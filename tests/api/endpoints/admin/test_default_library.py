@@ -55,3 +55,13 @@ class DefaultLibraryTest(BaseTestCase):
         data = {'user_email': self.user_name}
         resp = self.client.post(self.endpoint, data)
         self.assertEqual(403, resp.status_code)
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.endpoint)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.endpoint)
+        self.assertEqual(403, resp.status_code)

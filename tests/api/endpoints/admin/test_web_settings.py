@@ -10,6 +10,18 @@ class AdminWebSettingsTest(BaseTestCase):
         self.url = reverse('api-v2.1-web-settings')
         self.login_as(self.admin)
 
+    def test_get_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)
+
     def test_get_web_settings_info(self):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)

@@ -464,6 +464,11 @@ urlpatterns = [
 
     url(r'^api/v2.1/admin/admin-users/$', AdminAdminUsers.as_view(), name='api-v2.1-admin-admin-users'),
 
+    ## admin::users-batch
+    url(r'^api/v2.1/admin/admin-users/batch/$', AdminAdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
+    url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
+    url(r'^api/v2.1/admin/import-users/$', AdminImportUsers.as_view(), name='api-v2.1-admin-import-users'),
+
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
@@ -529,11 +534,6 @@ urlpatterns = [
             AdminUploadLinkUpload.as_view(), name='api-v2.1-admin-upload-link-upload'),
     url(r'^api/v2.1/admin/upload-links/(?P<token>[a-f0-9]+)/check-password/$',
             AdminUploadLinkCheckPassword.as_view(), name='api-v2.1-admin-upload-link-check-password'),
-
-    ## admin::users-batch
-    url(r'^api/v2.1/admin/admin-users/batch/$', AdminAdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
-    url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
-    url(r'^api/v2.1/admin/import-users/$', AdminImportUsers.as_view(), name='api-v2.1-admin-import-users'),
 
     ## admin::admin-role
     url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),

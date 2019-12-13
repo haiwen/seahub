@@ -27,6 +27,10 @@ class AdminSystemLibrary(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             repo = seafile_api.get_repo(get_system_default_repo_id())
         except Exception as e:
@@ -49,6 +53,9 @@ class AdminSystemLibraryUploadLink(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         req_from = request.GET.get('from', 'web')

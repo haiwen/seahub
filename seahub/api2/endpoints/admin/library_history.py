@@ -26,6 +26,9 @@ class AdminLibraryHistoryLimit(APIView):
 
     def get(self, request, repo_id, format=None):
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -45,6 +48,9 @@ class AdminLibraryHistoryLimit(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def put(self, request, repo_id, format=None):
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:

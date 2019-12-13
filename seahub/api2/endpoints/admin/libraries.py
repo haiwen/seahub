@@ -80,6 +80,9 @@ class AdminLibraries(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # search libraries (by name/owner)
         repo_name = request.GET.get('name', '')
         owner = request.GET.get('owner', '')
@@ -164,6 +167,8 @@ class AdminLibraries(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_name = request.data.get('name', None)
         if not repo_name:
@@ -213,6 +218,10 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -228,6 +237,10 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if get_system_default_repo_id() == repo_id:
             error_msg = _('System library can not be deleted.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -290,6 +303,10 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         new_status = request.data.get('status', None)
         if new_status:
@@ -450,6 +467,9 @@ class AdminSearchLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         query_str = request.GET.get('query', '').lower().strip()
         if not query_str:

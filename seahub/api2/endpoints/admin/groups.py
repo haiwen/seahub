@@ -54,6 +54,9 @@ class AdminGroups(APIView):
         1. Admin user;
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # search groups by name
         group_name = request.GET.get('name', '')
         group_name = group_name.strip()
@@ -108,6 +111,9 @@ class AdminGroups(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         group_name = request.data.get('group_name', '')
@@ -177,6 +183,9 @@ class AdminGroup(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # recourse check
         group_id = int(group_id) # Checked by URL Conf
@@ -256,6 +265,9 @@ class AdminGroup(APIView):
         """ Dismiss a specific group
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         group_id = int(group_id)
         group = ccnet_api.get_group(group_id)
         if not group:
@@ -301,6 +313,9 @@ class AdminSearchGroup(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         query_str = request.GET.get('query', '').lower().strip()
         if not query_str:

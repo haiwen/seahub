@@ -31,6 +31,7 @@ from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
 
+
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
         if not is_pro_version() or not EVENTS_ENABLED:
@@ -80,6 +81,9 @@ class FileOperationsView(APIView):
             return:
                 the list of file operations record.
         """
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         offset = get_time_offset()
         data = get_file_ops_stats_by_day(start_time, end_time, offset)
         ops_added_dict = get_init_data(start_time, end_time)
@@ -114,6 +118,10 @@ class TotalStorageView(APIView):
 
     @check_parameter
     def get(self, request, start_time, end_time):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         data = get_total_storage_stats_by_day(start_time, end_time, get_time_offset())
 
         res_data = []
@@ -133,6 +141,10 @@ class ActiveUsersView(APIView):
 
     @check_parameter
     def get(self, request, start_time, end_time):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         data = get_user_activity_stats_by_day(start_time, end_time, get_time_offset())
 
         res_data = []
@@ -152,6 +164,10 @@ class SystemTrafficView(APIView):
 
     @check_parameter
     def get(self, request, start_time, end_time):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         op_type_list = ['web-file-upload', 'web-file-download',
                         'sync-file-download', 'sync-file-upload',
                         'link-file-upload', 'link-file-download']
@@ -200,6 +216,10 @@ class SystemUserTrafficView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
 
         month = request.GET.get("month", "")
         if not month:
@@ -260,6 +280,10 @@ class SystemOrgTrafficView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
 
         month = request.GET.get("month", "")
         if not month:
@@ -322,6 +346,9 @@ class SystemUserTrafficExcelView(APIView):
 
     def get(self, request):
 
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         month = request.GET.get("month", "")
         if not month:
             error_msg = "month invalid."
@@ -381,6 +408,9 @@ class SystemUserStorageExcelView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_view_statistic():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         db_users = ccnet_api.get_emailusers('DB', -1, -1)
         ldap_import_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)

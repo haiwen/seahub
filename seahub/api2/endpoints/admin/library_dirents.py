@@ -74,6 +74,9 @@ class AdminLibraryDirents(APIView):
         """ Get all file/folder in a library
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo = seafile_api.get_repo(repo_id)
 
         parent_dir = request.GET.get('parent_dir', '/')
@@ -110,6 +113,9 @@ class AdminLibraryDirents(APIView):
     def post(self, request, repo_id, format=None):
         """ create file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         parent_dir = request.GET.get('parent_dir', '/')
         parent_dir = normalize_dir_path(parent_dir)
@@ -156,6 +162,9 @@ class AdminLibraryDirent(APIView):
     def get(self, request, repo_id):
         """ get info of a single file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
 
@@ -205,6 +214,9 @@ class AdminLibraryDirent(APIView):
     def put(self, request, repo_id):
         """ Copy a single file/folder to other place.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # check parameter for src
         path = request.GET.get('path', None)
@@ -267,6 +279,9 @@ class AdminLibraryDirent(APIView):
     def delete(self, request, repo_id):
         """ delete a single file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         path = request.GET.get('path', None)
         if not path:

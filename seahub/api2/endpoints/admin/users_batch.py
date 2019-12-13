@@ -51,6 +51,10 @@ class AdminAdminUsersBatch(APIView):
     def post(self, request):
         """ Add admin in batch
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         emails = request.POST.getlist('email', None)
         if not emails:
@@ -126,6 +130,9 @@ class AdminUsersBatch(APIView):
         Permission checking:
         1. admin user.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         emails = request.POST.getlist('email', None)
@@ -252,6 +259,10 @@ class AdminImportUsers(APIView):
         Permission checking:
         1. admin user.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         xlsx_file = request.FILES.get('file', None)
         if not xlsx_file:
             error_msg = 'file can not be found.'

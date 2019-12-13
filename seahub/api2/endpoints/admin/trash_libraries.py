@@ -55,6 +55,9 @@ class AdminTrashLibraries(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # list by owner
         search_owner = request.GET.get('owner', '')
         if search_owner:
@@ -102,13 +105,15 @@ class AdminTrashLibraries(APIView):
 
         return Response({"page_info": page_info, "repos": return_results})
 
-
     def delete(self, request, format=None):
         """ clean all deleted libraries(by owner)
 
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         owner = request.data.get('owner', '')
         try:
@@ -140,6 +145,9 @@ class AdminTrashLibrary(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if not seafile_api.get_trash_repo_owner(repo_id):
             error_msg = "Library does not exist in trash."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -159,6 +167,9 @@ class AdminTrashLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             seafile_api.del_repo_from_trash(repo_id)
