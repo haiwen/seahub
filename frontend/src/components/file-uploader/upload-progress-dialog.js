@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import UploadListItem from './upload-list-item';
 import { Utils } from '../../utils/utils';
+import UploadListItem from './upload-list-item';
+import ForbidUploadListItem from './forbid-upload-list-item';
 
 const propTypes = {
   uploadBitrate: PropTypes.number.isRequired,
   totalProgress: PropTypes.number.isRequired,
   retryFileList: PropTypes.array.isRequired,
   uploadFileList: PropTypes.array.isRequired,
+  forbidUploadFileList: PropTypes.array.isRequired,
   onCloseUploadDialog: PropTypes.func.isRequired,
   onCancelAllUploading: PropTypes.func.isRequired,
   onUploadCancel: PropTypes.func.isRequired,
@@ -94,6 +96,11 @@ class UploadProgressDialog extends React.Component {
                   }
                 </td>
               </tr>
+              {
+                this.props.forbidUploadFileList.map((file, index) => {
+                  return (<ForbidUploadListItem key={index} file={file} />);
+                })
+              }
               {
                 this.props.uploadFileList.map((resumableFile, index) => {
                   return (
