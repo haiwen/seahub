@@ -1,21 +1,66 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_base_style %}{% endblock %}
+{% block extra_style %}
+<style type="text/css">
+/* to overwrite the code from seahub.css */
+input[type=password] {
+  box-sizing: border-box;
+  height: auto;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+<style type="text/css">
+.small-panel {
+  max-width: 480px;
+  border-radius: 8px;
+  box-shadow: 0 2px 14px 2px rgba(0, 0, 0, 0.1);
+}
+.panel-title {
+  font-size: 1.5rem;
+  height: 90px;
+  line-height: 50px;
+  padding: 20px 40px;
+}
+.panel-content {
+  padding: 16px 40px 50px;
+}
+.intro {
+  font-size: 14px;
+  color: #999;
+}
+.sf-btn-submit {
+  background-image: none;
+}
+</style>
+{% endblock %}
+
+{% block header_right %}
+{# removed the content on the top right corner #}
+{% endblock %}
+
 {% block main_panel %}
-<div class="wide-panel">
-    <h2>{{repo.name}}</h2>
-    <p class="access-notice">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
-    <form action="" method="post" id="repo-decrypt-form">
-        <label>{% trans "Password: " %}</label>
-        <input type="password" name="password" autofocus />
-        <input type="submit" value="{% trans "Submit" %}" />
-        <p class="error hide"></p>
+<div class="mt-9 mb-4 mx-auto small-panel">
+  <div class="border-bottom">
+    <h2 class="panel-title text-center mb-0 ellipsis" title="{{repo.name}}">{{repo.name}}</h2>
+  </div>
+  <div class="panel-content">
+    <p class="intro">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
+    <form action="" method="post" id="repo-decrypt-form" class="mt-4">
+      <div class="form-group">
+        <label for="password">{% trans "Password" %}</label>
+        <input type="password" name="password" id="password" class="form-control" autofocus />
+      </div>
+      <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
+      <p class="error hide"></p>
     </form>
+  </div>
 </div>
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('#repo-decrypt-form').on('submit', function() {
+  $('#repo-decrypt-form').on('submit', function() {
     var $form = $(this),
         password = $.trim($('[name="password"]', $form).val()),
         $error = $('.error', $form);
