@@ -27,6 +27,9 @@ class AdminDevices(APIView):
 
     def get(self, request, format=None):
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '50'))
@@ -71,6 +74,9 @@ class AdminDevices(APIView):
         return Response({"page_info": page_info, "devices": return_results})
 
     def delete(self, request, format=None):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         platform = request.data.get('platform', '')
         device_id = request.data.get('device_id', '')

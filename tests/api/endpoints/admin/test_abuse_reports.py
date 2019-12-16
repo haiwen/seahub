@@ -18,6 +18,13 @@ class AdminAbuseReportsTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
 
+    @patch('seahub.api2.endpoints.admin.abuse_reports.ENABLE_SHARE_LINK_REPORT_ABUSE', MagicMock(return_value=True))
+    def test_no_permission(self):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
 
 class AdminAbuseReportTest(BaseTestCase):
     def setUp(self):
@@ -41,6 +48,15 @@ class AdminAbuseReportTest(BaseTestCase):
     def _remove_abuse_report(self, report_id):
         report = AbuseReport.objects.get(id=report_id)
         report.delete()
+
+    @patch('seahub.api2.endpoints.admin.abuse_reports.ENABLE_SHARE_LINK_REPORT_ABUSE', MagicMock(return_value=True))
+    def test_no_permission(self):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        report = self._add_abuse_report()
+        data = 'handled=' + str(not report.handled).lower()
+        resp = self.client.put(self.url + str(report.id) + '/', data, 'application/x-www-form-urlencoded')
+        self.assertEqual(403, resp.status_code)
 
     @patch('seahub.api2.endpoints.admin.abuse_reports.ENABLE_SHARE_LINK_REPORT_ABUSE', MagicMock(return_value=True))
     def test_can_put(self):

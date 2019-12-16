@@ -108,6 +108,12 @@ class Fixtures(Exam):
         return user
 
     @fixture
+    def admin_no_other_permission(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'no_other_permission')
+        return user
+
+    @fixture
     def repo(self):
         r = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
                                                   username=self.user.username,

@@ -30,6 +30,11 @@ class AdminTermsAndConditionsTest(BaseTestCase):
         assert json_resp['term_and_condition_list'][0]['text'] == term1.text
         term1.delete()
 
+    def test_no_permission(self):
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
     def test_get_permission_denied(self):
         self.login_as(self.user)
         resp = self.client.get(self.url)

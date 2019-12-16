@@ -31,6 +31,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_view_statistic': {
         'can_view_system_info': True,
@@ -41,6 +42,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_config_system': {
         'can_view_system_info': True,
@@ -51,6 +53,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_manage_library': {
         'can_view_system_info': True,
@@ -61,6 +64,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_manage_user': {
         'can_view_system_info': True,
@@ -71,6 +75,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_manage_group': {
         'can_view_system_info': True,
@@ -81,6 +86,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': False,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_view_user_log': {
         'can_view_system_info': True,
@@ -91,6 +97,7 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': False,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     'cannot_view_admin_log': {
         'can_view_system_info': True,
@@ -101,5 +108,17 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': False,
+        'other_permission': True,
+    },
+    'no_other_permission': {
+        'can_view_system_info': True,
+        'can_view_statistic': True,
+        'can_config_system': True,
+        'can_manage_library': True,
+        'can_manage_user': True,
+        'can_manage_group': True,
+        'can_view_user_log': True,
+        'can_view_admin_log': True,
+        'other_permission': False,
     },
 }

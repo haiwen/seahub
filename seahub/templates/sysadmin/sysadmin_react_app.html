@@ -51,7 +51,8 @@
         "can_manage_user": {% if user.admin_permissions.can_manage_user %} true {% else %} false {% endif %},
         "can_manage_group": {% if user.admin_permissions.can_manage_group %} true {% else %} false {% endif %},
         "can_view_user_log": {% if user.admin_permissions.can_view_user_log %} true {% else %} false {% endif %},
-        "can_view_admin_log": {% if user.admin_permissions.can_view_admin_log %} true {% else %} false {% endif %}
+        "can_view_admin_log": {% if user.admin_permissions.can_view_admin_log %} true {% else %} false {% endif %},
+        "other_permission": {% if user.admin_permissions.other_permission %} true {% else %} false {% endif %},
 			}
 		}
 	};

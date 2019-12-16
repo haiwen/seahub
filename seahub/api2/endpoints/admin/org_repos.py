@@ -34,6 +34,10 @@ class AdminOrgRepos(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         org_id = int(org_id)
         if org_id == 0:
             error_msg = 'org_id invalid.'

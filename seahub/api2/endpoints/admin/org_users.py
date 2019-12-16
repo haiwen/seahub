@@ -109,6 +109,10 @@ class AdminOrgUsers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         org_id = int(org_id)
         if org_id == 0:
@@ -135,6 +139,10 @@ class AdminOrgUsers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         org_id = int(org_id)
         if org_id == 0:
@@ -232,6 +240,9 @@ class AdminOrgUser(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         org_id = int(org_id)
         if org_id == 0:
@@ -260,6 +271,9 @@ class AdminOrgUser(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             user = User.objects.get(email=email)
@@ -344,6 +358,9 @@ class AdminOrgUser(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org = ccnet_api.get_org_by_id(org_id)
         if org.creator == email:

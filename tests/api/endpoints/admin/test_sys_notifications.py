@@ -27,6 +27,12 @@ class AdminSysNotificationsTest(BaseTestCase):
         assert 'msg' in json_resp['notifications'][0]
         assert 'is_current' in json_resp['notifications'][0]
 
+    def test_no_permission(self):
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.url)
+
+        self.assertEqual(403, resp.status_code)
+
     def test_get_with_invalid_user_permission(self):
         self.login_as(self.user)
         resp = self.client.get(self.url)

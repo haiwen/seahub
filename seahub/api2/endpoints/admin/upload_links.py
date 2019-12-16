@@ -75,6 +75,10 @@ class AdminUploadLinks(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -124,6 +128,9 @@ class AdminUploadLink(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             uploadlink = UploadLinkShare.objects.get(token=token)
         except UploadLinkShare.DoesNotExist:
@@ -139,6 +146,10 @@ class AdminUploadLink(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             upload_link = UploadLinkShare.objects.get(token=token)
         except UploadLinkShare.DoesNotExist:
@@ -166,6 +177,9 @@ class AdminUploadLinkUpload(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             uploadlink = UploadLinkShare.objects.get(token=token)
@@ -210,6 +224,9 @@ class AdminUploadLinkCheckPassword(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             uploadlink = UploadLinkShare.objects.get(token=token)

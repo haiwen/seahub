@@ -90,6 +90,7 @@ DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
+        'other_permission': True,
     },
     # SYSTEM_ADMIN can ONLY view system-info(without upload licence), settings pages.
     SYSTEM_ADMIN: {

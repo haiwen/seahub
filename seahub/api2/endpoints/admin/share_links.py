@@ -98,6 +98,10 @@ class AdminShareLinks(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -147,6 +151,9 @@ class AdminShareLink(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             sharelink = FileShare.objects.get(token=token)
         except FileShare.DoesNotExist:
@@ -162,6 +169,10 @@ class AdminShareLink(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             share_link = FileShare.objects.get(token=token)
         except FileShare.DoesNotExist:
@@ -201,6 +212,9 @@ class AdminShareLinkDirents(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)
@@ -273,6 +287,9 @@ class AdminShareLinkDownload(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)
@@ -415,6 +432,9 @@ class AdminShareLinkCheckPassword(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)

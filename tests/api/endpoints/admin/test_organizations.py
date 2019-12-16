@@ -82,6 +82,15 @@ class AdminOrganizationsTest(BaseTestCase):
         assert 'creator_contact_email' in users[0]
         assert 'quota' in users[0]
 
+    def test_can_get_orgs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.orgs_url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_not_get_orgs_if_not_admin(self):
 
         if not LOCAL_PRO_DEV_ENV:

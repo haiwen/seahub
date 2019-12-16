@@ -86,6 +86,16 @@ class AdminUploadLinkTest(BaseTestCase):
 
         self._remove_upload_link(token)
 
+    def test_no_permission(self):
+        self.login_as(self.admin_no_other_permission)
+        token = self._add_upload_link()
+
+        url = reverse('api-v2.1-admin-upload-link', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+        self._remove_upload_link(token)
+
     def test_get_upload_link_info_with_invalid_permission(self):
         self.login_as(self.user)
         token = self._add_upload_link()

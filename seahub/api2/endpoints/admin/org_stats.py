@@ -3,9 +3,11 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.utils import api_error
 from seahub.api2.endpoints.admin.statistics import (
     check_parameter, get_init_data, get_time_offset
 )
@@ -20,6 +22,10 @@ class AdminOrgStatsTraffic(APIView):
 
     @check_parameter
     def get(self, request, start_time, end_time, *args, **kwargs):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         org_id = kwargs['org_id']
 
         op_type_list = ['web-file-upload', 'web-file-download',

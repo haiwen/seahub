@@ -53,6 +53,10 @@ class AdminInstitutionUsers(APIView):
     def get(self, request, institution_id):
         """List users of an Institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
@@ -108,6 +112,9 @@ class AdminInstitutionUsers(APIView):
     def post(self, request, institution_id):
         """Add users to Institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             institution = Institution.objects.get(id=institution_id)
@@ -173,6 +180,10 @@ class AdminInstitutionUser(APIView):
     def put(self, request, institution_id, email):
         """ Update user of an institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
@@ -220,6 +231,10 @@ class AdminInstitutionUser(APIView):
     def delete(self, request, institution_id, email):
         """ Delete user from an institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:

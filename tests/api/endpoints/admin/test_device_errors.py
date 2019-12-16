@@ -32,6 +32,16 @@ class DeviceErrorsTest(BaseTestCase):
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code)
 
+    def test_no_permission(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin_no_other_permission)
+        url = reverse('api-v2.1-admin-device-errors')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
     @patch('seahub.views.file.is_pro_version')
     def test_can_clean(self, mock_is_pro_version):
 

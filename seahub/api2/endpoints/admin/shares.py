@@ -80,6 +80,9 @@ class AdminShares(APIView):
         1. admin user.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         result = []
 
         # current `request.user.username` is admin user,
