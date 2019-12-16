@@ -1,22 +1,29 @@
-{% extends "base.html" %}
+{% extends "base_for_small_panel.html" %}
 {% load i18n %}
 
+{% block extra_style %}{{ block.super }}
+<style type="text/css">
+.small-panel {
+  padding: 50px 40px;
+}
+</style>
+{% endblock %}
+
 {% block main_panel %}
-<div class="wide-panel">
-    <p class="access-notice">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
-    {% if path %}
-    <form action="{% url view_name token %}?p={{ path }}" method="post" id="share-passwd-form">{% csrf_token %}
-    {% else %}
-    <form action="{% url view_name token %}" method="post" id="share-passwd-form">{% csrf_token %}
+<div class="mt-9 mb-4 mx-auto small-panel">
+  <p class="intro">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
+  <form action="{% url view_name token %}?p={{ path }}" method="post" id="share-passwd-form">
+    {% csrf_token %}
+    <input type="hidden" name="token" value="{{ token }}" />
+    <div class="form-group">
+      <label for="password">{% trans "Password" %}</label>
+      <input type="password" name="password" id="password" class="form-control" autofocus />
+    </div>
+    <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
+    {% if err_msg %}
+    <p class="error">{{ err_msg }}</p>
     {% endif %}
-        <input type="text" name="token" value="{{ token }}" class="hide" />
-        <label>{% trans "Password: " %}</label><br />
-        <input type="password" name="password" class="input" autofocus /><br />
-        {% if err_msg %}
-        <p class="error">{{ err_msg }}</p>
-        {% endif %}
-        <input type="submit" value="{% trans "Submit" %}" />
-    </form>
+  </form>
 </div>
 {% endblock %}
 {% block extra_script %}
