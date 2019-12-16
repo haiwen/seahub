@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import TreeView from '../../components/tree-view/tree-view';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
-import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import Copy from '../../components/dialog/copy-dirent-dialog';
 import Move from '../../components/dialog/move-dirent-dialog';
@@ -42,7 +41,6 @@ class DirColumnNav extends React.Component {
     super(props);
     this.state = {
       opNode: null,
-      isDeleteDialogShow: false,
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
       isRenameDialogShow: false,
@@ -90,7 +88,7 @@ class DirColumnNav extends React.Component {
         this.onRenameToggle();
         break;
       case 'Delete':
-        this.onDeleteToggle();
+        this.onDeleteNode(node);
         break;
       case 'Copy':
         this.onCopyToggle();
@@ -132,10 +130,6 @@ class DirColumnNav extends React.Component {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
   }
 
-  onDeleteToggle = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-  }
-
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
   }
@@ -160,9 +154,7 @@ class DirColumnNav extends React.Component {
     this.props.onRenameNode(node, newName);
   }
 
-  onDeleteNode = () => {
-    this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-    let node = this.state.opNode;
+  onDeleteNode = (node) => {
     this.props.onDeleteNode(node);
   }
 
@@ -308,15 +300,6 @@ class DirColumnNav extends React.Component {
               onRename={this.onRenameNode}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleCancel={this.onRenameToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isDeleteDialogShow && (
-          <ModalPortal>
-            <Delete
-              currentNode={this.state.opNode}
-              handleSubmit={this.onDeleteNode}
-              toggleCancel={this.onDeleteToggle}
             />
           </ModalPortal>
         )}
