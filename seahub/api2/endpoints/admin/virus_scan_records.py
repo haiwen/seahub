@@ -29,7 +29,7 @@ class AdminVirusScanRecords(APIView):
         """get virus scan records
         """
 
-        if not request.user.admin_permissions.can_manage_user():
+        if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:

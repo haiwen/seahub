@@ -47,7 +47,7 @@ class AdminWorkWeixinDepartments(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not request.user.admin_permissions.other_permission():
+        if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         access_token = get_work_weixin_access_token()
@@ -89,7 +89,7 @@ class AdminWorkWeixinDepartmentMembers(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not request.user.admin_permissions.other_permission():
+        if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         access_token = get_work_weixin_access_token()
@@ -183,7 +183,7 @@ class AdminWorkWeixinUsersBatch(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not request.user.admin_permissions.other_permission():
+        if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         api_user_list = request.data.get(WORK_WEIXIN_DEPARTMENT_MEMBERS_FIELD, None)
@@ -312,7 +312,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
         permission: IsProVersion
         """
 
-        if not request.user.admin_permissions.other_permission():
+        if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
