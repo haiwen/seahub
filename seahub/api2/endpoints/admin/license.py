@@ -26,6 +26,10 @@ class AdminLicense(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         license_file = request.FILES.get('license', None)
         if not license_file:
             error_msg = 'license can not be found.'

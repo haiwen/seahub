@@ -55,6 +55,9 @@ class AdminGroupOwnedLibraries(APIView):
         """ Add a group owned library by system admin.
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         repo_name = request.data.get("repo_name", None)
         if not repo_name or \
@@ -144,6 +147,9 @@ class AdminGroupOwnedLibrary(APIView):
     def delete(self, request, group_id, repo_id):
         """ Delete a group owned library by system admin.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:

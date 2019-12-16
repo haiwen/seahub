@@ -12,6 +12,16 @@ class AdminLibrariesTest(BaseTestCase):
     def tearDown(self):
         self.remove_repo()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.libraries_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.post(self.libraries_url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_get(self):
         self.login_as(self.admin)
         resp = self.client.get(self.libraries_url)
@@ -129,6 +139,21 @@ class AdminLibraryTest(BaseTestCase):
 
         self.fs_upload = UploadLinkShare.objects.create_upload_link_share(self.user.username,
              self.repo_id, self.folder, None, None)
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.delete(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.put(self.library_url)
+        self.assertEqual(403, resp.status_code)
 
     def test_can_update_status_to_read_only(self):
 

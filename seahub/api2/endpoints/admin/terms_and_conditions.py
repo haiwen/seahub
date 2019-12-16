@@ -43,6 +43,9 @@ class AdminTermsAndConditions(APIView):
         1.login and is admin user.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         terms_and_conditions = TermsAndConditions.objects.all().order_by('-date_created')
 
         info_list = []
@@ -66,6 +69,9 @@ class AdminTermsAndConditions(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         name = request.data.get('name')
         if not name:
@@ -127,6 +133,9 @@ class AdminTermAndCondition(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         name = request.data.get('name')
 
@@ -191,6 +200,9 @@ class AdminTermAndCondition(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             term = TermsAndConditions.objects.get(pk=term_id)

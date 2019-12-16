@@ -46,6 +46,9 @@ class AdminOperationLogs(APIView):
         1. Admin user;
         """
 
+        if not request.user.admin_permissions.can_view_admin_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         email = request.GET.get('email', '')
         operation = request.GET.get('operation', '')
         if operation:

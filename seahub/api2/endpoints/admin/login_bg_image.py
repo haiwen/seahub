@@ -29,6 +29,10 @@ class AdminLoginBgImage(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         image_file = request.FILES.get('login_bg_image', None)
         if not image_file:
             error_msg = 'Image can not be found.'

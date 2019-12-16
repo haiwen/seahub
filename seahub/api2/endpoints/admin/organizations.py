@@ -128,6 +128,9 @@ class AdminOrganizations(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
@@ -161,6 +164,9 @@ class AdminOrganizations(APIView):
         if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org_name = request.data.get('org_name', None)
         if not org_name:
@@ -233,6 +239,9 @@ class AdminOrganization(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         org_id = int(org_id)
         if org_id == 0:
             error_msg = 'org_id invalid.'
@@ -262,6 +271,9 @@ class AdminOrganization(APIView):
         if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org_id = int(org_id)
         if org_id == 0:
@@ -349,6 +361,9 @@ class AdminOrganization(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         org_id = int(org_id)
         if org_id == 0:
             error_msg = 'org_id invalid.'
@@ -399,6 +414,9 @@ class AdminSearchOrganization(APIView):
         if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         query_str = request.GET.get('query', '').lower().strip()
         if not query_str:

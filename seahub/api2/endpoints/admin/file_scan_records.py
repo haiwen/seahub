@@ -28,6 +28,10 @@ class AdminFileScanRecords(APIView):
     def get(self, request):
         """get file content scan records
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             page = int(request.GET.get('page', ''))
         except ValueError:

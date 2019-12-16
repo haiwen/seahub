@@ -257,6 +257,10 @@ class AdminAdminUsers(APIView):
     def get(self, request):
         """List all admins from database and ldap imported
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             admin_users = ccnet_api.get_superusers()
         except Exception as e:
@@ -320,6 +324,9 @@ class AdminUsers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             page = int(request.GET.get('page', '1'))
@@ -389,6 +396,9 @@ class AdminUsers(APIView):
         return Response(result)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if user_number_over_limit():
             error_msg = _("The number of users exceeds the limit.")
@@ -523,6 +533,9 @@ class AdminLDAPUsers(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
@@ -567,6 +580,9 @@ class AdminSearchUser(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         query_str = request.GET.get('query', '').lower()
         if not query_str:
@@ -659,6 +675,9 @@ class AdminUser(APIView):
 
     def get(self, request, email):
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         avatar_size = request.data.get('avatar_size', 64)
         try:
             avatar_size = int(avatar_size)
@@ -679,6 +698,9 @@ class AdminUser(APIView):
         return Response(user_info)
 
     def put(self, request, email):
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # basic user info check
         is_staff = request.data.get("is_staff", None)
@@ -812,6 +834,9 @@ class AdminUser(APIView):
 
     def delete(self, request, email):
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
@@ -848,6 +873,9 @@ class AdminUserResetPassword(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if not is_valid_username2(email):
             error_msg = 'email invalid'
@@ -905,6 +933,9 @@ class AdminUserGroups(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             User.objects.get(email=email)
@@ -968,6 +999,9 @@ class AdminUserShareLinks(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             User.objects.get(email=email)
         except User.DoesNotExist as e:
@@ -996,6 +1030,9 @@ class AdminUserUploadLinks(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             User.objects.get(email=email)
@@ -1026,6 +1063,9 @@ class AdminUserBeSharedRepos(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             User.objects.get(email=email)

@@ -26,6 +26,14 @@ class DeviceAccessibleIpSetting(BaseTestCase):
         assert '127.0.0.1' in  [x['ip'] for x in json_resp]
 
     @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_no_permission(self, mock_IsProVersion):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        mock_IsProVersion.return_value= True
+        resp = self.client.get(self.url)
+        assert resp.status_code == 403
+
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_post(self, mock_IsProVersion):
         mock_IsProVersion.return_value= True
         resp = self.client.post(self.url, {'ipaddress': self.test_ip})

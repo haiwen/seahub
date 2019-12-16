@@ -34,6 +34,9 @@ class AdminAdminRole(APIView):
         2. email(from argument): must be an admin user.
         """
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         email = request.GET.get('email', None)
         if not email:
@@ -78,6 +81,9 @@ class AdminAdminRole(APIView):
         1. email(from argument): must be an admin user.
         2. only admin with `default_admin` role can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         email = request.data.get('email', None)
@@ -147,6 +153,9 @@ class AdminAdminRole(APIView):
         1. email(from argument): must be an admin user.
         2. only admin with `default_admin` role can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         email = request.data.get('email', None)

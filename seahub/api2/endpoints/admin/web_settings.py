@@ -15,6 +15,7 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
 logger = logging.getLogger(__name__)
 
 DIGIT_WEB_SETTINGS = [
@@ -41,6 +42,10 @@ class AdminWebSettings(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if not dj_settings.ENABLE_SETTINGS_VIA_WEB:
             error_msg = 'Web settings not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -57,6 +62,9 @@ class AdminWebSettings(APIView):
         return Response(config_dict)
 
     def put(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if not dj_settings.ENABLE_SETTINGS_VIA_WEB:
             error_msg = 'Web settings not supported.'

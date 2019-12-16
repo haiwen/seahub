@@ -34,6 +34,9 @@ class AdminAbuseReportsView(APIView):
             error_msg = 'Feature not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         abuse_type = request.GET.get('abuse_type', '')
         handled = request.GET.get('handled', '')
 
@@ -75,6 +78,9 @@ class AdminAbuseReportView(APIView):
         if not ENABLE_SHARE_LINK_REPORT_ABUSE:
             error_msg = 'Feature not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         handled = request.data.get('handled')

@@ -37,6 +37,16 @@ class LibraryDirentsTest(BaseTestCase):
         self.remove_repo()
         self.remove_group()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
     @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
     def test_can_get(self, mock_can_view_sys_admin_repo):
 
@@ -221,6 +231,21 @@ class LibraryDirentTest(BaseTestCase):
 
         self.remove_repo()
         self.remove_group()
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.delete(self.url)
+        self.assertEqual(403, resp.status_code)
 
     @patch('seahub.api2.endpoints.admin.library_dirents.can_view_sys_admin_repo')
     def test_can_get(self, mock_can_view_sys_admin_repo):

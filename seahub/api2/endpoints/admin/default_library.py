@@ -52,6 +52,9 @@ class AdminDefaultLibrary(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         user_email = request.GET.get('user_email', None)
         if not user_email:
@@ -88,6 +91,9 @@ class AdminDefaultLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         user_email = request.POST.get('user_email', None)

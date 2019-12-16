@@ -39,6 +39,9 @@ class AdminSysNotificationsView(APIView):
         1.login and is admin user.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             notifications = Notification.objects.all().order_by('-id')
         except Exception as e:
@@ -59,6 +62,9 @@ class AdminSysNotificationsView(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         msg = request.data.get('msg', '')
         if not msg:
@@ -89,6 +95,9 @@ class AdminSysNotificationView(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             nid = int(nid)
@@ -128,6 +137,9 @@ class AdminSysNotificationView(APIView):
         Permission checking:
         1.login and is admin user.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             nid = int(nid)

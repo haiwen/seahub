@@ -15,6 +15,12 @@ class AdminLogoTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
 
+    def test_post_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.post(reverse('api-v2.1-admin-logo'))
+        self.assertEqual(403, resp.status_code)
+
     def test_update_logo(self):
 
         custom_symlink = os.path.join(MEDIA_ROOT, os.path.dirname(CUSTOM_LOGO_PATH))

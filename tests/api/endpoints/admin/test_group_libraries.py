@@ -18,6 +18,11 @@ class GroupLibrariesTest(BaseTestCase):
     def tearDown(self):
         self.remove_group()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.get(reverse('api-v2.1-admin-group-libraries', args=[self.group_id]))
+        self.assertEqual(403, resp.status_code)
+
     def test_can_get(self):
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-group-libraries', args=[self.group_id])

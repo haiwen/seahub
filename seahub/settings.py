@@ -122,7 +122,6 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
-    'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',

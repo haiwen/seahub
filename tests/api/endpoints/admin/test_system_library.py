@@ -23,6 +23,12 @@ class AdminSystemLibraryTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+
 class AdminSystemLibraryUploadLinkTest(BaseTestCase):
 
     def setUp(self):
@@ -44,3 +50,7 @@ class AdminSystemLibraryUploadLinkTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)

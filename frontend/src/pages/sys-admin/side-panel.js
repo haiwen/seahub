@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import Logo from '../../components/logo';
-import { gettext, siteRoot, isPro, isDefaultAdmin, canViewSystemInfo, canViewStatistic,
+import { gettext, siteRoot, isPro, otherPermission, canViewSystemInfo, canViewStatistic,
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
   enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin,
@@ -55,7 +55,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin &&
+                {otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('devices')}`}
@@ -127,7 +127,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {multiTenancy && isDefaultAdmin &&
+                {multiTenancy && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('organizations')}`}
@@ -139,7 +139,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {multiInstitution && isDefaultAdmin &&
+                {multiInstitution && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('institutions')}`}
@@ -151,7 +151,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin &&
+                {otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('notifications')}`}
@@ -163,7 +163,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin &&
+                {otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('links')}`}
@@ -187,7 +187,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isPro && isDefaultAdmin && enableFileScan &&
+                {isPro && otherPermission && enableFileScan &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('file-scan-records')}`}
@@ -199,7 +199,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isPro && isDefaultAdmin &&
+                {isPro && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('virus-scan-records')}`}
@@ -211,7 +211,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {enableGuestInvitation && isDefaultAdmin &&
+                {enableGuestInvitation && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
@@ -223,7 +223,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin && enableTermsAndConditions &&
+                {otherPermission && enableTermsAndConditions &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('termsandconditions')}`}
@@ -247,7 +247,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin && enableWorkWeixin &&
+                {otherPermission && enableWorkWeixin &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('work-weixin')}`}
@@ -259,7 +259,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {isDefaultAdmin && enableShareLinkReportAbuse &&
+                {otherPermission && enableShareLinkReportAbuse &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('abuse-reports')}`}

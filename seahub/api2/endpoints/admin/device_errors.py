@@ -31,6 +31,9 @@ class AdminDeviceErrors(APIView):
             error_msg = 'Feature disabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         return_results = []
         try:
             device_errors = seafile_api.list_repo_sync_errors()
@@ -69,6 +72,9 @@ class AdminDeviceErrors(APIView):
         if not is_pro_version():
             error_msg = 'Feature disabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             seafile_api.clear_repo_sync_errors()

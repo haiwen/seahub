@@ -44,6 +44,9 @@ class AdminGroupLibraries(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         group_id = int(group_id)
         group = ccnet_api.get_group(group_id)
         if not group:
@@ -82,6 +85,9 @@ class AdminGroupLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:

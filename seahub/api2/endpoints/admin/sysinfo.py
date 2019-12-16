@@ -5,6 +5,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -15,6 +16,7 @@ from seahub.utils.licenseparse import parse_license
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.models import TokenV2
+from seahub.api2.utils import api_error
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -31,6 +33,10 @@ class SysInfo(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
+
+        if not request.user.admin_permissions.can_view_system_info():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # count repos
         try:
             repos_count = seafile_api.count_repos()

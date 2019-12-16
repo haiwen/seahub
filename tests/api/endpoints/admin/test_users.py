@@ -26,6 +26,16 @@ class AdminUsersTest(BaseTestCase):
     def tearDown(self):
         self.remove_user(self.tmp_email)
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.post(self.url)
+        self.assertEqual(403, resp.status_code)
+
     def test_get_users(self):
         self.login_as(self.admin)
 
@@ -98,6 +108,21 @@ class AdminUserTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_user(self.tmp_email)
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.delete(self.url)
+        self.assertEqual(403, resp.status_code)
 
     def get_user_info(self):
         self.login_as(self.admin)
@@ -389,6 +414,11 @@ class AdminUserShareLinksTest(BaseTestCase):
         link = FileShare.objects.get(token=token)
         link.delete()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(reverse('api-v2.1-admin-user-share-links', args=[self.admin.username]))
+        self.assertEqual(403, resp.status_code)
+
     def test_get_file_share_links(self):
         self.login_as(self.admin)
         token = self._add_file_share_link()
@@ -424,6 +454,11 @@ class AdminUserUploadLinksTest(BaseTestCase):
         link = UploadLinkShare.objects.get(token=token)
         link.delete()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(reverse('api-v2.1-admin-user-upload-links', args=[self.admin.username]))
+        self.assertEqual(403, resp.status_code)
+
     def test_get_file_share_links(self):
         self.login_as(self.admin)
         token = self._add_upload_link()
@@ -446,6 +481,11 @@ class AdminAdminUsersTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_user(self.tmp_email)
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
 
     def test_get_admin_users(self):
         self.login_as(self.admin)

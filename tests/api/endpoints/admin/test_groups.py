@@ -13,6 +13,16 @@ class GroupsTest(BaseTestCase):
     def tearDown(self):
         self.remove_group()
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.get(reverse('api-v2.1-admin-groups'))
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.post(reverse('api-v2.1-admin-groups'))
+        self.assertEqual(403, resp.status_code)
+
     def test_can_get(self):
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-groups')
@@ -131,6 +141,16 @@ class GroupTest(BaseTestCase):
         self.user_name = self.user.username
         self.admin_name = self.admin.username
         self.group_id = self.group.id
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.put(reverse('api-v2.1-admin-group', args=[self.group_id]))
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.delete(reverse('api-v2.1-admin-group', args=[self.group_id]))
+        self.assertEqual(403, resp.status_code)
 
     def test_can_transfer_group(self):
 

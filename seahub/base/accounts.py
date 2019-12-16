@@ -250,6 +250,9 @@ class AdminPermissions(object):
     def can_view_admin_log(self):
         return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_admin_log']
 
+    def other_permission(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['other_permission']
+
 
 class User(object):
     is_staff = False

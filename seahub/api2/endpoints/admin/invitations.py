@@ -33,6 +33,9 @@ class AdminInvitations(APIView):
             error_msg = 'invitation not enabled.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -99,6 +102,10 @@ class AdminInvitations(APIView):
         return Response(resp)
 
     def delete(self, request):
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         _type = request.GET.get('type', '')
         if _type == "" or _type not in ["expired"]:
             error_msg = "type %s invalid" % _type
@@ -124,6 +131,9 @@ class AdminInvitation(APIView):
         if not ENABLE_GUEST_INVITATION:
             error_msg = 'invitation not enabled.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             invitation = Invitation.objects.get(token=token)

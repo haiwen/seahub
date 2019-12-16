@@ -53,6 +53,12 @@ class InvitationsTest(BaseTestCase):
 
         assert type(json_resp['invitation_list']) is list
 
+    def test_no_permission(self):
+        self.logout()
+        self.login_as(self.admin_cannot_manage_user)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
     def test_get_invitations_permision_denied(self):
         self.login_as(self.user)
         resp = self.client.get(self.url)

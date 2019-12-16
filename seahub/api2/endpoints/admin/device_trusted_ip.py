@@ -83,12 +83,20 @@ class AdminDeviceTrustedIP(APIView):
 
     @check_parameter
     def get(self, request, format=None):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         ip_list = [ip.to_dict() for ip in TrustedIP.objects.all()]
         ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         return Response(ip_list)
 
     @check_parameter
     def post(self, request, format=None):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         new_ip = request.data.get('ipaddress')
         ip_obj, created = TrustedIP.objects.get_or_create(new_ip)
         if created:
@@ -99,6 +107,10 @@ class AdminDeviceTrustedIP(APIView):
 
     @check_parameter
     def delete(self, request, format=None):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         new_ip = request.data.get('ipaddress', '')
         TrustedIP.objects.delete(new_ip)
         return Response({})

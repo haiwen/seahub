@@ -72,6 +72,15 @@ class OrgGroupsTest(BaseTestCase):
         for repo in json_resp['group_list']:
             assert repo['org_id'] == self.org_id
 
+    def test_no_permission(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.org_groups_url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_not_get_repos_if_not_admin(self):
 
         if not LOCAL_PRO_DEV_ENV:

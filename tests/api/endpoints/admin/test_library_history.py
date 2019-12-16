@@ -9,6 +9,18 @@ class LibraryHistory(BaseTestCase):
         self.repo_id = self.repo.id
         self.url = reverse('api-v2.1-admin-library-history-limit', kwargs=dict(repo_id=self.repo_id))
 
+    def test_get_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_get(self):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)

@@ -15,6 +15,12 @@ class AdminLicenseTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
 
+    def test_post_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.post(reverse('api-v2.1-admin-license'))
+        self.assertEqual(403, resp.status_code)
+
     @patch.object(license_api, 'ccnet_api')
     def test_update_license(self, mock_ccnet_api):
         mock_ccnet_api.return_val = {}

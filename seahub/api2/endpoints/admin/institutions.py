@@ -31,6 +31,10 @@ class AdminInstitutions(APIView):
     def get(self, request):
         """List all Institutions
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -60,6 +64,10 @@ class AdminInstitutions(APIView):
     def post(self, request):
         """Create an Institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         name = request.data.get('name', '').strip()
         if not name:
             error_msg = 'name invalid.'
@@ -89,6 +97,10 @@ class AdminInstitution(APIView):
     def get(self, request, institution_id):
         """Get an Institution's info
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Exception as e:
@@ -109,6 +121,10 @@ class AdminInstitution(APIView):
     def put(self, request, institution_id):
         """Update (quota) of institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Exception as e:
@@ -149,6 +165,10 @@ class AdminInstitution(APIView):
     def delete(self, request, institution_id):
         """Delete an Institution
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Exception as e:

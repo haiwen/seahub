@@ -37,6 +37,16 @@ class InstitutionsTest(BaseTestCase):
 
         inst.delete()
 
+    def test_no_permission(self):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        inst = self._add_institution('int1')
+        url = reverse('api-v2.1-admin-institutions')
+        resp = self.client.get(url)
+
+        self.assertEqual(403, resp.status_code)
+        inst.delete()
+
     def test_can_create(self):
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-institutions')

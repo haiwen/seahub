@@ -28,6 +28,10 @@ class AdminVirusScanRecords(APIView):
     def get(self, request):
         """get virus scan records
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             page = int(request.GET.get('page', ''))
         except ValueError:
@@ -78,6 +82,10 @@ class AdminVirusScanRecord(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def delete(self, request, virus_id):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         virus_record = get_virus_record_by_id(virus_id)
         if not virus_record:
             error_msg = 'Virus file %d not found.' % virus_record.file_path

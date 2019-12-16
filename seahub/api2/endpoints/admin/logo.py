@@ -29,6 +29,9 @@ class AdminLogo(APIView):
 
     def post(self, request):
 
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         logo_file = request.FILES.get('logo', None)
         if not logo_file:
             error_msg = 'Logo can not be found.'
