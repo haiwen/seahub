@@ -13,13 +13,13 @@ i18n
   .init({
     lng: lang,
     fallbackLng: 'en',
-    ns: ['translations'],
+    ns: ['seafile-editor'],
     defaultNS: 'translations',
 
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
-      loadPath: mediaUrl + 'assets/frontend/locales/{{ lng }}/{{ ns }}.json',
+      loadPath: mediaUrl + 'locales/{{ lng }}/{{ ns }}.json',
       // loadPath: '/media/locales/{{lng}}/{{ns}}.json',
     },
 
