@@ -37,12 +37,12 @@ class OCMReposDirView(APIView):
 
         with_thumbnail = request.GET.get('with_thumbnail', 'false')
         if with_thumbnail not in ('true', 'false'):
-            error_msg = 'with_thumbnail %s invalid.' % with_thumbnail
+            error_msg = 'with_thumbnail invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
         if not ocm_share_received:
-            error_msg = 'repo not found.'
+            error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DIR']
@@ -74,7 +74,7 @@ class OCMReposDownloadLinkView(APIView):
 
         ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
         if not ocm_share_received:
-            error_msg = 'repo not found.'
+            error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
@@ -105,7 +105,7 @@ class OCMReposUploadLinkView(APIView):
 
         ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
         if not ocm_share_received:
-            error_msg = 'repo not found.'
+            error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']

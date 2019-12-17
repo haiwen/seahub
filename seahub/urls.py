@@ -438,9 +438,9 @@ urlpatterns = [
     url(r'api/v2.1/ocm/shares-received/$', OCMSharesReceivedView.as_view(), name='api-v2.1-ocm-shares-received'),
     url(r'api/v2.1/ocm/shares-received/(?P<pk>\d+)/$', OCMShareReceivedView.as_view(), name='api-v2.1-ocm-share-received'),
     # ocm local api, repo related operations
-    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/dir/$', OCMReposDirView.as_view(), name='api-v2.1-ocm-repos-dir'),
-    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/download-link/$', OCMReposDownloadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
-    url(r'api/v2.1/ocm/repos/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', OCMReposUploadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
+    url(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', OCMReposDirView.as_view(), name='api-v2.1-ocm-repos-dir'),
+    url(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/download-link/$', OCMReposDownloadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
+    url(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', OCMReposUploadLinkView.as_view(), name='api-v2.1-ocm-repos-dir'),
 
     # admin: activities
     url(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),
