@@ -1,0 +1,52 @@
+@font-face {
+    font-family: 'icomoon';
+    src:  url('./iconfont.eot');
+    src:  url('./iconfont.eot') format('embedded-opentype'),
+      url('./iconfont.ttf') format('truetype'),
+      url('./iconfont.woff') format('woff'),
+      url('./iconfont.woff2') format('woff2'),
+      url('./iconfont.svg') format('svg');
+  }
+  
+  .ico {
+    font-family: 'icomoon';
+    font-style: normal;
+    font-weight: normal;
+  }
+    
+  .ico-left-align:before {
+    content: "\e61d";
+  }
+    
+  .ico-center-horizontally:before {
+    content: "\e61e";
+  }
+    
+  .ico-right-align:before {
+    content: "\e620";
+  }
+    
+  .ico-row:before {
+    content: "\e621";
+  }
+    
+  .ico-delete-table:before {
+    content: "\e622";
+  }
+    
+  .ico-column:before {
+    content: "\e623";
+  }
+    
+  .ico-code-block:before {
+    content: "\e62c";
+  }
+    
+  .ico-drop-down:before {
+    content: "\e625";
+  }
+
+  .ico-full-button:before {
+    content: "\e627";
+  }
+  

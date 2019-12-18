@@ -3,16 +3,18 @@
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
-         <meta charset="UTF-8" />
-         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-         <title>{{ filename }}</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <title>{{ filename }}</title>
 
-         <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
-         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
-         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
-         {% render_bundle 'markdownEditor' 'css' %}
-         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
-         {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
+        <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+        {% render_bundle 'markdownEditor' 'css' %}
+        {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+        {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
     </head>
     <body>
          <div id="root"></div>
