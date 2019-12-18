@@ -1,7 +1,6 @@
 Django==1.11.25
 future
 captcha
-django-compressor
 django-statici18n
 django-post_office
 django-webpack_loader
