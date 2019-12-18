@@ -3,7 +3,7 @@ import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
-import SessionExpiredTip from '../components/session-expired-tip';
+import PermissionDeniedTip from '../components/permission-denied-tip';
 
 export const Utils = {
 
@@ -976,13 +976,10 @@ export const Utils = {
     let errorMsg = '';
     if (error.response) {
       if (error.response.status == 403) {
-        if (showLoginTipIf403) {
-          toaster.danger(
-            <SessionExpiredTip />,
-            {id: 'session_expired', duration: 3600}
-          );
-        }
-        errorMsg = gettext('Permission denied');
+        toaster.danger(
+          <PermissionDeniedTip />,
+          {id: 'permission_denied', duration: 3600}
+        );
       } else if (error.response.data &&
         error.response.data['error_msg']) {
         errorMsg = error.response.data['error_msg'];
