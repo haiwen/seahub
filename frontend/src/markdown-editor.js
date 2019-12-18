@@ -78,34 +78,12 @@ class EditorUtilities {
     return url;
   }
 
-  uploadImage = (imageFile) => {
-    return (
-      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
-        let uploadLinkComponent = res.data;
-        const uploadLink = uploadLinkComponent + '?ret-json=1';
-        const name = getImageFileNameWithTimestamp();
-        const blob = imageFile.slice(0, -1, 'image/png');
-        const newFile = new File([blob], name, {type: 'image/png'});
-        const formData = new FormData();
-        formData.append('parent_dir', '/');
-        formData.append('relative_path', 'images/auto-upload');
-        formData.append('file', newFile);
-        return {uploadLink, formData};
-      }).then(({ uploadLink, formData}) => {
-        return seafileAPI.uploadImage(uploadLink, formData);
-      }).then ((res) => {
-        let resArr = res.data[0];
-        let filename = resArr.name;
-        return this._getImageURL(filename);
-      })
-    );
-  }
-
   uploadLocalImage = (imageFile) => {
     return (
       seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data + '?ret-json=1';
-        const newFile = new File([imageFile], imageFile.name, {type: imageFile.type});
+        const name = getImageFileNameWithTimestamp();
+        const newFile = new File([imageFile], name, {type: imageFile.type});
         const formData = new FormData();
         formData.append('parent_dir', '/');
         formData.append('relative_path', 'images/auto-upload');
