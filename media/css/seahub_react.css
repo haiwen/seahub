@@ -1107,14 +1107,6 @@ a.table-sort-op:focus {
     color: red;
 }
 
-.session-expired-tip {
-    color: red;
-}
-
-.session-expired-link {
-    padding: 0;
-}
-
 /* file-tag */
 .tag-list {
     position: relative;
