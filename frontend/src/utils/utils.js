@@ -972,14 +972,18 @@ export const Utils = {
   /*
    * only used in the 'catch' part of a seafileAPI request
    */
-  getErrorMsg: function(error, showLoginTipIf403) {
+  getErrorMsg: function(error, showPermissionDeniedTip) {
     let errorMsg = '';
     if (error.response) {
       if (error.response.status == 403) {
-        toaster.danger(
-          <PermissionDeniedTip />,
-          {id: 'permission_denied', duration: 3600}
-        );
+        if (showPermissionDeniedTip) {
+          toaster.danger(
+            <PermissionDeniedTip />,
+            {id: 'permission_denied', duration: 3600}
+          );
+          return;
+        }
+        errorMsg = gettext('Permission denied');
       } else if (error.response.data &&
         error.response.data['error_msg']) {
         errorMsg = error.response.data['error_msg'];
