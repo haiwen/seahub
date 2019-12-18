@@ -3,7 +3,7 @@ import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
-import SessionExpiredTip from '../components/session-expired-tip';
+import PermissionDeniedTip from '../components/permission-denied-tip';
 
 export const Utils = {
 
@@ -972,15 +972,16 @@ export const Utils = {
   /*
    * only used in the 'catch' part of a seafileAPI request
    */
-  getErrorMsg: function(error, showLoginTipIf403) {
+  getErrorMsg: function(error, showPermissionDeniedTip) {
     let errorMsg = '';
     if (error.response) {
       if (error.response.status == 403) {
-        if (showLoginTipIf403) {
+        if (showPermissionDeniedTip) {
           toaster.danger(
-            <SessionExpiredTip />,
-            {id: 'session_expired', duration: 3600}
+            <PermissionDeniedTip />,
+            {id: 'permission_denied', duration: 3600}
           );
+          return;
         }
         errorMsg = gettext('Permission denied');
       } else if (error.response.data &&
