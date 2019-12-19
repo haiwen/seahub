@@ -96,7 +96,7 @@ class GroupView extends React.Component {
     }).catch((error) => {
       this.setState({
         isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       }); 
     });
   }
@@ -115,7 +115,7 @@ class GroupView extends React.Component {
     }).catch((error) => {
       this.setState({
         isLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       }); 
     });
   }
@@ -507,7 +507,7 @@ class GroupView extends React.Component {
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && errMessage) && errMessage}
+              {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
                 <SharedRepoListView 

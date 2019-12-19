@@ -205,7 +205,7 @@ class GroupsView extends React.Component {
             </div>
             <div className="cur-view-content cur-view-content-groups">
               {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && this.state.errorMsg) && this.state.errorMsg}
+              {(!this.state.isLoading && this.state.errorMsg) && <div className="error text-center mt-2">{this.state.errorMsg}</div>}
               {(!this.state.isLoading && !this.state.errorMsg && this.state.groupList.length == 0) && emptyTip}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (

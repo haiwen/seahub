@@ -981,7 +981,6 @@ export const Utils = {
             <PermissionDeniedTip />,
             {id: 'permission_denied', duration: 3600}
           );
-          return;
         }
         errorMsg = gettext('Permission denied');
       } else if (error.response.data &&

@@ -18,7 +18,6 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import SessionExpiredTip from '../../components/session-expired-tip';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -449,11 +448,9 @@ class LibContentView extends React.Component {
         });
       });
     }).catch((err) => {
-      if (err.response.status === 403) {
-        toaster.danger(
-          <SessionExpiredTip />,
-          {id: 'session_expired', duration: 3600}
-        );
+      let errMsg = Utils.getErrorMsg(err, true);
+      if (!err.response || err.response.status !== 403) {
+        toaster.danger(errMsg);
       }
       this.setState({
         isFileLoading: false,
@@ -496,11 +493,8 @@ class LibContentView extends React.Component {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
     }).catch((err) => {
-      if (err.response.status === 403) {
-        toaster.danger(
-          <SessionExpiredTip />,
-          {id: 'session_expired', duration: 3600}
-        );
+      Utils.getErrorMsg(err, true);
+      if (err.response && err.response.status === 403) {
         this.setState({isDirentListLoading: false});
         return;
       }

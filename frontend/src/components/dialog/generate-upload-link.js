@@ -9,7 +9,6 @@ import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
 import toaster from '../toast';
 import SendLink from '../send-link';
-import SessionExpiredTip from '../session-expired-tip';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -45,13 +44,11 @@ class GenerateUploadLink extends React.Component {
         this.setState({sharedUploadInfo: sharedUploadInfo});
       }
     }).catch((err) => {
-      if (err.response.status === 403) {
-        toaster.danger(
-          <SessionExpiredTip />,
-          {id: 'session_expired', duration: 3600}
-        );
-        this.props.closeShareDialog();
+      let errMsg = Utils.getErrorMsg(err, true);
+      if (!err.response || err.response.status !== 403) {
+        toaster.danger(errMsg);
       }
+      this.props.closeShareDialog();
     });
   }
 
