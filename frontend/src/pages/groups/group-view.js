@@ -507,7 +507,7 @@ class GroupView extends React.Component {
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && errMessage) && <span className="error">{errMessage}</span>}
+              {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
                 <SharedRepoListView 
