@@ -33,7 +33,8 @@ class DirView extends Component {
       repoName: '',
       path: '',
       direntList: [],
-      isNewFolderDialogOpen: false
+      isNewFolderDialogOpen: false,
+      userPerm: '',
     };
   }
 
@@ -55,7 +56,7 @@ class DirView extends Component {
   loadDirentList = (path) => {
     const { providerID, repoID } = this.props;
     seafileAPI.listOCMRepoDir(providerID, repoID, path).then(res => {
-      const { repo_name: repoName, dirent_list } = res.data;
+      const { repo_name: repoName, dirent_list, user_perm } = res.data;
       let direntList = [];
       dirent_list.forEach(item => {
         let dirent = new Dirent(item);
@@ -66,6 +67,7 @@ class DirView extends Component {
         repoName: repoName,
         direntList: direntList,
         path: path,
+        userPerm: user_perm,
       }, () => {
         let url =`${siteRoot}remote-library/${providerID}/${repoID}/${repoName}${Utils.encodePath(path)}`;
         window.history.replaceState({url: url, path: path}, path, url);
@@ -142,7 +144,7 @@ class DirView extends Component {
 
   render() {
     const { loading, errorMsg, 
-      repoName, direntList, path } = this.state;
+      repoName, direntList, path, userPerm } = this.state;
     const { repoID } = this.props;
 
     return (
@@ -150,7 +152,9 @@ class DirView extends Component {
         <MainPanelTopbar>
           <Fragment>
             <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
-            <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
+            {userPerm === 'rw' &&
+              <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
+            }
           </Fragment>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
@@ -161,6 +165,7 @@ class DirView extends Component {
                 repoName={repoName}
                 currentPath={path}
                 onPathClick={this.onPathClick}
+                onTabNavClick={this.props.onTabNavClick}
               />
             </div>
             <div className="cur-view-content">

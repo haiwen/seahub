@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from '@reach/router';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
@@ -7,6 +8,7 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
 };
 
@@ -51,7 +53,7 @@ class DirPath extends React.Component {
 
     return (
       <div className="path-container">
-        <a href={`${siteRoot}shared-with-ocm/`}>{gettext('All')}</a>
+        <Link to={siteRoot + 'shared-with-ocm/'} className="normal" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')}>{gettext('All')}</Link>
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?
           <span className="path-repo-name">{repoName}</span>:
