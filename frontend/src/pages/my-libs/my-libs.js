@@ -13,6 +13,7 @@ import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -28,6 +29,7 @@ class MyLibraries extends Component {
       repoList: [],
       isShowDetails: false,
       isSortOptionsDialogOpen: false,
+      isGuideForNewDialogOpen: window.app.pageOptions.guideEnabled,
       sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
@@ -135,6 +137,13 @@ class MyLibraries extends Component {
     this.setState({isShowDetails: !this.state.isShowDetails});
   }
 
+  toggleGuideForNewDialog = () => {
+    window.app.pageOptions.guideEnabled = false;
+    this.setState({
+      isGuideForNewDialogOpen: false
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -166,6 +175,11 @@ class MyLibraries extends Component {
               }
             </div>
           </div>
+          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen && 
+            <GuideForNewDialog 
+              toggleDialog={this.toggleGuideForNewDialog}
+            />
+          }
           {this.state.isSortOptionsDialogOpen &&
             <SortOptionsDialog
               toggleDialog={this.toggleSortOptionsDialog}
