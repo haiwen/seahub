@@ -494,13 +494,10 @@ class DirentListItem extends React.Component {
   }
 
   renderItemOperation = () => {
-    let { dirent, selectedDirentList } = this.props;
+    let { dirent, currentRepoInfo, selectedDirentList } = this.props;
 
-    // no need to check whether show shareBtn or not.
-    // according to specification below, shareBtn aways show.
-    // check for "generate uploadlink" or other tabs should put inside the shareDialog.
     // https://dev.seafile.com/seahub/lib/d6f300e7-bb2b-4722-b83e-cf45e370bfbc/file/seaf-server%20%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3/%E8%B5%84%E6%96%99%E5%BA%93%E6%9D%83%E9%99%90%E8%A7%84%E8%8C%83.md
-    // let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
+    let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
 
     return (
       <Fragment>
@@ -514,9 +511,11 @@ class DirentListItem extends React.Component {
                       <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                     </li>
                   )}
-                  <li className="operation-group-item">
-                    <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                  </li>
+                  {showShareBtn && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                    </li>
+                  )}
                   {dirent.permission === 'rw' && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
@@ -546,7 +545,7 @@ class DirentListItem extends React.Component {
                       <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                     </li>
                   )}
-                  {(
+                  {showShareBtn && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                     </li>
