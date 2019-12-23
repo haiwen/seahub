@@ -388,7 +388,16 @@ class FileUploader extends React.Component {
     if (!message) {
       error = gettext('Network error');
     } else {
-      error = message;
+      // eg: '{"error": "Internal error" \n }'
+      let errorMessage = message.replace(/\n/g, '');
+      errorMessage  = JSON.parse(errorMessage); 
+      error = errorMessage.error;
+      if (error === 'File locked by others.') {
+        error = gettext('File Locked by others.');
+      }
+      if (error === 'Internal error.') {
+        error = gettext('Internal error.');
+      }
     }
 
     let uploadFileList = this.state.uploadFileList.map(item => {
