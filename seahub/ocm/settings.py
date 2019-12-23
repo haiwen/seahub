@@ -26,3 +26,9 @@ OCM_NOTIFICATION_TYPE_LIST = [
     OCM_NOTIFICATION_SHARE_UNSHARED,
     OCM_NOTIFICATION_SHARE_DECLINED,
 ]
+
+VIA_REPO_TOKEN_URL = {
+    'DIR': 'api/v2.1/via-repo-token/dir/',
+    'UPLOAD_LINK': 'api/v2.1/via-repo-token/upload-link/',
+    'DOWNLOAD_LINK': 'api/v2.1/via-repo-token/download-link/',
+}

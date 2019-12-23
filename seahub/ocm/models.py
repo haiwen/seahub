@@ -102,5 +102,6 @@ class OCMShareReceived(models.Model):
             'repo_name': self.repo_name,
             'path': self.path,
             'permission': self.permission,
+            'provider_id': self.provider_id,
             'ctime': datetime_to_isoformat_timestr(self.ctime),
         }

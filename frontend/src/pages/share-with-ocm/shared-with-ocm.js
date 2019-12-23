@@ -40,7 +40,11 @@ class Content extends Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return <Item key={index} item={item} deleteShare={this.props.deleteShare} />;
+              return <Item
+                key={index}
+                item={item}
+                deleteShare={this.props.deleteShare}
+              />;
             })}
           </tbody>
         </table>
@@ -96,8 +100,8 @@ class Item extends Component {
     item.icon_title = Utils.getLibIconTitle(item);
     item.url = `${siteRoot}#shared-libs/lib/${item.repo_id}/`;
 
+    let shareRepoUrl =`${siteRoot}remote-library/${this.props.item.provider_id}/${this.props.item.repo_id}/${Utils.encodePath(this.props.item.repo_name)}/`;
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareRepoUrl =`${siteRoot}library/${item.repo_id}/${Utils.encodePath(item.repo_name)}/`;
     let deleteIcon = `action-icon sf2-icon-x3 ${iconVisibility ? 'invisible' : ''}`;
     return (
       <Fragment>
