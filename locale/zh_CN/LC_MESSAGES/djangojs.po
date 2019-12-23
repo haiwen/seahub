@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-17 15:37+0800\n"
-"PO-Revision-Date: 2019-12-02 10:20+0000\n"
+"POT-Creation-Date: 2019-12-23 17:01+0800\n"
+"PO-Revision-Date: 2019-12-23 09:24+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -613,7 +613,7 @@ msgstr "确定要注销该帐号吗？"
 #: frontend/src/components/dialog/file-participant-dialog.js:43
 #: frontend/src/components/dialog/generate-share-link.js:330
 #: frontend/src/components/dialog/generate-share-link.js:336
-#: frontend/src/components/dialog/generate-upload-link.js:208
+#: frontend/src/components/dialog/generate-upload-link.js:205
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:64
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:64
 #: frontend/src/components/dialog/org-delete-department-dialog.js:46
@@ -868,7 +868,7 @@ msgid "New Group"
 msgstr "新建群组"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:92
-#: frontend/src/components/dialog/generate-upload-link.js:116
+#: frontend/src/components/dialog/generate-upload-link.js:113
 #: frontend/src/components/dialog/org-add-user-dialog.js:120
 msgid "Please enter password"
 msgstr "请输入密码"
@@ -879,12 +879,12 @@ msgid "Please enter the password again"
 msgstr "请再次输入密码"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:102
-#: frontend/src/components/dialog/generate-upload-link.js:120
+#: frontend/src/components/dialog/generate-upload-link.js:117
 msgid "Password is too short"
 msgstr "密码太短"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:107
-#: frontend/src/components/dialog/generate-upload-link.js:124
+#: frontend/src/components/dialog/generate-upload-link.js:121
 #: frontend/src/components/dialog/org-add-user-dialog.js:130
 msgid "Passwords don't match"
 msgstr "两次输入的密码不一致"
@@ -963,7 +963,7 @@ msgstr "加密"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:213
 #: frontend/src/components/dialog/generate-share-link.js:352
-#: frontend/src/components/dialog/generate-upload-link.js:230
+#: frontend/src/components/dialog/generate-upload-link.js:227
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:106
@@ -975,7 +975,7 @@ msgstr "密码"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:226
 #: frontend/src/components/dialog/generate-share-link.js:360
-#: frontend/src/components/dialog/generate-upload-link.js:238
+#: frontend/src/components/dialog/generate-upload-link.js:235
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:110
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:160
 msgid "Password again"
@@ -1086,7 +1086,7 @@ msgid "Direct download link is copied to the clipboard."
 msgstr "直接下载连接已复制到剪切板。"
 
 #: frontend/src/components/dialog/generate-share-link.js:281
-#: frontend/src/components/dialog/generate-upload-link.js:186
+#: frontend/src/components/dialog/generate-upload-link.js:183
 msgid "(at least {passwordLength} characters)"
 msgstr "(至少 {passwordLength} 个字符)"
 
@@ -1104,12 +1104,12 @@ msgid "Direct Download Link:"
 msgstr "直接下载链接："
 
 #: frontend/src/components/dialog/generate-share-link.js:313
-#: frontend/src/components/dialog/generate-upload-link.js:202
+#: frontend/src/components/dialog/generate-upload-link.js:199
 msgid "Expiration Date:"
 msgstr "过期时间："
 
 #: frontend/src/components/dialog/generate-share-link.js:319
-#: frontend/src/components/dialog/generate-upload-link.js:207
+#: frontend/src/components/dialog/generate-upload-link.js:204
 #: frontend/src/components/send-link.js:110
 msgid "Send"
 msgstr "发送"
@@ -1124,13 +1124,13 @@ msgid ""
 msgstr "如果删除，获取该连接的任何人将无法继续访问。"
 
 #: frontend/src/components/dialog/generate-share-link.js:347
-#: frontend/src/components/dialog/generate-upload-link.js:224
+#: frontend/src/components/dialog/generate-upload-link.js:221
 msgid "Add password protection"
 msgstr "增加密码保护"
 
 #: frontend/src/components/dialog/generate-share-link.js:368
 #: frontend/src/components/dialog/generate-share-link.js:384
-#: frontend/src/components/dialog/generate-upload-link.js:244
+#: frontend/src/components/dialog/generate-upload-link.js:241
 msgid "Add auto expiration"
 msgstr "增加自动过期"
 
@@ -1139,7 +1139,7 @@ msgstr "增加自动过期"
 #: frontend/src/components/dialog/generate-share-link.js:391
 #: frontend/src/components/dialog/generate-share-link.js:394
 #: frontend/src/components/dialog/generate-share-link.js:397
-#: frontend/src/components/dialog/generate-upload-link.js:250
+#: frontend/src/components/dialog/generate-upload-link.js:247
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:142
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
 msgid "days"
@@ -1158,27 +1158,45 @@ msgid "Set permission"
 msgstr "设置权限"
 
 #: frontend/src/components/dialog/generate-share-link.js:423
-#: frontend/src/components/dialog/generate-upload-link.js:255
+#: frontend/src/components/dialog/generate-upload-link.js:252
 msgid "Generate"
 msgstr "生成链接"
 
-#: frontend/src/components/dialog/generate-upload-link.js:133
+#: frontend/src/components/dialog/generate-upload-link.js:130
 msgid "Please enter days"
 msgstr "请输入天数"
 
-#: frontend/src/components/dialog/generate-upload-link.js:137
+#: frontend/src/components/dialog/generate-upload-link.js:134
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:66
 msgid "Please enter a non-negative integer"
 msgstr "请输入一个非负整数"
 
-#: frontend/src/components/dialog/generate-upload-link.js:157
+#: frontend/src/components/dialog/generate-upload-link.js:154
 msgid "Upload link is copied to the clipboard."
 msgstr "上传连接已复制到剪切板。"
 
-#: frontend/src/components/dialog/generate-upload-link.js:194
+#: frontend/src/components/dialog/generate-upload-link.js:191
 msgid "Upload Link:"
 msgstr "上传连接："
+
+#: frontend/src/components/dialog/guide-for-new-dialog.js:23
+msgid "Welcome to {site_name_placeholder}"
+msgstr "欢迎使用 {site_name_placeholder}"
+
+#: frontend/src/components/dialog/guide-for-new-dialog.js:25
+msgid ""
+"{site_name_placeholder} organizes files into libraries. Each library can be "
+"synced and shared separately. We have created a personal library for you. "
+"You can create more libraries later."
+msgstr "{site_name_placeholder} 把文件组织到资料库里。每个资料库可以被单独地同步和共享。我们已经为你创建了一个私人资料库。之后你可以创建更多的资料库。"
+
+#: frontend/src/components/dialog/guide-for-new-dialog.js:26
+msgid ""
+"{site_name_placeholder} organizes files into libraries. Each library can be "
+"synced and shared separately. Howerver, since you are a guest user now, you "
+"can not create libraries."
+msgstr " {site_name_placeholder} 通过资料库来管理文件。每个资料库可以单独加密和共享。然而，因为您现在是访客，所以不能创建资料库。"
 
 #: frontend/src/components/dialog/image-dialog.js:27
 msgid "%curr% of %total%"
@@ -1402,16 +1420,16 @@ msgstr "未找到群组"
 #: frontend/src/components/dialog/repo-api-token-dialog.js:195
 #: frontend/src/pages/groups/group-view.js:206
 #: frontend/src/pages/groups/groups-view.js:67
-#: frontend/src/pages/lib-content-view/lib-content-view.js:161
-#: frontend/src/pages/lib-content-view/lib-content-view.js:619
-#: frontend/src/pages/lib-content-view/lib-content-view.js:662
-#: frontend/src/pages/lib-content-view/lib-content-view.js:694
-#: frontend/src/pages/lib-content-view/lib-content-view.js:878
-#: frontend/src/pages/lib-content-view/lib-content-view.js:889
-#: frontend/src/pages/lib-content-view/lib-content-view.js:915
-#: frontend/src/pages/lib-content-view/lib-content-view.js:929
-#: frontend/src/pages/lib-content-view/lib-content-view.js:988
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1039
+#: frontend/src/pages/lib-content-view/lib-content-view.js:160
+#: frontend/src/pages/lib-content-view/lib-content-view.js:613
+#: frontend/src/pages/lib-content-view/lib-content-view.js:656
+#: frontend/src/pages/lib-content-view/lib-content-view.js:688
+#: frontend/src/pages/lib-content-view/lib-content-view.js:872
+#: frontend/src/pages/lib-content-view/lib-content-view.js:883
+#: frontend/src/pages/lib-content-view/lib-content-view.js:909
+#: frontend/src/pages/lib-content-view/lib-content-view.js:923
+#: frontend/src/pages/lib-content-view/lib-content-view.js:982
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1033
 #: frontend/src/pages/my-libs/my-libs-deleted.js:148
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:216
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:232
@@ -1429,7 +1447,7 @@ msgstr "错误"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:177
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:155
 #: frontend/src/components/dialog/repo-api-token-dialog.js:197
-#: frontend/src/pages/lib-content-view/lib-content-view.js:167
+#: frontend/src/pages/lib-content-view/lib-content-view.js:166
 #: frontend/src/pages/search/main-panel.js:72
 #: frontend/src/pages/sys-admin/abuse-reports.js:48
 #: frontend/src/repo-folder-trash.js:141 frontend/src/repo-folder-trash.js:322
@@ -1858,8 +1876,8 @@ msgid "API token is copied to the clipboard."
 msgstr "API token 已复制到剪贴板。"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:114
-#: frontend/src/pages/lib-content-view/lib-content-view.js:153
-#: frontend/src/pages/lib-content-view/lib-content-view.js:156
+#: frontend/src/pages/lib-content-view/lib-content-view.js:152
+#: frontend/src/pages/lib-content-view/lib-content-view.js:155
 #: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:985
 msgid "Permission denied"
 msgstr "没有权限"
@@ -2587,7 +2605,7 @@ msgstr "文件夹"
 #: frontend/src/components/main-side-nav.js:210
 #: frontend/src/components/main-side-nav.js:212
 #: frontend/src/pages/my-libs/my-libs-deleted.js:53
-#: frontend/src/pages/my-libs/my-libs.js:148
+#: frontend/src/pages/my-libs/my-libs.js:157
 msgid "My Libraries"
 msgstr "我的资料库"
 
@@ -2712,6 +2730,12 @@ msgstr "下一页"
 msgid "Per page:"
 msgstr "每页："
 
+#: frontend/src/components/permission-denied-tip.js:6
+msgid ""
+"Permission denied. Plaese try {placeholder-left}login again.{placeholder-"
+"right}"
+msgstr "权限错误。请尝试 {placeholder-left}重新登录。{placeholder-right}"
+
 #: frontend/src/components/repo-info-bar.js:96
 msgid "draft"
 msgstr "草稿"
@@ -2777,14 +2801,6 @@ msgstr "附加消息（可选）："
 #: frontend/src/components/send-link.js:112
 msgid "Sending..."
 msgstr "发送中..."
-
-#: frontend/src/components/session-expired-tip.js:6
-msgid "You are logged out."
-msgstr "你已经登出。"
-
-#: frontend/src/components/session-expired-tip.js:7
-msgid "Login again."
-msgstr "再次登录。"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:45
 #: frontend/src/view-file-text.js:79
@@ -3193,11 +3209,11 @@ msgstr "文档改动数量"
 msgid "Modifier"
 msgstr "修改者"
 
-#: frontend/src/markdown-editor.js:366 frontend/src/view-file-cdoc.js:102
+#: frontend/src/markdown-editor.js:344 frontend/src/view-file-cdoc.js:102
 msgid "This file has been updated."
 msgstr "这个文件已被修改。"
 
-#: frontend/src/markdown-editor.js:367 frontend/src/repo-wiki-mode.js:134
+#: frontend/src/markdown-editor.js:345 frontend/src/repo-wiki-mode.js:134
 #: frontend/src/view-file-cdoc.js:103
 msgid "Refresh"
 msgstr "刷新"
@@ -3391,7 +3407,7 @@ msgstr "你可以点击上面的“新建资料库”按扭创建资料库。"
 
 #: frontend/src/pages/groups/group-view.js:202
 #: frontend/src/pages/groups/groups-view.js:63
-#: frontend/src/pages/lib-content-view/lib-content-view.js:688
+#: frontend/src/pages/lib-content-view/lib-content-view.js:682
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:228
 #: frontend/src/pages/org-admin/org-group-repos.js:139
 #: frontend/src/pages/org-admin/org-user-repos.js:139
@@ -3517,49 +3533,49 @@ msgstr "侧边导航菜单"
 msgid "Search files in this library"
 msgstr "在当前资料库搜索文件"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:684
+#: frontend/src/pages/lib-content-view/lib-content-view.js:678
 msgid "Successfully deleted {name} and other {n} items."
 msgstr "成功删除 {name} 和其他 {n} 项内容。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:695
+#: frontend/src/pages/lib-content-view/lib-content-view.js:689
 msgid "Failed to delete {name} and other {n} items."
 msgstr "删除 {name} 以及另外 {n} 项失败。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:880
-#: frontend/src/pages/lib-content-view/lib-content-view.js:891
+#: frontend/src/pages/lib-content-view/lib-content-view.js:874
+#: frontend/src/pages/lib-content-view/lib-content-view.js:885
 msgid "Renaming {name} failed"
 msgstr "重命名{name}失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:911
-#: frontend/src/pages/lib-content-view/lib-content-view.js:925
+#: frontend/src/pages/lib-content-view/lib-content-view.js:905
+#: frontend/src/pages/lib-content-view/lib-content-view.js:919
 #: frontend/src/pages/org-admin/org-groups.js:71
 #: frontend/src/pages/org-admin/org-libraries.js:73
 msgid "Successfully deleted {name}"
 msgstr " {name}  删除成功"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:917
-#: frontend/src/pages/lib-content-view/lib-content-view.js:931
+#: frontend/src/pages/lib-content-view/lib-content-view.js:911
+#: frontend/src/pages/lib-content-view/lib-content-view.js:925
 msgid "Failed to delete {name}"
 msgstr "删除 {name} 失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:959
-#: frontend/src/pages/lib-content-view/lib-content-view.js:989
+#: frontend/src/pages/lib-content-view/lib-content-view.js:953
+#: frontend/src/pages/lib-content-view/lib-content-view.js:983
 msgid "Failed to move {name}."
 msgstr "移动 {name} 失败。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:968
-#: frontend/src/pages/lib-content-view/lib-content-view.js:982
+#: frontend/src/pages/lib-content-view/lib-content-view.js:962
+#: frontend/src/pages/lib-content-view/lib-content-view.js:976
 msgid "Successfully moved {name}."
 msgstr "成功移动 {name}。"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1011
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1040
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1005
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1034
 #: frontend/src/repo-wiki-mode.js:519
 msgid "Failed to copy %(name)s"
 msgstr "复制 %(name)s 失败"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1019
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1033
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1013
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1027
 #: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:1084
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
@@ -3620,11 +3636,11 @@ msgstr "资料库还原成功。"
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
-#: frontend/src/pages/my-libs/my-libs.js:37
+#: frontend/src/pages/my-libs/my-libs.js:39
 msgid "You have not created any libraries"
 msgstr "你还未创建资料库"
 
-#: frontend/src/pages/my-libs/my-libs.js:38
+#: frontend/src/pages/my-libs/my-libs.js:40
 msgid ""
 "You can create a library to organize your files. For example, you can create"
 " one for each of your projects. Each library can be synchronized and shared "
