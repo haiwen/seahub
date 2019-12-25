@@ -1270,11 +1270,13 @@ class LibContentView extends React.Component {
       let direntList = this.state.direntList.filter(item => {
         return item.name !== name;
       });
+
+      // Recalculate the state of the selection
       let selectedDirentList = this.state.selectedDirentList.slice(0);
       if (selectedDirentList.length > 0) {
         selectedDirentList = selectedDirentList.filter(item => {
           return item.name !== name;
-        })
+        });
       }
       this.setState({ 
         direntList: direntList,
@@ -1300,12 +1302,14 @@ class LibContentView extends React.Component {
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
     });
+
+    // Recalculate the state of the selection
     let selectedDirentList = this.state.selectedDirentList.slice(0);
-      if (selectedDirentList.length > 0) {
-        selectedDirentList = selectedDirentList.filter(item => {
-          return item.name !== name;
-        })
-      }
+    if (selectedDirentList.length > 0) {
+      selectedDirentList = selectedDirentList.filter(item => {
+        return item.name !== name;
+      });
+    }
     this.setState({
       direntList: direntList,
       selectedDirentList: selectedDirentList,
