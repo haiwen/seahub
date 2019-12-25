@@ -1270,7 +1270,18 @@ class LibContentView extends React.Component {
       let direntList = this.state.direntList.filter(item => {
         return item.name !== name;
       });
-      this.setState({ direntList: direntList });
+      let selectedDirentList = this.state.selectedDirentList.slice(0);
+      if (selectedDirentList.length > 0) {
+        selectedDirentList = selectedDirentList.filter(item => {
+          return item.name !== name;
+        })
+      }
+      this.setState({ 
+        direntList: direntList,
+        selectedDirentList: selectedDirentList,
+        isDirentSelected: selectedDirentList.length > 0,
+        isAllDirentSelected: selectedDirentList.length === direntList.length,
+      });
       this.updateReadmeMarkdown(direntList);
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // the deleted item is ancester of the current item
@@ -1289,7 +1300,18 @@ class LibContentView extends React.Component {
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
     });
-    this.setState({direntList: direntList});
+    let selectedDirentList = this.state.selectedDirentList.slice(0);
+      if (selectedDirentList.length > 0) {
+        selectedDirentList = selectedDirentList.filter(item => {
+          return item.name !== name;
+        })
+      }
+    this.setState({
+      direntList: direntList,
+      selectedDirentList: selectedDirentList,
+      isDirentSelected: selectedDirentList.length > 0,
+      isAllDirentSelected: selectedDirentList.length === direntList.length,
+    });
     this.updateReadmeMarkdown(direntList);
   }
 
