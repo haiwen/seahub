@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-23 17:01+0800\n"
-"PO-Revision-Date: 2019-12-23 09:03+0000\n"
+"POT-Creation-Date: 2019-12-26 10:21+0800\n"
+"PO-Revision-Date: 2019-12-26 02:22+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/haiwen/seahub/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -1182,7 +1182,7 @@ msgstr ""
 #: frontend/src/components/dialog/guide-for-new-dialog.js:26
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
-"synced and shared separately. Howerver, since you are a guest user now, you "
+"synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
 msgstr ""
 
@@ -2720,7 +2720,7 @@ msgstr ""
 
 #: frontend/src/components/permission-denied-tip.js:6
 msgid ""
-"Permission denied. Plaese try {placeholder-left}login again.{placeholder-"
+"Permission denied. Please try {placeholder-left}login again.{placeholder-"
 "right}"
 msgstr ""
 
