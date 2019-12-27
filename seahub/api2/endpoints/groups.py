@@ -95,7 +95,7 @@ class Groups(APIView):
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
-            user_groups = seaserv.get_org_groups_by_user(org_id, username)
+            user_groups = seaserv.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
