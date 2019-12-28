@@ -6,7 +6,6 @@ view_snapshot_file, view_shared_file, etc.
 """
 
 import sys
-import jwt
 import os
 import json
 import stat
@@ -811,6 +810,7 @@ def view_lib_file(request, repo_id, path):
                 send_file_access_msg(request, repo, path, 'web')
 
                 if ONLYOFFICE_JWT_SECRET:
+                    import jwt
                     config = {
                         "document": {
                             "fileType": onlyoffice_dict['file_type'],
