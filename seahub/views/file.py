@@ -47,7 +47,7 @@ from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
-from seahub.base.templatetags.seahub_tags import file_icon_filter
+from seahub.base.templatetags.seahub_tags import file_icon_filter, email2nickname
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -827,13 +827,13 @@ def view_lib_file(request, repo_id, path):
                         "documentType": onlyoffice_dict['document_type'],
                         "editorConfig": {
                             "callbackUrl": onlyoffice_dict['callback_url'],
-                            "lang": "zh-cn",
+                            "lang": request.LANGUAGE_CODE,
                             "mode": onlyoffice_dict['can_edit'],
                             "customization": {
                                 "forcesave": onlyoffice_dict['onlyoffice_force_save'],
                             },
                             "user": {
-                                "name": "name-of-lian"
+                                "name": email2nickname(username)
                             }
                         }
                     };
