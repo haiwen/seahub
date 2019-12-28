@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, PER_PAGE, filePath } from '../../utils/constants';
-import editUtilties from '../../utils/editor-utilties';
+import editUtilities from '../../utils/editor-utilities';
 import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';
 import toaster from '../../components/toast';
@@ -26,7 +26,7 @@ class SidePanel extends React.Component {
   }
 
   componentDidMount() {
-    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       let historyList = res.data;
       if (historyList.length === 0) {
         this.setState({isLoading: false});
@@ -37,7 +37,7 @@ class SidePanel extends React.Component {
   }
   
   refershFileList() {
-    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
     });
   }
@@ -75,7 +75,7 @@ class SidePanel extends React.Component {
         currentPage: currentPage,
         isReloadingData: true,
       });
-      editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+      editUtilities.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
         this.setState({isReloadingData: false});
       });
@@ -84,7 +84,7 @@ class SidePanel extends React.Component {
 
   onItemRestore = (currentItem) => {
     let commitId = currentItem.commit_id;
-    editUtilties.revertFile(filePath, commitId).then(res => {
+    editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({isLoading: true});
         this.refershFileList();
