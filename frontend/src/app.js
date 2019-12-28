@@ -13,7 +13,7 @@ import DraftContent from './pages/drafts/draft-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
-import editUtilties from './utils/editor-utilties';
+import editUtilities from './utils/editor-utilities';
 import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
@@ -100,7 +100,7 @@ class App extends Component {
   }
 
   getDrafts = () => {
-    editUtilties.listDrafts().then(res => {
+    editUtilities.listDrafts().then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
         draftList: res.data.data, 

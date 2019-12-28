@@ -4,7 +4,7 @@ import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
-import editorUtilities from '../../utils/editor-utilties';
+import editorUtilities from '../../utils/editor-utilities';
 import More from '../more';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';

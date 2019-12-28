@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import moment from 'moment';
-import editUtilties from '../../utils/editor-utilties';
+import editorUtilities from '../../utils/editor-utilities';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import Draft from '../../models/draft';
@@ -36,7 +36,7 @@ class ListRepoDraftsDialog extends React.Component {
   }
 
   onDeleteDraftItem = (draft) => {
-    editUtilties.deleteDraft(draft.id).then(() => {
+    editorUtilities.deleteDraft(draft.id).then(() => {
       let drafts = this.state.drafts.filter(item => {
         return item.id !== draft.id;
       });

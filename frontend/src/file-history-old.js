@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload, canCompare } from './utils/constants';
-import editUtilties from './utils/editor-utilties';
+import editUtilities from './utils/editor-utilities';
 import Loading from './components/loading';
 import Logo from './components/logo';
 import CommonToolbar from './components/toolbar/common-toolbar';
@@ -43,7 +43,7 @@ class FileHistory extends React.Component {
   }
 
   listNewHistoryRecords = (filePath, PER_PAGE) => {
-    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
+    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       let historyData = res.data;
       if (!historyData) {
         this.setState({isLoading: false});
@@ -141,7 +141,7 @@ class FileHistory extends React.Component {
           currentPage: currentPage,
           isReloadingData: true,
         });
-        editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
+        editUtilities.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
           this.updateNewRecords(res.data);
         });
       } else {
@@ -193,7 +193,7 @@ class FileHistory extends React.Component {
   onItemRestore = (item) => {
     let commitId = item.commit_id;
     let filePath = item.path;
-    editUtilties.revertFile(filePath, commitId).then(res => {
+    editUtilities.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
         this.setState({isLoading: true});
         this.refershFileList();
@@ -203,7 +203,7 @@ class FileHistory extends React.Component {
 
   refershFileList() {
     if (useNewAPI) {
-      editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
+      editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then((res) => {
         this.initNewRecords(res.data);
       });
     } else {

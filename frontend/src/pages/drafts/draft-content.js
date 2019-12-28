@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { gettext } from '../../utils/constants';
-import editUtilties from '../../utils/editor-utilties';
+import editUtilities from '../../utils/editor-utilities';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
@@ -24,7 +24,7 @@ class DraftContent extends React.Component {
   onDeleteHandler = (draft) => {
     // let draft = this.state.currentDraft;
     let draft_name = Utils.getFileName(draft.draft_file_path);
-    editUtilties.deleteDraft(draft.id).then(res => {
+    editUtilities.deleteDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
@@ -39,7 +39,7 @@ class DraftContent extends React.Component {
   onPublishHandler = (draft) => {
     // let draft = this.state.currentDraft;
     let draft_name = Utils.getFileName(draft.draft_file_path);
-    editUtilties.publishDraft(draft.id).then(res => {
+    editUtilities.publishDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully published draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
