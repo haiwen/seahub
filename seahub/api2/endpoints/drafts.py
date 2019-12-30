@@ -193,7 +193,8 @@ class DraftView(APIView):
                              'Draft %s not found.' % pk)
 
         # perm check
-        if d.username != username:
+        draft_file_id = seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path)
+        if draft_file_id and d.username != username:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
 
