@@ -44,6 +44,10 @@
   border-radius: 0 0 3px 3px;
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
 }
+.dropdown-search-result-container {
+  max-height: 300px;
+  overflow: auto;
+}
 
 .search-result-container .search-result-none {
   text-align: center;

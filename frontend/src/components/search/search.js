@@ -24,6 +24,9 @@ class Search extends Component {
       width: 'default',
       value: '',
       resultItems: [],
+      page: 1,
+      perPage: 5,
+      total: 0,
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
@@ -95,12 +98,9 @@ class Search extends Component {
     this.sendRequest(queryData, this.source.token);
   }
 
-  sendRequest(queryData, cancelToken) {
+  searchWiki(search_repo, q, page, perPage) {
     var _this = this;
-    let isPublic = this.props.isPublic;
-
-    if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.q, queryData.search_repo).then(res => {
+      seafileAPI.searchFilesInPublishedRepo(search_repo, q, page, perPage).then(res => {
         if (!res.data.total) {
           _this.setState({
             resultItems: [],
@@ -110,15 +110,29 @@ class Search extends Component {
           return;
         }
 
-        let items = _this.formatResultItems(res.data.results);
+        const items = _this.formatResultItems(res.data.results);
         _this.setState({
-          resultItems: items,
+          total: res.data.total,
+          resultItems: page == 1 ? items : this.state.resultItems.concat(items),
           isResultGetted: true
         });
         _this.source = null;
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
+      });
+  }
+
+  sendRequest(queryData, cancelToken) {
+    var _this = this;
+    let isPublic = this.props.isPublic;
+
+    if (isPublic) {
+      // 'page=1' for this first request
+      this.setState({page: 1}, () => {
+        const { search_repo, q } = queryData;
+        const { page, perPage } = this.state;
+        this.searchWiki(search_repo, q, page, perPage);
       });
     } else {
       editorUtilities.searchFiles(queryData,cancelToken).then(res => {
@@ -133,6 +147,7 @@ class Search extends Component {
   
         let items = _this.formatResultItems(res.data.results);
         _this.setState({
+          total: res.data.total,
           resultItems: items,
           isResultGetted: true
         });
@@ -209,7 +224,17 @@ class Search extends Component {
     for (let key in queryData) {
       params += key + '=' + queryData[key] + '&';
     }
-    window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
+
+    if (this.props.isPublic) {
+      this.setState({
+        page: this.state.page + 1
+      }, () => {
+        const { page, perPage } = this.state;
+        this.searchWiki(repoID, newValue, page, perPage);
+      });
+    } else {
+      window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
+    }
   }
 
   renderSearchResult() {
@@ -227,19 +252,20 @@ class Search extends Component {
         <div className="search-result-none">{gettext('No results matching.')}</div>
       );
     }
-    let isShowMore = this.state.resultItems.length >= 5 ? true : false;
+    const { resultItems, total } = this.state;
+    const isShowMore = total > resultItems.length;
     return (
       <ul className="search-result-list">
-        {this.state.resultItems.map(item => {
+        {this.state.resultItems.map((item, index) => {
           return (
             <SearchResultItem
-              key={item.index}
+              key={index}
               item={item}
               onItemClickHandler={_this.onItemClickHandler}
             />
           );
         })}
-        {isShowMore && <More onShowMore={this.onShowMore}/>}
+        {isShowMore && <More onShowMore={this.onShowMore} />}
       </ul>
     );
   }
@@ -283,7 +309,7 @@ class Search extends Component {
                 }
                 {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
               </div>
-              <div className="search-result-container">
+              <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
               </div>
             </div>
@@ -316,7 +342,7 @@ class Search extends Component {
                   }
                   {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
                 </div>
-                <div className="search-result-container">
+                <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}
                 </div>
               </div>

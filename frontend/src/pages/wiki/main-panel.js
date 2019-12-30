@@ -108,6 +108,7 @@ class MainPanel extends Component {
                 )}
               </div>
               <CommonToolbar 
+                isPublic={true}
                 repoID={repoID}
                 onSearchedClick={this.props.onSearchedClick} 
                 searchPlaceholder={gettext('Search files in this library')}
