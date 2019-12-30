@@ -35,6 +35,9 @@ html, body { padding:0; margin:0; height:100%; }
             }
         },
         "documentType": "{{ document_type }}", // 'text' | 'spreadsheet' | 'presentation',
+        {% if onlyoffice_jwt_token %}
+        "token": "{{ onlyoffice_jwt_token }}",
+        {% endif %}
         "editorConfig": {
             "callbackUrl": "{{ callback_url }}",
             "lang": "{{ LANGUAGE_CODE }}",

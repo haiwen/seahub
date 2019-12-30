@@ -46,7 +46,7 @@ from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
-from seahub.base.templatetags.seahub_tags import file_icon_filter
+from seahub.base.templatetags.seahub_tags import file_icon_filter, email2nickname
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -127,6 +127,11 @@ try:
     from seahub.onlyoffice.settings import ONLYOFFICE_EDIT_FILE_EXTENSION
 except ImportError:
     ONLYOFFICE_EDIT_FILE_EXTENSION = ()
+
+try:
+    from seahub.onlyoffice.settings import ONLYOFFICE_JWT_SECRET
+except ImportError:
+    ONLYOFFICE_JWT_SECRET = ''
 
 # bisheng office
 from seahub.bisheng_office.utils import get_bisheng_dict, \
@@ -803,6 +808,37 @@ def view_lib_file(request, repo_id, path):
                         logger.error(e)
 
                 send_file_access_msg(request, repo, path, 'web')
+
+                if ONLYOFFICE_JWT_SECRET:
+                    import jwt
+                    config = {
+                        "document": {
+                            "fileType": onlyoffice_dict['file_type'],
+                            "key": onlyoffice_dict['doc_key'],
+                            "title": onlyoffice_dict['doc_title'],
+                            "url": onlyoffice_dict['doc_url'],
+                            "permissions": {
+                                "download": onlyoffice_dict['can_download'],
+                                "edit": onlyoffice_dict['can_edit'],
+                                "print": onlyoffice_dict['can_download'],
+                                "review": True
+                            }
+                        },
+                        "documentType": onlyoffice_dict['document_type'],
+                        "editorConfig": {
+                            "callbackUrl": onlyoffice_dict['callback_url'],
+                            "lang": request.LANGUAGE_CODE,
+                            "mode": onlyoffice_dict['can_edit'],
+                            "customization": {
+                                "forcesave": onlyoffice_dict['onlyoffice_force_save'],
+                            },
+                            "user": {
+                                "name": email2nickname(username)
+                            }
+                        }
+                    };
+                    onlyoffice_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
+
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
