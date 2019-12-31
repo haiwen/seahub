@@ -277,14 +277,13 @@ class GenerateShareLink extends React.Component {
 
   getCurrentPermission = (permissions) => {
     const { can_edit, can_download } = permissions;
-    switch (`${can_edit} ${can_download}`) {
-      case 'false true':
+    if (!can_edit && can_download) {
         return 'preview_download';
-      case 'false false':
+    } else if (!can_edit && !can_download) {
         return 'preview_only';
-      case 'true true':
+    } else if (can_edit && can_download) {
         return 'edit_download';
-      case 'true false':
+    } else if (can_edit && !can_download) {
         return 'cloud_edit';
     }
   }
@@ -357,7 +356,6 @@ class GenerateShareLink extends React.Component {
             {(isPro && sharedLinkInfo.permissions) && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Permissions:')}</dt>
-                {isPro &&
                 <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
                   <ShareLinkPermissionEditor
                     isTextMode={true}
@@ -367,7 +365,6 @@ class GenerateShareLink extends React.Component {
                     onPermissionChanged={this.changePerm}
                   />
                 </dd>
-                }
               </FormGroup>
             )}
 
