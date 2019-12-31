@@ -48,6 +48,14 @@ class AllRepos extends Component {
     });
   }
 
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getReposByPage(1);
+    });
+  }
+
   createRepo = (repoName, Owner) => {
     seafileAPI.sysAdminCreateRepo(repoName, Owner).then(res => {
       this.state.repos.unshift(res.data);
@@ -107,7 +115,9 @@ class AllRepos extends Component {
                 errorMsg={this.state.errorMsg}
                 items={this.state.repos}
                 pageInfo={this.state.pageInfo}
+                curPerPage={this.state.perPage}
                 getListByPage={this.getReposByPage}
+                resetPerPage={this.resetPerPage}
                 onDeleteRepo={this.onDeleteRepo}
                 onTransferRepo={this.onTransferRepo}
               />
