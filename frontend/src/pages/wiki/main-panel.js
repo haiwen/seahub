@@ -93,7 +93,7 @@ class MainPanel extends Component {
                 <Search
                   repoID={repoID}
                   onSearchedClick={this.props.onSearchedClick}
-                  placeholder={gettext('Search files in this library')}
+                  placeholder={gettext('Search')}
                 />
               </div>
             </Fragment>
@@ -112,7 +112,7 @@ class MainPanel extends Component {
                 <Search
                   repoID={repoID}
                   onSearchedClick={this.props.onSearchedClick}
-                  placeholder={gettext('Search files in this library')}
+                  placeholder={gettext('Search')}
                 />
                 <Notification />  
                 <Account />

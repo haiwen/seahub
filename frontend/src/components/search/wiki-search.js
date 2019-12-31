@@ -195,7 +195,6 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    console.log('wiki ...');
     var _this = this;
     if (!this.state.isResultShow) {
       return;
@@ -235,10 +234,6 @@ class Search extends Component {
     });
   }
 
-  onSearchPage = () => {
-    window.location.href = siteRoot + 'search/';
-  }
-
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
@@ -261,10 +256,6 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
-                {(this.state.isCloseShow && username) &&
-                  <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                    onClick={this.onSearchPage}></i>
-                }
                 {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
               </div>
               <div className="search-result-container dropdown-search-result-container">
@@ -294,10 +285,6 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {(this.state.isCloseShow && username) &&
-                    <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                      onClick={this.onSearchPage}></i>
-                  }
                   {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
