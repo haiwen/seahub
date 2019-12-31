@@ -4,7 +4,6 @@ import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
-import editorUtilities from '../../utils/editor-utilities';
 import More from '../more';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -94,7 +93,7 @@ class Search extends Component {
       isResultGetted: false
     });
 
-    this.source = editorUtilities.getSource();
+    this.source = seafileAPI.getSource();
     this.sendRequest(queryData, this.source.token);
   }
 
@@ -135,7 +134,7 @@ class Search extends Component {
         this.searchWiki(search_repo, q, page, perPage);
       });
     } else {
-      editorUtilities.searchFiles(queryData,cancelToken).then(res => {
+      seafileAPI.searchFiles(queryData,cancelToken).then(res => {
         if (!res.data.total) {
           _this.setState({
             resultItems: [],
