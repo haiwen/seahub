@@ -5,11 +5,13 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import More from '../more';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
-  onSearchedClick: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired
 };
 
 class Search extends Component {
@@ -20,6 +22,8 @@ class Search extends Component {
       width: 'default',
       value: '',
       resultItems: [],
+      page: 1,
+      perPage: 5,
       total: 0,
       isMaskShow: false,
       isResultShow: false,
@@ -92,10 +96,9 @@ class Search extends Component {
     this.sendRequest(queryData, this.source.token);
   }
 
-  sendRequest(queryData, cancelToken) {
+  searchWiki(search_repo, q, page, perPage) {
     var _this = this;
-
-    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+    seafileAPI.searchFilesInPublishedRepo(search_repo, q, page, perPage).then(res => {
       if (!res.data.total) {
         _this.setState({
           resultItems: [],
@@ -104,18 +107,26 @@ class Search extends Component {
         _this.source = null;
         return;
       }
-  
-      let items = _this.formatResultItems(res.data.results);
+
+      const items = _this.formatResultItems(res.data.results);
       _this.setState({
         total: res.data.total,
-        resultItems: items,
+        resultItems: page == 1 ? items : this.state.resultItems.concat(items),
         isResultGetted: true
       });
       _this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
-        console.log(res);
-        /* eslint-enable */
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  sendRequest(queryData) {
+    // 'page=1' for this first request
+    this.setState({page: 1}, () => {
+      const { search_repo, q } = queryData;
+      const { page, perPage } = this.state;
+      this.searchWiki(search_repo, q, page, perPage);
     });
   }
 
@@ -174,17 +185,13 @@ class Search extends Component {
   onShowMore = () => {
     let repoID = this.props.repoID;
     let newValue = this.state.value;
-    let queryData = {
-      q: newValue,
-      search_repo: repoID ? repoID : 'all',
-      search_ftypes: 'all',
-    };
-    let params = '';
-    for (let key in queryData) {
-      params += key + '=' + queryData[key] + '&';
-    }
 
-    window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
+    this.setState({
+      page: this.state.page + 1
+    }, () => {
+      const { page, perPage } = this.state;
+      this.searchWiki(repoID, newValue, page, perPage);
+    });
   }
 
   renderSearchResult() {
@@ -227,10 +234,6 @@ class Search extends Component {
     });
   }
 
-  onSearchPage = () => {
-    window.location.href = siteRoot + 'search/';
-  }
-
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
@@ -253,10 +256,6 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
-                {(this.state.isCloseShow && username) &&
-                  <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                    onClick={this.onSearchPage}></i>
-                }
                 {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
               </div>
               <div className="search-result-container dropdown-search-result-container">
@@ -286,10 +285,6 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {(this.state.isCloseShow && username) &&
-                    <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                      onClick={this.onSearchPage}></i>
-                  }
                   {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
                 </div>
                 <div className="search-result-container dropdown-search-result-container">

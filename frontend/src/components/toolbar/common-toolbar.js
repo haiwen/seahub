@@ -23,7 +23,7 @@ class  CommonToolbar extends React.Component {
             onSearchedClick={this.props.onSearchedClick} 
           />
         )}
-        <Notification  />
+        <Notification />
         <Account />
       </div>
     );
