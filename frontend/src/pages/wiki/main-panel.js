@@ -6,7 +6,9 @@ import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
-import Search from '../../components/search/search';
+import Search from '../../components/search/wiki-search';
+import Notification from '../../components/common/notification';
+import Account from '../../components/common/account';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -89,7 +91,6 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 <Search
-                  isPublic={true}
                   repoID={repoID}
                   onSearchedClick={this.props.onSearchedClick}
                   placeholder={gettext('Search files in this library')}
@@ -107,12 +108,15 @@ class MainPanel extends Component {
                     <span className="fa fa-pencil-alt mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick} style={{'font-size': '1.1rem'}}></span>
                 )}
               </div>
-              <CommonToolbar 
-                isPublic={true}
-                repoID={repoID}
-                onSearchedClick={this.props.onSearchedClick} 
-                searchPlaceholder={gettext('Search files in this library')}
-              />
+              <div className="common-toolbar">
+                <Search
+                  repoID={repoID}
+                  onSearchedClick={this.props.onSearchedClick}
+                  placeholder={gettext('Search files in this library')}
+                />
+                <Notification />  
+                <Account />
+              </div>
             </Fragment>
           )}
         </div>
