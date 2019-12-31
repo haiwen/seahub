@@ -107,6 +107,10 @@ class DirSharedItemsEndpoint(APIView):
         admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for item in share_items:
 
+            if '@seafile_group' in repo_owner and \
+                    repo_owner.split('@')[0] == str(item.group_id):
+                continue
+
             group_id = item.group_id
             group = ccnet_api.get_group(group_id)
             if not group:

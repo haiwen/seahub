@@ -1306,6 +1306,11 @@ class GroupOwnedLibraryGroupShare(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if '@seafile_group' in repo_owner and \
+                repo_owner.split('@')[0] == str(to_group_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         path = request.data.get('path', '/')
 
         SeafileAPI.delete_shared_group_by_repo_path(
