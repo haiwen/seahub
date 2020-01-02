@@ -140,7 +140,9 @@ class GroupsView extends React.Component {
       });
       this.setState({
         isLoading: false,
-        groupList: groupList,
+        groupList: groupList.sort((a, b) => {
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        })
       });
     }).catch((error) => {
       this.setState({
