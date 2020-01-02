@@ -275,19 +275,6 @@ class GenerateShareLink extends React.Component {
     this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
   }
 
-  getCurrentPermission = (permissions) => {
-    const { can_edit, can_download } = permissions;
-    if (!can_edit && can_download) {
-        return 'preview_download';
-    } else if (!can_edit && !can_download) {
-        return 'preview_only';
-    } else if (can_edit && can_download) {
-        return 'edit_download';
-    } else if (can_edit && !can_download) {
-        return 'cloud_edit';
-    }
-  }
-
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
   }
@@ -319,7 +306,7 @@ class GenerateShareLink extends React.Component {
 
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
-      let currentPermission = this.getCurrentPermission(sharedLinkInfo.permissions);
+      let currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
       const { permissionOptions , isOpIconShown } = this.state;
       return (
         <div>

@@ -112,25 +112,11 @@ class Item extends Component {
     let itemType = item.is_dir ? (item.path === '/' ? 'library' : 'dir') : 'file';
     let permission = item.repo_folder_permission;
     let permissionOptions = Utils.getShareLinkPermissionList(itemType, permission, item.path, item.can_edit);
-    let currentPermission = this.getCurrentPermission();
+    let currentPermission = Utils.getShareLinkPermissionStr(this.props.item.permissions);
     this.setState({
       permissionOptions: permissionOptions,
       currentPermission: currentPermission
     });
-  }
-
-  getCurrentPermission = () => {
-    const { can_edit, can_download } = this.props.item.permissions;
-    switch (`${can_edit} ${can_download}`) {
-      case 'false true':
-        return 'preview_download';
-      case 'false false':
-        return 'preview_only';
-      case 'true true':
-        return 'edit_download';
-      case 'true false':
-        return 'cloud_edit';
-    }
   }
 
   toggleOpMenu = () => {

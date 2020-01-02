@@ -155,6 +155,23 @@ export const Utils = {
     return permissionOptions;
   },
 
+  getShareLinkPermissionStr: function(permissions) {
+    const { can_edit, can_download } = permissions;
+    if (can_edit) {
+      if (can_download) {
+        return 'edit_download';
+      } else {
+        return 'cloud_edit';
+      }
+    } else {
+      if (can_download) {
+        return 'preview_download';
+      } else {
+        return 'preview_only';
+      }
+    }
+  },
+
   isEditableOfficeFile: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
