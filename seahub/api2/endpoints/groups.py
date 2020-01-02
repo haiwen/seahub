@@ -26,7 +26,7 @@ from seahub.utils.repo import get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
-    group_id_to_name
+    group_id_to_name, set_group_name_cache
 from seahub.group.views import remove_group_common
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -289,7 +289,8 @@ class Group(APIView):
                     error_msg = _('There is already a group with that name.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                seaserv.ccnet_threaded_rpc.set_group_name(group_id, new_group_name)
+                ccnet_api.set_group_name(group_id, new_group_name)
+                set_group_name_cache(group_id, new_group_name)
 
             except SearpcError as e:
                 logger.error(e)

@@ -136,5 +136,9 @@ def group_id_to_name(group_id):
 
     group_name = group.group_name
     cache.set(key, group_name, GROUP_ID_CACHE_TIMEOUT)
-
     return group_name
+
+def set_group_name_cache(group_id, group_name):
+    group_id = str(group_id)
+    key = normalize_cache_key(group_id, GROUP_ID_CACHE_PREFIX)
+    cache.set(key, group_name, GROUP_ID_CACHE_TIMEOUT)
