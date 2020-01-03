@@ -44,8 +44,8 @@ class Content extends Component {
 
     const emptyTip = (
       <EmptyTip>
-        <h2>{gettext('No libraries have been shared with you')}</h2>
-        <p>{gettext('No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".')}</p>
+        <h2>{gettext('No shared libraries')}</h2>
+        <p>{gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}</p>
       </EmptyTip>
     );
 

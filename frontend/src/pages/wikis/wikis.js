@@ -145,8 +145,8 @@ class Wikis extends Component {
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
                 <EmptyTip>
-                  <h2>{gettext('You do not have any public library')}</h2>
-                  <p>{gettext('Public libraries are for publishing your contents in an organized way.')}</p>
+                  <h2>{gettext('No published libraries')}</h2>
+                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Publish a Library" button in the menu bar.')}</p>
                 </EmptyTip>
               }
             </div>

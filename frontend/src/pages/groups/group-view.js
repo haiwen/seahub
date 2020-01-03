@@ -126,9 +126,8 @@ class GroupView extends React.Component {
       if (currentGroup.parent_group_id === 0) {
         emptyTip = (
           <EmptyTip>
-            <h2>{gettext('No library is shared to this group')}</h2>
-            <p>{gettext('You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.')}</p>
-            <p>{gettext('Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded.')}</p>
+            <h2>{gettext('No libraries shared with this group')}</h2>
+            <p>{gettext('No libraries have been shared with this group yet. A library shared with a group can be accessed by all group members. You can share a library with a group in "My Libraries". You can also create a new library to be shared with this group by clicking the "New Library" button in the menu bar.')}</p>
           </EmptyTip>
         );
       } else {

@@ -179,7 +179,8 @@ class Content extends Component {
     if (!invitationsList.length) {
       return ( 
         <EmptyTip>
-          <h2>{gettext('You have not invited any people.')}</h2>
+          <h2>{gettext('No guest invitations')}</h2>
+          <p>{gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" button in the menu bar.')}</p>
         </EmptyTip>
       );
     }
@@ -269,7 +270,7 @@ class InvitationsView extends React.Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Invite People')}</h3>
+              <h3 className="sf-heading">{gettext('Invite Guest')}</h3>
             </div>
             <div className="cur-view-content">
               <Content data={this.state} />

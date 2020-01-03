@@ -34,17 +34,16 @@ class MyLibraries extends Component {
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
 
-    this.emptyMessage = (
+    this.emptyTip = (
       <EmptyTip>
-        <h2>{gettext('You have not created any libraries')}</h2>
-        <p>{gettext('You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately.')}</p>
+        <h2>{gettext('No libraries')}</h2>
+        <p>{gettext('You have not created any libraries yet. A library is a container to organize your files and folders. A library can also be shared with others and synced to your connected devices. You can create a library by clicking the "New Library" button in the menu bar.')}</p>
       </EmptyTip>
     );
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type: 'mine'}).then((res) => {
-      // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
@@ -160,7 +159,7 @@ class MyLibraries extends Component {
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {!this.state.isLoading && this.state.errorMsg && <p className="error text-center mt-8">{this.state.errorMsg}</p>}
-              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyMessage}
+              {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length === 0 && this.emptyTip}
               {!this.state.isLoading && !this.state.errorMsg && this.state.repoList.length > 0 &&
                 <MylibRepoListView
                   sortBy={this.state.sortBy}

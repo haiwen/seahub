@@ -104,7 +104,7 @@ class InvitePeopleDialog extends React.Component {
     const { isSubmitting } = this.state;
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
-        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Invite People')}</ModalHeader>
+        <ModalHeader toggle={this.props.toggleDialog}>{gettext('Invite Guest')}</ModalHeader>
         <ModalBody>
           <label htmlFor="emails">{gettext('Emails')}</label>
           <Input
