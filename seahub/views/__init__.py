@@ -1123,10 +1123,17 @@ def react_fake_view(request, **kwargs):
     if guide_enabled:
         create_default_library(request)
 
+    try:
+        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+    except Exception as e:
+        logger.error(e)
+        expire_days = -1
+
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
 
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
+        'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'dtable_web_server': DTABLE_WEB_SERVER,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),

@@ -39,8 +39,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('You don\'t have any share links')}</h2>
-          <p>{gettext('You can generate a share link for a folder or a file. Anyone who receives this link can view the folder or the file online.')}</p>
+          <h2>{gettext('No share links')}</h2>
+          <p>{gettext('You have not created any share links yet. A share link can be used to share files and folders with anyone. You can create a share link for a file or folder by clicking the share icon to the right of its name.')}</p>
         </EmptyTip>
       );
 

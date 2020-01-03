@@ -21,7 +21,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('You don\'t have any favorite items yet')}</h2>
+          <h2>{gettext('No favorites')}</h2>
+          <p>{gettext('You have not added any libraries, folders or files to your favorites yet. A favorite gives you quick access to your most frequently used objects. You can add a library, folder or file to your favorites by clicking the star to the left of its name.')}</p>
         </EmptyTip>
       );
 

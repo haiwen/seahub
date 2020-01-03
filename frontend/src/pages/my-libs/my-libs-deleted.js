@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
-import { gettext, siteRoot, lang } from '../../utils/constants';
+import { gettext, siteRoot, lang, trashReposExpireDays } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -59,12 +59,13 @@ class MyLibsDeleted extends Component {
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.deletedRepoList.length === 0) &&
               <EmptyTip>
-                <h2>{gettext('No deleted libraries.')}</h2>
+                <h2>{gettext('No deleted libraries')}</h2>
+                <p>{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
               </EmptyTip>
               }
               {this.state.deletedRepoList.length !== 0 && 
                 <div>
-                  <p className="tip">{gettext('Tip: libraries deleted 30 days ago will be cleaned automatically.')}</p>
+                  <p className="tip mt-2">{gettext('Tip: libraries deleted {placeholder} days ago will be cleaned automatically.').replace('{placeholder}', trashReposExpireDays)}</p>
                   <DeletedRepoTable 
                     deletedRepoList={this.state.deletedRepoList}
                     refreshDeletedRepoList={this.refreshDeletedRepoList}

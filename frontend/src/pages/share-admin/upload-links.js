@@ -25,8 +25,8 @@ class Content extends Component {
 
     const emptyTip = (
       <EmptyTip>
-        <h2>{gettext('You don\'t have any upload links')}</h2>
-        <p>{gettext('You can generate an upload link from any folder. Anyone who receives this link can upload files to this folder.')}</p>
+        <h2>{gettext('No upload links')}</h2>
+        <p>{gettext('You have not created any upload links yet. An upload link allows anyone to upload files to a folder or library. You can create an upload link for a folder or library by clicking the share icon to the right of its name.')}</p>
       </EmptyTip>
     );
 

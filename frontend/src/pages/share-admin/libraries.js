@@ -29,8 +29,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('You have not shared any libraries')}</h2>
-          <p>{gettext('You can share libraries with your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in.')}</p>
+          <h2>{gettext('No libraries shared')}</h2>
+          <p>{gettext('You have not shared any libraries with other users yet. You can share a library with other users by clicking the share icon to the right of a library\'s name in "My Libraries".')}</p>
         </EmptyTip>
       );
 

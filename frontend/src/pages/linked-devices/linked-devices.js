@@ -19,8 +19,8 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('You do not have connected devices')}</h2>
-          <p>{gettext('Your clients (Desktop/Android/iOS) will be listed here.')}</p>
+          <h2>{gettext('No linked devices')}</h2>
+          <p>{gettext('You have not accessed your files with any client (desktop or mobile) yet. Configure clients on your devices to access your data more comfortably.')}</p>
         </EmptyTip>
       );
 

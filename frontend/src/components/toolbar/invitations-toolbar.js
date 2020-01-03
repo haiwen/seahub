@@ -27,11 +27,11 @@ class InvitationsToolbar extends React.Component {
           {Utils.isDesktop() ? (
             <div className="operation">
               <Button color="btn btn-secondary operation-item" onClick={toggleInvitePeopleDialog}>
-                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite People')}
+                <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite Guest')}
               </Button>
             </div>
           ) : (
-            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Invite People')} onClick={toggleInvitePeopleDialog}></span>
+            <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Invite Guest')} onClick={toggleInvitePeopleDialog}></span>
           )}
         </div>
         <CommonToolbar searchPlaceholder={this.props.searchPlaceholder} onSearchedClick={onSearchedClick}/>

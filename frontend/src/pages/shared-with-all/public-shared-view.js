@@ -167,7 +167,7 @@ class PublicSharedView extends React.Component {
     let emptyTip = (
       <EmptyTip>
         <h2>{gettext('No public libraries')}</h2>
-        <p>{gettext('You can create a public library by clicking the "New Library" button, others can view and download this library.')}</p>
+        <p>{gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}</p>
       </EmptyTip>
     );
     return (

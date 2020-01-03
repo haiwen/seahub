@@ -185,10 +185,10 @@ class GroupsView extends React.Component {
   render() {
     const emptyTip = (
       <EmptyTip>
-        <h2>{gettext('You are not in any groups')}</h2>
+        <h2>{gettext('No groups')}</h2>
         {canAddGroup ?
-          <p>{gettext('Groups allow multiple people to collaborate on libraries. You can create a group by clicking the "New Group" button.')}</p> :
-          <p>{gettext('Groups allow multiple people to collaborate on libraries. Groups you join will be listed here.')}</p>
+          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. You can create a group by clicking the "New Group" button in the menu bar.')}</p> :
+          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. Groups you join will be listed here.')}</p>
         }
       </EmptyTip>
     );
