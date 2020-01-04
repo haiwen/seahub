@@ -81,7 +81,6 @@ $('#signup-form').on('submit', function(){
     var email = $.trim($('input[name="email"]').val()),
         pwd1 = $.trim($('input[name="password1"]').val()),
         pwd2 = $.trim($('input[name="password2"]').val());
-        level = getStrengthLevel(pwd1);
 
         if (!email) {
             $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
@@ -100,6 +99,7 @@ $('#signup-form').on('submit', function(){
             return false;
         }
         {% if strong_pwd_required %}
+            var level = getStrengthLevel(pwd1);
             if (level < {{level}}) {
                 $('.error').html(passwd_tip).removeClass('hide');
                 return false;
