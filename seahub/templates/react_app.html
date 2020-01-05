@@ -5,10 +5,6 @@
 {% render_bundle 'app' 'css' %}
 {% endblock %}
 
-
-{% block internal_options %}
-  trashReposExpireDays: {{ trash_repos_expire_days }},
-{% endblock %}
 {% block extra_script %}
-{% render_bundle 'app' 'js' %}xw
+{% render_bundle 'app' 'js' %}
 {% endblock %}
