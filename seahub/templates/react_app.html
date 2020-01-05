@@ -6,11 +6,9 @@
 {% endblock %}
 
 
+{% block internal_options %}
+  trashReposExpireDays: {{ trash_repos_expire_days }},
+{% endblock %}
 {% block extra_script %}
-<script type="text/javascript">
-  window.app.pageOptions = {
-    trashReposExpireDays: {{ trash_repos_expire_days }},
-  };
-</script>
-{% render_bundle 'app' 'js' %}
+{% render_bundle 'app' 'js' %}xw
 {% endblock %}
