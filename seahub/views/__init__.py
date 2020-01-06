@@ -1131,10 +1131,17 @@ def react_fake_view(request, **kwargs):
 
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
 
+    try:
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+    except Exception as e:
+        logger.error(e)
+        max_upload_file_size = -1
+
     return render(request, "react_app.html", {
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'dtable_web_server': DTABLE_WEB_SERVER,
+        'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
