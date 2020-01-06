@@ -34,7 +34,7 @@ class AdvancedSearch extends React.Component {
       const typesLength = fileTypes.length;
       return (
         <div className="search-filters">
-          {search_repo && <span className="mr-4">{gettext('Libraries')}{': '}{search_repo}</span>}
+          {search_repo && <span className="mr-4">{gettext('Libraries')}{': '}{search_repo == 'all'? search_repo : repo_name}</span>}
           {typesLength > 0 &&
             <span className="mr-4">{gettext('File Types')}{': '}
               {fileTypes.map((type, index) => {
