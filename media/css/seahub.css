@@ -4465,17 +4465,17 @@ img.thumbnail {
 }
 
 /* policy, terms link */
-.private-policy-link {
+.privacy-policy-link {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 50px;
 }
-.private-policy-link-text {
+.privacy-policy-link-text {
     color: #666666;
     font-size: 12px;
 }
-.private-policy-link-split {
+.privacy-policy-link-split {
     width: 1px;
     background: #6e7687;
     height: 12px;
