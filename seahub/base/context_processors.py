@@ -21,7 +21,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
-    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE
+    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
@@ -133,6 +134,8 @@ def base(request):
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin': ENABLE_WORK_WEIXIN,
         'avatar_url': avatar_url if avatar_url else '',
+        'privacy_policy_link': PRIVACY_POLICY_LINK,
+        'terms_of_service_link': TERMS_OF_SERVICE_LINK,
     }
 
     if request.user.is_staff:

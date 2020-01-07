@@ -4463,3 +4463,20 @@ img.thumbnail {
 .report-month-custom-form {
     margin-left:10px;
 }
+
+/* policy, terms link */
+.privacy-policy-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+.privacy-policy-link-text {
+    color: #666666;
+    font-size: 12px;
+}
+.privacy-policy-link-split {
+    width: 1px;
+    background: #6e7687;
+    height: 12px;
+}
