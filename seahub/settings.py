@@ -534,6 +534,10 @@ ENABLE_SIGNUP = False
 # show 'log out' icon in top-bar or not.
 SHOW_LOGOUT_ICON = False
 
+# private police link and service link
+PRIVATE_POLICY_LINK = ''
+TERMS_OF_SERVICE_LINK = ''
+
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
 ALLOWED_HOSTS = ['*']

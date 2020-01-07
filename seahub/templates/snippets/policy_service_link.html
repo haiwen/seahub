@@ -1,0 +1,14 @@
+{% load i18n %}
+{% if private_police_link or terms_of_service_link %}
+    <div class="private-policy-link">
+        {% if private_police_link and terms_of_service_link %}
+            <a href="{{ private_police_link }}" class="private-policy-link-text px-3">{% trans "Privacy Policy" %}</a>
+            <span class="private-policy-link-split  "></span>
+            <a href="{{ terms_of_service_link }}" class="private-policy-link-text px-3">{% trans "Terms of Service" %}</a>
+        {% elif private_police_link %}
+            <a href="{{ private_police_link }}" class="private-policy-link-text px-3">{% trans "Privacy Policy" %}</a>
+        {% elif terms_of_service_link %}
+            <a href="{{ terms_of_service_link }}" class="private-policy-link-text px-3">{% trans "Terms of Service" %}</a>
+        {% endif %}
+    </div>
+{% endif %}
