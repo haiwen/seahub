@@ -9,6 +9,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import ModalPortal from '../../../components/modal-portal';
+import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
@@ -21,6 +22,17 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   getPreviousPageList = () => {
@@ -50,10 +62,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="5%">{/*icon*/}</th>
-                <th width="40%">{gettext('Name')}</th>
-                <th width="25%">{gettext('Owner')}</th>
+                <th width="43%">{gettext('Name')}</th>
+                <th width="27%">{gettext('Owner')}</th>
                 <th width="20%">{gettext('Deleted Time')}</th>
-                <th width="10%">{/*Operations*/}</th>
+                <th width="5%">{/*Operations*/}</th>
               </tr>
             </thead>
             <tbody>
@@ -61,6 +73,9 @@ class Content extends Component {
                 return (<Item
                   key={index}
                   repo={item}
+                  isItemFreezed={this.state.isItemFreezed}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
                   onDeleteRepo={this.props.onDeleteRepo}
                   onRestoreRepo={this.props.onRestoreRepo}
                 />);
@@ -89,10 +104,37 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      highlight: false,
       isOpIconShown: false,
       isDeleteRepoDialogOpen: false,
       isRestoreRepoDialogOpen: false
     };
+  }
+
+  handleMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
+  }
+
+  handleMouseOut = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
   }
 
   onDeleteRepo = () => {
@@ -119,18 +161,6 @@ class Item extends Component {
     });
   }
 
-  handleMouseOver = () => {
-    this.setState({
-      isOpIconShown: true
-    });
-  }
-
-  handleMouseOut = () => {
-    this.setState({
-      isOpIconShown: false
-    });
-  }
-
   toggleDeleteRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
@@ -143,6 +173,35 @@ class Item extends Component {
       e.preventDefault();
     }
     this.setState({isRestoreRepoDialogOpen: !this.state.isRestoreRepoDialogOpen});
+  }
+
+  translateOperations = (item) => {
+    let translateResult = '';
+    switch(item) {
+      case 'Restore':
+        translateResult = gettext('Restore');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      default:
+        break;
+    }
+
+    return translateResult;
+  }
+
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Restore':
+        this.toggleRestoreRepoDialog();
+        break;
+      case 'Delete':
+        this.toggleDeleteRepoDialog();
+        break;
+      default:
+        break;
+    }
   }
 
   render () {
@@ -165,10 +224,13 @@ class Item extends Component {
           <td>{moment(repo.delete_time).fromNow()}</td>
           <td>
             {isOpIconShown && (
-              <Fragment>
-                <a href="#" className="op-icon sf2-icon-reply" title={gettext('Restore')} onClick={this.toggleRestoreRepoDialog}></a>
-                <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.toggleDeleteRepoDialog}></a>
-              </Fragment>
+              <OpMenu
+                operations={['Restore', 'Delete']}
+                translateOperations={this.translateOperations}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.props.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+              />  
             )}
           </td>
         </tr>
