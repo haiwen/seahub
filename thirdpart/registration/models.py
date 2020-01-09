@@ -305,8 +305,8 @@ logger = logging.getLogger(__name__)
 def notify_admins_on_activate_request(reg_email):
     ctx_dict = {
         "site_name": settings.SITE_NAME,
-        "user_search_link": "%s%s?email=%s" % (
-            get_site_scheme_and_netloc(), reverse("user_search"),
+        "user_search_link": "%s%s?query=%s" % (
+            get_site_scheme_and_netloc(), reverse("sys_search_users"),
             urlquote(reg_email)),
     }
 
@@ -328,8 +328,8 @@ def notify_admins_on_activate_request(reg_email):
 def notify_admins_on_register_complete(reg_email):
     ctx_dict = {
         "site_name": settings.SITE_NAME,
-        "user_search_link": "%s%s?email=%s" % (
-            get_site_scheme_and_netloc(), reverse("user_search"),
+        "user_search_link": "%s%s?query=%s" % (
+            get_site_scheme_and_netloc(), reverse("sys_search_users"),
             urlquote(reg_email)),
         "reg_email": reg_email,
     }
