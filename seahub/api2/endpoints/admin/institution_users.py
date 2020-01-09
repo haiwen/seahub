@@ -76,6 +76,7 @@ class AdminInstitutionUsers(APIView):
                 per_page = 100
 
             start = (current_page - 1) * per_page
+            user_count = Profile.objects.filter(institution=institution.name).count()
             profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
             emails = [x.user for x in profiles]
         else:
@@ -85,11 +86,13 @@ class AdminInstitutionUsers(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
+            admin_count = InstitutionAdmin.objects.filter(institution=institution).count()
             if is_institution_admin == 'true':
                 emails = admin_emails
             elif is_institution_admin == 'false':
                 profiles = Profile.objects.filter(institution=institution.name)
                 emails = [x.user for x in profiles if x.user not in admin_emails]
+                user_count = len(emails)
 
         user_objs = []
         for email in emails:
@@ -105,7 +108,7 @@ class AdminInstitutionUsers(APIView):
 
         resp = {
             'user_list': user_info,
-            'total_count': len(user_objs),
+            'total_count': admin_count if is_institution_admin == 'true' else user_count,
         }
         return Response(resp)
 
