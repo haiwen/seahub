@@ -57,13 +57,17 @@ class AdminInstitutionUsers(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        is_institution_admin = request.GET.get('is_institution_admin', '').lower()
+        if is_institution_admin and is_institution_admin not in ('true', 'false'):
+            error_msg = 'is_institution_admin %s invalid' % is_institution_admin
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             institution = Institution.objects.get(id=institution_id)
         except Institution.DoesNotExist:
             error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        is_institution_admin = request.GET.get('is_institution_admin', '')
         # is_institution_admin = '', return all users, filter by page
         # is_institution_admin = true, return admin users
         # is_institution_admin = false, return none admin users
@@ -80,11 +84,6 @@ class AdminInstitutionUsers(APIView):
             profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
             emails = [x.user for x in profiles]
         else:
-            is_institution_admin = is_institution_admin.lower()
-            if is_institution_admin not in ('true', 'false'):
-                error_msg = 'is_institution_admin %s invalid' % is_institution_admin
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
             admin_count = InstitutionAdmin.objects.filter(institution=institution).count()
             if is_institution_admin == 'true':
