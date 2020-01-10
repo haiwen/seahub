@@ -44,15 +44,16 @@ class Paginator extends Component {
   }
 
   render() {
-    let { curPerPage } = this.props;
+    let { curPerPage, currentPage } = this.props;
     return (
       <Fragment>
         <div className="my-6 text-center">
           {this.props.currentPage != 1 &&
             <a href="#" onClick={this.goToPrevious}>{gettext('Previous')}</a>
           }
+          <span className="mx-4">{currentPage}</span>
           {this.props.hasNextPage &&
-            <a href="#" onClick={this.goToNext} className="ml-4">{gettext('Next')}</a>
+            <a href="#" onClick={this.goToNext}>{gettext('Next')}</a>
           }
           {(this.props.currentPage != 1 || this.props.hasNextPage) &&
             <span className="d-inline-block mx-2">|</span>
