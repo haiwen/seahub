@@ -33,3 +33,4 @@ WORK_WEIXIN_NOTIFICATIONS_URL = getattr(settings, 'WORK_WEIXIN_NOTIFICATIONS_URL
 # # constants
 
 WORK_WEIXIN_PROVIDER = 'work-weixin'
+REMEMBER_ME = True

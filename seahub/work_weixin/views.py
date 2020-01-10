@@ -17,7 +17,7 @@ from seahub.base.accounts import User
 from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIXIN_CORP_ID, \
     WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_PROVIDER, \
     WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, WORK_WEIXIN_UID_PREFIX, \
-    WORK_WEIXIN_USER_INFO_AUTO_UPDATE
+    WORK_WEIXIN_USER_INFO_AUTO_UPDATE, REMEMBER_ME
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
     handler_work_weixin_api_response, update_work_weixin_user_info
 from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
@@ -122,6 +122,7 @@ def work_weixin_oauth_callback(request):
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
     request.user = user
+    request.session['remember_me'] = REMEMBER_ME
     auth.login(request, user)
 
     # generate auth token for Seafile client
