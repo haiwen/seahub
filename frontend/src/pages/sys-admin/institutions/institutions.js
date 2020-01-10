@@ -142,7 +142,7 @@ class Institutions extends Component {
       loading: true,
       errorMsg: '',
       institutionList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
       isAddInstitutionDialogOpen: false,
@@ -151,7 +151,14 @@ class Institutions extends Component {
   }
 
   componentDidMount () {
-    this.getInstitutionsByPage(this.initPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getInstitutionsByPage(this.state.currentPage);
+    }); 
   }
 
   getInstitutionsByPage = (page) => {

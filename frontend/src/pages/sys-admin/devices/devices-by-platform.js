@@ -24,7 +24,7 @@ class Content extends Component {
   }
 
   render() {
-    const { loading, errorMsg, items, pageInfo } = this.props;
+    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -59,7 +59,9 @@ class Content extends Component {
             gotoNextPage={this.getNextPageDevicesList}
             currentPage={pageInfo.current_page}
             hasNextPage={pageInfo.has_next_page}
-            canResetPerPage={false}
+            canResetPerPage={true}
+            curPerPage={curPerPage}
+            resetPerPage={this.props.resetPerPage}
           />
         </Fragment>
       );
@@ -155,12 +157,19 @@ class DevicesByPlatform extends Component {
       errorMsg: '',
       devicesData: {},
       pageInfo: {},
-      perPage: 50
+      perPage: 25
     };
   }
 
   componentDidMount () {
-    this.getDevicesListByPage(1);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage = 1, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getDevicesListByPage(this.state.currentPage);
+    }); 
   }
 
   getDevicesListByPage = (page) => {
@@ -180,14 +189,24 @@ class DevicesByPlatform extends Component {
     });
   }
 
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getDevicesListByPage(1);
+    });
+  }
+
   render() {
     return (
       <div className="cur-view-content">
         <Content
-          getDevicesListByPage={this.getDevicesListByPage}
           loading={this.state.loading}
           errorMsg={this.state.errorMsg}
           items={this.state.devicesData}
+          getDevicesListByPage={this.getDevicesListByPage}
+          curPerPage={this.state.perPage}
+          resetPerPage={this.resetPerPage}
           pageInfo={this.state.pageInfo}
         />
       </div>

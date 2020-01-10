@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { navigate } from '@reach/router';
 import { gettext } from '../utils/constants';
 
 const propTypes = {
@@ -15,18 +16,32 @@ const propTypes = {
 class Paginator extends Component {
 
   resetPerPage = (perPage) => {
+    this.updateURL(1, perPage);
     this.props.resetPerPage(perPage);
   }
 
   goToPrevious = (e) => {
     e.preventDefault();
+    const { currentPage, curPerPage } = this.props;
+    this.updateURL(currentPage - 1, curPerPage);
     this.props.gotoPreviousPage();
   } 
 
   goToNext = (e) => {
     e.preventDefault();
+    const { currentPage, curPerPage } = this.props;
+    this.updateURL(currentPage + 1, curPerPage);
     this.props.gotoNextPage();
   } 
+
+  updateURL = (page, perPage) => {
+    let url = new URL(location.href);
+    let searchParams = new URLSearchParams(url.search);
+    searchParams.set('page', page);
+    searchParams.set('per_page', perPage);
+    url.search = searchParams.toString();
+    navigate(url.toString());
+  }
 
   render() {
     let { curPerPage } = this.props;

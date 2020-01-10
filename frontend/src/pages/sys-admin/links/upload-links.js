@@ -133,15 +133,22 @@ class UploadLinks extends Component {
       loading: true,
       errorMsg: '',
       uploadLinkList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
     };
     this.initPage = 1;
   }
 
-  componentDidMount () {
-    this.getUploadLinksByPage(this.initPage);
+  componentDidMount() {
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getUploadLinksByPage(this.state.currentPage);
+    });
   }
 
   getUploadLinksByPage = (page) => {

@@ -45,7 +45,14 @@ class Users extends Component {
     if (this.props.isAdmin) { // 'Admin' page
       this.getUserList(); // no pagination
     } else {
-      this.getUsersListByPage(1);
+      let urlParams = (new URL(window.location)).searchParams;
+      const { currentPage, perPage } = this.state;
+      this.setState({
+        perPage: parseInt(urlParams.get('per_page') || perPage),
+        currentPage: parseInt(urlParams.get('page') || currentPage)
+      }, () => {
+        this.getUsersListByPage(this.state.currentPage);
+      });
     }
   }
 

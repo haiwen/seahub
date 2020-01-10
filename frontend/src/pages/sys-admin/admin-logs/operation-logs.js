@@ -199,7 +199,7 @@ class AdminOperationLogs extends Component {
       loading: true,
       errorMsg: '',
       logList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
     };
@@ -207,7 +207,14 @@ class AdminOperationLogs extends Component {
   }
 
   componentDidMount () {
-    this.getLogsByPage(this.initPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getLogsByPage(this.state.currentPage);
+    }); 
   }
 
   getLogsByPage = (page) => {

@@ -16,7 +16,7 @@ class TrafficOrganizationsTable extends React.Component {
     super(props);
     this.state = {
       userTrafficList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
       month: moment().format('YYYYMM'),
@@ -29,15 +29,22 @@ class TrafficOrganizationsTable extends React.Component {
   }
 
   componentDidMount() {
-    this.onGenerateReports(this.initMonth, this.initPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.onGenerateReports(this.initMonth, this.state.currentPage);
+    }); 
   }
 
   getPreviousPage = () => {
-    this.onGenerateReports(this.state.currentPage - 1);
+    this.onGenerateReports(this.state.month, this.state.currentPage - 1);
   }
 
   getNextPage = () => {
-    this.onGenerateReports(this.state.currentPage + 1);
+    this.onGenerateReports(this.state.month, this.state.currentPage + 1);
   }
 
   handleChange = (e) => {

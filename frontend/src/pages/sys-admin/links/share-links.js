@@ -130,7 +130,7 @@ class ShareLinks extends Component {
       loading: true,
       errorMsg: '',
       shareLinkList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
     };
@@ -138,7 +138,14 @@ class ShareLinks extends Component {
   }
 
   componentDidMount () {
-    this.getShareLinksByPage(this.initPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getShareLinksByPage(this.state.currentPage);
+    });
   }
 
   getShareLinksByPage = (page) => {

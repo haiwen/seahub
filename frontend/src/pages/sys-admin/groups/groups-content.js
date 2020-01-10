@@ -37,7 +37,7 @@ class Content extends Component {
   }
 
   render() {
-    const { loading, errorMsg, items, pageInfo } = this.props;
+    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -79,7 +79,9 @@ class Content extends Component {
             gotoNextPage={this.getNextPage}
             currentPage={pageInfo.current_page}
             hasNextPage={pageInfo.has_next_page}
-            canResetPerPage={false}
+            canResetPerPage={true}
+            curPerPage={curPerPage}
+            resetPerPage={this.props.resetPerPage}
           />
           }
         </Fragment>

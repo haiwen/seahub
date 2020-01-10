@@ -20,13 +20,20 @@ class AllRepos extends Component {
       errorMsg: '',
       repos: [],
       pageInfo: {},
-      perPage: 100,
+      perPage: 25,
       isCreateRepoDialogOpen: false
     };
   }
 
   componentDidMount () {
-    this.getReposByPage(1);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage = 1, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getReposByPage(this.state.currentPage);
+    }); 
   }
 
   toggleCreateRepoDialog = () => {
