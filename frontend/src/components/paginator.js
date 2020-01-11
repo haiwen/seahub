@@ -1,7 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@reach/router';
 import { gettext } from '../utils/constants';
+
+import '../css/pagination.css';
 
 const propTypes = {
   gotoPreviousPage: PropTypes.func.isRequired,
@@ -15,20 +17,19 @@ const propTypes = {
 
 class Paginator extends Component {
 
-  resetPerPage = (perPage) => {
+  resetPerPage = (e) => {
+    const perPage = e.target.value;
     this.updateURL(1, perPage);
     this.props.resetPerPage(perPage);
   }
 
-  goToPrevious = (e) => {
-    e.preventDefault();
+  goToPrevious = () => {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage - 1, curPerPage);
     this.props.gotoPreviousPage();
   } 
 
-  goToNext = (e) => {
-    e.preventDefault();
+  goToNext = () => {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage + 1, curPerPage);
     this.props.gotoNextPage();
@@ -43,31 +44,40 @@ class Paginator extends Component {
     navigate(url.toString());
   }
 
+  getPerPageText = (perPage) => {
+    return gettext('{number_placeholder} / Page').replace('{number_placeholder}', perPage);
+  }
+
   render() {
-    let { curPerPage, currentPage } = this.props;
+    const { curPerPage, currentPage } = this.props;
     return (
-      <Fragment>
-        <div className="my-6 text-center">
-          {this.props.currentPage != 1 &&
-            <a href="#" onClick={this.goToPrevious}>{gettext('Previous')}</a>
-          }
-          <span className="mx-4">{currentPage}</span>
-          {this.props.hasNextPage &&
-            <a href="#" onClick={this.goToNext}>{gettext('Next')}</a>
-          }
-          {(this.props.currentPage != 1 || this.props.hasNextPage) &&
-            <span className="d-inline-block mx-2">|</span>
-          }
-          {this.props.canResetPerPage &&
-          <Fragment>
-            {gettext('Per page:')}
-            <span className={`${curPerPage === 25 ? '' : 'a-simulate '} mx-1`} onClick={() => {return this.resetPerPage(25);}}>25</span>
-            <span className={`${curPerPage === 50 ? '' : 'a-simulate '} mr-1`} onClick={() => {return this.resetPerPage(50);}}>50</span>
-            <span className={`${curPerPage === 100 ? '' : 'a-simulate '}`} onClick={() => {return this.resetPerPage(100);}}>100</span>
-          </Fragment>
-          }
-        </div>
-      </Fragment>
+      <div className="my-6 paginator d-flex align-items-center justify-content-center">
+        <button
+          className="btn btn-secondary"
+          disabled={currentPage == 1}
+          onClick={this.goToPrevious}
+        >
+          <span className="fas fa-chevron-left"></span>
+        </button>
+        <span className="btn btn-primary mx-4">{currentPage}</span>
+        <button
+          className="btn btn-secondary"
+          disabled={!this.props.hasNextPage}
+          onClick={this.goToNext}
+        >
+          <span className="fas fa-chevron-right"></span>
+        </button>
+
+        <select
+          className="form-control d-inline-block w-auto ml-6"
+          value={curPerPage}
+          onChange={this.resetPerPage}
+        >
+          <option value="25">{this.getPerPageText(25)}</option>
+          <option value="50">{this.getPerPageText(50)}</option>
+          <option value="100">{this.getPerPageText(100)}</option>
+        </select>
+      </div>
     );
   }
 }
