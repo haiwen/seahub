@@ -138,7 +138,6 @@ class TrafficOrganizationsTable extends React.Component {
           gotoNextPage={this.getNextPage}
           currentPage={currentPage}
           hasNextPage={hasNextPage}
-          canResetPerPage={true}
           curPerPage={perPage}
           resetPerPage={this.resetPerPage}
         />

@@ -6,13 +6,12 @@ import { gettext } from '../utils/constants';
 import '../css/pagination.css';
 
 const propTypes = {
+  currentPage: PropTypes.number.isRequired,
   gotoPreviousPage: PropTypes.func.isRequired,
   gotoNextPage: PropTypes.func.isRequired,
-  currentPage: PropTypes.number.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
-  canResetPerPage: PropTypes.bool.isRequired,
-  resetPerPage: PropTypes.func,
-  curPerPage: PropTypes.number,
+  resetPerPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired
 };
 
 class Paginator extends Component {

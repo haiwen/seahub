@@ -79,7 +79,6 @@ class Content extends Component {
             gotoNextPage={this.getNextPage}
             currentPage={pageInfo.current_page}
             hasNextPage={pageInfo.has_next_page}
-            canResetPerPage={true}
             curPerPage={curPerPage}
             resetPerPage={this.props.resetPerPage}
           />
