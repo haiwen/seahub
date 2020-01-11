@@ -94,8 +94,7 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
-  onShareClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+  onShareClick = () => {
     this.setState({
       isShareDialogShow: !this.state.isShareDialogShow
     });
