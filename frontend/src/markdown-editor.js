@@ -80,7 +80,7 @@ class EditorUtilities {
 
   uploadLocalImage = (imageFile) => {
     return (
-      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
+      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data + '?ret-json=1';
         const name = getImageFileNameWithTimestamp();
         const newFile = new File([imageFile], name, {type: imageFile.type});
