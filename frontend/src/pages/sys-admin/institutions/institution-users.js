@@ -83,7 +83,6 @@ class Content extends Component {
             gotoNextPage={this.getNextPage}
             currentPage={currentPage}
             hasNextPage={hasNextPage}
-            canResetPerPage={true}
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
@@ -231,7 +230,7 @@ class InstitutionUsers extends Component {
       errorMsg: '',
       institutionName: '',
       userList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
       isAddUserDialogOpen: false
@@ -245,7 +244,15 @@ class InstitutionUsers extends Component {
         institutionName: res.data.name
       });
     });
-    this.getInstitutionUsersByPage(this.initPage);
+
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getInstitutionUsersByPage(this.state.currentPage);
+    }); 
   }
 
   getInstitutionUsersByPage = (page) => {

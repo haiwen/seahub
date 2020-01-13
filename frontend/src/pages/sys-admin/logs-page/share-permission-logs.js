@@ -47,9 +47,9 @@ class Content extends Component {
                 <th width="10%">{gettext('Share From')}</th>
                 <th width="10%">{gettext('Share To')}</th>
                 <th width="20%">{gettext('Actions')}</th>
-                <th width="10%">{gettext('Permission')}</th>
+                <th width="13%">{gettext('Permission')}</th>
                 <th width="20%">{gettext('Library')}</th>
-                <th width="15%">{gettext('Folder')}</th> 
+                <th width="12%">{gettext('Folder')}</th> 
                 <th width="15%">{gettext('Date')}</th>
               </tr>
             </thead>
@@ -69,7 +69,6 @@ class Content extends Component {
             gotoNextPage={this.getNextPage}
             currentPage={currentPage}
             hasNextPage={hasNextPage}
-            canResetPerPage={true}
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
@@ -137,7 +136,7 @@ class SharePermissionLogs extends Component {
       loading: true,
       errorMsg: '',
       logList: [],
-      perPage: 100,
+      perPage: 25,
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
@@ -150,7 +149,14 @@ class SharePermissionLogs extends Component {
   }
 
   componentDidMount () {
-    this.getLogsByPage(this.initPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getLogsByPage(this.state.currentPage);
+    }); 
   }
 
   getLogsByPage = (page) => {

@@ -44,7 +44,7 @@ class Content extends Component {
   }
 
   render() {
-    const { loading, errorMsg, items, pageInfo } = this.props;
+    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -88,7 +88,8 @@ class Content extends Component {
             gotoNextPage={this.getNextPageList}
             currentPage={pageInfo.current_page}
             hasNextPage={pageInfo.has_next_page}
-            canResetPerPage={false}
+            curPerPage={curPerPage}
+            resetPerPage={this.props.resetPerPage}
           />
           }
         </Fragment>
@@ -270,13 +271,20 @@ class TrashRepos extends Component {
       errorMsg: '',
       repos: [],
       pageInfo: {},
-      perPage: 100,
+      perPage: 25,
       isCleanTrashDialogOpen: false
     };
   }
 
   componentDidMount () {
-    this.getReposByPage(1);
+      let urlParams = (new URL(window.location)).searchParams;
+      const { currentPage = 1, perPage } = this.state;
+      this.setState({
+        perPage: parseInt(urlParams.get('per_page') || perPage),
+        currentPage: parseInt(urlParams.get('page') || currentPage)
+      }, () => {
+        this.getReposByPage(this.state.currentPage);
+      }); 
   }
 
   toggleCleanTrashDialog = () => {
@@ -296,6 +304,14 @@ class TrashRepos extends Component {
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
+    });
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getReposByPage(1);
     });
   }
 
@@ -374,6 +390,8 @@ class TrashRepos extends Component {
                 onDeleteRepo={this.onDeleteRepo}
                 onRestoreRepo={this.onRestoreRepo}
                 getListByPage={this.getReposByPage}
+                resetPerPage={this.resetPerPage}
+                curPerPage={this.state.perPage}
               />
             </div>
           </div>

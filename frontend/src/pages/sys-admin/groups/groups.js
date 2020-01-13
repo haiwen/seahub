@@ -19,13 +19,20 @@ class Groups extends Component {
       errorMsg: '',
       groupList: [],
       pageInfo: {},
-      perPage: 100,
+      perPage: 25,
       isCreateGroupDialogOpen: false
     };
   }
 
   componentDidMount () {
-    this.getGroupListByPage(1);
+      let urlParams = (new URL(window.location)).searchParams;
+      const { currentPage = 1, perPage } = this.state;
+      this.setState({
+        perPage: parseInt(urlParams.get('per_page') || perPage),
+        currentPage: parseInt(urlParams.get('page') || currentPage)
+      }, () => {
+        this.getGroupListByPage(this.state.currentPage);
+      }); 
   }
 
   toggleCreateGroupDialog = () => {
@@ -45,6 +52,14 @@ class Groups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getGroupListByPage(1);
+    }); 
   }
 
   createGroup = (groupName, OnwerEmail) => {
@@ -130,6 +145,8 @@ class Groups extends Component {
                 deleteGroup={this.deleteGroup}
                 transferGroup={this.transferGroup}
                 getListByPage={this.getGroupListByPage}
+                resetPerPage={this.resetPerPage}
+                curPerPage={this.state.perPage}
               />
             </div>
           </div>

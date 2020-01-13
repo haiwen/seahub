@@ -82,7 +82,6 @@ class Content extends Component {
             gotoNextPage={this.getNextPage}
             currentPage={currentPage}
             hasNextPage={hasNextPage}
-            canResetPerPage={true}
             curPerPage={curPerPage}
             resetPerPage={this.props.resetPerPage}
           />
@@ -232,7 +231,14 @@ class Invitations extends Component {
   }
 
   componentDidMount () {
-    this.getItemsByPage(1);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getItemsByPage(this.state.currentPage);
+    });
   }
 
   getItemsByPage = (page) => {
