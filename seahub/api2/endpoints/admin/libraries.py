@@ -83,6 +83,11 @@ class AdminLibraries(APIView):
         if not request.user.admin_permissions.can_manage_library():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if order_by and order_by not in ('size', 'file_count'):
+            error_msg = 'order_by invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # search libraries (by name/owner)
         repo_name = request.GET.get('name', '')
         owner = request.GET.get('owner', '')
@@ -136,7 +141,10 @@ class AdminLibraries(APIView):
         start = (current_page - 1) * per_page
         limit = per_page + 1
 
-        repos_all = seafile_api.get_repo_list(start, limit)
+        if order_by:
+            repos_all = seafile_api.get_repo_list(start, limit, order_by)
+        else:
+            repos_all = seafile_api.get_repo_list(start, limit)
 
         if len(repos_all) > per_page:
             repos_all = repos_all[:per_page]
