@@ -26,7 +26,13 @@ from seahub.institutions.utils import is_institution_admin
 logger = logging.getLogger(__name__)
 
 
-def get_institution_user_info(user_obj, institution):
+def get_institution_user_info(user_obj, institution, is_check_admin=True):
+    """
+    If this function is called in for loop, do not check admin in this function,
+    but add is_institution_admin attribute out of this function.
+
+    is_institution_admin() will invoke a database query.
+    """
     info = {}
     info['email'] = user_obj.email
     info['name'] = email2nickname(user_obj.email)
@@ -36,7 +42,8 @@ def get_institution_user_info(user_obj, institution):
 
     info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
     info['is_active'] = user_obj.is_active
-    info['is_institution_admin'] = is_institution_admin(user_obj.email, institution)
+    if is_check_admin:
+        info['is_institution_admin'] = is_institution_admin(user_obj.email, institution)
 
     last_login_obj = UserLastLogin.objects.get_by_username(user_obj.email)
     info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
@@ -68,6 +75,7 @@ class AdminInstitutionUsers(APIView):
             error_msg = "institution %s not found." % institution_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
         # is_institution_admin = '', return all users, filter by page
         # is_institution_admin = true, return admin users
         # is_institution_admin = false, return none admin users
@@ -84,9 +92,8 @@ class AdminInstitutionUsers(APIView):
             profiles = Profile.objects.filter(institution=institution.name)[start:start + per_page]
             emails = [x.user for x in profiles]
         else:
-            admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=institution)]
-            admin_count = InstitutionAdmin.objects.filter(institution=institution).count()
             if is_institution_admin == 'true':
+                admin_count = InstitutionAdmin.objects.filter(institution=institution).count()
                 emails = admin_emails
             elif is_institution_admin == 'false':
                 profiles = Profile.objects.filter(institution=institution.name)
@@ -103,7 +110,9 @@ class AdminInstitutionUsers(APIView):
 
         user_info = []
         for user in user_objs:
-            user_info.append(get_institution_user_info(user, institution))
+            info = get_institution_user_info(user, institution, is_check_admin=False)
+            info['is_institution_admin'] = user.email in admin_emails
+            user_info.append(info)
 
         resp = {
             'user_list': user_info,
