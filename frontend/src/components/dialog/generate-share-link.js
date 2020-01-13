@@ -342,7 +342,7 @@ class GenerateShareLink extends React.Component {
 
             {(isPro && sharedLinkInfo.permissions) && (
               <FormGroup className="mb-0">
-                <dt className="text-secondary font-weight-normal">{gettext('Permissions:')}</dt>
+                <dt className="text-secondary font-weight-normal">{gettext('Permission:')}</dt>
                 <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
                   <ShareLinkPermissionEditor
                     isTextMode={true}
