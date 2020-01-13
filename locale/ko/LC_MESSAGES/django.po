@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-26 10:21+0800\n"
-"PO-Revision-Date: 2019-12-17 07:39+0000\n"
+"POT-Creation-Date: 2020-01-13 18:33+0800\n"
+"PO-Revision-Date: 2020-01-13 03:39+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -98,19 +98,19 @@ msgid ""
 msgstr "그룹 이름에는 문자, 숫자, 공백, 하이픈, 점, 작은 따옴표, 밑줄 문자만 넣을 수 있습니다"
 
 #: seahub/api2/endpoints/admin/groups.py:213
-#: seahub/api2/endpoints/groups.py:314
+#: seahub/api2/endpoints/groups.py:315
 #, python-format
 msgid "User %s is already group owner."
 msgstr "%s 사용자는 이미 그룹 소유자입니다."
 
-#: seahub/api2/endpoints/admin/institution_users.py:159
+#: seahub/api2/endpoints/admin/institution_users.py:170
 #: seahub/views/sysadmin.py:2339
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr "단체로의 %s 사용자 추가에 실패했습니다: 이미 해당 사용자가 단체에 있습니다"
 
-#: seahub/api2/endpoints/admin/institution_users.py:164
+#: seahub/api2/endpoints/admin/institution_users.py:175
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
@@ -145,8 +145,8 @@ msgstr "%s 전자메일 주소가 잘못되었습니다."
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:332
-#: seahub/api2/endpoints/dir_shared_items.py:431
+#: seahub/api2/endpoints/dir_shared_items.py:336
+#: seahub/api2/endpoints/dir_shared_items.py:435
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -434,13 +434,13 @@ msgstr "파일이 잠겨있습니다"
 msgid "Cancel failed"
 msgstr "취소에 실패했습니다"
 
-#: seahub/api2/endpoints/dir_shared_items.py:316
+#: seahub/api2/endpoints/dir_shared_items.py:320
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "잘못된 사용자 이름입니다."
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:329
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:177
@@ -1519,7 +1519,7 @@ msgstr "%s 이름이 잘못되었습니다"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1830 seahub/views/sysadmin.py:1735
+#: seahub/views/file.py:1866 seahub/views/sysadmin.py:1735
 #: seahub/views/sysadmin.py:1753
 msgid "Argument missing"
 msgstr "인자가 빠졌습니다"
@@ -1582,7 +1582,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "권한 오류: 그룹 스탭만이 구성원을 추가할 수 있습니다"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:459
+#: seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "그룹이 없습니다"
 
@@ -1674,8 +1674,8 @@ msgstr "새 페이지"
 
 #: seahub/group/views.py:107 seahub/share/views.py:228
 #: seahub/views/__init__.py:564 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1102
-#: seahub/views/file.py:1322 seahub/views/file.py:1839
+#: seahub/views/ajax.py:427 seahub/views/file.py:1138
+#: seahub/views/file.py:1358 seahub/views/file.py:1875
 #: seahub/views/repo.py:113 seahub/views/repo.py:169 seahub/views/repo.py:218
 #: seahub/views/repo.py:271 seahub/views/repo.py:377
 msgid "Permission denied"
@@ -2719,8 +2719,8 @@ msgstr "모든 알림 지우기에 성공했습니다."
 #: seahub/oauth/views.py:164 seahub/templates/remote_user/error.html:8
 #: seahub/work_weixin/views.py:60 seahub/work_weixin/views.py:65
 #: seahub/work_weixin/views.py:75 seahub/work_weixin/views.py:79
-#: seahub/work_weixin/views.py:165 seahub/work_weixin/views.py:170
-#: seahub/work_weixin/views.py:180 seahub/work_weixin/views.py:184
+#: seahub/work_weixin/views.py:166 seahub/work_weixin/views.py:171
+#: seahub/work_weixin/views.py:181 seahub/work_weixin/views.py:185
 msgid "Error, please contact administrator."
 msgstr "오류 발생. 관리자에게 문의하십시오."
 
@@ -3443,15 +3443,15 @@ msgstr "암호를 잊었나요?"
 msgid "Single Sign-On"
 msgstr "단일 로그인(SSO)"
 
-#: seahub/templates/registration/login.html:135
+#: seahub/templates/registration/login.html:136
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "CAPTCHA 새로 고침에 실패했습니다. 나중에 다시 해보세요."
 
-#: seahub/templates/registration/login.html:143
+#: seahub/templates/registration/login.html:144
 msgid "Email or username cannot be blank"
 msgstr "전자메일 또는 사용자 이름을 비워둘 수 없습니다"
 
-#: seahub/templates/registration/login.html:147
+#: seahub/templates/registration/login.html:148
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -3501,7 +3501,7 @@ msgstr "새 암호"
 
 #: seahub/templates/registration/password_change_form.html:37
 #: seahub/templates/registration/password_set_form.html:40
-#: seahub/templates/registration/registration_form.html:61
+#: seahub/templates/registration/registration_form.html:62
 #, python-format
 msgid ""
 "Passwords must have at least %(min_len)s characters and contain %(level)s of"
@@ -3826,6 +3826,16 @@ msgstr "중간"
 #: seahub/templates/snippets/password_strength_js.html:45
 msgid "strong"
 msgstr "강함"
+
+#: seahub/templates/snippets/policy_service_link.html:5
+#: seahub/templates/snippets/policy_service_link.html:9
+msgid "Privacy Policy"
+msgstr ""
+
+#: seahub/templates/snippets/policy_service_link.html:7
+#: seahub/templates/snippets/policy_service_link.html:11
+msgid "Terms of Service"
+msgstr ""
 
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
@@ -5300,7 +5310,7 @@ msgstr "라이브러리 수정 상태를 볼 수 없습니다"
 
 #: seahub/views/__init__.py:555 seahub/views/__init__.py:598
 #: seahub/views/__init__.py:729 seahub/views/__init__.py:875
-#: seahub/views/ajax.py:376 seahub/views/file.py:1825
+#: seahub/views/ajax.py:376 seahub/views/file.py:1861
 msgid "Library does not exist"
 msgstr "라이브러리가 없습니다"
 
@@ -5350,9 +5360,9 @@ msgstr "잘못된 저장소 ID 입니다"
 msgid "Bad upload link token."
 msgstr "잘못된 업로드 링크 토큰입니다."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:453 seahub/views/file.py:484
-#: seahub/views/file.py:1097 seahub/views/file.py:1317
-#: seahub/views/file.py:1834
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1133 seahub/views/file.py:1353
+#: seahub/views/file.py:1870
 msgid "File does not exist"
 msgstr "파일이 없습니다"
 
@@ -5364,77 +5374,77 @@ msgstr "업로드 링크에 잘못된 저장소 ID가 있습니다."
 msgid "No conflict in the merge."
 msgstr "합친 내용에 충돌이 없습니다."
 
-#: seahub/views/file.py:186
+#: seahub/views/file.py:191
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP오류: 파일을 온라인에서 열기에 실패했습니다"
 
-#: seahub/views/file.py:190
+#: seahub/views/file.py:195
 msgid "URLError: failed to open file online"
 msgstr "URL오류: 온라인에서 파일 열기에 실패했습니다"
 
-#: seahub/views/file.py:197
+#: seahub/views/file.py:202
 msgid "The encoding you chose is not proper."
 msgstr "선택한 인코딩이 적합하지 않습니다"
 
-#: seahub/views/file.py:214 seahub/views/file.py:217
+#: seahub/views/file.py:219 seahub/views/file.py:222
 msgid "Unknown file encoding"
 msgstr "알 수 없는 파일 인코딩"
 
-#: seahub/views/file.py:338 seahub/views/file.py:373 seahub/views/file.py:620
-#: seahub/views/file.py:711 seahub/views/file.py:840
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:625
+#: seahub/views/file.py:716 seahub/views/file.py:876
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
-#: seahub/views/file.py:345 seahub/views/file.py:746
+#: seahub/views/file.py:350 seahub/views/file.py:751
 msgid "The library is encrypted, can not open file online."
 msgstr "라이브러리를 암호화했습니다. 온라인에서 파일을 열어볼 수 없습니다."
 
-#: seahub/views/file.py:440 seahub/views/file.py:462 seahub/views/file.py:467
-#: seahub/views/file.py:508 seahub/views/file.py:699 seahub/views/file.py:962
-#: seahub/views/file.py:985 seahub/views/file.py:1012
-#: seahub/views/file.py:1127 seahub/views/file.py:1235
-#: seahub/views/file.py:1338 seahub/views/file.py:1443
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:704 seahub/views/file.py:998
+#: seahub/views/file.py:1021 seahub/views/file.py:1048
+#: seahub/views/file.py:1163 seahub/views/file.py:1271
+#: seahub/views/file.py:1374 seahub/views/file.py:1479
 msgid "Unable to view file"
 msgstr "파일을 볼 수 없습니다"
 
-#: seahub/views/file.py:780 seahub/views/file.py:910 seahub/views/file.py:1196
-#: seahub/views/file.py:1382
+#: seahub/views/file.py:785 seahub/views/file.py:946 seahub/views/file.py:1232
+#: seahub/views/file.py:1418
 msgid "Error when prepare Office Online file preview page."
 msgstr "오피스 온라인 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:808 seahub/views/file.py:922 seahub/views/file.py:1215
-#: seahub/views/file.py:1397
+#: seahub/views/file.py:844 seahub/views/file.py:958 seahub/views/file.py:1251
+#: seahub/views/file.py:1433
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "오피스 파일 미리 보기 페이지를 준비하는 중 오류가 나타났습니다."
 
-#: seahub/views/file.py:1045
+#: seahub/views/file.py:1081
 msgid "Unable to download file, invalid file path"
 msgstr "파일 경로가 잘못되어 파일을 다운로드할 수 없습니다"
 
-#: seahub/views/file.py:1054
+#: seahub/views/file.py:1090
 msgid "Unable to download file, wrong file path"
 msgstr "파일 경로가 잘못되어 파일을 다운로드할 수 없습니다"
 
-#: seahub/views/file.py:1059
+#: seahub/views/file.py:1095
 msgid "Unable to download file, share link traffic is used up."
 msgstr "공유 연결을 사용중이어서 파일을 다운로드할 수 없습니다."
 
-#: seahub/views/file.py:1066
+#: seahub/views/file.py:1102
 msgid "Unable to download file."
 msgstr "파일을 다운로드할 수 없습니다."
 
-#: seahub/views/file.py:1138 seahub/views/file.py:1349
+#: seahub/views/file.py:1174 seahub/views/file.py:1385
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "원시 파일을 볼 수 없습니다. 공유 링크 트래픽이 사용 중입니다."
 
-#: seahub/views/file.py:1252 seahub/views/file.py:1463
+#: seahub/views/file.py:1288 seahub/views/file.py:1499
 #: seahub/views/repo.py:326
 #, python-format
 msgid "Share link for %s."
 msgstr "%s 링크를 공유합니다."
 
-#: seahub/views/file.py:1581 seahub/views/file.py:1586
+#: seahub/views/file.py:1617 seahub/views/file.py:1622
 msgid "Unable to download file"
 msgstr "파일을 다운로드 할 수 없습니다."
 
@@ -5553,7 +5563,7 @@ msgid "Unable to view Wiki"
 msgstr "위키를 볼 수 없습니다"
 
 #: seahub/work_weixin/views.py:35 seahub/work_weixin/views.py:54
-#: seahub/work_weixin/views.py:139 seahub/work_weixin/views.py:159
-#: seahub/work_weixin/views.py:219
+#: seahub/work_weixin/views.py:140 seahub/work_weixin/views.py:160
+#: seahub/work_weixin/views.py:220
 msgid "Feature is not enabled."
 msgstr "기능을 활성 설정하지 않았습니다."

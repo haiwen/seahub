@@ -4,12 +4,14 @@
 # 
 # Translators:
 # 1resu <inactive+1resu@transifex.com>, 2016
+# 1resu <inactive+1resu@transifex.com>, 2016
 # A. Heß <schnuecks78@gmail.com>, 2015
 # Andreas Schmidt <as@walljet.de>, 2015
-# Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2019
+# Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2020
 # anselm92 <anselm92@gmail.com>, 2016
 # anselm92 <anselm92@gmail.com>, 2016
 # baiki <marco.baikhardt@toscano.ch>, 2014
+# casselt <casselt@luis.uni-hannover.de>, 2018
 # casselt <casselt@luis.uni-hannover.de>, 2018
 # fsdfassfsdtwf2, 2014
 # Marcus Müller <info@yoursecurecloud.de>, 2015-2016
@@ -22,6 +24,7 @@
 # flexo3001 <mrckndt@gmail.com>, 2014
 # Florin Peter <github@florin-peter.de>, 2014
 # Florin Peter <github@florin-peter.de>, 2014
+# fsdfassfsdtwf2, 2014
 # garyletshurry, 2013
 # Florin Peter <github@florin-peter.de>, 2014
 # Henri Wahl <h.wahl@ifw-dresden.de>, 2013,2015-2016
@@ -73,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-26 10:21+0800\n"
-"PO-Revision-Date: 2019-12-17 07:39+0000\n"
+"POT-Creation-Date: 2020-01-13 18:33+0800\n"
+"PO-Revision-Date: 2020-01-13 03:39+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -161,19 +164,19 @@ msgid ""
 msgstr "Gruppennamen dürfen nur Buchstaben, Zahlen, Leerzeichen, Bindestriche, Punkte, einfache Anführungszeichen und Unterstriche enthalten"
 
 #: seahub/api2/endpoints/admin/groups.py:213
-#: seahub/api2/endpoints/groups.py:314
+#: seahub/api2/endpoints/groups.py:315
 #, python-format
 msgid "User %s is already group owner."
 msgstr "Benutzer/in %s ist bereits Eigentümer/in der Gruppe."
 
-#: seahub/api2/endpoints/admin/institution_users.py:159
+#: seahub/api2/endpoints/admin/institution_users.py:170
 #: seahub/views/sysadmin.py:2339
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr "%s gehört bereits zu einer anderen Einrichtung und konnte nicht zugewiesen werden"
 
-#: seahub/api2/endpoints/admin/institution_users.py:164
+#: seahub/api2/endpoints/admin/institution_users.py:175
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
@@ -208,8 +211,8 @@ msgstr "E-Mail %s ist ungültig."
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:332
-#: seahub/api2/endpoints/dir_shared_items.py:431
+#: seahub/api2/endpoints/dir_shared_items.py:336
+#: seahub/api2/endpoints/dir_shared_items.py:435
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -497,13 +500,13 @@ msgstr "Datei ist gesperrt"
 msgid "Cancel failed"
 msgstr "Abbruch fehlgeschlagen"
 
-#: seahub/api2/endpoints/dir_shared_items.py:316
+#: seahub/api2/endpoints/dir_shared_items.py:320
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "Benutzername ungültig"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:329
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:177
@@ -1587,7 +1590,7 @@ msgstr "Name %s ist ungültig"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1830 seahub/views/sysadmin.py:1735
+#: seahub/views/file.py:1866 seahub/views/sysadmin.py:1735
 #: seahub/views/sysadmin.py:1753
 msgid "Argument missing"
 msgstr "Argument fehlt"
@@ -1650,7 +1653,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Weitergehende Rechte erforderlich: Nur mit Administrationsrecht können Mitglieder hinzugefügt werden"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:459
+#: seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Die Gruppe ist nicht vorhanden"
 
@@ -1742,8 +1745,8 @@ msgstr "Neue Seite"
 
 #: seahub/group/views.py:107 seahub/share/views.py:228
 #: seahub/views/__init__.py:564 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1102
-#: seahub/views/file.py:1322 seahub/views/file.py:1839
+#: seahub/views/ajax.py:427 seahub/views/file.py:1138
+#: seahub/views/file.py:1358 seahub/views/file.py:1875
 #: seahub/views/repo.py:113 seahub/views/repo.py:169 seahub/views/repo.py:218
 #: seahub/views/repo.py:271 seahub/views/repo.py:377
 msgid "Permission denied"
@@ -2789,8 +2792,8 @@ msgstr "Alle Mitteilungen gelöscht."
 #: seahub/oauth/views.py:164 seahub/templates/remote_user/error.html:8
 #: seahub/work_weixin/views.py:60 seahub/work_weixin/views.py:65
 #: seahub/work_weixin/views.py:75 seahub/work_weixin/views.py:79
-#: seahub/work_weixin/views.py:165 seahub/work_weixin/views.py:170
-#: seahub/work_weixin/views.py:180 seahub/work_weixin/views.py:184
+#: seahub/work_weixin/views.py:166 seahub/work_weixin/views.py:171
+#: seahub/work_weixin/views.py:181 seahub/work_weixin/views.py:185
 msgid "Error, please contact administrator."
 msgstr "Fehler, bitte kontaktieren Sie die Administration."
 
@@ -3417,7 +3420,7 @@ msgstr "Freigegebene Links"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr "Alle freigebenen Links dieser Bibliothek ansehen und verwalten."
+msgstr "Alle freigegebenen Links dieser Bibliothek ansehen und verwalten."
 
 #: seahub/templates/i18n.html:12 seahub/templates/sysadmin/userinfo.html:24
 msgid "Shared Libs"
@@ -3514,15 +3517,15 @@ msgstr "Passwort vergessen?"
 msgid "Single Sign-On"
 msgstr "Single Sign-On"
 
-#: seahub/templates/registration/login.html:135
+#: seahub/templates/registration/login.html:136
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "CAPTCHA-Aktualisierung fehlgeschlagen, bitte versuchen Sie es später noch einmal."
 
-#: seahub/templates/registration/login.html:143
+#: seahub/templates/registration/login.html:144
 msgid "Email or username cannot be blank"
 msgstr "E-Mailadresse bzw. Benutzername darf nicht leer sein"
 
-#: seahub/templates/registration/login.html:147
+#: seahub/templates/registration/login.html:148
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -3572,7 +3575,7 @@ msgstr "Neues Passwort"
 
 #: seahub/templates/registration/password_change_form.html:37
 #: seahub/templates/registration/password_set_form.html:40
-#: seahub/templates/registration/registration_form.html:61
+#: seahub/templates/registration/registration_form.html:62
 #, python-format
 msgid ""
 "Passwords must have at least %(min_len)s characters and contain %(level)s of"
@@ -3737,7 +3740,7 @@ msgstr "Aufräumen"
 
 #: seahub/templates/repo_dir_recycle_view.html:45
 msgid "Delete Time"
-msgstr "Löschzeit"
+msgstr "Löschdatum"
 
 #: seahub/templates/repo_dir_recycle_view.html:66
 msgid "Clear files in trash and history："
@@ -3897,6 +3900,16 @@ msgstr "mittel"
 #: seahub/templates/snippets/password_strength_js.html:45
 msgid "strong"
 msgstr "stark"
+
+#: seahub/templates/snippets/policy_service_link.html:5
+#: seahub/templates/snippets/policy_service_link.html:9
+msgid "Privacy Policy"
+msgstr ""
+
+#: seahub/templates/snippets/policy_service_link.html:7
+#: seahub/templates/snippets/policy_service_link.html:11
+msgid "Terms of Service"
+msgstr ""
 
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
@@ -5371,7 +5384,7 @@ msgstr "Konnte Bibliotheksänderungen nicht anzeigen"
 
 #: seahub/views/__init__.py:555 seahub/views/__init__.py:598
 #: seahub/views/__init__.py:729 seahub/views/__init__.py:875
-#: seahub/views/ajax.py:376 seahub/views/file.py:1825
+#: seahub/views/ajax.py:376 seahub/views/file.py:1861
 msgid "Library does not exist"
 msgstr "Die Bibliothek ist nicht vorhanden"
 
@@ -5421,9 +5434,9 @@ msgstr "Falsche Bibliotheks-ID"
 msgid "Bad upload link token."
 msgstr "Falsches Token im Upload-Link."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:453 seahub/views/file.py:484
-#: seahub/views/file.py:1097 seahub/views/file.py:1317
-#: seahub/views/file.py:1834
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1133 seahub/views/file.py:1353
+#: seahub/views/file.py:1870
 msgid "File does not exist"
 msgstr "Die Datei ist nicht vorhanden"
 
@@ -5435,77 +5448,77 @@ msgstr "Falsche Bibliotheks-ID im Upload-Link."
 msgid "No conflict in the merge."
 msgstr "Kein Konflikt bei der Zusammenführung."
 
-#: seahub/views/file.py:186
+#: seahub/views/file.py:191
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP-Fehler: Datei konnte online nicht geöffnet werden"
 
-#: seahub/views/file.py:190
+#: seahub/views/file.py:195
 msgid "URLError: failed to open file online"
 msgstr "URL-Fehler: Datei konnte online nicht geöffnet werden"
 
-#: seahub/views/file.py:197
+#: seahub/views/file.py:202
 msgid "The encoding you chose is not proper."
 msgstr "Der gewählte Zeichensatz ist ungültig."
 
-#: seahub/views/file.py:214 seahub/views/file.py:217
+#: seahub/views/file.py:219 seahub/views/file.py:222
 msgid "Unknown file encoding"
 msgstr "Unbekannte Datenkodierung"
 
-#: seahub/views/file.py:338 seahub/views/file.py:373 seahub/views/file.py:620
-#: seahub/views/file.py:711 seahub/views/file.py:840
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:625
+#: seahub/views/file.py:716 seahub/views/file.py:876
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dateien können nur bis zu einer Größe von %s in der Web-Vorschau angezeigt werden."
 
-#: seahub/views/file.py:345 seahub/views/file.py:746
+#: seahub/views/file.py:350 seahub/views/file.py:751
 msgid "The library is encrypted, can not open file online."
 msgstr "Die Bibliothek ist verschlüsselt und kann nicht online geöffnet werden."
 
-#: seahub/views/file.py:440 seahub/views/file.py:462 seahub/views/file.py:467
-#: seahub/views/file.py:508 seahub/views/file.py:699 seahub/views/file.py:962
-#: seahub/views/file.py:985 seahub/views/file.py:1012
-#: seahub/views/file.py:1127 seahub/views/file.py:1235
-#: seahub/views/file.py:1338 seahub/views/file.py:1443
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:704 seahub/views/file.py:998
+#: seahub/views/file.py:1021 seahub/views/file.py:1048
+#: seahub/views/file.py:1163 seahub/views/file.py:1271
+#: seahub/views/file.py:1374 seahub/views/file.py:1479
 msgid "Unable to view file"
 msgstr "Die Datei kann nicht angezeigt werden"
 
-#: seahub/views/file.py:780 seahub/views/file.py:910 seahub/views/file.py:1196
-#: seahub/views/file.py:1382
+#: seahub/views/file.py:785 seahub/views/file.py:946 seahub/views/file.py:1232
+#: seahub/views/file.py:1418
 msgid "Error when prepare Office Online file preview page."
 msgstr "Fehler beim Vorbereiten der Office Online Dateivorschau."
 
-#: seahub/views/file.py:808 seahub/views/file.py:922 seahub/views/file.py:1215
-#: seahub/views/file.py:1397
+#: seahub/views/file.py:844 seahub/views/file.py:958 seahub/views/file.py:1251
+#: seahub/views/file.py:1433
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Fehler beim Vorbereiten der Office Online Dateivorschau."
 
-#: seahub/views/file.py:1045
+#: seahub/views/file.py:1081
 msgid "Unable to download file, invalid file path"
 msgstr "Kann die Datei nicht herunterladen, ungültiger Pfad"
 
-#: seahub/views/file.py:1054
+#: seahub/views/file.py:1090
 msgid "Unable to download file, wrong file path"
 msgstr "Kann die Datei nicht herunterladen, falscher Pfad"
 
-#: seahub/views/file.py:1059
+#: seahub/views/file.py:1095
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Die Datei konnte nicht heruntergeladen werden: Das Datenvolumen für freigegebene Links ist aufgebraucht."
 
-#: seahub/views/file.py:1066
+#: seahub/views/file.py:1102
 msgid "Unable to download file."
 msgstr "Datei kann nicht heruntergeladen werden."
 
-#: seahub/views/file.py:1138 seahub/views/file.py:1349
+#: seahub/views/file.py:1174 seahub/views/file.py:1385
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "Die Datei kann nicht angezeigt werden. Das Datenvolumen des Freigabe-Links ist verbraucht."
 
-#: seahub/views/file.py:1252 seahub/views/file.py:1463
+#: seahub/views/file.py:1288 seahub/views/file.py:1499
 #: seahub/views/repo.py:326
 #, python-format
 msgid "Share link for %s."
 msgstr "Link für %s freigeben."
 
-#: seahub/views/file.py:1581 seahub/views/file.py:1586
+#: seahub/views/file.py:1617 seahub/views/file.py:1622
 msgid "Unable to download file"
 msgstr "Die Datei kann nicht heruntergeladen werden"
 
@@ -5624,7 +5637,7 @@ msgid "Unable to view Wiki"
 msgstr "Das Wiki kann nicht angezeigt werden"
 
 #: seahub/work_weixin/views.py:35 seahub/work_weixin/views.py:54
-#: seahub/work_weixin/views.py:139 seahub/work_weixin/views.py:159
-#: seahub/work_weixin/views.py:219
+#: seahub/work_weixin/views.py:140 seahub/work_weixin/views.py:160
+#: seahub/work_weixin/views.py:220
 msgid "Feature is not enabled."
 msgstr "Die Funktion ist nicht aktiviert."

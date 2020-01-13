@@ -197,7 +197,7 @@ class SharedRepoListItem extends React.Component {
         translateResult = gettext('Rename');
         break;
       case 'Folder Permission':
-        translateResult = gettext('Folder Premission');
+        translateResult = gettext('Folder Permission');
         break;
       case 'Details':
         translateResult = gettext('Details');

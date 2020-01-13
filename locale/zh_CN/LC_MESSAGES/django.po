@@ -9,7 +9,7 @@
 # ilearnit <helloworld.c@outlook.com>, 2018
 # Daniel Pan <daniel.pan@seafile.com>, 2016
 # imwhatiam <imwhatiam123@gmail.com>, 2014-2019
-# llj <lingjun.li1@gmail.com>, 2017-2019
+# llj <lingjun.li1@gmail.com>, 2017-2020
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
 # zheng xie <xiez1989@gmail.com>, 2014-2019
@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-26 10:21+0800\n"
-"PO-Revision-Date: 2019-12-17 07:39+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2020-01-13 18:33+0800\n"
+"PO-Revision-Date: 2020-01-13 06:41+0000\n"
+"Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -109,19 +109,19 @@ msgid ""
 msgstr "群组名称只能包含字母、数字、空格、中划线、单引号、下划线或中文"
 
 #: seahub/api2/endpoints/admin/groups.py:213
-#: seahub/api2/endpoints/groups.py:314
+#: seahub/api2/endpoints/groups.py:315
 #, python-format
 msgid "User %s is already group owner."
 msgstr "用户 %s 已经是群组拥有者。"
 
-#: seahub/api2/endpoints/admin/institution_users.py:159
+#: seahub/api2/endpoints/admin/institution_users.py:170
 #: seahub/views/sysadmin.py:2339
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr "添加 %s 到机构失败：用户已经属于一个机构"
 
-#: seahub/api2/endpoints/admin/institution_users.py:164
+#: seahub/api2/endpoints/admin/institution_users.py:175
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
@@ -156,8 +156,8 @@ msgstr "邮箱 %s 无效。"
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:332
-#: seahub/api2/endpoints/dir_shared_items.py:431
+#: seahub/api2/endpoints/dir_shared_items.py:336
+#: seahub/api2/endpoints/dir_shared_items.py:435
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -445,13 +445,13 @@ msgstr "文件已锁定"
 msgid "Cancel failed"
 msgstr "取消失败"
 
-#: seahub/api2/endpoints/dir_shared_items.py:316
+#: seahub/api2/endpoints/dir_shared_items.py:320
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "用户名不合法。"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:329
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:177
@@ -1530,7 +1530,7 @@ msgstr "名称 %s 含有无效字符"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1830 seahub/views/sysadmin.py:1735
+#: seahub/views/file.py:1866 seahub/views/sysadmin.py:1735
 #: seahub/views/sysadmin.py:1753
 msgid "Argument missing"
 msgstr "参数缺失"
@@ -1593,7 +1593,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "只有群组管理员可以添加成员。"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:459
+#: seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "群组不存在。"
 
@@ -1685,8 +1685,8 @@ msgstr "新建页面"
 
 #: seahub/group/views.py:107 seahub/share/views.py:228
 #: seahub/views/__init__.py:564 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1102
-#: seahub/views/file.py:1322 seahub/views/file.py:1839
+#: seahub/views/ajax.py:427 seahub/views/file.py:1138
+#: seahub/views/file.py:1358 seahub/views/file.py:1875
 #: seahub/views/repo.py:113 seahub/views/repo.py:169 seahub/views/repo.py:218
 #: seahub/views/repo.py:271 seahub/views/repo.py:377
 msgid "Permission denied"
@@ -2730,8 +2730,8 @@ msgstr "成功清空所有通知。"
 #: seahub/oauth/views.py:164 seahub/templates/remote_user/error.html:8
 #: seahub/work_weixin/views.py:60 seahub/work_weixin/views.py:65
 #: seahub/work_weixin/views.py:75 seahub/work_weixin/views.py:79
-#: seahub/work_weixin/views.py:165 seahub/work_weixin/views.py:170
-#: seahub/work_weixin/views.py:180 seahub/work_weixin/views.py:184
+#: seahub/work_weixin/views.py:166 seahub/work_weixin/views.py:171
+#: seahub/work_weixin/views.py:181 seahub/work_weixin/views.py:185
 msgid "Error, please contact administrator."
 msgstr "出错了，请联系管理员。"
 
@@ -3454,15 +3454,15 @@ msgstr "忘记密码？"
 msgid "Single Sign-On"
 msgstr "单点登录"
 
-#: seahub/templates/registration/login.html:135
+#: seahub/templates/registration/login.html:136
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "刷新验证码失败，请稍后尝试。"
 
-#: seahub/templates/registration/login.html:143
+#: seahub/templates/registration/login.html:144
 msgid "Email or username cannot be blank"
 msgstr "邮箱或用户名不能为空"
 
-#: seahub/templates/registration/login.html:147
+#: seahub/templates/registration/login.html:148
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -3512,7 +3512,7 @@ msgstr "新密码"
 
 #: seahub/templates/registration/password_change_form.html:37
 #: seahub/templates/registration/password_set_form.html:40
-#: seahub/templates/registration/registration_form.html:61
+#: seahub/templates/registration/registration_form.html:62
 #, python-format
 msgid ""
 "Passwords must have at least %(min_len)s characters and contain %(level)s of"
@@ -3837,6 +3837,16 @@ msgstr "中等"
 #: seahub/templates/snippets/password_strength_js.html:45
 msgid "strong"
 msgstr "强"
+
+#: seahub/templates/snippets/policy_service_link.html:5
+#: seahub/templates/snippets/policy_service_link.html:9
+msgid "Privacy Policy"
+msgstr "隐私政策"
+
+#: seahub/templates/snippets/policy_service_link.html:7
+#: seahub/templates/snippets/policy_service_link.html:11
+msgid "Terms of Service"
+msgstr "服务条款"
 
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
@@ -5311,7 +5321,7 @@ msgstr "无法浏览该资料库修改历史"
 
 #: seahub/views/__init__.py:555 seahub/views/__init__.py:598
 #: seahub/views/__init__.py:729 seahub/views/__init__.py:875
-#: seahub/views/ajax.py:376 seahub/views/file.py:1825
+#: seahub/views/ajax.py:376 seahub/views/file.py:1861
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -5361,9 +5371,9 @@ msgstr "错误的repo id"
 msgid "Bad upload link token."
 msgstr "无效的上传链接"
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:453 seahub/views/file.py:484
-#: seahub/views/file.py:1097 seahub/views/file.py:1317
-#: seahub/views/file.py:1834
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1133 seahub/views/file.py:1353
+#: seahub/views/file.py:1870
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -5375,77 +5385,77 @@ msgstr "上传链接中含无效的repo id"
 msgid "No conflict in the merge."
 msgstr "合并没有冲突。"
 
-#: seahub/views/file.py:186
+#: seahub/views/file.py:191
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: seahub/views/file.py:190
+#: seahub/views/file.py:195
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: seahub/views/file.py:197
+#: seahub/views/file.py:202
 msgid "The encoding you chose is not proper."
 msgstr "文件编码不合适"
 
-#: seahub/views/file.py:214 seahub/views/file.py:217
+#: seahub/views/file.py:219 seahub/views/file.py:222
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: seahub/views/file.py:338 seahub/views/file.py:373 seahub/views/file.py:620
-#: seahub/views/file.py:711 seahub/views/file.py:840
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:625
+#: seahub/views/file.py:716 seahub/views/file.py:876
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
-#: seahub/views/file.py:345 seahub/views/file.py:746
+#: seahub/views/file.py:350 seahub/views/file.py:751
 msgid "The library is encrypted, can not open file online."
 msgstr "加密资料库不能在线预览文件。"
 
-#: seahub/views/file.py:440 seahub/views/file.py:462 seahub/views/file.py:467
-#: seahub/views/file.py:508 seahub/views/file.py:699 seahub/views/file.py:962
-#: seahub/views/file.py:985 seahub/views/file.py:1012
-#: seahub/views/file.py:1127 seahub/views/file.py:1235
-#: seahub/views/file.py:1338 seahub/views/file.py:1443
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:704 seahub/views/file.py:998
+#: seahub/views/file.py:1021 seahub/views/file.py:1048
+#: seahub/views/file.py:1163 seahub/views/file.py:1271
+#: seahub/views/file.py:1374 seahub/views/file.py:1479
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: seahub/views/file.py:780 seahub/views/file.py:910 seahub/views/file.py:1196
-#: seahub/views/file.py:1382
+#: seahub/views/file.py:785 seahub/views/file.py:946 seahub/views/file.py:1232
+#: seahub/views/file.py:1418
 msgid "Error when prepare Office Online file preview page."
 msgstr "Office Online 预览文件时出错。"
 
-#: seahub/views/file.py:808 seahub/views/file.py:922 seahub/views/file.py:1215
-#: seahub/views/file.py:1397
+#: seahub/views/file.py:844 seahub/views/file.py:958 seahub/views/file.py:1251
+#: seahub/views/file.py:1433
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "OnlyOffice 预览文件时出错。"
 
-#: seahub/views/file.py:1045
+#: seahub/views/file.py:1081
 msgid "Unable to download file, invalid file path"
 msgstr "无法下载文件，无效的文件路径"
 
-#: seahub/views/file.py:1054
+#: seahub/views/file.py:1090
 msgid "Unable to download file, wrong file path"
 msgstr "无法下载文件，错误的文件路径"
 
-#: seahub/views/file.py:1059
+#: seahub/views/file.py:1095
 msgid "Unable to download file, share link traffic is used up."
 msgstr "无法下载文件，共享外链流量已用完。"
 
-#: seahub/views/file.py:1066
+#: seahub/views/file.py:1102
 msgid "Unable to download file."
 msgstr "无法下载文件。"
 
-#: seahub/views/file.py:1138 seahub/views/file.py:1349
+#: seahub/views/file.py:1174 seahub/views/file.py:1385
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "无法查看文件，外链流量已用完。"
 
-#: seahub/views/file.py:1252 seahub/views/file.py:1463
+#: seahub/views/file.py:1288 seahub/views/file.py:1499
 #: seahub/views/repo.py:326
 #, python-format
 msgid "Share link for %s."
 msgstr "%s 的共享链接。"
 
-#: seahub/views/file.py:1581 seahub/views/file.py:1586
+#: seahub/views/file.py:1617 seahub/views/file.py:1622
 msgid "Unable to download file"
 msgstr "无法下载文件"
 
@@ -5564,7 +5574,7 @@ msgid "Unable to view Wiki"
 msgstr "无法查看维基"
 
 #: seahub/work_weixin/views.py:35 seahub/work_weixin/views.py:54
-#: seahub/work_weixin/views.py:139 seahub/work_weixin/views.py:159
-#: seahub/work_weixin/views.py:219
+#: seahub/work_weixin/views.py:140 seahub/work_weixin/views.py:160
+#: seahub/work_weixin/views.py:220
 msgid "Feature is not enabled."
 msgstr "功能未启用。"
