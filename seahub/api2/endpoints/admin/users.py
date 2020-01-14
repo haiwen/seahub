@@ -318,6 +318,62 @@ class AdminUsers(APIView):
     permission_classes = (IsAdminUser, )
     throttle_classes = (UserRateThrottle, )
 
+    def get_info_of_users_order_by_quota_usage(self, source, direction,
+            page, per_page):
+
+        # get user's quota usage info
+        user_usage_dict = {}
+        users_with_usage = seafile_api.list_user_quota_usage()
+        for user in users_with_usage:
+            email = user.user
+            if email not in user_usage_dict:
+                user_usage_dict[email] = user.usage
+
+        # get all users and map quota usage to user
+        if source == 'db':
+            users = ccnet_api.get_emailusers('DB', -1, -1)
+        else:
+            users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+
+        for user in users:
+            email = user.email
+            user.quota_usage = user_usage_dict.get(email, -1)
+
+        # sort
+        users.sort(key=lambda item: item.quota_usage,
+                reverse = direction == 'desc')
+
+        data = []
+        MULTI_INSTITUTION = getattr(settings, 'MULTI_INSTITUTION', False)
+        for user in users[(page-1)*per_page: page*per_page]:
+
+            info = {}
+            info['email'] = user.email
+            info['name'] = email2nickname(user.email)
+            info['contact_email'] = email2contact_email(user.email)
+
+            profile = Profile.objects.get_profile_by_user(user.email)
+            info['login_id'] = profile.login_id if profile and profile.login_id else ''
+
+            info['is_staff'] = user.is_staff
+            info['is_active'] = user.is_active
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
+            info['quota_usage'] = user.quota_usage
+            info['quota_total'] = seafile_api.get_user_quota(user.email)
+
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+
+            info['role'] = get_user_role(user)
+
+            if MULTI_INSTITUTION:
+                info['institution'] = profile.institution if profile else ''
+
+            data.append(info)
+
+        return data
+
     def get(self, request):
         """List all users in DB or LDAPImport
 
@@ -328,6 +384,7 @@ class AdminUsers(APIView):
         if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        # parameter check
         try:
             page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '25'))
@@ -337,22 +394,67 @@ class AdminUsers(APIView):
 
         start = (page - 1) * per_page
 
-        # source: 'DB' or 'LDAPImport', default is 'DB'
-        source = request.GET.get('source', 'DB')
-        source = source.lower()
+        source = request.GET.get('source', 'DB').lower().strip()
         if source not in ['db', 'ldapimport']:
+            # source: 'DB' or 'LDAPImport', default is 'DB'
             error_msg = 'source %s invalid.' % source
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if order_by:
+            if order_by not in ('quota_usage'):
+                error_msg = 'order_by invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            direction = request.GET.get('direction', 'desc').lower().strip()
+            if direction not in ('asc', 'desc'):
+                error_msg = 'direction invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if source == 'db':
-            users = ccnet_api.get_emailusers('DB', start, per_page)
+
             total_count = ccnet_api.count_emailusers('DB') + \
                           ccnet_api.count_inactive_emailusers('DB')
+            if total_count > 500 and \
+                    not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+            if order_by:
+                try:
+                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
+                            page, per_page)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                result = {'data': data, 'total_count': total_count}
+                return Response(result)
+            else:
+                users = ccnet_api.get_emailusers('DB', start, per_page)
+
         elif source == 'ldapimport':
-            users = ccnet_api.get_emailusers('LDAPImport', start, per_page)
+
             # api param is 'LDAP', but actually get count of 'LDAPImport' users
             total_count = ccnet_api.count_emailusers('LDAP') + \
                           ccnet_api.count_inactive_emailusers('LDAP')
+            if total_count > 500 and \
+                    not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+            if order_by:
+                try:
+                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
+                            page, per_page)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                result = {'data': data, 'total_count': total_count}
+                return Response(result)
+            else:
+                users = ccnet_api.get_emailusers('LDAPImport', start, per_page)
 
         data = []
         for user in users:
