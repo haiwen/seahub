@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.0",
+    "@seafile/react-image-lightbox": "0.0.1",
     "@seafile/resumablejs": "^1.1.15",
     "@seafile/seafile-calendar": "0.0.8",
     "@seafile/seafile-editor": "^0.2.84",
@@ -38,7 +39,6 @@
     "react-cookies": "^0.1.0",
     "react-dom": "^16.8.6",
     "react-i18next": "^10.12.2",
-    "react-image-lightbox": "^5.1.0",
     "react-mentions": "^3.0.2",
     "react-moment": "^0.7.9",
     "react-responsive": "^6.1.2",
