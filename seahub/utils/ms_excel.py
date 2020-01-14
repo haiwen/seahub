@@ -10,7 +10,7 @@ def write_xls(sheet_name, head, data_list):
 
     try:
         wb = openpyxl.Workbook()
-        ws = wb.get_active_sheet()
+        ws = wb.active
     except Exception as e:
         logger.error(e)
         return None
