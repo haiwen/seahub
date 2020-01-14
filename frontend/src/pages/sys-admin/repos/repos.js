@@ -42,8 +42,19 @@ class Content extends Component {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
   }
 
+  sortByFileCount = (e) => {
+    e.preventDefault();
+    this.props.sortItems('file_count');
+  }
+
+  sortBySize = (e) => {
+    e.preventDefault();
+    this.props.sortItems('size');
+  }
+
   render() {
-    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
+    // offer 'sort' only for 'all repos'
+    const { loading, errorMsg, items, pageInfo, curPerPage, sortBy } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -54,6 +65,7 @@ class Content extends Component {
           <h2>{gettext('No libraries')}</h2>
         </EmptyTip>
       );
+      const sortIcon = <span className="fas fa-caret-down"></span>;
       const table = (
         <Fragment>
           <table>
@@ -61,7 +73,15 @@ class Content extends Component {
               <tr>
                 <th width="5%">{/*icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
-                <th width="15%">{gettext('Files')}{' / '}{gettext('Size')}</th>
+                <th width="15%">
+                  {sortBy != undefined ? 
+                    <Fragment>
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' && sortIcon}</a>{' / '}
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>
+                    </Fragment> :
+                    gettext('Files') / gettext('Size')
+                  }
+                </th>
                 <th width="32%">ID</th>
                 <th width="18%">{gettext('Owner')}</th>
                 <th width="5%">{/*Operations*/}</th>
