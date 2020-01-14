@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
+import Lightbox from '@seafile/react-image-lightbox';
+import '@seafile/react-image-lightbox/style.css';
 
 const propTypes = {
   imageItems: PropTypes.array.isRequired,
