@@ -62,5 +62,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
                     notify_admins_on_register_complete(user.email)
             else:
                 user = None
+        else:
+            user = User.objects.get(email=username)
 
         return user
