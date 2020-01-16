@@ -109,7 +109,7 @@ class MylibRepoMenu extends React.Component {
         translateResult = 'API Token'; // translation is not needed here
         break;
       case 'Share Links':
-        translateResult = 'Share Links'; // translation is not needed here
+        translateResult = gettext('Share Links');
         break;
       default:
         break;

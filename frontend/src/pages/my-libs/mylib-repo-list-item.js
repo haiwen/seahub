@@ -49,7 +49,7 @@ class MylibRepoListItem extends React.Component {
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogShow: false,
       isAPITokenDialogShow: false,
-      isRepoShareUploadLinksDialogShow: false,
+      isRepoShareUploadLinksDialogOpen: false
     };
   }
 
@@ -108,7 +108,7 @@ class MylibRepoListItem extends React.Component {
         this.onAPITokenToggle();
         break;
       case 'Share Links':
-        this.onRepoShareUploadLinksToggle();
+        this.toggleRepoShareUploadLinksDialog();
         break;
       default:
         break;
@@ -185,8 +185,8 @@ class MylibRepoListItem extends React.Component {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   }
 
-  onRepoShareUploadLinksToggle = () => {
-    this.setState({isRepoShareUploadLinksDialogShow: !this.state.isRepoShareUploadLinksDialogShow});
+  toggleRepoShareUploadLinksDialog = () => {
+    this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
   }
 
   onUnfreezedItem = () => {
@@ -434,11 +434,11 @@ class MylibRepoListItem extends React.Component {
           </ModalPortal>
         )}
 
-        {this.state.isRepoShareUploadLinksDialogShow && (
+        {this.state.isRepoShareUploadLinksDialogOpen && (
           <ModalPortal>
             <RepoShareUploadLinksDialog
               repo={repo}
-              onRepoShareUploadLinksToggle={this.onRepoShareUploadLinksToggle}
+              toggleDialog={this.toggleRepoShareUploadLinksDialog}
             />
           </ModalPortal>
         )}

@@ -1,21 +1,16 @@
-import React, {Fragment} from 'react';
-import { Link } from '@reach/router';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {gettext} from '../../utils/constants';
-import {Modal, ModalHeader, ModalBody, Button, Input, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import {seafileAPI} from '../../utils/seafile-api';
+import { Modal, ModalHeader, ModalBody, NavLink } from 'reactstrap';
+import { seafileAPI } from '../../utils/seafile-api';
+import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import copy from 'copy-to-clipboard';
 import Loading from '../loading';
-
-import '../../css/share-link-dialog.css';
 
 const repoShareUploadLinkItemPropTypes = {
   item: PropTypes.object.isRequired,
   activeTab: PropTypes.string.isRequired,
-  onDeleteShareLink: PropTypes.func.isRequired,
-  onDeleteUploadLink: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired
 };
 
 class RepoShareUploadLinkItem extends React.Component {
@@ -23,7 +18,7 @@ class RepoShareUploadLinkItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false,
+      isOperationShow: false
     };
   }
 
@@ -37,17 +32,10 @@ class RepoShareUploadLinkItem extends React.Component {
 
   onDeleteLink = (e) => {
     e.preventDefault();
-    if (this.props.activeTab === 'shareLinks') {
-      this.props.onDeleteShareLink(this.props.item);
-    }
-    if (this.props.activeTab === 'uploadLinks') {
-      this.props.onDeleteUploadLink(this.props.item);
-    }
+    this.props.deleteItem(this.props.item.token);
   };
 
-
   render() {
-    const { siteRoot } = window.app.config;
 
     let objUrl;
     let item = this.props.item;
@@ -66,152 +54,109 @@ class RepoShareUploadLinkItem extends React.Component {
     }
 
     return (
-      <Fragment>
-        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td className="name">{item.creator_name}</td>
-          <td>
-            <a href={objUrl} target="_blank">{item.obj_name}</a>
-          </td>
-          <td>
-            <a href={item.link} target="_blank">{item.link}</a>
-          </td>
-          <td>
-            <span
-              className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-              onClick={this.onDeleteLink}
-              title={gettext('Delete')}
-            />
-          </td>
-        </tr>
-      </Fragment>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <td className="name">{item.creator_name}</td>
+        <td>
+          <a href={objUrl} target="_blank" className="text-inherit">{item.obj_name}</a>
+        </td>
+        <td>
+          <a href={item.link} target="_blank" className="text-inherit">{item.link}</a>
+        </td>
+        <td>
+          <span
+            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
+            onClick={this.onDeleteLink}
+            title={gettext('Delete')}
+          />
+        </td>
+      </tr>
     );
   }
 }
 
 RepoShareUploadLinkItem.propTypes = repoShareUploadLinkItemPropTypes;
 
-// for share upload links dialog
 const RepoShareUploadLinksDialogPropTypes = {
   repo: PropTypes.object.isRequired,
-  onRepoShareUploadLinksToggle: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 class RepoShareUploadLinksDialog extends React.Component {
 
   constructor(props) {
     super(props);
-    this.repo = this.props.repo;
     this.state = {
-      repoShareUploadLinkList: [],
-      errorMsg: '',
       loading: true,
-      activeTab: 'shareLinks'
+      activeTab: 'shareLinks',
+      repoShareUploadLinkList: [],
+      errorMsg: ''
     };
   }
 
   componentDidMount() {
-    this.listRepoShareLinks();
+    this.getItems('share-link');
   }
 
-  listRepoShareLinks = () => {
-    seafileAPI.listRepoShareLinks(this.repo.repo_id).then((res) => {
+  getItems = (itemType) => {
+    const repoID = this.props.repo.repo_id;
+    const request = itemType == 'share-link' ?
+      seafileAPI.listRepoShareLinks(repoID) :
+      seafileAPI.listRepoUploadLinks(repoID);
+    request.then((res) => {
       this.setState({
-        repoShareUploadLinkList: res.data,
         loading: false,
+        repoShareUploadLinkList: res.data,
       });
     }).catch(error => {
-      if (error.response.status === 403) {
-        this.setState({
-          errorMsg: gettext('Permission denied'),
-        });
-      } else {
-        this.handleError(error);
-      }
-    });
-  };
-
-  listRepoUploadLinks = () => {
-    seafileAPI.listRepoUploadLinks(this.repo.repo_id).then((res) => {
       this.setState({
-        repoShareUploadLinkList: res.data,
-        loading: false,
-      });
-    }).catch(error => {
-      if (error.response.status === 403) {
-        this.setState({
-          errorMsg: gettext('Permission denied'),
-        });
-      } else {
-        this.handleError(error);
-      }
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true)
+      }); 
     });
-  };
+  }
 
-  onDeleteShareLink = (item) => {
-    const repo_id = item.repo_id;
-    const token = item.token;
-    seafileAPI.deleteRepoShareLink(repo_id, token).then((res) => {
+  deleteItem = (token) => {
+    const repoID = this.props.repo.repo_id;
+    const request = this.state.activeTab == 'shareLinks' ?
+      seafileAPI.deleteRepoShareLink(repoID, token) :
+      seafileAPI.deleteRepoUploadLink(repoID, token);
+    request.then((res) => {
       const repoShareUploadLinkList = this.state.repoShareUploadLinkList.filter(item => {
         return item.token !== token;
       });
       this.setState({
-        repoShareUploadLinkList: repoShareUploadLinkList,
+        repoShareUploadLinkList: repoShareUploadLinkList
       });
     }).catch(error => {
-      this.handleError(error);
+      toaster.danger(Utils.getErrorMsg(error));
     });
-  };
-
-  onDeleteUploadLink = (item) => {
-    const repo_id = item.repo_id;
-    const token = item.token;
-    seafileAPI.deleteRepoUploadLink(repo_id, token).then((res) => {
-      const repoShareUploadLinkList = this.state.repoShareUploadLinkList.filter(item => {
-        return item.token !== token;
-      });
-      this.setState({
-        repoShareUploadLinkList: repoShareUploadLinkList,
-      });
-    }).catch(error => {
-      this.handleError(error);
-    });
-  };
-
-  handleError = (e) => {
-    if (e.response) {
-      toaster.danger(e.response.data.error_msg || e.response.data.detail || gettext('Error'), {duration: 3});
-    } else {
-      toaster.danger(gettext('Please check the network.'), {duration: 3});
-    }
   };
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({activeTab: tab});
     }
-    if (tab === 'shareLinks') {
-      this.listRepoShareLinks();
+    if (tab == 'shareLinks') {
+      this.getItems('share-link');
     }
-    if (tab === 'uploadLinks') {
-      this.listRepoUploadLinks();
+    if (tab == 'uploadLinks') {
+      this.getItems('upload-link');
     }
   };
 
   render() {
 
-    let repo = this.repo;
-    let activeTab = this.state.activeTab;
+    const { loading, errorMsg, activeTab } = this.state;
 
-    const { siteRoot } = window.app.config;
-    const itemName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const itemName = '<span class="op-target">' + Utils.HTMLescape(this.props.repo.repo_name) + '</span>';
     const title = gettext('{placeholder} Share/Upload Links').replace('{placeholder}', itemName);
 
     return (
-      <Modal isOpen={true} className="share-dialog" style={{maxWidth: '800px'}}>
-        <ModalHeader toggle={this.props.onRepoShareUploadLinksToggle}>
-          <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
+      <Modal isOpen={true} style={{maxWidth: '800px'}}>
+        <ModalHeader toggle={this.props.toggleDialog}>
+          <span dangerouslySetInnerHTML={{__html: title}}></span>
         </ModalHeader>
-        <ModalBody className="share-dialog-content">
+        <ModalBody className="p-0 pb-4">
           <div className="main-panel-center">
             <div className="cur-view-container">
               <div className="cur-view-path share-upload-nav">
@@ -224,7 +169,10 @@ class RepoShareUploadLinksDialog extends React.Component {
                   </li>
                 </ul>
               </div>
-              <div className="cur-view-content">
+              <div className="cur-view-content" style={{minHeight: '20rem', maxHeight: '20rem'}}>
+                {loading && <Loading />}
+                {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
+                {!loading && !errorMsg &&
                 <table>
                   <thead>
                     <tr>
@@ -235,21 +183,19 @@ class RepoShareUploadLinksDialog extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.repoShareUploadLinkList.length !== 0 &&
-                      this.state.repoShareUploadLinkList.map((item, index) => {
-                        return (
-                          <RepoShareUploadLinkItem
-                            key={index}
-                            item={item}
-                            activeTab={this.state.activeTab}
-                            onDeleteShareLink={this.onDeleteShareLink}
-                            onDeleteUploadLink={this.onDeleteUploadLink}
-                          />
-                        );
-                      })
-                    }
+                    {this.state.repoShareUploadLinkList.map((item, index) => {
+                      return (
+                        <RepoShareUploadLinkItem
+                          key={index}
+                          item={item}
+                          activeTab={this.state.activeTab}
+                          deleteItem={this.deleteItem}
+                        />
+                      );
+                    })}
                   </tbody>
                 </table>
+                }
               </div>
             </div>
           </div>
