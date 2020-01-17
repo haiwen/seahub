@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@reach/router';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { isPro, gettext, siteRoot } from '../../../utils/constants';
@@ -18,6 +19,11 @@ import UsersNav from './users-nav';
 import Content from './users-content';
 
 const { availableRoles } = window.sysadmin.pageOptions;
+
+const propTypes = { 
+  isAdmin: PropTypes.bool,
+  isLDAPImported: PropTypes.bool
+};
 
 class Users extends Component {
 
@@ -46,10 +52,16 @@ class Users extends Component {
       this.getUserList(); // no pagination
     } else {
       let urlParams = (new URL(window.location)).searchParams;
-      const { currentPage, perPage } = this.state;
+      const {
+        currentPage, perPage,
+        sortBy = '',
+        sortOrder = 'asc'
+      } = this.state;
       this.setState({
         perPage: parseInt(urlParams.get('per_page') || perPage),
-        currentPage: parseInt(urlParams.get('page') || currentPage)
+        currentPage: parseInt(urlParams.get('page') || currentPage),
+        sortBy: urlParams.get('order_by') || sortBy,
+        sortOrder: urlParams.get('direction') || sortOrder
       }, () => {
         this.getUsersListByPage(this.state.currentPage);
       });
@@ -149,8 +161,9 @@ class Users extends Component {
   }
 
   getUsersListByPage = (page) => {
-    let { perPage } = this.state;
-    seafileAPI.sysAdminListUsers(page, perPage, this.props.isLDAPImported).then(res => {
+    const { perPage, sortBy, sortOrder } = this.state;
+    const { isLDAPImported } = this.props;
+    seafileAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
       this.setState({
         userList: users,
@@ -163,6 +176,24 @@ class Users extends Component {
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
+    });
+  }
+
+  sortByQuotaUsage = () => {
+    this.setState({
+      sortBy: 'quota_usage',
+      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc',
+      currentPage: 1
+    }, () => {
+      let url = new URL(location.href);
+      let searchParams = new URLSearchParams(url.search);
+      const { currentPage, sortBy, sortOrder } = this.state;
+      searchParams.set('page', currentPage);
+      searchParams.set('order_by', sortBy);
+      searchParams.set('direction', sortOrder);
+      url.search = searchParams.toString();
+      navigate(url.toString());
+      this.getUsersListByPage(currentPage);
     });
   }
 
@@ -429,6 +460,9 @@ class Users extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.userList}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortByQuotaUsage={this.sortByQuotaUsage}
                 currentPage={this.state.currentPage}
                 hasNextPage={this.state.hasNextPage}
                 curPerPage={this.state.perPage}
@@ -485,5 +519,7 @@ class Users extends Component {
     );
   }
 }
+
+Users.propTypes = propTypes;
 
 export default Users;
