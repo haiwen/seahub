@@ -2,10 +2,11 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import toaster from '../toast';
-import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
+import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+
 import '../../css/internal-link.css';
 
 const propTypes = {

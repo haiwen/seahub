@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
-import copy from '@seafile/seafile-editor/dist//utils/copy-to-clipboard';
+import copy from '../copy-to-clipboard';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
