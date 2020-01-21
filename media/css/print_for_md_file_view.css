@@ -1,0 +1,7 @@
+.sf-md-viewer-topbar,
+.seafile-rich-editor-topbar {
+  display: none;
+}
+.editor {
+  border: none!important;
+}
