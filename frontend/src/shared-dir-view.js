@@ -29,6 +29,9 @@ class SharedDirView extends React.Component {
       errorMsg: '',
       items: [],
 
+      sortBy: 'name', // 'name' or 'time' or 'size'
+      sortOrder: 'asc', // 'asc' or 'desc'
+
       isZipDialogOpen: false,
       zipFolderPath: '',
 
@@ -50,7 +53,7 @@ class SharedDirView extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: '',
-        items: items
+        items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder)
       });
       this.getThumbnails();
     }).catch((error) => {
@@ -60,6 +63,14 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
+  }
+
+  sortItems = (sortBy, sortOrder) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      items: Utils.sortDirentsInSharedDir(this.state.items, sortBy, sortOrder)
+    }); 
   }
 
   getThumbnails = () => {
@@ -209,7 +220,12 @@ class SharedDirView extends React.Component {
                 </div>
               </div>
               <Content
-                data={this.state}
+                isLoading={this.state.isLoading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
                 zipDownloadFolder={this.zipDownloadFolder}
                 showImagePopup={this.showImagePopup}
               />
@@ -243,8 +259,29 @@ class SharedDirView extends React.Component {
 
 class Content extends React.Component {
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortByTime = (e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
-    const { isLoading, errorMsg, items } = this.props.data;
+    const { isLoading, errorMsg, items, sortBy, sortOrder } = this.props;
     
     if (isLoading) {
       return <Loading />;
@@ -254,14 +291,15 @@ class Content extends React.Component {
       return <p className="error mt-6 text-center">{errorMsg}</p>;
     }
 
+    const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
     return mode == 'list' ? (
       <table className="table-hover">
         <thead>
           <tr>
             <th width="5%"></th>
-            <th width="55%">{gettext('Name')}</th>
-            <th width="14%">{gettext('Size')}</th>
-            <th width="16%">{gettext('Last Update')}</th>
+            <th width="55%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
+            <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
             <th width="10%">{gettext('Operations')}</th>
           </tr>
         </thead>

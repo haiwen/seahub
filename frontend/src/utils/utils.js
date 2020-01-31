@@ -968,6 +968,76 @@ export const Utils = {
     return items;
   },
 
+  // sort dirents in shared folder
+  sortDirentsInSharedDir: function(items, sortBy, sortOrder) {
+    const _this = this;
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function(a, b) {
+          let result;
+          if (a.is_dir) {
+            result = _this.compareTwoWord(a.folder_name, b.folder_name);
+          } else {
+            result = _this.compareTwoWord(a.file_name, b.file_name);
+          }
+          return result;
+        };
+        break;
+      case 'name-desc':
+        comparator = function(a, b) {
+          let result;
+          if (a.is_dir) {
+            result = _this.compareTwoWord(a.folder_name, b.folder_name);
+          } else {
+            result = _this.compareTwoWord(a.file_name, b.file_name);
+          }
+          return -result;
+        };
+        break;
+      case 'time-asc':
+        comparator = function(a, b) {
+          return a.last_modified < b.last_modified ? -1 : 1;
+        };
+        break;
+      case 'time-desc':
+        comparator = function(a, b) {
+          return a.last_modified < b.last_modified ? 1 : -1;
+        };
+        break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.is_dir) {
+            return 0;
+          } else {
+            return a.size < b.size ? -1 : 1;
+          }
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.is_dir) {
+            return 0;
+          } else {
+            return a.size < b.size ? 1 : -1;
+          }
+        };
+        break;
+    }
+
+    items.sort((a, b) => {
+      if (a.is_dir && !b.is_dir) {
+        return -1;
+      } else if (!a.is_dir && b.is_dir) {
+        return 1;
+      } else {
+        return comparator(a, b);
+      }
+    });
+    return items;
+  },
+
   sortTraffic(items, sortBy, sortOrder) {
     let comparator;
     switch(sortOrder) {
