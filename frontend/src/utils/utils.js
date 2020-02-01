@@ -939,8 +939,7 @@ export const Utils = {
       case 'size-asc':
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
-            let result = _this.compareTwoWord(a.name, b.name);
-            return result;
+            return 0;
           } 
           return a.size_original < b.size_original ? -1 : 1;
         };
@@ -948,8 +947,7 @@ export const Utils = {
       case 'size-desc':
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
-            let result = _this.compareTwoWord(a.name, b.name);
-            return -result;
+            return 0;
           } 
           return a.size_original < b.size_original ? 1 : -1;
         };
