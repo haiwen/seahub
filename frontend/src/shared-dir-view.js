@@ -300,7 +300,7 @@ class Content extends React.Component {
             <th width="55%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
             <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
-            <th width="10%">{gettext('Operations')}</th>
+            <th width="10%"></th>
           </tr>
         </thead>
         <tbody>
@@ -373,7 +373,7 @@ class Item extends React.Component {
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
           </td>
           <td></td>
-          <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
+          <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
@@ -397,7 +397,7 @@ class Item extends React.Component {
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td>{moment(item.last_modified).format('YYYY-MM-DD')}</td>
+          <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
