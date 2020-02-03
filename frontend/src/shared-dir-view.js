@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
@@ -193,6 +193,7 @@ class SharedDirView extends React.Component {
   }
 
   render() {
+    const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
     return (
       <React.Fragment>
@@ -210,16 +211,19 @@ class SharedDirView extends React.Component {
               <div className="d-flex justify-content-between align-items-center op-bar">
                 <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
                 <div>
+                  {isDesktop &&
                   <div className="view-mode btn-group">
                     <a href={`?p=${encodeURIComponent(path)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')}></a>
                     <a href={`?p=${encodeURIComponent(path)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
                   </div>
+                  }
                   {showDownloadIcon &&
                   <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
                   }
                 </div>
               </div>
               <Content
+                isDesktop={isDesktop}
                 isLoading={this.state.isLoading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
@@ -281,7 +285,7 @@ class Content extends React.Component {
   }
 
   render() {
-    const { isLoading, errorMsg, items, sortBy, sortOrder } = this.props;
+    const { isDesktop, isLoading, errorMsg, items, sortBy, sortOrder } = this.props;
     
     if (isLoading) {
       return <Loading />;
@@ -289,6 +293,35 @@ class Content extends React.Component {
 
     if (errorMsg) {
       return <p className="error mt-6 text-center">{errorMsg}</p>;
+    }
+
+    const tbody = (
+      <tbody>
+        {items.map((item, index) => {
+          return <Item 
+            key={index}
+            isDesktop={isDesktop}
+            item={item}
+            zipDownloadFolder={this.props.zipDownloadFolder}
+            showImagePopup={this.props.showImagePopup}
+          />;
+        })}
+      </tbody>
+    );
+
+    if (!isDesktop) {
+      return (
+        <table className="table-hover table-thead-hidden">
+          <thead>
+            <tr>
+              <th width="12%"></th>
+              <th width="80%"></th>
+              <th width="8%"></th>
+            </tr>
+          </thead>
+          {tbody}
+        </table>
+      );
     }
 
     const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
@@ -303,16 +336,7 @@ class Content extends React.Component {
             <th width="10%"></th>
           </tr>
         </thead>
-        <tbody>
-          {items.map((item, index) => {
-            return <Item 
-              key={index}
-              item={item}
-              zipDownloadFolder={this.props.zipDownloadFolder}
-              showImagePopup={this.props.showImagePopup}
-            />;
-          })}
-        </tbody>
+        {tbody}
       </table>
     ) : (
       <ul className="grid-view">
@@ -334,8 +358,13 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      isIconShown: false
+      isIconShown: false,
+      isOpMenuOpen: false
     };
+  }
+
+  toggleOpMenu = () => {
+    this.setState({isOpMenuOpen: !this.state.isOpMenuOpen});
   }
 
   handleMouseOver = () => {
@@ -362,11 +391,11 @@ class Item extends React.Component {
   }
 
   render() {
-    const item = this.props.item;
+    const { item, isDesktop } = this.props;
     const { isIconShown } = this.state;
 
     if (item.is_dir) {
-      return (
+      return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
@@ -381,11 +410,39 @@ class Item extends React.Component {
             }
           </td>
         </tr>
+      ) : (
+        <tr>
+          <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
+          <td>
+            <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
+            <br />
+            <span className="item-meta-info">{moment(item.last_modified).fromNow()}</span>
+          </td>
+          <td>
+            {showDownloadIcon &&
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />  
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" onClick={this.zipDownloadFolder}>{gettext('Download')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
+            }
+          </td>
+        </tr>
       );
     } else {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
-      return (
+      return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td className="text-center">
             {thumbnailURL ?
@@ -400,8 +457,41 @@ class Item extends React.Component {
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
-            </a>
+            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
+            }
+          </td>
+        </tr>
+      ) : (
+        <tr>
+          <td className="text-center">
+            {thumbnailURL ?
+              <img className="thumbnail" src={thumbnailURL} alt="" /> :
+              <img src={Utils.getFileIconUrl(item.file_name)} alt="" width="24" />
+            }
+          </td>
+          <td>
+            <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
+            <br />
+            <span className="item-meta-info">{Utils.bytesToSize(item.size)}</span>
+            <span className="item-meta-info">{moment(item.last_modified).fromNow()}</span>
+          </td>
+          <td>
+            {showDownloadIcon &&
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />  
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" tag="a" href={`${fileURL}&dl=1`}>{gettext('Download')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
             }
           </td>
         </tr>
