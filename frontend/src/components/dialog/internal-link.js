@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import toaster from '../toast';
-import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
+import copy from '../copy-to-clipboard';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
