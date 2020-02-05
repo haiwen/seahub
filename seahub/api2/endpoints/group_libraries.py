@@ -86,6 +86,7 @@ class GroupLibraries(APIView):
 
         # get repo id owner dict
         all_repo_owner = []
+        all_modifier = []
         repo_id_owner_dict = {}
         for repo in group_repos:
             repo_id = repo.id
@@ -94,7 +95,10 @@ class GroupLibraries(APIView):
                 all_repo_owner.append(repo_owner)
                 repo_id_owner_dict[repo_id] = repo_owner
 
-        all_modifier = [r.last_modifier for r in group_repos]
+            if repo.last_modifier is None:
+                all_modifier.append(repo_owner)
+            else:
+                all_modifier.append(last_modifier)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         name_dict = {}
