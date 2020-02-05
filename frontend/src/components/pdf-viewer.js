@@ -147,8 +147,8 @@ class PDFViewer extends React.Component {
 
             <div className="toolbar">
               <div id="toolbarContainer">
-                <div id="toolbarViewer" className="sf-hide">
-                  <div id="toolbarViewerLeft">
+                <div id="toolbarViewer">
+                  <div id="toolbarViewerLeft" className="sf-hide">
                     <button id="sidebarToggle" className="toolbarButton" title="Toggle Sidebar" tabIndex="11" data-l10n-id="toggle_sidebar">
                       <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
                     </button>
@@ -168,7 +168,7 @@ class PDFViewer extends React.Component {
                     <input type="number" id="pageNumber" className="toolbarField pageNumber" title="Page"  defaultValue="1" size="4" min="1" tabIndex="15" data-l10n-id="page" />
                     <span id="numPages" className="toolbarLabel"></span>
                   </div>
-                  <div id="toolbarViewerRight">
+                  <div id="toolbarViewerRight" className="sf-hide">
                     <button id="presentationMode" className="toolbarButton presentationMode hiddenLargeView" title="Switch to Presentation Mode" tabIndex="31" data-l10n-id="presentation_mode">
                       <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
                     </button>
@@ -194,17 +194,15 @@ class PDFViewer extends React.Component {
                       <span data-l10n-id="tools_label">Tools</span>
                     </button>
                   </div>
-                  <div id="toolbarViewerMiddle">
-                    <div className="splitToolbarButton">
-                      <button id="zoomOut" className="toolbarButton zoomOut" title="Zoom Out" tabIndex="21" data-l10n-id="zoom_out">
-                        <span data-l10n-id="zoom_out_label">Zoom Out</span>
+                  <div id="toolbarViewerMiddle" className="d-flex fixed-top position-absolute justify-content-center p-1 align-items-center">
+                    <div className="splitToolbarButton d-flex">
+                      <button id="zoomOut" className="toolbarButton zoomOut fas fa-minus btn-icon rounded mr-1" title="Zoom Out" tabIndex="21" data-l10n-id="zoom_out">
                       </button>
                       <div className="splitToolbarButtonSeparator"></div>
-                      <button id="zoomIn" className="toolbarButton zoomIn" title="Zoom In" tabIndex="22" data-l10n-id="zoom_in">
-                        <span data-l10n-id="zoom_in_label">Zoom In</span>
+                      <button id="zoomIn" className="toolbarButton zoomIn fas fa-plus btn-icon rounded" title="Zoom In" tabIndex="22" data-l10n-id="zoom_in">
                       </button>
                     </div>
-                    <span id="scaleSelectContainer" className="dropdownToolbarButton">
+                    <span id="scaleSelectContainer" className="dropdownToolbarButton ml-1">
                       <select id="scaleSelect" title="Zoom" tabIndex="23" data-l10n-id="zoom" defaultValue="auto">
                         <option id="pageAutoOption" title="" value="auto" data-l10n-id="page_scale_auto">Automatic Zoom</option>
                         <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
