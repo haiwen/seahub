@@ -1,14 +1,6 @@
 {% extends "base_for_small_panel.html" %}
 {% load i18n %}
 
-{% block extra_style %}{{ block.super }}
-<style type="text/css">
-.small-panel {
-  padding: 50px 40px;
-}
-</style>
-{% endblock %}
-
 {% block main_panel %}
 <div class="mt-9 mb-4 mx-auto small-panel">
   <p class="intro">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
