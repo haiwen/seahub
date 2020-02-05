@@ -3,20 +3,16 @@
 
 {% block main_panel %}
 <div class="mt-9 mb-4 mx-auto small-panel">
-  <div class="border-bottom">
-    <h2 class="panel-title text-center mb-0 ellipsis" title="{{repo.name}}">{{repo.name}}</h2>
-  </div>
-  <div class="panel-content">
-    <p class="intro">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
-    <form action="" method="post" id="repo-decrypt-form" class="mt-4">
-      <div class="form-group">
-        <label for="password">{% trans "Password" %}</label>
-        <input type="password" name="password" id="password" class="form-control" autofocus />
-      </div>
-      <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
-      <p class="error hide"></p>
-    </form>
-  </div>
+  <h2 class="text-center ellipsis" title="{{repo.name}}">{{repo.name}}</h2>
+  <p class="intro">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
+  <form action="" method="post" id="repo-decrypt-form" class="mt-4">
+    <div class="form-group">
+      <label for="password">{% trans "Password" %}</label>
+      <input type="password" name="password" id="password" class="form-control" autofocus />
+    </div>
+    <button type="submit" class="btn btn-primary sf-btn-submit">{% trans "Submit" %}</button>
+    <p class="error hide"></p>
+  </form>
 </div>
 {% endblock %}
 {% block extra_script %}
