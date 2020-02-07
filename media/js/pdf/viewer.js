@@ -140,6 +140,7 @@ function getViewerConfiguration() {
       pageNumber: document.getElementById('pageNumber'),
       scaleSelectContainer: document.getElementById('scaleSelectContainer'),
       scaleSelect: document.getElementById('scaleSelect'),
+      restoreToAuto: document.getElementById('restoreToAuto'),
       customScaleOption: document.getElementById('customScaleOption'),
       previous: document.getElementById('previous'),
       next: document.getElementById('next'),
@@ -11317,6 +11318,12 @@ var Toolbar = function () {
         eventBus.dispatch('scalechanged', {
           source: self,
           value: this.value
+        });
+      });
+      items.restoreToAuto.addEventListener('click', function () {
+        eventBus.dispatch('scalechanged', {
+          source: self,
+          value: 'auto'
         });
       });
       items.presentationModeButton.addEventListener('click', function () {

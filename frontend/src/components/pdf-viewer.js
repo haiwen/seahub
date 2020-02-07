@@ -1,4 +1,5 @@
 import React from 'react';
+import { gettext } from '../utils/constants';
 
 class PDFViewer extends React.Component {
 
@@ -194,15 +195,15 @@ class PDFViewer extends React.Component {
                       <span data-l10n-id="tools_label">Tools</span>
                     </button>
                   </div>
-                  <div id="toolbarViewerMiddle" className="d-flex fixed-top position-absolute justify-content-center p-1 align-items-center">
-                    <div className="splitToolbarButton d-flex">
-                      <button id="zoomOut" className="toolbarButton zoomOut fas fa-minus btn-icon rounded mr-1" title="Zoom Out" tabIndex="21" data-l10n-id="zoom_out">
+                  <div id="toolbarViewerMiddle" className="zoom-toolbar">
+                    <div className="splitToolbarButton d-flex flex-column">
+                      <button id="restoreToAuto" title={gettext('Default Size')} className="fas fa-square btn btn-icon rounded mb-4"></button>
+                      <button id="zoomIn" className="toolbarButton zoomIn fas fa-plus btn btn-icon rounded mb-2" title={gettext('Zoom In')} tabIndex="22" data-l10n-id="zoom_in"></button>
+                      <button id="zoomOut" className="toolbarButton zoomOut fas fa-minus btn btn-icon rounded" title={gettext('Zoom Out')} tabIndex="21" data-l10n-id="zoom_out">
                       </button>
                       <div className="splitToolbarButtonSeparator"></div>
-                      <button id="zoomIn" className="toolbarButton zoomIn fas fa-plus btn-icon rounded" title="Zoom In" tabIndex="22" data-l10n-id="zoom_in">
-                      </button>
                     </div>
-                    <span id="scaleSelectContainer" className="dropdownToolbarButton ml-1">
+                    <span id="scaleSelectContainer" className="dropdownToolbarButton hidden">
                       <select id="scaleSelect" title="Zoom" tabIndex="23" data-l10n-id="zoom" defaultValue="auto">
                         <option id="pageAutoOption" title="" value="auto" data-l10n-id="page_scale_auto">Automatic Zoom</option>
                         <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
