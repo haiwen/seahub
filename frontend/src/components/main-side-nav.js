@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Badge } from 'reactstrap';
-import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, lang } from '../utils/constants';
+import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -167,33 +167,14 @@ class MainSideNav extends React.Component {
   renderCustomNavItems() {
     return (
       customNavItems.map((item, idx) => {
-        // if no item.lang, show
-        // if has item.lang && system.lang in item.lang, show
-        // other case hide
-        if (item.hasOwnProperty('lang') && item.lang.indexOf(lang) == -1) return null;
-        if (item.type === 'heading') {
-          return (
-            <h3 key={idx} className="sf-heading">{item.desc}</h3>
-          );
-        } else {
-          return (
-            <ul className="nav nav-pills flex-column nav-container">
-              {
-                item.map((nav, idx) => {
-                  if (nav.hasOwnProperty('lang') && nav.lang.indexOf(lang) == -1) return null;
-                  return (
-                    <li key={idx} className="nav-item">
-                      <a href={nav.link} className="nav-link ellipsis" title={nav.desc}>
-                        <span className={nav.icon} aria-hidden="true"></span>
-                        <span className="nav-text">{nav.desc}</span>
-                      </a>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-          );
-        }
+        return (
+          <li key={idx} className="nav-item">
+            <a href={item.link} className="nav-link ellipsis" title={item.desc}>
+              <span className={item.icon} aria-hidden="true"></span>
+              <span className="nav-text">{item.desc}</span>
+            </a>
+          </li>
+        );
       })
     );
   }
@@ -295,8 +276,8 @@ class MainSideNav extends React.Component {
               </a>
               {this.renderSharedAdmin()}
             </li>
+            {customNavItems && this.renderCustomNavItems()}
           </ul>
-          {customNavItems && this.renderCustomNavItems()}
         </div>
 
         {dtableWebServer &&
