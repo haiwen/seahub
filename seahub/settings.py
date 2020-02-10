@@ -858,23 +858,10 @@ if ENABLE_OAUTH or ENABLE_WORK_WEIXIN:
 #####################
 # Custom Nav Items  #
 #####################
-# if lang is given and system's lang code not in lang, item will hide
 # an example:
-#
 # CUSTOM_NAV_ITEMS = [
-#     {'type': 'heading',
-#      'desc': 'my_custom_navs',
-#      'lang': ['en', 'zh-cn', 'de'],
+#     {'icon': 'sf2-icon-star',
+#      'desc': 'test custom name',
+#      'link': 'http://127.0.0.1:8000/shared-libs/',
 #      },
-#     [
-#      {'icon': 'sf2-icon-star',
-#       'desc': 'only show in english, chinese or german',
-#       'link': 'http://127.0.0.1:8000/shared-libs/',
-#       'lang': ['en', 'zh-cn', 'de'],
-#       },
-#      {'icon': 'sf2-icon-star',
-#       'desc': 'show in all languages',
-#       'link': 'http://127.0.0.1:8000/shared-libs/',
-#       },
-#     ],
 # ]
