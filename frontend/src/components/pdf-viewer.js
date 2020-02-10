@@ -197,9 +197,9 @@ class PDFViewer extends React.Component {
                   </div>
                   <div id="toolbarViewerMiddle" className="zoom-toolbar">
                     <div className="splitToolbarButton d-flex flex-column">
-                      <button id="restoreToAuto" title={gettext('Default Size')} className="fas fa-square btn btn-icon rounded mb-4"></button>
-                      <button id="zoomIn" className="toolbarButton zoomIn fas fa-plus btn btn-icon rounded mb-2" title={gettext('Zoom In')} tabIndex="22" data-l10n-id="zoom_in"></button>
-                      <button id="zoomOut" className="toolbarButton zoomOut fas fa-minus btn btn-icon rounded" title={gettext('Zoom Out')} tabIndex="21" data-l10n-id="zoom_out">
+                      <button id="restoreToAuto" title={gettext('Default Size')} className="sf3-font sf3-font-page-size btn btn-icon rounded mb-4"></button>
+                      <button id="zoomIn" className="toolbarButton zoomIn sf3-font sf3-font-enlarge btn btn-icon rounded mb-2" title={gettext('Zoom In')} tabIndex="22" data-l10n-id="zoom_in"></button>
+                      <button id="zoomOut" className="toolbarButton zoomOut sf3-font sf3-font-narrow btn btn-icon rounded" title={gettext('Zoom Out')} tabIndex="21" data-l10n-id="zoom_out">
                       </button>
                       <div className="splitToolbarButtonSeparator"></div>
                     </div>
