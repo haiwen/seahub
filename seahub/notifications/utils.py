@@ -45,7 +45,7 @@ def update_notice_detail(request, notices):
                 if repo is None:
                     notice.detail = None
                 else:
-                    d.pop('org_id')
+                    d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
                     url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
                     d['repo_name'] = repo.name
@@ -81,7 +81,7 @@ def update_notice_detail(request, notices):
                 if not repo or not group:
                     notice.detail = None
                 else:
-                    d.pop('org_id')
+                    d.pop('org_id', None)
                     share_from_user_email = d.pop('share_from')
                     url, is_default, date_uploaded = api_avatar_url(share_from_user_email, 32)
                     d['share_from_user_name'] = email2nickname(share_from_user_email)
@@ -138,7 +138,7 @@ def update_notice_detail(request, notices):
                 if not repo:
                     notice.detail = None
                 else:
-                    d.pop('org_id')
+                    d.pop('org_id', None)
                     repo_owner_email = d.pop('repo_owner')
                     d['transfer_from_user_name'] = email2nickname(repo_owner_email)
                     d['transfer_from_user_email'] = repo_owner_email
@@ -153,7 +153,7 @@ def update_notice_detail(request, notices):
         elif notice.is_draft_reviewer_msg():
             try:
                 d = json.loads(notice.detail)
-                d.pop('to_user')
+                d.pop('to_user', None)
                 request_user_email = d.pop('from_user')
                 url, is_default, date_uploaded = api_avatar_url(request_user_email, 32)
                 d['request_user_name'] = email2nickname(request_user_email)
