@@ -609,12 +609,6 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
     ### system admin ###
-    url(r'^sys/statistic/file/$', sys_statistic_file, name='sys_statistic_file'),
-    url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
-    url(r'^sys/statistic/user/$', sys_statistic_user, name='sys_statistic_user'),
-    url(r'^sys/statistic/traffic/$', sys_statistic_traffic, name='sys_statistic_traffic'),
-    url(r'^sys/statistic/reports/$', sys_statistic_reports, name='sys_statistic_reports'),
-
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
