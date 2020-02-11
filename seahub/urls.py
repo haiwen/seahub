@@ -609,7 +609,6 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
     ### system admin ###
-    url(r'^sys/settings/$', sys_settings, name='sys_settings'),
     url(r'^sys/statistic/file/$', sys_statistic_file, name='sys_statistic_file'),
     url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
     url(r'^sys/statistic/user/$', sys_statistic_user, name='sys_statistic_user'),
