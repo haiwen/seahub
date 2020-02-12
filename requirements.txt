@@ -1,4 +1,4 @@
-Django==1.11.25
+Django==1.11.28
 future
 captcha
 django-statici18n
