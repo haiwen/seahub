@@ -265,13 +265,13 @@ class ActivityItem extends Component {
           </tr>
         ) : (
           <tr>
-            <td className="text-center">
+            <td className="text-center align-top">
               <img src={item.avatar_url} alt="" width="32" height="32" className="avatar" />
             </td>
             <td>
               <a href={userProfileURL}>{item.author_name}</a>
-              <span className="item-meta-info-highlighted">{op}</span>
-              <br />{details}
+              <p className="m-0 text-secondary">{op}</p>
+              {details}
             </td>
             <td className="text-right align-top">
               <span className="text-secondary mobile-activity-time">
@@ -281,7 +281,6 @@ class ActivityItem extends Component {
               {moreDetails && libLink}
             </td>
           </tr>
-
         )}
         {this.state.isListCreatedFiles &&
           <ModalPortal>
