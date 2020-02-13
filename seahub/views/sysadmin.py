@@ -181,125 +181,6 @@ def _populate_user_quota_usage(user):
 
 @login_required
 @sys_staff_required
-def sys_user_admin(request):
-    """List all users from database.
-    """
-
-    try:
-        from seahub_extra.plan.models import UserPlan
-        enable_user_plan = True
-    except Exception:
-        enable_user_plan = False
-
-    if enable_user_plan and request.GET.get('filter', '') == 'paid':
-        # show paid users
-        users = []
-        ups = UserPlan.objects.all()
-        for up in ups:
-            try:
-                u = User.objects.get(up.username)
-            except User.DoesNotExist:
-                continue
-
-            _populate_user_quota_usage(u)
-            users.append(u)
-
-        last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
-        for u in users:
-            for e in last_logins:
-                if e.username == u.username:
-                    u.last_login = e.last_login
-
-        return render(request, 'sysadmin/sys_useradmin_paid.html', {
-            'users': users,
-            'enable_user_plan': enable_user_plan,
-        })
-
-    ### List all users
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-    users_plus_one = seaserv.get_emailusers('DB', per_page * (current_page - 1),
-                                            per_page + 1)
-    if len(users_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    users = users_plus_one[:per_page]
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    if ENABLE_TRIAL_ACCOUNT:
-        trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
-    else:
-        trial_users = []
-
-    for user in users:
-        if user.email == request.user.email:
-            user.is_self = True
-
-        populate_user_info(user)
-        _populate_user_quota_usage(user)
-
-        # check user's role
-        user.is_guest = True if get_user_role(user) == GUEST_USER else False
-        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
-
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-        user.trial_info = None
-        for trial_user in trial_users:
-            if trial_user.user_or_org == user.email:
-                user.trial_info = {'expire_date': trial_user.expire_date}
-
-    platform = get_platform_name()
-    server_id = get_server_id()
-    pro_server = 1 if is_pro_version() else 0
-    extra_user_roles = [x for x in get_available_roles()
-                        if x not in get_basic_user_roles()]
-
-    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
-    show_institution = False
-    institutions = None
-    if multi_institution:
-        show_institution = True
-        institutions = [inst.name for inst in Institution.objects.all()]
-        for user in users:
-            profile = Profile.objects.get_profile_by_user(user.email)
-            user.institution =  profile.institution if profile else ''
-
-    return render(request,
-        'sysadmin/sys_useradmin.html', {
-            'users': users,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-            'have_ldap': get_ldap_info(),
-            'platform': platform,
-            'server_id': server_id[:8],
-            'default_user': DEFAULT_USER,
-            'guest_user': GUEST_USER,
-            'is_pro': is_pro_version(),
-            'pro_server': pro_server,
-            'enable_user_plan': enable_user_plan,
-            'extra_user_roles': extra_user_roles,
-            'show_institution': show_institution,
-            'institutions': institutions,
-            'is_email_configured': IS_EMAIL_CONFIGURED,
-            'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
-        })
-
-@login_required
-@sys_staff_required
 def sys_useradmin_export_excel(request):
     """ Export all users from database to excel
     """
@@ -426,182 +307,6 @@ def sys_useradmin_export_excel(request):
     response['Content-Disposition'] = 'attachment; filename=users.xlsx'
     wb.save(response)
     return response
-
-@login_required
-@sys_staff_required
-def sys_user_admin_ldap_imported(request):
-    """List all users from LDAP imported.
-    """
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-    users_plus_one = seaserv.get_emailusers('LDAPImport',
-                                            per_page * (current_page - 1),
-                                            per_page + 1)
-    if len(users_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    users = users_plus_one[:per_page]
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    for user in users:
-        if user.email == request.user.email:
-            user.is_self = True
-
-        populate_user_info(user)
-        _populate_user_quota_usage(user)
-
-        # check user's role
-        user.is_guest = True if get_user_role(user) == GUEST_USER else False
-        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
-
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-    extra_user_roles = [x for x in get_available_roles()
-                        if x not in get_basic_user_roles()]
-
-    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
-    show_institution = False
-    institutions = None
-    if multi_institution:
-        show_institution = True
-        institutions = [inst.name for inst in Institution.objects.all()]
-        for user in users:
-            profile = Profile.objects.get_profile_by_user(user.email)
-            user.institution =  profile.institution if profile else ''
-
-    return render(request,
-        'sysadmin/sys_user_admin_ldap_imported.html', {
-            'users': users,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-            'is_pro': is_pro_version(),
-            'extra_user_roles': extra_user_roles,
-            'default_user': DEFAULT_USER,
-            'guest_user': GUEST_USER,
-            'show_institution': show_institution,
-            'institutions': institutions,
-        })
-
-@login_required
-@sys_staff_required
-def sys_user_admin_ldap(request):
-    """List all users from LDAP.
-    """
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-    users_plus_one = seaserv.get_emailusers('LDAP',
-                                            per_page * (current_page - 1),
-                                            per_page + 1)
-    if len(users_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    users = users_plus_one[:per_page]
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    for user in users:
-        if user.email == request.user.email:
-            user.is_self = True
-
-        _populate_user_quota_usage(user)
-
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-    return render(request,
-        'sysadmin/sys_useradmin_ldap.html', {
-            'users': users,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-            'is_pro': is_pro_version(),
-        })
-
-@login_required
-@sys_staff_required
-def sys_user_admin_admins(request):
-    """List all admins from database and ldap imported
-    """
-
-    db_users = ccnet_api.get_emailusers('DB', -1, -1)
-    ldap_imported_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
-
-    admin_users = []
-    not_admin_users = []
-
-    for user in db_users + ldap_imported_users:
-        if user.is_staff is True:
-            admin_users.append(user)
-        else:
-            not_admin_users.append(user)
-
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admin_users])
-
-    for user in admin_users:
-        if user.email == request.user.email:
-            user.is_self = True
-
-        _populate_user_quota_usage(user)
-
-        # check db user's role
-        if user.source == "DB":
-            if user.role == GUEST_USER:
-                user.is_guest = True
-            else:
-                user.is_guest = False
-
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-        try:
-            admin_role = AdminRole.objects.get_admin_role(user.email)
-            user.admin_role = admin_role.role
-        except AdminRole.DoesNotExist:
-            user.admin_role = DEFAULT_ADMIN
-
-    extra_admin_roles = [x for x in get_available_admin_roles()
-                        if x not in get_basic_admin_roles()]
-
-    return render(request,
-        'sysadmin/sys_useradmin_admins.html', {
-            'users': admin_users,
-            'not_admin_users': not_admin_users,
-            'have_ldap': get_ldap_info(),
-            'extra_admin_roles': extra_admin_roles,
-            'default_admin': DEFAULT_ADMIN,
-            'system_admin': SYSTEM_ADMIN,
-            'daily_admin': DAILY_ADMIN,
-            'audit_admin': AUDIT_ADMIN,
-            'is_pro': is_pro_version(),
-        })
 
 @login_required
 @sys_staff_required
@@ -818,7 +523,7 @@ def sys_org_set_quota(request, org_id):
 def user_remove(request, email):
     """Remove user"""
     referer = request.META.get('HTTP_REFERER', None)
-    next_page = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_info') if referer is None else referer
 
     try:
         user = User.objects.get(email=email)
@@ -856,7 +561,7 @@ def remove_trial(request, user_or_org):
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
-    next_page = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_info') if referer is None else referer
 
     TrialAccount.objects.filter(user_or_org=user_or_org).delete()
 
@@ -894,7 +599,7 @@ def user_remove_admin(request, email):
         messages.error(request, _('Failed to revoke admin: the user does not exist'))
 
     referer = request.META.get('HTTP_REFERER', None)
-    next_page = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
 
@@ -1065,7 +770,7 @@ def user_reset(request, email):
         messages.error(request, msg)
 
     referer = request.META.get('HTTP_REFERER', None)
-    next_page = reverse('sys_useradmin') if referer is None else referer
+    next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
 
@@ -1927,107 +1632,6 @@ def batch_add_user_example(request):
     return response
 
 @login_required
-@sys_staff_required
-def batch_add_user(request):
-    """  Batch add users. Import users from XLSX file.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    next_page = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
-
-    form = BatchAddUserForm(request.POST, request.FILES)
-    if form.is_valid():
-        content = request.FILES['file'].read()
-        if str(request.FILES['file']).split('.')[-1].lower() != 'xlsx':
-            messages.error(request, _('Please choose a .xlsx file.'))
-            return HttpResponseRedirect(next_page)
-
-        try:
-            fs = BytesIO(content)
-            wb = load_workbook(filename=fs, read_only=True)
-        except Exception as e:
-            logger.error(e)
-            messages.error(request, _('Internal Server Error'))
-            return HttpResponseRedirect(next_page)
-
-        rows = wb.worksheets[0].rows
-        records = []
-        # remove first row(head field).
-        next(rows)
-        for row in rows:
-            # value of email and password is not None
-            if row[0].value and row[1].value:
-                records.append([c.value for c in row])
-
-        if user_number_over_limit(new_users=len(records)):
-            messages.error(request, _('The number of users exceeds the limit.'))
-            return HttpResponseRedirect(next_page)
-
-        for row in records:
-            try:
-                username = row[0].strip()
-                password = row[1].strip()
-                if not is_valid_username(username) or not password:
-                    continue
-            except Exception as e:
-                logger.error(e)
-                continue
-
-            try:
-                User.objects.get(email=username)
-            except User.DoesNotExist:
-                User.objects.create_user(
-                    username, password, is_staff=False, is_active=True)
-
-                if config.FORCE_PASSWORD_CHANGE:
-                    UserOptions.objects.set_force_passwd_change(username)
-
-                # then update the user's optional info
-                try:
-                    nickname = row[2].strip()
-                    if len(nickname) <= 64 and '/' not in nickname:
-                        Profile.objects.add_or_update(username, nickname, '')
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    role = row[3].strip()
-                    if is_pro_version() and role in get_available_roles():
-                        User.objects.update_role(username, role)
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    space_quota_mb = int(row[4])
-                    if space_quota_mb >= 0:
-                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
-                        seafile_api.set_user_quota(username, space_quota)
-                except Exception as e:
-                    logger.error(e)
-
-                send_html_email_with_dj_template(
-                    username, dj_template='sysadmin/user_batch_add_email.html',
-                    subject=_('You are invited to join %s') % get_site_name(),
-                    context={
-                        'user': email2nickname(request.user.username),
-                        'email': username,
-                        'password': password,
-                    })
-
-                # send admin operation log signal
-                admin_op_detail = {
-                    "email": username,
-                }
-                admin_operation.send(sender=None, admin_name=request.user.username,
-                                     operation=USER_ADD, detail=admin_op_detail)
-        messages.success(request, _('Import succeeded'))
-    else:
-        messages.error(request, _('Please choose a .xlsx file.'))
-
-    return HttpResponseRedirect(next_page)
-
-@login_required
 def sys_sudo_mode(request):
     if request.method not in ('GET', 'POST'):
         return HttpResponseNotAllowed
@@ -2036,7 +1640,7 @@ def sys_sudo_mode(request):
     if not request.user.is_staff:
         raise Http404
 
-    next_page = request.GET.get('next', reverse('sys_useradmin'))
+    next_page = request.GET.get('next', reverse('sys_info'))
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')

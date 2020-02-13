@@ -610,11 +610,7 @@ urlpatterns = [
 
     ### system admin ###
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
-    url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
-    url(r'^sys/useradmin/ldap/$', sys_user_admin_ldap, name='sys_useradmin_ldap'),
-    url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),
-    url(r'^sys/useradmin/admins/$', sys_user_admin_admins, name='sys_useradmin_admins'),
     url(r'^sys/groupadmin/export-excel/$', sys_group_admin_export_excel, name='sys_group_admin_export_excel'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/orgadmin/search/$', sys_org_search, name='sys_org_search'),
@@ -658,7 +654,6 @@ urlpatterns = [
     url(r'^sys/termsadmin/delete/(?P<pk>[^/]+)/$', sys_delete_terms, name='sys_delete_terms'),
     url(r'^useradmin/password/reset/(?P<email>[^/]+)/$', user_reset, name='user_reset'),
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
-    url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^sys/info/$', sysadmin_react_fake_view, name="sys_info"),

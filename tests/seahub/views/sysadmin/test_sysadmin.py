@@ -125,7 +125,7 @@ class SudoModeTest(BaseTestCase):
             'password': self.admin_password,
         })
         self.assertEqual(302, resp.status_code)
-        self.assertRedirects(resp, reverse('sys_useradmin'))
+        self.assertRedirects(resp, reverse('sys_info'))
 
 
 class SysGroupAdminExportExcelTest(BaseTestCase):
