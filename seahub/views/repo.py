@@ -262,7 +262,10 @@ def view_shared_dir(request, fileshare):
     # Get path from frontend, use '/' if missing, and construct request path
     # with fileshare.path to real path, used to fetch dirents by RPC.
     req_path = request.GET.get('p', '/')
-    if req_path[-1] != '/':
+    if req_path == '':
+        # Handle the case where `p` is present but empty.
+        req_path = '/'
+    elif req_path[-1] != '/':
         req_path += '/'
 
     if req_path == '/':

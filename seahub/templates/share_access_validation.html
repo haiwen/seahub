@@ -4,7 +4,11 @@
 {% block main_panel %}
 <div class="mt-9 mb-4 mx-auto small-panel">
   <p class="intro">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
+  {% if path %}
   <form action="{% url view_name token %}?p={{ path }}" method="post" id="share-passwd-form">
+  {% else %}
+  <form action="{% url view_name token %}" method="post" id="share-passwd-form">
+  {% endif %}
     {% csrf_token %}
     <input type="hidden" name="token" value="{{ token }}" />
     <div class="form-group">
