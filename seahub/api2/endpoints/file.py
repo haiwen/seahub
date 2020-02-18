@@ -53,11 +53,14 @@ class FileView(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
-        file_name = file_obj.obj_name
-        file_size = file_obj.size
-
-        can_preview, error_msg = can_preview_file(file_name, file_size, repo)
-        can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
+        if file_obj:
+            file_name = file_obj.obj_name
+            file_size = file_obj.size
+            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+            can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
+        else:
+            can_preview = False
+            can_edit = False
 
         try:
             is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
@@ -70,9 +73,9 @@ class FileView(APIView):
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(file_path),
             'obj_name': file_name,
-            'obj_id': file_obj.obj_id,
+            'obj_id': file_obj.obj_id if file_obj else '',
             'size': file_size,
-            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime),
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
             'is_locked': is_locked,
             'can_preview': can_preview,
             'can_edit': can_edit,
