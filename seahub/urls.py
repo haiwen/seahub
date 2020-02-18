@@ -16,7 +16,6 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
-from .notifications.views import notification_list
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -619,7 +618,6 @@ urlpatterns = [
     url(r'^sys/uploadlinkadmin/$', sys_upload_link_admin, name='sys_upload_link_admin'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
     url(r'^sys/link-search/$', sys_link_search, name="sys_link_search"),
-    url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
     url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),

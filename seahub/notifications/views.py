@@ -19,47 +19,6 @@ from seahub.avatar.util import get_default_avatar_url
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-@login_required
-def notification_list(request):
-    if not request.user.is_staff:
-        raise Http404
-    notes = Notification.objects.all().order_by('-id')
-
-    return render(request, 'notifications/notification_list.html', {
-            'notes': notes,
-            })
-
-@login_required
-def notification_add(request):
-    if not request.user.is_staff or request.method != 'POST':
-        raise Http404
-
-    f = NotificationForm(request.POST)
-    f.save()
-    return HttpResponseRedirect(reverse('notification_list', args=[]))
-
-@login_required
-def notification_delete(request, nid):
-    if not request.user.is_staff:
-        raise Http404
-    Notification.objects.filter(id=nid).delete()
-    refresh_cache()
-
-    return HttpResponseRedirect(reverse('notification_list', args=[]))
-
-@login_required
-def set_primary(request, nid):
-    if not request.user.is_staff:
-        raise Http404
-    
-    # TODO: use transaction?
-    Notification.objects.filter(primary=1).update(primary=0)
-    Notification.objects.filter(id=nid).update(primary=1)
-
-    refresh_cache()
-    
-    return HttpResponseRedirect(reverse('notification_list', args=[]))
-
 ########## user notifications
 @login_required
 def user_notification_list(request):
