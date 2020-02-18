@@ -334,7 +334,7 @@ class WikiPageContentView(APIView):
         url = gen_inner_file_get_url(token, file_name)
         file_response = urllib2.urlopen(url)
         content = file_response.read()
-        
+
         try:
             dirent = seafile_api.get_dirent_by_path(repo.repo_id, path)
             if dirent:
