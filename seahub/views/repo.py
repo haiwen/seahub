@@ -202,7 +202,7 @@ def repo_snapshot(request, repo_id):
 
     return render(request, 'repo_snapshot_react.html', {
             'repo': repo,
-            "is_repo_owner": has_perm,
+            "can_restore_repo": has_perm,
             'current_commit': current_commit,
             })
 

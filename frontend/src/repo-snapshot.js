@@ -16,7 +16,7 @@ import './css/search.css';
 import './css/repo-snapshot.css';
 
 const { 
-  repoID, repoName, isRepoOwner,
+  repoID, repoName, canRestoreRepo,
   commitID, commitTime, commitDesc, commitRelativeTime,
   showAuthor, authorAvatarURL, authorName, authorNickName
 } = window.app.pageOptions;
@@ -159,7 +159,7 @@ class RepoSnapshot extends React.Component {
                 )}
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
-                  {(folderPath == '/' && isRepoOwner) &&
+                  {(folderPath == '/' && canRestoreRepo) &&
                   <button className="btn btn-secondary op-bar-btn" onClick={this.toggleDialog}>{gettext('Restore')}</button>
                   }
                 </div>

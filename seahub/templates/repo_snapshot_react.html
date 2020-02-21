@@ -27,7 +27,7 @@ window.app.pageOptions = {
   authorNickName: '{{ current_commit.props.creator_name|email2nickname|escapejs }}',
   {% endif %}
 
-  isRepoOwner: {% if is_repo_owner %} true {% else %} false {% endif %}
+  canRestoreRepo: {% if can_restore_repo %} true {% else %} false {% endif %}
 };
 </script>
 {% render_bundle 'repoSnapshot' 'js' %}
