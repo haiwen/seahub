@@ -17,6 +17,8 @@ from seahub.views import check_folder_permission
 from seaserv import seafile_api
 from seahub.utils.repo import is_repo_owner
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.group.utils import is_group_admin
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +48,14 @@ class RepoCommitRevertView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not is_repo_owner(request, repo_id, username) or \
-                check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+        has_perm = is_repo_owner(request, repo.id, username)
+        if not has_perm:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+            # department admin
+            if '@seafile_group' in repo_owner:
+                group_id = get_group_id_by_repo_owner(repo_owner)
+                has_perm = is_group_admin(group_id, username)
+        if not has_perm:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
