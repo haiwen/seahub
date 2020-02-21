@@ -1162,7 +1162,6 @@ if HAS_OFFICE_CONVERTER:
         params = {'static_filename': static_filename, 'file_id': file_id}
         try:
             ret = requests.get(url, params, headers=headers)
-            data = ret.text
         except urllib.error.HTTPError as e:
             raise Exception(e)
 
@@ -1171,7 +1170,7 @@ if HAS_OFFICE_CONVERTER:
             dummy, ext = os.path.splitext(os.path.basename(path))
             content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
 
-        resp = HttpResponse(data, content_type=content_type)
+        resp = HttpResponse(ret, content_type=content_type)
         if 'last-modified' in ret.headers:
             resp['Last-Modified'] = ret.headers.get('last-modified')
 
