@@ -35,6 +35,8 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.constants import HASH_URLS
+from seahub.group.utils import is_group_admin
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -190,9 +192,17 @@ def repo_snapshot(request, repo_id):
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
 
+    has_perm = is_repo_owner(request, repo.id, username)
+    # department admin
+    if not has_perm:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            has_perm = is_group_admin(group_id, username)
+
     return render(request, 'repo_snapshot_react.html', {
             'repo': repo,
-            "is_repo_owner": is_repo_owner(request, repo.id, username),
+            "is_repo_owner": has_perm,
             'current_commit': current_commit,
             })
 
