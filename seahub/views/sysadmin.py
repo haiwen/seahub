@@ -1034,69 +1034,6 @@ def sys_repo_delete(request, repo_id):
     messages.success(request, _('Successfully deleted.'))
     return HttpResponseRedirect(next_page)
 
-@login_required
-@sys_staff_required
-def sys_virus_scan_records(request):
-    """List virus scan records.
-    """
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
-    except ValueError:
-        current_page = 1
-        per_page = 100
-
-    records_all = get_virus_record(start=per_page * (current_page - 1),
-                                   limit=per_page + 1)
-    if len(records_all) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    records = []
-    for r in records_all[:per_page]:
-        try:
-            repo = seafile_api.get_repo(r.repo_id)
-        except SearpcError as e:
-            logger.error(e)
-            continue
-
-        if not repo:
-            continue
-
-        r.repo = repo
-        r.repo.owner = seafile_api.get_repo_owner(r.repo.repo_id)
-        records.append(r)
-
-    return render(request,
-        'sysadmin/sys_virus_scan_records.html', {
-            'records': records,
-            'current_page': current_page,
-            'prev_page': current_page - 1,
-            'next_page': current_page + 1,
-            'per_page': per_page,
-            'page_next': page_next,
-        })
-
-@login_required
-@sys_staff_required
-@require_POST
-def sys_delete_virus_scan_records(request, vid):
-    r = get_virus_record_by_id(vid)
-    parent_dir = os.path.dirname(r.file_path)
-    dirent_name = os.path.basename(r.file_path)
-
-    try:
-        seafile_api.del_file(r.repo_id, parent_dir, dirent_name,
-                             request.user.username)
-        handle_virus_record(vid)
-        messages.success(request, _('Successfully deleted.'))
-    except SearpcError as e:
-        logger.error(e)
-        messages.error(request, _('Failed to delete, please try again later.'))
-
-    return HttpResponseRedirect(reverse('sys_virus_scan_records'))
-
 @login_required_ajax
 @sys_staff_required
 def batch_user_make_admin(request):
