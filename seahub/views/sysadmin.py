@@ -1177,63 +1177,6 @@ def sys_check_license(request):
 
 @login_required
 @sys_staff_required
-def sys_invitation_admin(request):
-    """List all invitations .
-    """
-
-    if not ENABLE_GUEST_INVITATION:
-        raise Http404
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
-    except ValueError:
-        current_page = 1
-        per_page = 100
-
-    offset = per_page * (current_page - 1)
-    limit = per_page + 1
-    invitations = Invitation.objects.all().order_by('-invite_time')[offset:offset + limit]
-
-    if len(invitations) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    return render(request,
-        'sysadmin/sys_invitations_admin.html', {
-            'invitations': invitations,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-        })
-
-@login_required
-@sys_staff_required
-def sys_invitation_remove(request):
-    """Delete an invitation.
-    """
-    ct = 'application/json; charset=utf-8'
-    result = {}
-
-    if not ENABLE_GUEST_INVITATION:
-        return HttpResponse(json.dumps({}), status=400, content_type=ct)
-
-    inv_id = request.POST.get('inv_id', '')
-    if not inv_id:
-        result = {'error': "Argument missing"}
-        return HttpResponse(json.dumps(result), status=400, content_type=ct)
-
-    inv = get_object_or_404(Invitation, pk=inv_id)
-    inv.delete()
-
-    return HttpResponse(json.dumps({'success': True}), content_type=ct)
-
-@login_required
-@sys_staff_required
 def sys_terms_admin(request):
     """List Terms and Conditions"""
     if request.method == "POST":
