@@ -619,7 +619,6 @@ urlpatterns = [
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
-    url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
     url(r'^useradmin/password/reset/(?P<email>[^/]+)/$', user_reset, name='user_reset'),

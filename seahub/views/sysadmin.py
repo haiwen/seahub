@@ -500,48 +500,6 @@ def email_user_on_activation(user):
 @login_required_ajax
 @sys_staff_required
 @require_POST
-def user_toggle_status(request, email):
-    content_type = 'application/json; charset=utf-8'
-
-    if not is_valid_username(email):
-        return HttpResponse(json.dumps({'success': False}), status=400,
-                            content_type=content_type)
-
-    try:
-        user_status = int(request.POST.get('s', 0))
-    except ValueError:
-        user_status = 0
-
-    try:
-        user = User.objects.get(email)
-        user.is_active = bool(user_status)
-        result_code = user.save()
-        if result_code == -1:
-            return HttpResponse(json.dumps({'success': False}), status=403,
-                                content_type=content_type)
-
-        if user.is_active is True:
-            try:
-                email_user_on_activation(user)
-                email_sent = True
-            except Exception as e:
-                logger.error(e)
-                email_sent = False
-
-            return HttpResponse(json.dumps({'success': True,
-                                            'email_sent': email_sent,
-                                            }), content_type=content_type)
-
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-
-    except User.DoesNotExist:
-        return HttpResponse(json.dumps({'success': False}), status=500,
-                            content_type=content_type)
-
-@login_required_ajax
-@sys_staff_required
-@require_POST
 def user_toggle_role(request, email):
     content_type = 'application/json; charset=utf-8'
 
