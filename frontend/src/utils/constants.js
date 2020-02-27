@@ -55,6 +55,7 @@ export const canInvitePeople = window.app.pageOptions.canInvitePeople;
 export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
 export const customNavItems = window.app.pageOptions.customNavItems;
 export const maxUploadFileSize = window.app.pageOptions.maxUploadFileSize;
+export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfFilesForFileupload;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
