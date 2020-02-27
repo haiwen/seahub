@@ -6,6 +6,11 @@ from django.test import override_settings
 import seahub
 from seahub import urls
 from seahub.test_utils import BaseTestCase
+from seahub.views.sysadmin import sysadmin_react_fake_view
+
+urlpatterns = seahub.urls.urlpatterns + [
+    url(r'^sys/virus-scan-records/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
+]
 
 @override_settings(ROOT_URLCONF=__name__)
 class CommandTest(BaseTestCase):
