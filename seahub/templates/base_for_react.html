@@ -94,7 +94,9 @@
             {% if max_upload_file_size > 0 %}
             maxUploadFileSize: {{ max_upload_file_size }},
             {% endif %}
-
+            {% if max_number_of_files_for_fileupload > 0 %}
+            maxNumberOfFilesForFileupload: {{ max_number_of_files_for_fileupload }},
+            {% endif %}
             {% if request.user.is_authenticated and request.cur_note %}
             curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',

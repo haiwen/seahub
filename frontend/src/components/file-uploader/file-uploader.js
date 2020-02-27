@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
-import { enableResumableFileUpload, resumableUploadFileBlockSize, maxUploadFileSize } from '../../utils/constants';
+import { resumableUploadFileBlockSize, maxUploadFileSize, maxNumberOfFilesForFileupload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
@@ -17,12 +17,10 @@ const propTypes = {
   filetypes: PropTypes.array,
   chunkSize: PropTypes.number,
   withCredentials: PropTypes.bool,
-  maxFiles: PropTypes.number,
   testMethod: PropTypes.string,
   testChunks: PropTypes.number,
   simultaneousUploads: PropTypes.number,
   fileParameterName: PropTypes.string,
-  maxFilesErrorCallback: PropTypes.func,
   minFileSizeErrorCallback: PropTypes.func,
   fileTypeErrorCallback: PropTypes.func,
   dragAndDrop: PropTypes.bool.isRequired,
@@ -62,7 +60,7 @@ class FileUploader extends React.Component {
       target: '',
       query: this.setQuery || {},
       fileType: this.props.filetypes,
-      maxFiles: this.props.maxFiles,
+      maxFiles: maxNumberOfFilesForFileupload || undefined,
       maxFileSize: maxUploadFileSize * 1000 * 1000 || undefined,
       testMethod: this.props.testMethod || 'post',
       testChunks: this.props.testChunks || false,
@@ -104,10 +102,10 @@ class FileUploader extends React.Component {
   }
 
   bindCallbackHandler = () => {
-    let {maxFilesErrorCallback, minFileSizeErrorCallback, fileTypeErrorCallback } = this.props;
+    let { minFileSizeErrorCallback, fileTypeErrorCallback } = this.props;
 
-    if (maxFilesErrorCallback) {
-      this.resumable.opts.maxFilesErrorCallback = this.props.maxFilesErrorCallback;
+    if (this.maxFilesErrorCallback) {
+      this.resumable.opts.maxFilesErrorCallback = this.maxFilesErrorCallback;
     }
 
     if (minFileSizeErrorCallback) {
@@ -139,6 +137,16 @@ class FileUploader extends React.Component {
     this.resumable.on('beforeCancel', this.onBeforeCancel.bind(this));
     this.resumable.on('cancel', this.onCancel.bind(this));
     this.resumable.on('dragstart', this.onDragStart.bind(this));
+  }
+
+  maxFilesErrorCallback = (files, errorCount) => {
+    let maxFiles = maxNumberOfFilesForFileupload;
+    let message = gettext('Please upload no more than {maxFiles} files at a time. ');
+    if (maxFiles === 1) {
+      message = gettext('Please upload no more than {maxFiles} file at a time. ');
+    } 
+    message = message.replace('{maxFiles}', maxFiles);
+    toaster.danger(message);
   }
 
   maxFileSizeErrorCallback = (file) => {
