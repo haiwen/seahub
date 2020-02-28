@@ -16,7 +16,6 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
-from .notifications.views import notification_list
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -609,63 +608,21 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
     ### system admin ###
-    url(r'^sys/settings/$', sys_settings, name='sys_settings'),
-    url(r'^sys/statistic/file/$', sys_statistic_file, name='sys_statistic_file'),
-    url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
-    url(r'^sys/statistic/user/$', sys_statistic_user, name='sys_statistic_user'),
-    url(r'^sys/statistic/traffic/$', sys_statistic_traffic, name='sys_statistic_traffic'),
-    url(r'^sys/statistic/reports/$', sys_statistic_reports, name='sys_statistic_reports'),
-
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
-    url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
-    url(r'^sys/useradmin/ldap/$', sys_user_admin_ldap, name='sys_useradmin_ldap'),
-    url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),
-    url(r'^sys/useradmin/admins/$', sys_user_admin_admins, name='sys_useradmin_admins'),
     url(r'^sys/groupadmin/export-excel/$', sys_group_admin_export_excel, name='sys_group_admin_export_excel'),
-    url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
-    url(r'^sys/orgadmin/search/$', sys_org_search, name='sys_org_search'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/set_quota/$', sys_org_set_quota, name='sys_org_set_quota'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/rename/$', sys_org_rename, name='sys_org_rename'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/remove/$', sys_org_remove, name='sys_org_remove'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/set_member_quota/$', sys_org_set_member_quota, name='sys_org_set_member_quota'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/user/$', sys_org_info_user, name='sys_org_info_user'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/group/$', sys_org_info_group, name='sys_org_info_group'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/library/$', sys_org_info_library, name='sys_org_info_library'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/traffic/$', sys_org_info_traffic, name='sys_org_info_traffic'),
-    url(r'^sys/orgadmin/(?P<org_id>\d+)/setting/$', sys_org_info_setting, name='sys_org_info_setting'),
-    url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/users/$', sys_inst_info_user, name='sys_inst_info_users'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/users/add/$', sys_inst_add_user, name='sys_inst_add_user'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/users/search/$', sys_inst_search_user, name='sys_inst_search_user'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/admins/$', sys_inst_info_admins, name='sys_inst_info_admins'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/toggleadmin/(?P<email>[^/]+)/$', sys_inst_toggle_admin, name='sys_inst_toggle_admin'),
-    url(r'^sys/instadmin/(?P<inst_id>\d+)/set_quota/$', sys_inst_set_quota, name='sys_inst_set_quota'),
-    url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
-    url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
-    url(r'^sys/uploadlinkadmin/$', sys_upload_link_admin, name='sys_upload_link_admin'),
-    url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
-    url(r'^sys/link-search/$', sys_link_search, name="sys_link_search"),
-    url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
-    url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
-    url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
-    url(r'^useradmin/search/$', user_search, name="user_search"),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
-    url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
-    url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
-    url(r'^sys/termsadmin/$', sys_terms_admin, name='sys_terms_admin'),
-    url(r'^sys/termsadmin/delete/(?P<pk>[^/]+)/$', sys_delete_terms, name='sys_delete_terms'),
     url(r'^useradmin/password/reset/(?P<email>[^/]+)/$', user_reset, name='user_reset'),
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
-    url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^sys/info/$', sysadmin_react_fake_view, name="sys_info"),
@@ -764,27 +721,20 @@ if HAS_FILE_SEARCH:
     ]
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import sys_login_admin, \
-        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
+    from seahub_extra.sysadmin_extra.views import \
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
-        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
-        sys_log_email_audit
+        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += [
         url(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
-        url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
 
         url(r'^api/v2.1/admin/logs/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-logs-file-audit'),
-        url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
-        url(r'^sys/log/emailaudit/$', sys_log_email_audit, name='sys_log_email_audit'),
         url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
 
         url(r'^api/v2.1/admin/logs/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-logs-file-update'),
-        url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
         url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
 
         url(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
-        url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
         url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
     ]
 
