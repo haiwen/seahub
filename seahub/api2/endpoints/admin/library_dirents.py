@@ -48,6 +48,8 @@ def common_check(func):
     return _decorated
 
 def get_dirent_info(dirent):
+    if not dirent:
+        return {}
 
     if stat.S_ISDIR(dirent.mode):
         is_file = False
@@ -175,13 +177,7 @@ class AdminLibraryDirent(APIView):
 
         path = normalize_file_path(path)
 
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             error_msg = 'File or folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -224,13 +220,7 @@ class AdminLibraryDirent(APIView):
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             error_msg = 'File or folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)

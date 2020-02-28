@@ -92,11 +92,14 @@ def get_share_link_info(fileshare):
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        try:
-            can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
-            data['can_edit'] = can_edit
-        except Exception as e:
-            logger.error(e)
+        if dirent:
+            try:
+                can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
+                data['can_edit'] = can_edit
+            except Exception as e:
+                logger.error(e)
+        else:
+            data['can_edit'] = False
 
     return data
 
