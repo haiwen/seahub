@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-13 18:33+0800\n"
-"PO-Revision-Date: 2020-01-13 03:39+0000\n"
+"POT-Creation-Date: 2020-02-28 14:21+0800\n"
+"PO-Revision-Date: 2020-02-28 07:32+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,6 @@ msgstr "A név túl hosszú (legfeljebb 64 karakter lehet)"
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
 #: seahub/api2/views.py:355 seahub/forms.py:44 seahub/profile/forms.py:27
-#: seahub/templates/sysadmin/userinfo.html:427
 msgid "Name should not include '/'."
 msgstr "Név nem tartalmazhat \"/\" jelet."
 
@@ -66,7 +65,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "A tárhely kvóta túl alacsony (minimális érték 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:350 seahub/views/sysadmin.py:864
+#: seahub/organizations/api/admin/users.py:350 seahub/views/sysadmin.py:333
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Kvóta beállítása sikertelen: a maximális kvóta %d MB"
@@ -111,7 +110,6 @@ msgid "User %s is already group owner."
 msgstr "%s felhasználó már a csoport tulajdonosa."
 
 #: seahub/api2/endpoints/admin/institution_users.py:170
-#: seahub/views/sysadmin.py:2339
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
@@ -124,7 +122,7 @@ msgid ""
 "institution"
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:245 seahub/views/sysadmin.py:1864
+#: seahub/api2/endpoints/admin/libraries.py:245 seahub/views/sysadmin.py:748
 msgid "System library can not be deleted."
 msgstr "A rendszer kötetet nem lehet törölni."
 
@@ -174,20 +172,16 @@ msgstr "Idő"
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/templates/file_access.html:24
-#: seahub/templates/sysadmin/settings.html:60
-#: seahub/templates/sysadmin/sys_trafficadmin.html:35
 msgid "User"
 msgstr "Felhasználó"
 
 #: seahub/api2/endpoints/admin/statistics.py:371
 #: seahub/base/management/commands/export_user_traffic_report.py:45
-#: seahub/templates/sysadmin/sys_trafficadmin.html:60
 msgid "Web Download"
 msgstr "Web letöltés"
 
 #: seahub/api2/endpoints/admin/statistics.py:372
 #: seahub/base/management/commands/export_user_traffic_report.py:46
-#: seahub/templates/sysadmin/sys_trafficadmin.html:48
 msgid "Sync Download"
 msgstr "Szinkronizáció letölés"
 
@@ -198,13 +192,11 @@ msgstr "Link letöltés"
 
 #: seahub/api2/endpoints/admin/statistics.py:373
 #: seahub/base/management/commands/export_user_traffic_report.py:47
-#: seahub/templates/sysadmin/sys_trafficadmin.html:54
 msgid "Web Upload"
 msgstr "Web feltöltés"
 
 #: seahub/api2/endpoints/admin/statistics.py:373
 #: seahub/base/management/commands/export_user_traffic_report.py:47
-#: seahub/templates/sysadmin/sys_trafficadmin.html:42
 msgid "Sync Upload"
 msgstr "Szinkronizáció feltöltés"
 
@@ -226,18 +218,8 @@ msgstr "Link feltöltés"
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:15
-#: seahub/templates/sysadmin/sys_inst_info_user.html:23
-#: seahub/templates/sysadmin/sys_inst_info_user.html:31
-#: seahub/templates/sysadmin/sys_inst_search_user.html:8
-#: seahub/templates/sysadmin/sys_inst_search_user.html:17
-#: seahub/templates/sysadmin/sys_org_info_user.html:16
-#: seahub/templates/sysadmin/sys_org_info_user.html:62
-#: seahub/templates/sysadmin/sys_useradmin.html:43
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
-#: seahub/templates/sysadmin/user_search.html:10
-#: seahub/templates/sysadmin/userinfo.html:35 seahub/views/sysadmin.py:412
-#: seahub/views/sysadmin.py:416 seahub/views/sysadmin.py:1996
+#: seahub/views/sysadmin.py:206 seahub/views/sysadmin.py:210
+#: seahub/views/sysadmin.py:817
 msgid "Email"
 msgstr "E-mail"
 
@@ -254,27 +236,9 @@ msgstr "E-mail"
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
-#: seahub/templates/repo_history_view.html:58
-#: seahub/templates/sysadmin/org_admin_table.html:4
-#: seahub/templates/sysadmin/sys_inst_admin.html:18
-#: seahub/templates/sysadmin/sys_inst_admin.html:27
-#: seahub/templates/sysadmin/sys_link_search.html:21
-#: seahub/templates/sysadmin/sys_org_admin.html:24
-#: seahub/templates/sysadmin/sys_org_info_group.html:15
-#: seahub/templates/sysadmin/sys_org_info_library.html:15
-#: seahub/templates/sysadmin/sys_org_search.html:10
-#: seahub/templates/sysadmin/sys_publink_admin.html:27
-#: seahub/templates/sysadmin/sys_terms_admin.html:16
-#: seahub/templates/sysadmin/sys_terms_admin.html:55
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:21
-#: seahub/templates/sysadmin/useradmin_table.html:6
-#: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:185
-#: seahub/templates/sysadmin/userinfo.html:234
-#: seahub/templates/sysadmin/userinfo.html:272
-#: seahub/templates/sysadmin/userinfo.html:319 seahub/views/sysadmin.py:412
-#: seahub/views/sysadmin.py:416 seahub/views/sysadmin.py:1268
-#: seahub/views/sysadmin.py:1996
+#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:206
+#: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:695
+#: seahub/views/sysadmin.py:817
 msgid "Name"
 msgstr "Név"
 
@@ -285,10 +249,7 @@ msgstr "Név"
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/password_set_form.html:16
-#: seahub/templates/sysadmin/useradmin_table.html:6
-#: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:67 seahub/views/sysadmin.py:412
-#: seahub/views/sysadmin.py:416
+#: seahub/views/sysadmin.py:206 seahub/views/sysadmin.py:210
 msgid "Contact Email"
 msgstr "Kapcsolat email"
 
@@ -296,7 +257,7 @@ msgstr "Kapcsolat email"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:413 seahub/views/sysadmin.py:417
+#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
 msgid "Space Usage"
 msgstr "Felhasznált terület"
 
@@ -304,13 +265,13 @@ msgstr "Felhasznált terület"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:413 seahub/views/sysadmin.py:417
-#: seahub/views/sysadmin.py:1997
+#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
+#: seahub/views/sysadmin.py:818
 msgid "Space Quota"
 msgstr "Tárhely kvóta"
 
 #: seahub/api2/endpoints/admin/users.py:404 seahub/base/accounts.py:781
-#: seahub/forms.py:30 seahub/views/sysadmin.py:2051
+#: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "A felhasználószám túllépi a maximumot."
 
@@ -320,8 +281,7 @@ msgid "Successfully added user %(user)s."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:503
-#: seahub/api2/endpoints/admin/users_batch.py:377
-#: seahub/views/sysadmin.py:1167 seahub/views/sysadmin.py:2098
+#: seahub/api2/endpoints/admin/users_batch.py:377 seahub/views/sysadmin.py:594
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Önt meghívták ide: %s"
@@ -340,60 +300,51 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:820
 #: seahub/institutions/templates/institutions/useradmin.html:120
-#: seahub/templates/sysadmin/snippets/org_admin_js.html:32
-#: seahub/templates/sysadmin/sys_inst_info_user.html:111
-#: seahub/templates/sysadmin/sys_org_info_user.html:228
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:114
-#: seahub/templates/sysadmin/useradmin_js.html:65
 msgid "Edit succeeded"
 msgstr "Szerkesztés sikeres."
 
-#: seahub/api2/endpoints/admin/users.py:823 seahub/views/sysadmin.py:1028
+#: seahub/api2/endpoints/admin/users.py:823 seahub/views/sysadmin.py:497
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Felhasználói fiókja aktiválásra került itt: %s."
 
 #: seahub/api2/endpoints/admin/users.py:825
 #: seahub/institutions/templates/institutions/useradmin.html:116
-#: seahub/templates/sysadmin/sys_inst_info_user.html:107
-#: seahub/templates/sysadmin/useradmin_js.html:61
 msgid "Edit succeeded, an email has been sent."
 msgstr "Szerkesztés sikeres. Az e-mail kiküldésre került."
 
 #: seahub/api2/endpoints/admin/users.py:828
 #: seahub/institutions/templates/institutions/useradmin.html:118
-#: seahub/templates/sysadmin/sys_inst_info_user.html:109
-#: seahub/templates/sysadmin/useradmin_js.html:63
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a levelezés beállításokat."
 
-#: seahub/api2/endpoints/admin/users.py:906 seahub/views/sysadmin.py:1111
+#: seahub/api2/endpoints/admin/users.py:906 seahub/views/sysadmin.py:538
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Megváltozott jelszó itt: %s"
 
-#: seahub/api2/endpoints/admin/users.py:908 seahub/views/sysadmin.py:1136
+#: seahub/api2/endpoints/admin/users.py:908 seahub/views/sysadmin.py:563
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Jelszó sikeresen átállítva erre: %(passwd)s. Egy e-mailt küldtünk %(user)s részére."
 
-#: seahub/api2/endpoints/admin/users.py:912 seahub/views/sysadmin.py:1141
+#: seahub/api2/endpoints/admin/users.py:912 seahub/views/sysadmin.py:568
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Jelszó sikeresen átállítva erre: %(passwd)s, de a %(user)s felhasználónak nem sikerült az e-mailt elküldeni. Ellenőrizze a levelezés beállításokat."
 
-#: seahub/api2/endpoints/admin/users.py:915 seahub/views/sysadmin.py:1145
+#: seahub/api2/endpoints/admin/users.py:915 seahub/views/sysadmin.py:572
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "%(user)s jelszava sikeresen átállítva erre: %(passwd)s."
 
-#: seahub/api2/endpoints/admin/users.py:918 seahub/views/sysadmin.py:1148
+#: seahub/api2/endpoints/admin/users.py:918 seahub/views/sysadmin.py:575
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -431,9 +382,9 @@ msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "A(z) %(src)s könyvtárat nem lehet átmozgatni a(z) %(des)s alkönyvtárába"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:291 seahub/api2/endpoints/file.py:382
-#: seahub/api2/endpoints/file.py:491 seahub/api2/endpoints/file.py:568
-#: seahub/api2/endpoints/file.py:661
+#: seahub/api2/endpoints/file.py:294 seahub/api2/endpoints/file.py:385
+#: seahub/api2/endpoints/file.py:494 seahub/api2/endpoints/file.py:571
+#: seahub/api2/endpoints/file.py:664
 msgid "File is locked"
 msgstr "A fájl zárolva van"
 
@@ -465,11 +416,11 @@ msgstr "%s felhasználó nem található."
 msgid "Permission denied."
 msgstr "Jogosultság megtagadva"
 
-#: seahub/api2/endpoints/file.py:583 seahub/api2/endpoints/file.py:601
+#: seahub/api2/endpoints/file.py:586 seahub/api2/endpoints/file.py:604
 msgid "File is not locked."
 msgstr "A fájl nincs zárolva."
 
-#: seahub/api2/endpoints/file.py:613 seahub/api2/endpoints/share_links.py:538
+#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:541
 msgid "You can not refresh this file's lock."
 msgstr "Nem újíthatja meg a fájl zárolását."
 
@@ -479,7 +430,6 @@ msgstr "Nem újíthatja meg a fájl zárolását."
 #: seahub/api2/endpoints/send_upload_link_email.py:105
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/views/__init__.py:920
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405
-#: seahub/views/sysadmin.py:2038
 msgid "Internal Server Error"
 msgstr "Belső kiszolgálóhiba"
 
@@ -551,20 +501,11 @@ msgstr "Az e-mail küldése meghiúsult, az e-mail szolgáltatás nincs megfelel
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:100
-#: seahub/templates/sysadmin/sys_statistic_file.html:90
-#: seahub/templates/sysadmin/sys_statistic_storage.html:90
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:112
-#: seahub/templates/sysadmin/sys_statistic_user.html:89
-#: seahub/templates/sysadmin/useradmin_js.html:269
-#: seahub/templates/sysadmin/useradmin_table.html:110
-#: seahub/templates/sysadmin/userinfo.html:105
-#: seahub/templates/sysadmin/userinfo.html:584
 #: seahub/templates/view_shared_upload_link.html:82
 msgid "Error"
 msgstr "Hiba"
 
-#: seahub/api2/endpoints/repo_commit_revert.py:60
+#: seahub/api2/endpoints/repo_commit_revert.py:68
 msgid "This library has not been decrypted."
 msgstr ""
 
@@ -588,7 +529,6 @@ msgid "Wrong password"
 msgstr "Hibás jelszó"
 
 #: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3800
-#: seahub/views/sysadmin.py:2220
 msgid "Internal server error"
 msgstr "Belső hiba"
 
@@ -664,22 +604,22 @@ msgstr "Feltöltési linket osztottak meg Önnel itt: %s"
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "„%s” könyvtár letöltése sikertelen: túl nagy."
 
-#: seahub/api2/endpoints/share_links.py:241
+#: seahub/api2/endpoints/share_links.py:244
 msgid "Password is too short."
 msgstr "A jelszó túl rövid"
 
-#: seahub/api2/endpoints/share_links.py:256 seahub/api2/views.py:3368
+#: seahub/api2/endpoints/share_links.py:259 seahub/api2/views.py:3368
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "A lejárati napok száma legalább %s"
 
-#: seahub/api2/endpoints/share_links.py:262 seahub/api2/views.py:3374
+#: seahub/api2/endpoints/share_links.py:265 seahub/api2/views.py:3374
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "A lejárati napok száma legfeljebb %s"
 
-#: seahub/api2/endpoints/share_links.py:326
-#: seahub/api2/endpoints/share_links.py:335
+#: seahub/api2/endpoints/share_links.py:329
+#: seahub/api2/endpoints/share_links.py:338
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
@@ -753,17 +693,12 @@ msgstr "Email vagy felhasználónév"
 #: seahub/profile/templates/profile/set_profile.html:98
 #: seahub/profile/templates/profile/set_profile.html:105
 #: seahub/profile/templates/profile/set_profile.html:106
-#: seahub/templates/decrypt_repo_form.html:13
+#: seahub/templates/decrypt_repo_form.html:10
 #: seahub/templates/registration/login.html:38
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
-#: seahub/templates/share_access_validation.html:19
-#: seahub/templates/sysadmin/settings.html:105
-#: seahub/templates/sysadmin/sudo_mode.html:10
-#: seahub/templates/sysadmin/sys_org_admin.html:28
-#: seahub/templates/sysadmin/sys_org_info_user.html:68
-#: seahub/templates/sysadmin/sys_useradmin.html:59
-#: seahub/views/sysadmin.py:1996
+#: seahub/templates/share_access_validation.html:11
+#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:817
 msgid "Password"
 msgstr "Jelszó"
 
@@ -962,8 +897,6 @@ msgstr "Adjon meg érvényes e-mail címet."
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/templates/file_access.html:25
-#: seahub/templates/sysadmin/sys_invitations_admin.html:18
-#: seahub/templates/sysadmin/userinfo.html:274
 msgid "Type"
 msgstr "Típus"
 
@@ -1013,63 +946,41 @@ msgstr "Anonymous felhasználó"
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
 #: seahub/profile/templates/profile/set_profile.html:162
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:16
-#: seahub/templates/sysadmin/sys_inst_info_user.html:32
-#: seahub/templates/sysadmin/sys_inst_search_user.html:18
-#: seahub/templates/sysadmin/sys_org_info_user.html:17
-#: seahub/templates/sysadmin/useradmin_table.html:7
-#: seahub/templates/sysadmin/useradmin_table.html:11
-#: seahub/templates/sysadmin/userinfo.html:115 seahub/views/sysadmin.py:412
-#: seahub/views/sysadmin.py:416
+#: seahub/views/sysadmin.py:206 seahub/views/sysadmin.py:210
 msgid "Status"
 msgstr "Állapot"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/templates/sysadmin/org_admin_table.html:6
-#: seahub/templates/sysadmin/sys_useradmin.html:50
-#: seahub/templates/sysadmin/useradmin_table.html:8
-#: seahub/templates/sysadmin/userinfo.html:320 seahub/views/sysadmin.py:412
-#: seahub/views/sysadmin.py:1997
+#: seahub/views/sysadmin.py:206 seahub/views/sysadmin.py:818
 msgid "Role"
 msgstr "Szerep"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/templates/institutions/user_info.html:107
-#: seahub/templates/sysadmin/sys_inst_admin.html:28
-#: seahub/templates/sysadmin/sys_link_search.html:24
-#: seahub/templates/sysadmin/sys_org_info_group.html:17
-#: seahub/templates/sysadmin/sys_publink_admin.html:30
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:24
-#: seahub/templates/sysadmin/userinfo.html:321 seahub/views/sysadmin.py:414
-#: seahub/views/sysadmin.py:418 seahub/views/sysadmin.py:1268
+#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
+#: seahub/views/sysadmin.py:695
 msgid "Create At"
 msgstr "Létrehozás helye:"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:414 seahub/views/sysadmin.py:418
+#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
 msgid "Last Login"
 msgstr "Utolsó belépés"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/views.py:162 seahub/templates/base.html:72
-#: seahub/templates/base.html:75 seahub/templates/js/orgadmin-templates.html:5
-#: seahub/views/sysadmin.py:414 seahub/views/sysadmin.py:418
-#: seahub/views/sysadmin.py:809
+#: seahub/templates/base.html:75 seahub/views/sysadmin.py:208
+#: seahub/views/sysadmin.py:212
 msgid "Admin"
 msgstr "Adminisztrátor"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:18
-#: seahub/templates/sysadmin/sys_useradmin.html:17
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:18
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:414 seahub/views/sysadmin.py:418
+#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
 msgid "LDAP(imported)"
 msgstr "LDAP(betöltve)"
 
@@ -1077,14 +988,7 @@ msgstr "LDAP(betöltve)"
 #: seahub/institutions/templates/institutions/useradmin.html:33
 #: seahub/institutions/templates/institutions/useradmin.html:40
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:28
-#: seahub/templates/sysadmin/sys_inst_info_user.html:44
-#: seahub/templates/sysadmin/sys_inst_search_user.html:30
-#: seahub/templates/sysadmin/sys_org_info_user.html:29
-#: seahub/templates/sysadmin/sys_org_info_user.html:36
-#: seahub/templates/sysadmin/useradmin_table.html:43
-#: seahub/templates/sysadmin/useradmin_table.html:50
-#: seahub/views/sysadmin.py:472
+#: seahub/views/sysadmin.py:266
 msgid "Active"
 msgstr "Aktív"
 
@@ -1092,40 +996,25 @@ msgstr "Aktív"
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:30
-#: seahub/templates/sysadmin/sys_inst_info_user.html:46
-#: seahub/templates/sysadmin/sys_inst_search_user.html:32
-#: seahub/templates/sysadmin/sys_org_info_user.html:31
-#: seahub/templates/sysadmin/sys_org_info_user.html:37
-#: seahub/templates/sysadmin/useradmin_table.html:45
-#: seahub/templates/sysadmin/useradmin_table.html:51
-#: seahub/views/sysadmin.py:474
+#: seahub/views/sysadmin.py:268
 msgid "Inactive"
 msgstr "Nem aktív"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:124 seahub/views/sysadmin.py:480
-#: seahub/views/sysadmin.py:481
+#: seahub/templates/base.html:124 seahub/views/sysadmin.py:274
+#: seahub/views/sysadmin.py:275
 msgid "Yes"
 msgstr "Igen"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/templates/sysadmin/sys_useradmin.html:53
-#: seahub/templates/sysadmin/useradmin_table.html:59
-#: seahub/templates/sysadmin/useradmin_table.html:69
-#: seahub/views/sysadmin.py:486
+#: seahub/views/sysadmin.py:280
 msgid "Guest"
 msgstr "Vendég"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
-#: seahub/templates/sysadmin/org_admin_table.html:24
-#: seahub/templates/sysadmin/org_admin_table.html:32
-#: seahub/templates/sysadmin/sys_useradmin.html:52
-#: seahub/templates/sysadmin/useradmin_table.html:61
-#: seahub/templates/sysadmin/useradmin_table.html:68
-#: seahub/views/sysadmin.py:488 seahub/views/sysadmin.py:492
+#: seahub/views/sysadmin.py:282 seahub/views/sysadmin.py:286
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -1236,14 +1125,10 @@ msgstr[1] "%(seconds)d másodperce"
 
 #: seahub/base/templatetags/seahub_tags.py:464
 #: seahub/institutions/templates/institutions/user_info.html:72
-#: seahub/templates/sysadmin/sys_org_info_library.html:25
-#: seahub/templates/sysadmin/userinfo.html:196
-#: seahub/templates/sysadmin/userinfo.html:247
 msgid "Read-Write"
 msgstr "Írás-olvasás"
 
 #: seahub/base/templatetags/seahub_tags.py:466
-#: seahub/templates/sysadmin/userinfo.html:245
 msgid "Read-Only"
 msgstr "Csak olvaható"
 
@@ -1309,56 +1194,22 @@ msgstr "Megjegyzés"
 #: seahub/institutions/templates/institutions/user_info.html:108
 #: seahub/institutions/templates/institutions/useradmin.html:20
 #: seahub/institutions/templates/institutions/useradmin_search.html:23
-#: seahub/notifications/templates/notifications/notification_list.html:23
 #: seahub/templates/repo_dir_recycle_view.html:47
 #: seahub/templates/repo_history_view.html:60
-#: seahub/templates/sysadmin/org_admin_table.html:9
-#: seahub/templates/sysadmin/sys_inst_admin.html:29
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:19
-#: seahub/templates/sysadmin/sys_inst_info_user.html:35
-#: seahub/templates/sysadmin/sys_inst_search_user.html:21
-#: seahub/templates/sysadmin/sys_org_info_group.html:18
-#: seahub/templates/sysadmin/sys_org_info_library.html:18
-#: seahub/templates/sysadmin/sys_org_info_user.html:20
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:14
-#: seahub/templates/sysadmin/userinfo.html:188
-#: seahub/templates/sysadmin/userinfo.html:276
-#: seahub/templates/sysadmin/userinfo.html:322
 msgid "Operations"
 msgstr "Műveletek"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
 #: seahub/institutions/templates/institutions/useradmin.html:37
-#: seahub/templates/sysadmin/org_admin_table.html:29
-#: seahub/templates/sysadmin/sys_org_info_user.html:33
-#: seahub/templates/sysadmin/useradmin_table.html:47
-#: seahub/templates/sysadmin/useradmin_table.html:65
-#: seahub/templates/sysadmin/useradmin_table.html:88
-#: seahub/templates/sysadmin/useradmin_table.html:120
-#: seahub/templates/sysadmin/userinfo.html:52
-#: seahub/templates/sysadmin/userinfo.html:64
-#: seahub/templates/sysadmin/userinfo.html:76
-#: seahub/templates/sysadmin/userinfo.html:88
 msgid "Edit"
 msgstr "Szerkesztés"
 
 #: seahub/contacts/templates/contacts/contact_list.html:30
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
-#: seahub/notifications/templates/notifications/notification_list.html:37
 #: seahub/profile/templates/profile/set_profile.html:113
 #: seahub/profile/templates/profile/set_profile.html:209
 #: seahub/profile/templates/profile/set_profile.html:211
-#: seahub/templates/sysadmin/org_admin_table.html:44
-#: seahub/templates/sysadmin/sys_invitations_admin.html:49
-#: seahub/templates/sysadmin/sys_org_info_group.html:25
-#: seahub/templates/sysadmin/sys_org_info_library.html:38
-#: seahub/templates/sysadmin/sys_org_info_user.html:48
-#: seahub/templates/sysadmin/sys_terms_admin.html:40
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:23
-#: seahub/templates/sysadmin/useradmin_table.html:141
-#: seahub/templates/sysadmin/userinfo.html:215
-#: seahub/templates/sysadmin/userinfo.html:329
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "Delete"
 msgstr "Törlés"
@@ -1384,56 +1235,21 @@ msgstr "Megjegyzés (opcionális)"
 #: seahub/institutions/templates/institutions/user_info.html:52
 #: seahub/institutions/templates/institutions/useradmin_search.html:12
 #: seahub/invitations/templates/invitations/token_view.html:17
-#: seahub/notifications/templates/notifications/notification_list.html:15
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/organizations/templates/organizations/org_register.html:42
 #: seahub/profile/templates/profile/set_profile.html:91
 #: seahub/profile/templates/profile/set_profile.html:153
 #: seahub/share/templates/share/share_link_audit.html:22
-#: seahub/templates/decrypt_repo_form.html:16
+#: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/home_base.html:103
 #: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/repo_dir_recycle_view.html:74
-#: seahub/templates/share_access_validation.html:22
+#: seahub/templates/share_access_validation.html:14
 #: seahub/templates/snippets/search_form.html:11
 #: seahub/templates/snippets/search_form.html:78
-#: seahub/templates/snippets/web_settings_form.html:12
-#: seahub/templates/snippets/web_settings_form.html:27
-#: seahub/templates/snippets/web_settings_form.html:44
-#: seahub/templates/sysadmin/repo_transfer_form.html:8
-#: seahub/templates/sysadmin/sys_inst_admin.html:21
-#: seahub/templates/sysadmin/sys_inst_info_base.html:32
-#: seahub/templates/sysadmin/sys_inst_info_user.html:26
-#: seahub/templates/sysadmin/sys_inst_search_user.html:10
-#: seahub/templates/sysadmin/sys_link_search.html:13
-#: seahub/templates/sysadmin/sys_org_admin.html:34
-#: seahub/templates/sysadmin/sys_org_info_base.html:38
-#: seahub/templates/sysadmin/sys_org_info_setting.html:17
-#: seahub/templates/sysadmin/sys_org_info_setting.html:26
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:26
-#: seahub/templates/sysadmin/sys_org_info_user.html:77
-#: seahub/templates/sysadmin/sys_org_search.html:14
-#: seahub/templates/sysadmin/sys_statistic_file.html:27
-#: seahub/templates/sysadmin/sys_statistic_storage.html:27
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:39
-#: seahub/templates/sysadmin/sys_statistic_user.html:26
-#: seahub/templates/sysadmin/sys_terms_admin.html:71
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:61
-#: seahub/templates/sysadmin/sys_useradmin.html:68
-#: seahub/templates/sysadmin/sys_useradmin.html:78
-#: seahub/templates/sysadmin/sys_useradmin.html:100
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:45
-#: seahub/templates/sysadmin/user_search.html:12
-#: seahub/templates/sysadmin/useradmin_table.html:164
-#: seahub/templates/sysadmin/userinfo.html:137
-#: seahub/templates/sysadmin/userinfo.html:144
-#: seahub/templates/sysadmin/userinfo.html:151
-#: seahub/templates/sysadmin/userinfo.html:158
-#: seahub/templates/sysadmin/userinfo.html:165
-#: seahub/templates/sysadmin/userinfo.html:176
 msgid "Submit"
 msgstr "Beküldés"
 
@@ -1456,16 +1272,6 @@ msgstr "Kapcsolat törlése"
 #: seahub/contacts/templates/contacts/contact_list.html:109
 #: seahub/institutions/templates/institutions/useradmin.html:79
 #: seahub/institutions/templates/institutions/useradmin_search.html:72
-#: seahub/notifications/templates/notifications/notification_list.html:65
-#: seahub/templates/sysadmin/repoadmin_js.html:71
-#: seahub/templates/sysadmin/snippets/org_admin_js.html:5
-#: seahub/templates/sysadmin/sys_inst_admin.html:67
-#: seahub/templates/sysadmin/sys_org_info_group.html:41
-#: seahub/templates/sysadmin/sys_org_info_library.html:57
-#: seahub/templates/sysadmin/sys_org_info_user.html:173
-#: seahub/templates/sysadmin/sys_terms_admin.html:140
-#: seahub/templates/sysadmin/useradmin_js.html:4
-#: seahub/templates/sysadmin/userinfo.html:610
 #, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Biztosan törli: %s?"
@@ -1531,8 +1337,7 @@ msgstr "Érvénytelen név: %s"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1866 seahub/views/sysadmin.py:1735
-#: seahub/views/sysadmin.py:1753
+#: seahub/views/file.py:1866
 msgid "Argument missing"
 msgstr "Hiányzó paraméter"
 
@@ -1645,7 +1450,6 @@ msgstr "%(escaped_nickname)smeghívott a %(grp_name)scsoportba itt: %(site_name)
 #: seahub/institutions/templates/institutions/base.html:13
 #: seahub/profile/templates/profile/set_profile.html:12
 #: seahub/templates/base.html:30 seahub/templates/home_base.html:9
-#: seahub/templates/js/orgadmin-templates.html:4
 msgid "Close"
 msgstr "Bezárás"
 
@@ -1688,8 +1492,8 @@ msgstr "Új oldal"
 #: seahub/views/__init__.py:564 seahub/views/ajax.py:381
 #: seahub/views/ajax.py:427 seahub/views/file.py:1138
 #: seahub/views/file.py:1358 seahub/views/file.py:1875
-#: seahub/views/repo.py:113 seahub/views/repo.py:169 seahub/views/repo.py:218
-#: seahub/views/repo.py:271 seahub/views/repo.py:377
+#: seahub/views/repo.py:115 seahub/views/repo.py:171 seahub/views/repo.py:228
+#: seahub/views/repo.py:281 seahub/views/repo.py:387
 msgid "Permission denied"
 msgstr "Jogosultság megtagadva"
 
@@ -2094,35 +1898,19 @@ msgstr "Kilépés az admin felületről"
 
 #: seahub/institutions/templates/institutions/base.html:18
 #: seahub/institutions/templates/institutions/useradmin.html:9
-#: seahub/templates/js/orgadmin-templates.html:14
-#: seahub/templates/sysadmin/base.html:56
-#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:6
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:21
-#: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "Users"
 msgstr "Felhasználók"
 
 #: seahub/institutions/templates/institutions/base.html:23
-#: seahub/templates/sysadmin/sys_inst_info_base.html:36
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:9
-#: seahub/templates/sysadmin/sys_useradmin.html:7
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:8
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:8
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:7
 msgid "Search users..."
 msgstr "Felhasználók keresése..."
 
 #: seahub/institutions/templates/institutions/info.html:7
-#: seahub/templates/js/orgadmin-templates.html:8
-#: seahub/templates/sysadmin/base.html:26
 msgid "Info"
 msgstr "Infó."
 
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/templates/home_base.html:63
-#: seahub/templates/js/orgadmin-templates.html:11
-#: seahub/templates/sysadmin/base.html:50
-#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:5
 msgid "Libraries"
 msgstr "Kötetek"
 
@@ -2136,33 +1924,25 @@ msgstr "Összes felhasználó"
 
 #: seahub/institutions/templates/institutions/info.html:23
 #: seahub/institutions/templates/institutions/user_info.html:17
-#: seahub/templates/js/orgadmin-templates.html:17
-#: seahub/templates/sysadmin/base.html:62
-#: seahub/templates/sysadmin/settings.html:97
-#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:4
-#: seahub/templates/sysadmin/userinfo.html:26
 msgid "Groups"
 msgstr "Csoportok"
 
 #: seahub/institutions/templates/institutions/user_info.html:15
 #: seahub/profile/templates/profile/set_profile.html:14
 #: seahub/profile/templates/profile/user_profile.html:4
-#: seahub/templates/sysadmin/userinfo.html:22
 msgid "Profile"
 msgstr "Profil"
 
 #: seahub/institutions/templates/institutions/user_info.html:16
-#: seahub/templates/i18n.html:11 seahub/templates/sysadmin/userinfo.html:23
+#: seahub/templates/i18n.html:11
 msgid "Owned Libs"
 msgstr "Birtokolt kötetek"
 
 #: seahub/institutions/templates/institutions/user_info.html:23
-#: seahub/templates/sysadmin/userinfo.html:32
 msgid "Avatar"
 msgstr "Avatar:"
 
 #: seahub/institutions/templates/institutions/user_info.html:30
-#: seahub/templates/sysadmin/userinfo.html:43
 msgctxt "true name"
 msgid "Name"
 msgstr "Név"
@@ -2174,27 +1954,17 @@ msgstr "Osztály"
 
 #: seahub/institutions/templates/institutions/user_info.html:38
 #: seahub/templates/registration/registration_form.html:36
-#: seahub/templates/sysadmin/userinfo.html:92
 msgid "Telephone"
 msgstr "Telefon"
 
 #: seahub/institutions/templates/institutions/user_info.html:42
 #: seahub/institutions/templates/institutions/useradmin.html:18
 #: seahub/institutions/templates/institutions/useradmin_search.html:21
-#: seahub/templates/sysadmin/org_admin_table.html:7
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:17
-#: seahub/templates/sysadmin/sys_inst_info_base.html:22
-#: seahub/templates/sysadmin/sys_inst_info_user.html:33
-#: seahub/templates/sysadmin/sys_inst_search_user.html:19
-#: seahub/templates/sysadmin/sys_org_info_base.html:25
-#: seahub/templates/sysadmin/sys_org_info_user.html:18
 msgid "Space Used"
 msgstr "Felhasznált terület"
 
 #: seahub/institutions/templates/institutions/user_info.html:43
 #: seahub/institutions/templates/institutions/user_info.html:47
-#: seahub/templates/sysadmin/sys_inst_info_base.html:23
-#: seahub/templates/sysadmin/sys_org_info_base.html:27
 msgid "Set Quota"
 msgstr "Kvóta beállítása"
 
@@ -2205,138 +1975,79 @@ msgstr "Felhasználható kvóta:"
 #: seahub/institutions/templates/institutions/user_info.html:62
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
-#: seahub/templates/sysadmin/userinfo.html:186
-#: seahub/templates/sysadmin/userinfo.html:236
-#: seahub/templates/sysadmin/userinfo.html:273
 msgid "Size"
 msgstr "Méret"
 
 #: seahub/institutions/templates/institutions/user_info.html:63
-#: seahub/templates/sysadmin/userinfo.html:187
-#: seahub/templates/sysadmin/userinfo.html:237
 msgid "Last Update"
 msgstr "Utolsó frissítés "
 
 #: seahub/institutions/templates/institutions/user_info.html:70
-#: seahub/templates/sysadmin/sys_org_info_library.html:23
-#: seahub/templates/sysadmin/userinfo.html:194
-#: seahub/templates/sysadmin/userinfo.html:243
 msgid "Encrypted"
 msgstr "Titkosított"
 
 #: seahub/institutions/templates/institutions/user_info.html:70
 #: seahub/institutions/templates/institutions/user_info.html:72
-#: seahub/templates/sysadmin/sys_org_info_library.html:23
-#: seahub/templates/sysadmin/sys_org_info_library.html:25
-#: seahub/templates/sysadmin/userinfo.html:194
-#: seahub/templates/sysadmin/userinfo.html:196
-#: seahub/templates/sysadmin/userinfo.html:243
-#: seahub/templates/sysadmin/userinfo.html:245
-#: seahub/templates/sysadmin/userinfo.html:247
 msgid "library icon"
 msgstr "Kötet ikon"
 
 #: seahub/institutions/templates/institutions/user_info.html:96
-#: seahub/templates/sysadmin/userinfo.html:224
 msgid "This user has not created any libraries"
 msgstr "A felhasználó még nem hozott létre kötetet"
 
 #: seahub/institutions/templates/institutions/user_info.html:121
-#: seahub/templates/sysadmin/userinfo.html:335
 msgid "This user has not created or joined any groups"
 msgstr "A felhasználó még nem hozott létre csoportot és nem is tagja egyiknek sem"
 
 #: seahub/institutions/templates/institutions/user_info.html:146
-#: seahub/templates/sysadmin/sys_inst_info_base.html:55
 msgid "Space Quota can't be empty"
 msgstr "A tárhely kvóta megadása kötelező"
 
 #: seahub/institutions/templates/institutions/useradmin.html:19
 #: seahub/institutions/templates/institutions/useradmin_search.html:22
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:18
-#: seahub/templates/sysadmin/sys_inst_info_user.html:34
-#: seahub/templates/sysadmin/sys_inst_search_user.html:20
-#: seahub/templates/sysadmin/sys_org_info_user.html:19
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:28
-#: seahub/templates/sysadmin/useradmin_table.html:16
-#: seahub/templates/sysadmin/useradmin_table.html:20
 msgid "Create At / Last Login"
 msgstr "Létrehozva / Utolsó bejelentkezés"
 
 #: seahub/institutions/templates/institutions/useradmin.html:66
 #: seahub/institutions/templates/institutions/useradmin_search.html:63
-#: seahub/notifications/templates/notifications/notification_list.html:44
-#: seahub/templates/sysadmin/sys_inst_admin.html:44
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:47
-#: seahub/templates/sysadmin/sys_inst_info_user.html:64
-#: seahub/templates/sysadmin/sys_publink_admin.html:76
-#: seahub/templates/sysadmin/sys_terms_admin.html:48
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:70
 msgid "Empty"
 msgstr "Üres"
 
 #: seahub/institutions/templates/institutions/useradmin.html:70
-#: seahub/templates/sysadmin/sys_inst_info_user.html:68
-#: seahub/templates/sysadmin/sys_org_info_user.html:57
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
-#: seahub/templates/sysadmin/sys_useradmin.html:87
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:54
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:33
-#: seahub/templates/sysadmin/user_search.html:28
 msgid "Activating..., please wait"
 msgstr "Aktiválás, kis türelmet..."
 
 #: seahub/institutions/templates/institutions/useradmin.html:78
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
-#: seahub/templates/sysadmin/sys_org_info_user.html:172
-#: seahub/templates/sysadmin/useradmin_js.html:3
-#: seahub/templates/sysadmin/useradmin_js.html:179
 msgid "Delete User"
 msgstr "Felhasználó törlése"
 
 #: seahub/institutions/templates/institutions/useradmin.html:128
-#: seahub/templates/sysadmin/sys_inst_info_user.html:119
-#: seahub/templates/sysadmin/sys_org_info_user.html:235
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:121
-#: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit failed."
 msgstr "Szerkesztés meghiúsult."
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:7
-#: seahub/templates/sysadmin/sys_inst_search_user.html:5
-#: seahub/templates/sysadmin/user_search.html:7
 msgid "Search User"
 msgstr "Felhasználó keresés"
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:14
-#: seahub/templates/sysadmin/sys_inst_search_user.html:12
-#: seahub/templates/sysadmin/sys_link_search.html:16
-#: seahub/templates/sysadmin/sys_org_search.html:17
-#: seahub/templates/sysadmin/user_search.html:15
 msgid "Result"
 msgstr "Találat"
 
 #: seahub/institutions/views.py:160
-#: seahub/templates/sysadmin/sys_link_search.html:23
-#: seahub/templates/sysadmin/sys_org_admin.html:26
-#: seahub/templates/sysadmin/sys_org_info_library.html:17
-#: seahub/templates/sysadmin/sys_publink_admin.html:29
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:23
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/views/sysadmin.py:807
 msgid "Owner"
 msgstr "Tulajdonos"
 
-#: seahub/institutions/views.py:164 seahub/views/sysadmin.py:811
+#: seahub/institutions/views.py:164
 msgid "Member"
 msgstr "Tag"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:919
+#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:388
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s törlése sikeres"
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:929
+#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:398
 msgid "Failed to delete: the user does not exist"
 msgstr "A felhasználó nem létezik, nem lehet törölni"
 
@@ -2384,12 +2095,6 @@ msgid "Set your password"
 msgstr "Állítsa be jelszavát"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
-#: seahub/notifications/templates/notifications/notification_list.html:59
-#: seahub/templates/sysadmin/settings.html:268
-#: seahub/templates/sysadmin/sys_inst_info_user.html:157
-#: seahub/templates/sysadmin/sys_statistic_reports.html:50
-#: seahub/templates/sysadmin/useradmin_js.html:248
-#: seahub/templates/sysadmin/userinfo.html:565
 msgid "It is required."
 msgstr "Ez kötelező."
 
@@ -2492,7 +2197,7 @@ msgstr[1] "\nÖnnek %(num)s új üzenete van itt: %(site_name)s.\n"
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1186
+#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1185
 msgid "Internal error"
 msgstr "Belső hiba"
 
@@ -2579,14 +2284,10 @@ msgstr "Művelet"
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
-#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:4
-#: seahub/templates/sysadmin/userinfo.html:282
 msgid "File"
 msgstr "Fájl"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
-#: seahub/templates/sysadmin/settings.html:137
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "Kötet"
 
@@ -2671,31 +2372,6 @@ msgid ""
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 msgstr "%(user)s megosztotta a következő kötetet: <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> a következő csoporttal: <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
-#: seahub/notifications/templates/notifications/notification_list.html:8
-msgid "All Notifications"
-msgstr "Összes értesítés"
-
-#: seahub/notifications/templates/notifications/notification_list.html:9
-#: seahub/notifications/templates/notifications/notification_list.html:12
-msgid "Add new notification"
-msgstr "Új értesítés hozzáadása"
-
-#: seahub/notifications/templates/notifications/notification_list.html:22
-msgid "Notification Detail"
-msgstr "Értesítés részletei"
-
-#: seahub/notifications/templates/notifications/notification_list.html:31
-msgid "(current notification)"
-msgstr "(aktuális értesítés)"
-
-#: seahub/notifications/templates/notifications/notification_list.html:35
-msgid "Set to current"
-msgstr "Beállítás aktuálisnak"
-
-#: seahub/notifications/templates/notifications/notification_list.html:64
-msgid "Delete Notification"
-msgstr "Értesítés törlése"
-
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
@@ -2725,7 +2401,7 @@ msgstr "Tisztít"
 msgid "More"
 msgstr "Tovább"
 
-#: seahub/notifications/views.py:129
+#: seahub/notifications/views.py:88
 msgid "Successfully cleared all notices."
 msgstr "Minden üzenet sikeresen törölve."
 
@@ -2801,29 +2477,18 @@ msgstr "Admin Email címe"
 #: seahub/templates/registration/registration_form.html:27
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:18
-#: seahub/templates/sysadmin/sys_org_admin.html:30
-#: seahub/templates/sysadmin/sys_org_info_user.html:74
-#: seahub/templates/sysadmin/sys_useradmin.html:65
 msgid "Confirm Password"
 msgstr "Jelszó megerősítése"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/templates/file_access.html:55
 #: seahub/templates/snippets/admin_paginator.html:4
-#: seahub/templates/sysadmin/sys_publink_admin.html:50
-#: seahub/templates/sysadmin/sys_trafficadmin.html:104
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:44
-#: seahub/templates/sysadmin/useradmin_paginator.html:4
 msgid "Previous"
 msgstr "Előző"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
 #: seahub/templates/file_access.html:58
 #: seahub/templates/snippets/admin_paginator.html:7
-#: seahub/templates/sysadmin/sys_publink_admin.html:53
-#: seahub/templates/sysadmin/sys_trafficadmin.html:107
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:47
-#: seahub/templates/sysadmin/useradmin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Következő"
@@ -2831,19 +2496,13 @@ msgstr "Következő"
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
 #: seahub/templates/file_access.html:63
 #: seahub/templates/snippets/admin_paginator.html:12
-#: seahub/templates/sysadmin/sys_publink_admin.html:58
-#: seahub/templates/sysadmin/sys_trafficadmin.html:112
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:52
-#: seahub/templates/sysadmin/useradmin_paginator.html:12
 msgid "Per page: "
 msgstr "Oldalanként: "
 
 #: seahub/profile/templates/profile/set_profile.html:4
 #: seahub/profile/templates/profile/set_profile.html:46
 #: seahub/profile/templates/profile/set_profile_react.html:5
-#: seahub/templates/base.html:66 seahub/templates/sysadmin/base.html:44
-#: seahub/templates/sysadmin/settings.html:6
-#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:7
+#: seahub/templates/base.html:66
 msgid "Settings"
 msgstr "Beállítások"
 
@@ -2857,7 +2516,6 @@ msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:31
 #: seahub/profile/templates/profile/set_profile.html:160
-#: seahub/templates/sysadmin/userinfo.html:112
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr "Kétlépcsős azonosítás"
@@ -2882,7 +2540,6 @@ msgid "Avatar:"
 msgstr "Avatar:"
 
 #: seahub/profile/templates/profile/set_profile.html:53
-#: seahub/templates/snippets/web_settings_form.html:69
 msgid "Change"
 msgstr "Változtatás"
 
@@ -2922,23 +2579,16 @@ msgstr ""
 #: seahub/profile/templates/profile/set_profile.html:99
 #: seahub/profile/templates/profile/set_profile.html:112
 #: seahub/profile/templates/profile/set_profile_react.html:24
-#: seahub/templates/sysadmin/sys_terms_admin.html:39
 msgid "Update"
 msgstr "Frissítés"
 
 #: seahub/profile/templates/profile/set_profile.html:109
 #: seahub/profile/templates/profile/set_profile.html:344
 #: seahub/profile/templates/profile/set_profile.html:345
-#: seahub/templates/sysadmin/sys_org_info_user.html:71
-#: seahub/templates/sysadmin/sys_org_info_user.html:95
-#: seahub/templates/sysadmin/sys_useradmin.html:62
-#: seahub/templates/sysadmin/sys_useradmin.html:115
 msgid "Show"
 msgstr "Mutat"
 
 #: seahub/profile/templates/profile/set_profile.html:110
-#: seahub/templates/sysadmin/sys_org_info_user.html:72
-#: seahub/templates/sysadmin/sys_useradmin.html:63
 msgid "Generate a random password"
 msgstr "Véletlenszerű jelszó készítése"
 
@@ -2981,13 +2631,10 @@ msgid "Per week"
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:162
-#: seahub/templates/sysadmin/userinfo.html:115
 msgid "enabled"
 msgstr "bekapcsolt"
 
 #: seahub/profile/templates/profile/set_profile.html:164
-#: seahub/templates/sysadmin/userinfo.html:116
-#: seahub/templates/sysadmin/userinfo.html:118
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr "Kétlépcsős azonosítás kikapcsolása"
@@ -3052,11 +2699,7 @@ msgstr "Biztosan törli a fiókot?"
 #: seahub/profile/templates/profile/set_profile.html:304
 #: seahub/profile/templates/profile/set_profile.html:321
 #: seahub/profile/templates/profile/set_profile.html:403
-#: seahub/templates/sysadmin/settings.html:243
-#: seahub/templates/sysadmin/settings.html:290
-#: seahub/templates/sysadmin/userinfo.html:415 seahub/views/sysadmin.py:1441
-#: seahub/views/sysadmin.py:1498 seahub/views/sysadmin.py:2281
-#: seahub/views/sysadmin.py:2363 seahub/views/sysadmin.py:2534
+#: seahub/views/sysadmin.py:730
 msgid "Success"
 msgstr "Sikeres"
 
@@ -3064,10 +2707,6 @@ msgstr "Sikeres"
 #: seahub/profile/templates/profile/set_profile.html:351
 #: seahub/profile/templates/profile/set_profile.html:368
 #: seahub/profile/templates/profile/set_profile.html:369
-#: seahub/templates/sysadmin/sys_org_info_user.html:98
-#: seahub/templates/sysadmin/sys_org_info_user.html:112
-#: seahub/templates/sysadmin/sys_useradmin.html:118
-#: seahub/templates/sysadmin/sys_useradmin.html:131
 msgid "Hide"
 msgstr "Elrejt"
 
@@ -3209,7 +2848,7 @@ msgstr "Oldalsávi menü"
 msgid "View profile and more"
 msgstr "Profil megtekintése"
 
-#: seahub/templates/base.html:69 seahub/templates/sysadmin/base.html:21
+#: seahub/templates/base.html:69
 msgid "System Admin"
 msgstr "Rendszer-adminisztrátor"
 
@@ -3233,19 +2872,18 @@ msgstr "Személyes fiók készítése"
 msgid "Create an organization account"
 msgstr "Szervezeti fiók készítése"
 
-#: seahub/templates/decrypt_repo_form.html:10
+#: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr "Ez a kötet titkosítva van. Adja meg jelszavát az online böngészéshez. A jelszó egy óráig kerül tárolásra a kiszolgálón."
 
-#: seahub/templates/decrypt_repo_form.html:30
-#: seahub/templates/share_access_validation.html:36
+#: seahub/templates/decrypt_repo_form.html:26
+#: seahub/templates/share_access_validation.html:28
 msgid "Please enter the password."
 msgstr "Adjon meg jelszót."
 
 #: seahub/templates/download.html:4 seahub/templates/repo_history_view.html:79
-#: seahub/templates/sysadmin/userinfo.html:290
 msgid "Download"
 msgstr "Letöltés"
 
@@ -3330,8 +2968,6 @@ msgid "Folders"
 msgstr "Könyvtárak"
 
 #: seahub/templates/home_base.html:71 seahub/templates/home_base.html:75
-#: seahub/templates/js/orgadmin-templates.html:24
-#: seahub/templates/sysadmin/base.html:92
 msgid "Links"
 msgstr "Linkek"
 
@@ -3355,7 +2991,7 @@ msgstr "Automatikus lejárat beállítása"
 msgid "Days"
 msgstr "Napok"
 
-#: seahub/templates/i18n.html:9 seahub/templates/sysadmin/userinfo.html:25
+#: seahub/templates/i18n.html:9
 msgid "Shared Links"
 msgstr "Megosztás linkek"
 
@@ -3363,20 +2999,9 @@ msgstr "Megosztás linkek"
 msgid "View and manage all the shared links in this library."
 msgstr "A kötet minden megosztási linkjének kezelése és megtekintése."
 
-#: seahub/templates/i18n.html:12 seahub/templates/sysadmin/userinfo.html:24
+#: seahub/templates/i18n.html:12
 msgid "Shared Libs"
 msgstr "Megosztott kötetek"
-
-#: seahub/templates/js/orgadmin-templates.html:21
-#: seahub/templates/sysadmin/base.html:68
-msgctxt "address book"
-msgid "Departments"
-msgstr "Osztályok"
-
-#: seahub/templates/js/orgadmin-templates.html:27
-#: seahub/templates/sysadmin/base.html:98
-msgid "Logs"
-msgstr "Naplók"
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
@@ -3387,7 +3012,6 @@ msgid "About"
 msgstr "Névjegy"
 
 #: seahub/templates/nav_footer.html:5
-#: seahub/templates/sysadmin/settings.html:188
 msgid "Terms"
 msgstr "Feltételek"
 
@@ -3471,8 +3095,6 @@ msgstr "Az email vagy felhasználónév megadása kötelező"
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
 #: seahub/templates/sysadmin/sudo_mode.html:35
-#: seahub/templates/sysadmin/sys_org_info_user.html:130
-#: seahub/templates/sysadmin/sys_useradmin.html:150
 msgid "Password cannot be blank"
 msgstr "A jelszó megadása kötelező"
 
@@ -3531,9 +3153,6 @@ msgstr "A jelenlegi jelszó nem lehet üres"
 #: seahub/templates/registration/password_set_form.html:68
 #: seahub/templates/registration/registration_form.html:95
 #: seahub/templates/snippets/repo_create_js.html:54
-#: seahub/templates/sysadmin/sys_org_admin.html:79
-#: seahub/templates/sysadmin/sys_org_info_user.html:134
-#: seahub/templates/sysadmin/sys_useradmin.html:154
 msgid "Please enter the password again"
 msgstr "Adja meg a jelszót ismét"
 
@@ -3556,8 +3175,6 @@ msgstr "Jelszó átállítása sikeres."
 #: seahub/templates/registration/password_reset_done.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
-#: seahub/templates/sysadmin/sys_org_info_user.html:197
-#: seahub/templates/sysadmin/useradmin_js.html:8
 msgid "Password Reset"
 msgstr "Új jelszó beállítása"
 
@@ -3638,8 +3255,6 @@ msgid "Signup function is not enabled."
 msgstr "A regisztráció nincs engedélyezve."
 
 #: seahub/templates/registration/registration_form.html:87
-#: seahub/templates/sysadmin/sys_org_info_user.html:126
-#: seahub/templates/sysadmin/sys_useradmin.html:146
 msgid "Email cannot be blank"
 msgstr "Az e-mail megadása kötelező"
 
@@ -3663,7 +3278,6 @@ msgstr "<span class=\"op-target\">%(repo_dir_name)s</span> Kuka"
 
 #: seahub/templates/repo_dir_recycle_view.html:15
 #: seahub/templates/repo_history_view.html:16
-#: seahub/templates/sysadmin/sys_inst_info_base.html:15
 #: seahub/templates/text_diff.html:15
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Back"
@@ -3704,10 +3318,6 @@ msgid "all"
 msgstr "összes"
 
 #: seahub/templates/repo_dir_recycle_view.html:75
-#: seahub/templates/snippets/web_settings_form.html:13
-#: seahub/templates/snippets/web_settings_form.html:28
-#: seahub/templates/snippets/web_settings_form.html:45
-#: seahub/templates/sysadmin/repo_transfer_form.html:9
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
 #: seahub/two_factor/templates/two_factor/profile/disable.html:12
@@ -3765,7 +3375,7 @@ msgstr "{dirent_name} visszaállítva"
 msgid "Snapshot"
 msgstr ""
 
-#: seahub/templates/share_access_validation.html:14
+#: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/directory."
 msgstr "Ha fájlt vagy könyvtárat szeretne megosztani kérem adja meg a jelszót."
@@ -3785,14 +3395,6 @@ msgstr "%(escaped_nickname)s megosztott Önnel egy feltöltési hivatkozást a k
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
 msgstr "Navigáljon a következő oldalra a fájlok feltöltéséhez:"
-
-#: seahub/templates/snippets/file_encoding.html:5
-msgid "Encoding:"
-msgstr "Kódolás:"
-
-#: seahub/templates/snippets/file_encoding.html:8
-msgid "auto detect"
-msgstr "automatikus"
 
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
@@ -3950,368 +3552,6 @@ msgid ""
 "Please select at least one file type or input at least one file extension"
 msgstr "Kérem, válasszon ki legalább egy fájltípust vagy adjon meg legalább egy kiterjesztést."
 
-#: seahub/templates/snippets/space_and_traffic.html:3
-msgid "Used:"
-msgstr "Foglalt:"
-
-#: seahub/templates/snippets/space_and_traffic.html:17
-msgid "Payment"
-msgstr "Fizetés"
-
-#: seahub/templates/sysadmin/base.html:8
-msgid "Exit System Admin"
-msgstr "Admin kilépés"
-
-#: seahub/templates/sysadmin/base.html:32
-msgid "Statistic"
-msgstr "Statisztikák"
-
-#: seahub/templates/sysadmin/base.html:38
-msgid "Devices"
-msgstr "Eszközök"
-
-#: seahub/templates/sysadmin/base.html:74
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:24
-#: seahub/templates/sysadmin/sys_trafficadmin.html:20
-msgid "Organizations"
-msgstr "Szervezetek"
-
-#: seahub/templates/sysadmin/base.html:80
-msgid "Institutions"
-msgstr "Intézmények"
-
-#: seahub/templates/sysadmin/base.html:86
-msgid "Notifications"
-msgstr "Értesítések"
-
-#: seahub/templates/sysadmin/base.html:104
-msgid "File Scan"
-msgstr ""
-
-#: seahub/templates/sysadmin/base.html:110
-msgid "Virus Scan"
-msgstr "Víruskereső"
-
-#: seahub/templates/sysadmin/base.html:116
-msgid "Invitations"
-msgstr "Meghívások"
-
-#: seahub/templates/sysadmin/base.html:122
-#: seahub/templates/sysadmin/sys_terms_admin.html:8
-msgid "Terms and Conditions"
-msgstr "Felhasználási feltételek"
-
-#: seahub/templates/sysadmin/base.html:128
-msgid "Admin Logs"
-msgstr "Admin napló"
-
-#: seahub/templates/sysadmin/base.html:140
-msgid "Abuse Reports"
-msgstr ""
-
-#: seahub/templates/sysadmin/org_admin_table.html:5
-#: seahub/templates/sysadmin/sys_org_info_group.html:16
-#: seahub/templates/sysadmin/sys_org_search.html:12
-#: seahub/views/sysadmin.py:1268
-msgid "Creator"
-msgstr "Létrehozó"
-
-#: seahub/templates/sysadmin/org_admin_table.html:8
-msgid "Created At / Expiration"
-msgstr "Létrehozva / Lejárat"
-
-#: seahub/templates/sysadmin/repo_transfer_form.html:3
-msgid "Transfer Library"
-msgstr "Kötet átadása"
-
-#: seahub/templates/sysadmin/repo_transfer_form.html:4
-#, python-format
-msgid "Transfer %(lib_name)s to:"
-msgstr "%(lib_name)s átadása neki:"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:19
-#: seahub/templates/sysadmin/sys_inst_info_user.html:143
-msgid "Search user or enter email and press Enter"
-msgstr "Felhasználónév vagy email cím szerinti keresés, üssön Entert"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:20
-#: seahub/templates/sysadmin/sys_inst_info_user.html:144
-msgid "Please enter 1 or more character"
-msgstr "Kérem adjon hozzá 1 vagy több karaktert"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:21
-#: seahub/templates/sysadmin/sys_inst_info_user.html:145
-msgid "No matches"
-msgstr "Nincs találat"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:22
-#: seahub/templates/sysadmin/sys_inst_info_user.html:146
-msgid "Searching..."
-msgstr "Keresés..."
-
-#: seahub/templates/sysadmin/repoadmin_js.html:23
-#: seahub/templates/sysadmin/sys_inst_info_user.html:147
-msgid "Loading failed"
-msgstr "Betöltés nem sikerült"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:24
-msgid "You cannot select any more choices"
-msgstr "Nem lehet többet kiválasztani"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:52
-msgid "Successfully transfered 1 item."
-msgstr "1 elem átadása sikeres."
-
-#: seahub/templates/sysadmin/repoadmin_js.html:70
-#: seahub/templates/sysadmin/sys_org_info_library.html:56
-msgid "Delete Library"
-msgstr "Kötet törlése"
-
-#: seahub/templates/sysadmin/repoadmin_js.html:81
-#: seahub/templates/sysadmin/sys_link_search.html:66
-#: seahub/templates/sysadmin/sys_org_info_user.html:184
-msgid "Successfully deleted 1 item."
-msgstr "1 elem sikeresen törölve."
-
-#: seahub/templates/sysadmin/settings.html:10
-msgid ""
-"Note: Settings via web interface are saved in database table (seahub-"
-"db/constance_config). They have a higher priority over the settings in "
-"config files."
-msgstr "Megjegyzés: a webes felületen megadott beállítások az adatbázisban rögzülnek (seahub-db/constance_config). Ezeknek magasabb a prioritásuk a config fájlban rögzítetteknél."
-
-#: seahub/templates/sysadmin/settings.html:15
-msgid ""
-"The URL of the server, like https://seafile.example.com or "
-"http://192.168.1.2:8000"
-msgstr "Szerver címe, pl: https://seafile.example.com vagy http://192.168.1.2:8000"
-
-#: seahub/templates/sysadmin/settings.html:20
-msgid ""
-"The internal URL for downloading/uploading files. Users will not be able to "
-"download/upload files if this is not set correctly. If you config Seafile "
-"behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like "
-"https://seafile.example.com/seafhttp ."
-msgstr "A belső URL a fájlok le/feltöltéséhez. Hibás beállítás esetén a felhasználók nem lesznek képesek le/feltölteni fájlokat. Amennyiben Nginx/Apache mögött fut a Seafile szerver, SERVICE_URL/seafhttp-nek kell lennie, pl.: https://seafile.example.com/seafhttp."
-
-#: seahub/templates/sysadmin/settings.html:24
-msgid "Branding"
-msgstr "Branding"
-
-#: seahub/templates/sysadmin/settings.html:27
-msgid "Site title shown in a browser tab"
-msgstr "Oldal címe a böngésző fülön"
-
-#: seahub/templates/sysadmin/settings.html:32
-msgid "Site name used in email sending"
-msgstr "E-mailben megjelenő oldal neve"
-
-#: seahub/templates/sysadmin/settings.html:45
-msgid "Login Background Image"
-msgstr "Bejelentkező képernyő háttérkép"
-
-#: seahub/templates/sysadmin/settings.html:50
-msgid "ENABLE_BRANDING_CSS"
-msgstr "Branding CSS engedélyezése"
-
-#: seahub/templates/sysadmin/settings.html:51
-msgid "Use custom CSS"
-msgstr "Egyéni CSS használata"
-
-#: seahub/templates/sysadmin/settings.html:56
-msgid "Custom CSS"
-msgstr "Egyéni CSS"
-
-#: seahub/templates/sysadmin/settings.html:63
-msgid "allow new registrations"
-msgstr "Regisztráció engedélyezése"
-
-#: seahub/templates/sysadmin/settings.html:64
-msgid ""
-"Allow new user registrations. Uncheck this to prevent anyone from creating a"
-" new account."
-msgstr "Regisztrációk engedélyezése. Vegye ki a pipát, hogy megakadályozza új felhasználók regisztrálását."
-
-#: seahub/templates/sysadmin/settings.html:69
-msgid "activate after registration"
-msgstr "Aktiválás regisztráció után"
-
-#: seahub/templates/sysadmin/settings.html:70
-msgid ""
-"Activate user immediately after registration. If unchecked, a user need to "
-"be activated by administrator or via activation email"
-msgstr "Felhasználó automatikus aktiválása regisztráció után. Amennyiben nincs bepipálva, a felhasználót aktiválni kell egy adminisztrátornak, vagy aktiváló E-mail segítségével."
-
-#: seahub/templates/sysadmin/settings.html:75
-msgid "send activation email"
-msgstr "Aktiváló E-mail küldése"
-
-#: seahub/templates/sysadmin/settings.html:76
-msgid "Send activation Email after user registration."
-msgstr "Aktiváló E-mail küldése regisztráció után."
-
-#: seahub/templates/sysadmin/settings.html:81
-msgid "keep sign in"
-msgstr "Bejelentkezve maradok"
-
-#: seahub/templates/sysadmin/settings.html:82
-msgid "Number of days that keep user sign in."
-msgstr "Napok száma, amíg a felhasználó bejelentkezve marad."
-
-#: seahub/templates/sysadmin/settings.html:87
-msgid "The maximum number of failed login attempts before showing CAPTCHA."
-msgstr "Maximális sikertelen bejelentkezési kísérletek a CAPTCHA megjelenítése előtt."
-
-#: seahub/templates/sysadmin/settings.html:92
-msgid "Freeze user account when failed login attempts exceed limit."
-msgstr "Felhasználói fiók felfüggesztése, ha a sikertelen bejelentkezési kísérletek száma elérte a limitet."
-
-#: seahub/templates/sysadmin/settings.html:100
-msgid "Enable users to share libraries to any groups in the system."
-msgstr "Engedélyezi a felhasználóknak, kötetek megosztását bármely csoporttal a rendszerben."
-
-#: seahub/templates/sysadmin/settings.html:108
-msgid "strong password"
-msgstr "Erős jelszó"
-
-#: seahub/templates/sysadmin/settings.html:109
-msgid "Force user to use a strong password when sign up or change password."
-msgstr "Megköveteli a felhasználótól erős jelszó használatát regisztráció vagy jelszóváltás alkalmával."
-
-#: seahub/templates/sysadmin/settings.html:114
-msgid "force password change"
-msgstr "Kényszerített jelszóváltás"
-
-#: seahub/templates/sysadmin/settings.html:115
-msgid ""
-"Force user to change password when account is newly added or reset by admin"
-msgstr "Kényszeríti a felhasználót jelszavának megváltoztatására, új felhasználói fiók létrehozásakor, vagy ha egy Adminisztrátor alaphelyzetbe állítja azt."
-
-#: seahub/templates/sysadmin/settings.html:120
-msgid "password minimum length"
-msgstr "Jelszó minimális hossza"
-
-#: seahub/templates/sysadmin/settings.html:121
-msgid "The least number of characters an account password should include."
-msgstr "Felhasználó jelszavának minimális hossza."
-
-#: seahub/templates/sysadmin/settings.html:126
-msgid "password strength level"
-msgstr "Jelszó erőssége"
-
-#: seahub/templates/sysadmin/settings.html:127
-msgid ""
-"The level(1-4) of an account password's strength. For example, '3' means "
-"password must have at least 3 of the following: num, upper letter, lower "
-"letter and other symbols"
-msgstr "Felhasználó jelszavának erőssége (1-4). Például a '3' azt jelenti, hogy a jelszónak legalább három típust kell tartalmaznia a következőkből: szám, nagybetű, kisbetű, és egyéb karakterek."
-
-#: seahub/templates/sysadmin/settings.html:132
-msgid "enable two factor authentication"
-msgstr "Kétlépcsős azonosítás engedélyezése"
-
-#: seahub/templates/sysadmin/settings.html:133
-msgid "Enable two factor authentication"
-msgstr "Kétlépcsős azonosítás engedélyezése"
-
-#: seahub/templates/sysadmin/settings.html:140
-msgid "library history"
-msgstr "Kötetnapló"
-
-#: seahub/templates/sysadmin/settings.html:141
-msgid "Allow user to change library history settings"
-msgstr "Engedélyezi a felhasználóknak, a kötetnapló beállításainak módosítását."
-
-#: seahub/templates/sysadmin/settings.html:146
-msgid "encrypted library"
-msgstr "Titkosított kötet"
-
-#: seahub/templates/sysadmin/settings.html:147
-msgid "Allow user to create encrypted libraries"
-msgstr "Engedélyezi a felhasználóknak titkosítot kötet létrehozását."
-
-#: seahub/templates/sysadmin/settings.html:152
-msgid "library password minimum length"
-msgstr "Kötetjelszó minimális hossza"
-
-#: seahub/templates/sysadmin/settings.html:153
-msgid ""
-"The least number of characters an encrypted library password should include."
-msgstr "Titkosított kötet jelszavának minimális hossza."
-
-#: seahub/templates/sysadmin/settings.html:158
-msgid "download/upload link password minimum length"
-msgstr "Le/Feltöltési hivatkozás jelszó minimális hossza"
-
-#: seahub/templates/sysadmin/settings.html:159
-msgid ""
-"The least number of characters a download/upload link password should "
-"include."
-msgstr "Le/Feltöltési hivatkozás minimális hossza."
-
-#: seahub/templates/sysadmin/settings.html:164
-msgid ""
-"Allow user to add organization libraries. Otherwise, only system admin can "
-"add organization libraries."
-msgstr "Engedélyezi a felhasználók számára szervezeti kötetek létrehozását. Egyéb esetben csak Adminisztrátor tud létrehozni szervezeti kötetet."
-
-#: seahub/templates/sysadmin/settings.html:169
-msgid "Allow user to clean library trash"
-msgstr "Engedélyezi a felhasználónak a kuka ürítését"
-
-#: seahub/templates/sysadmin/settings.html:173
-msgid "Online Preview"
-msgstr "Online előnézet"
-
-#: seahub/templates/sysadmin/settings.html:176
-msgid "text file extensions"
-msgstr "Szövegfájl kiterjesztések"
-
-#: seahub/templates/sysadmin/settings.html:177
-msgid ""
-"Extensions of text files that can be online previewed, each suffix is "
-"separated by a comma."
-msgstr "Szöveg fájl kiterjesztések, melyek online megtekíthetőek. Minden végződést ','-vel kell elválasztani."
-
-#: seahub/templates/sysadmin/settings.html:181
-msgid "Sync"
-msgstr "Szinkronizálás"
-
-#: seahub/templates/sysadmin/settings.html:184
-msgid ""
-"If turn on, the desktop clients will not be able to sync a folder outside "
-"the default Seafile folder."
-msgstr "Ha bekapcsolva, az asztali kliensalkalmazások nem tudnak az alapértelmezett Seafile mappán kívüli mappát szinkronizálni."
-
-#: seahub/templates/sysadmin/settings.html:191
-msgid ""
-"Enable system admin to add Terms and Conditions, and all users will have to "
-"accept the terms."
-msgstr "Engedélyezi az Adminisztrátoroknak Felhasználási feltételek létrehozását, melyeket minden felhasználónak el kell fogadnia."
-
-#: seahub/templates/sysadmin/snippets/org_admin_js.html:4
-msgid "Delete organization"
-msgstr ""
-
-#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:3
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:7
-#: seahub/templates/sysadmin/sys_inst_info_user.html:13
-msgid "Members"
-msgstr "Tagok"
-
-#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
-#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:7
-msgid "Traffic"
-msgstr "Forgalom"
-
-#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:5
-msgid "Storage"
-msgstr "Tárhely"
-
-#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:8
-msgid "Reports"
-msgstr "Jelentések"
-
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
 msgstr "Továbblépéshez erősítsd meg a jelszót"
@@ -4329,610 +3569,6 @@ msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
 msgstr "Adminisztratív területre lépsz, pár órán keresztül nem fogjuk újrakérni a jelszót."
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:9
-msgid "All Institutions"
-msgstr "Minden intézmény"
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:12
-#: seahub/templates/sysadmin/sys_terms_admin.html:9
-msgid "Add"
-msgstr "Hozzáad"
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:17
-msgid "Add institution"
-msgstr "Intézmény hozzáadása"
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:36
-#: seahub/templates/sysadmin/sys_link_search.html:36
-#: seahub/templates/sysadmin/sys_publink_admin.html:42
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:36
-#: seahub/templates/sysadmin/userinfo.html:293
-#: seahub/templates/sysadmin/userinfo.html:302
-msgid "Remove"
-msgstr "Eltávolítás"
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:60
-#: seahub/templates/sysadmin/sys_org_admin.html:67
-msgid "Name can not be blank"
-msgstr "Név megadása kötelező"
-
-#: seahub/templates/sysadmin/sys_inst_admin.html:66
-msgid "Delete Institution"
-msgstr "Intézmény törlése"
-
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:8
-#: seahub/templates/sysadmin/sys_inst_info_user.html:14
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:20
-#: seahub/templates/sysadmin/sys_useradmin.html:20
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:20
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:19
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:20
-msgid "Admins"
-msgstr "Adminisztrátorok"
-
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:41
-#: seahub/templates/sysadmin/sys_inst_info_user.html:57
-#: seahub/templates/sysadmin/sys_inst_search_user.html:43
-#: seahub/templates/sysadmin/useradmin_js.html:13
-#: seahub/templates/sysadmin/useradmin_table.html:148
-msgid "Revoke Admin"
-msgstr "Admin jog elvétele"
-
-#: seahub/templates/sysadmin/sys_inst_info_base.html:19
-#: seahub/templates/sysadmin/sys_org_info_base.html:19
-msgid "Number of members"
-msgstr "Tagok száma"
-
-#: seahub/templates/sysadmin/sys_inst_info_base.html:28
-msgid "Set storage limit"
-msgstr "Tárhely limit beállítása"
-
-#: seahub/templates/sysadmin/sys_inst_info_base.html:30
-#: seahub/templates/sysadmin/sys_org_info_base.html:35
-#: seahub/templates/sysadmin/useradmin_table.html:161
-#: seahub/templates/sysadmin/userinfo.html:173
-msgid "Tip: 0 means default limit"
-msgstr "Tipp: a 0 az alapértelmezett korlátot jelenti"
-
-#: seahub/templates/sysadmin/sys_inst_info_user.html:17
-#: seahub/templates/sysadmin/sys_inst_info_user.html:22
-msgid "Add Members"
-msgstr "Tagok hozzáadása"
-
-#: seahub/templates/sysadmin/sys_inst_info_user.html:57
-#: seahub/templates/sysadmin/sys_inst_search_user.html:43
-msgid "Set Admin"
-msgstr "Admin jog megadása"
-
-#: seahub/templates/sysadmin/sys_inst_search_user.html:49
-#: seahub/templates/sysadmin/sys_link_search.html:42
-#: seahub/templates/sysadmin/sys_org_search.html:21
-#: seahub/templates/sysadmin/user_search.html:24
-msgid "No result"
-msgstr "Nincs találat"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:9
-msgid "All Invitations"
-msgstr "Minden meghívás"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:10
-msgid "Delete Expired Invitations"
-msgstr "Lejárt meghívok törlése"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:16
-msgid "Inviter"
-msgstr "Meghívó"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:17
-msgid "Accepter"
-msgstr "Elfogadó"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:19
-msgid "Invited at"
-msgstr "Meghívás ideje"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:20
-msgid "Accepted at"
-msgstr "Elfogadás ideje"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:21
-msgid "Expired at"
-msgstr "Lejárt"
-
-#: seahub/templates/sysadmin/sys_invitations_admin.html:58
-msgid "There is no invitation yet."
-msgstr "Nincsen meghívás."
-
-#: seahub/templates/sysadmin/sys_link_search.html:7
-msgid "Search Link"
-msgstr "Link keresése"
-
-#: seahub/templates/sysadmin/sys_link_search.html:10
-msgid "Tip: please input at least 3 characters."
-msgstr "Tipp: írjon be legalább 3 karaktert."
-
-#: seahub/templates/sysadmin/sys_link_search.html:11
-#: seahub/templates/sysadmin/sys_link_search.html:22
-#: seahub/templates/sysadmin/sys_publink_admin.html:28
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:22
-#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
-#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
-#: seahub/two_factor/forms.py:294
-msgid "Token"
-msgstr "Token"
-
-#: seahub/templates/sysadmin/sys_link_search.html:25
-#: seahub/templates/sysadmin/sys_publink_admin.html:31
-msgid "Count"
-msgstr "Számláló"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:14
-msgid "All"
-msgstr "Mind"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:19
-#: seahub/templates/sysadmin/sys_org_admin.html:23
-msgid "Add organization"
-msgstr "Szervezet hozzáadása"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:26
-msgid "Owner can use admin panel in an organization, must be a new account."
-msgstr "A tulajdonos a szervezet beállításait kezelheti, új fióknak kell lennie."
-
-#: seahub/templates/sysadmin/sys_org_admin.html:45
-msgid "None."
-msgstr "Nincs."
-
-#: seahub/templates/sysadmin/sys_org_admin.html:71
-msgid "Owner can not be blank"
-msgstr "Tulajdonos megadása kötelező"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:75
-msgid "Password can not be blank"
-msgstr "Jelszó megadása kötelező"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:83
-#: seahub/templates/sysadmin/sys_org_info_user.html:138
-#: seahub/templates/sysadmin/sys_useradmin.html:158
-msgid "Passwords do not match"
-msgstr "A jelszavak nem egyeznek meg"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:115
-msgid "Remove Trial"
-msgstr "Próba eltávolítása"
-
-#: seahub/templates/sysadmin/sys_org_admin.html:116
-#, python-format
-msgid "Are you sure you want to remove trial for %s ?"
-msgstr "Biztosan törli a próbát itt: %s ?"
-
-#: seahub/templates/sysadmin/sys_org_info_base.html:15
-msgid "Back to organization list"
-msgstr "Vissza a szervezet listába"
-
-#: seahub/templates/sysadmin/sys_org_info_base.html:21
-msgid "Number of groups"
-msgstr "Csoportok száma"
-
-#: seahub/templates/sysadmin/sys_org_info_base.html:30
-msgid "Set org storage limit"
-msgstr "Szervezet tárhely beállítása"
-
-#: seahub/templates/sysadmin/sys_org_info_base.html:34
-#: seahub/templates/sysadmin/useradmin_table.html:160
-#: seahub/templates/sysadmin/userinfo.html:172
-msgid "An integer that is greater than or equal to 0."
-msgstr "0-nál nagyobb vagy egyenlő egész."
-
-#: seahub/templates/sysadmin/sys_org_info_group.html:31
-msgid "This organization doesn't have any groups"
-msgstr "Ennek a szervezetnek nincsenek csoportjai"
-
-#: seahub/templates/sysadmin/sys_org_info_group.html:40
-#: seahub/templates/sysadmin/userinfo.html:609
-msgid "Delete Group"
-msgstr "Csoport törlése"
-
-#: seahub/templates/sysadmin/sys_org_info_library.html:46
-msgid "This organization doesn't have any libraries"
-msgstr "Ennek a szervezetnek nincsenek kötetei"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:13
-msgid "Rename Organization"
-msgstr "Szervezet átnevezése"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:15
-msgid "New Name"
-msgstr "Új név"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:21
-msgid "Limit Organization User Number"
-msgstr "Felhasználók számának korlátozása a szervezetekben"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:23
-msgid "Max User Number"
-msgstr "Max. felhasználói szám"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:49
-#: seahub/views/sysadmin.py:1492
-msgid "Input should be a number"
-msgstr "Szám kell"
-
-#: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1502
-msgid "Input number should be greater than 0"
-msgstr "A szám legyen 0-nál nagyobb"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:17
-#: seahub/templates/sysadmin/sys_statistic_file.html:18
-#: seahub/templates/sysadmin/sys_statistic_storage.html:18
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:30
-#: seahub/templates/sysadmin/sys_statistic_user.html:17
-msgid "7 Days"
-msgstr "7 nap"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:18
-#: seahub/templates/sysadmin/sys_statistic_file.html:19
-#: seahub/templates/sysadmin/sys_statistic_storage.html:19
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:31
-#: seahub/templates/sysadmin/sys_statistic_user.html:18
-msgid "30 Days"
-msgstr "30 nap"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:19
-#: seahub/templates/sysadmin/sys_statistic_file.html:20
-#: seahub/templates/sysadmin/sys_statistic_storage.html:20
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:32
-#: seahub/templates/sysadmin/sys_statistic_user.html:19
-msgid "1 Year"
-msgstr "1 év"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:211
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:223
-msgctxt "upload traffic"
-msgid "Upload"
-msgstr "Feltöltés"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:217
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:229
-msgctxt "download traffic"
-msgid "Download"
-msgstr "Letöltés"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:271
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:283
-msgid "Total Traffic"
-msgstr "Összes forgalom"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:278
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:290
-msgid "Share Link Traffic"
-msgstr "Megosztási link forgalom"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:285
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:297
-msgid "Sync Traffic"
-msgstr "Szinkronizáció forgalom"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:292
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:304
-msgid "Web Traffic"
-msgstr "Web forgalom"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:365
-#: seahub/templates/sysadmin/sys_statistic_file.html:280
-#: seahub/templates/sysadmin/sys_statistic_storage.html:269
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:377
-#: seahub/templates/sysadmin/sys_statistic_user.html:256
-msgid "Invalid start date, should be yyyy-mm-dd"
-msgstr "Érvénytelen kezdő dátum, a helyes formátum: éééé-hh-nn"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:369
-#: seahub/templates/sysadmin/sys_statistic_file.html:284
-#: seahub/templates/sysadmin/sys_statistic_storage.html:273
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:381
-#: seahub/templates/sysadmin/sys_statistic_user.html:260
-msgid "Invalid end date, should be yyyy-mm-dd"
-msgstr "Érvénytelen befejező dátum, a helyes formátum: éééé-hh-nn"
-
-#: seahub/templates/sysadmin/sys_org_info_traffic.html:374
-#: seahub/templates/sysadmin/sys_statistic_file.html:289
-#: seahub/templates/sysadmin/sys_statistic_storage.html:278
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:386
-#: seahub/templates/sysadmin/sys_statistic_user.html:265
-msgid "Start date should be earlier than end date."
-msgstr "A kezdő dátumnak korábbinak kell lennie, mint a befejezés dátuma."
-
-#: seahub/templates/sysadmin/sys_org_info_user.html:10
-#: seahub/templates/sysadmin/sys_org_info_user.html:61
-#: seahub/templates/sysadmin/sys_useradmin.html:29
-#: seahub/templates/sysadmin/sys_useradmin.html:42
-msgid "Add user"
-msgstr "Felhasználó hozzáadása"
-
-#: seahub/templates/sysadmin/sys_org_info_user.html:49
-#: seahub/templates/sysadmin/useradmin_table.html:144
-msgid "ResetPwd"
-msgstr "Új jelszó"
-
-#: seahub/templates/sysadmin/sys_org_info_user.html:65
-#: seahub/templates/sysadmin/sys_useradmin.html:46
-msgid "Name(optional)"
-msgstr "Név (opcionális)"
-
-#: seahub/templates/sysadmin/sys_org_info_user.html:198
-#: seahub/templates/sysadmin/useradmin_js.html:9
-#, python-format
-msgid "Are you sure you want to reset the password of %s ?"
-msgstr "Biztosan új jelszót állít be %s részére?"
-
-#: seahub/templates/sysadmin/sys_org_search.html:9
-msgid "Tip: you can search by keyword in name or creator or both."
-msgstr "Tipp: kulcsszóra a névben vagy a tulajdonosban lehet keresni vagy mindkettőben."
-
-#: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
-msgstr "A kvóta megadása kötelező"
-
-#: seahub/templates/sysadmin/sys_publink_admin.html:8
-msgid "Search share links by token..."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_publink_admin.html:16
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:10
-msgid "Share Links"
-msgstr "Megosztási linkek"
-
-#: seahub/templates/sysadmin/sys_publink_admin.html:19
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:13
-msgid "Upload Links"
-msgstr "Feltöltési linkek"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:174
-msgctxt "files visited"
-msgid "Visited"
-msgstr "Megtekintve"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:180
-msgctxt "files added"
-msgid "Added"
-msgstr "Hozzáadva"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:186
-msgctxt "files modified"
-msgid "Modified"
-msgstr "Módosítva"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:192
-msgctxt "files deleted"
-msgid "Deleted"
-msgstr "Törölve"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:203
-msgid "File Operations"
-msgstr "Fájlműveletek"
-
-#: seahub/templates/sysadmin/sys_statistic_reports.html:13
-msgid "Monthly User Traffic"
-msgstr "Havi felhasználói forgalom"
-
-#: seahub/templates/sysadmin/sys_statistic_reports.html:15
-#: seahub/templates/sysadmin/sys_trafficadmin.html:26
-msgid "Month:"
-msgstr "Hónap:"
-
-#: seahub/templates/sysadmin/sys_statistic_reports.html:17
-#: seahub/templates/sysadmin/sys_statistic_reports.html:25
-msgid "Create Report"
-msgstr "Jelentés készítése"
-
-#: seahub/templates/sysadmin/sys_statistic_reports.html:23
-msgid "User Storage"
-msgstr "Felhasználói tárhely"
-
-#: seahub/templates/sysadmin/sys_statistic_reports.html:56
-msgid "Invalid month, should be yyyymm."
-msgstr "Érvénytelen hónap, helyes formátum: éééé-hh"
-
-#: seahub/templates/sysadmin/sys_statistic_storage.html:168
-#: seahub/templates/sysadmin/sys_statistic_storage.html:180
-msgid "Total Storage"
-msgstr "Összes tárhely"
-
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:18
-#: seahub/templates/sysadmin/sys_trafficadmin.html:14
-msgid "System"
-msgstr "Rendszer"
-
-#: seahub/templates/sysadmin/sys_statistic_user.html:167
-#: seahub/templates/sysadmin/sys_statistic_user.html:179
-msgid "Active Users"
-msgstr "Bejelentkezett felhasználók"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:17
-msgid "Version"
-msgstr "Verzió"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:18
-#: seahub/templates/sysadmin/sys_terms_admin.html:61
-msgid "Text"
-msgstr "Szöveg"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:19
-msgid "Created"
-msgstr "Létrehozva"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:20
-#: seahub/templates/sysadmin/sys_terms_admin.html:64
-msgid "Activated"
-msgstr "Aktiválva"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:52
-msgid "Add Terms and Conditions"
-msgstr "Felhasználási feltételek hozzáadása"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:58
-msgid "Version Number"
-msgstr "Verziószám"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:66
-msgid "On"
-msgstr "Be"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:68
-msgid "Off"
-msgstr "Ki"
-
-#: seahub/templates/sysadmin/sys_terms_admin.html:128
-msgid "Update Terms and Conditions"
-msgstr "Felhasználási feltételek frissítése"
-
-#: seahub/templates/sysadmin/sys_trafficadmin.html:37
-#: seahub/templates/sysadmin/userinfo.html:39
-msgid "Organization"
-msgstr "Szervezet"
-
-#: seahub/templates/sysadmin/sys_trafficadmin.html:66
-msgid "Share link upload"
-msgstr "Megosztási link feltöltés"
-
-#: seahub/templates/sysadmin/sys_trafficadmin.html:72
-msgid "Share link download"
-msgstr "Megosztási link letöltés"
-
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:25
-#: seahub/templates/sysadmin/userinfo.html:275
-msgid "Visits"
-msgstr "Látogatások "
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:16
-#: seahub/templates/sysadmin/sys_useradmin.html:14
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:15
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:14
-msgid "Database"
-msgstr "Adatbázis"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:17
-#: seahub/templates/sysadmin/sys_useradmin.html:16
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:17
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:16
-msgid "LDAP"
-msgstr "LDAP"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:25
-#: seahub/templates/sysadmin/sys_useradmin.html:30
-msgid "Export Excel"
-msgstr "Exportálás Excelbe"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
-#: seahub/templates/sysadmin/sys_useradmin.html:33
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:27
-#: seahub/templates/sysadmin/user_search.html:17
-#: seahub/templates/sysadmin/useradmin_table.html:157
-#: seahub/templates/sysadmin/userinfo.html:169
-msgid "Set quota"
-msgstr "Kvóta beállítása"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:53
-#: seahub/templates/sysadmin/sys_useradmin.html:35
-#: seahub/templates/sysadmin/sys_useradmin.html:92
-msgid "Set institution"
-msgstr "Intézmény beállítása"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:32
-#: seahub/templates/sysadmin/sys_useradmin.html:37
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:28
-#: seahub/templates/sysadmin/user_search.html:18
-msgid "Delete users"
-msgstr "Felhasználók törlése"
-
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:43
-msgid "No LDAP users have been imported"
-msgstr "Nincs LDAP felhasználó betöltve"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:28
-msgid "Import users"
-msgstr "Felhasználók importálása"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:50
-msgid ""
-"You can also add a user as a guest, who will not be allowed to create "
-"libraries and groups."
-msgstr "Vendég felhasználót is hozzáadhat, aki nem tud kötetet és csoportot létrehozni."
-
-#: seahub/templates/sysadmin/sys_useradmin.html:72
-msgid "Import users from a .xlsx file"
-msgstr "Felhasználók importálása .xlsx fájlból"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:73
-msgid "Download an example file"
-msgstr "Mintafájl letöltése"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:77
-#: seahub/views/sysadmin.py:2030 seahub/views/sysadmin.py:2113
-msgid "Please choose a .xlsx file."
-msgstr "Válasszon egy .xlsx fájlt"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:184
-#, python-brace-format
-msgid ""
-"Successfully added user {placeholder}. An email notification has been sent."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_useradmin.html:186
-#, python-brace-format
-msgid "Successfully added user {placeholder}."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_useradmin.html:189
-#, python-brace-format
-msgid ""
-"Successfully added user {placeholder}. But email notification can not be "
-"sent, because Email service is not properly configured."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:24
-msgid "Add admin"
-msgstr "Adminisztrátor hozzáadása"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:33
-msgid "Add admins"
-msgstr "Adminisztrátorok hozzáadása"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:36
-msgid "Enter"
-msgstr "Bevitel"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:39
-msgid "Emails, separated by ','"
-msgstr "E-mail címek ”,”-vel elválasztva "
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:40
-msgid "Tip: the emails should be the users already added."
-msgstr "Tipp: az e-mail címeket a felhasználóknak már hozzá kellett volna adni."
-
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:27
-#: seahub/templates/sysadmin/useradmin_table.html:14
-#: seahub/templates/sysadmin/useradmin_table.html:19
-#: seahub/templates/sysadmin/userinfo.html:96
-msgid "Space Used / Quota"
-msgstr "Tár használva / Kvóta"
-
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:8
-msgid "Virus Scan Records"
-msgstr "Víruskereső napló"
-
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:13
-msgid "Virus File"
-msgstr "Vírus fájl"
-
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:25
-msgid "Handled"
-msgstr "Kezelve"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
@@ -4981,130 +3617,6 @@ msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
 msgstr "%(site_name)s -on/ön a jelszó megváltoztatva. Az új jelszó %(password)s. Kérem ahogy lehet változtassa meg."
-
-#: seahub/templates/sysadmin/useradmin_js.html:14
-#, python-format
-msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr "Biztosan törli %s adminisztrátori jogait?"
-
-#: seahub/templates/sysadmin/useradmin_js.html:155
-#, python-brace-format
-msgid "Successfully set institution for {users}."
-msgstr "Intézmény sikeresen beállítva: {users}."
-
-#: seahub/templates/sysadmin/useradmin_js.html:180
-msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr "Biztoson törölni kívánja a kijelelt felhasználó(ka)t?"
-
-#: seahub/templates/sysadmin/useradmin_js.html:207
-#, python-brace-format
-msgid "Successfully deleted {users}."
-msgstr "{users} sikeresen törölve."
-
-#: seahub/templates/sysadmin/useradmin_js.html:253
-#: seahub/templates/sysadmin/userinfo.html:570
-msgid "Invalid quota."
-msgstr "Érvénytelen kvóta"
-
-#: seahub/templates/sysadmin/useradmin_js.html:297
-#, python-brace-format
-msgid "Successfully set quota for {users}."
-msgstr "Kvóta sikeresen beállítva {users} számára"
-
-#: seahub/templates/sysadmin/useradmin_js.html:319
-#, python-brace-format
-msgid "Successfully set quota for {user}."
-msgstr "Kvóta sikeresen bállítba {user} számára."
-
-#: seahub/templates/sysadmin/useradmin_table.html:15
-msgid "Institution"
-msgstr "Intézmény"
-
-#: seahub/templates/sysadmin/useradmin_table.html:78
-#: seahub/templates/sysadmin/useradmin_table.html:91
-msgctxt "Default Administrator"
-msgid "Default Admin"
-msgstr "Alapértelmezett Admin"
-
-#: seahub/templates/sysadmin/useradmin_table.html:80
-#: seahub/templates/sysadmin/useradmin_table.html:92
-msgctxt "System Administrator"
-msgid "System Admin"
-msgstr "Rendszer-adminisztrátor"
-
-#: seahub/templates/sysadmin/useradmin_table.html:82
-#: seahub/templates/sysadmin/useradmin_table.html:93
-msgctxt "Daily Administrator"
-msgid "Daily Admin"
-msgstr "Napi Admin"
-
-#: seahub/templates/sysadmin/useradmin_table.html:84
-#: seahub/templates/sysadmin/useradmin_table.html:94
-msgctxt "Audit Administrator"
-msgid "Audit Admin"
-msgstr "Vizsgáló Admin"
-
-#: seahub/templates/sysadmin/useradmin_table.html:113
-#: seahub/templates/sysadmin/userinfo.html:108
-msgid "Edit Quota"
-msgstr "Kvóta módosítása"
-
-#: seahub/templates/sysadmin/userinfo.html:55
-msgid "Login ID"
-msgstr "Felhasználónév"
-
-#: seahub/templates/sysadmin/userinfo.html:79
-msgid "Reference ID"
-msgstr "Referencia ID"
-
-#: seahub/templates/sysadmin/userinfo.html:126
-msgid "Force Two-Factor Authentication"
-msgstr "Kötelező kétlépcsős azonosítás"
-
-#: seahub/templates/sysadmin/userinfo.html:134
-msgid "Set user name"
-msgstr "Felhasználónév beállítása"
-
-#: seahub/templates/sysadmin/userinfo.html:141
-msgid "Set user department"
-msgstr "Osztály beállítása"
-
-#: seahub/templates/sysadmin/userinfo.html:148
-msgid "Set user Login ID"
-msgstr "Felhasználónév beállítása"
-
-#: seahub/templates/sysadmin/userinfo.html:155
-msgid "Set user contact email"
-msgstr "Kapcsolat E-mail beállítása"
-
-#: seahub/templates/sysadmin/userinfo.html:162
-msgid "Set user Reference ID"
-msgstr "Referencia ID beállítása"
-
-#: seahub/templates/sysadmin/userinfo.html:216
-msgid "Transfer"
-msgstr "Átad"
-
-#: seahub/templates/sysadmin/userinfo.html:235
-msgid "Share From"
-msgstr "Megosztás innen"
-
-#: seahub/templates/sysadmin/userinfo.html:262
-msgid "This user has no shared libraries"
-msgstr "A felhasználónak nincs megosztott kötete"
-
-#: seahub/templates/sysadmin/userinfo.html:286
-#: seahub/templates/sysadmin/userinfo.html:296
-msgid "Directory icon"
-msgstr "Könyvtárikon"
-
-#: seahub/templates/sysadmin/userinfo.html:299
-msgid "Upload"
-msgstr "Feltöltés"
-
-#: seahub/templates/sysadmin/userinfo.html:310
-msgid "This user has not created any shared links"
-msgstr "A felhasználónak nincs megosztott hivatkozása"
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
@@ -5223,6 +3735,12 @@ msgstr "Bélyegkép készítése sikertelen."
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Érvénytelen kulcs."
+
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
+msgid "Token"
+msgstr "Token"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
@@ -5345,7 +3863,7 @@ msgstr "A megadott napló nem létezik"
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
-#: seahub/views/__init__.py:882 seahub/views/repo.py:275
+#: seahub/views/__init__.py:882 seahub/views/repo.py:285
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" nem létezik."
@@ -5454,7 +3972,7 @@ msgid "Unable to view raw file, share link traffic is used up."
 msgstr "A nyers fájl nem jeleníthető meg, a megosztási link elérte forgalmi korlátját."
 
 #: seahub/views/file.py:1288 seahub/views/file.py:1499
-#: seahub/views/repo.py:326
+#: seahub/views/repo.py:336
 #, python-format
 msgid "Share link for %s."
 msgstr ""
@@ -5463,115 +3981,96 @@ msgstr ""
 msgid "Unable to download file"
 msgstr "Nem lehet fájlt letölteni"
 
-#: seahub/views/sysadmin.py:403 seahub/views/sysadmin.py:509
-#: seahub/views/sysadmin.py:1265 seahub/views/sysadmin.py:1277
-#: seahub/views/sysadmin.py:2008
+#: seahub/views/sysadmin.py:197 seahub/views/sysadmin.py:303
+#: seahub/views/sysadmin.py:692 seahub/views/sysadmin.py:704
+#: seahub/views/sysadmin.py:829
 msgid "Failed to export Excel"
 msgstr "Excelbe exportálás sikertelen."
 
-#: seahub/views/sysadmin.py:870 seahub/views/sysadmin.py:896
+#: seahub/views/sysadmin.py:339 seahub/views/sysadmin.py:365
 msgid "Failed to set quota: internal server error"
 msgstr "Kvóta beállítása sikertelen: belső hiba"
 
-#: seahub/views/sysadmin.py:915
+#: seahub/views/sysadmin.py:384
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Törlés sikertelen: szervezetet létrehozó felhasználó"
 
-#: seahub/views/sysadmin.py:950
+#: seahub/views/sysadmin.py:419
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "Próba sikeresen törölve innen: %s"
 
-#: seahub/views/sysadmin.py:979
+#: seahub/views/sysadmin.py:448
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "%s felhasználótól az adminisztrátori jogok megvonása sikeres"
 
-#: seahub/views/sysadmin.py:981
+#: seahub/views/sysadmin.py:450
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "A felhasználótól nem lehet megvonni az adminisztrátori jogokat, a felhasználó nem létezik"
 
-#: seahub/views/sysadmin.py:1151
+#: seahub/views/sysadmin.py:578
 msgid "Failed to reset password: user does not exist"
 msgstr "Jelszó átállítása sikertelen: a felhasználó nem létezik"
 
-#: seahub/views/sysadmin.py:1200
+#: seahub/views/sysadmin.py:627
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Hiba a felhasználó felvételénél: %s."
 
-#: seahub/views/sysadmin.py:1225 seahub/views/sysadmin.py:1238
+#: seahub/views/sysadmin.py:652 seahub/views/sysadmin.py:665
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldve."
 
-#: seahub/views/sysadmin.py:1228 seahub/views/sysadmin.py:1241
+#: seahub/views/sysadmin.py:655 seahub/views/sysadmin.py:668
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen."
 
-#: seahub/views/sysadmin.py:1230 seahub/views/sysadmin.py:1243
+#: seahub/views/sysadmin.py:657 seahub/views/sysadmin.py:670
 #, python-format
 msgid "Successfully added user %s."
 msgstr "%s hozzáadása sikeres."
 
-#: seahub/views/sysadmin.py:1245
+#: seahub/views/sysadmin.py:672
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen, mivel nincs jól beállítva."
 
-#: seahub/views/sysadmin.py:1444
-msgid "Failed to rename organization"
-msgstr "Szervezet átnevezése sikertelen"
+#: seahub/views/sysadmin.py:695
+msgid "Creator"
+msgstr "Létrehozó"
 
-#: seahub/views/sysadmin.py:1474 seahub/views/sysadmin.py:1888
-#: seahub/views/sysadmin.py:1947
+#: seahub/views/sysadmin.py:724
+msgid "Input should be a number"
+msgstr "Szám kell"
+
+#: seahub/views/sysadmin.py:734
+msgid "Input number should be greater than 0"
+msgstr "A szám legyen 0-nál nagyobb"
+
+#: seahub/views/sysadmin.py:772
 msgid "Successfully deleted."
 msgstr "Sikeresen törölve."
 
-#: seahub/views/sysadmin.py:1950
-msgid "Failed to delete, please try again later."
-msgstr "A törlés sikertelen, kérem próbálja meg később."
-
-#: seahub/views/sysadmin.py:1981
+#: seahub/views/sysadmin.py:802
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s adminisztrátornak való beállítása sikeres."
 
-#: seahub/views/sysadmin.py:1983
+#: seahub/views/sysadmin.py:804
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "A %s felhasználót nem lehet adminisztrátornak jelölni, a felhasználó nem létezik."
 
-#: seahub/views/sysadmin.py:1996 seahub/views/sysadmin.py:1997
+#: seahub/views/sysadmin.py:817 seahub/views/sysadmin.py:818
 msgid "Optional"
 msgstr "Opcionálos"
-
-#: seahub/views/sysadmin.py:2111
-msgid "Import succeeded"
-msgstr "Importálás sikeres"
-
-#: seahub/views/sysadmin.py:2195
-msgid "Invalid setting"
-msgstr "Beállítás érvénytelen"
-
-#: seahub/views/sysadmin.py:2202 seahub/views/sysadmin.py:2206
-#: seahub/views/sysadmin.py:2211
-msgid "Invalid value"
-msgstr "Az érték érvénytelen"
-
-#: seahub/views/sysadmin.py:2344
-#, python-format
-msgid "Successfully added %s to the institution."
-msgstr "%s sikeresen hozzáadva az intézményhez."
-
-#: seahub/views/sysadmin.py:2667
-msgid "Successfully deleted 1 item"
-msgstr "1 elem sikeresen törölve."
 
 #: seahub/wiki/views.py:53
 msgid "Unable to view Wiki"

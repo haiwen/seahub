@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-13 18:33+0800\n"
-"PO-Revision-Date: 2020-01-13 10:41+0000\n"
+"POT-Creation-Date: 2020-02-28 14:21+0800\n"
+"PO-Revision-Date: 2020-02-28 08:04+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -281,7 +281,7 @@ msgstr "描述"
 #: frontend/src/components/dialog/generate-share-link.js:378
 #: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
-#: frontend/src/components/dialog/internal-link-dialog.js:75
+#: frontend/src/components/dialog/internal-link-dialog.js:76
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:56
 #: frontend/src/components/dialog/invite-people-dialog.js:121
 #: frontend/src/components/dialog/label-repo-state-dialog.js:88
@@ -825,7 +825,7 @@ msgstr "新建部门资料库"
 #: frontend/src/pages/sys-admin/users/user-repos.js:53
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:39
 #: frontend/src/repo-folder-trash.js:234 frontend/src/repo-snapshot.js:193
-#: frontend/src/shared-dir-view.js:262
+#: frontend/src/shared-dir-view.js:333
 msgid "Name"
 msgstr "名称"
 
@@ -982,7 +982,7 @@ msgid "Password again"
 msgstr "请再次输入密码"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:54
-#: frontend/src/components/file-uploader/file-uploader.js:399
+#: frontend/src/components/file-uploader/file-uploader.js:407
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
 
@@ -1250,27 +1250,27 @@ msgstr "选择图片"
 msgid "No preview"
 msgstr "没有预览"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:54
+#: frontend/src/components/dialog/internal-link-dialog.js:55
 #: frontend/src/components/dialog/internal-link.js:41
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:22
 msgid "Internal link has been copied to clipboard"
 msgstr "内部链接已复制到剪贴板"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:62
-#: frontend/src/components/dialog/internal-link-dialog.js:65
+#: frontend/src/components/dialog/internal-link-dialog.js:63
+#: frontend/src/components/dialog/internal-link-dialog.js:66
 #: frontend/src/components/dialog/share-dialog.js:105
 #: frontend/src/components/dialog/share-dialog.js:200
 msgid "Internal Link"
 msgstr "内部链接"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:68
+#: frontend/src/components/dialog/internal-link-dialog.js:69
 #: frontend/src/components/dialog/internal-link.js:54
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
 msgstr "内部链接是指向文件或目录的链接，只有对该文件或目录有访问权限的人可以访问。"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:76
+#: frontend/src/components/dialog/internal-link-dialog.js:77
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
 #: frontend/src/components/dialog/share-admin-link.js:34
@@ -1321,8 +1321,8 @@ msgstr "成功邀请了 %(email) 和其他 %(num) 个人。"
 #: frontend/src/components/dialog/invite-people-dialog.js:107
 #: frontend/src/components/dialog/share-dialog.js:124
 #: frontend/src/components/dialog/share-to-invite-people.js:254
-#: frontend/src/components/main-side-nav.js:284
-#: frontend/src/components/main-side-nav.js:286
+#: frontend/src/components/main-side-nav.js:265
+#: frontend/src/components/main-side-nav.js:267
 #: frontend/src/components/toolbar/invitations-toolbar.js:30
 #: frontend/src/components/toolbar/invitations-toolbar.js:34
 #: frontend/src/pages/invitations/invitations-view.js:273
@@ -1452,7 +1452,7 @@ msgstr "未找到群组"
 #: frontend/src/pages/shared-with-all/public-shared-view.js:106
 #: frontend/src/pages/sys-admin/abuse-reports.js:46
 #: frontend/src/repo-folder-trash.js:135 frontend/src/repo-folder-trash.js:320
-#: frontend/src/utils/utils.js:1007
+#: frontend/src/utils/utils.js:1075
 msgid "Error"
 msgstr "错误"
 
@@ -1465,7 +1465,7 @@ msgstr "错误"
 #: frontend/src/repo-folder-trash.js:141 frontend/src/repo-folder-trash.js:322
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1010 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1078 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
@@ -1554,6 +1554,7 @@ msgstr "资料库名称"
 #: frontend/src/pages/sys-admin/repos/dir-content.js:105
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:41
 #: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:194
+#: frontend/src/shared-dir-view.js:334
 msgid "Size"
 msgstr "大小"
 
@@ -1579,7 +1580,7 @@ msgstr "大小"
 #: frontend/src/pages/starred/starred.js:35
 #: frontend/src/pages/sys-admin/repos/dir-content.js:106
 #: frontend/src/pages/sys-admin/users/user-repos.js:55
-#: frontend/src/shared-dir-view.js:264
+#: frontend/src/shared-dir-view.js:335
 msgid "Last Update"
 msgstr "更新时间"
 
@@ -1598,8 +1599,8 @@ msgid "Failed to delete draft %(draft)s."
 msgstr "删除草稿 %(draft)s失败。"
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:61
-#: frontend/src/components/main-side-nav.js:267
-#: frontend/src/components/main-side-nav.js:270
+#: frontend/src/components/main-side-nav.js:248
+#: frontend/src/components/main-side-nav.js:251
 #: frontend/src/pages/drafts/drafts-view.js:19
 msgid "Drafts"
 msgstr "草稿"
@@ -1732,6 +1733,7 @@ msgstr "新建维基"
 #: frontend/src/pages/shared-libs/shared-libs.js:264
 #: frontend/src/pages/starred/starred.js:230
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
+#: frontend/src/shared-dir-view.js:427 frontend/src/shared-dir-view.js:484
 msgid "More Operations"
 msgstr "更多操作"
 
@@ -1900,7 +1902,7 @@ msgstr "API token 已复制到剪贴板。"
 #: frontend/src/components/dialog/repo-api-token-dialog.js:114
 #: frontend/src/pages/lib-content-view/lib-content-view.js:152
 #: frontend/src/pages/lib-content-view/lib-content-view.js:155
-#: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1002
+#: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1070
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -2334,8 +2336,10 @@ msgstr "发布资料库"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:193
-#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:365
-#: frontend/src/shared-dir-view.js:420 frontend/src/shared-dir-view.js:438
+#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:408
+#: frontend/src/shared-dir-view.js:434 frontend/src/shared-dir-view.js:460
+#: frontend/src/shared-dir-view.js:491 frontend/src/shared-dir-view.js:548
+#: frontend/src/shared-dir-view.js:566
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "下载"
@@ -2401,7 +2405,7 @@ msgid "Location"
 msgstr "位置"
 
 #: frontend/src/components/dirent-detail/lib-details.js:68
-#: frontend/src/components/main-side-nav.js:206
+#: frontend/src/components/main-side-nav.js:187
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:166
 #: frontend/src/pages/sys-admin/info.js:112
 msgid "Files"
@@ -2482,11 +2486,19 @@ msgstr "其他资料库"
 msgid "Search..."
 msgstr "搜索..."
 
-#: frontend/src/components/file-uploader/file-uploader.js:389
+#: frontend/src/components/file-uploader/file-uploader.js:144
+msgid "Please upload no more than {maxFiles} files at a time."
+msgstr "一次最多上传  {maxFiles} 个文件。"
+
+#: frontend/src/components/file-uploader/file-uploader.js:146
+msgid "Please upload no more than {maxFiles} file at a time."
+msgstr ""
+
+#: frontend/src/components/file-uploader/file-uploader.js:397
 msgid "Network error"
 msgstr "网络错误"
 
-#: frontend/src/components/file-uploader/file-uploader.js:396
+#: frontend/src/components/file-uploader/file-uploader.js:404
 msgid "File is locked by others."
 msgstr "文件被其他人锁定了。"
 
@@ -2632,60 +2644,60 @@ msgstr "链接"
 msgid "Folders"
 msgstr "文件夹"
 
-#: frontend/src/components/main-side-nav.js:210
-#: frontend/src/components/main-side-nav.js:212
+#: frontend/src/components/main-side-nav.js:191
+#: frontend/src/components/main-side-nav.js:193
 #: frontend/src/pages/my-libs/my-libs-deleted.js:53
 #: frontend/src/pages/my-libs/my-libs.js:156
 msgid "My Libraries"
 msgstr "我的资料库"
 
-#: frontend/src/components/main-side-nav.js:217
-#: frontend/src/components/main-side-nav.js:219
+#: frontend/src/components/main-side-nav.js:198
+#: frontend/src/components/main-side-nav.js:200
 #: frontend/src/pages/shared-libs/shared-libs.js:360
 msgid "Shared with me"
 msgstr "共享给我的"
 
-#: frontend/src/components/main-side-nav.js:224
-#: frontend/src/components/main-side-nav.js:226
+#: frontend/src/components/main-side-nav.js:205
+#: frontend/src/components/main-side-nav.js:207
 #: frontend/src/pages/shared-with-all/public-shared-view.js:206
 msgid "Shared with all"
 msgstr "公共"
 
-#: frontend/src/components/main-side-nav.js:231
-#: frontend/src/components/main-side-nav.js:234
+#: frontend/src/components/main-side-nav.js:212
+#: frontend/src/components/main-side-nav.js:215
 msgid "Shared with groups"
 msgstr "群组共享"
 
-#: frontend/src/components/main-side-nav.js:241
+#: frontend/src/components/main-side-nav.js:222
 msgid "Tools"
 msgstr "工具"
 
-#: frontend/src/components/main-side-nav.js:244
-#: frontend/src/components/main-side-nav.js:246
+#: frontend/src/components/main-side-nav.js:225
+#: frontend/src/components/main-side-nav.js:227
 #: frontend/src/pages/starred/starred.js:278
 msgid "Favorites"
 msgstr "收藏夹"
 
-#: frontend/src/components/main-side-nav.js:251
-#: frontend/src/components/main-side-nav.js:253
-#: frontend/src/pages/dashboard/files-activities.js:442
+#: frontend/src/components/main-side-nav.js:232
+#: frontend/src/components/main-side-nav.js:234
+#: frontend/src/pages/dashboard/files-activities.js:441
 msgid "Activities"
 msgstr "文件活动"
 
-#: frontend/src/components/main-side-nav.js:259
-#: frontend/src/components/main-side-nav.js:261
+#: frontend/src/components/main-side-nav.js:240
+#: frontend/src/components/main-side-nav.js:242
 #: frontend/src/pages/wikis/wikis.js:135
 msgid "Published Libraries"
 msgstr "已发布的资料库"
 
-#: frontend/src/components/main-side-nav.js:277
-#: frontend/src/components/main-side-nav.js:279
+#: frontend/src/components/main-side-nav.js:258
+#: frontend/src/components/main-side-nav.js:260
 #: frontend/src/pages/linked-devices/linked-devices.js:192
 msgid "Linked Devices"
 msgstr "已连接的设备"
 
-#: frontend/src/components/main-side-nav.js:291
-#: frontend/src/components/main-side-nav.js:294
+#: frontend/src/components/main-side-nav.js:272
+#: frontend/src/components/main-side-nav.js:275
 msgid "Share Admin"
 msgstr "共享管理"
 
@@ -2733,6 +2745,18 @@ msgstr "共享的资料库"
 #: frontend/src/components/paginator.js:47
 msgid "{number_placeholder} / Page"
 msgstr "{number_placeholder} / 页"
+
+#: frontend/src/components/pdf-viewer.js:200
+msgid "Default Size"
+msgstr "默认大小"
+
+#: frontend/src/components/pdf-viewer.js:201
+msgid "Zoom In"
+msgstr "放大"
+
+#: frontend/src/components/pdf-viewer.js:202
+msgid "Zoom Out"
+msgstr "缩小"
 
 #: frontend/src/components/permission-denied-tip.js:6
 msgid ""
@@ -2812,7 +2836,7 @@ msgid "Successfully saved"
 msgstr "保存成功"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:58
-#: frontend/src/shared-dir-view.js:43
+#: frontend/src/shared-dir-view.js:46
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "文件下载已禁用：外链拥有者的流量已用完。"
 
@@ -2983,7 +3007,7 @@ msgid "Create a draft from this file, instead of editing it directly."
 msgstr "从此文件创建草稿，而不是直接编辑它。"
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:26
-#: frontend/src/shared-dir-view.js:203
+#: frontend/src/shared-dir-view.js:216
 msgid "List"
 msgstr "列表"
 
@@ -3571,7 +3595,7 @@ msgstr "复制 %(name)s 失败"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1013
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1027
-#: frontend/src/utils/utils.js:1101
+#: frontend/src/utils/utils.js:1169
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
 
@@ -5185,7 +5209,7 @@ msgstr "邮件通知"
 msgid "Profile Setting"
 msgstr "个人信息设置"
 
-#: frontend/src/shared-dir-view.js:198
+#: frontend/src/shared-dir-view.js:210
 msgid "Shared by: "
 msgstr "共享来源："
 
@@ -5358,38 +5382,38 @@ msgstr "云端编辑与下载"
 msgid "Edit on cloud only"
 msgstr "仅云端编辑"
 
-#: frontend/src/utils/utils.js:1103
+#: frontend/src/utils/utils.js:1171
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功复制 %(name)s 和另1项条目。"
 
-#: frontend/src/utils/utils.js:1105
+#: frontend/src/utils/utils.js:1173
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功复制 %(name)s 和其他 %(amount)s 项条目。"
 
-#: frontend/src/utils/utils.js:1116
+#: frontend/src/utils/utils.js:1184
 msgid "Successfully moved %(name)s."
 msgstr "成功移动 %(name)s。"
 
-#: frontend/src/utils/utils.js:1118
+#: frontend/src/utils/utils.js:1186
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移动 %(name)s 和另1项条目。"
 
-#: frontend/src/utils/utils.js:1120
+#: frontend/src/utils/utils.js:1188
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移动 %(name)s 和其他 %(amount)s 项条目。"
 
-#: frontend/src/utils/utils.js:1132
+#: frontend/src/utils/utils.js:1200
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "复制 %(name)s 和其他 %(amount)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1135
+#: frontend/src/utils/utils.js:1203
 msgid "Failed to copy %(name)s."
 msgstr "复制 %(name)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1145
+#: frontend/src/utils/utils.js:1213
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "移动 %(name)s 和其他 %(amount)s 项条目失败。"
 
-#: frontend/src/utils/utils.js:1148
+#: frontend/src/utils/utils.js:1216
 msgid "Failed to move %(name)s."
 msgstr "移动 %(name)s 项条目失败。"

@@ -5,14 +5,14 @@
 # Translators:
 # Denis Baranov <baranov@itlibertas.com>, 2015
 # Michael Klimenko <michaelkl@mail.ru>, 2015
-# Vladimir <pash.vld@gmail.com>, 2015-2019
+# Vladimir <pash.vld@gmail.com>, 2015-2020
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-13 18:33+0800\n"
-"PO-Revision-Date: 2020-01-13 10:34+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
+"POT-Creation-Date: 2020-02-28 14:21+0800\n"
+"PO-Revision-Date: 2020-02-28 07:33+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -270,7 +270,7 @@ msgstr "Описание"
 #: frontend/src/components/dialog/generate-share-link.js:378
 #: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
-#: frontend/src/components/dialog/internal-link-dialog.js:75
+#: frontend/src/components/dialog/internal-link-dialog.js:76
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:56
 #: frontend/src/components/dialog/invite-people-dialog.js:121
 #: frontend/src/components/dialog/label-repo-state-dialog.js:88
@@ -814,7 +814,7 @@ msgstr "Новая библиотека отдела"
 #: frontend/src/pages/sys-admin/users/user-repos.js:53
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:39
 #: frontend/src/repo-folder-trash.js:234 frontend/src/repo-snapshot.js:193
-#: frontend/src/shared-dir-view.js:262
+#: frontend/src/shared-dir-view.js:333
 msgid "Name"
 msgstr "Имя"
 
@@ -971,7 +971,7 @@ msgid "Password again"
 msgstr "Подтвердите пароль"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:54
-#: frontend/src/components/file-uploader/file-uploader.js:399
+#: frontend/src/components/file-uploader/file-uploader.js:407
 msgid "Internal Server Error"
 msgstr "Внутренняя ошибка сервера"
 
@@ -1239,27 +1239,27 @@ msgstr "Выбрать изображение"
 msgid "No preview"
 msgstr "Нет предпросмотра"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:54
+#: frontend/src/components/dialog/internal-link-dialog.js:55
 #: frontend/src/components/dialog/internal-link.js:41
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:22
 msgid "Internal link has been copied to clipboard"
 msgstr "Внутренняя ссылка скопирована в буфер обмена"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:62
-#: frontend/src/components/dialog/internal-link-dialog.js:65
+#: frontend/src/components/dialog/internal-link-dialog.js:63
+#: frontend/src/components/dialog/internal-link-dialog.js:66
 #: frontend/src/components/dialog/share-dialog.js:105
 #: frontend/src/components/dialog/share-dialog.js:200
 msgid "Internal Link"
 msgstr "Внутренняя ссылка"
 
-#: frontend/src/components/dialog/internal-link-dialog.js:68
+#: frontend/src/components/dialog/internal-link-dialog.js:69
 #: frontend/src/components/dialog/internal-link.js:54
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
 msgstr "Внутренняя ссылка - это ссылка на файл или папку, к которым могут обращаться пользователи с правами на чтение файла или папки."
 
-#: frontend/src/components/dialog/internal-link-dialog.js:76
+#: frontend/src/components/dialog/internal-link-dialog.js:77
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
 #: frontend/src/components/dialog/share-admin-link.js:34
@@ -1310,13 +1310,13 @@ msgstr "Успешно приглашен %(email) и %(num) других люд
 #: frontend/src/components/dialog/invite-people-dialog.js:107
 #: frontend/src/components/dialog/share-dialog.js:124
 #: frontend/src/components/dialog/share-to-invite-people.js:254
-#: frontend/src/components/main-side-nav.js:284
-#: frontend/src/components/main-side-nav.js:286
+#: frontend/src/components/main-side-nav.js:265
+#: frontend/src/components/main-side-nav.js:267
 #: frontend/src/components/toolbar/invitations-toolbar.js:30
 #: frontend/src/components/toolbar/invitations-toolbar.js:34
 #: frontend/src/pages/invitations/invitations-view.js:273
 msgid "Invite Guest"
-msgstr ""
+msgstr "Пригласить гостя"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:109
 msgid "Emails"
@@ -1441,7 +1441,7 @@ msgstr "Группа не найдена"
 #: frontend/src/pages/shared-with-all/public-shared-view.js:106
 #: frontend/src/pages/sys-admin/abuse-reports.js:46
 #: frontend/src/repo-folder-trash.js:135 frontend/src/repo-folder-trash.js:320
-#: frontend/src/utils/utils.js:1007
+#: frontend/src/utils/utils.js:1075
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1454,7 +1454,7 @@ msgstr "Ошибка"
 #: frontend/src/repo-folder-trash.js:141 frontend/src/repo-folder-trash.js:322
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:1010 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils.js:1078 frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 msgid "Please check the network."
 msgstr "Пожалуйста, проверьте сеть."
@@ -1543,6 +1543,7 @@ msgstr "Название библиотеки"
 #: frontend/src/pages/sys-admin/repos/dir-content.js:105
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:41
 #: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:194
+#: frontend/src/shared-dir-view.js:334
 msgid "Size"
 msgstr "Размер"
 
@@ -1568,7 +1569,7 @@ msgstr "Размер"
 #: frontend/src/pages/starred/starred.js:35
 #: frontend/src/pages/sys-admin/repos/dir-content.js:106
 #: frontend/src/pages/sys-admin/users/user-repos.js:55
-#: frontend/src/shared-dir-view.js:264
+#: frontend/src/shared-dir-view.js:335
 msgid "Last Update"
 msgstr "Последнее обновление"
 
@@ -1587,8 +1588,8 @@ msgid "Failed to delete draft %(draft)s."
 msgstr "Не удалось удалить черновик %(draft)s."
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:61
-#: frontend/src/components/main-side-nav.js:267
-#: frontend/src/components/main-side-nav.js:270
+#: frontend/src/components/main-side-nav.js:248
+#: frontend/src/components/main-side-nav.js:251
 #: frontend/src/pages/drafts/drafts-view.js:19
 msgid "Drafts"
 msgstr "Черновики"
@@ -1721,6 +1722,7 @@ msgstr "Новая Wiki"
 #: frontend/src/pages/shared-libs/shared-libs.js:264
 #: frontend/src/pages/starred/starred.js:230
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
+#: frontend/src/shared-dir-view.js:427 frontend/src/shared-dir-view.js:484
 msgid "More Operations"
 msgstr "Больше операций"
 
@@ -1889,7 +1891,7 @@ msgstr "Токен API скопирован в буфер обмена."
 #: frontend/src/components/dialog/repo-api-token-dialog.js:114
 #: frontend/src/pages/lib-content-view/lib-content-view.js:152
 #: frontend/src/pages/lib-content-view/lib-content-view.js:155
-#: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1002
+#: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1070
 msgid "Permission denied"
 msgstr "Доступ запрещен"
 
@@ -2323,8 +2325,10 @@ msgstr "Опубликовать библиотеку"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:193
-#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:365
-#: frontend/src/shared-dir-view.js:420 frontend/src/shared-dir-view.js:438
+#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:408
+#: frontend/src/shared-dir-view.js:434 frontend/src/shared-dir-view.js:460
+#: frontend/src/shared-dir-view.js:491 frontend/src/shared-dir-view.js:548
+#: frontend/src/shared-dir-view.js:566
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Скачать"
@@ -2390,7 +2394,7 @@ msgid "Location"
 msgstr "Местонахождение"
 
 #: frontend/src/components/dirent-detail/lib-details.js:68
-#: frontend/src/components/main-side-nav.js:206
+#: frontend/src/components/main-side-nav.js:187
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:166
 #: frontend/src/pages/sys-admin/info.js:112
 msgid "Files"
@@ -2471,17 +2475,25 @@ msgstr "Другие библиотеки"
 msgid "Search..."
 msgstr "Поиск..."
 
-#: frontend/src/components/file-uploader/file-uploader.js:389
+#: frontend/src/components/file-uploader/file-uploader.js:144
+msgid "Please upload no more than {maxFiles} files at a time."
+msgstr ""
+
+#: frontend/src/components/file-uploader/file-uploader.js:146
+msgid "Please upload no more than {maxFiles} file at a time."
+msgstr ""
+
+#: frontend/src/components/file-uploader/file-uploader.js:397
 msgid "Network error"
 msgstr "Ошибка сети"
 
-#: frontend/src/components/file-uploader/file-uploader.js:396
+#: frontend/src/components/file-uploader/file-uploader.js:404
 msgid "File is locked by others."
-msgstr ""
+msgstr "Файл заблокирован другими."
 
 #: frontend/src/components/file-uploader/forbid-upload-list-item.js:13
 msgid "Please upload files less than {placeholder}M"
-msgstr ""
+msgstr "Загрузите файлы меньше, чем {placeholder}M"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:94
 msgid "Preparing to upload..."
@@ -2621,60 +2633,60 @@ msgstr "Ссылки"
 msgid "Folders"
 msgstr "Папки"
 
-#: frontend/src/components/main-side-nav.js:210
-#: frontend/src/components/main-side-nav.js:212
+#: frontend/src/components/main-side-nav.js:191
+#: frontend/src/components/main-side-nav.js:193
 #: frontend/src/pages/my-libs/my-libs-deleted.js:53
 #: frontend/src/pages/my-libs/my-libs.js:156
 msgid "My Libraries"
 msgstr "Мои библиотеки"
 
-#: frontend/src/components/main-side-nav.js:217
-#: frontend/src/components/main-side-nav.js:219
+#: frontend/src/components/main-side-nav.js:198
+#: frontend/src/components/main-side-nav.js:200
 #: frontend/src/pages/shared-libs/shared-libs.js:360
 msgid "Shared with me"
 msgstr "Общие со мной"
 
-#: frontend/src/components/main-side-nav.js:224
-#: frontend/src/components/main-side-nav.js:226
+#: frontend/src/components/main-side-nav.js:205
+#: frontend/src/components/main-side-nav.js:207
 #: frontend/src/pages/shared-with-all/public-shared-view.js:206
 msgid "Shared with all"
 msgstr "Общие со всеми"
 
-#: frontend/src/components/main-side-nav.js:231
-#: frontend/src/components/main-side-nav.js:234
+#: frontend/src/components/main-side-nav.js:212
+#: frontend/src/components/main-side-nav.js:215
 msgid "Shared with groups"
 msgstr "Общие с группами"
 
-#: frontend/src/components/main-side-nav.js:241
+#: frontend/src/components/main-side-nav.js:222
 msgid "Tools"
 msgstr "Инструменты"
 
-#: frontend/src/components/main-side-nav.js:244
-#: frontend/src/components/main-side-nav.js:246
+#: frontend/src/components/main-side-nav.js:225
+#: frontend/src/components/main-side-nav.js:227
 #: frontend/src/pages/starred/starred.js:278
 msgid "Favorites"
 msgstr "Избранные"
 
-#: frontend/src/components/main-side-nav.js:251
-#: frontend/src/components/main-side-nav.js:253
-#: frontend/src/pages/dashboard/files-activities.js:442
+#: frontend/src/components/main-side-nav.js:232
+#: frontend/src/components/main-side-nav.js:234
+#: frontend/src/pages/dashboard/files-activities.js:441
 msgid "Activities"
 msgstr "Активность"
 
-#: frontend/src/components/main-side-nav.js:259
-#: frontend/src/components/main-side-nav.js:261
+#: frontend/src/components/main-side-nav.js:240
+#: frontend/src/components/main-side-nav.js:242
 #: frontend/src/pages/wikis/wikis.js:135
 msgid "Published Libraries"
 msgstr "Опубликованные библиотеки"
 
-#: frontend/src/components/main-side-nav.js:277
-#: frontend/src/components/main-side-nav.js:279
+#: frontend/src/components/main-side-nav.js:258
+#: frontend/src/components/main-side-nav.js:260
 #: frontend/src/pages/linked-devices/linked-devices.js:192
 msgid "Linked Devices"
 msgstr "Связанные устройства"
 
-#: frontend/src/components/main-side-nav.js:291
-#: frontend/src/components/main-side-nav.js:294
+#: frontend/src/components/main-side-nav.js:272
+#: frontend/src/components/main-side-nav.js:275
 msgid "Share Admin"
 msgstr "Предоставленные ресурсы"
 
@@ -2721,6 +2733,18 @@ msgstr "Общие библиотеки"
 
 #: frontend/src/components/paginator.js:47
 msgid "{number_placeholder} / Page"
+msgstr "{number_placeholder} / Страница"
+
+#: frontend/src/components/pdf-viewer.js:200
+msgid "Default Size"
+msgstr ""
+
+#: frontend/src/components/pdf-viewer.js:201
+msgid "Zoom In"
+msgstr ""
+
+#: frontend/src/components/pdf-viewer.js:202
+msgid "Zoom Out"
 msgstr ""
 
 #: frontend/src/components/permission-denied-tip.js:6
@@ -2801,7 +2825,7 @@ msgid "Successfully saved"
 msgstr "Успешно сохранено"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:58
-#: frontend/src/shared-dir-view.js:43
+#: frontend/src/shared-dir-view.js:46
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Скачивание файла недоступно: трафик по ссылке превышен."
 
@@ -2972,7 +2996,7 @@ msgid "Create a draft from this file, instead of editing it directly."
 msgstr "Создать черновик из этого файла, вместо изменения его напрямую."
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:26
-#: frontend/src/shared-dir-view.js:203
+#: frontend/src/shared-dir-view.js:216
 msgid "List"
 msgstr "Список"
 
@@ -3363,7 +3387,7 @@ msgstr "Успешно восстановлено."
 
 #: frontend/src/pages/groups/group-view.js:129
 msgid "No libraries shared with this group"
-msgstr ""
+msgstr "В этой группе нет общих библиотек"
 
 #: frontend/src/pages/groups/group-view.js:130
 msgid ""
@@ -3371,7 +3395,7 @@ msgid ""
 "group can be accessed by all group members. You can share a library with a "
 "group in \"My Libraries\". You can also create a new library to be shared "
 "with this group by clicking the \"New Library\" button in the menu bar."
-msgstr ""
+msgstr "В этой группе еще не было ни одной библиотеки. Библиотека, доступная группе, доступна для всех членов группы. Вы можете поделиться библиотекой с группой в разделе \"Мои библиотеки\". Вы также можете создать новую библиотеку для совместного использования с этой группой, нажав кнопку \"Новая библиотека\" в строке меню."
 
 #: frontend/src/pages/groups/group-view.js:137
 #: frontend/src/pages/groups/group-view.js:143
@@ -3442,13 +3466,13 @@ msgid ""
 "You are not in any groups. Groups allow multiple people to collaborate on "
 "libraries. You can create a group by clicking the \"New Group\" button in "
 "the menu bar."
-msgstr ""
+msgstr "Вы не входите ни в какие группы. Группы позволяют нескольким людям совместно использовать библиотеки. Вы можете создать группу, нажав кнопку \"Новая группа\" в строке меню."
 
 #: frontend/src/pages/groups/groups-view.js:191
 msgid ""
 "You are not in any groups. Groups allow multiple people to collaborate on "
 "libraries. Groups you join will be listed here."
-msgstr ""
+msgstr "Вы не входите ни в какие группы. Группы позволяют нескольким людям совместно использовать библиотеки. Группы, к которым вы присоединитесь, будут перечислены здесь."
 
 #: frontend/src/pages/groups/groups-view.js:206
 msgid "My Groups"
@@ -3489,7 +3513,7 @@ msgstr "Принято"
 
 #: frontend/src/pages/invitations/invitations-view.js:182
 msgid "No guest invitations"
-msgstr ""
+msgstr "Нет гостевых приглашений"
 
 #: frontend/src/pages/invitations/invitations-view.js:183
 msgid ""
@@ -3497,7 +3521,7 @@ msgid ""
 "through the web interface allowing more efficient ways to collaborate than "
 "through links. You can invite a guest by clicking the \"Invite Guest\" "
 "button in the menu bar."
-msgstr ""
+msgstr "Вы еще не приглашали гостей. Гость может получить доступ к общим библиотекам через веб-интерфейс, что позволяет более эффективно сотрудничать, чем через ссылки. Вы можете пригласить гостя, нажав кнопку \"Пригласить гостя\" в строке меню."
 
 #: frontend/src/pages/lib-content-view/lib-content-container.js:100
 #: frontend/src/pages/wiki/main-panel.js:81
@@ -3560,19 +3584,19 @@ msgstr "Не удалось скопировать %(name)s"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1013
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1027
-#: frontend/src/utils/utils.js:1101
+#: frontend/src/utils/utils.js:1169
 msgid "Successfully copied %(name)s."
 msgstr "Успешно скопировано %(name)s."
 
 #: frontend/src/pages/linked-devices/linked-devices.js:22
 msgid "No linked devices"
-msgstr ""
+msgstr "Нет связанных устройств"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:23
 msgid ""
 "You have not accessed your files with any client (desktop or mobile) yet. "
 "Configure clients on your devices to access your data more comfortably."
-msgstr ""
+msgstr "Вы еще не обращались к своим файлам ни с одним клиентом (настольным или мобильным). Настройте клиенты на ваших устройствах для более удобного доступа к вашим данным."
 
 #: frontend/src/pages/linked-devices/linked-devices.js:30
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
@@ -3601,18 +3625,18 @@ msgstr "Отвязан %(name)s."
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:62
 msgid "No deleted libraries"
-msgstr ""
+msgstr "Нет удаленных библиотек"
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:63
 msgid ""
 "You have not deleted any libraries in the last {placeholder} days. A deleted"
 " library will be cleaned automatically after this period."
-msgstr ""
+msgstr "Вы не удалили ни одной библиотеки за последние {placeholder} дней. Удаленная библиотека будет очищена автоматически после этого периода."
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:68
 msgid ""
 "Tip: libraries deleted {placeholder} days ago will be cleaned automatically."
-msgstr ""
+msgstr "Совет: библиотеки, удаленные {placeholder} дней назад, будут очищены автоматически."
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:93
 msgid "Deleted Time"
@@ -3635,7 +3659,7 @@ msgid ""
 " your files and folders. A library can also be shared with others and synced"
 " to your connected devices. You can create a library by clicking the \"New "
 "Library\" button in the menu bar."
-msgstr ""
+msgstr "Вы еще не создали ни одной библиотеки. Библиотека - это контейнер для организации ваших файлов и папок. Библиотека также может быть доступна другим пользователям и синхронизирована с вашими подключенными устройствами. Вы можете создать библиотеку, нажав кнопку \"Новая библиотека\" в строке меню."
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:122
 #: frontend/src/pages/shared-libs/shared-libs.js:177
@@ -4087,7 +4111,7 @@ msgid ""
 "You have not shared any folders with other users yet. You can share a folder"
 " with other users by clicking the share icon to the right of a folder's "
 "name."
-msgstr ""
+msgstr "Вы еще не поделились папками с другими пользователями. Вы можете поделиться папкой с другими пользователями, щелкнув значок общего доступа справа от имени папки."
 
 #: frontend/src/pages/share-admin/folders.js:136
 #: frontend/src/pages/share-admin/libraries.js:166
@@ -4102,14 +4126,14 @@ msgstr "Общий доступ:"
 
 #: frontend/src/pages/share-admin/libraries.js:32
 msgid "No libraries shared"
-msgstr ""
+msgstr "Нет общих библиотек"
 
 #: frontend/src/pages/share-admin/libraries.js:33
 msgid ""
 "You have not shared any libraries with other users yet. You can share a "
 "library with other users by clicking the share icon to the right of a "
 "library's name in \"My Libraries\"."
-msgstr ""
+msgstr "Вы еще не поделились библиотеками с другими пользователями. Вы можете поделиться библиотекой с другими пользователями, щелкнув значок общего доступа справа от имени библиотеки в разделе \"Мои библиотеки\"."
 
 #: frontend/src/pages/share-admin/libraries.js:198
 msgid "all members"
@@ -4120,7 +4144,7 @@ msgid ""
 "You have not created any share links yet. A share link can be used to share "
 "files and folders with anyone. You can create a share link for a file or "
 "folder by clicking the share icon to the right of its name."
-msgstr ""
+msgstr "Вы еще не создали общедоступных ссылок. Общедоступная ссылка может использоваться для обмена файлами и папками с кем угодно. Вы можете создать общедоступную ссылку к файлу или папке, щелкнув значок общего ресурса справа от его имени."
 
 #: frontend/src/pages/share-admin/share-links.js:64
 #: frontend/src/pages/share-admin/share-links.js:246
@@ -4157,18 +4181,18 @@ msgid ""
 "You have not created any upload links yet. An upload link allows anyone to "
 "upload files to a folder or library. You can create an upload link for a "
 "folder or library by clicking the share icon to the right of its name."
-msgstr ""
+msgstr "Вы еще не создали ни одной ссылки для загрузки. Ссылка для загрузки позволяет любому пользователю загружать файлы в папку или библиотеку. Вы можете создать ссылку для загрузки в папку или библиотеку, щелкнув значок общего ресурса справа от его имени."
 
 #: frontend/src/pages/shared-libs/shared-libs.js:47
 msgid "No shared libraries"
-msgstr ""
+msgstr "Нет общих библиотек"
 
 #: frontend/src/pages/shared-libs/shared-libs.js:48
 msgid ""
 "No libraries have been shared directly with you. A shared library can be "
 "shared with full or restricted permission. If you need access to a library "
 "owned by another user, ask the user to share the library with you."
-msgstr ""
+msgstr "Ни одна библиотека не была передана напрямую вам. Общая библиотека может быть предоставлена ​​с полным или ограниченным разрешением. Если вам нужен доступ к библиотеке, принадлежащей другому пользователю, попросите пользователя поделиться этой библиотекой с вами."
 
 #: frontend/src/pages/shared-libs/shared-libs.js:225
 #: frontend/src/pages/shared-libs/shared-libs.js:275
@@ -4188,7 +4212,7 @@ msgid ""
 "No public libraries have been created yet. A public library is accessible by"
 " all users. You can create a public library by clicking the \"Add Library\" "
 "button in the menu bar."
-msgstr ""
+msgstr "Общедоступные библиотеки еще не созданы. Общедоступная библиотека доступна всем пользователям. Вы можете создать общедоступную библиотеку, нажав кнопку \"Добавить библиотеку\" в строке меню."
 
 #: frontend/src/pages/shared-with-all/public-shared-view.js:183
 #: frontend/src/pages/shared-with-all/public-shared-view.js:190
@@ -4205,7 +4229,7 @@ msgid ""
 "favorite gives you quick access to your most frequently used objects. You "
 "can add a library, folder or file to your favorites by clicking the star to "
 "the left of its name."
-msgstr ""
+msgstr "Вы еще не добавили ни одной библиотеки, папки или файла в избранное. Избранное дает вам быстрый доступ к вашим наиболее часто используемым объектам. Вы можете добавить библиотеку, папку или файл в избранное, нажав на звездочку слева от ее названия."
 
 #: frontend/src/pages/sys-admin/abuse-reports.js:90
 #: frontend/src/pages/sys-admin/side-panel.js:270
@@ -5098,14 +5122,14 @@ msgstr "Перейти в библиотеку"
 
 #: frontend/src/pages/wikis/wikis.js:148
 msgid "No published libraries"
-msgstr ""
+msgstr "Нет опубликованных библиотек"
 
 #: frontend/src/pages/wikis/wikis.js:149
 msgid ""
 "You have not published any libraries yet. A published library can be "
 "accessed by anyone, not only users, via its URL. You can publish a library "
 "by clicking the \"Publish a Library\" button in the menu bar."
-msgstr ""
+msgstr "Вы еще не опубликовали ни одной библиотеки. Доступ к опубликованной библиотеке может получить любой, не только пользователи по ее URL. Вы можете опубликовать библиотеку, нажав кнопку \"Опубликовать библиотеку\" в строке меню."
 
 #: frontend/src/repo-folder-trash.js:195
 msgid "{placeholder} Trash"
@@ -5174,7 +5198,7 @@ msgstr "Уведомление на email"
 msgid "Profile Setting"
 msgstr "Настройки профиля"
 
-#: frontend/src/shared-dir-view.js:198
+#: frontend/src/shared-dir-view.js:210
 msgid "Shared by: "
 msgstr "Общий доступ: "
 
@@ -5347,38 +5371,38 @@ msgstr "Изменение в облаке и скачивание"
 msgid "Edit on cloud only"
 msgstr "Изменить только в облаке"
 
-#: frontend/src/utils/utils.js:1103
+#: frontend/src/utils/utils.js:1171
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Успешно скопировано %(name)s и еще 1 объект."
 
-#: frontend/src/utils/utils.js:1105
+#: frontend/src/utils/utils.js:1173
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Успешно скопировано %(name)s и еще %(amount)s других объектов."
 
-#: frontend/src/utils/utils.js:1116
+#: frontend/src/utils/utils.js:1184
 msgid "Successfully moved %(name)s."
 msgstr "Успешно перемещено %(name)s."
 
-#: frontend/src/utils/utils.js:1118
+#: frontend/src/utils/utils.js:1186
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Успешно перемещено %(name)s и еще 1 объект."
 
-#: frontend/src/utils/utils.js:1120
+#: frontend/src/utils/utils.js:1188
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Успешно перемещено %(name)s и еще %(amount)s других объектов."
 
-#: frontend/src/utils/utils.js:1132
+#: frontend/src/utils/utils.js:1200
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Не удалось скопировать %(name)s и %(amount)s объект(ов)."
 
-#: frontend/src/utils/utils.js:1135
+#: frontend/src/utils/utils.js:1203
 msgid "Failed to copy %(name)s."
 msgstr "Не удалось скопировать %(name)s."
 
-#: frontend/src/utils/utils.js:1145
+#: frontend/src/utils/utils.js:1213
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Не удалось переместить %(name)s и %(amount)s объект(ов)."
 
-#: frontend/src/utils/utils.js:1148
+#: frontend/src/utils/utils.js:1216
 msgid "Failed to move %(name)s."
 msgstr "Не удалось переместить %(name)s."
