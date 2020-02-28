@@ -142,9 +142,6 @@ class FileUploader extends React.Component {
   maxFilesErrorCallback = (files, errorCount) => {
     let maxFiles = maxNumberOfFilesForFileupload;
     let message = gettext('Please upload no more than {maxFiles} files at a time.');
-    if (maxFiles === 1) {
-      message = gettext('Please upload no more than {maxFiles} file at a time.');
-    } 
     message = message.replace('{maxFiles}', maxFiles);
     toaster.danger(message);
   }
