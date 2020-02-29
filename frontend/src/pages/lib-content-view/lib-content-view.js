@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
@@ -19,6 +19,7 @@ import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import SessionExpiredTip from '../../components/session-expired-tip';
+import MoveDirentProgressDialog from '../../components/dialog/move-dirent-progress-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -75,6 +76,9 @@ class LibContentView extends React.Component {
       updateDetail: false,
       itemsShowLength: 100,
       isSessionExpired: false,
+      isMoveProgressDialogShow: false,
+      asyncMoveTaskId: '',
+      asyncMoveProgress: 0,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -574,43 +578,100 @@ class LibContentView extends React.Component {
     });
   }
 
+  getAsyncMoveProgress = () => {
+    let asyncMoveTaskId = this.state.asyncMoveTaskId;
+    seafileAPI.queryAsyncOperationProgress(asyncMoveTaskId).then(res => {
+      let data = res.data;
+      if (data.failed) {
+        clearInterval(this.asyncMoveTimer);
+        let message = 'Files moved failed.';
+        toaster.danger(message);
+        this.setState({
+          asyncMoveProgress: 0,
+          isMoveProgressDialogShow: false,
+        });
+        return;
+      }
+
+      if (data.done === data.total) {
+        if (this.asyncMoveTimer) {
+          clearInterval(this.asyncMoveTimer);
+        }
+        this.setState({
+          asyncMoveProgress: 100,
+          isMoveProgressDialogShow: false,
+        });
+        let message = 'Files moved successfully.';
+        toaster.success(message);
+      } else {
+        let moveProgress = parseInt((data.done/data.total * 100).toFixed(2));
+        this.setState({asyncMoveProgress: moveProgress});
+      }
+    }).catch(error => {
+      clearInterval(this.asyncMoveTimer);
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.setState({
+        asyncMoveProgress: 0,
+        isMoveProgressDialogShow: false,
+      }); 
+    });
+  }
+
+  cancelCopyMoveDirent = () => {
+    let taskId = this.state.asyncMoveTaskId;
+    seafileAPI.cancelCopyMoveOperation(taskId);
+  }
+
+  onMoveProgressDialogToggle = () => {
+    let { asyncMoveProgress } = this.state;
+    if (asyncMoveProgress && asyncMoveProgress !== 100) {
+      clearInterval(this.asyncMoveTimer);
+      this.cancelCopyMoveDirent();
+    }
+
+    this.setState({
+      asyncMoveProgress: 0,
+      isMoveProgressDialogShow: false,
+    })
+  }
+
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
+    if (repoID !== destRepo.repo_id) {
+      this.setState({isMoveProgressDialogShow: true});
+    }
+
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
-        let taskId = res.data.task_id;
-        seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
-          if (res.data.failed) {
-            let errMessage = Utils.getMoveFailedMessage(dirNames);
-            toaster.danger(errMessage);
-            return;
-          }
-          direntPaths.forEach((direntPath, index) => {
-            if (this.state.currentMode === 'column') {
-              this.deleteTreeNode(direntPath);
-            }
-            this.moveDirent(direntPath);
-          });
-          let message =  Utils.getMoveSuccessMessage(dirNames);
-          toaster.success(message);
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+        this.setState({
+          asyncMoveProgress: 0,
+          asyncMoveTaskId: res.data.task_id,
+        }, () => {
+          this.getAsyncMoveProgress();
+          this.asyncMoveTimer = setInterval(this.getAsyncMoveProgress, 1000);
         });
-      } else {
-        direntPaths.forEach((direntPath, index) => {
-          if (this.state.currentMode === 'column') {
-            this.deleteTreeNode(direntPath);
-          }
-          this.moveDirent(direntPath);
-        });
+      }
+
+      direntPaths.forEach((direntPath, index) => {
         if (this.state.currentMode === 'column') {
-          this.updateMoveCopyTreeNode(destDirentPath);
+          this.deleteTreeNode(direntPath);
         }
+        this.moveDirent(direntPath);
+      });
+
+      // 1. move to current repo 
+      // 2. tow columns mode need update left tree
+      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
+        this.updateMoveCopyTreeNode(destDirentPath);
+      }
+
+      // show tip message if move to current repo
+      if (repoID === destRepo.repo_id) {
         let message =  Utils.getMoveSuccessMessage(dirNames);
         toaster.success(message);
       }
@@ -951,34 +1012,33 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
+
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (repoID !== destRepo.repo_id) {
-        let taskId = res.data.task_id;
-        seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
-          if (res.data.failed) {
-            let errMessage = gettext('Failed to move {name}.');
-            errMessage = errMessage.replace('{name}', dirName);
-            toaster.danger(errMessage);
-            return;
-          }
-          if (this.state.currentMode === 'column') {
-            this.deleteTreeNode(direntPath);
-          }
-          this.moveDirent(direntPath);
-          let message = gettext('Successfully moved {name}.');
-          message = message.replace('{name}', dirName);
-          toaster.success(message);
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+        this.setState({
+          isMoveProgressDialogShow: true,
+          asyncMoveProgress: 0,
+          asyncMoveTaskId: res.data.task_id,
+        }, () => {
+          this.getAsyncMoveProgress();
+          this.asyncMoveTimer = setInterval(this.getAsyncMoveProgress, 1000);
         });
-      } else {
-        if (this.state.currentMode === 'column') {
-          this.deleteTreeNode(direntPath);
-          this.updateMoveCopyTreeNode(moveToDirentPath);
-        }
-        this.moveDirent(direntPath, moveToDirentPath);
-  
+      }
+
+      if (this.state.currentMode === 'column') {
+        this.deleteTreeNode(direntPath);
+      }
+
+      // 1. move to current repo 
+      // 2. tow columns mode need update left tree
+      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
+        this.updateMoveCopyTreeNode(moveToDirentPath);
+      }
+
+      this.moveDirent(direntPath, moveToDirentPath);
+
+      // show tip message if move to current repo
+      if (repoID === destRepo.repo_id) {
         let message = gettext('Successfully moved {name}.');
         message = message.replace('{name}', dirName);
         toaster.success(message);
@@ -1672,137 +1732,146 @@ class LibContentView extends React.Component {
     });
 
     return (
-      <div className="main-panel o-hidden">
-        <div className="main-panel-north border-left-show">
-          <LibContentToolbar
-            isViewFile={this.state.isViewFile}
-            filePermission={this.state.filePermission}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
-            fileTags={this.state.fileTags}
-            relatedFiles={this.state.relatedFiles}
-            onFileTagChanged={this.onToolbarFileTagChanged}
-            onRelatedFileChange={this.onToolbarRelatedFileChange}
-            onSideNavMenuClick={this.props.onMenuClick}
-            repoID={this.props.repoID}
-            path={this.state.path}
-            isDirentSelected={this.state.isDirentSelected}
-            selectedDirentList={this.state.selectedDirentList}
-            onItemsMove={this.onMoveItems}
-            onItemsCopy={this.onCopyItems}
-            onItemsDelete={this.onDeleteItems}
-            onItemRename={this.onMainPanelItemRename}
-            direntList={this.state.direntList}
-            repoName={this.state.repoName}
-            repoEncrypted={this.state.repoEncrypted}
-            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-            userPerm={this.state.userPerm}
-            showShareBtn={showShareBtn}
-            enableDirPrivateShare={enableDirPrivateShare}
-            onAddFile={this.onAddFile}
-            onAddFolder={this.onAddFolder}
-            onUploadFile={this.onUploadFile}
-            onUploadFolder={this.onUploadFolder}
-            currentMode={this.state.currentMode}
-            switchViewMode={this.switchViewMode}
-            onSearchedClick={this.onSearchedClick}
-            isRepoOwner={isRepoOwner}
-            currentRepoInfo={this.state.currentRepoInfo}
-            updateDirent={this.updateDirent}
-            onDirentSelected={this.onDirentSelected}
-            showDirentDetail={this.showDirentDetail}
-            listRelatedFiles={this.listRelatedFiles}
-            unSelectDirent={this.unSelectDirent}
-            onFilesTagChanged={this.onFileTagChanged}
-          />
-        </div>
-        <div className="main-panel-center flex-row">
-          <LibContentContainer 
-            pathPrefix={this.props.pathPrefix}
-            currentMode={this.state.currentMode}
-            path={this.state.path}
-            pathExist={this.state.pathExist}
-            currentRepoInfo={this.state.currentRepoInfo}
-            repoID={this.props.repoID}
-            repoPermission={this.state.repoPermission}
-            enableDirPrivateShare={enableDirPrivateShare}
-            userPerm={userPerm}
-            isGroupOwnedRepo={this.state.isGroupOwnedRepo}
-            onTabNavClick={this.props.onTabNavClick}
-            onMainNavBarClick={this.onMainNavBarClick}
-            isViewFile={this.state.isViewFile}
-            hash={this.state.hash}
-            isDraft={this.state.isDraft}
-            hasDraft={this.state.hasDraft}
-            fileTags={this.state.fileTags}
-            relatedFiles={this.state.relatedFiles}
-            goDraftPage={this.goDraftPage}
-            isFileLoading={this.state.isFileLoading}
-            isFileLoadedErr={this.state.isFileLoadedErr}
-            filePermission={this.state.filePermission}
-            content={this.state.content}
-            lastModified={this.state.lastModified}
-            latestContributor={this.state.latestContributor}
-            onLinkClick={this.onLinkClick}
-            isTreeDataLoading={this.state.isTreeDataLoading}
-            treeData={this.state.treeData}
-            currentNode={this.state.currentNode}
-            onNodeClick={this.onTreeNodeClick}
-            onNodeCollapse={this.onTreeNodeCollapse}
-            onNodeExpanded={this.onTreeNodeExpanded}
-            onAddFolderNode={this.onAddFolder}
-            onAddFileNode={this.onAddFile}
-            onRenameNode={this.onRenameTreeNode}
-            onDeleteNode={this.onDeleteTreeNode}
-            draftCounts={this.state.draftCounts}
-            usedRepoTags={this.state.usedRepoTags}
-            readmeMarkdown={this.state.readmeMarkdown}
-            updateUsedRepoTags={this.updateUsedRepoTags}
-            isDirentListLoading={this.state.isDirentListLoading}
-            direntList={direntItemsList}
-            sortBy={this.state.sortBy}
-            sortOrder={this.state.sortOrder}
-            sortItems={this.sortItems}
-            updateDirent={this.updateDirent}
-            onDirentClick={this.onDirentClick}
-            onItemClick={this.onItemClick}
-            onItemSelected={this.onDirentSelected}
-            onItemDelete={this.onMainPanelItemDelete}
-            onItemRename={this.onMainPanelItemRename}
-            onItemMove={this.onMoveItem}
-            onItemCopy={this.onCopyItem}
-            onAddFolder={this.onAddFolder}
-            onAddFile={this.onAddFile}
-            onFileTagChanged={this.onFileTagChanged}
-            isDirentSelected={this.state.isDirentSelected}
-            isAllDirentSelected={this.state.isAllDirentSelected}
-            onAllDirentSelected={this.onAllDirentSelected}
-            isDirentDetailShow={this.state.isDirentDetailShow}
-            selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
-            selectedDirentList={this.state.selectedDirentList}
-            onItemsMove={this.onMoveItems}
-            onItemsCopy={this.onCopyItems}
-            onItemsDelete={this.onDeleteItems}
-            closeDirentDetail={this.closeDirentDetail}
-            showDirentDetail={this.showDirentDetail}
-            direntDetailPanelTab={this.state.direntDetailPanelTab}
-            onDeleteRepoTag={this.onDeleteRepoTag}
-            onToolbarFileTagChanged={this.onToolbarFileTagChanged}
-            updateDetail={this.state.updateDetail}
-            onListContainerScroll={this.onListContainerScroll}
-          />
-          {this.state.pathExist && !this.state.isViewFile && (
-            <FileUploader
-              ref={uploader => this.uploader = uploader}
-              dragAndDrop={true}
-              path={this.state.path}
+      <Fragment>
+
+        <div className="main-panel o-hidden">
+          <div className="main-panel-north border-left-show">
+            <LibContentToolbar
+              isViewFile={this.state.isViewFile}
+              filePermission={this.state.filePermission}
+              isDraft={this.state.isDraft}
+              hasDraft={this.state.hasDraft}
+              fileTags={this.state.fileTags}
+              relatedFiles={this.state.relatedFiles}
+              onFileTagChanged={this.onToolbarFileTagChanged}
+              onRelatedFileChange={this.onToolbarRelatedFileChange}
+              onSideNavMenuClick={this.props.onMenuClick}
               repoID={this.props.repoID}
+              path={this.state.path}
+              isDirentSelected={this.state.isDirentSelected}
+              selectedDirentList={this.state.selectedDirentList}
+              onItemsMove={this.onMoveItems}
+              onItemsCopy={this.onCopyItems}
+              onItemsDelete={this.onDeleteItems}
+              onItemRename={this.onMainPanelItemRename}
               direntList={this.state.direntList}
-              onFileUploadSuccess={this.onFileUploadSuccess}
+              repoName={this.state.repoName}
+              repoEncrypted={this.state.repoEncrypted}
+              isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+              userPerm={this.state.userPerm}
+              showShareBtn={showShareBtn}
+              enableDirPrivateShare={enableDirPrivateShare}
+              onAddFile={this.onAddFile}
+              onAddFolder={this.onAddFolder}
+              onUploadFile={this.onUploadFile}
+              onUploadFolder={this.onUploadFolder}
+              currentMode={this.state.currentMode}
+              switchViewMode={this.switchViewMode}
+              onSearchedClick={this.onSearchedClick}
+              isRepoOwner={isRepoOwner}
+              currentRepoInfo={this.state.currentRepoInfo}
+              updateDirent={this.updateDirent}
+              onDirentSelected={this.onDirentSelected}
+              showDirentDetail={this.showDirentDetail}
+              listRelatedFiles={this.listRelatedFiles}
+              unSelectDirent={this.unSelectDirent}
+              onFilesTagChanged={this.onFileTagChanged}
             />
-          )}
+          </div>
+          <div className="main-panel-center flex-row">
+            <LibContentContainer 
+              pathPrefix={this.props.pathPrefix}
+              currentMode={this.state.currentMode}
+              path={this.state.path}
+              pathExist={this.state.pathExist}
+              currentRepoInfo={this.state.currentRepoInfo}
+              repoID={this.props.repoID}
+              repoPermission={this.state.repoPermission}
+              enableDirPrivateShare={enableDirPrivateShare}
+              userPerm={userPerm}
+              isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+              onTabNavClick={this.props.onTabNavClick}
+              onMainNavBarClick={this.onMainNavBarClick}
+              isViewFile={this.state.isViewFile}
+              hash={this.state.hash}
+              isDraft={this.state.isDraft}
+              hasDraft={this.state.hasDraft}
+              fileTags={this.state.fileTags}
+              relatedFiles={this.state.relatedFiles}
+              goDraftPage={this.goDraftPage}
+              isFileLoading={this.state.isFileLoading}
+              isFileLoadedErr={this.state.isFileLoadedErr}
+              filePermission={this.state.filePermission}
+              content={this.state.content}
+              lastModified={this.state.lastModified}
+              latestContributor={this.state.latestContributor}
+              onLinkClick={this.onLinkClick}
+              isTreeDataLoading={this.state.isTreeDataLoading}
+              treeData={this.state.treeData}
+              currentNode={this.state.currentNode}
+              onNodeClick={this.onTreeNodeClick}
+              onNodeCollapse={this.onTreeNodeCollapse}
+              onNodeExpanded={this.onTreeNodeExpanded}
+              onAddFolderNode={this.onAddFolder}
+              onAddFileNode={this.onAddFile}
+              onRenameNode={this.onRenameTreeNode}
+              onDeleteNode={this.onDeleteTreeNode}
+              draftCounts={this.state.draftCounts}
+              usedRepoTags={this.state.usedRepoTags}
+              readmeMarkdown={this.state.readmeMarkdown}
+              updateUsedRepoTags={this.updateUsedRepoTags}
+              isDirentListLoading={this.state.isDirentListLoading}
+              direntList={direntItemsList}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortItems}
+              updateDirent={this.updateDirent}
+              onDirentClick={this.onDirentClick}
+              onItemClick={this.onItemClick}
+              onItemSelected={this.onDirentSelected}
+              onItemDelete={this.onMainPanelItemDelete}
+              onItemRename={this.onMainPanelItemRename}
+              onItemMove={this.onMoveItem}
+              onItemCopy={this.onCopyItem}
+              onAddFolder={this.onAddFolder}
+              onAddFile={this.onAddFile}
+              onFileTagChanged={this.onFileTagChanged}
+              isDirentSelected={this.state.isDirentSelected}
+              isAllDirentSelected={this.state.isAllDirentSelected}
+              onAllDirentSelected={this.onAllDirentSelected}
+              isDirentDetailShow={this.state.isDirentDetailShow}
+              selectedDirent={this.state.selectedDirentList && this.state.selectedDirentList[0]}
+              selectedDirentList={this.state.selectedDirentList}
+              onItemsMove={this.onMoveItems}
+              onItemsCopy={this.onCopyItems}
+              onItemsDelete={this.onDeleteItems}
+              closeDirentDetail={this.closeDirentDetail}
+              showDirentDetail={this.showDirentDetail}
+              direntDetailPanelTab={this.state.direntDetailPanelTab}
+              onDeleteRepoTag={this.onDeleteRepoTag}
+              onToolbarFileTagChanged={this.onToolbarFileTagChanged}
+              updateDetail={this.state.updateDetail}
+              onListContainerScroll={this.onListContainerScroll}
+            />
+            {this.state.pathExist && !this.state.isViewFile && (
+              <FileUploader
+                ref={uploader => this.uploader = uploader}
+                dragAndDrop={true}
+                path={this.state.path}
+                repoID={this.props.repoID}
+                direntList={this.state.direntList}
+                onFileUploadSuccess={this.onFileUploadSuccess}
+              />
+            )}
+          </div>
         </div>
-      </div>
+        {this.state.isMoveProgressDialogShow && (
+          <MoveDirentProgressDialog 
+            asyncMoveProgress={this.state.asyncMoveProgress}
+            toggleDialog={this.onMoveProgressDialogToggle}
+          />
+        )}
+      </Fragment>
     );
   }
 }
