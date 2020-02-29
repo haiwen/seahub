@@ -610,8 +610,6 @@ class LibContentView extends React.Component {
       this.setState({asyncOperationProgress: asyncOperationProgress});
       this.getAsyncCopyMoveProgress();
     } catch (error) {
-      let errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
