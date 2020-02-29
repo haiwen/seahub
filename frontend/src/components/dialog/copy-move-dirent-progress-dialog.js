@@ -15,16 +15,20 @@ class CopyMoveDirentProgressDialog extends React.Component {
 
     let { type , asyncOperationProgress } = this.props;
     let title = type === 'move' ? gettext('Move Progress') : gettext('Copy Progress');
-
+    let progressStyle = {
+      width: asyncOperationProgress + '%',
+      lineHeight: '40px',
+      textAlign: 'left',
+    };
     return (
       <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>{title}</ModalHeader>
         <ModalBody style={{minHeight: '80px'}}>
           <div className="progress" style={{height: '40px'}}>
             <div 
-              className="progress-bar" 
+              className="progress-bar pl-2" 
               role="progressbar" 
-              style={{width: asyncOperationProgress + '%'}} 
+              style={progressStyle}
               aria-valuenow={asyncOperationProgress} 
               aria-valuemin="0" 
               aria-valuemax="100"
