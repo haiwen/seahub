@@ -579,12 +579,15 @@ class LibContentView extends React.Component {
   }
 
   async getAsyncCopyMoveProgress() {
-    let asyncCopyMoveTaskId = this.state.asyncCopyMoveTaskId;
+    let { asyncOperationType, asyncCopyMoveTaskId } = this.state;
     try {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
       if (data.failed) {
-        let message = 'Files moved failed.';
+        let message = gettext('Files moved to another repository failed.')
+        if (asyncOperationType === 'copy') {
+          message = gettext('Files copyed to another repository failed.')
+        }
         toaster.danger(message);
         this.setState({
           asyncOperationProgress: 0,
@@ -592,10 +595,13 @@ class LibContentView extends React.Component {
         });
         return;
       }
-
+      
       if (data.successful) {
-        this.setState({isCopyMoveProgressDialogShow: true});
-        let message = 'Files moved successfully.';
+        this.setState({isCopyMoveProgressDialogShow: false});
+        let message = gettext('Files moved to another repository successfully.')
+        if (asyncOperationType === 'copy') {
+          message = gettext('Files copyed to another repository successfully.')
+        }
         toaster.success(message);
         return;
       }
@@ -638,6 +644,7 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
+        asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true
       });
@@ -646,7 +653,6 @@ class LibContentView extends React.Component {
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
-          asyncOperationProgress: 0,
           asyncCopyMoveTaskId: res.data.task_id,
         }, () => {
           this.getAsyncCopyMoveProgress();
@@ -682,38 +688,32 @@ class LibContentView extends React.Component {
 
   onCopyItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
-    let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
+
+    if (repoID !== destRepo.repo_id) {
+      this.setState({
+        asyncOperationProgress: 0,
+        asyncOperationType: 'copy',
+        isCopyMoveProgressDialogShow: true
+      });
+    }
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
-        let taskId = res.data.task_id;
-        seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
-          if (res.data.failed) {
-            let errMessage = Utils.getCopyFailedMessage(dirNames);
-            toaster.danger(errMessage);
-            return;
-          }
-          if (destDirentPath === this.state.path) {
-            this.loadDirentList(this.state.path);
-          }
-          let message =  Utils.getCopySuccessfulMessage(dirNames);
-          toaster.success(message);
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+        this.setState({
+          asyncCopyMoveTaskId: res.data.task_id,
+        }, () => {
+          this.getAsyncCopyMoveProgress();
         });
-      } else {
-        if (this.state.currentMode === 'column') {
-          this.updateMoveCopyTreeNode(destDirentPath);
-        }
-        if (destDirentPath === this.state.path) {
-          this.loadDirentList(this.state.path);
-        }
-        let message =  Utils.getCopySuccessfulMessage(dirNames);
-        toaster.success(message);
       }
-      
+
+      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
+        this.updateMoveCopyTreeNode(destDirentPath);
+      }
+
+      if (destDirentPath === this.state.path) {
+        this.loadDirentList(this.state.path);
+      }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
@@ -1011,15 +1011,15 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
-        isCopyMoveProgressDialogShow: true,
+        asyncOperationProgress: 0,
         asyncOperationType: 'move',
+        isCopyMoveProgressDialogShow: true,
       });
     }
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
-          asyncOperationProgress: 0,
           asyncCopyMoveTaskId: res.data.task_id,
         }, () => {
           this.getAsyncCopyMoveProgress();
@@ -1061,36 +1061,34 @@ class LibContentView extends React.Component {
     if (!nodeParentPath) {
       nodeParentPath = this.state.path;
     }
-    let direntPath = Utils.joinPath(nodeParentPath, dirName);
+
+    if (repoID !== destRepo.repo_id) {
+      this.setState({
+        asyncOperationProgress: 0,
+        asyncOperationType: 'copy',
+        isCopyMoveProgressDialogShow: true
+      });
+    }
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
       
       if (repoID !== destRepo.repo_id) {
-        let taskId = res.data.task_id;
-        seafileAPI.queryAsyncOperationProgress(taskId).then(res => {
-          if (res.data.failed) {
-            let errMessage = gettext('Failed to copy %(name)s');
-            errMessage = errMessage.replace('%(name)s', dirName);
-            toaster.danger(errMessage);
-            return;
-          }
-          if (copyToDirentPath === nodeParentPath) {
-            this.loadDirentList(this.state.path);
-          }
-          let message = gettext('Successfully copied %(name)s.');
-          message = message.replace('%(name)s', dirName);
-          toaster.success(message);
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+        this.setState({
+          asyncCopyMoveTaskId: res.data.task_id,
+        }, () => {
+          this.getAsyncCopyMoveProgress();
         });
-      } else {
-        if (this.state.currentMode === 'column') {
-          this.updateMoveCopyTreeNode(copyToDirentPath);
-        }
-        if (copyToDirentPath === nodeParentPath) {
-          this.loadDirentList(this.state.path);
-        }
+      }
+
+      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
+        this.updateMoveCopyTreeNode(copyToDirentPath);
+      }
+
+      if (copyToDirentPath === nodeParentPath) {
+        this.loadDirentList(this.state.path);
+      }
+
+      if (repoID === destRepo.repo_id) {
         let message = gettext('Successfully copied %(name)s.');
         message = message.replace('%(name)s', dirName);
         toaster.success(message);
