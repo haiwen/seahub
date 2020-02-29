@@ -19,7 +19,7 @@ import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import SessionExpiredTip from '../../components/session-expired-tip';
-import MoveDirentProgressDialog from '../../components/dialog/move-dirent-progress-dialog';
+import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -76,9 +76,9 @@ class LibContentView extends React.Component {
       updateDetail: false,
       itemsShowLength: 100,
       isSessionExpired: false,
-      isMoveProgressDialogShow: false,
-      asyncMoveTaskId: '',
-      asyncMoveProgress: 0,
+      isCopyMoveProgressDialogShow: false,
+      asyncCopyMoveTaskId: '',
+      asyncOperationProgress: 0,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -578,61 +578,55 @@ class LibContentView extends React.Component {
     });
   }
 
-  getAsyncMoveProgress = () => {
-    let asyncMoveTaskId = this.state.asyncMoveTaskId;
-    seafileAPI.queryAsyncOperationProgress(asyncMoveTaskId).then(res => {
+  async getAsyncCopyMoveProgress() {
+    let asyncCopyMoveTaskId = this.state.asyncCopyMoveTaskId;
+    try {
+      let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
       if (data.failed) {
-        clearInterval(this.asyncMoveTimer);
         let message = 'Files moved failed.';
         toaster.danger(message);
         this.setState({
-          asyncMoveProgress: 0,
-          isMoveProgressDialogShow: false,
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
         });
         return;
       }
 
-      if (data.done === data.total) {
-        if (this.asyncMoveTimer) {
-          clearInterval(this.asyncMoveTimer);
-        }
-        this.setState({
-          asyncMoveProgress: 100,
-          isMoveProgressDialogShow: false,
-        });
+      if (data.successful) {
+        this.setState({isCopyMoveProgressDialogShow: true});
         let message = 'Files moved successfully.';
         toaster.success(message);
-      } else {
-        let moveProgress = parseInt((data.done/data.total * 100).toFixed(2));
-        this.setState({asyncMoveProgress: moveProgress});
+        return;
       }
-    }).catch(error => {
-      clearInterval(this.asyncMoveTimer);
+
+      let asyncOperationProgress = parseInt((data.done/data.total * 100).toFixed(2));
+      this.setState({asyncOperationProgress: asyncOperationProgress});
+      this.getAsyncCopyMoveProgress();
+    } catch (error) {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       this.setState({
-        asyncMoveProgress: 0,
-        isMoveProgressDialogShow: false,
+        asyncOperationProgress: 0,
+        isCopyMoveProgressDialogShow: false,
       }); 
-    });
+    }
   }
 
   cancelCopyMoveDirent = () => {
-    let taskId = this.state.asyncMoveTaskId;
+    let taskId = this.state.asyncCopyMoveTaskId;
     seafileAPI.cancelCopyMoveOperation(taskId);
   }
 
   onMoveProgressDialogToggle = () => {
-    let { asyncMoveProgress } = this.state;
-    if (asyncMoveProgress && asyncMoveProgress !== 100) {
-      clearInterval(this.asyncMoveTimer);
+    let { asyncOperationProgress } = this.state;
+    if (asyncOperationProgress && asyncOperationProgress !== 100) {
       this.cancelCopyMoveDirent();
     }
 
     this.setState({
-      asyncMoveProgress: 0,
-      isMoveProgressDialogShow: false,
+      asyncOperationProgress: 0,
+      isCopyMoveProgressDialogShow: false,
     })
   }
 
@@ -643,17 +637,19 @@ class LibContentView extends React.Component {
     let dirNames = this.getSelectedDirentNames();
 
     if (repoID !== destRepo.repo_id) {
-      this.setState({isMoveProgressDialogShow: true});
+      this.setState({
+        asyncOperationType: 'move',
+        isCopyMoveProgressDialogShow: true
+      });
     }
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
-          asyncMoveProgress: 0,
-          asyncMoveTaskId: res.data.task_id,
+          asyncOperationProgress: 0,
+          asyncCopyMoveTaskId: res.data.task_id,
         }, () => {
-          this.getAsyncMoveProgress();
-          this.asyncMoveTimer = setInterval(this.getAsyncMoveProgress, 1000);
+          this.getAsyncCopyMoveProgress();
         });
       }
 
@@ -1013,15 +1009,20 @@ class LibContentView extends React.Component {
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
 
+    if (repoID !== destRepo.repo_id) {
+      this.setState({
+        isCopyMoveProgressDialogShow: true,
+        asyncOperationType: 'move',
+      });
+    }
+
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
-          isMoveProgressDialogShow: true,
-          asyncMoveProgress: 0,
-          asyncMoveTaskId: res.data.task_id,
+          asyncOperationProgress: 0,
+          asyncCopyMoveTaskId: res.data.task_id,
         }, () => {
-          this.getAsyncMoveProgress();
-          this.asyncMoveTimer = setInterval(this.getAsyncMoveProgress, 1000);
+          this.getAsyncCopyMoveProgress();
         });
       }
 
@@ -1865,9 +1866,10 @@ class LibContentView extends React.Component {
             )}
           </div>
         </div>
-        {this.state.isMoveProgressDialogShow && (
-          <MoveDirentProgressDialog 
-            asyncMoveProgress={this.state.asyncMoveProgress}
+        {this.state.isCopyMoveProgressDialogShow && (
+          <CopyMoveDirentProgressDialog
+            type={this.state.asyncOperationType}
+            asyncOperationProgress={this.state.asyncOperationProgress}
             toggleDialog={this.onMoveProgressDialogToggle}
           />
         )}
