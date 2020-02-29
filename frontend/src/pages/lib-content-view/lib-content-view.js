@@ -1730,7 +1730,6 @@ class LibContentView extends React.Component {
 
     return (
       <Fragment>
-
         <div className="main-panel o-hidden">
           <div className="main-panel-north border-left-show">
             <LibContentToolbar
