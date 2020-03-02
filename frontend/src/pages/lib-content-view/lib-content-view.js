@@ -595,7 +595,7 @@ class LibContentView extends React.Component {
         this.setState({isCopyMoveProgressDialogShow: false});
         let message = gettext('Successfully moved files to another library.');
         if (asyncOperationType === 'copy') {
-          message = gettext('Successfully copyed files to another library.');
+          message = gettext('Successfully copied files to another library.');
         }
         toaster.success(message);
         return;
