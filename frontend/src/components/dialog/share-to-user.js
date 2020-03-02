@@ -263,8 +263,8 @@ class ShareToUser extends React.Component {
       let sharedItemUsername = sharedItem.user_info.name;
       if (username === sharedItemUsername) {
         sharedItem.permission = permission;
+        sharedItem.is_admin = permission === 'admin' ? true : false;
       }
-      sharedItem.is_admin = permission === 'admin' ? true : false;
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
