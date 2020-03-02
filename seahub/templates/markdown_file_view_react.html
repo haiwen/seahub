@@ -61,7 +61,7 @@
              }
           }
          </script>
-         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
 
          {% render_bundle 'commons' %}
          {% render_bundle 'markdownEditor' 'js' %}
