@@ -25,13 +25,9 @@ class UserTest(BaseTestCase):
         assert len(Email.objects.all()) == 0
 
         u = User.objects.get(self.user.username)
-        u.freeze_user(notify_admins=True)
+        u.freeze_user(notify_admins=False)
 
         assert u.is_active is False
-
-        assert len(Email.objects.all()) > 0
-        # email = Email.objects.all()[0]
-        # print email.html_message
 
     def test_delete_user_options(self):
         test_email = '123@123.com'
