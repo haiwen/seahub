@@ -18,7 +18,6 @@ import LibDecryptDialog from '../../components/dialog/lib-decrypt-dialog';
 import LibContentToolbar from './lib-content-toolbar';
 import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import SessionExpiredTip from '../../components/session-expired-tip';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 
 const propTypes = {
