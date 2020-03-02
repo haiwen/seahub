@@ -79,6 +79,7 @@ class LibContentView extends React.Component {
       isCopyMoveProgressDialogShow: false,
       asyncCopyMoveTaskId: '',
       asyncOperationProgress: 0,
+      asyncOperatedFilesLength: 0,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -584,9 +585,9 @@ class LibContentView extends React.Component {
       let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
       let data = res.data;
       if (data.failed) {
-        let message = gettext('Files moved to another repository failed.')
+        let message = gettext('Failed to move files to another library.');
         if (asyncOperationType === 'copy') {
-          message = gettext('Files copyed to another repository failed.')
+          message = gettext('Failed to copy files to another library.');
         }
         toaster.danger(message);
         this.setState({
@@ -598,9 +599,9 @@ class LibContentView extends React.Component {
       
       if (data.successful) {
         this.setState({isCopyMoveProgressDialogShow: false});
-        let message = gettext('Files moved to another repository successfully.')
+        let message = gettext('Successfully moved files to another library.');
         if (asyncOperationType === 'copy') {
-          message = gettext('Files copyed to another repository successfully.')
+          message = gettext('Successfully copyed files to another library.');
         }
         toaster.success(message);
         return;
@@ -642,6 +643,7 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
+        asyncOperatedFilesLength: dirNames.length,
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true
@@ -690,6 +692,7 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
+        asyncOperatedFilesLength: dirNames.length,
         asyncOperationProgress: 0,
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
@@ -1009,6 +1012,7 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
+        asyncOperatedFilesLength: 1,
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true,
@@ -1062,6 +1066,7 @@ class LibContentView extends React.Component {
 
     if (repoID !== destRepo.repo_id) {
       this.setState({
+        asyncOperatedFilesLength: 1,
         asyncOperationProgress: 0,
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
@@ -1864,6 +1869,7 @@ class LibContentView extends React.Component {
         {this.state.isCopyMoveProgressDialogShow && (
           <CopyMoveDirentProgressDialog
             type={this.state.asyncOperationType}
+            asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
             asyncOperationProgress={this.state.asyncOperationProgress}
             toggleDialog={this.onMoveProgressDialogToggle}
           />
