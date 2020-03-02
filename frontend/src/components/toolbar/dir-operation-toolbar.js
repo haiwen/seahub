@@ -7,6 +7,7 @@ import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
+import ViewModeToolbar from './view-mode-toolbar';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -22,6 +23,8 @@ const propTypes = {
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -167,51 +170,56 @@ class DirOperationToolbar extends React.Component {
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
-    const content = Utils.isDesktop() ? (
-      <Fragment>
-        {Utils.isSupportUploadFolder() ?
-          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
-        <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
-        {this.props.showShareBtn &&
-          <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
-      </Fragment>
-    ) : (
-      <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
-        <DropdownToggle
-          tag="span"
-          className="sf2-icon-plus mobile-toolbar-icon"
-        />
-        <DropdownMenu>
-          <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
-          <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
-          <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    );
+    let content = null;
+    if (Utils.isDesktop()) {
+      let { showShareBtn } = this.props;
+      content = (
+        <Fragment>
+          {Utils.isSupportUploadFolder() ?
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
+          <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
+          {showShareBtn && <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
+        </Fragment>
+      );
+    } else {
+      content = (
+        <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
+          <DropdownToggle tag="span" className="sf2-icon-plus mobile-toolbar-icon" />
+          <DropdownMenu>
+            <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
+            <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
+            <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      );
+    }
 
     return (
       <Fragment>
-        <div className="operation">
-          {content}
+        <div className="dir-operation">
+          <div className="operation">
+            {content}
+          </div>
+          {this.state.isUploadMenuShow && (
+            <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+              <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
+              <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
+            </ul>
+          )}
+          {this.state.isCreateMenuShow && (
+            <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+              <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
+              <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
+              <li className="dropdown-divider"></li>
+              <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
+              <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
+              <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
+              <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
+            </ul>
+          )}
         </div>
-        {this.state.isUploadMenuShow && (
-          <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
-            <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
-          </ul>
-        )}
-        {this.state.isCreateMenuShow && (
-          <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
-            <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
-            <li className="dropdown-divider"></li>
-            <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
-            <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
-            <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
-            <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
-          </ul>
-        )}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile

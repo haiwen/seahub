@@ -14,6 +14,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../dialog/rename-dirent';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
+import ViewModeToolbar from './view-mode-toolbar';
 
 import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -36,6 +37,8 @@ const propTypes = {
   onFilesTagChanged: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
 };
 
 class MultipleDirOperationToolbar extends React.Component {
@@ -331,23 +334,26 @@ class MultipleDirOperationToolbar extends React.Component {
     
     return (
       <Fragment>
-        <div className="d-flex">
-          <ButtonGroup className="flex-row group-operations">
-            <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-            <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-            <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
-            <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
-            {this.props.selectedDirentList.length === 1 &&
-              <ItemDropdownMenu 
-                tagName={'button'}
-                item={this.props.selectedDirentList[0]}
-                toggleClass={'fas fa-ellipsis-v dirents-more-menu'}
-                onMenuItemClick={this.onMenuItemClick}
-                getMenuList={this.getDirentMenuList}
-              />
-            }
-          </ButtonGroup>
+        <div className="dir-operation">
+          <div className="d-flex">
+            <ButtonGroup className="flex-row group-operations">
+              <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
+              <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+              <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+              <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+              {this.props.selectedDirentList.length === 1 &&
+                <ItemDropdownMenu
+                  tagName={'button'}
+                  item={this.props.selectedDirentList[0]}
+                  toggleClass={'fas fa-ellipsis-v dirents-more-menu'}
+                  onMenuItemClick={this.onMenuItemClick}
+                  getMenuList={this.getDirentMenuList}
+                />
+              }
+            </ButtonGroup>
+          </div>
         </div>
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}
