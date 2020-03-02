@@ -604,7 +604,7 @@ LOGGING = {
     }
 }
 
-#Login Attempt
+# Login Attempt
 LOGIN_ATTEMPT_LIMIT = 5
 LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 FREEZE_USER_ON_LOGIN_FAILED = False # deactivate user account when login attempts exceed limit
