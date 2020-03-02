@@ -80,27 +80,6 @@ class InvitationsTest(BaseTestCase):
 
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
-    def test_can_send_mail(self, mock_can_invite_guest, mock_has_permission):
-
-        mock_can_invite_guest.return_val = True
-        mock_has_permission.return_val = True
-
-        self.assertEqual(len(Email.objects.all()), 0)
-
-        resp = self.client.post(self.endpoint, {
-            'type': 'guest',
-            'accepter': 'some_random_user@1.com',
-        })
-        self.assertEqual(201, resp.status_code)
-        json_resp = json.loads(resp.content)
-
-        self.assertEqual(len(Email.objects.all()), 1)
-        self.assertRegex(Email.objects.all()[0].html_message,
-                                 json_resp['token'])
-        assert Email.objects.all()[0].status == 0
-
-    @patch.object(CanInviteGuest, 'has_permission')
-    @patch.object(UserPermissions, 'can_invite_guest')
     def test_can_list(self, mock_can_invite_guest, mock_has_permission):
 
         mock_can_invite_guest.return_val = True
@@ -192,30 +171,6 @@ class BatchInvitationsTest(BaseTestCase):
         assert 'some_random_user@2-1.com' == json_resp['failed'][1]['email']
         assert 'The email address is not allowed to be invited as a guest.' == json_resp['failed'][0]['error_msg']
         assert 'The email address is not allowed to be invited as a guest.' == json_resp['failed'][1]['error_msg']
-
-    @patch.object(CanInviteGuest, 'has_permission')
-    @patch.object(UserPermissions, 'can_invite_guest')
-    def test_can_send_mail(self, mock_can_invite_guest, mock_has_permission):
-
-        mock_can_invite_guest.return_val = True
-        mock_has_permission.return_val = True
-
-        self.assertEqual(len(Email.objects.all()), 0)
-
-        resp = self.client.post(self.endpoint, {
-            'type': 'guest',
-            'accepter': ['some_random_user@1.com', 'some_random_user@2.com'],
-        })
-        self.assertEqual(200, resp.status_code)
-        json_resp = json.loads(resp.content)
-
-        self.assertEqual(len(Email.objects.all()), 2)
-        self.assertRegex(Email.objects.all()[0].html_message,
-                                 json_resp['success'][0]['token'])
-        self.assertRegex(Email.objects.all()[1].html_message,
-                                 json_resp['success'][1]['token'])
-        assert Email.objects.all()[0].status == 0
-        assert Email.objects.all()[1].status == 0
 
     def test_without_permission(self):
         self.logout()
