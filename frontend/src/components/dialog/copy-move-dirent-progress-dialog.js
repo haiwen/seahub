@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   type: PropTypes.oneOf(['move', 'copy']).isRequired,
+  asyncOperatedFilesLength: PropTypes.number.isRequired,
   asyncOperationProgress: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   toggleDialog: PropTypes.func.isRequired,
 };
@@ -13,8 +14,9 @@ class CopyMoveDirentProgressDialog extends React.Component {
 
   render() {
 
-    let { type , asyncOperationProgress } = this.props;
-    let title = type === 'move' ? gettext('Move Progress') : gettext('Copy Progress');
+    let { type , asyncOperationProgress, asyncOperatedFilesLength } = this.props;
+    let title = type === 'move' ? gettext('Move {files_length} items') : gettext('Copy {files_length} items');
+    title = title.replace('{files_length}', asyncOperatedFilesLength);
     let progressStyle = {
       width: asyncOperationProgress + '%',
       lineHeight: '40px',
