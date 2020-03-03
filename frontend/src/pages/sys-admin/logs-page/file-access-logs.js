@@ -37,7 +37,7 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('No File Access Logs.')}</h2>
+          <h2>{gettext('No file access logs')}</h2>
         </EmptyTip>
       );
       const table = (
