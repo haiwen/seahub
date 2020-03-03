@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-28 14:21+0800\n"
-"PO-Revision-Date: 2020-02-28 07:33+0000\n"
+"POT-Creation-Date: 2020-03-02 17:55+0800\n"
+"PO-Revision-Date: 2020-03-02 10:03+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -624,7 +624,7 @@ msgstr "Vill du verkligen ta bort ditt konto? "
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/review-list-view/review-comments.js:294
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:315
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:338
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:342
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/pages/invitations/invitations-view.js:99
 #: frontend/src/pages/invitations/invitations-view.js:129
@@ -721,6 +721,14 @@ msgstr ""
 #: frontend/src/components/dialog/copy-dirent-dialog.js:152
 msgid "Copy selected item(s) to:"
 msgstr "Kopiera valda objekt till:"
+
+#: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:18
+msgid "Move {num} items"
+msgstr ""
+
+#: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:18
+msgid "Copy {num} items"
+msgstr ""
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:61
 #: frontend/src/components/dialog/create-group-dialog.js:55
@@ -828,8 +836,8 @@ msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
 #: frontend/src/components/dialog/create-file-dialog.js:138
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:188
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:207
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:192
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:213
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:180
 #: frontend/src/utils/text-translation.js:7
 msgid "New File"
@@ -840,8 +848,8 @@ msgid "This is a draft"
 msgstr ""
 
 #: frontend/src/components/dialog/create-folder-dialog.js:85
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:187
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:206
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:191
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:212
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:179
 #: frontend/src/pages/sys-admin/repos/dir-view.js:175
 #: frontend/src/utils/text-translation.js:6
@@ -971,7 +979,7 @@ msgid "Password again"
 msgstr "Lösenord igen"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:54
-#: frontend/src/components/file-uploader/file-uploader.js:407
+#: frontend/src/components/file-uploader/file-uploader.js:404
 msgid "Internal Server Error"
 msgstr "Internt serverproblem"
 
@@ -1264,7 +1272,7 @@ msgstr "En intern länk är en länk till en fil eller katalog som kan öppnas a
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
 #: frontend/src/components/dialog/share-admin-link.js:34
 #: frontend/src/components/dialog/view-link-dialog.js:38
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:337
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:341
 #: frontend/src/utils/text-translation.js:13
 msgid "Copy"
 msgstr "Kopiera"
@@ -1421,16 +1429,16 @@ msgstr ""
 #: frontend/src/components/dialog/repo-api-token-dialog.js:195
 #: frontend/src/pages/groups/group-view.js:205
 #: frontend/src/pages/groups/groups-view.js:67
-#: frontend/src/pages/lib-content-view/lib-content-view.js:160
-#: frontend/src/pages/lib-content-view/lib-content-view.js:613
-#: frontend/src/pages/lib-content-view/lib-content-view.js:656
-#: frontend/src/pages/lib-content-view/lib-content-view.js:688
-#: frontend/src/pages/lib-content-view/lib-content-view.js:872
-#: frontend/src/pages/lib-content-view/lib-content-view.js:883
-#: frontend/src/pages/lib-content-view/lib-content-view.js:909
-#: frontend/src/pages/lib-content-view/lib-content-view.js:923
-#: frontend/src/pages/lib-content-view/lib-content-view.js:982
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1033
+#: frontend/src/pages/lib-content-view/lib-content-view.js:165
+#: frontend/src/pages/lib-content-view/lib-content-view.js:676
+#: frontend/src/pages/lib-content-view/lib-content-view.js:714
+#: frontend/src/pages/lib-content-view/lib-content-view.js:746
+#: frontend/src/pages/lib-content-view/lib-content-view.js:930
+#: frontend/src/pages/lib-content-view/lib-content-view.js:941
+#: frontend/src/pages/lib-content-view/lib-content-view.js:967
+#: frontend/src/pages/lib-content-view/lib-content-view.js:981
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1045
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1095
 #: frontend/src/pages/my-libs/my-libs-deleted.js:149
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:216
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:232
@@ -1448,7 +1456,7 @@ msgstr "Fel"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:177
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:155
 #: frontend/src/components/dialog/repo-api-token-dialog.js:197
-#: frontend/src/pages/lib-content-view/lib-content-view.js:166
+#: frontend/src/pages/lib-content-view/lib-content-view.js:171
 #: frontend/src/pages/search/main-panel.js:72
 #: frontend/src/pages/sys-admin/abuse-reports.js:48
 #: frontend/src/repo-folder-trash.js:141 frontend/src/repo-folder-trash.js:322
@@ -1889,8 +1897,8 @@ msgid "API token is copied to the clipboard."
 msgstr ""
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:114
-#: frontend/src/pages/lib-content-view/lib-content-view.js:152
-#: frontend/src/pages/lib-content-view/lib-content-view.js:155
+#: frontend/src/pages/lib-content-view/lib-content-view.js:157
+#: frontend/src/pages/lib-content-view/lib-content-view.js:160
 #: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1070
 msgid "Permission denied"
 msgstr "Åtkomst nekas"
@@ -1976,7 +1984,7 @@ msgstr "Dela till grupp"
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:209
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:313
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:66
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:177
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:182
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:83
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:160
 #: frontend/src/components/toolbar/view-file-toolbar.js:122
@@ -2317,7 +2325,7 @@ msgstr ""
 #: frontend/src/components/history-trash-file-view/download.js:10
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:24
 #: frontend/src/components/shared-file-view/shared-file-view.js:125
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:339
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:343
 #: frontend/src/pages/file-history-old/history-item.js:122
 #: frontend/src/pages/sys-admin/repos/dir-content.js:64
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:64
@@ -2479,15 +2487,11 @@ msgstr ""
 msgid "Please upload no more than {maxFiles} files at a time."
 msgstr ""
 
-#: frontend/src/components/file-uploader/file-uploader.js:146
-msgid "Please upload no more than {maxFiles} file at a time."
-msgstr ""
-
-#: frontend/src/components/file-uploader/file-uploader.js:397
+#: frontend/src/components/file-uploader/file-uploader.js:394
 msgid "Network error"
 msgstr "Nätverksfel"
 
-#: frontend/src/components/file-uploader/file-uploader.js:404
+#: frontend/src/components/file-uploader/file-uploader.js:401
 msgid "File is locked by others."
 msgstr ""
 
@@ -2916,9 +2920,9 @@ msgstr ""
 msgid "Search Files"
 msgstr "Sök filer"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:173
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:174
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:186
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:179
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:180
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:190
 #: frontend/src/pages/sys-admin/repos/dir-view.js:174
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:59
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:69
@@ -2927,31 +2931,31 @@ msgstr "Sök filer"
 msgid "Upload"
 msgstr "Ladda upp"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:175
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:181
 msgid "New"
 msgstr "Ny"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:200
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:206
 msgid "Upload Files"
 msgstr "Ladda upp filer"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:201
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:207
 msgid "Upload Folder"
 msgstr "Ladda upp katalog"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:209
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:215
 msgid "New Markdown File"
 msgstr "Ny Markdown-fil"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:210
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:216
 msgid "New Excel File"
 msgstr "Ny Excel-fil"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:211
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:217
 msgid "New PowerPoint File"
 msgstr "Ny PowerPoint-fil"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:212
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:218
 msgid "New Word File"
 msgstr "Ny Word-fil"
 
@@ -2977,7 +2981,7 @@ msgstr "Nytt Förslag"
 msgid "Start review"
 msgstr ""
 
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:336
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:340
 #: frontend/src/utils/text-translation.js:12
 msgid "Move"
 msgstr "Flytta"
@@ -3412,7 +3416,7 @@ msgstr "Du kan skapa avdelningar genom att klicka på \"Ny Katalog\" knappen ova
 
 #: frontend/src/pages/groups/group-view.js:201
 #: frontend/src/pages/groups/groups-view.js:63
-#: frontend/src/pages/lib-content-view/lib-content-view.js:682
+#: frontend/src/pages/lib-content-view/lib-content-view.js:740
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:228
 #: frontend/src/pages/org-admin/org-group-repos.js:139
 #: frontend/src/pages/org-admin/org-user-repos.js:139
@@ -3532,61 +3536,73 @@ msgstr ""
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:62
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:89
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:61
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:88
 msgid "Side Nav Menu"
 msgstr "Sidomeny"
 
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:81
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:80
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:133
 msgid "Search files in this library"
 msgstr "Sök efter filer i detta bibliotek"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:678
+#: frontend/src/pages/lib-content-view/lib-content-view.js:582
+msgid "Failed to move files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:584
+msgid "Failed to copy files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:596
+msgid "Successfully moved files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:598
+msgid "Successfully copied files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:736
 msgid "Successfully deleted {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:689
+#: frontend/src/pages/lib-content-view/lib-content-view.js:747
 msgid "Failed to delete {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:874
-#: frontend/src/pages/lib-content-view/lib-content-view.js:885
+#: frontend/src/pages/lib-content-view/lib-content-view.js:932
+#: frontend/src/pages/lib-content-view/lib-content-view.js:943
 msgid "Renaming {name} failed"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:905
-#: frontend/src/pages/lib-content-view/lib-content-view.js:919
+#: frontend/src/pages/lib-content-view/lib-content-view.js:963
+#: frontend/src/pages/lib-content-view/lib-content-view.js:977
 #: frontend/src/pages/org-admin/org-groups.js:71
 #: frontend/src/pages/org-admin/org-libraries.js:73
 msgid "Successfully deleted {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:911
-#: frontend/src/pages/lib-content-view/lib-content-view.js:925
+#: frontend/src/pages/lib-content-view/lib-content-view.js:969
+#: frontend/src/pages/lib-content-view/lib-content-view.js:983
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:953
-#: frontend/src/pages/lib-content-view/lib-content-view.js:983
-msgid "Failed to move {name}."
-msgstr ""
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:962
-#: frontend/src/pages/lib-content-view/lib-content-view.js:976
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1039
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1005
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1034
-msgid "Failed to copy %(name)s"
-msgstr "Misslyckades att kopiera %(name)s"
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1046
+msgid "Failed to move {name}."
+msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1013
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1027
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1089
 #: frontend/src/utils/utils.js:1169
 msgid "Successfully copied %(name)s."
 msgstr "Lyckades kopiera %(name)s."
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1096
+msgid "Failed to copy %(name)s"
+msgstr "Misslyckades att kopiera %(name)s"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:22
 msgid "No linked devices"
@@ -5283,6 +5299,38 @@ msgstr ""
 msgid ""
 "Tip: libraries deleted {trashReposExpireDays} days ago will be cleaned "
 "automatically."
+msgstr ""
+
+#: frontend/src/translate.js:19
+msgid "No favorites"
+msgstr ""
+
+#: frontend/src/translate.js:20
+msgid "No folders shared"
+msgstr ""
+
+#: frontend/src/translate.js:21
+msgid "No Admin Login Logs."
+msgstr ""
+
+#: frontend/src/translate.js:22
+msgid "No Admin Operation Logs."
+msgstr ""
+
+#: frontend/src/translate.js:23
+msgid "No Permission Logs."
+msgstr ""
+
+#: frontend/src/translate.js:24
+msgid "No Login Logs."
+msgstr ""
+
+#: frontend/src/translate.js:25
+msgid "No File Update Logs."
+msgstr ""
+
+#: frontend/src/translate.js:26
+msgid "No File Access Logs."
 msgstr ""
 
 #: frontend/src/utils/text-translation.js:16
