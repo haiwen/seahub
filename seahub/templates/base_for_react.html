@@ -81,6 +81,7 @@
             shareLinkExpireDaysDefault: {% if share_link_expire_days_default %} {{ share_link_expire_days_default }} {% else %} 0 {% endif %},
             shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
             shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
+            sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
