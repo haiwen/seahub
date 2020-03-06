@@ -79,7 +79,7 @@ class EditorUtilities {
 
   uploadImage = (imageFile) => {
     return (
-      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
+      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
         let uploadLinkComponent = res.data;
         const uploadLink = uploadLinkComponent + '?ret-json=1';
         const name = getImageFileNameWithTimestamp();
@@ -102,7 +102,7 @@ class EditorUtilities {
 
   uploadLocalImage = (imageFile) => {
     return (
-      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
+      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data + '?ret-json=1';
         const newFile = new File([imageFile], imageFile.name, {type: imageFile.type});
         const formData = new FormData();
