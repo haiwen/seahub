@@ -200,7 +200,7 @@ class FileUploader extends React.Component {
       } else {
         this.setUploadFileList(this.resumable.files);
         let { repoID, path } = this.props;
-        seafileAPI.getUploadLink(repoID, path).then(res => {
+        seafileAPI.getFileServerUploadLink(repoID, path).then(res => {
           this.resumable.opts.target = res.data + '?ret-json=1';
           this.resumableUpload(resumableFile);
         }).catch(error => {
@@ -213,7 +213,7 @@ class FileUploader extends React.Component {
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
         let { repoID, path } = this.props;
-        seafileAPI.getUploadLink(repoID, path).then(res => {
+        seafileAPI.getFileServerUploadLink(repoID, path).then(res => {
           this.resumable.opts.target = res.data + '?ret-json=1';
           this.resumable.upload();
         }).catch(error => {
@@ -553,7 +553,7 @@ class FileUploader extends React.Component {
 
   onUploadRetry = (resumableFile) => {
 
-    seafileAPI.getUploadLink(this.props.repoID, this.props.path).then(res => {
+    seafileAPI.getFileServerUploadLink(this.props.repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data + '?ret-json=1';
       
       let retryFileList = this.state.retryFileList.filter(item => {
@@ -579,7 +579,7 @@ class FileUploader extends React.Component {
 
   onUploadRetryAll = () => {
 
-    seafileAPI.getUploadLink(this.props.repoID, this.props.path).then(res => {
+    seafileAPI.getFileServerUploadLink(this.props.repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data + '?ret-json=1';
       this.state.retryFileList.forEach(item => {
         item.error = false;
@@ -650,7 +650,7 @@ class FileUploader extends React.Component {
   uploadFile = () => {
     let resumableFile = this.resumable.files[this.resumable.files.length - 1];
     let { repoID, path } = this.props;
-    seafileAPI.getUploadLink(repoID, path).then((res) => {  // get upload link
+    seafileAPI.getFileServerUploadLink(repoID, path).then((res) => {  // get upload link
       this.resumable.opts.target = res.data + '?ret-json=1';
       this.setState({
         isUploadRemindDialogShow: false,

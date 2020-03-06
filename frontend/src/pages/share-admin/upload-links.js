@@ -199,7 +199,7 @@ class ShareAdminUploadLinks extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listUploadLinks().then((res) => {
+    seafileAPI.listUserUploadLinks().then((res) => {
       let items = res.data.map(item => {
         return new UploadLink(item);
       });

@@ -39,7 +39,7 @@ class GenerateUploadLink extends React.Component {
   getUploadLink = () => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
-    seafileAPI.getUploadLinks(repoID, path).then((res) => {
+    seafileAPI.getUploadLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         let sharedUploadInfo = new UploadLink(res.data[0]);
         this.setState({sharedUploadInfo: sharedUploadInfo});
