@@ -107,7 +107,7 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 {isPro && (
-                  <Search isPublic={permission !== 'rw' && permission !== 'r'} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
                 )}
                 <Notification />
                 <Account />
