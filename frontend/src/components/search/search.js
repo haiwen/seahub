@@ -100,7 +100,7 @@ class Search extends Component {
     let isPublic = this.props.isPublic;
 
     if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.q, queryData.search_repo).then(res => {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q).then(res => {
         if (!res.data.total) {
           _this.setState({
             resultItems: [],
