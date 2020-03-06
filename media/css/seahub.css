@@ -1266,118 +1266,11 @@ a.sf-popover-item {
 #wide-panel-noframe {
     padding-top:16px;
 }
-.side-panel {
-    display:flex;
-    flex-direction:column;
-    padding:0;
-    overflow:hidden;
-}
-@media (max-width: 767px) {
-    .side-panel {
-        background:#f8f8f8;
-        width:300px;
-        height:100%;
-        position:fixed;
-        left:-300px;
-        z-index:1; /* important! */
-        -webkit-transition: all 0.3s ease;
-        -moz-transition: all 0.3s ease;
-        transition: all 0.3s ease;
-    }
-}
-.side-panel-close {
-    margin:10px 0 0 auto;
-}
-.main-panel {
-    padding:0;
-    display:flex;
-    flex-direction:column;
-}
-.panel-top {
-    padding:.6rem 1rem .25rem;
-    height: 49px;
-    background:#f4f4f7;
-    border-bottom: 1px solid #e8e8e8;
-    display:flex;
-    flex-shrink:0;
-}
-.side-panel-top {
-    padding:.5rem 1rem;
-}
-@media (max-width: 767px) {
-    .side-panel-top {
-        border-right:1px solid #eee;
-    }
-}
-@media (min-width: 768px) {
-    .cur-view-toolbar {
-        position:relative; /* for the ':before' */
-        display: flex;
-    }
-    .repo-create-btn {
-        margin-right: 4px;
-    }
-    .cur-view-toolbar:before {
-        content:'';
-        border-left:1px solid #ddd;
-        position:absolute;
-        top:3px;
-        left:-16px;
-        height:23px;
-    }
-}
-.common-toolbar {
-    margin-left:auto;
-    display:flex;
-}
 #right-panel {
     padding-top:16px;
     padding-bottom:20px;
 }
-.main-panel-main {
-    flex:auto;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden; /* for ff */
-}
-.main-panel-main-with-side {
-    flex-direction:row;
-}
-.cur-view-main {
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
-.cur-view-path {
-    flex-shrink:0;
-    min-height:40px;
-    padding:8px 16px 0;
-    background:#f9f9f9;
-    position:relative; /* for the ':after' */
-}
-.cur-view-path:after {
-    content:'';
-    border-bottom:1px solid #e8e8e8;
-    position:absolute;
-    left:16px;
-    right:16px;
-    bottom:0;
-}
-.cur-view-path-path { /* for the real path */
-    font-size:16px;
-    word-break: break-all;
-}
-.cur-view-main-con {
-    padding:10px 16px 20px;
-    border-right:4px solid transparent;
-    overflow:auto;
-    flex:auto;
-}
-#title-panel h2 {
-    margin-bottom:0.45em;
-}
-#right-panel h3:first-child,
-#left-panel h3:first-child {
+#right-panel h3:first-child {
     margin-top: 0px;
 }
 #right-panel .hd,
@@ -1385,7 +1278,6 @@ a.sf-popover-item {
 .repo-file-list-topbar,
 .commit-list-topbar,
 .file-audit-list-topbar,
-#dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
     background:#f2f2f2;
@@ -1398,22 +1290,10 @@ a.sf-popover-item {
     padding-bottom:0;
     height:48px;
 }
-#organization-repos .hd {
-    position:relative;
-}
-.group-top-op-icon {
-    display:inline-block;
-    font-size:22px;
-    margin:3px 0 0 10px;
-}
 .commit-list-topbar,
 .file-audit-list-topbar,
 .repo-file-list-topbar {
     margin-bottom:0;
-}
-#dir-view .repo-file-list-topbar {
-    background:none;
-    padding:0;
 }
 #right-panel .hd h3,
 #right-panel h3.hd {
@@ -1447,26 +1327,11 @@ a.sf-popover-item {
     text-decoration:none;
     border-bottom-color: #eb8205;
 }
-.btn-white,
 .tabnav button,
 .repo-file-list-topbar .op-btn {
     height:29px;
     background:#fff;
     line-height:17px;
-}
-.btn-white {
-    height: 30px;
-}
-.cur-view-toolbar .btn-white {
-    min-width: 55px;
-}
-@media (max-width:767px) {
-    .cur-view-toolbar .mobile-icon {
-        color:#999;
-        line-height:1.63;
-        font-size:22px;
-        margin-right:8px;
-    }
 }
 /* info-bar */
 #info-bar {
@@ -1500,82 +1365,6 @@ a.sf-popover-item {
     #logout-icon {
         margin-left:10px;
     }
-}
-
-#notifications {
-    position:relative;
-    width: 32px;
-    height: 32px;
-    margin-left: 8px;
-}
-
-#notifications #notice-icon {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-@media (max-width: 390px) {
-    #notifications {
-        margin-left:8px;
-    }
-}
-#notifications .sf2-icon-bell {
-    font-size:24px;
-    line-height:1;
-    color:#999;
-}
-#notifications .num {
-    position:absolute;
-    color:#fff;
-    font-size:12px;
-    line-height:1;
-    padding:1px 2px;
-    background:#feac74;
-    border:1px solid #cb8a5d;
-    top:0;
-    left:15px;
-}
-#notice-popover {
-    top:38px;
-    right:-16px;
-}
-#notice-popover .outer-caret {
-    right:18px;
-}
-#notice-popover a {
-    font-weight:normal;
-}
-#notice-popover li {
-    padding:9px 0 3px;
-    border-bottom:1px solid #dfdfe1;
-}
-#notice-popover li.unread {
-    background:#f5f5f7;
-    padding-right:10px;
-    padding-left:8px;
-    border-left:2px solid #feac74;
-    margin:0 -10px;
-}
-#notice-popover .avatar {
-    border-radius:1000px;
-    float:left;
-}
-#notice-popover .brief {
-    margin-left:40px;
-}
-#notice-popover .time {
-    color:#999;
-    text-align:right;
-    margin:0;
-    clear:both;
-}
-#notice-popover .view-all {
-    display:block;
-    padding:7px 0;
-    text-align:center;
-    color:#a4a4a4;
 }
 #account {
     position:relative;
@@ -1780,51 +1569,6 @@ a.sf-popover-item {
     color: #333;
     font-weight: normal;
 }
-#repo-create-form {
-    padding:0 5px;
-}
-#repo-create-form .select {
-    width:268px;
-    margin-bottom:5px;
-}
-#repo-create-form .checkbox-label { /* for "Encrypt" */
-    margin:10px 0 0;
-}
-.activity-group-hd {
-    padding: 8px;
-    color: #444;
-    font-size:16px;
-    border-bottom: 1px solid #e5e5e5;
-    margin:0;
-}
-.activity-group-bd {
-    list-style-type: none;
-    font-size:15px;
-    line-height:21px;
-    padding:0;
-    margin: 0 0 15px 0;
-}
-.event-item {
-    padding:7px 8px;
-    border-bottom: 1px solid #e5e5e5;
-}
-.event-item .txt {
-    margin-left:45px;
-}
-.event-item .cmt-desc {
-    display:block;
-}
-.event-item p {
-    margin:0;
-}
-.event-item .time {
-    color:#888;
-}
-.event-item .avatar {
-    float:left;
-    border-radius:1000px;
-    margin-top:3px;
-}
 #notices-loading,
 #trash-more-loading {
     text-align:center;
@@ -1852,257 +1596,14 @@ a.sf-popover-item {
 .avatar-op .upload-new-avatar-hd {
     margin-top:15px;
 }
-/*user-basic-info*/
-.setting-item {
-    margin-top:15px;
-    margin-bottom:30px;
-}
-.setting-item h3 {
-    color:#000;
-    padding-bottom:0.2em;
-    border-bottom:1px solid #ddd;
-    margin-bottom:0.7em;
-}
-#user-basic-info label {
-    width:5.6em;
-    margin-right:1em;
-}
-.ru #user-basic-info label {
-    width:9em;
-}
-.es #user-basic-info label,
-.hu #user-basic-info label {
-    width:7.5em;
-}
-.it #user-basic-info label {
-    width:6em;
-}
-.fr #user-basic-info label {
-    width:8em;
-}
-#user-basic-info .avatar,
-#user-basic-info textarea {
-    vertical-align:text-top;
-}
-#user-basic-info .avatar {
-    margin-bottom:8px;
-}
-#user-avatar-form {
-    display:inline-block;
-    vertical-align:text-top;
-    margin-left:10px;
-}
-#repo-file-list {
-    margin-bottom:100px;
-}
 .path { margin: 1.4em 0 0; }
 .access-notice { margin: 0.8em 0 0.4em; }
-#repo-file-list .repo-op {
-    text-align:right;
-    margin-bottom:4px;
-}
-.repo-op .op-btn {
-    *margin-left:5px;/* for ie 7*/
-}
-.repo-op .op-btn [class^="icon-"],
-.repo-op .op-btn [class^="sf-icon-"] {
-    margin-right:3px;
-}
-.repo-op .op-btn {
-    vertical-align:middle;
-}
-.set-file-type {
-    padding: 2px;
-    line-height: 1.2;
-    margin: 2px 0 5px;
-}
 .file-audit-list-topbar .path,
 .commit-list-topbar .path,
 .repo-file-list-topbar .path {
     font-size:14px;
     line-height:25px;
     margin:0;
-}
-#dir-view .repo-op .op-btn {
-    padding:5px 14px;
-}
-.repo-file-list {
-    margin:0;
-}
-@media (min-width:768px) { /* for mv by 'drag & drop' in 'dir view' page */
-    .repo-file-list .select {
-        padding-left:10px;
-    }
-    .repo-file-list .hl .select {
-        background: transparent url('../img/grippy_large.png') scroll no-repeat 1px 50%;
-    }
-}
-.repo-file-list .icon-star-empty {
-    color:#d0d0d0;
-}
-.repo-file-list .icon-star {
-    color:#505050;
-}
-.repo-file-list .icon-star-empty,
-.repo-file-list .icon-star {
-    font-size:16px;
-    cursor:pointer;
-    text-decoration:none;
-    line-height:19px;
-    vertical-align:middle;
-}
-.repo-file-list .dirent-icon {
-    text-align:center;
-}
-.repo-file-list .dirent-name {
-    display: inline;
-    vertical-align: middle;
-}
-.repo-file-list .dirent-smart-link {
-    display: none;
-    margin-left: 4px;
-    color: #aaa;
-    cursor: pointer;
-}
-.hl .dirent-smart-link {
-    display: inline;
-    vertical-align: middle;
-}
-.smart-link-container {
-    width: 400px;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding:10px 20px;
-    position: relative;
-}
-.smart-link-help {
-    color: #bbb;
-    word-break: break-all;
-    word-wrap: break-word;
-}
-.smart-link-wraper {
-    width: 100%;
-    margin-bottom: 15px;
-    word-break: break-all;
-}
-.smart-link-wraper .smart-link-href {
-    display: none;
-}
-.input-copy-wrapper {
-    position: absolute;
-    left:-99999px;
-    top: 100px;
-}
-.smart-link-loading {
-    border: 2px solid #eee;
-    border-left: 2px solid #aaa;
-    border-radius: 50%;
-    display: block;
-    height: 20px;
-    width: 20px;
-    margin: 0 auto;
-    animation: loading 0.9s infinite linear;
-}
-.smart-link-operation {
-    display: none;
-}
-.smart-link-close {
-    margin-left: 5px;
-}
-
-@media (max-width:767px) {
-    .repo-file-list .dirent-name,
-    .repo-file-list .img-name-link {
-        display:block;
-    }
-    .repo-file-list .dirent-name a,
-    .repo-file-list .img-name-link a {
-        vertical-align: middle;
-    }
-
-}
-.repo-file-list .file-locked-icon {
-    position:absolute;
-    right:0;
-    bottom:0;
-}
-.repo-file-list th {
-    padding-top:1rem;
-}
-#repo-file-list .fixed-hd {
-    position:fixed;
-    width:950px;
-    top:0;
-    z-index:11; /*make it on top of dirent op(popup)*/
-    border-color:#efefef; /*for repo-file-list-topbar*/
-}
-#repo-file-list .repo-file-list-topbar.fixed-hd {
-    width:930px;
-    z-index:12; /* to make #upload-menu be on top of .repo-file-list tr.fixed-hd */
-}
-.repo-file-list .fixed-hd th {
-    background:#fff;
-    -webkit-box-shadow:0 2px 2px -1px #aaa;
-    box-shadow:0 2px 2px -3px #aaa;
-}
-.repo-file-list .repo-file-op {
-    position:relative;
-}
-.displayed-op {
-    display:inline;
-    margin-right:5px;
-}
-.file-choose-form {
-    width:500px;
-    padding:10px 20px;
-}
-@media (max-width:579px) {
-    .file-choose-form,.smart-link-container {
-        padding:0;
-        width:280px;
-    }
-}
-.file-tree-cont, .dir-tree-cont {
-    padding:5px;
-    height:280px;
-    overflow:auto;
-    border:1px solid #eee;
-    margin:5px 0 10px;
-}
-#mv-dir-list .icon-caret-down,
-#mv-dir-list .icon-caret-right {
-    margin-right:15px;
-}
-.inline-rename-form .input {
-    font-size:14px;
-}
-@media (max-width:321px) {
-    .inline-rename-form .input {
-        width:225px;
-    }
-    #dir-view .inline-rename-form .input {
-        width:200px;
-    }
-}
-@media (min-width:375px) and (max-width:400px) {
-    .inline-rename-form {
-        width:270px;
-    }
-}
-.web-setting-form .cancel,
-.inline-rename-form .cancel {
-    color:#666;
-}
-.inline-rename-form .input,
-.inline-rename-form .submit {
-    margin:0;
-}
-.web-setting-form .submit,
-.web-setting-form .cancel,
-.inline-rename-form .submit,
-.inline-rename-form .cancel {
-    font-size:16px;
-    line-height:1;
 }
 #repo-latest-commit .avatar {
     vertical-align:middle;
@@ -2111,81 +1612,15 @@ a.sf-popover-item {
     color:#666;
     margin-left:5px;
 }
-.lsch,
-.lsch-encrypted,
-.file-diff {
-    font-size:12px;
-    font-weight:normal;
-    color:#666;
-    text-decoration:underline;
-}
-#ls-ch {/*repo commit details container*/
-    min-width:300px;
-    min-height:300px;
-    max-width:850px;
-    max-height:550px;
-    overflow:auto;
-    line-height:1.6;
-}
-#ls-ch h2,
-#ls-ch h3 {
-    margin: 0 0 0.2em;
-    color:#333;
-    font-weight:bold;
-}
-#ls-ch .commit-time,
 .commit-time {
     color:#333;
     font-size:13px;
     font-weight:normal;
     margin-top: 0em;
 }
-#ls-ch ul {
-    padding:0 0 6px 0;
-}
-#ls-ch a {
-    color:#e83;
-    font-weight:normal;
-}
-#dirs { /* file mv */
-    margin-top:8px;
-}
 /* file upload */
-.fixed-upload-file-dialog {
-    width: 540px;
-    position: fixed;
-    bottom: 0;
-    right: 10px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    box-shadow: 0 0 6px #ddd;
-}
-.fixed-upload-file-dialog .hd {
-    padding: 6px 10px;
-    background: #f0f0f0;
-    margin:0;
-}
-.fixed-upload-file-dialog .con {
-    height:164px;
-    overflow-y:auto;
-}
-.fixed-upload-file-dialog .ops {
-    position:absolute;
-    top:10px;
-    right:10px;
-}
-.fixed-upload-file-dialog .op-icon {
-    font-size:18px;
-    color: #b8b8b8;
-    margin:0;
-}
-.fixed-upload-file-dialog .sf-close,
 .fileupload-buttonbar .cancel {
     *margin-left:5px;
-}
-.fixed-upload-file-dialog .total-error {
-    margin:10px;
 }
 .fileupload-progress {
     margin-top:5px;
@@ -2219,14 +1654,10 @@ a.sf-popover-item {
     padding-left:7px;
     margin:0;
 }
-.fixed-upload-file-dialog .fileupload-buttonbar .cancel,
 .template-upload .btn {
     background: transparent;
     border: none;
     color: #e83;
-}
-.fixed-upload-file-dialog .fileupload-buttonbar .cancel {
-    color:#909090;
 }
 .template-upload .btn {
     font-size:1em;
@@ -2241,9 +1672,6 @@ a.sf-popover-item {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
     height: 1em;
     overflow: hidden;
-}
-#mv-progress {
-    margin:10px 0;
 }
 .template-upload .progress {
     width:90%;
@@ -2294,100 +1722,17 @@ a.sf-popover-item {
 #online-gc {
     margin-left:5px;
 }
-/*repo-share-form*/
-#email_or_group,
-#share-link,
-#added-member-name {
-    width:260px;
-    height:80px;
-    padding:2px;
-}
-#myhome-mods-enable-form,
 #mods-enable-form {
     width:266px;
 }
-#email_or_group,
-#added-member-name {
-    width:98.5%;
-}
-#emails {
-    width:98.5%;
-    height:80px;
-    padding:2px;
-}
-/* file/dir share popup */
 .ellipsis-op-target {
     display:inline-block;
     vertical-align:bottom;
 }
-#share-popup .op-target {
-    max-width:400px;
-}
-@media (max-width:767px) {
-    #share-popup .op-target {
-        max-width:240px;
-    }
-}
-#mv-form .op-target {
-    max-width:410px;
-}
-@media (max-width:579px) {
-    #mv-form .op-target {
-        max-width:280px;
-    }
-}
-#folder-perm-popup .op-target {
-    max-width:540px;
-}
-#confirm-popup .op-target,
-#repo-transfer-form .op-target {
+#confirm-popup .op-target {
     max-width:200px;
 }
-/* group, org */
-.user-list {
-    margin-top:30px;
-}
-.user-list .user {
-    display:inline-block; /* to handle different height of items */
-    vertical-align:top;
-    width:330px;
-    margin:0 17px 30px 0;
-}
-.user-list .user {
-    *display:inline; /* for ie 6,7 */
-}
-.user-list .txt {
-    width:265px;
-}
-.member {
-    _height:21px;
-    padding-bottom:4px;
-}
-.member .avatar {
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    margin-right: 5px;
-}
-.member .avatar,
-.member .name {
-    vertical-align:middle;
-}
-/* notification admin */
-.cur-note { color: red; font-size: 75%; }
 /*file upload*/
-.files-add {
-    position: relative;
-    overflow: hidden;
-    margin-bottom:7px;
-}
-.files-add .op {
-    font-size:1.15em;
-    font-weight:bold;
-    display:inline-block;
-    padding-left:18px;
-    background-color:#fff;
-    background-position:0 -207px;
-}
 #upload-file-form .files-add input {
     cursor:pointer;
     position: absolute;
@@ -2421,21 +1766,6 @@ a.sf-popover-item {
     background:#e83;
     margin:0;
 }
-
-/* file view online, file edit */
-.file-view-hd {
-    font-size:1.4em;
-    margin-bottom:0px;
-}
-.file-view-op {
-    margin-top:10px;
-}
-.file-view-meta-info {
-    margin:0;
-}
-#link-options {
-    margin-bottom:10px;
-}
 #text-diff-output {
     padding:3px;
     background:#dedede;
@@ -2443,177 +1773,7 @@ a.sf-popover-item {
     -moz-border-radius:3px;
     margin-top:12px;
 }
-#file-enc-cont {
-    width:950px;
-    margin:-20px auto 6px;
-    text-align:right;
-}
-#file-enc {
-    padding:0;
-}
-#file-view-tip {
-    min-height:130px;
-    padding:30px 10px 10px;
-    width:950px;
-    background:#fff;
-    text-align:center;
-}
-#file-view-tip .open-via-client { /* for the text link */
-    display:block;
-    margin-top:25px;
-    color:#333;
-    font-weight:normal;
-    text-decoration:underline;
-}
-#file-view-op .open-via-client { /* for the button */
-    padding-top:6px;
-    padding-bottom:4px;
-}
-@media (max-width:991.98px) {
-    #file-view-tip {
-        width: 80%;
-    }
-}
-#docu-view {
-    font-size:14px;/*override .ace_editor*/
-    line-height:1.6em;
-    font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
-    min-height: 200px;
-}
-#img-prev,
-#img-next {
-    position:absolute;
-    top:48%;
-    text-decoration:none;
-    color:#888;
-    width:50px;
-    height:50px;
-    background:#fff;
-    border-radius:100%;
-    line-height:50px;
-}
-#img-prev {
-    left:15px;
-}
-#img-next {
-    right:15px;
-}
-
-#img-prev:hover,
-#img-next:hover {
-    color:#333;
-}
-#image-view {
-    padding:1px;
-    background:#fff;
-    border:1px solid #eee;
-    width:auto;
-    height:auto;
-    max-width:calc(100% - 4px);
-    max-height:calc(100% - 4px);
-    font-size:0;
-    line-height:0;
-}
-.image-file-view:before {
-    content:' ';
-    display:inline-block;
-    vertical-align:middle;
-    height:100%;
-    font-size:0;
-    line-height:0;
-}
-#svg-view {
-    max-width:calc(100% - 4px);
-    max-height:calc(100% - 4px);
-}
-#docu-view,
-#md-view,
-#md-edit {
-    background:#fff;
-}
-#md-view,
-#md-edit {
-    width:756px;
-}
-#md-view h2,
-#wiki-content h2 {
-    border-bottom: 1px solid #ccc;
-}
-.wiki-image {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-}
-#wiki-content img {
-    padding: 5px;
-    border: 1px solid #DDD;
-    box-shadow: 0 1px 1px #CCC;
-    border-radius: 2px;
-    max-width:calc(100% - 12px);
-    margin:15px 0;
-}
-#wiki-content .file-icon {
-    border:0;
-    padding:0;
-    border-radius:0;
-    box-shadow:none;
-    margin:0 2px 0 0;
-}
-.anchor {
-   font-size:0.8em;
-   margin-left:6px;
-}
-.anchor:hover {
-   text-decoration:none;
-}
-#doc-view {
-    min-height:700px;
-    _height:700px;
-}
-#op-after-edit {
-    margin-top:.9em;
-}
-#file-edit-submit {
-    margin-left:5px;
-}
-#file-edit-cancel {
-    color:#900;
-    font-weight: normal;
-    margin-left: 3px;
-}
-#md-view {
-    padding:40px 96px;
-}
-#side-toolbar {
-    position:fixed;
-    right:0;
-}
-.side-toolbar .item {
-    box-sizing:content-box;
-    width:59px;
-    height:40px;
-    padding-top:18px;
-    background:#fff;
-    text-align:center;
-    cursor:pointer;
-    border:1px solid #c0c0c0;
-    border-right:0;
-    border-top:0;
-}
-.side-toolbar .item:first-child {
-    border-top:1px solid #c0c0c0;
-    border-top-left-radius:3px;
-}
-.side-toolbar .item:last-child {
-    border-bottom-left-radius:3px;
-}
-/* shareadmin & useradmin */
-.select-white,
-.folder-perm-select,
-.share-permission-select,
 .user-role-select,
-.admin-role-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     padding:3px 2px;
@@ -2675,111 +1835,6 @@ a.sf-popover-item {
 .diff-chg {
     color: #c3f;
 }
-.video-container {
-    margin: auto;
-    width: 800px;
-    height: 400px;
-}
-.audio-container {
-    margin: auto;
-    width: 500px;
-    height: 30px;
-}
-@media (max-width: 991.98px){
-    #main #shared-file-view-hd {
-        width: 100%;
-        padding: 10px;
-    }
-    .video-container {
-        margin: 0 auto;
-        width: 80%;
-    }
-    .sf-video-dimensions {
-        width: 100%;
-        height: 100%;
-    }
-    .audio-container {
-        width: 350px;
-        max-width: 500px;
-    }
-    .mejs-container {
-        width: 100% !important;
-    }
-    .mejs-time-total {
-        width: 60%
-    }
-}
-
-/* wiki page */
-.wiki-top {/* for lang with long words */
-    text-align:right;
-    height:auto;
-}
-.wiki-top .btn-white {
-    margin-left:3px;
-}
-.wiki-nav .item {
-    float:left;
-}
-.wiki-nav .link {
-    color:#333;
-    font-weight:normal;
-}
-.add-wiki-container {
-    margin-left:auto;
-}
-.wiki-page-ops {
-    position:fixed;
-    top:10px;
-}
-@media (min-width: 768px) {
-    .wiki-page-ops:before {
-        content:'';
-        border-left:1px solid #ddd;
-        position:absolute;
-        top:3px;
-        left:-16px;
-        bottom:3px;
-    }
-}
-.wiki-pages-heading {
-    text-align:center;
-    padding-bottom:.5em;
-    border-bottom:1px solid #e8e8e8;
-}
-#wiki-page-list {
-    margin-top:1.6em;
-}
-.wiki-page-list-item {
-    word-break:break-all;
-    line-height:1.6;
-    margin:3px 0;
-}
-.wiki-page-link,
-.wiki-page-link:hover {
-   font-size:1.15em;
-   font-weight:normal;
-   color:#444;
-   margin-left:5px;
-}
-#wiki-area {
-    padding:30px 0 0;
-}
-#wiki-last-modified,
-#wiki-page-last-modified {
-    margin-top:40px;
-    font-size:12px;
-    color: #666;
-}
-#wiki-pages {
-   list-style-type:disc;
-   padding-left:2em;
-   margin-top:1.6em;
-}
-.wiki-page-missing {
-    color:red;
-}
-
 /* search */
 .search-input {
     margin:0;
@@ -2921,66 +1976,6 @@ a.sf-popover-item {
 .search-results-item .highlight-content {
     margin:0;
 }
-#plan-form {
-    width:260px;
-}
-#mass-msg {
-    width:424px;
-    height:100px;
-    padding:2px;
-    margin-bottom:3px;
-}
-#mass-email {
-    width:432px;
-    padding:0;
-}
-/* payments */
-#plans {
-    margin-top:24px;
-}
-#plans p {
-    margin:13px 0;
-}
-#plans th,
-#plans td {
-    text-align:center;
-    padding:6px 10px;
-    border:1px solid #ede;
-}
-#plans th {
-    color:#eb8205;
-    font-weight:bold;
-    font-size:16px;
-}
-#plans .price {
-    color:#666;
-    font-size:14px;
-}
-#plans tr:nth-child(even) td {
-    background: #f8f8f8;
-}
-#plans .empty-cell {
-    border-top-color:transparent;
-    border-left-color:transparent;
-}
-#plans .item {
-   text-align:right;
-   font-weight:bold;
-   color:#555;
-}
-#plan-form .options {
-    margin-right: 15px;
-}
-.signup-btn {
-    font-size:14px;
-    padding:10px 14px;
-    margin:10px 15px 20px 0;
-}
-.enable-mods-icon {
-    margin:3px 0 0;
-    color:#ccc;
-    font-size:18px;
-}
 .help-con {
 	padding:20px;
 }
@@ -2991,54 +1986,6 @@ a.sf-popover-item {
 #right-panel.help-con .hd {
     font-weight:normal;
     margin-bottom:15px;
-}
-/* wiki index */
-.wiki-index {
-    margin-top:25px;
-}
-.grp-wiki-index {
-    margin-left:12px;
-}
-.wiki-index h3 {
-    color:#333;
-}
-.wiki-index-edit-icon {
-    font-size:16px;
-    color:#d7d7d7;
-    margin:3px 0 0;
-}
-#wiki-index-con {
-    padding-left:12px;
-}
-.grp-wiki-index #wiki-index-con {
-    padding:0;
-}
-#wiki-index-con ul {
-    list-style-type: square;
-    padding-left: 1.5em;
-    margin-bottom:5px;
-    color:#8c8c8c;
-}
-#wiki-index-con a {
-    font-weight:normal;
-    color:#8c8c8c;
-}
-#wiki-index-con a:hover {
-    color:#f93;
-    text-decoration:underline;
-}
-
-/* client list */
-.client-list .lib-num {
-    cursor:pointer;
-}
-.client-list .dir-icon {
-    color:#666;
-}
-
-/* side-info */
-#left-panel .side-info .hd { /* '#left-panel' to override some style */
-    margin-top:19px;
 }
 .go-back {
     position: absolute;
@@ -3057,14 +2004,6 @@ a.sf-popover-item {
 }
 #set-quota-form .input {
     width:180px;
-}
-
-/* org reg */
-#org-url {
-    white-space: nowrap;
-}
-#org-url-prefix {
-    width: 50px;
 }
 
 /* notice page */
@@ -3112,195 +2051,12 @@ a.sf-popover-item {
     vertical-align:middle;
     line-height:16px;
 }
-
-/* repo setting TODO*/
-.user-perm-add-tr input,
-.group-perm-add-tr input {
-    padding:2px 5px;
-}
-#perm-add-grp-name {
-    width: 95%;
-}
-.perm-add-select-folder {
-    position:relative;
-    right:18px;
-    cursor:pointer;
-}
-
-/* file audit*/
-.audit-unselect-item {
-    display:inline-block;
-    border:1px solid #ccc;
-    border-radius:2px;
-    padding:1px 8px;
-    background: #f2f2f2;
-    cursor: pointer;
-    font-size:14px;
-}
-.audit-unselect-item:hover {
-    border-color:#a9a9a9;
-}
-.audit-select-user,
-.audit-select-repo {
-    font-size:13px;
-}
-/* multi repo operation */
-.repo-op .op-link {
-    display:inline-block;
-    height:29px;
-    margin-right:15px;
-    color:#8a8a8a;
-    font-size:22px;
-}
-.repo-op .op-link:hover {
-    color:#eb8205;
-    text-decoration:none;
-}
-/* multi dirents operation */
-#multi-dirents-op .op-btn {
-    margin:0;
-}
-#dir-private-share .label {
-    margin:6px 0 8px;
-}
-#dir-private-share .select2-container {
-    margin-bottom:10px;
-}
-#dir-private-share .submit {
-    margin-top:18px;
-}
-.lib-decrypt-form {
-    padding:25px 40px 30px;
-}
-.lib-decrypt-form .intro {
-    font-size:19px;
-    color:#464646;
-}
-.lib-decrypt-form .input {
-    height:30px;
-    width:194px;
-    margin-top:10px;
-}
-.lib-decrypt-form .submit {
-    width:202px;
-    height:36px;
-    margin:21px 0 10px;
-}
-
-/* user & group folder perm */
-#repo-folder-perm .nav-con-tabs-content {/* for the case that the scrollbar appears */
-    width:630px;
-    padding-right:0;
-}
-#repo-folder-perm .jstree {
-    margin:10px 0 4px;
-}
-.repo-folder-perm-folder-path {
-    width:150px;
-    padding:3px 33px 3px 5px;
-    border:1px solid #ddd;
-    border-radius:2px;
-    margin:0;
-}
-.repo-folder-perm-add-folder {
-    position:absolute;
-    right:0;
-    top:1px;
-    width:29px;
-    height:28px;
-    line-height:28px;
-    text-align:center;
-    font-size:14px;
-    color:#666;
-    cursor:pointer;
-    border-left: 1px solid #ddd;
-    margin:0;
-}
-.repo-folder-perm-content {
-    width:612px; /* for the table in it. */
-}
-#share-popup .share-permission-select,
-.folder-perm-select {
-    height:30px;
-}
-#dir-user-share .submit,
-#dir-group-share .submit,
-#folder-perm-tabs .submit {
-    box-sizing:border-box;
-    height:30px;
-    margin:0;
-}
-#add-group-members-form {
-    margin-bottom:4px;
-}
-
-/* add repo to public */
-#add-pubrepo-popup {
-    width:500px;
-}
-#add-pubrepo-popup tbody {
-    display: block;
-    max-height: 150px;
-    width: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-/* share popup */
-#share-popup .link-option-content {
-    margin-left: 18px;
-}
-#share-popup .radio-item {
-    margin:1px 0;
-}
-#share-popup .gen-link-btn {
-    margin:18px 0 0;
-}
-#download-link-operations dl {
-    margin-top:0;
-}
-#download-link-operations dt {
-    margin: 0;
-}
-.shared-link-copy-icon {
-    padding: 3px;
-    font-size: 16px;
-    color: #999;
-}
-.shared-link-copy-icon:hover {
-    cursor: pointer;
-    color: #333;
-}
-
-/* shared upload link */
 #upload-link-panel {
     width:600px;
     padding:10px 20px 20px;
 }
 #upload-link-panel .avatar {
     vertical-align: middle;
-}
-/* sysadmin */
-#import-members-btn .icon-upload-alt {
-    color:#777;
-    margin-right:3px;
-}
-#traffic-month-form {
-    margin-top:10px;
-}
-#traffic-month-form .input {
-    width:100px;
-}
-/* guide for new */
-#guide-for-new {
-    width: 450px;
-}
-#guide-for-new .icon-lightbulb {
-    font-size:6em;
-    color:#feac74;
-}
-#guide-for-new .txt {
-    margin-left:6.4em;
 }
 /* user profile */
 #user-profile {
@@ -3328,313 +2084,6 @@ a.sf-popover-item {
     display:inline-block;
     width:1.4em;
 }
-/* shared file view */
-#shared-file-view-hd .cur-path,
-#shared-file-view-hd .share-by {
-    margin:0;
-}
-.shared-file-op-btn {
-    padding:7px;
-    margin-top:9px;
-}
-/*random password */
-#share-popup .passwd-wrapper,
-#update-webdav-passwd .passwd-wrapper,
-#add-user-form .passwd-wrapper {
-    position:relative;
-    width:268px;
-}
-#share-popup .passwd,
-#update-webdav-passwd .passwd,
-#add-user-form .passwd {
-    width:188px;
-    padding-right:75px;
-}
-#share-popup .generate-random-password,
-#add-user-form .generate-random-password,
-#update-webdav-passwd .generate-random-password,
-#share-popup .show-or-hide-password,
-#update-webdav-passwd .show-or-hide-password,
-#add-user-form .show-or-hide-password {
-    position:absolute;
-    top:4px;
-    right:0;
-    width:36px;
-    height:26px;
-    line-height:26px;
-    text-align:center;
-    opacity:0.65;
-}
-#share-popup .show-or-hide-password,
-#update-webdav-passwd .show-or-hide-password,
-#add-user-form .show-or-hide-password {
-    right:36px;
-    background:#fff;
-}
-#share-popup .generate-random-password,
-#update-webdav-passwd .generate-random-password,
-#add-user-form .generate-random-password {
-    background:#ccc;
-}
-#share-popup .generate-random-password:hover,
-#add-user-form .generate-random-password:hover,
-#update-webdav-passwd .show-or-hide-password:hover,
-#share-popup .show-or-hide-password:hover,
-#update-webdav-passwd .show-or-hide-password:hover,
-#add-user-form .show-or-hide-password:hover {
-    opacity:1;
-}
-
-/* image thumbnail */
-img.thumbnail {
-    max-width: 24px;
-    max-height: 24px;
-}
-
-/* seahub web settings */
-.seahub-web-settings h4 {
-    padding:3px 10px;
-    background:#f7f7f7;
-    border-radius:2px;
-    margin:15px 0;
-}
-.web-setting-form {
-    margin-bottom:20px;
-}
-.web-setting-name,
-.web-setting-input,
-.web-setting-ops {
-    display:inline-block;
-}
-.web-setting-name {
-    width:180px;
-    padding:0 10px;
-    vertical-align:top;
-    font-weight:normal;
-    line-height:28px;
-}
-.web-setting-input {
-    width:400px;
-}
-.web-setting-name,
-.web-setting-input .input {
-    margin:0;
-}
-.web-setting-input .textarea {
-    box-sizing:content-box;
-    height:95px;
-    margin:0;
-}
-.web-setting-input .code-textarea {
-    width:calc(100% - 38px);
-    height:245px;
-}
-.web-setting-ops {
-    width:100px;
-    vertical-align:top;
-}
-.web-setting-form .submit,
-.web-setting-input {
-    margin-top:0;
-}
-.web-setting-form .submit {
-    margin-right:5px;
-}
-.web-setting-file-input {
-    position:relative;
-}
-.web-setting-file-upload {
-    position:absolute;
-    right:0;
-    top:0;
-}
-.web-setting-cur-img {
-    margin-bottom:5px;
-}
-/* view shared dir */
-.mode-link {
-    display:inline-block;
-    padding:4px 6px;
-    background:#fff;
-    border:1px solid #ccc;
-    font-size:0;
-    line-height:0;
-}
-.list-mode-link {
-    border-right:0;
-}
-.cur-mode-link {
-    background:#ccc;
-}
-.shared-dir-zip {
-    margin-left:5px;
-}
-/**** #groups ****/ /* groups page */
-#groups .group-name {
-    font-size:16px;
-    padding-left:3px;
-    border-bottom:1px solid #e6e6e6;
-    margin:15px 0 0;
-}
-#groups .group-name .a {
-    color:#322;
-}
-#group-list table {
-    margin:0 0 32px;
-}
-#group-list th {
-    font-size:0;
-    padding:0;
-    border-bottom:0;
-}
-#groups-list td {
-    border-bottom:0;
-}
-#groups .empty-tip {
-    color:#a4a4a4;
-    padding:4px 0;
-    border-bottom:1px solid #e5e5e5;
-    margin:0 0 32px;
-}
-/**** #group ****/ /* group page */
-#group-path {
-    display:flex;
-    justify-content:space-between;
-}
-.address-book-group-icon {
-    color:#888;
-}
-.group-toolbar-2 {
-    position:relative;
-    flex:none;
-    margin-left:10px;
-}
-#group-members, #group-settings {
-    position:absolute;
-    top:42px;
-    right:0;
-}
-.group-setting-list {
-    border-bottom:1px solid #e3e3e5;
-}
-#add-group-members-form .submit {
-    margin:0 0 0 5px;
-}
-.group-discussions-con .msg:first-child {
-    margin-top:0.5rem;
-}
-.group-admin-txt {
-    font-size:12px;
-    color:#888;
-}
-/* view mode */
-.switch-mode {
-    margin-left:15px;
-    font-size: 0;
-}
-.two-columns-view-icon-btn,
-.grid-view-icon-btn,
-.list-view-icon-btn {
-    display:inline-block;
-    padding:0 6px;
-    height:29px;
-    background:#fff;
-    border:1px solid #ccc;
-    font-size:18px;
-    color:#aaa;
-    cursor:pointer;
-    border-radius:0;
-    margin-left: -1px;
-}
-
-.list-view-icon-btn {
-    margin-left: 0;
-}
-
-.two-columns-view-icon-btn.active,
-.grid-view-icon-btn.active,
-.list-view-icon-btn.active {
-    color:#fff;
-    background:#ccc;
-    cursor:default;
-}
-
-.view-btn:hover,
-.view-btn:focus,
-.view-btn:active {
-    position: relative;
-    z-index: 1;
-}
-/* grid view */
-.grid-item {
-    display:inline-block;
-    width:140px;
-    padding:10px 4px;
-    position:relative;
-}
-.grid-item .img-link {
-    position:relative; /* for locked icon */
-    display:block;
-    text-align:center;
-    width:100px;
-    height:100px;
-    font-size:0;
-    line-height:0;
-    border-radius:3px;
-    margin:0 auto 6px;
-}
-.grid-item .img-link:before {
-    content:' ';
-    display:inline-block;
-    vertical-align:middle;
-    height:100%;
-}
-.grid-item .img-link.hl {
-    background:#f8f8f8;
-}
-.grid-item .thumbnail {
-    max-width:96px;
-    max-height:96px;
-    padding:1px;
-    border:1px solid #ddd;
-    border-radius:3px;
-}
-.grid-item .text-link {
-    display:block;
-    text-align:center;
-    color:#333;
-    font-size:14px;
-    line-height:17px;
-}
-.grid-item .text-link.hl {
-    color:#f93;
-    background:#fff;
-}
-.grid-item .op-icon {
-    position:absolute;
-    top:10px;
-    right:24px;
-    padding:2px 6px;
-    background:#fff;
-    border:1px solid #eee;
-    border-radius:3px;
-    margin:0;
-}
-.grid-file-locked-icon {
-    position:absolute;
-    bottom:0px;
-    right:10px;
-}
-.grid-item-op { /* the context menu */
-    box-shadow: 0 2px 2px #aaa;
-}
-#dir-view .grid-item {
-    width:134px;
-}
-/* devices */
-.device-libs-dropdown-menu {
-    min-width:200px;
-}
 /* link audit */
 #link-audit-form .email-input {
     margin-bottom:5px;
@@ -3642,13 +2091,6 @@ img.thumbnail {
 #link-audit-form .get-code-btn {
     margin-bottom:20px;
 }
-/* about dialog */
-.about-content {
-    min-width: 280px;
-    padding-top: 20px;
-    text-align: center;
-}
-
 /* two-factor-auth */
 .two-factor-auth-wizard-btns {
     margin-top:8px;
@@ -3666,172 +2108,11 @@ img.thumbnail {
     padding: 2px 3px;
     border-radius: 2px;
 }
-
 /* terms & conditions */
 #tc-content {
     padding-top:0;
     padding-left:0;
 }
-.tc-accept-form {
-    padding-bottom:30px;
-}
-#tc-preview {
-    box-sizing:border-box;
-    padding:40px;
-    width:800px;
-    overflow:auto;
-}
-
-/* tags in detail panel */
-.tags-label {
-    vertical-align: top;
-}
-.cur-tag {
-    padding:1px 5px;
-    background:#eee;
-    border-radius:3px;
-    margin:0 8px 8px 0;
-    white-space:nowrap; /* for snapshot label */
-}
-
-/* sysadmin statistic */
-.system-statistic-time-range {
-    margin: 15px 0 25px;
-}
-.date-custom-form {
-    margin-left:15px;
-}
-.date-custom-form .input,
-.date-custom-form .submit {
-    margin:0;
-}
-.date-custom-form .input {
-    height:25px;
-    width:75px;
-}
-.date-custom-form .submit {
-    margin-left:5px;
-}
-.traffic-chart {
-    margin:0 0 20px;
-}
-.traffic-tab-nav {
-    margin:10px 0 16px;
-}
-.traffic-tab-nav .tab {
-    display:inline-block;
-    margin-right:.7em;
-}
-.traffic-tab-nav .a {
-    color:#8a948f;
-    font-weight:normal;
-    padding:.3em 0;
-    border-bottom:2px solid transparent;
-}
-.traffic-tab-nav .tab-cur .a,
-.traffic-tab-nav .tab .a:hover {
-    color:#eb8205;
-    text-decoration:none;
-    border-bottom-color:#eb8205;
-}
-
-/* system info */
-.license-file-upload {
-    margin-top:5px;
-}
-
-/* file comment */
-.file-comment-panel-item-name {
-    display:inline-block;
-    max-width:215px;
-}
-/* dir view */
-#basic-upload { /* for IE 9 */
-    position: relative;
-}
-.basic-upload-input { /* for IE 9 */
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-#dir-view-path {
-    display:flex;
-    justify-content:space-between;
-}
-.dir-toolbar-2 {
-    flex:none;
-    margin-left:10px;
-}
-.dir-toolbar-2 .op-link {
-    font-size:21px;
-    color:#8a8a8a;
-    margin-left:8px;
-}
-.dir-toolbar-2 .op-link:hover {
-    color:#eb8205;
-    text-decoration:none;
-}
-
-/* address book */
-#address-book-group .empty-tip {
-    color:#a4a4a4;
-    text-align:center;
-    margin-bottom:30px;
-}
-#address-book-group .hd {
-    height:auto;
-}
-
-.invite-link-in-popup,
-.invite-link-in-popup:hover {
-    text-decoration:none;
-}
-#share-popup .invite-link-in-popup {
-    display:inline-block;
-    margin-top:4px;
-}
-
-/* wiki list style */
-.wiki-dropdown-menu {
-    margin-left: -5rem;
-}
-
-.wiki-list input {
-    width: 15rem;
-}
-
-.user-select-no {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-#new-wiki-by-existing-form .repo-container {
-    max-height: 20rem;
-    overflow-y: auto;
-}
-
-/* statistic report */
-.report {
-    margin:15px 0 20px;
-}
-.report-heading {
-    padding:3px 10px;
-    background:#f7f7f7;
-    border-radius:2px;
-    margin:0 0 15px;
-}
-.report-month-custom-form {
-    margin-left:10px;
-}
-
 /* policy, terms link */
 .privacy-policy-link {
     display: flex;
