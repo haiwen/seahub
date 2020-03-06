@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, slug, siteRoot, username } from '../../utils/constants';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Search from '../../components/search/search';
+import Notification from '../../components/common/notification';
+import Account from '../../components/common/account';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -76,6 +77,8 @@ class MainPanel extends Component {
 
 
   render() {
+    let { onSearchedClick, permission } = this.props;
+    let searchPlaceholder = gettext('Search files in this library');
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
     return (
       <div className="main-panel wiki-main-panel o-hidden">
@@ -86,12 +89,7 @@ class MainPanel extends Component {
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
               </div>
               <div className="common-toolbar">
-                <Search
-                  isPublic={true}
-                  repoID={repoID}
-                  onSearchedClick={this.props.onSearchedClick}
-                  placeholder={gettext('Search files in this library')}
-                />
+                <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
               </div>
             </Fragment>
           }
@@ -105,11 +103,11 @@ class MainPanel extends Component {
                     <span className="fa fa-pencil-alt mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick} style={{'font-size': '1.1rem'}}></span>
                 )}
               </div>
-              <CommonToolbar 
-                repoID={repoID}
-                onSearchedClick={this.props.onSearchedClick} 
-                searchPlaceholder={gettext('Search files in this library')}
-              />
+              <div className="common-toolbar">
+                <Search isPublic={permission !== 'rw' && permission !== 'r'} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                <Notification />
+                <Account />
+              </div>
             </Fragment>
           )}
         </div>
