@@ -367,7 +367,7 @@ class ShareAdminShareLinks extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listShareLinks().then((res) => {
+    seafileAPI.listUserShareLinks().then((res) => {
       let items = res.data.map(item => {
         return new ShareLink(item);
       });
