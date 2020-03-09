@@ -17,7 +17,7 @@ const propTypes = {
 class Paginator extends Component {
 
   resetPerPage = (e) => {
-    const perPage = e.target.value;
+    const perPage = parseInt(e.target.value);
     this.updateURL(1, perPage);
     this.props.resetPerPage(perPage);
   }

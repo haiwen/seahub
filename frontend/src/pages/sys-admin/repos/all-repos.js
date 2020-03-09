@@ -21,14 +21,16 @@ class AllRepos extends Component {
       repos: [],
       pageInfo: {},
       perPage: 25,
+      sortBy: '',
       isCreateRepoDialogOpen: false
     };
   }
 
   componentDidMount () {
     let urlParams = (new URL(window.location)).searchParams;
-    const { currentPage = 1, perPage } = this.state;
+    const { currentPage = 1, perPage, sortBy } = this.state;
     this.setState({
+      sortBy: urlParams.get('order_by') || sortBy,
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
@@ -41,7 +43,8 @@ class AllRepos extends Component {
   }
 
   getReposByPage = (page) => {
-    seafileAPI.sysAdminListAllRepos(page, this.state.perPage).then((res) => {
+    const { perPage, sortBy } = this.state;
+    seafileAPI.sysAdminListAllRepos(page, perPage, sortBy).then((res) => {
       this.setState({
         loading: false,
         repos: res.data.repos,
@@ -52,6 +55,22 @@ class AllRepos extends Component {
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
+    });
+  }
+
+  sortItems = (sortBy) => {
+    this.setState({
+      currentPage: 1,
+      sortBy: sortBy 
+    }, () => {
+      let url = new URL(location.href);
+      let searchParams = new URLSearchParams(url.search);
+      const { currentPage, sortBy } = this.state;
+      searchParams.set('page', currentPage);
+      searchParams.set('order_by', sortBy);
+      url.search = searchParams.toString();
+      navigate(url.toString());
+      this.getReposByPage(currentPage);
     });
   }
 
@@ -121,6 +140,8 @@ class AllRepos extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.repos}
+                sortBy={this.state.sortBy}
+                sortItems={this.sortItems}
                 pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
                 getListByPage={this.getReposByPage}
