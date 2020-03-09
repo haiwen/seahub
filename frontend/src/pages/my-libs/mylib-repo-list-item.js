@@ -107,7 +107,7 @@ class MylibRepoListItem extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
-      case 'Share Links':
+      case 'Share Links Admin':
         this.toggleRepoShareUploadLinksDialog();
         break;
       default:
