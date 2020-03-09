@@ -43,8 +43,17 @@ class Content extends Component {
     this.props.getListByPage(this.props.currentPage + 1);
   }
 
+  sortByQuotaUsage = (e) => {
+    e.preventDefault();
+    this.props.sortByQuotaUsage();
+  }
+
   render() {
-    const { isAdmin, loading, errorMsg, items, isAllUsersSelected, curPerPage, hasNextPage, currentPage } = this.props;
+    const {
+      isAdmin, loading, errorMsg, items, isAllUsersSelected,
+      curPerPage, hasNextPage, currentPage,
+      sortBy, sortOrder
+    } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -56,9 +65,18 @@ class Content extends Component {
         </EmptyTip>
       );
 
+
       let columns = [];
+
+      const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      const spaceText = gettext('Space Used');
+      const spaceEl =
+        sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
+        <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortBy == 'quota_usage' && sortIcon}</a> :
+        spaceText;
+      const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
+
       const colNameText = `${gettext('Name')} / ${gettext('Contact Email')}`;
-      const colSpaceText = `${gettext('Space Used')} / ${gettext('Quota')}`;
       const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')}`;
       if (isPro) {
         columns.push(
