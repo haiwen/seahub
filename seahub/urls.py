@@ -93,6 +93,9 @@ from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLi
     ViaRepoDownloadLinkView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 
+from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
+from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
+
 # Admin
 from seahub.api2.endpoints.admin.abuse_reports import AdminAbuseReportsView, AdminAbuseReportView
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -341,6 +344,11 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participants/$', FileParticipantsView.as_view(), name='api-v2.1-file-participants'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
+
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/$', RepoShareLinks.as_view(), name='api-v2.1-repo-share-links'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/(?P<token>[a-f0-9]+)/$', RepoShareLink.as_view(), name='api-v2.1-repo-share-link'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/$', RepoUploadLinks.as_view(), name='api-v2.1-repo-upload-links'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
 
     ## user:: repo-api-tokens
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),

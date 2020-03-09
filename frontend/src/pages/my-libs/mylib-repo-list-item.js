@@ -19,6 +19,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
+import RepoShareUploadLinksDialog from '../../components/dialog/repo-share-upload-links-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -48,6 +49,7 @@ class MylibRepoListItem extends React.Component {
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogShow: false,
       isAPITokenDialogShow: false,
+      isRepoShareUploadLinksDialogOpen: false
     };
   }
 
@@ -104,6 +106,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'API Token':
         this.onAPITokenToggle();
+        break;
+      case 'Share Links':
+        this.toggleRepoShareUploadLinksDialog();
         break;
       default:
         break;
@@ -178,6 +183,10 @@ class MylibRepoListItem extends React.Component {
 
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
+  }
+
+  toggleRepoShareUploadLinksDialog = () => {
+    this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
   }
 
   onUnfreezedItem = () => {
@@ -421,6 +430,15 @@ class MylibRepoListItem extends React.Component {
             <RepoAPITokenDialog
               repo={repo}
               onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isRepoShareUploadLinksDialogOpen && (
+          <ModalPortal>
+            <RepoShareUploadLinksDialog
+              repo={repo}
+              toggleDialog={this.toggleRepoShareUploadLinksDialog}
             />
           </ModalPortal>
         )}
