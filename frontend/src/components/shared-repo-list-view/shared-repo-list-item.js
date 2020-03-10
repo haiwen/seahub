@@ -14,6 +14,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
 import RepoAPITokenDialog from "../dialog/repo-api-token-dialog";
+import RepoShareUploadLinksDialog from '../dialog/repo-share-upload-links-dialog';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -43,6 +44,7 @@ class SharedRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
+      isRepoShareUploadLinksDialogOpen: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -135,6 +137,9 @@ class SharedRepoListItem extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
+      case 'Share Links Admin':
+        this.toggleRepoShareUploadLinksDialog();
+        break;
       default:
         break;
     }
@@ -186,6 +191,10 @@ class SharedRepoListItem extends React.Component {
     this.setState({isShowSharedDialog: false});
   }
 
+  toggleRepoShareUploadLinksDialog = () => {
+    this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
+  }
+
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   }
@@ -211,6 +220,9 @@ class SharedRepoListItem extends React.Component {
       case 'History Setting':
         translateResult = gettext('History Setting');
         break;
+      case 'Share Links Admin':
+        translateResult = gettext('Share Links Admin');
+        break;
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
         break;
@@ -232,12 +244,11 @@ class SharedRepoListItem extends React.Component {
       if (repo.owner_email.indexOf('@seafile_group') != -1) {  //current repo is belong to a group;
         if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
           this.isDeparementOnwerGroupMember = true;
+          operations = ['Rename'];
           if (folderPermEnabled) {
-            operations = ['Rename', 'Folder Permission', 'History Setting', 'Details'];
-          } else {
-            operations = ['Rename', 'Details'];
+            operations.push('Folder Permission');
           }
-          operations.push('API Token');
+          operations.push('Share Links Admin', 'History Setting', 'API Token', 'Details');
         } else {
           operations.push('Unshare');
         }
@@ -448,6 +459,14 @@ class SharedRepoListItem extends React.Component {
             <RepoAPITokenDialog
               repo={repo}
               onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isRepoShareUploadLinksDialogOpen && (
+          <ModalPortal>
+            <RepoShareUploadLinksDialog
+              repo={repo}
+              toggleDialog={this.toggleRepoShareUploadLinksDialog}
             />
           </ModalPortal>
         )}
