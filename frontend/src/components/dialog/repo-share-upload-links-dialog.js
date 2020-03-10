@@ -6,6 +6,7 @@ import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
+import EmptyTip from '../empty-tip';
 
 const repoShareUploadLinkItemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -146,7 +147,7 @@ class RepoShareUploadLinksDialog extends React.Component {
 
   render() {
 
-    const { loading, errorMsg, activeTab } = this.state;
+    const { loading, errorMsg, activeTab, repoShareUploadLinkList } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(this.props.repo.repo_name) + '</span>';
     const title = gettext('{placeholder} Share/Upload Links').replace('{placeholder}', itemName);
@@ -172,7 +173,12 @@ class RepoShareUploadLinksDialog extends React.Component {
               <div className="cur-view-content" style={{minHeight: '20rem', maxHeight: '20rem'}}>
                 {loading && <Loading />}
                 {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-                {!loading && !errorMsg &&
+                {!loading && !errorMsg && !repoShareUploadLinkList.length &&
+                  <EmptyTip forDialog={true}>
+                    <p className="text-secondary">{activeTab == 'shareLinks' ? gettext('No share links') : gettext('No upload links')}</p>
+                  </EmptyTip>
+                }
+                {!loading && !errorMsg && repoShareUploadLinkList.length > 0 &&
                 <table>
                   <thead>
                     <tr>
