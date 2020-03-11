@@ -13,7 +13,7 @@ import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
-import RepoAPITokenDialog from "../dialog/repo-api-token-dialog";
+import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareUploadLinksDialog from '../dialog/repo-share-upload-links-dialog';
 
 const propTypes = {
@@ -239,18 +239,19 @@ class SharedRepoListItem extends React.Component {
     let isRepoOwner = repo.owner_email === username;
     let isAdmin = repo.is_admin;
     let operations = [];
-    // todo ,shared width me shared width all;
     if (isPro) {
-      if (repo.owner_email.indexOf('@seafile_group') != -1) {  //current repo is belong to a group;
-        if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
-          this.isDeparementOnwerGroupMember = true;
-          operations = ['Rename'];
-          if (folderPermEnabled) {
-            operations.push('Folder Permission');
+      if (repo.owner_email.indexOf('@seafile_group') != -1) {
+        if (isStaff) {
+          if (repo.owner_email == currentGroup.id + '@seafile_group') {
+            this.isDeparementOnwerGroupMember = true;
+            operations = ['Rename'];
+            if (folderPermEnabled) {
+              operations.push('Folder Permission');
+            }
+            operations.push('Share Links Admin', 'History Setting', 'API Token', 'Details');
+          } else {
+            operations.push('Unshare');
           }
-          operations.push('Share Links Admin', 'History Setting', 'API Token', 'Details');
-        } else {
-          operations.push('Unshare');
         }
       } else {
         if (isRepoOwner || isAdmin) {
