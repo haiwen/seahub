@@ -6,6 +6,7 @@ import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
+import Paginator from './components/paginator';
 import ModalPortal from './components/modal-portal';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CommitDetails from './components/dialog/commit-details';
@@ -30,24 +31,33 @@ class RepoHistory extends React.Component {
     this.state = {
       isLoading: true,
       errorMsg: '',
-      page: 1,
-      perPage: 100,
-      items: [],
-      more: false
+      currentPage: 1,
+      perPage: 25,
+      hasNextPage: false,
+      items: []
     };
   }
 
   componentDidMount() {
-    this.getItems(this.state.page);
+    let urlParams = (new URL(window.location)).searchParams;
+    const {
+      currentPage, perPage
+    } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getItems(this.state.currentPage);
+    }); 
   }
 
   getItems = (page) => {
     seafileAPI.getRepoHistory(repoID, page, this.state.perPage).then((res) => {
       this.setState({
         isLoading: false,
-        page: page,
+        currentPage: page,
         items: res.data.data,
-        more: res.data.more
+        hasNextPage: res.data.more
       });
     }).catch((error) => {
       this.setState({
@@ -57,12 +67,12 @@ class RepoHistory extends React.Component {
     });
   }
 
-  getPrevious = () => {
-    this.getItems(this.state.page - 1);
-  }
-
-  getNext = () => {
-    this.getItems(this.state.page + 1);
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getItems(1);
+    }); 
   }
 
   onSearchedClick = (selectedItem) => {
@@ -100,9 +110,14 @@ class RepoHistory extends React.Component {
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content 
-                  data={this.state}
-                  getPrevious={this.getPrevious}
-                  getNext={this.getNext}
+                  isLoading={this.state.isLoading}
+                  errorMsg={this.state.errorMsg}
+                  items={this.state.items}
+                  currentPage={this.state.currentPage}
+                  hasNextPage={this.state.hasNextPage}
+                  curPerPage={this.state.perPage}
+                  resetPerPage={this.resetPerPage}
+                  getListByPage={this.getItems}
                 />
               </div>
             </div>
@@ -133,18 +148,19 @@ class Content extends React.Component {
     ];
   } 
 
-  getPrevious = (e) => {
-    e.preventDefault();
-    this.props.getPrevious();
+  getPreviousPage = () => {
+    this.props.getListByPage(this.props.currentPage - 1);
   }
 
-  getNext = (e) => {
-    e.preventDefault();
-    this.props.getNext();
+  getNextPage = () => {
+    this.props.getListByPage(this.props.currentPage + 1);
   }
 
   render() {
-    const { isLoading, errorMsg, page, items, more } = this.props.data;
+    const {
+      isLoading, errorMsg, items,
+      curPerPage, currentPage, hasNextPage 
+    } = this.props;
 
     if (isLoading) {
       return <Loading />;
@@ -166,20 +182,20 @@ class Content extends React.Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              item.isFirstCommit = (page == 1) && (index == 0);
-              item.showDetails = more || (index != items.length - 1);
+              item.isFirstCommit = (currentPage == 1) && (index == 0);
+              item.showDetails = hasNextPage || (index != items.length - 1);
               return <Item key={index} item={item} />;
             })}
           </tbody>
         </table>
-        <div className="text-center mt-6">
-          {page != 1 &&
-          <a href="#" onClick={this.getPrevious} className="m-2">{gettext('Previous')}</a>
-          }
-          {more && 
-          <a href="#" onClick={this.getNext} className="m-2">{gettext('Next')}</a>
-          }
-        </div>
+        <Paginator
+          gotoPreviousPage={this.getPreviousPage}
+          gotoNextPage={this.getNextPage}
+          currentPage={currentPage}
+          hasNextPage={hasNextPage}
+          curPerPage={curPerPage}
+          resetPerPage={this.props.resetPerPage}
+        />  
       </React.Fragment>
     );
   }
