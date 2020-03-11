@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { mediaUrl } from '../utils/constants';
 
 const propTypes = { 
-  forDialog: PropTypes.bool,
-  children: PropTypes.object.isRequired
+  forDialog: PropTypes.bool
 };
 
 class EmptyTip extends React.Component {
