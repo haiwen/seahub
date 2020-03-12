@@ -2,6 +2,9 @@
 .seafile-rich-editor-topbar {
   display: none;
 }
+.seafile-editor {
+  position: static;
+}
 .editor {
   border: none!important;
 }
