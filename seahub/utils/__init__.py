@@ -832,6 +832,10 @@ if EVENTS_CONFIG_FILE:
         with _get_seafevents_session() as session:
             return True if seafevents.handle_virus_record(session, vid) == 0 else False
 
+    def update_virus_record(vid, is_ignore):
+        with _get_seafevents_session() as session:
+            return True if seafevents.update_virus_record(session, vid, is_ignore) == 0 else False
+
     def get_virus_record_by_id(vid):
         with _get_seafevents_session() as session:
             return seafevents.get_virus_record_by_id(session, vid)
@@ -879,6 +883,8 @@ else:
     def get_virus_record():
         pass
     def handle_virus_record():
+        pass
+    def update_virus_record():
         pass
     def get_virus_record_by_id(vid):
         pass

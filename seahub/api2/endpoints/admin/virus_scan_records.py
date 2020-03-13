@@ -13,8 +13,8 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
-from seahub.api2.utils import api_error
-from seahub.utils import get_virus_record, get_virus_record_by_id, handle_virus_record
+from seahub.api2.utils import api_error, to_python_boolean
+from seahub.utils import get_virus_record, get_virus_record_by_id, handle_virus_record, update_virus_record
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +69,7 @@ class AdminVirusScanRecords(APIView):
                 record["repo_owner"] = repo_owner
                 record["file_path"] = virus_record.file_path
                 record["has_handle"] = virus_record.has_handle
+                record["has_ignore"] = virus_record.has_ignore
                 record["virus_id"] = virus_record.vid
                 record_list.append(record)
 
@@ -104,3 +105,30 @@ class AdminVirusScanRecord(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": True}, status=status.HTTP_200_OK)
+
+    def put(self, request, virus_id):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        is_ignore = request.data.get('is_ignore')
+        if is_ignore not in ('true', 'false'):
+            error_msg = 'is_ignore invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        is_ignore = to_python_boolean(is_ignore)
+
+        virus_record = get_virus_record_by_id(virus_id)
+        if not virus_record:
+            error_msg = 'Virus file %d not found.' % virus_record.file_path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            update_virus_record(virus_id, is_ignore)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Failed to modify, please try again later.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        virus_record = get_virus_record_by_id(virus_id)
+
+        return Response({"has_ignore": virus_record.has_ignore}, status=status.HTTP_200_OK)
