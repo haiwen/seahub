@@ -823,9 +823,9 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
-    def get_virus_record(repo_id=None, start=-1, limit=-1):
+    def get_virus_record(repo_id=None, has_handle=None, start=-1, limit=-1):
         with _get_seafevents_session() as session:
-            r = seafevents.get_virus_record(session, repo_id, start, limit)
+            r = seafevents.get_virus_record(session, repo_id, has_handle, start, limit)
         return r if r else []
 
     def handle_virus_record(vid):

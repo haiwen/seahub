@@ -42,11 +42,16 @@ class AdminVirusScanRecords(APIView):
         except ValueError:
             per_page = 25
 
+        try:
+            has_handle = to_python_boolean(request.GET.get('has_handle', ''))
+        except ValueError:
+            has_handle = None
+
         start = (page - 1) * per_page
         count = per_page
 
         try:
-            virus_records = get_virus_record(start=start, limit=count)
+            virus_records = get_virus_record(has_handle=has_handle, start=start, limit=count)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
