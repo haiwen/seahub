@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
@@ -42,15 +42,13 @@ from constance import config
 
 from seahub.password_session import update_session_auth_hash
 
-from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
-    if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
+    if not is_safe_url(url=redirect_to, host=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     if request.session.test_cookie_worked():
@@ -94,8 +92,8 @@ def login(request, template_name='registration/login.html',
     """Displays the login form and handles the login action."""
 
     redirect_to = request.GET.get(redirect_field_name, '')
-    if request.user.is_authenticated:
-        if redirect_to and is_safe_url(redirect_to, allowed_hosts=request.get_host()):
+    if request.user.is_authenticated():
+        if redirect_to:
             return HttpResponseRedirect(redirect_to)
         else:
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
@@ -189,7 +187,6 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
-                 getattr(settings, 'ENABLE_DINGTALK', False) or \
                  getattr(settings, 'ENABLE_CAS', False) or \
                  getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False) or \
                  getattr(settings, 'ENABLE_WORK_WEIXIN', False)
@@ -205,7 +202,6 @@ def login(request, template_name='registration/login.html',
         'signup_url': signup_url,
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
-        'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
 
 def login_simple_check(request):
@@ -221,7 +217,7 @@ def login_simple_check(request):
         raise Http404
 
     today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
+    expect = hashlib.md5(settings.SECRET_KEY+username+today).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)
@@ -233,15 +229,7 @@ def login_simple_check(request):
 
         auth_login(request, user)
 
-        # Ensure the user-originating redirection url is safe.
-        if REDIRECT_FIELD_NAME in request.GET:
-            next_page = request.GET[REDIRECT_FIELD_NAME]
-            if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
-                next_page = settings.LOGIN_REDIRECT_URL
-        else:
-            next_page = settings.SITE_ROOT
-
-        return HttpResponseRedirect(next_page)
+        return HttpResponseRedirect(settings.SITE_ROOT)
     else:
         raise Http404
 
@@ -250,7 +238,6 @@ def logout(request, next_page=None,
            template_name='registration/logged_out.html',
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
-
     from seahub.auth import logout
     logout(request)
 
@@ -267,19 +254,11 @@ def logout(request, next_page=None,
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
         response = HttpResponseRedirect(reverse('cas_ng_logout'))
-        response.delete_cookie('seahub_auth')
-        return response
-
-    from seahub.settings import LOGOUT_REDIRECT_URL
-    if LOGOUT_REDIRECT_URL:
-        response = HttpResponseRedirect(LOGOUT_REDIRECT_URL)
-        response.delete_cookie('seahub_auth')
-        return response
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+        if not is_safe_url(url=next_page, host=request.get_host()):
             next_page = request.path
 
     if next_page is None:
@@ -288,8 +267,7 @@ def logout(request, next_page=None,
             response = HttpResponseRedirect(redirect_to)
         else:
             response = render(request, template_name, {
-                'title': _('Logged out'),
-                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+                'title': _('Logged out')
             })
     else:
         # Redirect to this page until the session has been cleared.
@@ -339,9 +317,9 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['domain_override'] = get_current_site(request).domain
             try:
                 form.save(**opts)
-            except Exception as e:
+            except Exception, e:
                 logger.error(str(e))
-                messages.error(request, _('Failed to send email, please contact administrator.'))
+                messages.error(request, _(u'Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
                         })
