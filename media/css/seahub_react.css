@@ -105,6 +105,10 @@
 
 /* common class and element style*/
 body { overflow-y: auto; }
+ul,ol,li {
+    padding:0;
+    margin:0;
+}
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; font-weight:normal; }
 dd { margin-bottom:.8em; color:#222; }
@@ -132,11 +136,6 @@ a:hover { color:#eb8205; }
 .left-zero {
     left: 0px !important;
 }
-ul,ol,li {
-    padding:0;
-    margin:0;
-}
-
 .sf-heading {
     font-size: 1rem;
     color: #322;
@@ -154,23 +153,11 @@ ul,ol,li {
 .pl10 {
     padding-left: 10px;
 }
-
-.a-simulate {
-    color: #eb8205 !important;
-    text-decoration: none;
-    font-weight: normal;
-    cursor: pointer;
-}
-
-.a-simulate:hover {
-    text-decoration: underline;
-}
-
 .cursor-pointer {
     cursor: pointer;
 }
 
-.tr-drag-effect{ /* just for drag&drop item */
+.tr-drag-effect { /* just for drag&drop item */
     background-image: url('../img/grippy_large.png');
     background-repeat: no-repeat;
     background-position: 0px;
@@ -222,17 +209,6 @@ ul,ol,li {
 
 .link-dropdown-item:active {
     color: #fff;
-}
-
-.panel-heading {
-    position: relative;
-    padding: .5rem 1rem;
-    width: 100%;
-    height: 2.5rem;
-    font-size: 1rem;
-    font-weight: normal;
-    line-height: 1.5;
-    text-align: center;
 }
 
 .side-nav-toggle { /* just for control side-panel */
@@ -478,7 +454,6 @@ ul,ol,li {
     background:#ddd;
 }
 
-/** deparentment-usage **/
 .department-usage-container {
     display: inline-block;
     vertical-align: middle;
@@ -503,12 +478,6 @@ ul,ol,li {
     color: #666;
 }
 
-#notifications .sf2-icon-bell {
-    font-size:24px;
-    line-height:1;
-    color:#999;
-}
-
 @media (max-width:767px) {
     .cur-view-toolbar .mobile-icon {
         color:#999;
@@ -522,7 +491,7 @@ ul,ol,li {
 .nav .nav-item {
     padding: 0;
 }
-.nav .nav-item .nav-link{
+.nav .nav-item .nav-link {
     padding: 0.5rem 0;
     margin-right: 0.5rem;
     color: #8A948F;
@@ -1121,7 +1090,7 @@ a.table-sort-op:focus {
     margin-right: 0;
 }
 
-.tag-list-stacked .file-tag{
+.tag-list-stacked .file-tag {
     margin-right: -0.5rem;
     border: 0.125rem solid #fff;
     cursor: pointer;
