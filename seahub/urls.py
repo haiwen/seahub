@@ -11,7 +11,7 @@ from seahub.views.sso import *
 
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
-    text_diff, view_raw_file, download_file, view_lib_file, \
+    view_raw_file, download_file, view_lib_file, \
     file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
@@ -185,7 +185,6 @@ urlpatterns = [
     url(r'^repo/download_dir/(?P<repo_id>[-0-9a-f]{36})/$', repo_download_dir, name='repo_download_dir'),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
     url(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
-    url(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     url(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/$', repo_snapshot, name="repo_snapshot"),

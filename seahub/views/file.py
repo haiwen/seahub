@@ -54,7 +54,7 @@ from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
-    mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
+    mkstemp, EMPTY_SHA1, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
@@ -1661,65 +1661,6 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
         except Exception as e:
             return None, 'error when read file from fileserver: %s' % e
         return file_content, err
-
-@login_required
-def text_diff(request, repo_id):
-    commit_id = request.GET.get('commit', '')
-    path = request.GET.get('p', '')
-    u_filename = os.path.basename(path)
-    file_enc = request.GET.get('file_enc', 'auto')
-    if not file_enc in FILE_ENCODING_LIST:
-        file_enc = 'auto'
-
-    if not (commit_id and path):
-        return render_error(request, 'bad params')
-
-    repo = get_repo(repo_id)
-    if not repo:
-        return render_error(request, 'bad repo')
-
-    current_commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
-    if not current_commit:
-        return render_error(request, 'bad commit id')
-
-    prev_commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, current_commit.parent_id)
-    if not prev_commit:
-        return render_error('bad commit id')
-
-    current_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, current_commit.id, path, file_enc)
-    if err:
-        return render_error(request, err)
-
-    prev_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, prev_commit.id, path, file_enc)
-    if err:
-        return render_error(request, err)
-
-    is_new_file = False
-    diff_result_table = ''
-    if prev_content == '' and current_content == '':
-        is_new_file = True
-    else:
-        diff = HtmlDiff()
-        diff_result_table = diff.make_table(prev_content.splitlines(),
-                                        current_content.splitlines(), True)
-
-    zipped = gen_path_link(path, repo.name)
-
-    referer = request.GET.get('referer', '')
-
-    return render(request, 'text_diff.html', {
-        'u_filename': u_filename,
-        'repo': repo,
-        'path': path,
-        'zipped': zipped,
-        'current_commit': current_commit,
-        'prev_commit': prev_commit,
-        'diff_result_table': diff_result_table,
-        'is_new_file': is_new_file,
-        'referer': referer,
-    })
 
 ########## office related
 @require_POST

@@ -117,7 +117,6 @@ except ImportError:
     OFFICE_CONVERTOR_ROOT = ''
 
 from seahub.utils.file_types import *
-from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647

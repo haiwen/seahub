@@ -12,7 +12,6 @@ const propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   canDownload: PropTypes.bool.isRequired,
-  canCompare: PropTypes.bool.isRequired,
   onItemRestore: PropTypes.func.isRequired,
 };
 
@@ -47,7 +46,6 @@ class HistoryItem extends React.Component {
     let downloadUrl = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id});
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`;
     let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${filePath}`;
-    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${filePath}`;
     return (
       <Fragment>
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
@@ -66,10 +64,8 @@ class HistoryItem extends React.Component {
                 index={this.props.index}
                 downloadUrl={downloadUrl}
                 viewUrl={viewUrl}
-                diffUrl={diffUrl}
                 onItemRestore={this.onItemRestore}
                 canDownload={this.props.canDownload}
-                canCompare={this.props.canCompare}
               />
             }
           </td>
@@ -86,10 +82,8 @@ const MoreMenuPropTypes = {
   index: PropTypes.number.isRequired,
   downloadUrl: PropTypes.string.isRequired,
   viewUrl: PropTypes.string.isRequired,
-  diffUrl: PropTypes.string.isRequired,
   onItemRestore: PropTypes.func.isRequired,
   canDownload: PropTypes.bool.isRequired,
-  canCompare: PropTypes.bool.isRequired,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -106,7 +100,7 @@ class MoreMenu extends React.PureComponent {
   }
 
   render() {
-    const { index, downloadUrl, viewUrl, diffUrl, onItemRestore, canCompare, canDownload } = this.props;
+    const { index, downloadUrl, viewUrl, onItemRestore, canDownload } = this.props;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle
@@ -121,7 +115,6 @@ class MoreMenu extends React.PureComponent {
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>}
         </DropdownMenu>
       </Dropdown>
     );

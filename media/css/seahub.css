@@ -1781,60 +1781,6 @@ a.sf-popover-item {
     border:1px solid #ddd;
     border-radius:2px;
 }
-/* text file diff */
-.file-modification-hd .modifier,
-.file-modification-hd .time {
-    font-weight:normal;
-    font-size:13px;
-    color:#666;
-}
-.file-modification-hd a {
-    margin:0 3px 0 5px;
-}
-.file-modification-hd .avatar,
-.file-modification-meta-info .span {
-    vertical-align:middle;
-}
-.file-modification-hd .time {
-    margin-left:5px;
-}
-#text-diff-output {
-    font-size:14px;
-    font-family:monospace;
-}
-#text-diff-output .blank-file,
-#text-diff-output .diff-con {
-    background:#fff;
-    border:1px solid #ccc;
-    margin:0;
-}
-#text-diff-output .blank-file {
-    padding:2em 1em;
-}
-#text-diff-output th {
-    text-align: center;
-}
-#text-diff-output td {
-    font-size:12px;
-    word-wrap:break-word;
-    padding:2px 3px;
-    border-bottom:none;
-}
-#text-diff-output .diff-header {
-    text-align:right;
-    vertical-align:top; /* make the line number stay there even its right td gets multi lines of content */
-    background-color:#ebebeb;
-    border-right:1px solid #eee;
-}
-.diff-add {
-    color: #080;
-}
-.diff-sub {
-    color: #c00;
-}
-.diff-chg {
-    color: #c3f;
-}
 /* search */
 .search-input {
     margin:0;
