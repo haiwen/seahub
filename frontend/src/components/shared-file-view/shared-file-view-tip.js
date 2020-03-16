@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
-const { err, trafficOverLimit, zipped, filePath } = window.shared.pageOptions;
+const { err, trafficOverLimit, zipped, filePath, canDownload } = window.shared.pageOptions;
 
 const propTypes = {
   errorMsg: PropTypes.string
@@ -16,11 +16,14 @@ class SharedFileViewTip extends React.Component {
     } else {
       errorMsg = <p className="error">{err || this.props.errorMsg}</p>;
     }
+
+    let isShowDownloadBtn = canDownload && !trafficOverLimit;
+
     return (
       <div className="shared-file-view-body">
-        <div className="file-view-tip">
+        <div className={`file-view-tip ${!isShowDownloadBtn ? 'pt-7' : ''}`}>
           {errorMsg}
-          {!trafficOverLimit &&
+          {isShowDownloadBtn &&
             <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-secondary">{gettext('Download')}</a>
           }
         </div>
