@@ -775,7 +775,6 @@ def file_revisions(request, repo_id):
     if suffix_list and isinstance(suffix_list, list):
         suffix_list = [x.lower() for x in suffix_list]
     else:
-        logger.warning('Wrong type of suffix_list: %s' % repr(suffix_list))
         suffix_list = []
 
     use_new_api = True if file_ext in suffix_list else False

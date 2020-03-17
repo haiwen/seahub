@@ -118,6 +118,8 @@ class FileHistory extends React.Component {
         seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
           this.initOldRecords(res.data);
         });
+      } else {
+        this.setState({isLoading: false});
       }
     }
   }
