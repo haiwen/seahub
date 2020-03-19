@@ -143,15 +143,15 @@ def oauth_callback(request):
 
         for item, attr in list(ATTRIBUTE_MAP.items()):
             required, user_attr = attr
-            value = user_info_json.get(item, '')
+            value = user_info_json.get(user_attr, '')
 
             if value:
                 # ccnet email
-                if user_attr == 'email':
-                    user_info[user_attr] = value if is_valid_email(str(value)) else \
+                if item == 'email':
+                    user_info[item] = value if is_valid_email(str(value)) else \
                             '%s@%s' % (str(value), PROVIDER_DOMAIN)
                 else:
-                    user_info[user_attr] = value
+                    user_info[item] = value
             elif required:
                 error = True
 
