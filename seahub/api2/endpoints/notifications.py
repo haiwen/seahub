@@ -53,7 +53,6 @@ class NotificationsView(APIView):
 
         result_notices = update_notice_detail(request, notice_list)
         notification_list = []
-        unseen_count = 0
         for i in result_notices:
             if i.detail is not None:
                 notice = {}
@@ -63,29 +62,23 @@ class NotificationsView(APIView):
                 notice['time'] = datetime_to_isoformat_timestr(i.timestamp)
                 notice['seen'] = i.seen
 
-                if not i.seen:
-                    unseen_count += 1
-
                 notification_list.append(notice)
 
         cache_key = get_cache_key_of_unseen_notifications(username)
-        count_from_cache = cache.get(cache_key, None)
+        unseen_count_from_cache = cache.get(cache_key, None)
 
         # for case of count value is `0`
-        if count_from_cache is not None:
-            result['unseen_count'] = count_from_cache
-            unseen_num = count_from_cache
+        if unseen_count_from_cache is not None:
+            result['unseen_count'] = unseen_count_from_cache
         else:
+            unseen_count = UserNotification.objects.filter(to_user=username, seen=False).count()
             result['unseen_count'] = unseen_count
-            # set cache
             cache.set(cache_key, unseen_count)
-            unseen_num = unseen_count
 
         total_count = UserNotification.objects.filter(to_user=username).count()
 
         result['notification_list'] = notification_list
         result['count'] = total_count
-        result['unseen_count'] = unseen_num
 
         return Response(result)
 
