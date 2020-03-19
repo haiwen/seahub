@@ -16,6 +16,10 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_media_file_via_public_wiki
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
+
+from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
+        dingtalk_connect, dingtalk_connect_callback, dingtalk_disconnect
+
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -163,6 +167,9 @@ from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAc
 from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
+from seahub.api2.endpoints.admin.dingtalk import AdminDingtalkDepartments, \
+        AdminDingtalkDepartmentMembers, AdminDingtalkUsersBatch, \
+        AdminDingtalkDepartmentsImport
 from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusScanRecords, AdminVirusScanRecord
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
@@ -210,6 +217,14 @@ urlpatterns = [
     url(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     url(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
     url(r'^view-image-via-share-link/$', view_media_file_via_share_link, name='view_media_file_via_share_link'),
+
+
+    # dingtalk
+    url(r'dingtalk/login/$', dingtalk_login, name='dingtalk_login'),
+    url(r'dingtalk/callback/$', dingtalk_callback, name='dingtalk_callback'),
+    url(r'dingtalk/connect/$', dingtalk_connect, name='dingtalk_connect'),
+    url(r'dingtalk/connect-callback/$', dingtalk_connect_callback, name='dingtalk_connect_callback'),
+    url(r'dingtalk/disconnect/$', dingtalk_disconnect, name='dingtalk_disconnect'),
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
@@ -615,6 +630,12 @@ urlpatterns = [
     url(r'^api/v2.1/admin/work-weixin/users/batch/$', AdminWorkWeixinUsersBatch.as_view(), name='api-v2.1-admin-work-weixin-users'),
     url(r'^api/v2.1/admin/work-weixin/departments/import/$', AdminWorkWeixinDepartmentsImport.as_view(), name='api-v2.1-admin-work-weixin-department-import'),
 
+    ## admin:dingtalk departments
+    url(r'^api/v2.1/admin/dingtalk/departments/$', AdminDingtalkDepartments.as_view(), name='api-v2.1-admin-dingtalk-departments'),
+    url(r'^api/v2.1/admin/dingtalk/departments/(?P<department_id>\d+)/members/$', AdminDingtalkDepartmentMembers.as_view(), name='api-v2.1-admin-dingtalk-department-members'),
+    url(r'^api/v2.1/admin/dingtalk/users/batch/$', AdminDingtalkUsersBatch.as_view(), name='api-v2.1-admin-dingtalk-users-batch'),
+    url(r'^api/v2.1/admin/dingtalk/departments/import/$', AdminDingtalkDepartmentsImport.as_view(), name='api-v2.1-admin-dingtalk-department-import'),
+
     ### system admin ###
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
@@ -687,6 +708,8 @@ urlpatterns = [
     url(r'^sys/upload-links/$', sysadmin_react_fake_view, name="sys_upload_links"),
     url(r'^sys/work-weixin/$', sysadmin_react_fake_view, name="sys_work_weixin"),
     url(r'^sys/work-weixin/departments/$', sysadmin_react_fake_view, name="sys_work_weixin_departments"),
+    url(r'^sys/dingtalk/$', sysadmin_react_fake_view, name="sys_dingtalk"),
+    url(r'^sys/dingtalk/departments/$', sysadmin_react_fake_view, name="sys_dingtalk_departments"),
     url(r'^sys/invitations/$', sysadmin_react_fake_view, name="sys_invitations"),
     url(r'^sys/abuse-reports/$', sysadmin_react_fake_view, name="sys_abuse_reports"),
 

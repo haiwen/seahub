@@ -32,6 +32,9 @@ def sso(request):
     if getattr(settings, 'ENABLE_OAUTH', False):
         return HttpResponseRedirect(reverse('oauth_login') + next_param)
 
+    if getattr(settings, 'ENABLE_DINGTALK', False):
+        return HttpResponseRedirect(reverse('dingtalk_login') + next_param)
+
     if getattr(settings, 'ENABLE_CAS', False):
         return HttpResponseRedirect(reverse('cas_ng_login') + next_param)
 

@@ -1,0 +1,87 @@
+.cur-view-content {
+  position: relative;
+}
+.dir-content-main {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 75%;
+  overflow-y: hidden;
+  padding-right: 1rem;
+}
+.dir-content-main:hover {
+  overflow-y: auto;
+}
+.dir-content-main table td {
+  line-height: 2rem;
+}
+.dir-content-main .empty-tip {
+  box-shadow: none;
+}
+.dir-content-main .empty-tip img {
+  width: 140px;
+  height: 140px;
+}
+.dir-content-nav {
+  position: absolute;
+  overflow: hidden;
+  width: 24%;
+}
+.dir-content-nav:hover {
+  overflow: auto;
+}
+.dir-content-resize {
+  position: absolute;
+  left: 25%;
+  height: 100%;
+  width: 1%;
+  border-left: 1px solid #eee;
+}
+.department-children {
+  padding-left: 1rem;
+  position: relative;
+}
+.tree-node-inner {
+  position: relative;
+  display: flex;
+  padding-right: 1rem;
+}
+.tree-node-inner i {
+  position: absolute;
+  top: 20%;
+  left: 0.3rem;
+  color: silver;
+}
+.tree-node-inner-hover {
+  background-color: #FFEFB2;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.tree-node-hight-light {
+  color: #fff;
+  border-radius: 4px;
+  background-color: #feac74 !important;
+}
+.tree-node-hight-light i {
+  color: #fff;
+}
+.tree-node-hight-light .attr-action-icon,
+.tree-node-hight-light .attr-action-icon:focus,
+.tree-node-hight-light .attr-action-icon:hover {
+  color: #fff !important;
+}
+.tree-node-icon {
+  padding-right: 1.5rem;
+}
+.tree-node-text {
+  width: calc(100% - 2.5rem);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 24px;
+}
+.tree-view {
+  padding: 12px 12px 12px 0;
+  flex: 1 1;
+}

@@ -15,6 +15,7 @@ import ListInAddressBook from './components/user-settings/list-in-address-book';
 import EmailNotice from './components/user-settings/email-notice';
 import TwoFactorAuthentication from './components/user-settings/two-factor-auth';
 import SocialLogin from './components/user-settings/social-login';
+import SocialLoginDingtalk from './components/user-settings/social-login-dingtalk';
 import DeleteAccount from './components/user-settings/delete-account';
 
 import './css/toolbar.css';
@@ -22,12 +23,13 @@ import './css/search.css';
 
 import './css/user-settings.css';
 
-const { 
+const {
   canUpdatePassword, passwordOperationText,
   enableAddressBook,
   enableWebdavSecret,
   twoFactorAuthEnabled,
   enableWechatWork,
+  enableDingtalk,
   enableDeleteAccount
 } = window.app.pageOptions;
 
@@ -44,6 +46,7 @@ class Settings extends React.Component {
       {show: isPro, href: '#email-notice', text: gettext('Email Notification')},
       {show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication')},
       {show: enableWechatWork, href: '#social-auth', text: gettext('Social Login')},
+      {show: enableDingtalk, href: '#social-auth', text: gettext('Social Login')},
       {show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account')},
     ];
 
@@ -62,7 +65,7 @@ class Settings extends React.Component {
       toaster.danger(errMessage);
     });
   }
-  
+
   updateUserInfo = (data) => {
     seafileAPI.updateUserInfo(data).then((res) => {
       this.setState({
@@ -127,12 +130,13 @@ class Settings extends React.Component {
                 </div>
                 }
                 {enableWebdavSecret && <WebdavPassword />}
-                {enableAddressBook && this.state.userInfo && 
+                {enableAddressBook && this.state.userInfo &&
                 <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 <LanguageSetting />
                 {isPro && <EmailNotice />}
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
                 {enableWechatWork && <SocialLogin />}
+                {enableDingtalk && <SocialLoginDingtalk />}
                 {enableDeleteAccount && <DeleteAccount />}
               </div>
             </div>

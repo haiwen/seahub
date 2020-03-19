@@ -100,6 +100,7 @@ try:
 except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 
 logger = logging.getLogger(__name__)
@@ -130,6 +131,7 @@ def sysadmin_react_fake_view(request, **kwargs):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'enable_file_scan': ENABLE_FILE_SCAN,
         'enable_work_weixin': ENABLE_WORK_WEIXIN,
+        'enable_dingtalk': ENABLE_DINGTALK,
         'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'available_roles': get_available_roles(),

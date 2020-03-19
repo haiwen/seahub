@@ -128,6 +128,7 @@ export const canViewUserLog = window.sysadmin ? window.sysadmin.pageOptions.admi
 export const canViewAdminLog = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.can_view_admin_log : '';
 export const otherPermission = window.sysadmin ? window.sysadmin.pageOptions.admin_permissions.other_permission : '';
 export const enableWorkWeixin = window.sysadmin ? window.sysadmin.pageOptions.enable_work_weixin : '';
+export const enableDingtalk = window.sysadmin ? window.sysadmin.pageOptions.enable_dingtalk : '';
 export const enableSysAdminViewRepo = window.sysadmin ? window.sysadmin.pageOptions.enableSysAdminViewRepo : '';
 export const haveLDAP = window.sysadmin ? window.sysadmin.pageOptions.haveLDAP : '';
 export const enableShareLinkReportAbuse = window.sysadmin ? window.sysadmin.pageOptions.enable_share_link_report_abuse : '';

@@ -187,6 +187,7 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
+                 getattr(settings, 'ENABLE_DINGTALK', False) or \
                  getattr(settings, 'ENABLE_CAS', False) or \
                  getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False) or \
                  getattr(settings, 'ENABLE_WORK_WEIXIN', False)

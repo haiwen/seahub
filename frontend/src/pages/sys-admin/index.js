@@ -68,6 +68,7 @@ import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
 import VirusScanRecords from './virus-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
+import DingtalkDepartments from './dingtalk-departments';
 
 import Invitations from './invitations/invitations';
 import StatisticFile from './statistic/statistic-file';
@@ -255,6 +256,11 @@ class SysAdmin extends React.Component {
             />
             <WorkWeixinDepartments
               path={siteRoot + 'sys/work-weixin'}
+              currentTab={currentTab}
+              tabItemClick={this.tabItemClick}
+            />
+            <DingtalkDepartments
+              path={siteRoot + 'sys/dingtalk'}
               currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
