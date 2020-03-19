@@ -101,6 +101,22 @@ class NotificationsView(APIView):
 
         return Response({'success': True})
 
+    def delete(self, request):
+        """ delete a notification by username
+
+        Permission checking:
+        1. login user.
+        """
+        username = request.user.username
+
+        UserNotification.objects.remove_user_notifications(username)
+
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        cache.delete(cache_key)
+
+        return Response({'success': True})
+
+
 
 class NotificationView(APIView):
 
@@ -142,45 +158,6 @@ class NotificationView(APIView):
         if not notice.seen:
             notice.seen = True
             notice.save()
-
-        cache_key = get_cache_key_of_unseen_notifications(username)
-        cache.delete(cache_key)
-
-        return Response({'success': True})
-
-
-    def delete(self, request):
-        """ delete a notification by id
-
-        Permission checking:
-        1. login user.
-        """
-
-        notice_id = request.data.get('notice_id')
-
-        # argument check
-        try:
-            notice_id = int(notice_id)
-        except Exception as e:
-            error_msg = 'notice_id invalid.'
-            logger.error(e)
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        try:
-            notice = UserNotification.objects.get(id=notice_id)
-        except UserNotification.DoesNotExist as e:
-            logger.error(e)
-            error_msg = 'Notification %s not found.' % notice_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        username = request.user.username
-        if notice.to_user != username:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        notice.delete()
 
         cache_key = get_cache_key_of_unseen_notifications(username)
         cache.delete(cache_key)
