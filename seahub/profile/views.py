@@ -24,6 +24,7 @@ from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 @login_required
 def edit_profile(request):
@@ -97,6 +98,15 @@ def edit_profile(request):
         enable_wechat_work = False
         social_connected = False
 
+    if ENABLE_DINGTALK:
+        enable_dingtalk = True
+        from seahub.auth.models import SocialAuthUser
+        social_connected_dingtalk = SocialAuthUser.objects.filter(
+            username=request.user.username, provider='dingtalk').count() > 0
+    else:
+        enable_dingtalk = False
+        social_connected_dingtalk = False
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -113,9 +123,11 @@ def edit_profile(request):
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
             'email_notification_interval': email_inverval,
-            'social_connected': social_connected,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
+            'social_connected': social_connected,
+            'enable_dingtalk': enable_dingtalk,
+            'social_connected_dingtalk': social_connected_dingtalk,
             'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
     }

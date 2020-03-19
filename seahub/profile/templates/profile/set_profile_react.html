@@ -63,6 +63,12 @@ window.app.pageOptions = {
   socialNextPage: "{{ social_next_page|escapejs }}",
   {% endif %}
 
+  enableDingtalk: {% if enable_dingtalk %} true {% else %} false {% endif %},
+  {% if enable_dingtalk %}
+  socialConnectedDingtalk: {% if social_connected_dingtalk %} true {% else %} false {% endif %},
+  socialNextPage: "{{ social_next_page|escapejs }}",
+  {% endif %}
+
   enableDeleteAccount: {% if ENABLE_DELETE_ACCOUNT %} true {% else %} false {% endif %}
 };
 </script>

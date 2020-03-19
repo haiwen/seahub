@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
+
 # encoding: utf-8
 
 import logging
