@@ -101,6 +101,22 @@ class NotificationsView(APIView):
 
         return Response({'success': True})
 
+    def delete(self, request):
+        """ delete a notification by username
+
+        Permission checking:
+        1. login user.
+        """
+        username = request.user.username
+
+        UserNotification.objects.remove_user_notifications(username)
+
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        cache.delete(cache_key)
+
+        return Response({'success': True})
+
+
 
 class NotificationView(APIView):
 
