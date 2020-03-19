@@ -2006,37 +2006,6 @@ a.sf-popover-item {
     width:180px;
 }
 
-/* notice page */
-#notices-table .unread {
-    font-weight:bold;
-}
-#notices-table .avatar-cell {
-    vertical-align:top;
-    text-align:center;
-    padding-top:8px;
-}
-#notices-table .avatar {
-    border-radius:1000px;
-}
-#notices-table .brief,
-#notices-table .detail {
-    margin:0.2em 100px .2em 0;
-}
-#notices-table .detail {
-    color:#9d9b9c;
-    cursor:pointer;
-    font-weight:normal;
-}
-#notice-list .topic,
-#notices-table .topic {
-    padding:4px 13px;
-    border-left:3px solid #e0e0e0;
-    margin-left:7px;
-}
-#notices-table a {
-    font-weight:normal;
-}
-
 /* pwd strength */
 #pwd_strength {
     margin:-15px 0 20px;

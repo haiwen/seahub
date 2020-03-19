@@ -1,0 +1,18 @@
+{% extends 'base_for_react.html' %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{% trans "Notifications" %} - {% endblock %}
+
+{% block extra_style %}
+{% render_bundle 'userNotifications' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+};
+</script>
+{% render_bundle 'userNotifications' 'js' %}
+{% endblock %}

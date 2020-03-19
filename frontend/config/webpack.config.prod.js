@@ -60,6 +60,7 @@ module.exports = {
   entry: {
     markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
     TCAccept: [require.resolve('./polyfills'), paths.appSrc + "/tc-accept.js"],
+    userNotifications: [require.resolve('./polyfills'), paths.appSrc + "/user-notifications.js"],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
     fileHistoryOld: [require.resolve('./polyfills'), paths.appSrc + "/file-history-old.js"],

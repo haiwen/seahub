@@ -22,74 +22,8 @@ logger = logging.getLogger(__name__)
 ########## user notifications
 @login_required
 def user_notification_list(request):
-    """
-    
-    Arguments:
-    - `request`:
-    """
-    username = request.user.username
-    count = 25                  # initial notification count
-    limit = 25                   # next a mount of notifications fetched by AJAX
-    
-    notices = UserNotification.objects.get_user_notifications(username)[:count]
-
-    # Add 'msg_from' or 'default_avatar_url' to notice.
-    notices = add_notice_from_info(notices)
-
-    notices_more = True if len(notices) == count else False
-
-    return render(request, "notifications/user_notification_list.html", {
-            'notices': notices,
-            'start': count,
-            'limit': limit,
-            'notices_more': notices_more,
-            })
-
-@login_required_ajax
-def user_notification_more(request):
-    """Fetch next ``limit`` notifications starts from ``start``.
-    
-    Arguments:
-    - `request`:
-    - `start`:
-    - `limit`:
-    """
-    username = request.user.username
-    start = int(request.GET.get('start', 0))
-    limit = int(request.GET.get('limit', 0))
-
-    notices = UserNotification.objects.get_user_notifications(username)[
-        start: start+limit]
-
-    # Add 'msg_from' or 'default_avatar_url' to notice.
-    notices = add_notice_from_info(notices)
-
-    notices_more = True if len(notices) == limit else False
-    new_start = start+limit
-
-    ctx = {'notices': notices}
-    html = render_to_string("notifications/user_notification_tr.html", ctx)
-
-    ct = 'application/json; charset=utf-8'
-    return HttpResponse(json.dumps({
-                'html':html,
-                'notices_more':notices_more,
-                'new_start': new_start}), content_type=ct)
-    
-@login_required
-def user_notification_remove(request):
-    """
-    
-    Arguments:
-    - `request`:
-    """
-    UserNotification.objects.remove_user_notifications(request.user.username)
-
-    messages.success(request, _("Successfully cleared all notices."))
-    next_page = request.META.get('HTTP_REFERER', None)
-    if not next_page:
-        next_page = settings.SITE_ROOT
-    return HttpResponseRedirect(next_page)
+    return render(request, "notifications/user_notification_list_react.html", {
+        })
 
 def add_notice_from_info(notices):
     '''Add 'msg_from' or 'default_avatar_url' to notice.
