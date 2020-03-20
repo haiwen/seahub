@@ -6,9 +6,11 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import { seafileAPI } from '../../../utils/seafile-api.js';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
+import toaster from '../../../components/toast';
 
 const { availableRoles } = window.sysadmin.pageOptions;
 
@@ -85,7 +87,8 @@ class Item extends Component {
     super(props);
     this.state = {
       isOpIconShown: false,
-      isDeleteDialogOpen: false
+      isDeleteDialogOpen: false,
+      deleteDialogMsg: '',
     };
   }
 
@@ -101,7 +104,23 @@ class Item extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
+    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen}, () => {
+      if (this.state.isDeleteDialogOpen) {
+        seafileAPI.sysAdminGetOrg(this.props.item.org_id).then((res) => {
+          let orgName = '<span class="op-target">' + Utils.HTMLescape(res.data.org_name) + '</span>';
+          let userCount = '<span class="op-target">' + Utils.HTMLescape(res.data.users_count) + '</span>';
+          let repoCount = '<span class="op-target">' + Utils.HTMLescape(res.data.repos_count) + '</span>';
+          let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?<br/>{userCount} user(s) and {repoCount} libraries of this orgnization will also be deleted.')
+            .replace('{placeholder}', orgName)
+            .replace('{userCount}', userCount)
+            .replace('{repoCount}', repoCount);
+          this.setState({deleteDialogMsg: deleteDialogMsg});
+        }).catch(error => {
+          let errorMsg = Utils.getErrorMsg(error);
+          toaster.danger(errorMsg);
+        });
+      }
+    });
   }
 
   updateRole = (role) => {
@@ -114,10 +133,7 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
-
-    const orgName = '<span class="op-target">' + Utils.HTMLescape(item.org_name) + '</span>';
-    const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', orgName);
+    const { isOpIconShown, isDeleteDialogOpen, deleteDialogMsg } = this.state;
 
     return (
       <Fragment>

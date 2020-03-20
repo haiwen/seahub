@@ -70,6 +70,9 @@ def get_org_detailed_info(org):
     users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
     org_info['users_count'] = len(users)
 
+    repos = seafile_api.get_org_repo_list(org_id, -1, -1)
+    org_info['repos_count'] = len(repos)
+
     # groups
     groups = ccnet_api.get_org_groups(org_id, -1, -1)
     org_info['groups_count'] = len(groups)
@@ -379,6 +382,7 @@ class AdminOrganization(APIView):
             users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
             for u in users:
                 ccnet_api.remove_org_user(org_id, u.email)
+                User.objects.get(email=u.email).delete()
 
             # remove org groups
             groups = ccnet_api.get_org_groups(org_id, -1, -1)
