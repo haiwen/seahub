@@ -267,7 +267,7 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/dingtalk/'}
                       onClick={() => this.props.tabItemClick('dingtalk')}
                     >
-                      <span className="sf3-font-enterprise-dingtalk sf3-font" aria-hidden="true"></span>
+                      <span className="sf3-font-dingtalk sf3-font" aria-hidden="true"></span>
                       <span className="nav-text">{'钉钉集成'}</span>
                     </Link>
                   </li>
