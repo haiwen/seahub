@@ -286,6 +286,10 @@ class SharedRepoListItem extends React.Component {
         operations.unshift('Share');
       }
     }
+
+    if (!operations.length) {
+      return null;
+    }
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle 
@@ -389,9 +393,6 @@ class SharedRepoListItem extends React.Component {
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
-
-    // TODO: enableDirPrivateShare, isGroupOwnedRepo
-    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -411,6 +412,39 @@ class SharedRepoListItem extends React.Component {
           <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
           <td title={repo.owner_contact_email}>{repo.owner_name}</td>
         </tr>
+      </Fragment>
+    );
+  }
+  
+  renderMobileUI = () => {
+    let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
+    let { repo } = this.props;
+    return (
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
+          <td>
+            {this.state.isRenaming ? 
+              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
+              <Link to={libPath}>{repo.repo_name}</Link>  
+            }
+            <br />
+            <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
+            <span className="item-meta-info">{repo.size}</span>
+            <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
+          </td>
+          <td>{this.generatorMobileMenu()}</td>
+        </tr>
+      </Fragment>
+    );
+  }
+
+  render() {
+    let { repo } = this.props;
+    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
+    return (
+      <Fragment>
+        {Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI()}
         {this.state.isShowSharedDialog && (
           <ModalPortal>
             <ShareDialog 
@@ -473,54 +507,6 @@ class SharedRepoListItem extends React.Component {
         )}
       </Fragment>
     );
-  }
-  
-  renderMobileUI = () => {
-    let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo } = this.props;
-    let isGroupOwnedRepo = repo.owner_email.indexOf('@seafile_group') > -1;
-    return (
-      <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
-          <td>
-            {this.state.isRenaming ? 
-              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Link to={libPath}>{repo.repo_name}</Link>  
-            }
-            <br />
-            <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
-            <span className="item-meta-info">{repo.size}</span>
-            <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
-          </td>
-          <td>{this.generatorMobileMenu()}</td>
-        </tr>
-        {this.state.isShowSharedDialog && (
-          <ModalPortal>
-            <ShareDialog 
-              itemType={'library'}
-              itemName={repo.repo_name}
-              itemPath={'/'}
-              repoID={repo.repo_id}
-              repoEncrypted={repo.encrypted}
-              enableDirPrivateShare={true}
-              userPerm={repo.permission}
-              isAdmin={repo.is_admin}
-              isGroupOwnedRepo={isGroupOwnedRepo}
-              toggleDialog={this.toggleShareDialog}
-            />
-          </ModalPortal>
-        )}
-      </Fragment>
-    );
-  }
-
-  render() {
-    if (Utils.isDesktop()) {
-      return this.renderPCUI();
-    } else {
-      return this.renderMobileUI();
-    }
   }
 }
 
