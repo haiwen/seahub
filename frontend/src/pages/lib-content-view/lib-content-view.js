@@ -642,12 +642,12 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
     if (repoID !== destRepo.repo_id) {
-      this.setState({
+      this.setState(() => ({
         asyncOperatedFilesLength: selectedDirentList.length,
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true
-      });
+      }));
     }
     
     let dirNames = this.getSelectedDirentNames();
@@ -1724,7 +1724,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -1869,7 +1869,7 @@ class LibContentView extends React.Component {
             )}
           </div>
         </div>
-        {this.state.isCopyMoveProgressDialogShow && (
+        {isCopyMoveProgressDialogShow && (
           <CopyMoveDirentProgressDialog
             type={this.state.asyncOperationType}
             asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
