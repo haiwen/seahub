@@ -121,7 +121,7 @@ class MoreMenu extends React.PureComponent {
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>}
+          {/*canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>*/}
         </DropdownMenu>
       </Dropdown>
     );
