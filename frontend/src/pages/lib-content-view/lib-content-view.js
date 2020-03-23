@@ -630,7 +630,6 @@ class LibContentView extends React.Component {
       this.cancelCopyMoveDirent();
     }
 
-    console.log('adbdjde');
     this.setState({
       asyncOperationProgress: 0,
       isCopyMoveProgressDialogShow: false,
