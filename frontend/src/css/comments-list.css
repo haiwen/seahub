@@ -107,8 +107,6 @@
   background-color: #fafaf9;
   padding: 10px;
   border-top: 1px solid #e5e5e5;
-  display: flex;
-  flex-direction: column;
   min-height: 182px;
 }
 .seafile-edit-comment .edit-comment-input {
@@ -121,8 +119,7 @@
 }
 .seafile-comment-footer .submit-comment {
   margin-top: 5px;
-  width: 60px;
-  height: 28px;
+  padding: 0.35rem 0.5rem;
 }
 .seafile-edit-comment .comment-btn {
   height: 28px;
