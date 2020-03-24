@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   noticeItem: PropTypes.object.isRequired,
-  onNoticeItemClick: PropTypes.func.isRequired,
+  onNoticeItemClick: PropTypes.func
 };
 
 const MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group';
@@ -206,7 +206,19 @@ class NoticeItem extends React.Component {
       return '';
     }
 
-    return (
+    return this.props.tr ? (
+      <tr className={noticeItem.seen ? 'read' : 'unread font-weight-bold'}>
+        <td className="text-center">
+          <img src={avatar_url} width="32" height="32" className="avatar" alt="" />
+        </td>
+        <td className="pr-8">
+          <p className="m-0" dangerouslySetInnerHTML={{__html: notice}}></p>
+        </td>
+        <td>
+          {moment(noticeItem.time).fromNow()}
+        </td>
+      </tr>
+    ) : (
       <li onClick={this.onNoticeItemClick} className={noticeItem.seen ? 'read' : 'unread'}>
         <div className="notice-item">
           <div className="main-info">

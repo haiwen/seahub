@@ -19,7 +19,8 @@ class Notification extends React.Component {
     });
   }
 
-  onClick = () => {
+  onClick = (e) => {
+    e.preventDefault();
     if (this.state.showNotice) {
       seafileAPI.updateNotifications();
       this.setState({
@@ -35,7 +36,7 @@ class Notification extends React.Component {
   loadNotices = () => {
     let page = 1;
     let perPage = 5;
-    seafileAPI.listPopupNotices(page, perPage).then(res => {
+    seafileAPI.listNotifications(page, perPage).then(res => {
       let noticeList = res.data.notification_list;
       this.setState({noticeList: noticeList});
     });
@@ -61,7 +62,7 @@ class Notification extends React.Component {
 
     return (
       <div id="notifications">
-        <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title="Notifications" aria-label={gettext('Notifications')}>
+        <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
           <span className="sf2-icon-bell"></span>
           <span className={`num ${this.state.unseenCount ? '' : 'hide'}`}>{this.state.unseenCount}</span>
         </a>

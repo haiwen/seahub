@@ -59,6 +59,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/tc-accept.js",
     ],
+    userNotifications: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/user-notifications.js",
+    ],
     wiki: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
