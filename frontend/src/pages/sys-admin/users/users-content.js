@@ -68,11 +68,17 @@ class Content extends Component {
 
       let columns = [];
 
-      const sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      let sortIcon;
+      if (sortBy == '') {
+        // initial sort icon
+        sortIcon = <span className="fas fa-sort"></span>;
+      } else {
+        sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+      }
       const spaceText = gettext('Space Used');
       const spaceEl =
         sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
-        <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortBy == 'quota_usage' && sortIcon}</a> :
+        <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
         spaceText;
       const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
 
