@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext } from '../../utils/constants';
+import { isPro, gettext, showExtraLogoutIcon } from '../../utils/constants';
 import Search from '../search/search';
 import Notification from '../common/notification';
 import Account from '../common/account';
+import Logout from '../common/logout';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -25,6 +26,7 @@ class  CommonToolbar extends React.Component {
         )}
         <Notification  />
         <Account />
+        {showExtraLogoutIcon && (<Logout />)}
       </div>
     );
   }
