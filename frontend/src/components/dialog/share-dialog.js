@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, externalShareMessage } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, extraShareDialogNote } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import GenerateShareLink from './generate-share-link';
@@ -208,11 +208,11 @@ class ShareDialog extends React.Component {
   }
 
   renderExternalShareMessage = () => {
-    if (externalShareMessage && (typeof externalShareMessage) === 'object') {
+    if (extraShareDialogNote && (typeof extraShareDialogNote) === 'object') {
       return (
         <div className="external-share-message mt-2">
-          <h6>{externalShareMessage.title}</h6>
-          <div style={{fontSize: '14px', color: '#666'}}>{externalShareMessage.content}</div>
+          <h6>{extraShareDialogNote.title}</h6>
+          <div style={{fontSize: '14px', color: '#666'}}>{extraShareDialogNote.content}</div>
         </div>
       );
     }

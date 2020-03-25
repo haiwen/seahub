@@ -773,25 +773,25 @@ ENABLE_REPO_WIKI_MODE = True
 ############################
 # HU berlin external#
 ############################
-ENABLE_LOGOUT_APPLICATION = False
+SHOW_EXTRA_LOGOUT_ICON = False
 
-# EXTERNAL_SHARE_MESSAGE = {
+# EXTRA_SHARE_DIALOG_NOTE = {
 #     'title': 'Attention! Read before shareing files:',
 #     'content': 'Do not share personal or confidential official data with **.'
 # }
-EXTERNAL_SHARE_MESSAGE = None
+EXTRA_SHARE_DIALOG_NOTE = None
 
-# EXTERNAL_APP_LINKS = {
+# EXTRA_APP_BOTTOM_LINKS = {
 #     'seafile': 'http://dev.seahub.com/seahub',
 #     'dtable-web': 'http://dev.seahub.com/dtable-web'
 # }
-EXTERNAL_APP_LINKS = None
+EXTRA_APP_BOTTOM_LINKS = None
 
-# EXTERNAL_ABOUT_LINKS = {
+# EXTRA_ABOUT_DIALOG_LINKS = {
 #     'seafile': 'http://dev.seahub.com/seahub',
 #     'dtable-web': 'http://dev.seahub.com/dtable-web'
 # }
-EXTERNAL_ABOUT_LINKS = None
+EXTRA_ABOUT_DIALOG_LINKS = None
 
 ############################
 # Settings for SeafileDocs #

@@ -61,10 +61,10 @@ export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfF
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
 
-export const enableLogoutApplicagion = window.app.pageOptions.enableLogoutApplicagion;
-export const externalShareMessage = window.app.pageOptions.externalShareMessage;
-export const externalAppLinks = window.app.pageOptions.externalAppLinks;
-export const externalAboutLinks = window.app.pageOptions.externalAboutLinks;
+export const showExtraLogoutIcon = window.app.pageOptions.showExtraLogoutIcon;
+export const extraShareDialogNote = window.app.pageOptions.extraShareDialogNote;
+export const extraAppBottomLinks = window.app.pageOptions.extraAppBottomLinks;
+export const extraAboutDialogLinks = window.app.pageOptions.extraAboutDialogLinks;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
