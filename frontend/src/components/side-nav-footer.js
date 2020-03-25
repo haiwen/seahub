@@ -20,7 +20,7 @@ class SideNavFooter extends React.Component {
     if (extraAppBottomLinks && (typeof extraAppBottomLinks) === 'object') {
       let keys = Object.keys(extraAppBottomLinks);
       return keys.map((key, index) => {
-        return <a key={index} className="item" href={extraAppBottomLinks[key]} aria-hidden="true">{key}</a>;
+        return <a key={index} className="item" href={extraAppBottomLinks[key]}>{key}</a>;
       });
     }
     return null;

@@ -83,6 +83,17 @@
 .common-toolbar > div{
   margin-left: .5rem;
 }
+
+.common-toolbar .logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  text-decoration: none;
+  color: #ccc;
+}
 /* end common-toolbar */
 
 /* begin path toolbar  */

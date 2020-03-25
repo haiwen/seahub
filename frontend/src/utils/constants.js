@@ -61,7 +61,7 @@ export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfF
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
 
-export const showExtraLogoutIcon = window.app.pageOptions.showExtraLogoutIcon;
+export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
 export const extraShareDialogNote = window.app.pageOptions.extraShareDialogNote;
 export const extraAppBottomLinks = window.app.pageOptions.extraAppBottomLinks;
 export const extraAboutDialogLinks = window.app.pageOptions.extraAboutDialogLinks;

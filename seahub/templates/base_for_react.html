@@ -102,7 +102,7 @@
             curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
-            showExtraLogoutIcon: {% if show_extra_logout_icon %} true {% else %} false {% endif %},
+            showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             extraShareDialogNote: {% if extra_share_dialog_note %} {{ extra_share_dialog_note|safe }} {% else %} null {% endif %},
             extraAppBottomLinks: {% if extra_app_bottom_links %} {{ extra_app_bottom_links|safe }} {% else %} null {% endif %},
             extraAboutDialogLinks: {% if extra_about_dialog_links %} {{ extra_about_dialog_links|safe }} {% else %} null {% endif %}
