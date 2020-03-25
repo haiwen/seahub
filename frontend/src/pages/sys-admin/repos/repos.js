@@ -65,6 +65,7 @@ class Content extends Component {
           <h2>{gettext('No libraries')}</h2>
         </EmptyTip>
       );
+      const initialSortIcon = <span className="fas fa-sort"></span>;
       const sortIcon = <span className="fas fa-caret-down"></span>;
       const table = (
         <Fragment>
@@ -76,8 +77,8 @@ class Content extends Component {
                 <th width="15%">
                   {sortBy != undefined ? 
                     <Fragment>
-                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' && sortIcon}</a>{' / '}
-                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' ? sortIcon : initialSortIcon}</a>{' / '}
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' ? sortIcon : initialSortIcon}</a>
                     </Fragment> :
                     gettext('Files') / gettext('Size')
                   }
