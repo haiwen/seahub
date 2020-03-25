@@ -773,7 +773,6 @@ ENABLE_REPO_WIKI_MODE = True
 ############################
 # HU berlin external#
 ############################
-SHOW_EXTRA_LOGOUT_ICON = False
 
 # EXTRA_SHARE_DIALOG_NOTE = {
 #     'title': 'Attention! Read before shareing files:',
