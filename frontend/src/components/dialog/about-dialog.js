@@ -17,7 +17,7 @@ class AboutDialog extends React.Component {
     if (extraAboutDialogLinks && (typeof extraAboutDialogLinks) === 'object') {
       let keys = Object.keys(extraAboutDialogLinks);
       return keys.map((key, index) => {
-        return <a key={index} className="d-block" href={extraAboutDialogLinks[key]} aria-hidden="true">{key}</a>;
+        return <a key={index} className="d-block" href={extraAboutDialogLinks[key]}>{key}</a>;
       });
     }
     return null;
