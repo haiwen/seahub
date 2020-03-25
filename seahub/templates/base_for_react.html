@@ -102,6 +102,10 @@
             curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
+            enableLogoutApplicagion: {% if enable_logout_applicagion %} true {% else %} false {% endif %},
+            externalShareMessage: {% if external_share_message %} {{ external_share_message|safe }} {% else %} null {% endif %},
+            externalAppLinks: {% if external_app_links %} {{ external_app_links|safe }} {% else %} null {% endif %},
+            externalAboutLinks: {% if external_about_links %} {{ external_about_links|safe }} {% else %} null {% endif %}
         }
      };
 </script>

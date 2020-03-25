@@ -771,6 +771,29 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 ENABLE_REPO_WIKI_MODE = True
 
 ############################
+# HU berlin external#
+############################
+ENABLE_LOGOUT_APPLICATION = False
+
+# EXTERNAL_SHARE_MESSAGE = {
+#     'title': 'Attention! Read before shareing files:',
+#     'content': 'Do not share personal or confidential official data with **. You have selected the macOS system install of Python, which is not recommended for use with the Python extension. Some functionality will be limited, please select a different'
+# }
+EXTERNAL_SHARE_MESSAGE = None
+
+# EXTERNAL_APP_LINKS = {
+#     'baidu': 'http://www.baidu.com',
+#     'abc': 'http://www.abc.com'
+# }
+EXTERNAL_APP_LINKS = None
+
+# EXTERNAL_ABOUT_LINKS = {
+#     'biying': 'http://www.biying.com',
+#     'google': 'http://www.google.com'
+# }
+EXTERNAL_ABOUT_LINKS = None
+
+############################
 # Settings for SeafileDocs #
 ############################
 if os.environ.get('SEAFILE_DOCS', None):

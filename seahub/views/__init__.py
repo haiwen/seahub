@@ -56,7 +56,8 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
+    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
+    ENABLE_LOGOUT_APPLICATION, EXTERNAL_SHARE_MESSAGE, EXTERNAL_APP_LINKS, EXTERNAL_ABOUT_LINKS
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
@@ -1277,4 +1278,8 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_logout_applicagion': ENABLE_LOGOUT_APPLICATION,
+        'external_share_message': EXTERNAL_SHARE_MESSAGE,
+        'external_app_links': EXTERNAL_APP_LINKS,
+        'external_about_links': EXTERNAL_ABOUT_LINKS
     })
