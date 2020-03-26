@@ -274,7 +274,7 @@ class App extends Component {
             </Router>
           </MainPanel>
           <MediaQuery query="(max-width: 767.8px)">
-            <Modal isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+            <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
           </MediaQuery>
         </div>
       </React.Fragment>
