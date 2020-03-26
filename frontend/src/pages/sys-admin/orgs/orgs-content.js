@@ -112,7 +112,7 @@ class Item extends Component {
           let repoCount = '<span class="op-target">' + Utils.HTMLescape(res.data.repos_count) + '</span>';
           let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?')
             .replace('{placeholder}', orgName) + '<br/>' +
-            gettext('{userCount} user(s) and {repoCount} libraries of this orgnization will also be deleted.')
+            gettext('{userCount} user(s) and {repoCount} libraries of this organization will also be deleted.')
             .replace('{userCount}', userCount)
             .replace('{repoCount}', repoCount);
           this.setState({deleteDialogMsg: deleteDialogMsg});
