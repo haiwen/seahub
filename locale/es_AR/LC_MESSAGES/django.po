@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 11:25+0800\n"
-"PO-Revision-Date: 2020-03-25 02:26+0000\n"
+"POT-Creation-Date: 2020-03-26 10:14+0800\n"
+"PO-Revision-Date: 2020-03-25 18:31+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
@@ -1307,7 +1307,7 @@ msgstr "Error. por favor contacte al administrador."
 #: seahub/dingtalk/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "Usuario %s no encontrado o inactivo."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."

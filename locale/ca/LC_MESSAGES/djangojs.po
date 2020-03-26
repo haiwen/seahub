@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-25 11:25+0800\n"
-"PO-Revision-Date: 2020-03-25 03:27+0000\n"
+"POT-Creation-Date: 2020-03-26 10:14+0800\n"
+"PO-Revision-Date: 2020-03-26 02:18+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/haiwen/seahub/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -649,7 +649,7 @@ msgstr "Esteu segur que voleu eliminar el seu compte?"
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:158
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:166
 #: frontend/src/pages/sys-admin/repos/dir-content.js:61
-#: frontend/src/pages/sys-admin/repos/repos.js:241
+#: frontend/src/pages/sys-admin/repos/repos.js:242
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:186
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:244
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:120
@@ -658,7 +658,7 @@ msgstr "Esteu segur que voleu eliminar el seu compte?"
 #: frontend/src/pages/sys-admin/users/user-groups.js:190
 #: frontend/src/pages/sys-admin/users/user-repos.js:154
 #: frontend/src/pages/sys-admin/users/user-repos.js:209
-#: frontend/src/pages/sys-admin/users/users-content.js:442
+#: frontend/src/pages/sys-admin/users/users-content.js:448
 #: frontend/src/pages/sys-admin/users/users.js:508
 #: frontend/src/pages/sys-admin/virus-scan-records.js:50
 #: frontend/src/utils/text-translation.js:10
@@ -819,7 +819,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/org-repos.js:37
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:105
 #: frontend/src/pages/sys-admin/repos/dir-content.js:103
-#: frontend/src/pages/sys-admin/repos/repos.js:75
+#: frontend/src/pages/sys-admin/repos/repos.js:76
 #: frontend/src/pages/sys-admin/repos/search-repos.js:96
 #: frontend/src/pages/sys-admin/users/user-links.js:48
 #: frontend/src/pages/sys-admin/users/user-repos.js:53
@@ -1382,7 +1382,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:114
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:221
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:96
-#: frontend/src/pages/sys-admin/repos/repos.js:247
+#: frontend/src/pages/sys-admin/repos/repos.js:248
 msgid "History Setting"
 msgstr ""
 
@@ -1553,8 +1553,8 @@ msgstr ""
 #: frontend/src/pages/shared-libs/shared-libs.js:70
 #: frontend/src/pages/sys-admin/departments/department-detail.js:305
 #: frontend/src/pages/sys-admin/repos/dir-content.js:105
-#: frontend/src/pages/sys-admin/repos/repos.js:80
-#: frontend/src/pages/sys-admin/repos/repos.js:82
+#: frontend/src/pages/sys-admin/repos/repos.js:81
+#: frontend/src/pages/sys-admin/repos/repos.js:83
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:41
 #: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:194
 #: frontend/src/shared-dir-view.js:334
@@ -1624,7 +1624,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/groups/group-members.js:112
 #: frontend/src/pages/sys-admin/groups/groups-content.js:57
 #: frontend/src/pages/sys-admin/orgs/org-repos.js:39
-#: frontend/src/pages/sys-admin/repos/repos.js:86
+#: frontend/src/pages/sys-admin/repos/repos.js:87
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:66
 #: frontend/src/pages/sys-admin/virus-scan-records.js:84
 msgid "Owner"
@@ -1826,7 +1826,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/terms-and-conditions/item.js:134
 #: frontend/src/pages/sys-admin/users/user-groups.js:161
 #: frontend/src/pages/sys-admin/users/user-repos.js:183
-#: frontend/src/pages/sys-admin/users/users-content.js:340
+#: frontend/src/pages/sys-admin/users/users-content.js:346
 msgid "Are you sure you want to delete {placeholder} ?"
 msgstr ""
 
@@ -2036,7 +2036,7 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:84
 #: frontend/src/pages/shared-libs/shared-libs.js:223
 #: frontend/src/pages/shared-libs/shared-libs.js:273
-#: frontend/src/pages/sys-admin/repos/repos.js:238
+#: frontend/src/pages/sys-admin/repos/repos.js:239
 #: frontend/src/utils/text-translation.js:8
 msgid "Share"
 msgstr "Comparteix"
@@ -2428,7 +2428,7 @@ msgstr "Actualitza"
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:27
 #: frontend/src/pages/sys-admin/orgs/org-info.js:39
 #: frontend/src/pages/sys-admin/users/user-info.js:70
-#: frontend/src/pages/sys-admin/users/users-content.js:397
+#: frontend/src/pages/sys-admin/users/users-content.js:403
 #: frontend/src/pages/wiki/main-panel.js:107
 #: frontend/src/pages/wiki/main-panel.js:108 frontend/src/repo-history.js:290
 msgid "Edit"
@@ -2449,8 +2449,8 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:187
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:166
 #: frontend/src/pages/sys-admin/info.js:112
-#: frontend/src/pages/sys-admin/repos/repos.js:79
-#: frontend/src/pages/sys-admin/repos/repos.js:82
+#: frontend/src/pages/sys-admin/repos/repos.js:80
+#: frontend/src/pages/sys-admin/repos/repos.js:83
 msgid "Files"
 msgstr "Fitxers"
 
@@ -3469,7 +3469,7 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:237
 #: frontend/src/pages/org-admin/org-group-repos.js:139
 #: frontend/src/pages/org-admin/org-user-repos.js:139
-#: frontend/src/pages/sys-admin/repos/repos.js:139
+#: frontend/src/pages/sys-admin/repos/repos.js:140
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:145
 msgid "Successfully deleted {name}."
 msgstr ""
@@ -3501,7 +3501,7 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:93
 #: frontend/src/pages/org-admin/org-libraries.js:277
 #: frontend/src/pages/sys-admin/groups/groups-content.js:173
-#: frontend/src/pages/sys-admin/repos/repos.js:244
+#: frontend/src/pages/sys-admin/repos/repos.js:245
 #: frontend/src/pages/sys-admin/users/user-repos.js:157
 msgid "Transfer"
 msgstr "Transfereix"
@@ -3738,7 +3738,7 @@ msgstr ""
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:221
 #: frontend/src/pages/org-admin/org-libraries.js:244
-#: frontend/src/pages/sys-admin/repos/repos.js:151
+#: frontend/src/pages/sys-admin/repos/repos.js:152
 #: frontend/src/pages/sys-admin/users/user-repos.js:276
 msgid "Successfully transferred the library."
 msgstr ""
@@ -3755,7 +3755,7 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:102
 #: frontend/src/pages/sys-admin/orgs/org-users.js:170
 #: frontend/src/pages/sys-admin/orgs/org-users.js:225
-#: frontend/src/pages/sys-admin/users/users-content.js:448
+#: frontend/src/pages/sys-admin/users/users-content.js:454
 msgid "Reset Password"
 msgstr ""
 
@@ -3773,7 +3773,7 @@ msgstr "Estat"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:51
 #: frontend/src/pages/sys-admin/users/ldap-users.js:45
-#: frontend/src/pages/sys-admin/users/users-content.js:72
+#: frontend/src/pages/sys-admin/users/users-content.js:78
 msgid "Space Used"
 msgstr "Espai ocupat"
 
@@ -3818,7 +3818,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/links/share-links.js:48
 #: frontend/src/pages/sys-admin/links/upload-links.js:49
 #: frontend/src/pages/sys-admin/orgs/org-users.js:55
-#: frontend/src/pages/sys-admin/users/users-content.js:80
+#: frontend/src/pages/sys-admin/users/users-content.js:86
 msgid "Created At"
 msgstr ""
 
@@ -3827,7 +3827,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/departments/department-detail.js:234
 #: frontend/src/pages/sys-admin/departments/departments-list.js:97
 #: frontend/src/pages/sys-admin/users/ldap-users.js:45
-#: frontend/src/pages/sys-admin/users/users-content.js:77
+#: frontend/src/pages/sys-admin/users/users-content.js:83
 msgid "Quota"
 msgstr ""
 
@@ -4004,7 +4004,7 @@ msgstr "ReiniContra"
 #: frontend/src/pages/org-admin/org-user-item.js:160
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:137
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:177
-#: frontend/src/pages/sys-admin/users/users-content.js:457
+#: frontend/src/pages/sys-admin/users/users-content.js:463
 msgid "Revoke Admin"
 msgstr "Revoca el permís d'administrador"
 
@@ -4013,7 +4013,7 @@ msgid "Avatar"
 msgstr "Avatar"
 
 #: frontend/src/pages/org-admin/org-user-profile.js:140
-#: frontend/src/pages/sys-admin/users/users-content.js:79
+#: frontend/src/pages/sys-admin/users/users-content.js:85
 msgid "Contact Email"
 msgstr ""
 
@@ -4132,7 +4132,7 @@ msgstr "Escrigui les extensions de fitxer separades per ','"
 #: frontend/src/pages/search/advanced-search.js:209
 #: frontend/src/pages/search/advanced-search.js:231
 #: frontend/src/pages/sys-admin/orgs/org-users.js:228
-#: frontend/src/pages/sys-admin/users/users-content.js:451
+#: frontend/src/pages/sys-admin/users/users-content.js:457
 msgid "Reset"
 msgstr ""
 
@@ -4313,7 +4313,7 @@ msgid "Create Group"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:94
-#: frontend/src/pages/sys-admin/users/users-content.js:439
+#: frontend/src/pages/sys-admin/users/users-content.js:445
 msgid "Delete User"
 msgstr "Elimina l'usuari"
 
@@ -4530,13 +4530,13 @@ msgid "Last Login"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:148
-#: frontend/src/pages/sys-admin/users/users-content.js:342
+#: frontend/src/pages/sys-admin/users/users-content.js:348
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:180
-#: frontend/src/pages/sys-admin/users/users-content.js:460
+#: frontend/src/pages/sys-admin/users/users-content.js:466
 msgid "Revoke"
 msgstr ""
 
@@ -4650,14 +4650,14 @@ msgid "Successfully set max number of members."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/org-users.js:183
-#: frontend/src/pages/sys-admin/users/users-content.js:341
+#: frontend/src/pages/sys-admin/users/users-content.js:347
 msgid "Are you sure you want to reset the password of {placeholder} ?"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:115
 msgid ""
-"{userCount} user(s) and {repoCount} libraries of this orgnization will also "
-"be deleted."
+"{userCount} user(s) and {repoCount} libraries of this organization will also"
+" be deleted."
 msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:163
