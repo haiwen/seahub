@@ -129,6 +129,7 @@ class Item extends Component {
   }
 
   deleteOrg = () => {
+    toaster.notify(gettext('It may take some time, please wait.'));
     this.props.deleteOrg(this.props.item.org_id);
   }
 
