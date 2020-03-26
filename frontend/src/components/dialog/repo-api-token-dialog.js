@@ -9,9 +9,6 @@ import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 import Loading from '../loading';
 
-import '../../css/share-link-dialog.css';
-
-
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
   deleteAPIToken: PropTypes.func.isRequired,
@@ -232,7 +229,7 @@ class RepoAPITokenDialog extends React.Component {
         </div>
         }
         {!this.state.errorMsg &&
-        <div className='mx-5 mb-5' style={{height: 'auto'}}>
+        <Fragment>
           <table>
             {thead}
             <tbody>
@@ -262,21 +259,17 @@ class RepoAPITokenDialog extends React.Component {
             </tbody>
           </table>
           {this.state.apiTokenList.length !== 0 &&
-          <div className='o-auto' style={{height: 'calc(100% - 91px)'}}>
-            <div className="h-100" style={{maxHeight: '18rem'}}>
-              <table className="table-thead-hidden">
-                {thead}
-                <tbody>
-                  {renderAPITokenList}
-                </tbody>
-              </table>
-            </div>
+          <div className='o-auto' style={{minHeight: '10rem', maxHeight: '18rem'}}>
+            <table className="table-thead-hidden">
+              {thead}
+              <tbody>
+                {renderAPITokenList}
+              </tbody>
+            </table>
           </div>
           }
-          {this.state.loading &&
-          <Loading/>
-          }
-        </div>
+          {this.state.loading && <Loading/>}
+        </Fragment>
         }
       </Fragment>
     );
@@ -289,13 +282,13 @@ class RepoAPITokenDialog extends React.Component {
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal
-        isOpen={true} className="share-dialog" style={{maxWidth: '800px'}}
+        isOpen={true} style={{maxWidth: '800px'}}
         toggle={this.props.onRepoAPITokenToggle}
       >
         <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
           <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
         </ModalHeader>
-        <ModalBody className="share-dialog-content">
+        <ModalBody>
           {this.renderContent()}
         </ModalBody>
       </Modal>

@@ -2,14 +2,29 @@
     padding: 0;
     min-height: 27rem;
     display: flex;
+    flex-direction: column;
+}
+@media (min-width: 768px) {
+  .share-dialog .share-dialog-content {
     flex-direction: row;
+  }
 }
 
 .share-dialog-content .share-dialog-side {
     display: flex;
     flex: 0 0 22%;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+@media (min-width: 768px) {
+  .share-dialog-content .share-dialog-side {
     padding: 1rem 0 0 1rem;
+    border: 0;
     border-right: 1px solid #eee;
+  }
+  .share-dialog-side .nav {
+    flex-direction: column;
+  }
 }
 
 .share-dialog-side .nav-pills .nav-item .nav-link {

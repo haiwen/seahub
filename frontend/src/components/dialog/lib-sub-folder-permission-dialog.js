@@ -37,7 +37,7 @@ class LibSubFolderPermissionDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills vertical>
+          <Nav pills>
             <NavItem>
               <NavLink className={activeTab === 'userPermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'userPermission')}>
                 {gettext('User Permission')}
