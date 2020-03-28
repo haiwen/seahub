@@ -4077,7 +4077,7 @@ class SharedDirView(APIView):
 
         req_path = request.GET.get('p', '/')
 
-        if req_path[-1] != '/':
+        if not req_path.endswith('/'):
             req_path += '/'
 
         if req_path == '/':

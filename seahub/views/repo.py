@@ -55,7 +55,8 @@ def is_password_set(repo_id, username):
 
 def get_path_from_request(request):
     path = request.GET.get('p', '/')
-    if path[-1] != '/':
+
+    if not path.endswith('/'):
         path = path + '/'
     return path
 
@@ -261,9 +262,7 @@ def view_shared_dir(request, fileshare):
 
     # Get path from frontend, use '/' if missing, and construct request path
     # with fileshare.path to real path, used to fetch dirents by RPC.
-    req_path = request.GET.get('p', '/')
-    if req_path[-1] != '/':
-        req_path += '/'
+    req_path = get_path_from_request(request)
 
     if req_path == '/':
         real_path = fileshare.path
