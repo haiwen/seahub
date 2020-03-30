@@ -211,7 +211,7 @@ class NoticeItem extends React.Component {
         <td className="text-center">
           <img src={avatar_url} width="32" height="32" className="avatar" alt="" />
         </td>
-        <td className="pr-8">
+        <td className="pr-1 pr-md-8">
           <p className="m-0" dangerouslySetInnerHTML={{__html: notice}}></p>
         </td>
         <td>

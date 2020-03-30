@@ -119,8 +119,8 @@ class UserNotifications extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <div className="d-flex justify-content-between align-items-center op-bar">
-                  <h2 className="h4 m-0">{gettext('Notifications')}</h2>
+                <div className="d-flex justify-content-between align-items-center flex-wrap op-bar">
+                  <h2 className="h4 m-0 my-1">{gettext('Notifications')}</h2>
                   <div>
                     <button className="btn btn-secondary op-bar-btn" onClick={this.markAllRead}>{gettext('Mark all read')}</button>
                     <button className="btn btn-secondary op-bar-btn ml-2" onClick={this.clearAll}>{gettext('Clear')}</button>
@@ -149,11 +149,6 @@ class Content extends React.Component {
 
   constructor(props) {
     super(props);
-    this.theadData = [
-      {width: '7%', text: ''},
-      {width: '73%', text: gettext('Message')},
-      {width: '20%', text: gettext('Time')}
-    ];
   } 
 
   getPreviousPage = () => {
@@ -178,12 +173,23 @@ class Content extends React.Component {
       return <p className="error mt-6 text-center">{errorMsg}</p>;
     }
 
+    const isDesktop = Utils.isDesktop();
+    const theadData = isDesktop ? [
+      {width: '7%', text: ''},
+      {width: '73%', text: gettext('Message')},
+      {width: '20%', text: gettext('Time')}
+    ] : [
+      {width: '15%', text: ''},
+      {width: '52%', text: gettext('Message')},
+      {width: '33%', text: gettext('Time')}
+    ];
+
     return (
       <React.Fragment>
         <table className="table-hover">
           <thead>
             <tr>
-              {this.theadData.map((item, index) => {
+              {theadData.map((item, index) => {
                 return <th key={index} width={item.width}>{item.text}</th>;
               })}
             </tr>
