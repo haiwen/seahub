@@ -78,6 +78,7 @@ class LibContentView extends React.Component {
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
       asyncCopyMoveTaskId: '',
+      asyncOperationType: 'move',
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
     };
@@ -638,18 +639,18 @@ class LibContentView extends React.Component {
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
-    let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentNames();
-
+    let selectedDirentList = this.state.selectedDirentList;
     if (repoID !== destRepo.repo_id) {
-      this.setState({
-        asyncOperatedFilesLength: dirNames.length,
+      this.setState(() => ({
+        asyncOperatedFilesLength: selectedDirentList.length,
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true
-      });
+      }));
     }
-
+    
+    let dirNames = this.getSelectedDirentNames();
+    let direntPaths = this.getSelectedDirentPaths();
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
@@ -688,17 +689,18 @@ class LibContentView extends React.Component {
 
   onCopyItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
-    let dirNames = this.getSelectedDirentNames();
-
+    let selectedDirentList = this.state.selectedDirentList;
+    
     if (repoID !== destRepo.repo_id) {
       this.setState({
-        asyncOperatedFilesLength: dirNames.length,
+        asyncOperatedFilesLength: selectedDirentList.length,
         asyncOperationProgress: 0,
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
       });
     }
-
+    
+    let dirNames = this.getSelectedDirentNames();
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
@@ -1721,7 +1723,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -1866,7 +1868,7 @@ class LibContentView extends React.Component {
             )}
           </div>
         </div>
-        {this.state.isCopyMoveProgressDialogShow && (
+        {isCopyMoveProgressDialogShow && (
           <CopyMoveDirentProgressDialog
             type={this.state.asyncOperationType}
             asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
