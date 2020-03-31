@@ -289,7 +289,7 @@ class ShareToGroup extends React.Component {
   render() {
     return (
       <Fragment>
-        <table>
+        <table className="w-xs-200">
           <thead>
             <tr>
               <th width="50%">{gettext('Group')}</th>
@@ -337,7 +337,7 @@ class ShareToGroup extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
+          <table className="table-thead-hidden w-xs-200">
             <thead>
               <tr>
                 <th width="50%">{gettext('Group')}</th>

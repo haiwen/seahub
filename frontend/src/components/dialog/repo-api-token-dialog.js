@@ -230,7 +230,8 @@ class RepoAPITokenDialog extends React.Component {
         }
         {!this.state.errorMsg &&
         <Fragment>
-          <table>
+          <div className='o-auto'>
+          <table className="w-xs-200">
             {thead}
             <tbody>
               <tr>
@@ -258,16 +259,17 @@ class RepoAPITokenDialog extends React.Component {
               </tr>
             </tbody>
           </table>
-          {this.state.apiTokenList.length !== 0 &&
+            </div>
           <div className='o-auto' style={{minHeight: '10rem', maxHeight: '18rem'}}>
-            <table className="table-thead-hidden">
+          {this.state.apiTokenList.length !== 0 &&
+            <table className="table-thead-hidden w-xs-200">
               {thead}
               <tbody>
                 {renderAPITokenList}
               </tbody>
             </table>
-          </div>
           }
+          </div>
           {this.state.loading && <Loading/>}
         </Fragment>
         }
