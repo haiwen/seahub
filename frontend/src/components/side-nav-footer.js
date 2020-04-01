@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { gettext, siteRoot, sideNavFooterCustomHtml, extraAppBottomLinks } from '../utils/constants';
+import { gettext, siteRoot, sideNavFooterCustomHtml, additionalAppBottomLinks } from '../utils/constants';
 import ModalPortal from './modal-portal';
 import AboutDialog from './dialog/about-dialog';
 
@@ -17,10 +17,10 @@ class SideNavFooter extends React.Component {
   }
 
   renderExternalAppLinks = () => {
-    if (extraAppBottomLinks && (typeof extraAppBottomLinks) === 'object') {
-      let keys = Object.keys(extraAppBottomLinks);
+    if (additionalAppBottomLinks && (typeof additionalAppBottomLinks) === 'object') {
+      let keys = Object.keys(additionalAppBottomLinks);
       return keys.map((key, index) => {
-        return <a key={index} className="item" href={extraAppBottomLinks[key]}>{key}</a>;
+        return <a key={index} className="item" href={additionalAppBottomLinks[key]}>{key}</a>;
       });
     }
     return null;
@@ -37,7 +37,7 @@ class SideNavFooter extends React.Component {
           <a href={siteRoot + 'help/'} target="_blank" rel="noopener noreferrer" className="item">{gettext('Help')}</a>
           <a className="item cursor-pointer" onClick={this.onAboutDialogToggle}>{gettext('About')}</a>
           {this.renderExternalAppLinks()}
-          <a href={siteRoot + 'download_client_program/'} className={`item ${extraAppBottomLinks ? '' : 'last-item'}`}>
+          <a href={siteRoot + 'download_client_program/'} className={`item ${additionalAppBottomLinks ? '' : 'last-item'}`}>
             <span aria-hidden="true" className="sf2-icon-monitor vam"></span>{' '}
             <span className="vam">{gettext('Clients')}</span>
           </a>
