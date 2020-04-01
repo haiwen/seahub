@@ -5,6 +5,8 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import More from '../more';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -118,7 +120,7 @@ class Search extends Component {
         toaster.danger(errMessage);
       });
     } else {
-      editorUtilities.searchFiles(queryData,cancelToken).then(res => {
+      seafileAPI.searchFiles(queryData,cancelToken).then(res => {
         if (!res.data.total) {
           _this.setState({
             resultItems: [],
