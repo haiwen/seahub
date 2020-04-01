@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion, extraAboutDialogLinks } from '../../utils/constants';
+import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion, additionalAboutDialogLinks } from '../../utils/constants';
 
 const propTypes = {
   onCloseAboutDialog: PropTypes.func.isRequired,
@@ -14,10 +14,10 @@ class AboutDialog extends React.Component {
   }
 
   renderExternalAboutLinks = () => {
-    if (extraAboutDialogLinks && (typeof extraAboutDialogLinks) === 'object') {
-      let keys = Object.keys(extraAboutDialogLinks);
+    if (additionalAboutDialogLinks && (typeof additionalAboutDialogLinks) === 'object') {
+      let keys = Object.keys(additionalAboutDialogLinks);
       return keys.map((key, index) => {
-        return <a key={index} className="d-block" href={extraAboutDialogLinks[key]}>{key}</a>;
+        return <a key={index} className="d-block" href={additionalAboutDialogLinks[key]}>{key}</a>;
       });
     }
     return null;

@@ -68,9 +68,9 @@ export const curNoteID = window.app.pageOptions.curNoteID;
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
-export const extraShareDialogNote = window.app.pageOptions.extraShareDialogNote;
-export const extraAppBottomLinks = window.app.pageOptions.extraAppBottomLinks;
-export const extraAboutDialogLinks = window.app.pageOptions.extraAboutDialogLinks;
+export const additionalShareDialogNote = window.app.pageOptions.additionalShareDialogNote;
+export const additionalAppBottomLinks = window.app.pageOptions.additionalAppBottomLinks;
+export const additionalAboutDialogLinks = window.app.pageOptions.additionalAboutDialogLinks;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

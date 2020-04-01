@@ -55,7 +55,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
-    EXTRA_SHARE_DIALOG_NOTE, EXTRA_APP_BOTTOM_LINKS, EXTRA_ABOUT_DIALOG_LINKS, \
+    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
     DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
@@ -1159,7 +1159,7 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
-        'extra_share_dialog_note': EXTRA_SHARE_DIALOG_NOTE,
-        'extra_app_bottom_links': EXTRA_APP_BOTTOM_LINKS,
-        'extra_about_dialog_links': EXTRA_ABOUT_DIALOG_LINKS
+        'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
+        'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
+        'additional_about_dialog_links': ADDITIONAL_SHARE_DIALOG_NOTE
     })
