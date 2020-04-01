@@ -239,19 +239,22 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       );
     }
 
+    const thead = (
+      <thead>
+        <tr>
+          <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
+          {showPath &&
+          <th width="32%">{gettext('Folder')}</th>
+          }
+          <th width={showPath ? '24%': '30%'}>{gettext('Permission')}</th>
+          <th width={showPath ? '12%' : '15%'}></th>
+        </tr>
+      </thead>
+    );
     return (
       <Fragment>
-        <table className="w-xs-200">
-          <thead>
-            <tr>
-              <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
-              {showPath &&
-                <th width="32%">{gettext('Folder')}</th>
-              }
-              <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
-              <th width={showPath ? '10%' : '15%'}></th>
-            </tr>
-          </thead>
+        <table className="w-xs-250">
+          {thead}
           <tbody>
             <tr>
               <td>
@@ -303,17 +306,8 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-200">
-            <thead>
-              <tr>
-                <th width={showPath ? '32%': '55%'}>{gettext('User')}</th>
-                {showPath &&
-                  <th width="32%">{gettext('Folder')}</th>
-                }
-                <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
-                <th width={showPath ? '10%' : '15%'}></th>
-              </tr>
-            </thead>
+          <table className="table-thead-hidden w-xs-250">
+            {thead}
             <tbody>
               {userFolderPermItems.map((item, index) => {
                 return (

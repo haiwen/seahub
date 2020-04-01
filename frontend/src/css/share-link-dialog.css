@@ -48,7 +48,7 @@
 
 .share-list-container {
     max-height: 18rem;
-    height: 100%;
+    min-height: 10rem;
 }
 
 .share-dialog-content label {

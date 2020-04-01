@@ -214,24 +214,21 @@ class RepoAPITokenDialog extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width="22%">{gettext('App Name')}</th>
+          <th width="20%">{gettext('App Name')}</th>
           <th width="20%">{gettext('Permission')}</th>
           <th width="48%">API Token</th>
-          <th width="10%"></th>
+          <th width="12%"></th>
         </tr>
       </thead>
     );
     return (
       <Fragment>
         {this.state.errorMsg &&
-        <div className='w-100'>
           <p className="error text-center">{this.state.errorMsg}</p>
-        </div>
         }
         {!this.state.errorMsg &&
         <Fragment>
-          <div className='o-auto'>
-          <table className="w-xs-200">
+          <table className="w-xs-250">
             {thead}
             <tbody>
               <tr>
@@ -259,16 +256,15 @@ class RepoAPITokenDialog extends React.Component {
               </tr>
             </tbody>
           </table>
-            </div>
-          <div className='o-auto' style={{minHeight: '10rem', maxHeight: '18rem'}}>
-          {this.state.apiTokenList.length !== 0 &&
-            <table className="table-thead-hidden w-xs-200">
+          <div style={{minHeight: '10rem', maxHeight: '18rem'}}>
+            {this.state.apiTokenList.length !== 0 &&
+            <table className="table-thead-hidden w-xs-250">
               {thead}
               <tbody>
                 {renderAPITokenList}
               </tbody>
             </table>
-          }
+            }
           </div>
           {this.state.loading && <Loading/>}
         </Fragment>
@@ -291,7 +287,9 @@ class RepoAPITokenDialog extends React.Component {
           <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
         </ModalHeader>
         <ModalBody>
-          {this.renderContent()}
+          <div className="o-auto">
+            {this.renderContent()}
+          </div>
         </ModalBody>
       </Modal>
     );

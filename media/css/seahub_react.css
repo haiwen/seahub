@@ -232,6 +232,9 @@ a:hover { color:#eb8205; }
   .w-xs-200 {
     width: 200%;
   }
+  .w-xs-250 {
+    width: 250%;
+  }
 }
 
 /* UI Widget */
