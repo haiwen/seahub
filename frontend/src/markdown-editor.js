@@ -78,6 +78,29 @@ class EditorUtilities {
     return url;
   }
 
+  uploadImage = (imageFile) => {
+    return (
+      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
+        let uploadLinkComponent = res.data;
+        const uploadLink = uploadLinkComponent + '?ret-json=1';
+        const name = getImageFileNameWithTimestamp();
+        const blob = imageFile.slice(0, -1, 'image/png');
+        const newFile = new File([blob], name, {type: 'image/png'});
+        const formData = new FormData();
+        formData.append('parent_dir', '/');
+        formData.append('relative_path', 'images/auto-upload');
+        formData.append('file', newFile);
+        return {uploadLink, formData};
+      }).then(({ uploadLink, formData}) => {
+        return seafileAPI.uploadImage(uploadLink, formData);
+      }).then ((res) => {
+        let resArr = res.data[0];
+        let filename = resArr.name;
+        return this._getImageURL(filename);
+      })
+    );
+  }
+
   uploadLocalImage = (imageFile) => {
     return (
       seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {

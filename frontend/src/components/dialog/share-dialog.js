@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople } from '../../utils/constants';
+import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, extraShareDialogNote } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import ShareToInvitePeople from './share-to-invite-people';
@@ -226,13 +226,28 @@ class ShareDialog extends React.Component {
     );
   }
 
+  renderExternalShareMessage = () => {
+    if (extraShareDialogNote && (typeof extraShareDialogNote) === 'object') {
+      return (
+        <div className="external-share-message mt-2">
+          <h6>{extraShareDialogNote.title}</h6>
+          <div style={{fontSize: '14px', color: '#666'}}>{extraShareDialogNote.content}</div>
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
     const { itemType, itemName, repoEncrypted } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     return (
       <div>
-        <Modal isOpen={true} style={{ maxWidth: '720px' }} className="share-dialog" toggle={this.props.toggleDialog}>
-          <ModalHeader toggle={this.props.toggleDialog}>{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></ModalHeader>
+        <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog" toggle={this.props.toggleDialog}>
+          <ModalHeader toggle={this.props.toggleDialog}>
+            {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
+            {this.renderExternalShareMessage()}
+          </ModalHeader>
           <ModalBody className="share-dialog-content">
             {(itemType === 'library' || itemType === 'dir') && this.renderDirContent()}
             {(itemType === 'file' && enableShareLink) && this.renderFileContent()}

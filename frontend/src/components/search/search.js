@@ -94,29 +94,52 @@ class Search extends Component {
 
   sendRequest(queryData, cancelToken) {
     var _this = this;
+    let isPublic = this.props.isPublic;
 
-    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-      if (!res.data.total) {
+    if (isPublic) {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+
+        let items = _this.formatResultItems(res.data.results);
         _this.setState({
-          resultItems: [],
+          resultItems: items,
           isResultGetted: true
         });
         _this.source = null;
-        return;
-      }
-  
-      let items = _this.formatResultItems(res.data.results);
-      _this.setState({
-        total: res.data.total,
-        resultItems: items,
-        isResultGetted: true
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
-      _this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
+    } else {
+      editorUtilities.searchFiles(queryData,cancelToken).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+  
+        let items = _this.formatResultItems(res.data.results);
+        _this.setState({
+          resultItems: items,
+          isResultGetted: true
+        });
+        _this.source = null;
+      }).catch(res => {
+        /* eslint-disable */
         console.log(res);
         /* eslint-enable */
-    });
+      });
+    }
   }
 
   cancelRequest() {

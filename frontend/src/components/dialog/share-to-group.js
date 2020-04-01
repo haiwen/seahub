@@ -279,8 +279,8 @@ class ShareToGroup extends React.Component {
       let sharedItemGroupID = sharedItem.group_info.id;
       if (groupID === sharedItemGroupID) {
         sharedItem.permission = permission;
+        sharedItem.is_admin = permission === 'admin' ? true : false;
       }
-      sharedItem.is_admin = permission === 'admin' ? true : false;
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});

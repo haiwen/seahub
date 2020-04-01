@@ -86,6 +86,7 @@
             shareLinkExpireDaysDefault: {% if share_link_expire_days_default %} {{ share_link_expire_days_default }} {% else %} 0 {% endif %},
             shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
             shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
+            sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
@@ -106,6 +107,10 @@
             curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
+            showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
+            extraShareDialogNote: {% if extra_share_dialog_note %} {{ extra_share_dialog_note|safe }} {% else %} null {% endif %},
+            extraAppBottomLinks: {% if extra_app_bottom_links %} {{ extra_app_bottom_links|safe }} {% else %} null {% endif %},
+            extraAboutDialogLinks: {% if extra_about_dialog_links %} {{ extra_about_dialog_links|safe }} {% else %} null {% endif %}
         }
      };
 </script>

@@ -46,6 +46,11 @@ except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 
+try:
+    from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
+except ImportError:
+    SIDE_NAV_FOOTER_CUSTOM_HTML = ''
+
 
 def base(request):
     """
@@ -136,6 +141,7 @@ def base(request):
         'avatar_url': avatar_url if avatar_url else '',
         'privacy_policy_link': PRIVACY_POLICY_LINK,
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,
+        'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
     }
 
     if request.user.is_staff:

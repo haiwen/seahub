@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID, slug, siteRoot, username } from '../../utils/constants';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
+import { gettext, repoID, slug, siteRoot, username, isPro } from '../../utils/constants';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
-import Search from '../../components/search/wiki-search';
+import Search from '../../components/search/search';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
 
@@ -78,6 +77,8 @@ class MainPanel extends Component {
 
 
   render() {
+    let { onSearchedClick, permission } = this.props;
+    let searchPlaceholder = gettext('Search files in this library');
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
 
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
@@ -90,11 +91,9 @@ class MainPanel extends Component {
                 <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
               </div>
               <div className="common-toolbar">
-                <Search
-                  repoID={repoID}
-                  onSearchedClick={this.props.onSearchedClick}
-                  placeholder={gettext('Search')}
-                />
+                {isPro && (
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                )}
               </div>
             </Fragment>
           }
@@ -109,12 +108,10 @@ class MainPanel extends Component {
                 )}
               </div>
               <div className="common-toolbar">
-                <Search
-                  repoID={repoID}
-                  onSearchedClick={this.props.onSearchedClick}
-                  placeholder={gettext('Search')}
-                />
-                <Notification />  
+                {isPro && (
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                )}
+                <Notification />
                 <Account />
               </div>
             </Fragment>

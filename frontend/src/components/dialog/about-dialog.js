@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
-import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion } from '../../utils/constants';
+import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion, extraAboutDialogLinks } from '../../utils/constants';
 
 const propTypes = {
   onCloseAboutDialog: PropTypes.func.isRequired,
@@ -11,6 +11,16 @@ class AboutDialog extends React.Component {
 
   toggle = () => {
     this.props.onCloseAboutDialog();
+  }
+
+  renderExternalAboutLinks = () => {
+    if (extraAboutDialogLinks && (typeof extraAboutDialogLinks) === 'object') {
+      let keys = Object.keys(extraAboutDialogLinks);
+      return keys.map((key, index) => {
+        return <a key={index} className="d-block" href={extraAboutDialogLinks[key]}>{key}</a>;
+      });
+    }
+    return null;
   }
 
   render() {
@@ -23,6 +33,7 @@ class AboutDialog extends React.Component {
           <div className="about-content">
             <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
             <p>{gettext('Server Version: ')}{seafileVersion}<br />© 2019 {gettext('Seafile')}</p>
+            <p>{this.renderExternalAboutLinks()}</p>
             <p><a href={href} target="_blank">{gettext('About Us')}</a></p>
           </div>
         </ModalBody>

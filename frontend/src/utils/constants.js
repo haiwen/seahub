@@ -46,6 +46,7 @@ export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshot
 export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswordMinLength;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
+export const sideNavFooterCustomHtml = window.app.pageOptions.sideNavFooterCustomHtml;
 export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
@@ -66,6 +67,10 @@ export const curNoteID = window.app.pageOptions.curNoteID;
 
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
+export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
+export const extraShareDialogNote = window.app.pageOptions.extraShareDialogNote;
+export const extraAppBottomLinks = window.app.pageOptions.extraAppBottomLinks;
+export const extraAboutDialogLinks = window.app.pageOptions.extraAboutDialogLinks;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

@@ -728,6 +728,39 @@ ENABLE_WIKI = True
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False
 
+#  Repo wiki mode
+ENABLE_REPO_WIKI_MODE = True
+
+############################
+# HU berlin external#
+############################
+
+# EXTRA_SHARE_DIALOG_NOTE = {
+#     'title': 'Attention! Read before shareing files:',
+#     'content': 'Do not share personal or confidential official data with **.'
+# }
+EXTRA_SHARE_DIALOG_NOTE = None
+
+# EXTRA_APP_BOTTOM_LINKS = {
+#     'seafile': 'http://dev.seahub.com/seahub',
+#     'dtable-web': 'http://dev.seahub.com/dtable-web'
+# }
+EXTRA_APP_BOTTOM_LINKS = None
+
+# EXTRA_ABOUT_DIALOG_LINKS = {
+#     'seafile': 'http://dev.seahub.com/seahub',
+#     'dtable-web': 'http://dev.seahub.com/dtable-web'
+# }
+EXTRA_ABOUT_DIALOG_LINKS = None
+
+############################
+# Settings for SeafileDocs #
+############################
+if os.environ.get('SEAFILE_DOCS', None):
+    LOGO_PATH = 'img/seafile-docs-logo.png'
+    LOGO_WIDTH = ''
+    ENABLE_WIKI = True
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
