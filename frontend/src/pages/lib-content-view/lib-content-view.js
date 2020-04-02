@@ -599,12 +599,14 @@ class LibContentView extends React.Component {
       }
       
       if (data.successful) {
-        if (this.state.currentMode === 'column') {
-          let direntPaths = this.getSelectedDirentPaths();
-          this.deleteTreeNodes(direntPaths);
+        if (asyncOperationType === 'move') {
+          if (this.state.currentMode === 'column') {
+            let direntPaths = this.getSelectedDirentPaths();
+            this.deleteTreeNodes(direntPaths);
+          }
+          let direntNames = this.getSelectedDirentNames();
+          this.moveDirents(direntNames);
         }
-        let direntNames = this.getSelectedDirentNames();
-        this.moveDirents(direntNames);
 
         this.setState({isCopyMoveProgressDialogShow: false});
         let message = gettext('Successfully moved files to another library.');
@@ -722,12 +724,14 @@ class LibContentView extends React.Component {
         });
       }
 
-      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
-        this.updateMoveCopyTreeNode(destDirentPath);
-      }
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(destDirentPath);
+        }
 
-      if (destDirentPath === this.state.path) {
-        this.loadDirentList(this.state.path);
+        if (destDirentPath === this.state.path) {
+          this.loadDirentList(this.state.path);
+        }
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
