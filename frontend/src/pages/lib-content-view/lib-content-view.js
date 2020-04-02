@@ -593,6 +593,15 @@ class LibContentView extends React.Component {
       }
       
       if (data.successful) {
+        if (asyncOperationType === 'move') {
+          if (this.state.currentMode === 'column') {
+            let direntPaths = this.getSelectedDirentPaths();
+            this.deleteTreeNodes(direntPaths);
+          }
+          let direntNames = this.getSelectedDirentNames();
+          this.moveDirents(direntNames);
+        }
+
         this.setState({isCopyMoveProgressDialogShow: false});
         let message = gettext('Successfully moved files to another library.');
         if (asyncOperationType === 'copy') {
@@ -601,10 +610,11 @@ class LibContentView extends React.Component {
         toaster.success(message);
         return;
       }
+      // init state: total is 0
+      let asyncOperationProgress = !data.total ? 0 : parseInt((data.done/data.total * 100).toFixed(2));
 
-      let asyncOperationProgress = parseInt((data.done/data.total * 100).toFixed(2));
-      this.setState({asyncOperationProgress: asyncOperationProgress});
       this.getAsyncCopyMoveProgress();
+      this.setState({asyncOperationProgress: asyncOperationProgress});
     } catch (error) {
       this.setState({
         asyncOperationProgress: 0,
@@ -620,7 +630,7 @@ class LibContentView extends React.Component {
 
   onMoveProgressDialogToggle = () => {
     let { asyncOperationProgress } = this.state;
-    if (asyncOperationProgress && asyncOperationProgress !== 100) {
+    if (asyncOperationProgress !== 100) {
       this.cancelCopyMoveDirent();
     }
 
@@ -650,33 +660,37 @@ class LibContentView extends React.Component {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
         }, () => {
+          // After moving successfully, delete related files
           this.getAsyncCopyMoveProgress();
         });
       }
 
-      direntPaths.forEach((direntPath, index) => {
-        if (this.state.currentMode === 'column') {
-          this.deleteTreeNode(direntPath);
-        }
-        this.moveDirent(direntPath);
-      });
-
-      // 1. move to current repo 
-      // 2. tow columns mode need update left tree
-      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
-        this.updateMoveCopyTreeNode(destDirentPath);
-      }
-
-      // show tip message if move to current repo
       if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.deleteTreeNodes(direntPaths);
+        }
+        
+        this.moveDirents(dirNames);
+
+        // 2. tow columns mode need update left tree
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(destDirentPath);
+        }
+
+        // show tip message if move to current repo
         let message =  Utils.getMoveSuccessMessage(dirNames);
         toaster.success(message);
       }
+
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
         errMessage = Utils.getMoveFailedMessage(dirNames);
       }
+      this.setState({
+        asyncOperationProgress: 0,
+        isCopyMoveProgressDialogShow: false,
+      });
       toaster.danger(errMessage);
     });
   }
@@ -704,12 +718,18 @@ class LibContentView extends React.Component {
         });
       }
 
-      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
-        this.updateMoveCopyTreeNode(destDirentPath);
-      }
+      if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(destDirentPath);
+        }
 
-      if (destDirentPath === this.state.path) {
-        this.loadDirentList(this.state.path);
+        if (destDirentPath === this.state.path) {
+          this.loadDirentList(this.state.path);
+        }
+
+        // show tip message if copy to current repo
+        let message =  Utils.getCopySuccessfulMessage(dirNames);
+        toaster.success(message);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -727,12 +747,12 @@ class LibContentView extends React.Component {
 
     this.setState({updateDetail: !this.state.updateDetail});
     seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
-      direntPaths.forEach(direntPath => {
-        if (this.state.currentMode === 'column') {
-          this.deleteTreeNode(direntPath);
-        }
-        this.deleteDirent(direntPath);
-      });
+      if (this.state.currentMode === 'column') {
+        this.deleteTreeNodes(direntPaths);
+      }
+
+      this.deleteDirents(dirNames);
+
       let msg = '';
       if (direntPaths.length > 1) {
         msg = gettext('Successfully deleted {name} and other {n} items.');
@@ -1342,6 +1362,19 @@ class LibContentView extends React.Component {
     // else do nothing
   }
 
+  // only one scence: The deleted items are inside current path
+  deleteDirents = (direntNames) => {
+    let direntList = this.state.direntList.filter(item => {
+      return direntNames.indexOf(item.name) === -1;
+    });
+
+    // Recalculate the state of the selection
+    this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
+
+    this.setState({direntList: direntList});
+    this.updateReadmeMarkdown(direntList);
+  }
+
   moveDirent = (direntPath, moveToDirentPath = null) => {
     let name = Utils.getFileName(direntPath);
     if (moveToDirentPath === this.state.path) {
@@ -1350,6 +1383,19 @@ class LibContentView extends React.Component {
     }
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
+    });
+
+    // Recalculate the state of the selection
+    this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
+
+    this.setState({direntList: direntList});
+    this.updateReadmeMarkdown(direntList);
+  }
+
+  // only one scence: The moved items are inside current path
+  moveDirents = (direntNames) => {
+    let direntList = this.state.direntList.filter(item => {
+      return direntNames.indexOf(item.name) === -1;
     });
 
     // Recalculate the state of the selection
@@ -1532,6 +1578,11 @@ class LibContentView extends React.Component {
 
   deleteTreeNode = (path) => {
     let tree = treeHelper.deleteNodeByPath(this.state.treeData, path);
+    this.setState({treeData: tree});
+  }
+
+  deleteTreeNodes = (paths) => {
+    let tree = treeHelper.deleteNodeListByPaths(this.state.treeData, paths);
     this.setState({treeData: tree});
   }
 
