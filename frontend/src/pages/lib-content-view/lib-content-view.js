@@ -732,6 +732,10 @@ class LibContentView extends React.Component {
         if (destDirentPath === this.state.path) {
           this.loadDirentList(this.state.path);
         }
+
+        // show tip message if copy to current repo
+        let message =  Utils.getCopySuccessfulMessage(dirNames);
+        toaster.success(message);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
