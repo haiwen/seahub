@@ -13,3 +13,9 @@ source_file = locale/en/LC_MESSAGES/djangojs.po
 source_lang = en
 type = PO
 
+[seahub.seafile-editor]
+file_filter = media/locales/<lang>/seafile-editor.json
+source_file = media/locales/en/seafile-editor.json
+source_lang = en
+type = KEYVALUEJSON
+
