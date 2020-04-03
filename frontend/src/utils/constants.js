@@ -65,6 +65,8 @@ export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfF
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
 
+export const enableTC = window.app.pageOptions.enableTC;
+
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;

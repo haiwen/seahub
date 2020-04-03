@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { gettext, siteRoot, sideNavFooterCustomHtml, additionalAppBottomLinks } from '../utils/constants';
+import { gettext, siteRoot, enableTC, sideNavFooterCustomHtml, additionalAppBottomLinks } from '../utils/constants';
 import ModalPortal from './modal-portal';
 import AboutDialog from './dialog/about-dialog';
 
@@ -36,6 +36,7 @@ class SideNavFooter extends React.Component {
         <div className="side-nav-footer flex-wrap">
           <a href={siteRoot + 'help/'} target="_blank" rel="noopener noreferrer" className="item">{gettext('Help')}</a>
           <a className="item cursor-pointer" onClick={this.onAboutDialogToggle}>{gettext('About')}</a>
+          {enableTC && <a href={`${siteRoot}terms/`} className="item">{gettext('Terms')}</a>}
           {this.renderExternalAppLinks()}
           <a href={siteRoot + 'download_client_program/'} className={`item ${additionalAppBottomLinks ? '' : 'last-item'}`}>
             <span aria-hidden="true" className="sf2-icon-monitor vam"></span>{' '}
