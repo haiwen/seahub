@@ -41,7 +41,7 @@
   "star": "Add star",
   "unstar": "Remove star",
   "back_to_parent_directory":"Volver a la carpeta superior",
-  "edit":"editar",
+  "edit": "Editar",
   "copy": "Copiar",
   "copied": "Copiado",
   "internal_link": "Enlace interno",
@@ -81,13 +81,14 @@
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "Tienes un borrador sin guardar. ¿Deseas utilizarlo?",
   "local_draft_saved": "Borrador local guardado",
   "new_draft": "Nuevo Borrador",
-  "edit_draft": "Editar Borrador",
+  "view_draft": "Ver Borrador",
+  "publish": "Publicar",
   "this_file_has_a_draft": "Este archivo tiene un borrador", 
   "delete": "Borrar",
   "comments": "Comentarios",
   "add_a_comment": "Agregar un comentario...",
   "no_comment_yet": "No hay comentarios.",
-  "Mark_as_Resolved": "Marcar como resuelto",
+  "mark_as_resolved": "Marcar como resuelto",
   "ask_for_review": "Solicitar revisión",
   "review_already_exists": "La revisión ya existe",
   "view_review": "Ver revisión",
@@ -101,7 +102,19 @@
   "related_file": "archivo relacionado",
   "no_tags": "Sin etiquetas",
   "no_related_files": "Sin archivos relacionados",
-  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "",
+  "no_out_line": "No hay esquema",
+  "Please_use_Chrome_to_get_best_editing_experience": "Por favor utilice Chrome para obtener la mejor experiencia editando.",
+  "no_document_improvement_suggestion": "No hay sugerencias para mejorar el documento",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "No hay h1 en el documento",
+      "issue" : "Falta h1"
+    },
+    "heading_end_with_colon": {
+      "description": "Un encabezado no debe finalizar con el signo Dos Puntos.",
+      "issue": "El encabezado finaliza con el signo Dos Puntos"
+    }
+  },
   "userHelp": {
     "title": "Atajos de teclado",
     "userHelpData": [

@@ -41,7 +41,7 @@
   "star": "Přidat hvězdičku",
   "unstar": "Odebrat hvězdičku",
   "back_to_parent_directory":"Zpět do nadřazeného adresáře",
-  "edit":"editovat",
+  "edit": "Upravit",
   "copy": "Kopírovat",
   "copied": "Zkopírováno",
   "internal_link": "Interní odkaz",
@@ -81,13 +81,14 @@
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "Máte neuložený koncept. Chcete ho použít?",
   "local_draft_saved": "Místní koncept byl uložen",
   "new_draft": "Nový návrh",
-  "edit_draft": "Upravit návrh",
+  "view_draft": "Zobrazit koncept",
+  "publish": "Zveřejnit",
   "this_file_has_a_draft": "Tento soubor má koncept.", 
   "delete": "Smazat",
   "comments": "Komentáře",
   "add_a_comment": "Přidat komentář…",
   "no_comment_yet": "Žádné komentáře",
-  "Mark_as_Resolved": "Označit jako vyřešené",
+  "mark_as_resolved": "Označit jako vyřešené",
   "ask_for_review": "Požádat o kontrolu",
   "review_already_exists": "Kontrola již existuje. ",
   "view_review": "Zobrazit kontrolu",
@@ -101,7 +102,19 @@
   "related_file": "související soubor",
   "no_tags": "Žádné značky",
   "no_related_files": "Žádné související soubory",
-  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "",
+  "no_out_line": "Bez obrysu",
+  "Please_use_Chrome_to_get_best_editing_experience": "Prosím použijte Chrome pro lepší možnosti editace.",
+  "no_document_improvement_suggestion": "Žádný návrh na zlepšení dokumentu",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "V dokumentu není žádný h1",
+      "issue" : "Chybí h1"
+    },
+    "heading_end_with_colon": {
+      "description": "Koncová interpunkce v záhlaví by neměla být dvojtečka.",
+      "issue": "Záhlaví končí dvojtečkou"
+    }
+  },
   "userHelp": {
     "title": "Klávesové zkratky",
     "userHelpData": [

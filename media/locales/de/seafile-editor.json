@@ -9,24 +9,24 @@
   "header_five": "Überschrift 5",
   "header_six": "Überschrift 6",
   "paragraph": "Absatz",
-  "quote": "Zitat",
+  "quote": "Blockquote",
   "ordered_list": "Nummerierte Liste",
   "unordered_list": "Ungeordnete Liste",
-  "check_list_item": "Listeneintrag überprüfen",
-  "insert_image": "Bild einfügen",
+  "check_list_item": "Checkbox Liste",
+  "insert_image": "Bild",
   "code": "Inline-Code",
   "code_block": "Codeblock",
-  "insert_link": "Link einfügen",
-  "insert_table": "Tabelle einfügen",
+  "insert_link": "Link",
+  "insert_table": "Tabelle",
   "save": "Speichern",
   "more": "Mehr",
   "invalid_url": "Ungültige Adresse",
-  "link_address": "Adresse des Links",
-  "image_address": "Adresse des Bildes",
+  "link_address": "Link-URL",
+  "image_address": "Bild-URL",
   "submit": "Absenden",
   "cancel": "Abbrechen",
-  "switch_to_plain_text_editor": "Zum reinen Texteditor wechseln",
-  "switch_to_rich_text_editor": "Zum Editor mit Formatierungen wechseln",
+  "switch_to_plain_text_editor": "Zum Plain Text Editor wechseln",
+  "switch_to_rich_text_editor": "Zum Rich Text Editor wechseln",
   "switch_to_viewer": "Zur Markdown-Vorschau wechseln",
   "help": "Hilfe",
   "remove_table": "Tabelle entfernen",
@@ -36,17 +36,17 @@
   "left": "Links",
   "center": "Zentrieren",
   "right": "Rechts",
-  "file_saved": "Datei gespeichert.",
-  "file_failed_to_save": "Datei konnte nicht gespeichert werden.",
-  "star": "Stern hinzufügen",
-  "unstar": "Stern entfernen",
+  "file_saved": "Die Datei wurde gespeichert.",
+  "file_failed_to_save": "Die Datei konnte nicht gespeichert werden.",
+  "star": "Zu Favoriten hinzufügen",
+  "unstar": "Aus Favoriten entfernen",
   "back_to_parent_directory":"Zurück zum übergeordneten Verzeichnis",
-  "edit":"Bearbeiten",
+  "edit": "Bearbeiten",
   "copy": "Kopieren",
   "copied": "Kopiert",
   "internal_link": "Interner Link",
-  "copy_internal_link": "Der interne Link ist in den Zwischenspeicher kopiert",
-  "internal_link_desc": "Ein interner Link ist eine Verlinkung auf eine Datei oder einen Ordner, die von Anderen genutzt werden kann, soweit sie die entsprechenden Leserechte haben.",
+  "copy_internal_link": "Der interne Link wurde in den Zwischenspeicher kopiert.",
+  "internal_link_desc": "Interne Links sind Verweise auf Dateien bzw. Ordner, die nur von Benutzer/innen mit mindestens Leserechten für die Dateien bzw. Ordner genutzt werden können. Interne Links eignen sich insbesondere für die interne Kommunikation in Ticket-/CRM-Systemen sowie E-Mails und Chats.",
   "share": "Freigeben",
   "share_link": "Link freigeben",
   "generate": "Erstellen",
@@ -68,26 +68,27 @@
   "password_is_too_short": "Passwort ist zu kurz",
   "passwords_do_not_match": "Passwörter stimmen nicht überein",
   "return_to_wiki_page": "Zurück zur Wiki-Seite",
-  "insert_network_image": "Bild aus dem Netzwerk einfügen",
-  "upload_local_image": "Lokales Bild hochladen",
+  "insert_network_image": "Bild per URL einfügen",
+  "upload_local_image": "Bild hochladen und einfügen",
   "add_link": "Link hinzufügen",
   "file_history": "Dateiversionen",
   "history_version": "Versionen",
   "back_to_viewer": "Zurück zur Vorschau",
-  "link_title": "Titel des Links",
+  "link_title": "Linktext",
   "local_draft": "Lokaler Entwurf",
   "use_draft": "Entwurf verwenden",
   "delete_draft": "Entwurf löschen",
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "Es gibt einen ungespeicherten Entwurf. Möchten Sie ihn verwenden?",
   "local_draft_saved": "Lokaler Entwurf gespeichert",
   "new_draft": "Neuer Entwurf",
-  "edit_draft": "Entwurf bearbeiten",
+  "view_draft": "Entwurf anzeigen",
+  "publish": "Veröffentlichen",
   "this_file_has_a_draft": "Zu dieser Datei gibt es einen Entwurf.", 
   "delete": "Löschen",
   "comments": "Kommentare",
-  "add_a_comment": "Kommentieren …",
-  "no_comment_yet": "Noch nicht kommentiert.",
-  "Mark_as_Resolved": "Als erledigt markieren",
+  "add_a_comment": "Kommentar einfügen",
+  "no_comment_yet": "Keine Kommentare vorhanden",
+  "mark_as_resolved": "Als erledigt markieren",
   "ask_for_review": "Um ein Review bitten",
   "review_already_exists": "Es gibt bereits ein Review.",
   "view_review": "Review anzeigen",
@@ -101,21 +102,33 @@
   "related_file": "Zugehörige Datei",
   "no_tags": "Keine Tags",
   "no_related_files": "Keine zugehörigen Dateien",
-  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "",
+  "no_out_line": "Keine Gliederung",
+  "Please_use_Chrome_to_get_best_editing_experience": "Die Bearbeitungsfunktion ist für den Chrome-Browser optimiert.",
+  "no_document_improvement_suggestion": "Keine Vorschläge zur Verbesserung des Dokuments",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "Es gibt keine Hauptüberschrift (h1) in dem Text",
+      "issue" : "Hauptüberschrift (h1) fehlt"
+    },
+    "heading_end_with_colon": {
+      "description": "Überschriften dürfen nicht mit einem Doppelpunkt enden.",
+      "issue": "Überschrift endet mit einem Doppelpunkt"
+    }
+  },
   "userHelp": {
-    "title": "Tastaturkürzel",
+    "title": "Tastenkombinationen",
     "userHelpData": [
       {
-        "shortcutType":"Kürzel für Listen",
+        "shortcutType":"Listen",
         "shortcutData": {
-          "Make_list": "Liste anlegen",
+          "Make_list": "Ungeordnete Liste anlegen",
           "Make_ordered_list": "Nummerierte Liste anlegen",
-          "Insert_new_item": "Neues Objekt einfügen",
-          "Insert_child_in_item": "Unterobjekt einfügen",
-          "Increase_depth": "Tiefe erhöhen"
+          "Insert_new_item": "Neues Listenelement einfügen",
+          "Insert_child_in_item": "Textzeile einfügen",
+          "Increase_depth": "Einzug erhöhen"
         }
       }, {
-        "shortcutType": "Kürzel für Überschriften",
+        "shortcutType": "Überschriften",
         "shortcutData": {
           "Heading_1": "Überschrift 1",
           "Heading_2": "Überschrift 2",
@@ -125,27 +138,27 @@
           "Heading_6": "Überschrift 6"
         }
       }, {
-        "shortcutType": "Kürzel für Code",
+        "shortcutType": "Codeblock",
         "shortcutData": {
           "Make_code_block": "Codeblock anlegen",
           "Insert_new_line": "Neue Zeile einfügen",
           "Escape_code_block": "Codeblock beenden",
-          "Insert_indent": "Einzug einfügen"
+          "Insert_indent": "Einzug erhöhen"
         }
       }, {
-        "shortcutType": "Kürzel für Blockzitat",
+        "shortcutType": "Blockquote",
         "shortcutData": {
-          "Make_Block_quote": "Blockzitat anlegen",
-          "Escape_Block_quote": "Blockzitat beenden"
+          "Make_Block_quote": "Blockquote einfügen",
+          "Escape_Block_quote": "Blockquote beenden"
         }
       }, {
-        "shortcutType": "Kürzel für Tabellen",
+        "shortcutType": "Tabellen",
         "shortcutData": {
           "Insert_Table_Row": "Tabellenzeile einfügen",
           "Escape_table": "Tabelle beenden"
         }
       }, {
-        "shortcutType":"Kürzel für Inline-Text",
+        "shortcutType":"Textformatierung",
         "shortcutData": {
           "Bold": "Fett",
           "Italic": "Kursiv",
@@ -153,15 +166,15 @@
           "Inline_code": "Inline-Code"
         }
       }, {
-        "shortcutType": "Kürzel speichern",
+        "shortcutType": "Speichern",
         "shortcutData": {
           "Save_file": "Datei speichern"
         }
       }, {
-        "shortcutType": "Kürzel für Bilder",
+        "shortcutType": "Bilder",
         "shortcutData": {
-          "Paste_screen_shot": "Bildschirmfoto einfügen",
-          "Drag_image_from_anywhere_to_upload_it": "Datei zum Hochladen hierher ziehen"
+          "Paste_screen_shot": "Bild aus Zwischenablage einfügen",
+          "Drag_image_from_anywhere_to_upload_it": "Bilder zum Einfügen/Hochladen ins Dokument ziehen"
         }
       }
     ]
