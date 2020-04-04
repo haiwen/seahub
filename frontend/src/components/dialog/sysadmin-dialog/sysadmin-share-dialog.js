@@ -42,7 +42,7 @@ class SysAdminShareDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills vertical>
+          <Nav pills>
             {enableDirPrivateShare &&
               <Fragment>
                 <NavItem>

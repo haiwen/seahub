@@ -274,7 +274,7 @@ class ShareToUser extends React.Component {
     let { sharedItems } = this.state;
     return (
       <Fragment>
-        <table>
+        <table className="w-xs-200">
           <thead>
             <tr>
               <th width="50%">{gettext('User')}</th>
@@ -324,7 +324,7 @@ class ShareToUser extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
+          <table className="table-thead-hidden w-xs-200">
             <thead>
               <tr>
                 <th width="50%">{gettext('User')}</th>

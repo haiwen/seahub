@@ -264,19 +264,22 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       );
     }
 
+    const thead = (
+      <thead>
+        <tr>
+          <th width={showPath ? '32%' : '55%'}>{gettext('Group')}</th>
+          {showPath &&
+          <th width="32%">{gettext('Folder')}</th>
+          }
+          <th width={showPath ? '24%' : '30%'}>{gettext('Permission')}</th>
+          <th width={showPath ? '12%' : '15%'}></th>
+        </tr>
+      </thead>
+    );
     return (
       <Fragment>
-        <table>
-          <thead>
-            <tr>
-              <th width={showPath ? '32%': '55%'}>{gettext('Group')}</th>
-              {showPath &&
-                <th width="32%">{gettext('Folder')}</th>
-              }
-              <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
-              <th width={showPath ? '10%' : '15%'}></th>
-            </tr>
-          </thead>
+        <table className="w-xs-250">
+          {thead}
           <tbody>
             <tr>
               <td>
@@ -284,7 +287,6 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
                   onChange={this.handleSelectChange}
                   options={this.options}
                   placeholder={gettext('Select a group')}
-                  components={makeAnimated()}
                   maxMenuHeight={200}
                   inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
@@ -325,17 +327,8 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
-            <thead>
-              <tr>
-                <th width={showPath ? '32%': '55%'}>{gettext('Group')}</th>
-                {showPath &&
-                  <th width="32%">{gettext('Folder')}</th>
-                }
-                <th width={showPath ? '26%': '30%'}>{gettext('Permission')}</th>
-                <th width={showPath ? '10%' : '15%'}></th>
-              </tr>
-            </thead>
+          <table className="table-thead-hidden w-xs-250">
+            {thead}
             <tbody>
               {this.state.groupPermissionItems.map((item, index) => {
                 return (

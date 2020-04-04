@@ -248,7 +248,7 @@ class ShareToInvitePeople extends React.Component {
     let { sharedItems, isSubmitting } = this.state;
     return (
       <Fragment>
-        <table className="table-thead-hidden">
+        <table className="table-thead-hidden w-xs-200">
           <thead>
             <tr>
               <th width="50%">{gettext('Invite Guest')}</th>
@@ -290,7 +290,7 @@ class ShareToInvitePeople extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table>
+          <table className="w-xs-200">
             <thead>
               <tr>
                 <th width="25%">{gettext('Email')}</th>

@@ -227,6 +227,15 @@ a:hover { color:#eb8205; }
     padding: 0 0.5rem;
     min-width: 55px;
 }
+/* for 'extra small' */
+@media (max-width: 575px) {
+  .w-xs-200 {
+    width: 200%;
+  }
+  .w-xs-250 {
+    width: 250%;
+  }
+}
 
 /* UI Widget */
 

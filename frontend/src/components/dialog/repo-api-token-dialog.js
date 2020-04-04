@@ -9,9 +9,6 @@ import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 import Loading from '../loading';
 
-import '../../css/share-link-dialog.css';
-
-
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
   deleteAPIToken: PropTypes.func.isRequired,
@@ -217,23 +214,21 @@ class RepoAPITokenDialog extends React.Component {
     const thead = (
       <thead>
         <tr>
-          <th width="22%">{gettext('App Name')}</th>
+          <th width="20%">{gettext('App Name')}</th>
           <th width="20%">{gettext('Permission')}</th>
           <th width="48%">API Token</th>
-          <th width="10%"></th>
+          <th width="12%"></th>
         </tr>
       </thead>
     );
     return (
       <Fragment>
         {this.state.errorMsg &&
-        <div className='w-100'>
           <p className="error text-center">{this.state.errorMsg}</p>
-        </div>
         }
         {!this.state.errorMsg &&
-        <div className='mx-5 mb-5' style={{height: 'auto'}}>
-          <table>
+        <Fragment>
+          <table className="w-xs-250">
             {thead}
             <tbody>
               <tr>
@@ -261,22 +256,18 @@ class RepoAPITokenDialog extends React.Component {
               </tr>
             </tbody>
           </table>
-          {this.state.apiTokenList.length !== 0 &&
-          <div className='o-auto' style={{height: 'calc(100% - 91px)'}}>
-            <div className="h-100" style={{maxHeight: '18rem'}}>
-              <table className="table-thead-hidden">
-                {thead}
-                <tbody>
-                  {renderAPITokenList}
-                </tbody>
-              </table>
-            </div>
+          <div style={{minHeight: '10rem', maxHeight: '18rem'}}>
+            {this.state.apiTokenList.length !== 0 &&
+            <table className="table-thead-hidden w-xs-250">
+              {thead}
+              <tbody>
+                {renderAPITokenList}
+              </tbody>
+            </table>
+            }
           </div>
-          }
-          {this.state.loading &&
-          <Loading/>
-          }
-        </div>
+          {this.state.loading && <Loading/>}
+        </Fragment>
         }
       </Fragment>
     );
@@ -289,14 +280,16 @@ class RepoAPITokenDialog extends React.Component {
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
       <Modal
-        isOpen={true} className="share-dialog" style={{maxWidth: '800px'}}
+        isOpen={true} style={{maxWidth: '800px'}}
         toggle={this.props.onRepoAPITokenToggle}
       >
         <ModalHeader toggle={this.props.onRepoAPITokenToggle}>
           <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
         </ModalHeader>
-        <ModalBody className="share-dialog-content">
-          {this.renderContent()}
+        <ModalBody>
+          <div className="o-auto">
+            {this.renderContent()}
+          </div>
         </ModalBody>
       </Modal>
     );
