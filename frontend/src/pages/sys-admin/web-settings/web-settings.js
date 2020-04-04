@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
+import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -344,7 +344,7 @@ class WebSettings extends Component {
                   />
                 </Section>
 
-                <Section headingText={gettext('Terms')}>
+                {isPro && <Section headingText={gettext('Terms')}>
                   <CheckboxItem
                     saveSetting={this.saveSetting}
                     displayName='ENABLE_TERMS_AND_CONDITIONS'
@@ -352,7 +352,7 @@ class WebSettings extends Component {
                     value={config_dict['ENABLE_TERMS_AND_CONDITIONS']}
                     helpTip={gettext('Enable system admin to add Terms and Conditions, and all users will have to accept the terms.')}
                   />
-                </Section>
+                </Section>}
               </Fragment>
               }
             </div>
