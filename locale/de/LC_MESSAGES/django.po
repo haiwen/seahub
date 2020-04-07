@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-26 10:14+0800\n"
-"PO-Revision-Date: 2020-03-25 11:32+0000\n"
+"PO-Revision-Date: 2020-03-26 07:21+0000\n"
 "Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -330,7 +330,7 @@ msgstr "Speicherplatz"
 #: seahub/api2/endpoints/admin/users.py:506 seahub/base/accounts.py:781
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
-msgstr "Maximale Anzahl von Nutzer/innen wurde überschritten"
+msgstr "Maximale Anzahl von Benutzer/innen wurde überschritten"
 
 #: seahub/api2/endpoints/admin/users.py:601
 #, python-format
@@ -991,7 +991,7 @@ msgstr "Gelöscht:"
 #: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr "Nutzer/in anonym"
+msgstr "Benutzer/in anonym"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
