@@ -714,6 +714,11 @@ export const Utils = {
     }
   },
 
+  isInternalFileLink: function(url, repoID) {
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*');
+    return re.test(url);
+  },
+
   isInternalMarkdownLink: function(url, repoID) {
     var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
     return re.test(url);
