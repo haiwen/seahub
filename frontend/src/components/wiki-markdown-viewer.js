@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot } from '../utils/constants';
+import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot, sharedToken } from '../utils/constants';
 import { Card, CardTitle, CardText } from 'reactstrap';
 import Loading from './loading';
 import { seafileAPI } from '../utils/seafile-api';
@@ -158,13 +158,19 @@ class WikiMarkdownViewer extends React.Component {
 
       else if (item.type == 'link') {
         url = item.data.href;
-        // change file url 
-        if (Utils.isInternalMarkdownLink(url, repoID)) {
-          let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
-          // replace url
-          item.data.href = serviceURL + '/published/' + slug + path;
-        } 
-        // change dir url 
+        // change file url
+        if (Utils.isInternalFileLink(url, repoID)) {
+          if (Utils.isInternalMarkdownLink(url, repoID)) {
+            let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
+            // replace url
+            item.data.href = serviceURL + '/published/' + slug + path;
+          } else {
+            item.data.href = url.replace(/(.*)lib\/([-0-9a-f]{36})\/file(.*)/g, (match, p1, p2, p3) => {
+              return `${p1}d/${sharedToken}/files/?p=${p3}&dl=1`;
+            });
+          }
+        }
+        // change dir url
         else if (Utils.isInternalDirLink(url, repoID)) {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
