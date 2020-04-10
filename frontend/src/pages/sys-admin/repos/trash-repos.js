@@ -52,7 +52,7 @@ class Content extends Component {
     } else {
       const emptyTip = (
         <EmptyTip>
-          <h2>{gettext('No deleted libraries.')}</h2>
+          <h2>{gettext('No deleted libraries')}</h2>
         </EmptyTip>
       );
       const table = (
