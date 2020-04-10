@@ -576,7 +576,6 @@ class DirentListItem extends React.PureComponent {
   }
 
   render() {
-    console.log('abcdd');
     let { path, dirent, activeDirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';
