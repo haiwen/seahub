@@ -1,8 +1,8 @@
-Django==1.11.25
+Django==1.11.29
 future
 captcha
 django-statici18n
-django-post_office
+django-post_office==3.3.0
 django-webpack_loader
 gunicorn
 pymysql
