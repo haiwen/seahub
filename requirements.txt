@@ -17,3 +17,4 @@ requests
 pillow
 pyjwt
 pycryptodome
+requests_oauthlib
