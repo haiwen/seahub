@@ -54,7 +54,7 @@ const propTypes = {
   onShowDirentsDraggablePreview: PropTypes.func,
 };
 
-class DirentListItem extends React.Component {
+class DirentListItem extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -576,6 +576,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
+    console.log('abcdd');
     let { path, dirent, activeDirent } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
     let dirHref = '';

@@ -87,6 +87,8 @@ class LibContentView extends React.Component {
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
+    this.currentMoveItemName = '';
+    this.currentMoveItemPath = '';
   }
 
   showDirentDetail = (direntDetailPanelTab) => {
@@ -600,12 +602,19 @@ class LibContentView extends React.Component {
       
       if (data.successful) {
         if (asyncOperationType === 'move') {
-          if (this.state.currentMode === 'column') {
-            let direntPaths = this.getSelectedDirentPaths();
-            this.deleteTreeNodes(direntPaths);
+          if (this.currentMoveItemName && this.currentMoveItemPath) {
+            if (this.state.currentMode === 'column') {
+              this.deleteTreeNode(this.currentMoveItemPath);
+            }
+            this.moveDirent(this.currentMoveItemName);
+          } else {
+            if (this.state.currentMode === 'column') {
+              let direntPaths = this.getSelectedDirentPaths();
+              this.deleteTreeNodes(direntPaths);
+            }
+            let direntNames = this.getSelectedDirentNames();
+            this.moveDirents(direntNames);
           }
-          let direntNames = this.getSelectedDirentNames();
-          this.moveDirents(direntNames);
         }
 
         this.setState({isCopyMoveProgressDialogShow: false});
@@ -1043,10 +1052,10 @@ class LibContentView extends React.Component {
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (repoID !== destRepo.repo_id) {
-        this.setState({
-          asyncCopyMoveTaskId: res.data.task_id,
-        }, () => {
-          this.getAsyncCopyMoveProgress();
+        this.setState({asyncCopyMoveTaskId: res.data.task_id}, () => {
+          this.currentMoveItemName = dirName;
+          this.currentMoveItemPath = direntPath;
+          this.getAsyncCopyMoveProgress(dirName, direntPath);
         });
       }
 
@@ -1105,15 +1114,15 @@ class LibContentView extends React.Component {
         });
       }
 
-      if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
-        this.updateMoveCopyTreeNode(copyToDirentPath);
-      }
-
-      if (copyToDirentPath === nodeParentPath) {
-        this.loadDirentList(this.state.path);
-      }
-
       if (repoID === destRepo.repo_id) {
+        if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(copyToDirentPath);
+        }
+
+        if (copyToDirentPath === nodeParentPath) {
+          this.loadDirentList(this.state.path);
+        }
+
         let message = gettext('Successfully copied %(name)s.');
         message = message.replace('%(name)s', dirName);
         toaster.success(message);
