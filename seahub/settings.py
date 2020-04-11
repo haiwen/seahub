@@ -653,6 +653,10 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
+# type of template to use when creating new text documents, spreadsheets, presentations:
+# set to OOXML for docx, pptx, xlsx
+# set to OpenDocument for odp, ods, odt
+OFFICE_TEMPLATE_TYPE = 'OOXML'
 
 ENABLE_WEBDAV_SECRET = False
 ENABLE_USER_SET_CONTACT_EMAIL = False

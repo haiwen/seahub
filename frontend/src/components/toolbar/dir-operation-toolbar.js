@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { gettext } from '../../utils/constants';
+import { gettext, officeTemplateType } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -107,38 +107,10 @@ class DirOperationToolbar extends React.Component {
     this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
   }
 
-  onCreateFileToggle = () => {
+  onCreateFileToggle = (type) => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '',
-    });
-  }
-
-  onCreateMarkdownToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.md'
-    });
-  }
-
-  onCreateExcelToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.xlsx'
-    });
-  }
-
-  onCreatePPTToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.pptx'
-    });
-  }
-
-  onCreateWordToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.docx'
+      fileType: type,
     });
   }
 
@@ -189,7 +161,7 @@ class DirOperationToolbar extends React.Component {
           <DropdownMenu>
             <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
             <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
-            <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+            <DropdownItem onClick={this.onCreateFileToggle.bind(this, '')}>{gettext('New File')}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       );
@@ -210,12 +182,22 @@ class DirOperationToolbar extends React.Component {
           {this.state.isCreateMenuShow && (
             <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
               <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
-              <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
+              <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '')}>{gettext('New File')}</li>
               <li className="dropdown-divider"></li>
-              <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
-              <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
-              <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
-              <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
+              <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.md')}>{gettext('New Markdown File')}</li>
+              {officeTemplateType === 'OpenDocument' ? (
+                <Fragment>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.ods')}>{gettext('New Spreadsheet File')}</li>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.odp')}>{gettext('New Presentation File')}</li>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.odt')}>{gettext('New Text Document File')}</li>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.xlsx')}>{gettext('New Excel File')}</li>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.pptx')}>{gettext('New PowerPoint File')}</li>
+                  <li className="dropdown-item" onClick={this.onCreateFileToggle.bind(this, '.docx')}>{gettext('New Word File')}</li>
+                </Fragment>
+              )}
             </ul>
           )}
         </div>
@@ -227,7 +209,7 @@ class DirOperationToolbar extends React.Component {
               fileType={this.state.fileType}
               onAddFile={this.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
+              addFileCancel={this.onCreateFileToggle.bind(this, '')}
             />
           </ModalPortal>
         )}
