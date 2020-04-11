@@ -601,6 +601,8 @@ class LibContentView extends React.Component {
               this.deleteTreeNode(this.currentMoveItemPath);
             }
             this.moveDirent(this.currentMoveItemName);
+            this.currentMoveItemName = '';
+            this.currentMoveItemPath = '';
           } else {
             if (this.state.currentMode === 'column') {
               let direntPaths = this.getSelectedDirentPaths();
@@ -633,8 +635,9 @@ class LibContentView extends React.Component {
   }
 
   cancelCopyMoveDirent = () => {
-    let taskId = this.state.asyncCopyMoveTaskId;
+    let { taskId, direntList } = this.state.asyncCopyMoveTaskId;
     seafileAPI.cancelCopyMoveOperation(taskId);
+    this.setState({direntList: direntList.slice(0)});
   }
 
   onMoveProgressDialogToggle = () => {
