@@ -643,7 +643,9 @@ class LibContentView extends React.Component {
   cancelCopyMoveDirent = () => {
     let taskId = this.state.asyncCopyMoveTaskId;
     seafileAPI.cancelCopyMoveOperation(taskId);
-    
+
+    this.currentMoveItemName = '';
+    this.currentMoveItemPath = '';
     let direntList = this.state.direntList;
     this.setState({direntList: direntList.slice(0)});
   }
