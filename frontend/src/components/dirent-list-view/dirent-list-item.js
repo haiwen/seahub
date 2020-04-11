@@ -76,7 +76,7 @@ class DirentListItem extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.isItemFreezed) {
+    if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
       this.setState({
         highlight: false,
         isOperationShow: false,
