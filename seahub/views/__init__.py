@@ -1280,5 +1280,5 @@ def react_fake_view(request, **kwargs):
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
-        'additional_about_dialog_links': ADDITIONAL_SHARE_DIALOG_NOTE
+        'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS
     })
