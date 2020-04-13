@@ -23,6 +23,7 @@ from seahub.base.accounts import User
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 
+from seahub.dingtalk.utils import dingtalk_get_userid_by_unionid
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_QR_CONNECT_APP_ID, DINGTALK_QR_CONNECT_APP_SECRET, \
         DINGTALK_QR_CONNECT_AUTHORIZATION_URL, \
@@ -82,12 +83,13 @@ def dingtalk_callback(request):
         logger.error(user_info)
         return render_error(request, _('Error, please contact administrator.'))
 
-    auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk', user_info['unionid'])
+    user_id = dingtalk_get_userid_by_unionid(user_info['unionid'])
+    auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk', user_id)
     if auth_user:
         email = auth_user.username
     else:
         email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, 'dingtalk', user_info['unionid'])
+        SocialAuthUser.objects.add(email, 'dingtalk', user_id)
 
     try:
         user = auth.authenticate(remote_user=email)
@@ -176,7 +178,7 @@ def dingtalk_connect_callback(request):
         return render_error(request, _('Error, please contact administrator.'))
 
     username = request.user.username
-    dingtalk_user_id = user_info['unionid']
+    dingtalk_user_id = dingtalk_get_userid_by_unionid(user_info['unionid'])
 
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk',
             dingtalk_user_id)
