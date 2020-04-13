@@ -124,6 +124,12 @@ class AdminShareLinks(APIView):
 
         share_links_info = []
         for link in share_links:
+
+            if link.expire_date:
+                expire_date = datetime_to_isoformat_timestr(link.expire_date)
+            else:
+                expire_date = ''
+
             link_info = {}
             link_info['obj_name'] = link.get_obj_name()
             link_info['token'] = link.token
@@ -133,6 +139,8 @@ class AdminShareLinks(APIView):
             link_info['creator_name'] = nickname_dict.get(owner_email, '')
             link_info['ctime'] = datetime_to_isoformat_timestr(link.ctime)
             link_info['view_cnt'] = link.view_cnt
+            link_info['expire_date'] = expire_date
+            link_info['is_expired'] = link.is_expired()
             share_links_info.append(link_info)
 
         return Response({"share_link_list": share_links_info, "count": count})

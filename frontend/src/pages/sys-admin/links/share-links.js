@@ -45,12 +45,13 @@ class Content extends Component {
                 <th width="18%">{gettext('Name')}</th>
                 <th width="18%">{gettext('Token')}</th>
                 <th width="18%">{gettext('Owner')}</th>
-                <th width="18%">{gettext('Created At')}</th>
-                <th width="18%">{gettext('Count')}</th>
+                <th width="15%">{gettext('Created At')}</th>
+                <th width="10%">{gettext('Count')}</th>
+                <th width="11%">{gettext('Expiration')}</th>
                 <th width="10%">{/*Operations*/}</th>
               </tr>
             </thead>
-            {items && 
+            {items &&
               <tbody>
                 {items.map((item, index) => {
                   return (<Item
@@ -72,7 +73,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -102,6 +103,23 @@ class Item extends Component {
     this.props.deleteShareLink(this.props.item.token);
   }
 
+  renderExpiration = () => {
+    let item = this.props.item;
+    if (!item.expire_date) {
+      return (
+        <Fragment>--</Fragment>
+      );
+    }
+    let expire_date = moment(item.expire_date).format('YYYY-MM-DD');
+    return (
+      <Fragment>
+        {item.is_expired ?
+          <span className="error">{expire_date}</span> : expire_date
+        }
+      </Fragment>
+    );
+  }
+
   render() {
     let { isOpIconShown } = this.state;
     let { item } = this.props;
@@ -113,6 +131,7 @@ class Item extends Component {
         <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
         <td>{moment(item.ctime).fromNow()}</td>
         <td>{item.view_cnt}</td>
+        <td>{this.renderExpiration()}</td>
         <td>
           <a href="#" className={deleteIcon} title={gettext('Remove')} onClick={this.deleteShareLink}></a>
         </td>

@@ -101,6 +101,12 @@ class AdminUploadLinks(APIView):
 
         upload_links_info = []
         for link in upload_links:
+
+            if link.expire_date:
+                expire_date = datetime_to_isoformat_timestr(link.expire_date)
+            else:
+                expire_date = ''
+
             link_info = {}
             link_info['path'] = link.path
             link_info['token'] = link.token
@@ -110,6 +116,8 @@ class AdminUploadLinks(APIView):
             link_info['creator_name'] = nickname_dict.get(owner_email, '')
             link_info['ctime'] = datetime_to_isoformat_timestr(link.ctime)
             link_info['view_cnt'] = link.view_cnt
+            link_info['expire_date'] = expire_date
+            link_info['is_expired'] = link.is_expired()
             upload_links_info.append(link_info)
 
         return Response({"upload_link_list": upload_links_info, "count": count})
