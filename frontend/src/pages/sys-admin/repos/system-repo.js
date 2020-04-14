@@ -5,7 +5,6 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
-import EmptyTip from '../../../components/empty-tip';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './repos-nav';
 
@@ -22,11 +21,6 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const emptyTip = (
-        <EmptyTip>
-          <h2>{gettext('No System Library.')}</h2>
-        </EmptyTip>
-      );
       const table = (
         <Fragment>
           <table className="table-hover">
@@ -45,7 +39,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return table;
     }
   }
 }
