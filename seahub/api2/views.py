@@ -1771,6 +1771,10 @@ class UploadLinkView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         parent_dir = request.GET.get('p', '/')
+        if not parent_dir:
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
         if not dir_id:
             error_msg = 'Folder %s not found.' % parent_dir
