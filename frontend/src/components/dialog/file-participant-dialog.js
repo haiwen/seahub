@@ -91,6 +91,14 @@ class FileParticipantDialog extends Component {
     }
     let emails = selectedOption.map((option) => {return option.email;});
     seafileAPI.addFileParticipants(repoID, filePath, emails).then((res) => {
+      const failed = res.data.failed;
+      if (failed && Array.isArray(failed)) {
+        for (let i = 0; i < failed.length; i++) {
+          if (failed[i].error_code === 403) {
+            toaster.danger(failed[i].email + ' ' + gettext(failed[i].error_msg));
+          }
+        }
+      }
       this.props.onParticipantsChange(repoID, filePath);
     }).catch(error => {
       toaster.danger(Utils.getErrorMsg(error));
