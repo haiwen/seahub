@@ -4,6 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
 const propTypes = {
   groupName: PropTypes.string,
@@ -16,19 +17,15 @@ class DeleteDepartDialog extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      errMessage: null
-    };
   }
 
   deleteDepart = () => {
+    this.props.toggle();
     seafileAPI.orgAdminDeleteDepartGroup(orgID, this.props.groupID).then((res) => {
-      if (res.data.success) {
-        this.props.onDepartChanged();
-        this.props.toggle();
-      }
-    }).catch(err => {
-      this.setState({ errMessage: 'There are sub-departments in this department.' });
+      this.props.onDepartChanged();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -39,12 +36,11 @@ class DeleteDepartDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
         <ModalBody>
-          <div dangerouslySetInnerHTML={{__html: subtitle}}></div>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          <p dangerouslySetInnerHTML={{__html: subtitle}}></p>
         </ModalBody>
         <ModalFooter>
-          {!this.state.errMessage && <Button color="primary" onClick={this.deleteDepart}>{gettext('Delete')}</Button>}
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.deleteDepart}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );

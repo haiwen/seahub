@@ -229,11 +229,11 @@ class AdminAddressBookGroup(APIView):
 
         if has_repo:
             error_msg = _('There are libraries in this department.')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if len(child_groups) > 0:
             error_msg = _('There are sub-departments in this department.')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             ret_code = ccnet_api.remove_group(group_id)
