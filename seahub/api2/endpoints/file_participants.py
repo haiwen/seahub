@@ -110,14 +110,14 @@ class FileParticipantsView(APIView):
 
             # permission check
             if not seafile_api.check_permission_by_path(repo_id, '/', user.username):
-                error_dic = {'email': email, 'error_msg': 'Permission denied.', 'error_code': 403}
+                error_dic = {'email': email, 'error_msg': _('Permission denied.'), 'error_code': 403}
                 failed.append(error_dic)
                 continue
 
             # main
             try:
                 if participants_queryset.filter(uuid=uuid, username=email).count() > 0:
-                    error_dic = {'email': email, 'error_msg': 'Participant already exists.', 'error_code': 409}
+                    error_dic = {'email': email, 'error_msg': _('Participant already exists.'), 'error_code': 409}
                     failed.append(error_dic)
                     continue
 
@@ -126,7 +126,7 @@ class FileParticipantsView(APIView):
                 success.append(participant)
             except Exception as e:
                 logger.error(e)
-                error_dic = {'email': email, 'error_msg': 'Internal Server Error.', 'error_code': 500}
+                error_dic = {'email': email, 'error_msg': _('Internal Server Error.'), 'error_code': 500}
                 failed.append(error_dic)
                 continue
 
