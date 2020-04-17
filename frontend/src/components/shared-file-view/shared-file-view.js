@@ -158,7 +158,9 @@ class SharedFileView extends React.Component {
 if (enableWatermark) {
   let watermark_txt;
   if (loginUser) {
-    watermark_txt = siteName + '  ' + loginUser;
+    watermark_txt = siteName + ' ' + loginUser;
+  } else if (sharedBy) {
+    watermark_txt = siteName + ' ' + sharedBy;
   } else {
     watermark_txt = gettext('Anonymous User');
   }
