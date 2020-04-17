@@ -60,7 +60,7 @@ body {
       fileName: '{{ file_name|escapejs }}',
       fileSize: {{ file_size }},
       rawPath: '{{ raw_path|escapejs }}',
-      sharedBy: '{{ shared_by|email2nickname }}',
+      sharedBy: '{{ shared_by|email2nickname|escapejs }}',
       siteName: '{{ site_name }}',
       enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
       canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
