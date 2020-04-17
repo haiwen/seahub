@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
@@ -29,6 +29,9 @@ class SharedDirView extends React.Component {
       errorMsg: '',
       items: [],
 
+      isAllItemsSelected: false,
+      selectedItems: [],
+
       sortBy: 'name', // 'name' or 'time' or 'size'
       sortOrder: 'asc', // 'asc' or 'desc'
 
@@ -49,7 +52,10 @@ class SharedDirView extends React.Component {
     }
 
     seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
-      const items = res.data['dirent_list'];
+      const items = res.data['dirent_list'].map(item => {
+        item.isSelected = false;
+        return item;
+      });
       this.setState({
         isLoading: false,
         errorMsg: '',
@@ -129,10 +135,20 @@ class SharedDirView extends React.Component {
     });
   }
 
+  zipDownloadSelectedItems = () => {
+    this.setState({
+      isZipDialogOpen: true,
+      zipFolderPath: path, 
+      selectedItems: this.state.items.filter(item => item.isSelected)
+        .map(item => item.file_name || item.folder_name)
+    });
+  }
+
   closeZipDialog = () => {
     this.setState({
       isZipDialogOpen: false,
-      zipFolderPath: ''
+      zipFolderPath: '',
+      selectedItems: []
     });
   }
 
@@ -192,6 +208,31 @@ class SharedDirView extends React.Component {
     }));
   }
 
+  toggleAllSelected = () => {
+    this.setState((prevState) => ({
+      isAllItemsSelected: !prevState.isAllItemsSelected,
+      items: this.state.items.map((item) => {
+        item.isSelected = !prevState.isAllItemsSelected;
+        return item;
+      })
+    }));
+  }
+
+  toggleItemSelected = (targetItem, isSelected) => {
+    this.setState({
+      items: this.state.items.map((item) => {
+        if (item === targetItem) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    }, () => {
+      this.setState({
+        isAllItemsSelected: !this.state.items.some(item => !item.isSelected)
+      });
+    });
+  }
+
   render() {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
@@ -218,7 +259,12 @@ class SharedDirView extends React.Component {
                   </div>
                   }
                   {showDownloadIcon &&
-                  <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
+                  <Fragment>
+                    {this.state.items.some(item => item.isSelected) ? 
+                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 zip-btn">{gettext('ZIP Selected Items')}</Button> :
+                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
+                    }
+                  </Fragment>
                   }
                 </div>
               </div>
@@ -230,6 +276,9 @@ class SharedDirView extends React.Component {
                 sortBy={this.state.sortBy}
                 sortOrder={this.state.sortOrder}
                 sortItems={this.sortItems}
+                isAllItemsSelected={this.state.isAllItemsSelected}
+                toggleAllSelected={this.toggleAllSelected}
+                toggleItemSelected={this.toggleItemSelected}
                 zipDownloadFolder={this.zipDownloadFolder}
                 showImagePopup={this.showImagePopup}
               />
@@ -241,6 +290,7 @@ class SharedDirView extends React.Component {
           <ZipDownloadDialog 
             token={token}
             path={this.state.zipFolderPath}
+            target={this.state.selectedItems}
             toggleDialog={this.closeZipDialog}
           />
         </ModalPortal>
@@ -263,6 +313,10 @@ class SharedDirView extends React.Component {
 
 class Content extends React.Component {
 
+  constructor(props) {
+    super(props);
+  }
+  
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
@@ -285,7 +339,12 @@ class Content extends React.Component {
   }
 
   render() {
-    const { isDesktop, isLoading, errorMsg, items, sortBy, sortOrder } = this.props;
+    const { 
+      isDesktop, 
+      isLoading, errorMsg, items,
+      sortBy, sortOrder,
+      isAllItemsSelected
+    } = this.props;
     
     if (isLoading) {
       return <Loading />;
@@ -304,6 +363,7 @@ class Content extends React.Component {
             item={item}
             zipDownloadFolder={this.props.zipDownloadFolder}
             showImagePopup={this.props.showImagePopup}
+            toggleItemSelected={this.props.toggleItemSelected}
           />;
         })}
       </tbody>
@@ -329,8 +389,11 @@ class Content extends React.Component {
       <table className="table-hover">
         <thead>
           <tr>
+            <th width="3%" className="text-center">
+              <input type="checkbox" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
+            </th>
             <th width="5%"></th>
-            <th width="55%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width="52%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
             <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
             <th width="10%"></th>
@@ -390,6 +453,10 @@ class Item extends React.Component {
     this.props.showImagePopup(item);
   }
 
+  toggleItemSelected = (e) => {
+    this.props.toggleItemSelected(this.props.item, e.target.checked);
+  }
+
   render() {
     const { item, isDesktop } = this.props;
     const { isIconShown } = this.state;
@@ -397,6 +464,9 @@ class Item extends React.Component {
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td className="text-center">
+            <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+          </td>
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
@@ -444,6 +514,9 @@ class Item extends React.Component {
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td className="text-center">
+            <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+          </td>
           <td className="text-center">
             {thumbnailURL ?
               <img className="thumbnail" src={thumbnailURL} alt="" /> :

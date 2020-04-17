@@ -31,9 +31,14 @@ class ZipDownloadDialog extends React.Component {
 
   componentDidMount() {
     const { token, path, repoID, target } = this.props;
-    const getZipTask = token ?
-      seafileAPI.getShareLinkZipTask(token, path) :
-      seafileAPI.zipDownload(repoID, path, target);
+    let getZipTask;
+    if (token) {
+      getZipTask = target.length ? 
+        seafileAPI.getShareLinkDirentsZipTask(token, path, target) :
+        seafileAPI.getShareLinkZipTask(token, path);
+    } else {
+      getZipTask = seafileAPI.zipDownload(repoID, path, target);
+    }
     getZipTask.then((res) => {
       const zipToken = res.data['zip_token'];
       this.setState({
