@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
+from django.utils.translation import ugettext as _
+
 from seaserv import seafile_api
 
 from seahub.api2.utils import api_error
@@ -135,8 +137,8 @@ class RepoShareLink(APIView):
                 pass
 
         if has_published_library:
-            error_msg = 'There is an associated published library.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = _('There is an associated published library.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             fileshare.delete()
