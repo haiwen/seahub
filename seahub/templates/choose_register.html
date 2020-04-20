@@ -16,7 +16,11 @@
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#personal').on('click', function() {
+    {% if enable_weixin %}
+    location.href = "{% url 'weixin_oauth_login'%}";
+    {% else  %}
     location.href = "{% url 'registration_register'%}";
+    {% endif %}
 });
 $('#org').on('click', function() {
     location.href = "{% url 'org_register'%}";

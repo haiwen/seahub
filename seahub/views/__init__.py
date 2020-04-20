@@ -62,6 +62,8 @@ from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
 from seahub.constants import HASH_URLS, PERMISSION_READ
 
+from seahub.weixin.settings import ENABLE_WEIXIN
+
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
@@ -1112,6 +1114,7 @@ def choose_register(request):
     login_bg_image_path = get_login_bg_image_path()
 
     return render(request, 'choose_register.html', {
+        'enable_weixin': ENABLE_WEIXIN,
         'login_bg_image_path': login_bg_image_path
     })
 

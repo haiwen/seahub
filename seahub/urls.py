@@ -603,6 +603,7 @@ urlpatterns = [
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
     url(r'^work-weixin/', include('seahub.work_weixin.urls')),
+    url(r'^weixin/', include('seahub.weixin.urls')),
     # Must specify a namespace if specifying app_name.
     url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 
