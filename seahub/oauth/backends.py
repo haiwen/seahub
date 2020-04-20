@@ -5,6 +5,7 @@ from seahub.base.accounts import User
 from registration.models import (notify_admins_on_activate_request,
                                  notify_admins_on_register_complete)
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 class OauthRemoteUserBackend(RemoteUserBackend):
@@ -27,6 +28,12 @@ class OauthRemoteUserBackend(RemoteUserBackend):
     if ENABLE_WORK_WEIXIN:
         create_unknown_user = getattr(settings, 'WORK_WEIXIN_OAUTH_CREATE_UNKNOWN_USER', True)
         activate_after_creation = getattr(settings, 'WORK_WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
+
+    if ENABLE_WEIXIN:
+        from seahub.weixin.settings import WEIXIN_OAUTH_CREATE_UNKNOWN_USER, \
+                WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION
+        create_unknown_user = WEIXIN_OAUTH_CREATE_UNKNOWN_USER
+        activate_after_creation = WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION
 
     if ENABLE_DINGTALK:
         from seahub.dingtalk.settings import DINGTALK_QR_CONNECT_CREATE_UNKNOWN_USER, \

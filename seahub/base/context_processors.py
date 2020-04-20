@@ -45,6 +45,7 @@ try:
 except ImportError:
     ENABLE_FILE_SCAN = False
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.weixin.settings import ENABLE_WEIXIN
 
 try:
     from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
@@ -111,6 +112,7 @@ def base(request):
         'org': org,
         'site_name': get_site_name(),
         'enable_signup': config.ENABLE_SIGNUP,
+        'enable_weixin': ENABLE_WEIXIN,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,

@@ -279,6 +279,9 @@ ENABLE_WATERMARK = False
 # enable work weixin
 ENABLE_WORK_WEIXIN = False
 
+# enable weixin
+ENABLE_WEIXIN = False
+
 # enable dingtalk
 ENABLE_DINGTALK = False
 
@@ -888,7 +891,7 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
     MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
     AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
 
-if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_DINGTALK:
+if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
 
 #####################
