@@ -34,7 +34,7 @@
 .share-dialog-content .share-dialog-main {
     display: flex;
     flex: 0 0 78%;
-    padding: 1rem 1.5rem 2rem;
+    padding: 1rem;
 }
 
 .share-dialog-content .share-dialog-main .tab-content {

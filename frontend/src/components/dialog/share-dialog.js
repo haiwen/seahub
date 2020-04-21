@@ -243,7 +243,7 @@ class ShareDialog extends React.Component {
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
     return (
       <div>
-        <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={{maxWidth: '760px'}} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
             {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
             {this.renderExternalShareMessage()}
