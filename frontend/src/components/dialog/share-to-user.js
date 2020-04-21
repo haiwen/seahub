@@ -272,16 +272,19 @@ class ShareToUser extends React.Component {
 
   render() {
     let { sharedItems } = this.state;
+    const thead = (
+      <thead>
+        <tr>
+          <th width="47%">{gettext('User')}</th>
+          <th width="35%">{gettext('Permission')}</th>
+          <th width="18%"></th>
+        </tr>
+      </thead>
+    );
     return (
       <Fragment>
         <table className="w-xs-200">
-          <thead>
-            <tr>
-              <th width="50%">{gettext('User')}</th>
-              <th width="35%">{gettext('Permission')}</th>
-              <th width="15%"></th>
-            </tr>
-          </thead>
+          {thead}
           <tbody>
             <tr>
               <td>
@@ -325,13 +328,7 @@ class ShareToUser extends React.Component {
         </table>
         <div className="share-list-container">
           <table className="table-thead-hidden w-xs-200">
-            <thead>
-              <tr>
-                <th width="50%">{gettext('User')}</th>
-                <th width="35%">{gettext('Permission')}</th>
-                <th width="15%"></th>
-              </tr>
-            </thead>
+            {thead}
             <UserList 
               items={sharedItems}
               permissions={this.permissions}

@@ -287,16 +287,19 @@ class ShareToGroup extends React.Component {
   }
 
   render() {
+    const thead = (
+      <thead>
+        <tr>
+          <th width="47%">{gettext('Group')}</th>
+          <th width="35%">{gettext('Permission')}</th>
+          <th width="18%"></th>
+        </tr>
+      </thead>
+    );
     return (
       <Fragment>
         <table className="w-xs-200">
-          <thead>
-            <tr>
-              <th width="50%">{gettext('Group')}</th>
-              <th width="35%">{gettext('Permission')}</th>
-              <th width="15%"></th>
-            </tr>
-          </thead>
+          {thead}
           <tbody>
             <tr>
               <td>
@@ -338,13 +341,7 @@ class ShareToGroup extends React.Component {
         </table>
         <div className="share-list-container">
           <table className="table-thead-hidden w-xs-200">
-            <thead>
-              <tr>
-                <th width="50%">{gettext('Group')}</th>
-                <th width="35%">{gettext('Permission')}</th>
-                <th width="15%"></th>
-              </tr>
-            </thead>
+            {thead}
             <GroupList 
               items={this.state.sharedItems}
               permissions={this.permissions}
