@@ -4444,7 +4444,7 @@ var defaultOptions = {
     kind: OptionKind.API
   },
   cMapUrl: {
-    value: '../web/cmaps/',
+    value: sf_pdf_cmaps_path,
     kind: OptionKind.API
   },
   disableAutoFetch: {

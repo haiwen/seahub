@@ -18,6 +18,7 @@ var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
 var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf';
 var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
 var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
+var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
 </script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
 {% endblock %}

@@ -107,6 +107,7 @@ body {
     var sf_file_url = '{{ raw_path|escapejs }}';
     var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
     var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
+    var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
     </script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
@@ -117,6 +118,7 @@ body {
       var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf?token={{shared_token}}';
       var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
       var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
+      var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
     </script>
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
 {% elif filetype == 'SpreadSheet' %}
