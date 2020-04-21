@@ -13,6 +13,8 @@ from rest_framework import status
 
 from django.contrib.auth.hashers import check_password
 
+from django.utils.translation import ugettext as _
+
 from seaserv import seafile_api
 import seaserv
 
@@ -195,8 +197,8 @@ class AdminShareLink(APIView):
                 pass
 
         if has_published_library:
-            error_msg = 'There is an associated published library.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = _('There is an associated published library.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             share_link.delete()
