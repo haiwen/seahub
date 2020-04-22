@@ -1967,14 +1967,18 @@ def view_media_file_via_share_link(request):
     # If the image does not exist in markdown
     serviceURL = get_service_url().rstrip('/')
     image_file_name = os.path.basename(image_path)
-    image_file_name = urlquote(image_file_name)
+
+    # Translation ‘(’ ')'
+    image_file_name = image_file_name.replace('(', '\(')
+    image_file_name = image_file_name.replace(')', '\)')
+
     p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
     result = re.search(p, file_content)
     if not result:
         return render_error(request, 'Image does not exist')
 
     # get image
-    obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
+    obj_id = seafile_api.get_file_id_by_path(repo_id, urllib2.unquote(image_path))
     if not obj_id:
         return render_error(request, 'Image does not exist')
 
