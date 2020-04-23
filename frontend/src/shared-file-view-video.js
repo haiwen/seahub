@@ -29,7 +29,7 @@ class FileContent extends React.Component {
       }]
     };
     return (
-      <div className="shared-file-view-body d-flex">
+      <div className="shared-file-view-body d-flex video-file-view">
         <div className="flex-1">
           <VideoPlayer { ...videoJsOptions } />
         </div>
