@@ -127,7 +127,7 @@ export const Utils = {
     let editDownloadOption = 'edit_download';
     let editOnly = 'cloud_edit';
     let downloadOption = 'preview_download';
-    let permissionOptions = ['preview_only'];
+    let permissionOptions = [];
 
     if (itemType === 'library') {
       permissionOptions.push(downloadOption);
@@ -149,6 +149,9 @@ export const Utils = {
       // }
 
     }
+
+    permissionOptions.push('preview_only');
+    
     return permissionOptions;
   },
 
