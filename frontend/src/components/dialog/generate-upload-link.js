@@ -197,7 +197,7 @@ class GenerateUploadLink extends React.Component {
             {sharedUploadInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
+                <dd>{moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}</dd>
               </FormGroup>
             )}
           </Form>
