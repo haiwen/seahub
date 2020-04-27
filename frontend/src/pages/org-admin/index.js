@@ -1,10 +1,10 @@
-// Import React!
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
-import OrgUsers from './org-users';
+import OrgUsers from './org-users-users';
+import OrgAdmins from './org-users-admins';
 import OrgUserProfile from './org-user-profile';
 import OrgUserRepos from './org-user-repos';
 import OrgUserSharedRepos from './org-user-shared-repos';
@@ -34,7 +34,7 @@ class Org extends React.Component {
     super(props);
     this.state = {
       isSidePanelClosed: false,
-      currentTab: 'users',
+      currentTab: 'users'
     };
   }
 
@@ -70,7 +70,8 @@ class Org extends React.Component {
         <div className="main-panel o-hidden">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
-            <OrgUsers path={siteRoot + 'org/useradmin'} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
+            <OrgUsers path={siteRoot + 'org/useradmin'} />
+            <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
             <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
             <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />
             <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} />

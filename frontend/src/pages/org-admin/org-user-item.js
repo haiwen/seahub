@@ -130,7 +130,7 @@ class UserItem extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td>
-          <a href={href} className="font-weight-normal">{user.name}</a>
+          <a href={href}>{user.name}</a>
         </td>
         <td>
           <UserStatusEditor 
@@ -141,8 +141,12 @@ class UserItem extends React.Component {
             onStatusChanged={this.changeStatus}
           />
         </td>
-        <td>{user.quota ? user.self_usage + ' / ' + user.quota : user.self_usage}</td>
-        <td style={{'fontSize': '11px'}}>{user.ctime} / {user.last_login ? user.last_login : '--'}</td>
+        <td>{`${user.self_usage} / ${user.quota || '--'}`}</td>
+        <td>
+          {user.ctime} /
+          <br />
+          {user.last_login ? user.last_login : '--'}
+        </td>
         <td className="text-center cursor-pointer">
           {isOperationMenuShow && (
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>

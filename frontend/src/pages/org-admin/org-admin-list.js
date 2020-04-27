@@ -10,7 +10,7 @@ const propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   toggleRevokeAdmin: PropTypes.func.isRequired,
   orgAdminUsers: PropTypes.array.isRequired,
-  initOrgAdmin: PropTypes.func.isRequired,
+  initOrgAdmin: PropTypes.func.isRequired
 };
 
 class OrgAdminList extends React.Component {
@@ -18,7 +18,7 @@ class OrgAdminList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemFreezed: false,
+      isItemFreezed: false
     };
   }
 
@@ -44,9 +44,9 @@ class OrgAdminList extends React.Component {
             <tr>
               <th width="30%">{gettext('Name')}</th>
               <th width="15%">{gettext('Status')}</th>
-              <th width="15%">{gettext('Space Used')}</th>
-              <th width="20%">{gettext('Create At / Last Login')}</th>
-              <th width="20%" className="text-center">{gettext('Operations')}</th>
+              <th width="20%">{gettext('Space Used')} / {gettext('Quota')}</th>
+              <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
+              <th width="10%">{/*Operations*/}</th>
             </tr>
           </thead>
           <tbody>
@@ -55,7 +55,7 @@ class OrgAdminList extends React.Component {
                 <UserItem 
                   key={item.id}
                   user={item}
-                  currentTab={this.props.currentTab}
+                  currentTab="admins"
                   isItemFreezed={this.state.isItemFreezed}
                   toggleDelete={this.props.toggleDelete}
                   toggleRevokeAdmin={this.props.toggleRevokeAdmin}
