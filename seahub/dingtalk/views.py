@@ -89,7 +89,7 @@ def dingtalk_callback(request):
         email = auth_user.username
     else:
         email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, 'dingtalk', user_id)
+        SocialAuthUser.objects.add(email, 'dingtalk', user_info['unionid'])
 
     try:
         user = auth.authenticate(remote_user=email)
@@ -178,7 +178,7 @@ def dingtalk_connect_callback(request):
         return render_error(request, _('Error, please contact administrator.'))
 
     username = request.user.username
-    dingtalk_user_id = dingtalk_get_userid_by_unionid(user_info['unionid'])
+    dingtalk_user_id = user_info['unionid']
 
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk',
             dingtalk_user_id)

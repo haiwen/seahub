@@ -16,7 +16,7 @@ from seahub.notifications.models import UserNotification
 from seahub.utils import get_site_scheme_and_netloc, get_site_name
 from seahub.auth.models import SocialAuthUser
 
-from seahub.dingtalk.utils import dingtalk_get_access_token
+from seahub.dingtalk.utils import dingtalk_get_access_token, dingtalk_get_userid_by_unionid
 from seahub.dingtalk.settings import DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL, \
         DINGTALK_AGENT_ID
 
@@ -72,12 +72,12 @@ class Command(BaseCommand, CommandLogMixin):
         self.do_action()
         self.log_debug('Finish sending dingtalk msg.\n')
 
-    def send_dingtalk_msg(self, uid, title, content):
+    def send_dingtalk_msg(self, user_id, title, content):
 
-        self.log_info('Send dingtalk msg to user: %s, msg: %s' % (uid, content))
+        self.log_info('Send dingtalk msg to user: %s, msg: %s' % (user_id, content))
         data = {
             "agent_id": DINGTALK_AGENT_ID,
-            "userid_list": uid,
+            "userid_list": user_id,
             "msg": {
                 "msgtype": "markdown",
                 "markdown": {
@@ -116,7 +116,7 @@ class Command(BaseCommand, CommandLogMixin):
 
         user_uid_map = {}
         for username, uid in users:
-            user_uid_map[username] = uid
+            user_uid_map[username] = dingtalk_get_userid_by_unionid(uid)
 
         # 2. get previous time that command last runs
         try:
@@ -157,6 +157,7 @@ class Command(BaseCommand, CommandLogMixin):
 
         # 4. send msg to users
         for username, uid in users:
+            user_id = user_uid_map[username]
             notices = user_notices.get(username, [])
             count = len(notices)
             if count == 0:
@@ -171,7 +172,7 @@ class Command(BaseCommand, CommandLogMixin):
             ) % {'num': count, 'site_name': site_name, }
 
             content = '  \n  '.join([remove_html_a_element(x.format_msg()) for x in notices])
-            self.send_dingtalk_msg(uid, title, content)
+            self.send_dingtalk_msg(user_id, title, content)
 
         # reset language
         translation.activate(cur_language)

@@ -140,7 +140,7 @@ class AdminDingtalkDepartmentMembers(APIView):
             user_id_name_dict[user.uid] = user.username
 
         for user in resp_json['userlist']:
-            uid = user.get('userid', '')
+            uid = user.get('unionid', '')
             user['contact_email'] = user.get('email', '')
             user['userid'] = uid
 
@@ -372,7 +372,7 @@ class AdminDingtalkDepartmentsImport(APIView):
 
         # import api_user
         for api_user in api_user_list:
-            uid = api_user.get('userid', '')
+            uid = api_user.get('unionid', '')
             api_user['contact_email'] = api_user['email']
             api_user_name = api_user.get('name')
 
