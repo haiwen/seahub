@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import { navigate } from '@reach/router';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import MainPanelTopbar from './main-panel-topbar';
@@ -18,17 +19,26 @@ class OrgLibraries extends Component {
       page: 1,
       pageNext: false,
       orgRepos: [],
+      sortBy: '',
       isItemFreezed: false  
     };
   }
 
   componentDidMount() {
-    let page = this.state.page;
-    this.initData(page);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { page, /*currentPage = 1, perPage, */sortBy } = this.state;
+    this.setState({
+      sortBy: urlParams.get('order_by') || sortBy,
+      //perPage: parseInt(urlParams.get('per_page') || perPage),
+      //currentPage: parseInt(urlParams.get('page') || currentPage)
+      page: parseInt(urlParams.get('page') || page)
+    }, () => {
+      this.listRepos(this.state.page);
+    });
   }
 
-  initData = (page) => {
-    seafileAPI.orgAdminListOrgRepos(orgID, page).then(res => {
+  listRepos = (page) => {
+    seafileAPI.orgAdminListOrgRepos(orgID, page, this.state.sortBy).then(res => {
       let orgRepos = res.data.repo_list.map(item => {
         return new OrgAdminRepo(item);
       });
@@ -54,7 +64,7 @@ class OrgLibraries extends Component {
     } else {
       page = page - 1;
     }
-    this.initData(page);
+    this.listRepos(page);
   } 
 
   onFreezedItem = () => {
@@ -91,11 +101,39 @@ class OrgLibraries extends Component {
     });
   }
 
+  sortItems = (sortBy) => {
+    this.setState({
+      page: 1,
+      sortBy: sortBy
+    }, () => {
+      let url = new URL(location.href);
+      let searchParams = new URLSearchParams(url.search);
+      const { page, sortBy } = this.state;
+      searchParams.set('page', page);
+      searchParams.set('order_by', sortBy);
+      url.search = searchParams.toString();
+      navigate(url.toString());
+      this.listRepos(page);
+    });
+  }
+
+  sortByFileCount = (e) => {
+    e.preventDefault();
+    this.sortItems('file_count');
+  }
+
+  sortBySize = (e) => {
+    e.preventDefault();
+    this.sortItems('size');
+  }
+
   render() {
-    let repos = this.state.orgRepos;
+    const { orgRepos, sortBy } = this.state;
+    const initialSortIcon = <span className="fas fa-sort"></span>;
+    const sortIcon = <span className="fas fa-caret-down"></span>;
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
@@ -105,15 +143,19 @@ class OrgLibraries extends Component {
               <table>
                 <thead>
                   <tr>
-                    <th width="4%"></th>
-                    <th width="27%">{gettext('Name')}</th>
-                    <th width="30%">ID</th>
-                    <th width="24%">{gettext('Owner')}</th>
-                    <th width="15%" className="text-center">{gettext('Operations')}</th>
+                    <th width="5%">{/*icon*/}</th>
+                    <th width="25%">{gettext('Name')}</th>
+                    <th width="15%">
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' ? sortIcon : initialSortIcon}</a>{' / '}
+                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' ? sortIcon : initialSortIcon}</a>
+                    </th>
+                    <th width="32%">ID</th>
+                    <th width="18%">{gettext('Owner')}</th>
+                    <th width="5%">{/*Operations*/}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {repos.map(item => {
+                  {orgRepos.map(item => {
                     return (
                       <RepoItem
                         key={item.repoID}
@@ -259,7 +301,8 @@ class RepoItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td>{this.renderLibIcon(repo)}</td>
           <td>{repo.repoName}</td>
-          <td style={{'fontSize': '11px'}}>{repo.repoID}</td>
+          <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
+          <td>{repo.repoID}</td>
           <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
           <td className="text-center cursor-pointer">
             {isOperationMenuShow &&

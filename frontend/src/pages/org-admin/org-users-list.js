@@ -4,7 +4,6 @@ import { gettext } from '../../utils/constants';
 import UserItem from './org-user-item';
 
 const propTypes = {
-  currentTab: PropTypes.string.isRequired,
   initOrgUsersData: PropTypes.func.isRequired,
   toggleDelete: PropTypes.func.isRequired,
   orgUsers: PropTypes.array.isRequired,
@@ -17,12 +16,8 @@ class OrgUsersList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isItemFreezed: false,
+      isItemFreezed: false
     };
-  }
-
-  componentDidMount() {
-    this.props.initOrgUsersData(this.props.page);
   }
 
   onFreezedItem = () => {
@@ -46,7 +41,20 @@ class OrgUsersList extends React.Component {
     this.props.initOrgUsersData(page);
   }
 
+  sortByQuotaUsage = (e) => {
+    e.preventDefault();
+    this.props.sortByQuotaUsage();
+  }
+
   render() {
+    const { sortBy, sortOrder } = this.props;
+    let sortIcon;
+    if (sortBy == '') {
+      // initial sort icon
+      sortIcon = <span className="fas fa-sort"></span>;
+    } else {
+      sortIcon = <span className={`fas ${sortOrder == 'asc' ? 'fa-caret-up' : 'fa-caret-down'}`}></span>;
+    }
     let { orgUsers, page, pageNext } = this.props;
     return (
       <div className="cur-view-content">
@@ -55,9 +63,11 @@ class OrgUsersList extends React.Component {
             <tr>
               <th width="30%">{gettext('Name')}</th>
               <th width="15%">{gettext('Status')}</th>
-              <th width="15%">{gettext('Space Used')}</th>
-              <th width="20%">{gettext('Create At / Last Login')}</th>
-              <th width="20%" className="text-center">{gettext('Operations')}</th>
+              <th width="20%">
+                <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
+              </th>
+              <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
+              <th width="10%">{/*Operations*/}</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +76,7 @@ class OrgUsersList extends React.Component {
                 <UserItem 
                   key={item.id}
                   user={item}
-                  currentTab={this.props.currentTab}
+                  currentTab="users"
                   isItemFreezed={this.state.isItemFreezed}
                   toggleDelete={this.props.toggleDelete}
                   onFreezedItem={this.onFreezedItem}
