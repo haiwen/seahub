@@ -415,11 +415,13 @@ class AdminUsers(APIView):
 
             total_count = ccnet_api.count_emailusers('DB') + \
                           ccnet_api.count_inactive_emailusers('DB')
-            if total_count > 500 and \
-                    not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
-                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
             if order_by:
+
+                if total_count > 500 and \
+                        not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
+                    error_msg = _("order_by is not supported for >500 users.")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
                 try:
                     data = self.get_info_of_users_order_by_quota_usage(source, direction,
                             page, per_page)
@@ -438,11 +440,13 @@ class AdminUsers(APIView):
             # api param is 'LDAP', but actually get count of 'LDAPImport' users
             total_count = ccnet_api.count_emailusers('LDAP') + \
                           ccnet_api.count_inactive_emailusers('LDAP')
-            if total_count > 500 and \
-                    not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
-                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
             if order_by:
+
+                if total_count > 500 and \
+                        not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
+                    error_msg = _("order_by is not supported for >500 users.")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
                 try:
                     data = self.get_info_of_users_order_by_quota_usage(source, direction,
                             page, per_page)
