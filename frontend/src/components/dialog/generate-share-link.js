@@ -336,7 +336,7 @@ class GenerateShareLink extends React.Component {
             {sharedLinkInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD hh:mm:ss')}</dd>
+                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}</dd>
               </FormGroup>
             )}
 
