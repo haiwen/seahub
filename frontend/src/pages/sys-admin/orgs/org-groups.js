@@ -103,7 +103,7 @@ class Item extends Component {
         <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><a href={groupUrl}>{item.group_name}</a></td>
           <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
-          <td>{moment(item.created_at).format('YYYY-MM-DD hh:mm:ss')}</td>
+          <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
             <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
