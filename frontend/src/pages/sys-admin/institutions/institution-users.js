@@ -193,7 +193,7 @@ class Item extends Component {
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
           <td>
-            {moment(item.create_time).format('YYYY-MM-DD hh:mm:ss')}{' / '}{item.last_login ? moment(item.last_login).fromNow() : '--'}
+            {moment(item.create_time).format('YYYY-MM-DD HH:mm:ss')}{' / '}{item.last_login ? moment(item.last_login).fromNow() : '--'}
           </td>
           <td>
             {isOpIconShown &&

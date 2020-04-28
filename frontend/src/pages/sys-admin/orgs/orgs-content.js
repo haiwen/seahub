@@ -154,7 +154,7 @@ class Item extends Component {
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
-          <td>{moment(item.ctime).format('YYYY-MM-DD hh:mm:ss')}</td>
+          <td>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
             <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
