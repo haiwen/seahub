@@ -54,7 +54,7 @@ const propTypes = {
   onShowDirentsDraggablePreview: PropTypes.func,
 };
 
-class DirentListItem extends React.PureComponent {
+class DirentListItem extends React.Component {
 
   constructor(props) {
     super(props);
