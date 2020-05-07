@@ -108,7 +108,7 @@ class FileCommentsView(APIView):
         except SearpcError as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             'Internal error.')
+                             'Internal Server Error')
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 

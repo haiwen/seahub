@@ -2566,7 +2566,7 @@ class StarredFileView(APIView):
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
@@ -2598,7 +2598,7 @@ class StarredFileView(APIView):
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
@@ -3052,7 +3052,7 @@ class FileView(APIView):
                 return Response('success', status=status.HTTP_200_OK)
             except SearpcError as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         if operation.lower() == 'unlock':
             if not is_locked:
@@ -3066,7 +3066,7 @@ class FileView(APIView):
                 return Response('success', status=status.HTTP_200_OK)
             except SearpcError as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              "Operation can only be lock or unlock")
@@ -3393,7 +3393,7 @@ class FileSharedLinkView(APIView):
                     dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
                 except SearpcError as e:
                     logger.error(e)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal Server Error")
 
                 if not dirent:
                     return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
@@ -3801,7 +3801,7 @@ class DirSubRepoView(APIView):
                         error_msg = _('Wrong password')
                         return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
                     elif e.msg == 'Internal server error':
-                        error_msg = _('Internal server error')
+                        error_msg = _('Internal Server Error')
                         return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     else:
                         error_msg = _('Decrypt library error')
@@ -5179,7 +5179,7 @@ class OrganizationView(APIView):
             return Response(org_info, status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal Server Error")
 
 class RepoDownloadSharedLinks(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

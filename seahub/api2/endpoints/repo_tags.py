@@ -54,7 +54,7 @@ class RepoTagsView(APIView):
                 files_tags = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
             except Exception as e:
                 logger.error(e)
-                error_msg = 'Internal Server Error.'
+                error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             for file_tag in files_tags:
                 files_count[file_tag.repo_tag_id] += 1
@@ -64,7 +64,7 @@ class RepoTagsView(APIView):
             repo_tag_list = RepoTags.objects.get_all_by_repo_id(repo_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for repo_tag in repo_tag_list:
@@ -112,7 +112,7 @@ class RepoTagsView(APIView):
             repo_tag = RepoTags.objects.create_repo_tag(repo_id, tag_name, tag_color)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
@@ -154,7 +154,7 @@ class RepoTagView(APIView):
             repo_tag.save()
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
@@ -177,7 +177,7 @@ class RepoTagView(APIView):
             RepoTags.objects.delete_repo_tag(repo_tag_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": "true"}, status=status.HTTP_200_OK)

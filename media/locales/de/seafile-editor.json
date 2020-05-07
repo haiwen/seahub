@@ -14,7 +14,7 @@
   "unordered_list": "Ungeordnete Liste",
   "check_list_item": "Checkbox Liste",
   "insert_image": "Bild",
-  "insert_file": "Datei einfügen",
+  "insert_file": "Datei",
   "code": "Inline-Code",
   "code_block": "Codeblock",
   "insert_link": "Link",
@@ -53,8 +53,8 @@
   "edit": "Bearbeiten",
   "copy": "Kopieren",
   "copied": "Kopiert",
-  "internal_link": "Interner Link",
-  "copy_internal_link": "Der interne Link wurde in den Zwischenspeicher kopiert.",
+  "internal_link": "Internen Link anzeigen",
+  "copy_internal_link": "Der interne Link wurde in die Zwischenablage kopiert.",
   "internal_link_desc": "Interne Links sind Verweise auf Dateien bzw. Ordner, die nur von Benutzer/innen mit mindestens Leserechten für die Dateien bzw. Ordner genutzt werden können. Interne Links eignen sich insbesondere für die interne Kommunikation in Ticket-/CRM-Systemen sowie E-Mails und Chats.",
   "share": "Freigeben",
   "share_link": "Download-Link",
@@ -113,20 +113,20 @@
   "Date": "Datum",
   "Participants": "Teilnehmer",
   "Meeting_note": "Besprechungsnotiz",
-  "Chooser_document_type": "Chooser document type",
+  "Chooser_document_type": "Auswahl Dokumenttyp",
   "Empty": "Leer",
   "no_related_files": "Keine zugehörigen Dateien",
   "no_out_line": "Keine Gliederung",
-  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "Editing files in this browser can lead to slight display problems.",
+  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "Beim Bearbeiten von Dateien in diesem Browser können leichte Probleme bei der Anzeige auftreten.",
   "no_document_improvement_suggestion": "Keine Vorschläge zur Verbesserung des Dokuments",
-  "Hide_side_panel": "Hide side panel",
-  "Show_side_panel": "Show side panel",
+  "Hide_side_panel": "Seitenleiste verbergen",
+  "Show_side_panel": "Seitenleiste anzeigen",
   "Show_resolved_comments": "Erledigte Kommentare anzeigen",
   "Update": "Aktualisieren",
   "Width": "Breite",
   "Height": "Höhe",
   "Full_screen": "Vollbild",
-  "Insert_library_image": "Insert library image",
+  "Insert_library_image": "Bild aus Bibliothek einfügen",
   "Size": "Größe",
   "Location": "Ort",
   "Last_Update": "Letzte Änderung",
@@ -139,12 +139,12 @@
       "issue" : "Hauptüberschrift (h1) fehlt"
     },
     "heading_end_with_colon": {
-      "description": "Trailing punctuation in heading should not be a colon",
+      "description": "Überschriften dürfen nicht mit einem Doppelpunkt enden.",
       "issue": "Überschrift endet mit einem Doppelpunkt"
     },
     "heading_increase_irregular": {
-      "description": "Heading levels should only increment by one level at a time",
-      "issue": "Heading level issue"
+      "description": "Überschriften sollten in aufeinander folgenden Stufen angelegt werden",
+      "issue": "Stufe der Überschrift überprüfen"
     }
   },
   "userHelp": {

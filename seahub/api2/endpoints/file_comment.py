@@ -99,7 +99,7 @@ class FileCommentView(APIView):
                 file_comment.save()
             except Exception as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         if detail is not None:
             try:
@@ -107,7 +107,7 @@ class FileCommentView(APIView):
                 file_comment.save()
             except Exception as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         comment = request.data.get('comment')
         if comment is not None:
@@ -116,7 +116,7 @@ class FileCommentView(APIView):
                 file_comment.save()
             except Exception as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         try:
             avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))

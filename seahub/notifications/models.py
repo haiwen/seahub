@@ -462,7 +462,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         filename = d['file_name']
         repo_id = d['repo_id']
@@ -503,7 +503,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -554,7 +554,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -610,7 +610,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         username = d['username']
         group_id = d['group_id']
@@ -640,7 +640,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         group_staff = d['group_staff']
         group_id = d['group_id']
@@ -662,7 +662,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         repo_id = d['repo_id']
         file_path = d['file_path']
@@ -688,7 +688,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         draft_id = d['draft_id']
         author = d['author']
@@ -705,7 +705,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         draft_id = d['draft_id']
         from_user = d['from_user']
@@ -722,7 +722,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         inv_id = d['invitation_id']
         try:
@@ -751,7 +751,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _("Internal error")
+            return _("Internal Server Error")
 
         repo_owner_name = email2nickname(d['repo_owner'])
         repo_id = d['repo_id']

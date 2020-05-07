@@ -169,7 +169,7 @@ def render_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or _('Internal error')
+    ctx['error_msg'] = msg or _('Internal Server Error')
 
     if extra_ctx:
         for k in extra_ctx:
@@ -1182,7 +1182,7 @@ if HAS_OFFICE_CONVERTER:
         except Exception as e:
             print(e)
             logging.exception('failed to add_office_convert_task: %s' % e)
-            return _('Internal error')
+            return _('Internal Server Error')
         return None
 
 # search realted
