@@ -57,7 +57,7 @@ class FileParticipantsView(APIView):
                 participant_list.append(participant_info)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'participant_list': participant_list})
 
@@ -93,7 +93,7 @@ class FileParticipantsView(APIView):
             participants_queryset = FileParticipant.objects.get_participants(uuid)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         for email in emails:
             if not is_valid_username(email):
@@ -117,7 +117,7 @@ class FileParticipantsView(APIView):
             # main
             try:
                 if participants_queryset.filter(uuid=uuid, username=email).count() > 0:
-                    error_dic = {'email': email, 'error_msg': _('Participant already exists.'), 'error_code': 409}
+                    error_dic = {'email': email, 'error_msg': _('The participant already exists.'), 'error_code': 409}
                     failed.append(error_dic)
                     continue
 
@@ -126,7 +126,7 @@ class FileParticipantsView(APIView):
                 success.append(participant)
             except Exception as e:
                 logger.error(e)
-                error_dic = {'email': email, 'error_msg': _('Internal Server Error.'), 'error_code': 500}
+                error_dic = {'email': email, 'error_msg': _('Internal Server Error'), 'error_code': 500}
                 failed.append(error_dic)
                 continue
 
@@ -170,6 +170,6 @@ class FileParticipantView(APIView):
             FileParticipant.objects.delete_participant(file_uuid, email)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error.')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})

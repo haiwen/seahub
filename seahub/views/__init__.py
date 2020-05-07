@@ -900,7 +900,7 @@ def repo_download_dir(request, repo_id):
                 repo.version, dir_id)
         except Exception as e:
             logger.error(str(e))
-            return render_error(request, _('Internal Error'))
+            return render_error(request, _('Internal Server Error'))
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
             return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)

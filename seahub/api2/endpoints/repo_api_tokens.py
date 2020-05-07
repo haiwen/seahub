@@ -88,7 +88,7 @@ class RepoAPITokensView(APIView):
                                                      permission=repo_permission)
         except Exception as e:
             logger.error('user: %s create repo: %s\'s token error: %s', username, repo_id, e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))
@@ -120,7 +120,7 @@ class RepoAPITokenView(APIView):
             rat.delete()
         except Exception as e:
             logger.error('user: %s delete repo: %s app_name: %s error: %s', username, repo_id, app_name, e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'success': True})
 
@@ -153,7 +153,7 @@ class RepoAPITokenView(APIView):
             rat.save()
         except Exception as e:
             logger.error('user: %s update repo: %s app_name: %s error: %s', username, repo_id, app_name, e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(_get_repo_token_info(rat))

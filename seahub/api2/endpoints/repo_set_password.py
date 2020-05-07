@@ -67,7 +67,7 @@ class RepoSetPassword(APIView):
                 error_msg = _('Wrong password')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             elif e.msg == 'Internal server error':
-                error_msg = _('Internal server error')
+                error_msg = _('Internal Server Error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             else:
                 error_msg = _('Decrypt library error')

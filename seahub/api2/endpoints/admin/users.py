@@ -419,7 +419,7 @@ class AdminUsers(APIView):
 
                 if total_count > 500 and \
                         not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
-                    error_msg = _("order_by is not supported for >500 users.")
+                    error_msg = _("There are more than 500 users, and sort is not offered.")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
@@ -444,7 +444,7 @@ class AdminUsers(APIView):
 
                 if total_count > 500 and \
                         not getattr(settings, 'ALWAYS_SORT_USERS_BY_QUOTA_USAGE', False):
-                    error_msg = _("order_by is not supported for >500 users.")
+                    error_msg = _("There are more than 500 users, and sort is not offered.")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
@@ -918,7 +918,7 @@ class AdminUser(APIView):
             user_obj.save()
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal server error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         update_status_tip = ''

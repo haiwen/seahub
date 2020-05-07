@@ -60,7 +60,7 @@ class RepoFileTagsView(APIView):
             file_tags = FileTags.objects.get_file_tag_by_path(repo_id, file_path)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"file_tags": file_tags}, status=status.HTTP_200_OK)
@@ -109,7 +109,7 @@ class RepoFileTagsView(APIView):
             file_tag = FileTags.objects.add_file_tag(repo_id, repo_tag_id, file_path)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"file_tag": file_tag.to_dict()}, status=status.HTTP_201_CREATED)
@@ -143,7 +143,7 @@ class RepoFileTagView(APIView):
             FileTags.objects.delete_file_tag(file_tag_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": "true"}, status=status.HTTP_200_OK)
