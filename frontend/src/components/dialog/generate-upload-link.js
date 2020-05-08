@@ -2,19 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert } from 'reactstrap';
 import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
 import toaster from '../toast';
 import SendLink from '../send-link';
+import DateTimePicker from '../date-and-time-picker';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   closeShareDialog: PropTypes.func.isRequired,
 };
+
+const inputWidth = Utils.isDesktop() ? 250 : 210;
 
 class GenerateUploadLink extends React.Component {
   constructor(props) {
@@ -27,7 +30,9 @@ class GenerateUploadLink extends React.Component {
       sharedUploadInfo: null,
       isSendLinkShown: false,
       isExpireChecked: false,
-      expireDays: 0,
+      setExp: 'by-days',
+      expireDays: '',
+      expDate: null
     };
   }
 
@@ -88,13 +93,23 @@ class GenerateUploadLink extends React.Component {
   }
 
   generateUploadLink = () => {
-    let path = this.props.itemPath;
-    let repoID = this.props.repoID; 
-    let { password, expireDays } = this.state;
-
     let isValid = this.validateParamsInput();
     if (isValid) {
-      seafileAPI.createUploadLink(repoID, path, password, expireDays).then((res) => {
+      this.setState({errorInfo: ''});
+
+      let { itemPath, repoID } = this.props;
+      let { password, isExpireChecked, setExp, expireDays, expDate } = this.state;
+
+      let expirationTime = '';
+      if (isExpireChecked) {
+        if (setExp == 'by-days') {
+          expirationTime = moment().add(parseInt(expireDays), 'days').format();
+        } else {
+          expirationTime = expDate.format();
+        }
+      }
+
+      seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime).then((res) => {
         let sharedUploadInfo = new UploadLink(res.data);
         this.setState({sharedUploadInfo: sharedUploadInfo}); 
       }).catch(error => {
@@ -105,7 +120,7 @@ class GenerateUploadLink extends React.Component {
   }
 
   validateParamsInput = () => {
-    let { showPasswordInput , password, passwordnew, isExpireChecked, expireDays } = this.state;
+    let { showPasswordInput, password, passwordnew, isExpireChecked, setExp, expireDays, expDate } = this.state;
 
     // check password params
     if (showPasswordInput) {
@@ -123,9 +138,16 @@ class GenerateUploadLink extends React.Component {
       }
     }
 
-    // check expire day params
-    let reg = /^\d+$/;
     if (isExpireChecked) {
+      if (setExp == 'by-date') {
+        if (!expDate) {
+          this.setState({errorInfo: 'Please select an expiration time'});
+          return false;
+        }
+        return true;
+      }
+
+      let reg = /^\d+$/;
       if (!expireDays) {
         this.setState({errorInfo: gettext('Please enter days')});
         return false;
@@ -141,6 +163,29 @@ class GenerateUploadLink extends React.Component {
 
   onExpireChecked = (e) => {
     this.setState({isExpireChecked: e.target.checked});
+  }
+
+ setExp = (e) => {
+   this.setState({
+     setExp: e.target.value
+   });
+ }
+
+  disabledDate = (current) => {
+    if (!current) {
+      // allow empty select
+      return false;
+    }
+
+    const now = moment();
+    now.hour(0); // make 'today' be selectable
+    return current.valueOf() < now.valueOf();
+  }
+
+  onExpDateChanged = (value) => {
+    this.setState({
+      expDate: value
+    });
   }
 
   onExpireDaysChanged = (e) => {
@@ -218,36 +263,67 @@ class GenerateUploadLink extends React.Component {
       <Form className="generate-upload-link">
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
+            <Input type="checkbox" onChange={this.addPassword} />
+            <span>{gettext('Add password protection')}</span>
           </Label>
+          {this.state.showPasswordInput &&
+          <div className="ml-4">
+            <FormGroup>
+              <Label for="passwd">{gettext('Password')}</Label>
+              <span className="tip">{passwordLengthTip}</span>
+              <InputGroup style={{width: inputWidth}}>
+                <Input id="passwd" type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword} />
+                <InputGroupAddon addonType="append">
+                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+                </InputGroupAddon>
+              </InputGroup>
+            </FormGroup>
+            <FormGroup>
+              <Label for="passwd-again">{gettext('Password again')}</Label>
+              <Input id="passwd-again" style={{width: inputWidth}} type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
+            </FormGroup>
+          </div>
+          }
         </FormGroup>
-        {this.state.showPasswordInput &&
-          <FormGroup className="link-operation-content">
-            {/* todo translate  */}
-            <Label className="font-weight-bold">{gettext('Password')}</Label>{' '}<span className="tip">{passwordLengthTip}</span>
-            <InputGroup className="passwd">
-              <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
-              <InputGroupAddon addonType="append">
-                <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
-              </InputGroupAddon>
-            </InputGroup>
-            <Label className="font-weight-bold">{gettext('Password again')}</Label>
-            <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
-          </FormGroup>
-        }
         <FormGroup check>
           <Label check>
-            <Input className="expire-checkbox" type="checkbox" onChange={this.onExpireChecked}/>{'  '}{gettext('Add auto expiration')}
+            <Input type="checkbox" onChange={this.onExpireChecked} />
+            <span>{gettext('Add auto expiration')}</span>
           </Label>
+          {this.state.isExpireChecked &&
+          <div className="ml-4">
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="set-exp" value="by-days" checked={this.state.setExp == 'by-days'} onChange={this.setExp} className="mr-1" />
+                <span>{gettext('Expiration days')}</span>
+              </Label>
+              {this.state.setExp == 'by-days' && (
+                <InputGroup style={{width: inputWidth}}>
+                  <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
+                  <InputGroupAddon addonType="append">
+                    <InputGroupText>{gettext('days')}</InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+              )}
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name="set-exp" value="by-date" checked={this.state.setExp == 'by-date'} onChange={this.setExp} className="mr-1" />
+                <span>{gettext('Expiration time')}</span>
+              </Label>
+              {this.state.setExp == 'by-date' && (
+                <DateTimePicker
+                  inputWidth={inputWidth}
+                  disabledDate={this.disabledDate}
+                  value={this.state.expDate}
+                  onChange={this.onExpDateChanged}
+                />
+              )}
+            </FormGroup>
+          </div>
+          }
         </FormGroup>
-        {this.state.isExpireChecked &&
-          <FormGroup check>
-            <Label check>
-              <Input className="expire-input expire-input-border" type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} readOnly={!this.state.isExpireChecked}/><span className="expir-span">{gettext('days')}</span>
-            </Label>
-          </FormGroup>
-        }
         {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
         <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
       </Form>
