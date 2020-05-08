@@ -474,6 +474,44 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
     next_url = reverse('view_lib_file', args=[repo_id, path])
     return HttpResponseRedirect(next_url)
 
+def add_onlyoffice_jwt_ticked(request, onlyoffice_dict):
+    if not request.user.is_authenticated():
+        username = ANONYMOUS_EMAIL
+    else:
+        username = request.user.username
+
+    if ONLYOFFICE_JWT_SECRET:
+        import jwt
+
+        config = {
+            "document": {
+                "fileType": onlyoffice_dict['file_type'],
+                "key": onlyoffice_dict['doc_key'],
+                "title": onlyoffice_dict['doc_title'],
+                "url": onlyoffice_dict['doc_url'],
+                "permissions": {
+                    "download": onlyoffice_dict['can_download'],
+                    "edit": onlyoffice_dict['can_edit'],
+                    "print": onlyoffice_dict['can_download'],
+                    "review": True
+                }
+            },
+            "documentType": onlyoffice_dict['document_type'],
+            "editorConfig": {
+                "callbackUrl": onlyoffice_dict['callback_url'],
+                "lang": request.LANGUAGE_CODE,
+                "mode": onlyoffice_dict['can_edit'],
+                "customization": {
+                    "forcesave": onlyoffice_dict['onlyoffice_force_save'],
+                },
+                "user": {
+                    "name": email2nickname(username)
+                }
+            }
+        };
+        onlyoffice_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
+    return onlyoffice_dict
+
 @login_required
 @repo_passwd_set_required
 def view_lib_file(request, repo_id, path):
@@ -809,37 +847,7 @@ def view_lib_file(request, repo_id, path):
 
                 send_file_access_msg(request, repo, path, 'web')
 
-                if ONLYOFFICE_JWT_SECRET:
-                    import jwt
-                    config = {
-                        "document": {
-                            "fileType": onlyoffice_dict['file_type'],
-                            "key": onlyoffice_dict['doc_key'],
-                            "title": onlyoffice_dict['doc_title'],
-                            "url": onlyoffice_dict['doc_url'],
-                            "permissions": {
-                                "download": onlyoffice_dict['can_download'],
-                                "edit": onlyoffice_dict['can_edit'],
-                                "print": onlyoffice_dict['can_download'],
-                                "review": True
-                            }
-                        },
-                        "documentType": onlyoffice_dict['document_type'],
-                        "editorConfig": {
-                            "callbackUrl": onlyoffice_dict['callback_url'],
-                            "lang": request.LANGUAGE_CODE,
-                            "mode": onlyoffice_dict['can_edit'],
-                            "customization": {
-                                "forcesave": onlyoffice_dict['onlyoffice_force_save'],
-                            },
-                            "user": {
-                                "name": email2nickname(username)
-                            }
-                        }
-                    };
-                    onlyoffice_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
-
-                return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
+                return render(request, 'view_file_onlyoffice.html', add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
@@ -953,7 +961,7 @@ def view_history_file_common(request, repo_id, ret_dict):
                 if onlyoffice_dict:
                     # send file audit message
                     send_file_access_msg(request, repo, path, 'web')
-                    ret_dict['onlyoffice_dict'] = onlyoffice_dict
+                    ret_dict['onlyoffice_dict'] = add_onlyoffice_jwt_ticked(request,onlyoffice_dict)
                 else:
                     ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
@@ -1003,7 +1011,7 @@ def view_history_file(request, repo_id):
 
     if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
-        return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
+        return render(request, 'view_file_onlyoffice.html', add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
 
     # generate file path navigator
     path = ret_dict['path']
@@ -1026,7 +1034,7 @@ def view_trash_file(request, repo_id):
 
     if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
-        return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
+        return render(request, 'view_file_onlyoffice.html', add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
 
     basedir = request.GET.get('base', '')
     if not basedir:
@@ -1053,7 +1061,7 @@ def view_snapshot_file(request, repo_id):
 
     if 'onlyoffice_dict' in ret_dict:
         onlyoffice_dict = ret_dict['onlyoffice_dict']
-        return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
+        return render(request, 'view_file_onlyoffice.html', add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
 
     # generate file path navigator
     path = ret_dict['path']
@@ -1246,7 +1254,7 @@ def view_shared_file(request, fileshare):
                 send_file_access_msg(request, repo, path, 'share-link')
 
                 return render(request, 'view_file_onlyoffice.html',
-                        onlyoffice_dict)
+                        add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
@@ -1428,7 +1436,7 @@ def view_file_via_shared_dir(request, fileshare):
                 send_file_access_msg(request, repo, real_path, 'share-link')
 
                 return render(request, 'view_file_onlyoffice.html',
-                        onlyoffice_dict)
+                        add_onlyoffice_jwt_ticked(request, onlyoffice_dict))
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
