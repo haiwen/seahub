@@ -6,5 +6,12 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript">
+  Object.assign(app.pageOptions, {
+    shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
+    shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
+    shareLinkExpireDaysMax: {{ share_link_expire_days_max }}
+  });
+</script>
 {% render_bundle 'app' 'js' %}
 {% endblock %}
