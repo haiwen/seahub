@@ -6,6 +6,7 @@ import DatePicker from '@seafile/seafile-calendar/lib/Picker';
 import { translateCalendar } from '../utils/date-format-utils';
 
 import '@seafile/seafile-calendar/assets/index.css';
+import '../css/date-and-time-picker.css';
 
 const propsTypes = {
   disabledDate: PropTypes.func.isRequired,
@@ -52,7 +53,7 @@ class Picker extends React.Component {
         {
           ({value}) => {
             return (
-              <div className="position-relative">
+              <div>
                 <input 
                   placeholder={FORMAT}
                   style={{ width: props.inputWidth || 250 }}
