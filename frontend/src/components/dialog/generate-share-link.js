@@ -124,20 +124,18 @@ class GenerateShareLink extends React.Component {
       return false;
     }
 
-    const now = moment();
-    now.hour(0); // make 'today' be selectable
     if (this.isExpireDaysNoLimit) {
-      return current.valueOf() < now.valueOf();
+      return current.isBefore(moment(), 'day');
     }
-    const startDay = moment().hour(0).add(shareLinkExpireDaysMin, 'days').valueOf();
-    const endDay = moment().add(shareLinkExpireDaysMax, 'days').valueOf();
-    const currentTime = current.valueOf();
+
+    const startDay = moment().add(shareLinkExpireDaysMin, 'days');
+    const endDay = moment().add(shareLinkExpireDaysMax, 'days');
     if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax !== 0) {
-      return currentTime < startDay || currentTime > endDay;
+      return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
     } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) { 
-      return currentTime < startDay;
+      return current.isBefore(startDay, 'day');
     } else if (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax !== 0) {
-      return currentTime < now || currentTime > endDay;
+      return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
     }
   }
 

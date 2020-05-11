@@ -177,9 +177,7 @@ class GenerateUploadLink extends React.Component {
       return false;
     }
 
-    const now = moment();
-    now.hour(0); // make 'today' be selectable
-    return current.valueOf() < now.valueOf();
+    return current.isBefore(moment(), 'day');
   }
 
   onExpDateChanged = (value) => {
