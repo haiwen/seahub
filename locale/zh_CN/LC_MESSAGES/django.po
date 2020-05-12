@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-07 13:02+0800\n"
-"PO-Revision-Date: 2020-05-07 05:24+0000\n"
+"PO-Revision-Date: 2020-05-12 09:17+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr "部门中有资料库。"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are sub-departments in this department."
-msgstr "子部门中有资料库。"
+msgstr "该部门中包含子部门。"
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
