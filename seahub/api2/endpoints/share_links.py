@@ -283,6 +283,11 @@ class ShareLinks(APIView):
 
             if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
                 expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
+
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0)
+                expire_date_min_limit = expire_date_min_limit.replace(minute=0)
+                expire_date_min_limit = expire_date_min_limit.replace(second=0)
+
                 if expire_date < expire_date_min_limit:
                     error_msg = _('Expiration time should be later than %s') % \
                             expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
@@ -290,6 +295,11 @@ class ShareLinks(APIView):
 
             if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
                 expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
+
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23)
+                expire_date_max_limit = expire_date_max_limit.replace(minute=59)
+                expire_date_max_limit = expire_date_max_limit.replace(second=59)
+
                 if expire_date > expire_date_max_limit:
                     error_msg = _('Expiration time should be earlier than %s') % \
                             expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
