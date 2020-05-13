@@ -5,6 +5,7 @@ import json
 import logging
 import posixpath
 from constance import config
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from rest_framework.authentication import SessionAuthentication
@@ -244,32 +245,58 @@ class ShareLinks(APIView):
             error_msg = _('Password is too short.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            expire_days = int(request.data.get('expire_days', 0))
-        except ValueError:
-            error_msg = 'expire_days invalid.'
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if expire_days <= 0:
-            if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
-                expire_days = SHARE_LINK_EXPIRE_DAYS_DEFAULT
-
-        if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
-            if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
-                error_msg = _('Expire days should be greater or equal to %s') % \
-                        SHARE_LINK_EXPIRE_DAYS_MIN
+        expire_date = None
+        if expire_days:
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
-            if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
-                error_msg = _('Expire days should be less than or equal to %s') % \
-                        SHARE_LINK_EXPIRE_DAYS_MAX
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if expire_days <= 0:
-            expire_date = None
-        else:
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             expire_date = timezone.now() + relativedelta(days=expire_days)
+
+        elif expiration_time:
+
+            expire_date = datetime.strptime(expiration_time[:19], "%Y-%m-%dT%H:%M:%S")
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        else:
+            if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
+                expire_date = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_DEFAULT)
 
         try:
             perm = check_permissions_arg(request)
