@@ -211,7 +211,7 @@ class SidePanel extends React.Component {
                     </Link>
                   </li>
                 }
-                {enableGuestInvitation && otherPermission &&
+                {isPro && enableGuestInvitation && otherPermission &&
                   <li className="nav-item">
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
