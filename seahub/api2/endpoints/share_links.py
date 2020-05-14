@@ -2,6 +2,7 @@
 import os
 import stat
 import json
+import pytz
 import logging
 import posixpath
 from constance import config
@@ -279,14 +280,12 @@ class ShareLinks(APIView):
 
         elif expiration_time:
 
-            expire_date = datetime.strptime(expiration_time[:19], "%Y-%m-%dT%H:%M:%S")
+            expire_date = datetime.fromisoformat(expiration_time)
+            expire_date = expire_date.astimezone(pytz.UTC).replace(tzinfo=None)
 
             if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
                 expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
-
-                expire_date_min_limit = expire_date_min_limit.replace(hour=0)
-                expire_date_min_limit = expire_date_min_limit.replace(minute=0)
-                expire_date_min_limit = expire_date_min_limit.replace(second=0)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
 
                 if expire_date < expire_date_min_limit:
                     error_msg = _('Expiration time should be later than %s') % \
@@ -295,15 +294,13 @@ class ShareLinks(APIView):
 
             if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
                 expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
-
-                expire_date_max_limit = expire_date_max_limit.replace(hour=23)
-                expire_date_max_limit = expire_date_max_limit.replace(minute=59)
-                expire_date_max_limit = expire_date_max_limit.replace(second=59)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
 
                 if expire_date > expire_date_max_limit:
                     error_msg = _('Expiration time should be earlier than %s') % \
                             expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         else:
             if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
                 expire_date = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_DEFAULT)

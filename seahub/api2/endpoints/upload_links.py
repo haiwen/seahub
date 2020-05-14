@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import json
+import pytz
 import logging
 from constance import config
 from datetime import datetime
@@ -176,7 +177,8 @@ class UploadLinks(APIView):
 
         elif expiration_time:
 
-            expire_date = datetime.strptime(expiration_time[:19], "%Y-%m-%dT%H:%M:%S")
+            expire_date = datetime.fromisoformat(expiration_time)
+            expire_date = expire_date.astimezone(pytz.UTC).replace(tzinfo=None)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
