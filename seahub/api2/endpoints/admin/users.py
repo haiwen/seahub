@@ -1052,7 +1052,7 @@ class AdminUserGroups(APIView):
 
         groups_info = []
         try:
-            groups = ccnet_api.get_personal_groups_by_user(email)
+            groups = ccnet_api.get_groups(email)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

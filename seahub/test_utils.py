@@ -199,7 +199,7 @@ class Fixtures(Exam):
             User.objects.get(email).delete()
         except User.DoesNotExist:
             pass
-        for g in seaserv.get_personal_groups_by_user(email):
+        for g in ccnet_api.get_groups(email):
             ccnet_threaded_rpc.remove_group(g.id, email)
 
     def create_repo(self, **kwargs):

@@ -129,11 +129,9 @@ except ImportError:
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
 from seaserv import seafserv_threaded_rpc, \
-    get_personal_groups_by_user, is_personal_repo, \
-    get_repo, check_permission, get_commits,\
+    is_personal_repo, get_repo, check_permission, get_commits,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    remove_share, get_group, \
-    get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
+    remove_share, get_group, get_file_id_by_path, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
     create_org, ccnet_api
 
@@ -3871,7 +3869,7 @@ class BeSharedRepos(APIView):
         shared_repos = []
         shared_repos += seafile_api.get_share_in_repo_list(username, -1, -1)
 
-        joined_groups = get_personal_groups_by_user(username)
+        joined_groups = ccnet_api.get_groups(username)
         for grp in joined_groups:
             # Get group repos, and for each group repos...
             for r_id in get_group_repoids(grp.id):
@@ -4503,7 +4501,7 @@ class Groups(APIView):
             return Response(res)
         else:
             groups_json = []
-            joined_groups = get_personal_groups_by_user(request.user.username)
+            joined_groups = ccnet_api.get_groups(request.user.username)
 
             for g in joined_groups:
 
@@ -4538,7 +4536,7 @@ class Groups(APIView):
         # check plan
         num_of_groups = getattr(request.user, 'num_of_groups', -1)
         if num_of_groups > 0:
-            current_groups = len(get_personal_groups_by_user(username))
+            current_groups = len(ccnet_api.get_groups(username))
             if current_groups > num_of_groups:
                 result['error'] = 'You can only create %d groups.' % num_of_groups
                 return HttpResponse(json.dumps(result), status=500,
@@ -4553,7 +4551,7 @@ class Groups(APIView):
 
         # Check whether group name is duplicated.
         if request.cloud_mode:
-            checked_groups = get_personal_groups_by_user(username)
+            checked_groups = ccnet_api.get_groups(username)
         else:
             checked_groups = get_personal_groups(-1, -1)
         for g in checked_groups:
