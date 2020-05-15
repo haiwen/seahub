@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 import seaserv
-from seaserv import seafile_api, ccnet_threaded_rpc
+from seaserv import seafile_api, ccnet_threaded_rpc, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.serializers import AccountSerializer
@@ -93,7 +93,7 @@ class Account(APIView):
                 seafile_api.set_repo_owner(r.id, user2.username)
 
             # transfer joined groups to new user
-            for g in seaserv.get_personal_groups_by_user(from_user):
+            for g in ccnet_api.get_groups(from_user):
                 if not is_group_member(g.id, user2.username):
                     # add new user to the group on behalf of the group creator
                     ccnet_threaded_rpc.group_add_member(g.id, g.creator_name,

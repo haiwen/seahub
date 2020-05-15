@@ -9,7 +9,7 @@ from django.shortcuts import render
 
 from django.utils.translation import ugettext as _
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
@@ -144,7 +144,7 @@ def user_info(request, email):
     d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
     try:
-        personal_groups = seaserv.get_personal_groups_by_user(email)
+        personal_groups = ccnet_api.get_groups(email)
     except SearpcError as e:
         logger.error(e)
         personal_groups = []

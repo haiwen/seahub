@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework import status, serializers
-from seaserv import seafile_api, get_personal_groups_by_user, \
+from seaserv import seafile_api, ccnet_api, \
         get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
@@ -70,7 +70,7 @@ def prepare_starred_files(files):
 def get_groups(email):
     group_json = []
 
-    joined_groups = get_personal_groups_by_user(email)
+    joined_groups = ccnet_api.get_groups(email)
     grpmsgs = {}
     for g in joined_groups:
         grpmsgs[g.id] = 0

@@ -12,9 +12,7 @@ from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required
 import seaserv
-from seaserv import ccnet_threaded_rpc, seafile_api, \
-    get_group_repos, get_group, \
-    remove_repo, get_file_id_by_path, post_empty_file, del_file
+from seaserv import ccnet_threaded_rpc, ccnet_api, get_group
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
@@ -153,7 +151,7 @@ def rename_group_with_new_name(request, group_id, new_group_name):
         checked_groups = seaserv.get_org_groups_by_user(org_id, username)
     else:
         if request.cloud_mode:
-            checked_groups = seaserv.get_personal_groups_by_user(username)
+            checked_groups = ccnet_api.get_groups(username)
         else:
             checked_groups = get_all_groups(-1, -1)
 
