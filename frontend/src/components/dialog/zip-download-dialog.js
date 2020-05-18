@@ -99,7 +99,7 @@ class ZipDownloadDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} centered={true} toggle={this.toggleDialog}>
+      <Modal isOpen={true} toggle={this.toggleDialog}>
         <ModalHeader toggle={this.toggleDialog}>{gettext('Download')}</ModalHeader>
         <ModalBody>
           <Content data={this.state} />
