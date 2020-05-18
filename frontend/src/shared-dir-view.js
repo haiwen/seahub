@@ -389,11 +389,13 @@ class Content extends React.Component {
       <table className="table-hover">
         <thead>
           <tr>
+            {showDownloadIcon &&
             <th width="3%" className="text-center">
               <input type="checkbox" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
             </th>
+            }
             <th width="5%"></th>
-            <th width="52%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width={showDownloadIcon ? '52%' : '55%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
             <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
             <th width="10%"></th>
@@ -464,9 +466,11 @@ class Item extends React.Component {
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center">
-            <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
-          </td>
+          {showDownloadIcon &&
+            <td className="text-center">
+              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+            </td>
+          }
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
           <td>
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
@@ -514,9 +518,11 @@ class Item extends React.Component {
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td className="text-center">
-            <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
-          </td>
+          {showDownloadIcon &&
+            <td className="text-center">
+              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+            </td>
+          }
           <td className="text-center">
             {thumbnailURL ?
               <img className="thumbnail" src={thumbnailURL} alt="" /> :
