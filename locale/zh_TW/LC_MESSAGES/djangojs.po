@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 15:44+0800\n"
-"PO-Revision-Date: 2019-08-20 07:57+0000\n"
-"Last-Translator: aa bbb <lung375706226@gmail.com>\n"
+"POT-Creation-Date: 2020-05-19 17:02+0800\n"
+"PO-Revision-Date: 2020-05-19 09:03+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,39 +19,43 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: frontend/src/components/common/account.js:96
-msgid "Exit Admin Panel"
-msgstr ""
-
 #: frontend/src/components/common/account.js:102
+msgid "Exit System Admin"
+msgstr "退出系統管理"
+
+#: frontend/src/components/common/account.js:107
 msgid "Exit Organization Admin"
 msgstr ""
 
-#: frontend/src/components/common/account.js:108
+#: frontend/src/components/common/account.js:112
+msgid "Exit Institution Admin"
+msgstr ""
+
+#: frontend/src/components/common/account.js:120
 #: frontend/src/pages/sys-admin/side-panel.js:31
 msgid "System Admin"
 msgstr "系統管理"
 
-#: frontend/src/components/common/account.js:114
+#: frontend/src/components/common/account.js:125
 msgid "Organization Admin"
 msgstr "組織管理"
 
-#: frontend/src/components/common/account.js:120
-#: frontend/src/pages/org-admin/org-user-profile.js:141
-msgid "Avatar"
-msgstr "頭像"
+#: frontend/src/components/common/account.js:130
+msgid "Institution Admin"
+msgstr ""
 
-#: frontend/src/components/common/account.js:142
+#: frontend/src/components/common/account.js:161
 msgid "Used:"
 msgstr "已用空間："
 
-#: frontend/src/components/common/account.js:146
-#: frontend/src/pages/groups/group-view.js:446
+#: frontend/src/components/common/account.js:165
+#: frontend/src/pages/groups/group-view.js:459
 #: frontend/src/pages/sys-admin/side-panel.js:61 frontend/src/settings.js:116
 msgid "Settings"
 msgstr "設定"
 
-#: frontend/src/components/common/account.js:148
+#: frontend/src/components/common/account.js:167
+#: frontend/src/components/common/logout.js:6
 msgid "Log out"
 msgstr "退出"
 
@@ -119,10 +123,10 @@ msgstr "通知"
 #: frontend/src/components/dialog/manage-members-dialog.js:149
 #: frontend/src/components/dialog/org-add-admin-dialog.js:65
 #: frontend/src/components/dialog/readme-dialog.js:56
+#: frontend/src/components/dialog/share-admin-link.js:35
 #: frontend/src/components/dialog/share-repo-dialog.js:149
 #: frontend/src/components/dialog/transfer-group-dialog.js:68
 #: frontend/src/components/system-notification.js:46
-#: frontend/src/pages/share-admin/share-links.js:122
 msgid "Close"
 msgstr "關閉"
 
@@ -131,7 +135,7 @@ msgid "See All Notifications"
 msgstr "查看所有提醒。"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:31
-#: frontend/src/components/main-side-nav.js:69
+#: frontend/src/components/main-side-nav.js:71
 #: static/scripts/app/router.js:136
 msgid "A file is being uploaded. Are you sure you want to leave this page?"
 msgstr ""
@@ -139,8 +143,8 @@ msgstr ""
 #: frontend/src/components/cur-dir-path/dir-path.js:91
 #: frontend/src/components/cur-dir-path/dir-path.js:97
 #: frontend/src/components/file-chooser/file-chooser.js:448
-#: frontend/src/components/main-side-nav.js:143
 #: frontend/src/components/main-side-nav.js:145
+#: frontend/src/components/main-side-nav.js:147
 #: frontend/src/components/org-admin-group-nav.js:23
 #: frontend/src/pages/org-admin/org-department-item.js:292
 #: frontend/src/pages/org-admin/side-panel.js:44
@@ -173,15 +177,15 @@ msgstr "標籤"
 msgid "History"
 msgstr "歷史"
 
-#: frontend/src/components/dialog/about-dialog.js:25
+#: frontend/src/components/dialog/about-dialog.js:35
 msgid "Server Version: "
 msgstr "伺服器版本："
 
-#: frontend/src/components/dialog/about-dialog.js:25
+#: frontend/src/components/dialog/about-dialog.js:35
 msgid "Seafile"
 msgstr "海文互知"
 
-#: frontend/src/components/dialog/about-dialog.js:26
+#: frontend/src/components/dialog/about-dialog.js:37
 msgid "About Us"
 msgstr "關於我們"
 
@@ -237,7 +241,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-delete-member-dialog.js:46
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
 #: frontend/src/components/dialog/rename-dialog.js:122
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:123
+#: frontend/src/components/dialog/rename-dirent.js:124
 #: frontend/src/components/dialog/rename-group-dialog.js:66
 #: frontend/src/components/dialog/save-shared-file-dialog.js:72
 #: frontend/src/components/dialog/set-org-user-contact-email.js:65
@@ -297,7 +301,7 @@ msgstr "取消"
 #: frontend/src/components/dialog/org-add-user-dialog.js:169
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:83
 #: frontend/src/components/dialog/rename-dialog.js:123
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:124
+#: frontend/src/components/dialog/rename-dirent.js:125
 #: frontend/src/components/dialog/rename-group-dialog.js:67
 #: frontend/src/components/dialog/save-shared-file-dialog.js:74
 #: frontend/src/components/dialog/save-shared-file-dialog.js:76
@@ -488,17 +492,17 @@ msgstr "確定要刪除該帳號嗎？"
 #: frontend/src/components/dialog/share-to-user.js:58
 #: frontend/src/components/dialog/update-tag-dialog.js:124
 #: frontend/src/components/dirent-detail/detail-comments-list.js:223
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:509
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:543
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:521
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:555
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
 #: frontend/src/components/file-view/comment-panel.js:269
 #: frontend/src/components/review-list-view/review-comments.js:294
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:310
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:319
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:342
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/pages/invitations/invitations-view.js:99
 #: frontend/src/pages/invitations/invitations-view.js:129
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:266
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:262
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:85
 #: frontend/src/pages/org-admin/org-group-repos.js:180
 #: frontend/src/pages/org-admin/org-groups.js:239
@@ -568,6 +572,14 @@ msgstr ""
 msgid "Copy selected item(s) to:"
 msgstr "將已選條目複製到："
 
+#: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:18
+msgid "Move {num} items"
+msgstr ""
+
+#: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:18
+msgid "Copy {num} items"
+msgstr ""
+
 #: frontend/src/components/dialog/create-department-repo-dialog.js:61
 #: frontend/src/components/dialog/create-group-dialog.js:55
 #: frontend/src/components/dialog/create-repo-dialog.js:79
@@ -581,7 +593,7 @@ msgstr "名稱為必填項"
 #: frontend/src/components/dialog/create-department-repo-dialog.js:66
 #: frontend/src/components/dialog/create-repo-dialog.js:84
 #: frontend/src/components/dialog/rename-dialog.js:99
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:100
+#: frontend/src/components/dialog/rename-dirent.js:101
 #: frontend/src/components/rename.js:79 static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:703 static/scripts/app/views/dir.js:763
@@ -613,11 +625,11 @@ msgstr ""
 #: frontend/src/components/dialog/share-repo-dialog.js:128
 #: frontend/src/components/dialog/update-tag-dialog.js:101
 #: frontend/src/components/dialog/wiki-select-dialog.js:62
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:674
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:561
 #: frontend/src/components/draft-list-view/draft-list-view.js:36
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:118
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:20
-#: frontend/src/components/wiki-list-view/wiki-list-view.js:42
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:44
 #: frontend/src/pages/my-libs/my-libs-deleted.js:91
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:88
 #: frontend/src/pages/org-admin/org-admin-list.js:45
@@ -637,27 +649,27 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-users-list.js:56
 #: frontend/src/pages/share-admin/folders.js:49
 #: frontend/src/pages/share-admin/libraries.js:48
-#: frontend/src/pages/share-admin/share-links.js:94
-#: frontend/src/pages/share-admin/upload-links.js:57
+#: frontend/src/pages/share-admin/share-links.js:61
+#: frontend/src/pages/share-admin/upload-links.js:40
 #: frontend/src/pages/shared-libs/shared-libs.js:68
 #: frontend/src/pages/starred/starred.js:32
 #: frontend/src/repo-folder-trash.js:250 frontend/src/repo-snapshot.js:208
-#: frontend/src/shared-dir-view.js:270
+#: frontend/src/shared-dir-view.js:262
 msgid "Name"
 msgstr "名稱"
 
 #: frontend/src/components/dialog/create-file-dialog.js:60
 #: frontend/src/components/dialog/create-folder-dialog.js:57
 #: frontend/src/components/dialog/rename-dialog.js:63
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:64
+#: frontend/src/components/dialog/rename-dirent.js:64
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:101
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:75
 msgid "The name \"{name}\" is already taken. Please choose a different name."
 msgstr ""
 
 #: frontend/src/components/dialog/create-file-dialog.js:138
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:185
-#: frontend/src/pages/repo-wiki-mode/side-panel.js:180
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:193
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:214
 #: frontend/src/utils/text-translation.js:7
 #: static/scripts/app/views/dir.js:807
 msgid "New File"
@@ -668,15 +680,15 @@ msgid "This is a draft"
 msgstr ""
 
 #: frontend/src/components/dialog/create-folder-dialog.js:85
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:184
-#: frontend/src/pages/repo-wiki-mode/side-panel.js:179
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:192
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:213
 #: frontend/src/utils/text-translation.js:6
 msgid "New Folder"
 msgstr "新建資料夾"
 
 #: frontend/src/components/dialog/create-group-dialog.js:73
 #: frontend/src/components/toolbar/groups-toolbar.js:31
-#: frontend/src/components/toolbar/groups-toolbar.js:36
+#: frontend/src/components/toolbar/groups-toolbar.js:35
 msgid "New Group"
 msgstr "新建群組"
 
@@ -708,13 +720,14 @@ msgstr "兩次輸入的密碼不一致"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:171
 #: frontend/src/components/dialog/org-add-repo-dialog.js:70
+#: frontend/src/components/toolbar/repo-view-toobar.js:46
 #: frontend/src/components/toolbar/repo-view-toobar.js:47
-#: frontend/src/components/toolbar/repo-view-toobar.js:48
-#: frontend/src/components/toolbar/repo-view-toobar.js:65
-#: frontend/src/pages/groups/group-view.js:407
-#: frontend/src/pages/groups/group-view.js:408
+#: frontend/src/components/toolbar/repo-view-toobar.js:61
+#: frontend/src/pages/groups/group-view.js:417
+#: frontend/src/pages/groups/group-view.js:418
+#: frontend/src/pages/groups/group-view.js:421
 #: frontend/src/pages/org-admin/org-department-item.js:166
-#: frontend/src/pages/shared-with-all/public-shared-view.js:208
+#: frontend/src/pages/shared-with-all/public-shared-view.js:210
 msgid "New Library"
 msgstr "新建資料庫"
 
@@ -739,15 +752,15 @@ msgstr ""
 #: frontend/src/pages/share-admin/folders.js:234
 #: frontend/src/pages/share-admin/libraries.js:50
 #: frontend/src/pages/share-admin/libraries.js:247
-#: frontend/src/pages/share-admin/share-links.js:96
-#: frontend/src/pages/share-admin/share-links.js:324
+#: frontend/src/pages/share-admin/share-links.js:63
+#: frontend/src/pages/share-admin/share-links.js:275
 #: frontend/src/utils/text-translation.js:14
 msgid "Permission"
 msgstr "讀寫權限"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:199
 #: frontend/src/components/dialog/share-repo-dialog.js:40
-#: frontend/src/utils/utils.js:384
+#: frontend/src/utils/utils-m.js:570 frontend/src/utils/utils.js:542
 #: static/scripts/app/views/share-admin-folder.js:109
 #: static/scripts/app/views/share-admin-repo.js:123
 msgid "Read-Write"
@@ -755,7 +768,7 @@ msgstr "可讀寫"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:200
 #: frontend/src/components/dialog/share-repo-dialog.js:41
-#: frontend/src/utils/utils.js:387
+#: frontend/src/utils/utils-m.js:573 frontend/src/utils/utils.js:545
 #: static/scripts/app/views/share-admin-folder.js:112
 #: static/scripts/app/views/share-admin-repo.js:126
 msgid "Read-Only"
@@ -766,7 +779,7 @@ msgid "Encrypt"
 msgstr "加密"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:213
-#: frontend/src/components/dialog/generate-share-link.js:353
+#: frontend/src/components/dialog/generate-share-link.js:352
 #: frontend/src/components/dialog/generate-upload-link.js:230
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
@@ -775,12 +788,13 @@ msgid "Password"
 msgstr "密碼"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:226
-#: frontend/src/components/dialog/generate-share-link.js:361
+#: frontend/src/components/dialog/generate-share-link.js:360
 #: frontend/src/components/dialog/generate-upload-link.js:238
 msgid "Password again"
 msgstr "請再次輸入密碼"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:54
+#: frontend/src/components/file-uploader/file-uploader.js:404
 msgid "Internal Server Error"
 msgstr "伺服器內部錯誤"
 
@@ -845,7 +859,7 @@ msgid "Delete Library"
 msgstr "刪除資料庫"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
-#: frontend/src/pages/groups/group-view.js:469
+#: frontend/src/pages/groups/group-view.js:482
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:84
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
@@ -872,13 +886,12 @@ msgstr ""
 msgid "Edit labels"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:151
-#: frontend/src/pages/share-admin/share-links.js:58
+#: frontend/src/components/dialog/generate-share-link.js:156
 #: static/scripts/app/views/share.js:492
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:158
+#: frontend/src/components/dialog/generate-share-link.js:163
 msgid "Direct download link is copied to the clipboard."
 msgstr ""
 
@@ -921,55 +934,40 @@ msgid ""
 "If the share link is deleted, no one will be able to access it any more."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:348
+#: frontend/src/components/dialog/generate-share-link.js:347
 #: frontend/src/components/dialog/generate-upload-link.js:224
 msgid "Add password protection"
 msgstr "增加密碼保護"
 
-#: frontend/src/components/dialog/generate-share-link.js:369
-#: frontend/src/components/dialog/generate-share-link.js:385
+#: frontend/src/components/dialog/generate-share-link.js:368
+#: frontend/src/components/dialog/generate-share-link.js:384
 #: frontend/src/components/dialog/generate-upload-link.js:244
 msgid "Add auto expiration"
 msgstr "增加自動過期"
 
-#: frontend/src/components/dialog/generate-share-link.js:375
-#: frontend/src/components/dialog/generate-share-link.js:390
-#: frontend/src/components/dialog/generate-share-link.js:392
-#: frontend/src/components/dialog/generate-share-link.js:395
-#: frontend/src/components/dialog/generate-share-link.js:398
+#: frontend/src/components/dialog/generate-share-link.js:374
+#: frontend/src/components/dialog/generate-share-link.js:389
+#: frontend/src/components/dialog/generate-share-link.js:391
+#: frontend/src/components/dialog/generate-share-link.js:394
+#: frontend/src/components/dialog/generate-share-link.js:397
 #: frontend/src/components/dialog/generate-upload-link.js:250
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:142
 msgid "days"
 msgstr "天"
 
-#: frontend/src/components/dialog/generate-share-link.js:395
+#: frontend/src/components/dialog/generate-share-link.js:394
 msgid "Greater than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:398
+#: frontend/src/components/dialog/generate-share-link.js:397
 msgid "Less than or equal to"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:408
+#: frontend/src/components/dialog/generate-share-link.js:407
 msgid "Set permission"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:413
-#: frontend/src/utils/utils.js:429
-msgid "Preview and download"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:418
-#: frontend/src/utils/utils.js:438
-msgid "Preview only"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:424
-#: frontend/src/utils/utils.js:447
-msgid "Edit on cloud and download"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:431
+#: frontend/src/components/dialog/generate-share-link.js:423
 #: frontend/src/components/dialog/generate-upload-link.js:255
 msgid "Generate"
 msgstr "生成連結"
@@ -1050,7 +1048,7 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link-dialog.js:62
 #: frontend/src/components/dialog/internal-link-dialog.js:65
 #: frontend/src/components/dialog/share-dialog.js:104
-#: frontend/src/components/dialog/share-dialog.js:181
+#: frontend/src/components/dialog/share-dialog.js:183
 msgid "Internal Link"
 msgstr ""
 
@@ -1064,9 +1062,9 @@ msgstr ""
 #: frontend/src/components/dialog/internal-link-dialog.js:76
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
+#: frontend/src/components/dialog/share-admin-link.js:34
 #: frontend/src/components/dialog/view-link-dialog.js:38
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:318
-#: frontend/src/pages/share-admin/share-links.js:121
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:341
 #: frontend/src/utils/text-translation.js:13
 msgid "Copy"
 msgstr "複製"
@@ -1121,8 +1119,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/invite-people-dialog.js:107
 #: frontend/src/components/dialog/share-to-user.js:345
-#: frontend/src/components/main-side-nav.js:242
-#: frontend/src/components/main-side-nav.js:244
+#: frontend/src/components/main-side-nav.js:259
+#: frontend/src/components/main-side-nav.js:261
 #: frontend/src/components/toolbar/invitations-toolbar.js:30
 #: frontend/src/components/toolbar/invitations-toolbar.js:34
 #: frontend/src/pages/invitations/invitations-view.js:287
@@ -1149,7 +1147,7 @@ msgid "Label Current State"
 msgstr ""
 
 #: frontend/src/components/dialog/leave-group-dialog.js:27
-#: frontend/src/pages/groups/group-view.js:475
+#: frontend/src/pages/groups/group-view.js:488
 msgid "Leave Group"
 msgstr ""
 
@@ -1231,22 +1229,21 @@ msgstr ""
 #: frontend/src/pages/groups/groups-view.js:67
 #: frontend/src/pages/groups/groups-view.js:156
 #: frontend/src/pages/invitations/invitations-view.js:251
-#: frontend/src/pages/lib-content-view/lib-content-view.js:161
-#: frontend/src/pages/lib-content-view/lib-content-view.js:619
-#: frontend/src/pages/lib-content-view/lib-content-view.js:662
-#: frontend/src/pages/lib-content-view/lib-content-view.js:694
-#: frontend/src/pages/lib-content-view/lib-content-view.js:868
-#: frontend/src/pages/lib-content-view/lib-content-view.js:879
-#: frontend/src/pages/lib-content-view/lib-content-view.js:905
-#: frontend/src/pages/lib-content-view/lib-content-view.js:919
-#: frontend/src/pages/lib-content-view/lib-content-view.js:978
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1029
-#: frontend/src/pages/linked-devices/linked-devices.js:121
-#: frontend/src/pages/linked-devices/linked-devices.js:214
+#: frontend/src/pages/lib-content-view/lib-content-view.js:169
+#: frontend/src/pages/lib-content-view/lib-content-view.js:709
+#: frontend/src/pages/lib-content-view/lib-content-view.js:758
+#: frontend/src/pages/lib-content-view/lib-content-view.js:790
+#: frontend/src/pages/lib-content-view/lib-content-view.js:974
+#: frontend/src/pages/lib-content-view/lib-content-view.js:985
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1011
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1025
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1089
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1139
+#: frontend/src/pages/linked-devices/linked-devices.js:190
 #: frontend/src/pages/my-libs/my-libs-deleted.js:148
 #: frontend/src/pages/my-libs/my-libs.js:64
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:211
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:227
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:207
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:223
 #: frontend/src/pages/org-admin/org-group-info.js:39
 #: frontend/src/pages/org-admin/org-group-members.js:39
 #: frontend/src/pages/org-admin/org-group-repos.js:42
@@ -1259,20 +1256,19 @@ msgstr ""
 #: frontend/src/pages/search/main-panel.js:169
 #: frontend/src/pages/share-admin/folders.js:319
 #: frontend/src/pages/share-admin/libraries.js:303
-#: frontend/src/pages/share-admin/share-links.js:428
-#: frontend/src/pages/share-admin/upload-links.js:194
-#: frontend/src/pages/share-admin/upload-links.js:216
-#: frontend/src/pages/shared-libs/shared-libs.js:174
-#: frontend/src/pages/shared-libs/shared-libs.js:357
+#: frontend/src/pages/share-admin/share-links.js:389
+#: frontend/src/pages/share-admin/upload-links.js:221
+#: frontend/src/pages/shared-libs/shared-libs.js:341
 #: frontend/src/pages/shared-with-all/public-shared-view.js:65
 #: frontend/src/pages/shared-with-all/public-shared-view.js:121
-#: frontend/src/pages/starred/starred.js:279
+#: frontend/src/pages/starred/starred.js:275
 #: frontend/src/pages/sys-admin/file-scan-records.js:106
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:284
 #: frontend/src/pages/wikis/wikis.js:54 frontend/src/repo-folder-trash.js:68
 #: frontend/src/repo-folder-trash.js:151 frontend/src/repo-folder-trash.js:336
 #: frontend/src/repo-history.js:63 frontend/src/repo-snapshot.js:86
-#: frontend/src/utils/utils.js:783 static/scripts/app/views/fileupload.js:18
+#: frontend/src/utils/utils-m.js:1081 frontend/src/utils/utils.js:953
+#: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:228
 #: static/scripts/app/views/fileupload.js:268
 #: static/scripts/app/views/repo-details.js:37
@@ -1288,8 +1284,8 @@ msgstr "錯誤"
 #: frontend/src/pages/groups/group-view.js:147
 #: frontend/src/pages/groups/groups-view.js:162
 #: frontend/src/pages/invitations/invitations-view.js:257
-#: frontend/src/pages/lib-content-view/lib-content-view.js:167
-#: frontend/src/pages/linked-devices/linked-devices.js:221
+#: frontend/src/pages/lib-content-view/lib-content-view.js:175
+#: frontend/src/pages/linked-devices/linked-devices.js:197
 #: frontend/src/pages/my-libs/my-libs.js:70
 #: frontend/src/pages/org-admin/org-group-info.js:45
 #: frontend/src/pages/org-admin/org-group-members.js:45
@@ -1300,11 +1296,11 @@ msgstr "錯誤"
 #: frontend/src/pages/search/main-panel.js:72
 #: frontend/src/pages/share-admin/folders.js:325
 #: frontend/src/pages/share-admin/libraries.js:309
-#: frontend/src/pages/share-admin/share-links.js:434
-#: frontend/src/pages/share-admin/upload-links.js:200
-#: frontend/src/pages/shared-libs/shared-libs.js:364
+#: frontend/src/pages/share-admin/share-links.js:395
+#: frontend/src/pages/share-admin/upload-links.js:227
+#: frontend/src/pages/shared-libs/shared-libs.js:348
 #: frontend/src/pages/shared-with-all/public-shared-view.js:71
-#: frontend/src/pages/starred/starred.js:286
+#: frontend/src/pages/starred/starred.js:282
 #: frontend/src/pages/sys-admin/file-scan-records.js:112
 #: frontend/src/pages/sys-admin/work-weixin-departments.js:286
 #: frontend/src/pages/wikis/wikis.js:60 frontend/src/repo-folder-trash.js:74
@@ -1312,7 +1308,8 @@ msgstr "錯誤"
 #: frontend/src/repo-history.js:69 frontend/src/repo-snapshot.js:92
 #: frontend/src/shared-file-view-document.js:74
 #: frontend/src/shared-file-view-spreadsheet.js:71
-#: frontend/src/utils/utils.js:786 frontend/src/view-file-document.js:76
+#: frontend/src/utils/utils-m.js:1084 frontend/src/utils/utils.js:956
+#: frontend/src/view-file-document.js:76
 #: frontend/src/view-file-spreadsheet.js:71
 #: static/scripts/app/views/dir.js:503
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:507
@@ -1343,7 +1340,7 @@ msgstr "選擇一個群組"
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:309
 #: frontend/src/components/dialog/share-to-user.js:280
 #: frontend/src/components/dialog/share-to-user.js:330
-#: frontend/src/pages/dashboard/files-activities.js:32
+#: frontend/src/pages/dashboard/files-activities.js:31
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
 msgid "User"
@@ -1354,8 +1351,8 @@ msgid "Created Files"
 msgstr ""
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:29
-#: frontend/src/file-history-old.js:240
-#: frontend/src/pages/dashboard/files-activities.js:35
+#: frontend/src/file-history-old.js:243
+#: frontend/src/pages/dashboard/files-activities.js:34
 #: frontend/src/repo-history.js:137 frontend/src/repo-history.js:144
 msgid "Time"
 msgstr "時間"
@@ -1375,10 +1372,10 @@ msgstr ""
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:80
 #: frontend/src/components/dirent-detail/detail-list-view.js:105
 #: frontend/src/components/dirent-detail/lib-details.js:69
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:677
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:564
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:120
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:21
-#: frontend/src/file-history-old.js:242
+#: frontend/src/file-history-old.js:245
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:90
 #: frontend/src/pages/org-admin/org-department-item.js:301
 #: frontend/src/pages/org-admin/org-group-repos.js:98
@@ -1399,11 +1396,11 @@ msgstr "大小"
 #: frontend/src/components/dirent-detail/detail-list-view.js:93
 #: frontend/src/components/dirent-detail/detail-list-view.js:107
 #: frontend/src/components/dirent-detail/lib-details.js:70
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:678
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:565
 #: frontend/src/components/draft-list-view/draft-list-view.js:38
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:121
 #: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:22
-#: frontend/src/components/wiki-list-view/wiki-list-view.js:44
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:46
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
 #: frontend/src/pages/org-admin/org-user-repos.js:99
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:97
@@ -1411,7 +1408,7 @@ msgstr "大小"
 #: frontend/src/pages/search/advanced-search.js:169
 #: frontend/src/pages/shared-libs/shared-libs.js:71
 #: frontend/src/pages/starred/starred.js:34
-#: frontend/src/shared-dir-view.js:272
+#: frontend/src/shared-dir-view.js:264
 msgid "Last Update"
 msgstr "更新時間"
 
@@ -1420,8 +1417,8 @@ msgid "Add File"
 msgstr ""
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:44
-#: frontend/src/components/main-side-nav.js:225
-#: frontend/src/components/main-side-nav.js:228
+#: frontend/src/components/main-side-nav.js:242
+#: frontend/src/components/main-side-nav.js:245
 #: frontend/src/pages/drafts/drafts-view.js:19
 msgid "Drafts"
 msgstr ""
@@ -1429,7 +1426,7 @@ msgstr ""
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:50
 #: frontend/src/components/dialog/manage-members-dialog.js:216
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:122
-#: frontend/src/components/wiki-list-view/wiki-list-view.js:43
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:45
 #: frontend/src/pages/groups/group-view.js:383
 #: frontend/src/pages/org-admin/org-group-members.js:118
 #: frontend/src/pages/org-admin/org-libraries.js:111
@@ -1491,7 +1488,7 @@ msgstr "用戶角色"
 #: frontend/src/pages/org-admin/org-group-members.js:120
 #: frontend/src/pages/org-admin/org-users.js:195
 #: frontend/src/pages/org-admin/side-panel.js:33
-#: frontend/src/utils/utils.js:390
+#: frontend/src/utils/utils-m.js:576 frontend/src/utils/utils.js:548
 msgid "Admin"
 msgstr "管理"
 
@@ -1603,7 +1600,7 @@ msgid "Tip: -2 means no limit."
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:93
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:94
+#: frontend/src/components/dialog/rename-dirent.js:95
 #: frontend/src/components/rename.js:73
 #: static/scripts/sysadmin-app/views/address-book-group.js:114
 #: static/scripts/sysadmin-app/views/address-book.js:64
@@ -1613,24 +1610,24 @@ msgid "Name is required."
 msgstr "必須填寫名字。"
 
 #: frontend/src/components/dialog/rename-dialog.js:115
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:116
+#: frontend/src/components/dialog/rename-dirent.js:117
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "重新命名文件"
 
 #: frontend/src/components/dialog/rename-dialog.js:115
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:116
+#: frontend/src/components/dialog/rename-dirent.js:117
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "重新命名目錄"
 
 #: frontend/src/components/dialog/rename-dialog.js:117
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:118
+#: frontend/src/components/dialog/rename-dirent.js:119
 msgid "New file name"
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:117
-#: frontend/src/components/dialog/rename-grid-item-dialog.js:118
+#: frontend/src/components/dialog/rename-dirent.js:119
 msgid "New folder name"
 msgstr ""
 
@@ -1677,8 +1674,17 @@ msgstr ""
 msgid "Tip: 0 means default limit"
 msgstr "提示: 設定為0表示重置為預設上限"
 
+#: frontend/src/components/dialog/share-admin-link.js:22
+msgid "The link is copied to the clipboard."
+msgstr ""
+
+#: frontend/src/components/dialog/share-admin-link.js:29
+#: frontend/src/components/dialog/view-link-dialog.js:32
+msgid "Link"
+msgstr "鏈結"
+
 #: frontend/src/components/dialog/share-dialog.js:90
-#: frontend/src/components/dialog/share-dialog.js:176
+#: frontend/src/components/dialog/share-dialog.js:178
 msgid "Share Link"
 msgstr ""
 
@@ -1694,29 +1700,30 @@ msgstr "共享到用戶"
 msgid "Share to group"
 msgstr "共享到群組"
 
-#: frontend/src/components/dialog/share-dialog.js:213
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:504
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:538
+#: frontend/src/components/dialog/share-dialog.js:229
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:516
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:550
 #: frontend/src/components/file-view/file-toolbar.js:93
 #: frontend/src/components/file-view/file-toolbar.js:182
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:202
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:308
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:66
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:173
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:183
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:83
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:160
 #: frontend/src/components/toolbar/view-file-toolbar.js:122
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:265
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:82
-#: frontend/src/pages/shared-libs/shared-libs.js:240
+#: frontend/src/pages/shared-libs/shared-libs.js:223
+#: frontend/src/pages/shared-libs/shared-libs.js:273
 #: frontend/src/utils/text-translation.js:8
 msgid "Share"
 msgstr "共享"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:35
 #: frontend/src/pages/org-admin/org-department-item.js:469
-#: frontend/src/pages/starred/starred.js:188
-#: frontend/src/pages/starred/starred.js:211
+#: frontend/src/pages/starred/starred.js:189
+#: frontend/src/pages/starred/starred.js:212
 msgid "icon"
 msgstr "圖示"
 
@@ -1830,12 +1837,6 @@ msgstr "不取代"
 msgid "Link has been copied to clipboard"
 msgstr ""
 
-#: frontend/src/components/dialog/view-link-dialog.js:32
-#: frontend/src/pages/share-admin/share-links.js:116
-#: frontend/src/pages/share-admin/upload-links.js:72
-msgid "Link"
-msgstr "鏈結"
-
 #: frontend/src/components/dialog/wiki-delete-dialog.js:20
 msgid "Unpublish Library"
 msgstr ""
@@ -1854,19 +1855,19 @@ msgid "Publish a Library"
 msgstr ""
 
 #: frontend/src/components/dialog/zip-download-dialog.js:98
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:499
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:533
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:511
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:545
 #: frontend/src/components/file-view/file-toolbar.js:129
 #: frontend/src/components/file-view/file-toolbar.js:195
 #: frontend/src/components/file-view/file-view-tip.js:25
 #: frontend/src/components/history-list-view/history-list-item.js:101
 #: frontend/src/components/history-trash-file-view/download.js:10
-#: frontend/src/components/shared-file-view/shared-file-view-tip.js:24
+#: frontend/src/components/shared-file-view/shared-file-view-tip.js:27
 #: frontend/src/components/shared-file-view/shared-file-view.js:117
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:320
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:343
 #: frontend/src/pages/file-history-old/history-item.js:122
-#: frontend/src/repo-snapshot.js:312 frontend/src/shared-dir-view.js:373
-#: frontend/src/shared-dir-view.js:428 frontend/src/shared-dir-view.js:446
+#: frontend/src/repo-snapshot.js:312 frontend/src/shared-dir-view.js:365
+#: frontend/src/shared-dir-view.js:420 frontend/src/shared-dir-view.js:438
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "下載"
@@ -1882,13 +1883,11 @@ msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:90
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:124
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:236
 msgid "This file is in draft stage."
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:91
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:125
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:237
 msgid "View Draft"
 msgstr ""
 
@@ -1914,13 +1913,13 @@ msgstr "更新"
 #: frontend/src/components/dirent-detail/detail-comments-list.js:226
 #: frontend/src/components/file-view/comment-panel.js:273
 #: frontend/src/components/review-list-view/review-comments.js:297
-#: frontend/src/components/select-editor/select-editor.js:99
+#: frontend/src/components/select-editor/select-editor.js:103
 #: frontend/src/components/toolbar/view-file-toolbar.js:106
 #: frontend/src/pages/org-admin/org-user-profile.js:152
 #: frontend/src/pages/org-admin/org-user-profile.js:158
 #: frontend/src/pages/org-admin/org-user-profile.js:167
-#: frontend/src/pages/wiki/main-panel.js:105
-#: frontend/src/pages/wiki/main-panel.js:109 frontend/src/repo-history.js:289
+#: frontend/src/pages/wiki/main-panel.js:104
+#: frontend/src/pages/wiki/main-panel.js:105 frontend/src/repo-history.js:289
 msgid "Edit"
 msgstr "編輯"
 
@@ -1937,21 +1936,61 @@ msgid "Location"
 msgstr "位置"
 
 #: frontend/src/components/dirent-detail/lib-details.js:68
-#: frontend/src/components/main-side-nav.js:165
-#: frontend/src/pages/repo-wiki-mode/side-panel.js:166
+#: frontend/src/components/main-side-nav.js:182
 msgid "Files"
 msgstr "檔案"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:158
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:589
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:601
 msgid "locked by {name}"
 msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:178
-#: frontend/src/components/dirent-list-view/dirent-list-item.js:622
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:633
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:673
 #: frontend/src/components/file-view/file-info.js:31
 msgid "locked"
 msgstr "已鎖定"
+
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:690
+#: frontend/src/components/draft-list-view/draft-list-item.js:104
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:107
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:111
+#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:136
+#: frontend/src/components/history-list-view/history-list-item.js:97
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:277
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:321
+#: frontend/src/pages/invitations/invitations-view.js:120
+#: frontend/src/pages/linked-devices/linked-devices.js:144
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:125
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:149
+#: frontend/src/pages/org-admin/org-groups.js:233
+#: frontend/src/pages/org-admin/org-libraries.js:270
+#: frontend/src/pages/org-admin/org-links.js:209
+#: frontend/src/pages/org-admin/org-user-item.js:152
+#: frontend/src/pages/share-admin/folders.js:227
+#: frontend/src/pages/share-admin/libraries.js:240
+#: frontend/src/pages/share-admin/share-links.js:268
+#: frontend/src/pages/share-admin/upload-links.js:161
+#: frontend/src/pages/shared-libs/shared-libs.js:264
+#: frontend/src/pages/starred/starred.js:229
+#: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
+msgid "More Operations"
+msgstr "更多操作"
+
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:698
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:79
+#: frontend/src/pages/shared-libs/shared-libs.js:271
+#: frontend/src/pages/starred/starred.js:201
+#: frontend/src/pages/starred/starred.js:236
+msgid "Unstar"
+msgstr "取消星標"
+
+#: frontend/src/components/dirent-list-view/dirent-list-item.js:698
+#: frontend/src/pages/my-libs/mylib-repo-menu.js:76
+#: frontend/src/pages/shared-libs/shared-libs.js:271
+msgid "Star"
+msgstr "新增星標"
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:57
 msgid "This folder has no content at this time."
@@ -1961,31 +2000,6 @@ msgstr ""
 msgid "You can create files quickly"
 msgstr ""
 
-#: frontend/src/components/draft-list-view/draft-list-item.js:104
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:107
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:111
-#: frontend/src/components/dropdown-menu/item-dropdown-menu.js:136
-#: frontend/src/components/history-list-view/history-list-item.js:97
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:277
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:321
-#: frontend/src/pages/invitations/invitations-view.js:120
-#: frontend/src/pages/linked-devices/linked-devices.js:164
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:125
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:149
-#: frontend/src/pages/org-admin/org-groups.js:233
-#: frontend/src/pages/org-admin/org-libraries.js:270
-#: frontend/src/pages/org-admin/org-links.js:209
-#: frontend/src/pages/org-admin/org-user-item.js:152
-#: frontend/src/pages/repo-wiki-mode/side-panel.js:173
-#: frontend/src/pages/share-admin/folders.js:227
-#: frontend/src/pages/share-admin/libraries.js:240
-#: frontend/src/pages/share-admin/share-links.js:317
-#: frontend/src/pages/shared-libs/shared-libs.js:281
-#: frontend/src/pages/starred/starred.js:228
-#: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
-msgid "More Operations"
-msgstr "更多操作"
-
 #: frontend/src/components/draft-list-view/draft-list-item.js:112
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:139
 #: frontend/src/draft.js:770
@@ -1993,12 +2007,12 @@ msgid "Publish"
 msgstr ""
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:37
-#: frontend/src/pages/dashboard/files-activities.js:34
+#: frontend/src/pages/dashboard/files-activities.js:33
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:103
 #: frontend/src/pages/org-admin/org-logs-file-update.js:117
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
-#: frontend/src/pages/share-admin/share-links.js:95
-#: frontend/src/pages/share-admin/upload-links.js:58
+#: frontend/src/pages/share-admin/share-links.js:62
+#: frontend/src/pages/share-admin/upload-links.js:41
 #: frontend/src/pages/sys-admin/file-scan-records.js:28
 msgid "Library"
 msgstr "資料庫"
@@ -2021,9 +2035,21 @@ msgstr "其他資料庫"
 msgid "Search..."
 msgstr ""
 
-#: frontend/src/components/file-uploader/file-uploader.js:363
+#: frontend/src/components/file-uploader/file-uploader.js:144
+msgid "Please upload no more than {maxFiles} files at a time."
+msgstr ""
+
+#: frontend/src/components/file-uploader/file-uploader.js:394
 #: static/scripts/app/views/fileupload.js:444
 msgid "Network error"
+msgstr ""
+
+#: frontend/src/components/file-uploader/file-uploader.js:401
+msgid "File is locked by others."
+msgstr ""
+
+#: frontend/src/components/file-uploader/forbid-upload-list-item.js:13
+msgid "Please upload files less than {placeholder}M"
 msgstr ""
 
 #: frontend/src/components/file-uploader/upload-list-item.js:94
@@ -2051,38 +2077,38 @@ msgstr "保存中..."
 msgid "Uploaded"
 msgstr ""
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:46
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:48
 msgid "File Upload"
 msgstr "上傳檔案"
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:47
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:49
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Uploading..."
 msgstr "文件上傳中..."
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:74
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:76
 msgid "name"
 msgstr "名稱"
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:75
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:77
 msgid "size"
 msgstr ""
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:76
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:78
 msgid "progress"
 msgstr ""
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:77
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:79
 msgid "state"
 msgstr ""
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:84
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:86
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:88
 msgid "Retry All"
 msgstr ""
 
-#: frontend/src/components/file-uploader/upload-progress-dialog.js:91
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:93
+#: frontend/src/components/file-uploader/upload-progress-dialog.js:95
 msgid "Cancel All"
 msgstr "全部取消"
 
@@ -2152,85 +2178,85 @@ msgstr "資料庫類型"
 msgid "Actions"
 msgstr "操作"
 
-#: frontend/src/components/main-side-nav.js:92
+#: frontend/src/components/main-side-nav.js:94
 #: frontend/src/pages/org-admin/org-groups.js:88
 msgid "All Groups"
 msgstr "所有群組"
 
-#: frontend/src/components/main-side-nav.js:123
 #: frontend/src/components/main-side-nav.js:125
-#: frontend/src/components/main-side-nav.js:132
+#: frontend/src/components/main-side-nav.js:127
 #: frontend/src/components/main-side-nav.js:134
+#: frontend/src/components/main-side-nav.js:136
 #: frontend/src/pages/org-admin/side-panel.js:68
 #: frontend/src/pages/sys-admin/side-panel.js:125
 msgid "Links"
 msgstr "連結"
 
-#: frontend/src/components/main-side-nav.js:150
 #: frontend/src/components/main-side-nav.js:152
+#: frontend/src/components/main-side-nav.js:154
 #: frontend/src/pages/share-admin/folders.js:336
 msgid "Folders"
 msgstr "資料夾"
 
-#: frontend/src/components/main-side-nav.js:169
-#: frontend/src/components/main-side-nav.js:171
+#: frontend/src/components/main-side-nav.js:186
+#: frontend/src/components/main-side-nav.js:188
 #: frontend/src/pages/my-libs/my-libs-deleted.js:53
 #: frontend/src/pages/my-libs/my-libs.js:163
 msgid "My Libraries"
 msgstr "我的資料庫"
 
-#: frontend/src/components/main-side-nav.js:176
-#: frontend/src/components/main-side-nav.js:178
-#: frontend/src/pages/shared-libs/shared-libs.js:392
+#: frontend/src/components/main-side-nav.js:193
+#: frontend/src/components/main-side-nav.js:195
+#: frontend/src/pages/shared-libs/shared-libs.js:376
 msgid "Shared with me"
 msgstr "與我共享"
 
-#: frontend/src/components/main-side-nav.js:183
-#: frontend/src/components/main-side-nav.js:185
-#: frontend/src/pages/shared-with-all/public-shared-view.js:219
+#: frontend/src/components/main-side-nav.js:200
+#: frontend/src/components/main-side-nav.js:202
+#: frontend/src/pages/shared-with-all/public-shared-view.js:221
 msgid "Shared with all"
 msgstr "與所有人共享"
 
-#: frontend/src/components/main-side-nav.js:190
-#: frontend/src/components/main-side-nav.js:193
+#: frontend/src/components/main-side-nav.js:207
+#: frontend/src/components/main-side-nav.js:210
 msgid "Shared with groups"
 msgstr "群組共享"
 
-#: frontend/src/components/main-side-nav.js:199
+#: frontend/src/components/main-side-nav.js:216
 msgid "Tools"
 msgstr "工具"
 
-#: frontend/src/components/main-side-nav.js:202
-#: frontend/src/components/main-side-nav.js:204
-#: frontend/src/pages/starred/starred.js:297
+#: frontend/src/components/main-side-nav.js:219
+#: frontend/src/components/main-side-nav.js:221
+#: frontend/src/pages/starred/starred.js:293
 msgid "Favorites"
 msgstr "收藏夾"
 
-#: frontend/src/components/main-side-nav.js:209
-#: frontend/src/components/main-side-nav.js:211
-#: frontend/src/pages/dashboard/files-activities.js:445
+#: frontend/src/components/main-side-nav.js:226
+#: frontend/src/components/main-side-nav.js:228
+#: frontend/src/pages/dashboard/files-activities.js:446
 msgid "Activities"
 msgstr "檔案活動"
 
-#: frontend/src/components/main-side-nav.js:217
-#: frontend/src/components/main-side-nav.js:219
+#: frontend/src/components/main-side-nav.js:234
+#: frontend/src/components/main-side-nav.js:236
 #: frontend/src/pages/wikis/wikis.js:149
 msgid "Published Libraries"
 msgstr ""
 
-#: frontend/src/components/main-side-nav.js:235
-#: frontend/src/components/main-side-nav.js:237
-#: frontend/src/pages/linked-devices/linked-devices.js:232
+#: frontend/src/components/main-side-nav.js:252
+#: frontend/src/components/main-side-nav.js:254
+#: frontend/src/pages/linked-devices/linked-devices.js:208
 msgid "Linked Devices"
 msgstr "已連接的設備"
 
-#: frontend/src/components/main-side-nav.js:249
-#: frontend/src/components/main-side-nav.js:252
+#: frontend/src/components/main-side-nav.js:266
+#: frontend/src/components/main-side-nav.js:269
 msgid "Share Admin"
 msgstr "共享管理"
 
 #: frontend/src/components/markdown-view/history-list.js:105
-#: frontend/src/file-history-old.js:234
+#: frontend/src/file-history-old.js:237
 #: frontend/src/pages/file-history/side-panel.js:105
 msgid "History Versions"
 msgstr ""
@@ -2250,8 +2276,8 @@ msgid "show more"
 msgstr ""
 
 #: frontend/src/components/org-admin-group-nav.js:26
-#: frontend/src/pages/groups/group-view.js:484
-#: frontend/src/pages/groups/group-view.js:490
+#: frontend/src/pages/groups/group-view.js:497
+#: frontend/src/pages/groups/group-view.js:503
 #: frontend/src/pages/org-admin/org-department-item.js:255
 msgid "Members"
 msgstr "成員"
@@ -2349,7 +2375,7 @@ msgid "Anonymous User"
 msgstr "匿名用戶"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:190
-#: frontend/src/pages/groups/group-view.js:453
+#: frontend/src/pages/groups/group-view.js:466
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:88
 #: frontend/src/utils/text-translation.js:11
 msgid "Rename"
@@ -2374,25 +2400,25 @@ msgstr "詳情"
 msgid "Unshare"
 msgstr "取消共享"
 
-#: frontend/src/components/side-nav-footer.js:22
+#: frontend/src/components/side-nav-footer.js:37
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:36
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:81
 msgid "Help"
 msgstr "使用幫助"
 
-#: frontend/src/components/side-nav-footer.js:23
+#: frontend/src/components/side-nav-footer.js:38
 msgid "About"
 msgstr "關於"
 
-#: frontend/src/components/side-nav-footer.js:26
+#: frontend/src/components/side-nav-footer.js:42
 msgid "Clients"
 msgstr "客户端"
 
 #: frontend/src/components/toolbar/cdoc-editor-topbar.js:32
 #: frontend/src/components/toolbar/markdown-viewer-toolbar.js:72
-#: frontend/src/components/toolbar/repo-view-toobar.js:53
+#: frontend/src/components/toolbar/repo-view-toobar.js:51
 #: frontend/src/components/toolbar/view-file-toolbar.js:118
-#: frontend/src/file-history-old.js:265 frontend/src/repo-folder-trash.js:294
+#: frontend/src/file-history-old.js:268 frontend/src/repo-folder-trash.js:294
 msgid "More"
 msgstr "更多"
 
@@ -2406,44 +2432,45 @@ msgstr ""
 msgid "File History"
 msgstr ""
 
-#: frontend/src/components/toolbar/common-toolbar.js:16
+#: frontend/src/components/toolbar/common-toolbar.js:17
 #: frontend/src/pages/search/main-panel.js:300
 msgid "Search Files"
 msgstr "搜尋檔案"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:168
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:169
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:180
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:181
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:191
 msgid "Upload"
 msgstr "上傳"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:171
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:182
 msgid "New"
 msgstr "新建"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:178
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:207
 msgid "Upload Files"
 msgstr "上傳檔案"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:179
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:208
 msgid "Upload Folder"
 msgstr "上傳目錄"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:187
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:216
 #: static/scripts/app/views/dir.js:815
 msgid "New Markdown File"
 msgstr "新建Markdown文件"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:188
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:217
 #: static/scripts/app/views/dir.js:823
 msgid "New Excel File"
 msgstr "新建Excel文件"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:189
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:218
 #: static/scripts/app/views/dir.js:831
 msgid "New PowerPoint File"
 msgstr "新建PowerPoint文件"
 
-#: frontend/src/components/toolbar/dir-operation-toolbar.js:190
+#: frontend/src/components/toolbar/dir-operation-toolbar.js:219
 #: static/scripts/app/views/dir.js:839
 msgid "New Word File"
 msgstr "新建Word文件"
@@ -2470,12 +2497,12 @@ msgstr ""
 msgid "Start review"
 msgstr ""
 
-#: frontend/src/components/toolbar/mutilple-dir-operation-toolbar.js:317
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:340
 #: frontend/src/utils/text-translation.js:12
 msgid "Move"
 msgstr "移動"
 
-#: frontend/src/components/toolbar/repo-view-toobar.js:57
+#: frontend/src/components/toolbar/repo-view-toobar.js:55
 #: frontend/src/pages/my-libs/my-libs-deleted.js:55
 msgid "Deleted Libraries"
 msgstr "已刪除的資料庫"
@@ -2489,7 +2516,7 @@ msgid "Create a draft from this file, instead of editing it directly."
 msgstr ""
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:26
-#: frontend/src/shared-dir-view.js:211
+#: frontend/src/shared-dir-view.js:203
 msgid "List"
 msgstr "列表"
 
@@ -2688,7 +2715,7 @@ msgid "Edit Draft"
 msgstr ""
 
 #: frontend/src/draft.js:769
-#: frontend/src/pages/dashboard/files-activities.js:136
+#: frontend/src/pages/dashboard/files-activities.js:137
 msgid "Publish draft"
 msgstr ""
 
@@ -2720,7 +2747,7 @@ msgstr ""
 msgid "Number of changes:"
 msgstr ""
 
-#: frontend/src/file-history-old.js:241 frontend/src/repo-history.js:138
+#: frontend/src/file-history-old.js:244 frontend/src/repo-history.js:138
 #: frontend/src/repo-history.js:145
 msgid "Modifier"
 msgstr "修改者"
@@ -2729,130 +2756,129 @@ msgstr "修改者"
 msgid "This file has been updated."
 msgstr ""
 
-#: frontend/src/markdown-editor.js:352 frontend/src/repo-wiki-mode.js:134
-#: frontend/src/view-file-cdoc.js:104
+#: frontend/src/markdown-editor.js:352 frontend/src/view-file-cdoc.js:104
 #: static/scripts/app/views/notifications.js:63
 msgid "Refresh"
 msgstr "重新整理"
 
-#: frontend/src/pages/dashboard/files-activities.js:33
+#: frontend/src/pages/dashboard/files-activities.js:32
 msgid "Operation"
 msgstr "操作"
 
-#: frontend/src/pages/dashboard/files-activities.js:34
+#: frontend/src/pages/dashboard/files-activities.js:33
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
 #: frontend/src/repo-folder-trash.js:370 frontend/src/repo-folder-trash.js:422
 #: frontend/src/repo-snapshot.js:307
 msgid "File"
 msgstr "檔案"
 
-#: frontend/src/pages/dashboard/files-activities.js:108
+#: frontend/src/pages/dashboard/files-activities.js:109
 msgid "Created library"
 msgstr "建立了資料庫"
 
-#: frontend/src/pages/dashboard/files-activities.js:112
+#: frontend/src/pages/dashboard/files-activities.js:113
 msgid "Renamed library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:116
+#: frontend/src/pages/dashboard/files-activities.js:117
 msgid "Deleted library"
 msgstr "已刪除的資料庫"
 
-#: frontend/src/pages/dashboard/files-activities.js:120
+#: frontend/src/pages/dashboard/files-activities.js:121
 msgid "Restored library"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:124
+#: frontend/src/pages/dashboard/files-activities.js:125
 msgid "Cleaned trash"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:126
+#: frontend/src/pages/dashboard/files-activities.js:127
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
 msgstr "清空所有回收站的項目"
 
-#: frontend/src/pages/dashboard/files-activities.js:128
+#: frontend/src/pages/dashboard/files-activities.js:129
 #: static/scripts/app/views/activity-item.js:27
 msgid "Removed items older than {n} days from trash."
 msgstr "清空所有大於 {n} 天的項目"
 
-#: frontend/src/pages/dashboard/files-activities.js:149
+#: frontend/src/pages/dashboard/files-activities.js:150
 msgid "{file} and {n} other files"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:152
+#: frontend/src/pages/dashboard/files-activities.js:153
 msgid "Created {n} files"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:156
+#: frontend/src/pages/dashboard/files-activities.js:157
 msgid "details"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:170
+#: frontend/src/pages/dashboard/files-activities.js:171
 msgid "Created draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:170
+#: frontend/src/pages/dashboard/files-activities.js:171
 msgid "Created file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:175
+#: frontend/src/pages/dashboard/files-activities.js:176
 msgid "Deleted draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:175
+#: frontend/src/pages/dashboard/files-activities.js:176
 msgid "Deleted file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:180
+#: frontend/src/pages/dashboard/files-activities.js:181
 msgid "Restored file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:185
+#: frontend/src/pages/dashboard/files-activities.js:186
 msgid "Renamed file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:191
+#: frontend/src/pages/dashboard/files-activities.js:192
 msgid "Moved file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:196
+#: frontend/src/pages/dashboard/files-activities.js:197
 msgid "Updated draft"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:196
+#: frontend/src/pages/dashboard/files-activities.js:197
 msgid "Updated file"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:206
+#: frontend/src/pages/dashboard/files-activities.js:207
 msgid "Created folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:211
+#: frontend/src/pages/dashboard/files-activities.js:212
 msgid "Deleted folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:216
+#: frontend/src/pages/dashboard/files-activities.js:217
 msgid "Restored folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:221
+#: frontend/src/pages/dashboard/files-activities.js:222
 msgid "Renamed folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:227
+#: frontend/src/pages/dashboard/files-activities.js:228
 msgid "Moved folder"
 msgstr ""
 
-#: frontend/src/pages/dashboard/files-activities.js:335
-#: frontend/src/pages/dashboard/files-activities.js:420
+#: frontend/src/pages/dashboard/files-activities.js:336
+#: frontend/src/pages/dashboard/files-activities.js:421
 #: frontend/src/pages/groups/group-view.js:101
 #: frontend/src/pages/groups/group-view.js:135
 #: frontend/src/pages/groups/groups-view.js:150
 #: frontend/src/pages/invitations/invitations-view.js:245
-#: frontend/src/pages/lib-content-view/lib-content-view.js:153
-#: frontend/src/pages/lib-content-view/lib-content-view.js:156
-#: frontend/src/pages/linked-devices/linked-devices.js:208
+#: frontend/src/pages/lib-content-view/lib-content-view.js:161
+#: frontend/src/pages/lib-content-view/lib-content-view.js:164
+#: frontend/src/pages/linked-devices/linked-devices.js:184
 #: frontend/src/pages/my-libs/my-libs.js:58
 #: frontend/src/pages/org-admin/org-group-info.js:33
 #: frontend/src/pages/org-admin/org-group-members.js:33
@@ -2862,15 +2888,15 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:34
 #: frontend/src/pages/share-admin/folders.js:313
 #: frontend/src/pages/share-admin/libraries.js:297
-#: frontend/src/pages/share-admin/share-links.js:422
-#: frontend/src/pages/share-admin/upload-links.js:188
-#: frontend/src/pages/shared-libs/shared-libs.js:351
+#: frontend/src/pages/share-admin/share-links.js:383
+#: frontend/src/pages/share-admin/upload-links.js:215
+#: frontend/src/pages/shared-libs/shared-libs.js:335
 #: frontend/src/pages/shared-with-all/public-shared-view.js:59
-#: frontend/src/pages/starred/starred.js:273
+#: frontend/src/pages/starred/starred.js:269
 #: frontend/src/pages/sys-admin/file-scan-records.js:100
 #: frontend/src/pages/wikis/wikis.js:48 frontend/src/repo-folder-trash.js:62
 #: frontend/src/repo-folder-trash.js:145 frontend/src/repo-history.js:57
-#: frontend/src/repo-snapshot.js:80
+#: frontend/src/repo-snapshot.js:80 frontend/src/utils/utils-m.js:1076
 msgid "Permission denied"
 msgstr "沒有權限"
 
@@ -2906,9 +2932,10 @@ msgid "(current version)"
 msgstr "(當前版本)"
 
 #: frontend/src/pages/file-history-old/history-item.js:123
-#: frontend/src/pages/share-admin/share-links.js:291
-#: frontend/src/pages/share-admin/share-links.js:325
-#: frontend/src/pages/share-admin/upload-links.js:154
+#: frontend/src/pages/share-admin/share-links.js:242
+#: frontend/src/pages/share-admin/share-links.js:276
+#: frontend/src/pages/share-admin/upload-links.js:140
+#: frontend/src/pages/share-admin/upload-links.js:168
 msgid "View"
 msgstr "查看"
 
@@ -2950,8 +2977,8 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:232
 #: frontend/src/pages/groups/groups-view.js:63
-#: frontend/src/pages/lib-content-view/lib-content-view.js:688
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:223
+#: frontend/src/pages/lib-content-view/lib-content-view.js:784
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:219
 #: frontend/src/pages/org-admin/org-group-repos.js:154
 #: frontend/src/pages/org-admin/org-user-repos.js:154
 msgid "Successfully deleted {name}."
@@ -2959,27 +2986,27 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:238
 #: frontend/src/pages/groups/groups-view.js:69
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:229
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:225
 msgid "Failed to delete {name}."
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:421
+#: frontend/src/pages/groups/group-view.js:434
 #: frontend/src/pages/org-admin/side-panel.js:56
 #: frontend/src/pages/sys-admin/side-panel.js:85
 msgid "Groups"
 msgstr "群組"
 
-#: frontend/src/pages/groups/group-view.js:426
+#: frontend/src/pages/groups/group-view.js:439
 msgid "This is a special group representing a department."
 msgstr ""
 
-#: frontend/src/pages/groups/group-view.js:456
+#: frontend/src/pages/groups/group-view.js:469
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:91
 #: frontend/src/pages/org-admin/org-libraries.js:277
 msgid "Transfer"
 msgstr "轉讓"
 
-#: frontend/src/pages/groups/group-view.js:463
+#: frontend/src/pages/groups/group-view.js:476
 msgid "Manage Members"
 msgstr "管理成員"
 
@@ -3004,7 +3031,8 @@ msgid "My Groups"
 msgstr "我的群組"
 
 #: frontend/src/pages/invitations/invitations-view.js:54
-#: frontend/src/pages/share-admin/share-links.js:446
+#: frontend/src/pages/share-admin/share-links.js:407
+#: frontend/src/pages/share-admin/upload-links.js:239
 #: static/scripts/app/views/invitation.js:40
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
@@ -3019,9 +3047,10 @@ msgstr "邀請時間"
 
 #: frontend/src/pages/invitations/invitations-view.js:112
 #: frontend/src/pages/invitations/invitations-view.js:195
-#: frontend/src/pages/share-admin/share-links.js:98
-#: frontend/src/pages/share-admin/share-links.js:310
-#: frontend/src/pages/share-admin/upload-links.js:60
+#: frontend/src/pages/share-admin/share-links.js:65
+#: frontend/src/pages/share-admin/share-links.js:261
+#: frontend/src/pages/share-admin/upload-links.js:43
+#: frontend/src/pages/share-admin/upload-links.js:154
 msgid "Expiration"
 msgstr "過期時間"
 
@@ -3035,8 +3064,7 @@ msgid "You have not invited any people."
 msgstr "你還沒有邀請任何人。"
 
 #: frontend/src/pages/lib-content-view/lib-content-container.js:100
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:161
-#: frontend/src/pages/wiki/main-panel.js:80
+#: frontend/src/pages/wiki/main-panel.js:82
 msgid "Folder does not exist."
 msgstr ""
 
@@ -3046,65 +3074,74 @@ msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:61
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:88
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:170
 msgid "Side Nav Menu"
 msgstr "側邊導航選單"
 
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:80
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:128
-#: frontend/src/pages/repo-wiki-mode/main-panel.js:205
-#: frontend/src/pages/wiki/main-panel.js:94
-#: frontend/src/pages/wiki/main-panel.js:115
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:133
+#: frontend/src/pages/wiki/main-panel.js:81
 msgid "Search files in this library"
 msgstr "在當前資料庫搜尋檔案"
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:684
+#: frontend/src/pages/lib-content-view/lib-content-view.js:591
+msgid "Failed to move files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:593
+msgid "Failed to copy files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:623
+msgid "Successfully moved files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:625
+msgid "Successfully copied files to another library."
+msgstr ""
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:780
 msgid "Successfully deleted {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:695
+#: frontend/src/pages/lib-content-view/lib-content-view.js:791
 msgid "Failed to delete {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:870
-#: frontend/src/pages/lib-content-view/lib-content-view.js:881
+#: frontend/src/pages/lib-content-view/lib-content-view.js:976
+#: frontend/src/pages/lib-content-view/lib-content-view.js:987
 msgid "Renaming {name} failed"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:901
-#: frontend/src/pages/lib-content-view/lib-content-view.js:915
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1007
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1021
 #: frontend/src/pages/org-admin/org-groups.js:71
 #: frontend/src/pages/org-admin/org-libraries.js:73
 msgid "Successfully deleted {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:907
-#: frontend/src/pages/lib-content-view/lib-content-view.js:921
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1013
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1027
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:949
-#: frontend/src/pages/lib-content-view/lib-content-view.js:979
-msgid "Failed to move {name}."
-msgstr ""
-
-#: frontend/src/pages/lib-content-view/lib-content-view.js:958
-#: frontend/src/pages/lib-content-view/lib-content-view.js:972
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1083
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1001
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1030
-#: frontend/src/repo-wiki-mode.js:519 static/scripts/app/views/dir.js:1383
-msgid "Failed to copy %(name)s"
-msgstr "複製 %(name)s 失敗"
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1090
+msgid "Failed to move {name}."
+msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1009
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1023
-#: frontend/src/repo-wiki-mode.js:515 frontend/src/utils/utils.js:877
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1133
+#: frontend/src/utils/utils-m.js:1175 frontend/src/utils/utils.js:1047
 #: static/scripts/app/views/dir.js:1287 static/scripts/app/views/dir.js:1448
 msgid "Successfully copied %(name)s."
 msgstr "成功複製 %(name)s。"
+
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1140
+#: static/scripts/app/views/dir.js:1383
+msgid "Failed to copy %(name)s"
+msgstr "複製 %(name)s 失敗"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:22
 msgid "You do not have connected devices"
@@ -3131,19 +3168,12 @@ msgstr "IP"
 msgid "Last Access"
 msgstr "最後瀏覽時間"
 
-#: frontend/src/pages/linked-devices/linked-devices.js:116
-#: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
-#: static/scripts/sysadmin-app/views/device.js:53
-#: static/scripts/sysadmin-app/views/device.js:73
-msgid "Successfully unlink %(name)s."
-msgstr "斷開 %(name)s 連接成功。"
-
-#: frontend/src/pages/linked-devices/linked-devices.js:122
-msgid "Failed to unlink %(name)s"
+#: frontend/src/pages/linked-devices/linked-devices.js:100
+msgid "Successfully unlinked %(name)s."
 msgstr ""
 
-#: frontend/src/pages/linked-devices/linked-devices.js:146
-#: frontend/src/pages/linked-devices/linked-devices.js:171
+#: frontend/src/pages/linked-devices/linked-devices.js:126
+#: frontend/src/pages/linked-devices/linked-devices.js:151
 msgid "Unlink"
 msgstr "斷開連接"
 
@@ -3165,7 +3195,7 @@ msgid "Successfully restored the library."
 msgstr ""
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:149
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:213
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:209
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
 #: static/scripts/common.js:484
@@ -3184,39 +3214,27 @@ msgid ""
 "separately."
 msgstr "你可以新建一個資料庫來組織你的檔案資料，比如為每個項目建立一個資料庫，每個資料庫可以單獨地同步和共享。"
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:118
-#: frontend/src/pages/shared-libs/shared-libs.js:191
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:117
+#: frontend/src/pages/shared-libs/shared-libs.js:177
 msgid "Successfully unstarred {library_name_placeholder}."
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:130
-#: frontend/src/pages/shared-libs/shared-libs.js:203
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:127
+#: frontend/src/pages/shared-libs/shared-libs.js:187
 msgid "Successfully starred {library_name_placeholder}."
 msgstr ""
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:207
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:203
 #: frontend/src/pages/org-admin/org-libraries.js:244
 #: static/scripts/app/views/repo.js:276
 #: static/scripts/sysadmin-app/views/repo.js:136
 msgid "Successfully transferred the library."
 msgstr "資料庫轉讓成功。"
 
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:259
-#: frontend/src/pages/my-libs/mylib-repo-list-item.js:305
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:255
+#: frontend/src/pages/my-libs/mylib-repo-list-item.js:301
 msgid "Broken (please contact your administrator to fix this library)"
 msgstr "損壞 (請聯繫您的管理員來修復該資料庫)"
-
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:76
-#: frontend/src/pages/shared-libs/shared-libs.js:288
-msgid "Star"
-msgstr "新增星標"
-
-#: frontend/src/pages/my-libs/mylib-repo-menu.js:79
-#: frontend/src/pages/shared-libs/shared-libs.js:288
-#: frontend/src/pages/starred/starred.js:200
-#: frontend/src/pages/starred/starred.js:235
-msgid "Unstar"
-msgstr "取消星標"
 
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:97
 msgid "Change Password"
@@ -3345,13 +3363,13 @@ msgid "All Libraries"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-libraries.js:218
-#: frontend/src/utils/utils.js:339
+#: frontend/src/utils/utils-m.js:420 frontend/src/utils/utils.js:392
 #: static/scripts/app/models/deleted-repo.js:19 static/scripts/common.js:349
 msgid "Encrypted library"
 msgstr "加密資料庫"
 
 #: frontend/src/pages/org-admin/org-libraries.js:221
-#: frontend/src/utils/utils.js:345
+#: frontend/src/utils/utils-m.js:426 frontend/src/utils/utils.js:398
 #: static/scripts/app/models/deleted-repo.js:21 static/scripts/common.js:355
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
@@ -3437,6 +3455,10 @@ msgstr "重置密碼"
 #: frontend/src/pages/org-admin/org-user-item.js:160
 msgid "Revoke Admin"
 msgstr "取消管理員"
+
+#: frontend/src/pages/org-admin/org-user-profile.js:141
+msgid "Avatar"
+msgstr "頭像"
 
 #: frontend/src/pages/org-admin/org-user-profile.js:155
 msgid "Contact Email"
@@ -3587,14 +3609,13 @@ msgstr "如果你不想共享整個資料庫，你可以共享單個資料夾給
 
 #: frontend/src/pages/share-admin/folders.js:136
 #: frontend/src/pages/share-admin/libraries.js:166
-#: frontend/src/pages/shared-libs/shared-libs.js:170
 #: frontend/src/pages/shared-with-all/public-shared-view.js:117
 msgid "Successfully unshared {name}"
 msgstr ""
 
 #: frontend/src/pages/share-admin/folders.js:166
 #: frontend/src/pages/share-admin/libraries.js:141
-#: frontend/src/pages/share-admin/share-links.js:245
+#: frontend/src/pages/share-admin/share-links.js:196
 msgid "Successfully modified permission."
 msgstr ""
 
@@ -3618,50 +3639,40 @@ msgstr ""
 msgid "all members"
 msgstr "所有成員"
 
-#: frontend/src/pages/share-admin/share-links.js:75
+#: frontend/src/pages/share-admin/share-links.js:43
 msgid ""
 "You can generate a share link for a folder or a file. Anyone who receives "
 "this link can view the folder or the file online."
 msgstr ""
 
-#: frontend/src/pages/share-admin/share-links.js:97
-#: frontend/src/pages/share-admin/share-links.js:309
-#: frontend/src/pages/share-admin/upload-links.js:59
+#: frontend/src/pages/share-admin/share-links.js:64
+#: frontend/src/pages/share-admin/share-links.js:260
+#: frontend/src/pages/share-admin/upload-links.js:42
+#: frontend/src/pages/share-admin/upload-links.js:153
 msgid "Visits"
 msgstr "瀏覽次數"
 
-#: frontend/src/pages/share-admin/share-links.js:292
-#: frontend/src/pages/share-admin/share-links.js:326
-#: frontend/src/pages/share-admin/upload-links.js:155
+#: frontend/src/pages/share-admin/share-links.js:243
+#: frontend/src/pages/share-admin/share-links.js:277
+#: frontend/src/pages/share-admin/upload-links.js:141
+#: frontend/src/pages/share-admin/upload-links.js:169
 msgid "Remove"
 msgstr "刪除"
 
-#: frontend/src/pages/share-admin/share-links.js:461
-#: frontend/src/pages/share-admin/upload-links.js:230
+#: frontend/src/pages/share-admin/share-links.js:422
+#: frontend/src/pages/share-admin/upload-links.js:254
 msgid "Share Links"
 msgstr "共享網址"
 
-#: frontend/src/pages/share-admin/share-links.js:464
-#: frontend/src/pages/share-admin/upload-links.js:232
+#: frontend/src/pages/share-admin/share-links.js:425
+#: frontend/src/pages/share-admin/upload-links.js:256
 msgid "Upload Links"
 msgstr "上傳連結"
 
-#: frontend/src/pages/share-admin/upload-links.js:46
-msgid "You don't have any upload links"
-msgstr ""
-
-#: frontend/src/pages/share-admin/upload-links.js:47
+#: frontend/src/pages/share-admin/upload-links.js:29
 msgid ""
 "You can generate an upload link from any folder. Anyone who receives this "
 "link can upload files to this folder."
-msgstr ""
-
-#: frontend/src/pages/share-admin/upload-links.js:212
-msgid "Successfully deleted upload link."
-msgstr ""
-
-#: frontend/src/pages/share-admin/upload-links.js:217
-msgid "Failed to delete upload link."
 msgstr ""
 
 #: frontend/src/pages/shared-libs/shared-libs.js:47
@@ -3674,14 +3685,14 @@ msgid ""
 "libraries at \"Shared with groups\"."
 msgstr ""
 
-#: frontend/src/pages/shared-libs/shared-libs.js:175
+#: frontend/src/pages/shared-libs/shared-libs.js:225
+#: frontend/src/pages/shared-libs/shared-libs.js:275
+msgid "Leave Share"
+msgstr "退出共享"
+
 #: frontend/src/pages/shared-with-all/public-shared-view.js:122
 msgid "Failed to unshare {name}"
 msgstr ""
-
-#: frontend/src/pages/shared-libs/shared-libs.js:292
-msgid "Leave Share"
-msgstr "退出共享"
 
 #: frontend/src/pages/shared-with-all/public-shared-view.js:184
 msgid "No public libraries"
@@ -3694,11 +3705,11 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/shared-with-all/public-shared-view.js:198
-#: frontend/src/pages/shared-with-all/public-shared-view.js:203
+#: frontend/src/pages/shared-with-all/public-shared-view.js:205
 msgid "Add Library"
 msgstr "新增資料庫"
 
-#: frontend/src/pages/shared-with-all/public-shared-view.js:207
+#: frontend/src/pages/shared-with-all/public-shared-view.js:209
 msgid "Share existing libraries"
 msgstr "共享已有資料庫"
 
@@ -3829,19 +3840,6 @@ msgstr "查看鏡像"
 msgid "{placeholder} Snapshot"
 msgstr ""
 
-#: frontend/src/repo-wiki-mode.js:133
-msgid "This folder has been updated. "
-msgstr ""
-
-#: frontend/src/repo-wiki-mode.js:498 frontend/src/utils/utils.js:892
-#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
-msgid "Successfully moved %(name)s."
-msgstr "成功移動 %(name)s。"
-
-#: frontend/src/repo-wiki-mode.js:502 static/scripts/app/views/dir.js:1383
-msgid "Failed to move %(name)s"
-msgstr "移動 %(name)s 失敗"
-
 #: frontend/src/settings.js:39
 msgid "Profile"
 msgstr "設定"
@@ -3858,7 +3856,7 @@ msgstr ""
 msgid "Profile Setting"
 msgstr "個人資訊設定"
 
-#: frontend/src/shared-dir-view.js:206
+#: frontend/src/shared-dir-view.js:198
 msgid "Shared by: "
 msgstr "共享來源："
 
@@ -3887,104 +3885,126 @@ msgstr "客戶端打開"
 msgid "Access Log"
 msgstr "瀏覽日誌"
 
-#: frontend/src/utils/utils.js:341 seahub/templates/priv/ali.js:10
-#: static/scripts/common.js:351
+#: frontend/src/utils/utils-m.js:422 frontend/src/utils/utils.js:394
+#: seahub/templates/priv/ali.js:10 static/scripts/common.js:351
 msgid "Admin access"
 msgstr ""
 
-#: frontend/src/utils/utils.js:348 static/scripts/common.js:358
+#: frontend/src/utils/utils-m.js:429 frontend/src/utils/utils.js:401
+#: static/scripts/common.js:358
 msgid "Read-Only library"
 msgstr "唯讀資料庫"
 
-#: frontend/src/utils/utils.js:351
+#: frontend/src/utils/utils-m.js:432 frontend/src/utils/utils.js:404
 msgid "Online Read-Write library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:354
+#: frontend/src/utils/utils-m.js:435 frontend/src/utils/utils.js:407
 msgid "Online Read-Only library"
 msgstr ""
 
-#: frontend/src/utils/utils.js:365 seahub/templates/priv/ali.js:12
-#: static/scripts/common.js:375
+#: frontend/src/utils/utils-m.js:446 frontend/src/utils/utils.js:418
+#: seahub/templates/priv/ali.js:12 static/scripts/common.js:375
 msgid "Read-Write folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:368 seahub/templates/priv/ali.js:13
-#: static/scripts/common.js:378
+#: frontend/src/utils/utils-m.js:449 frontend/src/utils/utils.js:421
+#: seahub/templates/priv/ali.js:13 static/scripts/common.js:378
 msgid "Read-Only folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:371
+#: frontend/src/utils/utils-m.js:452 frontend/src/utils/utils.js:424
 msgid "Online Read-Write folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:374
+#: frontend/src/utils/utils-m.js:455 frontend/src/utils/utils.js:427
 msgid "Online Read-Only folder"
 msgstr ""
 
-#: frontend/src/utils/utils.js:393
+#: frontend/src/utils/utils-m.js:579 frontend/src/utils/utils.js:551
 msgid "Online Read-Write"
 msgstr ""
 
-#: frontend/src/utils/utils.js:396
+#: frontend/src/utils/utils-m.js:582 frontend/src/utils/utils.js:554
 msgid "Online Read-Only"
 msgstr ""
 
-#: frontend/src/utils/utils.js:406
+#: frontend/src/utils/utils-m.js:592 frontend/src/utils/utils.js:564
 msgid "User can read, write, upload, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:409
+#: frontend/src/utils/utils-m.js:595 frontend/src/utils/utils.js:567
 msgid "User can read, download and sync files."
 msgstr ""
 
-#: frontend/src/utils/utils.js:412
+#: frontend/src/utils/utils-m.js:598 frontend/src/utils/utils.js:570
 msgid "Besides Write permission, user can also share the library."
 msgstr ""
 
-#: frontend/src/utils/utils.js:415
+#: frontend/src/utils/utils-m.js:601 frontend/src/utils/utils.js:573
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/utils/utils.js:418
+#: frontend/src/utils/utils-m.js:604 frontend/src/utils/utils.js:576
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
 msgstr ""
 
-#: frontend/src/utils/utils.js:879 static/scripts/app/views/dir.js:1289
-#: static/scripts/app/views/dir.js:1450
+#: frontend/src/utils/utils-m.js:615 frontend/src/utils/utils.js:587
+msgid "Preview and download"
+msgstr ""
+
+#: frontend/src/utils/utils-m.js:624 frontend/src/utils/utils.js:596
+msgid "Preview only"
+msgstr ""
+
+#: frontend/src/utils/utils-m.js:633 frontend/src/utils/utils.js:605
+msgid "Edit on cloud and download"
+msgstr ""
+
+#: frontend/src/utils/utils-m.js:642 frontend/src/utils/utils.js:614
+msgid "Edit on cloud only"
+msgstr ""
+
+#: frontend/src/utils/utils-m.js:1177 frontend/src/utils/utils.js:1049
+#: static/scripts/app/views/dir.js:1289 static/scripts/app/views/dir.js:1450
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功複製 %(name)s 和另1項條目。"
 
-#: frontend/src/utils/utils.js:881 static/scripts/app/views/dir.js:1291
-#: static/scripts/app/views/dir.js:1452
+#: frontend/src/utils/utils-m.js:1179 frontend/src/utils/utils.js:1051
+#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1452
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功複製 %(name)s 和其他 %(amount)s 項條目。"
 
-#: frontend/src/utils/utils.js:894 static/scripts/app/views/dir.js:1280
-#: static/scripts/app/views/dir.js:1442
+#: frontend/src/utils/utils-m.js:1190 frontend/src/utils/utils.js:1062
+#: static/scripts/app/views/dir.js:1278 static/scripts/app/views/dir.js:1440
+msgid "Successfully moved %(name)s."
+msgstr "成功移動 %(name)s。"
+
+#: frontend/src/utils/utils-m.js:1192 frontend/src/utils/utils.js:1064
+#: static/scripts/app/views/dir.js:1280 static/scripts/app/views/dir.js:1442
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移動 %(name)s 和另1項條目。"
 
-#: frontend/src/utils/utils.js:896 static/scripts/app/views/dir.js:1282
-#: static/scripts/app/views/dir.js:1444
+#: frontend/src/utils/utils-m.js:1194 frontend/src/utils/utils.js:1066
+#: static/scripts/app/views/dir.js:1282 static/scripts/app/views/dir.js:1444
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移動 %(name)s 和其他 %(amount)s 項條目。"
 
-#: frontend/src/utils/utils.js:908
+#: frontend/src/utils/utils-m.js:1206 frontend/src/utils/utils.js:1078
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:911
+#: frontend/src/utils/utils-m.js:1209 frontend/src/utils/utils.js:1081
 msgid "Failed to copy %(name)s."
 msgstr ""
 
-#: frontend/src/utils/utils.js:921
+#: frontend/src/utils/utils-m.js:1219 frontend/src/utils/utils.js:1091
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: frontend/src/utils/utils.js:924
+#: frontend/src/utils/utils-m.js:1222 frontend/src/utils/utils.js:1094
 msgid "Failed to move %(name)s."
 msgstr ""
 
@@ -4065,6 +4085,12 @@ msgstr "確定要斷開此設備的連接嗎？"
 msgid "Delete files from this device the next time it comes online."
 msgstr "在此設備下次上線時刪除此設備上的文件。"
 
+#: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
+#: static/scripts/sysadmin-app/views/device.js:53
+#: static/scripts/sysadmin-app/views/device.js:73
+msgid "Successfully unlink %(name)s."
+msgstr "斷開 %(name)s 連接成功。"
+
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:54
 msgid "Move {placeholder} to:"
 msgstr "移動 {placeholder} 到"
@@ -4112,7 +4138,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:108
 #: static/scripts/sysadmin-app/views/repos.js:58
 msgid "Search user or enter email and press Enter"
-msgstr "搜索用戶或輸入電子郵件，然後按Enter"
+msgstr "搜尋用戶或輸入電子郵件，然後按Enter"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:143
 msgid "You can only select 1 item"
@@ -4120,7 +4146,7 @@ msgstr "只能選擇1個項目"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:222
 msgid "Please click and choose a directory."
-msgstr "請點擊選擇目標目錄。"
+msgstr "請按下選擇目標目錄。"
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:37
 msgid "{placeholder} History Setting"
@@ -4208,6 +4234,10 @@ msgstr "正在移動文件 %(index)s / %(total)s"
 msgid "Copying file %(index)s of %(total)s"
 msgstr "正在復製文件 %(index)s / %(total)s"
 
+#: static/scripts/app/views/dir.js:1383
+msgid "Failed to move %(name)s"
+msgstr "移動 %(name)s 失敗"
+
 #: static/scripts/app/views/dirent-details.js:92 static/scripts/common.js:734
 #: static/scripts/common.js:805
 msgid "No matches"
@@ -4233,15 +4263,15 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too big"
-msgstr "文件太大"
+msgstr "檔案太大"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "File is too small"
-msgstr "文件太小"
+msgstr "檔案太小"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Filetype not allowed"
-msgstr "不支持的文件類型"
+msgstr "不支援的檔案類型"
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Maximum number of files exceeded"
@@ -4249,11 +4279,11 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Uploaded bytes exceed file size"
-msgstr "上傳大小超過了文件大小"
+msgstr "上傳大小超過了檔案大小"
 
 #: static/scripts/app/views/fileupload.js:16
 msgid "Empty file upload result"
-msgstr "空文件"
+msgstr "空檔案"
 
 #: static/scripts/app/views/fileupload.js:19
 msgid "uploaded"
@@ -4281,7 +4311,7 @@ msgstr "文件上傳失敗"
 
 #: static/scripts/app/views/fileupload.js:308
 msgid "File is locked"
-msgstr "文件已鎖定"
+msgstr "檔案已鎖定"
 
 #: static/scripts/app/views/folder-perm.js:126
 #: static/scripts/app/views/share.js:882
@@ -4431,7 +4461,7 @@ msgstr "搜索用戶或輸入電子郵件，然後按Enter"
 
 #: static/scripts/common.js:735 static/scripts/common.js:806
 msgid "Searching..."
-msgstr "搜索中..."
+msgstr "搜尋中..."
 
 #: static/scripts/common.js:736 static/scripts/common.js:807
 msgid "Loading failed"
