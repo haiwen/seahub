@@ -177,7 +177,13 @@ class UploadLinks(APIView):
 
         elif expiration_time:
 
-            expire_date = datetime.fromisoformat(expiration_time)
+            try:
+                expire_date = datetime.fromisoformat(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             expire_date = expire_date.astimezone(pytz.UTC).replace(tzinfo=None)
 
         # resource check
