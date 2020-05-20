@@ -398,10 +398,10 @@ class FileUploader extends React.Component {
       errorMessage  = JSON.parse(errorMessage); 
       error = errorMessage.error;
       if (error === 'File locked by others.') {
-        error = gettext('File Locked by others.');
+        error = gettext('File is locked by others.');
       }
       if (error === 'Internal error.') {
-        error = gettext('Internal error.');
+        error = gettext('Internal Server Error');
       }
     }
 
