@@ -1,0 +1,169 @@
+{
+  "bold": "Gras",
+  "italic": "Italique",
+  "inline_code": "Code",
+  "header_one": "Titre 1",
+  "header_two": "Titre 2",
+  "header_three": "Titre 3",
+  "header_four": "Titre 4",
+  "header_five": "Titre 5",
+  "header_six": "Titre 6",
+  "paragraph": "Paragraphe",
+  "quote": "Citation",
+  "ordered_list": "Liste ordonnée",
+  "unordered_list": "Liste non ordonnée",
+  "check_list_item": "Élément liste de vérification",
+  "insert_image": "Insérer image",
+  "code": "Ligne de code",
+  "code_block": "Bloc de code",
+  "insert_link": "Insérer lien",
+  "insert_table": "Insérer table",
+  "save": "Sauvegarder",
+  "more": "Plus",
+  "invalid_url": "L'adresse n'est pas valide",
+  "link_address": "Adresse du lien",
+  "image_address": "Adresse de l'image",
+  "submit": "Soumettre",
+  "cancel": "Annuler",
+  "switch_to_plain_text_editor": "Basculer en éditeur de texte plein",
+  "switch_to_rich_text_editor": "Basculer en éditeur de texte riche",
+  "switch_to_viewer": "Basculer en visualiseur Markdown",
+  "help": "Aide",
+  "remove_table": "Supprimer la table",
+  "column": "Colonne",
+  "row": "Ligne",
+  "set_align": "Ajuster l'alignement",
+  "left": "Gauche",
+  "center": "Centrer",
+  "right": "Droite",
+  "file_saved": "Fichier sauvegardé.",
+  "file_failed_to_save": "Échec de la sauvegarde du fichier",
+  "star": "Ajouter étoile",
+  "unstar": "Enlever étoile",
+  "back_to_parent_directory":"Retour au répertoire parent",
+  "edit":"éditer",
+  "copy": "Copier",
+  "copied": "Copié",
+  "internal_link": "Lien interne",
+  "copy_internal_link": "Le lien interne a été copié dans le presse-papier",
+  "internal_link_desc": "Un lien interne est un lien vers un fichier ou un dossier accessible en lecture par un utilisateur.",
+  "share": "Partager",
+  "share_link": "Lien de partage",
+  "generate": "Générer",
+  "add_password_protection": "Ajouter un mot de passe de protection",
+  "password": "Mot de passe",
+  "at_least_8_characters": "Au moins 8 caractères",
+  "password_again": "Mot de passe (à nouveau)",
+  "add_auto_expiration": "Ajouter l'expiration automatique",
+  "days": "jours",
+  "please_enter_password": "Entrez un mot de passe",
+  "greater_than_or_equal_to": "Plus grand ou égale à",
+  "less_than_or_equal_to": "Plus petit ou égal à",
+  "set_permission": "Définir la permission",
+  "preview_and_download": "Prévisualiser et télécharger",
+  "preview_only": "Aperçu uniquement",
+  "please_enter_valid_days": "Saisissez un nombre de jours valide",
+  "please_enter_a_non-negative_integer": "Veuillez introduire un intégrateur non-négatif",
+  "please_enter_days": "Veuillez entrer un nombre de jours",
+  "password_is_too_short": "Le mot de passe est trop court",
+  "passwords_do_not_match": "Les mots de passe ne correspondent pas",
+  "return_to_wiki_page": "Retour à la page du Wiki",
+  "insert_network_image": "Insérer une image du réseau",
+  "upload_local_image": "Insérer une image locale",
+  "add_link": "Ajouter un lien",
+  "file_history": "Historique du fichier",
+  "history_version": "Historique des versions",
+  "back_to_viewer": "Retour au visualiseur",
+  "link_title": "Titre du lien",
+  "local_draft": "Brouillon local",
+  "use_draft": "Utiliser le brouillon",
+  "delete_draft": "Supprimer le brouillon",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Vous avez un brouillon qui n'est pas sauvé. Voulez-vous l'utiliser ?",
+  "local_draft_saved": "Brouillon local sauvegardé",
+  "new_draft": "Nouveau brouillon",
+  "edit_draft": "Éditer brouillon",
+  "this_file_has_a_draft": "Ce fichier possède un brouillon.", 
+  "delete": "Supprimer",
+  "comments": "Commentaires",
+  "add_a_comment": "Ajouter un commentaire ...",
+  "no_comment_yet": "Pas encore de commentaire.",
+  "Mark_as_Resolved": "Marqué comme résolu",
+  "ask_for_review": "Demande d'un avis",
+  "review_already_exists": "Un avis existe déjà",
+  "view_review": "Voir l'avis",
+  "there_is_an_associated_review_with_this_file": "Il y a un avis associé à ce fichier",
+  "start_review": "Commencer l'avis",
+  "this_file_is_in_draft_stage": "Ce fichier est à l'état de brouillon",
+  "this_file_is_in_review_stage": "Ce fichier est à l'état d'avis",
+  "this_file_has_been_updated": "Ce fichier à bien été mis à jour.",
+  "refresh": "Rafraichir",
+  "related_files": "Fichiers relatifs",
+  "related_file": "Fichier relatif",
+  "no_tags": "Pas de tag",
+  "no_related_files": "Aucun fichier relatif",
+  "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "",
+  "userHelp": {
+    "title": "Raccourcis clavier",
+    "userHelpData": [
+      {
+        "shortcutType":"Liste des raccourcis",
+        "shortcutData": {
+          "Make_list": "Faire une liste",
+          "Make_ordered_list": "Faire une liste ordonnée",
+          "Insert_new_item": "Insérer un nouvel élément",
+          "Insert_child_in_item": "Insérer enfant dans l'élément",
+          "Increase_depth": "Améliorer la profondeur"
+        }
+      }, {
+        "shortcutType": "Raccourcis en-tête",
+        "shortcutData": {
+          "Heading_1": "Titre 1",
+          "Heading_2": "Titre 2",
+          "Heading_3": "Titre 3",
+          "Heading_4": "Titre 4",
+          "Heading_5": "Titre 5",
+          "Heading_6": "Titre 6"
+        }
+      }, {
+        "shortcutType": "Raccourcis de blocs de code",
+        "shortcutData": {
+          "Make_code_block": "Faire un bloc de code",
+          "Insert_new_line": "Insérer une nouvelle ligne",
+          "Escape_code_block": "Sortir du bloc de code",
+          "Insert_indent": "Insérer un espace"
+        }
+      }, {
+        "shortcutType": "Raccourcis blocs de citation",
+        "shortcutData": {
+          "Make_Block_quote": "Faire un bloc de citation",
+          "Escape_Block_quote": "Sortir du bloc de citation"
+        }
+      }, {
+        "shortcutType": "Raccourcis table",
+        "shortcutData": {
+          "Insert_Table_Row": "Insérer une ligne à la table",
+          "Escape_table": "Sortir de la table"
+        }
+      }, {
+        "shortcutType":"Raccourcis en ligne",
+        "shortcutData": {
+          "Bold": "Gras",
+          "Italic": "Italique",
+          "Italic_Bold": "Italique Gras",
+          "Inline_code": "Ligne de code"
+        }
+      }, {
+        "shortcutType": "Sauvegarder les raccourcis",
+        "shortcutData": {
+          "Save_file": "Sauvegarder fichier"
+        }
+      }, {
+        "shortcutType": "Raccourcis image",
+        "shortcutData": {
+          "Paste_screen_shot": "Coller la capture d'écran",
+          "Drag_image_from_anywhere_to_upload_it": "Glisser l'image de n'importe où pour l'envoyer"
+        }
+      }
+    ]
+  }
+}
