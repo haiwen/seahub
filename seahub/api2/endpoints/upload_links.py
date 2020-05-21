@@ -1,8 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import json
+import pytz
 import logging
 from constance import config
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from rest_framework.authentication import SessionAuthentication
@@ -153,11 +155,36 @@ class UploadLinks(APIView):
             error_msg = _('Password is too short')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            expire_days = int(request.data.get('expire_days', 0))
-        except ValueError:
-            error_msg = 'expire_days invalid.'
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        expire_date = None
+        if expire_days:
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+
+        elif expiration_time:
+
+            try:
+                expire_date = datetime.fromisoformat(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = expire_date.astimezone(pytz.UTC).replace(tzinfo=None)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -179,11 +206,6 @@ class UploadLinks(APIView):
         if check_folder_permission(request, repo_id, path) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if expire_days <= 0:
-            expire_date = None
-        else:
-            expire_date = timezone.now() + relativedelta(days=expire_days)
 
         username = request.user.username
         uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)

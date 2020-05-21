@@ -69,8 +69,8 @@ import FileScanRecords from './file-scan-records';
 import VirusScanRecords from './virus-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 import DingtalkDepartments from './dingtalk-departments';
-
 import Invitations from './invitations/invitations';
+
 import StatisticFile from './statistic/statistic-file';
 import StatisticStorage from './statistic/statistic-storage';
 import StatisticTraffic from './statistic/statistic-traffic';

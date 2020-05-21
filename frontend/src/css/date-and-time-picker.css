@@ -1,0 +1,13 @@
+ /* to overwrite styles from seahub_react.css */
+.rc-calendar-table {
+  table-layout: auto;
+}
+.rc-calendar-table tbody tr {
+  height: auto;
+}
+
+/* overwrite some styles */
+/* for 'markdown file view -> share -> picker' */
+.rc-calendar-input:focus {
+  border-color: transparent;
+}
