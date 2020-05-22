@@ -79,6 +79,17 @@ class AdminUploadLinks(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if order_by:
+            if order_by not in ('ctime', 'view_cnt'):
+                error_msg = 'order_by invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            direction = request.GET.get('direction', 'desc').lower().strip()
+            if direction not in ('asc', 'desc'):
+                error_msg = 'direction invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -89,7 +100,21 @@ class AdminUploadLinks(APIView):
         start = (current_page - 1) * per_page
         end = start + per_page
 
-        upload_links = UploadLinkShare.objects.all().order_by('ctime')[start:end]
+        if order_by:
+            if order_by == 'ctime':
+                if direction == 'desc':
+                    sql_parameter = '-ctime'
+                else:
+                    sql_parameter = 'ctime'
+            else:
+                if direction == 'desc':
+                    sql_parameter = '-view_cnt'
+                else:
+                    sql_parameter = 'view_cnt'
+            upload_links = UploadLinkShare.objects.all().order_by(sql_parameter)[start:end]
+        else:
+            upload_links = UploadLinkShare.objects.all().order_by('ctime')[start:end]
+
         count = UploadLinkShare.objects.all().count()
 
         # Use dict to reduce memcache fetch cost in large for-loop.
