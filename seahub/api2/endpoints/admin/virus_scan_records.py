@@ -88,7 +88,7 @@ class AdminVirusScanRecord(APIView):
 
         virus_record = get_virus_record_by_id(virus_id)
         if not virus_record:
-            error_msg = 'Virus file %d not found.' % virus_record.file_path
+            error_msg = 'Virus record %d not found.' % virus_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         parent_dir = os.path.dirname(virus_record.file_path)
