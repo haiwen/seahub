@@ -48,7 +48,7 @@ class AdminVirusScanRecords(APIView):
             has_handle = None
 
         start = (page - 1) * per_page
-        count = per_page
+        count = per_page + 1
 
         try:
             virus_records = get_virus_record(has_handle=has_handle, start=start, limit=count)
@@ -56,6 +56,12 @@ class AdminVirusScanRecords(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(virus_records) > per_page:
+            virus_records = virus_records[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
 
         record_list = list()
         for virus_record in virus_records:
@@ -78,7 +84,7 @@ class AdminVirusScanRecords(APIView):
                 record["virus_id"] = virus_record.vid
                 record_list.append(record)
 
-        return Response({"record_list": record_list}, status=status.HTTP_200_OK)
+        return Response({"record_list": record_list, "has_next_page": has_next_page}, status=status.HTTP_200_OK)
 
 
 class AdminVirusScanRecord(APIView):
