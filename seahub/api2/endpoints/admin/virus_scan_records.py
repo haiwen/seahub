@@ -43,15 +43,15 @@ class AdminVirusScanRecords(APIView):
             per_page = 25
 
         try:
-            has_handle = to_python_boolean(request.GET.get('has_handle', ''))
+            has_handled = to_python_boolean(request.GET.get('has_handled', ''))
         except ValueError:
-            has_handle = None
+            has_handled = None
 
         start = (page - 1) * per_page
         count = per_page + 1
 
         try:
-            virus_records = get_virus_record(has_handle=has_handle, start=start, limit=count)
+            virus_records = get_virus_record(has_handled=has_handled, start=start, limit=count)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -79,8 +79,8 @@ class AdminVirusScanRecords(APIView):
                 record["repo_name"] = repo.name
                 record["repo_owner"] = repo_owner
                 record["file_path"] = virus_record.file_path
-                record["has_handle"] = virus_record.has_handle
-                record["has_ignore"] = virus_record.has_ignore
+                record["has_deleted"] = virus_record.has_deleted
+                record["has_ignored"] = virus_record.has_ignored
                 record["virus_id"] = virus_record.vid
                 record_list.append(record)
 
@@ -112,7 +112,7 @@ class AdminVirusScanRecord(APIView):
             handle_virus_record(virus_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Failed to delete, please try again later.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": True}, status=status.HTTP_200_OK)
@@ -122,24 +122,24 @@ class AdminVirusScanRecord(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        is_ignore = request.data.get('is_ignore')
-        if is_ignore not in ('true', 'false'):
-            error_msg = 'is_ignore invalid.'
+        ignore = request.data.get('ignore')
+        if ignore not in ('true', 'false'):
+            error_msg = 'ignore invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        is_ignore = to_python_boolean(is_ignore)
+        ignore = to_python_boolean(ignore)
 
         virus_record = get_virus_record_by_id(virus_id)
         if not virus_record:
-            error_msg = 'Virus file %d not found.' % virus_record.file_path
+            error_msg = 'Virus record %d not found.' % virus_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_virus_record(virus_id, is_ignore)
+            update_virus_record(virus_id, ignore)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Failed to modify, please try again later.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         virus_record = get_virus_record_by_id(virus_id)
 
-        return Response({"has_ignore": virus_record.has_ignore}, status=status.HTTP_200_OK)
+        return Response({"has_ignored": virus_record.has_ignored}, status=status.HTTP_200_OK)
