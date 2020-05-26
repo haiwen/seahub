@@ -823,22 +823,22 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
-    def get_virus_record(repo_id=None, has_handled=None, start=-1, limit=-1):
+    def get_virus_files(repo_id=None, has_handled=None, start=-1, limit=-1):
         with _get_seafevents_session() as session:
-            r = seafevents.get_virus_record(session, repo_id, has_handled, start, limit)
+            r = seafevents.get_virus_files(session, repo_id, has_handled, start, limit)
         return r if r else []
 
-    def handle_virus_record(vid):
+    def delete_virus_file(vid):
         with _get_seafevents_session() as session:
-            return True if seafevents.handle_virus_record(session, vid) == 0 else False
+            return True if seafevents.delete_virus_file(session, vid) == 0 else False
 
-    def update_virus_record(vid, ignore):
+    def operate_virus_file(vid, ignore):
         with _get_seafevents_session() as session:
-            return True if seafevents.update_virus_record(session, vid, ignore) == 0 else False
+            return True if seafevents.operate_virus_file(session, vid, ignore) == 0 else False
 
-    def get_virus_record_by_id(vid):
+    def get_virus_file_by_vid(vid):
         with _get_seafevents_session() as session:
-            return seafevents.get_virus_record_by_id(session, vid)
+            return seafevents.get_virus_file_by_vid(session, vid)
 
     def get_file_scan_record(start=-1, limit=-1):
         records = seafevents_api.get_content_scan_results(start, limit)
@@ -880,13 +880,13 @@ else:
         pass
     def get_perm_audit_events():
         pass
-    def get_virus_record():
+    def get_virus_files():
         pass
-    def handle_virus_record():
+    def delete_virus_file():
         pass
-    def update_virus_record():
+    def operate_virus_file():
         pass
-    def get_virus_record_by_id(vid):
+    def get_virus_file_by_vid(vid):
         pass
     def get_file_scan_record():
         pass
