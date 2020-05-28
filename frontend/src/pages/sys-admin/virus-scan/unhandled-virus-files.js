@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -73,6 +74,10 @@ class VirusFileItem extends Component {
     return translateResult;
   }
 
+  toggleItemSelected = (e) => {
+    this.props.toggleItemSelected(this.props.virusFile, e.target.checked);
+  }
+
   render() {
     const virusFile = this.props.virusFile;
     let fileStatus = '',
@@ -89,6 +94,9 @@ class VirusFileItem extends Component {
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <td className="text-center">
+          <input type="checkbox" checked={virusFile.isSelected} onChange={this.toggleItemSelected} />
+        </td>
         <td>{virusFile.repo_name}</td>
         <td>{virusFile.repo_owner}</td>
         <td>{virusFile.file_path}</td>
@@ -146,7 +154,8 @@ class Content extends Component {
   render() {
     const {
       loading, errorMsg, virusFiles,
-      curPerPage, hasNextPage, currentPage
+      curPerPage, hasNextPage, currentPage,
+      isAllItemsSelected
     } = this.props;
 
     if (loading) {
@@ -159,7 +168,10 @@ class Content extends Component {
           <table>
             <thead>
               <tr>
-                <th width="27%">{gettext('Library')}</th>
+                <th width="3%" className="text-center">
+                  <input type="checkbox" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
+                </th>
+                <th width="24%">{gettext('Library')}</th>
                 <th width="25%">{gettext('Owner')}</th>
                 <th width="28%">{gettext('Virus File')}</th>
                 <th width="15%">{gettext('Status')}</th>
@@ -176,6 +188,7 @@ class Content extends Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     handleFile={this.props.handleFile}
+                    toggleItemSelected={this.props.toggleItemSelected}
                   />
                 );
               })}
@@ -208,6 +221,10 @@ class UnhandledVirusFiles extends Component {
       loading: true,
       errorMsg: '',
       virusFiles: [],
+
+      isAllItemsSelected: false,
+      selectedItems: [],
+
       currentPage: 1,
       perPage: 25,
       hasNextPage: false
@@ -232,9 +249,13 @@ class UnhandledVirusFiles extends Component {
     const hasHandled = false;
     seafileAPI.listVirusFiles(page, perPage, hasHandled).then((res) => {
       const data = res.data;
+      const items = data.virus_file_list.map(item => {
+        item.isSelected = false;
+        return item;
+      });
       this.setState({
         loading: false,
-        virusFiles: data.virus_file_list,
+        virusFiles: items,
         hasNextPage: data.has_next_page
       });
     }).catch((error) => {
@@ -284,10 +305,51 @@ class UnhandledVirusFiles extends Component {
     });
   }
 
+  toggleAllSelected = () => {
+    this.setState((prevState) => ({
+      isAllItemsSelected: !prevState.isAllItemsSelected,
+      virusFiles: this.state.virusFiles.map((item) => {
+        item.isSelected = !prevState.isAllItemsSelected;
+        return item;
+      })
+    }));
+  }
+
+  toggleItemSelected = (targetItem, isSelected) => {
+    this.setState({
+      virusFiles: this.state.virusFiles.map((item) => {
+        if (item === targetItem) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    }, () => {
+      this.setState({
+        isAllItemsSelected: !this.state.virusFiles.some(item => !item.isSelected)
+      });
+    });
+  }
+
+  deleteSelectedItems = () => {
+    // TODO: complete it when python API is offered
+  }
+
+  ignoreSelectedItems = () => {
+    // TODO: complete it when python API is offered
+  }
+
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar />
+        {this.state.virusFiles.some(item => item.isSelected) ? (
+          <MainPanelTopbar>
+          <Fragment>
+            <Button onClick={this.deleteSelectedItems} className="operation-item">{gettext('Delete')}</Button>
+            <Button onClick={this.ignoreSelectedItems} className="operation-item">{gettext('Ignore')}</Button>
+          </Fragment>
+          </MainPanelTopbar>
+        ) : <MainPanelTopbar />
+        }
         <div className="main-panel-center">
           <div className="cur-view-container">
             <Nav currentItem="unhandled" /> 
@@ -302,6 +364,9 @@ class UnhandledVirusFiles extends Component {
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getListByPage}
                 handleFile={this.handleFile}
+                isAllItemsSelected={this.state.isAllItemsSelected}
+                toggleAllSelected={this.toggleAllSelected}
+                toggleItemSelected={this.toggleItemSelected}
               />
             </div>
           </div>
