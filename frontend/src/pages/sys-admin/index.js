@@ -7,6 +7,12 @@ import MainPanel from './main-panel';
 
 import Info from './info';
 
+import StatisticFile from './statistic/statistic-file';
+import StatisticStorage from './statistic/statistic-storage';
+import StatisticTraffic from './statistic/statistic-traffic';
+import StatisticUsers from './statistic/statistic-users';
+import StatisticReport from './statistic/statistic-reports';
+
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
@@ -58,24 +64,19 @@ import FileAccessLogs from './logs-page/file-access-logs';
 import FileUpdateLogs from './logs-page/file-update-logs';
 import SharePermissionLogs from './logs-page/share-permission-logs';
 
-import AdminOperationLogs from './admin-logs/operation-logs';
-import AdminLoginLogs from './admin-logs/login-logs';
-
-import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
-
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
-import VirusScanRecords from './virus-scan-records';
 import WorkWeixinDepartments from './work-weixin-departments';
 import DingtalkDepartments from './dingtalk-departments';
 import Invitations from './invitations/invitations';
+import TermsAndConditions from './terms-and-conditions/terms-and-conditions';
 
-import StatisticFile from './statistic/statistic-file';
-import StatisticStorage from './statistic/statistic-storage';
-import StatisticTraffic from './statistic/statistic-traffic';
-import StatisticUsers from './statistic/statistic-users';
-import StatisticReport from './statistic/statistic-reports';
+import AllVirusFiles from './virus-scan/all-virus-files';
+import UnhandledVirusFiles from './virus-scan/unhandled-virus-files';
+
+import AdminOperationLogs from './admin-logs/operation-logs';
+import AdminLoginLogs from './admin-logs/login-logs';
 
 import '../../assets/css/fa-solid.css';
 import '../../assets/css/fa-regular.css';
@@ -140,6 +141,10 @@ class SysAdmin extends React.Component {
       {
         tab: 'logs',
         urlPartList: ['logs/']
+      },
+      {
+        tab: 'virus-files',
+        urlPartList: ['virus-files/']
       },
       {
         tab: 'adminLogs',
@@ -244,16 +249,15 @@ class SysAdmin extends React.Component {
             <Invitations path={siteRoot + 'sys/invitations'} />
             <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} />
 
+            <AllVirusFiles path={siteRoot + 'sys/virus-files/all'} />
+            <UnhandledVirusFiles path={siteRoot + 'sys/virus-files/unhandled'} />
+
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick}
             />
-            <VirusScanRecords
-              path={siteRoot + 'sys/virus-scan-records'}
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick}
-            />
+
             <WorkWeixinDepartments
               path={siteRoot + 'sys/work-weixin'}
               currentTab={currentTab}

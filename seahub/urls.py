@@ -733,7 +733,8 @@ if ENABLE_FILE_SCAN:
 from seahub.utils import EVENTS_ENABLED
 if EVENTS_ENABLED:
     urlpatterns += [
-        url(r'^sys/virus-scan-records/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
+        url(r'^sys/virus-files/all/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
+        url(r'^sys/virus-files/unhandled/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
     ]
 
 if settings.SERVE_STATIC:
