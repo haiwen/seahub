@@ -1,6 +1,8 @@
 import seahub.settings as settings
 
 ENABLE_DINGTALK = getattr(settings, 'ENABLE_DINGTALK', False)
+DINGTALK_AGENT_ID = getattr(settings, 'DINGTALK_AGENT_ID', '')
+DINGTALK_GET_USERID_BY_UNIONID = getattr(settings, 'DINGTALK_GET_USERID_BY_UNIONID', 'https://oapi.dingtalk.com/user/getUseridByUnionid')
 
 # for dingtalk qr connect
 DINGTALK_QR_CONNECT_LOGIN_REMEMBER_ME = True
@@ -21,3 +23,6 @@ DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL = getattr(settings, 'DINGTALK_DEPARTMENT
 DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL = getattr(settings, 'DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL', 'https://oapi.dingtalk.com/department/get')
 DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL = getattr(settings, 'DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL', 'https://oapi.dingtalk.com/user/listbypage')
 DINGTALK_DEPARTMENT_USER_SIZE = 100
+
+# for dingtalk message
+DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL = getattr(settings, 'DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL', 'https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2')

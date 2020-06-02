@@ -5,7 +5,6 @@
 import logging
 import requests
 
-from django.core.cache import cache
 from django.core.files.base import ContentFile
 
 from rest_framework.authentication import SessionAuthentication
@@ -28,9 +27,8 @@ from seahub.profile.models import Profile
 from seahub.avatar.models import Avatar
 from seahub.group.utils import validate_group_name
 
-from seahub.utils import normalize_cache_key
-from seahub.dingtalk.settings import ENABLE_DINGTALK, DINGTALK_DEPARTMENT_APP_KEY, \
-        DINGTALK_DEPARTMENT_APP_SECRET, DINGTALK_DEPARTMENT_GET_ACCESS_TOKEN_URL, \
+from seahub.dingtalk.utils import dingtalk_get_access_token
+from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL, \
@@ -39,34 +37,6 @@ from seahub.dingtalk.settings import ENABLE_DINGTALK, DINGTALK_DEPARTMENT_APP_KE
 DEPARTMENT_OWNER = 'system admin'
 
 logger = logging.getLogger(__name__)
-
-
-def get_dingtalk_access_token():
-
-    cache_key = normalize_cache_key('DINGTALK_ACCESS_TOKEN')
-    access_token = cache.get(cache_key, None)
-
-    if not access_token:
-
-        data = {
-            'appkey': DINGTALK_DEPARTMENT_APP_KEY,
-            'appsecret': DINGTALK_DEPARTMENT_APP_SECRET,
-        }
-        resp_json = requests.get(DINGTALK_DEPARTMENT_GET_ACCESS_TOKEN_URL,
-                params=data).json()
-
-        access_token = resp_json.get('access_token', '')
-        if not access_token:
-            logger.error('failed to get dingtalk access_token')
-            logger.error(data)
-            logger.error(DINGTALK_DEPARTMENT_GET_ACCESS_TOKEN_URL)
-            logger.error(resp_json)
-            return ''
-
-        expires_in = resp_json.get('expires_in', 7200)
-        cache.set(cache_key, access_token, expires_in)
-
-    return access_token
 
 def update_dingtalk_user_info(email, name, contact_email, avatar_url):
 
@@ -114,7 +84,7 @@ class AdminDingtalkDepartments(APIView):
         if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        access_token = get_dingtalk_access_token()
+        access_token = dingtalk_get_access_token()
         if not access_token:
             error_msg = '获取钉钉组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -151,7 +121,7 @@ class AdminDingtalkDepartmentMembers(APIView):
         if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        access_token = get_dingtalk_access_token()
+        access_token = dingtalk_get_access_token()
         if not access_token:
             error_msg = '获取钉钉组织架构成员失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -320,7 +290,7 @@ class AdminDingtalkDepartmentsImport(APIView):
             error_msg = 'department_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        access_token = get_dingtalk_access_token()
+        access_token = dingtalk_get_access_token()
         if not access_token:
             error_msg = '获取钉钉组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
