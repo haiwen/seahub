@@ -100,7 +100,7 @@ class AddReviewerDialog extends React.Component {
           <p>{gettext('Add new reviewer')}</p>
           <div className='add-reviewer'>
             <UserSelect
-              placeholder={gettext('Select users...')}
+              placeholder={gettext('Search users...')}
               onSelectChange={this.handleSelectChange}
               ref="reviewSelect"
               isMulti={true}

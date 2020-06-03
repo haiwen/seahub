@@ -11,12 +11,7 @@ const propTypes = {
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool.isRequired,
   className: PropTypes.string,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('User not found')}</div>
-  );
+  value: PropTypes.string,
 };
 
 class UserSelect extends React.Component {
@@ -24,6 +19,13 @@ class UserSelect extends React.Component {
   constructor(props) {
     super(props);
     this.options = [];
+    this.state = {
+      searchValue: '',
+    };
+  }
+
+  onInputChange = (searchValue) => {
+    this.setState({ searchValue });
   }
 
   handleSelectChange = (option) => {
@@ -61,14 +63,23 @@ class UserSelect extends React.Component {
   }
 
   render() {
+    const searchValue = this.state.searchValue;
+    const style = { margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' };
     return (
       <AsyncSelect
         isClearable
         classNamePrefix
-        components={{ NoOptionsMessage }}
+        components={{
+          NoOptionsMessage: (props) => {
+            return (
+              <div {...props.innerProps} style={style}>{searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}</div>
+            );
+          } 
+        }}
         isMulti={this.props.isMulti}
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}
+        onInputChange={this.onInputChange}
         placeholder={this.props.placeholder}
         className={`user-select ${this.props.className}`}
         value={this.props.value}
