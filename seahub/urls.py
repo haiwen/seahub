@@ -171,7 +171,8 @@ from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, 
 from seahub.api2.endpoints.admin.dingtalk import AdminDingtalkDepartments, \
         AdminDingtalkDepartmentMembers, AdminDingtalkUsersBatch, \
         AdminDingtalkDepartmentsImport
-from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, AdminVirusFileView
+from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, AdminVirusFileView, \
+    AdminVirusFilesBatchView
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 
@@ -617,6 +618,7 @@ urlpatterns = [
     # admin::virus-files
     url(r'^api/v2.1/admin/virus-files/$', AdminVirusFilesView.as_view(), name='api-v2.1-admin-virus-files'),
     url(r'^api/v2.1/admin/virus-files/(?P<virus_id>\d+)/$', AdminVirusFileView.as_view(), name='api-v2.1-admin-virus-file'),
+    url(r'^api/v2.1/admin/virus-files/batch/$', AdminVirusFilesBatchView.as_view(), name='api-v2.1-admin-virus-files-batch'),
 
     ## admin::notifications
     url(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
