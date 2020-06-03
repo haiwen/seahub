@@ -125,7 +125,7 @@ class FileParticipantDialog extends Component {
               ref="userSelect"
               isMulti={true}
               className="participant-select"
-              placeholder={gettext('Select users...')}
+              placeholder={gettext('Search users...')}
               onSelectChange={this.handleSelectChange}
             />
             <Button className="btn btn-secondary ml-2" onClick={this.addFileParticipant}>{gettext('Add')}</Button>
