@@ -100,16 +100,16 @@ class AdminVirusFileView(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        virus_record = get_virus_file_by_vid(virus_id)
-        if not virus_record:
-            error_msg = 'Virus record %d not found.' % virus_id
+        virus_file = get_virus_file_by_vid(virus_id)
+        if not virus_file:
+            error_msg = 'Virus file %s not found.' % virus_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = os.path.dirname(virus_record.file_path)
-        filename = os.path.basename(virus_record.file_path)
+        parent_dir = os.path.dirname(virus_file.file_path)
+        filename = os.path.basename(virus_file.file_path)
         try:
             seafile_api.del_file(
-                virus_record.repo_id, parent_dir, filename, request.user.username
+                virus_file.repo_id, parent_dir, filename, request.user.username
             )
             delete_virus_file(virus_id)
         except Exception as e:
