@@ -107,18 +107,11 @@ class Item extends Component {
   renderExpiration = () => {
     let item = this.props.item;
     if (!item.expire_date) {
-      return (
-        <Fragment>--</Fragment>
-      );
+      return '--';
     }
-    let expire_date = moment(item.expire_date).format('YYYY-MM-DD');
-    return (
-      <Fragment>
-        {item.is_expired ?
-          <span className="error">{expire_date}</span> : expire_date
-        }
-      </Fragment>
-    );
+    const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
+    const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
+    return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
   }
 
   render() {
