@@ -67,14 +67,14 @@ function run_tests() {
     	  rvalue=0
     fi
 
-    if [[ ${TRAVIS} != "" ]]; then
-        # On travis-ci, dump seahub logs when test finished
-        for logfile in /tmp/logs/*.log; do
-            echo -e "\nLog file $logfile:\n"
-            cat "${logfile}"
-            echo
-        done
-    fi
+    # if [[ ${TRAVIS} != "" ]]; then
+    #     # On travis-ci, dump seahub logs when test finished
+    #     for logfile in /tmp/logs/*.log; do
+    #         echo -e "\nLog file $logfile:\n"
+    #         cat "${logfile}"
+    #         echo
+    #     done
+    # fi
     exit $rvalue
 }
 
