@@ -3,8 +3,7 @@ name: Seahub Dist CI
 on:
   push:
     branches:
-      - master
-      - "8.0"
+      - cloud-seafile-com
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,6 +27,6 @@ jobs:
 
       - name: Build dist branch
         run: |
-          cd $GITHUB_WORKSPACE/tests/ 
-          chmod +x github_actions_dist.sh 
+          cd $GITHUB_WORKSPACE/tests/
+          chmod +x github_actions_dist.sh
           ./github_actions_dist.sh
