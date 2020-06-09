@@ -177,14 +177,12 @@ class AdminOrgUsers(APIView):
 
         is_active = active == 'true'
 
-        try:
-            User.objects.get(email=email)
-            user_exists = True
-        except User.DoesNotExist:
-            user_exists = False
+        from seahub.utils.auth import gen_user_virtual_id
+        contact_email = email
+        email = gen_user_virtual_id()
 
-        if user_exists:
-            error_msg = 'User %s already exists.' % email
+        if Profile.objects.get_profile_by_contact_email(contact_email):
+            error_msg = "User %s already exists." % contact_email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # check user number limit by license
@@ -205,6 +203,7 @@ class AdminOrgUsers(APIView):
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                     is_active=is_active)
+            Profile.objects.add_or_update(email, contact_email=contact_email)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'Fail to add user %s.' % email

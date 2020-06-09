@@ -601,11 +601,6 @@ class AdminUsers(APIView):
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        contact_email = request.data.get('contact_email', None)
-        if contact_email and not is_valid_email(contact_email):
-            error_msg = 'contact_email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
             try:
@@ -626,14 +621,12 @@ class AdminUsers(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            User.objects.get(email=email)
-            user_exist = True
-        except User.DoesNotExist:
-            user_exist = False
+        from seahub.utils.auth import gen_user_virtual_id
+        contact_email = email
+        email = gen_user_virtual_id()
 
-        if user_exist:
-            error_msg = "User %s already exists." % email
+        if Profile.objects.get_profile_by_contact_email(contact_email):
+            error_msg = "User %s already exists." % contact_email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get('password', None)
@@ -652,20 +645,16 @@ class AdminUsers(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        add_user_tip = _('Successfully added user %(user)s.') % {'user': email}
+        add_user_tip = _('Successfully added user %(user)s.') % {'user': contact_email}
         if IS_EMAIL_CONFIGURED and SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
-            c = {'user': request.user.username, 'email': email, 'password': password}
+            c = {'user': request.user.username, 'email': contact_email, 'password': password}
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
-                                'sysadmin/user_add_email.html',
-                                c,
-                                None,
-                                [email2contact_email(email)])
-
-                add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
+                                'sysadmin/user_add_email.html', c, None, [contact_email])
+                add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': contact_email}
             except Exception as e:
                 logger.error(str(e))
-                add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
+                add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': contact_email}
 
         user_info = get_user_info(email)
         user_info['add_user_tip'] = add_user_tip
