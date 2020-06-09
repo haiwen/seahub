@@ -191,20 +191,24 @@ class AdminOrganizations(APIView):
             error_msg = 'Failed to create organization, please try again later.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            User.objects.get(email=owner_email)
-        except User.DoesNotExist:
-            pass
-        else:
-            error_msg = "User %s already exists." % owner_email
+        from seahub.profile.models import Profile
+        from seahub.utils.auth import gen_user_virtual_id
+        contact_email = owner_email
+        owner_email = gen_user_virtual_id()
+
+        if Profile.objects.get_profile_by_contact_email(contact_email):
+            error_msg = "User %s already exists." % contact_email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             new_user = User.objects.create_user(owner_email, owner_password,
                                                 is_staff=False, is_active=True)
+            Profile.objects.add_or_update(username=new_user.username,
+                    contact_email=contact_email,
+                    nickname=contact_email.split('@')[0])
         except User.DoesNotExist as e:
             logger.error(e)
-            error_msg = 'Failed to add user %s.' % owner_email
+            error_msg = 'Failed to add user %s.' % contact_email
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
