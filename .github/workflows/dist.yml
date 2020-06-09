@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - cloud-seafile-com
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
