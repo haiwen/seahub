@@ -26,6 +26,7 @@ from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.utils.auth import get_user_virtual_id_by_contact_email
 from seahub.share.models import ExtraSharePermission
 
 try:
@@ -573,6 +574,8 @@ class AuthBackend(object):
         return user
 
     def authenticate(self, username=None, password=None):
+        username = get_user_virtual_id_by_contact_email(username)
+
         user = self.get_user(username)
         if not user:
             return None
