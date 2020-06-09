@@ -124,6 +124,9 @@ class PasswordResetForm(forms.Form):
 
         # TODO: add filter method to UserManager
         try:
+            from seahub.utils.auth import get_user_virtual_id_by_contact_email
+            contact_email = email
+            email = get_user_virtual_id_by_contact_email(email)
             self.users_cache = User.objects.get(email=email)
         except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
@@ -145,16 +148,16 @@ class PasswordResetForm(forms.Form):
         else:
             site_name = domain_override
 
+        contact_email = email2contact_email(user.username)
         c = {
-            'email': user.username,
+            'email': contact_email,
             'uid': int_to_base36(user.id),
             'user': user,
             'token': token_generator.make_token(user),
         }
 
         send_html_email(_("Reset Password on %s") % site_name,
-                        email_template_name, c, None,
-                        [email2contact_email(user.username)])
+                        email_template_name, c, None, [contact_email])
 
 class SetPasswordForm(forms.Form):
     """

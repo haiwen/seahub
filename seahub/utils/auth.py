@@ -1,6 +1,7 @@
 import os
 from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT
 from seahub.utils import gen_token
+from seahub.profile.models import Profile
 
 VIRTUAL_ID_EMAIL_DOMAIN = '@auth.local'
 
@@ -24,3 +25,7 @@ def get_custom_login_bg_image_path():
 
 def gen_user_virtual_id():
     return gen_token(max_length=32) + VIRTUAL_ID_EMAIL_DOMAIN
+
+def get_user_virtual_id_by_contact_email(contact_email):
+    p = Profile.objects.get_profile_by_contact_email(contact_email)
+    return p.user if p else contact_email
