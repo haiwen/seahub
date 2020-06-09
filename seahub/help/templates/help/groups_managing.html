@@ -1,0 +1,15 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+<h3 class="hd">{% trans "Managing groups" %}</h3>
+<p>{% trans "Creating a group is a convenient way to share files to many people. In Seafile, you can create and manage a group easily." %}</p>
+<p>{% trans "Here is how groups work in Seafile:" %}</p>
+<ul>
+  <li>{% trans "Each group has a group admin. The admin is the creator of the group by default. The group admin can add more group admins. He/she can also transfer the ownership of the group to another member." %}</li>
+  <li>{% trans "The group admin can add/delete members in the group. And he/she can also unshare a library in the group." %}</li>
+</ul>
+<p>{% trans "To see all the groups you're in, click on the \"Groups\" tab on the left panel. You'll see all the groups you're in. Clicking into any group, you'll see the libraries shared into this group." %}</p>
+<p>{% trans "To create a new group, click on the \"Groups\" tab on the left panel. Then click on \"All Groups\". In the all group page, you can click \"New Group\" button to create a group." %}</p>
+<p>{% blocktrans %}See <a href="{{ SITE_ROOT }}help/sharing_files_and_folders/">sharing files and folders</a> about how to share libraries or folders to a group.{% endblocktrans %}</p>
+{% endblock %}

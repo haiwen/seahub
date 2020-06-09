@@ -1980,8 +1980,8 @@ a.sf-popover-item {
 	padding:20px;
 }
 .help-con img {
-    max-width:100%;
-    margin:5px 0;
+    max-width: 80%;
+    margin: 5px 0;
 }
 #right-panel.help-con .hd {
     font-weight:normal;

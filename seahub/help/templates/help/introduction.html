@@ -1,0 +1,12 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+
+<h3 class="hd">{% trans "Introduction" %}</h3>
+
+<p>{% trans "Seafile is an enterprise file hosting platform with high reliability and performance." %}</p>
+<p>{% blocktrans %}Seafile contains a web interface for you to manage and share files. It has two kinds of desktop clients, <a href="{{ SITE_ROOT }}help/install_sync/">the file syncing client</a> and <a href="{{ SITE_ROOT }}help/using_drive_client">the drive client</a>. It also has mobile clients for Android and iOS.{% endblocktrans %}</p>
+<p>{% trans "You can download the clients in <a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web site</a>." %}</p>
+<p>{% trans "If this manual does not contain the information you needed, you can seek help in our forum: <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a>." %}</p>
+{% endblock %}
