@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
 
@@ -196,7 +197,7 @@ class AdminVirusFilesBatchView(APIView):
             else:
                 result['failed'].append({
                     'virus_id': virus_id,
-                    'error_msg': 'Virus file not found.'
+                    'error_msg': _('Virus file not found.')
                 })
                 continue
 
@@ -214,7 +215,7 @@ class AdminVirusFilesBatchView(APIView):
                     logger.error(e)
                     result['failed'].append({
                         'virus_id': virus_id,
-                        'error_msg': 'Internal Server Error'
+                        'error_msg': _('Internal Server Error')
                     })
                     continue
 
@@ -229,7 +230,7 @@ class AdminVirusFilesBatchView(APIView):
                     logger.error(e)
                     result['failed'].append({
                         'virus_id': virus_id,
-                        'error_msg': 'Internal Server Error'
+                        'error_msg': _('Internal Server Error')
                     })
                     continue
 
@@ -244,7 +245,7 @@ class AdminVirusFilesBatchView(APIView):
                     logger.error(e)
                     result['failed'].append({
                         'virus_id': virus_id,
-                        'error_msg': 'Internal Server Error'
+                        'error_msg': _('Internal Server Error')
                     })
                     continue
 
