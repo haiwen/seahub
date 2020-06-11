@@ -181,8 +181,8 @@ class AdminVirusFilesBatchView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = request.POST.get('operation', None)
-        if operation not in ('delete-virus', 'ignore-virus', 'cancel-ignore'):
-            error_msg = "operation can only be 'delete-virus', 'ignore-virus' or 'cancel-ignore'."
+        if operation not in ('delete-virus', 'ignore-virus', 'cancel-ignore-virus'):
+            error_msg = "operation can only be 'delete-virus', 'ignore-virus' or 'cancel-ignore-virus'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         result = dict(failed=[])
@@ -235,7 +235,7 @@ class AdminVirusFilesBatchView(APIView):
 
                 result['success'].append({'virus_id': virus_id})
 
-        if operation == 'cancel-ignore':
+        if operation == 'cancel-ignore-virus':
             for virus_file in virus_files:
                 virus_id = int(virus_file.vid)
                 try:
