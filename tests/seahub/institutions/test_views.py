@@ -5,6 +5,7 @@ from django.test import override_settings
 
 from seahub.base.accounts import User
 from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.institutions.utils import is_institution_admin
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
@@ -112,3 +113,16 @@ class UserToggleStatusTest(InstTestBase):
         u = User.objects.get(email=self.admin.username)
         assert u.is_active is False
         assert u.enc_password == old_passwd
+
+
+class UserIsAdminTest(InstTestBase):
+    @override_settings(
+        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MULTI_INSTITUTION=True
+    )
+
+    def test_is_institution_admin(self):
+        assert is_institution_admin(self.user.username) == True
+        assert is_institution_admin(self.admin.username) == False
+        assert is_institution_admin(self.user.username, self.inst) == True
+        assert is_institution_admin(self.admin.username, self.inst) == False
