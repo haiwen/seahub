@@ -165,7 +165,7 @@ class AdminVirusFilesBatchView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
-        """ Delete virus files, ignore virus files, in batch.
+        """ Delete virus files, ignore or cancel ignore virus files, in batch.
 
         Permission checking:
         1. admin user.
@@ -181,8 +181,8 @@ class AdminVirusFilesBatchView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = request.POST.get('operation', None)
-        if operation not in ('delete-virus', 'ignore-virus'):
-            error_msg = "operation can only be 'delete-virus' or 'ignore-virus'."
+        if operation not in ('delete-virus', 'ignore-virus', 'cancel-ignore'):
+            error_msg = "operation can only be 'delete-virus', 'ignore-virus' or 'cancel-ignore'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         result = dict(failed=[])
@@ -221,16 +221,25 @@ class AdminVirusFilesBatchView(APIView):
                 result['success'].append({'virus_id': virus_id})
 
         if operation == 'ignore-virus':
-            ignore = request.POST.get('ignore')
-            if ignore not in ('true', 'false'):
-                error_msg = 'ignore invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            ignore = to_python_boolean(ignore)
-
             for virus_file in virus_files:
                 virus_id = int(virus_file.vid)
                 try:
-                    operate_virus_file(virus_id, ignore)
+                    operate_virus_file(virus_id, True)
+                except Exception as e:
+                    logger.error(e)
+                    result['failed'].append({
+                        'virus_id': virus_id,
+                        'error_msg': 'Internal Server Error'
+                    })
+                    continue
+
+                result['success'].append({'virus_id': virus_id})
+
+        if operation == 'cancel-ignore':
+            for virus_file in virus_files:
+                virus_id = int(virus_file.vid)
+                try:
+                    operate_virus_file(virus_id, False)
                 except Exception as e:
                     logger.error(e)
                     result['failed'].append({
