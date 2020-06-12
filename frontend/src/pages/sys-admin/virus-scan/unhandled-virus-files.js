@@ -330,12 +330,54 @@ class UnhandledVirusFiles extends Component {
     });
   }
 
+  handleSelectedItems = (op) => {
+    // op: 'delete-virus', 'ignore-virus'
+    const virusIDs = this.state.virusFiles
+      .filter(item => {
+        if (op == 'delete-virus') {
+          return item.isSelected && !item.has_deleted;
+        } else {
+          return item.isSelected && !item.has_ignored;
+        }
+      })
+      .map(item => item.virus_id);
+    seafileAPI.batchProcessVirusFiles(virusIDs, op).then((res) => {
+      let fileList = this.state.virusFiles;
+      res.data.success.forEach(item => {
+        let file = fileList.find(file => file.virus_id == item.virus_id);
+        if (op == 'delete-virus') {
+          file.has_deleted = true;
+        } else {
+          file.has_ignored = true;
+        }
+      });
+      this.setState({
+        virusFiles: fileList
+      });
+
+      res.data.failed.forEach(item => {
+        const file = fileList.find(file => file.virus_id == item.virus_id);
+        let errMsg = op == 'delete-virus' ?
+          gettext('Failed to delete %(virus_file) from library %(library): %(error_msg)') :
+          gettext('Failed to ignore %(virus_file) from library %(library): %(error_msg)');
+        errMsg = errMsg.replace('%(virus_file)', file.file_path)
+          .replace('%(library)', file.repo_name)
+          .replace('%(error_msg)', item.error_msg);
+        toaster.danger(errMsg);
+      });
+    }).catch((error) => {
+      toaster.danger(Utils.getErrorMsg(error));
+    });
+  }
+
   deleteSelectedItems = () => {
-    // TODO: complete it when python API is offered
+    const op = 'delete-virus';
+    this.handleSelectedItems(op);
   }
 
   ignoreSelectedItems = () => {
-    // TODO: complete it when python API is offered
+    const op = 'ignore-virus';
+    this.handleSelectedItems(op);
   }
 
   render() {
@@ -343,10 +385,10 @@ class UnhandledVirusFiles extends Component {
       <Fragment>
         {this.state.virusFiles.some(item => item.isSelected) ? (
           <MainPanelTopbar>
-          <Fragment>
-            <Button onClick={this.deleteSelectedItems} className="operation-item">{gettext('Delete')}</Button>
-            <Button onClick={this.ignoreSelectedItems} className="operation-item">{gettext('Ignore')}</Button>
-          </Fragment>
+            <Fragment>
+              <Button onClick={this.deleteSelectedItems} className="operation-item">{gettext('Delete')}</Button>
+              <Button onClick={this.ignoreSelectedItems} className="operation-item">{gettext('Ignore')}</Button>
+            </Fragment>
           </MainPanelTopbar>
         ) : <MainPanelTopbar />
         }
