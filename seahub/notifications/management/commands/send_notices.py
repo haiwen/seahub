@@ -298,12 +298,14 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
+            user_name = email2nickname(to_user)
             contact_email = Profile.objects.get_contact_email_by_user(to_user)
             to_user = contact_email  # use contact email if any
             c = {
                 'to_user': to_user,
                 'notice_count': count,
                 'notices': notices,
+                'user_name': user_name,
                 }
 
             try:

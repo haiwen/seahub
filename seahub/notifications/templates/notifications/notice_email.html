@@ -4,7 +4,7 @@
 
 {% block email_con %}
 
-<p style="font-size:14px; line-height: 1.5; color:#121214; margin:.2em 0 12px;">{% blocktrans with name=to_user|email2nickname %}Hi, {{ name }}{% endblocktrans %}</p>
+<p style="font-size:14px; line-height: 1.5; color:#121214; margin:.2em 0 12px;">{% blocktrans with name=user_name %}Hi, {{ name }}{% endblocktrans %}</p>
 <p style="font-size:14px; line-height: 1.5; color:#434144; margin:.2em 0;">
 {% blocktrans count num=notice_count %}
 You've got 1 new notice on {{ site_name }}:
