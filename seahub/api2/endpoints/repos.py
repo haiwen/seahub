@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.db.models import Q
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -19,12 +20,12 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
 from seahub.views import check_folder_permission, list_inner_pub_repos
-from seahub.share.models import ExtraSharePermission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out, get_related_users_by_repo, normalize_repo_status_code
+        repo_has_been_shared_out, normalize_repo_status_code
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
@@ -202,6 +203,11 @@ class ReposView(APIView):
 
             group_repos.sort(key=lambda x: x.last_modify, reverse=True)
 
+            repos_with_admin_share_to = []
+            group_id_list = [item.group_id for item in group_repos]
+            for item in ExtraGroupsSharePermission.objects.filter(Q(group_id__in=group_id_list)).values('repo_id'):
+                repos_with_admin_share_to.append(item['repo_id'])
+
             # Reduce memcache fetch ops.
             share_from_set = {x.user for x in group_repos}
             modifiers_set = {x.last_modifier for x in group_repos}
@@ -229,6 +235,12 @@ class ReposView(APIView):
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version == 3 else '',
                 }
+
+                if r.repo_id in repos_with_admin_share_to:
+                    repo_info['is_admin'] = True
+                else:
+                    repo_info['is_admin'] = False
+
                 repo_info_list.append(repo_info)
 
         if filter_by['public'] and request.user.permissions.can_view_org():
