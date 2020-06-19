@@ -28,7 +28,7 @@ $('#share-passwd-form').on('submit', function() {
     var form = $(this),
         pwd = $('[name="password"]', form).val(),
         err = $('.error',form);
-    if (!$.trim(pwd)) {
+    if (!pwd.trim()) {
         err.html("{% trans "Please enter the password." %}").removeClass('hide');
         return false;
     }

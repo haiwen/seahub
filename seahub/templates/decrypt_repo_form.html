@@ -19,7 +19,7 @@
 <script type="text/javascript">
   $('#repo-decrypt-form').on('submit', function() {
     var $form = $(this),
-        password = $.trim($('[name="password"]', $form).val()),
+        password = $('[name="password"]', $form).val().trim(),
         $error = $('.error', $form);
 
     if (!password) {

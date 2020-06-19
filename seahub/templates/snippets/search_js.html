@@ -1,6 +1,6 @@
 // search-form: top-search-form, advanced-search-form, search-form in search result page
 $('.search-form').on('submit', function() {
-    if (!$.trim($(this).find('.search-input').val())) {
+    if (!$(this).find('.search-input').val().trim()) {
         return false;
     }
 });
@@ -23,7 +23,7 @@ $('.search-filetypes .item:last-child').on('click', function() {
 $('#advanced-search-form').on('submit', function() {
     if ($('#custom-search-ftypes').attr('checked') &&
         $('.custom-ftype-options .checkbox-checked').length == 0 &&
-        !$.trim($('.custom-ftype-options .fileext-input').val())) {
+        $('.custom-ftype-options .fileext-input').val().trim()) {
         $(this).find('.error').removeClass('hide');
         return false;
     }
