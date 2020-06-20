@@ -47,7 +47,7 @@ $(document).on('click', function(e) {
 
 // search: disable submit when input nothing
 $('.search-form').on('submit', function() {
-    if (!$.trim($(this).find('.search-input').val())) {
+    if (!$(this).find('.search-input').val().trim()) {
         return false;
     }
 });
@@ -402,7 +402,7 @@ function userInputOPtionsForSelect2(user_search_url) {
 
         createSearchChoice: function(term) {
             return {
-                'id': $.trim(term)
+                'id': term.trim()
             };
         },
 

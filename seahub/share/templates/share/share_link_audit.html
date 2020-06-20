@@ -26,7 +26,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('#get-code').on('click', function() {
-    var email = $.trim($('input[name="email"]').val());
+    var email = $('input[name="email"]').val().trim();
     if (!email) {
         return false;
     }
@@ -70,8 +70,8 @@ $('#get-code').on('click', function() {
 });
 
 $('#link-audit-form').on('submit', function() {
-    var email = $.trim($('[name="email"]').val());
-    var code = $.trim($('[name="code"]').val());
+    var email = $('[name="email"]').val().trim();
+    var code = $('[name="code"]').val().trim();
     if (!email || !code) {
         return false;
     }
