@@ -253,9 +253,11 @@ urlpatterns = [
     url(r'^org/$', react_fake_view, name="org"),
     url(r'^invitations/$', react_fake_view, name="invitations"),
 
+    ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]+)/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
+    url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
 
     url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
 

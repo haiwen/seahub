@@ -1,0 +1,18 @@
+{% load seahub_tags i18n %}
+<div class="item">
+    <p>{% trans "Used:" %} {{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %}/ {{ space_quota|seahub_filesizeformat }} {% endif %}</p>
+
+    {% if space_quota > 0 %}
+    <div id="quota-bar">
+        <span id="quota-usage" class="usage" style="width:{{rates.space_usage}};"></span>
+    </div>
+    {% endif %}
+
+    {% if user.trialing %}
+    <p><a href="{{user.trial_info.payment_url}}">Trial expires at {{user.trial_info.expire_date|date:"Y-m-d"}}</a></p>
+    {% endif %}
+</div>
+
+{% if ENABLE_PAYMENT %}
+<a class="item" href="{{ payment_url }}">{% trans "Payment" %}</a>
+{% endif %}

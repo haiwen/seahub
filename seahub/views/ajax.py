@@ -347,6 +347,56 @@ def upload_file_done(request):
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
 
+@login_required_ajax
+def space_and_traffic(request):
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    # space & quota calculation
+    org = ccnet_api.get_orgs_by_user(username)
+    if not org:
+        space_quota = seafile_api.get_user_quota(username)
+        space_usage = seafile_api.get_user_self_usage(username)
+    else:
+        org_id = org[0].org_id
+        space_quota = seafile_api.get_org_user_quota(org_id, username)
+        space_usage = seafile_api.get_org_user_quota_usage(org_id, username)
+
+    rates = {}
+    if space_quota > 0:
+        rates['space_usage'] = str(float(space_usage) / space_quota * 100) + '%'
+    else:                       # no space quota set in config
+        rates['space_usage'] = '0%'
+
+    # payment url, TODO: need to remove from here.
+    payment_url = ''
+    ENABLE_PAYMENT = getattr(settings, 'ENABLE_PAYMENT', False)
+    if ENABLE_PAYMENT:
+        if is_org_context(request):
+            if request.user.org and bool(request.user.org.is_staff) is True:
+                # payment for org admin
+                payment_url = reverse('org_plan')
+            else:
+                # no payment for org members
+                ENABLE_PAYMENT = False
+        else:
+            # payment for personal account
+            payment_url = reverse('plan')
+
+    ctx = {
+        "org": org,
+        "space_quota": space_quota,
+        "space_usage": space_usage,
+        "rates": rates,
+        "SHOW_TRAFFIC": SHOW_TRAFFIC,
+        "ENABLE_PAYMENT": ENABLE_PAYMENT,
+        "payment_url": payment_url,
+        "user": request.user
+    }
+
+    html = render_to_string('snippets/space_and_traffic.html', ctx)
+    return HttpResponse(json.dumps({"html": html}), content_type=content_type)
+
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
 
