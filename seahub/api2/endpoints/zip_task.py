@@ -203,11 +203,6 @@ class ZipTaskView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not json.loads(seafile_api.is_dir_downloadable(repo_id, parent_dir,
-                request.user.username, repo_folder_permission))['is_downloadable']:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         # get file server access token
         is_windows = 0
         if is_windows_operating_system(request):
@@ -229,6 +224,11 @@ class ZipTaskView(APIView):
                 error_msg = 'Unable to download directory "%s": size is too large.' % dir_name
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, full_dir_path,
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             fake_obj_id = {
                 'obj_id': dir_id,
                 'dir_name': dir_name,
@@ -238,6 +238,7 @@ class ZipTaskView(APIView):
         if download_type == 'download-multi':
             dirent_list = []
             total_size = 0
+            full_dirent_path_list = []
             for dirent_name in dirent_name_list:
                 dirent_name = dirent_name.strip('/')
                 dirent_list.append(dirent_name)
@@ -253,9 +254,16 @@ class ZipTaskView(APIView):
                 else:
                     total_size += current_dirent.size
 
+                full_dirent_path_list.append(full_dirent_path)
+
             if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
                 error_msg = _('Total size exceeds limit.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, full_dirent_path_list,
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             fake_obj_id = {
                 'parent_dir': parent_dir,
