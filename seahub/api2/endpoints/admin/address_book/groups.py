@@ -220,22 +220,23 @@ class AdminAddressBookGroup(APIView):
             return Response({'success': True})
 
         org_id = None
-        org_has_repo = False
         if is_org_context(request):
             # request called by org admin
             org_id = request.user.org.org_id
 
         try:
-            has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
             if org_id:
-                org_has_repo = seafile_api.org_if_group_has_group_owned_repo(org_id, group_id)
+                has_repo = seafile_api.org_if_group_has_group_owned_repo(org_id, group_id)
+            else:
+                has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
+
             child_groups = ccnet_api.get_child_groups(group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if has_repo or org_has_repo:
+        if has_repo:
             error_msg = _('There are libraries in this department.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
