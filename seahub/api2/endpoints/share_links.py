@@ -2,12 +2,11 @@
 import os
 import stat
 import json
-import pytz
 import logging
 import posixpath
 from constance import config
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import dateutil.parser
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -16,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.utils import timezone
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 
@@ -281,13 +281,13 @@ class ShareLinks(APIView):
         elif expiration_time:
 
             try:
-                expire_date = datetime.fromisoformat(expiration_time)
+                expire_date = dateutil.parser.isoparse(expiration_time)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            expire_date = expire_date.astimezone(pytz.UTC).replace(tzinfo=None)
+            expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
 
             if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
                 expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
