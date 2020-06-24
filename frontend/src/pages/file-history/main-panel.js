@@ -4,7 +4,7 @@ import Prism from 'prismjs';
 import Loading from '../../components/loading';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 
-require('@seafile/seafile-editor/dist/editor/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-highlight-package');
 
 const contentClass = 'markdown-viewer-render-content';
 const propTypes = {

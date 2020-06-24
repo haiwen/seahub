@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, canGenerateShareLink } from '../../utils/constants';
-import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
+import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbar-component/editor-toolbar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
-import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
+import FileInfo from '@seafile/seafile-editor/dist/components/topbar-component/file-info';
 
 
 class MoreMenu extends React.PureComponent {
@@ -54,7 +54,7 @@ class CDOCTopbar extends React.Component {
         <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
           <FileInfo
             toggleStar={this.props.toggleStar}
-            editorUtilities={this.props.editorUtilities}
+            editorApi={this.props.editorApi}
             fileInfo={this.props.fileInfo}
             showDraftSaved={this.props.showDraftSaved}
           />

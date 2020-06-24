@@ -15,11 +15,11 @@ import ReviewComments from './components/review-list-view/review-comments';
 import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
-import { findRange } from '@seafile/slate-react';
+import  { ReactEditor }  from '@seafile/slate-react'; 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
-import { Value, Document, Block } from 'slate';
+import { Range, Editor } from 'slate';
 import ModalPortal from './components/modal-portal';
 import reviewComment from './models/review-comment.js';
 
@@ -31,9 +31,11 @@ import './css/toolbar.css';
 import './css/dirent-detail.css';
 import './css/draft.css';
 
-require('@seafile/seafile-editor/dist/editor/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-highlight-package');
 const URL = require('url-parse');
 var moment = require('moment');
+
+const { toSlateRange: findRange, toDOMNode } = ReactEditor;
 
 class Draft extends React.Component {
   constructor(props) {
@@ -242,18 +244,19 @@ class Draft extends React.Component {
   }
 
   getChangedNodes = () => {
-    const nodes = this.refs.diffViewer.value.document.nodes;
+    const nodes = this.refs.diffViewer.value;
     let keys = [];
     let lastDiffState = '';
-    nodes.map((node) => {
-      if (node.data.get('diff_state') === 'diff-added' && lastDiffState !== 'diff-added') {
-        keys.push(node.key);
-      } else if (node.data.get('diff_state') === 'diff-removed' && lastDiffState !== 'diff-removed') {
-        keys.push(node.key);
-      } else if (node.data.get('diff_state') === 'diff-replaced' && lastDiffState !== 'diff-replaced') {
-        keys.push(node.key);
+    nodes.map((node, index) => {
+      const diff_state = node.data['diff_state'];
+      if (diff_state === 'diff-added' && lastDiffState !== 'diff-added') {
+        keys.push(index);
+      } else if (diff_state === 'diff-removed' && lastDiffState !== 'diff-removed') {
+        keys.push(index);
+      } else if (diff_state === 'diff-replaced' && lastDiffState !== 'diff-replaced') {
+        keys.push(index);
       }
-      lastDiffState = node.data.get('diff_state');
+      lastDiffState = node.data.diff_state;
     });
     this.setState({
       changedNodes: keys
@@ -271,7 +274,8 @@ class Draft extends React.Component {
     }
     const win = window;
     let key = this.state.changedNodes[this.changeIndex];
-    let element = win.document.querySelector(`[data-key="${key}"]`);
+    let node = window.viewer.children[key];
+    let element = toDOMNode(window.viewer, node);
     // fix code-block or tables
     while (element.className.indexOf('diff-') === -1 && element.tagName !== 'BODY') {
       element = element.parentNode;
@@ -306,26 +310,16 @@ class Draft extends React.Component {
   }
 
   scrollToQuote = (newIndex, oldIndex, quote) => {
-    const nodes = this.refs.diffViewer.value.document.nodes;
-    let key;
-    nodes.map((node) => {
-      if (node.data.get('old_index') == oldIndex && node.data.get('new_index') == newIndex) {
-        key = node.key;
+    const nodes = this.refs.diffViewer.value;
+    let commentNode = nodes.find((node) => {
+      if (node.data['old_index'] == oldIndex && node.data['new_index'] == newIndex) {
+        return node
       }
     });
-    if (typeof(key) !== 'string') {
-      nodes.map((node) => {
-        if (node.text.indexOf(quote) > 0) {
-          key = node.key;
-        }
-      });
-    }
-    if (typeof(key) === 'string') {
+    if (commentNode) {
+      const element = toDOMNode(window.viewer, commentNode);
+      if (!element) return;
       const win = window;
-      let element = win.document.querySelector(`[data-key="${key}"]`);
-      while (element.tagName === 'CODE') {
-        element = element.parentNode;
-      }
       const scroller = this.findScrollContainer(element, win);
       const isWindow = scroller == win.document.body || scroller == win.document.documentElement;
       if (isWindow) {
@@ -516,121 +510,56 @@ class Draft extends React.Component {
     }
   } 
 
+  getDomNodeByPath = (path) => {
+    let node, parent = document.querySelector('.viewer-component');
+    while(typeof path[0] === 'number' && parent) {
+      node = parent.children[path[0]];
+      if (!node.getAttribute('data-slate-node')) {
+        node = node.children[0];
+      }
+      path.shift();
+      parent = node;
+    }
+    return node;
+  }
 
-  setBtnPosition = (e) => {
+  setBtnPosition = () => {
     const nativeSelection = window.getSelection();
     if (!nativeSelection.rangeCount) {
-      this.range = null;
       return;
     }
-    if (nativeSelection.isCollapsed === false) {
-      const nativeRange = nativeSelection.getRangeAt(0);
-      const focusNode = nativeSelection.focusNode;
-      if ((focusNode.tagName === 'I') ||
-          (focusNode.nodeType !== 3 && focusNode.getAttribute('class') === 'language-type')) {
-        // fix select last paragraph
-        let fragment = nativeRange.cloneContents();
-        let startNode = fragment.firstChild.firstChild;
-        if (!startNode) {
-          return;
-        }
-        let newNativeRange = document.createRange();
-        newNativeRange.setStartBefore(startNode);
-        newNativeRange.setEndAfter(startNode);
-        this.range =  findRange(newNativeRange, this.refs.diffViewer);
-      } else {
-        this.range = findRange(nativeRange, this.refs.diffViewer);
-      }
-      if (!this.range) {
-        return;
-      }
-      let rect = nativeRange.getBoundingClientRect();
-      // fix Safari bug
-      if (navigator.userAgent.indexOf('Chrome') < 0 && navigator.userAgent.indexOf('Safari') > 0) {
-        if (nativeRange.collapsed && rect.top == 0 && rect.height == 0) {
-          if (nativeRange.startOffset == 0) {
-            nativeRange.setEnd(nativeRange.endContainer, 1);
-          } else {
-            nativeRange.setStart(nativeRange.startContainer, nativeRange.startOffset - 1);
-          }
-          rect = nativeRange.getBoundingClientRect();
-          if (rect.top == 0 && rect.height == 0) {
-            if (nativeRange.getClientRects().length) {
-              rect = nativeRange.getClientRects()[0];
-            }
-          }
-        }
-      }
-      let style = this.refs.commentbtn.style;
-      style.top = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
+    const nativeRange = nativeSelection.getRangeAt(0);
+    let selection = null;
+    let style = this.refs.commentbtn.style;
+    try {
+      selection = findRange(window.viewer, nativeRange);
+    } catch (err) {
+      style.top = '-1000px';
+      return;
     }
-    else {
-      let style = this.refs.commentbtn.style;
+    if (!selection || Range.isCollapsed(selection)) {
+      style.top = '-1000px';
+      return;
+    }
+    this.range = selection;
+    const focusNodePath = selection.anchor.path.slice();
+    focusNodePath.pop();
+    const focusNode = this.getDomNodeByPath(focusNodePath);
+    style.right = '0px';
+
+    if (focusNode) {
+      style.top = `${focusNode.offsetTop}px`;
+    } else {
       style.top = '-1000px';
     }
   }
 
   getQuote = () => {
-    let range = this.range;
-    if (!range) return;
-    this.quote = '';
-    const { document } = this.refs.diffViewer.value;
-    let { anchor, focus } = range;
-    const anchorText = document.getNode(anchor.key);
-    const focusText = document.getNode(focus.key);
-    const anchorInline = document.getClosestInline(anchor.key);
-    const focusInline = document.getClosestInline(focus.key);
-    // COMPAT: If the selection is at the end of a non-void inline node, and
-    // there is a node after it, put it in the node after instead. This
-    // standardizes the behavior, since it's indistinguishable to the user.
-    if (anchorInline && anchor.offset == anchorText.text.length) {
-      const block = document.getClosestBlock(anchor.key);
-      const nextText = block.getNextText(anchor.key);
-      if (nextText) {
-        range = range.moveAnchorTo(nextText.key, 0);
-      }
-    }
-    if (focusInline && focus.offset == focusText.text.length) {
-      const block = document.getClosestBlock(focus.key);
-      const nextText = block.getNextText(focus.key);
-      if (nextText) {
-        range = range.moveFocusTo(nextText.key, 0); 
-      }
-    }
-    let fragment = document.getFragmentAtRange(range);
-    let nodes = this.removeNullNode(fragment.nodes);
-    let newFragment = Document.create({
-      nodes: nodes
-    });
-    let newValue = Value.create({
-      document: newFragment
-    });
-    this.quote = serialize(newValue.toJSON());
-    let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
-    let node = document.getNode(blockPath);
-    this.newIndex = node.data.get('new_index');
-    this.oldIndex = node.data.get('old_index');
-  }
-
-  removeNullNode = (oldNodes) => {
-    let newNodes = [];
-    oldNodes.map((node) => {
-      if (!node.text.trim()) return;
-      const childNodes = node.nodes;
-      if ((childNodes && childNodes.size === 1) || (!childNodes)) {
-        newNodes.push(node);
-      } else if (childNodes.size > 1) {
-        let nodes = this.removeNullNode(childNodes);
-        let newNode = Block.create({
-          nodes: nodes,
-          data: node.data,
-          key: node.key,
-          type: node.type
-        });
-        newNodes.push(newNode);
-      }
-    });
-    return newNodes;
+    if (!this.range) return;
+    this.quote = serialize(Editor.fragment(window.viewer, this.range));
+    const node = window.viewer.children[this.range.anchor.path[0]];
+    this.newIndex = node.data['new_index'];
+    this.oldIndex = node.data['old_index'];
   }
 
   onResizeMouseUp = () => {

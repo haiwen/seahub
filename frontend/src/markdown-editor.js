@@ -33,7 +33,7 @@ function getImageFileNameWithTimestamp() {
 }
 
 
-class EditorUtilities {
+class EditorApi {
 
   constructor () {
     this.repoID = repoID;
@@ -268,7 +268,7 @@ class EditorUtilities {
   }
 }
 
-const editorUtilities = new EditorUtilities();
+const editorApi = new EditorApi();
 
 class MarkdownEditor extends React.Component {
   constructor(props) {
@@ -360,7 +360,7 @@ class MarkdownEditor extends React.Component {
     if ((parseFloat(currentTime - this.lastModifyTime)/1000) <= 5) {
       return;
     }
-    editorUtilities.fileMetaData().then((res) => {
+    editorApi.fileMetaData().then((res) => {
       if (res.data.id !== this.state.fileInfo.id) {
         toaster.notify(
           <span>
@@ -443,7 +443,7 @@ class MarkdownEditor extends React.Component {
   }
 
   checkDraft = () => {
-    let draftKey = editorUtilities.getDraftKey();
+    let draftKey = editorApi.getDraftKey();
     let draft = localStorage.getItem(draftKey);
     let that = this;
     if (draft) {
@@ -472,7 +472,7 @@ class MarkdownEditor extends React.Component {
         loading: false,
       });
     }
-    let draftKey = editorUtilities.getDraftKey();
+    let draftKey = editorApi.getDraftKey();
     localStorage.removeItem(draftKey);
   }
 
@@ -548,11 +548,11 @@ class MarkdownEditor extends React.Component {
 
     this.socket.emit('repo_update', {
       request: 'unwatch_update',
-      repo_id: editorUtilities.repoID,
+      repo_id: editorApi.repoID,
       user: {
-        name: editorUtilities.name,
-        username: editorUtilities.username,
-        contact_email: editorUtilities.contact_email,
+        name: editorApi.name,
+        username: editorApi.username,
+        contact_email: editorApi.contact_email,
       },
     });
   }
@@ -607,11 +607,11 @@ class MarkdownEditor extends React.Component {
 
       this.socket.emit('repo_update', {
         request: 'watch_update',
-        repo_id: editorUtilities.repoID,
+        repo_id: editorApi.repoID,
         user: {
-          name: editorUtilities.name,
-          username: editorUtilities.username,
-          contact_email: editorUtilities.contact_email,
+          name: editorApi.name,
+          username: editorApi.username,
+          contact_email: editorApi.contact_email,
         },
       });
     }
@@ -654,7 +654,7 @@ class MarkdownEditor extends React.Component {
   }
 
   listFileParticipants = () => {
-    editorUtilities.listFileParticipant().then((res) => {
+    editorApi.listFileParticipant().then((res) => {
       this.setState({ participants: res.data.participant_list });
     });
   }
@@ -672,13 +672,13 @@ class MarkdownEditor extends React.Component {
   toggleStar = () => {
     let starrd = this.state.fileInfo.starred;
     if (starrd) {
-      editorUtilities.unstarItem().then((response) => {
+      editorApi.unstarItem().then((response) => {
         this.setState({
           fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
         });
       });
     } else if (!starrd) {
-      editorUtilities.starItem().then((response) => {
+      editorApi.starItem().then((response) => {
         this.setState({
           fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
         });
@@ -696,12 +696,12 @@ class MarkdownEditor extends React.Component {
         let str = '';
         if (this.state.editorMode == 'rich') {
           let value = this.draftRichValue;
-          str = serialize(value.toJSON());
+          str = serialize(value);
         }
         else if (this.state.editorMode == 'plain') {
           str = this.draftPlainValue;
         }
-        let draftKey = editorUtilities.getDraftKey();
+        let draftKey = editorApi.getDraftKey();
         localStorage.setItem(draftKey, str);
         that.setState({
           showDraftSaved: true
@@ -717,14 +717,14 @@ class MarkdownEditor extends React.Component {
   }
 
   openParentDirectory = () => {
-    window.location.href = editorUtilities.getParentDectionaryUrl();
+    window.location.href = editorApi.getParentDectionaryUrl();
   }
 
   onEdit = (mode) => {
     if (mode === 'rich') {
       window.seafileEditor.switchToRichTextEditor();
     } else if (mode === 'plain') {
-      window.seafileEditor.switchToPlainTextEditor();
+      window.seafileEditor.switchToPlainTextEditor();  
     }
   }
 
@@ -780,7 +780,7 @@ class MarkdownEditor extends React.Component {
             isDocs={isDocs}
             hasDraft={hasDraft}
             isDraft={isDraft}
-            editorUtilities={editorUtilities}
+            editorApi={editorApi}
             collabUsers={this.state.collabUsers}
             fileInfo={this.state.fileInfo}
             toggleStar={this.toggleStar}
@@ -788,7 +788,7 @@ class MarkdownEditor extends React.Component {
             openDialogs={this.openDialogs}
             toggleShareLinkDialog={this.toggleShareLinkDialog}
             onEdit={this.onEdit}
-            toggleNewDraft={editorUtilities.createDraftFile}
+            toggleNewDraft={editorApi.createDraftFile}
             showFileHistory={this.state.isShowHistory ? false : true }
             toggleHistory={this.toggleHistory}
             readOnly={this.state.readOnly}
@@ -804,7 +804,7 @@ class MarkdownEditor extends React.Component {
           <SeafileEditor
             fileInfo={this.state.fileInfo}
             markdownContent={this.state.markdownContent}
-            editorUtilities={editorUtilities}
+            editorApi={editorApi}
             collabUsers={this.state.collabUsers}
             setFileInfoMtime={this.setFileInfoMtime}
             toggleStar={this.toggleStar}

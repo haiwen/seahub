@@ -8,14 +8,13 @@ import { gettext } from './utils/constants';
 import ModalPortal from './components/modal-portal';
 import { RichEditor } from '@seafile/seafile-editor';
 import CDOCTypeChooser from '@seafile/seafile-editor/dist/components/codc-type-chooser';
-import { Value } from 'slate';
 import CDOCTopbar from './components/toolbar/cdoc-editor-topbar';
 import ShareDialog from './components/dialog/share-dialog';
 import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import { withTranslation } from 'react-i18next';
 
-import { EditorUtilities } from '@seafile/seafile-editor/dist/editorUtilities';
+import { EditorApi } from '@seafile/seafile-editor/dist/editor-api';
 import toaster from './components/toast';
 import { RichEditorUtils } from '@seafile/seafile-editor/dist/rich-editor-utils';
 
@@ -32,16 +31,16 @@ const { siteRoot, seafileCollabServer, serviceURL } = window.app.config;
 const { name } = window.app.userInfo;
 
 let dirPath = '/';
-const editorUtilities = new EditorUtilities(seafileAPI, repoID, fileName, dirPath, name, filePath, serviceURL, username, contactEmail, repoName);
+const editorApi = new EditorApi(seafileAPI, repoID, fileName, dirPath, name, filePath, serviceURL, username, contactEmail, repoName);
 const userInfo = window.app.userInfo;
 class CDOCEditor extends React.Component {
 
   constructor(props) {
     super(props);
     this.collabServer = seafileCollabServer ? seafileCollabServer : null;
-    this.richEditorUtils = new RichEditorUtils(editorUtilities, this);
+    this.richEditorUtils = new RichEditorUtils(editorApi, this);
     this.state = {
-      value: Value.create({}),
+      value: [],
       collabUsers: userInfo ?
         [{ user: userInfo, is_editing: false }] : [],
       fileInfo: {
@@ -80,11 +79,11 @@ class CDOCEditor extends React.Component {
 
       this.socket.emit('repo_update', {
         request: 'watch_update',
-        repo_id: editorUtilities.repoID,
+        repo_id: editorApi.repoID,
         user: {
-          name: editorUtilities.name,
-          username: editorUtilities.username,
-          contact_email: editorUtilities.contact_email,
+          name: editorApi.name,
+          username: editorApi.username,
+          contact_email: editorApi.contact_email,
         },
       });
     }
@@ -95,7 +94,7 @@ class CDOCEditor extends React.Component {
     if ((parseFloat(currentTime - this.lastModifyTime) / 1000) <= 5) {
       return;
     }
-    editorUtilities.fileMetaData().then((res) => {
+    editorApi.fileMetaData().then((res) => {
       if (res.data.id !== this.state.fileInfo.id) {
         toaster.notify(
           <span>
@@ -145,13 +144,13 @@ class CDOCEditor extends React.Component {
   toggleStar = () => {
     let starrd = this.state.fileInfo.starred;
     if (starrd) {
-      editorUtilities.unStarItem().then((response) => {
+      editorApi.unStarItem().then((response) => {
         this.setState({
           fileInfo: Object.assign({}, this.state.fileInfo, { starred: !starrd })
         });
       });
     } else if (!starrd) {
-      editorUtilities.starItem().then((response) => {
+      editorApi.starItem().then((response) => {
         this.setState({
           fileInfo: Object.assign({}, this.state.fileInfo, { starred: !starrd })
         });
@@ -164,7 +163,7 @@ class CDOCEditor extends React.Component {
   }
 
   backToParentDirectory = () => {
-    window.location.href = editorUtilities.getParentDectionaryUrl();
+    window.location.href = editorApi.getParentDectionaryUrl();
   }
 
   toggleShareLinkDialog = () => {
@@ -201,7 +200,7 @@ class CDOCEditor extends React.Component {
 
   componentWillMount() {
     this.richEditorUtils.initialContent();
-    editorUtilities.getFileInfo().then((response) => {
+    editorApi.getFileInfo().then((response) => {
       this.setState({
         fileInfo: Object.assign({}, this.state.fileInfo, {
           mtime: response.data.mtime,
@@ -223,7 +222,7 @@ class CDOCEditor extends React.Component {
           fileInfo={this.state.fileInfo}
           collabUsers={this.state.collabUsers}
           toggleStar={this.toggleStar}
-          editorUtilities={editorUtilities}
+          editorApi={editorApi}
           backToParentDirectory={this.backToParentDirectory}
           toggleShareLinkDialog={this.toggleShareLinkDialog}
           openDialogs={this.openDialogs}
@@ -238,7 +237,7 @@ class CDOCEditor extends React.Component {
           resetContentChange={this.richEditorUtils.resetContentChange}
           value={this.state.value}
           onChange={this.richEditorUtils.onChange}
-          editorUtilities={editorUtilities}
+          editorApi={editorApi}
         />
         {this.state.showShareLinkDialog &&
           <ModalPortal>

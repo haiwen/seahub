@@ -1089,8 +1089,8 @@ export const Utils = {
   changeMarkdownNodes: function(nodes, fn) {
     nodes.map((item) => {
       fn(item); 
-      if (item.nodes && item.nodes.length > 0){
-        Utils.changeMarkdownNodes(item.nodes, fn); 
+      if (item.children && item.children.length > 0){
+        Utils.changeMarkdownNodes(item.children, fn); 
       }
     });
 

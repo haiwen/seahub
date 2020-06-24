@@ -8,7 +8,7 @@ import { gettext } from '../../utils/constants';
 import '../../css/markdown-viewer/history-viewer.css';
 
 const propTypes = {
-  editorUtilities: PropTypes.object.isRequired,
+  editorApi: PropTypes.object.isRequired,
   showDiffViewer: PropTypes.func.isRequired,
   setDiffViewerContent: PropTypes.func.isRequired,
   reloadDiffContent: PropTypes.func.isRequired,
@@ -29,24 +29,24 @@ class HistoryList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.editorUtilities.listFileHistoryRecords(1, this.perPage).then((res) => {
+    this.props.editorApi.listFileHistoryRecords(1, this.perPage).then((res) => {
       this.setState({
         historyList: res.data.data,
         totalReversionCount: res.data.total_count
       });
       if (res.data.data.length > 1) {
         axios.all([
-          this.props.editorUtilities.getFileHistoryVersion(res.data.data[0].commit_id, res.data.data[0].path),
-          this.props.editorUtilities.getFileHistoryVersion(res.data.data[1].commit_id, res.data.data[1].path)
+          this.props.editorApi.getFileHistoryVersion(res.data.data[0].commit_id, res.data.data[0].path),
+          this.props.editorApi.getFileHistoryVersion(res.data.data[1].commit_id, res.data.data[1].path)
         ]).then(axios.spread((res1, res2) => {
-          axios.all([this.props.editorUtilities.getFileContent(res1.data), this.props.editorUtilities.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+          axios.all([this.props.editorApi.getFileContent(res1.data), this.props.editorApi.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
             this.props.showDiffViewer();
             this.props.setDiffViewerContent(content1.data, content2.data);
           }));
         }));
       } else {
-        this.props.editorUtilities.getFileHistoryVersion(res.data.data[0].commit_id, res.data.data[0].path).then((res) => {
-          this.props.editorUtilities.getFileContent(res.data).then((content) => {
+        this.props.editorApi.getFileHistoryVersion(res.data.data[0].commit_id, res.data.data[0].path).then((res) => {
+          this.props.editorApi.getFileContent(res.data).then((content) => {
             this.props.showDiffViewer();
             this.props.setDiffViewerContent(content.data, '');
           });
@@ -62,10 +62,10 @@ class HistoryList extends React.Component {
       activeItem: key,
     });
     axios.all([
-      this.props.editorUtilities.getFileHistoryVersion(currentItem.commit_id, currentItem.path),
-      this.props.editorUtilities.getFileHistoryVersion(preItem.commit_id, preItem.path)
+      this.props.editorApi.getFileHistoryVersion(currentItem.commit_id, currentItem.path),
+      this.props.editorApi.getFileHistoryVersion(preItem.commit_id, preItem.path)
     ]).then(axios.spread((res1, res2) => {
-      axios.all([this.props.editorUtilities.getFileContent(res1.data), this.props.editorUtilities.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+      axios.all([this.props.editorApi.getFileContent(res1.data), this.props.editorApi.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
         this.props.showDiffViewer();
         this.props.setDiffViewerContent(content1.data, content2.data);
       }));
@@ -84,7 +84,7 @@ class HistoryList extends React.Component {
           currentPage: currentPage,
           loading : true
         });
-        this.props.editorUtilities.listFileHistoryRecords(currentPage, this.perPage).then((res) => {
+        this.props.editorApi.listFileHistoryRecords(currentPage, this.perPage).then((res) => {
           let currentHistoryList = Object.assign([], this.state.historyList);
           this.setState({
             historyList: [...currentHistoryList, ...res.data.data],
