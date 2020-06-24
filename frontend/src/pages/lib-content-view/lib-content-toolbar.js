@@ -54,6 +54,11 @@ const propTypes = {
 class LibContentToolbar extends React.Component {
 
   render() {
+
+    if (!this.props.userPerm) {
+      return <div className="cur-view-toolbar"></div>
+    }
+
     if (this.props.isViewFile) {
       return (
         <Fragment>
