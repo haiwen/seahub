@@ -28,7 +28,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.endpoints.utils import is_org_user
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
+        datetime_to_isoformat_timestr
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -53,8 +54,12 @@ def get_org_user_info(org_id, user_obj):
     user_info['quota_usage'] = org_user_quota_usage
 
     user_info['create_time'] = timestamp_to_isoformat_timestr(user_obj.ctime)
-    user_info['last_login'] = UserLastLogin.objects.get_by_username(
-        email).last_login if UserLastLogin.objects.get_by_username(email) else ''
+
+    user_info['last_login'] = ''
+    last_login = UserLastLogin.objects.get_by_username(email).last_login \
+            if UserLastLogin.objects.get_by_username(email) else ''
+    if last_login:
+        user_info['last_login'] = datetime_to_isoformat_timestr(last_login)
 
     return user_info
 
