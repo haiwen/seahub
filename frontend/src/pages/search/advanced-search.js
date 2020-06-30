@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { gettext, lang } from '../../utils/constants';
 import { Button, Col, Collapse, CustomInput, FormGroup, Input, Label, Row, InputGroupAddon, InputGroup } from 'reactstrap';
-import SelectDate from '@seafile/seafile-editor/dist/components/calander';
+import SelectDate from './select-date';
 
 const { repo_name, search_repo } = window.search.pageOptions;
 

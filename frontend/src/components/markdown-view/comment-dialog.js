@@ -6,7 +6,7 @@ import { gettext } from '../../utils/constants';
 import '../../css/markdown-viewer/comment-dialog.css';
 
 const propTypes = {
-  editorUtilities: PropTypes.object.isRequired,
+  editorApi: PropTypes.object.isRequired,
   quote: PropTypes.string.isRequired,
   commentPosition: PropTypes.object.isRequired,
   onCommentAdded: PropTypes.func.isRequired,
@@ -38,7 +38,7 @@ class CommentDialog extends React.Component {
         position: this.props.commentPosition,
       };
       let detailJSON = JSON.stringify(detail);
-      this.props.editorUtilities.postComment(comment, detailJSON).then((res) => {
+      this.props.editorApi.postComment(comment, detailJSON).then((res) => {
         this.props.onCommentAdded();
       });
     }
@@ -68,7 +68,7 @@ class CommentDialog extends React.Component {
   render() {
     return (
       <div className="comment-dialog">
-        <div>{this.props.editorUtilities.name}</div>
+        <div>{this.props.editorApi.name}</div>
         <blockquote className="comment-dialog-quote">
           <div dangerouslySetInnerHTML={{ __html: this.state.quote}}></div>
         </blockquote>

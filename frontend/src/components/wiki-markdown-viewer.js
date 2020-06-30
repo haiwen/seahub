@@ -183,10 +183,8 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   modifyValueBeforeRender = (value) => {
-    let nodes = value.document.nodes;
-    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeInlineNode);
-    value.document.nodes = newNodes;
-    return value;
+    let newNodes = Utils.changeMarkdownNodes(value, this.changeInlineNode);
+    return newNodes;
   }
 
   renderMarkdown = () => {

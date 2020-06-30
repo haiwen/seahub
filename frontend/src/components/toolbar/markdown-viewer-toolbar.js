@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../utils/constants';
-import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbarcomponent/editorToolBar';
+import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbar-component/editor-toolbar';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
-import FileInfo from '@seafile/seafile-editor/dist/components/topbarcomponent/file-info';
+import FileInfo from '@seafile/seafile-editor/dist/components/topbar-component/file-info';
 
 const { seafileCollabServer } = window.app.config;
 
@@ -11,7 +11,7 @@ const propTypes = {
   isDocs: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   isDraft: PropTypes.bool.isRequired,
-  editorUtilities: PropTypes.object.isRequired,
+  editorApi: PropTypes.object.isRequired,
   collabUsers: PropTypes.array.isRequired,
   fileInfo: PropTypes.object.isRequired,
   toggleShareLinkDialog: PropTypes.func.isRequired,
@@ -111,7 +111,7 @@ class MarkdownViewerToolbar extends React.Component {
           <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
             <FileInfo
               toggleStar={this.props.toggleStar}
-              editorUtilities={this.props.editorUtilities}
+              editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}
               showDraftSaved={this.props.showDraftSaved}
               isLocked={isLocked}
@@ -122,7 +122,7 @@ class MarkdownViewerToolbar extends React.Component {
             {(this.props.hasDraft && !this.props.isDraft) &&
               <div className='seafile-btn-view-review'>
                 <div className='tag tag-green'>{gettext('This file is in draft stage.')}
-                  <a className="ml-2" onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('View Draft')}</a></div>
+                  <a className="ml-2" onMouseDown={this.props.editorApi.goDraftPage}>{gettext('View Draft')}</a></div>
               </div>
             }
             <div className="topbar-btn-container">
@@ -133,10 +133,10 @@ class MarkdownViewerToolbar extends React.Component {
               {this.props.isDraft &&
                 <div>
                   <button type="button" className="btn btn-success seafile-btn-add-review"
-                    onMouseDown={this.props.editorUtilities.goDraftPage}>{gettext('Start review')}</button>
+                    onMouseDown={this.props.editorApi.goDraftPage}>{gettext('Start review')}</button>
                   {canPublishDraft &&
                     <button type="button" className="btn btn-success seafile-btn-add-review"
-                      onMouseDown={this.props.editorUtilities.publishDraftFile}>{gettext('Publish')}</button>
+                      onMouseDown={this.props.editorApi.publishDraftFile}>{gettext('Publish')}</button>
                   }
                 </div>
               }
@@ -184,7 +184,7 @@ class MarkdownViewerToolbar extends React.Component {
           <div className="sf-md-viewer-topbar-first-narrow d-flex justify-content-between">
             <FileInfo
               toggleStar={this.props.toggleStar}
-              editorUtilities={this.props.editorUtilities}
+              editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}
               showDraftSaved={this.props.showDraftSaved}
             />
@@ -217,7 +217,7 @@ class MarkdownViewerToolbar extends React.Component {
       return (
         <div className="sf-md-viewer-topbar">
           <div className="sf-md-viewer-topbar-first d-flex justify-content-between">
-            <FileInfo toggleStar={this.props.toggleStar} editorUtilities={this.props.editorUtilities}
+            <FileInfo toggleStar={this.props.toggleStar} editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}/>
             <div className="topbar-btn-container">
               {(seafileCollabServer && this.props.collabUsers.length > 0) &&
@@ -245,7 +245,7 @@ class MarkdownViewerToolbar extends React.Component {
             </div>
           </div>
           <div className="sf-md-viewer-topbar-first-narrow d-flex justify-content-between">
-            <FileInfo toggleStar={this.props.toggleStar} editorUtilities={this.props.editorUtilities}
+            <FileInfo toggleStar={this.props.toggleStar} editorApi={this.props.editorApi}
               fileInfo={this.props.fileInfo}/>
             <div className="topbar-btn-container">
               <ButtonGroup>
