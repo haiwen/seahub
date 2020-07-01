@@ -90,6 +90,7 @@ module.exports = {
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
     viewCdoc: [require.resolve('./polyfills'), paths.appSrc + "/view-file-cdoc.js"],
     search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
+    uploadLink: [require.resolve('./polyfills'), paths.appSrc + "/pages/upload-link"],
   },
 
   output: {

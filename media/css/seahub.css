@@ -2020,13 +2020,6 @@ a.sf-popover-item {
     vertical-align:middle;
     line-height:16px;
 }
-#upload-link-panel {
-    width:600px;
-    padding:10px 20px 20px;
-}
-#upload-link-panel .avatar {
-    vertical-align: middle;
-}
 /* user profile */
 #user-profile {
     width: 290px;
