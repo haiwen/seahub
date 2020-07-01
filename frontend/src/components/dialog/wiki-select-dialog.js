@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import moment from 'moment';
@@ -9,7 +9,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
-  addWiki: PropTypes.func.isRequired,
+  addWiki: PropTypes.func.isRequired
 };
 
 class WikiSelectDialog extends React.Component {
@@ -24,10 +24,26 @@ class WikiSelectDialog extends React.Component {
 
   componentDidMount() {
     seafileAPI.listRepos().then(res => {
-      let repoList = res.data.repos.map(item => {
-        let repo = new Repo(item);
-        return repo;
-      });
+      let repoList = res.data.repos
+        .filter(item => {
+          switch (item.type) {
+            case 'mine': // my libraries
+              return !item.encrypted;
+            case 'shared': // libraries shared with me
+              // 'is_admin': the library is shared with 'admin' permission
+              return !item.encrypted && item.is_admin;
+            case 'group':
+            default:
+              return !item.encrypted && !res.data.repos.some(repo => {
+                // just remove the duplicated libraries
+                return repo.type != item.type && repo.repo_id == item.repo_id;
+              });
+          }
+        })
+        .map(item => {
+          let repo = new Repo(item);
+          return repo;
+        });
       repoList = Utils.sortRepos(repoList, 'name', 'asc');
       this.setState({repos: repoList}); 
     });
