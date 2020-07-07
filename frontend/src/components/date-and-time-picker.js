@@ -14,8 +14,6 @@ const propsTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const FORMAT = 'YYYY-MM-DD HH:mm';
-
 class Picker extends React.Component {
 
   constructor(props) {
@@ -24,7 +22,7 @@ class Picker extends React.Component {
     this.calendarContainerRef = React.createRef();
     this.inputRef = React.createRef();
     this.state = {
-      isOpen: true
+      isOpen: false
     };
   }
 
@@ -64,12 +62,20 @@ class Picker extends React.Component {
 
   render() {
     const props = this.props;
+
+    let showHourAndMinute = true; // default: true
+    if (props.showHourAndMinute != undefined) {
+      showHourAndMinute = props.showHourAndMinute;
+    }
+
+    const FORMAT = showHourAndMinute ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD';
+
     const calendar = (<Calendar
       defaultValue={this.defaultCalendarValue}
       disabledDate={props.disabledDate}
       format={FORMAT}
       locale={translateCalendar()}
-      showHourAndMinute={true}
+      showHourAndMinute={showHourAndMinute}
     />);
     return (
       <DatePicker
