@@ -99,7 +99,7 @@ class IndexContentViewer extends React.Component {
   }
 
   changeInlineNode = (item) => {
-    if (item.object == 'inline') {
+    if (item.type == 'link' || item.type === 'image') {
       let url;
 
       // change image url
@@ -149,11 +149,10 @@ class IndexContentViewer extends React.Component {
 
   getRootNode = () => {
     let value = deserialize(this.props.indexContent);
-    value = value.toJSON();
-    const newNodes = Utils.changeMarkdownNodes(value.document.nodes, this.changeInlineNode);
+    const newNodes = Utils.changeMarkdownNodes(value, this.changeInlineNode);
     newNodes.map((node) => {
       if (node.type === 'unordered_list' || node.type === 'ordered_list') {
-        let treeRoot = this.transSlateToTree(node.nodes, this.treeRoot);
+        let treeRoot = this.transSlateToTree(node.children, this.treeRoot);
         this.setNodePath(treeRoot, '/');
         this.treeRoot = treeRoot; 
       }
@@ -175,18 +174,18 @@ class IndexContentViewer extends React.Component {
   transSlateToTree = (slateNodes, parentTreeNode) => {
     let treeNodes = slateNodes.map((slateNode) => {
       // item has children(unordered list)
-      if (slateNode.nodes.length === 2 && (slateNode.nodes[1].type === 'unordered_list' || slateNode.nodes[1].type === 'ordered_list')) {
+      if (slateNode.children.length === 2 && (slateNode.children[1].type === 'unordered_list' || slateNode.children[1].type === 'ordered_list')) {
         // slateNode.nodes[0] is paragraph, create TreeNode, set name and href
-        const paragraphNode = slateNode.nodes[0];
+        const paragraphNode = slateNode.children[0];
         const treeNode = this.transParagraph(paragraphNode);
         // slateNode.nodes[1] is list, set it as TreeNode's children
-        const listNode = slateNode.nodes[1];
+        const listNode = slateNode.children[1];
         // Add sub list items to the tree node
-        return this.transSlateToTree(listNode.nodes, treeNode);
+        return this.transSlateToTree(listNode.children, treeNode);
       } else {
         // item doesn't have children list
-        if (slateNode.nodes[0] && (slateNode.nodes[0].type === 'paragraph')) {
-          return this.transParagraph(slateNode.nodes[0]);
+        if (slateNode.children[0] && (slateNode.children[0].type === 'paragraph')) {
+          return this.transParagraph(slateNode.children[0]);
         } else {
           // list item contain table/code_block/blockqupta
           return new TreeNode({ name: '', href: '' });
@@ -200,16 +199,16 @@ class IndexContentViewer extends React.Component {
   // translate slate_paragraph_node to treeNode
   transParagraph = (paragraphNode) => {
     let treeNode;
-    if (paragraphNode.nodes[1] && paragraphNode.nodes[1].type === 'link') {
+    if (paragraphNode.children[1] && paragraphNode.children[1].type === 'link') {
       // paragraph node is a link node
-      const linkNode = paragraphNode.nodes[1];
-      const textNode = linkNode.nodes[0];
-      let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
+      const linkNode = paragraphNode.children[1];
+      const textNode = linkNode.children[0];
+      let name = textNode ? textNode.text : '';
       treeNode =  new TreeNode({ name: name, href: linkNode.data.href });
-    } else if (paragraphNode.nodes[0].object === 'text') {
+    } else if (paragraphNode.children[0].object === 'text') {
       // paragraph first child node is a text node, then get node name
-      const textNode = paragraphNode.nodes[0];
-      let name = textNode.leaves[0] ? textNode.leaves[0].text : '';
+      const textNode = paragraphNode.children[0];
+      let name = textNode.text ? textNode.text : '';
       treeNode = new TreeNode({ name: name, href: '' });
     } else {
       treeNode = new TreeNode({ name: '', href: '' });

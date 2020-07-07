@@ -61,10 +61,7 @@ class FileContent extends React.Component {
   }
 
   modifyValueBeforeRender = (value) => {
-    let nodes = value.document.nodes;
-    let newNodes = Utils.changeMarkdownNodes(nodes, this.changeImageURL);
-    value.document.nodes = newNodes;
-    return value;
+    return Utils.changeMarkdownNodes(value, this.changeImageURL);
   }
 
   render() {
