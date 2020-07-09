@@ -196,6 +196,8 @@ class AdminAddressBookGroup(APIView):
         for m in members:
             member_info = self._get_address_book_group_memeber_info(request,
                     m, avatar_size)
+            if member_info['role'] == 'Owner':
+                continue
             ret_members.append(member_info)
 
         ret_dict['groups'] = ret_groups
