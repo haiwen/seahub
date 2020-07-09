@@ -202,9 +202,9 @@ class SidePanel extends React.Component {
                 {isPro && otherPermission &&
                   <li className="nav-item">
                     <Link
-                      className={`nav-link ellipsis ${this.getActiveClass('virus-scan-records')}`}
-                      to={siteRoot + 'sys/virus-scan-records/'}
-                      onClick={() => this.props.tabItemClick('virus-scan-records')}
+                      className={`nav-link ellipsis ${this.getActiveClass('virus-files')}`}
+                      to={siteRoot + 'sys/virus-files/all/'}
+                      onClick={() => this.props.tabItemClick('virus-files')}
                     >
                       <span className="sf2-icon-security" aria-hidden="true"></span>
                       <span className="nav-text">{gettext('Virus Scan')}</span>
