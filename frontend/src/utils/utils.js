@@ -119,43 +119,36 @@ export const Utils = {
     }
   },
 
-  getShareLinkPermissionList: function(itemType, permission = null, path, canEdit = null) {
+  getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
     // itemType: library, dir, file
     // permission: rw, r, admin, cloud-edit, preview
 
-    // if item is library, can preview and download, no need to check
-    // if item is dir, check can download
-    // if item is file, check can download and check can edit
-
-    let editDownloadOption = 'edit_download';
-    let editOnly = 'cloud_edit';
-    let downloadOption = 'preview_download';
     let permissionOptions = [];
 
-    if (itemType === 'library') {
-      permissionOptions.push(downloadOption);
-    } else if (itemType === 'dir') {
-      if (permission == 'rw' || permission == 'admin' || permission == 'r') {
-        permissionOptions.push(downloadOption);
+    if (permission == 'rw' || permission == 'admin' || permission == 'r') {
+      permissionOptions.push('preview_download');
+    }
+    permissionOptions.push('preview_only');
+
+    if (itemType == 'library' || itemType == 'dir') {
+      if (permission == 'rw' || permission == 'admin') {
+        permissionOptions.push('download_upload');
       }
-    } else if (itemType === 'file') {
-      if (permission == 'rw' || permission == 'admin' || permission == 'r') {
-        permissionOptions.push(downloadOption);
-      }
+    } else {
       if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin') && canEdit) {
-        permissionOptions.push(editDownloadOption);
+        permissionOptions.push('edit_download');
       }
 
       // not support
       // if (this.isEditableOfficeFile(path) && (permission == 'cloud-edit')) {
-      //   permissionOptions.push(editOnly);
+      //   permissionOptions.push('cloud_edit');
       // }
 
     }
-    permissionOptions.push('preview_only');
     return permissionOptions;
   },
 
+  // TODO
   getShareLinkPermissionStr: function(permissions) {
     const { can_edit, can_download } = permissions;
     if (can_edit) {
@@ -625,6 +618,16 @@ export const Utils = {
           permissionDetails: {
             'can_edit': false,
             "can_download": false 
+          }
+        };
+      case 'download_upload':
+        return {
+          value: permission, 
+          text: gettext('Download and upload'), 
+          permissionDetails: {
+            // TODO
+            'can_edit': false,
+            "can_download": true
           }
         };
       case 'edit_download':

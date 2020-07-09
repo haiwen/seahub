@@ -53,7 +53,7 @@ class ShareDialog extends React.Component {
   getInitialActiveTab = () => {
     const { repoEncrypted, userPerm, enableDirPrivateShare } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
-    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && (userPerm == 'rw' || userPerm == 'admin');
 
     if (enableShareLink) {
       return 'shareLink';
@@ -79,7 +79,7 @@ class ShareDialog extends React.Component {
     let activeTab = this.state.activeTab;
     const { repoEncrypted, userPerm, enableDirPrivateShare, itemType } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
-    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && (userPerm == 'rw' || userPerm == 'admin');
 
     return (
       <Fragment>
@@ -138,6 +138,7 @@ class ShareDialog extends React.Component {
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
                   itemType={itemType}
+                  userPerm={userPerm}
                 />
               </TabPane>
             }
