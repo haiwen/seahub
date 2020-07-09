@@ -153,6 +153,7 @@ class OrgDepartmentItem extends React.Component {
   render() {
     const { members, repos, groups } = this.state;
     const groupID = this.props.groupID;
+    const noMembers = (members && members.length === 1 && members[0].role === 'Owner') || (members && members.length === 0) || (!members);
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
       <Fragment>
@@ -255,7 +256,7 @@ class OrgDepartmentItem extends React.Component {
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
               </div>
               <div className="cur-view-content">
-                {(members && members.length === 1 && members[0].role === 'Owner') ?
+                {noMembers ?
                   <p className="no-member">{gettext('No members')}</p> :
                   <table>
                     <thead>

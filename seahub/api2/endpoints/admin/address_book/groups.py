@@ -88,7 +88,7 @@ class AdminAddressBookGroups(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Group owner is 'system admin'
-        group_owner = request.data.get('group_owner', '')
+        group_owner = request.data.get('group_owner', 'system admin')
 
         try:
             parent_group = int(request.data.get('parent_group', -1))
