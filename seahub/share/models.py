@@ -302,11 +302,14 @@ class FileShare(models.Model):
     PERM_EDIT_DL = 'edit_download'
     PERM_EDIT_ONLY = 'edit_only'
 
+    PERM_VIEW_DL_UPLOAD = 'view_download_upload'
+
     PERMISSION_CHOICES = (
         (PERM_VIEW_DL, 'Preview only and can download'),
         (PERM_VIEW_ONLY, 'Preview only and disable download'),
         (PERM_EDIT_DL, 'Edit and can download'),
         (PERM_EDIT_ONLY, 'Edit and disable download'),
+        (PERM_VIEW_DL_UPLOAD, 'Preview only and can download and upload'),
     )
 
     username = LowerCaseCharField(max_length=255, db_index=True)
@@ -354,15 +357,23 @@ class FileShare(models.Model):
         if self.permission == FileShare.PERM_VIEW_DL:
             perm_dict['can_edit'] = False
             perm_dict['can_download'] = True
+            perm_dict['can_upload'] = False
         elif self.permission == FileShare.PERM_VIEW_ONLY:
             perm_dict['can_edit'] = False
             perm_dict['can_download'] = False
+            perm_dict['can_upload'] = False
         elif self.permission == FileShare.PERM_EDIT_DL:
             perm_dict['can_edit'] = True
             perm_dict['can_download'] = True
+            perm_dict['can_upload'] = False
         elif self.permission == FileShare.PERM_EDIT_ONLY:
             perm_dict['can_edit'] = True
             perm_dict['can_download'] = False
+            perm_dict['can_upload'] = False
+        elif self.permission == FileShare.PERM_VIEW_DL_UPLOAD:
+            perm_dict['can_edit'] = False
+            perm_dict['can_download'] = True
+            perm_dict['can_upload'] = True
         else:
             assert False
         return perm_dict
