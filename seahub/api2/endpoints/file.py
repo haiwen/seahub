@@ -217,6 +217,12 @@ class FileView(APIView):
                 empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.pptx')
             elif new_file_name.endswith('.docx'):
                 empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.docx')
+            elif new_file_name.endswith('.odp'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.odp')
+            elif new_file_name.endswith('.ods'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.ods')
+            elif new_file_name.endswith('.odt'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.odt')
             else:
                 empty_file_path = ''
 

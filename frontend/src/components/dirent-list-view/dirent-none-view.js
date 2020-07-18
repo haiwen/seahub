@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, officeTemplateType } from '../../utils/constants';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -56,15 +56,22 @@ class DirentNodeView extends React.Component {
         <div className="tip-for-new-file text-center">
           <p className="text-secondary">{gettext('This folder has no content at this time.')}</p>
           <p className="text-secondary">{gettext('You can create files quickly')}{' +'}</p>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>
-            {'+ Markdown'}</button>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>
-            {'+ PPT'}</button>
-          <br />
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>
-            {'+ Word'}</button>
-          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>
-            {'+ Excel'}</button>
+          <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>{'+ Markdown'}</button>
+          {officeTemplateType === 'OpenDocument' ? (
+            <Fragment>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.odp')}>{'+ Presentation'}</button>
+              <br />
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.odt')}>{'+ Text Document'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.ods')}>{'+ Spreadsheet'}</button>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>{'+ PPT'}</button>
+              <br />
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>{'+ Word'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>{'+ Excel'}</button>
+            </Fragment>
+          )}
         </div>
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>

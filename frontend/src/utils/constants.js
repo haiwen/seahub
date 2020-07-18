@@ -19,6 +19,7 @@ export const serviceURL = window.app.config.serviceURL;
 export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
+export const officeTemplateType = window.app.config.officeTemplateType;
 
 //pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;
