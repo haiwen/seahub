@@ -5,7 +5,7 @@ import posixpath
 
 import seaserv
 from seaserv import seafile_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _

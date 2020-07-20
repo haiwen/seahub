@@ -5,7 +5,7 @@ import urllib.parse
 import posixpath
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import force_bytes
 
 from seaserv import seafile_api

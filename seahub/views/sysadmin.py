@@ -14,7 +14,7 @@ from openpyxl import load_workbook
 
 from django.db.models import Q
 from django.conf import settings as dj_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404

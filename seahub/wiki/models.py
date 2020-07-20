@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from seaserv import seafile_api

@@ -2,7 +2,7 @@
 # encoding: utf-8
 from django.conf import settings
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib import messages

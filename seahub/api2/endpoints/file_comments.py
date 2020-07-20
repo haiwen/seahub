@@ -8,8 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api
 from pysearpc import SearpcError
-from django.db.models import Count
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible

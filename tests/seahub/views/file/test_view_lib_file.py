@@ -2,7 +2,7 @@ import requests
 from mock import Mock
 from mock import patch
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 

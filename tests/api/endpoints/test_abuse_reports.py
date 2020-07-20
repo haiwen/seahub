@@ -2,7 +2,7 @@
 import json
 
 from mock import patch, MagicMock
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
 

@@ -4,7 +4,7 @@ from datetime import date
 
 from mock import patch
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 

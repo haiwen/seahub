@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.http import is_safe_url, urlquote
 
@@ -10,7 +10,7 @@ def sso(request):
     # Ensure the user-originating redirection url is safe.
     if REDIRECT_FIELD_NAME in request.GET:
         next_page = request.GET[REDIRECT_FIELD_NAME]
-        if not is_safe_url(url=next_page, host=request.get_host()):
+        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
             next_page = settings.LOGIN_REDIRECT_URL
     else:
         next_page = reverse('libraries')

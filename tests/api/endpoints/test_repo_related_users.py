@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seaserv import seafile_api, ccnet_api
 
 from seahub.test_utils import BaseTestCase

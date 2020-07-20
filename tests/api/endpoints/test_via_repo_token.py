@@ -6,7 +6,7 @@ import os
 import json
 import uuid
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.test_utils import BaseTestCase

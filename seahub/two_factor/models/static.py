@@ -60,7 +60,7 @@ class StaticToken(models.Model):
 
         *CharField*: A random string up to 16 characters.
     """
-    device = models.ForeignKey(StaticDevice, related_name='token_set')
+    device = models.ForeignKey(StaticDevice, on_delete=models.CASCADE, related_name='token_set')
     token = models.CharField(max_length=16, db_index=True)
 
     @staticmethod

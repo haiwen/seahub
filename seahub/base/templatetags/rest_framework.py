@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django import template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import QueryDict
 from django.utils.encoding import force_text
 from django.utils.html import escape

@@ -6,7 +6,7 @@ from base64 import b32encode
 from constance import config
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms import Form
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import redirect

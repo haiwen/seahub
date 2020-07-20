@@ -3,7 +3,7 @@ import os
 import json
 import logging
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seaserv import ccnet_api, seafile_api
 from seahub.notifications.models import Notification

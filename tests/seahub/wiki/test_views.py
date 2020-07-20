@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.wiki.models import Wiki
 from seahub.test_utils import BaseTestCase

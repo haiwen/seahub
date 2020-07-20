@@ -41,8 +41,8 @@ class ShareLinkZipTaskView(APIView):
 
         # permission check
         if is_pro_version() and settings.ENABLE_SHARE_LINK_AUDIT:
-            if not request.user.is_authenticated() and \
-                not request.session.get('anonymous_email'):
+            if not request.user.is_authenticated and \
+                    not request.session.get('anonymous_email'):
                 # if anonymous user has passed email code check,
                 # then his/her email info will be in session.
 

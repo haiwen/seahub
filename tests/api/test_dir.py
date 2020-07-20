@@ -2,7 +2,7 @@ import json
 import os
 import time
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.cache import cache
 
 from seahub.test_utils import BaseTestCase

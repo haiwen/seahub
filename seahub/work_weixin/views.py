@@ -22,7 +22,7 @@ from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_ac
     handler_work_weixin_api_response, update_work_weixin_user_info
 from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.auth.models import SocialAuthUser
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 

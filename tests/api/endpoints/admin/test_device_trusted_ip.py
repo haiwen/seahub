@@ -2,7 +2,7 @@ import json
 from functools import cmp_to_key
 
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 from seahub.test_utils import BaseTestCase
 from seahub.trusted_ip.models import TrustedIP

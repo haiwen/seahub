@@ -5,7 +5,7 @@ import json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect
 from django.shortcuts import render, Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory

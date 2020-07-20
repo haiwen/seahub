@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile

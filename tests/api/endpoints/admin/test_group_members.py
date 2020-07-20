@@ -1,7 +1,7 @@
 import json
 
 from seaserv import ccnet_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 
 class GroupMembersTest(BaseTestCase):

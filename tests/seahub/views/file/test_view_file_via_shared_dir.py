@@ -1,7 +1,7 @@
 # encoding: utf-8
 import os
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from seahub.share.models import FileShare

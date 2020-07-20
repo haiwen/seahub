@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email

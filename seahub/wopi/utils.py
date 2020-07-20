@@ -18,7 +18,7 @@ except ImportError:
 from seaserv import seafile_api
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.utils import get_site_scheme_and_netloc
 from .settings import OFFICE_WEB_APP_BASE_URL, WOPI_ACCESS_TOKEN_EXPIRATION, \

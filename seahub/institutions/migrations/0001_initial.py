@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('user', models.EmailField(max_length=254)),
-                ('institution', models.ForeignKey(to='institutions.Institution')),
+                ('institution', models.ForeignKey(to='institutions.Institution', on_delete=models.CASCADE)),
             ],
         ),
     ]

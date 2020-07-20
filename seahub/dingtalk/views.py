@@ -11,7 +11,7 @@ import requests
 from hashlib import sha256
 
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from seahub.api2.utils import get_api_token

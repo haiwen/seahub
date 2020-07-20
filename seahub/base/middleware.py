@@ -1,9 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import re
 
+from django.utils.deprecation import MiddlewareMixin
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 from seaserv import ccnet_api
 
@@ -21,7 +22,7 @@ except ImportError:
     MULTI_TENANCY = False
 from seahub.settings import SITE_ROOT
 
-class BaseMiddleware(object):
+class BaseMiddleware(MiddlewareMixin):
     """
     Middleware that add organization, group info to user.
     """
@@ -45,7 +46,7 @@ class BaseMiddleware(object):
     def process_response(self, request, response):
         return response
 
-class InfobarMiddleware(object):
+class InfobarMiddleware(MiddlewareMixin):
     """Query info bar close status, and store into request."""
 
     def get_from_db(self):
@@ -81,7 +82,7 @@ class InfobarMiddleware(object):
         return response
 
 
-class ForcePasswdChangeMiddleware(object):
+class ForcePasswdChangeMiddleware(MiddlewareMixin):
     def _request_in_black_list(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'home/.+', r'repo/.+',

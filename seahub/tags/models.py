@@ -227,7 +227,7 @@ class Tags(models.Model):
 
 class FileTag(models.Model):
     uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tags)
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
     username = LowerCaseCharField(max_length=255)
 
     objects = FileTagManager()

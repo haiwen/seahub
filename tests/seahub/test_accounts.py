@@ -1,5 +1,5 @@
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.utils.html import escape
 

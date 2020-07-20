@@ -2,7 +2,7 @@ import os
 import json
 from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.settings import MEDIA_ROOT, CUSTOM_LOGO_PATH, MEDIA_URL

@@ -4,7 +4,7 @@ import os
 import posixpath
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render

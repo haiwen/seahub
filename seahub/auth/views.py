@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
@@ -48,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
-    if not is_safe_url(url=redirect_to, host=request.get_host()):
+    if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     if request.session.test_cookie_worked():
@@ -259,7 +259,7 @@ def logout(request, next_page=None,
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, host=request.get_host()):
+        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
             next_page = request.path
 
     if next_page is None:

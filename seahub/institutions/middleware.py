@@ -1,10 +1,11 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
+from django.utils.deprecation import MiddlewareMixin
 
 from seahub.institutions.models import InstitutionAdmin
 
 
-class InstitutionMiddleware(object):
+class InstitutionMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if not getattr(settings, 'MULTI_INSTITUTION', False):
             return None

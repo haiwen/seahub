@@ -31,8 +31,9 @@ except ImportError:
 import pstats
 from io import StringIO
 from django.conf import settings
+from django.utils.deprecation import MiddlewareMixin
 
-class ProfilerMiddleware(object):
+class ProfilerMiddleware(MiddlewareMixin):
     """
     Simple profile middleware to profile django views. To run it, add ?prof to
     the URL like this:

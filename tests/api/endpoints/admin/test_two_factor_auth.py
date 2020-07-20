@@ -1,6 +1,6 @@
 import os
 import pytest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.options.models import (UserOptions, KEY_FORCE_2FA, VAL_FORCE_2FA)
 from seahub.test_utils import BaseTestCase

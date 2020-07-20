@@ -7,7 +7,7 @@ import urllib.request, urllib.error, urllib.parse
 import logging
 import posixpath
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlquote
 from django.utils.encoding import smart_str
 

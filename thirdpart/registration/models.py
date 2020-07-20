@@ -290,7 +290,7 @@ class RegistrationProfile(models.Model):
 ########## signal handlers
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.dispatch import receiver
 from django.utils.http import urlquote
 

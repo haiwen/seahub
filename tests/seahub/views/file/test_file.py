@@ -1,5 +1,5 @@
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import requests
 
 from seahub.test_utils import BaseTestCase

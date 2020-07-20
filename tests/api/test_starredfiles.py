@@ -2,7 +2,7 @@
 import json
 import urllib.request, urllib.error, urllib.parse
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.models import UserStarredFiles
 from seahub.test_utils import BaseTestCase, Fixtures

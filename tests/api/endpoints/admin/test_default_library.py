@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.options.models import UserOptions
 from seahub.test_utils import BaseTestCase
 

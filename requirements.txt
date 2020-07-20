@@ -1,11 +1,11 @@
-Django==1.11.29
+Django==2.2.14
 future
 captcha
 django-statici18n
 django-post_office==3.3.0
 django-webpack_loader
 gunicorn
-pymysql
+mysqlclient
 django-picklefield==2.1.1
 openpyxl
 qrcode

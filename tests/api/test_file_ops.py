@@ -4,7 +4,7 @@ import json
 
 from seaserv import seafile_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename

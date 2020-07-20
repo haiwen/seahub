@@ -4,7 +4,7 @@ from mock import patch
 from django.test import override_settings
 from post_office.models import Email
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.base.accounts import UserPermissions
 from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.test_utils import BaseTestCase

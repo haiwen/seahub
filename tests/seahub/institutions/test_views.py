@@ -1,6 +1,6 @@
 from django.core import mail
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 
 from seahub.base.accounts import User
@@ -9,7 +9,7 @@ from seahub.institutions.utils import is_institution_admin
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
-settings.MIDDLEWARE_CLASSES += (
+settings.MIDDLEWARE.append(
     'seahub.institutions.middleware.InstitutionMiddleware',
 )
 
@@ -33,7 +33,7 @@ class InstTestBase(BaseTestCase):
 
 class InfoTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_render(self):
@@ -46,7 +46,7 @@ class InfoTest(InstTestBase):
 
 class UseradminTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_list(self):
@@ -59,7 +59,7 @@ class UseradminTest(InstTestBase):
 
 class UseradminSearchTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_search(self):
@@ -73,7 +73,7 @@ class UseradminSearchTest(InstTestBase):
 
 class UserToggleStatusTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_activate(self):
@@ -95,7 +95,7 @@ class UserToggleStatusTest(InstTestBase):
         self.assertEqual(len(mail.outbox), 1)
 
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_deactivate(self):
@@ -117,7 +117,7 @@ class UserToggleStatusTest(InstTestBase):
 
 class UserIsAdminTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
 
