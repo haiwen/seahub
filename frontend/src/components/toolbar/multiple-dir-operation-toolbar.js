@@ -398,7 +398,7 @@ class MultipleDirOperationToolbar extends React.Component {
                   itemPath={direntPath}
                   userPerm={dirent.permission}
                   repoID={repoID}
-                  repoEncrypted={false}
+                  repoEncrypted={this.props.repoEncrypted}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   toggleDialog={this.toggleCancel}
