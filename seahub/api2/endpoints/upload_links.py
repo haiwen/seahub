@@ -29,6 +29,9 @@ from seahub.utils import gen_shared_upload_link, gen_file_upload_url
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
+from seahub.settings import UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
+        UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX
+
 logger = logging.getLogger(__name__)
 
 def get_upload_link_info(uls):
@@ -173,6 +176,18 @@ class UploadLinks(APIView):
                 error_msg = 'expire_days invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if UPLOAD_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < UPLOAD_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            UPLOAD_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > UPLOAD_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            UPLOAD_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
         elif expiration_time:
@@ -185,6 +200,28 @@ class UploadLinks(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=UPLOAD_LINK_EXPIRE_DAYS_MIN)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
+
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=UPLOAD_LINK_EXPIRE_DAYS_MAX)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
+
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        else:
+            if UPLOAD_LINK_EXPIRE_DAYS_DEFAULT > 0:
+                expire_date = timezone.now() + relativedelta(days=UPLOAD_LINK_EXPIRE_DAYS_DEFAULT)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
