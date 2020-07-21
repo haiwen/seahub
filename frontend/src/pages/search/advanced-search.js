@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { gettext, lang } from '../../utils/constants';
+import moment from 'moment';
 import { Button, Col, Collapse, CustomInput, FormGroup, Input, Label, Row, InputGroupAddon, InputGroup } from 'reactstrap';
-import SelectDate from '@seafile/seafile-editor/dist/components/calander';
+import { gettext } from '../../utils/constants';
+import DateTimePicker from '../../components/date-and-time-picker';
 
 const { repo_name, search_repo } = window.search.pageOptions;
 
@@ -24,6 +25,34 @@ class AdvancedSearch extends React.Component {
     return ftype;
   };
 
+  disabledStartDate = (startValue) => {
+    if (!startValue) {
+      return false;
+    }
+
+    const isAfterToday = startValue.isAfter(moment(), 'day');
+    const { time_to } = this.props.stateAndValues;
+    const endValue = time_to;
+    if (!endValue) {
+      return isAfterToday;
+    }
+    return startValue.isAfter(endValue) || isAfterToday;
+  }
+
+  disabledEndDate = (endValue) => {
+    if (!endValue) {
+      return false;
+    }
+
+    const isAfterToday = endValue.isAfter(moment(), 'day');
+    const { time_from } = this.props.stateAndValues;
+    const startValue = time_from;
+    if (!startValue) {
+      return isAfterToday;
+    }
+    return endValue.isBefore(startValue) || isAfterToday;
+  }
+
   render() {
     const { stateAndValues } = this.props;
     const { errorDateMsg, errorSizeMsg } = stateAndValues;
@@ -43,7 +72,7 @@ class AdvancedSearch extends React.Component {
             </span>
           }
           {(time_from && time_to ) &&
-            <span className="mr-4">{gettext('Last Update')}{': '}{time_from}{' '}{gettext('to')}{' '}{time_to}</span>
+            <span className="mr-4">{gettext('Last Update')}{': '}{time_from.format('YYYY-MM-DD')}{' '}{gettext('to')}{' '}{time_to.format('YYYY-MM-DD')}</span>
           }
           {(size_from && size_to) &&
             <span className="mr-4">{gettext('Size')}{': '}{size_from}{'MB - '}{size_to}{'MB'}</span>
@@ -168,20 +197,24 @@ class AdvancedSearch extends React.Component {
               <Row>
                 <Col md="2" lg="2" className="mt-2">{gettext('Last Update')}{': '}</Col>
                 <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
-                  <SelectDate
-                    onDateChange={this.props.handleTimeFromInput}
+                  <DateTimePicker
+                    inputWidth={'100%'}
+                    disabledDate={this.disabledStartDate}
                     value={stateAndValues.time_from}
-                    locale={lang}
-                  />
+                    onChange={this.props.handleTimeFromInput}
+                    showHourAndMinute={false}
+                  />  
                   <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
                 <div className="mt-2">-</div>
                 <Col md="4" lg="4" sm="4" xs="5" className="position-relative">
-                  <SelectDate
-                    onDateChange={this.props.handleTimeToInput}
+                  <DateTimePicker
+                    inputWidth={'100%'}
+                    disabledDate={this.disabledEndDate}
                     value={stateAndValues.time_to}
-                    locale={lang}
-                  />
+                    onChange={this.props.handleTimeToInput}
+                    showHourAndMinute={false}
+                  />  
                   <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
               </Row>

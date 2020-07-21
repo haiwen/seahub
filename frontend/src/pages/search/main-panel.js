@@ -30,8 +30,8 @@ class SearchViewPanel extends React.Component {
       search_ftypes: search_ftypes,
       fileTypeItemsStatus: [false, false, false, false, false, false, false],
       input_fexts: '',
-      time_from: '',
-      time_to: '',
+      time_from: null,
+      time_to: null,
       size_from: '',
       size_to: '',
       // search result
@@ -81,8 +81,9 @@ class SearchViewPanel extends React.Component {
     if (this.state.search_ftypes) {params.search_ftypes = this.state.search_ftypes;}
     if (this.state.per_page) {params.per_page = this.state.per_page;}
     if (this.state.input_fexts) {params.input_fexts = this.state.input_fexts;}
-    if (this.state.time_from) {params.time_from = moment(this.state.time_from).valueOf() / 1000;}
-    if (this.state.time_to) {params.time_to = moment(this.state.time_to).valueOf() / 1000;}
+    const { time_from, time_to } = this.state;
+    if (time_from) {params.time_from = parseInt(time_from.valueOf() / 1000);}
+    if (time_to) {params.time_to = parseInt(time_to.valueOf() / 1000);}
     if (this.state.size_from) {params.size_from = this.state.size_from * 1000 *1000;}
     if (this.state.size_to) {params.size_to = this.state.size_to * 1000 * 1000;}
     if (ftype.length !== 0) {params.ftype = ftype;}
@@ -90,10 +91,6 @@ class SearchViewPanel extends React.Component {
   };
 
   handleSubmit = () => {
-    if (this.compareNumber(this.state.time_from, this.state.time_to)) {
-      this.setState({ errorDateMsg: gettext('Start date should be earlier than end date.') });
-      return;
-    }
     if (this.compareNumber(this.state.size_from, this.state.size_to)) {
       this.setState({ errorSizeMsg: gettext('Invalid file size range.') });
       return;
@@ -138,8 +135,8 @@ class SearchViewPanel extends React.Component {
       search_ftypes: search_ftypes,
       fileTypeItemsStatus: [false, false, false, false, false, false, false],
       input_fexts: '',
-      time_from: '',
-      time_to: '',
+      time_from: null,
+      time_to: null,
       size_from: '',
       size_to: '',
       errorMsg: '',
@@ -258,12 +255,14 @@ class SearchViewPanel extends React.Component {
   };
 
   handleTimeFromInput = (value) => {
-    this.setState({ time_from: value });
+    // set the time to be '00:00:00'
+    this.setState({time_from: value ? value.hours(0).minutes(0).seconds(0) : value});
     if (this.state.errorDateMsg) this.setState({ errorDateMsg: '' });
   };
 
   handleTimeToInput = (value) => {
-    this.setState({ time_to: value });
+    // set the time to be '23:59:59'
+    this.setState({time_to: value ? value.hours(23).minutes(59).seconds(59) : value});
     if (this.state.errorDateMsg) this.setState({ errorDateMsg: '' });
   };
 
