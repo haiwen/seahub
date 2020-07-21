@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert } from 'reactstrap';
-import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, FormText } from 'reactstrap';
+import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
@@ -22,6 +22,24 @@ const inputWidth = Utils.isDesktop() ? 250 : 210;
 class GenerateUploadLink extends React.Component {
   constructor(props) {
     super(props);
+
+    this.isExpireDaysNoLimit = (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax === 0 && uploadLinkExpireDaysDefault == 0);
+    this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : uploadLinkExpireDaysDefault;
+
+    let expirationLimitTip = '';
+    if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax !== 0) {
+      expirationLimitTip = gettext('{minDays_placeholder} - {maxDays_placeholder} days')
+        .replace('{minDays_placeholder}', uploadLinkExpireDaysMin)
+        .replace('{maxDays_placeholder}', uploadLinkExpireDaysMax);
+    } else if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax === 0) {
+      expirationLimitTip = gettext('Greater than or equal to {minDays_placeholder} days')
+        .replace('{minDays_placeholder}', uploadLinkExpireDaysMin);
+    } else if (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax !== 0) {
+      expirationLimitTip = gettext('Less than or equal to {maxDays_placeholder} days')
+        .replace('{maxDays_placeholder}', uploadLinkExpireDaysMax);
+    }
+    this.expirationLimitTip = expirationLimitTip;
+
     this.state = {
       showPasswordInput: false,
       passwordVisible: false,
@@ -29,9 +47,9 @@ class GenerateUploadLink extends React.Component {
       passwdnew: '',
       sharedUploadInfo: null,
       isSendLinkShown: false,
-      isExpireChecked: false,
+      isExpireChecked: !this.isExpireDaysNoLimit,
       setExp: 'by-days',
-      expireDays: '',
+      expireDays: this.defaultExpireDays,
       expDate: null
     };
   }
@@ -177,7 +195,19 @@ class GenerateUploadLink extends React.Component {
       return false;
     }
 
-    return current.isBefore(moment(), 'day');
+    if (this.isExpireDaysNoLimit) {
+      return current.isBefore(moment(), 'day');
+    }
+
+    const startDay = moment().add(uploadLinkExpireDaysMin, 'days');
+    const endDay = moment().add(uploadLinkExpireDaysMax, 'days');
+    if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax !== 0) {
+      return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
+    } else if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax === 0) {
+      return current.isBefore(startDay, 'day');
+    } else if (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax !== 0) {
+      return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
+    }
   }
 
   onExpDateChanged = (value) => {
@@ -203,6 +233,8 @@ class GenerateUploadLink extends React.Component {
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
         showPasswordInput: false,
+        expireDays: this.defaultExpireDays,
+        isExpireChecked: !this.isExpireDaysNoLimit,
         password: '',
         passwordnew: '',
         sharedUploadInfo: null,
@@ -286,7 +318,11 @@ class GenerateUploadLink extends React.Component {
         </FormGroup>
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" onChange={this.onExpireChecked} />
+              {this.isExpireDaysNoLimit ? (
+                <Input type="checkbox" onChange={this.onExpireChecked} />
+              ) : (
+                <Input type="checkbox" checked readOnly disabled />
+              )}
             <span>{gettext('Add auto expiration')}</span>
           </Label>
           {this.state.isExpireChecked &&
@@ -297,12 +333,17 @@ class GenerateUploadLink extends React.Component {
                 <span>{gettext('Expiration days')}</span>
               </Label>
               {this.state.setExp == 'by-days' && (
-                <InputGroup style={{width: inputWidth}}>
-                  <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
-                  <InputGroupAddon addonType="append">
-                    <InputGroupText>{gettext('days')}</InputGroupText>
-                  </InputGroupAddon>
-                </InputGroup>
+                <Fragment>
+                  <InputGroup style={{width: inputWidth}}>
+                    <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
+                    <InputGroupAddon addonType="append">
+                      <InputGroupText>{gettext('days')}</InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  {!this.state.isExpireDaysNoLimit && (
+                    <FormText color="muted">{this.expirationLimitTip}</FormText>
+                  )}
+                </Fragment>
               )}
             </FormGroup>
             <FormGroup check>
