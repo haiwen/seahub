@@ -118,7 +118,7 @@ class ViewFileToolbar extends React.Component {
                 {gettext('More')}
               </DropdownToggle>
               <DropdownMenu>
-                {this.props.showShareBtn && canGenerateShareLink && 
+                {this.props.showShareBtn && 
                   <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
