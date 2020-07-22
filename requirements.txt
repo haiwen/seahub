@@ -6,7 +6,7 @@ django-post_office==3.3.0
 django-webpack_loader
 gunicorn
 pymysql
-django-picklefield
+django-picklefield==2.1.1
 openpyxl
 qrcode
 django-formtools
