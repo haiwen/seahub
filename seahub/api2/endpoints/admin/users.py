@@ -536,7 +536,7 @@ class AdminUsers(APIView):
             role = request.data.get("role", None)
         if role:
             available_roles = get_available_roles()
-            if role.lower() not in available_roles:
+            if role not in available_roles:
                 error_msg = 'role must be in %s.' % str(available_roles)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -829,7 +829,7 @@ class AdminUser(APIView):
         role = request.data.get("role", None)
         if role:
             available_roles = get_available_roles()
-            if role.lower() not in available_roles:
+            if role not in available_roles:
                 error_msg = 'role must be in %s.' % str(available_roles)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
