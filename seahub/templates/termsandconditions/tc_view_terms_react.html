@@ -1,0 +1,17 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'TCAccept' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+  window.tc = {
+    termsName: "{{ terms.name|escapejs }}",
+    termsText: "{{ terms.text|escapejs }}"
+  };
+</script>
+{% render_bundle 'TCView' 'js' %}
+{% endblock %}

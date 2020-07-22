@@ -712,11 +712,11 @@ if EVENTS_CONFIG_FILE:
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
-    def get_file_history(repo_id, path, start, count):
+    def get_file_history(repo_id, path, start, count, history_limit=-1):
         """Return file histories
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_history(session, repo_id, path, start, count)
+            res = seafevents.get_file_history(session, repo_id, path, start, count, history_limit)
         return res
 
     def get_log_events_by_time(log_type, tstart, tend):

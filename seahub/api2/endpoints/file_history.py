@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -108,6 +109,14 @@ class FileHistoryView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # get repo history limit
+        try:
+            keep_days = seafile_api.get_repo_history_limit(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         # get file history
         limit = request.GET.get('limit', 50)
         try:
@@ -125,9 +134,14 @@ class FileHistoryView(APIView):
 
         result = []
         for commit in file_revisions:
-            info = get_file_history_info(commit, avatar_size)
-            info['path'] = path
-            result.append(info)
+            present_time = datetime.utcnow()
+            history_time = datetime.utcfromtimestamp(commit.ctime)
+            if (keep_days == -1) or ((present_time - history_time).days < keep_days):
+                info = get_file_history_info(commit, avatar_size)
+                info['path'] = path
+                result.append(info)
+
+        next_start_commit = next_start_commit if result else False
 
         return Response({
             "data": result,
@@ -182,11 +196,19 @@ class NewFileHistoryView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # get repo history limit
+        try:
+            history_limit = seafile_api.get_repo_history_limit(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         start = (page - 1) * per_page
         count = per_page
 
         try:
-            file_revisions, total_count = get_file_history(repo_id, path, start, count)
+            file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

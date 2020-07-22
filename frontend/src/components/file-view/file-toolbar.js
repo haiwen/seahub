@@ -63,8 +63,9 @@ class FileToolbar extends React.Component {
     }   
 
     let showShareBtn = false;
-    if (!repoEncrypted &&
-      (filePerm == 'rw' || filePerm == 'r') && canGenerateShareLink) {
+    if (repoEncrypted) {
+      showShareBtn = true; // for internal link
+    } else if ((filePerm == 'rw' || filePerm == 'r') && canGenerateShareLink) {
       showShareBtn = true;
     }
 
@@ -212,7 +213,7 @@ class FileToolbar extends React.Component {
             itemPath={filePath}
             userPerm={filePerm}
             repoID={repoID}
-            repoEncrypted={false}
+            repoEncrypted={repoEncrypted}
             toggleDialog={this.toggleShareDialog}
           />
         </ModalPortal>

@@ -72,7 +72,8 @@ class ZipTaskView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, parent_dir):
+        repo_folder_permission = check_folder_permission(request, repo_id, parent_dir)
+        if not repo_folder_permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -90,6 +91,11 @@ class ZipTaskView(APIView):
                 error_msg = 'Folder %s not found.' % full_dir_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps([full_dir_path]), \
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             dir_size = seafile_api.get_dir_size(
                     repo.store_id, repo.version, dir_id)
 
@@ -106,6 +112,7 @@ class ZipTaskView(APIView):
         if download_type == 'download-multi':
             dirent_list = []
             total_size = 0
+            full_dirent_path_list = []
             for dirent_name in dirent_name_list:
                 dirent_name = dirent_name.strip('/')
                 dirent_list.append(dirent_name)
@@ -120,6 +127,13 @@ class ZipTaskView(APIView):
                         repo.version, current_dirent.obj_id)
                 else:
                     total_size += current_dirent.size
+
+                full_dirent_path_list.append(full_dirent_path)
+
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps(full_dirent_path_list), \
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
                 error_msg = _('Total size exceeds limit.')
@@ -192,7 +206,8 @@ class ZipTaskView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
+        repo_folder_permission = check_folder_permission(request, repo_id, parent_dir)
+        if parse_repo_perm(repo_folder_permission).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -210,6 +225,11 @@ class ZipTaskView(APIView):
                 error_msg = 'Folder %s not found.' % full_dir_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps([full_dir_path]), \
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             dir_size = seafile_api.get_dir_size(
                     repo.store_id, repo.version, dir_id)
 
@@ -226,6 +246,7 @@ class ZipTaskView(APIView):
         if download_type == 'download-multi':
             dirent_list = []
             total_size = 0
+            full_dirent_path_list = []
             for dirent_name in dirent_name_list:
                 dirent_name = dirent_name.strip('/')
                 dirent_list.append(dirent_name)
@@ -240,6 +261,13 @@ class ZipTaskView(APIView):
                         repo.version, current_dirent.obj_id)
                 else:
                     total_size += current_dirent.size
+
+                full_dirent_path_list.append(full_dirent_path)
+
+            if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps(full_dirent_path_list), \
+                    request.user.username, repo_folder_permission))['is_downloadable']:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
                 error_msg = _('Total size exceeds limit.')

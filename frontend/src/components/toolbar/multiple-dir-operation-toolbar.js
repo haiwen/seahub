@@ -327,20 +327,22 @@ class MultipleDirOperationToolbar extends React.Component {
     const dirent = this.props.selectedDirentList[0];
 
     let direntPath = this.getDirentPath(dirent);
-
-    if (userPerm !== 'rw' && userPerm !== 'admin') {
-      return '';
-    }
     
     return (
       <Fragment>
         <div className="dir-operation">
           <div className="d-flex">
             <ButtonGroup className="flex-row group-operations">
-              <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-              <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-              <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
-              <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+              {(userPerm === 'rw' || userPerm === 'admin') && (
+                <Fragment>
+                  <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
+                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+                  <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+                </Fragment>
+              )}
+              {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'r') && (
+                <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+              )}
               {this.props.selectedDirentList.length === 1 &&
                 <ItemDropdownMenu
                   tagName={'button'}
@@ -396,7 +398,7 @@ class MultipleDirOperationToolbar extends React.Component {
                   itemPath={direntPath}
                   userPerm={dirent.permission}
                   repoID={repoID}
-                  repoEncrypted={false}
+                  repoEncrypted={this.props.repoEncrypted}
                   enableDirPrivateShare={this.props.enableDirPrivateShare}
                   isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                   toggleDialog={this.toggleCancel}

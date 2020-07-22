@@ -31,7 +31,7 @@
 <script type="text/javascript">
 $('.new-narrow-panel input[name="password"]').trigger('focus');
 $('input[type="submit"]').on('click', function(){
-    if (!$.trim($('input[name="password"]').val())) {
+    if (!$('input[name="password"]').val().trim()) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
     }

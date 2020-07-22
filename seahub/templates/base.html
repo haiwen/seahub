@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
+{% load seahub_tags i18n staticfiles %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -39,48 +39,8 @@
             <span class="sf2-icon-menu side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
 
             {% block header_right %}
-            {% if request.user.is_authenticated %}
-            <div class="d-flex">
-                {% block top_search %}
-                {% if has_file_search %}
-                    {% include 'snippets/search_form.html' %}
-                {% endif %}
-                {% endblock %}
-
-                <div id="account">
-                    <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
-                        {% avatar request.user 32 %} <span class="icon-caret-down vam"></span>
-                    </a>
-                    <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
-                    <div id="user-info-popup" class="account-popup sf-popover hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <div class="sf-popover-con">
-                            <div class="item ovhd">
-                                {% avatar request.user 36 %}
-                                <div class="txt">
-                                    {{ request.user.username|email2nickname }}
-                                </div>
-                            </div>
-                            <span class="loading-icon loading-tip"></span>
-                            <div id="space-traffic" class="hide"></div>
-                            <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                            {% block admin_link %}
-                            {% if request.user.is_staff %}
-                            <a href="{% url 'sys_info' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
-                            {% endif %}
-                            {% if request.user.org and request.user.org.is_staff %}
-                            <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">{% trans "Organization Admin" %}</a>
-                            {% endif %}
-                            {% if request.user.inst_admin %}
-                            <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
-                            {% endif %}
-                            {% endblock %}
-                            <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %} {# for non-logged-in user #}
+            {% if not request.user.is_authenticated %}
+            {# for non-logged-in user #}
             <div id="lang">
                 <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="icon-caret-down"></span></a>
                 <div id="lang-context-selector" class="sf-popover hide">
@@ -181,10 +141,6 @@ $('#info-bar .close').on('click', function() {
         }
     }
 });
-{% endif %}
-
-{% if has_file_search %}
-    {% include 'snippets/search_js.html' %}
 {% endif %}
 
 {% else %} {# for non-logged-in user #}

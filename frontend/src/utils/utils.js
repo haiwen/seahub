@@ -1286,7 +1286,7 @@ export const Utils = {
     let isRepoOwner = ownerEmail === username;
 
     if (repoEncrypted) {
-      return false;
+      return true;
     }
 
     if (dirent && dirent.type === 'file') {

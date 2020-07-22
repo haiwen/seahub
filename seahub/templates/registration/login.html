@@ -149,11 +149,11 @@ $('#refresh-captcha').on('click', function() {
 });
 
 $('#login-form').on('submit', function(){
-    if (!$.trim($('input[name="login"]').val())) {
+    if (!$('input[name="login"]').val().trim()) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
     }
-    if (!$.trim($('input[name="password"]').val())) {
+    if (!$('input[name="password"]').val().trim()) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
     }

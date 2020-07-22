@@ -69,7 +69,7 @@ $("#id_password1")
 })
 .on('keyup', function() {
     var pwd = $(this).val();
-    if ($.trim(pwd)) {
+    if (pwd.trim()) {
         var level = getStrengthLevel(pwd);
         showStrength(level);
     } else {
@@ -79,9 +79,9 @@ $("#id_password1")
 {% endif %}
 
 $('#signup-form').on('submit', function(){
-    var email = $.trim($('input[name="email"]').val()),
-        pwd1 = $.trim($('input[name="password1"]').val()),
-        pwd2 = $.trim($('input[name="password2"]').val());
+    var email = $('input[name="email"]').val().trim(),
+        pwd1 = $('input[name="password1"]').val().trim(),
+        pwd2 = $('input[name="password2"]').val().trim();
 
         if (!email) {
             $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');

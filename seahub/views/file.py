@@ -5,7 +5,6 @@ File related views, including view_file, view_history_file, view_trash_file,
 view_snapshot_file, view_shared_file, etc.
 """
 
-import sys
 import os
 import json
 import stat
@@ -15,7 +14,6 @@ import logging
 import posixpath
 import re
 import mimetypes
-import urllib.parse
 import datetime
 
 from django.core import signing
@@ -24,7 +22,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.translation import get_language, ugettext as _
@@ -37,7 +35,6 @@ from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc
-from pysearpc import SearpcError
 
 from seahub.settings import SITE_ROOT
 from seahub.tags.models import FileUUIDMap
@@ -54,7 +51,7 @@ from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
-    mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
+    EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
@@ -1978,7 +1975,7 @@ def view_media_file_via_share_link(request):
         return render_error(request, 'Image does not exist')
 
     # get image
-    obj_id = seafile_api.get_file_id_by_path(repo_id, urllib2.unquote(image_path))
+    obj_id = seafile_api.get_file_id_by_path(repo_id, image_path)
     if not obj_id:
         return render_error(request, 'Image does not exist')
 

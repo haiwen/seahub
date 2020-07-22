@@ -221,8 +221,17 @@ class AdminAddressBookGroup(APIView):
         if not group:
             return Response({'success': True})
 
+        org_id = None
+        if is_org_context(request):
+            # request called by org admin
+            org_id = request.user.org.org_id
+
         try:
-            has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
+            if org_id:
+                has_repo = seafile_api.org_if_group_has_group_owned_repo(org_id, group_id)
+            else:
+                has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
+
             child_groups = ccnet_api.get_child_groups(group_id)
         except Exception as e:
             logger.error(e)

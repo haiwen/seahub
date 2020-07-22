@@ -34,7 +34,8 @@ class TermsView(DetailView):
 
     url: /terms/view
     """
-    template_name = "termsandconditions/tc_view_terms.html"
+    #template_name = "termsandconditions/tc_view_terms.html"
+    template_name = "termsandconditions/tc_view_terms_react.html"
     context_object_name = 'terms'
 
     def get_object(self, queryset=None):
