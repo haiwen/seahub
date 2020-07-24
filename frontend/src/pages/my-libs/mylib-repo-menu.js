@@ -68,6 +68,7 @@ class MylibRepoMenu extends React.Component {
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
+    operations.push('Old Files Auto Delete');
     return operations;
   }
 
@@ -112,6 +113,9 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Share Links Admin':
         translateResult = gettext('Share Links Admin');
+        break;
+      case 'Old Files Auto Delete':
+        translateResult = gettext('Old Files Auto Delete');
         break;
       default:
         break;

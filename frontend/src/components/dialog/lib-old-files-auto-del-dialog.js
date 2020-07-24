@@ -1,0 +1,128 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { gettext, enableRepoHistorySetting } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+
+const propTypes = {
+  toggleDialog: PropTypes.func.isRequired,
+  repoID: PropTypes.string.isRequired,
+};
+
+class LibOldFilesAutoDelDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      autoDelDays: 0,
+      isAutoDel: false,
+      errorInfo: '',
+    };
+  }
+
+  componentDidMount() {
+    seafileAPI.getRepoOldFilesAutoDelDays(this.props.repoID).then(res => {
+      this.setState({
+        autoDelDays: res.data.auto_del_days,
+        isAutoDel: res.data.auto_del_days > 0,
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  submit = () => {
+    let daysNeedTobeSet = this.state.autoDelDays;
+    if (!this.state.isAutoDel) {
+      daysNeedTobeSet = 0;    // if no auto del, give 0 to server
+    }
+
+    let reg = /^-?\d+$/;
+    let isvalid_days = reg.test(daysNeedTobeSet);
+    if (!isvalid_days || daysNeedTobeSet <= 0) {
+      this.setState({
+        errorInfo: gettext('Please enter a positive integer'),
+      });
+      return;
+    }
+
+    let repoID = this.props.repoID;
+
+    let message = gettext('Library old files auto delete days setted.');
+    seafileAPI.setRepoOldFilesAutoDelDays(repoID, daysNeedTobeSet).then(res => {
+      toaster.success(message);
+      this.props.toggleDialog();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.submit();
+      e.preventDefault();
+    }
+  }
+
+  onChange = (e) => {
+    let days = e.target.value;
+    this.setState({
+      autoDelDays: days,
+    });
+  }
+
+  updateRadioCheck = (type) => {
+    if (type === 'noAutoDel') {
+      this.setState({
+        isAutoDel: false,
+      });
+    } else if (type === 'autoDel') {
+      this.setState({
+        isAutoDel: true,
+      });
+    }
+  }
+
+  render() {
+    return (
+      <Modal isOpen={true}>
+        <ModalHeader toggle={this.props.toggleDialog}>
+          {gettext('Old Files Auto Delete Days')}
+        </ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup check>
+              <Input type="radio" name="radio1" checked={!this.state.isAutoDel} onChange={() =>{this.updateRadioCheck('noAutoDel');}}/>{' '}
+              <Label>{gettext('Don\'t delete old files automatically.')}</Label>
+            </FormGroup>
+            <FormGroup check>
+              <Input type="radio" name="radio1" checked={this.state.isAutoDel} onChange={() =>{this.updateRadioCheck('autoDel');}}/>{' '}
+              <Label>{gettext('Old files not modified more than this will be delete:')}</Label>
+              <Input 
+                type="text" 
+                className="expire-input" 
+                value={this.state.autoDelDays}
+                onChange={this.onChange} 
+                onKeyDown={this.handleKeyPress}
+              />{' '}
+              <Label><span>{gettext('days')}</span></Label>
+            </FormGroup>
+            {this.state.errorInfo && <Alert color="danger">{this.state.errorInfo}</Alert>}
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+LibOldFilesAutoDelDialog.propTypes = propTypes;
+
+export default LibOldFilesAutoDelDialog;

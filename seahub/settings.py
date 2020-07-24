@@ -253,6 +253,7 @@ INSTALLED_APPS = [
     'seahub.file_participants',
     'seahub.repo_api_tokens',
     'seahub.abuse_reports',
+    'seahub.repo_files_auto_del',
 ]
 
 # Enable or disable view File Scan

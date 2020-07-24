@@ -20,6 +20,7 @@ import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareUploadLinksDialog from '../../components/dialog/repo-share-upload-links-dialog';
+import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -51,6 +52,7 @@ class MylibRepoListItem extends React.Component {
       isAPITokenDialogShow: false,
       isRepoShareUploadLinksDialogOpen: false,
       isRepoDeleted: false,
+      isOldFilesAutoDelDialogOpen: false,
     };
   }
 
@@ -110,6 +112,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Share Links Admin':
         this.toggleRepoShareUploadLinksDialog();
+        break;
+      case 'Old Files Auto Delete':
+        this.toggleOldFilesAutoDelDialog();
         break;
       default:
         break;
@@ -188,6 +193,10 @@ class MylibRepoListItem extends React.Component {
 
   toggleRepoShareUploadLinksDialog = () => {
     this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
+  }
+
+  toggleOldFilesAutoDelDialog = () => {
+    this.setState({isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen});
   }
 
   onUnfreezedItem = () => {
@@ -449,6 +458,14 @@ class MylibRepoListItem extends React.Component {
             <RepoShareUploadLinksDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareUploadLinksDialog}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isOldFilesAutoDelDialogOpen && (
+          <ModalPortal>
+            <LibOldFilesAutoDelDialog
+              repoID={repo.repo_id}
+              toggleDialog={this.toggleOldFilesAutoDelDialog}
             />
           </ModalPortal>
         )}
