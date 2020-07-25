@@ -190,6 +190,7 @@ class GroupView extends React.Component {
   }
 
   onItemDelete = (repo) => {
+    let groupID = this.props.groupID;
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
