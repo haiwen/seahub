@@ -44,7 +44,8 @@ class SharedRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
-      isRepoShareUploadLinksDialogOpen: false
+      isRepoShareUploadLinksDialogOpen: false,
+      isRepoDeleted: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -194,7 +195,14 @@ class SharedRepoListItem extends React.Component {
     }
 
     const groupID = currentGroup.id;
+
     seafileAPI.deleteGroupOwnedLibrary(groupID, repo.repo_id).then(() => {
+      
+      this.setState({
+        isRepoDeleted: true,
+        isDeleteDialogShow: false,
+      });
+      
       this.props.onItemDelete(repo);
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
@@ -206,6 +214,8 @@ class SharedRepoListItem extends React.Component {
         errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
       }
       toaster.danger(errMessage);
+
+      this.setState({isRepoDeleted: false});
     });
   }
 
@@ -497,7 +507,8 @@ class SharedRepoListItem extends React.Component {
           <ModalPortal>
             <DeleteRepoDialog
               repo={this.props.repo}
-              onDeleteRepo={this.props.onItemDelete}
+              isRepoDeleted={this.state.isRepoDeleted}
+              onDeleteRepo={this.onItemDelete}
               toggle={this.onItemDeleteToggle}
             />
           </ModalPortal>

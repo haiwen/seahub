@@ -130,20 +130,26 @@ class Item extends Component {
       isShareDialogOpen: false,
       isDeleteDialogOpen: false,
       isTransferDialogOpen: false,
-      isHistorySettingDialogOpen: false
+      isHistorySettingDialogOpen: false,
+      isRepoDeleted: false,
     };
   }
 
   onDeleteRepo = (repo) => {
     seafileAPI.sysAdminDeleteRepo(repo.id).then((res) => {
       this.props.onDeleteRepo(repo);
+      this.setState({
+        isDeleteDialogOpen: false,
+        isRepoDeleted: true,
+      });
       const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.name);
       toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+
+      this.setState({isRepoDeleted: false});
     });
-    this.toggleDeleteDialog();
   }
 
   onTransferRepo = (owner) => {
@@ -325,6 +331,7 @@ class Item extends Component {
           <ModalPortal>
             <DeleteRepoDialog
               repo={repo}
+              isRepoDeleted={this.state.isRepoDeleted}
               onDeleteRepo={this.onDeleteRepo}
               toggle={this.toggleDeleteDialog}
             />
