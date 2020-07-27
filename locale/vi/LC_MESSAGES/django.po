@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-07 13:02+0800\n"
-"PO-Revision-Date: 2020-05-07 05:02+0000\n"
+"POT-Creation-Date: 2020-07-27 12:02+0800\n"
+"PO-Revision-Date: 2020-07-27 04:02+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
-#: seahub/api2/views.py:351
+#: seahub/api2/views.py:354
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
-#: seahub/api2/views.py:355 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:358 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr ""
 
@@ -55,7 +55,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Định mức quá thấp (tối thiểu là 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:350 seahub/views/sysadmin.py:335
+#: seahub/organizations/api/admin/users.py:432 seahub/views/sysadmin.py:335
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Thiết lập Quota thất bại: quota tối đa là %d MB"
@@ -71,18 +71,18 @@ msgstr ""
 msgid "There is already a group with that name."
 msgstr "Đã tồn tại tên nhóm này"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:231
+#: seahub/api2/endpoints/admin/address_book/groups.py:240
 msgid "There are libraries in this department."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:235
+#: seahub/api2/endpoints/admin/address_book/groups.py:244
 msgid "There are sub-departments in this department."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:662 seahub/views/__init__.py:663
-#: seahub/views/__init__.py:667 seahub/views/__init__.py:668
+#: seahub/views/__init__.py:663 seahub/views/__init__.py:664
+#: seahub/views/__init__.py:668 seahub/views/__init__.py:669
 msgid "My Library"
 msgstr "Thư viện của tôi"
 
@@ -116,18 +116,18 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr "Không thể xóa thư viện hệ thống."
 
-#: seahub/api2/endpoints/admin/libraries.py:374 seahub/api2/views.py:1606
+#: seahub/api2/endpoints/admin/libraries.py:374 seahub/api2/views.py:1609
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:395 seahub/api2/views.py:1611
+#: seahub/api2/endpoints/admin/libraries.py:395 seahub/api2/views.py:1614
 msgid "Library can not be transferred to owner."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/share_links.py:200
+#: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:473
+#: seahub/api2/endpoints/share_links.py:513
 msgid "There is an associated published library."
 msgstr ""
 
@@ -266,6 +266,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:422
 #: seahub/api2/endpoints/admin/users.py:447
+#: seahub/organizations/api/admin/users.py:147
 msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
@@ -367,11 +368,11 @@ msgstr "Đường dẫn không hợp lệ"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1749
-#: seahub/api2/views.py:1789 seahub/api2/views.py:1838
-#: seahub/api2/views.py:1882 seahub/api2/views.py:1928
-#: seahub/api2/views.py:1977 seahub/api2/views.py:2388
-#: seahub/api2/views.py:2502
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1752
+#: seahub/api2/views.py:1792 seahub/api2/views.py:1841
+#: seahub/api2/views.py:1885 seahub/api2/views.py:1931
+#: seahub/api2/views.py:1980 seahub/api2/views.py:2391
+#: seahub/api2/views.py:2505
 msgid "Out of quota."
 msgstr ""
 
@@ -411,7 +412,7 @@ msgstr ""
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
 #: seahub/profile/views.py:215 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:737
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:738
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
 msgstr ""
@@ -420,7 +421,7 @@ msgstr ""
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:541
+#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:581
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -434,14 +435,14 @@ msgstr ""
 #: seahub/api2/endpoints/repo_set_password.py:70
 #: seahub/api2/endpoints/repo_share_invitations.py:197
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3804
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3807
 #: seahub/notifications/models.py:465 seahub/notifications/models.py:506
 #: seahub/notifications/models.py:557 seahub/notifications/models.py:613
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
 #: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1185
-#: seahub/views/__init__.py:903 seahub/views/__init__.py:922
+#: seahub/views/__init__.py:904 seahub/views/__init__.py:923
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405
 msgid "Internal Server Error"
 msgstr "Internal Server Error"
@@ -460,10 +461,10 @@ msgid "User %s is already a group member."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1591
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1594
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:241
+#: seahub/organizations/api/admin/users.py:323
 #, python-format
 msgid "User %s not found in organization."
 msgstr ""
@@ -537,11 +538,11 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3801
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3804
 msgid "Wrong password"
 msgstr "Sai mật khẩu"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3807
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3810
 msgid "Decrypt library error"
 msgstr "Lỗi giải mã"
 
@@ -607,33 +608,52 @@ msgstr ""
 msgid "An upload link is shared to you on %s"
 msgstr "Một link tải lên được chia sẻ với bạn tại %s"
 
-#: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:906
+#: seahub/api2/endpoints/share_link_zip_task.py:103
+#: seahub/api2/endpoints/zip_task.py:103 seahub/views/__init__.py:907
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Không thể tải thư mục \"%s\": dung lượng quá lớn."
 
-#: seahub/api2/endpoints/share_links.py:244
+#: seahub/api2/endpoints/share_link_zip_task.py:243
+#: seahub/api2/endpoints/zip_task.py:139 seahub/api2/endpoints/zip_task.py:273
+msgid "Total size exceeds limit."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:246
 msgid "Password is too short."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:259 seahub/api2/views.py:3372
+#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/upload_links.py:181 seahub/api2/views.py:3375
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:265 seahub/api2/views.py:3378
+#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/upload_links.py:187 seahub/api2/views.py:3381
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:329
-#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/share_links.py:297
+#: seahub/api2/endpoints/upload_links.py:209
+#, python-format
+msgid "Expiration time should be later than %s."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:306
+#: seahub/api2/endpoints/upload_links.py:218
+#, python-format
+msgid "Expiration time should be earlier than %s."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:369
+#: seahub/api2/endpoints/share_links.py:378
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/upload_links.py:153
+#: seahub/api2/endpoints/upload_links.py:158
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short"
 msgstr "Mật khẩu quá ngắn"
@@ -680,10 +700,6 @@ msgstr ""
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Name is required."
 msgstr "Yêu cầu tên."
-
-#: seahub/api2/endpoints/zip_task.py:125 seahub/api2/endpoints/zip_task.py:245
-msgid "Total size exceeds limit."
-msgstr ""
 
 #: seahub/auth/decorators.py:74
 msgid "Please log in."
@@ -895,6 +911,11 @@ msgstr "Ghi chú"
 msgid "Files in this library can not be viewed online."
 msgstr "Các file trong thư viện này không thể xem trực tuyến"
 
+#: seahub/base/management/commands/check_user_quota.py:58
+#, python-format
+msgid "Your quota is almost full on %s"
+msgstr ""
+
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
 msgstr "Nhập địa chỉ email."
@@ -975,8 +996,7 @@ msgstr "Lần đăng nhập cuối"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/templates/base.html:72
-#: seahub/templates/base.html:75 seahub/views/sysadmin.py:210
+#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:210
 #: seahub/views/sysadmin.py:214
 msgid "Admin"
 msgstr "Admin"
@@ -1005,7 +1025,7 @@ msgstr "Chưa kích hoạt"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:124 seahub/views/sysadmin.py:276
+#: seahub/templates/base.html:84 seahub/views/sysadmin.py:276
 #: seahub/views/sysadmin.py:277
 msgid "Yes"
 msgstr "Có"
@@ -1240,8 +1260,6 @@ msgstr "Ghi chú (không bắt buộc)"
 #: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/repo_dir_recycle_view.html:74
 #: seahub/templates/share_access_validation.html:21
-#: seahub/templates/snippets/search_form.html:11
-#: seahub/templates/snippets/search_form.html:78
 msgid "Submit"
 msgstr "Cập nhật"
 
@@ -1349,7 +1367,7 @@ msgstr "Tên %s không hợp lệ"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1866
+#: seahub/views/file.py:1863
 msgid "Argument missing"
 msgstr "Thiếu tham số"
 
@@ -1411,7 +1429,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Lỗi: chỉ có thành viên trong Group mới có thể thêm mới"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:464
+#: seahub/views/file.py:461
 msgid "Group does not exist"
 msgstr "Group không tồn tại"
 
@@ -1476,16 +1494,16 @@ msgstr "Cám ơn bạn đã sử dụng dịch vụ của chúng tôi!"
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s"
 
-#: seahub/group/views.py:107 seahub/share/views.py:228
-#: seahub/views/__init__.py:567 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1138
-#: seahub/views/file.py:1358 seahub/views/file.py:1875
+#: seahub/group/views.py:105 seahub/share/views.py:228
+#: seahub/views/__init__.py:568 seahub/views/ajax.py:381
+#: seahub/views/ajax.py:427 seahub/views/file.py:1135
+#: seahub/views/file.py:1355 seahub/views/file.py:1872
 #: seahub/views/repo.py:115 seahub/views/repo.py:171 seahub/views/repo.py:228
 #: seahub/views/repo.py:281 seahub/views/repo.py:387
 msgid "Permission denied"
 msgstr "Không có quyền"
 
-#: seahub/group/views.py:173
+#: seahub/group/views.py:171
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "Bạn được mời tham gia vào Group %s"
@@ -2064,6 +2082,7 @@ msgstr "%(user)s mời bạn tham gia %(site_name)s."
 #: seahub/templates/sysadmin/user_batch_add_email.html:9
 #: seahub/templates/sysadmin/user_freeze_email.html:9
 #: seahub/templates/sysadmin/user_reset_email.html:9
+#: seahub/templates/user_quota_full.html:9
 msgid "Hi,"
 msgstr "Xin chào,"
 
@@ -2167,21 +2186,15 @@ msgstr ""
 msgid "New file updates on %s"
 msgstr ""
 
-#: seahub/notifications/management/commands/send_notices.py:310
+#: seahub/notifications/management/commands/send_notices.py:312
 #, python-format
 msgid "New notice on %s"
 msgstr "Ghi chú mới trên %s"
 
-#: seahub/notifications/management/commands/send_work_weixin_notifications.py:170
-#: seahub/notifications/templates/notifications/notice_email.html:9
+#: seahub/notifications/management/commands/send_notices_to_social_account.py:223
 #, python-format
-msgid ""
-"\n"
-"You've got 1 new notice on %(site_name)s:\n"
-msgid_plural ""
-"\n"
-"You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] "\nBạn có %(num)s thông báo mới trên %(site_name)s:\n"
+msgid "You've got %(num)s new notices on %(site_name)s:\n"
+msgstr ""
 
 #: seahub/notifications/models.py:483
 #, python-format
@@ -2276,6 +2289,16 @@ msgstr "Thư viện"
 #, python-format
 msgid "Hi, %(name)s"
 msgstr "Hi, %(name)s"
+
+#: seahub/notifications/templates/notifications/notice_email.html:9
+#, python-format
+msgid ""
+"\n"
+"You've got 1 new notice on %(site_name)s:\n"
+msgid_plural ""
+"\n"
+"You've got %(num)s new notices on %(site_name)s:\n"
+msgstr[0] "\nBạn có %(num)s thông báo mới trên %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/notice_email.html:19
 msgid "Message"
@@ -2452,8 +2475,11 @@ msgstr "Tiếp theo"
 msgid "Per page: "
 msgstr ""
 
+#: seahub/organizations/views.py:265 seahub/thumbnail/views.py:154
+msgid "Invalid token."
+msgstr ""
+
 #: seahub/profile/templates/profile/set_profile_react.html:5
-#: seahub/templates/base.html:66
 msgid "Settings"
 msgstr "Cài đặt"
 
@@ -2602,23 +2628,7 @@ msgstr "Tổ chức file phối hợp Group"
 msgid "Side Nav Menu"
 msgstr ""
 
-#: seahub/templates/base.html:51 seahub/templates/base.html:54
-msgid "View profile and more"
-msgstr ""
-
-#: seahub/templates/base.html:69
-msgid "System Admin"
-msgstr "System Admin"
-
-#: seahub/templates/base.html:72
-msgid "Organization Admin"
-msgstr ""
-
-#: seahub/templates/base.html:78
-msgid "Log out"
-msgstr "Đăng xuất"
-
-#: seahub/templates/base.html:125
+#: seahub/templates/base.html:85
 msgid "No"
 msgstr "Không"
 
@@ -3171,89 +3181,6 @@ msgid ""
 "as soon as possible."
 msgstr ""
 
-#: seahub/templates/snippets/search_form.html:6
-msgid "Search files in this wiki"
-msgstr "Tìm trong Wiki"
-
-#: seahub/templates/snippets/search_form.html:6
-msgid "Search files in this library"
-msgstr "Tìm trong thư viện"
-
-#: seahub/templates/snippets/search_form.html:9
-#: seahub/templates/snippets/search_form.html:15
-msgid "Search Files"
-msgstr "Tìm kiếm"
-
-#: seahub/templates/snippets/search_form.html:11
-msgid "advanced"
-msgstr "nâng cao"
-
-#: seahub/templates/snippets/search_form.html:19
-#: seahub/templates/snippets/search_form.html:23
-#: seahub/templates/snippets/search_form.html:26
-msgid "In all libraries"
-msgstr "Trong tất cả các thư viện"
-
-#: seahub/templates/snippets/search_form.html:20
-msgid "In this wiki"
-msgstr "Trong wiki này"
-
-#: seahub/templates/snippets/search_form.html:20
-msgid "In this library"
-msgstr "Trong thư viện này"
-
-#: seahub/templates/snippets/search_form.html:24
-#, python-format
-msgid "in %(name)s"
-msgstr "trong %(name)s"
-
-#: seahub/templates/snippets/search_form.html:32
-#: seahub/templates/snippets/search_form.html:35
-msgid "All file types"
-msgstr "Tất cả các dạng file"
-
-#: seahub/templates/snippets/search_form.html:33
-#: seahub/templates/snippets/search_form.html:36
-msgid "Custom file types"
-msgstr "Tùy chỉnh các dạng file"
-
-#: seahub/templates/snippets/search_form.html:47
-msgid "Text files"
-msgstr "File văn bản"
-
-#: seahub/templates/snippets/search_form.html:51
-msgid "Documents"
-msgstr "Tài liệu"
-
-#: seahub/templates/snippets/search_form.html:55
-msgid "Images"
-msgstr "Hình ảnh"
-
-#: seahub/templates/snippets/search_form.html:59
-msgid "Video"
-msgstr "Video"
-
-#: seahub/templates/snippets/search_form.html:63
-msgid "Audio"
-msgstr "Audio"
-
-#: seahub/templates/snippets/search_form.html:67
-msgid "pdf"
-msgstr "pdf"
-
-#: seahub/templates/snippets/search_form.html:71
-msgid "markdown"
-msgstr ""
-
-#: seahub/templates/snippets/search_form.html:74
-msgid "Input file extensions here, separate with ','"
-msgstr "Điền định dạng file, cách biệt bởi dấu ','"
-
-#: seahub/templates/snippets/search_form.html:75
-msgid ""
-"Please select at least one file type or input at least one file extension"
-msgstr "Vui lòng chọn ít nhất kiểu file hoặc định dạng file"
-
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
 msgstr "Xác nhận mật khẩu để tiếp tục"
@@ -3339,6 +3266,15 @@ msgstr "sau khi sửa đổi"
 #: seahub/templates/user_404.html:6
 msgid "Sorry, this user is not registered yet."
 msgstr "Xin lỗi, người dùng này chưa đăng ký"
+
+#: seahub/templates/user_quota_full.html:12
+#, python-format
+msgid "Your quota is almost full on %(site_name)s."
+msgstr ""
+
+#: seahub/templates/user_quota_full.html:14
+msgid "Used:"
+msgstr "Đã dùng"
 
 #: seahub/templates/view_shared_upload_link.html:8
 #, python-format
@@ -3426,16 +3362,12 @@ msgid "Network error"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:599
+#: seahub/views/__init__.py:600
 msgid "Invalid arguments."
 msgstr ""
 
 #: seahub/thumbnail/views.py:62 seahub/thumbnail/views.py:185
 msgid "Failed to create thumbnail."
-msgstr ""
-
-#: seahub/thumbnail/views.py:154
-msgid "Invalid token."
 msgstr ""
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
@@ -3546,43 +3478,43 @@ msgstr ""
 msgid "permission error"
 msgstr ""
 
-#: seahub/views/__init__.py:400 seahub/views/__init__.py:415
-#: seahub/views/__init__.py:430
+#: seahub/views/__init__.py:401 seahub/views/__init__.py:416
+#: seahub/views/__init__.py:431
 msgid "Unable to view recycle page"
 msgstr ""
 
-#: seahub/views/__init__.py:475
+#: seahub/views/__init__.py:476
 msgid "Unable to view library modification"
 msgstr "Không thể xem sự sửa đổi của thư viện"
 
-#: seahub/views/__init__.py:558 seahub/views/__init__.py:601
-#: seahub/views/__init__.py:732 seahub/views/__init__.py:877
-#: seahub/views/ajax.py:376 seahub/views/file.py:1861
+#: seahub/views/__init__.py:559 seahub/views/__init__.py:602
+#: seahub/views/__init__.py:733 seahub/views/__init__.py:878
+#: seahub/views/ajax.py:376 seahub/views/file.py:1858
 msgid "Library does not exist"
 msgstr "Thư viện không tồn tại"
 
-#: seahub/views/__init__.py:592
+#: seahub/views/__init__.py:593
 msgid "Please specify history ID"
 msgstr "Vui lòng ghi rõ lịch sử ID"
 
-#: seahub/views/__init__.py:596
+#: seahub/views/__init__.py:597
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:603
+#: seahub/views/__init__.py:604
 msgid "History you specified does not exist"
 msgstr "Lịch sử mà bạn chỉ định không tồn tại"
 
-#: seahub/views/__init__.py:605
+#: seahub/views/__init__.py:606
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:884 seahub/views/repo.py:285
+#: seahub/views/__init__.py:885 seahub/views/repo.py:285
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" không tồn tại."
 
-#: seahub/views/__init__.py:925
+#: seahub/views/__init__.py:926
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Không thể downlad \"%s\""
@@ -3603,9 +3535,9 @@ msgstr ""
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1133 seahub/views/file.py:1353
-#: seahub/views/file.py:1870
+#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
+#: seahub/views/file.py:1130 seahub/views/file.py:1350
+#: seahub/views/file.py:1867
 msgid "File does not exist"
 msgstr "File không tồn tại"
 
@@ -3617,77 +3549,77 @@ msgstr ""
 msgid "No conflict in the merge."
 msgstr "Không có xung đột trong khi hợp nhất."
 
-#: seahub/views/file.py:191
+#: seahub/views/file.py:188
 msgid "HTTPError: failed to open file online"
 msgstr "Lỗi HTTP: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:195
+#: seahub/views/file.py:192
 msgid "URLError: failed to open file online"
 msgstr "Lỗi URL: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:202
+#: seahub/views/file.py:199
 msgid "The encoding you chose is not proper."
 msgstr ""
 
-#: seahub/views/file.py:219 seahub/views/file.py:222
+#: seahub/views/file.py:216 seahub/views/file.py:219
 msgid "Unknown file encoding"
 msgstr ""
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:625
-#: seahub/views/file.py:716 seahub/views/file.py:876
+#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:622
+#: seahub/views/file.py:713 seahub/views/file.py:873
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dung lượng %s quá nặng, không thể mở trực tuyến"
 
-#: seahub/views/file.py:350 seahub/views/file.py:751
+#: seahub/views/file.py:347 seahub/views/file.py:748
 msgid "The library is encrypted, can not open file online."
 msgstr " Thư viện đã mã hóa, không thể mở file trực tuyến"
 
-#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:704 seahub/views/file.py:998
-#: seahub/views/file.py:1021 seahub/views/file.py:1048
-#: seahub/views/file.py:1163 seahub/views/file.py:1271
-#: seahub/views/file.py:1374 seahub/views/file.py:1479
+#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
+#: seahub/views/file.py:510 seahub/views/file.py:701 seahub/views/file.py:995
+#: seahub/views/file.py:1018 seahub/views/file.py:1045
+#: seahub/views/file.py:1160 seahub/views/file.py:1268
+#: seahub/views/file.py:1371 seahub/views/file.py:1476
 msgid "Unable to view file"
 msgstr ""
 
-#: seahub/views/file.py:785 seahub/views/file.py:946 seahub/views/file.py:1232
-#: seahub/views/file.py:1418
+#: seahub/views/file.py:782 seahub/views/file.py:943 seahub/views/file.py:1229
+#: seahub/views/file.py:1415
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:844 seahub/views/file.py:958 seahub/views/file.py:1251
-#: seahub/views/file.py:1433
+#: seahub/views/file.py:841 seahub/views/file.py:955 seahub/views/file.py:1248
+#: seahub/views/file.py:1430
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1081
+#: seahub/views/file.py:1078
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:1090
+#: seahub/views/file.py:1087
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:1095
+#: seahub/views/file.py:1092
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Không thể tải file, link chia sẻ đã hết băng thông."
 
-#: seahub/views/file.py:1102
+#: seahub/views/file.py:1099
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1174 seahub/views/file.py:1385
+#: seahub/views/file.py:1171 seahub/views/file.py:1382
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1288 seahub/views/file.py:1499
+#: seahub/views/file.py:1285 seahub/views/file.py:1496
 #: seahub/views/repo.py:336
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1617 seahub/views/file.py:1622
+#: seahub/views/file.py:1614 seahub/views/file.py:1619
 msgid "Unable to download file"
 msgstr "Không thể tải file"
 

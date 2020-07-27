@@ -206,7 +206,7 @@ class UploadLinks(APIView):
                 expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
 
                 if expire_date < expire_date_min_limit:
-                    error_msg = _('Expiration time should be later than %s') % \
+                    error_msg = _('Expiration time should be later than %s.') % \
                             expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -215,7 +215,7 @@ class UploadLinks(APIView):
                 expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
 
                 if expire_date > expire_date_max_limit:
-                    error_msg = _('Expiration time should be earlier than %s') % \
+                    error_msg = _('Expiration time should be earlier than %s.') % \
                             expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
