@@ -6,7 +6,7 @@ from mock import patch
 import pytest
 pytestmark = pytest.mark.django_db
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api

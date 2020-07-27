@@ -9,7 +9,7 @@ import logging
 import posixpath
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect

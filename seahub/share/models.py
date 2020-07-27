@@ -390,10 +390,9 @@ class OrgFileShare(models.Model):
     Model used for organization file or dir shared link.
     """
     org_id = models.IntegerField(db_index=True)
-    file_share = models.OneToOneField(FileShare)
+    file_share = models.OneToOneField(FileShare, on_delete=models.CASCADE)
     objects = OrgFileShareManager()
 
-    objects = OrgFileShareManager()
 
 class UploadLinkShareManager(models.Manager):
     def _get_upload_link_by_path(self, username, repo_id, path):

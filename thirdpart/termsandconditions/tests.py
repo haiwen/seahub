@@ -252,7 +252,7 @@ class TermsAndConditionsTests(TestCase):
         self.assertContains(slug_response, 'Terms and Conditions')
 
         LOGGER.debug('Test /terms/view/site-terms/1.5')
-        version_response = self.client.get(self.terms3.get_absolute_url(), follow=True)
+        version_response = self.client.get('/terms/view/site-terms/1.0', follow=True)
         self.assertContains(version_response, 'Terms and Conditions')
 
     def test_user_pipeline(self):

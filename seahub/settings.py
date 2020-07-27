@@ -14,9 +14,9 @@ DEBUG = False
 
 CLOUD_MODE = False
 
-ADMINS = (
+ADMINS = [
     # ('Your Name', 'your_email@domain.com'),
-)
+]
 
 MANAGERS = ADMINS
 
@@ -110,7 +110,7 @@ SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 ENABLE_REMOTE_USER_AUTHENTICATION = False
 
 # Order is important
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,8 +124,8 @@ MIDDLEWARE_CLASSES = (
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
-    'seahub.trusted_ip.middleware.LimitIpMiddleware',
-)
+    'seahub.trusted_ip.middleware.LimitIpMiddleware'
+]
 
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -161,7 +161,7 @@ TEMPLATES = [
 ]
 
 
-LANGUAGES = (
+LANGUAGES = [
     # ('bg', gettext_noop(u'български език')),
     ('ca', 'Català'),
     ('cs', 'Čeština'),
@@ -196,14 +196,14 @@ LANGUAGES = (
     # ('lt', 'Lietuvių kalba'),
     ('zh-cn', '简体中文'),
     ('zh-tw', '繁體中文'),
-)
+]
 
-LOCALE_PATHS = (
+LOCALE_PATHS = [
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -253,7 +253,7 @@ INSTALLED_APPS = (
     'seahub.file_participants',
     'seahub.repo_api_tokens',
     'seahub.abuse_reports',
-)
+]
 
 # Enable or disable view File Scan
 # ENABLE_FILE_SCAN = True
@@ -832,7 +832,7 @@ else:
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
 
     # In server release, gunicorn is used to deploy seahub
-    INSTALLED_APPS += ('gunicorn', )
+    INSTALLED_APPS.append('gunicorn')
 
     load_local_settings(seahub_settings)
     del seahub_settings
@@ -888,7 +888,7 @@ CONSTANCE_CONFIG = {
 # then add 'seahub.auth.middleware.SeafileRemoteUserMiddleware' and
 # 'seahub.auth.backends.SeafileRemoteUserBackend' to settings.
 if ENABLE_REMOTE_USER_AUTHENTICATION:
-    MIDDLEWARE_CLASSES += ('seahub.auth.middleware.SeafileRemoteUserMiddleware',)
+    MIDDLEWARE.append('seahub.auth.middleware.SeafileRemoteUserMiddleware')
     AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:

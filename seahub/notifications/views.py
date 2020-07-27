@@ -3,7 +3,7 @@ import json
 import logging
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render

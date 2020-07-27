@@ -4,7 +4,7 @@ import hashlib
 
 import urllib.parse
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import force_bytes
 
 from seahub.utils import get_site_scheme_and_netloc

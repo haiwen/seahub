@@ -5,7 +5,7 @@ import os
 import json
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.conf import settings
 from django.forms import ModelForm, Textarea

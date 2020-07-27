@@ -1,7 +1,7 @@
 import json
 
 from seaserv import seafile_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.file_participants.models import FileParticipant
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring

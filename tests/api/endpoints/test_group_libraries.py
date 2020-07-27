@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seaserv import seafile_api, ccnet_api
 

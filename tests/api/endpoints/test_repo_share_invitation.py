@@ -7,7 +7,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.api2.permissions import CanInviteGuest
 from tests.common.utils import randstring
 from seahub.base.accounts import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class InvitationsTest(BaseTestCase):

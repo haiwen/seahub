@@ -6,7 +6,7 @@ import logging
 import requests
 
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext as _
 

@@ -5,7 +5,7 @@ from seahub.base.accounts import User, RegistrationForm
 from seahub.options.models import UserOptions
 from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
 from post_office.models import Email
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 from mock import patch
 

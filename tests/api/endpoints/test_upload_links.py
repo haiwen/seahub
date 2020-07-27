@@ -4,7 +4,7 @@ from mock import patch
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from tests.common.utils import upload_file_test, randstring
 

@@ -2,7 +2,7 @@ import json
 
 from mock import patch
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 
 class SysinfoTest(BaseTestCase):

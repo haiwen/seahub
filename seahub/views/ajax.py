@@ -9,7 +9,7 @@ import csv
 import chardet
 import io
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.utils.http import urlquote

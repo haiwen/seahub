@@ -3,7 +3,7 @@ import json
 from mock import patch
 
 from tests.common.utils import randstring
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User
 from seahub.role_permissions.models import AdminRole

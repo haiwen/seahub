@@ -1,7 +1,7 @@
 import os
 import json
 from mock import patch 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.api2.endpoints.admin import license as license_api
 from seahub.settings import LICENSE_PATH

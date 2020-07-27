@@ -2,7 +2,7 @@
 import json
 from mock import patch
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 
 from seahub.utils import IS_EMAIL_CONFIGURED

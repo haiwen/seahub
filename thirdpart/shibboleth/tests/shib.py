@@ -50,7 +50,7 @@ settings.AUTHENTICATION_BACKENDS += (
     'shibboleth.backends.ShibbolethRemoteUserBackend',
 )
 
-settings.MIDDLEWARE_CLASSES += (
+settings.MIDDLEWARE.append(
     'shibboleth.middleware.ShibbolethRemoteUserMiddleware',
 )
 

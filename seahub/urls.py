@@ -599,14 +599,14 @@ urlpatterns = [
     url(r'^help/', include('seahub.help.urls')),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^thumbnail/', include('seahub.thumbnail.urls')),
-    url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
-    url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
+    url(r'^inst/', include(('seahub.institutions.urls', 'institutions'), namespace='institutions')),
+    url(r'^invite/', include(('seahub.invitations.urls', 'invitations'), namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
-    url(r'^published/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^published/', include(('seahub.wiki.urls', 'wiki'), namespace='wiki')),
     url(r'^work-weixin/', include('seahub.work_weixin.urls')),
     url(r'^weixin/', include('seahub.weixin.urls')),
     # Must specify a namespace if specifying app_name.
-    url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
+    url(r'^drafts/', include(('seahub.drafts.urls', 'drafts'), namespace='drafts')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),

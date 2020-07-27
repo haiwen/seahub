@@ -4,7 +4,7 @@ from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import AVATAR_BASE_URL
 from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 class AvatarApiTest(ApiTestBase):
 

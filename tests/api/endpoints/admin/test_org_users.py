@@ -2,7 +2,7 @@ import json
 from mock import patch
 
 from seaserv import ccnet_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 

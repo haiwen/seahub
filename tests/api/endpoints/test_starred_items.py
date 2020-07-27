@@ -1,7 +1,7 @@
 import json
 from tests.common.utils import randstring
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.models import UserStarredFiles
 from seahub.utils.star import is_file_starred

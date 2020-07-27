@@ -5,7 +5,7 @@ import json
 import pytest
 from seaserv import seafile_api, ccnet_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 from seahub.group.utils import is_group_admin

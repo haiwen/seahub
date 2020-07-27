@@ -1,7 +1,7 @@
 from mock import patch
 import time
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 
 from seahub.api2.throttling import SimpleRateThrottle

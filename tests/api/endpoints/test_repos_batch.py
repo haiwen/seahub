@@ -2,7 +2,7 @@ import os
 import json
 import posixpath
 from seaserv import seafile_api, ccnet_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from tests.common.utils import randstring
 from seahub.test_utils import BaseTestCase
 from seahub.utils import normalize_dir_path

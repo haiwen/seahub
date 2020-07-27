@@ -3,7 +3,7 @@ import json
 
 from seaserv import ccnet_api, seafile_api
 from tests.common.utils import randstring
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \

@@ -2,7 +2,7 @@
 import os
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 

@@ -22,7 +22,7 @@ from constance import config
 import seaserv
 from seaserv import seafile_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import Context, loader

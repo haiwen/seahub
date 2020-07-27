@@ -4,7 +4,7 @@ import json
 import pytest
 pytestmark = pytest.mark.django_db
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 

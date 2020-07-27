@@ -7,7 +7,7 @@ except ImportError:
     from urllib.parse import urlencode
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import ugettext, pgettext
 from twilio.rest import TwilioRestClient
