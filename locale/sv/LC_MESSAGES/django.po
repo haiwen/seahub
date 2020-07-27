@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-07 13:02+0800\n"
-"PO-Revision-Date: 2020-05-18 14:29+0000\n"
-"Last-Translator: Radapompa <radapompa@gmail.com>\n"
+"POT-Creation-Date: 2020-07-27 12:02+0800\n"
+"PO-Revision-Date: 2020-07-27 04:02+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,12 +23,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
-#: seahub/api2/views.py:351
+#: seahub/api2/views.py:354
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Namnet är för långt (max 64 tecken)"
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
-#: seahub/api2/views.py:355 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:358 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Namn ska inte innehålla '/'."
 
@@ -60,7 +60,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Utrymmeskvot är för lågt (minsta värde är 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:350 seahub/views/sysadmin.py:335
+#: seahub/organizations/api/admin/users.py:432 seahub/views/sysadmin.py:335
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Misslyckades att sätta kvot: max kvot är %d MB"
@@ -76,20 +76,20 @@ msgstr "Namnet kan enbart innehålla bokstäver, nummer, blanksteg, bindestreck 
 msgid "There is already a group with that name."
 msgstr "Det finns redan en annan grupp med detta namn."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:231
+#: seahub/api2/endpoints/admin/address_book/groups.py:240
 msgid "There are libraries in this department."
 msgstr "Det är kataloger i denna avdelning."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:235
+#: seahub/api2/endpoints/admin/address_book/groups.py:244
 msgid "There are sub-departments in this department."
 msgstr "Det är underavdelningar i denna avdelning."
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:662 seahub/views/__init__.py:663
-#: seahub/views/__init__.py:667 seahub/views/__init__.py:668
+#: seahub/views/__init__.py:663 seahub/views/__init__.py:664
+#: seahub/views/__init__.py:668 seahub/views/__init__.py:669
 msgid "My Library"
-msgstr "Mitt bibliotek"
+msgstr "Min Katalog"
 
 #: seahub/api2/endpoints/admin/groups.py:127
 #: seahub/api2/endpoints/groups.py:208
@@ -119,27 +119,27 @@ msgstr "Misslyckades att lägga till %s till institutionen: användaren tillhör
 
 #: seahub/api2/endpoints/admin/libraries.py:253 seahub/views/sysadmin.py:750
 msgid "System library can not be deleted."
-msgstr "Systembibliotek kan inte tas bort."
+msgstr "Systemkatalog kan inte tas bort."
 
-#: seahub/api2/endpoints/admin/libraries.py:374 seahub/api2/views.py:1606
+#: seahub/api2/endpoints/admin/libraries.py:374 seahub/api2/views.py:1609
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "Överföring misslyckades: rolen för %s är %s, kan inte lägga till katalog."
 
-#: seahub/api2/endpoints/admin/libraries.py:395 seahub/api2/views.py:1611
+#: seahub/api2/endpoints/admin/libraries.py:395 seahub/api2/views.py:1614
 msgid "Library can not be transferred to owner."
 msgstr "Katalogen kan inte överföras till ägaren."
 
-#: seahub/api2/endpoints/admin/share_links.py:200
+#: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:473
+#: seahub/api2/endpoints/share_links.py:513
 msgid "There is an associated published library."
 msgstr "Det finns en associerad publicerad katalog."
 
 #: seahub/api2/endpoints/admin/shares.py:183
 #, python-format
 msgid "User %s is already library owner."
-msgstr "Användaren %s äger redan biblioteket."
+msgstr "Användaren %s äger redan katalogen."
 
 #: seahub/api2/endpoints/admin/shares.py:191
 #: seahub/api2/endpoints/invitations.py:51
@@ -271,6 +271,7 @@ msgstr "Utrymmeskvot"
 
 #: seahub/api2/endpoints/admin/users.py:422
 #: seahub/api2/endpoints/admin/users.py:447
+#: seahub/organizations/api/admin/users.py:147
 msgid "There are more than 500 users, and sort is not offered."
 msgstr "Det finns mer än 500 användare och kan därmed inte sortera."
 
@@ -372,11 +373,11 @@ msgstr "Felaktig destination"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1749
-#: seahub/api2/views.py:1789 seahub/api2/views.py:1838
-#: seahub/api2/views.py:1882 seahub/api2/views.py:1928
-#: seahub/api2/views.py:1977 seahub/api2/views.py:2388
-#: seahub/api2/views.py:2502
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1752
+#: seahub/api2/views.py:1792 seahub/api2/views.py:1841
+#: seahub/api2/views.py:1885 seahub/api2/views.py:1931
+#: seahub/api2/views.py:1980 seahub/api2/views.py:2391
+#: seahub/api2/views.py:2505
 msgid "Out of quota."
 msgstr "Slut på kvoten."
 
@@ -416,7 +417,7 @@ msgstr "Användare %s hittades inte."
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
 #: seahub/profile/views.py:215 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:737
+#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:738
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
 msgstr "Åtkomst nekas"
@@ -425,7 +426,7 @@ msgstr "Åtkomst nekas"
 msgid "File is not locked."
 msgstr "Filen är inte låst."
 
-#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:541
+#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:581
 msgid "You can not refresh this file's lock."
 msgstr "Du kan inte uppdatera denna fillåsning."
 
@@ -439,14 +440,14 @@ msgstr "Deltagaren existerar redan."
 #: seahub/api2/endpoints/repo_set_password.py:70
 #: seahub/api2/endpoints/repo_share_invitations.py:197
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3804
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3807
 #: seahub/notifications/models.py:465 seahub/notifications/models.py:506
 #: seahub/notifications/models.py:557 seahub/notifications/models.py:613
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
 #: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1185
-#: seahub/views/__init__.py:903 seahub/views/__init__.py:922
+#: seahub/views/__init__.py:904 seahub/views/__init__.py:923
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405
 msgid "Internal Server Error"
 msgstr "Internt serverproblem"
@@ -465,10 +466,10 @@ msgid "User %s is already a group member."
 msgstr "Användaren %s är redan medlem i gruppen."
 
 #: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1591
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1594
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:241
+#: seahub/organizations/api/admin/users.py:323
 #, python-format
 msgid "User %s not found in organization."
 msgstr "Kan inte hitta användaren %s i organisationen."
@@ -535,20 +536,20 @@ msgstr "Tillägg avstängd."
 #: seahub/api2/endpoints/repo_send_new_password.py:65
 #: seahub/api2/endpoints/repo_set_password.py:160
 msgid "Can not reset this library's password."
-msgstr "Can inte återställa denna katalogs lösenord."
+msgstr "Kan inte återställa katalogens lösenord."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:72
 #, python-format
 msgid "New password of library %s"
 msgstr "Nytt lösenord för katalog %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3801
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3804
 msgid "Wrong password"
 msgstr "Fel lösenord"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3807
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3810
 msgid "Decrypt library error"
-msgstr "Fel vid avkryptering av bibliotek"
+msgstr "Fel vid avkryptering av katalog"
 
 #: seahub/api2/endpoints/repo_set_password.py:127
 msgid "Wrong old password"
@@ -565,12 +566,12 @@ msgstr "Filen %s är låst."
 #: seahub/api2/endpoints/repos_batch.py:1482
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr "Kan inte flytta %s, vänligen kontrollera dess rättigheter."
+msgstr "Kan inte flytta mappen %s, vänligen kontrollera dess rättigheter."
 
 #: seahub/api2/endpoints/repos_batch.py:1570
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr "Kan inte ta bort katalogen %s, vänligen kontrollera dess rättigheter."
+msgstr "Kan inte ta bort mappen %s, vänligen kontrollera dess rättigheter."
 
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32
@@ -612,33 +613,52 @@ msgstr "mailadress ogiltig."
 msgid "An upload link is shared to you on %s"
 msgstr "En uppladdningslänk är delad med dig på %s"
 
-#: seahub/api2/endpoints/share_link_zip_task.py:101
-#: seahub/api2/endpoints/zip_task.py:97 seahub/views/__init__.py:906
+#: seahub/api2/endpoints/share_link_zip_task.py:103
+#: seahub/api2/endpoints/zip_task.py:103 seahub/views/__init__.py:907
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Kan inte ladda ner katalog \"%s\": Den är för stor."
 
-#: seahub/api2/endpoints/share_links.py:244
+#: seahub/api2/endpoints/share_link_zip_task.py:243
+#: seahub/api2/endpoints/zip_task.py:139 seahub/api2/endpoints/zip_task.py:273
+msgid "Total size exceeds limit."
+msgstr "Totala storleken överskrider begränsningen."
+
+#: seahub/api2/endpoints/share_links.py:246
 msgid "Password is too short."
 msgstr "Lösenordet är för kort."
 
-#: seahub/api2/endpoints/share_links.py:259 seahub/api2/views.py:3372
+#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/upload_links.py:181 seahub/api2/views.py:3375
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Utgångsdatum ska vara större eller lika med %s"
 
-#: seahub/api2/endpoints/share_links.py:265 seahub/api2/views.py:3378
+#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/upload_links.py:187 seahub/api2/views.py:3381
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Utgångsdagar ska vara minde än eller lika med %s"
 
-#: seahub/api2/endpoints/share_links.py:329
-#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/share_links.py:297
+#: seahub/api2/endpoints/upload_links.py:209
+#, python-format
+msgid "Expiration time should be later than %s."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:306
+#: seahub/api2/endpoints/upload_links.py:218
+#, python-format
+msgid "Expiration time should be earlier than %s."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:369
+#: seahub/api2/endpoints/share_links.py:378
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Delningslänk %s existerar redan."
 
-#: seahub/api2/endpoints/upload_links.py:153
+#: seahub/api2/endpoints/upload_links.py:158
 #: seahub/templates/snippets/repo_create_js.html:50
 msgid "Password is too short"
 msgstr "Lösenordet är för kort"
@@ -685,10 +705,6 @@ msgstr "Wiki hittas inte."
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Name is required."
 msgstr "Namn krävs"
-
-#: seahub/api2/endpoints/zip_task.py:125 seahub/api2/endpoints/zip_task.py:245
-msgid "Total size exceeds limit."
-msgstr "Totala storleken överskrider begränsningen."
 
 #: seahub/auth/decorators.py:74
 msgid "Please log in."
@@ -898,7 +914,12 @@ msgstr "anteckning"
 
 #: seahub/base/decorators.py:57
 msgid "Files in this library can not be viewed online."
-msgstr "Filer i detta bibliotek kan inte visas online."
+msgstr "Filer i denna katalog kan inte visas online."
+
+#: seahub/base/management/commands/check_user_quota.py:58
+#, python-format
+msgid "Your quota is almost full on %s"
+msgstr ""
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -980,8 +1001,7 @@ msgstr "Senast Inloggning"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/templates/base.html:72
-#: seahub/templates/base.html:75 seahub/views/sysadmin.py:210
+#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:210
 #: seahub/views/sysadmin.py:214
 msgid "Admin"
 msgstr "Administrera"
@@ -1010,7 +1030,7 @@ msgstr "Inaktiv"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:124 seahub/views/sysadmin.py:276
+#: seahub/templates/base.html:84 seahub/views/sysadmin.py:276
 #: seahub/views/sysadmin.py:277
 msgid "Yes"
 msgstr "Ja"
@@ -1069,7 +1089,7 @@ msgstr "Tillagd eller modifierad"
 #: seahub/base/templatetags/seahub_tags.py:150
 #: seahub/base/templatetags/seahub_tags.py:221
 msgid "Reverted library to status at"
-msgstr "Backade bibliotekets status till"
+msgstr "Backade katalogens status till"
 
 #: seahub/base/templatetags/seahub_tags.py:153
 #: seahub/base/templatetags/seahub_tags.py:224
@@ -1085,7 +1105,7 @@ msgstr "Återskapade borttagen katalog"
 #: seahub/base/templatetags/seahub_tags.py:159
 #: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:460
 msgid "Changed library name or description"
-msgstr "Ändrade biblioteks namn eller beskrivning"
+msgstr "Ändrade katalogens namn eller beskrivning"
 
 #: seahub/base/templatetags/seahub_tags.py:161
 #: seahub/base/templatetags/seahub_tags.py:232
@@ -1096,7 +1116,7 @@ msgstr "Automatisk ihopslagning av seafile-systemet"
 #: seahub/base/templatetags/seahub_tags.py:234
 #: seahub/notifications/management/commands/send_file_updates.py:109
 msgid "Created library"
-msgstr "Skapade bibliotek"
+msgstr "Skapade katalog"
 
 #: seahub/base/templatetags/seahub_tags.py:309
 #: seahub/base/templatetags/seahub_tags.py:345
@@ -1227,7 +1247,7 @@ msgstr "Du har inga kontakter"
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
-msgstr "Lägg till kontakter så att du snabbt kan dela bibliotek och skicka delningslänkar."
+msgstr "Lägg till kontakter så att du snabbt kan dela kataloger och skicka delningslänkar."
 
 #: seahub/contacts/templates/contacts/contact_list.html:46
 #: seahub/contacts/templates/contacts/contact_list.html:55
@@ -1250,8 +1270,6 @@ msgstr "Anteckning (frivilligt)"
 #: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/repo_dir_recycle_view.html:74
 #: seahub/templates/share_access_validation.html:21
-#: seahub/templates/snippets/search_form.html:11
-#: seahub/templates/snippets/search_form.html:78
 msgid "Submit"
 msgstr "OK"
 
@@ -1359,7 +1377,7 @@ msgstr "Namn %s är inte giltigt"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1866
+#: seahub/views/file.py:1863
 msgid "Argument missing"
 msgstr "Argument saknas"
 
@@ -1382,7 +1400,7 @@ msgstr "Namnet \"%s\" är inte giltigt"
 
 #: seahub/forms.py:162
 msgid "Library name is required"
-msgstr "Biblioteks namn måste anges"
+msgstr "Katalogens namn måste anges"
 
 #: seahub/forms.py:164
 msgid "Please enter a number"
@@ -1421,7 +1439,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Endast gruppmedlem kan lägga till nya medlemmar"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:464
+#: seahub/views/file.py:461
 msgid "Group does not exist"
 msgstr "Gruppen finns inte"
 
@@ -1486,16 +1504,16 @@ msgstr "Tack för att du använder vår sajt!"
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s teamet"
 
-#: seahub/group/views.py:107 seahub/share/views.py:228
-#: seahub/views/__init__.py:567 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1138
-#: seahub/views/file.py:1358 seahub/views/file.py:1875
+#: seahub/group/views.py:105 seahub/share/views.py:228
+#: seahub/views/__init__.py:568 seahub/views/ajax.py:381
+#: seahub/views/ajax.py:427 seahub/views/file.py:1135
+#: seahub/views/file.py:1355 seahub/views/file.py:1872
 #: seahub/views/repo.py:115 seahub/views/repo.py:171 seahub/views/repo.py:228
 #: seahub/views/repo.py:281 seahub/views/repo.py:387
 msgid "Permission denied"
 msgstr "Åtkomst nekas"
 
-#: seahub/group/views.py:173
+#: seahub/group/views.py:171
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "Du är inbjuden att gå med i en grupp på %s"
@@ -1510,15 +1528,15 @@ msgstr "Installera och synka Filer"
 
 #: seahub/help/templates/help/base.html:26
 msgid "Syncing existing folders"
-msgstr "Synkronisera existerande kataloger"
+msgstr "Synkronisera existerande mappar"
 
 #: seahub/help/templates/help/base.html:27
 msgid "Selective sync sub-folders"
-msgstr "Selektiv synk av underkataloger"
+msgstr "Selektiv synk av undermappar"
 
 #: seahub/help/templates/help/base.html:28
 msgid "Unsync and resync libraries"
-msgstr "Avsynkronisera och synkronisera om bibliotek"
+msgstr "Avsynkronisera och synkronisera om kataloger"
 
 #: seahub/help/templates/help/base.html:29
 msgid "Setting sync interval"
@@ -1543,14 +1561,14 @@ msgstr "Säkerhet och Kryptering"
 
 #: seahub/help/templates/help/base.html:36
 msgid "How to use encrypted libraries"
-msgstr "Hur man använder krypterade bibliotek"
+msgstr "Hur man använder krypterade kataloger"
 
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
 "Once you and your friends sync a shared file library onto your computers, "
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
-msgstr "När du och dina vänner synkar ett delat filbibliotek till era datorer kan ni lägga till, ta bort och ändra filer i biblioteket tillsammans. Alla ändringar som ni gör i biblioteket kommer automatiskt synkroniseras till andras datorer."
+msgstr "När du och dina vänner synkar en delad filkatalog till era datorer kan ni lägga till, ta bort och ändra filer i katalogen tillsammans. Alla ändringar som ni gör i katalogen kommer automatiskt synkroniseras till andras datorer."
 
 #: seahub/help/templates/help/conflicts.html:9
 msgid ""
@@ -1590,7 +1608,7 @@ msgstr "För att ändra proxyinställningar, klicka på Seafile ikonen i systemn
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr "Hur man använder krypterade bibliotek"
+msgstr "Hur man använder krypterade kataloger"
 
 #: seahub/help/templates/help/encrypted_libraries.html:8
 msgid ""
@@ -1599,18 +1617,18 @@ msgid ""
 "libraries are encrypted on client side. The encryption password is not "
 "stored on the server. So even the server administrator can't access your "
 "file contents."
-msgstr "Seafile tillhandahåller klientbaserad ände-till-ände-datakryptering. Du kan skapa krypterade bibliotek för att använda denna funktion. Filinnehåll i krypterade bibliotek krypteras på klientsidan. Krypteringslösenordet sparas inte på servern så inte ens serverns administratör kan komma åt innehållet i dina filer."
+msgstr "Seafile tillhandahåller klientbaserad ände-till-ände-datakryptering. Du kan skapa krypterade kataloger för att använda denna funktion. Filinnehåll i krypterade kataloger krypteras på klientsidan. Krypteringslösenordet sparas inte på servern så inte ens serverns administratör kan komma åt innehållet i dina filer."
 
 #: seahub/help/templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr "När ett krypterat bibliotek skapas:"
+msgstr "När en krypterad katalog skapas:"
 
 #: seahub/help/templates/help/encrypted_libraries.html:12
 msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server use this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr "Om du skapar ett krypterat bibliotek i webbappen skickas lösenordet till servern. Servern använder lösenordet för att skapa biblioteket, men lösenordet sparas inte i klartext."
+msgstr "Om du skapar en krypterad katalog i webbappen skickas lösenordet till servern. Servern använder lösenordet för att skapa katalogen, men lösenordet sparas inte i klartext."
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -1618,11 +1636,11 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install/\">file syncing</a>), the "
 "password is not sent to the server."
-msgstr "Om du skapar ett krypterat bibliotek från en lokal katalog med skrivbordsklienten (se <a href=\"%(SITE_ROOT)shelp/install/\">filsynkning</a>) skickas inte lösenordet till servern."
+msgstr "Om du skapar en krypterad katalog från en lokal mapp med skrivbordsklienten (se <a href=\"%(SITE_ROOT)shelp/install/\">filsynkning</a>) skickas inte lösenordet till servern."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr "När du öppnar det krypterade biblioteket:"
+msgstr "När du öppnar den krypterade katalogen:"
 
 #: seahub/help/templates/help/encrypted_libraries.html:19
 msgid ""
@@ -1636,7 +1654,7 @@ msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypt and encrypt file contents locally. The plain "
 "text password is not stored on the client disk too."
-msgstr "Om du använder skrivbordsklienten för att synkronisera biblioteket skickas inte lösenordet till servern. Klienten avkrypterar och krypterar filers innehåll lokalt. Lösenordet sparas inte i klartext på klientens disk."
+msgstr "Om du använder skrivbordsklienten för att synkronisera katalogen skickas inte lösenordet till servern. Klienten avkrypterar och krypterar filers innehåll lokalt. Lösenordet sparas inte i klartext på klientens disk."
 
 #: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
@@ -1648,18 +1666,18 @@ msgstr "iOS-klient stöder klientbaserad kryptering från version 2.1.6. Android
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."
-msgstr "Notera att krypterade bibliotek enbart krypterar filers innehåll, men inte kataloger och filnamn."
+msgstr "Notera att krypterad katalog enbart krypterar filers innehåll, men inte mappar och filnamn."
 
 #: seahub/help/templates/help/encrypted_libraries.html:27
 msgid ""
 "More technical details of encrypted library can be found at <a "
 "href=\"http://manual.seafile.com/security/security_features.html\">Seafile "
 "Manual</a>."
-msgstr "Mer teknisk information om krypterade bibliotek kan hittas i <a href=\"http://manual.seafile.com/security/security_features.html\">Seafile-manualen</a>."
+msgstr "Mer teknisk information om krypterade kataloger kan hittas i <a href=\"http://manual.seafile.com/security/security_features.html\">Seafile-manualen</a>."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr "Exkluderar filer/kataloger från synkronisering"
+msgstr "Exkluderar filer/mappar från synkronisering"
 
 #: seahub/help/templates/help/ignore.html:8
 msgid ""
@@ -1668,7 +1686,7 @@ msgid ""
 "library. This special file specifies the files and folders that Seafile "
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
-msgstr "Ibland vill du inte synkronisera vissa filer eller kataloger i ett bibliotek. För att göra detta skapar du en fil med namnet seafile-ignore.txt i rotkatalogen i biblioteket. Denna speciella fil specificerar filer och kataloger som Seafile inte ska synka. Varje rad i seafile-ignore.txt speciferar ett mönster. Följande mönster stöds."
+msgstr "Ibland vill du inte synkronisera vissa filer eller mappar i en katalog. För att göra detta skapar du en fil med namnet seafile-ignore.txt i rotmappen i katalogen. Denna speciella fil specificerar filer och mappar som Seafile inte ska synka. Varje rad i seafile-ignore.txt speciferar ett mönster. Följande mönster stöds."
 
 #: seahub/help/templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1685,14 +1703,14 @@ msgid ""
 "\"foo/hello\". Note that the wildcard character * recursively matches all "
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
-msgstr "Seafile stöder jokertecken i sökmönstret. T.ex. \"foo/*\" matchar \"foo/1\" och \"foo/hello\". \"foo/?\" matchar \"foo/1\" men inte \"foo/hello\". Observera att jokertecknet * matchar alla sökvägar rekursivt under en katalog. T.ex. \"foo/*.html\" matchar \"foo/a.html\" och \"foo/templates/b.html\"."
+msgstr "Seafile stöder jokertecken i sökmönstret. T.ex. \"foo/*\" matchar \"foo/1\" och \"foo/hello\". \"foo/?\" matchar \"foo/1\" men inte \"foo/hello\". Observera att jokertecknet * matchar alla sökvägar rekursivt under en mapp. T.ex. \"foo/*.html\" matchar \"foo/a.html\" och \"foo/templates/b.html\"."
 
 #: seahub/help/templates/help/ignore.html:13
 msgid ""
 "If the pattern ends with a slash, it would only match a folder. In other "
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
-msgstr "Om sökmönstret slutar med en slash, kommer det bara matcha en katalog. Med andra ord, \"foo/\" kommer matcha katalogen \"foo\" och sökvägen under den, men inte en vanlig fil eller en symbolisk länk \"foo\"."
+msgstr "Om sökmönstret slutar med en slash, kommer det bara matcha en mapp. Med andra ord, \"foo/\" kommer matcha mappen \"foo\" och sökvägen under den, men inte en vanlig fil eller en symbolisk länk \"foo\"."
 
 #: seahub/help/templates/help/ignore.html:14
 msgid ""
@@ -1700,7 +1718,7 @@ msgid ""
 "folder. For example, \"foo\" can only match regular file \"foo\" or a "
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
-msgstr "Om ett sökmönster inte slutar med en slash eller ett wildcard, kommer det inte matcha en katalog. Tex,   \"foo\" kommer bara matcha en vanlig fil  \"foo\" eller en symbolisk länk - medan  \"foo/\" och \"foo*\" matchar en katalog och sökvägar under den."
+msgstr "Om ett sökmönster inte slutar med en slash eller ett wildcard, kommer det inte matcha en mapp. Tex, \"foo\" kommer bara matcha en vanlig fil  \"foo\" eller en symbolisk länk - medan  \"foo/\" och \"foo*\" matchar en mapp och sökvägar under den."
 
 #: seahub/help/templates/help/ignore.html:18
 msgid "Example"
@@ -1753,7 +1771,7 @@ msgstr "1. Välj en diskpartition för att spara lokal Seafile-data"
 
 #: seahub/help/templates/help/install.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr "Väljer en katalog för att spara Seafile-data"
+msgstr "Väljer en mapp för att spara Seafile-data"
 
 #: seahub/help/templates/help/install.html:13
 msgid "2. Add an account"
@@ -1765,25 +1783,25 @@ msgstr "Skapa ett konto på en privat eller på en publik Seafile-server."
 
 #: seahub/help/templates/help/install.html:18
 msgid "3. Sync a library"
-msgstr "3. Synkronisera ett bibliotek"
+msgstr "3. Synkronisera en katalog"
 
 #: seahub/help/templates/help/install.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
-msgstr "Klicka på \"Synka detta bibliotek\"-knappen för att synka med en lokal katalog."
+msgstr "Klicka på \"Synka denna katalog\"-knappen för att synka med en lokal mapp."
 
 #: seahub/help/templates/help/install.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
-msgstr "Sedan lägger du till filer i biblioteket. Dessa kommer automatiskt synkas med molntjänsten."
+msgstr "Sedan lägger du till filer i katalogen. Dessa kommer automatiskt synkas med molntjänsten."
 
 #: seahub/help/templates/help/install.html:26
 msgid "4. (Optional) Create a library"
-msgstr "4. (Valfritt) Skapa ett bibliotek"
+msgstr "4. (Valfritt) Skapa en katalog"
 
 #: seahub/help/templates/help/install.html:28
 msgid "You can also create a library from a local folder."
-msgstr "Du kan också skapa ett bibliotek från en lokal katalog."
+msgstr "Du kan också skapa en katalog från en lokal mapp."
 
 #: seahub/help/templates/help/install.html:34
 msgid "5. Browse files on the cloud"
@@ -1798,7 +1816,7 @@ msgstr "Ibland vill du ändra filer i molnet utan att synkronisera dem. Seafilek
 
 #: seahub/help/templates/help/selective_sync.html:6
 msgid "Selective Sync Sub-folders"
-msgstr "Selektiv Synk Underkataloger"
+msgstr "Selektiv Synk Undermappar"
 
 #: seahub/help/templates/help/selective_sync.html:8
 msgid ""
@@ -1806,7 +1824,7 @@ msgid ""
 "currently only interested in a sub-folder inside one library. If your "
 "Seafile server is Pro edition, you can selectively sync a sub-folder in a "
 "library, instead of syncing the entire library."
-msgstr "Du kan ha väldigt stora bibliotek på Seafile-servern. Om du är intresserad enbart av en underkatalog i biblioteket och din Seafile-server är Pro-versionen så kan du välja att synkronisera enbart en underkatalog inuti ett bibliotek istället för att synkronisera hela biblioteket."
+msgstr "Du kan ha väldigt stora kataloger på Seafile-servern. Om du är intresserad enbart av en undermapp i en katalog. Om din Seafile-server är Pro-versionen så kan du välja att synkronisera enbart en undermapp inuti en katalog istället för att synkronisera hela katalogen."
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -1814,17 +1832,17 @@ msgid ""
 "which hasn't been synced. Navigate into the parent folder of that sub-"
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
-msgstr "För att synkronisera en underkatalog, öppna molnutforskaren genom att dubbelklicka på ett bibliotek som inte har synkroniserats. Navigera till katalogen innehållande underkatalogen. Högerklicka på underkatalogen och välj \"Synka den här katalogen\" i pop-up-menyn."
+msgstr "För att synkronisera en undermapp, öppna molnutforskaren genom att dubbelklicka på en katalog som inte har synkroniserats. Navigera till huvudmappen innehållande undermappen. Högerklicka på undermappen och välj \"Synka den här mappen\" i pop-up-menyn."
 
 #: seahub/help/templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
-msgstr "Efter att ha synkroniserat underkatalogen kan du se synkroniseringstatus i \"Synkroniserade bibliotek\"-gruppen i klientens huvudfönster."
+msgstr "Efter att ha synkroniserat undermappen kan du se synkroniseringstatus i \"Synkroniserade kataloger\"-gruppen i klientens huvudfönster."
 
 #: seahub/help/templates/help/sync_existing.html:6
 msgid "Syncing With an Existing Folder"
-msgstr "Synkroniserar med en existerande katalog"
+msgstr "Synkroniserar med en existerande mapp"
 
 #: seahub/help/templates/help/sync_existing.html:8
 #, python-format
@@ -1837,21 +1855,21 @@ msgid ""
 "overwritten or lost. The merge will produce some <a "
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
-msgstr "Ibland har du redan ett bibliotek på Seafile-servern (delad av andra eller uppladdad från en annan dator). Du kan synkronisera detta bibliotek med en existerande katalog på din dator. Den lokala katalogen måste ha samma namn som biblioteket. Filerna i den lokala katalogen kommer slås ihop med filerna i biblioteket. Inga filer i den lokala katalogen eller biblioteket kommer bli överskrivna eller förlorade. Sammanslagningen kommer att skapa några <a href=\"%(SITE_ROOT)shelp/conflicts/\">konfliktfiler</a> om filernas innehåll är olika i den lokala katalogen och biblioteket."
+msgstr "Ibland har du redan en katalog på Seafile-servern (delad av andra eller uppladdad från en annan dator). Du kan synkronisera denna katalog med en existerande mapp på din dator. Den lokala mappen måste ha samma namn som katalogen. Filerna i den lokala mappen kommer slås ihop med filerna i katalogen. Inga filer i den lokala mappen eller katalogen kommer bli överskrivna eller förlorade. Sammanslagningen kommer att skapa några <a href=\"%(SITE_ROOT)shelp/conflicts/\">konfliktfiler</a> om filernas innehåll är olika i den lokala mappen och katalogen."
 
 #: seahub/help/templates/help/sync_existing.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
-msgstr "För att synkronisera ett bibliotek med en existerande katalog, högerklicka på biblioteket i Seafile-klientens huvudfönster och klicka på \"Synkronisera detta bibliotek\"."
+msgstr "För att synkronisera en katalog med en existerande mapp, högerklicka på katalogen i Seafile-klientens huvudfönster och klicka på \"Synkronisera denna katalog\"."
 
 #: seahub/help/templates/help/sync_existing.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr "I pop-up dialogen, klicka på \"Synkronisera med en existerande katalog\" länken."
+msgstr "I pop-up dialogen, klicka på \"Synkronisera med en existerande mapp\" länken."
 
 #: seahub/help/templates/help/sync_existing.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr "Välj sedan en existerande katalog att synkronisera biblioteket med."
+msgstr "Välj sedan en existerande mapp att synkronisera katalogen med."
 
 #: seahub/help/templates/help/sync_interval.html:6
 msgid "Setting Sync Interval"
@@ -1865,11 +1883,11 @@ msgid ""
 "case, you can ask Seafile client to periodically checks for changes in the "
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
-msgstr "Normalt sett så detekterar klienten automatiskt en lokal katalog och laddar upp ändringarna till servern. Men om den lokala katalogen är på en Windows nätverksdisk så kan inte Seafile trovärdigt detektera ändringarna. I detta fall så kan du fråga Seafile klienten att periodvis kontrollera efter ändringar i den lokala katalogen. Du kan sätta intervallet av denna periodiska synkroniseringen. Intervallet är i sekunder."
+msgstr "Normalt sett så detekterar klienten automatiskt en lokal katalog och laddar upp ändringarna till servern. Men om den lokala mappen är på en Windows nätverksdisk så kan inte Seafile trovärdigt detektera ändringarna. I detta fall så kan du fråga Seafile klienten att periodvis kontrollera efter ändringar i den lokala mappen. Du kan sätta intervallet av denna periodiska synkroniseringen. Intervallet är i sekunder."
 
 #: seahub/help/templates/help/unsync_resync.html:6
 msgid "Unsync and Resync Library"
-msgstr "Avsynkronisera och synkronisera om biblioteket"
+msgstr "Avsynkronisera och synkronisera om katalogen"
 
 #: seahub/help/templates/help/unsync_resync.html:8
 #, python-format
@@ -1880,7 +1898,7 @@ msgid ""
 " you want to sync the library with the local folder again, you can use <a "
 "href=\"%(SITE_ROOT)shelp/sync_existing/\">sync with existing folder</a> "
 "feature."
-msgstr "När du inte längre vill synkronisera en lokal katalog med ett bibliotek kan du avsynkronisera den. Efter att du har avsynkroniserat ett bibliotek kommer inte ändringar i den lokala katalogen eller dess filer laddas upp och ändringar i biblioteket kommer inte laddas ner. Om du vill synkronisera biblioteket med den lokala katalogen igen kan du använda  funktionen <a href=\"%(SITE_ROOT)shelp/sync_existing/\">synkronisera med en existerande katalog</a>."
+msgstr "När du inte längre vill synkronisera en lokal mapp med en katalog kan du avsynkronisera den. Efter att du har avsynkroniserat en katalog kommer inte ändringar i den lokala mappen eller dess filer laddas upp och ändringar i katalogen kommer inte laddas ner. Om du vill synkronisera katalogen med den lokala mappen igen kan du använda  funktionen <a href=\"%(SITE_ROOT)shelp/sync_existing/\">synkronisera med en existerande mapp</a>."
 
 #: seahub/help/templates/help/unsync_resync.html:10
 msgid ""
@@ -1888,7 +1906,7 @@ msgid ""
 "these cases, it's usually helpful to \"resync\" the library. Resync means "
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
-msgstr "Ibland uppstår interna fel i klienten som hindrar synkronisering. I dessa fall är det bra att köra en \"omsynkronisering\" av biblioteket. Omsynkronisering är att avsynkronisera och sedan omedelbart synkronisera biblioteket med samma katalog. Du kan hitta detta val i pop-up-menyn i klientens huvudfönster."
+msgstr "Ibland uppstår interna fel i klienten som hindrar synkronisering. I dessa fall är det bra att köra en \"omsynkronisering\" av katalogen. Omsynkronisering är att avsynkronisera och sedan omedelbart synkronisera katalogen med samma mapp. Du kan hitta detta val i pop-up-menyn i klientens huvudfönster."
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"
@@ -1915,7 +1933,7 @@ msgstr "Info"
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/templates/home_base.html:63
 msgid "Libraries"
-msgstr "Bibliotek"
+msgstr "Kataloger"
 
 #: seahub/institutions/templates/institutions/info.html:16
 msgid "Activated Users"
@@ -1991,11 +2009,11 @@ msgstr "Krypterad"
 #: seahub/institutions/templates/institutions/user_info.html:70
 #: seahub/institutions/templates/institutions/user_info.html:72
 msgid "library icon"
-msgstr "biblioteksikon"
+msgstr "katalogsikon"
 
 #: seahub/institutions/templates/institutions/user_info.html:96
 msgid "This user has not created any libraries"
-msgstr "Denna användare har inte skapat några bibliotek"
+msgstr "Denna användare har inte skapat några kataloger"
 
 #: seahub/institutions/templates/institutions/user_info.html:121
 msgid "This user has not created or joined any groups"
@@ -2074,6 +2092,7 @@ msgstr "%(user)s bjöd in dig till att gå med %(site_name)s."
 #: seahub/templates/sysadmin/user_batch_add_email.html:9
 #: seahub/templates/sysadmin/user_freeze_email.html:9
 #: seahub/templates/sysadmin/user_reset_email.html:9
+#: seahub/templates/user_quota_full.html:9
 msgid "Hi,"
 msgstr "Hej,"
 
@@ -2113,7 +2132,7 @@ msgstr "Döpte om katalog"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Deleted library"
-msgstr "Bibliotek borttaget"
+msgstr "Katalog borttagen"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Restored library"
@@ -2154,45 +2173,38 @@ msgstr "Uppdaterat fil"
 
 #: seahub/notifications/management/commands/send_file_updates.py:160
 msgid "Created folder"
-msgstr "Skapat katalog"
+msgstr "Skapat mapp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Deleted folder"
-msgstr "Tagit bort katalog"
+msgstr "Tagit bort mapp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Restored folder"
-msgstr "Återställt katalog"
+msgstr "Återställt mapp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Renamed folder"
-msgstr "Döpt om katalog"
+msgstr "Döpt om mapp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:174
 msgid "Moved folder"
-msgstr "Flyttat katalog"
+msgstr "Flyttat mapp"
 
 #: seahub/notifications/management/commands/send_file_updates.py:268
 #, python-format
 msgid "New file updates on %s"
 msgstr "Nya filer uppdaterad på %s"
 
-#: seahub/notifications/management/commands/send_notices.py:310
+#: seahub/notifications/management/commands/send_notices.py:312
 #, python-format
 msgid "New notice on %s"
 msgstr "Ny notis på %s"
 
-#: seahub/notifications/management/commands/send_work_weixin_notifications.py:170
-#: seahub/notifications/templates/notifications/notice_email.html:9
+#: seahub/notifications/management/commands/send_notices_to_social_account.py:223
 #, python-format
-msgid ""
-"\n"
-"You've got 1 new notice on %(site_name)s:\n"
-msgid_plural ""
-"\n"
-"You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] "\nDu har 1 ny nots på %(site_name)s:\n"
-msgstr[1] "\nDu har %(num)s nya notiser på %(site_name)s:\n"
+msgid "You've got %(num)s new notices on %(site_name)s:\n"
+msgstr ""
 
 #: seahub/notifications/models.py:483
 #, python-format
@@ -2206,7 +2218,7 @@ msgstr "En fil med namn <a href='%(file_link)s'>%(file_name)s</a> är uppladdad 
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
-msgstr "En fil med namn <strong>%(file_name)s</strong> laddades upp till <strong>Borttaget bibliotek</strong>"
+msgstr "En fil med namn <strong>%(file_name)s</strong> laddades upp till <strong>Borttagen katalog</strong>"
 
 #: seahub/notifications/models.py:624
 #, python-format
@@ -2282,12 +2294,23 @@ msgstr "Fil"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 msgid "Library"
-msgstr "Bibliotek"
+msgstr "Katalog"
 
 #: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
 msgstr "Hej, %(name)s"
+
+#: seahub/notifications/templates/notifications/notice_email.html:9
+#, python-format
+msgid ""
+"\n"
+"You've got 1 new notice on %(site_name)s:\n"
+msgid_plural ""
+"\n"
+"You've got %(num)s new notices on %(site_name)s:\n"
+msgstr[0] "\nDu har 1 ny nots på %(site_name)s:\n"
+msgstr[1] "\nDu har %(num)s nya notiser på %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/notice_email.html:19
 msgid "Message"
@@ -2306,7 +2329,7 @@ msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
 "href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
-msgstr "En fil <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> har laddats upp till din katalog <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+msgstr "En fil <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> har laddats upp till din mapp <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:54
 #, python-format
@@ -2339,7 +2362,7 @@ msgstr "Kolla in följande sida:"
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s har delat en katalog som heter <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> till dig."
+msgstr "%(user)s har delat en mapp som heter <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> till dig."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2347,14 +2370,14 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s har delat en katalog som heter <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> till gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "%(user)s har delat en mapp som heter <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> till gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s har delat ett bibliotek med namn <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med dig."
+msgstr "%(user)s har delat en katalog med namn <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med dig."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2362,7 +2385,7 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr "%(user)s har delat ett bibliotek med namn <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr "%(user)s har delat en katalog med namn <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> med gruppen <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
@@ -2381,7 +2404,7 @@ msgstr "Meddelanden"
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr "Ange hur krypterade bibliotek ska visas online"
+msgstr "Ange hur krypterade kataloger ska visas online"
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
@@ -2464,8 +2487,11 @@ msgstr "Nästa"
 msgid "Per page: "
 msgstr "Per sida: "
 
+#: seahub/organizations/views.py:265 seahub/thumbnail/views.py:154
+msgid "Invalid token."
+msgstr "Felaktig symbol."
+
 #: seahub/profile/templates/profile/set_profile_react.html:5
-#: seahub/templates/base.html:66
 msgid "Settings"
 msgstr "Inställningar"
 
@@ -2502,16 +2528,16 @@ msgstr "Demo-konto kan inte tas bort"
 
 #: seahub/profile/views.py:251
 msgid "Failed to set default library."
-msgstr "Misslyckades att sätta standardbibliotek."
+msgstr "Misslyckades att sätta standardkatalog."
 
 #: seahub/profile/views.py:255
 msgid "Can not set encrypted library as default library."
-msgstr "Kan inte använda ett krypterad bibliotek som standardbibliotek."
+msgstr "Kan inte använda en krypterad katalog som standardkatalog."
 
 #: seahub/profile/views.py:260
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr "Satte \"%s\" till ditt standardbibliotek."
+msgstr "Satte \"%s\" till ditt standardkatalog."
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -2576,7 +2602,7 @@ msgstr "Misslyckades att skicka en uppladdningslänk. Email-service är inte kor
 #: seahub/thumbnail/views.py:161 seahub/views/ajax.py:140
 #: seahub/views/ajax.py:418
 msgid "Library does not exist."
-msgstr "Biblioteket finns inte."
+msgstr "Katalogen finns inte."
 
 #: seahub/share/views.py:336 seahub/views/ajax.py:386
 msgid "Directory does not exist."
@@ -2584,7 +2610,7 @@ msgstr "Katalog existerar inte"
 
 #: seahub/share/views.py:385
 msgid "Only the owner of the library has permission to share it."
-msgstr "Endast bibliotekets ägare har behörighet att dela det."
+msgstr "Endast katalogens ägare har behörighet att dela det."
 
 #: seahub/share/views.py:423
 msgid "Please check the email(s) you entered"
@@ -2614,23 +2640,7 @@ msgstr "Samarbetande Team"
 msgid "Side Nav Menu"
 msgstr "Sidomeny"
 
-#: seahub/templates/base.html:51 seahub/templates/base.html:54
-msgid "View profile and more"
-msgstr "Visa profil och mer"
-
-#: seahub/templates/base.html:69
-msgid "System Admin"
-msgstr "Systemadministratör"
-
-#: seahub/templates/base.html:72
-msgid "Organization Admin"
-msgstr "Organisationsadmin"
-
-#: seahub/templates/base.html:78
-msgid "Log out"
-msgstr "Logga ut"
-
-#: seahub/templates/base.html:125
+#: seahub/templates/base.html:85
 msgid "No"
 msgstr "Nej"
 
@@ -2646,7 +2656,7 @@ msgstr "Skapa ett organisationskonto"
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr "Det här biblioteket är krypterat. Ange lösenord om du vill utforska det online. Lösenordet kommer sparas på servern i en timme."
+msgstr "Den här katalogen är krypterad. Ange lösenord om du vill utforska det online. Lösenordet kommer sparas på servern i en timme."
 
 #: seahub/templates/decrypt_repo_form.html:26
 #: seahub/templates/share_access_validation.html:32
@@ -2679,7 +2689,7 @@ msgstr "Filer"
 
 #: seahub/templates/home_base.html:14
 msgid "My Libraries"
-msgstr "Mina bibliotek"
+msgstr "Mina kataloger"
 
 #: seahub/templates/home_base.html:16
 msgid "Shared with me"
@@ -2731,7 +2741,7 @@ msgstr "Administrera delningar"
 
 #: seahub/templates/home_base.html:66
 msgid "Folders"
-msgstr "Kataloger"
+msgstr "Mappar"
 
 #: seahub/templates/home_base.html:71 seahub/templates/home_base.html:75
 msgid "Links"
@@ -2747,7 +2757,7 @@ msgstr "Personlig Wiki"
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
-msgstr "Ladda upp katalog"
+msgstr "Ladda upp mapp"
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
@@ -2763,7 +2773,7 @@ msgstr "Delade Länkar"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr "Visa och hantera alla delade länkar i detta bibliotek."
+msgstr "Visa och hantera alla delade länkar i denna katalog."
 
 #: seahub/templates/i18n.html:12
 msgid "Shared Libs"
@@ -3106,11 +3116,11 @@ msgstr "Katalog"
 
 #: seahub/templates/repo_history_view.html:89
 msgid "Restore Library"
-msgstr "Återskapa bibliotek"
+msgstr "Återskapa katalog"
 
 #: seahub/templates/repo_history_view.html:90
 msgid "Are you sure you want to restore this library?"
-msgstr "Är du säker att du vill återställa detta bibliotek?"
+msgstr "Är du säker att du vill återställa denna katalog?"
 
 #: seahub/templates/repo_history_view.html:114
 #, python-brace-format
@@ -3182,89 +3192,6 @@ msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
 msgstr "Nya lösenordet för katalogen %(repo_name)s är %(password)s. Vänligen ändra det så snart som möjligt."
-
-#: seahub/templates/snippets/search_form.html:6
-msgid "Search files in this wiki"
-msgstr "Sök i alla filer i denna wiki"
-
-#: seahub/templates/snippets/search_form.html:6
-msgid "Search files in this library"
-msgstr "Sök efter filer i detta bibliotek"
-
-#: seahub/templates/snippets/search_form.html:9
-#: seahub/templates/snippets/search_form.html:15
-msgid "Search Files"
-msgstr "Sök filer"
-
-#: seahub/templates/snippets/search_form.html:11
-msgid "advanced"
-msgstr "avancerad"
-
-#: seahub/templates/snippets/search_form.html:19
-#: seahub/templates/snippets/search_form.html:23
-#: seahub/templates/snippets/search_form.html:26
-msgid "In all libraries"
-msgstr "I alla bibliotek"
-
-#: seahub/templates/snippets/search_form.html:20
-msgid "In this wiki"
-msgstr "i denna wiki"
-
-#: seahub/templates/snippets/search_form.html:20
-msgid "In this library"
-msgstr "I detta bibliotek"
-
-#: seahub/templates/snippets/search_form.html:24
-#, python-format
-msgid "in %(name)s"
-msgstr "i %(name)s"
-
-#: seahub/templates/snippets/search_form.html:32
-#: seahub/templates/snippets/search_form.html:35
-msgid "All file types"
-msgstr "Alla filtyper"
-
-#: seahub/templates/snippets/search_form.html:33
-#: seahub/templates/snippets/search_form.html:36
-msgid "Custom file types"
-msgstr "Anpassade filändelser "
-
-#: seahub/templates/snippets/search_form.html:47
-msgid "Text files"
-msgstr "Textfiler"
-
-#: seahub/templates/snippets/search_form.html:51
-msgid "Documents"
-msgstr "Dokument"
-
-#: seahub/templates/snippets/search_form.html:55
-msgid "Images"
-msgstr "Bilder"
-
-#: seahub/templates/snippets/search_form.html:59
-msgid "Video"
-msgstr "Video"
-
-#: seahub/templates/snippets/search_form.html:63
-msgid "Audio"
-msgstr "Audio"
-
-#: seahub/templates/snippets/search_form.html:67
-msgid "pdf"
-msgstr "pdf"
-
-#: seahub/templates/snippets/search_form.html:71
-msgid "markdown"
-msgstr "markdown"
-
-#: seahub/templates/snippets/search_form.html:74
-msgid "Input file extensions here, separate with ','"
-msgstr "Ange filändelser här, separerade med ','"
-
-#: seahub/templates/snippets/search_form.html:75
-msgid ""
-"Please select at least one file type or input at least one file extension"
-msgstr "Ange minst en filtyp eller minst en filändelse"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -3352,6 +3279,15 @@ msgstr "efter förändring"
 msgid "Sorry, this user is not registered yet."
 msgstr "Ledsen, denna användare är inte registrerad"
 
+#: seahub/templates/user_quota_full.html:12
+#, python-format
+msgid "Your quota is almost full on %(site_name)s."
+msgstr ""
+
+#: seahub/templates/user_quota_full.html:14
+msgid "Used:"
+msgstr "Använt"
+
 #: seahub/templates/view_shared_upload_link.html:8
 #, python-format
 msgid "Upload files to <span class=\"op-target\">%(dir_name)s</span>"
@@ -3363,7 +3299,7 @@ msgstr "delat av:"
 
 #: seahub/templates/view_shared_upload_link.html:11
 msgid "The owner of this library has run out of space."
-msgstr "Ägaren av detta bibliotek har slut på ledigt diskutrymme."
+msgstr "Ägaren av denna katalog har slut på ledigt diskutrymme."
 
 #: seahub/templates/view_shared_upload_link.html:18
 #: seahub/templates/view_shared_upload_link.html:64
@@ -3372,7 +3308,7 @@ msgstr "Lägg till filer"
 
 #: seahub/templates/view_shared_upload_link.html:24
 msgid "Add folder"
-msgstr "Lägg till katalog"
+msgstr "Lägg till mapp"
 
 #: seahub/templates/view_shared_upload_link.html:30
 msgid "Cancel All"
@@ -3386,7 +3322,7 @@ msgstr "Drag & Drop av filer stöds för Chrome, Safari 5.0+, Firefox 4.0+, IE 1
 
 #: seahub/templates/view_shared_upload_link.html:36
 msgid "Folder Drag & Drop is supported for Chrome"
-msgstr "Drag & Drop av kataloger stöds för Chrome"
+msgstr "Drag & Släpp av mappar stöds för Chrome"
 
 #: seahub/templates/view_shared_upload_link.html:39
 #, python-format
@@ -3438,17 +3374,13 @@ msgid "Network error"
 msgstr "Nätverksfel"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:599
+#: seahub/views/__init__.py:600
 msgid "Invalid arguments."
 msgstr "Felaktiga argument."
 
 #: seahub/thumbnail/views.py:62 seahub/thumbnail/views.py:185
 msgid "Failed to create thumbnail."
 msgstr "Misslyckades att skapa tumnagel."
-
-#: seahub/thumbnail/views.py:154
-msgid "Invalid token."
-msgstr "Felaktig symbol."
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
 #: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
@@ -3558,50 +3490,50 @@ msgstr "Inaktivera"
 msgid "permission error"
 msgstr "behörighetsfel"
 
-#: seahub/views/__init__.py:400 seahub/views/__init__.py:415
-#: seahub/views/__init__.py:430
+#: seahub/views/__init__.py:401 seahub/views/__init__.py:416
+#: seahub/views/__init__.py:431
 msgid "Unable to view recycle page"
 msgstr "Misslyckades att visa papperskorgen"
 
-#: seahub/views/__init__.py:475
+#: seahub/views/__init__.py:476
 msgid "Unable to view library modification"
-msgstr "Kan inte visa biblioteksändringar"
+msgstr "Kan inte visa katalogsändringar"
 
-#: seahub/views/__init__.py:558 seahub/views/__init__.py:601
-#: seahub/views/__init__.py:732 seahub/views/__init__.py:877
-#: seahub/views/ajax.py:376 seahub/views/file.py:1861
+#: seahub/views/__init__.py:559 seahub/views/__init__.py:602
+#: seahub/views/__init__.py:733 seahub/views/__init__.py:878
+#: seahub/views/ajax.py:376 seahub/views/file.py:1858
 msgid "Library does not exist"
-msgstr "Biblioteket existerar inte"
+msgstr "Katalogen existerar inte"
 
-#: seahub/views/__init__.py:592
+#: seahub/views/__init__.py:593
 msgid "Please specify history ID"
 msgstr "Ange historik-ID"
 
-#: seahub/views/__init__.py:596
+#: seahub/views/__init__.py:597
 msgid "Successfully restored the library."
-msgstr "Lyckades återställa biblioteket"
+msgstr "Lyckades återställa katalogen"
 
-#: seahub/views/__init__.py:603
+#: seahub/views/__init__.py:604
 msgid "History you specified does not exist"
 msgstr "Historiken du angett existerar inte"
 
-#: seahub/views/__init__.py:605
+#: seahub/views/__init__.py:606
 msgid "Unknown error"
 msgstr "Okänt fel"
 
-#: seahub/views/__init__.py:884 seahub/views/repo.py:285
+#: seahub/views/__init__.py:885 seahub/views/repo.py:285
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" existerar inte."
 
-#: seahub/views/__init__.py:925
+#: seahub/views/__init__.py:926
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Kan inte ladda ner \"%s\""
 
 #: seahub/views/ajax.py:161 seahub/views/ajax.py:441
 msgid "Library is encrypted."
-msgstr "Biblioteket är krypterat."
+msgstr "Katalogen är krypterad."
 
 #: seahub/views/ajax.py:167
 msgid "Error: no head commit id"
@@ -3615,9 +3547,9 @@ msgstr "Fel repo id"
 msgid "Bad upload link token."
 msgstr "Dålig uppladdningslänk symbol."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1133 seahub/views/file.py:1353
-#: seahub/views/file.py:1870
+#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
+#: seahub/views/file.py:1130 seahub/views/file.py:1350
+#: seahub/views/file.py:1867
 msgid "File does not exist"
 msgstr "Filen existerar inte"
 
@@ -3629,77 +3561,77 @@ msgstr "Dålig katalog id i uppladdningslänk."
 msgid "No conflict in the merge."
 msgstr "Ingen konflikt i sammanslagningen"
 
-#: seahub/views/file.py:191
+#: seahub/views/file.py:188
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:195
+#: seahub/views/file.py:192
 msgid "URLError: failed to open file online"
 msgstr "URL-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:202
+#: seahub/views/file.py:199
 msgid "The encoding you chose is not proper."
 msgstr "Krypteringen du har valt är inte korrekt."
 
-#: seahub/views/file.py:219 seahub/views/file.py:222
+#: seahub/views/file.py:216 seahub/views/file.py:219
 msgid "Unknown file encoding"
 msgstr "Okänd fil-kodning"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:625
-#: seahub/views/file.py:716 seahub/views/file.py:876
+#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:622
+#: seahub/views/file.py:713 seahub/views/file.py:873
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Filen är större än %s och kan inte öppnas online."
 
-#: seahub/views/file.py:350 seahub/views/file.py:751
+#: seahub/views/file.py:347 seahub/views/file.py:748
 msgid "The library is encrypted, can not open file online."
-msgstr "Biblioteket är krypterat, kan inte öppna filen online."
+msgstr "Katalogen är krypterad, kan inte öppna filen online."
 
-#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:704 seahub/views/file.py:998
-#: seahub/views/file.py:1021 seahub/views/file.py:1048
-#: seahub/views/file.py:1163 seahub/views/file.py:1271
-#: seahub/views/file.py:1374 seahub/views/file.py:1479
+#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
+#: seahub/views/file.py:510 seahub/views/file.py:701 seahub/views/file.py:995
+#: seahub/views/file.py:1018 seahub/views/file.py:1045
+#: seahub/views/file.py:1160 seahub/views/file.py:1268
+#: seahub/views/file.py:1371 seahub/views/file.py:1476
 msgid "Unable to view file"
 msgstr "Kan inte läsa fil"
 
-#: seahub/views/file.py:785 seahub/views/file.py:946 seahub/views/file.py:1232
-#: seahub/views/file.py:1418
+#: seahub/views/file.py:782 seahub/views/file.py:943 seahub/views/file.py:1229
+#: seahub/views/file.py:1415
 msgid "Error when prepare Office Online file preview page."
 msgstr "Fel vid förberedelse av Office Online filvisningssidan."
 
-#: seahub/views/file.py:844 seahub/views/file.py:958 seahub/views/file.py:1251
-#: seahub/views/file.py:1433
+#: seahub/views/file.py:841 seahub/views/file.py:955 seahub/views/file.py:1248
+#: seahub/views/file.py:1430
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Fel vid förberedelse av OnlyOffice filvisningssidan."
 
-#: seahub/views/file.py:1081
+#: seahub/views/file.py:1078
 msgid "Unable to download file, invalid file path"
 msgstr "Kan inte ladda ner fil. Felaktig filsökväg"
 
-#: seahub/views/file.py:1090
+#: seahub/views/file.py:1087
 msgid "Unable to download file, wrong file path"
 msgstr "Kan inte ladda ner fil. Felaktig sökväg"
 
-#: seahub/views/file.py:1095
+#: seahub/views/file.py:1092
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Kan inte ladda ner fil. All delningstrafik har använts."
 
-#: seahub/views/file.py:1102
+#: seahub/views/file.py:1099
 msgid "Unable to download file."
 msgstr "Kan inte ladda ner fil."
 
-#: seahub/views/file.py:1174 seahub/views/file.py:1385
+#: seahub/views/file.py:1171 seahub/views/file.py:1382
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "Kan inte visa råfil, all delningslänktrafik har använts. "
 
-#: seahub/views/file.py:1288 seahub/views/file.py:1499
+#: seahub/views/file.py:1285 seahub/views/file.py:1496
 #: seahub/views/repo.py:336
 #, python-format
 msgid "Share link for %s."
 msgstr "Dela länk för %s."
 
-#: seahub/views/file.py:1617 seahub/views/file.py:1622
+#: seahub/views/file.py:1614 seahub/views/file.py:1619
 msgid "Unable to download file"
 msgstr "Kan inte ladda ner fil"
 
