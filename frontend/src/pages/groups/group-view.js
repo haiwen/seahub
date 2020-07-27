@@ -191,23 +191,11 @@ class GroupView extends React.Component {
 
   onItemDelete = (repo) => {
     let groupID = this.props.groupID;
-    seafileAPI.deleteGroupOwnedLibrary(groupID, repo.repo_id).then(() => {
-      let repoList = this.state.repoList.filter(item => {
-        return item.repo_id !== repo.repo_id;
-      });
-      this.setState({repoList: repoList});
-      this.loadGroup(groupID);
-      let name = repo.repo_name;
-      var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
-      toaster.success(msg);
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        let name = repo.repo_name;
-        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
-      }
-      toaster.danger(errMessage);
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repo.repo_id;
     });
+    this.setState({repoList: repoList});
+    this.loadGroup(groupID);
   }
 
   addRepoItem = (repo) => {

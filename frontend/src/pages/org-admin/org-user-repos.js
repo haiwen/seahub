@@ -103,7 +103,8 @@ class Item extends Component {
     this.state = {
       isOpIconShown: false,
       deleted: false,
-      isDeleteRepoDialogOpen: false
+      isDeleteRepoDialogOpen: false,
+      isRepoDeleted: false,
     };
   }
 
@@ -134,13 +135,16 @@ class Item extends Component {
     const repo = this.props.data;
     seafileAPI.orgAdminDeleteOrgRepo(orgID, repo.repo_id).then((res) => {
       this.setState({
-        deleted: true
+        deleted: true,
+        isRepoDeleted: true,
       });
       const msg = gettext('Successfully deleted {name}.').replace('{name}', repo.repo_name);
       toaster.success(msg);
     }).catch((error) => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
+
+      this.setState({isRepoDeleted: false});
     });
   }
 
@@ -165,13 +169,14 @@ class Item extends Component {
             <a href="#" className={`action-icon sf2-icon-delete${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
           </td>
         </tr>
-        {isDeleteRepoDialogOpen && 
-        <DeleteRepoDialog
-          repo={repo}
-          onDeleteRepo={this.deleteRepo}
-          toggle={this.toggleDeleteRepoDialog}
-        />
-        }
+        {isDeleteRepoDialogOpen && (
+          <DeleteRepoDialog
+            repo={repo}
+            isRepoDeleted={this.state.isRepoDeleted}
+            onDeleteRepo={this.deleteRepo}
+            toggle={this.toggleDeleteRepoDialog}
+          />
+        )}
       </Fragment>
     );
   }

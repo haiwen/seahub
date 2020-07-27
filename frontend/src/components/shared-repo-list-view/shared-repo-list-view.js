@@ -15,7 +15,7 @@ const propTypes = {
   sortItems: PropTypes.func,
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func,
   onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
 };

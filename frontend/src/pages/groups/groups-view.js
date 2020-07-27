@@ -53,23 +53,10 @@ class RepoListViewPanel extends React.Component {
   }
 
   onItemDelete = (repo) => {
-    let group = this.props.group;
-    seafileAPI.deleteGroupOwnedLibrary(group.id, repo.repo_id).then(() => {
-      let repoList = this.state.repoList.filter(item => {
-        return item.repo_id !== repo.repo_id;
-      });
-      this.setState({repoList: repoList});
-      let name = repo.repo_name;
-      var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
-      toaster.success(msg);
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        let name = repo.repo_name;
-        errMessage = gettext('Failed to delete {name}.').replace('{name}', name);
-      }
-      toaster.danger(errMessage);
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repo.repo_id;
     });
+    this.setState({repoList: repoList});
   }
   
   onItemRename = (repo, newName) => {
