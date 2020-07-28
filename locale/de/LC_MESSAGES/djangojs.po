@@ -24,8 +24,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-27 12:03+0800\n"
-"PO-Revision-Date: 2020-07-27 03:40+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2020-07-27 09:44+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1100,17 +1100,17 @@ msgstr "Hinzufügen"
 #: frontend/src/components/dialog/generate-share-link.js:34
 #: frontend/src/components/dialog/generate-upload-link.js:31
 msgid "{minDays_placeholder} - {maxDays_placeholder} days"
-msgstr ""
+msgstr "{minDays_placeholder} - {maxDays_placeholder} Tage"
 
 #: frontend/src/components/dialog/generate-share-link.js:38
 #: frontend/src/components/dialog/generate-upload-link.js:35
 msgid "Greater than or equal to {minDays_placeholder} days"
-msgstr ""
+msgstr "Mindestens {minDays_placeholder} Tage"
 
 #: frontend/src/components/dialog/generate-share-link.js:41
 #: frontend/src/components/dialog/generate-upload-link.js:38
 msgid "Less than or equal to {maxDays_placeholder} days"
-msgstr ""
+msgstr "Höchstens {maxDays_placeholder} Tage"
 
 #: frontend/src/components/dialog/generate-share-link.js:217
 msgid "Share link is copied to the clipboard."
@@ -1182,7 +1182,7 @@ msgstr "Befristung hinzufügen"
 #: frontend/src/components/dialog/generate-share-link.js:481
 #: frontend/src/components/dialog/generate-upload-link.js:333
 msgid "Expiration days"
-msgstr ""
+msgstr "Tage bis zum Ablaufen"
 
 #: frontend/src/components/dialog/generate-share-link.js:488
 #: frontend/src/components/dialog/generate-upload-link.js:340
@@ -1194,7 +1194,7 @@ msgstr "Tage"
 #: frontend/src/components/dialog/generate-share-link.js:500
 #: frontend/src/components/dialog/generate-upload-link.js:352
 msgid "Expiration time"
-msgstr ""
+msgstr "Zeitpunkt des Ablaufens"
 
 #: frontend/src/components/dialog/generate-share-link.js:517
 msgid "Set permission"

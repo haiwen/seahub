@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-27 12:02+0800\n"
-"PO-Revision-Date: 2020-07-27 04:02+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2020-07-27 18:50+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -645,13 +645,13 @@ msgstr "Días al vencimiento de be ser menor o igual que %s"
 #: seahub/api2/endpoints/upload_links.py:209
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "El tiempo de vencimiento debe ser posterior a %s."
 
 #: seahub/api2/endpoints/share_links.py:306
 #: seahub/api2/endpoints/upload_links.py:218
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "El tiempo de vencimiento debe ser anterior a %s."
 
 #: seahub/api2/endpoints/share_links.py:369
 #: seahub/api2/endpoints/share_links.py:378
@@ -920,7 +920,7 @@ msgstr "Los archivos de esta biblioteca no se pueden ver en linea."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "Tu cuota está casi completa en %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -2205,7 +2205,7 @@ msgstr "Nueva notificación en %s"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:223
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "Tienes %(num)s nuevas notificaciones en %(site_name)s:\n"
 
 #: seahub/notifications/models.py:483
 #, python-format
@@ -3283,7 +3283,7 @@ msgstr "Este usuario no está registrado aún."
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Tu cuota está casi completa en %(site_name)s."
 
 #: seahub/templates/user_quota_full.html:14
 msgid "Used:"
