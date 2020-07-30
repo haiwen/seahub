@@ -148,21 +148,19 @@ export const Utils = {
     return permissionOptions;
   },
 
-  // TODO
   getShareLinkPermissionStr: function(permissions) {
-    const { can_edit, can_download } = permissions;
-    if (can_edit) {
-      if (can_download) {
-        return 'edit_download';
-      } else {
-        return 'cloud_edit';
-      }
-    } else {
-      if (can_download) {
+    const { can_edit, can_download, can_upload } = permissions;
+    switch (`${can_edit} ${can_download} ${can_upload}`) {
+      case 'false true false':
         return 'preview_download';
-      } else {
+      case 'false false false':
         return 'preview_only';
-      }
+      case 'false true true':
+        return 'download_upload';
+      case 'true true false':
+        return 'edit_download';
+      case 'true false false':
+        return 'cloud_edit';
     }
   },
 
@@ -309,7 +307,7 @@ export const Utils = {
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
       navigator.userAgent.indexOf('Chrome') > -1 || 
-      navigator.userAgent.indexOf("Safari") > -1;
+      navigator.userAgent.indexOf('Safari') > -1;
   },
 
   isIEBrower: function() { // is ie <= ie11 not include Edge
@@ -608,7 +606,8 @@ export const Utils = {
           text: gettext('Preview and download'), 
           permissionDetails: {
             'can_edit': false,
-            "can_download": true
+            'can_download': true,
+            'can_upload': false
           }
         };
       case 'preview_only':
@@ -617,7 +616,8 @@ export const Utils = {
           text: gettext('Preview only'), 
           permissionDetails: {
             'can_edit': false,
-            "can_download": false 
+            'can_download': false,
+            'can_upload': false
           }
         };
       case 'download_upload':
@@ -625,9 +625,9 @@ export const Utils = {
           value: permission, 
           text: gettext('Download and upload'), 
           permissionDetails: {
-            // TODO
             'can_edit': false,
-            "can_download": true
+            'can_download': true,
+            'can_upload': true 
           }
         };
       case 'edit_download':
@@ -636,7 +636,8 @@ export const Utils = {
           text: gettext('Edit on cloud and download'), 
           permissionDetails: {
             'can_edit': true,
-            "can_download": true
+            'can_download': true,
+            'can_upload': false
           }
         };
       case 'cloud_edit':
@@ -645,7 +646,8 @@ export const Utils = {
           text: gettext('Edit on cloud only'),
           permissionDetails: {
             'can_edit': true,
-            "can_download": false
+            'can_download': false,
+            'can_upload': false
           }
         };
     }
