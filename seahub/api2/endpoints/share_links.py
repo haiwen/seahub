@@ -30,7 +30,8 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
-        normalize_dir_path, is_pro_version, get_file_type_and_ext
+        normalize_dir_path, is_pro_version, get_file_type_and_ext, \
+        check_filename_with_rename
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
@@ -44,6 +45,7 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         THUMBNAIL_ROOT
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -696,3 +698,76 @@ class ShareLinkDirents(APIView):
             result.append(dirent_info)
 
         return Response({'dirent_list': result})
+
+
+class ShareLinkSaveFileToRepo(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, token):
+
+        # argument check
+        dst_repo_id = request.POST.get('dst_repo_id', '')
+        if not dst_repo_id:
+            error_msg = 'dst_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.POST.get('dst_parent_dir', '')
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Share link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_repo(dst_repo_id):
+            error_msg = 'Library %s not found.' % dst_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(dst_repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        share_link_permission = share_link.get_permissions()
+        if not share_link_permission.get('can_download', False):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_folder_permission(request,
+                                   dst_repo_id,
+                                   dst_parent_dir) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # copy file
+        if share_link.s_type == 'f':
+            src_dirent_path = share_link.path
+        else:
+            path = request.POST.get('path', '')
+            if not path:
+                error_msg = 'path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            src_dirent_path = posixpath.join(share_link.path,
+                                             path.strip('/'))
+
+        src_repo_id = share_link.repo_id
+        src_parent_dir = os.path.dirname(src_dirent_path)
+        src_dirent_name = os.path.basename(src_dirent_path)
+        dst_dirent_name = check_filename_with_rename(dst_repo_id,
+                                                     dst_parent_dir,
+                                                     src_dirent_name)
+
+        username = request.user.username
+        seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
+                              dst_repo_id, dst_parent_dir, dst_dirent_name,
+                              username, need_progress=0)
+
+        return Response({'success': True})
