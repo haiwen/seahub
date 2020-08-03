@@ -91,17 +91,17 @@ class LibOldFilesAutoDelDialog extends React.Component {
     return (
       <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          {gettext('Old Files Auto Delete Days')}
+          {gettext('Auto deletion')}
         </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup check>
               <Input type="radio" name="radio1" checked={!this.state.isAutoDel} onChange={() =>{this.updateRadioCheck('noAutoDel');}}/>{' '}
-              <Label>{gettext('Don\'t delete old files automatically.')}</Label>
+              <Label>{gettext('Do not automatically delete files')}</Label>
             </FormGroup>
             <FormGroup check>
               <Input type="radio" name="radio1" checked={this.state.isAutoDel} onChange={() =>{this.updateRadioCheck('autoDel');}}/>{' '}
-              <Label>{gettext('Old files not modified more than this will be delete:')}</Label>
+              <Label>{gettext('Automatically delete files that are not modified within certain days:')}</Label>
               <Input 
                 type="text" 
                 className="expire-input" 

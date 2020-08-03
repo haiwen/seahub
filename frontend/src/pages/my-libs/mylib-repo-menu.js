@@ -115,7 +115,7 @@ class MylibRepoMenu extends React.Component {
         translateResult = gettext('Share Links Admin');
         break;
       case 'Old Files Auto Delete':
-        translateResult = gettext('Old Files Auto Delete');
+        translateResult = gettext('Auto deletion');
         break;
       default:
         break;
