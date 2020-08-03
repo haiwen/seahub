@@ -65,7 +65,7 @@ class FileToolbar extends React.Component {
     let showShareBtn = false;
     if (repoEncrypted) {
       showShareBtn = true; // for internal link
-    } else if ((filePerm == 'rw' || filePerm == 'r') && canGenerateShareLink) {
+    } else if (filePerm == 'rw' || filePerm == 'r') {
       showShareBtn = true;
     }
 
