@@ -1289,7 +1289,8 @@ export const Utils = {
       return true;
     }
 
-    if (dirent && dirent.type === 'file') {
+    // for 'file' & 'dir'
+    if (dirent) {
       if (userDirPermission == 'rw' || userDirPermission == 'r') {
         // can generate internal link
         return true;
