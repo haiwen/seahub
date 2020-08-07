@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
-import { gettext } from '../utils/constants';
+import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
 import { Utils } from '../utils/utils.js';
 import toaster from './toast';
 
@@ -44,7 +44,10 @@ class UserSelect extends React.Component {
           obj.label =
             <React.Fragment>
               <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-              <span className='select-module select-module-name'>{item.name}</span>
+              {enableShowContactEmailWhenSearchUser ?
+                <span className='select-module select-module-name'>{item.name}({item.contact_email})</span> :
+                <span className='select-module select-module-name'>{item.name}</span>
+              }
             </React.Fragment>;
           this.options.push(obj);
         }
