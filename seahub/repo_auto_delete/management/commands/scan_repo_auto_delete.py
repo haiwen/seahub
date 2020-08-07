@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 
 from seaserv import seafile_api, ccnet_api
 
-from seahub.repo_files_auto_del.models import RepoFilesAutoDel
+from seahub.repo_auto_delete.models import RepoAutoDelete
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,6 @@ class Command(BaseCommand):
 
 
     def do_action(self, *args, **options):
-        repo_files_auto_dels = RepoFilesAutoDel.objects.filter(days__gt=0)
-        for auto_del in repo_files_auto_dels:
+        repo_auto_deletes = RepoAutoDelete.objects.filter(days__gt=0)
+        for auto_del in repo_auto_deletes:
             iterate_and_del_files_recursively(auto_del.repo_id, '/', auto_del.days)

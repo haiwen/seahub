@@ -25,8 +25,8 @@ class LibOldFilesAutoDelDialog extends React.Component {
   componentDidMount() {
     seafileAPI.getRepoOldFilesAutoDelDays(this.props.repoID).then(res => {
       this.setState({
-        autoDelDays: res.data.auto_del_days,
-        isAutoDel: res.data.auto_del_days > 0,
+        autoDelDays: res.data.auto_delete_days,
+        isAutoDel: res.data.auto_delete_days > 0,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -36,9 +36,6 @@ class LibOldFilesAutoDelDialog extends React.Component {
 
   submit = () => {
     let daysNeedTobeSet = this.state.autoDelDays;
-    if (!this.state.isAutoDel) {
-      daysNeedTobeSet = 0;    // if no auto del, give 0 to server
-    }
 
     let reg = /^-?\d+$/;
     let isvalid_days = reg.test(daysNeedTobeSet);
@@ -47,6 +44,10 @@ class LibOldFilesAutoDelDialog extends React.Component {
         errorInfo: gettext('Please enter a positive integer'),
       });
       return;
+    }
+
+    if (!this.state.isAutoDel) {
+      daysNeedTobeSet = 0;    // if no auto del, give 0 to server
     }
 
     let repoID = this.props.repoID;

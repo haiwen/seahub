@@ -175,7 +175,7 @@ from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, 
     AdminVirusFilesBatchView
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
-from seahub.api2.endpoints.repo_files_auto_del import RepoFilesAutoDelDaysView
+from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -365,7 +365,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/participant/$', FileParticipantView.as_view(), name='api-v2.1-file-participant'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
 
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-del-days/$', RepoFilesAutoDelDaysView.as_view(), name='api-v2.1-repo-auto-del-days'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-delete/$', RepoAutoDeleteView.as_view(), name='api-v2.1-repo-auto-delete'),
 
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/$', RepoShareLinks.as_view(), name='api-v2.1-repo-share-links'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/(?P<token>[a-f0-9]+)/$', RepoShareLink.as_view(), name='api-v2.1-repo-share-link'),
