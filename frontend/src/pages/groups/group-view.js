@@ -51,6 +51,9 @@ class GroupView extends React.Component {
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false,
       repoList: [],
+      currentPage: 1,
+      perPage: 25, 
+      hasNextPage: false,
       libraryType: 'group',
       isCreateRepoDialogShow: false,
       isDepartmentGroup: false,
@@ -68,6 +71,15 @@ class GroupView extends React.Component {
   }
 
   componentDidMount() {
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      //this.getItemsByPage(this.state.currentPage);
+    }); 
+
     let groupID = this.props.groupID;
     this.loadGroup(groupID);
   }
@@ -92,7 +104,7 @@ class GroupView extends React.Component {
         isDepartmentGroup: isDepartmentGroup,
         isOwner: isOwner,
       });
-      this.loadRepos(groupID);
+      this.loadRepos(this.state.currentPage);
     }).catch((error) => {
       this.setState({
         isLoading: false,
@@ -101,15 +113,22 @@ class GroupView extends React.Component {
     });
   }
 
-  loadRepos = (groupID) => {
+  loadRepos = (page) => {
     this.setState({isLoading: true});
-    seafileAPI.listGroupRepos(groupID).then((res) => {
+    const { perPage } = this.state;
+    seafileAPI.listGroupRepos(this.props.groupID, page, perPage).then((res) => {
+      let hasNextPage = true;
+      if (res.data.length < perPage) {
+        hasNextPage = false;
+      }
       let repoList = res.data.map(item => {
         let repo = new Repo(item);
         return repo;
       });
       this.setState({
         isLoading: false,
+        currentPage: page,
+        hasNextPage: hasNextPage, 
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
@@ -117,6 +136,14 @@ class GroupView extends React.Component {
         isLoading: false,
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       }); 
+    });
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.loadRepos(1);
     });
   }
 
@@ -371,9 +398,9 @@ class GroupView extends React.Component {
             <div className="operation">
               {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
                 Utils.isDesktop() ? (
-                <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-                </button>
+                  <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
+                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+                  </button>
                 ) : (
                   <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateRepoToggle}></span>
                 )
@@ -499,6 +526,12 @@ class GroupView extends React.Component {
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
                 <SharedRepoListView 
                   repoList={this.state.repoList} 
+                  isPaginatorShown={true}
+                  currentPage={this.state.currentPage}
+                  hasNextPage={this.state.hasNextPage}
+                  curPerPage={this.state.perPage}
+                  resetPerPage={this.resetPerPage}
+                  getListByPage={this.loadRepos}
                   currentGroup={this.state.currentGroup} 
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}

@@ -1,7 +1,8 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Paginator from '../../components/paginator';
 import SharedRepoListItem from './shared-repo-list-item';
 import toaster from '../toast';
 import LibsMobileThead from '../libs-mobile-thead';
@@ -140,11 +141,32 @@ class SharedRepoListView extends React.Component {
     );
   }
 
+  getPreviousPage = () => {
+    this.props.getListByPage(this.props.currentPage - 1);
+  } 
+
+  getNextPage = () => {
+    this.props.getListByPage(this.props.currentPage + 1);
+  }
+
   render() {
-    if (Utils.isDesktop()) {
-      return this.renderPCUI();
+    const table = Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI();
+    if (this.props.isPaginatorShown) {
+      return (
+        <Fragment>
+          {table}
+          <Paginator
+            currentPage={this.props.currentPage}
+            hasNextPage={this.props.hasNextPage}
+            curPerPage={this.props.curPerPage}
+            resetPerPage={this.props.resetPerPage}
+            gotoPreviousPage={this.getPreviousPage}
+            gotoNextPage={this.getNextPage}
+          />  
+        </Fragment>
+      );
     } else {
-      return this.renderMobileUI();
+      return table;
     }
   }
 }
