@@ -6,6 +6,8 @@ import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constant
 import { Utils } from '../utils/utils.js';
 import toaster from './toast';
 
+import '../css/user-select.css';
+
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func.isRequired,
@@ -42,13 +44,19 @@ class UserSelect extends React.Component {
           obj.value = item.name;
           obj.email = item.email;
           obj.label =
-            <React.Fragment>
-              <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-              {enableShowContactEmailWhenSearchUser ?
-                <span className='select-module select-module-name'>{item.name}({item.contact_email})</span> :
-                <span className='select-module select-module-name'>{item.name}</span>
-              }
-            </React.Fragment>;
+              enableShowContactEmailWhenSearchUser ? (
+                <div className="d-flex">
+                  <img src={item.avatar_url} className="avatar" width="24" alt="" />
+                  <div className="ml-2">
+                    <span className="user-option-name">{item.name}</span><br />
+                    <span className="user-option-email">{item.contact_email}</span>
+                  </div>
+                </div>
+              ) : ( 
+                <React.Fragment>
+                  <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
+                  <span className='select-module select-module-name'>{item.name}</span>
+                </React.Fragment>);
           this.options.push(obj);
         }
         callback(this.options);
