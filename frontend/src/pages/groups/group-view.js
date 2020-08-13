@@ -40,7 +40,8 @@ class GroupView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: true, // first loading
+      isLoadingMore: false,
       errMessage: '',
       emptyTip: null,
       currentGroup: null,
@@ -51,6 +52,9 @@ class GroupView extends React.Component {
       sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false,
       repoList: [],
+      currentPage: 1,
+      perPage: 50, 
+      hasNextPage: false,
       libraryType: 'group',
       isCreateRepoDialogShow: false,
       isDepartmentGroup: false,
@@ -91,8 +95,9 @@ class GroupView extends React.Component {
         isStaff: isStaff,
         isDepartmentGroup: isDepartmentGroup,
         isOwner: isOwner,
+        repoList: []  // empty it for the current group
       });
-      this.loadRepos(groupID);
+      this.loadRepos(this.state.currentPage);
     }).catch((error) => {
       this.setState({
         isLoading: false,
@@ -101,20 +106,32 @@ class GroupView extends React.Component {
     });
   }
 
-  loadRepos = (groupID) => {
-    this.setState({isLoading: true});
-    seafileAPI.listGroupRepos(groupID).then((res) => {
-      let repoList = res.data.map(item => {
+  loadRepos = (page) => {
+    const { perPage } = this.state;
+    seafileAPI.listGroupRepos(this.props.groupID, page, perPage).then((res) => {
+      let hasNextPage = true;
+      if (res.data.length < perPage) {
+        hasNextPage = false;
+      }
+      let repoList = this.state.repoList;
+      let newRepoList = res.data.map(item => {
         let repo = new Repo(item);
         return repo;
       });
+      if (newRepoList.length) {
+        repoList = repoList.concat(newRepoList);
+      }
       this.setState({
         isLoading: false,
+        isLoadingMore: false,
+        currentPage: page,
+        hasNextPage: hasNextPage,
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
       this.setState({
         isLoading: false,
+        isLoadingMore: false,
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
       }); 
     });
@@ -347,6 +364,22 @@ class GroupView extends React.Component {
     });
   }
 
+  handleScroll = (event) => {
+    // isLoadingMore: to avoid repeated request
+    const { currentPage, hasNextPage, isLoadingMore } = this.state;
+    if (hasNextPage && !isLoadingMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({isLoadingMore: true}, () => {
+          this.loadRepos(currentPage + 1);
+        }); 
+      }   
+    }   
+  }
+
   render() {
     let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = false;
@@ -492,13 +525,14 @@ class GroupView extends React.Component {
                 </Fragment>
               )}
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content d-block" onScroll={this.handleScroll}>
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
                 <SharedRepoListView 
                   repoList={this.state.repoList} 
+                  hasNextPage={this.state.hasNextPage} 
                   currentGroup={this.state.currentGroup} 
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}
