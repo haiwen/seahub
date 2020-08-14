@@ -13,6 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.ocm.models import OCMShareReceived
 from seahub.ocm.settings import  VIA_REPO_TOKEN_URL
+from seahub.constants import PERMISSION_READ_WRITE
 
 
 logger = logging.getLogger(__name__)
@@ -44,6 +45,10 @@ class OCMReposDirView(APIView):
         if not ocm_share_received:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if ocm_share_received.to_user != request.user.username:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DIR']
         params = {
@@ -77,6 +82,10 @@ class OCMReposDownloadLinkView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if ocm_share_received.to_user != request.user.username:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
         params = {
             'path': path,
@@ -107,6 +116,14 @@ class OCMReposUploadLinkView(APIView):
         if not ocm_share_received:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if ocm_share_received.to_user != request.user.username:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if ocm_share_received.permission != PERMISSION_READ_WRITE:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']
         params = {

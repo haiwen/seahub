@@ -397,6 +397,10 @@ class OCMSharePrepareView(APIView):
             error_msg = 'OCMShare %s not found.' % pk
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if ocm_share.from_user != request.user.username:
+            error_msg = 'permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         to_server_url = ocm_share.to_server_url
         shared_secret = ocm_share.shared_secret
 
