@@ -21,7 +21,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import is_org_user
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.base.accounts import User
 from seahub.group.utils import is_group_member
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
@@ -35,6 +36,7 @@ from seahub.share.signals import share_repo_to_user_successful, share_repo_to_gr
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 from seahub.utils.repo import get_available_repo_perms
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
 logger = logging.getLogger(__name__)
@@ -73,11 +75,14 @@ class DirSharedItemsEndpoint(APIView):
         admin_users = ExtraSharePermission.objects.get_admin_users_by_repo(repo_id)
         ret = []
         for item in share_items:
+            avatar_url, is_default, date_uploaded = api_avatar_url(item.user, 72)
             ret.append({
                 "share_type": "user",
                 "user_info": {
                     "name": item.user,
                     "nickname": email2nickname(item.user),
+                    "contact_email": email2contact_email(item.user),
+                    "avatar_url": avatar_url,
                 },
                 "permission": item.perm,
                 "is_admin": item.user in admin_users
@@ -378,11 +383,14 @@ class DirSharedItemsEndpoint(APIView):
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
 
+                    avatar_url, is_default, date_uploaded = api_avatar_url(to_user, 72)
                     result['success'].append({
                         "share_type": "user",
                         "user_info": {
                             "name": to_user,
                             "nickname": email2nickname(to_user),
+                            "contact_email": email2contact_email(to_user),
+                            "avatar_url": avatar_url,
                         },
                         "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
                         "is_admin": permission == PERMISSION_ADMIN
