@@ -1166,6 +1166,7 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_show_contact_email_when_search_user' : settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS
