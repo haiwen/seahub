@@ -1,0 +1,15 @@
+.user-details-popover {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.14);
+  background: #fff;
+  z-index: 1000;
+  left: 2px;
+}
+.user-details-main {
+  border-bottom: 1px solid #eee;
+}
+.user-details-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
