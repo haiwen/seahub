@@ -196,7 +196,7 @@ class OCMSharesView(APIView):
             provider_id=provider_id,
         )
 
-        return Response(request.data)
+        return Response(request.data, status=status.HTTP_201_CREATED)
 
 
 class OCMNotificationsView(APIView):
