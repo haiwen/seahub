@@ -58,6 +58,7 @@ def get_group_repo_info(request, group_repo):
     return group_repo_info
 
 class GroupLibraries(APIView):
+
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -83,6 +84,16 @@ class GroupLibraries(APIView):
             group_repos = seafile_api.get_repos_by_group(group_id)
 
         group_repos.sort(key=lambda x: x.last_modified, reverse=True)
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        group_repos = group_repos[start:start+per_page]
 
         # get repo id owner dict
         all_repo_owner = []
