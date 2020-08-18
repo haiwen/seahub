@@ -18,7 +18,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import validate_group_name
+from seahub.group.utils import validate_group_name, check_group_name_conflict
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_DELETE
 from seahub.api2.utils import to_python_boolean, api_error
@@ -81,11 +81,9 @@ class AdminAddressBookGroups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
-        pattern_matched_groups = ccnet_api.search_groups(group_name, -1, -1)
-        for group in pattern_matched_groups:
-            if group.group_name == group_name:
-                error_msg = _('There is already a group with that name.')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if check_group_name_conflict(request, group_name):
+            error_msg = _('There is already a group with that name.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Group owner is 'system admin'
         group_owner = request.data.get('group_owner', '')
