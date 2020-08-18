@@ -135,8 +135,8 @@ class SharedFileView extends React.Component {
         </div>
         {this.state.showSaveSharedFileDialog &&
           <SaveSharedFileDialog
-            repoID={repoID}
             sharedToken={sharedToken}
+            filePath={zipped ? filePath : ''}
             toggleCancel={this.toggleCancel}
             handleSaveSharedFile={this.handleSaveSharedFile}
           />
