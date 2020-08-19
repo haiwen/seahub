@@ -54,6 +54,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
     DTABLE_WEB_SERVER
@@ -1153,6 +1154,9 @@ def react_fake_view(request, **kwargs):
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+        'upload_link_expire_days_default': UPLOAD_LINK_EXPIRE_DAYS_DEFAULT,
+        'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
+        'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
@@ -1162,6 +1166,7 @@ def react_fake_view(request, **kwargs):
         'folder_perm_enabled': folder_perm_enabled,
         'file_audit_enabled' : FILE_AUDIT_ENABLED,
         'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_show_contact_email_when_search_user' : settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS

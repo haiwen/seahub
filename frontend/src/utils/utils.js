@@ -1289,12 +1289,12 @@ export const Utils = {
       return true;
     }
 
-    if (dirent && dirent.type === 'file') {
-      let hasGenerateShareLinkPermission = false;
-      if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
-        hasGenerateShareLinkPermission = true;
+    // for 'file' & 'dir'
+    if (dirent) {
+      if (userDirPermission == 'rw' || userDirPermission == 'r') {
+        // can generate internal link
+        return true;
       }
-      return hasGenerateShareLinkPermission;
     }
 
     // the root path or the dirent type is dir

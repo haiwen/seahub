@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
+  isRepoDeleted: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
 };
@@ -17,6 +18,12 @@ class DeleteRepoDialog extends Component {
     this.state = {
       isRequestSended: false,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.isRepoDeleted) {
+      this.setState({isRequestSended: false});
+    }
   }
 
   toggle = () => {

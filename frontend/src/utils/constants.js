@@ -48,6 +48,9 @@ export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDays
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const sideNavFooterCustomHtml = window.app.pageOptions.sideNavFooterCustomHtml;
 export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
+export const uploadLinkExpireDaysMin = window.app.pageOptions.uploadLinkExpireDaysMin;
+export const uploadLinkExpireDaysMax = window.app.pageOptions.uploadLinkExpireDaysMax;
+export const uploadLinkExpireDaysDefault = window.app.pageOptions.uploadLinkExpireDaysDefault;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
@@ -59,6 +62,7 @@ export const canAddPublicRepo = window.app.pageOptions.canAddPublicRepo;
 export const canInvitePeople = window.app.pageOptions.canInvitePeople;
 export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
 export const customNavItems = window.app.pageOptions.customNavItems;
+export const enableShowContactEmailWhenSearchUser = window.app.pageOptions.enableShowContactEmailWhenSearchUser;
 export const maxUploadFileSize = window.app.pageOptions.maxUploadFileSize;
 export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfFilesForFileupload;
 

@@ -9,12 +9,15 @@ import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import '../../css/invitations.css';
 
+import '../../css/share-to-user.css';
+
 class UserItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false
+      isOperationShow: false,
+      isUserDetailsPopoverOpen: false
     };
   }
   
@@ -26,11 +29,19 @@ class UserItem extends React.Component {
     this.setState({isOperationShow: false});
   }
 
+  userAvatarOnMouseEnter = () => {
+    this.setState({isUserDetailsPopoverOpen: true});
+  }
+
+  userAvatarOnMouseLeave = () => {
+    this.setState({isUserDetailsPopoverOpen: false});
+  }
+
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_info.name);
   }
-  
+
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
@@ -39,9 +50,33 @@ class UserItem extends React.Component {
   render() {
     let item = this.props.item;
     let currentPermission = item.is_admin ? 'admin' : item.permission;
+    const { isUserDetailsPopoverOpen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="name">{item.user_info.nickname}</td>
+        <td className="name">
+          <div className="position-relative">
+            <img src={item.user_info.avatar_url}
+              width="24" alt={item.user_info.nickname}
+              className="rounded-circle mr-2 cursor-pointer"
+              onMouseEnter={this.userAvatarOnMouseEnter}
+              onMouseLeave={this.userAvatarOnMouseLeave} />
+            <span>{item.user_info.nickname}</span>
+            {isUserDetailsPopoverOpen && (
+              <div className="user-details-popover p-4 position-absolute w-100 mt-1">
+                <div className="user-details-main pb-3">
+                  <img src={item.user_info.avatar_url} width="40"
+                    alt={item.user_info.nickname}
+                    className="rounded-circle mr-2" />
+                  <span className="user-details-name">{item.user_info.nickname}</span>
+                </div>
+                <dl className="m-0 mt-3 d-flex">
+                  <dt className="m-0 mr-3">{gettext('Email')}</dt>
+                  <dd className="m-0">{item.user_info.contact_email}</dd>
+                </dl>
+              </div>
+            )}
+          </div>
+        </td>
         <td>
           <SharePermissionEditor 
             isTextMode={true}

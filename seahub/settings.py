@@ -276,6 +276,8 @@ AUTHENTICATION_BACKENDS = (
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
+ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER = False
+
 # enable work weixin
 ENABLE_WORK_WEIXIN = False
 
@@ -341,6 +343,14 @@ SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 # default expire days should be
 # greater than or equal to MIN and less than or equal to MAX
 SHARE_LINK_EXPIRE_DAYS_DEFAULT = 0
+
+# min/max expire days for an upload link
+UPLOAD_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
+UPLOAD_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+
+# default expire days should be
+# greater than or equal to MIN and less than or equal to MAX
+UPLOAD_LINK_EXPIRE_DAYS_DEFAULT = 0
 
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8

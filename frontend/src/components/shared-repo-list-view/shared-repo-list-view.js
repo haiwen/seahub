@@ -1,10 +1,11 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SharedRepoListItem from './shared-repo-list-item';
 import toaster from '../toast';
 import LibsMobileThead from '../libs-mobile-thead';
+import Loading from '../loading';
 
 const propTypes = {
   libraryType: PropTypes.string,
@@ -15,9 +16,10 @@ const propTypes = {
   sortItems: PropTypes.func,
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func,
   onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
+  hasNextPage: PropTypes.bool
 };
 
 class SharedRepoListView extends React.Component {
@@ -141,10 +143,16 @@ class SharedRepoListView extends React.Component {
   }
 
   render() {
-    if (Utils.isDesktop()) {
-      return this.renderPCUI();
+    const table = Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI();
+    if (this.props.hasNextPage) {
+      return (
+        <Fragment>
+          {table}
+          <Loading />
+        </Fragment>
+      );
     } else {
-      return this.renderMobileUI();
+      return table;
     }
   }
 }

@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,
+  filePath: PropTypes.string,
   toggleCancel: PropTypes.func.isRequired,
   handleSaveSharedFile: PropTypes.func.isRequired,
 };
@@ -24,7 +25,8 @@ class SaveSharedFileDialog extends React.Component {
   }
 
   onSaveSharedFile = () => {
-    seafileAPI.saveSharedFile(this.state.repo.repo_id, this.state.selectedPath, this.props.sharedToken).then((res) => {
+    const { sharedToken, filePath } = this.props;
+    seafileAPI.saveSharedFile(this.state.repo.repo_id, this.state.selectedPath, sharedToken, filePath).then((res) => {
       this.props.toggleCancel();
       this.props.handleSaveSharedFile();
     }).catch((error) => {
