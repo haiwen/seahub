@@ -60,7 +60,6 @@ def check_url_slash(url):
 
 
 class OCMProtocolView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -90,7 +89,6 @@ class OCMProtocolView(APIView):
 
 
 class OCMSharesView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
@@ -180,6 +178,16 @@ class OCMSharesView(APIView):
             repo_id = protocol['options']['repoId']
             from_server_url = protocol['options']['seafileServiceURL']
 
+        if OCMShareReceived.objects.filter(
+            from_user=sender,
+            to_user=share_with,
+            from_server_url=from_server_url,
+            repo_id=repo_id,
+            repo_name=repo_name,
+            provider_id=provider_id,
+        ).exists():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'same share already exists.')
+
         if 'write' in permissions:
             permission = PERMISSION_READ_WRITE
         else:
@@ -200,7 +208,6 @@ class OCMSharesView(APIView):
 
 
 class OCMNotificationsView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
@@ -335,6 +342,16 @@ class OCMSharesPrepareView(APIView):
         repo_owner = get_repo_owner(request, repo_id)
         if repo_owner != username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        if OCMShare.objects.filter(
+            from_user=request.user.username,
+            to_user=to_user,
+            to_server_url=to_server_url,
+            repo_id=repo_id,
+            repo_name=repo.repo_name,
+            path=path,
+        ).exists():
+            return api_error(status.HTTP_400_BAD_REQUEST, 'same share already exists.')
 
         consumer_protocol = get_remote_protocol(to_server_url + OCM_PROTOCOL_URL)
 
