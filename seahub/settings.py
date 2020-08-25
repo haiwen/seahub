@@ -467,6 +467,9 @@ CACHES = {
 
 # rest_framwork
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
     'DEFAULT_THROTTLE_RATES': {
         'ping': '3000/minute',
         'anon': '60/minute',
