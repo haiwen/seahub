@@ -37,23 +37,36 @@ class MarkdownLintView(APIView):
             logger.error(e)
             error_msg = 'slate invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        try:
+            document_nodes = slate["document"]["nodes"]
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'slate invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         issue_list = []
-        document_nodes = slate["document"]["nodes"]
-
         # check h1
-        heading_one_issue_list = check_heading_one(document_nodes)
-        if len(heading_one_issue_list) > 0:
-            issue_list.extend(heading_one_issue_list)
+        try:
+            heading_one_issue_list = check_heading_one(document_nodes)
+            if len(heading_one_issue_list) > 0:
+                issue_list.extend(heading_one_issue_list)
+        except Exception as e:
+            logger.error('check h1 error: %s' % e)
 
         # check heading_end_with
-        heading_end_issue_list = check_heading_end_with(document_nodes)
-        if len(heading_end_issue_list) > 0:
-            issue_list.extend(heading_end_issue_list)
+        try:
+            heading_end_issue_list = check_heading_end_with(document_nodes)
+            if len(heading_end_issue_list) > 0:
+                issue_list.extend(heading_end_issue_list)
+        except Exception as e:
+            logger.error('check heading_end_with error: %s' % e)
 
         # check heading_increase
-        heading_increase_issue_list = check_heading_increase(document_nodes)
-        if len(heading_increase_issue_list) > 0:
-            issue_list.extend(heading_increase_issue_list)
+        try:
+            heading_increase_issue_list = check_heading_increase(document_nodes)
+            if len(heading_increase_issue_list) > 0:
+                issue_list.extend(heading_increase_issue_list)
+        except Exception as e:
+            logger.error('check heading_increase error: %s' % e)
 
         return Response({"issue_list": issue_list}, status=status.HTTP_200_OK)
