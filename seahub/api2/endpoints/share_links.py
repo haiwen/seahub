@@ -95,7 +95,12 @@ def get_share_link_info(fileshare):
 
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
-        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        except Exception as e:
+            logger.error(e)
+            dirent = None
+
         if dirent:
             try:
                 can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
@@ -201,8 +206,14 @@ class ShareLinks(APIView):
 
             repo_id = fileshare.repo_id
             if repo_id not in repo_folder_permission_dict:
-                permission = seafile_api.check_permission_by_path(repo_id,
-                        folder_path, fileshare.username)
+
+                try:
+                    permission = seafile_api.check_permission_by_path(repo_id,
+                            folder_path, fileshare.username)
+                except Exception as e:
+                    logger.error(e)
+                    permission = ''
+
                 repo_folder_permission_dict[repo_id] = permission
 
         links_info = []
