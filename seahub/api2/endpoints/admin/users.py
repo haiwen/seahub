@@ -33,7 +33,7 @@ from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX,
 from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
-        gen_shared_link, gen_shared_upload_link
+        gen_shared_link, gen_shared_upload_link, get_email_by_GH
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
@@ -510,7 +510,13 @@ class AdminUsers(APIView):
             error_msg = _("The number of users exceeds the limit.")
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        email = request.data.get('email', None)
+        # SHEN HANG CUSTOM
+        gh = request.data.get('gh')
+        if not gh:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'gh invalid.')
+        email = get_email_by_GH(gh)
+        if not email:
+            email = request.data.get('email', None)
         if not email or not is_valid_email(email):
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

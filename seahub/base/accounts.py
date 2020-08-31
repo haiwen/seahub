@@ -2,6 +2,9 @@
 # encoding: utf-8
 import re
 import logging
+import requests
+import pyDes
+import json
 
 from django import forms
 from django.core.mail import send_mail
@@ -23,10 +26,12 @@ from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
-    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
+    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED, get_email_by_GH
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
+from seahub.settings import CAS_SERVER_API_URL, CAS_3DES_KEY, CAS_API_METHOD, \
+    CAS_3DES_KEY, DES_MODE, DES_INIT_BYTES, DES_PAD, DES_PAD_MODE
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -577,6 +582,51 @@ class AuthBackend(object):
         if not user:
             return None
 
+        if user.check_password(password):
+            return user
+
+class ShenHangCASAPIBackend(object):
+    def get_user(self, username):
+        try:
+            user = User.objects.get(username)
+        except User.DoesNotExist:
+            user = None
+        return user
+
+    def authenticate(self, username=None, password=None):
+        if '@' in username:
+            email = username
+            username = username.split('@')[0]
+        else:
+            email = get_email_by_GH(username)
+
+        KEY = CAS_3DES_KEY.encode()
+        data = "method={}&idNumber={}&UserPwd={}".format(CAS_API_METHOD, username, password)
+        des_obj = pyDes.triple_des(KEY, DES_MODE, DES_INIT_BYTES.encode(), pad=DES_PAD, padmode=DES_PAD_MODE)
+
+        d = des_obj.encrypt(data.encode())
+
+        url = CAS_SERVER_API_URL + d.hex()
+
+        cas_api_pass = False
+        res = requests.post(url=url)
+        if res.status_code == 200:
+            try:
+                res = json.loads(res.content)
+                if res['message']['map']['USER_NAME']:
+                    cas_api_pass = True
+            except Exception as e:
+                cas_api_pass = False
+
+        user = self.get_user(email)
+        if not user:
+            return None
+
+        # cas api pass, and user in seafile, return user
+        if cas_api_pass:
+            return user
+
+        # cas api not pass, use seafile pass word check
         if user.check_password(password):
             return user
 

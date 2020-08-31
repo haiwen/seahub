@@ -55,7 +55,7 @@ html, body, #wrapper { height:100%; }
         {% elif form.errors.not_found %}
         <p class="error">{{ form.errors.not_found }}</p>
         {% else %}
-        <p class="error">{% trans "Incorrect email or password" %}</p>
+        <p class="error">{{ login_err_msg | safe }}</p>
         {% endif %}
         {% else %}
         <p class="error hide"></p>

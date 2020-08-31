@@ -36,7 +36,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
-        MEDIA_ROOT, CUSTOM_LOGO_PATH
+        MEDIA_ROOT, CUSTOM_LOGO_PATH, TEACHER_EMAIL_DOMAIN, STUDENT_EMAIL_DOMAIN
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -1375,3 +1375,8 @@ def is_valid_org_id(org_id):
         return True
     else:
         return False
+
+def get_email_by_GH(GH):
+    if len(GH) <= 8:
+        return GH + "@" + TEACHER_EMAIL_DOMAIN
+    return GH + "@" + STUDENT_EMAIL_DOMAIN

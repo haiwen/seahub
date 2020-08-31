@@ -31,7 +31,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import is_ldap_user, get_site_name
+from seahub.utils import is_ldap_user, get_site_name, get_email_by_GH
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
@@ -99,9 +99,19 @@ def login(request, template_name='registration/login.html',
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
     ip = get_remote_ip(request)
+    login_err_msg = _('Incorrect email or password')
 
     if request.method == "POST":
         login = request.POST.get('login', '').strip()
+        if '@' in login:
+            email = login
+        else:
+            email = get_email_by_GH(login)
+        try:
+            User.objects.get(email)
+        except User.DoesNotExist:
+            login_err_msg = "您尚未开户，请<a href='{}'>申请开户</a>".format(settings.LOGIN_NOT_FOUND_URL)
+
         failed_attempt = get_login_failed_attempts(username=login, ip=ip)
         remember_me = True if request.POST.get('remember_me',
                                                '') == 'on' else False
@@ -203,6 +213,7 @@ def login(request, template_name='registration/login.html',
         'signup_url': signup_url,
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
+        'login_err_msg': login_err_msg,
     })
 
 def login_simple_check(request):

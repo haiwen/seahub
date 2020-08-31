@@ -784,6 +784,10 @@ del d
 if not os.path.exists(EVENTS_CONFIG_FILE):
     del EVENTS_CONFIG_FILE
 
+# 沈航custom settings
+USE_CAS_API_LOGIN = False
+LOGIN_NOT_FOUND_URL = '/'
+
 #####################
 # External settings #
 #####################
@@ -901,6 +905,10 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+AUTHENTICATION_BACKENDS = ('seahub_extra.django_cas_ng.backends.CASBackend',)
+if USE_CAS_API_LOGIN:
+    AUTHENTICATION_BACKENDS += ('seahub.base.accounts.ShenHangCASAPIBackend',)
 
 #####################
 # Custom Nav Items  #
