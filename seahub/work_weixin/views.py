@@ -93,6 +93,9 @@ def work_weixin_oauth_callback(request):
         user = auth.authenticate(remote_user=email)
     except User.DoesNotExist:
         user = None
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Error, please contact administrator.'))
 
     if not user:
         return render_error(
