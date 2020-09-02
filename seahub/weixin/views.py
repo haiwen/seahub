@@ -90,6 +90,9 @@ def weixin_oauth_callback(request):
         user = auth.authenticate(remote_user=email)
     except User.DoesNotExist:
         user = None
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Error, please contact administrator.'))
 
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
