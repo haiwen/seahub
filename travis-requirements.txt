@@ -1,0 +1,11 @@
+Django==1.11.15
+jsonfield==2.1.1
+django-appconf==1.0.2
+django-simple-captcha
+django-compressor==2.3
+django-picklefield==1.1.0
+django-statici18n
+django-constance==2.4.0
+django-post_office==3.1.0
+django-webpack-loader
+social-auth-core
