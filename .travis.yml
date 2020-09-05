@@ -26,14 +26,13 @@ before_install:
 
 # install seahub requirements
 install:
-  - pip install -r dev-requirements.txt
-  - pip install -r test-requirements.txt
+  - pip install -r travis-requirements.txt
 
 before_scipt: true
 
 # int & start seahub server, run seahub tests
-script:
-  - .travis/test_seahub_changes.sh; rc=$?; if [[ $rc == 0 ]]; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+script: true
+  #  - .travis/test_seahub_changes.sh; rc=$?; if [[ $rc == 0 ]]; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
 
 after_success:
   # making dist assets if current branch(master/7.0) is updated
