@@ -156,10 +156,11 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             p = Profile(user=user.username)
 
         if nickname.strip():  # set nickname when it's not empty
-            p.nickname = nickname
+            p.nickname = nickname.encode("iso-8859-1").decode('utf8')
 
         if institution:
             p.institution = institution
+
         if contact_email:
             p.contact_email = contact_email
 
