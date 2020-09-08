@@ -94,7 +94,13 @@ class AdminLibraries(APIView):
         repos = []
         if repo_name and owner:
             # search by name and owner
-            owned_repos = seafile_api.get_owned_repo_list(owner)
+            orgs = ccnet_api.get_orgs_by_user(owner)
+            if orgs:
+                org_id = orgs[0].org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id, owner)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(owner)
+
             for repo in owned_repos:
                 if not repo.name or repo.is_virtual:
                     continue
@@ -120,7 +126,13 @@ class AdminLibraries(APIView):
 
         elif owner:
             # search by owner
-            owned_repos = seafile_api.get_owned_repo_list(owner)
+            orgs = ccnet_api.get_orgs_by_user(owner)
+            if orgs:
+                org_id = orgs[0].org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id, owner)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(owner)
+
             for repo in owned_repos:
                 if repo.is_virtual:
                     continue
