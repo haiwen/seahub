@@ -95,9 +95,11 @@ class GroupView extends React.Component {
         isStaff: isStaff,
         isDepartmentGroup: isDepartmentGroup,
         isOwner: isOwner,
+        currentPage: 1,
         repoList: []  // empty it for the current group
+      }, () => {
+        this.loadRepos(this.state.currentPage);
       });
-      this.loadRepos(this.state.currentPage);
     }).catch((error) => {
       this.setState({
         isLoading: false,
