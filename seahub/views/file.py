@@ -125,11 +125,6 @@ try:
 except ImportError:
     ONLYOFFICE_EDIT_FILE_EXTENSION = ()
 
-try:
-    from seahub.onlyoffice.settings import ONLYOFFICE_JWT_SECRET
-except ImportError:
-    ONLYOFFICE_JWT_SECRET = ''
-
 # bisheng office
 from seahub.bisheng_office.utils import get_bisheng_dict, \
         get_bisheng_editor_url, get_bisheng_preivew_url
@@ -790,9 +785,8 @@ def view_lib_file(request, repo_id, path):
                     (is_locked and locked_by_online_office)):
                 can_edit = True
 
-            onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
-                    can_edit=can_edit,
-                    can_download=parse_repo_perm(permission).can_download)
+            onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
+                    can_edit=can_edit, can_download=parse_repo_perm(permission).can_download)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
@@ -805,36 +799,6 @@ def view_lib_file(request, repo_id, path):
                         logger.error(e)
 
                 send_file_access_msg(request, repo, path, 'web')
-
-                if ONLYOFFICE_JWT_SECRET:
-                    import jwt
-                    config = {
-                        "document": {
-                            "fileType": onlyoffice_dict['file_type'],
-                            "key": onlyoffice_dict['doc_key'],
-                            "title": onlyoffice_dict['doc_title'],
-                            "url": onlyoffice_dict['doc_url'],
-                            "permissions": {
-                                "download": onlyoffice_dict['can_download'],
-                                "edit": onlyoffice_dict['can_edit'],
-                                "print": onlyoffice_dict['can_download'],
-                                "review": True
-                            }
-                        },
-                        "documentType": onlyoffice_dict['document_type'],
-                        "editorConfig": {
-                            "callbackUrl": onlyoffice_dict['callback_url'],
-                            "lang": request.LANGUAGE_CODE,
-                            "mode": onlyoffice_dict['can_edit'],
-                            "customization": {
-                                "forcesave": onlyoffice_dict['onlyoffice_force_save'],
-                            },
-                            "user": {
-                                "name": email2nickname(username)
-                            }
-                        }
-                    };
-                    onlyoffice_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
 
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
@@ -944,7 +908,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
             if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
-                onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
+                onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
                         file_id=obj_id, can_download=parse_repo_perm(user_perm).can_download)
 
                 if onlyoffice_dict:
@@ -1230,7 +1194,7 @@ def view_shared_file(request, fileshare):
 
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
-            onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
+            onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
                     can_edit=can_edit, can_download=can_download)
 
             if onlyoffice_dict:
@@ -1416,7 +1380,7 @@ def view_file_via_shared_dir(request, fileshare):
 
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
-            onlyoffice_dict = get_onlyoffice_dict(username,
+            onlyoffice_dict = get_onlyoffice_dict(request, username,
                     repo_id, real_path)
 
             if onlyoffice_dict:
