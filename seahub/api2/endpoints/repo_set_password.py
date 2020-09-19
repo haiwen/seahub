@@ -8,15 +8,17 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.utils.translation import ugettext as _
 
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils.repo import is_repo_owner, add_encrypted_repo_secret_key_to_database
+from seahub.utils.repo import is_repo_owner, get_repo_owner, \
+        add_encrypted_repo_secret_key_to_database
 from seahub.base.models import RepoSecretKey
 from seahub.views import check_folder_permission
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 
@@ -103,10 +105,19 @@ class RepoSetPassword(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # permission check
+
         username = request.user.username
-        if not is_repo_owner(request, repo_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        repo_owner = get_repo_owner(request, repo_id)
+
+        if '@seafile_group' in repo_owner:
+            group_id = email2nickname(repo_owner)
+            if not ccnet_api.check_group_staff(int(group_id), username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if operation == 'change-password':
 
