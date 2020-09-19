@@ -4,11 +4,13 @@ import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
+import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
@@ -46,6 +48,8 @@ class SharedRepoListItem extends React.Component {
       isAPITokenDialogShow: false,
       isRepoShareUploadLinksDialogOpen: false,
       isRepoDeleted: false,
+      isChangePasswordDialogShow: false,
+      isResetPasswordDialogShow: false
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -141,6 +145,12 @@ class SharedRepoListItem extends React.Component {
       case 'Share Links Admin':
         this.toggleRepoShareUploadLinksDialog();
         break;
+      case 'Change Password':
+        this.onChangePasswordToggle();
+        break;
+      case 'Reset Password':
+        this.onResetPasswordToggle();
+        break;
       default:
         break;
     }
@@ -231,6 +241,14 @@ class SharedRepoListItem extends React.Component {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   }
 
+  onChangePasswordToggle = () => {
+    this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
+  }
+
+  onResetPasswordToggle = () => {
+    this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
+  }
+
   translateMenuItem = (menuItem) => {
     let translateResult = '';
     switch(menuItem) {
@@ -254,6 +272,12 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'Share Links Admin':
         translateResult = gettext('Share Links Admin');
+        break;
+      case 'Change Password':
+        translateResult = gettext('Change Password');
+        break;
+      case 'Reset Password':
+        translateResult = gettext('Reset Password');
         break;
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
@@ -280,7 +304,14 @@ class SharedRepoListItem extends React.Component {
             if (folderPermEnabled) {
               operations.push('Folder Permission');
             }
-            operations.push('Share Links Admin', 'History Setting', 'API Token', 'Details');
+            operations.push('Share Links Admin');
+            if (repo.encrypted) {
+              operations.push('Change Password');
+            }   
+            if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
+              operations.push('Reset Password');
+            }   
+            operations.push('History Setting', 'API Token', 'Details');
           } else {
             operations.push('Unshare');
           }
@@ -535,6 +566,23 @@ class SharedRepoListItem extends React.Component {
             <RepoShareUploadLinksDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareUploadLinksDialog}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isChangePasswordDialogShow && (
+          <ModalPortal>
+            <ChangeRepoPasswordDialog
+              repoID={repo.repo_id}
+              repoName={repo.repo_name}
+              toggleDialog={this.onChangePasswordToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isResetPasswordDialogShow && (
+          <ModalPortal>
+            <ResetEncryptedRepoPasswordDialog
+              repoID={repo.repo_id}
+              toggleDialog={this.onResetPasswordToggle}
             />
           </ModalPortal>
         )}
