@@ -6,8 +6,8 @@ import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import Loading from '../../../components/loading';
-import TrafficOrganizationsTable from './traffic-organizations-table';
-import TrafficUserTable from './traffic-user-table';
+import OrgsTraffic from './statistic-traffic-orgs';
+import UsersTraffic from './statistic-traffic-users';
 import StatisticChart from './statistic-chart';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
@@ -204,10 +204,10 @@ class StatisticTraffic extends React.Component {
               </div>
             }
             {!isLoading && tabActive === 'user' && 
-              <TrafficUserTable />
+              <UsersTraffic />
             }
             {!isLoading && tabActive === 'organizations' && 
-              <TrafficOrganizationsTable />
+              <OrgsTraffic />
             }
           </div>
         </div>

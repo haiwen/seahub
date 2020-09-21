@@ -1042,24 +1042,6 @@ export const Utils = {
     return items;
   },
 
-  sortTraffic(items, sortBy, sortOrder) {
-    let comparator;
-    switch(sortOrder) {
-      case 'asc': 
-        comparator = function(a, b) {
-          return a[sortBy] < b[sortBy] ? -1 : 1;
-        };
-        break;
-      case 'desc': 
-        comparator = function(a, b) {
-          return a[sortBy] < b[sortBy] ? 1 : -1;
-        };
-        break;
-    }
-    items.sort(comparator);
-    return items;
-  },
-
   /*
    * only used in the 'catch' part of a seafileAPI request
    */
