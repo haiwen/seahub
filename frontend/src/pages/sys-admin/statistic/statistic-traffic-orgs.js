@@ -10,19 +10,20 @@ import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
-class TrafficOrganizationsTable extends React.Component {
+class OrgsTraffic extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      userTrafficList: [],
+      orgTrafficList: [],
       perPage: 25,
       currentPage: 1,
       hasNextPage: false,
       month: moment().format('YYYYMM'),
       isLoading: false,
       errorMessage: '',
-      sortOrder: 'asc'
+      sortBy: 'link_file_download',
+      sortOrder: 'desc'
     };
     this.initPage = 1;
     this.initMonth = moment().format('YYYYMM');
@@ -35,16 +36,16 @@ class TrafficOrganizationsTable extends React.Component {
       perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
-      this.onGenerateReports(this.initMonth, this.state.currentPage);
+      this.getTrafficList(this.initMonth, this.state.currentPage);
     }); 
   }
 
   getPreviousPage = () => {
-    this.onGenerateReports(this.state.month, this.state.currentPage - 1);
+    this.getTrafficList(this.state.month, this.state.currentPage - 1);
   }
 
   getNextPage = () => {
-    this.onGenerateReports(this.state.month, this.state.currentPage + 1);
+    this.getTrafficList(this.state.month, this.state.currentPage + 1);
   }
 
   handleChange = (e) => {
@@ -65,28 +66,22 @@ class TrafficOrganizationsTable extends React.Component {
         });
         return;
       }
-      this.onGenerateReports(month, this.initPage);
+      this.getTrafficList(month, this.initPage);
       e.target.blur();
       e.preventDefault();
     }
   }
 
-  sortBySize = (sortByType, sortOrder) => {
-    let { userTrafficList } = this.state;
-    let newUserTrafficList = Utils.sortTraffic(userTrafficList, sortByType, sortOrder);
-    this.setState({
-      userTrafficList: newUserTrafficList,
-      sortOrder: sortOrder
-    });
-  }
-
-  onGenerateReports = (month, page) => {
-    let { perPage } = this.state;
+  getTrafficList = (month, page) => {
+    const { perPage, sortBy, sortOrder } = this.state;
+    const orderBy = `${sortBy}_${sortOrder}`;
     this.setState({isLoading: true, errorMessage: ''});
-    seafileAPI.sysAdminListOrgTraffic(month, page, perPage).then(res => {
-      let userTrafficList = res.data.org_monthly_traffic_list.slice(0);
+    seafileAPI.sysAdminListOrgTraffic(month, page, perPage, orderBy).then(res => {
+      let orgTrafficList = res.data.org_monthly_traffic_list.slice(0);
       this.setState({
-        userTrafficList: userTrafficList,
+        month: month,
+        currentPage: page,
+        orgTrafficList: orgTrafficList,
         hasNextPage: res.data.has_next_page,
         isLoading: false
       });
@@ -96,14 +91,28 @@ class TrafficOrganizationsTable extends React.Component {
     });
   }
 
+  sortItems = (sortBy) => {
+    this.setState({
+      sortBy: sortBy,
+      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc'
+    }, () => {
+      const { month, currentPage } = this.state;
+      this.getTrafficList(month, currentPage);
+    });
+  }
+
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
-    }, () => this.onGenerateReports(this.initPage, this.initMonth));
+    }, () => this.getTrafficList(this.initPage, this.initMonth));
   }
 
   render() {
-    let { userTrafficList, currentPage, hasNextPage, perPage, isLoading, errorMessage, sortOrder } = this.state;
+    const {
+      isLoading, errorMessage, orgTrafficList,
+      currentPage, hasNextPage, perPage,
+      sortBy, sortOrder
+    } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
@@ -118,8 +127,8 @@ class TrafficOrganizationsTable extends React.Component {
         </div>
         {isLoading && <Loading />}
         {!isLoading && 
-          <TrafficTable type={'org'} sortOrder={sortOrder} sortBySize={this.sortBySize} >
-            {userTrafficList.length > 0 && userTrafficList.map((item, index) => {
+          <TrafficTable type={'org'} sortItems={this.sortItems} sortBy={sortBy} sortOrder={sortOrder}>
+            {orgTrafficList.length > 0 && orgTrafficList.map((item, index) => {
               return(
                 <TrafficTableBody 
                   key={index}
@@ -143,4 +152,4 @@ class TrafficOrganizationsTable extends React.Component {
   }
 }
 
-export default TrafficOrganizationsTable;
+export default OrgsTraffic;
