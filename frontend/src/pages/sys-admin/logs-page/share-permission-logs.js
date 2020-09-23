@@ -1,17 +1,18 @@
 import React, { Component, Fragment } from 'react';
+import { Link } from '@reach/router';
+import moment from 'moment';
+import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import EmptyTip from '../../../components/empty-tip';
-import moment from 'moment';
-import { Button } from 'reactstrap';
-import Loading from '../../../components/loading';
-import Paginator from '../../../components/paginator';
-import LogsNav from './logs-nav';
-import MainPanelTopbar from '../main-panel-topbar';
-import UserLink from '../user-link';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import ModalPortal from '../../../components/modal-portal';
+import EmptyTip from '../../../components/empty-tip';
+import Loading from '../../../components/loading';
+import Paginator from '../../../components/paginator';
+import MainPanelTopbar from '../main-panel-topbar';
+import UserLink from '../user-link';
+import LogsNav from './logs-nav';
 
 class Content extends Component {
 
@@ -44,9 +45,9 @@ class Content extends Component {
           <table className="table-hover">
             <thead>
               <tr>
-                <th width="10%">{gettext('Share From')}</th>
-                <th width="10%">{gettext('Share To')}</th>
-                <th width="20%">{gettext('Actions')}</th>
+                <th width="15%">{gettext('Share From')}</th>
+                <th width="15%">{gettext('Share To')}</th>
+                <th width="10%">{gettext('Actions')}</th>
                 <th width="13%">{gettext('Permission')}</th>
                 <th width="20%">{gettext('Library')}</th>
                 <th width="12%">{gettext('Folder')}</th> 
@@ -112,12 +113,27 @@ class Item extends Component {
     }
   }
 
+  getShareTo = (item) => {
+    switch(item.share_type) {
+      case 'user':
+        return <UserLink email={item.to_user_email} name={item.to_user_name} />;
+      case 'group':
+        return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>; 
+      case 'department':
+        return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>; 
+      case 'all':  
+        return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>; 
+      default:
+        return gettext('Deleted'); 
+    }
+  }
+
   render() {
     let { item } = this.props;
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><UserLink email={item.from_user_email} name={item.from_user_name} /></td>
-        <td><UserLink email={item.to_user_email} name={item.to_user_name} /></td>
+        <td>{this.getShareTo(item)}</td>
         <td>{this.getActionTextByEType(item.etype)}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         <td>{item.repo_name ? item.repo_name : gettext('Deleted')}</td>
