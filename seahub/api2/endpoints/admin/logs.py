@@ -310,40 +310,55 @@ class AdminLogsSharePermissionLogs(APIView):
         to_nickname_dict = {}
         to_contact_email_dict = {}
         repo_dict = {}
+        to_group_name_dict = {}
+
         from_user_email_set = set()
         to_user_email_set = set()
         repo_id_set = set()
+        to_group_id_set = set()
+        department_set = set()
 
         for event in events:
+
             from_user_email_set.add(event.from_user)
-            to_user_email_set.add(event.to)
             repo_id_set.add(event.repo_id)
+
+            if is_valid_email(event.to):
+                to_user_email_set.add(event.to)
+
+            if event.to.isdigit():
+                to_group_id_set.add(event.to)
 
         for e in from_user_email_set:
             if e not in from_nickname_dict:
                 from_nickname_dict[e] = email2nickname(e)
             if e not in from_contact_email_dict:
                 from_contact_email_dict[e] = email2contact_email(e)
+
         for e in to_user_email_set:
             if e not in to_nickname_dict:
                 to_nickname_dict[e] = email2nickname(e)
             if e not in to_contact_email_dict:
                 to_contact_email_dict[e] = email2contact_email(e)
+
         for e in repo_id_set:
             if e not in repo_dict:
                 repo_dict[e] = seafile_api.get_repo(e)
+
+        for group_id in to_group_id_set:
+            if group_id not in to_group_name_dict:
+                group = ccnet_api.get_group(int(group_id))
+                to_group_name_dict[group_id] = group.group_name
+                if group.parent_group_id != 0:
+                    department_set.add(group_id)
 
         events_info = []
         for ev in events:
             data = {}
             from_user_email = ev.from_user
-            to_user_email = ev.to
             data['from_user_email'] = from_user_email
             data['from_user_name'] = from_nickname_dict.get(from_user_email, '')
             data['from_user_contact_email'] = from_contact_email_dict.get(from_user_email, '')
-            data['to_user_email'] = to_user_email
-            data['to_user_name'] = to_nickname_dict.get(to_user_email, '')
-            data['to_user_contact_email'] = to_contact_email_dict.get(to_user_email, '')
 
             data['etype'] = ev.etype
             data['permission'] = ev.permission
@@ -355,6 +370,33 @@ class AdminLogsSharePermissionLogs(APIView):
 
             data['folder'] = '/' if ev.file_path == '/' else os.path.basename(ev.file_path.rstrip('/'))
             data['date'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
+
+            data['share_type'] = 'all'
+
+            data['to_user_email'] = ''
+            data['to_user_name'] = ''
+            data['to_user_contact_email'] = ''
+            data['to_group_id'] = ''
+            data['to_group_name'] = ''
+
+            if is_valid_email(ev.to):
+                to_user_email = ev.to
+                data['to_user_email'] = to_user_email
+                data['to_user_name'] = to_nickname_dict.get(to_user_email, '')
+                data['to_user_contact_email'] = to_contact_email_dict.get(to_user_email, '')
+                data['share_type'] = 'user'
+
+            if ev.to.isdigit():
+
+                to_group_id = ev.to
+                data['to_group_id'] = to_group_id
+                data['to_group_name'] = to_group_name_dict.get(to_group_id, '')
+
+                if to_group_id in department_set:
+                    data['share_type'] = 'department'
+                else:
+                    data['share_type'] = 'group'
+
             events_info.append(data)
 
         resp = {
