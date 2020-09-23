@@ -849,7 +849,7 @@ class AdminUser(APIView):
             login_id = login_id.strip()
             username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
             if username_by_login_id is not None:
-                return api_error(status.HTTP_400_BAD_REQUEST, 
+                return api_error(status.HTTP_400_BAD_REQUEST,
                                  _("Login id %s already exists." % login_id))
 
         contact_email = request.data.get("contact_email", None)
@@ -860,7 +860,7 @@ class AdminUser(APIView):
 
         password = request.data.get("password")
 
-        reference_id = request.data.get("reference_id", "")
+        reference_id = request.data.get("reference_id", None)
         if reference_id:
             if ' ' in reference_id:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID can not contain spaces.')
