@@ -71,10 +71,10 @@ class OrgUsersList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {orgUsers.map(item => {
+            {orgUsers.map((item, index) => {
               return (
                 <UserItem 
-                  key={item.id}
+                  key={index}
                   user={item}
                   currentTab="users"
                   isItemFreezed={this.state.isItemFreezed}
