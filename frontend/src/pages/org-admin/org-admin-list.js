@@ -53,7 +53,7 @@ class OrgAdminList extends React.Component {
             {orgAdminUsers.map(item => {
               return (
                 <UserItem 
-                  key={item.id}
+                  key={item.index}
                   user={item}
                   currentTab="admins"
                   isItemFreezed={this.state.isItemFreezed}

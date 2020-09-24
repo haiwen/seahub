@@ -122,6 +122,17 @@ class UserItem extends React.Component {
     );
   }
 
+  getQuotaTotal = (data) => {
+    switch (data) {
+      case -1: // failed to fetch quota
+        return gettext('Failed');
+      case -2:
+        return '--';
+      default: // data > 0
+        return Utils.formatSize({bytes: data});
+    }
+  }
+
   render() {
     let { user, currentTab } = this.props;
     let href = siteRoot + 'org/useradmin/info/' + encodeURIComponent(user.email) + '/';
@@ -141,7 +152,7 @@ class UserItem extends React.Component {
             onStatusChanged={this.changeStatus}
           />
         </td>
-        <td>{`${user.self_usage} / ${user.quota || '--'}`}</td>
+        <td>{`${Utils.formatSize({bytes: user.quota_usage})} / ${this.getQuotaTotal(user.quota_total)}`}</td>
         <td>
           {user.ctime} /
           <br />
