@@ -186,6 +186,7 @@ class ViaRepoDirView(APIView):
         response_dict = {}
         response_dict["user_perm"] = permission
         response_dict["dir_id"] = dir_id
+        response_dict["repo_name"] = repo.repo_name
 
         if request_type == 'f':
             response_dict['dirent_list'] = all_file_info_list

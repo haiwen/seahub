@@ -12,6 +12,7 @@ from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.repo_api_tokens.models import RepoAPITokens
+from seahub.ocm.models import OCMShare
 from seahub.utils import within_time_range
 try:
     from seahub.settings import MULTI_TENANCY
@@ -176,7 +177,11 @@ class RepoAPITokenAuthentication(BaseAuthentication):
 
         rat = RepoAPITokens.objects.filter(token=auth[1]).first()
         if not rat:
-            raise AuthenticationFailed('Token inactive or deleted')
+            rat = OCMShare.objects.filter(shared_secret=auth[1]).first()
+            if not rat:
+                raise AuthenticationFailed('Token inactive or deleted')
+            # if is request by remote server through ocm, use from_user instead of app_name
+            rat.app_name = rat.from_user
         request.repo_api_token_obj = rat
 
         return AnonymousUser(), auth[1]

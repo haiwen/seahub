@@ -65,6 +65,7 @@ export const customNavItems = window.app.pageOptions.customNavItems;
 export const enableShowContactEmailWhenSearchUser = window.app.pageOptions.enableShowContactEmailWhenSearchUser;
 export const maxUploadFileSize = window.app.pageOptions.maxUploadFileSize;
 export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfFilesForFileupload;
+export const enableOCM = window.app.pageOptions.enableOCM;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
