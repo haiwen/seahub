@@ -5,6 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import { Utils } from '../../utils/utils';
 
 class Content extends Component {
@@ -65,8 +66,9 @@ class Item extends Component {
     super(props);
     this.state = {
       isOpMenuOpen: false, // for mobile
-      showOpIcon: false,
-      unlinked: false
+      isOpIconShown: false,
+      unlinked: false,
+      isConfirmUnlinkDialogOpen: false
     };
   }
 
@@ -78,13 +80,19 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({
-      showOpIcon: true
+      isOpIconShown: true
     });
   }
 
   handleMouseOut = () => {
     this.setState({
-      showOpIcon: false
+      isOpIconShown: false
+    });
+  }
+
+  toggleDialog = () => {
+    this.setState({
+      isConfirmUnlinkDialogOpen: !this.state.isConfirmUnlinkDialogOpen 
     });
   }
 
@@ -92,14 +100,23 @@ class Item extends Component {
     e.preventDefault();
 
     const data = this.props.data;
+    if (data.is_desktop_client) {
+      this.toggleDialog();
+    } else {
+      const wipeDevice = true;
+      this.unlinkDevice(wipeDevice);
+    }
+  }
 
-    seafileAPI.unlinkDevice(data.platform, data.device_id).then((res) => {
+  unlinkDevice = (wipeDevice) => {
+    const data = this.props.data;
+    seafileAPI.unlinkDevice(data.platform, data.device_id, wipeDevice).then((res) => {
       this.setState({
         unlinked: true
       });
-      let msg_s = gettext('Successfully unlinked %(name)s.');
-      msg_s = msg_s.replace('%(name)s', data.device_name);
-      toaster.success(msg_s);
+      let msg = gettext('Successfully unlinked %(name)s.');
+      msg = msg.replace('%(name)s', data.device_name);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -114,7 +131,7 @@ class Item extends Component {
     const data = this.props.data;
 
     let opClasses = 'sf2-icon-delete unlink-device action-icon';
-    opClasses += this.state.showOpIcon ? '' : ' invisible';
+    opClasses += this.state.isOpIconShown ? '' : ' invisible';
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
@@ -156,7 +173,17 @@ class Item extends Component {
       </tr>
     );
 
-    return this.props.isDesktop ? desktopItem : mobileItem;
+    return (
+      <React.Fragment>
+        {this.props.isDesktop ? desktopItem : mobileItem}
+        {this.state.isConfirmUnlinkDialogOpen &&
+        <ConfirmUnlinkDeviceDialog
+          executeOperation={this.unlinkDevice}
+          toggleDialog={this.toggleDialog} 
+        />
+        }
+      </React.Fragment>
+    );
   }
 }
 
