@@ -9,7 +9,7 @@ import logging
 import posixpath
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
@@ -1119,10 +1119,47 @@ def choose_register(request):
         'login_bg_image_path': login_bg_image_path
     })
 
+
 @login_required
 def react_fake_view(request, **kwargs):
-   
+
     username = request.user.username
+
+    if resolve(request.path).url_name == 'lib_view':
+
+        repo_id = kwargs.get('repo_id', '')
+        path = kwargs.get('path', '')
+
+        if repo_id and path and \
+                not check_folder_permission(request, repo_id, path):
+
+            converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+            if not converted_repo_path:
+                error_msg = 'Permission denied.'
+                return render_error(request, error_msg)
+
+            repo_path_dict = json.loads(converted_repo_path)
+
+            converted_repo_id = repo_path_dict['repo_id']
+            converted_repo = seafile_api.get_repo(converted_repo_id)
+            if not converted_repo:
+                error_msg = 'Library %s not found.' % converted_repo_id
+                return render_error(request, error_msg)
+
+            converted_path = repo_path_dict['path']
+            if not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+                error_msg = 'Dirent %s not found.' % converted_path
+                return render_error(request, error_msg)
+
+            if not check_folder_permission(request, converted_repo_id, converted_path):
+                error_msg = 'Permission denied.'
+                return render_error(request, error_msg)
+
+            next_url = reverse('lib_view', args=[converted_repo_id,
+                                                 converted_repo.repo_name,
+                                                 converted_path.strip('/')])
+            return HttpResponseRedirect(next_url)
+
     guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     if guide_enabled:
         create_default_library(request)
@@ -1164,9 +1201,9 @@ def react_fake_view(request, **kwargs):
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
         'folder_perm_enabled': folder_perm_enabled,
-        'file_audit_enabled' : FILE_AUDIT_ENABLED,
-        'custom_nav_items' : json.dumps(CUSTOM_NAV_ITEMS),
-        'enable_show_contact_email_when_search_user' : settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
+        'file_audit_enabled': FILE_AUDIT_ENABLED,
+        'custom_nav_items': json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_show_contact_email_when_search_user': settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS
