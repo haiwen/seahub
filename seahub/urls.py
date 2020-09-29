@@ -84,6 +84,7 @@ from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
+from seahub.api2.endpoints.auth_token_by_session import AuthTokenBySession
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
 from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
 from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
@@ -267,6 +268,9 @@ urlpatterns = [
 
     ## user
     url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
+
+    ## obtain auth token by login session
+    url(r'^api/v2.1/auth-token-by-session/$', AuthTokenBySession.as_view(), name="api-v2.1-auth-token-by-session"),
 
     ## user::smart-link
     url(r'^api/v2.1/smart-link/$', SmartLink.as_view(), name="api-v2.1-smart-link"),
