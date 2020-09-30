@@ -241,9 +241,22 @@ class SystemUserTrafficView(APIView):
             per_page = 25
         start = (page - 1) * per_page
 
+        order_by = request.GET.get('order_by', '')
+        filters = [
+            'sync_file_upload', 'sync_file_download',
+            'web_file_upload', 'web_file_download',
+            'link_file_upload', 'link_file_download',
+        ]
+        if order_by not in filters and \
+           order_by not in map(lambda x: x + '_desc', filters):
+            order_by = 'link_file_download_desc'
+
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_users_traffic_by_month(month_obj, start, start + per_page + 1)
+            traffics = seafevents_api.get_all_users_traffic_by_month(month_obj,
+                                                                     start,
+                                                                     start + per_page + 1,
+                                                                     order_by)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -305,9 +318,22 @@ class SystemOrgTrafficView(APIView):
             per_page = 25
         start = (page - 1) * per_page
 
+        order_by = request.GET.get('order_by', '')
+        filters = [
+            'sync_file_upload', 'sync_file_download',
+            'web_file_upload', 'web_file_download',
+            'link_file_upload', 'link_file_download',
+        ]
+        if order_by not in filters and \
+           order_by not in map(lambda x: x + '_desc', filters):
+            order_by = 'link_file_download_desc'
+
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_orgs_traffic_by_month(month_obj, start, start + per_page + 1)
+            traffics = seafevents_api.get_all_orgs_traffic_by_month(month_obj,
+                                                                    start,
+                                                                    start + per_page + 1,
+                                                                    order_by)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

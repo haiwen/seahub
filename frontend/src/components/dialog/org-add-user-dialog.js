@@ -30,7 +30,7 @@ class AddOrgUserDialog extends React.Component {
     if (isValid) {
       let { email, name, password } = this.state;
       this.setState({isAddingUser: true});
-      this.props.handleSubmit(email, name, password);
+      this.props.handleSubmit(email, name.trim(), password);
     }
   } 
 
@@ -71,7 +71,7 @@ class AddOrgUserDialog extends React.Component {
   }
 
   inputName = (e) => {
-    let name = e.target.value.trim();
+    let name = e.target.value;
     this.setState({name: name});
   }
 
@@ -107,7 +107,7 @@ class AddOrgUserDialog extends React.Component {
       this.setState({errMessage: errMessage});
       return false;
     }
-    let name = this.state.name;
+    let name = this.state.name.trim();
     if (!name.length) {
       errMessage = gettext('Name is required');
       this.setState({errMessage: errMessage});
