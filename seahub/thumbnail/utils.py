@@ -5,6 +5,7 @@ import timeit
 import tempfile
 import urllib.request, urllib.error, urllib.parse
 import logging
+import subprocess
 from io import BytesIO
 import zipfile
 try: # Py2 and Py3 compatibility
@@ -25,15 +26,6 @@ from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
 logger = logging.getLogger(__name__)
 
 XMIND_IMAGE_SIZE = 1024
-
-if ENABLE_VIDEO_THUMBNAIL:
-    try:
-        from moviepy.editor import VideoFileClip
-        logger.debug('Video thumbnail is enabled.')
-    except ImportError:
-        logger.error("Could not find moviepy installed.")
-else:
-    logger.debug('Video thumbnail is disabled.')
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
@@ -196,10 +188,14 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
         return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
-    clip = VideoFileClip(inner_path)
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
 
-    clip.save_frame(tmp_path, t=THUMBNAIL_VIDEO_FRAME_TIME)
+    try:
+        subprocess.check_output(['ffmpeg', '-ss', '00:00:01', '-vframes', '1', tmp_path, '-i', inner_path])
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+    
     t2 = timeit.default_timer()
     logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
 
