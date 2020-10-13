@@ -74,7 +74,7 @@ class OrgsTraffic extends React.Component {
 
   getTrafficList = (month, page) => {
     const { perPage, sortBy, sortOrder } = this.state;
-    const orderBy = `${sortBy}_${sortOrder}`;
+    const orderBy = sortOrder == 'asc' ? sortBy : `${sortBy}_${sortOrder}`;
     this.setState({isLoading: true, errorMessage: ''});
     seafileAPI.sysAdminListOrgTraffic(month, page, perPage, orderBy).then(res => {
       let orgTrafficList = res.data.org_monthly_traffic_list.slice(0);

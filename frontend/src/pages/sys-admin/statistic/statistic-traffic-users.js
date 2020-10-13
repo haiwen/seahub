@@ -74,7 +74,7 @@ class UsersTraffic extends React.Component {
 
   getTrafficList = (month, page) => {
     const { perPage, sortBy, sortOrder } = this.state;
-    const orderBy = `${sortBy}_${sortOrder}`;
+    const orderBy = sortOrder == 'asc' ? sortBy : `${sortBy}_${sortOrder}`;
     this.setState({
       isLoading: true,
       errorMessage: ''
