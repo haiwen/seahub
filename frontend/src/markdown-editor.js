@@ -25,7 +25,7 @@ const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft, 
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
-let dirPath = '/';
+const dirPath = Utils.getDirName(filePath);
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
