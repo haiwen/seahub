@@ -54,7 +54,7 @@ class ShareDialog extends React.Component {
   getInitialActiveTab = () => {
     let { repoEncrypted, userPerm, enableDirPrivateShare, itemType } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
-    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && (userPerm == 'rw' || userPerm == 'admin');
 
     // for encrypted repo, 'dir private share' is only enabled for the repo itself,
     // not for the folders in it.
@@ -88,7 +88,7 @@ class ShareDialog extends React.Component {
     let activeTab = this.state.activeTab;
     let { repoEncrypted, userPerm, enableDirPrivateShare, itemType } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
-    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && userPerm == 'rw';
+    const enableUploadLink = !repoEncrypted && canGenerateUploadLink && (userPerm == 'rw' || userPerm == 'admin');
 
     // for encrypted repo, 'dir private share' is only enabled for the repo itself,
     // not for the folders in it.
@@ -160,6 +160,7 @@ class ShareDialog extends React.Component {
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
                   itemType={itemType}
+                  userPerm={userPerm}
                 />
               </TabPane>
             }

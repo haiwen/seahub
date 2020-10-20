@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
+import { isPro, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -11,6 +11,7 @@ import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
 import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
+import FileUploader from './components/shared-link-file-uploader/file-uploader';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -18,7 +19,13 @@ import './css/grid-view.css';
 moment.locale(window.app.config.lang);
 
 let loginUser = window.app.pageOptions.name;
-const { token, trafficOverLimit, dirName, sharedBy, path, canDownload, mode, thumbnailSize, zipped } = window.shared.pageOptions;
+const {
+  token, dirName, sharedBy,
+  repoID, path,
+  mode, thumbnailSize, zipped,
+  trafficOverLimit, canDownload,
+  noQuota, canUpload
+} = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
@@ -235,6 +242,28 @@ class SharedDirView extends React.Component {
     });
   }
 
+  onUploadFile = (e) => { 
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFileUpload();
+  }
+
+  onFileUploadSuccess = (direntObject) => {
+    const { name, size } = direntObject;
+    const newItem = {
+      isSelected: false,
+      file_name: name,
+      file_path: Utils.joinPath(path, name),
+      is_dir: false,
+      last_modified: moment().format(),
+      size: size
+    };
+    const folderItems = this.state.items.filter(item => { return item.is_dir; });
+    // put the new file as the first file
+    let items = Array.from(this.state.items);
+    items.splice(folderItems.length, 0, newItem);
+    this.setState({items: items});
+  }
+
   render() {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
@@ -249,7 +278,7 @@ class SharedDirView extends React.Component {
           </div>
           <div className="o-auto">
             <div className="shared-dir-view-main">
-              <h2 className="title">{dirName}</h2>
+              <h2 className="h3">{dirName}</h2>
               <p>{gettext('Shared by: ')}{sharedBy}</p>
               <div className="d-flex justify-content-between align-items-center op-bar">
                 <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
@@ -260,16 +289,31 @@ class SharedDirView extends React.Component {
                     <a href={`?p=${encodeURIComponent(path)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
                   </div>
                   }
+                  {canUpload && (
+                    <Button disabled={noQuota}
+                      title={noQuota ? gettext('The owner of this library has run out of space.') : ''}
+                      onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn">{gettext('Upload')}</Button>
+                  )}
                   {showDownloadIcon &&
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ? 
-                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 zip-btn">{gettext('ZIP Selected Items')}</Button> :
-                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
+                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button> :
+                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
                     }
                   </Fragment>
                   }
                 </div>
               </div>
+              {!noQuota && canUpload && (
+                <FileUploader
+                  ref={uploader => this.uploader = uploader}
+                  dragAndDrop={false}
+                  token={token}
+                  path={path}
+                  repoID={repoID}
+                  onFileUploadSuccess={this.onFileUploadSuccess}
+                />
+              )}
               <Content
                 isDesktop={isDesktop}
                 isLoading={this.state.isLoading}

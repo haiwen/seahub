@@ -83,8 +83,9 @@ class GenerateShareLink extends React.Component {
     });
 
     if (isPro) {
-      if (this.props.itemType === 'library') {
-        let permissionOptions = Utils.getShareLinkPermissionList(this.props.itemType, '', path);
+      const { itemType, userPerm } = this.props;
+      if (itemType == 'library') {
+        let permissionOptions = Utils.getShareLinkPermissionList(itemType, userPerm, path);
         this.setState({
           permissionOptions: permissionOptions,
           currentPermission: permissionOptions[0],

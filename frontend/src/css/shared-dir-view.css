@@ -11,10 +11,6 @@ body {
   height: 53px;
   flex-shrink: 0;
 }
-.title {
-  font-size: 1.4rem;
-  margin-bottom: .5rem;
-}
 .shared-dir-view-main {
   width: calc(100% - 40px);
   max-width: 950px;
@@ -42,10 +38,13 @@ body {
   background-color: #ccc;
   color: #fff;
 }
-.zip-btn {
+.shared-dir-op-btn {
   height: 30px;
   line-height: 30px;
   padding: 0 10px;
+}
+.shared-dir-upload-btn {
+  border: 1px solid #ccc;
 }
 .grid-item .action-icon {
   position: absolute;

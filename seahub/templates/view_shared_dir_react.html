@@ -21,6 +21,7 @@
         pageOptions: {
             dirName: '{{ dir_name|escapejs }}',
             sharedBy: '{{ username|email2nickname|escapejs }}',
+            repoID: '{{repo.id}}',
             path: '{{ path|escapejs }}',
             zipped: (function() {
               var list = [];
@@ -36,7 +37,9 @@
             mode: '{{ mode }}',
             thumbnailSize: {{ thumbnail_size }},
             trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
-            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %}
+            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
+            noQuota: {% if no_quota %}true{% else %}false{% endif %},
+            canUpload: {% if permissions.can_upload %}true{% else %}false{% endif %}
         }
     };
 </script>

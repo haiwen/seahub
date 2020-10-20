@@ -328,7 +328,10 @@ def view_shared_dir(request, fileshare):
                 req_image_path = posixpath.join(req_path, f.obj_name)
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
-    
+
+    # for 'upload file'
+    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
+
     #template = 'view_shared_dir.html'
     template = 'view_shared_dir_react.html'
 
@@ -345,6 +348,7 @@ def view_shared_dir(request, fileshare):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
+            'no_quota': no_quota,
             'permissions': permissions,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
