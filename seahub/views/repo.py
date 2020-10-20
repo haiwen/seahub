@@ -391,7 +391,8 @@ def view_shared_upload_link(request, uploadlink):
 
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
-    return render(request, 'view_shared_upload_link.html', {
+    return render(request, 'view_shared_upload_link_react.html', {
+    #return render(request, 'view_shared_upload_link.html', {
             'repo': repo,
             'path': path,
             'username': username,

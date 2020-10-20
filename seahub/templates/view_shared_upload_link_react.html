@@ -1,0 +1,27 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n avatar_tags %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'uploadLink' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+  window.uploadLink = {
+    dirName: "{{dir_name|escapejs}}",
+    sharedBy: {
+      name: "{{username|email2nickname|escapejs}}", 
+      avatar: '{% avatar username 16 %}'
+    },
+    noQuota: {% if no_quota %} true {% else %} false {% endif %},
+    {% if max_upload_file_size %}
+    maxUploadFileSize: "{{max_upload_file_size|filesizeformat}}",
+    {% endif %}
+    token: "{{uploadlink.token}}",
+    repoID: "{{uploadlink.repo_id}}",
+    path: "{{path|escapejs}}"
+  };
+</script>
+{% render_bundle 'uploadLink' 'js' %}
+{% endblock %}

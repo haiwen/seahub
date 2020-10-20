@@ -90,6 +90,7 @@ module.exports = {
     orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
     sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
     search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
+    uploadLink: [require.resolve('./polyfills'), paths.appSrc + "/pages/upload-link"],
   },
 
   output: {

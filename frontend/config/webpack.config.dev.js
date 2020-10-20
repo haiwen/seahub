@@ -210,6 +210,11 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/pages/search",
     ],
+    uploadLink: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/upload-link",
+    ]
   },
 
   output: {
