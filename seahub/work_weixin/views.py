@@ -4,7 +4,9 @@
 import uuid
 import logging
 import requests
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
@@ -15,7 +17,7 @@ from seahub import auth
 from seahub.utils import render_error
 from seahub.base.accounts import User
 from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIXIN_CORP_ID, \
-    WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_PROVIDER, \
+    WORK_WEIXIN_AGENT_ID, WORK_WEIXIN_PROVIDER, MP_WORK_WEIXIN_AUTHORIZATION_URL, \
     WORK_WEIXIN_GET_USER_INFO_URL, WORK_WEIXIN_GET_USER_PROFILE_URL, WORK_WEIXIN_UID_PREFIX, \
     WORK_WEIXIN_USER_INFO_AUTO_UPDATE, REMEMBER_ME
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
@@ -44,7 +46,13 @@ def work_weixin_oauth_login(request):
         'redirect_uri': get_site_scheme_and_netloc() + reverse('work_weixin_oauth_callback'),
         'state': state,
     }
-    authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
+
+    if 'micromessenger' in request.META.get('HTTP_USER_AGENT').lower():
+        data['response_type'] = 'code'
+        data['scope'] = 'snsapi_base'
+        authorization_url = MP_WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data) + '#wechat_redirect'
+    else:
+        authorization_url = WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
 
     return HttpResponseRedirect(authorization_url)
 
