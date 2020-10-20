@@ -25,7 +25,7 @@ const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft, 
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
-let dirPath = '/';
+let dirPath = Utils.getDirName(filePath);
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -143,7 +143,8 @@ class EditorUtilities {
   }
 
   getFiles() {
-    return seafileAPI.listDir(repoID, dirPath, { recursive: true} ).then((response) => {
+    const rootPath = '/';
+    return seafileAPI.listDir(repoID, rootPath, { recursive: true} ).then((response) => {
       var files = response.data.dirent_list.map((item) => {
         return {
           name: item.name,
