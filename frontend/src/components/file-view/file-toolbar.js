@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 
-const propTypes = { 
+const propTypes = {
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
   onSave: PropTypes.func,
@@ -17,7 +17,7 @@ const propTypes = {
   toggleCommentPanel: PropTypes.func.isRequired
 };
 
-const { 
+const {
   canLockUnlockFile, canGenerateShareLink,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
   fileName,
@@ -47,7 +47,7 @@ class FileToolbar extends React.Component {
   }
 
   render() {
-    const { isLocked, lockedByMe } = this.props; 
+    const { isLocked, lockedByMe } = this.props;
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -59,8 +59,8 @@ class FileToolbar extends React.Component {
         showLockUnlockBtn = true;
         lockUnlockText = gettext('Unlock');
         lockUnlockIcon = 'fa fa-unlock';
-      }   
-    }   
+      }
+    }
 
     let showShareBtn = false;
     if (repoEncrypted) {
@@ -104,8 +104,8 @@ class FileToolbar extends React.Component {
               href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}`}
             />
           )}
-          {(canEditFile && !err) && 
-            ( this.props.isSaving ? 
+          {(canEditFile && !err) &&
+            ( this.props.isSaving ?
               <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
               (

@@ -136,7 +136,7 @@ class OrgDepartmentItem extends React.Component {
   }
 
   showDeleteDepartDialog = (subGroup) => {
-    this.setState({ 
+    this.setState({
       showDeleteDepartDialog: true,
       subGroupID: subGroup.id,
       subGroupName: subGroup.name
@@ -203,7 +203,7 @@ class OrgDepartmentItem extends React.Component {
             <div className="cur-view-path">
               <div className="fleft">
                 <h3 className="sf-heading">
-                  {groupID ? 
+                  {groupID ?
                     <Link to={siteRoot + 'org/departmentadmin/'}>{gettext('Departments')}</Link>
                     : <span>{gettext('Departments')}</span>
                   }
@@ -249,7 +249,7 @@ class OrgDepartmentItem extends React.Component {
                 }
               </div>
             </div>
-            
+
             <div className="cur-view-subcontainer org-members">
               <div className="cur-view-path">
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
@@ -413,7 +413,7 @@ class MemberItem extends React.Component {
         <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
         <td><a href={memberLink}>{member.name}</a></td>
         <td>
-          <RoleEditor 
+          <RoleEditor
             isTextMode={true}
             isEditIconShow={highlight}
             currentRole={member.role}

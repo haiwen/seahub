@@ -52,7 +52,7 @@ class OrgAdminList extends React.Component {
           <tbody>
             {orgAdminUsers.map(item => {
               return (
-                <UserItem 
+                <UserItem
                   key={item.index}
                   user={item}
                   currentTab="admins"

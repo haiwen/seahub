@@ -111,7 +111,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Update':
         translateResult = gettext('Update');
@@ -121,7 +121,7 @@ class Item extends Component {
         break;
       default:
         break;
-    }   
+    }
 
     return translateResult;
   }

@@ -156,7 +156,7 @@ class MarkdownViewerToolbar extends React.Component {
                 {(canLockUnlockFile && lockedByMe) &&
                   <IconButton id="lock-unlock-file" icon='fa fa-unlock' text={gettext('Unlock')} onMouseDown={this.props.toggleLockFile}/>
                 }
-                {canGenerateShareLink && 
+                {canGenerateShareLink &&
                   <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                     onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
@@ -168,7 +168,7 @@ class MarkdownViewerToolbar extends React.Component {
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged} 
+                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
               </ButtonGroup>
@@ -194,7 +194,7 @@ class MarkdownViewerToolbar extends React.Component {
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged} 
+                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
               </ButtonGroup>

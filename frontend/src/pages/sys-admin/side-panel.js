@@ -69,7 +69,7 @@ class SidePanel extends React.Component {
                 }
                 {constanceEnabled && canConfigSystem &&
                   <li className="nav-item">
-                    <Link 
+                    <Link
                       className={`nav-link ellipsis ${this.getActiveClass('web-settings')}`}
                       to={siteRoot + 'sys/web-settings/'}
                       onClick={() => this.props.tabItemClick('web-settings')}
@@ -105,7 +105,7 @@ class SidePanel extends React.Component {
                 }
                 {canManageGroup &&
                   <li className="nav-item">
-                    <Link 
+                    <Link
                       className={`nav-link ellipsis ${this.getActiveClass('groups')}`}
                       to={siteRoot + 'sys/groups/'}
                       onClick={() => this.props.tabItemClick('groups')}
@@ -117,7 +117,7 @@ class SidePanel extends React.Component {
                 }
                 {isPro && canManageGroup &&
                   <li className="nav-item">
-                    <Link 
+                    <Link
                       className={`nav-link ellipsis ${this.getActiveClass('departments')}`}
                       to={siteRoot + 'sys/departments/'}
                       onClick={() => this.props.tabItemClick('departments')}

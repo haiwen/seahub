@@ -251,7 +251,7 @@ class DirentListView extends React.Component {
       });
 
       this.setState({
-        isProgressDialogShow: true, 
+        isProgressDialogShow: true,
         downloadItems: selectedDirentNames
       });
     }
@@ -356,7 +356,7 @@ class DirentListView extends React.Component {
       case 'New File':
         this.onCreateFileToggle();
         break;
-      default: 
+      default:
         break;
     }
 
@@ -377,7 +377,7 @@ class DirentListView extends React.Component {
       case 'Delete':
         this.props.onItemsDelete();
         break;
-      default: 
+      default:
         break;
     }
 
@@ -437,7 +437,7 @@ class DirentListView extends React.Component {
         index = i;
         break;
       }
-    } 
+    }
     return index;
   }
 
@@ -446,7 +446,7 @@ class DirentListView extends React.Component {
     const currentRepoInfo = this.props.currentRepoInfo;
     return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   }
-  
+
   onTableDragEnter = (e) => {
     if (Utils.isIEBrower()) {
       return false;
@@ -539,10 +539,10 @@ class DirentListView extends React.Component {
     const isDesktop = Utils.isDesktop();
 
     return (
-      <div 
+      <div
         className={`table-container ${this.state.isListDropTipShow ? 'table-drop-active' : ''}`}
-        onMouseDown={this.onContainerMouseDown} 
-        onContextMenu={this.onContainerContextMenu} 
+        onMouseDown={this.onContainerMouseDown}
+        onContextMenu={this.onContainerContextMenu}
         onClick={this.onContainerClick}
         onDragEnter={this.onTableDragEnter}
         onDragOver={this.onTableDragOver}
@@ -551,20 +551,20 @@ class DirentListView extends React.Component {
       >
         <table className={`table-hover ${isDesktop ? '': 'table-thead-hidden'}`}>
           {isDesktop ? (
-          <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
-            <tr>
-              <th width="3%" className="pl10">
-                <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
-              </th>
-              <th width="3%" className="pl10">{/*icon */}</th>
-              <th width="5%" className="pl10">{/*star */}</th>
-              <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
-              <th width="6%">{/*tag */}</th>
-              <th width="18%">{/*operation */}</th>
-              <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-              <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
-            </tr>
-          </thead>
+            <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
+              <tr>
+                <th width="3%" className="pl10">
+                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
+                </th>
+                <th width="3%" className="pl10">{/*icon */}</th>
+                <th width="5%" className="pl10">{/*star */}</th>
+                <th width="39%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="6%">{/*tag */}</th>
+                <th width="18%">{/*operation */}</th>
+                <th width="11%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+                <th width="15%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+              </tr>
+            </thead>
           ) : (
             <thead>
               <tr>
@@ -617,11 +617,11 @@ class DirentListView extends React.Component {
           </tbody>
         </table>
         <Fragment>
-          <ContextMenu 
+          <ContextMenu
             id={'dirent-container-menu'}
             onMenuItemClick={this.onContainerMenuItemClick}
           />
-          <ContextMenu 
+          <ContextMenu
             id={'dirent-item-menu'}
             onMenuItemClick={this.onMenuItemClick}
             onShowMenu={this.onShowMenu}
@@ -631,9 +631,9 @@ class DirentListView extends React.Component {
             id={'dirents-menu'}
             onMenuItemClick={this.onDirentsMenuItemClick}
           />
-          {this.state.isShowDirentsDraggablePreview && 
+          {this.state.isShowDirentsDraggablePreview &&
             <ModalPortal>
-              <DirentsDraggedPreview 
+              <DirentsDraggedPreview
                 selectedDirentList={this.props.selectedDirentList}
                 onHideDirentsDraggablePreview={this.onHideDirentsDraggablePreview}
                 dragStartPosition={this.state.dragStartPosition}
@@ -660,7 +660,7 @@ class DirentListView extends React.Component {
                 addFolderCancel={this.onCreateFolderToggle}
               />
             </ModalPortal>
-          )} 
+          )}
           {this.state.isCreateFileDialogShow && (
             <ModalPortal>
               <CreateFile
@@ -672,8 +672,8 @@ class DirentListView extends React.Component {
               />
             </ModalPortal>
           )}
-          {this.state.isMoveDialogShow && 
-            <MoveDirentDialog 
+          {this.state.isMoveDialogShow &&
+            <MoveDirentDialog
               path={this.props.path}
               repoID={this.props.repoID}
               repoEncrypted={this.props.currentRepoInfo.encrypted}
@@ -695,11 +695,11 @@ class DirentListView extends React.Component {
             />
           }
           {this.state.isProgressDialogShow &&
-            <ZipDownloadDialog 
+            <ZipDownloadDialog
               repoID={this.props.repoID}
               path={this.props.path}
               target={this.state.downloadItems}
-              toggleDialog={this.onCloseZipDownloadDialog} 
+              toggleDialog={this.onCloseZipDownloadDialog}
             />
           }
         </Fragment>

@@ -52,7 +52,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -94,7 +94,7 @@ class Item extends Component {
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.group_name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
-    const groupUrl = item.parent_group_id == 0 ? 
+    const groupUrl = item.parent_group_id == 0 ?
       `${siteRoot}sys/groups/${item.group_id}/libraries/` :
       `${siteRoot}sysadmin/#address-book/groups/${item.group_id}/`;
 

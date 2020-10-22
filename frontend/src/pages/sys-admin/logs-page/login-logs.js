@@ -51,7 +51,7 @@ class Content extends Component {
                 <th width="25%">{gettext('Time')}</th>
               </tr>
             </thead>
-            {items && 
+            {items &&
               <tbody>
                 {items.map((item, index) => {
                   return (<Item
@@ -72,7 +72,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -139,7 +139,7 @@ class LoginLogs extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getLogsByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getLogsByPage = (page) => {

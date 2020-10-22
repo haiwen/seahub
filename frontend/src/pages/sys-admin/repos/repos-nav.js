@@ -12,9 +12,9 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'all', urlPart: 'all-libraries', text: gettext('All')}, 
-      {name: 'system', urlPart: 'system-library', text: gettext('System')}, 
-      {name: 'trash', urlPart: 'trash-libraries', text: gettext('Trash')} 
+      {name: 'all', urlPart: 'all-libraries', text: gettext('All')},
+      {name: 'system', urlPart: 'system-library', text: gettext('System')},
+      {name: 'trash', urlPart: 'trash-libraries', text: gettext('Trash')}
     ];
   }
 

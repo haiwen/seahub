@@ -68,11 +68,11 @@ class SysAdminCreateGroupDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="groupName">{gettext('Name')}</Label>
-              <Input 
+              <Input
                 id="groupName"
-                onKeyPress={this.handleKeyPress} 
-                innerRef={input => {this.newInput = input;}} 
-                value={this.state.groupName} 
+                onKeyPress={this.handleKeyPress}
+                innerRef={input => {this.newInput = input;}}
+                value={this.state.groupName}
                 onChange={this.handleRepoNameChange}
               />
               <Label className="mt-2">

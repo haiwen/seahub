@@ -57,7 +57,7 @@ class Orgs extends Component {
   resetPerPage = (perPage) => {
     this.setState({
       perPage: perPage
-    }, () => {  
+    }, () => {
       this.getItemsByPage(1);
     });
   }
@@ -113,7 +113,7 @@ class Orgs extends Component {
     return <Search
       placeholder={gettext('Search organizations')}
       submit={this.searchItems}
-    />; 
+    />;
   }
 
   searchItems = (keyword) => {
@@ -131,7 +131,7 @@ class Orgs extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Organizations')}</h3>
-            </div> 
+            </div>
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -139,7 +139,7 @@ class Orgs extends Component {
                 items={this.state.orgList}
                 currentPage={this.state.currentPage}
                 hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage} 
+                curPerPage={this.state.perPage}
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getItemsByPage}
                 updateRole={this.updateRole}

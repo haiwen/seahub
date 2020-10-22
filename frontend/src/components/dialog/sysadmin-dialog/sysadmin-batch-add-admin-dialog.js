@@ -51,7 +51,7 @@ class SysAdminBatchAddAdminDialog extends React.Component {
             className="reviewer-select"
             placeholder={gettext('Select users...')}
             onSelectChange={this.handleSelectChange}
-          />  
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

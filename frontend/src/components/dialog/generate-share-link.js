@@ -34,7 +34,7 @@ class GenerateShareLink extends React.Component {
       expirationLimitTip = gettext('{minDays_placeholder} - {maxDays_placeholder} days')
         .replace('{minDays_placeholder}', shareLinkExpireDaysMin)
         .replace('{maxDays_placeholder}', shareLinkExpireDaysMax);
-    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) { 
+    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) {
       expirationLimitTip = gettext('Greater than or equal to {minDays_placeholder} days')
         .replace('{minDays_placeholder}', shareLinkExpireDaysMin);
     } else if (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax !== 0) {
@@ -132,7 +132,7 @@ class GenerateShareLink extends React.Component {
     const endDay = moment().add(shareLinkExpireDaysMax, 'days');
     if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax !== 0) {
       return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
-    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) { 
+    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) {
       return current.isBefore(startDay, 'day');
     } else if (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax !== 0) {
       return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
@@ -193,7 +193,7 @@ class GenerateShareLink extends React.Component {
         const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
         permissions = JSON.stringify(permissionDetails);
       }
-      let expirationTime = ''; 
+      let expirationTime = '';
       if (isExpireChecked) {
         if (setExp == 'by-days') {
           expirationTime = moment().add(parseInt(expireDays), 'days').format();
@@ -468,7 +468,7 @@ class GenerateShareLink extends React.Component {
             <Label check>
               {this.isExpireDaysNoLimit ? (
                 <Input type="checkbox" onChange={this.onExpireChecked} />
-              ) : ( 
+              ) : (
                 <Input type="checkbox" checked readOnly disabled />
               )}
               <span>{gettext('Add auto expiration')}</span>

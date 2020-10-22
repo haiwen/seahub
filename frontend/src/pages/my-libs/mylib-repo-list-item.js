@@ -233,12 +233,12 @@ class MylibRepoListItem extends React.Component {
 
   onDeleteRepo = (repo) => {
     seafileAPI.deleteRepo(repo.repo_id).then((res) => {
-      
+
       this.setState({
         isRepoDeleted: true,
         isDeleteDialogShow: false,
       });
-      
+
       this.props.onDeleteRepo(repo);
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);

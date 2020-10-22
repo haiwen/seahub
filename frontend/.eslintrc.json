@@ -50,7 +50,8 @@
     "no-irregular-whitespace": "warn",
     "no-console": "warn",
     "no-useless-escape": "warn",
-    
+    "no-trailing-spaces": "warn",
+
     "react/jsx-indent": ["warn", 2],
     "react/prop-types": "warn",
     "react/display-name": "warn",

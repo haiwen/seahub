@@ -67,7 +67,7 @@ class TagItem extends React.Component {
           fileTag = fileTagList[i];
           break;
         }
-      } 
+      }
       seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
         this.props.onFileTagChanged();

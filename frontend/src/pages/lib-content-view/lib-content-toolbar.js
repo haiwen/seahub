@@ -60,7 +60,7 @@ class LibContentToolbar extends React.Component {
         <Fragment>
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
-            <ViewFileToolbar 
+            <ViewFileToolbar
               path={this.props.path}
               repoID={this.props.repoID}
               userPerm={this.props.userPerm}
@@ -89,7 +89,7 @@ class LibContentToolbar extends React.Component {
           <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.props.onSideNavMenuClick}></span>
           {this.props.isDirentSelected ?
             <MultipleDirOperationToolbar
-              repoID={this.props.repoID} 
+              repoID={this.props.repoID}
               path={this.props.path}
               userPerm={this.props.userPerm}
               repoEncrypted={this.props.repoEncrypted}
@@ -112,7 +112,7 @@ class LibContentToolbar extends React.Component {
               currentMode={this.props.currentMode}
               switchViewMode={this.props.switchViewMode}
             /> :
-            <DirOperationToolBar 
+            <DirOperationToolBar
               path={this.props.path}
               repoID={this.props.repoID}
               repoName={this.props.repoName}

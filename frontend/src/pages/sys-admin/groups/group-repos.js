@@ -54,7 +54,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -99,10 +99,10 @@ class Item extends Component {
         return <a href={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</a>;
       } else {
         return repo.name;
-      }   
+      }
     } else {
       return '--';
-    }   
+    }
   }
 
   render() {
@@ -129,7 +129,7 @@ class Item extends Component {
           </td>
         </tr>
         {isUnshareRepoDialogOpen &&
-          <CommonOperationConfirmationDialog 
+          <CommonOperationConfirmationDialog
             title={gettext('Unshare Library')}
             message={dialogMsg}
             executeOperation={this.unshareRepo}
@@ -192,7 +192,7 @@ class GroupRepos extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <GroupNav 
+            <GroupNav
               groupID={this.props.groupID}
               groupName={this.state.groupName}
               currentItem="repos"

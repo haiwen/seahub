@@ -20,7 +20,7 @@ class UserItem extends React.Component {
       isUserDetailsPopoverOpen: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -78,7 +78,7 @@ class UserItem extends React.Component {
           </div>
         </td>
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -89,7 +89,7 @@ class UserItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteShareItem} 
+            onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
           </span>
@@ -107,9 +107,9 @@ class UserList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <UserItem 
-              key={index} 
-              item={item} 
+            <UserItem
+              key={index}
+              item={item}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
@@ -176,7 +176,7 @@ class ShareToUser extends React.Component {
 
   shareToUser = () => {
     let users = [];
-    let path = this.props.itemPath; 
+    let path = this.props.itemPath;
     let repoID = this.props.repoID;
     if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
@@ -245,7 +245,7 @@ class ShareToUser extends React.Component {
         }
       });
     }
-  } 
+  }
 
   deleteShareItem = (username) => {
     let path = this.props.itemPath;
@@ -253,7 +253,7 @@ class ShareToUser extends React.Component {
     if (this.props.isGroupOwnedRepo) {
       seafileAPI.deleteGroupOwnedRepoSharedUserItem(repoID, username, path).then(res => {
         this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; })
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -262,7 +262,7 @@ class ShareToUser extends React.Component {
     } else {
       seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
         this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; })
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -291,7 +291,7 @@ class ShareToUser extends React.Component {
       });
     }
   }
-  
+
   updateSharedItems = (item, permission) => {
     let username = item.user_info.name;
     let sharedItems = this.state.sharedItems.map(sharedItem => {
@@ -332,7 +332,7 @@ class ShareToUser extends React.Component {
                 />
               </td>
               <td>
-                <SharePermissionEditor 
+                <SharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -364,10 +364,10 @@ class ShareToUser extends React.Component {
         <div className="share-list-container">
           <table className="table-thead-hidden w-xs-200">
             {thead}
-            <UserList 
+            <UserList
               items={sharedItems}
               permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem} 
+              deleteShareItem={this.deleteShareItem}
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>

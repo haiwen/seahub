@@ -92,7 +92,7 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   onLinkClick = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     event.stopPropagation();
     let link = '';
     if (event.target.tagName !== 'A') {
@@ -140,7 +140,7 @@ class WikiMarkdownViewer extends React.Component {
       if (item.type == 'image' && isPublicWiki) {
         url = item.data.src;
         const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        // different repo 
+        // different repo
         if (re.test(url)) {
           // get image path
           let index = url.indexOf('/file');
@@ -154,7 +154,7 @@ class WikiMarkdownViewer extends React.Component {
           return;
         }
         item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
-      } 
+      }
 
       else if (item.type == 'link') {
         url = item.data.href;
@@ -175,7 +175,7 @@ class WikiMarkdownViewer extends React.Component {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
           item.data.href = serviceURL + '/published/' + slug + path;
-        } 
+        }
       }
     }
 

@@ -25,13 +25,13 @@ class OrgGroupInfo extends Component {
     seafileAPI.orgAdminGetGroup(orgID, this.props.groupID).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   render() {
@@ -42,7 +42,7 @@ class OrgGroupInfo extends Component {
           <div className="cur-view-container">
             <OrgAdminGroupNav groupID={this.props.groupID} currentItem='info' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
               />
             </div>
@@ -84,7 +84,7 @@ class Content extends Component {
           <Link to={`${siteRoot}org/useradmin/info/${encodeURIComponent(creator_email)}/`}>{creator_name}</Link>
         </dd>
       </dl>
-    ); 
+    );
   }
 }
 

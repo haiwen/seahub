@@ -72,7 +72,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -140,7 +140,7 @@ class Item extends Component {
         return <Link to={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</Link>;
       } else {
         return repo.name;
-      }   
+      }
     } else {
       return gettext('Broken ({repo_id_placeholder})')
         .replace('{repo_id_placeholder}', repo.id);
@@ -148,7 +148,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -197,8 +197,8 @@ class Item extends Component {
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
-            />  
-            }   
+            />
+            }
           </td>
         </tr>
         {isDeleteDialogOpen &&
@@ -217,7 +217,7 @@ class Item extends Component {
           canTransferToDept={false}
           toggleDialog={this.toggleTransferDialog}
         />
-        } 
+        }
       </Fragment>
     );
   }
@@ -239,7 +239,7 @@ class Repos extends Component {
     seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
       this.setState({
         userInfo: res.data
-      }); 
+      });
     });
     seafileAPI.sysAdminListReposByOwner(this.props.email).then(res => {
       this.setState({

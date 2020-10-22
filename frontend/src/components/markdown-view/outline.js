@@ -57,7 +57,7 @@ class OutlineView extends React.PureComponent {
         <div className="seafile-editor-outline-heading">{gettext('Contents')}</div>
         {headerList.size > 0 ?
           headerList.map((node, index) => {
-            let active = (index === this.props.activeTitleIndex) ? ' active' : ''; 
+            let active = (index === this.props.activeTitleIndex) ? ' active' : '';
             return (
               <OutlineItem
                 key={node.key}

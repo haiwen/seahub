@@ -118,7 +118,7 @@ class ViewFileToolbar extends React.Component {
                 {gettext('More')}
               </DropdownToggle>
               <DropdownMenu>
-                {this.props.showShareBtn && 
+                {this.props.showShareBtn &&
                   <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
@@ -130,7 +130,7 @@ class ViewFileToolbar extends React.Component {
         </div>
         {this.state.isShareDialogShow && (
           <ModalPotal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'file'}
               itemName={Utils.getFileName(this.props.path)}
               itemPath={this.props.path}

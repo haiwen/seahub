@@ -19,7 +19,7 @@ class ConfirmRestoreRepo extends Component {
 
   action = () => {
     this.setState({
-      btnDisabled: true 
+      btnDisabled: true
     });
     this.props.restoreRepo();
   }

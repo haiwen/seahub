@@ -45,7 +45,7 @@ class WikiSelectDialog extends React.Component {
           return repo;
         });
       repoList = Utils.sortRepos(repoList, 'name', 'asc');
-      this.setState({repos: repoList}); 
+      this.setState({repos: repoList});
     });
   }
 

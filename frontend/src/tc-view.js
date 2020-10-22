@@ -6,7 +6,7 @@ import TermsPreviewWidget from './components/terms-preview-widget';
 
 import './css/tc-accept.css';
 
-const { 
+const {
   termsName,
   termsText
 } = window.tc;

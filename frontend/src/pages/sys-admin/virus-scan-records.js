@@ -189,7 +189,7 @@ class VirusScanRecords extends Component {
               <h3 className="sf-heading">{gettext('Virus Scan Records')}</h3>
             </div>
             <div className="cur-view-content" onScroll={this.handleScroll}>
-              <RecordList 
+              <RecordList
                 loading={this.state.loading}
                 isLoadingMore={this.state.isLoadingMore}
                 errorMsg={this.state.errorMsg}

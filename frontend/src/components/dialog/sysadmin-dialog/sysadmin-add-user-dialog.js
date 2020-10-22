@@ -35,10 +35,10 @@ class SysAdminAddUserDialog extends React.Component {
       btnActive = true;
     } else {
       btnActive = false;
-    }   
+    }
     this.setState({
       isSubmitBtnActive: btnActive
-    }); 
+    });
   }
 
   toggle = () => {
@@ -90,8 +90,8 @@ class SysAdminAddUserDialog extends React.Component {
   updateRole = (role) => {
     this.setState({
       role: role
-    });         
-  }     
+    });
+  }
 
   handleSubmit = () => {
     const { email, password, passwordAgain, name, role } = this.state;
@@ -113,9 +113,9 @@ class SysAdminAddUserDialog extends React.Component {
 
   render() {
     const { dialogTitle, showRole } = this.props;
-    const { 
-      errorMsg, isPasswordVisible, 
-      email, name, role, password, passwordAgain, 
+    const {
+      errorMsg, isPasswordVisible,
+      email, name, role, password, passwordAgain,
       isSubmitBtnActive
     } = this.state;
     return (
@@ -125,13 +125,13 @@ class SysAdminAddUserDialog extends React.Component {
           <Form autoComplete="off">
             <FormGroup>
               <Label>{gettext('Email')}</Label>
-              <Input value={email} onChange={this.inputEmail} /> 
+              <Input value={email} onChange={this.inputEmail} />
             </FormGroup>
             <FormGroup>
               <Label>{gettext('Name(optional)')}</Label>
-              <Input type="text" value={name} onChange={this.inputName} /> 
+              <Input type="text" value={name} onChange={this.inputName} />
             </FormGroup>
-            {showRole && 
+            {showRole &&
             <FormGroup>
               <Label>
                 {gettext('Role')}
@@ -143,7 +143,7 @@ class SysAdminAddUserDialog extends React.Component {
                 currentRole={role}
                 roleOptions={this.props.availableRoles}
                 onRoleChanged={this.updateRole}
-              />  
+              />
             </FormGroup>
             }
             <FormGroup>

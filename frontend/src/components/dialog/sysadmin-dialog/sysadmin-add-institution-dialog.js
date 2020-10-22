@@ -22,7 +22,7 @@ class SysAdminAddInstitutionDialog extends React.Component {
     const value = e.target.value;
     this.setState({
       value: value,
-      isSubmitBtnActive: value.trim() != '' 
+      isSubmitBtnActive: value.trim() != ''
     });
   }
 

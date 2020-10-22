@@ -42,7 +42,7 @@ class Rename extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.changeState(nextProps.currentNode);
   }
-  
+
   handleChange = (e) => {
     if (!e.target.value.trim()) {
       this.setState({isSubmitBtnActive: false});
@@ -50,7 +50,7 @@ class Rename extends React.Component {
       this.setState({isSubmitBtnActive: true});
     }
 
-    this.setState({newName: e.target.value}); 
+    this.setState({newName: e.target.value});
   }
 
   handleSubmit = () => {
@@ -72,7 +72,7 @@ class Rename extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
-    } 
+    }
   }
 
   toggle = () => {

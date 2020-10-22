@@ -118,7 +118,7 @@ const RelatedFilePropTypes = {
 };
 
 class RelatedFile extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = ({

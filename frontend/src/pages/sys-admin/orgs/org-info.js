@@ -145,7 +145,7 @@ class OrgInfo extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   updateName = (orgName) => {

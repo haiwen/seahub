@@ -25,14 +25,14 @@ class Groups extends Component {
   }
 
   componentDidMount () {
-      let urlParams = (new URL(window.location)).searchParams;
-      const { currentPage = 1, perPage } = this.state;
-      this.setState({
-        perPage: parseInt(urlParams.get('per_page') || perPage),
-        currentPage: parseInt(urlParams.get('page') || currentPage)
-      }, () => {
-        this.getGroupListByPage(this.state.currentPage);
-      }); 
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage = 1, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getGroupListByPage(this.state.currentPage);
+    });
   }
 
   toggleCreateGroupDialog = () => {
@@ -59,7 +59,7 @@ class Groups extends Component {
       perPage: perPage
     }, () => {
       this.getGroupListByPage(1);
-    }); 
+    });
   }
 
   createGroup = (groupName, OnwerEmail) => {
@@ -113,7 +113,7 @@ class Groups extends Component {
     return <Search
       placeholder={gettext('Search groups by name')}
       submit={this.searchGroups}
-    />; 
+    />;
   }
 
   searchGroups = (name) => {
@@ -152,7 +152,7 @@ class Groups extends Component {
           </div>
         </div>
         {isCreateGroupDialogOpen &&
-          <SysAdminCreateGroupDialog 
+          <SysAdminCreateGroupDialog
             createGroup={this.createGroup}
             toggleDialog={this.toggleCreateGroupDialog}
           />

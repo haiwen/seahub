@@ -9,7 +9,7 @@ import TermsPreviewWidget from './components/terms-preview-widget';
 import './css/tc-accept.css';
 
 const { csrfToken } = window.app.pageOptions;
-const { 
+const {
   termsName,
   formAction,
   formTerms,

@@ -34,7 +34,7 @@ class StatisticStorage extends React.Component {
         });
         let total_storage = {
           label: gettext('Total Storage'),
-          data: totalStorage, 
+          data: totalStorage,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         filesData = [total_storage];
@@ -60,8 +60,8 @@ class StatisticStorage extends React.Component {
           <div className="cur-view-content">
             <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
             {isLoading && <Loading />}
-            {!isLoading && labels.length > 0 && 
-              <StatisticChart 
+            {!isLoading && labels.length > 0 &&
+              <StatisticChart
                 labels={labels}
                 filesData={filesData}
                 suggestedMaxNumbers={10*1000*1000}

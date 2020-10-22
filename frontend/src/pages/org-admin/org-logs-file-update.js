@@ -23,7 +23,7 @@ class OrgLogsFileUpdate extends Component {
       eventList: [],
       userSelected: '',
       repoSelected: '',
-      isItemFreezed: false, 
+      isItemFreezed: false,
       showDetails: false,
       repoID: '',
       commitID: ''
@@ -76,7 +76,7 @@ class OrgLogsFileUpdate extends Component {
   onDetails = (e, fileEvent) => {
     e.preventDefault();
     this.setState({
-      showDetails: !this.state.showDetails, 
+      showDetails: !this.state.showDetails,
       repoID: fileEvent.repo_id,
       commitID: fileEvent.repo_commit_id
     });
@@ -140,9 +140,9 @@ class OrgLogsFileUpdate extends Component {
           {(this.state.page != 1 && this.state.pageNext) && <span> | </span>}
           {this.state.pageNext && <a href="#" onClick={(e) => this.onChangePageNum(e, 1)}>{gettext('Next')}</a>}
         </div>
-        {this.state.showDetails && 
+        {this.state.showDetails &&
           <ModalPortal>
-            <FileUpdateDetailDialog 
+            <FileUpdateDetailDialog
               repoID={this.state.repoID}
               commitID={this.state.commitID}
               toggleCancel={this.toggleCancelDetail}
@@ -200,7 +200,7 @@ class FileUpdateItem extends React.Component {
   }
 
   renderUser = (fileEvent) => {
-    if (!fileEvent.user_email) { 
+    if (!fileEvent.user_email) {
       return gettext('Anonymous User');
     }
 
@@ -227,8 +227,8 @@ class FileUpdateItem extends React.Component {
   renderRepo = (fileEvent) => {
     let repoName = 'Deleted';
     if (fileEvent.repo_name) {
-      repoName = fileEvent.repo_name; 
-    } 
+      repoName = fileEvent.repo_name;
+    }
     return (
       <span>
         <span>{repoName}</span>

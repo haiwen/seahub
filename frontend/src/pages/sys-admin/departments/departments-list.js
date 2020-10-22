@@ -26,7 +26,7 @@ class DepartmentsList extends React.Component {
       isShowAddDepartDialog: false,
     };
   }
-  
+
   componentDidMount() {
     this.listDepartGroups();
   }

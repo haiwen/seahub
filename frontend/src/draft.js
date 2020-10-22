@@ -78,7 +78,7 @@ class Draft extends React.Component {
 
         if (!originFileExists) {
           seafileAPI.getFileDownloadLink(draftRepoID, draftFilePath)
-            .then(res => { 
+            .then(res => {
               seafileAPI.getFileContent(res.data)
                 .then(res => {
                   this.setState({
@@ -86,7 +86,7 @@ class Draft extends React.Component {
                     draftOriginContent: res.data,
                     isLoading: false,
                     isShowDiff: false
-                  }); 
+                  });
                 });
             });
           return;
@@ -102,7 +102,7 @@ class Draft extends React.Component {
             activeTab: 'history',
           });
           seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
-            const historyList = res.data.data;        
+            const historyList = res.data.data;
             this.setState({
               historyList: historyList,
               totalReversionCount: res.data.total_count
@@ -160,8 +160,8 @@ class Draft extends React.Component {
           return;
         }
 
-        let dl0 = siteRoot + 'repo/' + draftRepoID + '/' + draftPublishVersion + '/download?' + 'p=' + draftOriginFilePath; 
-        let dl = siteRoot + 'repo/' + draftRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+        let dl0 = siteRoot + 'repo/' + draftRepoID + '/' + draftPublishVersion + '/download?' + 'p=' + draftOriginFilePath;
+        let dl = siteRoot + 'repo/' + draftRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath;
         axios.all([
           seafileAPI.getFileContent(dl0),
           seafileAPI.getFileContent(dl)
@@ -170,7 +170,7 @@ class Draft extends React.Component {
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data,
             isLoading: false,
-          }); 
+          });
         }));
         break;
     }
@@ -465,7 +465,7 @@ class Draft extends React.Component {
       if (tab !== 'history' && window.location.hash) {
         this.setURL('#');
       }
-      if (tab == 'reviewInfo') { 
+      if (tab == 'reviewInfo') {
         this.initialContent();
       } else if (tab == 'history') {
         this.initialDiffViewerContent();
@@ -514,7 +514,7 @@ class Draft extends React.Component {
           </NavItem>
         );
     }
-  } 
+  }
 
 
   setBtnPosition = (e) => {
@@ -594,7 +594,7 @@ class Draft extends React.Component {
       const block = document.getClosestBlock(focus.key);
       const nextText = block.getNextText(focus.key);
       if (nextText) {
-        range = range.moveFocusTo(nextText.key, 0); 
+        range = range.moveFocusTo(nextText.key, 0);
       }
     }
     let fragment = document.getFragmentAtRange(range);
@@ -731,7 +731,7 @@ class Draft extends React.Component {
   }
 
   render() {
-    const { draftInfo, reviewers, originRepoName, draftStatus } = this.state; 
+    const { draftInfo, reviewers, originRepoName, draftStatus } = this.state;
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const showPublishedButton = this.state.draftStatus == 'published';
@@ -782,8 +782,8 @@ class Draft extends React.Component {
             <div className='cur-view-content' ref="viewContent" style={{width:(100 - this.state.rightPartWidth) + '%'}}>
               {this.state.isLoading ?
                 <div className="markdown-viewer-render-content article">
-                  <Loading /> 
-                </div> 
+                  <Loading />
+                </div>
                 :
                 <div className="markdown-viewer-render-content article">
                   {this.renderContent()}

@@ -55,7 +55,7 @@ class CreateRepoDialog extends React.Component {
       }
       this.props.onCreateRepo(repoData);
     }
-  } 
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -156,7 +156,7 @@ class CreateRepoDialog extends React.Component {
         passwd: password,
       };
     }
-  
+
     const storage_id = this.state.storage_id;
     if (storage_id) {
       repo.storage_id = storage_id;
@@ -173,11 +173,11 @@ class CreateRepoDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="repoName">{gettext('Name')}</Label>
-              <Input 
+              <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress} 
-                innerRef={input => {this.newInput = input;}} 
-                value={this.state.repoName} 
+                onKeyPress={this.handleKeyPress}
+                innerRef={input => {this.newInput = input;}}
+                value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
               />
             </FormGroup>
@@ -189,7 +189,7 @@ class CreateRepoDialog extends React.Component {
                   defaultValue={{value: storages[0].id, label: storages[0].name}}
                   options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
                   onChange={this.handleStorageInputChange}
-                /> 
+                />
               </FormGroup>
             )}
             {this.props.libraryType === 'group' && (
@@ -207,28 +207,28 @@ class CreateRepoDialog extends React.Component {
                   <Input type="checkbox" id="encrypt" onChange={this.onEncrypted} />
                   <Label for="encrypt">{gettext('Encrypt')}</Label>
                 </FormGroup>
-                {!this.state.disabled && 
+                {!this.state.disabled &&
                   <FormGroup>
                     {/* todo translate */}
                     <Label for="passwd1">{gettext('Password')}</Label><span className="tip">{' '}{gettext('(at least {placeholder} characters)').replace('{placeholder}', repoPasswordMinLength)}</span>
-                    <Input 
-                      id="passwd1" 
+                    <Input
+                      id="passwd1"
                       type="password"
                       disabled={this.state.disabled}
-                      value={this.state.password1} 
+                      value={this.state.password1}
                       onChange={this.handlePassword1Change}
                       autoComplete="new-password"
                     />
                   </FormGroup>
                 }
-                {!this.state.disabled && 
+                {!this.state.disabled &&
                   <FormGroup>
                     <Label for="passwd2">{gettext('Password again')}</Label>
-                    <Input 
+                    <Input
                       id="passwd2"
                       type="password"
                       disabled={this.state.disabled}
-                      value={this.state.password2} 
+                      value={this.state.password2}
                       onChange={this.handlePassword2Change}
                       autoComplete="new-password"
                     />

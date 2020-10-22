@@ -142,7 +142,7 @@ class DepartmentDetail extends React.Component {
   }
 
   showDeleteDepartDialog = (subGroup) => {
-    this.setState({ 
+    this.setState({
       showDeleteDepartDialog: true,
       subGroupID: subGroup.id,
       subGroupName: subGroup.name
@@ -207,7 +207,7 @@ class DepartmentDetail extends React.Component {
             <div className="cur-view-path">
               <div className="fleft">
                 <h3 className="sf-heading">
-                  {groupID ? 
+                  {groupID ?
                     <Link to={siteRoot + 'sys/departments/'}>{gettext('Departments')}</Link>
                     : <span>{gettext('Departments')}</span>
                   }
@@ -253,7 +253,7 @@ class DepartmentDetail extends React.Component {
                 }
               </div>
             </div>
-            
+
             <div className="cur-view-subcontainer org-members">
               <div className="cur-view-path">
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>

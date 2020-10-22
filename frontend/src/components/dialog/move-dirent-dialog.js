@@ -48,7 +48,7 @@ class MoveDirent extends React.Component {
     let { repoID } = this.props;
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
-    
+
     if (!repo || selectedPath === '') {
       this.setState({errMessage: message});
       return;
@@ -60,7 +60,7 @@ class MoveDirent extends React.Component {
       let path = Utils.joinPath(this.props.path, dirent.name);
       direntPaths.push(path);
     });
-    
+
     // move dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
       this.setState({errMessage: message});
@@ -97,7 +97,7 @@ class MoveDirent extends React.Component {
 
   moveItem = () => {
     let { repoID } = this.props;
-    let { repo, selectedPath } = this.state; 
+    let { repo, selectedPath } = this.state;
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
@@ -105,19 +105,19 @@ class MoveDirent extends React.Component {
       this.setState({errMessage: message});
       return;
     }
-    
+
     // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
       this.setState({errMessage: message});
       return;
     }
-    
+
     // copy the dirent to current path
     if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
       this.setState({errMessage: message});
       return;
     }
-    
+
     // copy the dirent to it's child. eg: A/B -> A/B/C
     if ( selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
@@ -163,7 +163,7 @@ class MoveDirent extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
         <ModalBody>
-          <FileChooser 
+          <FileChooser
             repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}

@@ -46,14 +46,14 @@ class FileActivitiesContent extends Component {
       </thead>
     );
 
-    return ( 
+    return (
       <Fragment>
         <table className="table-hover table-thead-hidden">
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
               return (
-                <ActivityItem 
+                <ActivityItem
                   key={index}
                   isDesktop={isDesktop}
                   item={item}
@@ -66,7 +66,7 @@ class FileActivitiesContent extends Component {
         </table>
         {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
       </Fragment>
-    ); 
+    );
   }
 }
 
@@ -406,7 +406,7 @@ class FilesActivities extends Component {
         isLoadingMore: false,
         items: [...this.state.items, ...events],
         currentPage: currentPage + 1,
-        hasMore: res.data.events.length === 0 ? false : true 
+        hasMore: res.data.events.length === 0 ? false : true
       });
       if (this.state.items.length < 25 && this.state.hasMore) {
         this.getMore();
@@ -442,10 +442,10 @@ class FilesActivities extends Component {
           </div>
           <div className="cur-view-content d-block" onScroll={this.handleScroll}>
             {this.state.isFirstLoading && <Loading />}
-            {(!this.state.isFirstLoading && this.state.errorMsg) && 
+            {(!this.state.isFirstLoading && this.state.errorMsg) &&
               <p className="error text-center">{this.state.errorMsg}</p>
             }
-            {!this.state.isFirstLoading && 
+            {!this.state.isFirstLoading &&
               <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore}/>
             }
           </div>

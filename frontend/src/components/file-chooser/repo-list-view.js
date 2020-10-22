@@ -28,13 +28,13 @@ class RepoListView extends React.Component {
       <ul className="list-view-content file-chooser-item">
         {repoList.length > 0 && repoList.map((repoItem, index) => {
           return (
-            <RepoListItem 
-              key={index} 
+            <RepoListItem
+              key={index}
               repo={repoItem}
               initToShowChildren={this.props.initToShowChildren}
               selectedRepo={this.props.selectedRepo}
               selectedPath={this.props.selectedPath}
-              onRepoItemClick={this.props.onRepoItemClick} 
+              onRepoItemClick={this.props.onRepoItemClick}
               onDirentItemClick={this.props.onDirentItemClick}
               isShowFile={this.props.isShowFile}
               fileSuffixes={this.props.fileSuffixes}

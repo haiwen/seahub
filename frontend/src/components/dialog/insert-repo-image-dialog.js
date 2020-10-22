@@ -68,7 +68,7 @@ class InsertRepoImageDialog extends React.Component {
               />
             </div>
             <div className="insert-image-container col-6">
-              {imageUrl ? 
+              {imageUrl ?
                 <img src={imageUrl} className='d-inline-block mh-100 mw-100' alt=''/> :
                 <span>{gettext('No preview')}</span>
               }

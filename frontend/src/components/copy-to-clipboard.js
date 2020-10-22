@@ -11,7 +11,7 @@ function copy(text) {
     // 'a' is for 'copy a link to seafile markdown editor'
     mark = document.createElement('a');
     mark.textContent = text;
-    
+
     document.body.appendChild(mark);
 
     range.selectNode(mark);

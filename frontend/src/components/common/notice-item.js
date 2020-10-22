@@ -32,7 +32,7 @@ class NoticeItem extends React.Component {
       let avatar_url = detail.group_staff_avatar_url;
 
       let groupStaff = detail.group_staff_name;
-      
+
       let userHref = siteRoot + 'profile/' + detail.group_staff_email + '/';
       let groupHref = siteRoot + 'group/' + detail.group_id + '/';
       let groupName = detail.group_name;
@@ -80,7 +80,7 @@ class NoticeItem extends React.Component {
       let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' + repoName + '/';
 
       let groupUrl = siteRoot + 'group/' + detail.group_id + '/';
-      let groupName = detail.group_name; 
+      let groupName = detail.group_name;
 
       let path = detail.path;
       let notice = '';
@@ -150,7 +150,7 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{author}', author);
       return {avatar_url, notice};
     }
-    
+
     if (noticeType === MSG_TYPE_DRAFT_COMMENT) {
 
       let avatar_url = detail.author_avatar_url;
@@ -166,7 +166,7 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{author}', author);
       return {avatar_url, notice};
     }
-    
+
     if (noticeType === MSG_TYPE_DRAFT_REVIEWER) {
 
       let avatar_url = detail.request_user_avatat_url;
@@ -182,11 +182,11 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{draft_link}', draftLink);
       return {avatar_url, notice};
     }
-    
+
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
-      
+
     // }
-    
+
     return {avatar_url : null, notice : null};
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { gettext, siteRoot } from '../../utils/constants';
 
-const { 
+const {
   fileName, repoID, objID, path
 } = window.app.pageOptions;
 

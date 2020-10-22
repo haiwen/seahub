@@ -111,7 +111,7 @@ class MyLibraries extends Component {
     });
     this.setState({repoList: repoList});
   }
-  
+
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
@@ -174,8 +174,8 @@ class MyLibraries extends Component {
               }
             </div>
           </div>
-          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen && 
-            <GuideForNewDialog 
+          {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
+            <GuideForNewDialog
               toggleDialog={this.toggleGuideForNewDialog}
             />
           }
@@ -189,7 +189,7 @@ class MyLibraries extends Component {
           }
           {this.state.isShowDetails && (
             <div className="cur-view-detail">
-              <LibDetail 
+              <LibDetail
                 currentRepo={this.state.currentRepo}
                 closeDetails={this.closeDetails}
               />

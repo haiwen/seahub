@@ -26,7 +26,7 @@ class FileViewTip extends React.Component {
           {canDownloadFile && <Download />}
         </div>
       </div>
-    );  
+    );
   }
 }
 FileViewTip.propTypes = propTypes;

@@ -90,7 +90,7 @@ class App extends Component {
     this.navigateClientUrlToLib();
 
     // e.g.  from http://127.0.0.1:8000/drafts/reviews/
-    // get reviews  
+    // get reviews
     // TODO: need refactor later
     let href = window.location.href.split('/');
     if (isDocs) {
@@ -103,16 +103,16 @@ class App extends Component {
     editUtilities.listDrafts().then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
-        draftList: res.data.data, 
+        draftList: res.data.data,
         isLoadingDraft: false,
-      }); 
+      });
     });
   }
 
   updateDraftsList = (draft_id) => {
     this.setState({
       draftCounts: this.state.draftCounts - 1,
-      draftList: this.state.draftList.filter(draft => draft.id != draft_id), 
+      draftList: this.state.draftList.filter(draft => draft.id != draft_id),
     });
   }
 
@@ -173,7 +173,7 @@ class App extends Component {
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
-  } 
+  }
 
   generatorPrefix = (tabName, groupID) => {
     let pathPrefix = [];

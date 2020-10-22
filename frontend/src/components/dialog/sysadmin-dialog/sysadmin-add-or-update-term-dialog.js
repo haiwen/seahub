@@ -139,7 +139,7 @@ class AddOrUpdateTermDialog extends React.Component {
           </ModalFooter>
         </Modal>
         {this.state.isConditionsEditorDialogShow && (
-          <TermsEditorDialog 
+          <TermsEditorDialog
             content={this.state.text}
             onCommit={this.onUpdateContent}
             onCloseEditorDialog={this.onCloseEditorDialog}
