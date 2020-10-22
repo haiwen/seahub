@@ -71,7 +71,7 @@ class CommentPanel extends React.Component {
       toaster.danger(Utils.getErrorMsg(err));
     });
     this.setState({ comment: '' });
-  } 
+  }
 
   onSubmit = () => {
     this.addParticipant(username);

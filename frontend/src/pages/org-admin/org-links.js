@@ -111,7 +111,7 @@ class OrgLinks extends React.Component {
                         <RepoItem
                           link={item}
                           isItemFreezed={this.state.isItemFreezed}
-                          onFreezedItem={this.onFreezedItem} 
+                          onFreezedItem={this.onFreezedItem}
                           onUnfreezedItem={this.onUnfreezedItem}
                           deleteOrgLink={this.deleteOrgLink}
                           openLinkDialog={this.openLinkDialog}
@@ -167,7 +167,7 @@ class RepoItem extends React.Component {
     if (!this.props.isItemFreezed) {
       this.setState({ showMenu: false, highlight: false });
     }
-  } 
+  }
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();

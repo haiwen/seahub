@@ -93,7 +93,7 @@ class TreeHelper {
     let treeCopy = tree.clone();
     let destNode = treeCopy.getNodeByPath(destPath);
     if (destNode) {
-      nodePaths.forEach(nodePath => { 
+      nodePaths.forEach(nodePath => {
         let node = treeCopy.getNodeByPath(nodePath);
         treeCopy.moveNode(node, destNode);
       });
@@ -117,7 +117,7 @@ class TreeHelper {
     }
     return treeCopy;
   }
-  
+
   copyNodeListByPaths(tree, nodePaths, destPath) {
     let treeCopy = tree.clone();
     let destNode = treeCopy.getNodeByPath(destPath);

@@ -27,8 +27,8 @@ class UploadProgressDialog extends React.Component {
 
   toggleDropdown = () => {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen 
-    }); 
+      dropdownOpen: !this.state.dropdownOpen
+    });
   }
 
   render() {
@@ -65,9 +65,9 @@ class UploadProgressDialog extends React.Component {
               })}
               {this.props.uploadFileList.map((resumableFile, index) => {
                 return (
-                  <UploadListItem 
-                    key={index} 
-                    resumableFile={resumableFile} 
+                  <UploadListItem
+                    key={index}
+                    resumableFile={resumableFile}
                     onUploadCancel={this.props.onUploadCancel}
                     onUploadRetry={this.props.onUploadRetry}
                   />

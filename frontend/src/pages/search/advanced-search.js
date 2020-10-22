@@ -203,7 +203,7 @@ class AdvancedSearch extends React.Component {
                     value={stateAndValues.time_from}
                     onChange={this.props.handleTimeFromInput}
                     showHourAndMinute={false}
-                  />  
+                  />
                   <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
                 <div className="mt-2">-</div>
@@ -214,7 +214,7 @@ class AdvancedSearch extends React.Component {
                     value={stateAndValues.time_to}
                     onChange={this.props.handleTimeToInput}
                     showHourAndMinute={false}
-                  />  
+                  />
                   <span className="select-data-icon"><i className="fa fa-calendar-alt"></i></span>
                 </Col>
               </Row>

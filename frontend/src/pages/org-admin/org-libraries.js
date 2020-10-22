@@ -20,7 +20,7 @@ class OrgLibraries extends Component {
       pageNext: false,
       orgRepos: [],
       sortBy: '',
-      isItemFreezed: false  
+      isItemFreezed: false
     };
   }
 
@@ -65,7 +65,7 @@ class OrgLibraries extends Component {
       page = page - 1;
     }
     this.listRepos(page);
-  } 
+  }
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
@@ -161,7 +161,7 @@ class OrgLibraries extends Component {
                         key={item.repoID}
                         repo={item}
                         isItemFreezed={this.state.isItemFreezed}
-                        onFreezedItem={this.onFreezedItem} 
+                        onFreezedItem={this.onFreezedItem}
                         onUnfreezedItem={this.onUnfreezedItem}
                         deleteRepoItem={this.deleteRepoItem}
                         transferRepoItem={this.transferRepoItem}
@@ -220,7 +220,7 @@ class RepoItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
@@ -257,11 +257,11 @@ class RepoItem extends React.Component {
     let iconTitle;
     if (repo.encrypted) {
       href = mediaUrl + 'img/lib/48/lib-encrypted.png';
-      iconTitle = gettext('Encrypted library'); 
+      iconTitle = gettext('Encrypted library');
     } else {
       href = mediaUrl + 'img/lib/48/lib.png';
       iconTitle = gettext('Read-Write library');
-    } 
+    }
     return <img src={href} title={iconTitle} alt={iconTitle} width="24" />;
   }
 
@@ -294,7 +294,7 @@ class RepoItem extends React.Component {
 
   render() {
     let { repo } = this.props;
-    
+
     let isOperationMenuShow = this.state.showMenu && !repo.isDepartmentRepo;
     return (
       <Fragment>

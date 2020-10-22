@@ -26,7 +26,7 @@ class SysAdminRepoTransferDialog extends React.Component {
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  } 
+  }
 
   render() {
     const repoName = this.props.repoName;
@@ -45,7 +45,7 @@ class SysAdminRepoTransferDialog extends React.Component {
             className="reviewer-select"
             placeholder={gettext('Search users...')}
             onSelectChange={this.handleSelectChange}
-          /> 
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>

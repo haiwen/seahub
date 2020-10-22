@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -20,7 +20,7 @@ class UpdateRepoCommitLabels extends React.Component {
     super(props);
     this.state = {
       inputValue: this.props.commitLabels.map((item, index) => {
-        return {label: item, value: item}; 
+        return {label: item, value: item};
       }),
       submitBtnDisabled: false
     };
@@ -38,7 +38,7 @@ class UpdateRepoCommitLabels extends React.Component {
     const {repoID, commitID} = this.props;
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     seafileAPI.updateRepoCommitLabels(repoID, commitID, labels).then((res) => {
@@ -50,7 +50,7 @@ class UpdateRepoCommitLabels extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 

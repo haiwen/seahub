@@ -67,7 +67,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -118,7 +118,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (item) {
       case 'View':
         translateResult = gettext('View');
@@ -168,7 +168,7 @@ class Item extends Component {
       if (item.is_dir) {
         url = Utils.getFolderIconUrl();
       } else {
-        url = Utils.getFileIconUrl(item.obj_name); 
+        url = Utils.getFileIconUrl(item.obj_name);
       }
     }
     return url;
@@ -203,7 +203,7 @@ class Item extends Component {
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
             />
-            }   
+            }
           </td>
         </tr>
         {isLinkDialogOpen &&
@@ -234,27 +234,27 @@ class Links extends Component {
     seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
       this.setState({
         userInfo: res.data
-      }); 
+      });
     });
 
     seafileAPI.sysAdminListShareLinksByUser(this.props.email).then(res => {
       const items = res.data.share_link_list.map(item => {
         item.type = 'download';
         return item;
-      }); 
+      });
       items.sort((a, b) => {
         return a.is_dir ? -1 : 1;
       });
       this.setState({
         loading: false,
         shareLinkItems: items
-      }); 
+      });
     });
     seafileAPI.sysAdminListUploadLinksByUser(this.props.email).then(res => {
       const items = res.data.upload_link_list.map(item => {
         item.type = 'upload';
         return item;
-      }); 
+      });
       this.setState({
         loading: false,
         uploadLinkItems: items
@@ -274,15 +274,15 @@ class Links extends Component {
       seafileAPI.sysAdminDeleteShareLink(token).then(res => {
         let items = this.state.shareLinkItems.filter(item=> {
           return item.token != token;
-        }); 
+        });
         this.setState({
-          shareLinkItems: items 
-        }); 
+          shareLinkItems: items
+        });
         toaster.success(gettext('Successfully deleted 1 item.'));
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      }); 
+      });
     } else {
       seafileAPI.sysAdminDeleteUploadLink(token).then(res => {
         let items = this.state.uploadLinkItems.filter(item=> {

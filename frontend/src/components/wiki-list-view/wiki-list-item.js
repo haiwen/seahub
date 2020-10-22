@@ -103,14 +103,14 @@ class WikiListItem extends Component {
   //   this.props.onUnfreezedItem();
   //   this.setState({isRenameing: false});
   // }
-  
+
   onDeleteToggle = () => {
     this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
   }
-  
+
   onDeleteCancel = () => {
     this.props.onUnfreezedItem();
     this.setState({

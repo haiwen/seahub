@@ -16,7 +16,7 @@ class ShareItem extends React.Component {
       isOperationShow: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -38,7 +38,7 @@ class ShareItem extends React.Component {
         <td className="name">{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -222,7 +222,7 @@ class ShareToOtherServer extends React.Component {
         </table>
         <ShareList
           items={ocmShares}
-          deleteShareItem={this.deleteShareItem} 
+          deleteShareItem={this.deleteShareItem}
         />
       </Fragment>
     );

@@ -35,7 +35,7 @@ class AllRepos extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getReposByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   toggleCreateRepoDialog = () => {
@@ -61,7 +61,7 @@ class AllRepos extends Component {
   sortItems = (sortBy) => {
     this.setState({
       currentPage: 1,
-      sortBy: sortBy 
+      sortBy: sortBy
     }, () => {
       let url = new URL(location.href);
       let searchParams = new URLSearchParams(url.search);
@@ -130,7 +130,7 @@ class AllRepos extends Component {
         <MainPanelTopbar search={this.getSearch()}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
             <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-          </Button>          
+          </Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">

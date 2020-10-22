@@ -21,7 +21,7 @@ class OrgLogsFileAudit extends React.Component {
       eventList: [],
       userSelected: '',
       repoSelected: '',
-      isItemFreezed: false  
+      isItemFreezed: false
     };
   }
 
@@ -175,7 +175,7 @@ class FileAuditItem extends React.Component {
   }
 
   renderUser = (fileEvent) => {
-    if (!fileEvent.user_email) { 
+    if (!fileEvent.user_email) {
       return gettext('Anonymous User');
     }
 
@@ -194,18 +194,18 @@ class FileAuditItem extends React.Component {
         </Dropdown>
       </span>
     );
-    
+
   }
 
   renderType = (type) => {
     if (type.indexOf('web') != -1) {
-      type = 'web'; 
+      type = 'web';
     }
     if (type.indexOf('api') != -1) {
-      type = 'api'; 
+      type = 'api';
     }
     if (type.indexOf('share-link') != -1) {
-      type = 'share link'; 
+      type = 'share link';
     }
     return type;
   }
@@ -217,7 +217,7 @@ class FileAuditItem extends React.Component {
   renderRepo = (fileEvent) => {
     let repoName = 'Deleted';
     if (fileEvent.repo_name) {
-      repoName = fileEvent.repo_name; 
+      repoName = fileEvent.repo_name;
     }
     return (
       <span>

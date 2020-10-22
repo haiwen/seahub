@@ -60,7 +60,7 @@ class GenerateUploadLink extends React.Component {
 
   getUploadLink = () => {
     let path = this.props.itemPath;
-    let repoID = this.props.repoID; 
+    let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         let sharedUploadInfo = new UploadLink(res.data[0]);
@@ -129,7 +129,7 @@ class GenerateUploadLink extends React.Component {
 
       seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime).then((res) => {
         let sharedUploadInfo = new UploadLink(res.data);
-        this.setState({sharedUploadInfo: sharedUploadInfo}); 
+        this.setState({sharedUploadInfo: sharedUploadInfo});
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -318,11 +318,11 @@ class GenerateUploadLink extends React.Component {
         </FormGroup>
         <FormGroup check>
           <Label check>
-              {this.isExpireDaysNoLimit ? (
-                <Input type="checkbox" onChange={this.onExpireChecked} />
-              ) : (
-                <Input type="checkbox" checked readOnly disabled />
-              )}
+            {this.isExpireDaysNoLimit ? (
+              <Input type="checkbox" onChange={this.onExpireChecked} />
+            ) : (
+              <Input type="checkbox" checked readOnly disabled />
+            )}
             <span>{gettext('Add auto expiration')}</span>
           </Label>
           {this.state.isExpireChecked &&

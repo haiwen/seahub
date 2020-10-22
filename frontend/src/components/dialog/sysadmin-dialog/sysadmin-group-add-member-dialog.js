@@ -30,7 +30,7 @@ class SysAdminGroupAddMemberDialog extends React.Component {
     let emails = this.state.selectedOptions.map(item => item.email);
     this.props.addMembers(emails);
     this.props.toggle();
-  } 
+  }
 
   render() {
     const { isSubmitBtnDisabled } = this.state;
@@ -44,7 +44,7 @@ class SysAdminGroupAddMemberDialog extends React.Component {
             className="reviewer-select"
             placeholder={gettext('Search users...')}
             onSelectChange={this.handleSelectChange}
-          /> 
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>

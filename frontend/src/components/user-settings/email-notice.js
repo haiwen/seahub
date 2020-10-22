@@ -40,7 +40,7 @@ class EmailNotice extends React.Component {
     seafileAPI.updateEmailNotificationInterval(this.state.currentInterval).then((res) => {
       toaster.success(gettext('Success'));
     }).catch((error) => {
-      let errorMsg = Utils.getErrorMsg(error); 
+      let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
   }
@@ -55,7 +55,7 @@ class EmailNotice extends React.Component {
           {this.intervalOptions.map((item, index) => {
             return (
               <React.Fragment key={index}>
-                <input type="radio" name="interval" value={item.interval} className="align-middle" id={`interval-option${index + 1}`} checked={currentInterval == item.interval} onChange={this.inputChange} /> 
+                <input type="radio" name="interval" value={item.interval} className="align-middle" id={`interval-option${index + 1}`} checked={currentInterval == item.interval} onChange={this.inputChange} />
                 <label className="align-middle m-0 ml-2" htmlFor={`interval-option${index + 1}`}>{item.text}</label>
                 <br />
               </React.Fragment>
@@ -68,4 +68,4 @@ class EmailNotice extends React.Component {
   }
 }
 
-export default EmailNotice; 
+export default EmailNotice;

@@ -21,7 +21,7 @@ class DirentNodeView extends React.Component {
       fileType: '',
       isCreateFileDialogShow: false,
     };
-  } 
+  }
 
   onCreateNewFile = (type) => {
     this.setState({

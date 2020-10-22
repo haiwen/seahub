@@ -66,11 +66,11 @@ class SysAdminCreateRepoDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="repoName">{gettext('Name')}</Label>
-              <Input 
+              <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress} 
-                innerRef={input => {this.newInput = input;}} 
-                value={this.state.repoName} 
+                onKeyPress={this.handleKeyPress}
+                innerRef={input => {this.newInput = input;}}
+                value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
               />
             </FormGroup>

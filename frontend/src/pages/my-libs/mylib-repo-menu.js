@@ -37,7 +37,7 @@ class MylibRepoMenu extends React.Component {
       this.setState({isItemMenuShow: !this.state.isItemMenuShow});
       return;
     }
-    
+
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow},
       () => {
@@ -53,7 +53,7 @@ class MylibRepoMenu extends React.Component {
   generatorOperations = () => {
     let repo = this.props.repo;
     let showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
-    let operations = ['Rename', 'Transfer']; 
+    let operations = ['Rename', 'Transfer'];
     if (folderPermEnabled) {
       operations.push('Folder Permission');
     }
@@ -131,18 +131,18 @@ class MylibRepoMenu extends React.Component {
     if (this.props.isPC) {
       return (
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-          <DropdownToggle 
+          <DropdownToggle
             tag="i"
             className="sf-dropdown-toggle sf2-icon-caret-down"
             title={gettext('More Operations')}
             // onClick={this.clickOperationMenuToggle}
-            data-toggle="dropdown" 
+            data-toggle="dropdown"
             aria-expanded={this.state.isItemMenuShow}
           />
           <DropdownMenu>
             {operations.map((item, index)=> {
               if (item == 'Divider') {
-                return <DropdownItem key={index} divider />; 
+                return <DropdownItem key={index} divider />;
               } else {
                 return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
               }
@@ -159,12 +159,12 @@ class MylibRepoMenu extends React.Component {
 
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle 
+        <DropdownToggle
           tag="i"
           className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
           title={gettext('More Operations')}
           // onClick={this.clickOperationMenuToggle}
-          data-toggle="dropdown" 
+          data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
         />
         <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>

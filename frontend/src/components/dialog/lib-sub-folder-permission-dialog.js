@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
@@ -8,7 +8,7 @@ import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-per
 import '../../css/share-link-dialog.css';
 import '../../css/sub-folder-permission.css';
 
-const propTypes = { 
+const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string,
   isDepartmentRepo: PropTypes.bool,
@@ -33,7 +33,7 @@ class LibSubFolderPermissionDialog extends React.Component {
 
   renderContent = () => {
     let activeTab = this.state.activeTab;
-    
+
     return (
       <Fragment>
         <div className="share-dialog-side">
@@ -66,7 +66,7 @@ class LibSubFolderPermissionDialog extends React.Component {
 
   render() {
     const { repoName, folderName } = this.props;
-  
+
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '980px'}} className="share-dialog" toggle={this.props.toggleDialog}>

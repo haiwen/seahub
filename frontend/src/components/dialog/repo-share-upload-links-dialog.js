@@ -112,7 +112,7 @@ class RepoShareUploadLinksDialog extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true)
-      }); 
+      });
     });
   }
 

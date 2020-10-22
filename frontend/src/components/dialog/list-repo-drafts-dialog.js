@@ -23,15 +23,15 @@ class ListRepoDraftsDialog extends React.Component {
     };
   }
 
-  componentDidMount() { 
+  componentDidMount() {
     seafileAPI.listRepoDrafts(this.props.repoID).then(res => {
       let drafts = res.data.drafts.map(item => {
         let draft = new Draft(item);
         return draft;
       });
       this.setState({
-        drafts: drafts 
-      }); 
+        drafts: drafts
+      });
     });
   }
 

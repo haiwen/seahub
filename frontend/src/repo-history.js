@@ -17,7 +17,7 @@ import './css/search.css';
 
 import './css/repo-history.css';
 
-const { 
+const {
   repoID,
   repoName,
   userPerm,
@@ -48,7 +48,7 @@ class RepoHistory extends React.Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getItems(this.state.currentPage);
-    }); 
+    });
   }
 
   getItems = (page) => {
@@ -63,7 +63,7 @@ class RepoHistory extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -72,7 +72,7 @@ class RepoHistory extends React.Component {
       perPage: perPage
     }, () => {
       this.getItems(1);
-    }); 
+    });
   }
 
   onSearchedClick = (selectedItem) => {
@@ -109,7 +109,7 @@ class RepoHistory extends React.Component {
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
-                <Content 
+                <Content
                   isLoading={this.state.isLoading}
                   errorMsg={this.state.errorMsg}
                   items={this.state.items}
@@ -146,7 +146,7 @@ class Content extends React.Component {
       {width: '15%', text: `${gettext('Device')} / ${gettext('Version')}`},
       {width: '12%', text: ''}
     ];
-  } 
+  }
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
@@ -159,7 +159,7 @@ class Content extends React.Component {
   render() {
     const {
       isLoading, errorMsg, items,
-      curPerPage, currentPage, hasNextPage 
+      curPerPage, currentPage, hasNextPage
     } = this.props;
 
     if (isLoading) {
@@ -195,7 +195,7 @@ class Content extends React.Component {
           hasNextPage={hasNextPage}
           curPerPage={curPerPage}
           resetPerPage={this.props.resetPerPage}
-        />  
+        />
       </React.Fragment>
     );
   }
@@ -206,7 +206,7 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      labels: this.props.item.tags, 
+      labels: this.props.item.tags,
       isIconShown: false,
       isCommitLabelUpdateDialogOpen: false,
       isCommitDetailsDialogOpen: false
@@ -281,7 +281,7 @@ class Item extends React.Component {
           <td>
             {item.client_version ? `${item.device_name} / ${item.client_version}` : 'API / --'}
           </td>
-          {showLabel && 
+          {showLabel &&
           <td>
             {labels.map((item, index) => {
               return <span key={index} className="commit-label">{item}</span>;

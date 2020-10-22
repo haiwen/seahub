@@ -17,7 +17,7 @@ class GroupItem extends React.Component {
       isOperationShow: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -49,7 +49,7 @@ class GroupItem extends React.Component {
           </td>
         }
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
@@ -60,7 +60,7 @@ class GroupItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteGroupPermissionItem} 
+            onClick={this.deleteGroupPermissionItem}
             title={gettext('Delete')}
           >
           </span>
@@ -166,20 +166,20 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         folderPath: ''
       });
     }).catch((error) => {
-      let errorMsg = ''; 
+      let errorMsg = '';
       if (error.response) {
         if (error.response.data && error.response.data['error_msg']) {
           errorMsg = error.response.data['error_msg'];
         } else {
           errorMsg = gettext('Error');
-        }   
+        }
       } else {
         errorMsg = gettext('Please check the network.');
-      }   
+      }
       this.setState({
         errorMsg: [errorMsg]
-      }); 
-    }); 
+      });
+    });
   }
 
   deleteGroupPermissionItem = (item) => {
@@ -188,7 +188,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       seafileAPI.deleteGroupFolderPerm(item.repo_id, item.permission, item.folder_path, item.group_id);
     request.then(() => {
       this.setState({
-        groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; }) 
+        groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; })
       });
     });
   }
@@ -201,7 +201,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       this.updateGroupPermission(item, permission);
     });
   }
-  
+
   updateGroupPermission = (item, permission) => {
     let groupID = item.group_id;
     let groupPermissionItems = this.state.groupPermissionItems.map(sharedItem => {
@@ -216,7 +216,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
 
   onSetSubFolder = (e) => {
     this.setState({
-      folderPath: e.target.value 
+      folderPath: e.target.value
     });
   }
 
@@ -230,7 +230,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
-    }); 
+    });
   }
 
   handleSubmit = () => {
@@ -241,7 +241,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
 
   onRepoItemClick = () => {
     this.setState({
-      folderPath: '/' 
+      folderPath: '/'
     });
   }
 
@@ -251,7 +251,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
     if (this.state.showFileChooser) {
       return (
         <div>
-          <FileChooser repoID={this.props.repoID} 
+          <FileChooser repoID={this.props.repoID}
             mode={'only_current_library'}
             onDirentItemClick={this.toggleSubFolder}
             onRepoItemClick={this.onRepoItemClick}
@@ -302,7 +302,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
                 </td>
               }
               <td>
-                <SharePermissionEditor 
+                <SharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -314,7 +314,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
                 <Button onClick={this.addGroupFolderPerm}>{gettext('Submit')}</Button>
               </td>
             </tr>
-            {this.state.errorMsg.length > 0 &&                  
+            {this.state.errorMsg.length > 0 &&
               this.state.errorMsg.map((item, index) => {
                 let errMessage = item.group_id + ': ' + item.error_msg;
                 return (
@@ -322,7 +322,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
                     <td colSpan={3}><p className="error">{errMessage}</p></td>
                   </tr>
                 );
-              })                                                
+              })
             }
           </tbody>
         </table>
@@ -332,9 +332,9 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
             <tbody>
               {this.state.groupPermissionItems.map((item, index) => {
                 return (
-                  <GroupItem 
-                    key={index} 
-                    item={item} 
+                  <GroupItem
+                    key={index}
+                    item={item}
                     permissions={this.permissions}
                     deleteGroupPermissionItem={this.deleteGroupPermissionItem}
                     onChangeGroupPermission={this.onChangeGroupPermission}

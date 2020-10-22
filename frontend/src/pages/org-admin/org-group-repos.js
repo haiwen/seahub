@@ -27,13 +27,13 @@ class OrgGroupRepos extends Component {
     seafileAPI.orgAdminListGroupRepos(orgID, this.props.groupID).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   render() {
@@ -44,7 +44,7 @@ class OrgGroupRepos extends Component {
           <div className="cur-view-container">
             <OrgAdminGroupNav groupID={this.props.groupID} currentItem='repos' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
               />
             </div>
@@ -63,7 +63,7 @@ class Content extends Component {
 
   render() {
     const {
-      loading, errorMsg, libraries 
+      loading, errorMsg, libraries
     } = this.props.data;
 
     if (loading) {
@@ -92,7 +92,7 @@ class Content extends Component {
           </tbody>
         </table>
       </Fragment>
-    ); 
+    );
   }
 }
 
@@ -111,7 +111,7 @@ class Item extends Component {
   handleMouseOver = () => {
     this.setState({
       isOpIconShown: true
-    }); 
+    });
   }
 
   handleMouseOut = () => {
@@ -150,7 +150,7 @@ class Item extends Component {
 
   render() {
     const { deleted, isOpIconShown, isDeleteRepoDialogOpen } = this.state;
-    const repo = this.props.data; 
+    const repo = this.props.data;
 
     if (deleted) {
       return null;
@@ -160,7 +160,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td>
-            <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" /> 
+            <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
           </td>
           <td>{repo.name}</td>
           <td>{Utils.bytesToSize(repo.size)}</td>

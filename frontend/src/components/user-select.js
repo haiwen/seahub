@@ -54,7 +54,7 @@ class UserSelect extends React.Component {
                     <span className="user-option-email">{item.contact_email}</span>
                   </div>
                 </div>
-              ) : ( 
+              ) : (
                 <React.Fragment>
                   <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
                   <span className='select-module select-module-name'>{item.name}</span>
@@ -85,7 +85,7 @@ class UserSelect extends React.Component {
             return (
               <div {...props.innerProps} style={style}>{searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}</div>
             );
-          } 
+          }
         }}
         isMulti={this.props.isMulti}
         loadOptions={this.loadOptions}

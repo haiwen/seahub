@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Select from 'react-select/lib/Creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -39,7 +39,7 @@ class CleanTrash extends React.Component {
     const { repoID } = this.props;
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     seafileAPI.deleteRepoTrash(repoID, inputValue.value).then((res) => {
@@ -51,7 +51,7 @@ class CleanTrash extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 

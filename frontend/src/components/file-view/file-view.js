@@ -69,8 +69,8 @@ class FileView extends React.Component {
     if (this.state.isLocked) {
       seafileAPI.unlockfile(repoID, filePath).then((res) => {
         this.setState({
-          isLocked: false, 
-          lockedByMe: false 
+          isLocked: false,
+          lockedByMe: false
         });
       }).catch((error) => {
         const errorMsg = Utils.getErrorMsg(error);
@@ -86,7 +86,7 @@ class FileView extends React.Component {
         const errorMsg = Utils.getErrorMsg(error);
         toaster.danger(errorMsg);
       });
-    }    
+    }
   }
 
   render() {
@@ -98,7 +98,7 @@ class FileView extends React.Component {
             isLocked={this.state.isLocked}
             toggleStar={this.toggleStar}
           />
-          <FileToolbar 
+          <FileToolbar
             isLocked={this.state.isLocked}
             lockedByMe={this.state.lockedByMe}
             onSave={this.props.onSave}

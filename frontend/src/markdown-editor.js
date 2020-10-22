@@ -724,7 +724,7 @@ class MarkdownEditor extends React.Component {
     if (mode === 'rich') {
       window.seafileEditor.switchToRichTextEditor();
     } else if (mode === 'plain') {
-      window.seafileEditor.switchToPlainTextEditor();  
+      window.seafileEditor.switchToPlainTextEditor();
     }
   }
 

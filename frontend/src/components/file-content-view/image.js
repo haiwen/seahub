@@ -12,7 +12,7 @@ const {
   xmindImageSrc // for xmind file
 } = window.app.pageOptions;
 
-let previousImageUrl, nextImageUrl; 
+let previousImageUrl, nextImageUrl;
 if (previousImage) {
   previousImageUrl = `${siteRoot}lib/${repoID}/file${Utils.encodePath(previousImage)}`;
 }

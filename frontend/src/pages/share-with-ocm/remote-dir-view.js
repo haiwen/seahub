@@ -143,7 +143,7 @@ class DirView extends Component {
   }
 
   render() {
-    const { loading, errorMsg, 
+    const { loading, errorMsg,
       repoName, direntList, path, userPerm } = this.state;
     const { repoID } = this.props;
 
@@ -160,7 +160,7 @@ class DirView extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
-              <DirPathBar 
+              <DirPathBar
                 repoID={repoID}
                 repoName={repoName}
                 currentPath={path}

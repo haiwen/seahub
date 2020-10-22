@@ -37,7 +37,7 @@ class OrgsTraffic extends React.Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getTrafficList(this.initMonth, this.state.currentPage);
-    }); 
+    });
   }
 
   getPreviousPage = () => {
@@ -117,8 +117,8 @@ class OrgsTraffic extends React.Component {
       <Fragment>
         <div className="d-flex align-items-center mt-4">
           <span className="statistic-reports-tip">{gettext('Month:')}</span>
-          <Input 
-            className="statistic-reports-input" 
+          <Input
+            className="statistic-reports-input"
             defaultValue={moment().format('YYYYMM')}
             onChange={this.handleChange}
             onKeyPress={this.handleKeyPress}
@@ -126,11 +126,11 @@ class OrgsTraffic extends React.Component {
           {errorMessage && <div className="error">{errorMessage}</div>}
         </div>
         {isLoading && <Loading />}
-        {!isLoading && 
+        {!isLoading &&
           <TrafficTable type={'org'} sortItems={this.sortItems} sortBy={sortBy} sortOrder={sortOrder}>
             {orgTrafficList.length > 0 && orgTrafficList.map((item, index) => {
               return(
-                <TrafficTableBody 
+                <TrafficTableBody
                   key={index}
                   userTrafficItem={item}
                   type={'org'}
@@ -139,7 +139,7 @@ class OrgsTraffic extends React.Component {
             })}
           </TrafficTable>
         }
-        <Paginator 
+        <Paginator
           gotoPreviousPage={this.getPreviousPage}
           gotoNextPage={this.getNextPage}
           currentPage={currentPage}

@@ -55,7 +55,7 @@ class DirentGridView extends React.Component{
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-      // onmenuClick 
+      // onmenuClick
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
@@ -119,13 +119,13 @@ class DirentGridView extends React.Component{
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
     switch(operation) {
-      case 'Download': 
+      case 'Download':
         this.onItemDownload(currentObject, event);
         break;
       case 'Share':
         this.onItemShare(event);
         break;
-      case 'Delete': 
+      case 'Delete':
         this.onItemDelete(currentObject, event);
         break;
       case 'Rename':
@@ -271,7 +271,7 @@ class DirentGridView extends React.Component{
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
     location.href = url;
   }
-  
+
   onAccessLog = (currentObject) => {
     let filePath = this.getDirentPath(currentObject);
     let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
@@ -407,7 +407,7 @@ class DirentGridView extends React.Component{
     }
 
     hideMenu();
-    
+
     this.setState({activeDirent: currentObject});
 
     let showMenuConfig = {
@@ -439,7 +439,7 @@ class DirentGridView extends React.Component{
     if (this.props.isDirentListLoading) {
       return (<Loading />);
     }
-  
+
     return (
       <Fragment>
         <ul className="grid-view" onClick={this.gridContainerClick} onContextMenu={this.onGridContainerContextMenu} onMouseDown={this.onGridContainerMouseDown}>
@@ -464,11 +464,11 @@ class DirentGridView extends React.Component{
             })
           }
         </ul>
-        <ContextMenu 
+        <ContextMenu
           id={'grid-item-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
         />
-        <ContextMenu 
+        <ContextMenu
           id={'dirent-grid-container-menu'}
           onMenuItemClick={this.onMenuItemClick}
         />
@@ -481,7 +481,7 @@ class DirentGridView extends React.Component{
               addFolderCancel={this.onCreateFolderToggle}
             />
           </ModalPortal>
-        )} 
+        )}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile
@@ -492,8 +492,8 @@ class DirentGridView extends React.Component{
             />
           </ModalPortal>
         )}
-        {this.state.isMoveDialogShow && 
-          <MoveDirentDialog 
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog
             path={this.props.path}
             repoID={this.props.repoID}
             repoEncrypted={this.props.currentRepoInfo.encrypted}
@@ -535,7 +535,7 @@ class DirentGridView extends React.Component{
         }
         {this.state.isShareDialogShow &&
           <ModalPortal>
-            <ShareDialog 
+            <ShareDialog
               itemType={dirent.type}
               itemName={dirent.name}
               itemPath={direntPath}

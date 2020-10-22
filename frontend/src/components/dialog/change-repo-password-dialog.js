@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -76,7 +76,7 @@ class ChangeRepoPasswordDialog extends React.Component {
     }
 
     this.setState({
-      submitBtnDisabled: true  
+      submitBtnDisabled: true
     });
     seafileAPI.changeEncryptedRepoPassword(this.props.repoID, oldPassword, newPassword)
       .then(() => {
@@ -87,7 +87,7 @@ class ChangeRepoPasswordDialog extends React.Component {
         this.setState({
           errorMsg: errorMsg,
           submitBtnDisabled: false
-        }); 
+        });
       });
   }
 

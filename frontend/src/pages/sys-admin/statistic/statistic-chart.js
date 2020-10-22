@@ -110,7 +110,7 @@ class StatisticChart extends React.Component {
 
     let { data, options } = this.state;
     return (
-      <Line 
+      <Line
         data={data}
         options={options}
       />

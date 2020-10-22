@@ -82,7 +82,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const user = this.props.userInfo;
-      const { 
+      const {
         currentKey, dialogTitle,
         isSetQuotaDialogOpen, isUpdateUserDialogOpen
       } = this.state;
@@ -133,7 +133,7 @@ class Content extends Component {
               {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
-    
+
             {twoFactorAuthEnabled &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
@@ -209,13 +209,13 @@ class User extends Component {
       let userInfo = this.state.userInfo;
       userInfo[key]= res.data[key];
       this.setState({
-        userInfo: userInfo 
+        userInfo: userInfo
       });
       toaster.success(gettext('Edit succeeded'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   disable2FA = () => {
@@ -224,7 +224,7 @@ class User extends Component {
       let userInfo = this.state.userInfo;
       userInfo.has_default_device = false;
       this.setState({
-        userInfo: userInfo 
+        userInfo: userInfo
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -239,7 +239,7 @@ class User extends Component {
       let userInfo = this.state.userInfo;
       userInfo.is_force_2fa = checked;
       this.setState({
-        userInfo: userInfo 
+        userInfo: userInfo
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

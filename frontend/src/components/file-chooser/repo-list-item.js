@@ -101,7 +101,7 @@ class RepoListItem extends React.Component {
   loadNodeAndParentsByPath = (repoID, path) => {
 
     let tree = this.state.treeData.clone();
-   
+
     seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
       let direntList = res.data.dirent_list;
       direntList = direntList.filter(item => item.type === 'dir');
@@ -169,13 +169,13 @@ class RepoListItem extends React.Component {
           <div className="item-left-icon">
             <span className={`item-toggle icon fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
             <i className="tree-node-icon">
-              <span className="icon far fa-folder tree-node-icon"></span> 
+              <span className="icon far fa-folder tree-node-icon"></span>
             </i>
           </div>
         </div>
         {this.state.isShowChildren && (
-          <TreeListView 
-            repo={this.props.repo} 
+          <TreeListView
+            repo={this.props.repo}
             onDirentItemClick={this.onDirentItemClick}
             selectedRepo={this.props.selectedRepo}
             selectedPath={this.props.selectedPath}

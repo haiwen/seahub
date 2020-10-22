@@ -79,7 +79,7 @@ class WebSettings extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   render() {
@@ -95,7 +95,7 @@ class WebSettings extends Component {
             <div className="cur-view-content container mw-100">
               {loading && <Loading />}
               {errorMsg && <p className="error text-center mt-4">{errorMsg}</p>}
-              {(!loading && !errorMsg) && config_dict && 
+              {(!loading && !errorMsg) && config_dict &&
               <Fragment>
                 <p className="small text-secondary my-4">{gettext('Note: Settings via web interface are saved in database table (seahub-db/constance_config). They have a higher priority over the settings in config files.')}</p>
 

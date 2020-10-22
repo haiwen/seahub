@@ -179,12 +179,12 @@ class LibContentContainer extends React.Component {
             </div>
           }
           <div className="cur-view-path">
-            <CurDirPath 
+            <CurDirPath
               repoID={repoID}
               repoName={this.props.currentRepoInfo.repo_name}
               pathPrefix={this.props.pathPrefix}
-              currentPath={this.props.path} 
-              permission={this.props.repoPermission} 
+              currentPath={this.props.path}
+              permission={this.props.repoPermission}
               isViewFile={this.props.isViewFile}
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
@@ -202,7 +202,7 @@ class LibContentContainer extends React.Component {
             {this.props.pathExist && (
               <Fragment>
                 {this.props.currentMode === 'list' && (
-                  <DirListView 
+                  <DirListView
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
@@ -240,7 +240,7 @@ class LibContentContainer extends React.Component {
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
-                  <DirGridView 
+                  <DirGridView
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
@@ -271,7 +271,7 @@ class LibContentContainer extends React.Component {
                   />
                 )}
                 {this.props.currentMode === 'column' && (
-                  <DirColumnView 
+                  <DirColumnView
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
@@ -335,11 +335,11 @@ class LibContentContainer extends React.Component {
             )}
           </div>
         </div>
-        {this.props.isDirentDetailShow && 
+        {this.props.isDirentDetailShow &&
           <Fragment>
             <div className="cur-view-detail">
-              {(this.props.path === '/' && !this.state.currentDirent) ? 
-                <LibDetail 
+              {(this.props.path === '/' && !this.state.currentDirent) ?
+                <LibDetail
                   currentRepo={this.props.currentRepoInfo}
                   closeDetails={this.props.closeDirentDetail}
                 /> :

@@ -13,7 +13,7 @@ class WikiDeleteDialog extends React.Component {
   toggle = () => {
     this.props.toggleCancel();
   }
-  
+
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>

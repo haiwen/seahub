@@ -17,7 +17,7 @@ class SysAdminAddOrgDialog extends React.Component {
       password: '',
       passwordAgain: '',
       errorMsg: '',
-      isSubmitBtnActive: false 
+      isSubmitBtnActive: false
     };
   }
 
@@ -93,14 +93,14 @@ class SysAdminAddOrgDialog extends React.Component {
           <Form autoComplete="off">
             <FormGroup>
               <Label>{gettext('Name')}</Label>
-              <Input value={name} onChange={this.inputName} /> 
+              <Input value={name} onChange={this.inputName} />
             </FormGroup>
             <FormGroup>
               <Label>
                 {gettext('Owner')}
                 <span className="small text-secondary ml-1 fas fa-question-circle" title={gettext('Owner can use admin panel in an organization, must be a new account.')}></span>
               </Label>
-              <Input value={email} onChange={this.inputEmail} /> 
+              <Input value={email} onChange={this.inputEmail} />
             </FormGroup>
             <FormGroup>
               <Label>{gettext('Password')}</Label>

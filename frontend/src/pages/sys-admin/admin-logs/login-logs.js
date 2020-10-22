@@ -69,7 +69,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -116,7 +116,7 @@ class AdminLoginLogs extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getLogsByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getLogsByPage = (page) => {

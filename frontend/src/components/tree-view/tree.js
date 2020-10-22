@@ -18,7 +18,7 @@ class Tree {
     this.root = node;
   }
 
-  getNodeByPath(path) { 
+  getNodeByPath(path) {
     let findNode = null;
     function callback(currentNode) {
       if (currentNode.path === path) {
@@ -112,7 +112,7 @@ class Tree {
       node = node.parentNode;
     }
   }
-  
+
   collapseNode(node) {
     node.isExpanded = false;
   }

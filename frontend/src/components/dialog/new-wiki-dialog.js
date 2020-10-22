@@ -41,7 +41,7 @@ class NewWikiDialog extends React.Component {
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
-    } 
+    }
   }
 
   handleSubmit = () => {

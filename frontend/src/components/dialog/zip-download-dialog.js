@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -33,7 +33,7 @@ class ZipDownloadDialog extends React.Component {
     const { token, path, repoID, target } = this.props;
     let getZipTask;
     if (token) {
-      getZipTask = target.length ? 
+      getZipTask = target.length ?
         seafileAPI.getShareLinkDirentsZipTask(token, path, target) :
         seafileAPI.getShareLinkZipTask(token, path);
     } else {
@@ -44,8 +44,8 @@ class ZipDownloadDialog extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: '',
-        zipToken: zipToken 
-      }); 
+        zipToken: zipToken
+      });
       this.queryZipProgress();
       interval = setInterval(this.queryZipProgress, 1000);
     }).catch((error) => {
@@ -53,7 +53,7 @@ class ZipDownloadDialog extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
-      }); 
+      });
     });
   }
 
@@ -75,7 +75,7 @@ class ZipDownloadDialog extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
-      }); 
+      });
     });
   }
 

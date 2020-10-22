@@ -52,7 +52,7 @@ class DirentItem extends React.Component {
             }
           </td>
           <td>
-            {isOpIconShown && dirent.is_file && 
+            {isOpIconShown && dirent.is_file &&
             <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.downloadDirent}></a>
             }
           </td>

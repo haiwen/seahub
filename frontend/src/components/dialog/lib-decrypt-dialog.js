@@ -33,7 +33,7 @@ class LibDecryptDialog extends React.Component {
     });
 
     e.preventDefault();
-  } 
+  }
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
@@ -56,7 +56,7 @@ class LibDecryptDialog extends React.Component {
     return (
       <Modal isOpen={true}>
         <ModalBody>
-          <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button> 
+          <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
           <Form className="lib-decrypt-form text-center">
             <img src={`${mediaUrl}img/lock.png`} alt="" aria-hidden="true" />
             <p className="intro">{gettext('This library is password protected')}</p>

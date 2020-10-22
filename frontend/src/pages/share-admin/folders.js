@@ -67,7 +67,7 @@ class Content extends Component {
         </table>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -144,7 +144,7 @@ class Item extends Component {
   changePerm = (permission) => {
     const item = this.props.item;
     const postData = {
-      'permission': permission 
+      'permission': permission
     };
     let options = {
       'p': item.path
@@ -182,7 +182,7 @@ class Item extends Component {
     if (share_permission == 'r' || share_permission == 'preview') {
       is_readonly = true;
     }
-    let iconUrl = Utils.getFolderIconUrl(is_readonly); 
+    let iconUrl = Utils.getFolderIconUrl(is_readonly);
     let iconTitle = Utils.getFolderIconTitle({
       'permission': share_permission
     });
@@ -193,11 +193,11 @@ class Item extends Component {
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td><Link to={folderUrl}>{item.folder_name}</Link></td>
         <td>
-          {item.share_type == 'personal' ? 
+          {item.share_type == 'personal' ?
             <span title={item.contact_email}>{item.user_name}</span> : item.group_name}
         </td>
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={isOpIconShown}
             currentPermission={share_permission}
@@ -321,7 +321,7 @@ class ShareAdminFolders extends Component {
             <h3 className="sf-heading">{gettext('Folders')}</h3>
           </div>
           <div className="cur-view-content">
-            <Content 
+            <Content
               errorMsg={this.state.errorMsg}
               loading={this.state.loading}
               items={this.state.items}

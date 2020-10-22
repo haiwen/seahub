@@ -177,7 +177,7 @@ class SysAdmin extends React.Component {
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});
-  }  
+  }
 
   render() {
     let { currentTab, isSidePanelClosed } = this.state;
@@ -234,7 +234,7 @@ class SysAdmin extends React.Component {
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} />
             <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} />
-            
+
             <Users path={siteRoot + 'sys/users'} />
             <AdminUsers path={siteRoot + 'sys/users/admins'} />
             <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} />
@@ -254,7 +254,7 @@ class SysAdmin extends React.Component {
 
             <FileScanRecords
               path={siteRoot + 'sys/file-scan-records'}
-              currentTab={currentTab} 
+              currentTab={currentTab}
               tabItemClick={this.tabItemClick}
             />
 

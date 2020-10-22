@@ -14,7 +14,7 @@ class Delete extends React.Component {
   toggle = () => {
     this.props.toggleCancel();
   }
-  
+
   render() {
     let currentNode = this.props.currentNode;
     let name = currentNode.object.name;

@@ -58,7 +58,7 @@ class VirusFileItem extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'delete':
         translateResult = gettext('Delete');
@@ -94,7 +94,7 @@ class VirusFileItem extends Component {
         <td>{virusFile.file_path}</td>
         <td>{fileStatus}</td>
         <td>
-          {fileOpList.length > 0 && this.state.isOpIconShown && 
+          {fileOpList.length > 0 && this.state.isOpIconShown &&
             <OpMenu
               operations={fileOpList}
               translateOperations={this.translateOperations}
@@ -122,9 +122,9 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       isItemFreezed: false
-    };  
+    };
   }
 
   onFreezedItem = () => {
@@ -136,11 +136,11 @@ class Content extends Component {
   }
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1); 
+    this.props.getListByPage(this.props.currentPage - 1);
   }
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1); 
+    this.props.getListByPage(this.props.currentPage + 1);
   }
 
   render() {
@@ -251,7 +251,7 @@ class AllVirusFiles extends Component {
       this.getListByPage(1);
     });
   }
-  
+
   handleFile = (virusID, op) => {
     let request;
     switch(op) {
@@ -289,9 +289,9 @@ class AllVirusFiles extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <Nav currentItem="all" /> 
+            <Nav currentItem="all" />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 virusFiles={this.state.virusFiles}

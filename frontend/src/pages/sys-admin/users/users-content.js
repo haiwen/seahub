@@ -79,7 +79,7 @@ class Content extends Component {
       const spaceEl =
         sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
         <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
-        spaceText;
+          spaceText;
       const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
 
       const colNameText = `${gettext('Name')} / ${gettext('Contact Email')}`;
@@ -156,7 +156,7 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -190,7 +190,7 @@ class Item extends Component {
         isOpIconShown: false,
         highlight: false
       });
-    } 
+    }
   }
 
   onUnfreezedItem = () => {
@@ -249,7 +249,7 @@ class Item extends Component {
         return gettext('Audit Admin');
       default:
         return role;
-    }   
+    }
   }
 
   updateInstitution = (value) => {
@@ -276,7 +276,7 @@ class Item extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   revokeAdmin = () => {
@@ -285,7 +285,7 @@ class Item extends Component {
   }
 
   getMenuOperations = () => {
-    const { 
+    const {
       isAdmin, isLDAPImported,
       isSearchResult, item
     } = this.props;
@@ -301,7 +301,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -312,7 +312,7 @@ class Item extends Component {
       case 'Revoke Admin':
         translateResult = gettext('Revoke Admin');
         break;
-    }   
+    }
 
     return translateResult;
   }
@@ -335,8 +335,8 @@ class Item extends Component {
 
   render() {
     const { item, isAdmin } = this.props;
-    const { 
-      isOpIconShown, 
+    const {
+      isOpIconShown,
       isSetQuotaDialogOpen,
       isDeleteUserDialogOpen,
       isResetUserPasswordDialogOpen,
@@ -356,12 +356,12 @@ class Item extends Component {
           </td>
           <td>
             <UserLink email={item.email} name={item.name} />
-            {item.contact_email && 
+            {item.contact_email &&
               <Fragment>
                 <br />
                 {item.contact_email}
               </Fragment>}
-            {item.org_id && 
+            {item.org_id &&
               <Fragment>
                 <br />
                 <Link to={`${siteRoot}sys/organizations/${item.org_id}/info/`}>({item.org_name})</Link>
@@ -369,7 +369,7 @@ class Item extends Component {
             }
           </td>
           <td>
-            <SysAdminUserStatusEditor 
+            <SysAdminUserStatusEditor
               isTextMode={true}
               isEditIconShow={isOpIconShown}
               currentStatus={item.is_active ? 'active' : 'inactive'}
@@ -377,7 +377,7 @@ class Item extends Component {
               onStatusChanged={this.updateStatus}
             />
           </td>
-          {isPro && 
+          {isPro &&
           <td>
             {isAdmin ?
               <SelectEditor
@@ -457,7 +457,7 @@ class Item extends Component {
             executeOperation={this.resetPassword}
             confirmBtnText={gettext('Reset')}
             toggleDialog={this.toggleResetUserPasswordDialog}
-          /> 
+          />
         }
         {isRevokeAdminDialogOpen &&
           <CommonOperationConfirmationDialog
@@ -466,7 +466,7 @@ class Item extends Component {
             executeOperation={this.revokeAdmin}
             confirmBtnText={gettext('Revoke')}
             toggleDialog={this.toggleRevokeAdminDialog}
-          /> 
+          />
         }
       </Fragment>
     );

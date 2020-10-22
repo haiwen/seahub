@@ -42,7 +42,7 @@ class Notification extends React.Component {
     });
   }
 
-  onNoticeItemClick = (noticeItem) => {    
+  onNoticeItemClick = (noticeItem) => {
     let noticeList = this.state.noticeList.map(item => {
       if (item.id === noticeItem.id) {
         item.seen = true;
@@ -53,9 +53,9 @@ class Notification extends React.Component {
     let unseenCount = this.state.unseenCount === 0 ? 0 : this.state.unseenCount - 1;
     this.setState({
       noticeList: noticeList,
-      unseenCount: unseenCount, 
+      unseenCount: unseenCount,
     });
-    
+
   }
 
   render() {

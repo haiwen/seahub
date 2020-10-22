@@ -51,4 +51,4 @@ class DeleteAccount extends React.Component {
   }
 }
 
-export default DeleteAccount; 
+export default DeleteAccount;

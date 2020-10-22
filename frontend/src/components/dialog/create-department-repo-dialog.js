@@ -27,7 +27,7 @@ class CreateDepartmentRepoDialog extends React.Component {
     }
 
     this.setState({
-      repoName: e.target.value, 
+      repoName: e.target.value,
     });
   }
 
@@ -37,7 +37,7 @@ class CreateDepartmentRepoDialog extends React.Component {
       let repo = this.createRepo(this.state.repoName);
       this.props.onCreateRepo(repo, 'department');
     }
-  } 
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -84,11 +84,11 @@ class CreateDepartmentRepoDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="repo-name">{gettext('Name')}</Label>
-              <Input 
-                id="repo-name" 
-                onKeyPress={this.handleKeyPress} 
-                innerRef={input => {this.newInput = input;}} 
-                value={this.state.repoName} 
+              <Input
+                id="repo-name"
+                onKeyPress={this.handleKeyPress}
+                innerRef={input => {this.newInput = input;}}
+                value={this.state.repoName}
                 onChange={this.handleChange}
                 maxLength={maxFileName}
               />

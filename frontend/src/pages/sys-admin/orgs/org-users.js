@@ -72,7 +72,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -94,8 +94,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: true,
         highlight: true
-      }); 
-    }   
+      });
+    }
   }
 
   handleMouseLeave = () => {
@@ -103,8 +103,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: false,
         highlight: false
-      }); 
-    }   
+      });
+    }
   }
 
   onUnfreezedItem = () => {
@@ -157,11 +157,11 @@ class Item extends Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -169,7 +169,7 @@ class Item extends Component {
       case 'Reset Password':
         translateResult = gettext('Reset Password');
         break;
-    }   
+    }
 
     return translateResult;
   }
@@ -320,9 +320,9 @@ class OrgUsers extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <OrgNav 
-              currentItem="users" 
-              orgID={this.props.orgID} 
+            <OrgNav
+              currentItem="users"
+              orgID={this.props.orgID}
               orgName={orgName}
             />
             <div className="cur-view-content">

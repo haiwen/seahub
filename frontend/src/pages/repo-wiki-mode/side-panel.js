@@ -99,7 +99,7 @@ class SidePanel extends Component {
       this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     }
   }
-  
+
   onAddFolderToggle = (type) => {
     if (type === 'root') {
       let root = this.props.treeData.root;
@@ -144,7 +144,7 @@ class SidePanel extends Component {
 
   checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
-    // root node to new node conditions: parentNode is null, 
+    // root node to new node conditions: parentNode is null,
     let parentNode = node.parentNode ? node.parentNode : node;
     let childrenObject = parentNode.children.map(item => {
       return item.object;
@@ -167,11 +167,11 @@ class SidePanel extends Component {
             <div className="heading-icon">
               {(permission && this.state.isMenuIconShow) && (
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
-                  <DropdownToggle 
-                    tag="i" 
-                    className="fas fa-ellipsis-v" 
+                  <DropdownToggle
+                    tag="i"
+                    className="fas fa-ellipsis-v"
                     title={gettext('More Operations')}
-                    data-toggle="dropdown" 
+                    data-toggle="dropdown"
                     aria-expanded={this.state.isHeaderMenuShow}
                     onClick={this.onDropdownToggleClick}
                   />
@@ -184,7 +184,7 @@ class SidePanel extends Component {
             </div>
           </h3>
           <div className="wiki-pages-container">
-            {this.props.isTreeDataLoading ? 
+            {this.props.isTreeDataLoading ?
               (<Loading/>) :
               (<TreeView
                 isNodeMenuShow={this.isNodeMenuShow}

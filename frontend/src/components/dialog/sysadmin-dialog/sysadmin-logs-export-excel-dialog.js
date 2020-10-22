@@ -71,7 +71,7 @@ class LogsExportExcelDialog extends React.Component {
 
   handleEndChange = (e) => {
     const endDateStr = e.target.value.trim();
-    this.setState({ 
+    this.setState({
       endDateStr: endDateStr,
       errMsg: '',
     });

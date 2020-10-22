@@ -35,7 +35,7 @@ class SidePanel extends React.Component {
       this.initResultState(res.data);
     });
   }
-  
+
   refershFileList() {
     editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
@@ -106,7 +106,7 @@ class SidePanel extends React.Component {
           <div className="history-body">
             {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
-              <HistoryListView 
+              <HistoryListView
                 hasMore={this.state.hasMore}
                 isReloadingData={this.state.isReloadingData}
                 historyList={this.state.historyInfo}

@@ -16,7 +16,7 @@ import './css/search.css';
 
 import './css/repo-folder-trash.css';
 
-const { 
+const {
   repoID,
   repoFolderName,
   path,
@@ -92,7 +92,7 @@ class RepoFolderTrash extends React.Component {
   toggleCleanTrashDialog = () => {
     this.setState({
       isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen
-    }); 
+    });
   }
 
   refreshTrash = () => {
@@ -128,19 +128,19 @@ class RepoFolderTrash extends React.Component {
           this.setState({
             isLoading: false,
             errorMsg: gettext('Permission denied')
-          }); 
+          });
         } else {
           this.setState({
             isLoading: false,
             errorMsg: gettext('Error')
-          }); 
+          });
         }
       } else {
         this.setState({
           isLoading: false,
           errorMsg: gettext('Please check the network.')
-        }); 
-      }   
+        });
+      }
     });
   }
 
@@ -168,11 +168,11 @@ class RepoFolderTrash extends React.Component {
                 <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))}>{pathList[index]}</a>
                 <span> / </span>
               </React.Fragment>
-            );  
-          }   
-        }   
-        )}  
-        {pathList[pathList.length - 1]} 
+            );
+          }
+        }
+        )}
+        {pathList[pathList.length - 1]}
       </React.Fragment>
     );
   }
@@ -202,7 +202,7 @@ class RepoFolderTrash extends React.Component {
                   <button className="btn btn-secondary clean" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                   }
                 </div>
-                <Content 
+                <Content
                   data={this.state}
                   getMore={this.getMore}
                   renderFolder={this.renderFolder}
@@ -236,7 +236,7 @@ class Content extends React.Component {
       {width: '15%', text: gettext('Size')},
       {width: '15%', text: ''}
     ];
-  } 
+  }
 
   render() {
     const { isLoading, errorMsg, items, more, showFolder, commitID, baseDir, folderPath, folderItems } = this.props.data;
@@ -254,9 +254,9 @@ class Content extends React.Component {
           <tbody>
             {showFolder ?
               folderItems.map((item, index) => {
-                return <FolderItem 
+                return <FolderItem
                   key={index}
-                  item={item} 
+                  item={item}
                   commitID={commitID}
                   baseDir={baseDir}
                   folderPath={folderPath}
@@ -264,9 +264,9 @@ class Content extends React.Component {
                 />;
               }) :
               items.map((item, index) => {
-                return <Item 
+                return <Item
                   key={index}
-                  item={item} 
+                  item={item}
                   renderFolder={this.props.renderFolder}
                 />;
               })}
@@ -315,14 +315,14 @@ class Item extends React.Component {
       });
       toaster.success(gettext('Successfully restored 1 item.'));
     }).catch((error) => {
-      let errorMsg = ''; 
+      let errorMsg = '';
       if (error.response) {
         errorMsg = error.response.data.error_msg || gettext('Error');
       } else {
         errorMsg = gettext('Please check the network.');
-      }   
+      }
       toaster.danger(errorMsg);
-    }); 
+    });
   }
 
   renderFolder = (e) => {

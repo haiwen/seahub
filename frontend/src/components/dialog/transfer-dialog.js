@@ -34,7 +34,7 @@ class TransferDialog extends React.Component {
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  } 
+  }
 
   componentDidMount() {
     if (isPro) {

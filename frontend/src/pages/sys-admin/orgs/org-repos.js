@@ -52,7 +52,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -142,7 +142,7 @@ class OrgRepos extends Component {
     seafileAPI.sysAdminGetOrg(this.props.orgID).then((res) => {
       this.setState({
         orgName: res.data.org_name
-      }); 
+      });
     });
     seafileAPI.sysAdminListOrgRepos(this.props.orgID).then((res) => {
       this.setState({

@@ -40,7 +40,7 @@ class RelatedFileDialogs extends React.Component {
     return (
       <ModalPortal>
         <Modal isOpen={true} toggle={this.props.toggleCancel} size='lg' style={{width:'650px'}}>
-          {this.state.showListRelatedFileDialog && 
+          {this.state.showListRelatedFileDialog &&
             <ListRelatedFileDialog
               filePath={this.props.filePath}
               relatedFiles={this.props.relatedFiles}
@@ -50,7 +50,7 @@ class RelatedFileDialogs extends React.Component {
               onRelatedFileChange={this.props.onRelatedFileChange}
             />
           }
-          {!this.state.showListRelatedFileDialog && 
+          {!this.state.showListRelatedFileDialog &&
             <AddRelatedFileDialog
               filePath={this.props.filePath}
               repoID={this.props.repoID}

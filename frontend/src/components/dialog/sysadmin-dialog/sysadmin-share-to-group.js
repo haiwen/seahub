@@ -17,7 +17,7 @@ class GroupItem extends React.Component {
       isOperationShow: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -43,7 +43,7 @@ class GroupItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className='name'>{item.group_name}</td>
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -54,7 +54,7 @@ class GroupItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteShareItem} 
+            onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
           </span>
@@ -72,9 +72,9 @@ class GroupList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <GroupItem 
-              key={index} 
-              item={item} 
+            <GroupItem
+              key={index}
+              item={item}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
@@ -143,7 +143,7 @@ class SysAdminShareToGroup extends React.Component {
   }
 
   listSharedGroups = () => {
-    let repoID = this.props.repoID; 
+    let repoID = this.props.repoID;
     seafileAPI.sysAdminListRepoSharedItems(repoID, 'group').then((res) => {
       if(res.data.length !== 0) {
         this.setState({
@@ -162,7 +162,7 @@ class SysAdminShareToGroup extends React.Component {
 
   shareToGroup = () => {
     let groups = [];
-    let repoID = this.props.repoID; 
+    let repoID = this.props.repoID;
     if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         groups[i] = this.state.selectedOption[i].id;
@@ -189,10 +189,10 @@ class SysAdminShareToGroup extends React.Component {
   }
 
   deleteShareItem = (groupID) => {
-    let repoID = this.props.repoID; 
+    let repoID = this.props.repoID;
     seafileAPI.sysAdminDeleteRepoSharedItem(repoID, 'group', groupID).then(() => {
       this.setState({
-        sharedItems: this.state.sharedItems.filter(item => { return item.group_id !== groupID; }) 
+        sharedItems: this.state.sharedItems.filter(item => { return item.group_id !== groupID; })
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -210,7 +210,7 @@ class SysAdminShareToGroup extends React.Component {
       toaster.danger(errMessage);
     });
   }
-  
+
   updateSharedItems = (item, permission) => {
     let groupID = item.group_id;
     let sharedItems = this.state.sharedItems.map(sharedItem => {
@@ -251,7 +251,7 @@ class SysAdminShareToGroup extends React.Component {
                 />
               </td>
               <td>
-                <SharePermissionEditor 
+                <SharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -263,7 +263,7 @@ class SysAdminShareToGroup extends React.Component {
                 <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
               </td>
             </tr>
-            {this.state.errorMsg.length > 0 &&                  
+            {this.state.errorMsg.length > 0 &&
               this.state.errorMsg.map((item, index) => {
                 let errMessage = item.group_name + ': ' + item.error_msg;
                 return (
@@ -271,7 +271,7 @@ class SysAdminShareToGroup extends React.Component {
                     <td colSpan={3}><p className="error">{errMessage}</p></td>
                   </tr>
                 );
-              })                                                
+              })
             }
           </tbody>
         </table>
@@ -284,10 +284,10 @@ class SysAdminShareToGroup extends React.Component {
                 <th width="15%"></th>
               </tr>
             </thead>
-            <GroupList 
+            <GroupList
               items={this.state.sharedItems}
               permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem} 
+              deleteShareItem={this.deleteShareItem}
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>

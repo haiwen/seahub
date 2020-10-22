@@ -19,7 +19,7 @@ class ShareLinkPermissionEditor extends React.Component {
 
   render() {
     return (
-      <SelectEditor 
+      <SelectEditor
         isTextMode={this.props.isTextMode}
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.permissionOptions}
