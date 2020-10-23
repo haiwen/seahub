@@ -20,10 +20,11 @@ window.app.pageOptions = {
   enableUserSetContactEmail: {% if ENABLE_USER_SET_CONTACT_EMAIL %} true {% else %} false {% endif %},
 
   canUpdatePassword: {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %} true {% else %} false {% endif %},
-  canGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
   {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
   passwordOperationText: {% if user_unusable_password %}"{% trans "Set Password" %}"{% else %}"{% trans "Update" %}"{% endif %},
   {% endif %}
+
+  enableGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
   {% if ENABLE_WEBDAV_SECRET %}

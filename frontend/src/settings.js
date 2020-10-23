@@ -9,6 +9,7 @@ import CommonToolbar from './components/toolbar/common-toolbar';
 import SideNav from './components/user-settings/side-nav';
 import UserAvatarForm from './components/user-settings/user-avatar-form';
 import UserBasicInfoForm from './components/user-settings/user-basic-info-form';
+import WebAPIAuthToken from './components/user-settings/web-api-auth-token';
 import WebdavPassword from './components/user-settings/webdav-password';
 import LanguageSetting from './components/user-settings/language-setting';
 import ListInAddressBook from './components/user-settings/list-in-address-book';
@@ -24,9 +25,10 @@ import './css/search.css';
 import './css/user-settings.css';
 
 const {
-  canUpdatePassword, canGetAuthToken, passwordOperationText,
-  enableAddressBook,
+  canUpdatePassword, passwordOperationText,
+  enableGetAuthToken,
   enableWebdavSecret,
+  enableAddressBook,
   twoFactorAuthEnabled,
   enableWechatWork,
   enableDingtalk,
@@ -40,7 +42,7 @@ class Settings extends React.Component {
     this.sideNavItems = [
       {show: true, href: '#user-basic-info', text: gettext('Profile')},
       {show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password')},
-      {show: canGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token')},
+      {show: enableGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token')},
       {show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password')},
       {show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book')},
       {show: true, href: '#lang-setting', text: gettext('Language')},
@@ -52,8 +54,7 @@ class Settings extends React.Component {
     ];
 
     this.state = {
-      curItemID: this.sideNavItems[0].href.substr(1),
-      authToken: "******"
+      curItemID: this.sideNavItems[0].href.substr(1)
     };
   }
 
@@ -103,17 +104,6 @@ class Settings extends React.Component {
     }
   }
 
-  getAuthToken = () => {
-    seafileAPI.getAuthTokenBySession().then((res) => {
-      this.setState({
-        authToken: res.data.token
-      });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -143,19 +133,10 @@ class Settings extends React.Component {
                 </div>
                 }
 
-                {canGetAuthToken &&
-                <div id="get-auth-token" className="setting-item">
-                  <h3 className="setting-item-heading">{gettext('Web API Auth Token')}</h3>
-                    <div className="d-flex align-items-center">
-                      <input id="user-auth-token" className="form-control mr-2" style={{width: "400px", display: "inline-block"}} type="text" value={this.state.authToken} disabled={true} />
-                      <div className="btn btn-outline-primary" onClick={this.getAuthToken}>{gettext('Get')}</div>
-                    </div>
-                </div>
-                }
-
+                {enableGetAuthToken && <WebAPIAuthToken />}
                 {enableWebdavSecret && <WebdavPassword />}
                 {enableAddressBook && this.state.userInfo &&
-                <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
+                  <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 <LanguageSetting />
                 {isPro && <EmailNotice />}
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
