@@ -24,7 +24,7 @@ import './css/search.css';
 import './css/user-settings.css';
 
 const {
-  canUpdatePassword, passwordOperationText,
+  canUpdatePassword, canGetAuthToken, passwordOperationText,
   enableAddressBook,
   enableWebdavSecret,
   twoFactorAuthEnabled,
@@ -40,6 +40,7 @@ class Settings extends React.Component {
     this.sideNavItems = [
       {show: true, href: '#user-basic-info', text: gettext('Profile')},
       {show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password')},
+      {show: canGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token')},
       {show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password')},
       {show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book')},
       {show: true, href: '#lang-setting', text: gettext('Language')},
@@ -51,7 +52,8 @@ class Settings extends React.Component {
     ];
 
     this.state = {
-      curItemID: this.sideNavItems[0].href.substr(1)
+      curItemID: this.sideNavItems[0].href.substr(1),
+      authToken: "******"
     };
   }
 
@@ -101,6 +103,17 @@ class Settings extends React.Component {
     }
   }
 
+  getAuthToken = () => {
+    seafileAPI.getAuthTokenBySession().then((res) => {
+      this.setState({
+        authToken: res.data.token
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -129,6 +142,17 @@ class Settings extends React.Component {
                   <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
                 </div>
                 }
+
+                {canGetAuthToken &&
+                <div id="get-auth-token" className="setting-item">
+                  <h3 className="setting-item-heading">{gettext('Web API Auth Token')}</h3>
+                    <div className="d-flex align-items-center">
+                      <input id="user-auth-token" className="form-control mr-2" style={{width: "400px", display: "inline-block"}} type="text" value={this.state.authToken} disabled={true} />
+                      <div className="btn btn-outline-primary" onClick={this.getAuthToken}>{gettext('Get')}</div>
+                    </div>
+                </div>
+                }
+
                 {enableWebdavSecret && <WebdavPassword />}
                 {enableAddressBook && this.state.userInfo &&
                 <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
