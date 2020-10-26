@@ -295,46 +295,46 @@ class DepartmentDetail extends React.Component {
               </div>
               <div className="cur-view-content">
                 {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
-                   members.length == 0 ?
-                   <p className="no-member">{gettext('No members')}</p> :
-                   <Fragment>
-                   <table>
-                     <thead>
-                       <tr>
-                         <th width="5%"></th>
-                         <th width="50%">{gettext('Name')}</th>
-                         <th width="15%">{gettext('Role')}</th>
-                         <th width="30%"></th>
-                       </tr>
-                     </thead>
-                     <tbody>
-                       {members.map((member, index) => {
-                         return (
-                           <Fragment key={index}>
-                             <MemberItem
-                               member={member}
-                               showDeleteMemberDialog={this.showDeleteMemberDialog}
-                               isItemFreezed={this.state.isItemFreezed}
-                               onMemberChanged={this.onMemberChanged}
-                               toggleItemFreezed={this.toggleItemFreezed}
-                               groupID={groupID}
-                             />
-                           </Fragment>
-                         );
-                       })}
-                     </tbody>
-                   </table>
-                   {this.state.membersPageInfo &&
-                   <Paginator
-                     gotoPreviousPage={this.getPreviousPageList}
-                     gotoNextPage={this.getNextPageList}
-                     currentPage={this.state.membersPageInfo.current_page}
-                     hasNextPage={this.state.membersPageInfo.has_next_page}
-                     curPerPage={this.state.membersPerPage}
-                     resetPerPage={this.resetPerPage}
-                   />
-                   }
-                   </Fragment>
+                  members.length == 0 ?
+                  <p className="no-member">{gettext('No members')}</p> :
+                  <Fragment>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th width="5%"></th>
+                        <th width="50%">{gettext('Name')}</th>
+                        <th width="15%">{gettext('Role')}</th>
+                        <th width="30%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {members.map((member, index) => {
+                        return (
+                          <Fragment key={index}>
+                            <MemberItem
+                              member={member}
+                              showDeleteMemberDialog={this.showDeleteMemberDialog}
+                              isItemFreezed={this.state.isItemFreezed}
+                              onMemberChanged={this.onMemberChanged}
+                              toggleItemFreezed={this.toggleItemFreezed}
+                              groupID={groupID}
+                            />
+                          </Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {this.state.membersPageInfo &&
+                  <Paginator
+                    gotoPreviousPage={this.getPreviousPageList}
+                    gotoNextPage={this.getNextPageList}
+                    currentPage={this.state.membersPageInfo.current_page}
+                    hasNextPage={this.state.membersPageInfo.has_next_page}
+                    curPerPage={this.state.membersPerPage}
+                    resetPerPage={this.resetPerPage}
+                  />
+                  }
+                  </Fragment>
                 }
               </div>
             </div>
