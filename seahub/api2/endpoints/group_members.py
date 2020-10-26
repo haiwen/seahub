@@ -46,12 +46,22 @@ class GroupMembers(APIView):
             avatar_size = AVATAR_DEFAULT_SIZE
 
         try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            page = 1
+            per_page = 100
+
+        start = (page - 1) * per_page
+        limit = per_page
+
+        try:
             # only group member can get info of all group members
             if not is_group_member(group_id, request.user.username):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            members = ccnet_api.get_group_members(group_id)
+            members = ccnet_api.get_group_members(group_id, start, limit)
 
         except SearpcError as e:
             logger.error(e)

@@ -184,20 +184,7 @@ class AdminAddressBookGroup(APIView):
         for group in groups:
             ret_groups.append(address_book_group_to_dict(group))
 
-        try:
-            members = ccnet_api.get_group_members(group_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        for m in members:
-            member_info = self._get_address_book_group_memeber_info(request,
-                    m, avatar_size)
-            ret_members.append(member_info)
-
         ret_dict['groups'] = ret_groups
-        ret_dict['members'] = ret_members
 
         if return_ancestors:
             # get ancestor groups and remove last group which is self
