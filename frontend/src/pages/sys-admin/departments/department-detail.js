@@ -36,9 +36,8 @@ class DepartmentDetail extends React.Component {
       isItemFreezed: false,
       ancestorGroups: [],
       members: [],
+      membersErrorMsg: '',
       membersPageInfo: {
-        current_page: 1,
-        has_next_page: true
       },
       membersPage: 1,
       membersPerPage: 25,
@@ -103,7 +102,7 @@ class DepartmentDetail extends React.Component {
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.setState({membersErrorMsg: errMessage});
     });
   }
 
@@ -193,7 +192,7 @@ class DepartmentDetail extends React.Component {
   }
 
   render() {
-    const { members, repos, groups } = this.state;
+    const { members, membersErrorMsg, repos, groups } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
@@ -295,7 +294,8 @@ class DepartmentDetail extends React.Component {
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
               </div>
               <div className="cur-view-content">
-                {(members && members.length === 1 && members[0].role === 'Owner') ?
+                {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
+members.length == 0 ?
                   <p className="no-member">{gettext('No members')}</p> :
                   <Fragment>
                   <table>
