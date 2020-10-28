@@ -30,7 +30,7 @@ class InvitationManager(models.Manager):
                 self).filter(inviter=inviter).order_by('-invite_time')
 
     def delete_all_expire_invitation(self):
-        super(InvitationManager, self).filter(expire_time__lte=timezone.now()).delete()
+        super(InvitationManager, self).filter(expire_time__lte=timezone.now(), accept_time__isnull=True).delete()
 
     def get_by_token(self, token):
         qs = self.filter(token=token)
