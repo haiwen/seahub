@@ -133,15 +133,15 @@ class FileHistoryView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = []
+        present_time = datetime.utcnow()
         for commit in file_revisions:
-            present_time = datetime.utcnow()
             history_time = datetime.utcfromtimestamp(commit.ctime)
-            if (keep_days == -1) or ((present_time - history_time).days < keep_days):
-                info = get_file_history_info(commit, avatar_size)
-                info['path'] = path
-                result.append(info)
-
-        next_start_commit = next_start_commit if result else False
+            if (keep_days != -1) and ((present_time - history_time).days > keep_days):
+                next_start_commit = False
+                break
+            info = get_file_history_info(commit, avatar_size)
+            info['path'] = path
+            result.append(info)
 
         return Response({
             "data": result,
