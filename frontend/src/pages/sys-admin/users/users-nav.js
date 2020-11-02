@@ -12,7 +12,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'database', urlPart: 'users', text: gettext('Database')} 
+      {name: 'database', urlPart: 'users', text: gettext('Database')}
     ];
     if (haveLDAP) {
       this.navItems.push(

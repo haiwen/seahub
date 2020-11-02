@@ -58,7 +58,7 @@ class Wiki extends Component {
     this.loadWikiData(initialPath);
   }
 
-  loadWikiData = (initialPath) => {  
+  loadWikiData = (initialPath) => {
     this.loadSidePanel(initialPath);
 
     if (isDir === 'None') {
@@ -69,7 +69,7 @@ class Wiki extends Component {
         let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
         window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
       }
-    } else if (isDir === 'True') {  
+    } else if (isDir === 'True') {
       this.showDir(initialPath);
     } else if (isDir === 'False') {
       this.showFile(initialPath);
@@ -88,7 +88,7 @@ class Wiki extends Component {
         this.loadNodeAndParentsByPath(initialPath);
       }
     }
-    
+
   }
 
   loadIndexNode = () => {
@@ -121,7 +121,7 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
       isViewFile: true,
-      path: filePath, 
+      path: filePath,
     });
 
     seafileAPI.getWikiFileContent(slug, filePath).then(res => {
@@ -255,9 +255,9 @@ class Wiki extends Component {
       }
     }
   }
-  
+
   onSearchedClick = (item) => {
-    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
+    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
     if (this.state.currentPath === path) {
       return;
     }
@@ -270,7 +270,7 @@ class Wiki extends Component {
       if (!node) {
         index = i;
         break;
-      } 
+      }
     }
     if (index === -1) { // all the data has been loaded already.
       let tree = this.state.treeData.clone();

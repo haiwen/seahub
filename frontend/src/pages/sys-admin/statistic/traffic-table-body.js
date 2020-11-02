@@ -13,7 +13,7 @@ class TrafficTableBody extends React.Component {
   trafficName = () => {
     let { userTrafficItem, type } = this.props;
     switch(type) {
-      case 'user': 
+      case 'user':
         if (userTrafficItem.name) {
           return (
             <a href={siteRoot + 'useradmin/info/' + userTrafficItem.email + '/'}>{userTrafficItem.name}</a>
@@ -22,12 +22,12 @@ class TrafficTableBody extends React.Component {
         return(<span>{'--'}</span>);
       case 'org':
         return(<span>{userTrafficItem.org_name}</span>);
-    } 
+    }
   }
 
   render() {
     let { userTrafficItem } = this.props;
-    
+
     let syncUploadSize = Utils.bytesToSize(userTrafficItem.sync_file_upload);
     let syncDownloadSize = Utils.bytesToSize(userTrafficItem.sync_file_download);
     let webUploadSize = Utils.bytesToSize(userTrafficItem.web_file_upload);

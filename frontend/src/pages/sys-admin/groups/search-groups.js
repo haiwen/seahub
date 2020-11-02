@@ -12,8 +12,8 @@ class SearchGroups extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '', 
-      isSubmitBtnActive: false, 
+      name: '',
+      isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
       groupList: [],

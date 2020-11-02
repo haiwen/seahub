@@ -53,7 +53,7 @@ class GroupView extends React.Component {
       isSortOptionsDialogOpen: false,
       repoList: [],
       currentPage: 1,
-      perPage: 50, 
+      perPage: 50,
       hasNextPage: false,
       libraryType: 'group',
       isCreateRepoDialogShow: false,
@@ -104,7 +104,7 @@ class GroupView extends React.Component {
       this.setState({
         isLoading: false,
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -135,7 +135,7 @@ class GroupView extends React.Component {
         isLoading: false,
         isLoadingMore: false,
         errMessage: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -255,7 +255,7 @@ class GroupView extends React.Component {
   onTabNavClick = (tabName) => {
     this.props.onTabNavClick(tabName);
   }
-  
+
   toggleGroupDropdown = () => {
     this.setState({
       showGroupDropdown: !this.state.showGroupDropdown
@@ -351,7 +351,7 @@ class GroupView extends React.Component {
   translateRole = (role) => {
     if (role === 'Admin') {
       return gettext('Admin');
-    }  
+    }
     else if (role === 'Member') {
       return gettext('Member');
     }
@@ -377,20 +377,20 @@ class GroupView extends React.Component {
       if (isBottom) { // scroll to the bottom
         this.setState({isLoadingMore: true}, () => {
           this.loadRepos(currentPage + 1);
-        }); 
-      }   
-    }   
+        });
+      }
+    }
   }
 
   render() {
     let { errMessage, emptyTip, currentGroup, isDepartmentGroup, isStaff } = this.state;
     let isShowSettingIcon = false;
-    if (currentGroup) { // group message is loaded  
+    if (currentGroup) { // group message is loaded
       if (currentGroup.parent_group_id === 0) {
-        isShowSettingIcon = true; 
+        isShowSettingIcon = true;
       } else {
         if (currentGroup.admins.indexOf(username) > -1) {
-          isShowSettingIcon = true; 
+          isShowSettingIcon = true;
         }
       }
     }
@@ -406,9 +406,9 @@ class GroupView extends React.Component {
             <div className="operation">
               {((!isDepartmentGroup && canAddRepo) || (isDepartmentGroup && isStaff)) && (
                 Utils.isDesktop() ? (
-                <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
-                </button>
+                  <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
+                    <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
+                  </button>
                 ) : (
                   <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('New Library')} onClick={this.onCreateRepoToggle}></span>
                 )
@@ -532,10 +532,10 @@ class GroupView extends React.Component {
               {(!this.state.isLoading && errMessage) && <div className="error text-center mt-2">{errMessage}</div>}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <SharedRepoListView 
-                  repoList={this.state.repoList} 
-                  hasNextPage={this.state.hasNextPage} 
-                  currentGroup={this.state.currentGroup} 
+                <SharedRepoListView
+                  repoList={this.state.repoList}
+                  hasNextPage={this.state.hasNextPage}
+                  currentGroup={this.state.currentGroup}
                   sortBy={this.state.sortBy}
                   sortOrder={this.state.sortOrder}
                   sortItems={this.sortItems}
@@ -555,7 +555,7 @@ class GroupView extends React.Component {
         </div>
         {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
           <ModalPortal>
-            <CreateRepoDialog 
+            <CreateRepoDialog
               libraryType={this.state.libraryType}
               onCreateToggle={this.onCreateRepoToggle}
               onCreateRepo={this.onCreateRepo}
@@ -563,7 +563,7 @@ class GroupView extends React.Component {
           </ModalPortal>
         )}
         {this.state.isCreateRepoDialogShow && this.state.isDepartmentGroup &&
-          <CreateRepoDialog 
+          <CreateRepoDialog
             isAdmin={this.state.isAdmin}
             onCreateToggle={this.onCreateRepoToggle}
             onCreateRepo={this.onCreateRepo}

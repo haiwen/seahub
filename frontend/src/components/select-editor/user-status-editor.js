@@ -17,7 +17,7 @@ class UserStatusEditor extends React.Component {
     if (userStatus === 'active') {
       return gettext('Active');
     }
-    
+
     if (userStatus === 'inactive') {
       return gettext('Inactive');
     }
@@ -25,7 +25,7 @@ class UserStatusEditor extends React.Component {
 
   render() {
     return (
-      <SelectEditor 
+      <SelectEditor
         isTextMode={this.props.isTextMode}
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.statusArray}

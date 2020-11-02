@@ -60,7 +60,7 @@ class Content extends Component {
           </thead>
           <tbody>
             {items.map((item, index) => {
-              return (<Item 
+              return (<Item
                 key={index}
                 isDesktop={isDesktop}
                 item={item}
@@ -70,7 +70,7 @@ class Content extends Component {
         </table>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -157,7 +157,7 @@ class Item extends Component {
       options.user = item.user_email;
     } else if (share_type == 'group') {
       options.group_id = item.group_id;
-    } 
+    }
 
     seafileAPI.unshareRepo(item.repo_id, options).then((res) => {
       this.setState({
@@ -183,7 +183,7 @@ class Item extends Component {
       is_admin: is_admin
     });
 
-    let iconUrl = Utils.getLibIconUrl(item); 
+    let iconUrl = Utils.getLibIconUrl(item);
     let iconTitle = Utils.getLibIconTitle(item);
     let repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`;
 
@@ -210,7 +210,7 @@ class Item extends Component {
           {item.share_type == 'personal' ? <span title={item.contact_email}>{shareTo}</span> : shareTo}
         </td>
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOpIconShown}
             currentPermission={share_permission}
@@ -267,7 +267,7 @@ class Item extends Component {
 }
 
 class ShareAdminLibraries extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -313,7 +313,7 @@ class ShareAdminLibraries extends Component {
             <h3 className="sf-heading">{gettext('Libraries')}</h3>
           </div>
           <div className="cur-view-content">
-            <Content 
+            <Content
               errorMsg={this.state.errorMsg}
               loading={this.state.loading}
               items={this.state.items}

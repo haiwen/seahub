@@ -26,7 +26,7 @@ class SearchViewPanel extends React.Component {
       isShowSearchFilter: false,
       // advanced search index
       q: q.trim(),
-      search_repo: search_repo, 
+      search_repo: search_repo,
       search_ftypes: search_ftypes,
       fileTypeItemsStatus: [false, false, false, false, false, false, false],
       input_fexts: '',

@@ -27,12 +27,12 @@ class CopyMoveDirentProgressDialog extends React.Component {
         <ModalHeader toggle={this.props.toggleDialog}>{title}</ModalHeader>
         <ModalBody style={{minHeight: '80px'}}>
           <div className="progress" style={{height: '40px'}}>
-            <div 
-              className="progress-bar pl-2" 
-              role="progressbar" 
+            <div
+              className="progress-bar pl-2"
+              role="progressbar"
               style={progressStyle}
-              aria-valuenow={asyncOperationProgress} 
-              aria-valuemin="0" 
+              aria-valuenow={asyncOperationProgress}
+              aria-valuemin="0"
               aria-valuemax="100"
             >
               {asyncOperationProgress + '%'}

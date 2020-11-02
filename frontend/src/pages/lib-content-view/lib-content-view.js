@@ -135,7 +135,7 @@ class LibContentView extends React.Component {
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
-        libNeedDecrypt: repoInfo.lib_need_decrypt, 
+        libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
         repoPermission: repoInfo.permission === 'rw',
         isGroupOwnedRepo: isGroupOwnedRepo,
@@ -159,7 +159,7 @@ class LibContentView extends React.Component {
             isDirentListLoading: false,
             errorMsg: gettext('Permission denied')
           });
-          
+
           let errorMsg = gettext('Permission denied');
           toaster.danger(errorMsg);
         } else {
@@ -333,7 +333,7 @@ class LibContentView extends React.Component {
         toaster.danger(errMessage);
       });
     }
-    
+
     if (Utils.isMarkdownFile(path)) {
       seafileAPI.getFileInfo(this.props.repoID, path).then(() => {
         if (this.state.currentMode !== 'column') {
@@ -417,7 +417,7 @@ class LibContentView extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      
+
       seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
         let relatedFiles = res.data.related_files.map((relatedFile) => {
           return relatedFile;
@@ -470,7 +470,7 @@ class LibContentView extends React.Component {
     let repoInfo = this.state.currentRepoInfo;
     let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(filePath);
     window.history.pushState({url: url, path: filePath}, filePath, url);
-  } 
+  }
 
   loadDirentList = (path) => {
     let repoID = this.props.repoID;
@@ -545,7 +545,7 @@ class LibContentView extends React.Component {
           getThumbnail(++i);
         } else {
           _this.setState({
-            direntList: direntList 
+            direntList: direntList
           });
         }
       });
@@ -593,7 +593,7 @@ class LibContentView extends React.Component {
         });
         return;
       }
-      
+
       if (data.successful) {
         if (asyncOperationType === 'move') {
           if (this.currentMoveItemName && this.currentMoveItemPath) {
@@ -630,7 +630,7 @@ class LibContentView extends React.Component {
       this.setState({
         asyncOperationProgress: 0,
         isCopyMoveProgressDialogShow: false,
-      }); 
+      });
     }
   }
 
@@ -653,7 +653,7 @@ class LibContentView extends React.Component {
     this.setState({
       asyncOperationProgress: 0,
       isCopyMoveProgressDialogShow: false,
-    })
+    });
   }
 
   // toolbar operations
@@ -668,7 +668,7 @@ class LibContentView extends React.Component {
         isCopyMoveProgressDialogShow: true
       }));
     }
-    
+
     let dirNames = this.getSelectedDirentNames();
     let direntPaths = this.getSelectedDirentPaths();
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
@@ -685,7 +685,7 @@ class LibContentView extends React.Component {
         if (this.state.currentMode === 'column') {
           this.deleteTreeNodes(direntPaths);
         }
-        
+
         this.moveDirents(dirNames);
 
         // 2. tow columns mode need update left tree
@@ -714,7 +714,7 @@ class LibContentView extends React.Component {
   onCopyItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
-    
+
     if (repoID !== destRepo.repo_id) {
       this.setState({
         asyncOperatedFilesLength: selectedDirentList.length,
@@ -723,7 +723,7 @@ class LibContentView extends React.Component {
         isCopyMoveProgressDialogShow: true
       });
     }
-    
+
     let dirNames = this.getSelectedDirentNames();
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
@@ -857,7 +857,7 @@ class LibContentView extends React.Component {
   }
 
   onSearchedClick = (item) => {
-    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
+    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
     if (this.state.currentPath === path) {
       return;
     }
@@ -870,7 +870,7 @@ class LibContentView extends React.Component {
         if (!node) {
           index = i;
           break;
-        } 
+        }
       }
       if (index === -1) { // all the data has been loaded already.
         let node = this.state.treeData.getNodeByPath(path);
@@ -1064,7 +1064,7 @@ class LibContentView extends React.Component {
         this.deleteTreeNode(direntPath);
       }
 
-      // 1. move to current repo 
+      // 1. move to current repo
       // 2. tow columns mode need update left tree
       if (repoID === destRepo.repo_id && this.state.currentMode === 'column') {
         this.updateMoveCopyTreeNode(moveToDirentPath);
@@ -1106,7 +1106,7 @@ class LibContentView extends React.Component {
     }
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
-      
+
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
@@ -1173,7 +1173,7 @@ class LibContentView extends React.Component {
         this.showColumnMarkdownFile(direntPath);
       } else {
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
-        
+
         let isWeChat = Utils.isWeChat();
         if (!isWeChat) {
           let newWindow = window.open('about:blank');
@@ -1263,7 +1263,7 @@ class LibContentView extends React.Component {
   }
 
   onFileUploadSuccess = (direntObject) => {
-    let isExist = this.state.direntList.some(item => { 
+    let isExist = this.state.direntList.some(item => {
       return item.name === direntObject.name && item.type === direntObject.type;
     });
     if (isExist) {
@@ -1677,7 +1677,7 @@ class LibContentView extends React.Component {
         return item.name !== name;
       });
     }
-    this.setState({ 
+    this.setState({
       selectedDirentList: selectedDirentList,
       isDirentSelected: selectedDirentList.length > 0,
       isAllDirentSelected: selectedDirentList.length === newDirentList.length,
@@ -1688,7 +1688,7 @@ class LibContentView extends React.Component {
     this.setState({libNeedDecrypt: false});
     this.loadDirData(this.state.path);
   }
-  
+
   goDraftPage = () => {
     window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
   }
@@ -1771,7 +1771,7 @@ class LibContentView extends React.Component {
     if (this.state.libNeedDecrypt) {
       return (
         <ModalPortal>
-          <LibDecryptDialog 
+          <LibDecryptDialog
             repoID={this.props.repoID}
             onLibDecryptDialog={this.onLibDecryptDialog}
           />
@@ -1843,7 +1843,7 @@ class LibContentView extends React.Component {
             />
           </div>
           <div className="main-panel-center flex-row">
-            <LibContentContainer 
+            <LibContentContainer
               pathPrefix={this.props.pathPrefix}
               currentMode={this.state.currentMode}
               path={this.state.path}

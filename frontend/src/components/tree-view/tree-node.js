@@ -76,7 +76,7 @@ class TreeNode {
 
   rename(newName) {
     this.object.name = newName;
-    this.path = this.generatePath(this.parentNode); 
+    this.path = this.generatePath(this.parentNode);
     if (this.isExpanded) {
       this.updateChildrenPath(this);
     } else {

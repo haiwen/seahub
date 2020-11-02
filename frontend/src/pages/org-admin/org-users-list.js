@@ -73,7 +73,7 @@ class OrgUsersList extends React.Component {
           <tbody>
             {orgUsers.map((item, index) => {
               return (
-                <UserItem 
+                <UserItem
                   key={index}
                   user={item}
                   currentTab="users"

@@ -44,7 +44,7 @@ class UploadProgressDialog extends React.Component {
 
   render() {
 
-    let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate)
+    let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate);
     let uploadedMessage = gettext('File Upload');
     let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + uploadBitrate + ')';
 
@@ -82,7 +82,7 @@ class UploadProgressDialog extends React.Component {
             <tbody>
               <tr>
                 <td className="text-right" colSpan={3}>
-                  {retryFileList.length > 0 ? 
+                  {retryFileList.length > 0 ?
                     <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
                     :
                     <span className="cursor-pointer disabled-link">{gettext('Retry All')}</span>
@@ -104,9 +104,9 @@ class UploadProgressDialog extends React.Component {
               {
                 this.props.uploadFileList.map((resumableFile, index) => {
                   return (
-                    <UploadListItem 
-                      key={index} 
-                      resumableFile={resumableFile} 
+                    <UploadListItem
+                      key={index}
+                      resumableFile={resumableFile}
                       onUploadCancel={this.props.onUploadCancel}
                       onUploadRetry={this.props.onUploadRetry}
                     />

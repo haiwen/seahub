@@ -60,7 +60,7 @@ class DirentItem extends React.Component {
             {isOpIconShown && fromSystemRepo &&
               <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.deleteDirent}></a>
             }
-            {isOpIconShown && dirent.is_file && 
+            {isOpIconShown && dirent.is_file &&
             <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.downloadDirent}></a>
             }
           </td>

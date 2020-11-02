@@ -38,7 +38,7 @@ class CurDirPath extends React.Component {
     const isDesktop = Utils.isDesktop();
     return (
       <Fragment>
-        <DirPath 
+        <DirPath
           repoName={this.props.repoName}
           pathPrefix={this.props.pathPrefix}
           currentPath={this.props.currentPath}
@@ -49,11 +49,11 @@ class CurDirPath extends React.Component {
           fileTags={this.props.fileTags}
         />
         {isDesktop &&
-        <DirTool 
+        <DirTool
           repoID={this.props.repoID}
-          repoName={this.props.repoName} 
+          repoName={this.props.repoName}
           permission={this.props.permission}
-          currentPath={this.props.currentPath} 
+          currentPath={this.props.currentPath}
           updateUsedRepoTags={this.props.updateUsedRepoTags}
           onDeleteRepoTag={this.props.onDeleteRepoTag}
         />}

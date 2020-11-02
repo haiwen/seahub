@@ -25,13 +25,13 @@ class OrgGroupMembers extends Component {
     seafileAPI.orgAdminListGroupMembers(orgID, this.props.groupID).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   render() {
@@ -42,7 +42,7 @@ class OrgGroupMembers extends Component {
           <div className="cur-view-container">
             <OrgAdminGroupNav groupID={this.props.groupID} currentItem='members' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
               />
             </div>
@@ -61,7 +61,7 @@ class Content extends Component {
 
   render() {
     const {
-      loading, errorMsg, members 
+      loading, errorMsg, members
     } = this.props.data;
 
     if (loading) {
@@ -88,7 +88,7 @@ class Content extends Component {
           </tbody>
         </table>
       </Fragment>
-    ); 
+    );
   }
 }
 
@@ -110,7 +110,7 @@ class Item extends Component {
   }
 
   render() {
-    const item = this.props.data; 
+    const item = this.props.data;
     return (
       <Fragment>
         <tr>

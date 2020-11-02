@@ -2,7 +2,7 @@ import { MENU_SHOW, MENU_HIDE } from './actions';
 import { uniqueId, hasOwnProp, canUseDOM } from './helpers';
 
 class GlobalEventListener {
-    
+
   constructor() {
     this.callbacks = {};
 

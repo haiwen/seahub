@@ -74,7 +74,7 @@ class Info extends Component {
 
   render() {
     let { license_mode, license_to, license_expiration, org_count,
-      repos_count, total_files_count, total_storage, total_devices_count, 
+      repos_count, total_files_count, total_storage, total_devices_count,
       current_connected_devices_count, license_maxusers, multi_tenancy_enabled,
       active_users_count, users_count, groups_count, with_license } = this.state.sysInfo;
     let { loading, errorMsg } = this.state;

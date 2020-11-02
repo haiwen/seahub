@@ -22,8 +22,8 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }       
-            
+  }
+
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
   }
@@ -76,7 +76,7 @@ class Content extends Component {
           }
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -113,8 +113,8 @@ class Item extends Component {
           let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?')
             .replace('{placeholder}', orgName) + '<br/>' +
             gettext('{userCount} user(s) and {repoCount} libraries of this organization will also be deleted.')
-            .replace('{userCount}', userCount)
-            .replace('{repoCount}', repoCount);
+              .replace('{userCount}', userCount)
+              .replace('{repoCount}', repoCount);
           this.setState({deleteDialogMsg: deleteDialogMsg});
         }).catch(error => {
           let errorMsg = Utils.getErrorMsg(error);

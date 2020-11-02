@@ -43,7 +43,7 @@ class TreeView extends React.Component {
     }
     let dragStartNodeData = {nodeDirent: node.object, nodeParentPath: node.parentNode.path, nodeRootPath: node.path};
     dragStartNodeData = JSON.stringify(dragStartNodeData);
-    
+
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
   }
@@ -199,22 +199,22 @@ class TreeView extends React.Component {
 
   onContextMenu = (event) => {
     event.preventDefault();
-  
+
     let currentRepoInfo = this.props.currentRepoInfo;
     if (currentRepoInfo.permission !== 'admin' && currentRepoInfo.permission !== 'rw') {
       return '';
     }
     this.handleContextClick(event);
   }
-  
+
   handleContextClick = (event, node) => {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if (!this.props.isNodeMenuShow) {
       return;
     }
-    
+
     let x = event.clientX || (event.touches && event.touches[0].pageX);
     let y = event.clientY || (event.touches && event.touches[0].pageY);
 
@@ -228,7 +228,7 @@ class TreeView extends React.Component {
     hideMenu();
 
     let menuList = this.getMenuList(node);
-    
+
     let showMenuConfig = {
       id: 'tree-node-contextmenu',
       position: { x, y },
@@ -236,7 +236,7 @@ class TreeView extends React.Component {
       currentObject: node,
       menuList: menuList,
     };
-    
+
     showMenu(showMenuConfig);
   }
 
@@ -253,7 +253,7 @@ class TreeView extends React.Component {
       menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
     } else {
       menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
-    } 
+    }
 
     return menuList;
   }
@@ -268,15 +268,15 @@ class TreeView extends React.Component {
 
   render() {
     return (
-      <div 
-        className={`tree-view tree ${this.state.isTreeViewDropTipShow ? 'tree-view-drop' : ''}`} 
-        onDrop={this.onNodeDrop} 
-        onDragEnter={this.onNodeDragEnter} 
+      <div
+        className={`tree-view tree ${this.state.isTreeViewDropTipShow ? 'tree-view-drop' : ''}`}
+        onDrop={this.onNodeDrop}
+        onDragEnter={this.onNodeDragEnter}
         onDragLeave={this.onNodeDragLeave}
         onMouseDown={this.onMouseDown}
         onContextMenu={this.onContextMenu}
       >
-        <TreeNodeView 
+        <TreeNodeView
           repoPermission={this.props.repoPermission}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
@@ -296,7 +296,7 @@ class TreeView extends React.Component {
           onNodeDragLeave={this.onNodeDragLeave}
           handleContextClick={this.handleContextClick}
         />
-        <ContextMenu 
+        <ContextMenu
           id={'tree-node-contextmenu'}
           onMenuItemClick={this.onMenuItemClick}
           onHideMenu={this.onHideMenu}

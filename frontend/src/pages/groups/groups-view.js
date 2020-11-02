@@ -58,7 +58,7 @@ class RepoListViewPanel extends React.Component {
     });
     this.setState({repoList: repoList});
   }
-  
+
   onItemRename = (repo, newName) => {
     let group = this.props.group;
     seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
@@ -83,12 +83,12 @@ class RepoListViewPanel extends React.Component {
         <h4 className="group-item-heading ellipsis">
           <a href={`${siteRoot}group/${group.id}/`} title={group.name}>{group.name}</a>
         </h4>
-        {this.state.repoList.length === 0 ? 
+        {this.state.repoList.length === 0 ?
           emptyTip :
-          <SharedRepoListView 
+          <SharedRepoListView
             isShowTableThread={false}
-            isShowRepoOwner={false} 
-            currentGroup={this.props.group} 
+            isShowRepoOwner={false}
+            currentGroup={this.props.group}
             repoList={this.state.repoList}
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
@@ -104,7 +104,7 @@ class RepoListViewPanel extends React.Component {
 RepoListViewPanel.propTypes = propTypes;
 
 class GroupsView extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -135,7 +135,7 @@ class GroupsView extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -198,9 +198,9 @@ class GroupsView extends React.Component {
               {(!this.state.isLoading && !this.state.errorMsg && this.state.groupList.length == 0) && emptyTip}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (
-                  <RepoListViewPanel 
-                    key={index} 
-                    group={group} 
+                  <RepoListViewPanel
+                    key={index}
+                    group={group}
                     onItemDetails={this.onItemDetails}
                   />
                 );

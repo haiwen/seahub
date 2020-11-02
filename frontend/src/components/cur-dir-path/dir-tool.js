@@ -103,7 +103,7 @@ class DirTool extends React.Component {
                 <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
               </ul>
-    
+
               {this.state.isRepoTagDialogShow && (
                 <ModalPortal>
                   <Modal isOpen={true}>

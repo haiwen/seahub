@@ -44,7 +44,7 @@ class SetGroupQuotaDialog extends React.Component {
     } else {
       const err = gettext('Quota is invalid.');
       this.setState({ errMessage: err });
-    } 
+    }
   }
 
   handleChange = (e) => {
@@ -66,8 +66,8 @@ class SetGroupQuotaDialog extends React.Component {
         <ModalBody>
           <InputGroup>
             <Input
-              onKeyPress={this.handleKeyPress} 
-              value={this.state.quota} 
+              onKeyPress={this.handleKeyPress}
+              value={this.state.quota}
               onChange={this.handleChange}
               innerRef={input => {this.newInput = input;}}
             />

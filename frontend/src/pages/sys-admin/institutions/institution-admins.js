@@ -69,7 +69,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -90,8 +90,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: true,
         highlight: true
-      }); 
-    }   
+      });
+    }
   }
 
   handleMouseLeave = () => {
@@ -99,8 +99,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: false,
         highlight: false
-      }); 
-    }   
+      });
+    }
   }
 
   onUnfreezedItem = () => {
@@ -131,12 +131,12 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Revoke Admin':
         translateResult = gettext('Revoke Admin');
         break;
-    }   
+    }
     return translateResult;
   }
 
@@ -217,7 +217,7 @@ class InstitutionAdmins extends Component {
       });
     });
   }
-  
+
   revokeAdmin = (item) => {
     const email = item.email;
     const name = item.name;
@@ -253,9 +253,9 @@ class InstitutionAdmins extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <InstitutionNav 
+            <InstitutionNav
               currentItem="admins"
-              institutionID={this.props.institutionID} 
+              institutionID={this.props.institutionID}
               institutionName={institutionName}
             />
             <div className="cur-view-content">

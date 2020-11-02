@@ -42,12 +42,12 @@ const propTypes = {
 };
 
 class DirListView extends React.Component {
-  
+
   render() {
 
     if (this.props.path === '/' && this.props.direntList.length === 0) {
       return (
-        <DirentNoneView 
+        <DirentNoneView
           path={this.props.path}
           isDirentListLoading={this.props.isDirentListLoading}
           onAddFile={this.props.onAddFile}
@@ -58,7 +58,7 @@ class DirListView extends React.Component {
     return (
       <Fragment>
         {this.props.isRepoInfoBarShow && (
-          <RepoInfoBar 
+          <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
             readmeMarkdown={this.props.readmeMarkdown}

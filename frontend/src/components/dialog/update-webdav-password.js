@@ -13,7 +13,7 @@ class UpdateWebdavPassword extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       password: this.props.password,
       isPasswordVisible: false,
       btnDisabled: false

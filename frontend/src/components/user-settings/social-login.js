@@ -57,4 +57,4 @@ class SocialLogin extends React.Component {
   }
 }
 
-export default SocialLogin; 
+export default SocialLogin;

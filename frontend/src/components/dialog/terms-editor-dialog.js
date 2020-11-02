@@ -45,9 +45,9 @@ class TermsEditorDialog extends React.Component {
   render() {
     let { content, title } = this.props;
     return (
-      <Modal 
-        isOpen={true} 
-        toggle={this.toggle} 
+      <Modal
+        isOpen={true}
+        toggle={this.toggle}
         onKeyDown={this.onKeyDown}
         wrapClassName={'conditions-editor-dialog-wrapper'}
         className={'conditions-editor-dialog'}
@@ -57,7 +57,7 @@ class TermsEditorDialog extends React.Component {
       >
         <ModalHeader className="conditions-editor-dialog-title" toggle={this.toggle}>{title}</ModalHeader>
         <ModalBody className={'conditions-editor-dialog-main'}>
-          <SimpleEditor 
+          <SimpleEditor
             onRef={this.setSimpleEditorRef.bind(this)}
             value={content || ''}
           />

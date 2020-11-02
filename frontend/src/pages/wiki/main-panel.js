@@ -49,7 +49,7 @@ class MainPanel extends Component {
     let pathElem = paths.map((item, index) => {
       if (item === '') {
         return;
-      } 
+      }
       if (index === (paths.length - 1)) {
         return (
           <Fragment key={index}>
@@ -62,9 +62,9 @@ class MainPanel extends Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <a 
-              className="path-link" 
-              data-path={nodePath} 
+            <a
+              className="path-link"
+              data-path={nodePath}
               onClick={this.onMainNavBarClick}>
               {item}
             </a>
@@ -142,7 +142,7 @@ class MainPanel extends Component {
               <WikiDirListView
                 path={this.props.path}
                 direntList={this.props.direntList}
-                onDirentClick={this.props.onDirentClick} 
+                onDirentClick={this.props.onDirentClick}
               />
             )}
           </div>

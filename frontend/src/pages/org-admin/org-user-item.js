@@ -47,13 +47,13 @@ class UserItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
 
   toggleDelete = () => {
     const email = this.props.user.email;
     this.props.toggleDelete(email);
-  }        
-           
+  }
+
   toggleResetPW = () => {
     const { email, name } = this.props.user;
     toaster.success(gettext('Resetting user\'s password, please wait for a moment.'));
@@ -144,7 +144,7 @@ class UserItem extends React.Component {
           <a href={href}>{user.name}</a>
         </td>
         <td>
-          <UserStatusEditor 
+          <UserStatusEditor
             isTextMode={true}
             isEditIconShow={isEditIconShow}
             currentStatus={this.state.currentStatus}

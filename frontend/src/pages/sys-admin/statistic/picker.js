@@ -45,7 +45,7 @@ class Picker extends React.Component {
           ({value}) => {
             return (
               <span>
-                <input 
+                <input
                   placeholder="yyyy-mm-dd"
                   tabIndex="-1"
                   readOnly

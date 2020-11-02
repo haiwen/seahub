@@ -15,7 +15,7 @@ import './css/search.css';
 
 import './css/repo-snapshot.css';
 
-const { 
+const {
   repoID, repoName, canRestoreRepo,
   commitID, commitTime, commitDesc, commitRelativeTime,
   showAuthor, authorAvatarURL, authorName, authorNickName
@@ -76,7 +76,7 @@ class RepoSnapshot extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -104,11 +104,11 @@ class RepoSnapshot extends React.Component {
                 <a href="#" onClick={this.clickFolderPath.bind(this, pathList.slice(0, index+1).join('/'))}>{pathList[index]}</a>
                 <span> / </span>
               </React.Fragment>
-            );  
+            );
           }
         }
-        )}  
-        {pathList[pathList.length - 1]} 
+        )}
+        {pathList[pathList.length - 1]}
       </React.Fragment>
     );
   }
@@ -121,7 +121,7 @@ class RepoSnapshot extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       this.toggleDialog();
       toaster.danger(errorMsg);
-    }); 
+    });
   }
 
   render() {
@@ -163,7 +163,7 @@ class RepoSnapshot extends React.Component {
                   <button className="btn btn-secondary op-bar-btn" onClick={this.toggleDialog}>{gettext('Restore')}</button>
                   }
                 </div>
-                <Content 
+                <Content
                   data={this.state}
                   renderFolder={this.renderFolder}
                 />
@@ -194,7 +194,7 @@ class Content extends React.Component {
       {width: '20%', text: gettext('Size')},
       {width: '20%', text: ''}
     ];
-  } 
+  }
 
   render() {
     const { isLoading, errorMsg, folderPath, folderItems } = this.props.data;
@@ -218,9 +218,9 @@ class Content extends React.Component {
         </thead>
         <tbody>
           {folderItems.map((item, index) => {
-            return <FolderItem 
+            return <FolderItem
               key={index}
-              item={item} 
+              item={item}
               folderPath={folderPath}
               renderFolder={this.props.renderFolder}
             />;
@@ -255,14 +255,14 @@ class FolderItem extends React.Component {
     const item = this.props.item;
     const path = Utils.joinPath(this.props.folderPath, item.name);
     const request = item.type == 'dir' ?
-      seafileAPI.revertFolder(repoID, path, commitID): 
+      seafileAPI.revertFolder(repoID, path, commitID):
       seafileAPI.revertFile(repoID, path, commitID);
     request.then((res) => {
       toaster.success(gettext('Successfully restored 1 item.'));
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
-    }); 
+    });
   }
 
   renderFolder = (e) => {

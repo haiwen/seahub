@@ -53,7 +53,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -72,13 +72,13 @@ class Item extends Component {
         return <Link to={`${siteRoot}sys/libraries/${repo.id}/`}>{repo.name}</Link>;
       } else {
         return repo.name;
-      }   
+      }
     } else {
       return gettext('Broken ({repo_id_placeholder})')
         .replace('{repo_id_placeholder}', repo.id);
     }
   }
-  
+
   getOwnerLink = () => {
     let link;
     const { item } = this.props;
@@ -126,7 +126,7 @@ class Repos extends Component {
     seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
       this.setState({
         userInfo: res.data
-      }); 
+      });
     });
     seafileAPI.sysAdminListShareInRepos(this.props.email).then(res => {
       this.setState({
@@ -137,7 +137,7 @@ class Repos extends Component {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 

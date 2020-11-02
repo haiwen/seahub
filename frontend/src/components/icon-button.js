@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip } from 'reactstrap';
 
-const propTypes = { 
+const propTypes = {
   id: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
@@ -15,19 +15,19 @@ class IconButton extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       tooltipOpen: false
-    };  
+    };
   }
 
   toggle = () => {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
-    }); 
+    });
   }
   render() {
     const className = 'btn-icon';
-    const btnContent = ( 
+    const btnContent = (
       <React.Fragment>
         <span className={this.props.icon}></span>
         <Tooltip

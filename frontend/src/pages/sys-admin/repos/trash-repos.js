@@ -95,7 +95,7 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -231,7 +231,7 @@ class Item extends Component {
                 onMenuItemClick={this.onMenuItemClick}
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
-              />  
+              />
             )}
           </td>
         </tr>
@@ -277,14 +277,14 @@ class TrashRepos extends Component {
   }
 
   componentDidMount () {
-      let urlParams = (new URL(window.location)).searchParams;
-      const { currentPage = 1, perPage } = this.state;
-      this.setState({
-        perPage: parseInt(urlParams.get('per_page') || perPage),
-        currentPage: parseInt(urlParams.get('page') || currentPage)
-      }, () => {
-        this.getReposByPage(this.state.currentPage);
-      }); 
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage = 1, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getReposByPage(this.state.currentPage);
+    });
   }
 
   toggleCleanTrashDialog = () => {
@@ -330,7 +330,7 @@ class TrashRepos extends Component {
     });
     this.setState({
       repos: repos
-    }); 
+    });
   }
 
   cleanTrash = () => {
@@ -402,7 +402,7 @@ class TrashRepos extends Component {
             message={gettext('Are you sure you want to clear trash?')}
             executeOperation={this.cleanTrash}
             confirmBtnText={gettext('Clear')}
-            toggleDialog={this.toggleCleanTrashDialog} 
+            toggleDialog={this.toggleCleanTrashDialog}
           />
         }
       </Fragment>

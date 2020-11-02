@@ -88,7 +88,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -109,8 +109,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: true,
         highlight: true
-      }); 
-    }   
+      });
+    }
   }
 
   handleMouseLeave = () => {
@@ -118,8 +118,8 @@ class Item extends Component {
       this.setState({
         isOpIconShown: false,
         highlight: false
-      }); 
-    }   
+      });
+    }
   }
 
   onUnfreezedItem = () => {
@@ -162,7 +162,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -170,7 +170,7 @@ class Item extends Component {
       case 'Set Admin':
         translateResult = gettext('Set Admin');
         break;
-    }   
+    }
 
     return translateResult;
   }
@@ -252,7 +252,7 @@ class InstitutionUsers extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getInstitutionUsersByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getInstitutionUsersByPage = (page) => {
@@ -309,7 +309,7 @@ class InstitutionUsers extends Component {
       }
       failedArray.map((item) => {
         toaster.danger(item.error_msg);
-      }); 
+      });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -340,7 +340,7 @@ class InstitutionUsers extends Component {
           <div className="cur-view-container">
             <InstitutionNav
               currentItem="members"
-              institutionID={this.props.institutionID} 
+              institutionID={this.props.institutionID}
               institutionName={institutionName}
             />
             <div className="cur-view-content">

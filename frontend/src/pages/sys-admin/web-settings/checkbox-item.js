@@ -26,7 +26,7 @@ class WebSettingCheckbox extends Component {
     this.setState({
       inputChecked: checked
     });
-    this.props.saveSetting(this.props.keyText, valueToNum);  
+    this.props.saveSetting(this.props.keyText, valueToNum);
   }
 
   render() {
@@ -40,8 +40,8 @@ class WebSettingCheckbox extends Component {
             <Input className="ml-0" checked={inputChecked} type='checkbox' onChange={this.onInputChange} />
             <p className="ml-4">{helpTip}</p>
           </Fragment>
-        }   
-      />  
+        }
+      />
     );
   }
 }

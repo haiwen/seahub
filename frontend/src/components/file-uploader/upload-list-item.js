@@ -33,7 +33,7 @@ class UploadListItem extends React.Component {
       if (resumableFile.remainingTime === 0 && !resumableFile.isSaved) {
         uploadState = UPLOAD_ISSAVING;
       }
-  
+
       if (resumableFile.isSaved) {
         uploadState = UPLOAD_UPLOADED;
       }

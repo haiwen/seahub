@@ -57,42 +57,42 @@ class StatisticTraffic extends React.Component {
         });
         let linkUpload = {
           label: gettext('Upload'),
-          data: link_upload, 
+          data: link_upload,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let linkDownload = {
           label: gettext('Download'),
-          data: link_download, 
+          data: link_download,
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let syncUpload = {
           label: gettext('Upload'),
-          data: sync_upload, 
+          data: sync_upload,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let syncDownload = {
           label: gettext('Download'),
-          data: sync_download, 
+          data: sync_download,
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let webUpload = {
           label: gettext('Upload'),
-          data: web_upload, 
+          data: web_upload,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let webDownload = {
           label: gettext('Download'),
-          data: web_download, 
+          data: web_download,
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let totalUpload = {
           label: gettext('Upload'),
-          data: total_upload, 
+          data: total_upload,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let totalDownload = {
           label: gettext('Download'),
-          data: total_download, 
+          data: total_download,
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let linkData = [linkUpload, linkDownload];
@@ -141,17 +141,17 @@ class StatisticTraffic extends React.Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar /> 
+        <MainPanelTopbar />
         <div className="cur-view-container">
           <StatisticNav currentItem="trafficStatistic" />
           <div className="cur-view-content">
             {this.renderCommonTool()}
             {isLoading && <Loading />}
-            {!isLoading && tabActive === 'system' && 
+            {!isLoading && tabActive === 'system' &&
               <div className="statistic-traffic-chart-container">
                 <div className="mb-4">
-                  {labels.length > 0 && 
-                    <StatisticChart 
+                  {labels.length > 0 &&
+                    <StatisticChart
                       labels={labels}
                       filesData={filesData}
                       chartTitle={gettext('Total Traffic')}
@@ -163,8 +163,8 @@ class StatisticTraffic extends React.Component {
                   }
                 </div>
                 <div className="mb-4">
-                  {labels.length > 0 && 
-                    <StatisticChart 
+                  {labels.length > 0 &&
+                    <StatisticChart
                       labels={labels}
                       filesData={webData}
                       chartTitle={gettext('Web Traffic')}
@@ -176,8 +176,8 @@ class StatisticTraffic extends React.Component {
                   }
                 </div>
                 <div className="mb-4">
-                  {labels.length > 0 && 
-                    <StatisticChart 
+                  {labels.length > 0 &&
+                    <StatisticChart
                       labels={labels}
                       filesData={linkData}
                       chartTitle={gettext('Share Link Traffic')}
@@ -189,8 +189,8 @@ class StatisticTraffic extends React.Component {
                   }
                 </div>
                 <div className="mb-4">
-                  {labels.length > 0 && 
-                    <StatisticChart 
+                  {labels.length > 0 &&
+                    <StatisticChart
                       labels={labels}
                       filesData={syncData}
                       chartTitle={gettext('Sync Traffic')}
@@ -203,10 +203,10 @@ class StatisticTraffic extends React.Component {
                 </div>
               </div>
             }
-            {!isLoading && tabActive === 'user' && 
+            {!isLoading && tabActive === 'user' &&
               <UsersTraffic />
             }
-            {!isLoading && tabActive === 'organizations' && 
+            {!isLoading && tabActive === 'organizations' &&
               <OrgsTraffic />
             }
           </div>

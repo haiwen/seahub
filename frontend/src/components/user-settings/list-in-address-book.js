@@ -7,7 +7,7 @@ class ListInAddressBook extends React.Component {
     super(props);
     const { list_in_address_book } = this.props.userInfo;
     this.state = {
-      inputChecked: list_in_address_book 
+      inputChecked: list_in_address_book
     };
   }
 
@@ -36,4 +36,4 @@ class ListInAddressBook extends React.Component {
   }
 }
 
-export default ListInAddressBook; 
+export default ListInAddressBook;

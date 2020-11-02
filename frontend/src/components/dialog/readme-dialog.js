@@ -32,7 +32,7 @@ class ReadmeDialog extends React.Component {
         this.setState({
           readmeContent: res.data,
           isLoading: false,
-        }); 
+        });
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -47,7 +47,7 @@ class ReadmeDialog extends React.Component {
           <a className="readme-dialog-edit" href={this.props.href} target='_blank'><i className="fa fa-pencil-alt"></i></a>
         </ModalHeader>
         <ModalBody>
-          {this.state.isLoading ? 
+          {this.state.isLoading ?
             <Loading />:
             <MarkdownViewer markdownContent={this.state.readmeContent} showTOC={false}/>
           }

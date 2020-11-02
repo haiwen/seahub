@@ -50,7 +50,7 @@ class FileUpdateDetailDialog extends React.Component {
     for (var i = 0, len = items.length; i < len; i++) {
       con += '<li class="list-group-item">' + items[i] + '</li>';
     }
-    con += '</ul>'; 
+    con += '</ul>';
     return {__html: con};
   }
 

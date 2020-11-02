@@ -118,7 +118,7 @@ class FileScanRecords extends Component {
               <h3 className="sf-heading">{gettext('Content Scan Records')}</h3>
             </div>
             <div className="cur-view-content">
-              <Table 
+              <Table
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 records={this.state.records}

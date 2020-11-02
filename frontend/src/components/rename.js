@@ -86,12 +86,12 @@ class Rename extends React.Component {
   render() {
     return (
       <div className="rename-container">
-        <input 
-          ref="renameInput" 
-          value={this.state.name} 
-          onChange={this.onChange} 
-          onKeyPress={this.onKeyPress} 
-          onClick={this.onClick} 
+        <input
+          ref="renameInput"
+          value={this.state.name}
+          onChange={this.onChange}
+          onKeyPress={this.onKeyPress}
+          onClick={this.onClick}
         />
         <button className="btn btn-secondary sf2-icon-confirm confirm" onClick={this.onRenameConfirm}></button>
         <button className="btn btn-secondary sf2-icon-cancel cancel" onClick={this.onRenameCancel}></button>

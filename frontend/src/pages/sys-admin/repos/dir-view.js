@@ -74,8 +74,8 @@ class DirView extends Component {
       this.setState({
         loading: false,
         repoName: repoName,
-        isSystemRepo: isSystemRepo, 
-        direntList: direntList, 
+        isSystemRepo: isSystemRepo,
+        direntList: direntList,
         path: path,
       }, () => {
         let url = siteRoot + 'sys/libraries/' + repoID + '/' + encodeURIComponent(this.state.repoName) + Utils.encodePath(path);
@@ -160,8 +160,8 @@ class DirView extends Component {
   }
 
   render() {
-    const { loading, errorMsg, 
-      repoName, direntList, isSystemRepo, path, 
+    const { loading, errorMsg,
+      repoName, direntList, isSystemRepo, path,
       isNewFolderDialogOpen } = this.state;
     const { repoID } = this.props;
 
@@ -174,12 +174,12 @@ class DirView extends Component {
               <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
               <Button className="operation-item" onClick={this.toggleNewFolderDialog}>{gettext('New Folder')}</Button>
             </Fragment>
-          </MainPanelTopbar> : <MainPanelTopbar /> 
+          </MainPanelTopbar> : <MainPanelTopbar />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
-              <DirPathBar 
+              <DirPathBar
                 isSystemRepo={isSystemRepo}
                 repoID={repoID}
                 repoName={repoName}
@@ -205,7 +205,7 @@ class DirView extends Component {
             parentPath={path}
             checkDuplicatedName={this.checkDuplicatedName}
             onAddFolder={this.createNewFolder}
-            addFolderCancel={this.toggleNewFolderDialog} 
+            addFolderCancel={this.toggleNewFolderDialog}
           />
         }
       </Fragment>

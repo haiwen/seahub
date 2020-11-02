@@ -78,7 +78,7 @@ class SharedDirView extends React.Component {
       sortBy: sortBy,
       sortOrder: sortOrder,
       items: Utils.sortDirentsInSharedDir(this.state.items, sortBy, sortOrder)
-    }); 
+    });
   }
 
   getThumbnails = () => {
@@ -140,7 +140,7 @@ class SharedDirView extends React.Component {
   zipDownloadSelectedItems = () => {
     this.setState({
       isZipDialogOpen: true,
-      zipFolderPath: path, 
+      zipFolderPath: path,
       selectedItems: this.state.items.filter(item => item.isSelected)
         .map(item => item.file_name || item.folder_name)
     });
@@ -262,7 +262,7 @@ class SharedDirView extends React.Component {
                   }
                   {showDownloadIcon &&
                   <Fragment>
-                    {this.state.items.some(item => item.isSelected) ? 
+                    {this.state.items.some(item => item.isSelected) ?
                       <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 zip-btn">{gettext('ZIP Selected Items')}</Button> :
                       <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 zip-btn">{gettext('ZIP')}</Button>
                     }
@@ -289,7 +289,7 @@ class SharedDirView extends React.Component {
         </div>
         {this.state.isZipDialogOpen &&
         <ModalPortal>
-          <ZipDownloadDialog 
+          <ZipDownloadDialog
             token={token}
             path={this.state.zipFolderPath}
             target={this.state.selectedItems}
@@ -318,7 +318,7 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
@@ -341,13 +341,13 @@ class Content extends React.Component {
   }
 
   render() {
-    const { 
-      isDesktop, 
+    const {
+      isDesktop,
       isLoading, errorMsg, items,
       sortBy, sortOrder,
       isAllItemsSelected
     } = this.props;
-    
+
     if (isLoading) {
       return <Loading />;
     }
@@ -359,7 +359,7 @@ class Content extends React.Component {
     const tbody = (
       <tbody>
         {items.map((item, index) => {
-          return <Item 
+          return <Item
             key={index}
             isDesktop={isDesktop}
             item={item}
@@ -424,7 +424,7 @@ class Item extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       isIconShown: false,
       isOpMenuOpen: false
     };
@@ -503,7 +503,7 @@ class Item extends React.Component {
                 title={gettext('More Operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
-              />  
+              />
               <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
@@ -565,7 +565,7 @@ class Item extends React.Component {
                 title={gettext('More Operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isOpMenuOpen}
-              />  
+              />
               <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">

@@ -28,22 +28,22 @@ class HistoryTrashFileView extends React.Component {
       case 'Image':
         content = <Image tip={<FileViewTip />} />;
         break;
-      case 'SVG': 
+      case 'SVG':
         content = <SVG />;
         break;
-      case 'PDF': 
+      case 'PDF':
         content = <PDF />;
         break;
-      case 'Text': 
+      case 'Text':
         content = <Text />;
         break;
-      case 'Markdown': 
+      case 'Markdown':
         content = <Markdown />;
         break;
-      case 'Video': 
+      case 'Video':
         content = <Video />;
         break;
-      case 'Audio': 
+      case 'Audio':
         content = <Audio />;
         break;
       default:

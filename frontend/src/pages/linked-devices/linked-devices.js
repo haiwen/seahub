@@ -92,7 +92,7 @@ class Item extends Component {
 
   toggleDialog = () => {
     this.setState({
-      isConfirmUnlinkDialogOpen: !this.state.isConfirmUnlinkDialogOpen 
+      isConfirmUnlinkDialogOpen: !this.state.isConfirmUnlinkDialogOpen
     });
   }
 
@@ -179,7 +179,7 @@ class Item extends Component {
         {this.state.isConfirmUnlinkDialogOpen &&
         <ConfirmUnlinkDeviceDialog
           executeOperation={this.unlinkDevice}
-          toggleDialog={this.toggleDialog} 
+          toggleDialog={this.toggleDialog}
         />
         }
       </React.Fragment>

@@ -17,7 +17,7 @@ class WikiPermissionEditor extends React.Component {
     if (permission === 'private') {
       return gettext('Private');
     }
-    
+
     if (permission === 'public') {
       return gettext('Public');
     }
@@ -25,7 +25,7 @@ class WikiPermissionEditor extends React.Component {
 
   render() {
     return (
-      <SelectEditor 
+      <SelectEditor
         isTextMode={this.props.isTextMode}
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.permissions}

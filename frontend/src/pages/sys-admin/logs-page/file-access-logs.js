@@ -53,7 +53,7 @@ class Content extends Component {
                 <th width="15%">{gettext('File')}{' / '}{gettext('Folder')}</th>
               </tr>
             </thead>
-            {items && 
+            {items &&
               <tbody>
                 {items.map((item, index) => {
                   return (<Item
@@ -74,7 +74,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }

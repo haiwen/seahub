@@ -15,9 +15,9 @@ class Content extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       isItemFreezed: false
-    };  
+    };
   }
 
   onFreezedItem = () => {
@@ -85,7 +85,7 @@ class Content extends Component {
           }
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -164,7 +164,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -172,7 +172,7 @@ class Item extends Component {
       case 'Transfer':
         translateResult = gettext('Transfer');
         break;
-    }   
+    }
 
     return translateResult;
   }
@@ -214,7 +214,7 @@ class Item extends Component {
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationConfirmationDialog 
+          <CommonOperationConfirmationDialog
             title={gettext('Delete Group')}
             message={deleteDialogMsg}
             executeOperation={this.deleteGroup}

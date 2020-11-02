@@ -69,7 +69,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -157,7 +157,7 @@ class Institutions extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getInstitutionsByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getInstitutionsByPage = (page) => {
@@ -222,7 +222,7 @@ class Institutions extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Institutions')}</h3>
-            </div> 
+            </div>
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

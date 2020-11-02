@@ -54,8 +54,8 @@ class WikiListView extends Component {
           <tbody>
             {wikis.map((wiki, index) => {
               return (
-                <WikiListItem 
-                  key={index} 
+                <WikiListItem
+                  key={index}
                   wiki={wiki}
                   renameWiki={this.props.renameWiki}
                   deleteWiki={this.props.deleteWiki}

@@ -62,7 +62,7 @@ class DirColumnFile extends React.Component {
     e.preventDefault();
     this.props.goDraftPage();
   }
-  
+
   render() {
     if (this.props.isFileLoadedErr) {
       return (

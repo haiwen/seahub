@@ -133,9 +133,9 @@ class ShareRepoDialog extends React.Component {
             <tbody>
               {this.state.repoList.map((repo, index) => {
                 return (
-                  <ShareRepoListItem 
-                    key={index} 
-                    repo={repo} 
+                  <ShareRepoListItem
+                    key={index}
+                    repo={repo}
                     onRepoSelect={this.onRepoSelect}
                     onPermissionChange={this.onPermissionChange}
                   />

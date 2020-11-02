@@ -100,7 +100,7 @@ class UsersTraffic extends React.Component {
       sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc'
     }, () => {
       const { month, currentPage } = this.state;
-      this.getTrafficList(month, currentPage); 
+      this.getTrafficList(month, currentPage);
     });
   }
 
@@ -111,29 +111,29 @@ class UsersTraffic extends React.Component {
   }
 
   render() {
-    const { 
+    const {
       isLoading, errorMessage, userTrafficList,
-      currentPage, hasNextPage, perPage, 
+      currentPage, hasNextPage, perPage,
       sortBy, sortOrder
     } = this.state;
     return (
       <Fragment>
         <div className="d-flex align-items-center mt-4">
           <span className="statistic-reports-tip">{gettext('Month:')}</span>
-          <Input 
-            className="statistic-reports-input" 
-            defaultValue={moment().format('YYYYMM')} 
-            onChange={this.handleChange} 
-            onKeyPress={this.handleKeyPress}   
+          <Input
+            className="statistic-reports-input"
+            defaultValue={moment().format('YYYYMM')}
+            onChange={this.handleChange}
+            onKeyPress={this.handleKeyPress}
           />
           {errorMessage && <div className="error">{errorMessage}</div>}
         </div>
         {isLoading && <Loading />}
-        {!isLoading && 
+        {!isLoading &&
           <TrafficTable type={'user'} sortItems={this.sortItems} sortBy={sortBy} sortOrder={sortOrder}>
             {userTrafficList.length > 0 && userTrafficList.map((item, index) => {
               return(
-                <TrafficTableBody 
+                <TrafficTableBody
                   key={index}
                   userTrafficItem={item}
                   type={'user'}
@@ -142,7 +142,7 @@ class UsersTraffic extends React.Component {
             })}
           </TrafficTable>
         }
-        <Paginator 
+        <Paginator
           gotoPreviousPage={this.getPreviousPage}
           gotoNextPage={this.getNextPage}
           currentPage={currentPage}

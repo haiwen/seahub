@@ -25,7 +25,7 @@ class FileViewTip extends React.Component {
           <a href="?dl=1" className="btn btn-secondary">{gettext('Download')}</a>
         </div>
       </div>
-    );  
+    );
   }
 }
 FileViewTip.propTypes = propTypes;

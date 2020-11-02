@@ -12,14 +12,14 @@ class SysAdminUnlinkDevice extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       inputChecked: false
-    };  
+    };
   }
 
   handleInputChange = (e) => {
     this.setState({
-      inputChecked: e.target.checked 
+      inputChecked: e.target.checked
     });
   }
 

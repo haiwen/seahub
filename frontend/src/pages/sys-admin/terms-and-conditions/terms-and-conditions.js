@@ -35,7 +35,7 @@ class TermsAndConditions extends Component {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 

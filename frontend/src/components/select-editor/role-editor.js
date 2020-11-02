@@ -18,7 +18,7 @@ class RoleEditor extends React.Component {
     if (role === 'Admin') {
       return gettext('Admin');
     }
-    
+
     if (role === 'Member') {
       return gettext('Member');
     }
@@ -26,7 +26,7 @@ class RoleEditor extends React.Component {
 
   render() {
     return (
-      <SelectEditor 
+      <SelectEditor
         isTextMode={this.props.isTextMode}
         isEditIconShow={this.props.isEditIconShow}
         options={this.props.roles}

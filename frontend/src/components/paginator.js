@@ -26,13 +26,13 @@ class Paginator extends Component {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage - 1, curPerPage);
     this.props.gotoPreviousPage();
-  } 
+  }
 
   goToNext = () => {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage + 1, curPerPage);
     this.props.gotoNextPage();
-  } 
+  }
 
   updateURL = (page, perPage) => {
     let url = new URL(location.href);

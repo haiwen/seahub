@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -27,7 +27,7 @@ class SetOrgUserQuota extends React.Component {
 
   handleInputChange = (e) => {
     this.setState({
-      inputValue: e.target.value 
+      inputValue: e.target.value
     });
   }
 
@@ -43,7 +43,7 @@ class SetOrgUserQuota extends React.Component {
     }
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     seafileAPI.orgAdminSetOrgUserQuota(orgID, email, quota).then((res) => {
@@ -54,7 +54,7 @@ class SetOrgUserQuota extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 

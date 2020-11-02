@@ -52,7 +52,7 @@ class UserSelect extends React.Component {
                     <span className="user-option-email">{item.contact_email}</span>
                   </div>
                 </div>
-              ) : ( 
+              ) : (
                 <React.Fragment>
                   <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
                   <span className='select-module select-module-name'>{item.name}</span>

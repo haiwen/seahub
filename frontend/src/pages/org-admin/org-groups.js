@@ -16,7 +16,7 @@ class OrgGroups extends Component {
       page: 1,
       pageNext: false,
       orgGroups: [],
-      isItemFreezed: false  
+      isItemFreezed: false
     };
   }
 
@@ -53,7 +53,7 @@ class OrgGroups extends Component {
       page = page - 1;
     }
     this.initData(page);
-  } 
+  }
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
@@ -67,7 +67,7 @@ class OrgGroups extends Component {
     seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
       this.setState({
         orgGroups: this.state.orgGroups.filter(item => item.id != group.id)
-      }); 
+      });
       let msg = gettext('Successfully deleted {name}');
       msg = msg.replace('{name}', group.groupName);
       toaster.success(msg);
@@ -104,7 +104,7 @@ class OrgGroups extends Component {
                         key={item.id}
                         group={item}
                         isItemFreezed={this.state.isItemFreezed}
-                        onFreezedItem={this.onFreezedItem} 
+                        onFreezedItem={this.onFreezedItem}
                         onUnfreezedItem={this.onUnfreezedItem}
                         deleteGroupItem={this.deleteGroupItem}
                       />
@@ -160,7 +160,7 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
@@ -194,9 +194,9 @@ class GroupItem extends React.Component {
       groupInfoHref = siteRoot + 'org/departmentadmin/groups/' + group.id + '/';
     } else {
       groupInfoHref = siteRoot + 'org/groupadmin/' + group.id + '/';
-    } 
-                                                         
-    return groupInfoHref; 
+    }
+
+    return groupInfoHref;
   }
 
   renderGroupCreator = (group) => {
@@ -211,7 +211,7 @@ class GroupItem extends React.Component {
           <a href={userInfoHref} className="font-weight-normal">{group.creatorName}</a>
         </td>
       );
-    }     
+    }
   }
 
   render() {

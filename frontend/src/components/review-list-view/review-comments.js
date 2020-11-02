@@ -36,7 +36,7 @@ class ReviewComments extends React.Component {
   submitComment = () => {
     let comment = this.state.comment.trim();
     if (comment.length > 0) {
-      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {        
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {
         this.props.listComments();
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -101,7 +101,7 @@ class ReviewComments extends React.Component {
     }
     this.setState({ commentFooterHeight: rate });
   };
-  
+
   scrollToQuote = (newIndex, oldIndex, quote) => {
     this.props.scrollToQuote(newIndex, oldIndex, quote);
     this.setState({ comment: '' });

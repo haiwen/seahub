@@ -32,7 +32,7 @@ class ReviewCommentDialog extends React.Component {
     this.setState({ comment: comment });
   }
 
-  submitComment = () => {    
+  submitComment = () => {
     const { quote, newIndex, oldIndex } = this.props;
     const comment = this.state.comment.trim();
     if (comment.length === 0) return;

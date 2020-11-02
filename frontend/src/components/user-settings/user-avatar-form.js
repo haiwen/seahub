@@ -26,7 +26,7 @@ class UserAvatarForm extends React.Component {
     }
 
     const file = this.fileInput.current.files[0];
-    const fileName = file.name; 
+    const fileName = file.name;
 
     // no file extension
     if (fileName.lastIndexOf('.') == -1) {

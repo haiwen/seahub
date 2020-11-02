@@ -29,16 +29,16 @@ class InnerFileView extends React.Component {
       case 'XMind':
         content = <Image tip={<FileViewTip />} />;
         break;
-      case 'SVG': 
+      case 'SVG':
         content = <SVG />;
         break;
-      case 'PDF': 
+      case 'PDF':
         content = <PDF />;
         break;
-      case 'Video': 
+      case 'Video':
         content = <Video />;
         break;
-      case 'Audio': 
+      case 'Audio':
         content = <Audio />;
         break;
     }

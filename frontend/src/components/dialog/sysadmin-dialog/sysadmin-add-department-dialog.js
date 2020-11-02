@@ -57,7 +57,7 @@ class AddDepartDialog extends React.Component {
 
   handleChange = (e) => {
     this.setState({
-      departName: e.target.value, 
+      departName: e.target.value,
     });
   }
 
@@ -77,10 +77,10 @@ class AddDepartDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="departName">{gettext('Name')}</Label>
-              <Input 
-                id="departName" 
-                onKeyPress={this.handleKeyPress} 
-                value={this.state.departName} 
+              <Input
+                id="departName"
+                onKeyPress={this.handleKeyPress}
+                value={this.state.departName}
                 onChange={this.handleChange}
                 innerRef={input => {this.newInput = input;}}
               />

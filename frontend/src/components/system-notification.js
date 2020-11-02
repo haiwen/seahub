@@ -1,5 +1,5 @@
 import React from 'react';
-import { curNoteMsg, curNoteID, siteRoot, gettext } from '../utils/constants'; 
+import { curNoteMsg, curNoteID, siteRoot, gettext } from '../utils/constants';
 
 import '../css/system-notification.css';
 
@@ -34,7 +34,7 @@ class SystemNotification extends React.Component {
       }
     }
   }
-  
+
   render() {
     if (!curNoteMsg || this.state.isClosed) {
       return null;

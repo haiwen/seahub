@@ -49,4 +49,4 @@ class TwoFactorAuthentication extends React.Component {
   }
 }
 
-export default TwoFactorAuthentication; 
+export default TwoFactorAuthentication;

@@ -59,14 +59,14 @@ class Org extends React.Component {
   }
 
   tabItemClick = (param) => {
-    this.setState({currentTab: param});          
+    this.setState({currentTab: param});
   }
 
   render() {
     let { isSidePanelClosed, currentTab } = this.state;
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>       
+        <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
         <div className="main-panel o-hidden">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>

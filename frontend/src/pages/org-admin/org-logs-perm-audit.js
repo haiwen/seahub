@@ -21,7 +21,7 @@ class OrgLogsFileUpdate extends Component {
       eventList: [],
       userSelected: '',
       repoSelected: '',
-      isItemFreezed: false  
+      isItemFreezed: false
     };
   }
 
@@ -146,10 +146,10 @@ class PermAuditItem extends React.Component {
         highlight: false
       });
     }
-  } 
+  }
 
   renderFromUser = (permEvent) => {
-    if (!permEvent.from_user_email) { 
+    if (!permEvent.from_user_email) {
       return gettext('Anonymous User');
     }
     return (
@@ -182,42 +182,42 @@ class PermAuditItem extends React.Component {
       if (permEvent.to_group_name) {
         return <a href={siteRoot + 'org/groupadmin/' + permEvent.to_group_id + '/'}>{permEvent.to_group_name}</a>;
       }
-      return 'Deleted'; 
+      return 'Deleted';
     }
-    
+
     if (permEvent.type.indexOf('user') != -1) {
       return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to_user_email + '/'}>{permEvent.to_user_name}</a>;
     }
 
-  } 
+  }
 
   renderType = (type) => {
     if (type.indexOf('add') != -1) {
-      type = 'Add'; 
+      type = 'Add';
     }
     if (type.indexOf('modify') != -1) {
-      type = 'Modify'; 
+      type = 'Modify';
     }
     if (type.indexOf('delete') != -1) {
-      type = 'Delete'; 
+      type = 'Delete';
     }
     return type;
-  } 
+  }
 
   renderRepo = (permEvent) => {
     let repoName = 'Deleted';
     if (permEvent.repo_name) {
-      repoName = permEvent.repo_name; 
-    } 
-    return repoName; 
+      repoName = permEvent.repo_name;
+    }
+    return repoName;
   }
 
   renderFolder = (name) => {
     let folderName = '/';
     if (name) {
-      folderName = name; 
+      folderName = name;
     }
-    return folderName; 
+    return folderName;
   }
 
   render() {

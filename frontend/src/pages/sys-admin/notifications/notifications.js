@@ -63,7 +63,7 @@ class Content extends Component {
           </tbody>
         </table>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -143,9 +143,9 @@ class Item extends Component {
         break;
       default:
         break;
-    }   
+    }
     return translateResult;
-  } 
+  }
 
   getOperations = () => {
     const { item } = this.props;

@@ -70,7 +70,7 @@ const propTypes = {
 };
 
 class DirColumnView extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -150,7 +150,7 @@ class DirColumnView extends React.Component {
     const mainFlex = '1 0 ' + (1 - this.state.navRate - 0.05) * 100 + '%';
     return (
       <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
-        <DirColumnNav 
+        <DirColumnNav
           currentPath={this.props.path}
           repoPermission={this.props.repoPermission}
           isTreeDataLoading={this.props.isTreeDataLoading}
@@ -175,7 +175,7 @@ class DirColumnView extends React.Component {
         <div className="dir-content-resize" onMouseDown={this.onResizeMouseDown}></div>
         <div className="dir-content-main" style={{userSelect: select, flex: mainFlex}}>
           {this.props.isViewFile ? (
-            <DirColumnFile 
+            <DirColumnFile
               path={this.props.path}
               repoID={this.props.repoID}
               hash={this.props.hash}
@@ -191,7 +191,7 @@ class DirColumnView extends React.Component {
               onLinkClick={this.props.onLinkClick}
             />
           ) : (
-            <DirListView 
+            <DirListView
               path={this.props.path}
               repoID={this.props.repoID}
               currentRepoInfo={this.props.currentRepoInfo}

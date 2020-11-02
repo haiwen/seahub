@@ -33,13 +33,13 @@ class ListCreatedFileDialog extends React.Component {
               {
                 activity.createdFilesList.map((item, index) => {
                   let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-                  if (item.name.endsWith('(draft).md')) {                 
+                  if (item.name.endsWith('(draft).md')) {
                     fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
-                  } 
+                  }
                   let fileLink = <a href={fileURL} target='_blank'>{item.name}</a>;
                   if (item.name.endsWith('(draft).md') && !item.draft_id) {
                     fileLink = item.name;
-                  }  
+                  }
                   return (
                     <tr key={index}>
                       <td>{fileLink}</td>

@@ -71,7 +71,7 @@ class SharedRepoListItem extends React.Component {
       });
     }
   }
-  
+
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -91,7 +91,7 @@ class SharedRepoListItem extends React.Component {
       this.setState({isItemMenuShow: !this.state.isItemMenuShow});
       return;
     }
-    
+
     this.setState(
       {isItemMenuShow: !this.state.isItemMenuShow},
       () => {
@@ -110,7 +110,7 @@ class SharedRepoListItem extends React.Component {
 
   getRepoComputeParams = () => {
     let repo = this.props.repo;
-    
+
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
@@ -168,7 +168,7 @@ class SharedRepoListItem extends React.Component {
     this.props.onItemRename(this.props.repo, name);
     this.onRenameCancel();
   }
-  
+
   onRenameCancel = () => {
     this.props.onUnfreezedItem();
     this.setState({isRenaming: !this.state.isRenaming});
@@ -207,12 +207,12 @@ class SharedRepoListItem extends React.Component {
     const groupID = currentGroup.id;
 
     seafileAPI.deleteGroupOwnedLibrary(groupID, repo.repo_id).then(() => {
-      
+
       this.setState({
         isRepoDeleted: true,
         isDeleteDialogShow: false,
       });
-      
+
       this.props.onItemDelete(repo);
       let name = repo.repo_name;
       var msg = gettext('Successfully deleted {name}.').replace('{name}', name);
@@ -307,10 +307,10 @@ class SharedRepoListItem extends React.Component {
             operations.push('Share Links Admin');
             if (repo.encrypted) {
               operations.push('Change Password');
-            }   
+            }
             if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
               operations.push('Reset Password');
-            }   
+            }
             operations.push('History Setting', 'API Token', 'Details');
           } else {
             operations.push('Unshare');
@@ -333,7 +333,7 @@ class SharedRepoListItem extends React.Component {
       }
     }
     return operations;
-  } 
+  }
 
   generatorMobileMenu = () => {
     let operations = [];
@@ -355,11 +355,11 @@ class SharedRepoListItem extends React.Component {
     }
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle 
-          tag="i" 
+        <DropdownToggle
+          tag="i"
           className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
-          title={gettext('More Operations')} 
-          data-toggle="dropdown" 
+          title={gettext('More Operations')}
+          data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           onClick={this.clickOperationMenuToggle}
         />
@@ -392,18 +392,18 @@ class SharedRepoListItem extends React.Component {
     const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
     const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
     const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
-    
+
     if (this.isDeparementOnwerGroupMember) {
       return (
         <Fragment>
           {shareOperation}
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-            <DropdownToggle 
-              tag="i" 
-              className="sf-dropdown-toggle sf2-icon-caret-down" 
+            <DropdownToggle
+              tag="i"
+              className="sf-dropdown-toggle sf2-icon-caret-down"
               title={gettext('More Operations')}
-              data-toggle="dropdown" 
+              data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
               onClick={this.clickOperationMenuToggle}
             />
@@ -465,8 +465,8 @@ class SharedRepoListItem extends React.Component {
           </td>
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>
-            {this.state.isRenaming ? 
-              <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> : 
+            {this.state.isRenaming ?
+              <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <Link to={libPath}>{repo.repo_name}</Link>
             }
           </td>
@@ -478,7 +478,7 @@ class SharedRepoListItem extends React.Component {
       </Fragment>
     );
   }
-  
+
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
@@ -487,9 +487,9 @@ class SharedRepoListItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
           <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
           <td>
-            {this.state.isRenaming ? 
+            {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Link to={libPath}>{repo.repo_name}</Link>  
+              <Link to={libPath}>{repo.repo_name}</Link>
             }
             <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
@@ -510,7 +510,7 @@ class SharedRepoListItem extends React.Component {
         {Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI()}
         {this.state.isShowSharedDialog && (
           <ModalPortal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'library'}
               itemName={repo.repo_name}
               itemPath={'/'}
@@ -534,7 +534,7 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.isDeleteDialogShow && 
+        {this.state.isDeleteDialogShow &&
           <ModalPortal>
             <DeleteRepoDialog
               repo={this.props.repo}

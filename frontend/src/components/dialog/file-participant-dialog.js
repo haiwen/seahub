@@ -97,7 +97,7 @@ class FileParticipantDialog extends Component {
           .replace('{email_placeholder}', item.email)
           .replace('{error_msg_placeholder}', item.error_msg);
         toaster.danger(msg, {duration: 3});
-      }); 
+      });
     }).catch(error => {
       toaster.danger(Utils.getErrorMsg(error));
     });

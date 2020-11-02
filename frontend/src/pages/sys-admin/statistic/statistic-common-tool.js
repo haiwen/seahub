@@ -38,13 +38,13 @@ class StatisticCommonTool extends React.Component {
     let endTime = today;
     let startTime;
     switch(statisticTypeName) {
-      case 'oneWeek' : 
+      case 'oneWeek' :
         startTime = moment().subtract(6,'d').format('YYYY-MM-DD 00:00:00');
         break;
-      case 'oneMonth' : 
+      case 'oneMonth' :
         startTime = moment().subtract(29,'d').format('YYYY-MM-DD 00:00:00');
         break;
-      case 'oneYear' : 
+      case 'oneYear' :
         startTime = moment().subtract(364,'d').format('YYYY-MM-DD 00:00:00');
         break;
     }
@@ -60,7 +60,7 @@ class StatisticCommonTool extends React.Component {
       return false;
     }
     let today = moment().format();
-    
+
     const endValue = this.state.endValue;
     if (!endValue) {
       let startTime = moment(startValue).format();

@@ -69,7 +69,7 @@ class ContextMenu extends React.Component {
     document.addEventListener('contextmenu', this.handleHide);
     document.addEventListener('keydown', this.handleKeyNavigation);
     window.addEventListener('resize', this.handleHide);
-  } 
+  }
 
   unregisterHandlers = () => {
     document.removeEventListener('mousedown', this.handleOutsideClick);
@@ -90,7 +90,7 @@ class ContextMenu extends React.Component {
     this.registerHandlers();
     callIfExists(this.props.onShowMenu, e);
   }
-  
+
   handleHide = (e) => {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
       this.unregisterHandlers();
@@ -155,7 +155,7 @@ class ContextMenu extends React.Component {
     }
 
     return menuStyles;
-  } 
+  }
 
   getRTLMenuPosition = (x = 0, y = 0) => {
     let menuStyles = {
@@ -211,9 +211,9 @@ class ContextMenu extends React.Component {
             return <div key={index} className="seafile-divider dropdown-divider"></div>;
           } else {
             return (
-              <button 
-                key={index} 
-                className="seafile-contextmenu-item dropdown-item" 
+              <button
+                key={index}
+                className="seafile-contextmenu-item dropdown-item"
                 data-operation={menuItem.key}
                 onClick={this.onMenuItemClick}
                 onContextMenu={this.onContextMenu}

@@ -72,10 +72,10 @@ class AddRepoDialog extends React.Component {
           <Form>
             <FormGroup>
               <Label for="repoName">{gettext('Name')}</Label>
-              <Input 
-                id="repoName" 
-                onKeyPress={this.handleKeyPress} 
-                value={this.state.repoName} 
+              <Input
+                id="repoName"
+                onKeyPress={this.handleKeyPress}
+                value={this.state.repoName}
                 onChange={this.handleChange}
                 innerRef={input => {this.newInput = input;}}
               />

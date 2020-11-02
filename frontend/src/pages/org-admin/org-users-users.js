@@ -4,7 +4,7 @@ import Nav from './org-users-nav';
 import OrgUsersList from './org-users-list';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
-import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog'; 
+import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
 import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -20,7 +20,7 @@ class OrgUsers extends Component {
       orgUsers: [],
       page: 1,
       pageNext: false,
-      sortBy: '', 
+      sortBy: '',
       sortOrder: 'asc',
       isShowAddOrgUserDialog: false,
       isInviteUserDialogOpen: false
@@ -58,7 +58,7 @@ class OrgUsers extends Component {
       url.search = searchParams.toString();
       navigate(url.toString());
       this.initOrgUsersData(page);
-    }); 
+    });
   }
 
   toggleAddOrgUser = () => {
@@ -91,7 +91,7 @@ class OrgUsers extends Component {
       let userInfo = new OrgUserInfo(res.data);
       this.state.orgUsers.unshift(userInfo);
       this.setState({
-        orgUsers: this.state.orgUsers 
+        orgUsers: this.state.orgUsers
       });
       this.toggleAddOrgUser();
       let msg = gettext('successfully added user %s.');
@@ -115,7 +115,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  } 
+  }
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';

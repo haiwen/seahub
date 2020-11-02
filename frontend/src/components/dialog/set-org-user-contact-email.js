@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -25,7 +25,7 @@ class SetOrgUserContactEmail extends React.Component {
 
   handleInputChange = (e) => {
     this.setState({
-      inputValue: e.target.value 
+      inputValue: e.target.value
     });
   }
 
@@ -34,7 +34,7 @@ class SetOrgUserContactEmail extends React.Component {
     const contactEmail = this.state.inputValue.trim();
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     seafileAPI.orgAdminSetOrgUserContactEmail(orgID, email, contactEmail).then((res) => {
@@ -46,7 +46,7 @@ class SetOrgUserContactEmail extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 

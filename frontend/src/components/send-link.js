@@ -46,7 +46,7 @@ class SendLink extends React.Component {
       });
       return;
     }
- 
+
     this.setState({
       btnDisabled: true,
       sending: true
@@ -79,7 +79,7 @@ class SendLink extends React.Component {
         sending: false,
         errorMsg: errorMsg
       });
-    }); 
+    });
   }
 
   render() {

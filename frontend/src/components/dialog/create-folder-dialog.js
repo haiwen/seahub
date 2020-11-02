@@ -61,7 +61,7 @@ class CreateForder extends React.Component {
       let path = this.state.parentPath + newName;
       this.props.onAddFolder(path);
     }
-  } 
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -87,11 +87,11 @@ class CreateForder extends React.Component {
           <Form>
             <FormGroup>
               <Label for="folderName">{gettext('Name')}</Label>
-              <Input 
-                id="folderName" 
-                value={this.state.childName} 
-                innerRef={input => {this.newInput = input;}} 
-                onKeyPress={this.handleKeyPress} 
+              <Input
+                id="folderName"
+                value={this.state.childName}
+                innerRef={input => {this.newInput = input;}}
+                onKeyPress={this.handleKeyPress}
                 onChange={this.handleChange}
               />
             </FormGroup>

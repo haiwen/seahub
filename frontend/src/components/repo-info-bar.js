@@ -46,7 +46,7 @@ class RepoInfoBar extends React.Component {
 
   toggleDrafts = () => {
     this.setState({
-      showRepoDrafts: !this.state.showRepoDrafts 
+      showRepoDrafts: !this.state.showRepoDrafts
     });
   }
 
@@ -78,13 +78,13 @@ class RepoInfoBar extends React.Component {
           </ul>
         )}
         <div className={(usedRepoTags.length > 0 && readmeMarkdown) ? 'file-info-list mt-1' : 'file-info-list'}>
-          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) > 1) && 
+          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) > 1) &&
             <span className="file-info" onClick={this.toggleReadme}>
               <span className="info-icon sf2-icon-readme"></span>
               <span className="used-tag-name">{readmeMarkdown.name}</span>
             </span>
           }
-          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) < 2) && 
+          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) < 2) &&
             <span className="file-info">
               <span className="info-icon sf2-icon-readme"></span>
               <a className="used-tag-name" href={href} target='_blank'>{readmeMarkdown.name}</a>

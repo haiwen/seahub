@@ -83,7 +83,7 @@ class DirOperationToolbar extends React.Component {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFile(e);
   }
-  
+
   onUploadFolder = (e) => {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFolder(e);
@@ -241,7 +241,7 @@ class DirOperationToolbar extends React.Component {
         )}
         {this.state.isShareDialogShow &&
           <ModalPortal>
-            <ShareDialog 
+            <ShareDialog
               itemType={itemType}
               itemName={itemName}
               itemPath={this.props.path}

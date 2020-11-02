@@ -74,7 +74,7 @@ class SearchOrgs extends Component {
   }
 
   handleInputChange = (e) => {
-    this.setState({ 
+    this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
   }
@@ -83,7 +83,7 @@ class SearchOrgs extends Component {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
-    }); 
+    });
   }
 
   render() {
@@ -95,7 +95,7 @@ class SearchOrgs extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Organizations')}</h3>
-            </div> 
+            </div>
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Organizations')}</h4>

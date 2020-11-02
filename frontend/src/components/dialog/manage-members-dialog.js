@@ -208,7 +208,7 @@ class Member extends React.PureComponent {
   translateRole = (role) => {
     if (role === 'Admin') {
       return gettext('Admin');
-    }  
+    }
     else if (role === 'Member') {
       return gettext('Member');
     }
@@ -225,11 +225,11 @@ class Member extends React.PureComponent {
         <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
         <td>{item.name}</td>
         <td>
-          {((isOwner === false) || (isOwner === true && item.role === 'Owner')) && 
+          {((isOwner === false) || (isOwner === true && item.role === 'Owner')) &&
             <span className="group-admin">{this.translateRole(item.role)}</span>
           }
           {(isOwner === true && item.role !== 'Owner') &&
-            <RoleEditor 
+            <RoleEditor
               isTextMode={true}
               isEditIconShow={this.state.highlight}
               currentRole={item.role}

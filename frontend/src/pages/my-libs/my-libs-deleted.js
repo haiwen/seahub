@@ -63,10 +63,10 @@ class MyLibsDeleted extends Component {
                 <p>{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
               </EmptyTip>
               }
-              {this.state.deletedRepoList.length !== 0 && 
+              {this.state.deletedRepoList.length !== 0 &&
                 <div>
                   <p className="tip mt-2">{gettext('Tip: libraries deleted {placeholder} days ago will be cleaned automatically.').replace('{placeholder}', trashReposExpireDays)}</p>
-                  <DeletedRepoTable 
+                  <DeletedRepoTable
                     deletedRepoList={this.state.deletedRepoList}
                     refreshDeletedRepoList={this.refreshDeletedRepoList}
                   />
@@ -135,7 +135,7 @@ class DeletedRepoItem extends Component {
         highlight: false,
       });
     }
-  } 
+  }
 
   restoreDeletedRepo = () => {
     let repoID = this.props.repo.repo_id;

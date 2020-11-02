@@ -25,7 +25,7 @@ class Search extends React.Component {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
-    }   
+    }
   }
 
   handleSubmit = () => {

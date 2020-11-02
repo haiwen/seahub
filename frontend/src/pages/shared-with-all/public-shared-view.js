@@ -184,7 +184,7 @@ class PublicSharedView extends React.Component {
                     </DropdownToggle>
                   </MediaQuery>
                   <MediaQuery query="(max-width: 767.8px)">
-                    <DropdownToggle 
+                    <DropdownToggle
                       tag="span"
                       className="sf2-icon-plus mobile-toolbar-icon"
                       title={gettext('Add Library')}
@@ -211,7 +211,7 @@ class PublicSharedView extends React.Component {
               {(!this.state.isLoading && errMessage) && errMessage}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <SharedRepoListView 
+                <SharedRepoListView
                   libraryType={this.state.libraryType}
                   repoList={this.state.repoList}
                   sortBy={this.state.sortBy}
@@ -234,7 +234,7 @@ class PublicSharedView extends React.Component {
         }
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
-            <CreateRepoDialog 
+            <CreateRepoDialog
               libraryType={this.state.libraryType}
               onCreateToggle={this.onCreateRepoToggle}
               onCreateRepo={this.onCreateRepo}
@@ -243,7 +243,7 @@ class PublicSharedView extends React.Component {
         )}
         {this.state.isSelectRepoDialpgShow && (
           <ModalPortal>
-            <ShareRepoDialog 
+            <ShareRepoDialog
               onRepoSelectedHandler={this.onRepoSelectedHandler}
               onShareRepoDialogClose={this.onSelectRepoToggle}
             />

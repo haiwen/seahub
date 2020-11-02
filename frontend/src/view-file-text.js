@@ -119,7 +119,7 @@ class ViewFileText extends React.Component {
 
   render() {
     return (
-      <FileView 
+      <FileView
         content={
           <FileContent
             content={this.state.content}

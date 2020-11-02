@@ -105,12 +105,12 @@ class ItemDropdownMenu extends React.Component {
     if (tagName && tagName === 'button') {
       return (
         <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} title={gettext('More Operations')}>
-          <DropdownToggle 
+          <DropdownToggle
             className={toggleClass}
-            data-toggle="dropdown" 
+            data-toggle="dropdown"
             title={gettext('More Operations')}
-            aria-expanded={this.state.isItemMenuShow} 
-            // onClick={this.onDropdownToggleClick} 
+            aria-expanded={this.state.isItemMenuShow}
+            // onClick={this.onDropdownToggleClick}
           >
           </DropdownToggle>
           <DropdownMenu>
@@ -134,7 +134,7 @@ class ItemDropdownMenu extends React.Component {
           tag={tagName || 'i'}
           className={toggleClass}
           title={gettext('More Operations')}
-          data-toggle="dropdown" 
+          data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           // onClick={this.onDropdownToggleClick}
         />

@@ -29,12 +29,12 @@ class MainPanel extends React.Component {
       <div className="main-panel">
         <div className="main-panel-center content-viewer">
           <div className={contentClass}>
-            { 
-              this.props.renderingContent ? 
-                (<Loading />) : 
+            {
+              this.props.renderingContent ?
+                (<Loading />) :
                 (<div className="diff-view article">
-                  <DiffViewer 
-                    newMarkdownContent={this.props.newMarkdownContent} 
+                  <DiffViewer
+                    newMarkdownContent={this.props.newMarkdownContent}
                     oldMarkdownContent={this.props.oldMarkdownContent}
                   />
                 </div>)

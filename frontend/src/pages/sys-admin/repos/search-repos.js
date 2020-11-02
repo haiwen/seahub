@@ -13,7 +13,7 @@ class SearchRepos extends Component {
     super(props);
     this.state = {
       name: '',
-      isSubmitBtnActive: false, 
+      isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
       repos: []
@@ -49,10 +49,10 @@ class SearchRepos extends Component {
   onDeleteRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
       return repo.id != targetRepo.id;
-    }); 
+    });
     this.setState({
       repos: repos
-    }); 
+    });
   }
 
   onTransferRepo = (targetRepo) => {

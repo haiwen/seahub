@@ -80,7 +80,7 @@ class DetailListView extends React.Component {
       showRelatedFileDialog: false,
     });
   }
-  
+
   render() {
     let { direntType, direntDetail, fileTagList, relatedFiles, fileParticipantList } = this.props;
     let position = this.getDirentPostion();

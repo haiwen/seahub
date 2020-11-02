@@ -47,7 +47,7 @@ class WebSettingFile extends Component {
             <Button color="secondary" onClick={this.openFileInput}>{gettext('Change')}</Button>
             <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInput} />
           </Fragment>
-        } 
+        }
       />
     );
   }

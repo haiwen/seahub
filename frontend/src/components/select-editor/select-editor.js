@@ -103,9 +103,9 @@ class SelectEditor extends React.Component {
           <div>
             {this.props.translateOption(currentOption)}
             {this.props.isEditIconShow && (
-              <span 
-                title={gettext('Edit')} 
-                className="fa fa-pencil-alt attr-action-icon" 
+              <span
+                title={gettext('Edit')}
+                className="fa fa-pencil-alt attr-action-icon"
                 onClick={this.onEditPermission}>
               </span>
             )}

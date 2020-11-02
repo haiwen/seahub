@@ -40,7 +40,7 @@ class TreeViewItem extends React.Component {
     if (this.props.selectedRepo) {
       isCurrentRepo = this.props.selectedRepo.repo_id === this.props.repo.repo_id;
     }
-    
+
     if (isCurrentRepo) {
       if (this.props.selectedPath !== this.state.filePath) {
         this.props.onDirentItemClick(this.state.filePath, this.props.node.object);
@@ -68,7 +68,7 @@ class TreeViewItem extends React.Component {
               node={item}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
-              repo={this.props.repo} 
+              repo={this.props.repo}
               onDirentItemClick={this.props.onDirentItemClick}
               selectedRepo={this.props.selectedRepo}
               selectedPath={this.props.selectedPath}

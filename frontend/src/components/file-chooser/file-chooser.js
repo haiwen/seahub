@@ -288,8 +288,8 @@ class FileChooser extends React.Component {
 
     if (this.state.isResultGot && this.state.searchResults.length > 0) {
       return (
-        <SearchedListView 
-          searchResults={this.state.searchResults} 
+        <SearchedListView
+          searchResults={this.state.searchResults}
           onItemClick={this.onSearchedItemClick}
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
         />);
@@ -300,7 +300,7 @@ class FileChooser extends React.Component {
     if (item.type !== 'dir') {
       return;
     }
-    
+
     let selectedItemInfo = {
       repoID: item.repo_id,
       filePath: item.path,
@@ -383,12 +383,12 @@ class FileChooser extends React.Component {
               </div>
               {
                 this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-                <RepoListView 
+                <RepoListView
                   initToShowChildren={true}
                   currentRepoInfo={this.state.currentRepoInfo}
                   selectedRepo={this.state.selectedRepo}
                   selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick} 
+                  onRepoItemClick={this.onRepoItemClick}
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
@@ -402,18 +402,18 @@ class FileChooser extends React.Component {
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
               {
-                this.state.isOtherRepoShow && 
-                <RepoListView 
+                this.state.isOtherRepoShow &&
+                <RepoListView
                   initToShowChildren={false}
                   repoList={this.state.repoList}
                   selectedRepo={this.state.selectedRepo}
                   selectedPath={this.state.selectedPath}
-                  onRepoItemClick={this.onRepoItemClick} 
+                  onRepoItemClick={this.onRepoItemClick}
                   onDirentItemClick={this.onDirentItemClick}
                   isShowFile={this.props.isShowFile}
                   fileSuffixes={this.props.fileSuffixes}
                   selectedItemInfo={this.state.selectedItemInfo}
-                /> 
+                />
               }
             </div>
           </Fragment>
@@ -426,12 +426,12 @@ class FileChooser extends React.Component {
             </div>
             {
               this.state.isCurrentRepoShow && this.state.currentRepoInfo &&
-              <RepoListView 
+              <RepoListView
                 initToShowChildren={true}
                 currentRepoInfo={this.state.currentRepoInfo}
                 selectedRepo={this.state.selectedRepo}
                 selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick} 
+                onRepoItemClick={this.onRepoItemClick}
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
@@ -447,17 +447,17 @@ class FileChooser extends React.Component {
                 <span className="item-toggle fa fa-caret-down"></span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
-              <RepoListView 
+              <RepoListView
                 initToShowChildren={false}
                 repoList={this.state.repoList}
                 selectedRepo={this.state.selectedRepo}
                 selectedPath={this.state.selectedPath}
-                onRepoItemClick={this.onRepoItemClick} 
+                onRepoItemClick={this.onRepoItemClick}
                 onDirentItemClick={this.onDirentItemClick}
                 isShowFile={this.props.isShowFile}
                 fileSuffixes={this.props.fileSuffixes}
                 selectedItemInfo={this.state.selectedItemInfo}
-              /> 
+              />
             </div>
           </div>
         )}

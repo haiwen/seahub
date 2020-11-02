@@ -38,7 +38,7 @@ class UserNotifications extends React.Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getItems(this.state.currentPage);
-    }); 
+    });
   }
 
   getItems = (page) => {
@@ -54,7 +54,7 @@ class UserNotifications extends React.Component {
       this.setState({
         isLoading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 
@@ -63,7 +63,7 @@ class UserNotifications extends React.Component {
       perPage: perPage
     }, () => {
       this.getItems(1);
-    }); 
+    });
   }
 
   onSearchedClick = (selectedItem) => {
@@ -126,7 +126,7 @@ class UserNotifications extends React.Component {
                     <button className="btn btn-secondary op-bar-btn ml-2" onClick={this.clearAll}>{gettext('Clear')}</button>
                   </div>
                 </div>
-                <Content 
+                <Content
                   isLoading={this.state.isLoading}
                   errorMsg={this.state.errorMsg}
                   items={this.state.items}
@@ -149,7 +149,7 @@ class Content extends React.Component {
 
   constructor(props) {
     super(props);
-  } 
+  }
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
@@ -162,7 +162,7 @@ class Content extends React.Component {
   render() {
     const {
       isLoading, errorMsg, items,
-      curPerPage, currentPage, hasNextPage 
+      curPerPage, currentPage, hasNextPage
     } = this.props;
 
     if (isLoading) {
@@ -200,7 +200,7 @@ class Content extends React.Component {
             })}
           </tbody>
         </table>
-      {items.length > 0 &&
+        {items.length > 0 &&
         <Paginator
           gotoPreviousPage={this.getPreviousPage}
           gotoNextPage={this.getNextPage}
@@ -209,7 +209,7 @@ class Content extends React.Component {
           curPerPage={curPerPage}
           resetPerPage={this.props.resetPerPage}
         />
-      }
+        }
       </React.Fragment>
     );
   }

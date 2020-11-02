@@ -16,7 +16,7 @@ class PermSelect extends React.Component {
     super(props);
 
     this.state = {
-      currentOption: this.props.currentPerm 
+      currentOption: this.props.currentPerm
     };
   }
 
@@ -27,7 +27,7 @@ class PermSelect extends React.Component {
 
     const currentOption = e.target.value;
     this.setState({
-      currentOption: currentOption 
+      currentOption: currentOption
     });
 
     this.props.changePerm(currentOption);

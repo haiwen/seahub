@@ -49,15 +49,15 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
           {gettext('Reset library password')}
         </ModalHeader>
         <ModalBody>
-        {this.state.showLoading && (
-          <span>{gettext('Sending new password...')}</span>
-        )}
-        {this.state.showSuccess && (
-          <div dangerouslySetInnerHTML={{__html:message}} />
-        )}
-        {this.state.showError && (
-          <span className="err-message">{this.state.errMessage}</span>
-        )}
+          {this.state.showLoading && (
+            <span>{gettext('Sending new password...')}</span>
+          )}
+          {this.state.showSuccess && (
+            <div dangerouslySetInnerHTML={{__html:message}} />
+          )}
+          {this.state.showError && (
+            <span className="err-message">{this.state.errMessage}</span>
+          )}
         </ModalBody>
       </Modal>
     );

@@ -16,7 +16,7 @@ class UserItem extends React.Component {
       isOperationShow: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -29,7 +29,7 @@ class UserItem extends React.Component {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_email);
   }
-  
+
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
@@ -42,7 +42,7 @@ class UserItem extends React.Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.user_name}</td>
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -53,7 +53,7 @@ class UserItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteShareItem} 
+            onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
           </span>
@@ -71,9 +71,9 @@ class UserList extends React.Component {
       <tbody>
         {items.map((item, index) => {
           return (
-            <UserItem 
-              key={index} 
-              item={item} 
+            <UserItem
+              key={index}
+              item={item}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
@@ -164,13 +164,13 @@ class SysAdminShareToUser extends React.Component {
         });
       }
     });
-  } 
+  }
 
   deleteShareItem = (useremail) => {
     let repoID = this.props.repoID;
     seafileAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', useremail).then(res => {
       this.setState({
-        sharedItems: this.state.sharedItems.filter( item => { return item.user_email !== useremail; }) 
+        sharedItems: this.state.sharedItems.filter( item => { return item.user_email !== useremail; })
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -188,7 +188,7 @@ class SysAdminShareToUser extends React.Component {
       toaster.danger(errMessage);
     });
   }
-  
+
   updateSharedItems = (item, permission) => {
     let username = item.user_name;
     let sharedItems = this.state.sharedItems.map(sharedItem => {
@@ -226,7 +226,7 @@ class SysAdminShareToUser extends React.Component {
                 />
               </td>
               <td>
-                <SharePermissionEditor 
+                <SharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -264,10 +264,10 @@ class SysAdminShareToUser extends React.Component {
                 <th width="15%"></th>
               </tr>
             </thead>
-            <UserList 
+            <UserList
               items={sharedItems}
               permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem} 
+              deleteShareItem={this.deleteShareItem}
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>

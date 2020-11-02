@@ -67,7 +67,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -118,7 +118,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
@@ -160,7 +160,7 @@ class Item extends Component {
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
-    const url = item.parent_group_id == 0 ? 
+    const url = item.parent_group_id == 0 ?
       `${siteRoot}sys/groups/${item.id}/libraries/` :
       `${siteRoot}sys/departments/${item.id}/`;
 
@@ -179,7 +179,7 @@ class Item extends Component {
               onFreezedItem={this.props.onFreezedItem}
               onUnfreezedItem={this.onUnfreezedItem}
             />
-            }   
+            }
           </td>
         </tr>
         {isDeleteDialogOpen &&
@@ -212,7 +212,7 @@ class Groups extends Component {
     seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
       this.setState({
         userInfo: res.data
-      }); 
+      });
     });
     seafileAPI.sysAdminListGroupsJoinedByUser(this.props.email).then(res => {
       this.setState({
@@ -223,7 +223,7 @@ class Groups extends Component {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      }); 
+      });
     });
   }
 

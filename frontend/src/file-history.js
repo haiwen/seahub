@@ -80,7 +80,7 @@ class FileHistory extends React.Component {
           </div>
         </div>
         <div id="main" className="history-content">
-          <MainPanel 
+          <MainPanel
             newMarkdownContent={this.state.newMarkdownContent}
             oldMarkdownContent={this.state.oldMarkdownContent}
             renderingContent={this.state.renderingContent}

@@ -190,7 +190,7 @@ class SearchUsers extends Component {
         return item;
       });
       this.setState({userList: newUserList});
-      const msg = (key == 'is_active' && value) ? 
+      const msg = (key == 'is_active' && value) ?
         res.data.update_status_tip : gettext('Edit succeeded');
       toaster.success(msg);
     }).catch((error) => {
@@ -219,7 +219,7 @@ class SearchUsers extends Component {
     seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
       let userList = this.state.userList.filter(item => {
         return item.email != email;
-      }); 
+      });
       this.setState({
         userList: userList
       });
@@ -231,10 +231,10 @@ class SearchUsers extends Component {
   }
 
   handleInputChange = (e) => {
-    this.setState({ 
+    this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }                 
+  }
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
@@ -246,8 +246,8 @@ class SearchUsers extends Component {
   render() {
     const { query, isSubmitBtnActive } = this.state;
     const {
-      hasUserSelected, 
-      isBatchDeleteUserDialogOpen, 
+      hasUserSelected,
+      isBatchDeleteUserDialogOpen,
       isBatchSetQuotaDialogOpen
     } = this.state;
     return (

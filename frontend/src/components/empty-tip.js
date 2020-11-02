@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { mediaUrl } from '../utils/constants';
 
-const propTypes = { 
+const propTypes = {
   forDialog: PropTypes.bool
 };
 

@@ -44,7 +44,7 @@ class DirentGridItem extends React.Component {
   onItemClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const dirent = this.props.dirent;
     if (this.props.dirent === this.props.activeDirent) {
       this.setState({isGridSelected: false});
@@ -108,7 +108,7 @@ class DirentGridItem extends React.Component {
 
     if (dropItemData.type !== 'dir') {
       return;
-    } 
+    }
 
     let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
@@ -131,7 +131,7 @@ class DirentGridItem extends React.Component {
     let dirent = this.props.dirent;
     this.props.onGridItemContextMenu(event, dirent);
   }
-   
+
   render() {
     let { dirent, path } = this.props;
     let direntPath = Utils.joinPath(path, dirent.name);
@@ -150,7 +150,7 @@ class DirentGridItem extends React.Component {
       dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
     }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
-    
+
     let gridClass = 'grid-file-img-link cursor-pointer';
     gridClass += this.state.isGridSelected ? ' grid-selected-active' : ' ';
     gridClass += this.state.isGridDropTipShow ? ' grid-drop-show' : ' ';
@@ -161,14 +161,14 @@ class DirentGridItem extends React.Component {
     return(
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
-          <div 
+          <div
             className={gridClass}
-            draggable="true" 
+            draggable="true"
             onClick={this.onItemClick}
-            onDragStart={this.onGridItemDragStart} 
-            onDragEnter={this.onGridItemDragEnter} 
-            onDragOver={this.onGridItemDragOver} 
-            onDragLeave={this.onGridItemDragLeave} 
+            onDragStart={this.onGridItemDragStart}
+            onDragEnter={this.onGridItemDragEnter}
+            onDragOver={this.onGridItemDragOver}
+            onDragLeave={this.onGridItemDragLeave}
             onDrop={this.onGridItemDragDrop}
           >
             {dirent.encoded_thumbnail_src ?

@@ -16,7 +16,7 @@ class DesktopDevices extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <DevicesNav currentItem="desktop" />
-            <DevicesByPlatform 
+            <DevicesByPlatform
               devicesPlatform={'desktop'}
             />
           </div>

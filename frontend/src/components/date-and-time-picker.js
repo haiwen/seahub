@@ -90,7 +90,7 @@ class Picker extends React.Component {
           ({value}) => {
             return (
               <div>
-                <input 
+                <input
                   placeholder={FORMAT}
                   style={{ width: props.inputWidth || 250 }}
                   tabIndex="-1"

@@ -73,7 +73,7 @@ class OrgUsers extends Component {
     msg = msg.replace('%s', userInfo.email);
     toaster.success(msg);
     this.toggleAddOrgAdmin();
-  } 
+  }
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';

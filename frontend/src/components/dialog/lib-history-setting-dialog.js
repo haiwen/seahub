@@ -35,7 +35,7 @@ class LibHistorySetting extends React.Component {
         noHistory: res.data.keep_days === 0 ? true : false,
         autoHistory: res.data.keep_days > 0 ? true : false,
         disabled: res.data.keep_days > 0 ? false : true,
-        expireDays: res.data.keep_days > 0 ? res.data.keep_days : 30, 
+        expireDays: res.data.keep_days > 0 ? res.data.keep_days : 30,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -51,7 +51,7 @@ class LibHistorySetting extends React.Component {
     let repoID = this.props.repoID;
     let reg = /^-?\d+$/;
     let flag = reg.test(days);
-    if (flag) {  
+    if (flag) {
       let message = gettext('Successfully set library history.');
       seafileAPI.setRepoHistoryLimit(repoID, days).then(res => {
         toaster.success(message);
@@ -94,7 +94,7 @@ class LibHistorySetting extends React.Component {
       });
     } else {
       this.setState({
-        disabled: false 
+        disabled: false
       });
     }
 
@@ -131,11 +131,11 @@ class LibHistorySetting extends React.Component {
             <FormGroup check>
               <Input type="radio" name="radio1" checked={this.state.autoHistory} disabled={!enableRepoHistorySetting} onChange={() =>{this.setLimitDays('autoHistory');}}/>{' '}
               <Label>{gettext('Only keep a period of history:')}</Label>
-              <Input 
-                type="text" 
-                className="expire-input" 
+              <Input
+                type="text"
+                className="expire-input"
                 value={this.state.expireDays}
-                onChange={this.onChange} 
+                onChange={this.onChange}
                 disabled={this.state.disabled}
                 onKeyDown={this.handleKeyPress}
               />{' '}

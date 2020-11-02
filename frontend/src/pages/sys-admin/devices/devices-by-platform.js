@@ -65,7 +65,7 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -89,7 +89,7 @@ class Item extends Component {
     this.setState({isOpIconShown: false});
   }
 
-  handleUnlink = (e) => { 
+  handleUnlink = (e) => {
     e.preventDefault();
     if (this.props.item.is_desktop_client) {
       this.toggleUnlinkDeviceDialog();
@@ -170,7 +170,7 @@ class DevicesByPlatform extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getDevicesListByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getDevicesListByPage = (page) => {
@@ -186,7 +186,7 @@ class DevicesByPlatform extends Component {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-      });    
+      });
     });
   }
 

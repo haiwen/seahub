@@ -20,7 +20,7 @@ import Content from './users-content';
 
 const { availableRoles } = window.sysadmin.pageOptions;
 
-const propTypes = { 
+const propTypes = {
   isAdmin: PropTypes.bool,
   isLDAPImported: PropTypes.bool
 };
@@ -274,7 +274,7 @@ class Users extends Component {
           return new SysAdminUser(item);
         });
         this.setState({
-          userList: users.concat(this.state.userList) 
+          userList: users.concat(this.state.userList)
         });
       }
       res.data.failed.map(item => {
@@ -320,7 +320,7 @@ class Users extends Component {
         return item;
       });
       this.setState({userList: newUserList});
-      const msg = (key == 'is_active' && value) ? 
+      const msg = (key == 'is_active' && value) ?
         res.data.update_status_tip : gettext('Edit succeeded');
       toaster.success(msg);
     }).catch((error) => {
@@ -349,7 +349,7 @@ class Users extends Component {
     seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
       let userList = this.state.userList.filter(item => {
         return item.email != email;
-      }); 
+      });
       this.setState({
         userList: userList
       });
@@ -394,7 +394,7 @@ class Users extends Component {
 
   toggleBatchAddAdminDialog = () => {
     this.setState({isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen});
-  }  
+  }
 
   addAdminInBatch = (emails) => {
     seafileAPI.sysAdminAddAdminInBatch(emails).then(res => {
@@ -402,7 +402,7 @@ class Users extends Component {
         return new SysAdminAdminUser(user);
       });
       this.setState({
-        userList: users.concat(this.state.userList) 
+        userList: users.concat(this.state.userList)
       });
       res.data.failed.map(item => {
         const msg = `${item.email}: ${item.error_msg}`;
@@ -432,10 +432,10 @@ class Users extends Component {
   render() {
     const { isAdmin, isLDAPImported } = this.props;
     const {
-      hasUserSelected, 
+      hasUserSelected,
       isImportUserDialogOpen,
-      isAddUserDialogOpen, 
-      isBatchDeleteUserDialogOpen, 
+      isAddUserDialogOpen,
+      isBatchDeleteUserDialogOpen,
       isBatchSetQuotaDialogOpen,
       isBatchAddAdminDialogOpen
     } = this.state;

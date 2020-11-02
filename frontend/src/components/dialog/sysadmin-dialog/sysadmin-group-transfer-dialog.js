@@ -24,7 +24,7 @@ class SysAdminTransferGroupDialog extends React.Component {
   handleSelectChange = (option) => {
     this.setState({
       selectedOption: option,
-      submitBtnDisabled: option == null 
+      submitBtnDisabled: option == null
     });
   }
 
@@ -32,7 +32,7 @@ class SysAdminTransferGroupDialog extends React.Component {
     const receiver = this.state.selectedOption.email;
     this.props.transferGroup(receiver);
     this.props.toggleDialog();
-  } 
+  }
 
   render() {
     const { submitBtnDisabled } = this.state;
@@ -50,7 +50,7 @@ class SysAdminTransferGroupDialog extends React.Component {
             className="reviewer-select"
             placeholder={gettext('Select a user')}
             onSelectChange={this.handleSelectChange}
-          /> 
+          />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>

@@ -47,11 +47,11 @@ class OpMenu extends React.Component {
     const { operations, translateOperations } = this.props;
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        <DropdownToggle 
+        <DropdownToggle
           tag="i"
           className="d-flex w-5 h-5 align-items-center justify-content-center sf-dropdown-toggle fa fa-ellipsis-v"
           title={gettext('More Operations')}
-          data-toggle="dropdown" 
+          data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
         />
         <DropdownMenu className="my-1 mr-2">

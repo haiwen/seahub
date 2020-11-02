@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/lib/Creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -29,15 +29,15 @@ class LabelRepoStateDialog extends React.Component {
     seafileAPI.getAllRepoSnapshotLabels().then((res) => {
       this.setState({
         isLoading: false,
-        existingLabels: res.data, 
+        existingLabels: res.data,
         errorMsg: ''
-      }); 
+      });
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
-      }); 
+      });
     });
   }
 
@@ -58,7 +58,7 @@ class LabelRepoStateDialog extends React.Component {
     }
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     const {repoID, repoName} = this.props;
@@ -72,7 +72,7 @@ class LabelRepoStateDialog extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 
