@@ -88,7 +88,7 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -118,7 +118,7 @@ class Item extends Component {
         isOpIconShown: false,
         highlight: false
       });
-    } 
+    }
   }
 
   onUnfreezedItem = () => {
@@ -134,12 +134,12 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (item) {
       case 'Delete':
         translateResult = gettext('Delete');
         break;
-    }   
+    }
     return translateResult;
   }
 
@@ -154,7 +154,7 @@ class Item extends Component {
   }
 
   getInviteTypeText = () => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch (this.props.item.invite_type) {
       case 'Guest':
         translateResult = gettext('Guest');
@@ -165,8 +165,8 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { 
-      isOpIconShown 
+    const {
+      isOpIconShown
     } = this.state;
 
     return (
@@ -186,13 +186,13 @@ class Item extends Component {
             <span title={moment(item.invite_time).format('llll')}>{moment(item.invite_time).fromNow()}</span>
           </td>
           <td>
-            {item.accept_time ? 
+            {item.accept_time ?
               <span title={moment(item.accept_time).format('llll')}>{moment(item.accept_time).fromNow()}</span> :
               '--'
             }
           </td>
           <td>
-            {item.is_expired ? 
+            {item.is_expired ?
               <span className="text-red">{moment(item.expire_time).format('YYYY-MM-DD HH:mm')}</span> :
               moment(item.expire_time).format('YYYY-MM-DD HH:mm')
             }
@@ -263,13 +263,13 @@ class Invitations extends Component {
     seafileAPI.sysAdminDeleteInvitation(token).then(res => {
       let items = this.state.items.filter(item => {
         return item.token != token;
-      }); 
+      });
       this.setState({items: items});
       toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
-    }); 
+    });
   }
 
   deleteItemInBatch = () => {
@@ -278,7 +278,7 @@ class Invitations extends Component {
       const items = this.state.items.filter(item => !item.is_expired);
       if (items.length < prevItems.length) {
         this.setState({
-          items: items 
+          items: items
         });
         toaster.success(gettext('Operation succeeded.'));
       }

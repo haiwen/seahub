@@ -13,7 +13,7 @@ class WikiOutlineItem extends React.Component {
     var activeId = this.props.item.id;
     this.props.handleNavItemClick(activeId);
   }
-  
+
   render() {
     let item = this.props.item;
     let activeIndex = parseInt(this.props.activeIndex);
@@ -59,13 +59,13 @@ class WikiOutline extends React.Component {
       let flag = false;
       let item = navItems[i];
       if (item.id === activeId && item.key !== _this.state.activeIndex) {
-        let scrollTop = 0; 
+        let scrollTop = 0;
         if (item.key > 20) {
           scrollTop = - (item.key - 20)*27 + 'px';
           if (parseInt(scrollTop) > 0) { // handle scroll quickly;
             scrollTop = 0;
-          }  
-        } 
+          }
+        }
         _this.setState({
           activeIndex : item.key,
           scrollTop: scrollTop
@@ -77,16 +77,16 @@ class WikiOutline extends React.Component {
       }
     }
   }
-  
+
   render() {
     let style = {top: this.state.scrollTop};
     return (
       <ul className="wiki-viewer-outline" ref="outlineContainer" style={style}>
         {this.props.navItems.map(item => {
           return (
-            <WikiOutlineItem 
-              key={item.key} 
-              item={item} 
+            <WikiOutlineItem
+              key={item.key}
+              item={item}
               activeIndex={this.state.activeIndex}
               handleNavItemClick={this.props.handleNavItemClick}
             />

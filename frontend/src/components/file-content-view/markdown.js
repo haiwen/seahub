@@ -10,7 +10,7 @@ class FileContent extends React.Component {
     return (
       <div className="file-view-content flex-1 o-auto">
         <div className="md-content">
-          <MarkdownViewer 
+          <MarkdownViewer
             markdownContent={fileContent}
             showTOC={false}
           />

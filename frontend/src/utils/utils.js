@@ -253,7 +253,7 @@ export const Utils = {
   },
 
   /**
-   * input: 
+   * input:
    *  eg: /
    *      ../abc/abc/
    *      ../abc/bc
@@ -306,7 +306,7 @@ export const Utils = {
 
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
-      navigator.userAgent.indexOf('Chrome') > -1 || 
+      navigator.userAgent.indexOf('Chrome') > -1 ||
       navigator.userAgent.indexOf('Safari') > -1;
   },
 
@@ -486,7 +486,7 @@ export const Utils = {
 
   getFileOperationList: function(currentRepoInfo, dirent, isContextmenu) {
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, 
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
       COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
 
@@ -507,7 +507,7 @@ export const Utils = {
 
       list.push('Divider');
     }
- 
+
     if (permission == 'rw') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
@@ -518,7 +518,7 @@ export const Utils = {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice') {
             list.push(UNLOCK);
-          }   
+          }
         } else {
           list.push(LOCK);
         }
@@ -527,11 +527,11 @@ export const Utils = {
       list.push('Divider');
       if (enableFileComment) {
         list.push(COMMENT);
-      }   
+      }
       list.push(HISTORY);
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
-      }   
+      }
       list.push('Divider', OPEN_VIA_CLIENT);
     }
 
@@ -541,7 +541,7 @@ export const Utils = {
       }
       if (enableFileComment) {
         list.push(COMMENT);
-      }   
+      }
       list.push(HISTORY);
     }
 
@@ -602,8 +602,8 @@ export const Utils = {
     switch (permission) {
       case 'preview_download':
         return {
-          value: permission, 
-          text: gettext('Preview and download'), 
+          value: permission,
+          text: gettext('Preview and download'),
           permissionDetails: {
             'can_edit': false,
             'can_download': true,
@@ -612,8 +612,8 @@ export const Utils = {
         };
       case 'preview_only':
         return {
-          value: permission, 
-          text: gettext('Preview only'), 
+          value: permission,
+          text: gettext('Preview only'),
           permissionDetails: {
             'can_edit': false,
             'can_download': false,
@@ -622,18 +622,18 @@ export const Utils = {
         };
       case 'download_upload':
         return {
-          value: permission, 
-          text: gettext('Download and upload'), 
+          value: permission,
+          text: gettext('Download and upload'),
           permissionDetails: {
             'can_edit': false,
             'can_download': true,
-            'can_upload': true 
+            'can_upload': true
           }
         };
       case 'edit_download':
         return {
           value: permission,
-          text: gettext('Edit on cloud and download'), 
+          text: gettext('Edit on cloud and download'),
           permissionDetails: {
             'can_edit': true,
             'can_download': true,
@@ -741,7 +741,7 @@ export const Utils = {
     var path = decodeURIComponent(array[1]);
     return path;
   },
-  
+
   getPathFromInternalDirLink: function(url, repoID) {
     var re = new RegExp(serviceURL + '/library/' + repoID + '(/.*)');
     var array = re.exec(url);
@@ -776,7 +776,7 @@ export const Utils = {
     }
     return path;
   },
-  
+
   getPathFromWikiInternalDirLink: function(url, slug) {
     slug = encodeURIComponent(slug);
     var re = new RegExp(serviceURL + '/published/' + slug + '(/.*)');
@@ -951,7 +951,7 @@ export const Utils = {
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
             return 0;
-          } 
+          }
           return a.size_original < b.size_original ? -1 : 1;
         };
         break;
@@ -959,7 +959,7 @@ export const Utils = {
         comparator = function(a, b) {
           if (a.type == 'dir' && b.type == 'dir') {
             return 0;
-          } 
+          }
           return a.size_original < b.size_original ? 1 : -1;
         };
         break;
@@ -1075,9 +1075,9 @@ export const Utils = {
 
   changeMarkdownNodes: function(nodes, fn) {
     nodes.map((item) => {
-      fn(item); 
+      fn(item);
       if (item.children && item.children.length > 0){
-        Utils.changeMarkdownNodes(item.children, fn); 
+        Utils.changeMarkdownNodes(item.children, fn);
       }
     });
 
@@ -1253,22 +1253,22 @@ export const Utils = {
       return event.target.dataset[data];
     }
     return event.target.getAttribute('data-' + data);
-    
+
   },
 
   /**
-   * Check whether user has permission to share a dirent. 
+   * Check whether user has permission to share a dirent.
    * If dirent is none, then check whether the user can share the repo
    * scene 1: root path or folder path, control the share button in the toolbar
    * scene 2: selected a dirent, control the share button in the toolbar dropdown-menu
    * scene 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
-   * 
-   * @param {*} repoInfo 
-   * @param {*} userDirPermission 
-   * @param {*} dirent 
+   *
+   * @param {*} repoInfo
+   * @param {*} userDirPermission
+   * @param {*} dirent
    */
   isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
-    
+
     let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
     let isRepoOwner = ownerEmail === username;
 

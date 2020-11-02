@@ -56,7 +56,7 @@ class MultipleDirOperationToolbar extends React.Component {
       fileTagList: [],
       multiFileTagList: [],
       showRelatedFileDialog: false,
-      viewMode: 'list_related_file',     
+      viewMode: 'list_related_file',
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false
     };
@@ -170,7 +170,7 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'History':
         this.onHistory(dirent);
         break;
-      case 'Access Log': 
+      case 'Access Log':
         this.onAccessLog(dirent);
         break;
       case 'Open via Client':
@@ -327,7 +327,7 @@ class MultipleDirOperationToolbar extends React.Component {
     const dirent = this.props.selectedDirentList[0];
 
     let direntPath = this.getDirentPath(dirent);
-    
+
     return (
       <Fragment>
         <div className="dir-operation">
@@ -356,8 +356,8 @@ class MultipleDirOperationToolbar extends React.Component {
           </div>
         </div>
         {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
-        {this.state.isMoveDialogShow && 
-          <MoveDirentDialog 
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog
             path={this.props.path}
             repoID={this.props.repoID}
             repoEncrypted={this.props.repoEncrypted}

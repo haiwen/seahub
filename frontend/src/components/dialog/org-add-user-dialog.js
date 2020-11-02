@@ -32,7 +32,7 @@ class AddOrgUserDialog extends React.Component {
       this.setState({isAddingUser: true});
       this.props.handleSubmit(email, name.trim(), password);
     }
-  } 
+  }
 
   handleKeyPress = (e) => {
     e.preventDefault();

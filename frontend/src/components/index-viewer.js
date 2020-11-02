@@ -77,7 +77,7 @@ class IndexContentViewer extends React.Component {
   }
 
   onLinkClick = (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     const currentPath = event.target.getAttribute('data-path');
     if (currentPath === this.state.currentPath) {
       return;
@@ -106,7 +106,7 @@ class IndexContentViewer extends React.Component {
       if (item.type == 'image' && isPublicWiki) {
         url = item.data.src;
         const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        // different repo 
+        // different repo
         if (!re.test(url)) {
           return;
         }
@@ -116,7 +116,7 @@ class IndexContentViewer extends React.Component {
         const imagePath = url.substring(index + 5, index2);
         // replace url
         item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
-      } 
+      }
 
       else if (item.type == 'link') {
         url = item.data.href;
@@ -125,17 +125,17 @@ class IndexContentViewer extends React.Component {
         /* eslint-enable */
         let re = new RegExp(expression);
 
-        // Solving relative paths  
+        // Solving relative paths
         if (!re.test(url)) {
           item.data.href = serviceURL + '/published/' + slug + '/' + url;
         }
-        // change file url 
+        // change file url
         else if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
           // replace url
           item.data.href = serviceURL + '/published/' + slug + path;
-        } 
-        // change dir url 
+        }
+        // change dir url
         else if (Utils.isInternalDirLink(url, repoID)) {
           let path = Utils.getPathFromInternalDirLink(url, repoID);
           // replace url
@@ -154,7 +154,7 @@ class IndexContentViewer extends React.Component {
       if (node.type === 'unordered_list' || node.type === 'ordered_list') {
         let treeRoot = this.transSlateToTree(node.children, this.treeRoot);
         this.setNodePath(treeRoot, '/');
-        this.treeRoot = treeRoot; 
+        this.treeRoot = treeRoot;
       }
     });
   }
@@ -163,7 +163,7 @@ class IndexContentViewer extends React.Component {
     let name = node.name;
     let path = parentNodePath === '/' ? parentNodePath + name : parentNodePath + '/' + name;
     node.path = path;
-    if (node.children.length > 0) {      
+    if (node.children.length > 0) {
       node.children.map(child => {
         this.setNodePath(child, path);
       });

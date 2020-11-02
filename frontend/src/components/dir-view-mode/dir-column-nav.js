@@ -113,7 +113,7 @@ class DirColumnNav extends React.Component {
       this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     }
   }
-  
+
   onAddFolderToggle = (type) => {
     if (type === 'root') {
       let root = this.props.treeData.root;
@@ -165,7 +165,7 @@ class DirColumnNav extends React.Component {
 
   checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
-    // root node to new node conditions: parentNode is null, 
+    // root node to new node conditions: parentNode is null,
     let parentNode = node.parentNode ? node.parentNode : node;
     let childrenObject = parentNode.children.map(item => {
       return item.object;
@@ -253,7 +253,7 @@ class DirColumnNav extends React.Component {
     return (
       <Fragment>
         <div className="dir-content-nav" role="navigation" style={{flex: (flex), userSelect: select}} onScroll={this.stopTreeScrollPropagation}>
-          {this.props.isTreeDataLoading ? 
+          {this.props.isTreeDataLoading ?
             (<Loading/>) :
             (<TreeView
               repoPermission={this.props.repoPermission}

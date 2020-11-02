@@ -25,13 +25,13 @@ class OrgUserSharedRepos extends Component {
     seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   render() {
@@ -42,7 +42,7 @@ class OrgUserSharedRepos extends Component {
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='shared-repos' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
               />
             </div>
@@ -88,7 +88,7 @@ class Content extends Component {
           })}
         </tbody>
       </table>
-    ); 
+    );
   }
 }
 
@@ -99,11 +99,11 @@ class Item extends Component {
   }
 
   render() {
-    const repo = this.props.data; 
+    const repo = this.props.data;
     return (
       <tr>
         <td>
-          <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" /> 
+          <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
         </td>
         <td>{repo.repo_name}</td>
         <td>{repo.owner_name}</td>

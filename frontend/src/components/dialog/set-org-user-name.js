@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -25,7 +25,7 @@ class SetOrgUserName extends React.Component {
 
   handleInputChange = (e) => {
     this.setState({
-      inputValue: e.target.value 
+      inputValue: e.target.value
     });
   }
 
@@ -34,7 +34,7 @@ class SetOrgUserName extends React.Component {
     const name = this.state.inputValue.trim();
 
     this.setState({
-      submitBtnDisabled: true 
+      submitBtnDisabled: true
     });
 
     // when name is '', api returns the previous name
@@ -48,7 +48,7 @@ class SetOrgUserName extends React.Component {
       this.setState({
         formErrorMsg: errorMsg,
         submitBtnDisabled: false
-      }); 
+      });
     });
   }
 

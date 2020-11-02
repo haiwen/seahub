@@ -45,7 +45,7 @@ class AddOrgAdminDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  } 
+  }
 
   render() {
     return (

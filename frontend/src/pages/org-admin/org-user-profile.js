@@ -27,30 +27,30 @@ class OrgUserProfile extends Component {
     seafileAPI.orgAdminGetOrgUserInfo(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   updateName = (name) => {
     this.setState({
-      name: name 
+      name: name
     });
   }
 
   updateContactEmail = (contactEmail) => {
     this.setState({
-      contact_email: contactEmail 
+      contact_email: contactEmail
     });
   }
 
   updateQuota = (quota) => {
     this.setState({
-      quota_total: quota 
+      quota_total: quota
     });
   }
 
@@ -62,7 +62,7 @@ class OrgUserProfile extends Component {
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='profile' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
                 updateName={this.updateName}
                 updateContactEmail={this.updateContactEmail}
@@ -152,7 +152,7 @@ class Content extends Component {
             <span title={gettext('Edit')} className="attr-action-icon fa fa-pencil-alt" onClick={this.toggleSetQuotaDialog}></span>
           </dd>
         </dl>
-        {isSetNameDialogOpen && 
+        {isSetNameDialogOpen &&
         <SetOrgUserName
           orgID={orgID}
           email={email}
@@ -161,7 +161,7 @@ class Content extends Component {
           toggleDialog={this.toggleSetNameDialog}
         />
         }
-        {isSetContactEmailDialogOpen && 
+        {isSetContactEmailDialogOpen &&
         <SetOrgUserContactEmail
           orgID={orgID}
           email={email}
@@ -170,7 +170,7 @@ class Content extends Component {
           toggleDialog={this.toggleSetContactEmailDialog}
         />
         }
-        {isSetQuotaDialogOpen && 
+        {isSetQuotaDialogOpen &&
         <SetOrgUserQuota
           orgID={orgID}
           email={email}
@@ -180,7 +180,7 @@ class Content extends Component {
         />
         }
       </Fragment>
-    ); 
+    );
   }
 }
 

@@ -42,9 +42,9 @@ class DraftListView extends React.Component {
         <tbody>
           { drafts && drafts.map((draft) => {
             return (
-              <DraftListItem 
-                key={draft.id} 
-                draft={draft} 
+              <DraftListItem
+                key={draft.id}
+                draft={draft}
                 isItemFreezed={this.state.isItemFreezed}
                 onFreezedItem={this.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}

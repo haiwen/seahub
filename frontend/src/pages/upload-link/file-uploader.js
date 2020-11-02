@@ -1,4 +1,4 @@
-// This file is copied from frontend/src/components/file-uploader/file-uploader.js,   
+// This file is copied from frontend/src/components/file-uploader/file-uploader.js,
 // and modified according to the requirements of this page.
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
@@ -95,8 +95,8 @@ class FileUploader extends React.Component {
   }
 
   onbeforeunload = () => {
-    if (window.uploader && 
-        window.uploader.isUploadProgressDialogShow && 
+    if (window.uploader &&
+        window.uploader.isUploadProgressDialogShow &&
         window.uploader.totalProgress !== 100) {
       return '';
     }
@@ -153,7 +153,7 @@ class FileUploader extends React.Component {
     let allFilesUploaded = this.state.allFilesUploaded;
     if (allFilesUploaded === true) {
       this.setState({allFilesUploaded: false});
-    } 
+    }
 
     let path = this.props.path;
     let fileName = resumableFile.fileName;
@@ -184,14 +184,14 @@ class FileUploader extends React.Component {
         if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
           hasRepetition = true;
           break;
-        }   
-      }   
+        }
+      }
       */
       if (hasRepetition) {
         this.setState({
           isUploadRemindDialogShow: true,
           currentResumableFile: resumableFile,
-        }); 
+        });
       } else {
         this.setUploadFileList(this.resumable.files);
         seafileAPI.sharedUploadLinkGetFileUploadUrl(this.props.token).then(res => {
@@ -202,7 +202,7 @@ class FileUploader extends React.Component {
           toaster.danger(errMessage);
         });
       }
-    } else { 
+    } else {
       this.setUploadFileList(this.resumable.files);
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
@@ -281,7 +281,7 @@ class FileUploader extends React.Component {
     if (this.timestamp) {
       let timeDiff = (now - this.timestamp);
       if (timeDiff < this.bitrateInterval) {
-        return this.state.uploadBitrate; 
+        return this.state.uploadBitrate;
       }
 
       // 1. Cancel will produce loaded greater than this.loaded
@@ -295,10 +295,10 @@ class FileUploader extends React.Component {
 
     this.timestamp = now;
     this.loaded = loaded;
-    
+
     return uploadBitrate;
   }
-  
+
   onProgress = () => {
     let progress = Math.round(this.resumable.progress() * 100);
     this.setState({totalProgress: progress});
@@ -388,7 +388,7 @@ class FileUploader extends React.Component {
     } else {
       // eg: '{"error": "Internal error" \n }'
       let errorMessage = message.replace(/\n/g, '');
-      errorMessage  = JSON.parse(errorMessage); 
+      errorMessage  = JSON.parse(errorMessage);
       error = errorMessage.error;
       if (error === 'File locked by others.') {
         error = gettext('File is locked by others.');
@@ -510,7 +510,7 @@ class FileUploader extends React.Component {
   onCancelAllUploading = () => {
     let uploadFileList = this.state.uploadFileList.filter(item => {
       if (Math.round(item.progress() !== 1)) {
-        item.cancel(); 
+        item.cancel();
         return false;
       }
       return true;
@@ -540,7 +540,7 @@ class FileUploader extends React.Component {
         }
         return item;
       });
-  
+
       this.setState({
         retryFileList: retryFileList,
         uploadFileList: uploadFileList
@@ -560,7 +560,7 @@ class FileUploader extends React.Component {
       let prefix = path === '/' ? (path + relative_path) : (path + '/' + relative_path);
       fileName = prefix + fileName;
     }
-    
+
     resumableFile.bootstrap();
     var firedRetry = false;
     resumableFile.resumableObj.on('chunkingComplete', () => {
@@ -570,9 +570,9 @@ class FileUploader extends React.Component {
           let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
           let offset = Math.floor(uploadedBytes / blockSize);
           resumableFile.markChunksCompleted(offset);
-    
+
           resumableFile.resumableObj.upload();
-    
+
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
@@ -580,7 +580,7 @@ class FileUploader extends React.Component {
       }
       firedRetry = true;
     });
-    
+
   }
 
   replaceRepetitionFile = () => {
@@ -598,7 +598,7 @@ class FileUploader extends React.Component {
       toaster.danger(errMessage);
     });
   }
-  
+
   cancelFileUpload = () => {
     this.resumable.files.pop(); //delete latest file；
   }

@@ -50,11 +50,11 @@ class Content extends Component {
                 <th width="10%">{gettext('Actions')}</th>
                 <th width="13%">{gettext('Permission')}</th>
                 <th width="20%">{gettext('Library')}</th>
-                <th width="12%">{gettext('Folder')}</th> 
+                <th width="12%">{gettext('Folder')}</th>
                 <th width="15%">{gettext('Date')}</th>
               </tr>
             </thead>
-            {items && 
+            {items &&
               <tbody>
                 {items.map((item, index) => {
                   return (<Item
@@ -75,7 +75,7 @@ class Content extends Component {
           />
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -118,13 +118,13 @@ class Item extends Component {
       case 'user':
         return <UserLink email={item.to_user_email} name={item.to_user_name} />;
       case 'group':
-        return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>; 
+        return <Link to={`${siteRoot}sys/groups/${item.to_group_id}/libraries/`}>{item.to_group_name}</Link>;
       case 'department':
-        return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>; 
-      case 'all':  
-        return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>; 
+        return <Link to={`${siteRoot}sys/departments/${item.to_group_id}/`}>{item.to_group_name}</Link>;
+      case 'all':
+        return <Link to={`${siteRoot}org/`}>{gettext('All')}</Link>;
       default:
-        return gettext('Deleted'); 
+        return gettext('Deleted');
     }
   }
 
@@ -172,7 +172,7 @@ class SharePermissionLogs extends Component {
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getLogsByPage(this.state.currentPage);
-    }); 
+    });
   }
 
   getLogsByPage = (page) => {

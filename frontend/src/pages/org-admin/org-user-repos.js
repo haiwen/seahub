@@ -27,13 +27,13 @@ class OrgUserOwnedRepos extends Component {
     seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, this.props.email).then((res) => {
       this.setState(Object.assign({
         loading: false
-      }, res.data)); 
+      }, res.data));
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   render() {
@@ -44,7 +44,7 @@ class OrgUserOwnedRepos extends Component {
           <div className="cur-view-container">
             <OrgAdminUserNav email={this.props.email} currentItem='owned-repos' />
             <div className="cur-view-content">
-              <Content 
+              <Content
                 data={this.state}
               />
             </div>
@@ -92,7 +92,7 @@ class Content extends Component {
           </tbody>
         </table>
       </Fragment>
-    ); 
+    );
   }
 }
 
@@ -111,7 +111,7 @@ class Item extends Component {
   handleMouseOver = () => {
     this.setState({
       isOpIconShown: true
-    }); 
+    });
   }
 
   handleMouseOut = () => {
@@ -150,7 +150,7 @@ class Item extends Component {
 
   render() {
     const { deleted, isOpIconShown, isDeleteRepoDialogOpen } = this.state;
-    const repo = this.props.data; 
+    const repo = this.props.data;
 
     if (deleted) {
       return null;
@@ -160,7 +160,7 @@ class Item extends Component {
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td>
-            <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" /> 
+            <img src={Utils.getLibIconUrl(repo, false)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
           </td>
           <td>{repo.repo_name}</td>
           <td>{Utils.bytesToSize(repo.size)}</td>

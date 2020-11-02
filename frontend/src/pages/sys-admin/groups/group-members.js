@@ -55,7 +55,7 @@ class Content extends Component {
           </table>
         </Fragment>
       );
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -110,7 +110,7 @@ class Item extends Component {
           <td>
             {item.role == 'Owner' ?
               gettext('Owner') :
-              <SysAdminGroupRoleEditor 
+              <SysAdminGroupRoleEditor
                 isTextMode={true}
                 isEditIconShow={isOpIconShown}
                 roleOptions={['Member', 'Admin']}
@@ -126,7 +126,7 @@ class Item extends Component {
           </td>
         </tr>
         {isDeleteDialogOpen &&
-          <CommonOperationConfirmationDialog 
+          <CommonOperationConfirmationDialog
             title={gettext('Remove Member')}
             message={dialogMsg}
             executeOperation={this.removeMember}
@@ -238,7 +238,7 @@ class GroupMembers extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <GroupNav 
+            <GroupNav
               currentItem="members"
               groupID={this.props.groupID}
               groupName={this.state.groupName}

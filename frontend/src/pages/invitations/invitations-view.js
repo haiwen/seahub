@@ -19,7 +19,7 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpIconShown: false, 
+      isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isRevokeDialogOpen: false
     };
@@ -39,14 +39,14 @@ class Item extends React.Component {
 
   onMouseLeave = () => {
     this.setState({
-      isOpIconShown: false  
+      isOpIconShown: false
     });
   }
 
   deleteItem = () => {
     // make the icon avoid being clicked repeatedly
     this.setState({
-      isOpIconShown: false  
+      isOpIconShown: false
     });
     const token = this.props.invitation.token;
     seafileAPI.deleteInvitation(token).then((res) => {
@@ -56,7 +56,7 @@ class Item extends React.Component {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
       this.setState({
-        isOpIconShown: true 
+        isOpIconShown: true
       });
     });
   }
@@ -165,7 +165,7 @@ class Content extends Component {
 
   render() {
     const {
-      loading, errorMsg, invitationsList 
+      loading, errorMsg, invitationsList
     } = this.props.data;
 
     if (loading) {
@@ -177,7 +177,7 @@ class Content extends Component {
     }
 
     if (!invitationsList.length) {
-      return ( 
+      return (
         <EmptyTip>
           <h2>{gettext('No guest invitations')}</h2>
           <p>{gettext('You have not invited any guests yet. A guest can access shared libraries through the web interface allowing more efficient ways to collaborate than through links. You can invite a guest by clicking the "Invite Guest" button in the menu bar.')}</p>
@@ -243,7 +243,7 @@ class InvitationsView extends React.Component {
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    }); 
+    });
   }
 
   onInvitePeople = (invitationsArray) => {

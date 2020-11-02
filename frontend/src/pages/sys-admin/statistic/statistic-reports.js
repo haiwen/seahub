@@ -43,7 +43,7 @@ class StatisticReports extends React.Component {
       }
     }
     switch(type) {
-      case 'month': 
+      case 'month':
         url += 'system-user-traffic/excel/?month=' + month;
         break;
       case 'storage':

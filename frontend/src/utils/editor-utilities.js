@@ -2,7 +2,7 @@ import { slug, repoID, historyRepoID } from './constants';
 import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {
-  
+
   getFiles() {
     return seafileAPI.listWikiDir(slug, '/').then(items => {
       const files = items.data.dir_file_list.map(item => {
@@ -90,7 +90,7 @@ class EditorUtilities {
   listFileHistoryRecords(filePath, page, per_page) {
     return seafileAPI.listFileHistoryRecords(historyRepoID, filePath, page, per_page);
   }
-  
+
   revertFile(filePath, commitID) {
     return seafileAPI.revertFile(historyRepoID, filePath, commitID);
   }

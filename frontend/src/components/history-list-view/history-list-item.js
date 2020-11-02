@@ -32,7 +32,7 @@ class HistoryListItem extends React.Component {
       this.setState({isShowOperationIcon: true});
     }
   }
-  
+
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({isShowOperationIcon: false});
@@ -74,9 +74,9 @@ class HistoryListItem extends React.Component {
     let objID = this.props.currentItem.rev_file_id;
     let url = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
     return (
-      <li 
-        className={`history-list-item ${isHigtlightItem ? 'item-active' : ''}`} 
-        onMouseEnter={this.onMouseEnter} 
+      <li
+        className={`history-list-item ${isHigtlightItem ? 'item-active' : ''}`}
+        onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onItemClick}
       >
@@ -89,11 +89,11 @@ class HistoryListItem extends React.Component {
         </div>
         <div className="history-operation">
           <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-            <DropdownToggle 
-              tag='a' 
+            <DropdownToggle
+              tag='a'
               className={`fas fa-ellipsis-v ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
-              data-toggle="dropdown" 
-              aria-expanded={this.state.isMenuShow} 
+              data-toggle="dropdown"
+              aria-expanded={this.state.isMenuShow}
               alt={gettext('More Operations')}
             />
             <DropdownMenu>

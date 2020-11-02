@@ -21,7 +21,7 @@ class Content extends Component {
     }
     if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
-    } 
+    }
 
     const emptyTip = (
       <EmptyTip>
@@ -43,13 +43,13 @@ class Content extends Component {
               <th width="16%">{gettext('Expiration')}</th>
               <th width="10%">{/*Operations*/}</th>
             </tr>
-          ) : ( 
+          ) : (
             <tr>
               <th width="12%"></th>
               <th width="80%"></th>
               <th width="8%"></th>
-            </tr> 
-          )}    
+            </tr>
+          )}
         </thead>
         <tbody>
           {items.map((item, index) => {
@@ -59,7 +59,7 @@ class Content extends Component {
       </table>
     );
 
-    return items.length ? table : emptyTip; 
+    return items.length ? table : emptyTip;
   }
 }
 
@@ -83,7 +83,7 @@ class Item extends Component {
   toggleLinkDialog = () => {
     this.setState({
       isLinkDialogOpen: !this.state.isLinkDialogOpen
-    });   
+    });
   }
 
   handleMouseOver = () => {
@@ -98,7 +98,7 @@ class Item extends Component {
     e.preventDefault();
     this.toggleLinkDialog();
   }
-  
+
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
@@ -108,7 +108,7 @@ class Item extends Component {
     const item = this.props.item;
     if (!item.expire_date) {
       return '--';
-    }   
+    }
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
@@ -140,7 +140,7 @@ class Item extends Component {
       <tr>
         <td><img src={iconUrl} alt="" width="24" /></td>
         <td>
-          <Link to={objUrl}>{item.obj_name}</Link> 
+          <Link to={objUrl}>{item.obj_name}</Link>
           <br />
           <span>{item.repo_name}</span><br />
           <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>

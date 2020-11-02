@@ -14,7 +14,7 @@ const propTypes = {
 };
 
 class RepoViewToolbar extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +63,7 @@ class RepoViewToolbar extends React.Component {
         </div>
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
-            <CreateRepoDialog 
+            <CreateRepoDialog
               libraryType={this.props.libraryType}
               onCreateRepo={this.onCreateRepo}
               onCreateToggle={this.onCreateToggle}

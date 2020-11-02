@@ -52,7 +52,7 @@ class InvitePeopleDialog extends React.Component {
     }
 
     let emailsArray = [];
-    emails = emails.split(',');  
+    emails = emails.split(',');
     for (let i = 0, len = emails.length; i < len; i++) {
       let email = emails[i].trim();
       if (email) {

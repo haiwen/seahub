@@ -81,7 +81,7 @@ class Search extends Component {
   }
 
   getSearchResult(queryData) {
-    
+
     if(this.source){
       this.cancelRequest();
     }
@@ -129,7 +129,7 @@ class Search extends Component {
           _this.source = null;
           return;
         }
-  
+
         let items = _this.formatResultItems(res.data.results);
         _this.setState({
           resultItems: items,
@@ -267,9 +267,9 @@ class Search extends Component {
             <div className="search-container">
               <div className="input-icon">
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
-                <input 
-                  type="text" 
-                  className="form-control search-input" 
+                <input
+                  type="text"
+                  className="form-control search-input"
                   name="query"
                   placeholder={this.props.placeholder}
                   style={style}
@@ -294,15 +294,15 @@ class Search extends Component {
           <div className="search-icon-container">
             <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
           </div>
-          {this.state.isSearchInputShow && 
+          {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
               <div className="search-container">
                 <div className="input-icon">
                   <i className="search-icon-left input-icon-addon fas fa-search"></i>
-                  <input 
-                    type="text" 
-                    className="form-control search-input" 
+                  <input
+                    type="text"
+                    className="form-control search-input"
                     name="query"
                     placeholder={this.props.placeholder}
                     style={style}

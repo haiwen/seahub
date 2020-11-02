@@ -18,10 +18,10 @@ class  CommonToolbar extends React.Component {
     return (
       <div className="common-toolbar">
         {isPro && (
-          <Search 
+          <Search
             repoID={this.props.repoID}
             placeholder={searchPlaceholder}
-            onSearchedClick={this.props.onSearchedClick} 
+            onSearchedClick={this.props.onSearchedClick}
           />
         )}
         <Notification />

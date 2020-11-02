@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { gettext, fileServerRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -32,13 +32,13 @@ class CommitDetails extends React.Component {
         isLoading: false,
         errorMsg: '',
         commitDetails: res.data
-      }); 
+      });
     }).catch((error) => {
       let errorMsg = Utils.getErrorMsg(error);
       this.setState({
         isLoading: false,
         errorMsg: errorMsg
-      }); 
+      });
     });
   }
 

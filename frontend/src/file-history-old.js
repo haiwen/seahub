@@ -253,7 +253,7 @@ class FileHistory extends React.Component {
                     {this.state.historyList.map((item, index) => {
                       return (
                         <HistoryItem
-                          key={index} 
+                          key={index}
                           item={item}
                           index={index}
                           canDownload={canDownload}

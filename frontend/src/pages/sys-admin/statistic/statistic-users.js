@@ -34,7 +34,7 @@ class StatisticUsers extends React.Component {
         });
         let userCount = {
           label: gettext('Active Users'),
-          data: count, 
+          data: count,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         filesData = [userCount];
@@ -60,8 +60,8 @@ class StatisticUsers extends React.Component {
           <div className="cur-view-content">
             <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
             {isLoading && <Loading />}
-            {!isLoading && labels.length > 0 && 
-              <StatisticChart 
+            {!isLoading && labels.length > 0 &&
+              <StatisticChart
                 labels={labels}
                 filesData={filesData}
                 suggestedMaxNumbers={10}

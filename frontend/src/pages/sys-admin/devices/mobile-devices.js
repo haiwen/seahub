@@ -16,7 +16,7 @@ class MobileDevices extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <DevicesNav currentItem="mobile" />
-            <DevicesByPlatform 
+            <DevicesByPlatform
               devicesPlatform={'mobile'}
             />
           </div>

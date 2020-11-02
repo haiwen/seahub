@@ -36,7 +36,7 @@ class WebdavPassword extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       this.toggleDialog();
       toaster.danger(errorMsg);
-    }); 
+    });
   }
 
   toggleDialog = () => {

@@ -37,8 +37,8 @@ class Content extends Component {
   }
 
   render() {
-    const { 
-      loading, errorMsg, items, 
+    const {
+      loading, errorMsg, items,
       perPage, currentPage, hasNextPage,
       sortBy, sortOrder
     } = this.props;
@@ -166,7 +166,7 @@ class ShareLinks extends Component {
       perPage: 25,
       currentPage: 1,
       hasNextPage: false,
-      sortBy: '', 
+      sortBy: '',
       sortOrder: 'asc'
     };
     this.initPage = 1;
@@ -217,7 +217,7 @@ class ShareLinks extends Component {
       url.search = searchParams.toString();
       navigate(url.toString());
       this.getShareLinksByPage(currentPage);
-    }); 
+    });
   }
 
   deleteShareLink = (linkToken) => {

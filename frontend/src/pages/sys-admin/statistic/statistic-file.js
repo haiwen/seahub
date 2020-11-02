@@ -42,22 +42,22 @@ class StatisticFile extends React.Component {
         });
         let addedData = {
           label: gettext('Added'),
-          data: added, 
+          data: added,
           borderColor: '#57cd6b',
           backgroundColor: '#57cd6b'};
         let visitedData = {
           label: gettext('Visited'),
-          data: visited, 
+          data: visited,
           borderColor: '#fd913a',
           backgroundColor: '#fd913a'};
         let modifiedData = {
           label: gettext('Modified'),
-          data: modified, 
+          data: modified,
           borderColor: '#72c3fc',
           backgroundColor: '#72c3fc'};
         let deletedData = {
           label: gettext('Deleted'),
-          data: deleted, 
+          data: deleted,
           borderColor: '#f75356',
           backgroundColor: '#f75356'};
         filesData = [visitedData, addedData, modifiedData, deletedData];
@@ -85,7 +85,7 @@ class StatisticFile extends React.Component {
             <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
             {isLoading && <Loading />}
             {!isLoading && labels.length > 0 &&
-              <StatisticChart 
+              <StatisticChart
                 labels={labels}
                 filesData={filesData}
                 suggestedMaxNumbers={10}

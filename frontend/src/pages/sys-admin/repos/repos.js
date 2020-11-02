@@ -75,7 +75,7 @@ class Content extends Component {
                 <th width="5%">{/*icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">
-                  {sortBy != undefined ? 
+                  {sortBy != undefined ?
                     <Fragment>
                       <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' ? sortIcon : initialSortIcon}</a>{' / '}
                       <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' ? sortIcon : initialSortIcon}</a>
@@ -102,7 +102,7 @@ class Content extends Component {
               })}
             </tbody>
           </table>
-          {pageInfo && 
+          {pageInfo &&
           <Paginator
             gotoPreviousPage={this.getPreviousPageList}
             gotoNextPage={this.getNextPageList}
@@ -115,7 +115,7 @@ class Content extends Component {
         </Fragment>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -239,7 +239,7 @@ class Item extends Component {
   }
 
   translateOperations = (item) => {
-    let translateResult = ''; 
+    let translateResult = '';
     switch(item) {
       case 'Share':
         translateResult = gettext('Share');
@@ -255,7 +255,7 @@ class Item extends Component {
         break;
       default:
         break;
-    }   
+    }
 
     return translateResult;
   }
@@ -272,10 +272,10 @@ class Item extends Component {
 
   render () {
     const { repo } = this.props;
-    const { 
+    const {
       isOpIconShown,
       isShareDialogOpen,
-      isDeleteDialogOpen, 
+      isDeleteDialogOpen,
       isTransferDialogOpen,
       isHistorySettingDialogOpen
     } = this.state;

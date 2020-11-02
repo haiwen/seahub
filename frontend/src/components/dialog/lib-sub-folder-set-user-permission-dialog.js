@@ -16,7 +16,7 @@ class UserItem extends React.Component {
       isOperationShow: false
     };
   }
-  
+
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
   }
@@ -29,7 +29,7 @@ class UserItem extends React.Component {
     let item = this.props.item;
     this.props.deleteUserFolderPermission(item);
   }
-  
+
   onChangeUserFolderPerm = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserFolderPerm(item.repo_id, permission, item.folder_path, item.user_email);
@@ -49,7 +49,7 @@ class UserItem extends React.Component {
           </td>
         }
         <td>
-          <SharePermissionEditor 
+          <SharePermissionEditor
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -60,7 +60,7 @@ class UserItem extends React.Component {
         <td>
           <span
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.deleteUserFolderPermission} 
+            onClick={this.deleteUserFolderPermission}
             title={gettext('Delete')}
           >
           </span>
@@ -123,7 +123,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       return false;
     }
 
-    const users = selectedUsers.map((item, index) => item.email); 
+    const users = selectedUsers.map((item, index) => item.email);
 
     const request = this.props.isDepartmentRepo ?
       seafileAPI.addDepartmentRepoUserFolderPerm(this.props.repoID, this.state.permission, folderPath, users) :
@@ -144,21 +144,21 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       });
       this.refs.userSelect.clearSelect();
     }).catch((error) => {
-      let errorMsg = ''; 
+      let errorMsg = '';
       if (error.response) {
         if (error.response.data && error.response.data['error_msg']) {
           errorMsg = error.response.data['error_msg'];
         } else {
           errorMsg = gettext('Error');
-        }   
+        }
       } else {
         errorMsg = gettext('Please check the network.');
-      }   
+      }
       this.setState({
         errorMsg: [errorMsg]
       });
-    }); 
-  } 
+    });
+  }
 
   deleteUserFolderPermItem = (item) => {
     const request = this.props.isDepartmentRepo ?
@@ -168,7 +168,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       this.setState({
         userFolderPermItems: this.state.userFolderPermItems.filter(deletedItem => {
           return deletedItem != item;
-        }) 
+        })
       });
     });
   }
@@ -190,7 +190,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   onSetSubFolder = (e) => {
     this.setState({
-      folderPath: e.target.value 
+      folderPath: e.target.value
     });
   }
 
@@ -204,7 +204,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
-    }); 
+    });
   }
 
   handleFileChooserSubmit = () => {
@@ -215,7 +215,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   onRepoItemClick = () => {
     this.setState({
-      folderPath: '/' 
+      folderPath: '/'
     });
   }
 
@@ -226,7 +226,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     if (this.state.showFileChooser) {
       return (
         <div>
-          <FileChooser repoID={this.props.repoID} 
+          <FileChooser repoID={this.props.repoID}
             mode={'only_current_library'}
             onDirentItemClick={this.toggleSubFolder}
             onRepoItemClick={this.onRepoItemClick}
@@ -276,7 +276,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                 </td>
               }
               <td>
-                <SharePermissionEditor 
+                <SharePermissionEditor
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -311,9 +311,9 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             <tbody>
               {userFolderPermItems.map((item, index) => {
                 return (
-                  <UserItem 
-                    key={index} 
-                    item={item} 
+                  <UserItem
+                    key={index}
+                    item={item}
                     permissions={this.permissions}
                     deleteUserFolderPermission={this.deleteUserFolderPermItem}
                     onChangeUserFolderPerm={this.onChangeUserFolderPerm}

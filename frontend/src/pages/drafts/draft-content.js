@@ -50,7 +50,7 @@ class DraftContent extends React.Component {
       toaster.danger(msg_s);
     });
   }
-  
+
   render() {
     return (
       <div className="cur-view-content">
@@ -65,7 +65,7 @@ class DraftContent extends React.Component {
             )}
             {this.props.draftList.length !==0 && (
               <DraftListView
-                draftList={this.props.draftList} 
+                draftList={this.props.draftList}
                 onDeleteHandler={this.onDeleteHandler}
                 onPublishHandler={this.onPublishHandler}
               />
