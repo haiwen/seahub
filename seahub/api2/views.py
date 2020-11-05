@@ -1046,7 +1046,7 @@ class Repos(APIView):
                              'Invalid enc_version param.')
 
         salt = None
-        if enc_version == 3 and settings.ENCRYPTED_LIBRARY_VERSION == 3:
+        if enc_version >= 3 and settings.ENCRYPTED_LIBRARY_VERSION >= 3:
             salt = request.data.get('salt', '')
             if not salt:
                 error_msg = 'salt invalid.'
