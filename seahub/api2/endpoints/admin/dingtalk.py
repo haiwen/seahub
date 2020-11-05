@@ -38,6 +38,7 @@ DEPARTMENT_OWNER = 'system admin'
 
 logger = logging.getLogger(__name__)
 
+
 def update_dingtalk_user_info(email, name, contact_email, avatar_url):
 
     # make sure the contact_email is unique
@@ -57,17 +58,19 @@ def update_dingtalk_user_info(email, name, contact_email, avatar_url):
         except Exception as e:
             logger.error(e)
 
-    try:
-        image_name = 'dingtalk_avatar'
-        image_file = requests.get(avatar_url).content
-        avatar = Avatar.objects.filter(emailuser=email, primary=True).first()
-        avatar = avatar or Avatar(emailuser=email, primary=True)
-        avatar_file = ContentFile(image_file)
-        avatar_file.name = image_name
-        avatar.avatar = avatar_file
-        avatar.save()
-    except Exception as e:
-        logger.error(e)
+    if avatar_url:
+        try:
+            image_name = 'dingtalk_avatar'
+            image_file = requests.get(avatar_url).content
+            avatar = Avatar.objects.filter(emailuser=email, primary=True).first()
+            avatar = avatar or Avatar(emailuser=email, primary=True)
+            avatar_file = ContentFile(image_file)
+            avatar_file.name = image_name
+            avatar.avatar = avatar_file
+            avatar.save()
+        except Exception as e:
+            logger.error(e)
+
 
 class AdminDingtalkDepartments(APIView):
 
@@ -213,8 +216,10 @@ class AdminDingtalkUsersBatch(APIView):
                 })
 
             try:
-                update_dingtalk_user_info(email, user.get('name'),
-                        user.get('contact_email'), user.get('avatar'))
+                update_dingtalk_user_info(email,
+                                          user.get('name'),
+                                          user.get('contact_email'),
+                                          user.get('avatar'))
             except Exception as e:
                 logger.error(e)
 
@@ -418,8 +423,10 @@ class AdminDingtalkDepartmentsImport(APIView):
                     failed.append(failed_msg)
 
                 try:
-                    update_dingtalk_user_info(email, api_user.get('name'),
-                            api_user.get('contact_email'), api_user.get('avatar'))
+                    update_dingtalk_user_info(email,
+                                              api_user.get('name'),
+                                              api_user.get('contact_email'),
+                                              api_user.get('avatar'))
                 except Exception as e:
                     logger.error(e)
 
