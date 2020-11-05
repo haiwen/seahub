@@ -4,7 +4,9 @@ import axios from 'axios';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { draftOriginRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
+import { draftRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
 import '../../css/file-history.css';
 
@@ -21,9 +23,9 @@ class HistoryList extends React.Component {
     };
   }
 
-  onClick = (event, key, preCommitID, currentCommitID)=> {
+  onClick = (event, key, preItem, currentItem)=> {
     if (key === this.state.activeItem) return false;
-    this.props.onHistoryItemClick(currentCommitID, preCommitID, key);
+    this.props.onHistoryItemClick(currentItem, preItem, key);
   }
 
   onScroll = (event) => {
@@ -38,12 +40,15 @@ class HistoryList extends React.Component {
           currentPage: currentPage,
           loading : true
         });
-        seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
+        seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
           let currentHistoryList = Object.assign([], this.props.historyList);
           this.props.onHistoryListChange([...currentHistoryList, ...res.data.data]);
           this.setState({
             loading : false
           });
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
         });
       }
     }
@@ -51,7 +56,7 @@ class HistoryList extends React.Component {
 
   render() {
     return (
-      <div className="history-body" style={{ 'height': '500px'}}>
+      <div className="history-body">
         <ul onScroll={this.onScroll} className={'history-list-container'}>
           {
             this.props.historyList ?
@@ -65,11 +70,11 @@ class HistoryList extends React.Component {
                     onClick={this.onClick}
                     ctime={item.ctime}
                     className={this.props.activeItem === index ? 'item-active': ''}
-                    currentCommitId={item.commit_id}
                     name={item.creator_name}
                     index={index}
                     key={index}
-                    preCommitId={arr[preItemIndex].commit_id}
+                    preItem={arr[preItemIndex]}
+                    currentItem={item}
                   />
                 );
               }) : <Loading/>
@@ -88,7 +93,7 @@ class HistoryItem extends React.Component {
   render() {
     let time = moment.parseZone(this.props.ctime).format('YYYY-MM-DD HH:mm');
     return (
-      <li onClick={(event) => this.props.onClick(event, this.props.index, this.props.preCommitId, this.props.currentCommitId)} className={'history-list-item ' + this.props.className}>
+      <li onClick={(event) => this.props.onClick(event, this.props.index, this.props.preItem, this.props.currentItem)} className={'history-list-item ' + this.props.className}>
         <div className="history-info">
           <div className="time">{time}</div>
           <div className="owner"><i className="squire-icon"/><span>{this.props.name}</span></div>

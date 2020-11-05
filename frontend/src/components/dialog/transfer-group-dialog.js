@@ -1,9 +1,10 @@
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import UserSelect from '../user-select';
+import { Utils } from '../../utils/utils';
 
 import '../../css/transfer-group-dialog.css';
 
@@ -32,37 +33,14 @@ class TransferGroupDialog extends React.Component {
     this.options = [];
   }
 
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <React.Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar" alt=""/>
-              <span className="transfer-group-name">{res.data.users[i].name}</span>
-            </React.Fragment>;
-          this.options.push(obj);
-        }
-        callback(this.options);
-      });
-    }
-  }
-
   transferGroup = () => {
     const email = this.state.selectedOption && this.state.selectedOption.email;
     if (email) {
       seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
         this.props.toggleTransferGroupDialog();
       }).catch((error) => {
-        if (error.response) {
-          this.setState({
-            errMessage: error.response.data.error_msg
-          });
-        }
+        let errMessage = Utils.getErrorMsg(error);
+        this.setState({errMessage: errMessage});
       });
     }
   }
@@ -77,12 +55,12 @@ class TransferGroupDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Transfer Group')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Transfer group to')}</p>
-          <AsyncSelect
-            className='group-transfer-select'
-            isClearable classNamePrefix
-            loadOptions={this.loadOptions}
-            onChange={this.handleSelectChange}
+          <UserSelect
+            ref="userSelect"
+            isMulti={false}
+            className="reviewer-select"
             placeholder={gettext('Please enter 1 or more character')}
+            onSelectChange={this.handleSelectChange}
           />
           <div className="error">{this.state.errMessage}</div>
         </ModalBody>

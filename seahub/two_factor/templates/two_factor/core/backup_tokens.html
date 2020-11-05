@@ -23,7 +23,7 @@
   {% endif %}
 
   <form method="post">{% csrf_token %}{{ form }}
-      <a href="{% url 'edit_profile'%}" class="sf-btn-link">{% trans "Back to Profile" %}</a>
+      <a href="{{ SITE_ROOT }}" class="sf-btn-link">{% trans "Back" %}</a>
       <button type="submit" style="margin-top:5px;">{% trans "Generate Tokens" %}</button>
   </form>
     </div>

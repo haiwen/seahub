@@ -1,4 +1,6 @@
-from seahub.group.utils import is_group_member
+import logging
+
+from seahub.group.utils import is_group_admin
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.utils import is_valid_org_id
@@ -6,17 +8,43 @@ from seahub.utils import is_valid_org_id
 import seaserv
 from seaserv import seafile_api
 
-def is_repo_admin(username, repo_id):
-    is_administrator = ExtraSharePermission.objects.\
-            get_user_permission(repo_id, username) == PERMISSION_ADMIN
-    belong_to_admin_group = False
-    group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
-    for group_id in group_ids:
-        if is_group_member(group_id, username):
-            belong_to_admin_group = True
-            break
+logger = logging.getLogger(__name__)
 
-    return is_administrator or belong_to_admin_group
+def is_repo_admin(username, repo_id):
+
+    # repo is shared to user with admin permission
+    try:
+        user_share_permission = ExtraSharePermission.objects. \
+            get_user_permission(repo_id, username)
+        if user_share_permission == PERMISSION_ADMIN:
+            return True
+
+        # get all groups that repo is shared to with admin permission
+        group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
+        for group_id in group_ids:
+            if is_group_admin(group_id, username):
+                return True
+    except Exception as e:
+        logger.error(e)
+        return False
+
+    repo_owner = seafile_api.get_repo_owner(repo_id) or seafile_api.get_org_repo_owner(repo_id)
+    if not repo_owner:
+        logger.error('repo %s owner is None' % repo_id)
+        return False
+
+    # repo owner
+    if username == repo_owner:
+        return True
+
+    # user is department admin
+    if '@seafile_group' in repo_owner:
+        # is group owned repo
+        group_id = int(repo_owner.split('@')[0])
+        if is_group_admin(group_id, username):
+            return True
+
+    return False
 
 def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_id=None):
     # Share  repo or subdir to user with permission(r, rw, admin).

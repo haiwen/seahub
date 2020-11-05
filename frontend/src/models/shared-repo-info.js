@@ -1,5 +1,5 @@
 class SharedRepoInfo {
-  
+
   constructor(object) {
     this.repo_id = object.repo_id;
     this.repo_name = object.repo_name;
@@ -13,8 +13,8 @@ class SharedRepoInfo {
       this.is_admin = object.is_admin;
       this.user_name = object.user_name;
       this.user_email = object.user_email;
-      this.contact_email = this.contact_email;
-    } else if(this.share_type === 'group') {
+      this.contact_email = object.contact_email;
+    } else if (this.share_type === 'group') {
       this.is_admin = object.is_admin;
       this.group_id = object.group_id;
       this.group_name = object.group_name;

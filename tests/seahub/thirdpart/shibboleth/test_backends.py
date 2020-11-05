@@ -6,6 +6,7 @@ from shibboleth import backends
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.test_utils import BaseTestCase
+import importlib
 
 SAMPLE_HEADERS = {
     "REMOTE_USER": 'sampledeveloper@school.edu',
@@ -43,7 +44,7 @@ settings.AUTHENTICATION_BACKENDS += (
     'shibboleth.backends.ShibbolethRemoteUserBackend',
 )
 
-settings.MIDDLEWARE_CLASSES += (
+settings.MIDDLEWARE.append(
     'shibboleth.middleware.ShibbolethRemoteUserMiddleware',
 )
 
@@ -71,7 +72,7 @@ class ShibbolethRemoteUserBackendTest(BaseTestCase):
 
         with self.settings(SHIB_ACTIVATE_AFTER_CREATION=False):
             # reload our shibboleth.backends module, so it picks up the settings change
-            reload(backends)
+            importlib.reload(backends)
             user = authenticate(remote_user=self.remote_user,
                                 shib_meta=SAMPLE_HEADERS)
             self.assertEqual(user.username, 'sampledeveloper@school.edu')
@@ -80,4 +81,4 @@ class ShibbolethRemoteUserBackendTest(BaseTestCase):
         assert len(mail.outbox) != 0
         assert 'a newly registered account need to be activated' in mail.outbox[0].body
         # now reload again, so it reverts to original settings
-        reload(backends)
+        importlib.reload(backends)

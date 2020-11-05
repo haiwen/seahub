@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 
 from base64 import b32encode
 from os import urandom
@@ -60,7 +60,7 @@ class StaticToken(models.Model):
 
         *CharField*: A random string up to 16 characters.
     """
-    device = models.ForeignKey(StaticDevice, related_name='token_set')
+    device = models.ForeignKey(StaticDevice, on_delete=models.CASCADE, related_name='token_set')
     token = models.CharField(max_length=16, db_index=True)
 
     @staticmethod

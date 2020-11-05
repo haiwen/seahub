@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
+import stat
 import logging
 from collections import namedtuple
 
@@ -8,7 +9,8 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.constants import (
     PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
-    PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
+    PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+    REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY
 )
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
 from seahub.base.models import RepoSecretKey
@@ -18,6 +20,25 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
 
 logger = logging.getLogger(__name__)
+
+
+def normalize_repo_status_code(status):
+    if status == 0:
+        return REPO_STATUS_NORMAL
+    elif status == 1:
+        return REPO_STATUS_READ_ONLY
+    else:
+        return ''
+
+
+def normalize_repo_status_str(status):
+    if status == 'normal':
+        return 0
+    elif status == 'read-only':
+        return 1
+    else:
+        return ''
+
 
 def get_available_repo_perms():
     perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
@@ -33,6 +54,7 @@ def parse_repo_perm(perm):
         'can_edit_on_web',             # edit files on web
         'can_copy',                    # copy files/folders on web
         'can_preview',                 # preview files on web
+        'can_generate_share_link',     # generate share link
     ])
 
     RP.can_download = True if perm in [
@@ -47,6 +69,10 @@ def parse_repo_perm(perm):
     ] else False
     RP.can_preview = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+        PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+    ] else False
+    RP.can_generate_share_link = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_ADMIN,
         PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
     ] else False
     return RP
@@ -188,6 +214,30 @@ def get_locked_files_by_dir(request, repo_id, folder_path):
 
     return locked_files
 
+def get_sub_folder_permission_by_dir(request, repo_id, parent_dir):
+    """ Get sub folder permission in a folder
+
+    Returns:
+        A dict contains folder name and permission.
+
+        folder_permission_dict = {
+            'folder_name_1': 'r';
+            'folder_name_2': 'rw';
+            ...
+        }
+    """
+    username = request.user.username
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+    dirents = seafile_api.list_dir_with_perm(repo_id,
+            parent_dir, dir_id, username, -1, -1)
+
+    folder_permission_dict = {}
+    for dirent in dirents:
+        if stat.S_ISDIR(dirent.mode):
+            folder_permission_dict[dirent.obj_name] = dirent.permission
+
+    return folder_permission_dict
+
 def get_shared_groups_by_repo(repo_id, org_id=None):
     if not org_id:
         group_ids = seafile_api.get_shared_group_ids_by_repo(
@@ -217,21 +267,17 @@ def get_related_users_by_repo(repo_id, org_id=None):
 
     users = []
 
-    if org_id:
-        repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        user_shared_to = seafile_api.list_org_repo_shared_to(org_id,
-                repo_owner, repo_id)
+    # 1. users repo has been shared to
+    if org_id and org_id > 0:
+        users.extend(seafile_api.org_get_shared_users_by_repo(org_id, repo_id))
+        owner = seafile_api.get_org_repo_owner(repo_id)
     else:
-        repo_owner = seafile_api.get_repo_owner(repo_id)
-        user_shared_to = seafile_api.list_repo_shared_to(
-                repo_owner, repo_id)
+        users.extend(seafile_api.get_shared_users_by_repo(repo_id))
+        owner = seafile_api.get_repo_owner(repo_id)
 
-    # 1. repo owner
-    users.append(repo_owner)
-
-    # 2. users repo has been shared to
-    for user in user_shared_to:
-        users.append(user.user)
+    # 2. repo owner
+    if owner not in users:
+        users.append(owner)
 
     # 3. members of groups repo has been shared to
     groups = get_shared_groups_by_repo(repo_id, org_id)

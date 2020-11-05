@@ -2,7 +2,7 @@
 """
 Provides various throttling policies.
 """
-from __future__ import unicode_literals
+
 from django.conf import settings
 from django.core.cache import cache as default_cache
 from django.core.exceptions import ImproperlyConfigured
@@ -177,7 +177,7 @@ class AnonRateThrottle(SimpleRateThrottle):
     scope = 'anon'
 
     def get_cache_key(self, request, view):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return None  # Only throttle unauthenticated requests.
 
         return self.cache_format % {
@@ -197,7 +197,7 @@ class UserRateThrottle(SimpleRateThrottle):
     scope = 'user'
 
     def get_cache_key(self, request, view):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             ident = request.user.id
         else:
             ident = self.get_ident(request)
@@ -245,7 +245,7 @@ class ScopedRateThrottle(SimpleRateThrottle):
         Otherwise generate the unique cache key by concatenating the user id
         with the '.throttle_scope` property of the view.
         """
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             ident = request.user.id
         else:
             ident = self.get_ident(request)

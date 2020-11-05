@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, navigate } from '@reach/router';
-import { siteRoot, canAddRepo } from './utils/constants';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
+import { siteRoot, canAddRepo, isDocs } from './utils/constants';
 import { Utils } from './utils/utils';
+import SystemNotification from './components/system-notification';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
 import DraftContent from './pages/drafts/draft-content';
-import ReviewContent from './pages/drafts/review-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
-import editUtilties from './utils/editor-utilties';
+import editUtilities from './utils/editor-utilities';
 import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
+import ShareWithOCM from './pages/share-with-ocm/shared-with-ocm';
+import OCMRepoDir from './pages/share-with-ocm/remote-dir-view';
 import MyLibraries from './pages/my-libs/my-libs';
 import MyLibDeleted from './pages/my-libs/my-libs-deleted';
 import PublicSharedView from './pages/shared-with-all/public-shared-view';
 import LibContentView from './pages/lib-content-view/lib-content-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
+import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import MainContentWrapper from './components/main-content-wrapper';
 
@@ -35,6 +40,7 @@ const DraftsViewWrapper = MainContentWrapper(DraftsView);
 const StarredWrapper = MainContentWrapper(Starred);
 const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
 const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
+const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
 const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
@@ -54,31 +60,62 @@ class App extends Component {
       pathPrefix: [],
     };
     this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
+    window.onpopstate = this.onpopstate;
+  }
+
+  onpopstate = (event) => {
+    if (event.state && event.state.currentTab && event.state.pathPrefix) {
+      let { currentTab, pathPrefix } = event.state;
+      this.setState({currentTab, pathPrefix});
+    }
+  }
+
+  componentWillMount() {
+    if (!Utils.isDesktop()) {
+      this.setState({
+        isSidePanelClosed: true
+      });
+    }
+  }
+
+  navigateClientUrlToLib = () =>{
+    if(window.location.hash && window.location.hash.indexOf('common/lib') != -1){
+      let splitUrlArray = window.location.hash.split('/');
+      let repoID = splitUrlArray[splitUrlArray.length - 2];
+      let url = siteRoot + 'library/' + repoID + '/';
+      navigate(url, {repalce: true});
+    }
   }
 
   componentDidMount() {
+    // url from client  e.g. http://127.0.0.1:8000/#common/lib/34e7fb92-e91d-499d-bcde-c30ea8af9828/
+    // navigate to library page http://127.0.0.1:8000/library/34e7fb92-e91d-499d-bcde-c30ea8af9828/
+    this.navigateClientUrlToLib();
+
     // e.g.  from http://127.0.0.1:8000/drafts/reviews/
-    // get reviews  
+    // get reviews
     // TODO: need refactor later
     let href = window.location.href.split('/');
-    this.getDrafts();
+    if (isDocs) {
+      this.getDrafts();
+    }
     this.setState({currentTab: href[href.length - 2]});
   }
 
   getDrafts = () => {
-    editUtilties.listDrafts().then(res => {
+    editUtilities.listDrafts().then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
-        draftList: res.data.data, 
+        draftList: res.data.data,
         isLoadingDraft: false,
-      }); 
+      });
     });
   }
 
   updateDraftsList = (draft_id) => {
     this.setState({
       draftCounts: this.state.draftCounts - 1,
-      draftList: this.state.draftList.filter(draft => draft.id != draft_id), 
+      draftList: this.state.draftList.filter(draft => draft.id != draft_id),
     });
   }
 
@@ -101,8 +138,13 @@ class App extends Component {
       navigate(url, {repalce: true});
     } else {
       let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
+      let isWeChat = Utils.isWeChat();
+      if (!isWeChat) {
+        let newWindow = window.open('about:blank');
+        newWindow.location.href = url;
+      } else {
+        location.href = url;
+      }
     }
   }
 
@@ -127,8 +169,14 @@ class App extends Component {
     this.setState({
       currentTab: tabName,
       pathPrefix: pathPrefix
+    }, () => {
+      let { currentTab, pathPrefix } = this.state;
+      window.history.replaceState({currentTab: currentTab, pathPrefix: pathPrefix}, null);
     });
-  } 
+    if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
+      this.setState({ isSidePanelClosed: true });
+    }
+  }
 
   generatorPrefix = (tabName, groupID) => {
     let pathPrefix = [];
@@ -171,58 +219,70 @@ class App extends Component {
     }
   }
 
+  toggleSidePanel = () => {
+    this.setState({
+      isSidePanelClosed: !this.state.isSidePanelClosed
+    });
+  }
+
   render() {
-    let { currentTab } = this.state;
+    let { currentTab, isSidePanelClosed } = this.state;
 
     const home = canAddRepo ?
       <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} /> :
       <SharedLibrariesWrapper path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />;
 
     return (
-      <div id="main">
-        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
-        <MainPanel>
-          <Router>
-            {home}
-            <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <DraftsViewWrapper path={siteRoot + 'drafts'}  
-              currentTab={currentTab} 
-              tabItemClick={this.tabItemClick} 
-              onShowSidePanel={this.onShowSidePanel} 
-              onSearchedClick={this.onSearchedClick} 
-            >
-              <DraftContent 
-                path='/' 
-                getDrafts={this.getDrafts} 
-                isLoadingDraft={this.state.isLoadingDraft}
-                draftList={this.state.draftList}
-                updateDraftsList={this.updateDraftsList}
+      <React.Fragment>
+        <SystemNotification />
+        <div id="main">
+          <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
+          <MainPanel>
+            <Router className="reach-router">
+              {home}
+              <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <DraftsViewWrapper path={siteRoot + 'drafts'}
+                onShowSidePanel={this.onShowSidePanel}
+                onSearchedClick={this.onSearchedClick}
+              >
+                <DraftContent
+                  path='/'
+                  getDrafts={this.getDrafts}
+                  isLoadingDraft={this.state.isLoadingDraft}
+                  draftList={this.state.draftList}
+                  updateDraftsList={this.updateDraftsList}
+                />
+              </DraftsViewWrapper>
+              <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
+              <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
+              <OCMRepoDir path={siteRoot + 'remote-library/:providerID/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
+              <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+              <Group
+                path={siteRoot + 'group/:groupID'}
+                onShowSidePanel={this.onShowSidePanel}
+                onSearchedClick={this.onSearchedClick}
+                onTabNavClick={this.tabItemClick}
+                onGroupChanged={this.onGroupChanged}
               />
-              <ReviewContent path='reviews' />
-            </DraftsViewWrapper>
-            <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <MyLibDeleted path={siteRoot + 'my-libs/deleted/'} onSearchedClick={this.onSearchedClick} />
-            <LibContentView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
-            <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <Group
-              path={siteRoot + 'group/:groupID'}
-              onShowSidePanel={this.onShowSidePanel}
-              onSearchedClick={this.onSearchedClick}
-              onTabNavClick={this.tabItemClick}
-              onGroupChanged={this.onGroupChanged}
-            />
-            <Wikis path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
-          </Router>
-        </MainPanel>
-      </div>
+              <Wikis path={siteRoot + 'published'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+              <PublicSharedView path={siteRoot + 'org/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} onTabNavClick={this.tabItemClick}/>
+              <InvitationsView path={siteRoot + 'invitations/'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            </Router>
+          </MainPanel>
+          <MediaQuery query="(max-width: 767.8px)">
+            <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+          </MediaQuery>
+        </div>
+      </React.Fragment>
     );
   }
 }

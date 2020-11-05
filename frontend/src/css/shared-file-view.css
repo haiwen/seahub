@@ -28,11 +28,6 @@
   justify-content: space-between;
 }
 
-.shared-file-view-head a {
-  color: #fff;
-  text-decoration: none;
-}
-
 .shared-file-view-head h2 {
   color: #222;
   font-size: 1.4em;
@@ -42,10 +37,6 @@
 
 .shared-file-view-head .share-by {
   margin: 0;
-}
-
-.shared-file-view-head .shared-file-op-btn {
-  padding: 7px;
 }
 
 .shared-file-view-body {
@@ -65,34 +56,6 @@
   width: 950px;
   background: #fff;
   overflow: auto;
-}
-
-.shared-file-view-body .txt-view .CodeMirror,
-.shared-file-view-body .txt-view .file-view-tip {
-  height: auto;
-  min-height: 400px;
-  border: 1px solid #ccc;
-  margin: 0 auto;
-  box-shadow: 0 0 6px #ccc;
-  width: 816px;
-  padding: 40px 96px;
-  line-height: 1.5em;
-  background-color: #fff;
-}
-
-.shared-file-view-body .txt-view .file-view-tip {
-  min-height: 100px;
-  text-align: center;
-}
-
-.shared-file-view-body .txt-view .CodeMirror-scroll {
-  min-height: 400px;
-}
-
-.file-enc-cont {
-  width: 950px;
-  margin: -20px auto 6px;
-  text-align: right;
 }
 
 @media (max-width: 991.98px) {

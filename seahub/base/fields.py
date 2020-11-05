@@ -15,7 +15,7 @@ class ModifyingFieldDescriptor(object):
 class LowerCaseCharField(CharField):
     def to_python(self, value):
         value = super(LowerCaseCharField, self).to_python(value)
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return value.lower()
         return value
     def contribute_to_class(self, cls, name):

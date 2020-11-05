@@ -11,7 +11,7 @@ def get_page_range(current_page, num_pages):
         else:
             first_page = current_page - 5
             last_page = current_page + 4 if current_page + 4 < num_pages else num_pages
-    return range(first_page, last_page + 1)
+    return list(range(first_page, last_page + 1))
     
 class Paginator(DefaultPaginator):
     def get_page_range(self, current_page=1):

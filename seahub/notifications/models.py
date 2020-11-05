@@ -5,7 +5,7 @@ import os
 import json
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.conf import settings
 from django.forms import ModelForm, Textarea
@@ -24,15 +24,35 @@ from seahub.utils.repo import get_repo_shared_users
 from seahub.utils import normalize_cache_key
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import HASH_URLS
+from seahub.drafts.models import DraftReviewer
+from seahub.file_participants.utils import list_file_participants
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+class NotificationManager(models.Manager):
+    def create_sys_notification(self, message, is_primary=False):
+        """
+        Creates and saves a system notification.
+        """
+        notification = Notification()
+        notification.message = message
+        notification.primary = is_primary
+        notification.save()
+
+        return notification
 
 
 ########## system notification
 class Notification(models.Model):
     message = models.CharField(max_length=512)
     primary = models.BooleanField(default=False, db_index=True)
+    objects = NotificationManager()
+
+    def update_notification_to_current(self):
+        self.primary = 1
+        self.save()
 
 class NotificationForm(ModelForm):
     """
@@ -46,7 +66,6 @@ class NotificationForm(ModelForm):
         }
 
 ########## user notification
-MSG_TYPE_GROUP_MSG = 'group_msg'
 MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
@@ -54,9 +73,8 @@ MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
-MSG_TYPE_REVIEW_COMMENT = 'review_comment'
-MSG_TYPE_UPDATE_REVIEW = 'update_review'
-MSG_TYPE_REQUEST_REVIEWER = 'request_reviewer'
+MSG_TYPE_DRAFT_COMMENT = 'draft_comment'
+MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 
@@ -97,21 +115,15 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'author': author,
                        'comment': comment})
 
-def review_comment_msg_to_json(review_id, author, comment):
-    return json.dumps({'review_id': review_id,
+def draft_comment_msg_to_json(draft_id, author, comment):
+    return json.dumps({'draft_id': draft_id,
                        'author': author,
                        'comment': comment})
 
-def request_reviewer_msg_to_json(review_id, from_user, to_user):
-    return json.dumps({'review_id': review_id,
+def request_reviewer_msg_to_json(draft_id, from_user, to_user):
+    return json.dumps({'draft_id': draft_id,
                        'from_user': from_user,
                        'to_user': to_user})
-
-def update_review_msg_to_json(review_id, from_user, to_user, status):
-    return json.dumps({'review_id': review_id,
-                       'from_user': from_user,
-                       'to_user': to_user,
-                       'status': status})
 
 def guest_invitation_accepted_msg_to_json(invitation_id):
     return json.dumps({'invitation_id': invitation_id})
@@ -191,37 +203,6 @@ class UserNotificationManager(models.Manager):
         return super(UserNotificationManager, self).filter(
             to_user=username, seen=False).count()
 
-    def bulk_add_group_msg_notices(self, to_users, detail):
-        """Efficiently add group message notices.
-
-        NOTE: ``pre_save`` and ``post_save`` signals will not be sent.
-
-        Arguments:
-        - `self`:
-        - `to_users`:
-        - `detail`:
-        """
-        user_notices = [ UserNotification(to_user=m,
-                                          msg_type=MSG_TYPE_GROUP_MSG,
-                                          detail=detail
-                                          ) for m in to_users ]
-        UserNotification.objects.bulk_create(user_notices)
-
-    def seen_group_msg_notices(self, to_user, group_id):
-        """Mark group message notices of a user as seen.
-        """
-        user_notices = super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG)
-        for notice in user_notices:
-            try:
-                gid = notice.group_message_detail_to_dict().get('group_id')
-                if gid == group_id:
-                    if notice.seen is False:
-                        notice.seen = True
-                        notice.save()
-            except UserNotification.InvalidDetailError:
-                continue
-
     def seen_user_msg_notices(self, to_user, from_user):
         """Mark priv message notices of a user as seen.
         """
@@ -233,13 +214,6 @@ class UserNotificationManager(models.Manager):
                 if notice.seen is False:
                     notice.seen = True
                     notice.save()
-
-    def remove_group_msg_notices(self, to_user, group_id):
-        """Remove group message notices of a user.
-        """
-        super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG,
-            detail=str(group_id)).delete()
 
     def add_group_join_request_notice(self, to_user, detail):
         """
@@ -314,20 +288,15 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
-    def add_review_comment_msg(self, to_user, detail):
+    def add_draft_comment_msg(self, to_user, detail):
         """Notify ``to_user`` that review creator 
         """
-        return self._add_user_notification(to_user, MSG_TYPE_REVIEW_COMMENT, detail)
+        return self._add_user_notification(to_user, MSG_TYPE_DRAFT_COMMENT, detail)
 
     def add_request_reviewer_msg(self, to_user, detail):
         """Notify ``to_user`` that reviewer 
         """
-        return self._add_user_notification(to_user, MSG_TYPE_REQUEST_REVIEWER, detail)
-
-    def add_update_review_msg(self, to_user, detail):
-        """Notify ``to_user`` that reviewer and owner 
-        """
-        return self._add_user_notification(to_user, MSG_TYPE_UPDATE_REVIEW, detail)
+        return self._add_user_notification(to_user, MSG_TYPE_DRAFT_REVIEWER, detail)
 
     def add_guest_invitation_accepted_msg(self, to_user, detail):
         """Nofity ``to_user`` that a guest has accpeted an invitation.
@@ -373,14 +342,6 @@ class UserNotification(models.Model):
             self.seen = True
             self.save()
         return seen
-
-    def is_group_msg(self):
-        """Check whether is a group message notification.
-
-        Arguments:
-        - `self`:
-        """
-        return self.msg_type == MSG_TYPE_GROUP_MSG
 
     def is_file_uploaded_msg(self):
         """
@@ -433,53 +394,17 @@ class UserNotification(models.Model):
     def is_file_comment_msg(self):
         return self.msg_type == MSG_TYPE_FILE_COMMENT
 
-    def is_review_comment_msg(self):
-        return self.msg_type == MSG_TYPE_REVIEW_COMMENT
+    def is_draft_comment_msg(self):
+        return self.msg_type == MSG_TYPE_DRAFT_COMMENT
 
-    def is_request_reviewer_msg(self):
-        return self.msg_type == MSG_TYPE_REQUEST_REVIEWER
-
-    def is_update_review_msg(self):
-        return self.msg_type == MSG_TYPE_UPDATE_REVIEW
+    def is_draft_reviewer_msg(self):
+        return self.msg_type == MSG_TYPE_DRAFT_REVIEWER
 
     def is_guest_invitation_accepted_msg(self):
         return self.msg_type == MSG_TYPE_GUEST_INVITATION_ACCEPTED
 
     def is_repo_transfer_msg(self):
         return self.msg_type == MSG_TYPE_REPO_TRANSFER
-
-    def group_message_detail_to_dict(self):
-        """Parse group message detail, returns dict contains ``group_id`` and
-        ``msg_from``.
-
-        NOTE: ``msg_from`` may be ``None``.
-
-        Arguments:
-        - `self`:
-
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
-        """
-        assert self.is_group_msg()
-
-        try:
-            detail = json.loads(self.detail)
-        except ValueError:
-            raise self.InvalidDetailError, 'Wrong detail format of group message'
-        else:
-            if isinstance(detail, int): # Compatible with existing records
-                group_id = detail
-                msg_from = None
-                return {'group_id': group_id, 'msg_from': msg_from}
-            elif isinstance(detail, dict):
-                group_id = detail['group_id']
-                msg_from = detail['msg_from']
-                if 'message' in detail:
-                    message = detail['message']
-                    return {'group_id': group_id, 'msg_from': msg_from, 'message': message}
-                else:
-                    return {'group_id': group_id, 'msg_from': msg_from}
-            else:
-                raise self.InvalidDetailError, 'Wrong detail format of group message'
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
@@ -504,9 +429,7 @@ class UserNotification(models.Model):
 
     ########## functions used in templates
     def format_msg(self):
-        if self.is_group_msg():
-            return self.format_group_message_title()
-        elif self.is_file_uploaded_msg():
+        if self.is_file_uploaded_msg():
             return self.format_file_uploaded_msg()
         elif self.is_repo_share_msg():
             return self.format_repo_share_msg()
@@ -516,12 +439,10 @@ class UserNotification(models.Model):
             return self.format_group_join_request()
         elif self.is_file_comment_msg():
             return self.format_file_comment_msg()
-        elif self.is_review_comment_msg():
-            return self.format_review_comment_msg()
-        elif self.is_update_review_msg():
-            return self.format_update_review_msg()
-        elif self.is_request_reviewer_msg():
-            return self.format_request_reviewer_msg()
+        elif self.is_draft_comment_msg():
+            return self.format_draft_comment_msg()
+        elif self.is_draft_reviewer_msg():
+            return self.format_draft_reviewer_msg()
         elif self.is_guest_invitation_accepted_msg():
             return self.format_guest_invitation_accepted_msg()
         elif self.is_add_user_to_group():
@@ -541,7 +462,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         filename = d['file_name']
         repo_id = d['repo_id']
@@ -559,14 +480,14 @@ class UserNotification(models.Model):
                 name = os.path.basename(uploaded_to)
             file_link = reverse('view_lib_file', args=[repo_id, file_path])
 
-            msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
+            msg = _("A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
                 'file_link': file_link,
                 'file_name': escape(filename),
                 'link': link,
                 'name': escape(name),
                 }
         else:
-            msg = _(u"A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+            msg = _("A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
                 'file_name': escape(filename),
                 }
 
@@ -582,7 +503,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -633,7 +554,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
@@ -679,56 +600,6 @@ class UserNotification(models.Model):
 
         return msg
 
-    def format_group_message_title(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.group_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _(u"Internal error")
-
-        group_id = d.get('group_id')
-        group = ccnet_api.get_group(group_id)
-        if group is None:
-            self.delete()
-            return None
-
-        msg_from = d.get('msg_from')
-
-        if msg_from is None:
-            msg = _(u"<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
-                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
-                'group_name': group.group_name}
-        else:
-            msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
-                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
-                'user': escape(email2nickname(msg_from)),
-                'group_name': escape(group.group_name)
-            }
-        return msg
-
-    def format_group_message_detail(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.group_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _(u"Internal error")
-
-        message = d.get('message')
-        if message is not None:
-            return message
-        else:
-            return None
-
     def format_group_join_request(self):
         """
 
@@ -739,7 +610,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         username = d['username']
         group_id = d['group_id']
@@ -750,7 +621,7 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
+        msg = _("User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
             'href': HASH_URLS['GROUP_MEMBERS'] % {'group_id': group_id},
@@ -769,7 +640,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         group_staff = d['group_staff']
         group_id = d['group_id']
@@ -779,7 +650,7 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
+        msg = _("User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
             'user_profile': reverse('user_profile', args=[group_staff]),
             'group_staff': escape(email2nickname(group_staff)),
             'href': reverse('group', args=[group_id]),
@@ -791,7 +662,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         repo_id = d['repo_id']
         file_path = d['file_path']
@@ -812,64 +683,38 @@ class UserNotification(models.Model):
         }
         return msg
 
-    def format_review_comment_msg(self):
+    def format_draft_comment_msg(self):
         try:
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
-        review_id = d['review_id']
+        draft_id = d['draft_id']
         author = d['author']
 
-        msg = _("<a href='%(file_url)s'>Review #%(review_id)s</a> has a new comment from user %(author)s") % {
-            'review_id': review_id,
-            'file_url': reverse('drafts:review', args=[review_id]),
+        msg = _("<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user %(author)s") % {
+            'draft_id': draft_id,
+            'file_url': reverse('drafts:draft', args=[draft_id]),
             'author': escape(email2nickname(author)),
         }
         return msg
 
-    def format_request_reviewer_msg(self):
+    def format_draft_reviewer_msg(self):
         try:
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
-        review_id = d['review_id']
+        draft_id = d['draft_id']
         from_user = d['from_user']
 
-        msg = _("%(from_user)s has sent you a request for <a href='%(file_url)s'>review #%(review_id)s</a>") % {
-            'review_id': review_id,
-            'file_url': reverse('drafts:review', args=[review_id]),
+        msg = _("%(from_user)s has sent you a request for <a href='%(file_url)s'>draft #%(draft_id)s</a>") % {
+            'draft_id': draft_id,
+            'file_url': reverse('drafts:draft', args=[draft_id]),
             'from_user': escape(email2nickname(from_user))
         }
-        return msg
-
-    def format_update_review_msg(self):
-        try:
-            d = json.loads(self.detail)
-        except Exception as e:
-            logger.error(e)
-            return _(u"Internal error")
-
-        review_id = d['review_id']
-        from_user = d['from_user']
-        status = d['status']
-
-        if status == 'closed':
-            msg = _("%(from_user)s has closed <a href='%(file_url)s'>review #%(review_id)s</a>") % {
-                'review_id': review_id,
-                'file_url': reverse('drafts:review', args=[review_id]),
-                'from_user': escape(email2nickname(from_user))
-            }
-
-        if status == 'finished':
-            msg = _("%(from_user)s has published <a href='%(file_url)s'>review #%(review_id)s</a>") % {
-                'review_id': review_id,
-                'file_url': reverse('drafts:review', args=[review_id]),
-                'from_user': escape(email2nickname(from_user))
-            }
         return msg
 
     def format_guest_invitation_accepted_msg(self):
@@ -877,7 +722,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         inv_id = d['invitation_id']
         try:
@@ -906,7 +751,7 @@ class UserNotification(models.Model):
             d = json.loads(self.detail)
         except Exception as e:
             logger.error(e)
-            return _(u"Internal error")
+            return _("Internal Server Error")
 
         repo_owner_name = email2nickname(d['repo_owner'])
         repo_id = d['repo_id']
@@ -924,12 +769,12 @@ class UserNotification(models.Model):
 from django.dispatch import receiver
 
 from seahub.signals import upload_file_successful, comment_file_successful, repo_transfer
-from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
+from seahub.group.signals import group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
-from seahub.drafts.signals import comment_review_successful, \
-        request_reviewer_successful, update_review_successful
+from seahub.drafts.signals import comment_draft_successful, \
+        request_reviewer_successful
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -982,18 +827,6 @@ def add_share_repo_to_group_msg_cb(sender, **kwargs):
         detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id, path, org_id)
         UserNotification.objects.add_repo_share_to_group_msg(to_user, detail)
 
-@receiver(grpmsg_added)
-def grpmsg_added_cb(sender, **kwargs):
-    group_id = kwargs['group_id']
-    from_email = kwargs['from_email']
-    message = kwargs['message']
-    group_members = seaserv.get_group_members(int(group_id))
-
-    notify_members = [x.user_name for x in group_members if x.user_name != from_email]
-
-    detail = group_msg_to_json(group_id, from_email, message)
-    UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
-
 @receiver(group_join_request)
 def group_join_request_cb(sender, **kwargs):
     staffs = kwargs['staffs']
@@ -1021,48 +854,45 @@ def add_user_to_group_cb(sender, **kwargs):
 
 @receiver(comment_file_successful)
 def comment_file_successful_cb(sender, **kwargs):
+    """ send notification to file participants
+    """
     repo = kwargs['repo']
     repo_owner = kwargs['repo_owner']
     file_path = kwargs['file_path']
     comment = kwargs['comment']
     author = kwargs['author']
 
-    notify_users = get_repo_shared_users(repo.id, repo_owner)
-    notify_users.append(repo_owner)
+    notify_users = list_file_participants(repo.id, file_path)
     notify_users = [x for x in notify_users if x != author]
     for u in notify_users:
         detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
         UserNotification.objects.add_file_comment_msg(u, detail)
 
-@receiver(comment_review_successful)
-def comment_review_successful_cb(sender, **kwargs):
-    review = kwargs['review']
+@receiver(comment_draft_successful)
+def comment_draft_successful_cb(sender, **kwargs):
+    draft = kwargs['draft']
     comment = kwargs['comment']
     author = kwargs['author']
 
-    detail = review_comment_msg_to_json(review.id, author, comment)
-    UserNotification.objects.add_review_comment_msg(review.creator, detail)
+    detail = draft_comment_msg_to_json(draft.id, author, comment)
+
+    if draft.username != author:
+        UserNotification.objects.add_draft_comment_msg(draft.username, detail)
+
+    reviewers = DraftReviewer.objects.filter(draft=draft)
+    for r in reviewers:
+        if r.reviewer != author:
+            UserNotification.objects.add_draft_comment_msg(r.reviewer, detail)
 
 @receiver(request_reviewer_successful)
 def requeset_reviewer_successful_cb(sender, **kwargs):
     from_user = kwargs['from_user']
-    review_id = kwargs['review_id']
+    draft_id = kwargs['draft_id']
     to_user = kwargs['to_user']
 
-    detail = request_reviewer_msg_to_json(review_id, from_user, to_user)
+    detail = request_reviewer_msg_to_json(draft_id, from_user, to_user)
 
     UserNotification.objects.add_request_reviewer_msg(to_user, detail)
-
-@receiver(update_review_successful)
-def update_review_successful_cb(sender, **kwargs):
-    from_user = kwargs['from_user']
-    review_id = kwargs['review_id']
-    to_user = kwargs['to_user']
-    status = kwargs['status']
-
-    detail = update_review_msg_to_json(review_id, from_user, to_user, status)
-
-    UserNotification.objects.add_update_review_msg(to_user, detail)
 
 @receiver(accept_guest_invitation_successful)
 def accept_guest_invitation_successful_cb(sender, **kwargs):

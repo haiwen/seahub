@@ -3,7 +3,7 @@ import base64
 from datetime import datetime
 import hashlib
 
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.db import connection, transaction
 
 from seahub.avatar.models import Avatar
@@ -15,7 +15,7 @@ class AvatarNotFoundError(Exception):
     pass
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Migrate avatars from file system to database."
 
     def __init__(self):
@@ -28,13 +28,13 @@ class Command(NoArgsCommand):
 
         super(Command, self).__init__()
 
-    def handle_noargs(self, **options):
+    def handle(self, **options):
         for avatar in Avatar.objects.all():
             try:
                 self._save(avatar.avatar.name, avatar.avatar)
-                print "SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser)
+                print("SUCCESS: migrated Avatar path=%s user=%s" % (avatar.avatar.name, avatar.emailuser))
             except AvatarNotFoundError:
-                print "ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser)
+                print("ERROR: Avatar file not found: path=%s user=%s. Skip." % (avatar.avatar.name, avatar.emailuser))
                 continue
 
             # try:
@@ -50,10 +50,10 @@ class Command(NoArgsCommand):
         in the name will be converted to forward '/'.
         """
         name = name.replace('\\', '/')
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         try:
             binary = content.read()
-        except AttributeError, IOError:
+        except AttributeError as IOError:
             raise AvatarNotFoundError
 
         size = len(binary)
@@ -78,7 +78,7 @@ class Command(NoArgsCommand):
         return name
 
     def exists(self, name):
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT COUNT(*) FROM %(table)s WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__
         cursor = connection.cursor()

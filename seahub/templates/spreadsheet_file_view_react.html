@@ -1,0 +1,15 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+{% render_bundle 'viewFileSpreadsheet' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+  commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}'
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'viewFileSpreadsheet' 'js' %}
+{% endblock %}

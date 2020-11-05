@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import migrations, models
 
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('quota', models.BigIntegerField()),
-                ('institution', models.ForeignKey(to='institutions.Institution')),
+                ('institution', models.ForeignKey(to='institutions.Institution', on_delete=models.CASCADE)),
             ],
         ),
     ]

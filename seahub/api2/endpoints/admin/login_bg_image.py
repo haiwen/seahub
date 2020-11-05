@@ -11,9 +11,10 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT
+from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, MEDIA_URL, CUSTOM_LOGIN_BG_PATH
 from seahub.utils.auth import get_custom_login_bg_image_path
-from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT, \
+    get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
@@ -28,6 +29,10 @@ class AdminLoginBgImage(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         image_file = request.FILES.get('login_bg_image', None)
         if not image_file:
             error_msg = 'Image can not be found.'
@@ -55,7 +60,7 @@ class AdminLoginBgImage(APIView):
             custom_login_bg_image_file = os.path.join(SEAHUB_DATA_ROOT,
                     custom_login_bg_image_path)
             # save login background image file to custom dir
-            with open(custom_login_bg_image_file, 'w') as fd:
+            with open(custom_login_bg_image_file, 'wb') as fd:
                 fd.write(image_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,
@@ -69,4 +74,4 @@ class AdminLoginBgImage(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        return Response({'login_bg_image_path': get_service_url() + MEDIA_URL + CUSTOM_LOGIN_BG_PATH})

@@ -16,12 +16,13 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
-        validate_group_name, check_group_name_conflict
+        validate_group_name
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
+from seahub.share.models import ExtraGroupsSharePermission
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,9 @@ class AdminGroups(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # search groups by name
         group_name = request.GET.get('name', '')
@@ -108,6 +112,9 @@ class AdminGroups(APIView):
         1. Admin user;
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # argument check
         group_name = request.data.get('group_name', '')
         if not group_name:
@@ -117,13 +124,15 @@ class AdminGroups(APIView):
         group_name = group_name.strip()
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
-        if check_group_name_conflict(request, group_name):
-            error_msg = _(u'There is already a group with that name.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        pattern_matched_groups = ccnet_api.search_groups(group_name, -1, -1)
+        for group in pattern_matched_groups:
+            if group.group_name == group_name:
+                error_msg = _('There is already a group with that name.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         group_owner = request.data.get('group_owner', '')
         if group_owner:
@@ -175,6 +184,9 @@ class AdminGroup(APIView):
         1. Admin user;
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # recourse check
         group_id = int(group_id) # Checked by URL Conf
         group = ccnet_api.get_group(group_id)
@@ -198,7 +210,7 @@ class AdminGroup(APIView):
 
             old_owner = group.creator_name
             if new_owner == old_owner:
-                error_msg = _(u'User %s is already group owner.') % new_owner
+                error_msg = _('User %s is already group owner.') % new_owner
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # transfer a group
@@ -253,6 +265,9 @@ class AdminGroup(APIView):
         """ Dismiss a specific group
         """
 
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         group_id = int(group_id)
         group = ccnet_api.get_group(group_id)
         if not group:
@@ -262,8 +277,13 @@ class AdminGroup(APIView):
         group_name = group.group_name
 
         try:
-            ccnet_api.remove_group(group_id)
+            org_id = ccnet_api.get_org_id_by_group(group_id)
+            if org_id >= 0:
+                ccnet_api.remove_org_group(org_id, group_id)
+            else:
+                ccnet_api.remove_group(group_id)
             seafile_api.remove_group_repos(group_id)
+            ExtraGroupsSharePermission.objects.filter(group_id=group_id).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -279,3 +299,33 @@ class AdminGroup(APIView):
                 operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
+
+
+class AdminSearchGroup(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        """ Search group by name
+
+        Permission checking:
+        1. Admin user;
+        """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = []
+        groups = ccnet_api.search_groups(query_str, 0, 25)
+        for group in groups:
+            group_info = get_group_info(group.id)
+            result.append(group_info)
+
+        return Response({"group_list": result})

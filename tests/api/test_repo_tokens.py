@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from tests.api.apitestbase import ApiTestBase
 from tests.common.utils import apiurl
 

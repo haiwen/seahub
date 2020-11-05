@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
 from mock import patch
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from tests.common.utils import upload_file_test, randstring
 
@@ -29,9 +31,9 @@ class UploadLinksTest(BaseTestCase):
     def tearDown(self):
         self.remove_repo()
 
-    def _add_upload_link(self):
+    def _add_upload_link(self, expire_date=None):
         upload_link = UploadLinkShare.objects.create_upload_link_share(self.user_name,
-            self.repo_id, self.folder_path, None, None)
+            self.repo_id, self.folder_path, None, expire_date=expire_date)
 
         return upload_link.token
 
@@ -50,11 +52,27 @@ class UploadLinksTest(BaseTestCase):
 
         assert json_resp[0]['link'] is not None
         assert json_resp[0]['token'] is not None
+        assert json_resp[0]['is_expired'] is not None
+
 
         assert token in json_resp[0]['link']
         assert 'u/d' in json_resp[0]['link']
 
         assert token == json_resp[0]['token']
+
+        self._remove_upload_link(token)
+
+    def test_get_expired_upload_link(self):
+        self.login_as(self.user)
+        # create a upload link expired one day ago.
+        expire_date = timezone.now() + relativedelta(days=-1)
+        token = self._add_upload_link(expire_date=expire_date)
+
+        resp = self.client.get(self.url + '?path=' + self.folder_path + '&repo_id=' + self.repo_id)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['is_expired'] == True
 
         self._remove_upload_link(token)
 
@@ -207,7 +225,7 @@ class UploadLinkUploadTest(BaseTestCase):
         assert 'upload' in json_resp['upload_link']
 
         # test upload file via `upload_link`
-        upload_file_test(json_resp['upload_link'])
+        upload_file_test(json_resp['upload_link'], parent_dir=self.folder_path)
 
         self._remove_upload_link(token)
 

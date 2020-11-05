@@ -140,6 +140,7 @@ function getViewerConfiguration() {
       pageNumber: document.getElementById('pageNumber'),
       scaleSelectContainer: document.getElementById('scaleSelectContainer'),
       scaleSelect: document.getElementById('scaleSelect'),
+      restoreToAuto: document.getElementById('restoreToAuto'),
       customScaleOption: document.getElementById('customScaleOption'),
       previous: document.getElementById('previous'),
       next: document.getElementById('next'),
@@ -175,12 +176,14 @@ function getViewerConfiguration() {
       spreadEvenButton: document.getElementById('spreadEven'),
       documentPropertiesButton: document.getElementById('documentProperties')
     },
+    /*
     fullscreen: {
       contextFirstPage: document.getElementById('contextFirstPage'),
       contextLastPage: document.getElementById('contextLastPage'),
       contextPageRotateCw: document.getElementById('contextPageRotateCw'),
       contextPageRotateCcw: document.getElementById('contextPageRotateCcw')
     },
+    */
     sidebar: {
       outerContainer: document.getElementById('outerContainer'),
       viewerContainer: document.getElementById('viewerContainer'),
@@ -4393,7 +4396,7 @@ var defaultOptions = {
     kind: OptionKind.VIEWER
   },
   imageResourcesPath: {
-    value: './images/',
+    value: sf_pdf_images_path,
     kind: OptionKind.VIEWER
   },
   maxCanvasPixels: {
@@ -4441,7 +4444,7 @@ var defaultOptions = {
     kind: OptionKind.API
   },
   cMapUrl: {
-    value: '../web/cmaps/',
+    value: sf_pdf_cmaps_path,
     kind: OptionKind.API
   },
   disableAutoFetch: {
@@ -11315,6 +11318,12 @@ var Toolbar = function () {
         eventBus.dispatch('scalechanged', {
           source: self,
           value: this.value
+        });
+      });
+      items.restoreToAuto.addEventListener('click', function () {
+        eventBus.dispatch('scalechanged', {
+          source: self,
+          value: 'auto'
         });
       });
       items.presentationModeButton.addEventListener('click', function () {

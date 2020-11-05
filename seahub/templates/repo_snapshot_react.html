@@ -1,0 +1,34 @@
+{% extends 'base_for_react.html' %}
+{% load seahub_tags i18n avatar_tags %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{% trans "Snapshot" %} - {% endblock %}
+
+{% block extra_style %}
+{% render_bundle 'repoSnapshot' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  repoID: '{{repo.id}}',
+  repoName: '{{repo.props.name|escapejs}}',
+
+  commitID: '{{current_commit.id}}',
+  commitTime: '{{current_commit.props.ctime|tsstr_sec}}',
+  commitDesc: '{{ current_commit.props.desc|translate_commit_desc|escapejs }}',
+  commitRelativeTime: '{{ current_commit.props.ctime|translate_seahub_time }}',
+
+  {% if current_commit.props.creator_name %}
+  showAuthor: true,
+  authorAvatarURL: "{% avatar_url current_commit.props.creator_name 40 %}",
+  authorName: '{{ current_commit.props.creator_name|escapejs }}',
+  authorNickName: '{{ current_commit.props.creator_name|email2nickname|escapejs }}',
+  {% endif %}
+
+  canRestoreRepo: {% if can_restore_repo %} true {% else %} false {% endif %}
+};
+</script>
+{% render_bundle 'repoSnapshot' 'js' %}
+{% endblock %}

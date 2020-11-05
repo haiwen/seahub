@@ -6,7 +6,7 @@ from base64 import b32encode
 from constance import config
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms import Form
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -105,7 +105,7 @@ class SetupView(CheckTwoFactorEnabledMixin, IdempotentSessionWizardView):
         """
         In the validation step, ask the device to generate a challenge.
         """
-        next_step = self.steps.next
+        next_step = self.steps.__next__
         if next_step == 'validation':
             try:
                 self.get_device().generate_challenge()

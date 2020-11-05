@@ -1,0 +1,70 @@
+{% load render_bundle from webpack_loader %}
+{% load static seahub_tags i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <title>{{ filename }}</title>
+
+        <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+        {% render_bundle 'markdownEditor' 'css' %}
+        <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
+        {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+        {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
+    </head>
+    <body>
+         <div id="root"></div>
+         <div id="modal-wrapper"></div>
+         <script type="text/javascript">
+           window.app = {
+              config: {
+                  mediaUrl: '{{ MEDIA_URL }}',
+                  siteRoot: '{{ SITE_ROOT }}',
+                  serviceUrl: '{{ serviceUrl }}',
+                  isPro: '{{ is_pro }}',
+                  isDocs: '{{ is_docs }}',
+                  lang: '{{ LANGUAGE_CODE }}',
+                  seafileCollabServer: '{{ seafile_collab_server}}',
+              },
+              pageOptions: {
+                  repoID: '{{ repo.id }}',
+                  repoName: '{{ repo.name|escapejs }}',
+                  filePath: '{{ path|escapejs }}',
+                  fileName: '{{ filename|escapejs }}',
+                  domain: '{{ domain }}',
+                  protocol: '{{ protocol }}',
+                  lang: '{{ language_code }}',
+                  mode: '{{ mode }}',
+                  draftID: '{{ draft_id }}',
+                  isDraft: '{{ is_draft }}' === 'True',
+                  hasDraft: '{{ has_draft }}' === 'True',
+                  draftFilePath: '{{ draft_file_path }}',
+                  draftOriginFilePath: '{{ draft_origin_file_path }}',
+                  shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+                  shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
+                  shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
+                  shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
+                  canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+                  canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
+                  isLocked: {% if file_locked %}true{% else %}false{% endif %},
+                  lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
+                  canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
+              },
+             userInfo: {
+               username: '{{ user.username }}',
+               name: '{{ user.username|email2nickname|escapejs }}',
+               contact_email: '{{ user.username|email2contact_email }}',
+             }
+          }
+         </script>
+         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+
+         {% render_bundle 'commons' %}
+         {% render_bundle 'markdownEditor' 'js' %}
+    </body>
+</html>

@@ -1,5 +1,9 @@
-import { mediaUrl, gettext, serviceURL } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
+import TextTranslation from './text-translation';
+import React from 'react';
+import toaster from '../components/toast';
+import PermissionDeniedTip from '../components/permission-denied-tip';
 
 export const Utils = {
 
@@ -31,6 +35,17 @@ export const Utils = {
     } else {
       return false;
     }
+  },
+
+  isDesktop: function() {
+    return window.innerWidth >= 768;
+  },
+
+  isWeChat: function() {
+    let ua = window.navigator.userAgent.toLowerCase();
+    let isWeChat = ua.match(/MicroMessenger/i) == 'micromessenger';
+    let isEnterpriseWeChat = ua.match(/MicroMessenger/i) == 'micromessenger' && ua.match(/wxwork/i) == 'wxwork';
+    return isEnterpriseWeChat || isWeChat;
   },
 
   FILEEXT_ICON_MAP: {
@@ -90,13 +105,13 @@ export const Utils = {
   },
 
   // check if a file is an image
-  imageCheck: function (filename) {
+  imageCheck: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'];
+    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff'];
     if (image_exts.indexOf(file_ext) != -1) {
       return true;
     } else {
@@ -104,8 +119,67 @@ export const Utils = {
     }
   },
 
+  getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
+    // itemType: library, dir, file
+    // permission: rw, r, admin, cloud-edit, preview
+
+    let permissionOptions = [];
+
+    if (permission == 'rw' || permission == 'admin' || permission == 'r') {
+      permissionOptions.push('preview_download');
+    }
+    permissionOptions.push('preview_only');
+
+    if (itemType == 'library' || itemType == 'dir') {
+      if (permission == 'rw' || permission == 'admin') {
+        permissionOptions.push('download_upload');
+      }
+    } else {
+      if (this.isEditableOfficeFile(path) && (permission == 'rw' || permission == 'admin') && canEdit) {
+        permissionOptions.push('edit_download');
+      }
+
+      // not support
+      // if (this.isEditableOfficeFile(path) && (permission == 'cloud-edit')) {
+      //   permissionOptions.push('cloud_edit');
+      // }
+
+    }
+    return permissionOptions;
+  },
+
+  getShareLinkPermissionStr: function(permissions) {
+    const { can_edit, can_download, can_upload } = permissions;
+    switch (`${can_edit} ${can_download} ${can_upload}`) {
+      case 'false true false':
+        return 'preview_download';
+      case 'false false false':
+        return 'preview_only';
+      case 'false true true':
+        return 'download_upload';
+      case 'true true false':
+        return 'edit_download';
+      case 'true false false':
+        return 'cloud_edit';
+    }
+  },
+
+  isEditableOfficeFile: function(filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    var exts = ['docx', 'pptx', 'xlsx'];
+    if (exts.indexOf(file_ext) != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
   // check if a file is a video
-  videoCheck: function (filename) {
+  videoCheck: function(filename) {
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -117,6 +191,12 @@ export const Utils = {
     } else {
       return false;
     }
+  },
+
+  checkDuplicatedNameInList: function(list, targetName) {
+    return list.some(object => {
+      return object.name === targetName;
+    });
   },
 
   encodePath: function(path) {
@@ -173,7 +253,7 @@ export const Utils = {
   },
 
   /**
-   * input: 
+   * input:
    *  eg: /
    *      ../abc/abc/
    *      ../abc/bc
@@ -226,18 +306,47 @@ export const Utils = {
 
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
-      navigator.userAgent.indexOf('Chrome') > -1;
+      navigator.userAgent.indexOf('Chrome') > -1 ||
+      navigator.userAgent.indexOf('Safari') > -1;
+  },
+
+  isIEBrower: function() { // is ie <= ie11 not include Edge
+    var userAgent = navigator.userAgent;
+    var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
+    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
+    return isIE || isIE11;
+  },
+
+  getDefaultLibIconUrl: function(isBig) {
+    let size = Utils.isHiDPI() ? 48 : 24;
+    size = isBig ? 256 : size;
+    let icon_name = 'lib.png';
+    return mediaUrl + 'img/lib/' + size + '/' + icon_name;
   },
 
   getLibIconUrl: function(repo, isBig) {
     let permission = repo.permission || repo.share_permission; //Compatible with regular repo and repo shared
     let size = Utils.isHiDPI() ? 48 : 24;
     size = isBig ? 256 : size;
+
     let icon_name = 'lib.png';
     if (repo.encrypted) {
       icon_name = 'lib-encrypted.png';
     }
-    if (permission === 'r' || permission === 'perview') {
+    switch (permission) {
+      case 'r':
+        icon_name = 'lib-readonly.png';
+        break;
+      case 'preview':
+        icon_name = 'lib-cloud-preview.png';
+        break;
+      case 'cloud-edit':
+        icon_name = 'lib-cloud-preview-edit.png';
+        break;
+    }
+
+    // must be the last
+    if (repo.status == 'read-only') {
       icon_name = 'lib-readonly.png';
     }
 
@@ -255,6 +364,16 @@ export const Utils = {
       return this.getFolderIconUrl(readonly, size);
     } else {
       return this.getFileIconUrl(dirent.name, size);
+    }
+  },
+
+  getAdminTemplateDirentIcon: function (dirent, isBig) {
+    let size = this.isHiDPI() ? 48 : 24;
+    size = isBig ? 192 : size;
+    if (dirent.is_file) {
+      return this.getFileIconUrl(dirent.obj_name, size);
+    } else {
+      return this.getFolderIconUrl();
     }
   },
 
@@ -301,10 +420,10 @@ export const Utils = {
           title = gettext('Read-Only library');
           break;
         case 'cloud-edit':
-          title = gettext('Preview-Edit-on-Cloud library');
+          title = gettext('Online Read-Write library');
           break;
         case 'preview':
-          title = gettext('Preview-on-Cloud library');
+          title = gettext('Online Read-Only library');
           break;
       }
     }
@@ -321,13 +440,118 @@ export const Utils = {
         title = gettext('Read-Only folder');
         break;
       case 'cloud-edit':
-        title = gettext('Preview-Edit-on-Cloud folder');
+        title = gettext('Online Read-Write folder');
         break;
       case 'preview':
-        title = gettext('Preview-on-Cloud folder');
+        title = gettext('Online Read-Only folder');
         break;
     }
     return title;
+  },
+
+  getFolderOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+
+    let list = [];
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
+    const permission = dirent.permission;
+
+    if (isContextmenu) {
+      if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+        list.push(SHARE);
+      }
+
+      if (permission == 'rw') {
+        list.push(DELETE, 'Divider');
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push(RENAME, MOVE, COPY);
+      if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
+        list.push('Divider', PERMISSION);
+      }
+      list.push('Divider', OPEN_VIA_CLIENT);
+    }
+
+    if (permission == 'r' && !currentRepoInfo.encrypted) {
+      list.push(COPY);
+    }
+
+    return list;
+  },
+
+  getFileOperationList: function(currentRepoInfo, dirent, isContextmenu) {
+    let list = [];
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
+    const permission = dirent.permission;
+
+    if (isContextmenu) {
+      if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
+        list.push(SHARE);
+      }
+
+      if (permission == 'rw') {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
+        }
+      }
+
+      list.push('Divider');
+    }
+
+    if (permission == 'rw') {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME, MOVE);
+      }
+      list.push(COPY, TAGS);
+
+      if (isPro) {
+        if (dirent.is_locked) {
+          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice') {
+            list.push(UNLOCK);
+          }
+        } else {
+          list.push(LOCK);
+        }
+      }
+
+      list.push('Divider');
+      if (enableFileComment) {
+        list.push(COMMENT);
+      }
+      list.push(HISTORY);
+      if (isPro && fileAuditEnabled) {
+        list.push(ACCESS_LOG);
+      }
+      list.push('Divider', OPEN_VIA_CLIENT);
+    }
+
+    if (permission == 'r') {
+      if (!currentRepoInfo.encrypted) {
+        list.push(COPY);
+      }
+      if (enableFileComment) {
+        list.push(COMMENT);
+      }
+      list.push(HISTORY);
+    }
+
+    return list;
+  },
+
+  getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+    return dirent.type == 'dir' ?
+      Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu) :
+      Utils.getFileOperationList(currentRepoInfo, dirent, isContextmenu);
   },
 
   sharePerms: function(permission) {
@@ -343,10 +567,10 @@ export const Utils = {
         title = gettext('Admin');
         break;
       case 'cloud-edit':
-        title = gettext('Preview-Edit-on-Cloud');
+        title = gettext('Online Read-Write');
         break;
       case 'preview':
-        title = gettext('Preview-on-Cloud');
+        title = gettext('Online Read-Only');
         break;
     }
     return title;
@@ -365,13 +589,71 @@ export const Utils = {
         title = gettext('Besides Write permission, user can also share the library.');
         break;
       case 'cloud-edit':
-        title = gettext('Same as Preview on cloud. But user can also edit files online via browser.');
+        title = gettext('User can view and edit file online via browser. Files can\'t be downloaded.');
         break;
       case 'preview':
         title = gettext('User can only view files online via browser. Files can\'t be downloaded.');
         break;
     }
     return title;
+  },
+
+  getShareLinkPermissionObject: function(permission) {
+    switch (permission) {
+      case 'preview_download':
+        return {
+          value: permission,
+          text: gettext('Preview and download'),
+          permissionDetails: {
+            'can_edit': false,
+            'can_download': true,
+            'can_upload': false
+          }
+        };
+      case 'preview_only':
+        return {
+          value: permission,
+          text: gettext('Preview only'),
+          permissionDetails: {
+            'can_edit': false,
+            'can_download': false,
+            'can_upload': false
+          }
+        };
+      case 'download_upload':
+        return {
+          value: permission,
+          text: gettext('Download and upload'),
+          permissionDetails: {
+            'can_edit': false,
+            'can_download': true,
+            'can_upload': true
+          }
+        };
+      case 'edit_download':
+        return {
+          value: permission,
+          text: gettext('Edit on cloud and download'),
+          permissionDetails: {
+            'can_edit': true,
+            'can_download': true,
+            'can_upload': false
+          }
+        };
+      case 'cloud_edit':
+        return {
+          value: permission,
+          text: gettext('Edit on cloud only'),
+          permissionDetails: {
+            'can_edit': true,
+            'can_download': false,
+            'can_upload': false
+          }
+        };
+    }
+    return {
+      text: '',
+    };
   },
 
   formatSize: function(options) {
@@ -438,6 +720,11 @@ export const Utils = {
     }
   },
 
+  isInternalFileLink: function(url, repoID) {
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*');
+    return re.test(url);
+  },
+
   isInternalMarkdownLink: function(url, repoID) {
     var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
     return re.test(url);
@@ -454,7 +741,7 @@ export const Utils = {
     var path = decodeURIComponent(array[1]);
     return path;
   },
-  
+
   getPathFromInternalDirLink: function(url, repoID) {
     var re = new RegExp(serviceURL + '/library/' + repoID + '(/.*)');
     var array = re.exec(url);
@@ -466,19 +753,19 @@ export const Utils = {
 
   isWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*\.md$');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
     return re.test(url);
   },
 
   isWikiInternalDirLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '.*');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*');
     return re.test(url);
   },
 
   getPathFromWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
     var array = re.exec(url);
     var path = array[1];
     try {
@@ -489,10 +776,10 @@ export const Utils = {
     }
     return path;
   },
-  
+
   getPathFromWikiInternalDirLink: function(url, slug) {
     slug = encodeURIComponent(slug);
-    var re = new RegExp(serviceURL + '/wikis/' + slug + '(/.*)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '(/.*)');
     var array = re.exec(url);
     var path = array[1];
     try {
@@ -608,6 +895,25 @@ export const Utils = {
           return a.last_modified < b.last_modified ? 1 : -1;
         };
         break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.size === b.size) {
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return result;
+          }
+          return a.size_original < b.size_original ? -1 : 1;
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.size === b.size) {
+            let result = _this.compareTwoWord(a.repo_name, b.repo_name);
+            return -result;
+          }
+
+          return a.size_original < b.size_original ? 1 : -1;
+        };
+        break;
     }
 
     repos.sort(comparator);
@@ -641,6 +947,22 @@ export const Utils = {
           return a.mtime < b.mtime ? 1 : -1;
         };
         break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            return 0;
+          }
+          return a.size_original < b.size_original ? -1 : 1;
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.type == 'dir' && b.type == 'dir') {
+            return 0;
+          }
+          return a.size_original < b.size_original ? 1 : -1;
+        };
+        break;
     }
 
     items.sort((a, b) => {
@@ -655,11 +977,107 @@ export const Utils = {
     return items;
   },
 
+  // sort dirents in shared folder
+  sortDirentsInSharedDir: function(items, sortBy, sortOrder) {
+    const _this = this;
+    let comparator;
+
+    switch (`${sortBy}-${sortOrder}`) {
+      case 'name-asc':
+        comparator = function(a, b) {
+          let result;
+          if (a.is_dir) {
+            result = _this.compareTwoWord(a.folder_name, b.folder_name);
+          } else {
+            result = _this.compareTwoWord(a.file_name, b.file_name);
+          }
+          return result;
+        };
+        break;
+      case 'name-desc':
+        comparator = function(a, b) {
+          let result;
+          if (a.is_dir) {
+            result = _this.compareTwoWord(a.folder_name, b.folder_name);
+          } else {
+            result = _this.compareTwoWord(a.file_name, b.file_name);
+          }
+          return -result;
+        };
+        break;
+      case 'time-asc':
+        comparator = function(a, b) {
+          return a.last_modified < b.last_modified ? -1 : 1;
+        };
+        break;
+      case 'time-desc':
+        comparator = function(a, b) {
+          return a.last_modified < b.last_modified ? 1 : -1;
+        };
+        break;
+      case 'size-asc':
+        comparator = function(a, b) {
+          if (a.is_dir) {
+            return 0;
+          } else {
+            return a.size < b.size ? -1 : 1;
+          }
+        };
+        break;
+      case 'size-desc':
+        comparator = function(a, b) {
+          if (a.is_dir) {
+            return 0;
+          } else {
+            return a.size < b.size ? 1 : -1;
+          }
+        };
+        break;
+    }
+
+    items.sort((a, b) => {
+      if (a.is_dir && !b.is_dir) {
+        return -1;
+      } else if (!a.is_dir && b.is_dir) {
+        return 1;
+      } else {
+        return comparator(a, b);
+      }
+    });
+    return items;
+  },
+
+  /*
+   * only used in the 'catch' part of a seafileAPI request
+   */
+  getErrorMsg: function(error, showPermissionDeniedTip) {
+    let errorMsg = '';
+    if (error.response) {
+      if (error.response.status == 403) {
+        if (showPermissionDeniedTip) {
+          toaster.danger(
+            <PermissionDeniedTip />,
+            {id: 'permission_denied', duration: 3600}
+          );
+        }
+        errorMsg = gettext('Permission denied');
+      } else if (error.response.data &&
+        error.response.data['error_msg']) {
+        errorMsg = error.response.data['error_msg'];
+      } else {
+        errorMsg = gettext('Error');
+      }
+    } else {
+      errorMsg = gettext('Please check the network.');
+    }
+    return errorMsg;
+  },
+
   changeMarkdownNodes: function(nodes, fn) {
     nodes.map((item) => {
-      fn(item); 
-      if (item.nodes && item.nodes.length > 0){
-        Utils.changeMarkdownNodes(item.nodes, fn); 
+      fn(item);
+      if (item.children && item.children.length > 0){
+        Utils.changeMarkdownNodes(item.children, fn);
       }
     });
 
@@ -698,5 +1116,232 @@ export const Utils = {
     }
     return mode;
   },
+
+  DARK_COLOR_MAP: {
+    // old color
+    'red': '#D11507',
+    'orange': '#FF8C00',
+    'yellow': '#EDEF00',
+    'green': '#006400',
+    'cyan': '#00E0E1',
+    'blue': '#2510A3',
+    'indigo': '#350C56',
+    'purple': '#551054',
+    'pink': '#E3A5B0',
+    'azure': '#C4D0D0',
+    'lime': '#00E100',
+    'teal': '#006A6B',
+    'gray': '#545454',
+
+    // new color
+    '#FFA8A8': '#E49090',
+    '#FFA94D': '#E39136',
+    '#FFD43B': '#E0B815',
+    '#A0EC50': '#83CF32',
+    '#A9E34B': '#8DC72E',
+    '#63E6BE': '#43CAA4',
+    '#4FD2C9': '#2DB9B0',
+    '#72C3FC': '#57ABE3',
+    '#91A7FF': '#7A91E7',
+    '#E599F7': '#CC82DE',
+    '#B197FC': '#9B82E5',
+    '#F783AC': '#DF6D97',
+    '#CED4DA': '#A8ADB2',
+  },
+
+  getDarkColor: function(color) {
+    let darkColor;
+    darkColor = this.DARK_COLOR_MAP[color];
+    return darkColor;
+  },
+
+  getCopySuccessfulMessage: function(dirNames) {
+    let message;
+    let dirNamesLength = dirNames.length;
+    if (dirNamesLength === 1) {
+      message = gettext('Successfully copied %(name)s.');
+    } else if (dirNamesLength === 2) {
+      message = gettext('Successfully copied %(name)s and 1 other item.');
+    } else {
+      message = gettext('Successfully copied %(name)s and %(amount)s other items.');
+      message = message.replace('%(amount)s', dirNamesLength - 1);
+    }
+    message = message.replace('%(name)s', dirNames[0]);
+    return message;
+  },
+
+  getMoveSuccessMessage: function(dirNames) {
+    let message;
+    let dirNamesLength = dirNames.length;
+    if (dirNamesLength === 1) {
+      message = gettext('Successfully moved %(name)s.');
+    } else if (dirNamesLength === 2) {
+      message = gettext('Successfully moved %(name)s and 1 other item.');
+    } else {
+      message = gettext('Successfully moved %(name)s and %(amount)s other items.');
+      message = message.replace('%(amount)s', dirNamesLength - 1);
+    }
+    message = message.replace('%(name)s', dirNames[0]);
+    return message;
+  },
+
+  getCopyFailedMessage: function(dirNames) {
+    let message;
+    let dirNamesLength = dirNames.length;
+
+    if (dirNamesLength > 1) {
+      message = gettext('Failed to copy %(name)s and %(amount)s other item(s).');
+      message = message.replace('%(amount)s', dirNamesLength - 1);
+    } else {
+      message = gettext('Failed to copy %(name)s.');
+    }
+    message = message.replace('%(name)s', dirNames[0]);
+    return message;
+  },
+
+  getMoveFailedMessage: function(dirNames) {
+    let message;
+    let dirNamesLength = dirNames.length;
+    if (dirNamesLength > 1) {
+      message = gettext('Failed to move %(name)s and %(amount)s other item(s).');
+      message = message.replace('%(amount)s', dirNamesLength - 1);
+    } else {
+      message = gettext('Failed to move %(name)s.');
+    }
+    message = message.replace('%(name)s', dirNames[0]);
+    return message;
+  },
+
+  handleSearchedItemClick: function(searchedItem) {
+    if (searchedItem.is_dir === true) {
+      let url = siteRoot + 'library/' + searchedItem.repo_id + '/' + searchedItem.repo_name + searchedItem.path;
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    } else {
+      let url = siteRoot + 'lib/' + searchedItem.repo_id + '/file' + Utils.encodePath(searchedItem.path);
+      let newWindow = window.open('about:blank');
+      newWindow.location.href = url;
+    }
+  },
+
+  generatePassword: function(passwordLength) {
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+    let password = '';
+    for (let i = 0; i < passwordLength; i++) {
+      password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return password;
+  },
+
+  pathNormalize: function(originalPath) {
+    let oldPath = originalPath.split('/');
+    let newPath = [];
+    for (let i = 0; i < oldPath.length; i++) {
+      if (oldPath[i] === '.' || oldPath[i] === '') {
+        continue;
+      } else if (oldPath[i] === '..') {
+        newPath.pop();
+      } else {
+        newPath.push(oldPath[i]);
+      }
+    }
+    return newPath.join('/');
+  },
+
+  getEventData: function(event, data) {
+    if (event.target.dataset) {
+      return event.target.dataset[data];
+    }
+    return event.target.getAttribute('data-' + data);
+
+  },
+
+  /**
+   * Check whether user has permission to share a dirent.
+   * If dirent is none, then check whether the user can share the repo
+   * scene 1: root path or folder path, control the share button in the toolbar
+   * scene 2: selected a dirent, control the share button in the toolbar dropdown-menu
+   * scene 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
+   *
+   * @param {*} repoInfo
+   * @param {*} userDirPermission
+   * @param {*} dirent
+   */
+  isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
+
+    let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
+    let isRepoOwner = ownerEmail === username;
+
+    if (repoEncrypted) {
+      return true;
+    }
+
+    // for 'file' & 'dir'
+    if (dirent) {
+      if (userDirPermission == 'rw' || userDirPermission == 'r') {
+        // can generate internal link
+        return true;
+      }
+    }
+
+    // the root path or the dirent type is dir
+    let hasGenerateShareLinkPermission = false;
+    if (canGenerateShareLink && (userDirPermission == 'rw' || userDirPermission == 'r')) {
+      hasGenerateShareLinkPermission = true;
+      return hasGenerateShareLinkPermission;
+    }
+
+    let hasGenerateUploadLinkPermission = false;
+    if (canGenerateUploadLink && (userDirPermission == 'rw')) {
+      hasGenerateUploadLinkPermission = true;
+      return hasGenerateUploadLinkPermission;
+    }
+
+    let hasDirPrivateSharePermission = false;
+    if (!isVirtual && (isRepoOwner || isAdmin)) {
+      hasDirPrivateSharePermission = true;
+      return hasDirPrivateSharePermission;
+    }
+
+    return false;
+  },
+
+  registerGlobalVariable: function(namespace, key, value) {
+    if (!window[namespace]) {
+      window[namespace] = {};
+    }
+    window[namespace][key] = value;
+  },
+
+  formatTime: function(seconds) {
+    var ss = parseInt(seconds);
+    var mm = 0;
+    var hh = 0;
+    if (ss > 60) {
+      mm = parseInt(ss / 60);
+      ss = parseInt(ss % 60);
+    }
+    if (mm > 60) {
+      hh = parseInt(mm / 60);
+      mm = parseInt(mm % 60);
+    }
+
+    var result = ('00' + parseInt(ss)).slice(-2);
+    if (mm > 0) {
+      result = ('00' + parseInt(mm)).slice(-2) + ':' + result;
+    } else {
+      result = '00:' + result;
+    }
+    if (hh > 0) {
+      result = ('00' + parseInt(hh)).slice(-2) + ':' + result;
+    } else {
+      result = '00:' + result;
+    }
+    return result;
+  },
+
+  hasNextPage(curPage, perPage, totalCount) {
+    return curPage * perPage < totalCount;
+  }
 
 };

@@ -80,6 +80,9 @@ class AdminShares(APIView):
         1. admin user.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         result = []
 
         # current `request.user.username` is admin user,
@@ -177,7 +180,7 @@ class AdminShares(APIView):
                 if repo_owner == email:
                     result['failed'].append({
                         'user_email': email,
-                        'error_msg': _(u'User %s is already library owner.') % email
+                        'error_msg': _('User %s is already library owner.') % email
                         })
 
                     continue
@@ -203,7 +206,7 @@ class AdminShares(APIView):
                 if has_shared_to_user(repo.repo_id, path, email):
                     result['failed'].append({
                         'email': email,
-                        'error_msg': _(u'This item has been shared to %s.') % email
+                        'error_msg': _('This item has been shared to %s.') % email
                     })
                     continue
 
@@ -260,7 +263,7 @@ class AdminShares(APIView):
                 if has_shared_to_group(repo.repo_id, path, group_id):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': _(u'This item has been shared to %s.') % group.group_name
+                        'error_msg': _('This item has been shared to %s.') % group.group_name
                         })
                     continue
 

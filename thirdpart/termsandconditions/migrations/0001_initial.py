@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import migrations, models
 import seahub.base.fields
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('username', seahub.base.fields.LowerCaseCharField(max_length=255)),
                 ('ip_address', models.GenericIPAddressField(null=True, verbose_name=b'IP Address', blank=True)),
                 ('date_accepted', models.DateTimeField(auto_now_add=True, verbose_name=b'Date Accepted')),
-                ('terms', models.ForeignKey(related_name='userterms', to='termsandconditions.TermsAndConditions')),
+                ('terms', models.ForeignKey(on_delete=models.CASCADE, related_name='userterms', to='termsandconditions.TermsAndConditions')),
             ],
             options={
                 'get_latest_by': 'date_accepted',
@@ -47,6 +47,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='usertermsandconditions',
-            unique_together=set([('username', 'terms')]),
+            unique_together={('username', 'terms')},
         ),
     ]

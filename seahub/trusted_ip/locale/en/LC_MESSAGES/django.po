@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"POT-Creation-Date: 2020-07-27 12:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,42 +31,5 @@ msgid "Please contact the webmaster."
 msgstr ""
 
 #: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_tab.html:3
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:17
 msgid "Trusted IP Address"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:6
-msgid "Desktop"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:9
-msgid "Mobile"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:13
-msgid "Errors"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:21
-msgid "Add"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:27
-msgid "IP Address"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:36
-msgid "No Trusted IP Address"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:42
-msgid "Add Trusted IP Address"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:45
-msgid "Submit"
-msgstr ""
-
-#: seahub/trusted_ip/templates/trusted_ip/sysadmin-templates_trusted_ip.html:51
-msgid "Delete"
 msgstr ""

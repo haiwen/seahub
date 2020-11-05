@@ -34,8 +34,9 @@
   .side-panel {
     position:fixed;
     left:-300px;
-    z-index: 99; /* important! */
-    width:300px;
+    z-index: 1031;
+    width: 300px;
+    max-width: calc(100% - 40px);
     height:100%;
     background:#f8f8f8;
     -webkit-transition: all 0.3s ease;
@@ -52,6 +53,7 @@
   flex-shrink: 0;
   background: #f4f4f7;
   border-bottom: 1px solid #e8e8e8;
+  z-index: 100;
 }
 
 @media (max-width: 767px) {
@@ -70,6 +72,7 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 
 .side-panel-center,
@@ -92,6 +95,7 @@
   max-height: 40px;
   background:#f9f9f9;
   display: flex;
+  align-items: center;
   flex-shrink: 0;
   justify-content: space-between;
 }
@@ -110,6 +114,25 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container {
+  flex: 1;
+  padding: 0 1rem 10rem;
+  position: relative;
+}
+
+.table-drop-active::before {
+  border: 1px solid rgba(69,170,242); 
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  z-index: -1;
 }
 
 .cur-view-content .article {
@@ -129,17 +152,40 @@
   border-radius: 2px;
 }
 
-.cur-view-content .permission-editor-select .permission-editor__control {
-  height: 24px;
-  min-height: 24px;
+.cur-view-content .tip {
+  font-size: 14px;
 }
+
 .cur-view-detail {
-  flex: 0 0 20rem;
-  display: flex;
+  display: block;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+  width: 300px;
+  height: 100%;
+  box-shadow: -1px 0 3px 0 #ccc;
+  animation: move .5s ease-in-out 1;
+  z-index: 50;
+}
+
+@keyframes move {
+  from {
+    right: -500px;
+    opacity: 0.5;
+  }
+  to {
+    right: 0px;
+    opacity: 1;
+  }
+}
+
+.cur-view-detail .detail-container {
+  height: 100%;
 }
 
 /* for reach/router */
-[role=group] {
+.reach-router[role=group],
+div[tabindex="-1"][role="group"] {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -237,3 +283,28 @@ img[src=""],img:not([src]){ /* for first loading img*/
   padding: 0 1rem;
 }
 
+.cur-view-container .fa-star.fas {
+  color: #999;
+}
+
+.path-container {
+  display: flex;
+  align-items: center;
+  word-break: keep-all;
+  max-width: 80%;
+}
+.path-container a, .path-container span {
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} 
+.path-container span, .path-container a {
+  flex-shrink: 1;
+} 
+.path-container span:first-child, .path-container span:last-child {
+  flex-shrink: 0;
+} 
+.path-container span.path-file-name, .path-container span.path-repo-name {
+  flex-shrink: 1;
+}

@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.options.models import UserOptions
 from seahub.test_utils import BaseTestCase
 
@@ -54,4 +54,14 @@ class DefaultLibraryTest(BaseTestCase):
 
         data = {'user_email': self.user_name}
         resp = self.client.post(self.endpoint, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.endpoint)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.endpoint)
         self.assertEqual(403, resp.status_code)

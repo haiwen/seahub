@@ -1,10 +1,12 @@
-import React from 'react';
+import React ,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import Dirent from '../../models/dirent';
 import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+import '../../css/list-related-file-dialog.css';
 
 const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
@@ -30,6 +32,9 @@ class ListRelatedFileDialog extends React.Component {
     let relatedID = item.related_id;
     seafileAPI.deleteRelatedFile(repoID, filePath, relatedID).then((res) => {
       this.props.onRelatedFileChange();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -52,11 +57,9 @@ class ListRelatedFileDialog extends React.Component {
         dirent['related_id'] = item.related_id;
         dirent['link'] = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(item.path);
         direntList.push(dirent);
-        this.setState({
-          direntList: direntList
-        });
       });
     });
+    this.setState({direntList: direntList});
   }
 
   componentWillMount() {
@@ -71,42 +74,38 @@ class ListRelatedFileDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} size={this.state.direntList.length > 0 ? 'lg' : 'sm'}>
+      <Fragment>
         <ModalHeader toggle={this.toggle}>{gettext('Related Files')}</ModalHeader>
         <ModalBody className={this.state.direntList.length > 0 ? 'list-related-file-body' : ''}>
-          {
-            this.state.direntList.length > 0 ?
-              <Table hover size="sm" className="list-related-file-table">
-                <thead>
-                  <tr>
-                    <th width='50%'>{gettext('Name')}</th>
-                    <th width='15%'>{gettext('Library Name')}</th>
-                    <th width='15%'>{gettext('Size')}</th>
-                    <th width='15%'>{gettext('Last Update')}</th>
-                    <th width='5%'></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    this.state.direntList.map((relatedFile, index) => {
-                      return (
-                        <React.Fragment key={index}>
-                          <RelatedFile relatedFile={relatedFile} onDeleteRelatedFile={this.onDeleteRelatedFile}/>
-                        </React.Fragment>
-                      );
-                    })
-                  }
-                </tbody>
-              </Table>
-              :
-              <div className="no-related-file">{gettext('No related file yet.')}</div>
-          }
+          <Table hover size="sm" className="list-related-file-table">
+            <thead>
+              <tr>
+                <th width='40%'>{gettext('Name')}</th>
+                <th width='20%'>{gettext('Library Name')}</th>
+                <th width='13%'>{gettext('Size')}</th>
+                <th width='20%'>{gettext('Last Update')}</th>
+                <th width='5%'></th>
+                <th width='2%'></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.direntList.map((relatedFile, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <RelatedFile relatedFile={relatedFile} onDeleteRelatedFile={this.onDeleteRelatedFile}/>
+                    </React.Fragment>
+                  );
+                })
+              }
+            </tbody>
+          </Table>
+          <a href="#" className="add-related-file-link" onClick={this.props.addRelatedFileToggle}>{gettext('Add File')}</a>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
-          <Button color="primary" onClick={this.props.addRelatedFileToggle}>{gettext('Add File')}</Button>
         </ModalFooter>
-      </Modal>
+      </Fragment>
     );
   }
 }
@@ -119,7 +118,7 @@ const RelatedFilePropTypes = {
 };
 
 class RelatedFile extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = ({
@@ -149,6 +148,7 @@ class RelatedFile extends React.Component {
         <td>{relatedFile.size}</td>
         <td>{relatedFile.mtime_relative}</td>
         <td><i className={className} onClick={this.props.onDeleteRelatedFile.bind(this, relatedFile)}></i></td>
+        <td></td>
       </tr>
     );
   }

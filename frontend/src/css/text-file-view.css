@@ -12,3 +12,6 @@
     height: auto;
     min-height: 300px;
 }
+.CodeMirror-scroll {
+    min-height: 300px;
+}

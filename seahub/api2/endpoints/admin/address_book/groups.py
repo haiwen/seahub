@@ -77,16 +77,16 @@ class AdminAddressBookGroups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _(u'Name can only contain letters, numbers, blank, hyphen or underscore.')
+            error_msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
         if check_group_name_conflict(request, group_name):
-            error_msg = _(u'The name already exists.')
+            error_msg = _('There is already a group with that name.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Group owner is 'system admin'
-        group_owner = request.data.get('group_owner', '')
+        group_owner = request.data.get('group_owner', 'system admin')
 
         try:
             parent_group = int(request.data.get('parent_group', -1))
@@ -130,11 +130,7 @@ class AdminAddressBookGroup(APIView):
     def _get_address_book_group_memeber_info(self, request, group_member_obj, avatar_size):
 
         email = group_member_obj.user_name
-        try:
-            avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
-        except Exception as e:
-            logger.error(e)
-            avatar_url = get_default_avatar_url()
+        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
 
         group_id = group_member_obj.group_id
         group = ccnet_api.get_group(group_member_obj.group_id)
@@ -152,7 +148,7 @@ class AdminAddressBookGroup(APIView):
             'email': email,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
-            "avatar_url": request.build_absolute_uri(avatar_url),
+            "avatar_url": avatar_url,
             "is_admin": is_admin,
             "role": role,
         }
@@ -198,6 +194,8 @@ class AdminAddressBookGroup(APIView):
         for m in members:
             member_info = self._get_address_book_group_memeber_info(request,
                     m, avatar_size)
+            if member_info['role'] == 'Owner':
+                continue
             ret_members.append(member_info)
 
         ret_dict['groups'] = ret_groups
@@ -221,8 +219,17 @@ class AdminAddressBookGroup(APIView):
         if not group:
             return Response({'success': True})
 
+        org_id = None
+        if is_org_context(request):
+            # request called by org admin
+            org_id = request.user.org.org_id
+
         try:
-            has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
+            if org_id:
+                has_repo = seafile_api.org_if_group_has_group_owned_repo(org_id, group_id)
+            else:
+                has_repo = seafile_api.if_group_has_group_owned_repo(group_id)
+
             child_groups = ccnet_api.get_child_groups(group_id)
         except Exception as e:
             logger.error(e)
@@ -230,12 +237,12 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if has_repo:
-            error_msg = _(u'There are libraries in this department.')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = _('There are libraries in this department.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if len(child_groups) > 0:
-            error_msg = _(u'There are sub-departments in this department.')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = _('There are sub-departments in this department.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             ret_code = ccnet_api.remove_group(group_id)

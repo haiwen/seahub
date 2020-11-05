@@ -12,7 +12,7 @@
 {% blocktrans %}Account {{ user }} froze due to excessive failed logins. Please check at:{% endblocktrans%}
 </p>
 
-<a href="{{ url_base }}{% url 'user_search' %}?email={{user|urlencode}}" target="_blank">{{ url_base }}{% url 'user_search' %}?email={{user|urlencode}}</a>
+<a href="{{ url_base }}{% url 'sys_search_users' %}?query={{user|urlencode}}" target="_blank">{{ url_base }}{% url 'sys_search_users' %}?query={{user|urlencode}}</a>
 
 {% endautoescape %}
 

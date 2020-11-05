@@ -5,7 +5,7 @@ from constance import config
 from django.core.exceptions import ValidationError
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 try:

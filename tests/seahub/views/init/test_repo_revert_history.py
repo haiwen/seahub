@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 
@@ -11,7 +11,7 @@ class RepoRevertHistoryTest(BaseTestCase):
 
         })
         self.assertEqual(200, resp.status_code)
-        assert 'Invalid arguments' in resp.content
+        assert b'Invalid arguments' in resp.content
 
     def test_passwd_true(self):
         resp = self.client.post(reverse('repo_revert_history', args=[self.enc_repo.id]) + '?commit_id=xxx', {})

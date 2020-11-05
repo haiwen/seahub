@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from seaserv import seafile_api
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
+from seahub.onlyoffice.utils import generate_onlyoffice_cache_key
 from seahub.utils import gen_inner_file_upload_url
 
 # Get an instance of a logger
@@ -73,12 +74,16 @@ def onlyoffice_editor_callback(request):
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
 
+    # When forcesave is initiated, document editing service performs request to
+    # the callback handler with the link to the document as the url parameter and
+    # with the 6 value for the status parameter.
     if status in (2, 6):
+
         # Defines the link to the edited document to be saved with the document storage service.
         # The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
-        resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
-        if not resp:
+        onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        if not onlyoffice_resp:
             logger.error('[OnlyOffice] No response from file content url.')
             return HttpResponse('{"error": 0}')
 
@@ -90,6 +95,16 @@ def onlyoffice_editor_callback(request):
         file_path = doc_info['file_path']
         username = doc_info['username']
 
+        cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
+        # cache document key when forcesave
+        if status == 6:
+            cache.set(cache_key, doc_key)
+
+        # remove document key from cache when document is ready for saving
+        # no one is editting
+        if status == 2:
+            cache.delete(cache_key)
+
         fake_obj_id = {'online_office_update': True,}
         update_token = seafile_api.get_fileserver_access_token(repo_id,
                 json.dumps(fake_obj_id), 'update', username)
@@ -100,7 +115,7 @@ def onlyoffice_editor_callback(request):
 
         # get file content
         files = {
-            'file': requests.get(url).content,
+            'file': onlyoffice_resp.content,
             'file_name': os.path.basename(file_path),
             'target_file': file_path,
         }

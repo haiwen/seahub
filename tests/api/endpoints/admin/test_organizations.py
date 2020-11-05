@@ -4,7 +4,7 @@ import os
 import pytest
 
 from seaserv import ccnet_api
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 
 from seahub.test_utils import BaseTestCase
@@ -73,14 +73,23 @@ class AdminOrganizationsTest(BaseTestCase):
 
         users = json_resp['organizations']
         assert len(users) > 0
-        assert users[0].has_key('org_id')
-        assert users[0].has_key('org_name')
-        assert users[0].has_key('ctime')
-        assert users[0].has_key('org_url_prefix')
-        assert users[0].has_key('creator_email')
-        assert users[0].has_key('creator_name')
-        assert users[0].has_key('creator_contact_email')
-        assert users[0].has_key('quota')
+        assert 'org_id' in users[0]
+        assert 'org_name' in users[0]
+        assert 'ctime' in users[0]
+        assert 'org_url_prefix' in users[0]
+        assert 'creator_email' in users[0]
+        assert 'creator_name' in users[0]
+        assert 'creator_contact_email' in users[0]
+        assert 'quota' in users[0]
+
+    def test_can_get_orgs(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin_no_other_permission)
+        resp = self.client.get(self.orgs_url)
+        self.assertEqual(403, resp.status_code)
 
     def test_can_not_get_orgs_if_not_admin(self):
 
@@ -90,6 +99,24 @@ class AdminOrganizationsTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.get(self.orgs_url)
         self.assertEqual(403, resp.status_code)
+
+    def test_can_create_org(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+
+        org_name = randstring(6)
+        owner_email = '%s@%s.com' % (randstring(6), randstring(6))
+        password = randstring(6)
+        data = {'org_name': org_name, 'owner_email': owner_email, 'password': password}
+
+        resp = self.client.post(self.orgs_url, data)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert org_name == json_resp['org_name']
+        assert owner_email == json_resp['creator_email']
 
 
 @pytest.mark.skipif(TRAVIS, reason="pro only")

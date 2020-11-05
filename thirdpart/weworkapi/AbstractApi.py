@@ -74,7 +74,7 @@ class AbstractApi(object) :
         if args is None :
             return url
 
-        for key, value in args.items() : 
+        for key, value in list(args.items()) : 
             if '?' in url : 
                 url += ('&' + key + '=' + value)
             else :
@@ -103,7 +103,7 @@ class AbstractApi(object) :
         realUrl = self.__appendToken(url)
 
         if DEBUG is True : 
-            print realUrl, args 
+            print(realUrl, args) 
 
         return requests.post(realUrl, data = json.dumps(args, ensure_ascii = False).encode('utf-8')).json()
 
@@ -111,7 +111,7 @@ class AbstractApi(object) :
         realUrl = self.__appendToken(url)
 
         if DEBUG is True : 
-            print realUrl 
+            print(realUrl) 
 
         return requests.get(realUrl).json()
 

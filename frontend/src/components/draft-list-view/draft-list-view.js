@@ -6,7 +6,7 @@ import DraftListItem from './draft-list-item';
 const propTypes = {
   draftList: PropTypes.array.isRequired,
   onDeleteHandler: PropTypes.func.isRequired,
-  onReviewHandler: PropTypes.func.isRequired,
+  onPublishHandler: PropTypes.func.isRequired,
 };
 
 class DraftListView extends React.Component {
@@ -34,8 +34,7 @@ class DraftListView extends React.Component {
           <tr>
             <th style={{width: '4%'}}>{/*img*/}</th>
             <th style={{width: '46%'}}>{gettext('Name')}</th>
-            <th style={{width: '20%'}}>{gettext('Library')}</th>
-            <th style={{width: '10%'}}>{gettext('Review')}</th>
+            <th style={{width: '30%'}}>{gettext('Library')}</th>
             <th style={{width: '10%'}}>{gettext('Last Update')}</th>
             <th style={{width: '10%'}}></th>
           </tr>
@@ -43,14 +42,14 @@ class DraftListView extends React.Component {
         <tbody>
           { drafts && drafts.map((draft) => {
             return (
-              <DraftListItem 
-                key={draft.id} 
-                draft={draft} 
+              <DraftListItem
+                key={draft.id}
+                draft={draft}
                 isItemFreezed={this.state.isItemFreezed}
                 onFreezedItem={this.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
                 onDeleteHandler={this.props.onDeleteHandler}
-                onReviewHandler={this.props.onReviewHandler}
+                onPublishHandler={this.props.onPublishHandler}
               />
             );
           })}

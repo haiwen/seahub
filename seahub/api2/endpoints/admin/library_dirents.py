@@ -48,6 +48,8 @@ def common_check(func):
     return _decorated
 
 def get_dirent_info(dirent):
+    if not dirent:
+        return {}
 
     if stat.S_ISDIR(dirent.mode):
         is_file = False
@@ -73,6 +75,9 @@ class AdminLibraryDirents(APIView):
     def get(self, request, repo_id, format=None):
         """ Get all file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo = seafile_api.get_repo(repo_id)
 
@@ -110,6 +115,9 @@ class AdminLibraryDirents(APIView):
     def post(self, request, repo_id, format=None):
         """ create file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         parent_dir = request.GET.get('parent_dir', '/')
         parent_dir = normalize_dir_path(parent_dir)
@@ -157,6 +165,9 @@ class AdminLibraryDirent(APIView):
         """ get info of a single file/folder in a library
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo = seafile_api.get_repo(repo_id)
 
         path = request.GET.get('path', None)
@@ -166,13 +177,7 @@ class AdminLibraryDirent(APIView):
 
         path = normalize_file_path(path)
 
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             error_msg = 'File or folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -206,19 +211,16 @@ class AdminLibraryDirent(APIView):
         """ Copy a single file/folder to other place.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         # check parameter for src
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             error_msg = 'File or folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -267,6 +269,9 @@ class AdminLibraryDirent(APIView):
     def delete(self, request, repo_id):
         """ delete a single file/folder in a library
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         path = request.GET.get('path', None)
         if not path:

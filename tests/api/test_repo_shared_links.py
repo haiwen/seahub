@@ -1,7 +1,7 @@
 """seahub/api2/views.py::Repo api tests.
 """
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import UploadLinkShare, FileShare

@@ -1,0 +1,58 @@
+body {
+  overflow: hidden;
+}
+#wrapper {
+  height: 100%;
+}
+.top-header {
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 8px 16px 4px;
+  height: 53px;
+  flex-shrink: 0;
+}
+.shared-dir-view-main {
+  width: calc(100% - 40px);
+  max-width: 950px;
+  padding: 15px 0 40px;
+  margin: 0 auto;
+}
+.op-bar {
+  padding: 9px 10px;
+  background: #f2f2f2;
+  border-radius: 2px;
+}
+
+.sf-view-mode-btn {
+  padding: 0;
+  height: 30px;
+  min-width: 2rem;
+  color: #aaa;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  line-height: 29px;
+  font-size: 18px;
+  border-radius: 2px;
+}
+.sf-view-mode-btn.current-mode {
+  background-color: #ccc;
+  color: #fff;
+}
+.shared-dir-op-btn {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+}
+.shared-dir-upload-btn {
+  border: 1px solid #ccc;
+}
+.grid-item .action-icon {
+  position: absolute;
+  top: 10px;
+  right: 24px;
+  padding: 3px 5px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  margin: 0;
+}

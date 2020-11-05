@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 from django.utils.http import urlquote
 
@@ -21,4 +21,4 @@ class SSOTest(BaseTestCase):
         assert resp.get('location') == '/foo'
 
         resp = self.client.get(self.url + '?next=' + urlquote('http://testserver\@example.com'))
-        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)
+        self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)

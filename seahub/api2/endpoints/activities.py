@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.drafts.models import Draft
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class ActivitiesView(APIView):
                 avatar_size = 72
 
             url, is_default, date_uploaded = api_avatar_url(e.op_user, avatar_size)
-            d['avatar_url'] = request.build_absolute_uri(url)
+            d['avatar_url'] = url
             d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
 
             if e.op_type == 'clean-up-trash':
@@ -83,9 +84,21 @@ class ActivitiesView(APIView):
             elif e.op_type == 'rename' and e.obj_type in ['dir', 'file']:
                 d['old_path'] = e.old_path
                 d['old_name'] = os.path.basename(e.old_path)
-            elif e.obj_type == 'review':
+            elif e.op_type == 'publish':
                 d['old_path'] = e.old_path
-                d['review_id'] = e.review_id
+            elif d['name'].endswith('(draft).md'):
+                if e.op_type in ('create', 'edit') and e.obj_type == 'file':
+                    try:
+                        draft = Draft.objects.filter(username=e.op_user,
+                                                     origin_repo_id=e.repo_id,
+                                                     draft_file_path=e.path)
+                        if draft:
+                            draft = draft[0]
+                            d['draft_id'] = draft.id
+                        else:
+                            Draft.DoesNotExist
+                    except Draft.DoesNotExist:
+                        pass
 
             events_list.append(d)
 

@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.utils import get_site_scheme_and_netloc
 

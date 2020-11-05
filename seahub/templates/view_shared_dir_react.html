@@ -1,0 +1,47 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_ogp_tags %}
+<meta property="og:type" content="object" />
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:url" content="{{ service_url }}{{ dir_share_link }}" />
+<meta property="og:title" content="{{ dir_name }}" />
+<meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/folder-192.png" />
+<meta property="og:description" content="{{ desc_for_ogp }}" />
+{% endblock %}
+
+{% block extra_style %}
+{% render_bundle 'sharedDirView' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.shared = {
+        pageOptions: {
+            dirName: '{{ dir_name|escapejs }}',
+            sharedBy: '{{ username|email2nickname|escapejs }}',
+            repoID: '{{repo.id}}',
+            path: '{{ path|escapejs }}',
+            zipped: (function() {
+              var list = [];
+              {% for name, path in zipped %}
+              list.push({
+                'name': '{{ name|escapejs }}',
+                'path': '{{ path|escapejs }}'
+              });
+              {% endfor %}
+              return list;
+            })(),
+            token: '{{ token }}',
+            mode: '{{ mode }}',
+            thumbnailSize: {{ thumbnail_size }},
+            trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
+            canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
+            noQuota: {% if no_quota %}true{% else %}false{% endif %},
+            canUpload: {% if permissions.can_upload %}true{% else %}false{% endif %}
+        }
+    };
+</script>
+    {% render_bundle 'sharedDirView' 'js' %}
+{% endblock %}

@@ -14,6 +14,8 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
+  updateUsedRepoTags: PropTypes.func.isRequired,
+  onDeleteRepoTag: PropTypes.func.isRequired,
 };
 
 class DirTool extends React.Component {
@@ -82,73 +84,71 @@ class DirTool extends React.Component {
     let { repoID, repoName, permission, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
-    let trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
-    let historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
-    if ( (name === repoName  || name === '') && !isFile && permission) {
-      return (
-        <Fragment>
-          <ul className="path-toolbar">
-            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
-            <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
-            <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
-          </ul>
+    let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
+    let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
+    if (permission) {
+      if (!isFile) {
+        if (name) { // name not '' is not root path
+          trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
+          return (
+            <ul className="path-toolbar">
+              <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
+            </ul>
+          );
+        } else { // currentPath === '/' is root path
+          return (
+            <Fragment>
+              <ul className="path-toolbar">
+                <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
+                <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
+                <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
+              </ul>
 
-          {this.state.isRepoTagDialogShow && (
-            <ModalPortal>
-              <Modal isOpen={true}>
-                {this.state.isListRepoTagShow && (
-                  <ListTagDialog
-                    repoID={repoID}
-                    onListTagCancel={this.onCloseRepoTagDialog}
-                    onCreateRepoTag={this.onCreateRepoTagToggle}
-                    onUpdateRepoTag={this.onUpdateRepoTagToggle}
-                    onListTaggedFiles={this.onListTaggedFileToggle}
-                  />
-                )}
-
-                {this.state.isCreateRepoTagShow && (
-                  <CreateTagDialog
-                    repoID={repoID}
-                    onClose={this.onCloseRepoTagDialog}
-                    toggleCancel={this.onCreateRepoTagToggle}
-                  />
-                )}
-
-                {this.state.isUpdateRepoTagShow && (
-                  <UpdateTagDialog
-                    repoID={repoID}
-                    currentTag={this.state.currentTag}
-                    onClose={this.onCloseRepoTagDialog}
-                    toggleCancel={this.onUpdateRepoTagToggle}
-                  />
-                )}
-
-                {this.state.isListTaggedFileShow && (
-                  <ListTaggedFilesDialog
-                    repoID={this.props.repoID}
-                    currentTag={this.state.currentTag}
-                    onClose={this.onCloseRepoTagDialog}
-                    toggleCancel={this.onListTaggedFileToggle}
-                  />
-                )}
-              </Modal>
-            </ModalPortal>
-          )}
-        </Fragment>
-      );
-    } else if (!isFile && permission) {
-      return (
-        <ul className="path-toolbar">
-          <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
-        </ul>
-      );
-    } else if (permission) {
-      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(currentPath) + '&referer=' + encodeURIComponent(location.href);
-      return (
-        <ul className="path-toolbar">
-          <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
-        </ul>
-      );
+              {this.state.isRepoTagDialogShow && (
+                <ModalPortal>
+                  <Modal isOpen={true}>
+                    {this.state.isListRepoTagShow && (
+                      <ListTagDialog
+                        repoID={repoID}
+                        onListTagCancel={this.onCloseRepoTagDialog}
+                        onCreateRepoTag={this.onCreateRepoTagToggle}
+                        onUpdateRepoTag={this.onUpdateRepoTagToggle}
+                        onListTaggedFiles={this.onListTaggedFileToggle}
+                      />
+                    )}
+                    {this.state.isCreateRepoTagShow && (
+                      <CreateTagDialog
+                        repoID={repoID}
+                        onClose={this.onCloseRepoTagDialog}
+                        toggleCancel={this.onCreateRepoTagToggle}
+                      />
+                    )}
+                    {this.state.isUpdateRepoTagShow && (
+                      <UpdateTagDialog
+                        repoID={repoID}
+                        currentTag={this.state.currentTag}
+                        onClose={this.onCloseRepoTagDialog}
+                        toggleCancel={this.onUpdateRepoTagToggle}
+                        onDeleteRepoTag={this.props.onDeleteRepoTag}
+                        updateUsedRepoTags={this.props.updateUsedRepoTags}
+                      />
+                    )}
+                    {this.state.isListTaggedFileShow && (
+                      <ListTaggedFilesDialog
+                        repoID={this.props.repoID}
+                        currentTag={this.state.currentTag}
+                        onClose={this.onCloseRepoTagDialog}
+                        toggleCancel={this.onListTaggedFileToggle}
+                        updateUsedRepoTags={this.props.updateUsedRepoTags}
+                      />
+                    )}
+                  </Modal>
+                </ModalPortal>
+              )}
+            </Fragment>
+          );
+        }
+      }
     }
     return '';
   }

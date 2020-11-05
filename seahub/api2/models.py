@@ -4,6 +4,9 @@ import hmac
 import datetime
 from hashlib import sha1
 
+import operator
+from functools import cmp_to_key
+
 from django.db import models
 from django.utils import timezone
 
@@ -27,7 +30,7 @@ class Token(models.Model):
 
     def generate_key(self):
         unique = str(uuid.uuid4())
-        return hmac.new(unique, digestmod=sha1).hexdigest()
+        return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
 
     def __unicode__(self):
         return self.key
@@ -72,13 +75,12 @@ class TokenV2Manager(models.Manager):
             the same category are listed by most recently used first
 
             '''
-            ret = cmp(platform_priorities[d1.platform], platform_priorities[d2.platform])
-            if ret != 0:
-                return ret
+            if operator.eq(platform_priorities[d1.platform], platform_priorities[d2.platform]):
+                return operator.lt(d2.last_accessed, d1.last_accessed)
+            else:
+                return operator.lt(platform_priorities[d1.platform], platform_priorities[d2.platform])
 
-            return cmp(d2.last_accessed, d1.last_accessed)
-
-        return [ d.as_dict() for d in sorted(devices, sort_devices) ]
+        return [ d.as_dict() for d in sorted(devices, key=cmp_to_key(sort_devices)) ]
 
     def _get_token_by_user_device(self, username, platform, device_id):
         try:
@@ -172,11 +174,11 @@ class TokenV2(models.Model):
 
     def generate_key(self):
         unique = str(uuid.uuid4())
-        return hmac.new(unique, digestmod=sha1).hexdigest()
+        return hmac.new(unique.encode('utf-8'), digestmod=sha1).hexdigest()
 
     def __unicode__(self):
         return "TokenV2{user=%(user)s,device=%(device_name)s}" % \
-            dict(user=self.user,device_name=self.device_name)
+            dict(user=self.user, device_name=self.device_name)
 
     def is_desktop_client(self):
         return str(self.platform) in ('windows', 'linux', 'mac')

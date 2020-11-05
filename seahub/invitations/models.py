@@ -11,8 +11,9 @@ from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token, get_site_name
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
-GUEST = _('Guest')
+GUEST = 'Guest'
 
 class InvitationManager(models.Manager):
     def add(self, inviter, accepter, invite_type=GUEST):
@@ -31,9 +32,16 @@ class InvitationManager(models.Manager):
     def delete_all_expire_invitation(self):
         super(InvitationManager, self).filter(expire_time__lte=timezone.now()).delete()
 
+    def get_by_token(self, token):
+        qs = self.filter(token=token)
+        if qs.count() > 0:
+            return qs[0]
+        return None
+
+
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (
-        (GUEST, _('Guest')),
+        (GUEST, 'Guest'),
     )
 
     token = models.CharField(max_length=40, db_index=True)
@@ -95,3 +103,52 @@ class Invitation(models.Model):
             subject=subject,
             priority=MAIL_PRIORITY.now
         )
+
+
+class RepoShareInvitationManager(models.Manager):
+    def add(self, invitation, repo_id, path, permission):
+        obj = self.model(
+            invitation=invitation,
+            repo_id=repo_id,
+            path=path,
+            permission=permission,
+        )
+        obj.save()
+        return obj
+    
+    def list_by_repo_id_and_path(self, repo_id, path):
+        return self.select_related('invitation').filter(
+            invitation__expire_time__gte=timezone.now(),
+            invitation__accept_time=None,
+            repo_id=repo_id,
+            path=path,
+            )
+
+    def get_by_token_and_path(self, token, repo_id, path):
+        qs = self.select_related('invitation').filter(
+            invitation__token=token, repo_id=repo_id, path=path,
+            )
+        if qs.exists():
+            return qs[0]
+        else:
+            return None
+    
+    def list_by_invitation(self, invitation):
+        return self.select_related('invitation').filter(invitation=invitation)
+
+class RepoShareInvitation(models.Model):
+    PERMISSION_CHOICES = (
+        (PERMISSION_READ, 'read only'),
+        (PERMISSION_READ_WRITE, 'read and write')
+    )
+
+    invitation = models.ForeignKey(Invitation, on_delete=models.CASCADE, related_name='repo_share')
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    permission = models.CharField(
+        max_length=50, choices=PERMISSION_CHOICES, default=PERMISSION_READ)
+
+    objects = RepoShareInvitationManager()
+
+    class Meta:
+        db_table = 'repo_share_invitation'

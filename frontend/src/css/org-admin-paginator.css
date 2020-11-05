@@ -1,0 +1,9 @@
+.paginator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.cur-view-path.org-user-nav {
+    padding: 0 1rem;
+}

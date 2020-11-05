@@ -1,10 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
-import { siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
-import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -20,6 +22,7 @@ class Search extends Component {
       width: 'default',
       value: '',
       resultItems: [],
+      total: 0,
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
@@ -78,7 +81,7 @@ class Search extends Component {
   }
 
   getSearchResult(queryData) {
-    
+
     if(this.source){
       this.cancelRequest();
     }
@@ -87,33 +90,58 @@ class Search extends Component {
       isResultGetted: false
     });
 
-    this.source = editorUtilities.getSource();
+    this.source = seafileAPI.getSource();
     this.sendRequest(queryData, this.source.token);
   }
 
   sendRequest(queryData, cancelToken) {
     var _this = this;
-    editorUtilities.searchFiles(queryData,cancelToken).then(res => {
-      if (!res.data.total) {
+    let isPublic = this.props.isPublic;
+
+    if (isPublic) {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+
+        let items = _this.formatResultItems(res.data.results);
         _this.setState({
-          resultItems: [],
+          resultItems: items,
           isResultGetted: true
         });
         _this.source = null;
-        return;
-      }
-
-      let items = _this.formatResultItems(res.data.results);
-      _this.setState({
-        resultItems: items,
-        isResultGetted: true
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
-      _this.source = null;
-    }).catch(res => {
-      /* eslint-disable */
-      console.log(res);
-      /* eslint-enable */
-    });
+    } else {
+      seafileAPI.searchFiles(queryData,cancelToken).then(res => {
+        if (!res.data.total) {
+          _this.setState({
+            resultItems: [],
+            isResultGetted: true
+          });
+          _this.source = null;
+          return;
+        }
+
+        let items = _this.formatResultItems(res.data.results);
+        _this.setState({
+          resultItems: items,
+          isResultGetted: true
+        });
+        _this.source = null;
+      }).catch(res => {
+        /* eslint-disable */
+        console.log(res);
+        /* eslint-enable */
+      });
+    }
   }
 
   cancelRequest() {
@@ -180,6 +208,7 @@ class Search extends Component {
     for (let key in queryData) {
       params += key + '=' + queryData[key] + '&';
     }
+
     window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
   }
 
@@ -195,22 +224,23 @@ class Search extends Component {
     }
     if (!this.state.resultItems.length) {
       return (
-        <div className="search-result-none">No results matching.</div>
+        <div className="search-result-none">{gettext('No results matching.')}</div>
       );
     }
-    let isShowMore = this.state.resultItems.length >= 5 ? true : false;
+    const { resultItems, total } = this.state;
+    const isShowMore = total > resultItems.length;
     return (
       <ul className="search-result-list">
-        {this.state.resultItems.map(item => {
+        {this.state.resultItems.map((item, index) => {
           return (
             <SearchResultItem
-              key={item.index}
+              key={index}
               item={item}
               onItemClickHandler={_this.onItemClickHandler}
             />
           );
         })}
-        {isShowMore && <More onShowMore={this.onShowMore}/>}
+        {isShowMore && <More onShowMore={this.onShowMore} />}
       </ul>
     );
   }
@@ -220,6 +250,10 @@ class Search extends Component {
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
     });
+  }
+
+  onSearchPage = () => {
+    window.location.href = siteRoot + 'search/';
   }
 
   render() {
@@ -233,9 +267,9 @@ class Search extends Component {
             <div className="search-container">
               <div className="input-icon">
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
-                <input 
-                  type="text" 
-                  className="form-control search-input" 
+                <input
+                  type="text"
+                  className="form-control search-input"
                   name="query"
                   placeholder={this.props.placeholder}
                   style={style}
@@ -244,27 +278,31 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
+                {(this.state.isCloseShow && username) &&
+                  <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
+                    onClick={this.onSearchPage}></i>
+                }
                 {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
               </div>
-              <div className="search-result-container">
+              <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
               </div>
             </div>
           </div>
         </MediaQuery>
-        <MediaQuery query="(max-width: 768px)">
+        <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
             <i className="search-icon fas fa-search" onClick={this.onSearchToggle}></i>
           </div>
-          {this.state.isSearchInputShow && 
+          {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
               <div className="search-container">
                 <div className="input-icon">
                   <i className="search-icon-left input-icon-addon fas fa-search"></i>
-                  <input 
-                    type="text" 
-                    className="form-control search-input" 
+                  <input
+                    type="text"
+                    className="form-control search-input"
                     name="query"
                     placeholder={this.props.placeholder}
                     style={style}
@@ -273,9 +311,13 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
+                  {(this.state.isCloseShow && username) &&
+                    <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
+                      onClick={this.onSearchPage}></i>
+                  }
                   {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
                 </div>
-                <div className="search-result-container">
+                <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}
                 </div>
               </div>

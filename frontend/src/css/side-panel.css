@@ -98,7 +98,7 @@
 
 .tree-node-inner {
   position: relative;
-  height: 26px;
+  height: 24px;
   cursor: pointer;
   line-height: 1.625;
 }
@@ -110,11 +110,12 @@
 
 .tree-node-inner .tree-node-text {
   padding-left: 2.8rem;
-  width: calc(100% - 2.8rem);
-  font-size: 15px;
+  width: calc(100% - 1rem);
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 24px;
 }
 
 .tree-node-inner .left-icon {

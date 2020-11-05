@@ -1,14 +1,17 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, loginUrl } from '../../utils/constants';
+import { gettext, siteRoot, canAddGroup } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
+import toaster from '../../components/toast';
 import GroupsToolbar from '../../components/toolbar/groups-toolbar';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import CreateGroupDialog from '../../components/dialog/create-group-dialog';
 import LibDetail from '../../components/dirent-detail/lib-details';
+import EmptyTip from '../../components/empty-tip';
 
 import '../../css/groups.css';
 
@@ -38,26 +41,24 @@ class RepoListViewPanel extends React.Component {
 
   onItemUnshare = (repo) => {
     let group = this.props.group;
-    seafileAPI.unshareRepo(repo.repo_id, {share_type: 'group', group_id: group.id}).then(() => {
+    seafileAPI.unshareRepoToGroup(repo.repo_id, group.id).then(() => {
       let repoList = this.state.repoList.filter(item => {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
   onItemDelete = (repo) => {
-    let group = this.props.group;
-    seafileAPI.deleteGroupOwnedLibrary(group.id, repo.repo_id).then(() => {
-      let repoList = this.state.repoList.filter(item => {
-        return item.repo_id !== repo.repo_id;
-      });
-      this.setState({repoList: repoList});
-    }).catch(() => {
-      // todo;
+    let repoList = this.state.repoList.filter(item => {
+      return item.repo_id !== repo.repo_id;
     });
+    this.setState({repoList: repoList});
   }
-  
+
   onItemRename = (repo, newName) => {
     let group = this.props.group;
     seafileAPI.renameGroupOwnedLibrary(group.id, repo.repo_id, newName).then(res => {
@@ -68,8 +69,9 @@ class RepoListViewPanel extends React.Component {
         return item;
       });
       this.setState({repoList: repoList});
-    }).catch(() => {
-      // todo
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -81,12 +83,12 @@ class RepoListViewPanel extends React.Component {
         <h4 className="group-item-heading ellipsis">
           <a href={`${siteRoot}group/${group.id}/`} title={group.name}>{group.name}</a>
         </h4>
-        {this.state.repoList.length === 0 ? 
+        {this.state.repoList.length === 0 ?
           emptyTip :
-          <SharedRepoListView 
+          <SharedRepoListView
             isShowTableThread={false}
-            isShowRepoOwner={false} 
-            currentGroup={this.props.group} 
+            isShowRepoOwner={false}
+            currentGroup={this.props.group}
             repoList={this.state.repoList}
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
@@ -102,7 +104,7 @@ class RepoListViewPanel extends React.Component {
 RepoListViewPanel.propTypes = propTypes;
 
 class GroupsView extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -125,28 +127,15 @@ class GroupsView extends React.Component {
       });
       this.setState({
         isLoading: false,
-        groupList: groupList,
+        groupList: groupList.sort((a, b) => {
+          return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        })
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
@@ -181,6 +170,16 @@ class GroupsView extends React.Component {
   }
 
   render() {
+    const emptyTip = (
+      <EmptyTip>
+        <h2>{gettext('No groups')}</h2>
+        {canAddGroup ?
+          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. You can create a group by clicking the "New Group" button in the menu bar.')}</p> :
+          <p>{gettext('You are not in any groups. Groups allow multiple people to collaborate on libraries. Groups you join will be listed here.')}</p>
+        }
+      </EmptyTip>
+    );
+
     return (
       <Fragment>
         <GroupsToolbar
@@ -195,13 +194,13 @@ class GroupsView extends React.Component {
             </div>
             <div className="cur-view-content cur-view-content-groups">
               {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && this.state.errorMsg !== '') && this.state.errorMsg}
-              {/* {(!this.state.isLoading && this.state.groupList.length === 0 ) && emptyTip} //todo */}
+              {(!this.state.isLoading && this.state.errorMsg) && <div className="error text-center mt-2">{this.state.errorMsg}</div>}
+              {(!this.state.isLoading && !this.state.errorMsg && this.state.groupList.length == 0) && emptyTip}
               {!this.state.isLoading && this.state.groupList.map((group, index) => {
                 return (
-                  <RepoListViewPanel 
-                    key={index} 
-                    group={group} 
+                  <RepoListViewPanel
+                    key={index}
+                    group={group}
                     onItemDetails={this.onItemDetails}
                   />
                 );

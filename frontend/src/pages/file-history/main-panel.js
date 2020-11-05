@@ -4,7 +4,7 @@ import Prism from 'prismjs';
 import Loading from '../../components/loading';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 
-require('@seafile/seafile-editor/dist/editor/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-highlight-package');
 
 const contentClass = 'markdown-viewer-render-content';
 const propTypes = {
@@ -29,12 +29,12 @@ class MainPanel extends React.Component {
       <div className="main-panel">
         <div className="main-panel-center content-viewer">
           <div className={contentClass}>
-            { 
-              this.props.renderingContent ? 
-                (<Loading />) : 
+            {
+              this.props.renderingContent ?
+                (<Loading />) :
                 (<div className="diff-view article">
-                  <DiffViewer 
-                    newMarkdownContent={this.props.newMarkdownContent} 
+                  <DiffViewer
+                    newMarkdownContent={this.props.newMarkdownContent}
                     oldMarkdownContent={this.props.oldMarkdownContent}
                   />
                 </div>)

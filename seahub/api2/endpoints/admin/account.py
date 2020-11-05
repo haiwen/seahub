@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 import seaserv
-from seaserv import seafile_api, ccnet_threaded_rpc
+from seaserv import seafile_api, ccnet_threaded_rpc, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.serializers import AccountSerializer
@@ -93,7 +93,7 @@ class Account(APIView):
                 seafile_api.set_repo_owner(r.id, user2.username)
 
             # transfer joined groups to new user
-            for g in seaserv.get_personal_groups_by_user(from_user):
+            for g in ccnet_api.get_groups(from_user):
                 if not is_group_member(g.id, user2.username):
                     # add new user to the group on behalf of the group creator
                     ccnet_threaded_rpc.group_add_member(g.id, g.creator_name,
@@ -192,11 +192,11 @@ class Account(APIView):
         if name is not None:
             if len(name) > 64:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Name is too long (maximum is 64 characters)'))
+                        _('Name is too long (maximum is 64 characters)'))
 
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u"Name should not include '/'."))
+                        _("Name should not include '/'."))
 
         # argument check for list_in_address_book
         list_in_address_book = request.data.get("list_in_address_book", None)
@@ -211,18 +211,18 @@ class Account(APIView):
             loginid = loginid.strip()
             if loginid == "":
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                            _(u"Login id can't be empty"))
+                            _("Login id can't be empty"))
             usernamebyloginid = Profile.objects.get_username_by_login_id(loginid)
             if usernamebyloginid is not None:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                          _(u"Login id %s already exists." % loginid))
+                          _("Login id %s already exists." % loginid))
 
         # argument check for department
         department = request.data.get("department", None)
         if department is not None:
             if len(department) > 512:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Department is too long (maximum is 512 characters)'))
+                        _('Department is too long (maximum is 512 characters)'))
 
         # argument check for institution
         institution = request.data.get("institution", None)
@@ -256,7 +256,7 @@ class Account(APIView):
                         get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
                     return api_error(status.HTTP_400_BAD_REQUEST, \
-                            _(u'Failed to set quota: maximum quota is %d MB' % org_quota_mb))
+                            _('Failed to set quota: maximum quota is %d MB' % org_quota_mb))
 
         # argument check for is_trial
         is_trial = request.data.get("is_trial", None)

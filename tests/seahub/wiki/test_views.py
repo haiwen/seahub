@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.wiki.models import Wiki
 from seahub.test_utils import BaseTestCase
@@ -17,4 +17,4 @@ class SlugTest(BaseTestCase):
     def test_old_home_page(self, ):
         resp = self.client.get(reverse('wiki:slug', args=['new-wiki', 'home']))
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], '/wikis/new-wiki/home.md')
+        self.assertRegex(resp['Location'], '/published/new-wiki/home.md')

@@ -45,7 +45,7 @@ class StarredItems(APIView):
         item_info['path'] = path
         if path == '/':
             item_info['obj_name'] = repo.repo_name if repo else ''
-            item_info['mtime'] = timestamp_to_isoformat_timestr(repo.mtime) if \
+            item_info['mtime'] = timestamp_to_isoformat_timestr(repo.last_modified) if \
                     repo else ''
         else:
             item_info['obj_name'] = os.path.basename(path.rstrip('/'))
@@ -62,7 +62,6 @@ class StarredItems(APIView):
         1. all authenticated user can perform this action.
         """
 
-        result = []
         email = request.user.username
         all_starred_items = UserStarredFiles.objects.filter(email=email)
 
@@ -74,6 +73,9 @@ class StarredItems(APIView):
                 if repo:
                     repo_dict[repo_id] = repo
 
+        starred_repos = []
+        starred_folders = []
+        starred_files = []
         for starred_item in all_starred_items:
 
             repo_id = starred_item.repo_id
@@ -96,10 +98,19 @@ class StarredItems(APIView):
             item_info['user_name'] = email2nickname(email)
             item_info['user_contact_email'] = email2contact_email(email)
 
-            result.append(item_info)
+            if path == '/':
+                starred_repos.append(item_info)
+            elif starred_item.is_dir:
+                starred_folders.append(item_info)
+            else:
+                starred_files.append(item_info)
 
-        result.sort(lambda x, y: cmp(y['mtime'], x['mtime']))
-        return Response({'starred_item_list': result})
+        starred_repos.sort(key=lambda x: x['mtime'], reverse=True)
+        starred_folders.sort(key=lambda x: x['mtime'], reverse=True)
+        starred_files.sort(key=lambda x: x['mtime'], reverse=True)
+
+        return Response({'starred_item_list': starred_repos + \
+                starred_folders + starred_files})
 
     def post(self, request):
         """ Star a file/folder.
@@ -184,13 +195,20 @@ class StarredItems(APIView):
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # permission check
-        if not check_folder_permission(request, repo_id, '/'):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # handler path if item exist
+        if seafile_api.get_dir_id_by_path(repo_id, path):
+            path = normalize_dir_path(path)
+        elif seafile_api.get_file_id_by_path(repo_id, path):
+            path = normalize_file_path(path)
+
+        email = request.user.username
+
+        # database record check
+        if not UserStarredFiles.objects.get_starred_item(email, repo_id, path):
+            error_msg = 'Item %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # unstar a item
-        email = request.user.username
         try:
             UserStarredFiles.objects.delete_starred_item(email, repo_id, path)
         except Exception as e:

@@ -17,10 +17,10 @@ class TestAddUserForm(TestCase):
         mock_user_number_over_limit.return_value = False
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'role': DEFAULT_USER,
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = AddUserForm(data = user_info)
@@ -33,10 +33,10 @@ class TestAddUserForm(TestCase):
         mock_user_number_over_limit.return_value = True
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'role': DEFAULT_USER,
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = AddUserForm(data = user_info)
@@ -52,8 +52,8 @@ class TestAddUserForm(TestCase):
             # invalid email
             'email': USERNAME,
             'role': DEFAULT_USER,
-            'password1':'password',
-            'password2':'password',
+            'password1': 'password',
+            'password2': 'password',
         }
 
         f = AddUserForm(data = user_info)
@@ -66,11 +66,11 @@ class TestAddUserForm(TestCase):
         mock_user_number_over_limit.return_value = False
 
         user_info = {
-            'email':'%s@%s.com' % (randstring(10), randstring(10)) ,
+            'email': '%s@%s.com' % (randstring(10), randstring(10)),
             'role': DEFAULT_USER,
             # invalid password
-            'password1':'password1',
-            'password2':'password2',
+            'password1': 'password1',
+            'password2': 'password2',
         }
 
         f = AddUserForm(data = user_info)

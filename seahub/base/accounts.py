@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 import seaserv
-from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
+from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
     seafile_api, ccnet_api
 from constance import config
 from registration import signals
@@ -64,7 +64,7 @@ class UserManager(object):
         """
         If user has a role, update it; or create a role for user.
         """
-        ccnet_threaded_rpc.update_role_emailuser(email, role)
+        ccnet_api.update_role_emailuser(email, role)
         return self.get(email=email)
 
     def create_superuser(self, email, password):
@@ -89,14 +89,14 @@ class UserManager(object):
 
     def get(self, email=None, id=None):
         if not email and not id:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         if email:
             emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if id:
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -180,10 +180,11 @@ class UserPermissions(object):
                 return False
         elif self.user.is_staff:
             return True
-        elif self._get_perm_by_roles('can_add_public_repo'):
+        elif self._get_perm_by_roles('can_add_public_repo') and \
+                bool(config.ENABLE_USER_CREATE_ORG_REPO):
             return True
         else:
-            return bool(config.ENABLE_USER_CREATE_ORG_REPO)
+            return False
 
     def can_drag_drop_folder_to_sync(self):
         return self._get_perm_by_roles('can_drag_drop_folder_to_sync')
@@ -215,11 +216,11 @@ class UserPermissions(object):
     def storage_ids(self):
         return self._get_perm_by_roles('storage_ids')
 
-    def can_use_wiki(self):
+    def can_publish_repo(self):
         if not settings.ENABLE_WIKI:
             return False
 
-        return self._get_perm_by_roles('can_use_wiki')
+        return self._get_perm_by_roles('can_publish_repo')
 
 class AdminPermissions(object):
     def __init__(self, user):
@@ -248,6 +249,9 @@ class AdminPermissions(object):
 
     def can_view_admin_log(self):
         return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_admin_log']
+
+    def other_permission(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['other_permission']
 
 
 class User(object):
@@ -503,7 +507,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -525,7 +529,7 @@ class User(object):
         passwd_setted_repos = []
         for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
-                    is_passwd_set(r.id, self.email):
+                    seafile_api.is_password_set(r.id, self.email):
                 passwd_setted_repos.append(r)
 
         for r in passwd_setted_repos:
@@ -536,7 +540,7 @@ class AuthBackend(object):
     def get_user_with_import(self, username):
         emailuser = seaserv.get_emailuser_with_import(username)
         if not emailuser:
-            raise User.DoesNotExist, 'User matching query does not exits.'
+            raise User.DoesNotExist('User matching query does not exits.')
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -575,50 +579,6 @@ class AuthBackend(object):
 
         if user.check_password(password):
             return user
-
-class ProxyRemoteUserBackend(AuthBackend):
-    """
-    This backend is to be used in conjunction with the ``RemoteUserMiddleware``
-    found in the middleware module of this package, and is used when the server
-    is handling authentication outside of Django.
-    By default, the ``authenticate`` method creates ``User`` objects for
-    usernames that don't already exist in the database.  Subclasses can disable
-    this behavior by setting the ``create_unknown_user`` attribute to
-    ``False``.
-    """
-    # Create a User object if not already in the database?
-    create_unknown_user = True
-
-    trust_proxy = getattr(settings, 'TRUST_PROXY_AUTHENTICATION', False)
-
-    def authenticate(self, remote_user):
-        """
-        The username passed as ``remote_user`` is considered trusted.  This
-        method simply returns the ``User`` object with the given username,
-        creating a new ``User`` object if ``create_unknown_user`` is ``True``.
-        Returns None if ``create_unknown_user`` is ``False`` and a ``User``
-        object with the given username is not found in the database.
-        """
-        # End the remote user auth process if the proxy is not trusted
-        if not remote_user or not self.trust_proxy:
-            return
-        user = None
-        username = self.clean_username(remote_user)
-
-        # Note that this could be accomplished in one try-except clause, but
-        # instead we use get_or_create when creating unknown users since it has
-        # built-in safeguards for multiple threads.
-
-        user = self.get_user(username)
-        return user
-
-    def clean_username(self, username):
-        """
-        Performs any cleaning on the "username" prior to using it to get or
-        create the user object.  Returns the cleaned username.
-        By default, returns the username unchanged.
-        """
-        return username
 
 ########## Register related
 class RegistrationBackend(object):

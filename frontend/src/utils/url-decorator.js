@@ -1,4 +1,4 @@
-import {siteRoot, historyRepoID, fileServerRoot } from './constants';
+import { siteRoot, historyRepoID } from './constants';
 import { Utils } from './utils';
 class URLDecorator {
 
@@ -9,9 +9,6 @@ class URLDecorator {
       case 'download_historic_file':
         params = 'p=' + options.filePath;
         url = siteRoot + 'repo/' + historyRepoID + '/' + options.objID + '/download?' + params;
-        break;
-      case 'download_dir_zip_url':
-        url = fileServerRoot + 'zip/' + options.token;
         break;
       case 'download_file_url':
         url = siteRoot + 'lib/' + options.repoID + '/file' + Utils.encodePath(options.filePath) + '?dl=1';

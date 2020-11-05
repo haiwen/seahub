@@ -5,9 +5,9 @@ Test file/dir operations.
 
 import posixpath
 import pytest
-import urllib
-from urllib import urlencode, quote
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlencode, quote
+import urllib.parse
 from nose.tools import assert_in
 
 from tests.common.utils import randstring, urljoin
@@ -23,7 +23,7 @@ class FilesApiTest(ApiTestBase):
                 'newname': name + randstring(),
             }
             res = self.post(furl, data=data)
-            self.assertRegexpMatches(res.text, r'"http(.*)"')
+            self.assertRegex(res.text, r'"http(.*)"')
 
     def test_remove_file(self):
         with self.get_tmp_repo() as repo:
@@ -51,13 +51,13 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in(tmp_file, res.text)
 
             # get info of copied file in dst dir('/')
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -69,8 +69,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (1).txt', res.text)
 
@@ -81,8 +81,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (2).txt', res.text)
 
@@ -92,8 +92,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'move',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file%20%283%29.txt', res.text)
 
@@ -118,13 +118,13 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in(tmp_file, res.text)
 
             # get info of copied file in dst dir('/')
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -136,8 +136,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (1).txt', res.text)
 
@@ -148,8 +148,8 @@ class FilesApiTest(ApiTestBase):
                 'dst_dir': '/',
                 'operation': 'copy',
             }
-            u = urlparse.urlparse(furl)
-            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            u = urllib.parse.urlparse(furl)
+            parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             assert_in('tmp_file (2).txt', res.text)
 
@@ -157,37 +157,43 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl)
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
     def test_download_file_without_reuse_token(self):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl)
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 
             # download for the second time
-            url = urllib.urlopen(res.text.strip('"'))
-            code = url.getcode()
-            self.assertEqual(code, 400)
+            try:
+                url = urllib.request.urlopen(res.text.strip('"'))
+            except Exception as e:
+                assert 'HTTP Error 400: Bad Request' in str(e)
+
+            # url = urllib.request.urlopen(res.text.strip('"'))
+            # code = url.getcode()
+            # self.assertEqual(code, 400)
+
 
     def test_download_file_with_reuse_token(self):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl + '&reuse=1')
-            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, '"http(.*)/%s"' % quote(fname))
 
             # download for the first time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 
             # download for the second time
-            url = urllib.urlopen(res.text.strip('"'))
+            url = urllib.request.urlopen(res.text.strip('"'))
             code = url.getcode()
             self.assertEqual(code, 200)
 
@@ -205,12 +211,12 @@ class FilesApiTest(ApiTestBase):
             }
             query = '?' + urlencode(data)
             res = self.get(repo.file_url + query)
-            self.assertRegexpMatches(res.text, r'"http(.*)/%s"' % quote(fname))
+            self.assertRegex(res.text, r'"http(.*)/%s"' % quote(fname))
 
     def test_get_file_detail(self):
         with self.get_tmp_repo() as repo:
             fname, _ = self.create_file(repo)
-            fdurl = repo.file_url + u'detail/?p=/%s' % quote(fname)
+            fdurl = repo.file_url + 'detail/?p=/%s' % quote(fname)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
@@ -226,7 +232,7 @@ class FilesApiTest(ApiTestBase):
     def test_get_file_history(self):
         with self.get_tmp_repo() as repo:
             fname, _ = self.create_file(repo)
-            fhurl = repo.file_url + u'history/?p=%s' % quote(fname)
+            fhurl = repo.file_url + 'history/?p=%s' % quote(fname)
             history = self.get(fhurl).json()
             for commit in history['commits']:
                 self.assertIsNotNone(commit['rev_file_size'])
@@ -252,7 +258,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_url = urljoin(repo.repo_url, 'upload-link')
             res = self.get(upload_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/upload-api/[^/]+"')
 
     def test_get_upload_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -263,7 +269,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             update_url = urljoin(repo.repo_url, 'update-link')
             res = self.get(update_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/update-api/[^/]+"')
 
     def test_get_update_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -303,7 +309,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_blks_url = urljoin(repo.repo_url, 'upload-blks-link')
             res = self.get(upload_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/upload-blks-api/[^/]+"')
 
     def test_get_upload_blocks_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -314,7 +320,7 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             update_blks_url = urljoin(repo.repo_url, 'update-blks-link')
             res = self.get(update_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/[^/]+"')
+            self.assertRegex(res.text, r'"http(.*)/update-blks-api/[^/]+"')
 
     def test_get_update_blocks_link_with_invalid_repo_id(self):
         repo_url = urljoin(REPOS_URL, '12345678-1234-1234-1234-12345678901b')
@@ -395,13 +401,13 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             _, durl = self.create_dir(repo)
             res = self.delete(durl)
-            self.assertEqual(res.text, u'"success"')
+            self.assertEqual(res.text, '"success"')
             self.get(durl, expected=404)
 
     @pytest.mark.xfail
     def test_create_dir_with_parents(self):
         with self.get_tmp_repo() as repo:
-            path = u'/level1/level 2/level_3/目录4'
+            path = '/level1/level 2/level_3/目录4'
             self.create_dir_with_parents(repo, path)
 
     def create_dir_with_parents(self, repo, path):

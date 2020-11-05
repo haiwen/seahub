@@ -11,6 +11,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `abuse_reports_abusereport` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reporter` longtext DEFAULT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `repo_name` varchar(255) NOT NULL,
+  `file_path` longtext DEFAULT NULL,
+  `abuse_type` varchar(255) NOT NULL,
+  `description` longtext DEFAULT NULL,
+  `handled` tinyint(1) NOT NULL,
+  `time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `abuse_reports_abusereport_abuse_type_703d5335` (`abuse_type`),
+  KEY `abuse_reports_abusereport_handled_94b8304c` (`handled`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `abuse_reports_abusereport` DISABLE KEYS */;
+/*!40000 ALTER TABLE `abuse_reports_abusereport` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin_log_adminlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(254) NOT NULL,
@@ -97,11 +117,11 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add content type',1,'add_contenttype'),(2,'Can change content type',1,'change_contenttype'),(3,'Can delete content type',1,'delete_contenttype'),(4,'Can change config',2,'change_config'),(5,'Can add session',3,'add_session'),(6,'Can change session',3,'change_session'),(7,'Can delete session',3,'delete_session'),(8,'Can add user enabled module',8,'add_userenabledmodule'),(9,'Can change user enabled module',8,'change_userenabledmodule'),(10,'Can delete user enabled module',8,'delete_userenabledmodule'),(11,'Can add user starred files',10,'add_userstarredfiles'),(12,'Can change user starred files',10,'change_userstarredfiles'),(13,'Can delete user starred files',10,'delete_userstarredfiles'),(14,'Can add file discuss',11,'add_filediscuss'),(15,'Can change file discuss',11,'change_filediscuss'),(16,'Can delete file discuss',11,'delete_filediscuss'),(17,'Can add repo secret key',6,'add_reposecretkey'),(18,'Can change repo secret key',6,'change_reposecretkey'),(19,'Can delete repo secret key',6,'delete_reposecretkey'),(20,'Can add user last login',14,'add_userlastlogin'),(21,'Can change user last login',14,'change_userlastlogin'),(22,'Can delete user last login',14,'delete_userlastlogin'),(23,'Can add inner pub msg',12,'add_innerpubmsg'),(24,'Can change inner pub msg',12,'change_innerpubmsg'),(25,'Can delete inner pub msg',12,'delete_innerpubmsg'),(26,'Can add group enabled module',4,'add_groupenabledmodule'),(27,'Can change group enabled module',4,'change_groupenabledmodule'),(28,'Can delete group enabled module',4,'delete_groupenabledmodule'),(29,'Can add commands last check',7,'add_commandslastcheck'),(30,'Can change commands last check',7,'change_commandslastcheck'),(31,'Can delete commands last check',7,'delete_commandslastcheck'),(32,'Can add file comment',9,'add_filecomment'),(33,'Can change file comment',9,'change_filecomment'),(34,'Can delete file comment',9,'delete_filecomment'),(35,'Can add inner pub msg reply',13,'add_innerpubmsgreply'),(36,'Can change inner pub msg reply',13,'change_innerpubmsgreply'),(37,'Can delete inner pub msg reply',13,'delete_innerpubmsgreply'),(38,'Can add client login token',5,'add_clientlogintoken'),(39,'Can change client login token',5,'change_clientlogintoken'),(40,'Can delete client login token',5,'delete_clientlogintoken'),(41,'Can add device token',15,'add_devicetoken'),(42,'Can change device token',15,'change_devicetoken'),(43,'Can delete device token',15,'delete_devicetoken'),(44,'Can add group',16,'add_group'),(45,'Can change group',16,'change_group'),(46,'Can delete group',16,'delete_group'),(47,'Can add permission',18,'add_permission'),(48,'Can change permission',18,'change_permission'),(49,'Can delete permission',18,'delete_permission'),(50,'Can add user',17,'add_user'),(51,'Can change user',17,'change_user'),(52,'Can delete user',17,'delete_user'),(53,'Can add registration profile',19,'add_registrationprofile'),(54,'Can change registration profile',19,'change_registrationprofile'),(55,'Can delete registration profile',19,'delete_registrationprofile'),(56,'Can add captcha store',20,'add_captchastore'),(57,'Can change captcha store',20,'change_captchastore'),(58,'Can delete captcha store',20,'delete_captchastore'),(59,'Can add constance',21,'add_constance'),(60,'Can change constance',21,'change_constance'),(61,'Can delete constance',21,'delete_constance'),(62,'Can add Email',24,'add_email'),(63,'Can change Email',24,'change_email'),(64,'Can delete Email',24,'delete_email'),(65,'Can add Attachment',25,'add_attachment'),(66,'Can change Attachment',25,'change_attachment'),(67,'Can delete Attachment',25,'delete_attachment'),(68,'Can add Email Template',23,'add_emailtemplate'),(69,'Can change Email Template',23,'change_emailtemplate'),(70,'Can delete Email Template',23,'delete_emailtemplate'),(71,'Can add Log',22,'add_log'),(72,'Can change Log',22,'change_log'),(73,'Can delete Log',22,'delete_log'),(74,'Can add Terms and Conditions',26,'add_termsandconditions'),(75,'Can change Terms and Conditions',26,'change_termsandconditions'),(76,'Can delete Terms and Conditions',26,'delete_termsandconditions'),(77,'Can add User Terms and Conditions',27,'add_usertermsandconditions'),(78,'Can change User Terms and Conditions',27,'change_usertermsandconditions'),(79,'Can delete User Terms and Conditions',27,'delete_usertermsandconditions'),(80,'Can add token v2',29,'add_tokenv2'),(81,'Can change token v2',29,'change_tokenv2'),(82,'Can delete token v2',29,'delete_tokenv2'),(83,'Can add token',28,'add_token'),(84,'Can change token',28,'change_token'),(85,'Can delete token',28,'delete_token'),(86,'Can add avatar',30,'add_avatar'),(87,'Can change avatar',30,'change_avatar'),(88,'Can delete avatar',30,'delete_avatar'),(89,'Can add group avatar',31,'add_groupavatar'),(90,'Can change group avatar',31,'change_groupavatar'),(91,'Can delete group avatar',31,'delete_groupavatar'),(92,'Can add contact',32,'add_contact'),(93,'Can change contact',32,'change_contact'),(94,'Can delete contact',32,'delete_contact'),(95,'Can add draft',35,'add_draft'),(96,'Can change draft',35,'change_draft'),(97,'Can delete draft',35,'delete_draft'),(98,'Can add draft review',33,'add_draftreview'),(99,'Can change draft review',33,'change_draftreview'),(100,'Can delete draft review',33,'delete_draftreview'),(101,'Can add review comment',36,'add_reviewcomment'),(102,'Can change review comment',36,'change_reviewcomment'),(103,'Can delete review comment',36,'delete_reviewcomment'),(104,'Can add review reviewer',34,'add_reviewreviewer'),(105,'Can change review reviewer',34,'change_reviewreviewer'),(106,'Can delete review reviewer',34,'delete_reviewreviewer'),(107,'Can add institution',38,'add_institution'),(108,'Can change institution',38,'change_institution'),(109,'Can delete institution',38,'delete_institution'),(110,'Can add institution admin',37,'add_institutionadmin'),(111,'Can change institution admin',37,'change_institutionadmin'),(112,'Can delete institution admin',37,'delete_institutionadmin'),(113,'Can add institution quota',39,'add_institutionquota'),(114,'Can change institution quota',39,'change_institutionquota'),(115,'Can delete institution quota',39,'delete_institutionquota'),(116,'Can add invitation',40,'add_invitation'),(117,'Can change invitation',40,'change_invitation'),(118,'Can delete invitation',40,'delete_invitation'),(119,'Can add personal wiki',41,'add_personalwiki'),(120,'Can change personal wiki',41,'change_personalwiki'),(121,'Can delete personal wiki',41,'delete_personalwiki'),(122,'Can add wiki',42,'add_wiki'),(123,'Can change wiki',42,'change_wiki'),(124,'Can delete wiki',42,'delete_wiki'),(125,'Can add group wiki',43,'add_groupwiki'),(126,'Can change group wiki',43,'change_groupwiki'),(127,'Can delete group wiki',43,'delete_groupwiki'),(128,'Can add message attachment',47,'add_messageattachment'),(129,'Can change message attachment',47,'change_messageattachment'),(130,'Can delete message attachment',47,'delete_messageattachment'),(131,'Can add message reply',46,'add_messagereply'),(132,'Can change message reply',46,'change_messagereply'),(133,'Can delete message reply',46,'delete_messagereply'),(134,'Can add public group',44,'add_publicgroup'),(135,'Can change public group',44,'change_publicgroup'),(136,'Can delete public group',44,'delete_publicgroup'),(137,'Can add group message',45,'add_groupmessage'),(138,'Can change group message',45,'change_groupmessage'),(139,'Can delete group message',45,'delete_groupmessage'),(140,'Can add notification',48,'add_notification'),(141,'Can change notification',48,'change_notification'),(142,'Can delete notification',48,'delete_notification'),(143,'Can add user notification',49,'add_usernotification'),(144,'Can change user notification',49,'change_usernotification'),(145,'Can delete user notification',49,'delete_usernotification'),(146,'Can add user options',50,'add_useroptions'),(147,'Can change user options',50,'change_useroptions'),(148,'Can delete user options',50,'delete_useroptions'),(149,'Can add detailed profile',51,'add_detailedprofile'),(150,'Can change detailed profile',51,'change_detailedprofile'),(151,'Can delete detailed profile',51,'delete_detailedprofile'),(152,'Can add profile',52,'add_profile'),(153,'Can change profile',52,'change_profile'),(154,'Can delete profile',52,'delete_profile'),(155,'Can add private file dir share',53,'add_privatefiledirshare'),(156,'Can change private file dir share',53,'change_privatefiledirshare'),(157,'Can delete private file dir share',53,'delete_privatefiledirshare'),(158,'Can add extra share permission',57,'add_extrasharepermission'),(159,'Can change extra share permission',57,'change_extrasharepermission'),(160,'Can delete extra share permission',57,'delete_extrasharepermission'),(161,'Can add file share',54,'add_fileshare'),(162,'Can change file share',54,'change_fileshare'),(163,'Can delete file share',54,'delete_fileshare'),(164,'Can add extra groups share permission',58,'add_extragroupssharepermission'),(165,'Can change extra groups share permission',58,'change_extragroupssharepermission'),(166,'Can delete extra groups share permission',58,'delete_extragroupssharepermission'),(167,'Can add anonymous share',59,'add_anonymousshare'),(168,'Can change anonymous share',59,'change_anonymousshare'),(169,'Can delete anonymous share',59,'delete_anonymousshare'),(170,'Can add org file share',55,'add_orgfileshare'),(171,'Can change org file share',55,'change_orgfileshare'),(172,'Can delete org file share',55,'delete_orgfileshare'),(173,'Can add upload link share',56,'add_uploadlinkshare'),(174,'Can change upload link share',56,'change_uploadlinkshare'),(175,'Can delete upload link share',56,'delete_uploadlinkshare'),(176,'Can add admin log',60,'add_adminlog'),(177,'Can change admin log',60,'change_adminlog'),(178,'Can delete admin log',60,'delete_adminlog'),(179,'Can add file tag',62,'add_filetag'),(180,'Can change file tag',62,'change_filetag'),(181,'Can delete file tag',62,'delete_filetag'),(182,'Can add tags',63,'add_tags'),(183,'Can change tags',63,'change_tags'),(184,'Can delete tags',63,'delete_tags'),(185,'Can add file uuid map',61,'add_fileuuidmap'),(186,'Can change file uuid map',61,'change_fileuuidmap'),(187,'Can delete file uuid map',61,'delete_fileuuidmap'),(188,'Can add tags',65,'add_tags'),(189,'Can change tags',65,'change_tags'),(190,'Can delete tags',65,'delete_tags'),(191,'Can add revision tags',64,'add_revisiontags'),(192,'Can change revision tags',64,'change_revisiontags'),(193,'Can delete revision tags',64,'delete_revisiontags'),(194,'Can add static token',67,'add_statictoken'),(195,'Can change static token',67,'change_statictoken'),(196,'Can delete static token',67,'delete_statictoken'),(197,'Can add TOTP device',68,'add_totpdevice'),(198,'Can change TOTP device',68,'change_totpdevice'),(199,'Can delete TOTP device',68,'delete_totpdevice'),(200,'Can add phone device',66,'add_phonedevice'),(201,'Can change phone device',66,'change_phonedevice'),(202,'Can delete phone device',66,'delete_phonedevice'),(203,'Can add static device',69,'add_staticdevice'),(204,'Can change static device',69,'change_staticdevice'),(205,'Can delete static device',69,'delete_staticdevice'),(206,'Can add admin role',70,'add_adminrole'),(207,'Can change admin role',70,'change_adminrole'),(208,'Can delete admin role',70,'delete_adminrole'),(209,'Can add trusted ip',71,'add_trustedip'),(210,'Can change trusted ip',71,'change_trustedip'),(211,'Can delete trusted ip',71,'delete_trustedip'),(212,'Can add repo tags',72,'add_repotags'),(213,'Can change repo tags',72,'change_repotags'),(214,'Can delete repo tags',72,'delete_repotags'),(215,'Can add file tags',73,'add_filetags'),(216,'Can change file tags',73,'change_filetags'),(217,'Can delete file tags',73,'delete_filetags'),(218,'Can add related files',74,'add_relatedfiles'),(219,'Can change related files',74,'change_relatedfiles'),(220,'Can delete related files',74,'delete_relatedfiles'),(221,'Can add user login log',75,'add_userloginlog'),(222,'Can change user login log',75,'change_userloginlog'),(223,'Can delete user login log',75,'delete_userloginlog'),(224,'Can add org member quota',77,'add_orgmemberquota'),(225,'Can change org member quota',77,'change_orgmemberquota'),(226,'Can delete org member quota',77,'delete_orgmemberquota'),(227,'Can add org settings',76,'add_orgsettings'),(228,'Can change org settings',76,'change_orgsettings'),(229,'Can delete org settings',76,'delete_orgsettings'),(230,'Can add session ticket',79,'add_sessionticket'),(231,'Can change session ticket',79,'change_sessionticket'),(232,'Can delete session ticket',79,'delete_sessionticket'),(233,'Can add proxy granting ticket',78,'add_proxygrantingticket'),(234,'Can change proxy granting ticket',78,'change_proxygrantingticket'),(235,'Can delete proxy granting ticket',78,'delete_proxygrantingticket');
+INSERT INTO `auth_permission` VALUES (1,'Can add content type',1,'add_contenttype'),(2,'Can change content type',1,'change_contenttype'),(3,'Can delete content type',1,'delete_contenttype'),(4,'Can change config',2,'change_config'),(5,'Can add session',3,'add_session'),(6,'Can change session',3,'change_session'),(7,'Can delete session',3,'delete_session'),(8,'Can add client login token',4,'add_clientlogintoken'),(9,'Can change client login token',4,'change_clientlogintoken'),(10,'Can delete client login token',4,'delete_clientlogintoken'),(11,'Can add commands last check',5,'add_commandslastcheck'),(12,'Can change commands last check',5,'change_commandslastcheck'),(13,'Can delete commands last check',5,'delete_commandslastcheck'),(14,'Can add device token',6,'add_devicetoken'),(15,'Can change device token',6,'change_devicetoken'),(16,'Can delete device token',6,'delete_devicetoken'),(17,'Can add file comment',7,'add_filecomment'),(18,'Can change file comment',7,'change_filecomment'),(19,'Can delete file comment',7,'delete_filecomment'),(20,'Can add file discuss',8,'add_filediscuss'),(21,'Can change file discuss',8,'change_filediscuss'),(22,'Can delete file discuss',8,'delete_filediscuss'),(23,'Can add group enabled module',9,'add_groupenabledmodule'),(24,'Can change group enabled module',9,'change_groupenabledmodule'),(25,'Can delete group enabled module',9,'delete_groupenabledmodule'),(26,'Can add inner pub msg',10,'add_innerpubmsg'),(27,'Can change inner pub msg',10,'change_innerpubmsg'),(28,'Can delete inner pub msg',10,'delete_innerpubmsg'),(29,'Can add inner pub msg reply',11,'add_innerpubmsgreply'),(30,'Can change inner pub msg reply',11,'change_innerpubmsgreply'),(31,'Can delete inner pub msg reply',11,'delete_innerpubmsgreply'),(32,'Can add user enabled module',12,'add_userenabledmodule'),(33,'Can change user enabled module',12,'change_userenabledmodule'),(34,'Can delete user enabled module',12,'delete_userenabledmodule'),(35,'Can add user last login',13,'add_userlastlogin'),(36,'Can change user last login',13,'change_userlastlogin'),(37,'Can delete user last login',13,'delete_userlastlogin'),(38,'Can add user starred files',14,'add_userstarredfiles'),(39,'Can change user starred files',14,'change_userstarredfiles'),(40,'Can delete user starred files',14,'delete_userstarredfiles'),(41,'Can add repo secret key',15,'add_reposecretkey'),(42,'Can change repo secret key',15,'change_reposecretkey'),(43,'Can delete repo secret key',15,'delete_reposecretkey'),(44,'Can add permission',16,'add_permission'),(45,'Can change permission',16,'change_permission'),(46,'Can delete permission',16,'delete_permission'),(47,'Can add group',17,'add_group'),(48,'Can change group',17,'change_group'),(49,'Can delete group',17,'delete_group'),(50,'Can add user',18,'add_user'),(51,'Can change user',18,'change_user'),(52,'Can delete user',18,'delete_user'),(53,'Can add registration profile',19,'add_registrationprofile'),(54,'Can change registration profile',19,'change_registrationprofile'),(55,'Can delete registration profile',19,'delete_registrationprofile'),(56,'Can add captcha store',20,'add_captchastore'),(57,'Can change captcha store',20,'change_captchastore'),(58,'Can delete captcha store',20,'delete_captchastore'),(59,'Can add constance',21,'add_constance'),(60,'Can change constance',21,'change_constance'),(61,'Can delete constance',21,'delete_constance'),(62,'Can add Attachment',22,'add_attachment'),(63,'Can change Attachment',22,'change_attachment'),(64,'Can delete Attachment',22,'delete_attachment'),(65,'Can add Email',23,'add_email'),(66,'Can change Email',23,'change_email'),(67,'Can delete Email',23,'delete_email'),(68,'Can add Email Template',24,'add_emailtemplate'),(69,'Can change Email Template',24,'change_emailtemplate'),(70,'Can delete Email Template',24,'delete_emailtemplate'),(71,'Can add Log',25,'add_log'),(72,'Can change Log',25,'change_log'),(73,'Can delete Log',25,'delete_log'),(74,'Can add Terms and Conditions',26,'add_termsandconditions'),(75,'Can change Terms and Conditions',26,'change_termsandconditions'),(76,'Can delete Terms and Conditions',26,'delete_termsandconditions'),(77,'Can add User Terms and Conditions',27,'add_usertermsandconditions'),(78,'Can change User Terms and Conditions',27,'change_usertermsandconditions'),(79,'Can delete User Terms and Conditions',27,'delete_usertermsandconditions'),(80,'Can add token',28,'add_token'),(81,'Can change token',28,'change_token'),(82,'Can delete token',28,'delete_token'),(83,'Can add token v2',29,'add_tokenv2'),(84,'Can change token v2',29,'change_tokenv2'),(85,'Can delete token v2',29,'delete_tokenv2'),(86,'Can add avatar',30,'add_avatar'),(87,'Can change avatar',30,'change_avatar'),(88,'Can delete avatar',30,'delete_avatar'),(89,'Can add group avatar',31,'add_groupavatar'),(90,'Can change group avatar',31,'change_groupavatar'),(91,'Can delete group avatar',31,'delete_groupavatar'),(92,'Can add contact',32,'add_contact'),(93,'Can change contact',32,'change_contact'),(94,'Can delete contact',32,'delete_contact'),(95,'Can add draft',33,'add_draft'),(96,'Can change draft',33,'change_draft'),(97,'Can delete draft',33,'delete_draft'),(98,'Can add draft reviewer',34,'add_draftreviewer'),(99,'Can change draft reviewer',34,'change_draftreviewer'),(100,'Can delete draft reviewer',34,'delete_draftreviewer'),(101,'Can add institution',35,'add_institution'),(102,'Can change institution',35,'change_institution'),(103,'Can delete institution',35,'delete_institution'),(104,'Can add institution admin',36,'add_institutionadmin'),(105,'Can change institution admin',36,'change_institutionadmin'),(106,'Can delete institution admin',36,'delete_institutionadmin'),(107,'Can add institution quota',37,'add_institutionquota'),(108,'Can change institution quota',37,'change_institutionquota'),(109,'Can delete institution quota',37,'delete_institutionquota'),(110,'Can add invitation',38,'add_invitation'),(111,'Can change invitation',38,'change_invitation'),(112,'Can delete invitation',38,'delete_invitation'),(113,'Can add group wiki',39,'add_groupwiki'),(114,'Can change group wiki',39,'change_groupwiki'),(115,'Can delete group wiki',39,'delete_groupwiki'),(116,'Can add personal wiki',40,'add_personalwiki'),(117,'Can change personal wiki',40,'change_personalwiki'),(118,'Can delete personal wiki',40,'delete_personalwiki'),(119,'Can add wiki',41,'add_wiki'),(120,'Can change wiki',41,'change_wiki'),(121,'Can delete wiki',41,'delete_wiki'),(122,'Can add notification',42,'add_notification'),(123,'Can change notification',42,'change_notification'),(124,'Can delete notification',42,'delete_notification'),(125,'Can add user notification',43,'add_usernotification'),(126,'Can change user notification',43,'change_usernotification'),(127,'Can delete user notification',43,'delete_usernotification'),(128,'Can add user options',44,'add_useroptions'),(129,'Can change user options',44,'change_useroptions'),(130,'Can delete user options',44,'delete_useroptions'),(131,'Can add detailed profile',45,'add_detailedprofile'),(132,'Can change detailed profile',45,'change_detailedprofile'),(133,'Can delete detailed profile',45,'delete_detailedprofile'),(134,'Can add profile',46,'add_profile'),(135,'Can change profile',46,'change_profile'),(136,'Can delete profile',46,'delete_profile'),(137,'Can add anonymous share',47,'add_anonymousshare'),(138,'Can change anonymous share',47,'change_anonymousshare'),(139,'Can delete anonymous share',47,'delete_anonymousshare'),(140,'Can add extra groups share permission',48,'add_extragroupssharepermission'),(141,'Can change extra groups share permission',48,'change_extragroupssharepermission'),(142,'Can delete extra groups share permission',48,'delete_extragroupssharepermission'),(143,'Can add extra share permission',49,'add_extrasharepermission'),(144,'Can change extra share permission',49,'change_extrasharepermission'),(145,'Can delete extra share permission',49,'delete_extrasharepermission'),(146,'Can add file share',50,'add_fileshare'),(147,'Can change file share',50,'change_fileshare'),(148,'Can delete file share',50,'delete_fileshare'),(149,'Can add org file share',51,'add_orgfileshare'),(150,'Can change org file share',51,'change_orgfileshare'),(151,'Can delete org file share',51,'delete_orgfileshare'),(152,'Can add private file dir share',52,'add_privatefiledirshare'),(153,'Can change private file dir share',52,'change_privatefiledirshare'),(154,'Can delete private file dir share',52,'delete_privatefiledirshare'),(155,'Can add upload link share',53,'add_uploadlinkshare'),(156,'Can change upload link share',53,'change_uploadlinkshare'),(157,'Can delete upload link share',53,'delete_uploadlinkshare'),(158,'Can add admin log',54,'add_adminlog'),(159,'Can change admin log',54,'change_adminlog'),(160,'Can delete admin log',54,'delete_adminlog'),(161,'Can add file tag',55,'add_filetag'),(162,'Can change file tag',55,'change_filetag'),(163,'Can delete file tag',55,'delete_filetag'),(164,'Can add file uuid map',56,'add_fileuuidmap'),(165,'Can change file uuid map',56,'change_fileuuidmap'),(166,'Can delete file uuid map',56,'delete_fileuuidmap'),(167,'Can add tags',57,'add_tags'),(168,'Can change tags',57,'change_tags'),(169,'Can delete tags',57,'delete_tags'),(170,'Can add revision tags',58,'add_revisiontags'),(171,'Can change revision tags',58,'change_revisiontags'),(172,'Can delete revision tags',58,'delete_revisiontags'),(173,'Can add tags',59,'add_tags'),(174,'Can change tags',59,'change_tags'),(175,'Can delete tags',59,'delete_tags'),(176,'Can add phone device',60,'add_phonedevice'),(177,'Can change phone device',60,'change_phonedevice'),(178,'Can delete phone device',60,'delete_phonedevice'),(179,'Can add static device',61,'add_staticdevice'),(180,'Can change static device',61,'change_staticdevice'),(181,'Can delete static device',61,'delete_staticdevice'),(182,'Can add static token',62,'add_statictoken'),(183,'Can change static token',62,'change_statictoken'),(184,'Can delete static token',62,'delete_statictoken'),(185,'Can add TOTP device',63,'add_totpdevice'),(186,'Can change TOTP device',63,'change_totpdevice'),(187,'Can delete TOTP device',63,'delete_totpdevice'),(188,'Can add admin role',64,'add_adminrole'),(189,'Can change admin role',64,'change_adminrole'),(190,'Can delete admin role',64,'delete_adminrole'),(191,'Can add trusted ip',65,'add_trustedip'),(192,'Can change trusted ip',65,'change_trustedip'),(193,'Can delete trusted ip',65,'delete_trustedip'),(194,'Can add repo tags',66,'add_repotags'),(195,'Can change repo tags',66,'change_repotags'),(196,'Can delete repo tags',66,'delete_repotags'),(197,'Can add file tags',67,'add_filetags'),(198,'Can change file tags',67,'change_filetags'),(199,'Can delete file tags',67,'delete_filetags'),(200,'Can add related files',68,'add_relatedfiles'),(201,'Can change related files',68,'change_relatedfiles'),(202,'Can delete related files',68,'delete_relatedfiles'),(203,'Can add file participant',69,'add_fileparticipant'),(204,'Can change file participant',69,'change_fileparticipant'),(205,'Can delete file participant',69,'delete_fileparticipant'),(206,'Can add repo api tokens',70,'add_repoapitokens'),(207,'Can change repo api tokens',70,'change_repoapitokens'),(208,'Can delete repo api tokens',70,'delete_repoapitokens'),(209,'Can add abuse report',71,'add_abusereport'),(210,'Can change abuse report',71,'change_abusereport'),(211,'Can delete abuse report',71,'delete_abusereport'),(212,'Can add user login log',72,'add_userloginlog'),(213,'Can change user login log',72,'change_userloginlog'),(214,'Can delete user login log',72,'delete_userloginlog'),(215,'Can add org member quota',73,'add_orgmemberquota'),(216,'Can change org member quota',73,'change_orgmemberquota'),(217,'Can delete org member quota',73,'delete_orgmemberquota'),(218,'Can add org settings',74,'add_orgsettings'),(219,'Can change org settings',74,'change_orgsettings'),(220,'Can delete org settings',74,'delete_orgsettings'),(221,'Can add proxy granting ticket',75,'add_proxygrantingticket'),(222,'Can change proxy granting ticket',75,'change_proxygrantingticket'),(223,'Can delete proxy granting ticket',75,'delete_proxygrantingticket'),(224,'Can add session ticket',76,'add_sessionticket'),(225,'Can change session ticket',76,'change_sessionticket'),(226,'Can delete session ticket',76,'delete_sessionticket'),(227,'Can add user plan',77,'add_userplan'),(228,'Can change user plan',77,'change_userplan'),(229,'Can delete user plan',77,'delete_userplan'),(230,'Can add org plan',78,'add_orgplan'),(231,'Can change org plan',78,'change_orgplan'),(232,'Can delete org plan',78,'delete_orgplan'),(233,'Can add social auth user',79,'add_socialauthuser'),(234,'Can change social auth user',79,'change_socialauthuser'),(235,'Can delete social auth user',79,'delete_socialauthuser'),(236,'Can add repo share invitation',80,'add_reposhareinvitation'),(237,'Can change repo share invitation',80,'change_reposhareinvitation'),(238,'Can delete repo share invitation',80,'delete_reposhareinvitation');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -247,65 +267,6 @@ CREATE TABLE `base_filecomment` (
 /*!40000 ALTER TABLE `base_filecomment` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_filediscuss` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `path` longtext NOT NULL,
-  `path_hash` varchar(12) NOT NULL,
-  `group_message_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `base_filediscuss_group_message_id_2f7d7046_fk_group_gro` (`group_message_id`),
-  KEY `base_filediscuss_path_hash_fd9f7348` (`path_hash`),
-  CONSTRAINT `base_filediscuss_group_message_id_2f7d7046_fk_group_gro` FOREIGN KEY (`group_message_id`) REFERENCES `group_groupmessage` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `base_filediscuss` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_filediscuss` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_groupenabledmodule` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` varchar(10) NOT NULL,
-  `module_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `base_groupenabledmodule_group_id_8c06b5bc` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `base_groupenabledmodule` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_groupenabledmodule` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_innerpubmsg` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_email` varchar(254) NOT NULL,
-  `message` varchar(500) NOT NULL,
-  `timestamp` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `base_innerpubmsg` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_innerpubmsg` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_innerpubmsgreply` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_email` varchar(254) NOT NULL,
-  `message` varchar(150) NOT NULL,
-  `timestamp` datetime NOT NULL,
-  `reply_to_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `base_innerpubmsgrepl_reply_to_id_62ce6fe5_fk_base_inne` (`reply_to_id`),
-  CONSTRAINT `base_innerpubmsgrepl_reply_to_id_62ce6fe5_fk_base_inne` FOREIGN KEY (`reply_to_id`) REFERENCES `base_innerpubmsg` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `base_innerpubmsgreply` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_innerpubmsgreply` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_reposecretkey` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
@@ -317,19 +278,6 @@ CREATE TABLE `base_reposecretkey` (
 
 /*!40000 ALTER TABLE `base_reposecretkey` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_reposecretkey` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_userenabledmodule` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `module_name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `base_userenabledmodule_username_4f1c3c88` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `base_userenabledmodule` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_userenabledmodule` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userlastlogin` (
@@ -379,10 +327,10 @@ CREATE TABLE `captcha_captchastore` (
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `constance_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) NOT NULL,
-  `value` longtext NOT NULL,
+  `constance_key` varchar(255) NOT NULL,
+  `value` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
+  UNIQUE KEY `constance_key` (`constance_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -440,11 +388,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (60,'admin_log','adminlog'),(28,'api2','token'),(29,'api2','tokenv2'),(16,'auth','group'),(18,'auth','permission'),(17,'auth','user'),(30,'avatar','avatar'),(31,'avatar','groupavatar'),(5,'base','clientlogintoken'),(7,'base','commandslastcheck'),(15,'base','devicetoken'),(9,'base','filecomment'),(11,'base','filediscuss'),(4,'base','groupenabledmodule'),(12,'base','innerpubmsg'),(13,'base','innerpubmsgreply'),(6,'base','reposecretkey'),(8,'base','userenabledmodule'),(14,'base','userlastlogin'),(10,'base','userstarredfiles'),(20,'captcha','captchastore'),(2,'constance','config'),(32,'contacts','contact'),(1,'contenttypes','contenttype'),(21,'database','constance'),(78,'django_cas_ng','proxygrantingticket'),(79,'django_cas_ng','sessionticket'),(35,'drafts','draft'),(33,'drafts','draftreview'),(36,'drafts','reviewcomment'),(34,'drafts','reviewreviewer'),(73,'file_tags','filetags'),(45,'group','groupmessage'),(47,'group','messageattachment'),(46,'group','messagereply'),(44,'group','publicgroup'),(38,'institutions','institution'),(37,'institutions','institutionadmin'),(39,'institutions','institutionquota'),(40,'invitations','invitation'),(48,'notifications','notification'),(49,'notifications','usernotification'),(50,'options','useroptions'),(77,'organizations','orgmemberquota'),(76,'organizations','orgsettings'),(25,'post_office','attachment'),(24,'post_office','email'),(23,'post_office','emailtemplate'),(22,'post_office','log'),(51,'profile','detailedprofile'),(52,'profile','profile'),(19,'registration','registrationprofile'),(74,'related_files','relatedfiles'),(72,'repo_tags','repotags'),(64,'revision_tag','revisiontags'),(65,'revision_tag','tags'),(70,'role_permissions','adminrole'),(3,'sessions','session'),(59,'share','anonymousshare'),(58,'share','extragroupssharepermission'),(57,'share','extrasharepermission'),(54,'share','fileshare'),(55,'share','orgfileshare'),(53,'share','privatefiledirshare'),(56,'share','uploadlinkshare'),(75,'sysadmin_extra','userloginlog'),(62,'tags','filetag'),(61,'tags','fileuuidmap'),(63,'tags','tags'),(26,'termsandconditions','termsandconditions'),(27,'termsandconditions','usertermsandconditions'),(71,'trusted_ip','trustedip'),(66,'two_factor','phonedevice'),(69,'two_factor','staticdevice'),(67,'two_factor','statictoken'),(68,'two_factor','totpdevice'),(43,'wiki','groupwiki'),(41,'wiki','personalwiki'),(42,'wiki','wiki');
+INSERT INTO `django_content_type` VALUES (71,'abuse_reports','abusereport'),(54,'admin_log','adminlog'),(28,'api2','token'),(29,'api2','tokenv2'),(17,'auth','group'),(16,'auth','permission'),(18,'auth','user'),(30,'avatar','avatar'),(31,'avatar','groupavatar'),(4,'base','clientlogintoken'),(5,'base','commandslastcheck'),(6,'base','devicetoken'),(7,'base','filecomment'),(8,'base','filediscuss'),(9,'base','groupenabledmodule'),(10,'base','innerpubmsg'),(11,'base','innerpubmsgreply'),(15,'base','reposecretkey'),(79,'base','socialauthuser'),(12,'base','userenabledmodule'),(13,'base','userlastlogin'),(14,'base','userstarredfiles'),(20,'captcha','captchastore'),(2,'constance','config'),(32,'contacts','contact'),(1,'contenttypes','contenttype'),(21,'database','constance'),(75,'django_cas_ng','proxygrantingticket'),(76,'django_cas_ng','sessionticket'),(33,'drafts','draft'),(34,'drafts','draftreviewer'),(69,'file_participants','fileparticipant'),(67,'file_tags','filetags'),(35,'institutions','institution'),(36,'institutions','institutionadmin'),(37,'institutions','institutionquota'),(38,'invitations','invitation'),(80,'invitations','reposhareinvitation'),(42,'notifications','notification'),(43,'notifications','usernotification'),(44,'options','useroptions'),(73,'organizations','orgmemberquota'),(74,'organizations','orgsettings'),(78,'plan','orgplan'),(77,'plan','userplan'),(22,'post_office','attachment'),(23,'post_office','email'),(24,'post_office','emailtemplate'),(25,'post_office','log'),(45,'profile','detailedprofile'),(46,'profile','profile'),(19,'registration','registrationprofile'),(68,'related_files','relatedfiles'),(70,'repo_api_tokens','repoapitokens'),(66,'repo_tags','repotags'),(58,'revision_tag','revisiontags'),(59,'revision_tag','tags'),(64,'role_permissions','adminrole'),(3,'sessions','session'),(47,'share','anonymousshare'),(48,'share','extragroupssharepermission'),(49,'share','extrasharepermission'),(50,'share','fileshare'),(51,'share','orgfileshare'),(52,'share','privatefiledirshare'),(53,'share','uploadlinkshare'),(72,'sysadmin_extra','userloginlog'),(55,'tags','filetag'),(56,'tags','fileuuidmap'),(57,'tags','tags'),(26,'termsandconditions','termsandconditions'),(27,'termsandconditions','usertermsandconditions'),(65,'trusted_ip','trustedip'),(60,'two_factor','phonedevice'),(61,'two_factor','staticdevice'),(62,'two_factor','statictoken'),(63,'two_factor','totpdevice'),(39,'wiki','groupwiki'),(40,'wiki','personalwiki'),(41,'wiki','wiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -454,11 +402,11 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2019-01-22 02:36:08'),(2,'api2','0001_initial','2019-01-22 02:36:08'),(3,'contenttypes','0001_initial','2019-01-22 02:36:08'),(4,'contenttypes','0002_remove_content_type_name','2019-01-22 02:36:08'),(5,'auth','0001_initial','2019-01-22 02:36:09'),(6,'auth','0002_alter_permission_name_max_length','2019-01-22 02:36:09'),(7,'auth','0003_alter_user_email_max_length','2019-01-22 02:36:09'),(8,'auth','0004_alter_user_username_opts','2019-01-22 02:36:09'),(9,'auth','0005_alter_user_last_login_null','2019-01-22 02:36:09'),(10,'auth','0006_require_contenttypes_0002','2019-01-22 02:36:09'),(11,'auth','0007_alter_validators_add_error_messages','2019-01-22 02:36:09'),(12,'auth','0008_alter_user_username_max_length','2019-01-22 02:36:09'),(13,'avatar','0001_initial','2019-01-22 02:36:09'),(14,'tags','0001_initial','2019-01-22 02:36:09'),(15,'group','0001_initial','2019-01-22 02:36:09'),(16,'base','0001_initial','2019-01-22 02:36:10'),(17,'base','0002_reposecretkey','2019-01-22 02:36:10'),(18,'base','0003_auto_20181016_1242','2019-01-22 02:36:10'),(19,'captcha','0001_initial','2019-01-22 02:36:10'),(20,'contacts','0001_initial','2019-01-22 02:36:10'),(21,'database','0001_initial','2019-01-22 02:36:10'),(22,'django_cas_ng','0001_initial','2019-01-22 02:36:10'),(23,'django_cas_ng','0002_auto_20180410_0948','2019-01-22 02:36:11'),(24,'drafts','0001_initial','2019-01-22 02:36:11'),(25,'drafts','0002_draftreview_author','2019-01-22 02:36:11'),(26,'repo_tags','0001_initial','2019-01-22 02:36:11'),(27,'file_tags','0001_initial','2019-01-22 02:36:11'),(28,'institutions','0001_initial','2019-01-22 02:36:11'),(29,'institutions','0002_institutionquota','2019-01-22 02:36:12'),(30,'institutions','0003_auto_20180426_0710','2019-01-22 02:36:12'),(31,'invitations','0001_initial','2019-01-22 02:36:12'),(32,'invitations','0002_invitation_invite_type','2019-01-22 02:36:12'),(33,'invitations','0003_auto_20160510_1703','2019-01-22 02:36:12'),(34,'invitations','0004_auto_20160629_1610','2019-01-22 02:36:12'),(35,'invitations','0005_auto_20160629_1614','2019-01-22 02:36:12'),(36,'notifications','0001_initial','2019-01-22 02:36:12'),(37,'notifications','0002_auto_20180426_0710','2019-01-22 02:36:12'),(38,'options','0001_initial','2019-01-22 02:36:12'),(39,'options','0002_auto_20181107_0811','2019-01-22 02:36:12'),(40,'organizations','0001_initial','2019-01-22 02:36:12'),(41,'organizations','0002_orgsettings','2019-01-22 02:36:12'),(42,'organizations','0003_auto_20190116_0323','2019-01-22 02:36:12'),(43,'post_office','0001_initial','2019-01-22 02:36:13'),(44,'post_office','0002_add_i18n_and_backend_alias','2019-01-22 02:36:14'),(45,'post_office','0003_longer_subject','2019-01-22 02:36:14'),(46,'post_office','0004_auto_20160607_0901','2019-01-22 02:36:14'),(47,'post_office','0005_auto_20170515_0013','2019-01-22 02:36:15'),(48,'post_office','0006_attachment_mimetype','2019-01-22 02:36:15'),(49,'profile','0001_initial','2019-01-22 02:36:15'),(50,'profile','0002_auto_20190122_0225','2019-01-22 02:36:15'),(51,'registration','0001_initial','2019-01-22 02:36:15'),(52,'related_files','0001_initial','2019-01-22 02:36:15'),(53,'revision_tag','0001_initial','2019-01-22 02:36:15'),(54,'role_permissions','0001_initial','2019-01-22 02:36:15'),(55,'sessions','0001_initial','2019-01-22 02:36:15'),(56,'share','0001_initial','2019-01-22 02:36:16'),(57,'sysadmin_extra','0001_initial','2019-01-22 02:36:16'),(58,'termsandconditions','0001_initial','2019-01-22 02:36:16'),(59,'trusted_ip','0001_initial','2019-01-22 02:36:16'),(60,'two_factor','0001_initial','2019-01-22 02:36:17'),(61,'wiki','0001_initial','2019-01-22 02:36:17'),(62,'wiki','0002_auto_20180326_0548','2019-01-22 02:36:17'),(63,'wiki','0003_auto_20180428_0619','2019-01-22 02:36:17');
+INSERT INTO `django_migrations` VALUES (1,'abuse_reports','0001_initial','2019-11-25 14:33:59.365443'),(2,'admin_log','0001_initial','2019-11-25 14:33:59.469182'),(3,'api2','0001_initial','2019-11-25 14:33:59.693836'),(4,'contenttypes','0001_initial','2019-11-25 14:33:59.777749'),(5,'contenttypes','0002_remove_content_type_name','2019-11-25 14:33:59.858901'),(6,'auth','0001_initial','2019-11-25 14:34:00.633824'),(7,'auth','0002_alter_permission_name_max_length','2019-11-25 14:34:00.680928'),(8,'auth','0003_alter_user_email_max_length','2019-11-25 14:34:00.733661'),(9,'auth','0004_alter_user_username_opts','2019-11-25 14:34:00.752616'),(10,'auth','0005_alter_user_last_login_null','2019-11-25 14:34:00.801604'),(11,'auth','0006_require_contenttypes_0002','2019-11-25 14:34:00.810103'),(12,'auth','0007_alter_validators_add_error_messages','2019-11-25 14:34:00.825053'),(13,'auth','0008_alter_user_username_max_length','2019-11-25 14:34:00.890617'),(14,'avatar','0001_initial','2019-11-25 14:34:01.063878'),(15,'tags','0001_initial','2019-11-25 14:34:01.557738'),(16,'group','0001_initial','2019-11-25 14:34:02.025435'),(17,'base','0001_initial','2019-11-25 14:34:03.226703'),(18,'base','0002_reposecretkey','2019-11-25 14:34:03.319120'),(19,'base','0003_auto_20181016_1242','2019-11-25 14:34:03.417627'),(20,'captcha','0001_initial','2019-11-25 14:34:03.542585'),(21,'contacts','0001_initial','2019-11-25 14:34:03.652793'),(22,'database','0001_initial','2019-11-25 14:34:03.725390'),(23,'database','0002_auto_20190129_2304','2019-11-25 14:34:03.776378'),(24,'django_cas_ng','0001_initial','2019-11-25 14:34:04.033039'),(25,'django_cas_ng','0002_auto_20180410_0948','2019-11-25 14:34:04.169581'),(26,'drafts','0001_initial','2019-11-25 14:34:10.856324'),(27,'drafts','0002_draftreview_author','2019-11-25 14:34:10.929413'),(28,'drafts','0003_auto_20190301_0648','2019-11-25 14:34:11.432905'),(29,'drafts','0004_auto_20190610_0628','2019-11-25 14:34:11.577308'),(30,'file_participants','0001_initial','2019-11-25 14:34:11.763284'),(31,'repo_tags','0001_initial','2019-11-25 14:34:11.903061'),(32,'file_tags','0001_initial','2019-11-25 14:34:12.191192'),(33,'file_tags','0002_remove_filetags_parent_folder_uuid','2019-11-25 14:34:12.272233'),(34,'institutions','0001_initial','2019-11-25 14:34:12.508609'),(35,'institutions','0002_institutionquota','2019-11-25 14:34:12.666828'),(36,'institutions','0003_auto_20180426_0710','2019-11-25 14:34:12.713231'),(37,'invitations','0001_initial','2019-11-25 14:34:12.865889'),(38,'invitations','0002_invitation_invite_type','2019-11-25 14:34:12.922193'),(39,'invitations','0003_auto_20160510_1703','2019-11-25 14:34:12.982345'),(40,'invitations','0004_auto_20160629_1610','2019-11-25 14:34:13.064011'),(41,'invitations','0005_auto_20160629_1614','2019-11-25 14:34:13.096590'),(42,'notifications','0001_initial','2019-11-25 14:34:13.310594'),(43,'notifications','0002_auto_20180426_0710','2019-11-25 14:34:13.355493'),(44,'notifications','0003_auto_20181115_0825','2019-11-25 14:34:13.404819'),(45,'options','0001_initial','2019-11-25 14:34:13.560917'),(46,'options','0002_auto_20181107_0811','2019-11-25 14:34:13.621244'),(47,'organizations','0001_initial','2019-11-25 14:34:13.735566'),(48,'organizations','0002_orgsettings','2019-11-25 14:34:13.846286'),(49,'organizations','0003_auto_20190116_0323','2019-11-25 14:34:13.891216'),(50,'post_office','0001_initial','2019-11-25 14:34:14.814213'),(51,'post_office','0002_add_i18n_and_backend_alias','2019-11-25 14:34:15.077736'),(52,'post_office','0003_longer_subject','2019-11-25 14:34:15.116500'),(53,'post_office','0004_auto_20160607_0901','2019-11-25 14:34:15.488007'),(54,'post_office','0005_auto_20170515_0013','2019-11-25 14:34:15.531781'),(55,'post_office','0006_attachment_mimetype','2019-11-25 14:34:15.590856'),(56,'post_office','0007_auto_20170731_1342','2019-11-25 14:34:15.622814'),(57,'post_office','0008_attachment_headers','2019-11-25 14:34:15.675049'),(58,'profile','0001_initial','2019-11-25 14:34:15.884625'),(59,'profile','0002_auto_20190122_0225','2019-11-25 14:34:15.922660'),(60,'registration','0001_initial','2019-11-25 14:34:16.012897'),(61,'related_files','0001_initial','2019-11-25 14:34:16.156173'),(62,'repo_api_tokens','0001_initial','2019-11-25 14:34:16.290298'),(63,'revision_tag','0001_initial','2019-11-25 14:34:16.522331'),(64,'role_permissions','0001_initial','2019-11-25 14:34:16.607236'),(65,'sessions','0001_initial','2019-11-25 14:34:16.695390'),(66,'share','0001_initial','2019-11-25 14:34:17.428416'),(67,'sysadmin_extra','0001_initial','2019-11-25 14:34:17.556464'),(68,'termsandconditions','0001_initial','2019-11-25 14:34:17.895240'),(69,'trusted_ip','0001_initial','2019-11-25 14:34:17.991415'),(70,'two_factor','0001_initial','2019-11-25 14:34:18.432226'),(71,'wiki','0001_initial','2019-11-25 14:34:18.609279'),(72,'wiki','0002_auto_20180326_0548','2019-11-25 14:34:18.797942'),(73,'wiki','0003_auto_20180428_0619','2019-11-25 14:34:18.851746'),(74,'base','0004_auto_20191125_1555','2019-11-25 15:57:10.821867'),(75,'contacts','0002_auto_20191125_1555','2019-11-25 15:57:10.842151'),(76,'group','0002_auto_20191125_1555','2019-11-25 15:57:10.966529'),(77,'invitations','0006_reposhareinvitation','2019-11-25 15:57:11.090331'),(78,'notifications','0004_auto_20191125_1555','2019-11-25 15:57:11.106563'),(79,'profile','0003_auto_20191125_1555','2019-11-25 15:57:11.124521'),(80,'revision_tag','0002_auto_20191125_1555','2019-11-25 15:57:11.142928'),(81,'share','0002_auto_20191125_1555','2019-11-25 15:57:11.176538'),(82,'termsandconditions','0002_auto_20191125_1555','2019-11-25 15:57:11.231421'),(83,'wiki','0004_auto_20191125_1555','2019-11-25 15:57:11.266350');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -483,13 +431,15 @@ CREATE TABLE `drafts_draft` (
   `origin_repo_id` varchar(36) NOT NULL,
   `origin_file_version` varchar(100) NOT NULL,
   `draft_file_path` varchar(1024) NOT NULL,
-  `origin_file_uuid_id` char(32) NOT NULL,
+  `origin_file_uuid` char(32) NOT NULL,
+  `publish_file_version` varchar(100) DEFAULT NULL,
+  `status` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `drafts_draft_origin_file_uuid_id_f150319e_fk_tags_file` (`origin_file_uuid_id`),
+  UNIQUE KEY `drafts_draft_origin_file_uuid_7c003c98_uniq` (`origin_file_uuid`),
   KEY `drafts_draft_created_at_e9f4523f` (`created_at`),
   KEY `drafts_draft_updated_at_0a144b05` (`updated_at`),
   KEY `drafts_draft_username_73e6738b` (`username`),
-  CONSTRAINT `drafts_draft_origin_file_uuid_id_f150319e_fk_tags_file` FOREIGN KEY (`origin_file_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
+  KEY `drafts_draft_origin_repo_id_8978ca2c` (`origin_repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -497,150 +447,49 @@ CREATE TABLE `drafts_draft` (
 /*!40000 ALTER TABLE `drafts_draft` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drafts_draftreview` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `creator` varchar(255) NOT NULL,
-  `status` varchar(20) NOT NULL,
-  `origin_repo_id` varchar(36) NOT NULL,
-  `draft_file_path` varchar(1024) NOT NULL,
-  `origin_file_version` varchar(100) NOT NULL,
-  `publish_file_version` varchar(100) DEFAULT NULL,
-  `draft_id_id` int(11) DEFAULT NULL,
-  `origin_file_uuid_id` char(32) NOT NULL,
-  `author` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `draft_id_id` (`draft_id_id`),
-  KEY `drafts_draftreview_origin_file_uuid_id_113d5031_fk_tags_file` (`origin_file_uuid_id`),
-  KEY `drafts_draftreview_created_at_1e4356bb` (`created_at`),
-  KEY `drafts_draftreview_updated_at_ad2a1471` (`updated_at`),
-  KEY `drafts_draftreview_creator_ecbc7e5e` (`creator`),
-  KEY `drafts_draftreview_author_2ed48342` (`author`),
-  CONSTRAINT `drafts_draftreview_draft_id_id_9e6babe7_fk_drafts_draft_id` FOREIGN KEY (`draft_id_id`) REFERENCES `drafts_draft` (`id`),
-  CONSTRAINT `drafts_draftreview_origin_file_uuid_id_113d5031_fk_tags_file` FOREIGN KEY (`origin_file_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `drafts_draftreview` DISABLE KEYS */;
-/*!40000 ALTER TABLE `drafts_draftreview` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drafts_reviewcomment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `author` varchar(255) NOT NULL,
-  `resolved` tinyint(1) NOT NULL,
-  `comment` longtext NOT NULL,
-  `detail` longtext NOT NULL,
-  `review_id_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `drafts_reviewcomment_review_id_id_1645670c_fk_drafts_dr` (`review_id_id`),
-  KEY `drafts_reviewcomment_created_at_370dbc87` (`created_at`),
-  KEY `drafts_reviewcomment_updated_at_46073bd4` (`updated_at`),
-  KEY `drafts_reviewcomment_author_5498ceea` (`author`),
-  KEY `drafts_reviewcomment_resolved_94bcb8e6` (`resolved`),
-  CONSTRAINT `drafts_reviewcomment_review_id_id_1645670c_fk_drafts_dr` FOREIGN KEY (`review_id_id`) REFERENCES `drafts_draftreview` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `drafts_reviewcomment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `drafts_reviewcomment` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drafts_reviewreviewer` (
+CREATE TABLE `drafts_draftreviewer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reviewer` varchar(255) NOT NULL,
-  `review_id_id` int(11) NOT NULL,
+  `draft_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `drafts_reviewreviewe_review_id_id_fc6bd0fd_fk_drafts_dr` (`review_id_id`),
-  KEY `drafts_reviewreviewer_reviewer_65880f6e` (`reviewer`),
-  CONSTRAINT `drafts_reviewreviewe_review_id_id_fc6bd0fd_fk_drafts_dr` FOREIGN KEY (`review_id_id`) REFERENCES `drafts_draftreview` (`id`)
+  KEY `drafts_draftreviewer_reviewer_e4c777ac` (`reviewer`),
+  KEY `drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id` (`draft_id`),
+  CONSTRAINT `drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id` FOREIGN KEY (`draft_id`) REFERENCES `drafts_draft` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE `drafts_reviewreviewer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `drafts_reviewreviewer` ENABLE KEYS */;
+/*!40000 ALTER TABLE `drafts_draftreviewer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `drafts_draftreviewer` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_participants_fileparticipant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `uuid_id` char(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `file_participants_fileparticipant_uuid_id_username_c747dd36_uniq` (`uuid_id`,`username`),
+  CONSTRAINT `file_participants_fi_uuid_id_861b7339_fk_tags_file` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `file_participants_fileparticipant` DISABLE KEYS */;
+/*!40000 ALTER TABLE `file_participants_fileparticipant` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_tags_filetags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_uuid_id` char(32) NOT NULL,
-  `parent_folder_uuid_id` char(32) NOT NULL,
   `repo_tag_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `file_tags_filetags_file_uuid_id_e30f0ec8_fk_tags_file` (`file_uuid_id`),
-  KEY `file_tags_filetags_parent_folder_uuid_i_df56f09b_fk_tags_file` (`parent_folder_uuid_id`),
   KEY `file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id` (`repo_tag_id`),
-  CONSTRAINT `file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id` FOREIGN KEY (`repo_tag_id`) REFERENCES `repo_tags_repotags` (`id`),
   CONSTRAINT `file_tags_filetags_file_uuid_id_e30f0ec8_fk_tags_file` FOREIGN KEY (`file_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`),
-  CONSTRAINT `file_tags_filetags_parent_folder_uuid_i_df56f09b_fk_tags_file` FOREIGN KEY (`parent_folder_uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
+  CONSTRAINT `file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id` FOREIGN KEY (`repo_tag_id`) REFERENCES `repo_tags_repotags` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `file_tags_filetags` DISABLE KEYS */;
 /*!40000 ALTER TABLE `file_tags_filetags` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `group_groupmessage` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  `from_email` varchar(255) NOT NULL,
-  `message` longtext NOT NULL,
-  `timestamp` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_groupmessage_group_id_acc24329` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `group_groupmessage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_groupmessage` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `group_messageattachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(40) NOT NULL,
-  `attach_type` varchar(5) NOT NULL,
-  `path` longtext NOT NULL,
-  `src` varchar(20) NOT NULL,
-  `group_message_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_messageattachm_group_message_id_6edb6096_fk_group_gro` (`group_message_id`),
-  CONSTRAINT `group_messageattachm_group_message_id_6edb6096_fk_group_gro` FOREIGN KEY (`group_message_id`) REFERENCES `group_groupmessage` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `group_messageattachment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_messageattachment` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `group_messagereply` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `from_email` varchar(255) NOT NULL,
-  `message` longtext NOT NULL,
-  `timestamp` datetime NOT NULL,
-  `reply_to_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_messagereply_reply_to_id_6562f0ac_fk_group_groupmessage_id` (`reply_to_id`),
-  CONSTRAINT `group_messagereply_reply_to_id_6562f0ac_fk_group_groupmessage_id` FOREIGN KEY (`reply_to_id`) REFERENCES `group_groupmessage` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `group_messagereply` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_messagereply` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `group_publicgroup` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_publicgroup_group_id_c91e54ce` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `group_publicgroup` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_publicgroup` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `institutions_institution` (
@@ -725,7 +574,8 @@ CREATE TABLE `notifications_usernotification` (
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `notifications_usernotification_to_user_6cadafa1` (`to_user`),
-  KEY `notifications_usernotification_msg_type_985afd02` (`msg_type`)
+  KEY `notifications_usernotification_msg_type_985afd02` (`msg_type`),
+  KEY `notifications_usernotification_timestamp_125067e8` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -779,6 +629,7 @@ CREATE TABLE `post_office_attachment` (
   `file` varchar(100) NOT NULL,
   `name` varchar(255) NOT NULL,
   `mimetype` varchar(255) NOT NULL,
+  `headers` longtext DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -937,6 +788,43 @@ CREATE TABLE `related_files_relatedfiles` (
 
 /*!40000 ALTER TABLE `related_files_relatedfiles` DISABLE KEYS */;
 /*!40000 ALTER TABLE `related_files_relatedfiles` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `repo_api_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `app_name` varchar(255) NOT NULL,
+  `token` varchar(40) NOT NULL,
+  `generated_at` datetime NOT NULL,
+  `generated_by` varchar(255) NOT NULL,
+  `last_access` datetime NOT NULL,
+  `permission` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`),
+  KEY `repo_api_tokens_repo_id_47a50fef` (`repo_id`),
+  KEY `repo_api_tokens_app_name_7c395c31` (`app_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `repo_api_tokens` DISABLE KEYS */;
+/*!40000 ALTER TABLE `repo_api_tokens` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `repo_share_invitation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `path` longtext NOT NULL,
+  `permission` varchar(50) NOT NULL,
+  `invitation_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `repo_share_invitatio_invitation_id_b71effd2_fk_invitatio` (`invitation_id`),
+  KEY `repo_share_invitation_repo_id_7bcf84fa` (`repo_id`),
+  CONSTRAINT `repo_share_invitatio_invitation_id_b71effd2_fk_invitatio` FOREIGN KEY (`invitation_id`) REFERENCES `invitations_invitation` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `repo_share_invitation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `repo_share_invitation` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `repo_tags_repotags` (
@@ -1127,6 +1015,22 @@ CREATE TABLE `share_uploadlinkshare` (
 /*!40000 ALTER TABLE `share_uploadlinkshare` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_auth_usersocialauth` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `provider` varchar(32) NOT NULL,
+  `uid` varchar(255) NOT NULL,
+  `extra_data` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `social_auth_usersocialauth_provider_uid_e6b5e668_uniq` (`provider`,`uid`),
+  KEY `social_auth_usersocialauth_username_3f06b5cf` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `social_auth_usersocialauth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `social_auth_usersocialauth` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sysadmin_extra_userloginlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
@@ -1301,32 +1205,6 @@ CREATE TABLE `two_factor_totpdevice` (
 
 /*!40000 ALTER TABLE `two_factor_totpdevice` DISABLE KEYS */;
 /*!40000 ALTER TABLE `two_factor_totpdevice` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `wiki_groupwiki` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `group_id` int(11) NOT NULL,
-  `repo_id` varchar(36) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `wiki_groupwiki` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wiki_groupwiki` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `wiki_personalwiki` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `repo_id` varchar(36) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `wiki_personalwiki` DISABLE KEYS */;
-/*!40000 ALTER TABLE `wiki_personalwiki` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_wiki` (

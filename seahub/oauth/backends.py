@@ -2,9 +2,11 @@ from django.conf import settings
 
 from seahub.auth.backends import RemoteUserBackend
 from seahub.base.accounts import User
-from registration.models import (
-    notify_admins_on_activate_request, notify_admins_on_register_complete)
-
+from registration.models import (notify_admins_on_activate_request,
+                                 notify_admins_on_register_complete)
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 class OauthRemoteUserBackend(RemoteUserBackend):
     """
@@ -22,6 +24,22 @@ class OauthRemoteUserBackend(RemoteUserBackend):
     create_unknown_user = getattr(settings, 'OAUTH_CREATE_UNKNOWN_USER', True)
     # Create active user by default.
     activate_after_creation = getattr(settings, 'OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
+
+    if ENABLE_WORK_WEIXIN:
+        create_unknown_user = getattr(settings, 'WORK_WEIXIN_OAUTH_CREATE_UNKNOWN_USER', True)
+        activate_after_creation = getattr(settings, 'WORK_WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION', True)
+
+    if ENABLE_WEIXIN:
+        from seahub.weixin.settings import WEIXIN_OAUTH_CREATE_UNKNOWN_USER, \
+                WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION
+        create_unknown_user = WEIXIN_OAUTH_CREATE_UNKNOWN_USER
+        activate_after_creation = WEIXIN_OAUTH_ACTIVATE_USER_AFTER_CREATION
+
+    if ENABLE_DINGTALK:
+        from seahub.dingtalk.settings import DINGTALK_QR_CONNECT_CREATE_UNKNOWN_USER, \
+                DINGTALK_QR_CONNECT_ACTIVATE_USER_AFTER_CREATION
+        create_unknown_user = DINGTALK_QR_CONNECT_CREATE_UNKNOWN_USER
+        activate_after_creation = DINGTALK_QR_CONNECT_ACTIVATE_USER_AFTER_CREATION
 
     def get_user(self, username):
         try:
@@ -49,10 +67,10 @@ class OauthRemoteUserBackend(RemoteUserBackend):
             if self.create_unknown_user:
                 user = User.objects.create_user(
                     email=username, is_active=self.activate_after_creation)
-                if user and self.activate_after_creation is False:
-                    notify_admins_on_activate_request(user.email)
-                if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
-                    notify_admins_on_register_complete(user.email)
+                if not self.activate_after_creation:
+                    notify_admins_on_activate_request(username)
+                elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
+                    notify_admins_on_register_complete(username)
             else:
                 user = None
 

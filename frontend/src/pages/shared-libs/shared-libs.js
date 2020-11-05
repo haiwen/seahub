@@ -1,14 +1,20 @@
 import React, { Component, Fragment } from 'react';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import cookie from 'react-cookies';
 import { Link } from '@reach/router';
+import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 import Repo from '../../models/repo';
-import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
+import LibsMobileThead from '../../components/libs-mobile-thead';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 class Content extends Component {
 
@@ -26,14 +32,21 @@ class Content extends Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
-    
+
     const emptyTip = (
-      <div className="empty-tip">
-        <h2>{gettext('No libraries have been shared with you')}</h2>
-        <p>{gettext('No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".')}</p>
-      </div>
+      <EmptyTip>
+        <h2>{gettext('No shared libraries')}</h2>
+        <p>{gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.')}</p>
+      </EmptyTip>
     );
 
     if (loading) {
@@ -44,43 +57,36 @@ class Content extends Component {
       // sort
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
+      const sortBySize = sortBy == 'size';
       const sortIcon = sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>;
 
       const desktopThead = (
         <thead>
           <tr>
+            <th width="4%"></th>
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="38%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="34%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width="14%">{gettext('Size')}</th>
+            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
             <th width="18%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext('Owner')}</th>
           </tr>
         </thead>
       );
 
-      const mobileThead = (
-        <thead>
-          <tr>
-            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="76%">
-              {gettext('Sort:')}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
-            </th>
-            <th width="6%"><span className="sr-only">{gettext('Actions')}</span></th>
-          </tr>
-        </thead>
-      );
-
+      const isDesktop = Utils.isDesktop();
       const table = (
-        <table>
-          {window.innerWidth >= 768 ? desktopThead : mobileThead}
-          <TableBody items={items} />
+        <table className={isDesktop ? '' : 'table-thead-hidden'}>
+          {isDesktop ? desktopThead : <LibsMobileThead />}
+          <tbody>
+            {items.map((item, index) => {
+              return <Item key={index} data={item} isDesktop={isDesktop} />;
+            })}
+          </tbody>
         </table>
       );
 
-      return items.length ? table : emptyTip; 
+      return items.length ? table : emptyTip;
     }
   }
 }
@@ -94,24 +100,6 @@ Content.propTypes = {
   sortItems: PropTypes.func.isRequired
 };
 
-class TableBody extends Component {
-
-  render() {
-
-    let listItems = this.props.items.map(function(item, index) {
-      return <Item key={index} data={item} />;
-    }, this);
-
-    return (
-      <tbody>{listItems}</tbody>
-    );
-  }
-}
-
-TableBody.propTypes = {
-  items: PropTypes.array.isRequired
-};
-
 class Item extends Component {
 
   constructor(props) {
@@ -120,33 +108,35 @@ class Item extends Component {
       showOpIcon: false,
       unshared: false,
       isShowSharedDialog: false,
+      isStarred: this.props.data.starred,
+      isOpMenuOpen: false // for mobile
     };
-
-    this.handleMouseOver = this.handleMouseOver.bind(this);
-    this.handleMouseOut = this.handleMouseOut.bind(this);
-
-    this.share = this.share.bind(this);
-    this.leaveShare = this.leaveShare.bind(this);
   }
 
-  handleMouseOver() {
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  }
+
+  handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
   }
 
-  handleMouseOut() {
+  handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
   }
 
-  share(e) {
+  share = (e) => {
     e.preventDefault();
     this.setState({isShowSharedDialog: true});
   }
 
-  leaveShare(e) {
+  leaveShare = (e) => {
     e.preventDefault();
 
     const data = this.props.data;
@@ -163,17 +153,45 @@ class Item extends Component {
     }
 
     request.then((res) => {
-      this.setState({
-        unshared: true
-      });
-      // TODO: show feedback msg
-    }).catch((error) => {
-        // TODO: show feedback msg
+      this.setState({unshared: true});
+      let message = gettext('Successfully unshared {name}').replace('{name}', data.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to unshare {name}').replace('{name}', data.repo_name);
+      }
+      toaster(errMessage);
     });
   }
 
   toggleShareDialog = () => {
     this.setState({isShowSharedDialog: false});
+  }
+
+  onStarRepo = () => {
+    const repoName = this.props.data.repo_name;
+    if (this.state.isStarred) {
+      seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(this.props.data.repo_id, '/').then(() => {
+        this.setState({isStarred: !this.state.isStarred});
+        const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
   }
 
   render() {
@@ -183,19 +201,23 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    data.icon_url = Utils.getLibIconUrl(data); 
+    data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
     data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility; 
+    let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
-
+    let shareRepoUrl =`${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
     const desktopItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+          <td className="text-center">
+            {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
+            {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          </td>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
+          <td><Link to={shareRepoUrl}>{data.repo_name}</Link></td>
           <td>
             {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
@@ -208,7 +230,7 @@ class Item extends Component {
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'library'}
               itemName={data.repo_name}
               itemPath={'/'}
@@ -229,21 +251,36 @@ class Item extends Component {
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td>
-            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
+            <Link to={shareRepoUrl}>{data.repo_name}</Link><br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
           </td>
           <td>
-            {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
-            }
-            <a href="#" className={leaveShareIconClassName} title={gettext("Leave Share")} onClick={this.leaveShare}></a>
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                className="sf-dropdown-toggle fa fa-ellipsis-v ml-0"
+                title={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />
+              <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
+                <div className="mobile-operation-menu-bg-layer"></div>
+                <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" onClick={this.onStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
+                  {(isPro && data.is_admin) &&
+                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
+                  }
+                  <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+                </div>
+              </div>
+            </Dropdown>
           </td>
         </tr>
         {this.state.isShowSharedDialog && (
           <ModalPotal>
-            <ShareDialog 
+            <ShareDialog
               itemType={'library'}
               itemName={data.repo_name}
               itemPath={'/'}
@@ -259,11 +296,12 @@ class Item extends Component {
       </Fragment>
     );
 
-    return window.innerWidth >= 768 ? desktopItem : mobileItem;
+    return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
 
 Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired
 };
 
@@ -274,14 +312,14 @@ class SharedLibraries extends Component {
       loading: true,
       errorMsg: '',
       items: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc' // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos({type:'shared'}).then((res) => {
-      // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let repoList = res.data.repos.map((item) => {
         return new Repo(item);
       });
@@ -290,30 +328,16 @@ class SharedLibraries extends Component {
         items: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
   sortItems = (sortBy, sortOrder) => {
+    cookie.save('seafile-repo-dir-sort-by', sortBy);
+    cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -321,25 +345,42 @@ class SharedLibraries extends Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('Shared with me')}</h3>
-          </div>
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={this.state.items}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortItems}
-            />
+      <Fragment>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading m-0">{gettext('Shared with me')}</h3>
+              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+            </div>
+            <div className="cur-view-content">
+              <Content
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortItems={this.sortItems}
+        />
+        }
+      </Fragment>
     );
   }
 }

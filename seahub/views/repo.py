@@ -4,7 +4,7 @@ import os
 import posixpath
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -25,14 +25,18 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import  gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext, get_service_url
+from seahub.utils.repo import is_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER
+    SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER, \
+    ENABLE_SHARE_LINK_REPORT_ABUSE
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.constants import HASH_URLS
+from seahub.group.utils import is_group_admin
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -108,7 +112,7 @@ def repo_history_view(request, repo_id):
     path = get_path_from_request(request)
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -154,6 +158,55 @@ def repo_history_view(request, repo_id):
             })
 
 @login_required
+def repo_snapshot(request, repo_id):
+    """View repo in history.
+    """
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    username = request.user.username
+    user_perm = check_folder_permission(request, repo.id, '/')
+    if user_perm is None:
+        return render_error(request, _('Permission denied'))
+
+    try:
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False
+
+    reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
+    if repo.encrypted and \
+        (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
+        and not is_password_set(repo.id, username):
+        return render(request, 'decrypt_repo_form.html', {
+                'repo': repo,
+                'next': get_next_url_from_request(request) or reverse_url,
+                })
+
+    commit_id = request.GET.get('commit_id', None)
+    if commit_id is None:
+        return HttpResponseRedirect(reverse_url)
+    current_commit = get_commit(repo.id, repo.version, commit_id)
+    if not current_commit:
+        current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
+
+    has_perm = is_repo_owner(request, repo.id, username)
+    # department admin
+    if not has_perm:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            has_perm = is_group_admin(group_id, username)
+
+    return render(request, 'repo_snapshot_react.html', {
+            'repo': repo,
+            "can_restore_repo": has_perm,
+            'current_commit': current_commit,
+            })
+
+@login_required
 def view_lib_as_wiki(request, repo_id, path):
 
     if not path.startswith('/'):
@@ -172,7 +225,7 @@ def view_lib_as_wiki(request, repo_id, path):
 
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     if user_perm == 'rw':
         user_can_write = True
@@ -225,7 +278,7 @@ def view_shared_dir(request, fileshare):
 
     if repo.encrypted or not \
             seafile_api.check_permission_by_path(repo_id, '/', username):
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     # Check path still exist, otherwise show error
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
@@ -276,7 +329,16 @@ def view_shared_dir(request, fileshare):
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
 
-    return render(request, 'view_shared_dir.html', {
+    # for 'upload file'
+    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
+
+    #template = 'view_shared_dir.html'
+    template = 'view_shared_dir_react.html'
+
+    dir_share_link = request.path
+    desc_for_ogp = _('Share link for %s.') % dir_name
+
+    return render(request, template, {
             'repo': repo,
             'token': token,
             'path': req_path,
@@ -286,10 +348,14 @@ def view_shared_dir(request, fileshare):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
+            'no_quota': no_quota,
             'permissions': permissions,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,
+            'dir_share_link': dir_share_link,
+            'desc_for_ogp': desc_for_ogp,
+            'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
 
 @share_link_audit
@@ -322,14 +388,15 @@ def view_shared_upload_link(request, uploadlink):
 
     if repo.encrypted or \
             seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
-        return render_error(request, _(u'Permission denied'))
+        return render_error(request, _('Permission denied'))
 
     uploadlink.view_cnt = F('view_cnt') + 1
     uploadlink.save()
 
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
-    return render(request, 'view_shared_upload_link.html', {
+    return render(request, 'view_shared_upload_link_react.html', {
+    #return render(request, 'view_shared_upload_link.html', {
             'repo': repo,
             'path': path,
             'username': username,

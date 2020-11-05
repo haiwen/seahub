@@ -16,6 +16,7 @@ from seahub.base.accounts import User
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation
 from seahub.invitations.utils import block_accepter
+from seahub.constants import GUEST_USER
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -38,7 +39,7 @@ class InvitationsView(APIView):
     def post(self, request, format=None):
         # Send invitation.
         itype = request.data.get('type', '').lower()
-        if not itype or itype != 'guest':
+        if not itype or itype != GUEST_USER:
             return api_error(status.HTTP_400_BAD_REQUEST, 'type invalid.')
 
         accepter = request.data.get('accepter', '').lower()
@@ -59,14 +60,13 @@ class InvitationsView(APIView):
                              _('%s is already invited.') % accepter)
 
         try:
-            User.objects.get(accepter)
-            user_exists = True
+            user = User.objects.get(accepter)
+            # user is active return exist
+            if user.is_active is True:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 _('User %s already exists.') % accepter)
         except User.DoesNotExist:
-            user_exists = False
-
-        if user_exists:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             _('User %s already exists.') % accepter)
+            pass
 
         i = Invitation.objects.add(inviter=request.user.username,
                                    accepter=accepter)
@@ -127,22 +127,26 @@ class InvitationsBatchView(APIView):
                 continue
 
             try:
-                User.objects.get(accepter)
-                result['failed'].append({
-                    'email': accepter,
-                    'error_msg': _('User %s already exists.') % accepter
-                    })
-                continue
-            except User.DoesNotExist:
-                i = Invitation.objects.add(inviter=request.user.username,
-                        accepter=accepter)
-                m = i.send_to(email=accepter)
-                if m.status == STATUS.sent:
-                    result['success'].append(i.to_dict())
-                else:
+                user = User.objects.get(accepter)
+                # user is active return exist
+                if user.is_active is True:
                     result['failed'].append({
                         'email': accepter,
-                        'error_msg': _('Internal Server Error'),
-                    })
+                        'error_msg': _('User %s already exists.') % accepter
+                        })
+                    continue
+            except User.DoesNotExist:
+                pass
+
+            i = Invitation.objects.add(inviter=request.user.username,
+                    accepter=accepter)
+            result['success'].append(i.to_dict())
+
+            m = i.send_to(email=accepter)
+            if m.status != STATUS.sent:
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),
+                })
 
         return Response(result)

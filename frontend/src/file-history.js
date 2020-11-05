@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import editUtilties from './utils/editor-utilties';
-import { siteRoot, filePath, fileName } from './utils/constants';
+import { fileName, historyRepoID } from './utils/constants';
 import { Utils } from './utils/utils';
-import URLDecorator from './utils/url-decorator';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
+import { seafileAPI } from './utils/seafile-api';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -28,16 +27,8 @@ class FileHistory extends React.Component {
     };
   }
 
-  onSearchedClick = (selectedItem) => {
-    if (selectedItem.is_dir === true) {
-      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    } else {
-      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    }
+  onSearchedClick = (searchedItem) => {
+    Utils.handleSearchedItemClick(searchedItem);
   }
 
   setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
@@ -52,24 +43,25 @@ class FileHistory extends React.Component {
   onHistoryItemClick = (item, preItem)=> {
     this.setState({renderingContent: true});
     if (preItem) {
-      let currID = item.rev_file_id;
-      let preID = preItem.rev_file_id;
-      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: currID});
-      let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: preID});
       axios.all([
-        editUtilties.getFileContent(downLoadURL),
-        editUtilties.getFileContent(downLoadURL1)
-      ]).then(axios.spread((res1, res2) => {
-        this.setDiffContent(res1.data, res2.data);
+        seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path),
+        seafileAPI.getFileRevision(historyRepoID, preItem.commit_id, preItem.path)
+      ]).then(axios.spread((res, res1) => {
+        axios.all([
+          seafileAPI.getFileContent(res.data),
+          seafileAPI.getFileContent(res1.data)
+        ]).then(axios.spread((content1, content2) => {
+          this.setDiffContent(content1.data, content2.data);
+        }));
       }));
     } else {
-      let currID = item.rev_file_id;
-      let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: currID});
-      axios.all([
-        editUtilties.getFileContent(downLoadURL),
-      ]).then(axios.spread((res1) => {
-        this.setDiffContent(res1.data, '');
-      }));
+      seafileAPI.getFileRevision(historyRepoID, item.commit_id, item.path).then((res) => {
+        axios.all([
+          seafileAPI.getFileContent(res.data),
+        ]).then(axios.spread((content1) => {
+          this.setDiffContent(content1.data, '');
+        }));
+      });
     }
   }
 
@@ -88,7 +80,7 @@ class FileHistory extends React.Component {
           </div>
         </div>
         <div id="main" className="history-content">
-          <MainPanel 
+          <MainPanel
             newMarkdownContent={this.state.newMarkdownContent}
             oldMarkdownContent={this.state.oldMarkdownContent}
             renderingContent={this.state.renderingContent}

@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
-import editorUtilities from '../../utils/editor-utilties';
-import { siteRoot, gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
+import toaster from '../toast';
+
+const propTypes = {
+  isAdminPanel: PropTypes.bool,
+};
 
 class Account extends Component {
   constructor(props) {
@@ -16,12 +22,8 @@ class Account extends Component {
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
-      avatarURL: '',
     };
-  }
-
-  componentDidMount(){
-    this.getAccountInfo();
+    this.isFirstMounted = true;
   }
 
   componentDidUpdate(prevProps) {
@@ -66,55 +68,82 @@ class Account extends Component {
   }
 
   onClickAccount = () => {
-    this.setState({
-      showInfo: !this.state.showInfo,
-    });
-  }
-
-  getAccountInfo = () => {
-    editorUtilities.getAccountInfo().then(resp => {
-      this.setState({
-        userName: resp.data.name,
-        contactEmail: resp.data.email,
-        usageRate: resp.data.space_usage,
-        quotaUsage: Utils.bytesToSize(resp.data.usage),
-        quotaTotal: Utils.bytesToSize(resp.data.total),
-        isStaff: resp.data.is_staff,
-        isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
-        avatarURL: resp.data.avatar_url
+    if (this.isFirstMounted) {
+      seafileAPI.getAccountInfo().then(resp => {
+        this.setState({
+          userName: resp.data.name,
+          contactEmail: resp.data.email,
+          usageRate: resp.data.space_usage,
+          quotaUsage: Utils.bytesToSize(resp.data.usage),
+          quotaTotal: Utils.bytesToSize(resp.data.total),
+          isStaff: resp.data.is_staff,
+          isInstAdmin: resp.data.is_inst_admin,
+          isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
+          showInfo: !this.state.showInfo,
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
-    });
+      this.isFirstMounted = false;
+    } else {
+      this.setState({showInfo: !this.state.showInfo});
+    }
   }
 
   renderMenu = () => {
-    if(this.state.isStaff){
-      return (
-        <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
-      );
+    let data;
+    const { isStaff, isOrgStaff, isInstAdmin } = this.state;
+
+    if (this.props.isAdminPanel) {
+      if (isStaff) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit System Admin')
+        };
+      } else if (isOrgStaff) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit Organization Admin')
+        };
+      } else if (isInstAdmin) {
+        data = {
+          url: siteRoot,
+          text: gettext('Exit Institution Admin')
+        };
+      }
+
+    } else {
+      if (isStaff) {
+        data = {
+          url: `${siteRoot}sys/info/`,
+          text: gettext('System Admin')
+        };
+      } else if (isOrgStaff) {
+        data = {
+          url: `${siteRoot}org/useradmin/`,
+          text: gettext('Organization Admin')
+        };
+      } else if (isInstAdmin) {
+        data = {
+          url: `${siteRoot}inst/useradmin/`,
+          text: gettext('Institution Admin')
+        };
+      }
     }
-    if (this.state.isOrgStaff) {
-      return (
-        <a href={siteRoot + 'org/useradmin/'} title={gettext('Organization Admin')} className="item">{gettext('Organization Admin')}</a>
-      );
-    }
+
+    return data && <a href={data.url} title={data.text} className="item">{data.text}</a>;
   }
 
   renderAvatar = () => {
-    if (this.state.avatarURL) {
-      return (
-        <img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />
-      );
-    }
-    return (
-      <img src="" width="36" height="36" className="avatar" alt={gettext('Avatar')} />
-    );
+    return (<img src={appAvatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />);
   }
 
   render() {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-          <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} /></span>
+          <span>{this.renderAvatar()}</span>
           <span className="fas fa-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
@@ -142,5 +171,11 @@ class Account extends Component {
     );
   }
 }
+
+Account.defaultProps = {
+  isAdminPanel: false
+};
+
+Account.propTypes = propTypes;
 
 export default Account;

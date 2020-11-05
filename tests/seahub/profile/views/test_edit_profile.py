@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile
@@ -17,11 +17,6 @@ class EditProfileTest(BaseTestCase):
     def tearDown(self):
         self.remove_user(self.tmp_user.username)
 
-    def test_can_render_edit_page(self):
-        resp = self.client.get(self.url)
-        self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'profile/set_profile.html')
-
     def test_can_edit(self):
         assert email2nickname(self.tmp_user.username) == self.tmp_user.username.split('@')[0]
 
@@ -29,5 +24,5 @@ class EditProfileTest(BaseTestCase):
             'nickname': 'new nickname'
         })
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], r'/profile/')
+        self.assertRegex(resp['Location'], r'/profile/')
         assert email2nickname(self.tmp_user.username) == 'new nickname'

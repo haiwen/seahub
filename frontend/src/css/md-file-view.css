@@ -1,0 +1,9 @@
+.md-content {
+    box-shadow: 0 0 6px #ccc;
+    border: 1px solid #ccc;
+    padding: 70px 75px;
+    width: calc(100% - 40px);
+    max-width: 950px;
+    background: #fff;
+    margin: 0 auto;
+}

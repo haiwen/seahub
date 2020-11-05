@@ -1,11 +1,15 @@
+.group-member-list-header {
+  border-bottom: 1px solid #e3e3e5;
+  padding-bottom: 10px;
+  margin-bottom: 0px;
+}
 .group-member-list {
-  box-sizing: border-box;
   max-height: 400px;
-  overflow-y: auto;
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
 }
 .group-member-list .user-item {
-  margin: 0px -10px;
-  padding: 5px 10px;
   line-height: 2rem;
 }
 .group-member-list .user-item:hover {
@@ -13,6 +17,7 @@
 }
 .group-member-list .user-item .group-member-name {
   margin: 0 5px;
+  max-width: 70%;
 }
 .group-member-list .user-item .group-member-admin {
   color: #888;

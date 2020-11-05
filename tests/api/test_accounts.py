@@ -16,7 +16,7 @@ class AccountsApiTest(ApiTestBase):
         # Normal user can not list accounts
         self.get(ACCOUNTS_URL, expected=403)
         accounts = self.admin_get(ACCOUNTS_URL).json()
-        self.assertGreaterEqual(accounts, 2)
+        self.assertGreaterEqual(len(accounts), 2)
         # TODO: check returned json, test start/limit param
 
     def test_create_delete_account(self):
@@ -106,11 +106,11 @@ class AccountsApiTest(ApiTestBase):
 
     def test_auth_ping(self):
         res = self.get(AUTH_PING_URL)
-        self.assertRegexpMatches(res.text, u'"pong"')
+        self.assertRegex(res.text, '"pong"')
         res = requests.get(AUTH_PING_URL)
         self.assertEqual(res.status_code, 403)
 
     def test_ping(self):
         res = requests.get(PING_URL)
-        self.assertRegexpMatches(res.text, u'"pong"')
+        self.assertRegex(res.text, '"pong"')
         self.assertEqual(res.status_code, 200)

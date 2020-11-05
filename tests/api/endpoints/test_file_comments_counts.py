@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.models import FileComment
 from seahub.test_utils import BaseTestCase
@@ -39,10 +39,10 @@ class FileCommentsCountsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 2
         for d in json_resp:
-            if d.keys()[0] == 'test.txt':
+            if list(d.keys())[0] == 'test.txt':
                 assert d['test.txt'] == 2
 
-            if d.keys()[0] == 'test2.txt':
+            if list(d.keys())[0] == 'test2.txt':
                 assert d['test2.txt'] == 1
 
     # def test_can_get_file(self):

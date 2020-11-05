@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from registration import forms
@@ -46,7 +46,7 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
                                 'registration/registration_form.html')
-        self.failUnless(isinstance(response.context['form'],
+        self.assertTrue(isinstance(response.context['form'],
                                    forms.RegistrationForm))
 
     def test_registration_view_success(self):
@@ -77,9 +77,9 @@ class RegistrationViewTests(TestCase):
                                           'password1': 'foo',
                                           'password2': 'bar'})
         self.assertEqual(response.status_code, 200)
-        self.failIf(response.context['form'].is_valid())
+        self.assertFalse(response.context['form'].is_valid())
         self.assertFormError(response, 'form', field=None,
-                             errors=u"The two password fields didn't match.")
+                             errors="The two password fields didn't match.")
         self.assertEqual(len(mail.outbox), 0)
 
     def test_registration_view_closed(self):
@@ -177,7 +177,7 @@ class RegistrationViewTests(TestCase):
         response = self.client.get(reverse('registration_activate',
                                            kwargs={'activation_key': profile.activation_key}))
         self.assertRedirects(response, success_redirect)
-        self.failUnless(User.objects.get(username='alice').is_active)
+        self.assertTrue(User.objects.get(username='alice').is_active)
 
     def test_invalid_activation(self):
         """
@@ -203,7 +203,7 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['activation_key'],
                          expired_profile.activation_key)
-        self.failIf(User.objects.get(username='bob').is_active)
+        self.assertFalse(User.objects.get(username='bob').is_active)
 
     def test_activation_success_url(self):
         """

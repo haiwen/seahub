@@ -1,11 +1,13 @@
 from collections import OrderedDict
 from fnmatch import fnmatch
 import logging
+import os
+import sys
 
 from django.conf import settings
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from seaserv import seafile_api, ccnet_api
 
@@ -16,10 +18,20 @@ from seahub.base.accounts import User
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
-from seahub.utils.user_permissions import get_user_role
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+try:
+    conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    sys.path.append(conf_dir)
+    try:
+        from seahub_custom_functions import custom_shibboleth_get_user_role
+        CUSTOM_SHIBBOLETH_GET_USER_ROLE = True
+    except ImportError:
+        CUSTOM_SHIBBOLETH_GET_USER_ROLE = False
+except KeyError:
+    CUSTOM_SHIBBOLETH_GET_USER_ROLE = False
 
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
@@ -39,19 +51,19 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             raise ImproperlyConfigured(
                 "The Django remote user auth middleware requires the"
                 " authentication middleware to be installed.  Edit your"
-                " MIDDLEWARE_CLASSES setting to insert"
+                " MIDDLEWARE setting to insert"
                 " 'django.contrib.auth.middleware.AuthenticationMiddleware'"
                 " before the RemoteUserMiddleware class.")
 
-        #To support logout.  If this variable is True, do not
-        #authenticate user and return now.
+        # To support logout.  If this variable is True, do not
+        # authenticate user and return now.
         if request.session.get(LOGOUT_SESSION_KEY) is True:
             return
         else:
-            #Delete the shib reauth session key if present.
+            # Delete the shib reauth session key if present.
             request.session.pop(LOGOUT_SESSION_KEY, None)
 
-        #Locate the remote user header.
+        # Locate the remote user header.
         # import pprint; pprint.pprint(request.META)
         try:
             username = request.META[SHIB_USER_HEADER]
@@ -97,16 +109,26 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             user.save()
             # call make profile.
             self.make_profile(user, shib_meta)
-            user_role = self.update_user_role(user, shib_meta)
+
+            if CUSTOM_SHIBBOLETH_GET_USER_ROLE:
+                user_role = custom_shibboleth_get_user_role(shib_meta)
+                if user_role:
+                    ccnet_api.update_role_emailuser(user.email, user_role)
+                else:
+                    user_role = self.update_user_role(user, shib_meta)
+            else:
+                user_role = self.update_user_role(user, shib_meta)
+
             if user_role:
                 self.update_user_quota(user, user_role)
-            #setup session.
+
+            # setup session.
             self.setup_session(request)
             request.shib_login = True
 
     def process_response(self, request, response):
         if getattr(request, 'shib_login', False):
-            print '%s: set shibboleth cookie!' % id(self)
+            print('%s: set shibboleth cookie!' % id(self))
             self._set_auth_cookie(request, response)
         return response
 
@@ -156,10 +178,11 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             p = Profile(user=user.username)
 
         if nickname.strip():  # set nickname when it's not empty
-            p.nickname = nickname
+            p.nickname = nickname.encode("iso-8859-1").decode('utf8')
 
         if institution:
             p.institution = institution
+
         if contact_email:
             p.contact_email = contact_email
 
@@ -224,7 +247,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         shib_attrs = {}
         error = False
         meta = request.META
-        for header, attr in SHIB_ATTRIBUTE_MAP.items():
+        for header, attr in list(SHIB_ATTRIBUTE_MAP.items()):
             required, name = attr
             value = meta.get(header, None)
             shib_attrs[name] = value
@@ -232,6 +255,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
                 if required:
                     error = True
         return shib_attrs, error
+
 
 class ShibbolethValidationError(Exception):
     pass

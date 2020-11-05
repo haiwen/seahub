@@ -14,7 +14,7 @@ class NormalizeDirPathTest(BaseTestCase):
         folder_2 = randstring(3)
 
         random_slash = ''
-        for i in range(1, randint(1,10)):
+        for i in range(1, randint(1, 10)):
             random_slash += slash
 
         posix_path = posixpath.join(folder_1, folder_2)

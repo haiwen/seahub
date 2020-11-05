@@ -1,0 +1,18 @@
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}{{ inviter }} revoked your access to {{ site_name }}.{% endblocktrans %}
+</p>
+
+
+{% endautoescape %}
+
+{% endblock %}

@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
-import { gettext, siteRoot, lang } from '../../utils/constants';
+import { gettext, siteRoot, lang, trashReposExpireDays } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 
 moment.locale(lang);
 
@@ -25,7 +27,10 @@ class MyLibsDeleted extends Component {
         deletedRepoList: res.data,
         isLoading: false,
       });
-    });  
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   refreshDeletedRepoList = (repoID) => {
@@ -45,7 +50,7 @@ class MyLibsDeleted extends Component {
           <div className="cur-view-container">
             <div className="cur-view-path">
               <div className="path-container">
-                <Link to={ siteRoot + 'my-libs/' }>{gettext("My Libraries")}</Link>
+                <Link to={ siteRoot + 'my-libs/' }>{gettext('My Libraries')}</Link>
                 <span className="path-split">/</span>
                 <span>{gettext('Deleted Libraries')}</span>
               </div>
@@ -53,14 +58,15 @@ class MyLibsDeleted extends Component {
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && this.state.deletedRepoList.length === 0) &&
-                <div className="message empty-tip">
-                  <h2>{gettext('No deleted libraries.')}</h2>
-                </div>
+              <EmptyTip>
+                <h2>{gettext('No deleted libraries')}</h2>
+                <p>{gettext('You have not deleted any libraries in the last {placeholder} days. A deleted library will be cleaned automatically after this period.').replace('{placeholder}', trashReposExpireDays)}</p>
+              </EmptyTip>
               }
-              {this.state.deletedRepoList.length !== 0 && 
+              {this.state.deletedRepoList.length !== 0 &&
                 <div>
-                  <p className="tip">{gettext('Tip: libraries deleted 30 days ago will be cleaned automatically.')}</p>
-                  <DeletedRepoTable 
+                  <p className="tip mt-2">{gettext('Tip: libraries deleted {placeholder} days ago will be cleaned automatically.').replace('{placeholder}', trashReposExpireDays)}</p>
+                  <DeletedRepoTable
                     deletedRepoList={this.state.deletedRepoList}
                     refreshDeletedRepoList={this.refreshDeletedRepoList}
                   />
@@ -129,7 +135,7 @@ class DeletedRepoItem extends Component {
         highlight: false,
       });
     }
-  } 
+  }
 
   restoreDeletedRepo = () => {
     let repoID = this.props.repo.repo_id;
@@ -138,25 +144,28 @@ class DeletedRepoItem extends Component {
       let message = gettext('Successfully restored the library.') + '  ' + repoName;
       toaster.success(message);
       this.props.refreshDeletedRepoList(repoID);
-    }).catch(res => {
-        let message = gettext('Failed. Please check the network.')
-        toaster.danger(message);
-    })
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed. Please check the network.');
+      }
+      toaster.danger(errMessage);
+    });
   }
 
   render() {
     let localTime = moment.utc(this.props.repo.del_time).toDate();
     localTime = moment(localTime).fromNow();
+    let iconUrl = Utils.getLibIconUrl(this.props.repo);
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='' /></td>
+        <td className="text-center"><img src={iconUrl} alt='' width="24" /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
         <td>
-          {this.state.highlight && (
-            <a href="#" onClick={this.restoreDeletedRepo} className="op-icon sf2-icon-reply repo-share-btn" title={gettext('Restore')} aria-label={gettext('Restore')}></a>
-          )}
+          <span onClick={this.restoreDeletedRepo} title={gettext('Restore')}
+            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}></span>
         </td>
       </tr>
     );

@@ -10,8 +10,8 @@ from django.db import connection, transaction
 
 import base64
 import hashlib
-import StringIO
-import urlparse
+import io
+import urllib.parse
 from datetime import datetime
 
 from seahub.utils.timeutils import value_to_db_datetime
@@ -137,7 +137,7 @@ class DatabaseStorage(Storage):
         """
         assert mode == 'rb', "DatabaseStorage open mode must be 'rb'."
 
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
 
         query = 'SELECT %(data_column)s FROM %(table)s ' + \
                 'WHERE %(name_md5_column)s = %%s'
@@ -148,7 +148,7 @@ class DatabaseStorage(Storage):
         if row is None:
             return None
 
-        inMemFile = StringIO.StringIO(base64.b64decode(row[0]))
+        inMemFile = io.BytesIO(base64.b64decode(row[0]))
         inMemFile.name = name
         inMemFile.mode = mode
 
@@ -160,7 +160,7 @@ class DatabaseStorage(Storage):
         in the name will be converted to forward '/'.
         """
         name = name.replace('\\', '/')
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         binary = content.read()
 
         size = len(binary)
@@ -185,7 +185,7 @@ class DatabaseStorage(Storage):
         return name
 
     def exists(self, name):
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT COUNT(*) FROM %(table)s WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__
         cursor = connection.cursor()
@@ -196,7 +196,7 @@ class DatabaseStorage(Storage):
     def delete(self, name):
         if self.exists(name):
             with transaction.atomic(using='default'):
-                name_md5 = hashlib.md5(name).hexdigest()
+                name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
                 query = 'DELETE FROM %(table)s WHERE %(name_md5_column)s = %%s'
                 query %= self.__dict__
                 connection.cursor().execute(query, [name_md5])
@@ -207,12 +207,12 @@ class DatabaseStorage(Storage):
     def url(self, name):
         if self.base_url is None:
             raise ValueError("This file is not accessible via a URL.")
-        result = urlparse.urljoin(self.base_url, name).replace('\\', '/')
+        result = urllib.parse.urljoin(self.base_url, name).replace('\\', '/')
         return result
 
     def size(self, name):
         "Get the size of the given filename or raise ObjectDoesNotExist."
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT %(size_column)s FROM %(table)s ' + \
                 'WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__
@@ -226,7 +226,7 @@ class DatabaseStorage(Storage):
 
     def modified_time(self, name):
         "Get the modified time of the given filename or raise ObjectDoesNotExist."
-        name_md5 = hashlib.md5(name).hexdigest()
+        name_md5 = hashlib.md5(name.encode('utf-8')).hexdigest()
         query = 'SELECT %(mtime_column)s FROM %(table)s ' + \
                 'WHERE %(name_md5_column)s = %%s'
         query %= self.__dict__

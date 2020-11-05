@@ -1,0 +1,56 @@
+language: python
+python:
+  - "2.7"
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
+
+env:
+  global:
+    - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
+
+# install & start seafile-server CE, install nginx
+before_install:
+  # npm token to fetch private repos
+  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > ~/.npmrc
+  # build/init/start ccnet-server/seafile-server
+  - git clone --depth=1 --branch=7.0 git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+  - cd /tmp/seafile-test-deploy && ./bootstrap.sh && cd -
+
+  # install nginx
+  - ./tests/install-deps.sh
+  - npm install -g requirejs
+
+# install seahub requirements
+install:
+  - pip install -r dev-requirements.txt
+  - pip install -r test-requirements.txt
+
+before_scipt: true
+
+# int & start seahub server, run seahub tests
+script:
+  - .travis/test_seahub_changes.sh; rc=$?; if [[ $rc == 0 ]]; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
+
+after_success:
+  # making dist assets if current branch(master/7.0) is updated
+  - travis_wait 30 test $TRAVIS_PULL_REQUEST = "false" && .travis/dist_and_push.sh
+
+after_failure: true
+
+after_script: true
+
+notifications:
+  email:
+    recipients:
+      - lian@seafile.com
+    on_success: never
+    on_failure: always
+
+branches:
+  only:
+    - master
+    - 7.0

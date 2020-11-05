@@ -1,0 +1,38 @@
+{% extends 'file_view_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+
+{% block extra_style %}
+{% if filetype == 'PDF' %}
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+{% endif %}
+{% render_bundle 'fileView' 'css' %}
+{% endblock %}
+
+{% block extra_data %}
+{% if filetype == 'Image' %}
+// img_prev && img_next can be path or None
+previousImage: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}false{% endif %},
+nextImage: {% if img_next %}'{{ img_next|escapejs }}'{% else %}false{% endif %},
+fileExt: '{{ fileext|escapejs }}',
+thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
+{% endif %}
+{% if filetype == 'XMind' %}
+xmindImageSrc: '{{ xmind_image_src|escapejs }}',
+{% endif %}
+rawPath: '{{ raw_path|escapejs }}'
+{% endblock %}
+
+{% block render_bundle %}
+{% render_bundle 'fileView' 'js' %}
+{% if filetype == 'PDF' %}
+<script type="text/javascript">
+  var sf_file_url = '{{ raw_path|escapejs }}';
+  var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
+  var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
+  var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
+{% endif %}
+{% endblock %}

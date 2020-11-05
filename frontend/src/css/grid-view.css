@@ -1,0 +1,86 @@
+.grid-view {
+  padding: 0.625rem 1rem 10rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.grid-item {
+  width: 134px;
+  padding: 10px 4px;
+  text-align: center;
+  position: relative;
+  line-height: 0;
+}
+
+.grid-item:hover .grid-file-img-link {
+  background: #f8f8f8;
+}
+
+.grid-item:hover a {
+  color: #eb8205;
+}
+
+.grid-file-img-link {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 6px;
+  position: relative;
+  border-radius: 3px;
+  font-size: 0;
+  text-align: center;
+  line-height: 0;
+}
+
+.grid-file-img-link .thumbnail {
+  max-width: 88px;
+  max-height: 88px;
+  padding: 1px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 1px;
+}
+
+.grid-file-img-link::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.grid-file-name {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 17px;
+  font-size: 14px;
+}
+
+.grid-file-name-link {
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.grid-file-locked-icon {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  width: 16px;
+}
+
+.grid-selected-active {
+  background-color: #f8f8f8;
+}
+
+.grid-link-selected-active {
+  color: #eb8205;
+}
+
+.grid-drop-show {
+  background: #f8f8f8;
+}

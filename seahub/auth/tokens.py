@@ -72,7 +72,7 @@ class PasswordResetTokenGenerator(object):
         return "%s-%s" % (ts_b36, hash)
 
     def _num_days(self, dt):
-        return (dt - date(2001,1,1)).days
+        return (dt - date(2001, 1, 1)).days
 
     def _today(self):
         # Used for mocking in tests

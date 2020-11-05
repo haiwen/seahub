@@ -1,0 +1,98 @@
+.old-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  background-color: #f4f4f7;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.old-history-main {
+  padding: 16px 10% 0;
+  display: inline !important;
+  overflow: auto;
+  position: relative;
+  min-height: 1px;
+}
+
+.old-history-main .go-back {
+  font-size: 25px;
+  color: #ccc;
+  float: left;
+  margin-left: -3rem;
+}
+
+.old-history-main .go-back:hover {
+  color:#ff9933;
+  text-decoration: none;
+}
+
+.old-history-main .get-more-btn {
+  width: 100%;
+  padding: .5em 0;
+  background: #efefef;
+  border: 0;
+  color: #777;
+  border-radius: 2px;
+}
+.old-history-main .get-more-btn:hover {
+  color: #444;
+}
+
+.old-history-main p {
+  color: #808080;
+  font-size: 12px;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.old-history-main h2 {
+  font-size: 1.5em;
+  color: #222;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.old-history-main .file-name {
+  color: #ee8204;
+  word-wrap: break-word;
+} 
+
+.old-history-main .commit-list {
+  width: 100%;
+  margin: 8px 0 40px;
+}
+
+.old-history-main .commit-list .avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
+.old-history-main .commit-list .username {
+  vertical-align: middle;
+  color: #eb8205;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.old-history-more-operation i {
+  color: #999;
+  cursor: pointer;
+}
+
+.old-history-more-operation a:hover {
+  text-decoration: none;
+}
+
+.old-history-more-operation i:hover {
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .old-history-main .go-back {
+    margin-left: -2rem;
+  }
+}

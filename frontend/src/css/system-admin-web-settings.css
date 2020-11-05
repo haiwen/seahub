@@ -1,0 +1,17 @@
+.web-setting-icon-btn {
+  font-size: 1rem;
+  line-height: 1.5;
+  min-width: 0;
+}
+.web-setting-icon-btn-submit {
+  color: green;
+}
+.web-setting-icon-btn-cancel {
+  color: #666;
+}
+.web-setting-textarea {
+  min-height: 7rem;
+}
+.web-setting-label {
+  word-break: break-word;
+}

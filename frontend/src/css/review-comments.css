@@ -38,8 +38,7 @@
   text-align: center;
 }
 .seafile-comment-item {
-  overflow-y: hidden;
-  padding: 15px;
+  padding: 15px 10px;
 }
 .seafile-comment-item-resolved {
   background-color: #e6ffed;
@@ -51,6 +50,7 @@
   padding-left: 10px;
   height: 2rem;
   display: block;
+  max-width: 75%;
 }
 .seafile-comment-item .seafile-comment-info .reviewer-name {
   font-size: 1rem;
@@ -84,7 +84,7 @@
   color: #555;
 }
 .seafile-comment-item .seafile-comment-content {
-  margin-top: 10px;
+  margin: 10px 0 0 40px;
 }
 .seafile-comment-item .seafile-comment-content ol,
 .seafile-comment-item .seafile-comment-content ul,
@@ -115,7 +115,7 @@
 .seafile-comment-footer {
   background-color: #fafaf9;
   border-top: 1px solid #e5e5e5;
-  min-height: 170px;
+  min-height: 120px;
   position: absolute;
   bottom: 0;
   padding-top: 0;
@@ -125,18 +125,25 @@
   margin: 10px 20px 5px 15px;
   height: 100%;
 }
-.seafile-comment-footer .seafile-add-comment .add-comment-input {
+.seafile-add-comment .add-comment-input,
+.seafile-edit-comment .edit-comment-input {
   box-sizing: border-box;
   background-color: #fff;
   border: 1px solid #e6e6dd;
   padding: 5px;
-  height: calc(100% - 100px);
+  height: calc(100% - 50px);
   min-height: 70px;
   width: 100%;
   resize: none;
+  border-radius: 5px;
 }
-.seafile-comment-footer .seafile-add-comment .submit-comment {
+.seafile-comment-footer .seafile-add-comment .comment-btn,
+.seafile-edit-comment .comment-btn {
   height: 28px;
+  width: 60px;
+}
+.seafile-edit-comment {
+  margin-top: 10px;
 }
 @media (max-width: 992px) {
   .seafile-comment-footer {
@@ -151,7 +158,7 @@
   .seafile-comment {
     font-size: 12px;
   }
-  .seafile-comment-footer .seafile-add-comment .submit-comment {
+  .seafile-comment-footer .seafile-add-comment .comment-btn {
     height: 24px;
   }
   .seafile-comment-footer {

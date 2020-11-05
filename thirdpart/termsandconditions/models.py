@@ -19,7 +19,7 @@ DEFAULT_TERMS_SLUG = getattr(settings, 'DEFAULT_TERMS_SLUG', 'site-terms')
 class UserTermsAndConditions(models.Model):
     """Holds mapping between TermsAndConditions and Users"""
     username = LowerCaseCharField(max_length=255)
-    terms = models.ForeignKey("TermsAndConditions", related_name="userterms")
+    terms = models.ForeignKey("TermsAndConditions", on_delete=models.CASCADE, related_name="userterms")
     ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name='IP Address')
     date_accepted = models.DateTimeField(auto_now_add=True, verbose_name='Date Accepted')
 
@@ -52,10 +52,6 @@ class TermsAndConditions(models.Model):
 
     def __str__(self):
         return "{0}-{1:.2f}".format(self.slug, self.version_number)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('tc_view_specific_version_page', [self.slug, self.version_number])  # pylint: disable=E1101
 
     @staticmethod
     def create_default_terms():
@@ -95,7 +91,7 @@ class TermsAndConditions(models.Model):
         except TermsAndConditions.DoesNotExist:  # pragma: nocover
             terms_list.update({DEFAULT_TERMS_SLUG: TermsAndConditions.create_default_terms()})
 
-        terms_list = OrderedDict(sorted(terms_list.items(), key=lambda t: t[0]))
+        terms_list = OrderedDict(sorted(list(terms_list.items()), key=lambda t: t[0]))
         return terms_list
 
     @staticmethod

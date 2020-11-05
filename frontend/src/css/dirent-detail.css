@@ -13,6 +13,7 @@
   line-height: 2.5rem;
   background-color: #f9f9f9;
   border-bottom: 1px solid #e8e8e8;
+  height: 40px;
 }
 
 .detail-header .detail-control {
@@ -58,8 +59,14 @@
   align-items: center;
 }
 
+.dirent-info .img .thumbnail {
+  max-width: calc(100% - 4px);
+  max-height: 100%;
+  display: inline-block;
+}
+
 .dirent-table-container {
-  padding: 10px 20px;
+  padding: 10px 20px 20px;
   display: flex;
 }
 
@@ -132,12 +139,12 @@
   max-height: 100px;
   overflow-y: scroll;
   white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
 }
 
 .file-related-files td ul li {
   margin-bottom: 5px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .file-related-files ul li a,
@@ -160,5 +167,15 @@
 }
 
 .sf-add-related-file .related-file-subtitle {
-  margin-bottom: 4px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.detail-container .tab-content {
+  height: calc(100% - 73px);
+  overflow-y: auto;
+}
+
+.detail-container .nav-item .nav-link, .detail-container .nav-item .nav-link i {
+  margin: 0 auto;
 }

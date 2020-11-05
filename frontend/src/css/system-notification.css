@@ -1,0 +1,22 @@
+#info-bar {
+    color: #1f0600;
+    padding: 4px 25px 4px 10px;
+    background: #fddaa4;
+    position: relative;
+}
+#info-bar .close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 16px;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+}
+#info-bar-info {
+    margin: 0;
+}
+#info-bar-info a {
+    color: #a68558;
+    text-decoration: underline;
+}

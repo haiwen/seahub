@@ -1,7 +1,7 @@
 import json
 
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core import mail
 from django.test import override_settings
 
@@ -25,7 +25,7 @@ class TokenViewTest(BaseTestCase):
     def test_get(self):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
-        self.assertRegexpMatches(resp.content, 'Set your password')
+        self.assertRegex(resp.content, b'Set your password')
 
     def test_expired_token(self):
         self.iv.expire_time = timezone.now()

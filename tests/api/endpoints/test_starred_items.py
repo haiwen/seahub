@@ -1,7 +1,7 @@
 import json
+from tests.common.utils import randstring
 
-
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.models import UserStarredFiles
 from seahub.utils.star import is_file_starred
@@ -85,6 +85,24 @@ class StarredItemsTest(BaseTestCase):
         # confirm file is unstarred
         assert is_file_starred(self.user_name, self.repo_id, self.file) is False
 
+    def test_can_not_unstar_file_when_path_is_wrong(self):
+        self.login_as(self.user)
+
+        # first star a file
+        data = {'repo_id': self.repo_id, 'path': self.file}
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+
+        # confirm file is starred
+        assert is_file_starred(self.user_name, self.repo_id, self.file) is True
+
+        # can not unstar a file when path is wrong
+        resp = self.client.delete(self.url + '?repo_id=%s&path=%s' % (self.repo_id, self.file[:2] + randstring(5) + self.file[2:]))
+        self.assertEqual(404, resp.status_code)
+
+        # confirm file is starred
+        assert is_file_starred(self.user_name, self.repo_id, self.file) is True
+
     def test_can_unstar_folder(self):
         self.login_as(self.user)
 
@@ -102,3 +120,21 @@ class StarredItemsTest(BaseTestCase):
 
         # confirm folder is unstarred
         assert is_file_starred(self.user_name, self.repo_id, self.folder_path) is False
+
+    def test_can_not_unstar_folder_when_path_is_wrong(self):
+        self.login_as(self.user)
+
+        # first star a folder
+        data = {'repo_id': self.repo_id, 'path': self.folder_path}
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+
+        # confirm folder is starred
+        assert is_file_starred(self.user_name, self.repo_id, self.folder_path) is True
+
+        # can not unstar a folder when path is wrong
+        resp = self.client.delete(self.url + '?repo_id=%s&path=%s' % (self.repo_id, self.folder_path[:2] + randstring(5) + self.folder_path[2:]))
+        self.assertEqual(404, resp.status_code)
+
+        # confirm folder is starred
+        assert is_file_starred(self.user_name, self.repo_id, self.folder_path) is True

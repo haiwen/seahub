@@ -21,7 +21,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import is_org_user
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.base.accounts import User
 from seahub.group.utils import is_group_member
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
@@ -35,6 +36,7 @@ from seahub.share.signals import share_repo_to_user_successful, share_repo_to_gr
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 from seahub.utils.repo import get_available_repo_perms
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
 logger = logging.getLogger(__name__)
@@ -73,11 +75,14 @@ class DirSharedItemsEndpoint(APIView):
         admin_users = ExtraSharePermission.objects.get_admin_users_by_repo(repo_id)
         ret = []
         for item in share_items:
+            avatar_url, is_default, date_uploaded = api_avatar_url(item.user, 72)
             ret.append({
                 "share_type": "user",
                 "user_info": {
                     "name": item.user,
                     "nickname": email2nickname(item.user),
+                    "contact_email": email2contact_email(item.user),
+                    "avatar_url": avatar_url,
                 },
                 "permission": item.perm,
                 "is_admin": item.user in admin_users
@@ -106,6 +111,10 @@ class DirSharedItemsEndpoint(APIView):
         # change is_admin to True if user in admin groups.
         admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for item in share_items:
+
+            if '@seafile_group' in repo_owner and \
+                    repo_owner.split('@')[0] == str(item.group_id):
+                continue
 
             group_id = item.group_id
             group = ccnet_api.get_group(group_id)
@@ -313,7 +322,7 @@ class DirSharedItemsEndpoint(APIView):
                 if not is_valid_username(to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': _(u'username invalid.')
+                        'error_msg': _('username invalid.')
                         })
                     continue
 
@@ -322,14 +331,14 @@ class DirSharedItemsEndpoint(APIView):
                 except User.DoesNotExist:
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': _(u'User %s not found.') % to_user
+                        'error_msg': _('User %s not found.') % to_user
                         })
                     continue
 
                 if self.has_shared_to_user(request, repo_id, path, to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': _(u'This item has been shared to %s.') % email2nickname(to_user)
+                        'error_msg': _('This item has been shared to %s.') % email2nickname(to_user)
                         })
                     continue
 
@@ -374,11 +383,14 @@ class DirSharedItemsEndpoint(APIView):
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
 
+                    avatar_url, is_default, date_uploaded = api_avatar_url(to_user, 72)
                     result['success'].append({
                         "share_type": "user",
                         "user_info": {
                             "name": to_user,
                             "nickname": email2nickname(to_user),
+                            "contact_email": email2contact_email(to_user),
+                            "avatar_url": avatar_url,
                         },
                         "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
                         "is_admin": permission == PERMISSION_ADMIN
@@ -428,7 +440,7 @@ class DirSharedItemsEndpoint(APIView):
                 if self.has_shared_to_group(request, repo_id, path, gid):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': _(u'This item has been shared to %s.') % group.group_name
+                        'error_msg': _('This item has been shared to %s.') % group.group_name
                         })
                     continue
 

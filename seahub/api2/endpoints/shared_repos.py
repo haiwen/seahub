@@ -55,7 +55,7 @@ class SharedRepos(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         returned_result = []
-        shared_repos.sort(lambda x, y: cmp(x.repo_name, y.repo_name))
+        shared_repos.sort(key=lambda x: x.repo_name)
         usernames = []
         gids = []
         for repo in shared_repos:
@@ -309,10 +309,10 @@ class SharedRepo(APIView):
         if share_type == 'public':
             pub_repos = []
             if org_id:
-                pub_repos = seaserv.list_org_inner_pub_repos(org_id, username)
+                pub_repos = seafile_api.list_org_inner_pub_repos(org_id)
 
             if not request.cloud_mode:
-                pub_repos = seaserv.list_inner_pub_repos(username)
+                pub_repos = seafile_api.get_inner_pub_repo_list()
 
             try:
                 if org_id:

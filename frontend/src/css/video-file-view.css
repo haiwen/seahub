@@ -1,0 +1,6 @@
+.video-js {
+    width: calc(100% - 40px);
+    max-width: 800px;
+    max-height: 100%;
+    margin: 0 auto;
+}

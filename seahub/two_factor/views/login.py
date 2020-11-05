@@ -8,7 +8,7 @@ from importlib import import_module
 from constance import config
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
@@ -106,7 +106,7 @@ class TwoFactorVerifyView(SessionWizardView):
 
         self.reset_two_factor_session()
 
-        if not is_safe_url(url=redirect_to, host=self.request.get_host()):
+        if not is_safe_url(url=redirect_to, allowed_hosts=self.request.get_host()):
             redirect_to = str(settings.LOGIN_REDIRECT_URL)
 
         res = HttpResponseRedirect(redirect_to)

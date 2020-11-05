@@ -4,8 +4,9 @@ import moment from 'moment';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import ListRelatedFileDialog from '../dialog/list-related-file-dialog';
-import AddRelatedFileDialog from '../dialog/add-related-file-dialog';
+import ModalPortal from '../modal-portal';
+import RelatedFileDialogs from '../dialog/related-file-dialogs';
+import ParticipantsList from '../file-view/participants-list';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -18,6 +19,8 @@ const propTypes = {
   relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onRelatedFileChange: PropTypes.func.isRequired,
+  onParticipantsChange: PropTypes.func.isRequired,
+  fileParticipantList: PropTypes.array.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -26,8 +29,7 @@ class DetailListView extends React.Component {
     super(props);
     this.state = {
       isEditFileTagShow: false,
-      isListRelatedFileShow: false,
-      isAddRelatedFileShow: false,
+      showRelatedFileDialog: false,
     };
   }
 
@@ -55,25 +57,32 @@ class DetailListView extends React.Component {
   }
 
   getDirentPath = () => {
+    if (Utils.isMarkdownFile(this.props.path)) {
+      return this.props.path; // column mode: view file
+    }
     let { dirent, path } = this.props;
     return Utils.joinPath(path, dirent.name);
   }
 
+  onRelatedFileChange = () => {
+    let direntPath = this.getDirentPath();
+    this.props.onRelatedFileChange(this.props.dirent, direntPath);
+  }
+
   onListRelatedFileToggle = () => {
     this.setState({
-      isListRelatedFileShow: !this.state.isListRelatedFileShow
+      showRelatedFileDialog: true,
     });
   }
 
-  onAddRelatedFileToggle = () => {
+  toggleCancel = () => {
     this.setState({
-      isListRelatedFileShow: !this.state.isListRelatedFileShow,
-      isAddRelatedFileShow: !this.state.isAddRelatedFileShow
+      showRelatedFileDialog: false,
     });
   }
-  
+
   render() {
-    let { direntType, direntDetail, fileTagList, relatedFiles } = this.props;
+    let { direntType, direntDetail, fileTagList, relatedFiles, fileParticipantList } = this.props;
     let position = this.getDirentPostion();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
@@ -106,7 +115,7 @@ class DetailListView extends React.Component {
                     {fileTagList.map((fileTag) => {
                       return (
                         <li key={fileTag.id} className="file-tag-item">
-                          <span className={`file-tag bg-${fileTag.color}`}></span>
+                          <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
                           <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
                         </li>
                       );
@@ -131,38 +140,45 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onListRelatedFileToggle}></i>
                 </td>
               </tr>
+              <tr className="file-participants">
+                <th>{gettext('Participants')}</th>
+                <td>
+                  {fileParticipantList &&
+                    <ParticipantsList
+                      onParticipantsChange={this.props.onParticipantsChange}
+                      participants={fileParticipantList}
+                      repoID={this.props.repoID}
+                      filePath={direntPath}
+                      showIconTip={false}
+                    />
+                  }
+                </td>
+              </tr>
             </tbody>
           </table>
-          {
-            this.state.isAddRelatedFileShow &&
-            <AddRelatedFileDialog
-              filePath={direntPath}
-              repoID={this.props.repoID}
-              toggleCancel={this.onAddRelatedFileToggle}
-              onRelatedFileChange={this.props.onRelatedFileChange}
-              dirent={this.props.dirent}
-            />
+          {this.state.showRelatedFileDialog &&
+            <ModalPortal>
+              <RelatedFileDialogs
+                repoID={this.props.repoID}
+                filePath={direntPath}
+                relatedFiles={relatedFiles}
+                toggleCancel={this.toggleCancel}
+                onRelatedFileChange={this.onRelatedFileChange}
+                dirent={this.props.dirent}
+                viewMode="list_related_file"
+              />
+            </ModalPortal>
           }
-          {
-            this.state.isListRelatedFileShow &&
-            <ListRelatedFileDialog
-              relatedFiles={relatedFiles}
-              repoID={this.props.repoID}
-              filePath={direntPath}
-              toggleCancel={this.onListRelatedFileToggle}
-              addRelatedFileToggle={this.onAddRelatedFileToggle}
-              onRelatedFileChange={this.props.onRelatedFileChange}
-            />
-          }
-          {
-            this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              fileTagList={fileTagList}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
+          {this.state.isEditFileTagShow &&
+            <ModalPortal>
+              <EditFileTagDialog
+                repoID={this.props.repoID}
+                fileTagList={fileTagList}
+                filePath={direntPath}
+                toggleCancel={this.onEditFileTagToggle}
+                onFileTagChanged={this.onFileTagChanged}
+              />
+            </ModalPortal>
           }
         </Fragment>
       );

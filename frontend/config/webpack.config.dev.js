@@ -54,35 +54,50 @@ module.exports = {
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
     ],
+    TCAccept: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/tc-accept.js",
+    ],
+    TCView: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/tc-view.js",
+    ],
+    userNotifications: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/user-notifications.js",
+    ],
     wiki: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/wiki.js",
-    ],
-    repoview: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/repo-wiki-mode.js",
     ],
     fileHistory: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/file-history.js",
     ],
+    fileHistoryOld: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/file-history-old.js",
+    ],
     app: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/app.js",
     ],
-    draftReview: [
+    draft: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/draft-review.js",
+      paths.appSrc + "/draft.js",
     ],
-    draw: [
+    sharedDirView: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/draw/draw.js",
+      paths.appSrc + "/shared-dir-view.js",
     ],
     sharedFileViewMarkdown: [
       require.resolve('./polyfills'),
@@ -99,15 +114,106 @@ module.exports = {
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/shared-file-view-image.js",
     ],
+    sharedFileViewVideo: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-video.js",
+    ],
+    sharedFileViewPDF: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-pdf.js",
+    ],
+    sharedFileViewSVG: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-svg.js",
+    ],
+    sharedFileViewAudio: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-audio.js",
+    ],
+    sharedFileViewDocument: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-document.js",
+    ],
+    sharedFileViewSpreadsheet: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-spreadsheet.js",
+    ],
+    sharedFileViewUnknown: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/shared-file-view-unknown.js",
+    ],
+    historyTrashFileView: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/history-trash-file-view.js",
+    ],
+    fileView: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/file-view.js",
+    ],
     viewFileText: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
       paths.appSrc + "/view-file-text.js",
     ],
-    viewFileImage: [
+    viewFileDocument: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-image.js",
+      paths.appSrc + "/view-file-document.js",
+    ],
+    viewFileSpreadsheet: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/view-file-spreadsheet.js",
+    ],
+    settings: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/settings.js",
+    ],
+    repoHistory: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/repo-history.js",
+    ],
+    repoSnapshot: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/repo-snapshot.js",
+    ],
+    repoFolderTrash: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/repo-folder-trash.js",
+    ],
+    orgAdmin: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/org-admin",
+    ],
+    sysAdmin: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/sys-admin",
+    ],
+
+    search: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/search",
+    ],
+    uploadLink: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/pages/upload-link",
     ]
   },
 
@@ -315,6 +421,17 @@ module.exports = {
     //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new BundleTracker({filename: './webpack-stats.dev.json'}),
+
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        filename: '[name]/bundle.common.js',
+        minChunks: function(module, count) {
+          if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
+            return false;
+          }
+          return module.context && module.context.includes('node_modules') && count >=5;
+        }
+      })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

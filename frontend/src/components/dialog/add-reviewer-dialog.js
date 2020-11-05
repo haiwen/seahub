@@ -1,14 +1,16 @@
 import React from 'react';
-import AsyncSelect from 'react-select/lib/Async';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+import UserSelect from '../user-select.js';
 import '../../css/add-reviewer-dialog.css';
 
 const propTypes = {
   showReviewerDialog: PropTypes.bool.isRequired,
-  reviewID: PropTypes.string.isRequired,
+  draftID: PropTypes.string.isRequired,
   toggleAddReviewerDialog: PropTypes.func.isRequired,
   reviewers: PropTypes.array.isRequired
 };
@@ -27,43 +29,19 @@ class AddReviewerDialog extends React.Component {
   }
 
   listReviewers = () => {
-    seafileAPI.listReviewers(this.props.reviewID).then((res) => {
-      this.setState({
-        reviewers: res.data.reviewers
-      });
+    seafileAPI.listDraftReviewers(this.props.draftID).then((res) => {
+      this.setState({ reviewers: res.data.reviewers });
     });
   }
 
   handleSelectChange = (option) => {
-    this.setState({
-      selectedOption: option,
-    });
+    this.setState({ selectedOption: option });
     this.Options = [];
-  }
-
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.Options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <React.Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
-              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
-            </React.Fragment>;
-          this.Options.push(obj);
-        }
-        callback(this.Options);
-      });
-    }
   }
 
   addReviewers = () => {
     if (this.state.selectedOption.length > 0 ) {
-      this.refs.reviewSelect.select.onChange([], { action: 'clear' });
+      this.refs.reviewSelect.clearSelect();
       let reviewers = [];
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         reviewers[i] = this.state.selectedOption[i].email;
@@ -72,15 +50,13 @@ class AddReviewerDialog extends React.Component {
         loading: true,
         errorMsg: [],
       });
-      seafileAPI.addReviewers(this.props.reviewID, reviewers).then((res) => {
+      seafileAPI.addDraftReviewers(this.props.draftID, reviewers).then((res) => {
         if (res.data.failed.length > 0) {
           let errorMsg = [];
           for (let i = 0 ; i < res.data.failed.length ; i++) {
             errorMsg[i] = res.data.failed[i];
           }
-          this.setState({
-            errorMsg: errorMsg
-          });
+          this.setState({ errorMsg: errorMsg });
         }
         this.setState({
           selectedOption: null,
@@ -89,13 +65,16 @@ class AddReviewerDialog extends React.Component {
         if (res.data.success.length > 0) {
           this.listReviewers();
         }
+      }).catch(error => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     }
   }
 
   deleteReviewer = (event) => {
     let reviewer = event.target.getAttribute('name');
-    seafileAPI.deleteReviewer(this.props.reviewID, reviewer).then((res) => {
+    seafileAPI.deleteDraftReviewer(this.props.draftID, reviewer).then((res) => {
       if (res.data === 200) {
         let newReviewers = [];
         for (let i = 0; i < this.state.reviewers.length; i ++) {
@@ -103,41 +82,50 @@ class AddReviewerDialog extends React.Component {
             newReviewers.push(this.state.reviewers[i]);
           }
         }
-        this.setState({
-          reviewers: newReviewers
-        });
+        this.setState({ reviewers: newReviewers });
       }
+    }).catch(error => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
     });
   }
 
   render() {
+    const toggleDialog = this.props.toggleAddReviewerDialog;
+    const { reviewers, errorMsg } = this.state;
     return (
-      <Modal isOpen={true} toggle={this.props.toggleAddReviewerDialog}>
-        <ModalHeader>{gettext('Request a review')}</ModalHeader>
-        <ModalBody >
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{gettext('Request a review')}</ModalHeader>
+        <ModalBody>
           <p>{gettext('Add new reviewer')}</p>
-          <AsyncSelect
-            className='reviewer-select' isMulti isFocused
-            loadOptions={this.loadOptions}
-            placeholder={gettext('Please enter 1 or more character')}
-            onChange={this.handleSelectChange}
-            ref="reviewSelect" isClearable classNamePrefix
-          />
-          {this.state.errorMsg.length > 0 &&
-            this.state.errorMsg.map((item, index = 0, arr) => {
+          <div className='add-reviewer'>
+            <UserSelect
+              placeholder={gettext('Search users...')}
+              onSelectChange={this.handleSelectChange}
+              ref="reviewSelect"
+              isMulti={true}
+              className='reviewer-select'
+            />
+            {(this.state.selectedOption && !this.state.loading)?
+              <Button color="secondary" onClick={this.addReviewers}>{gettext('Submit')}</Button> :
+              <Button color="secondary" disabled>{gettext('Submit')}</Button>
+            }
+          </div>
+          {errorMsg.length > 0 &&
+            errorMsg.map((item, index = 0, arr) => {
               return (
-                <p className="reviewer-select-error error" key={index}>{this.state.errorMsg[index].email}
-                  {': '}{this.state.errorMsg[index].error_msg}</p>
+                <p className="reviewer-select-error error" key={index}>{errorMsg[index].email}
+                  {': '}{errorMsg[index].error_msg}</p>
               );
             })
           }
-          { this.state.reviewers.length > 0 &&
-            this.state.reviewers.map((item, index = 0, arr) => {
+          {reviewers.length > 0 &&
+            reviewers.map((item, index = 0, arr) => {
               return (
                 <div className="reviewer-select-info" key={index}>
-                  <div>
+                  <div className="d-flex">
                     <img className="avatar reviewer-select-avatar" src={item.avatar_url} alt=""/>
-                    <span className="reviewer-select-name">{item.user_name}</span>
+                    <span className="reviewer-select-name ellipsis">{item.user_name}</span>
                   </div>
                   <i className="fa fa-times" name={item.user_email} onClick={this.deleteReviewer}></i>
                 </div>
@@ -146,13 +134,7 @@ class AddReviewerDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          { this.state.loading ?
-            <Button disabled><i className="fa fa-spinner" aria-hidden="true"></i></Button>
-            :
-            <Button color="primary" onClick={this.addReviewers}>{gettext('Submit')}</Button>
-          }
-          <Button color="secondary" onClick={this.props.toggleAddReviewerDialog}>
-            {gettext('Close')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Close')}</Button>
         </ModalFooter>
       </Modal>
     );

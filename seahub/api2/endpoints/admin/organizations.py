@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 
+from django.utils.crypto import get_random_string
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -9,10 +11,12 @@ from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
 
+from seahub.utils import is_valid_email
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
+from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -26,11 +30,6 @@ except ImportError:
 
 if ORG_MEMBER_QUOTA_ENABLED:
     from seahub_extra.organizations.models import OrgMemberQuota
-
-try:
-    from seahub.settings import CLOUD_MODE
-except ImportError:
-    CLOUD_MODE = False
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -63,6 +62,58 @@ def get_org_info(org):
 
     return org_info
 
+def get_org_detailed_info(org):
+    org_id = org.org_id
+    org_info = get_org_info(org)
+
+    # users
+    users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+    org_info['users_count'] = len(users)
+
+    repos = seafile_api.get_org_repo_list(org_id, -1, -1)
+    org_info['repos_count'] = len(repos)
+
+    # groups
+    groups = ccnet_api.get_org_groups(org_id, -1, -1)
+    org_info['groups_count'] = len(groups)
+
+    return org_info
+
+def gen_org_url_prefix(max_trial=None, length=20):
+    """Generate organization url prefix automatically.
+    If ``max_trial`` is large than 0, then re-try that times if failed.
+
+    Arguments:
+    - `max_trial`:
+
+    Returns:
+        Url prefix if succed, otherwise, ``None``.
+    """
+    def _gen_prefix():
+        url_prefix = 'org_' + get_random_string(
+            length, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
+        if ccnet_api.get_org_by_url_prefix(url_prefix) is not None:
+            logger.error("org url prefix, %s is duplicated" % url_prefix)
+            return None
+        else:
+            return url_prefix
+
+    try:
+        max_trial = int(max_trial)
+    except (TypeError, ValueError):
+        max_trial = 0
+
+    while max_trial >= 0:
+        ret = _gen_prefix()
+        if ret is not None:
+            return ret
+        else:
+            max_trial -= 1
+
+    logger.error("Failed to generate org url prefix, retry: %d" % max_trial)
+    return None
+
+
 class AdminOrganizations(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -76,12 +127,25 @@ class AdminOrganizations(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
-            orgs = ccnet_api.get_all_orgs(-1, -1)
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+
+        start = (page - 1) * per_page
+
+        try:
+            orgs = ccnet_api.get_all_orgs(start, per_page)
+            total_count = ccnet_api.count_orgs()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -92,7 +156,73 @@ class AdminOrganizations(APIView):
             org_info = get_org_info(org)
             result.append(org_info)
 
-        return Response({'organizations': result})
+        return Response({'organizations': result, 'total_count': total_count})
+
+    def post(self, request):
+        """ Create an organization
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        if not MULTI_TENANCY:
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        org_name = request.data.get('org_name', None)
+        if not org_name:
+            error_msg = 'org_name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        owner_email = request.data.get('owner_email', None)
+        if not owner_email or not is_valid_email(owner_email):
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        owner_password = request.data.get('owner_password', None)
+        if not owner_password:
+            error_msg = 'owner_password invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        url_prefix = gen_org_url_prefix(5, 20)
+        if ccnet_api.get_org_by_url_prefix(url_prefix):
+            error_msg = 'Failed to create organization, please try again later.'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            User.objects.get(email=owner_email)
+        except User.DoesNotExist:
+            pass
+        else:
+            error_msg = "User %s already exists." % owner_email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            new_user = User.objects.create_user(owner_email, owner_password,
+                                                is_staff=False, is_active=True)
+        except User.DoesNotExist as e:
+            logger.error(e)
+            error_msg = 'Failed to add user %s.' % owner_email
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            org_id = ccnet_api.create_org(org_name, url_prefix, new_user.username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        org = ccnet_api.get_org_by_id(org_id)
+        try:
+            org_info = get_org_info(org)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(org_info)
 
 
 class AdminOrganization(APIView):
@@ -108,9 +238,12 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org_id = int(org_id)
         if org_id == 0:
@@ -123,7 +256,7 @@ class AdminOrganization(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            org_info = get_org_info(org)
+            org_info = get_org_detailed_info(org)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -138,9 +271,12 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org_id = int(org_id)
         if org_id == 0:
@@ -224,9 +360,12 @@ class AdminOrganization(APIView):
         1. only admin can perform this action.
         """
 
-        if not (CLOUD_MODE and MULTI_TENANCY):
+        if not MULTI_TENANCY:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         org_id = int(org_id)
         if org_id == 0:
@@ -243,6 +382,7 @@ class AdminOrganization(APIView):
             users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
             for u in users:
                 ccnet_api.remove_org_user(org_id, u.email)
+                User.objects.get(email=u.email).delete()
 
             # remove org groups
             groups = ccnet_api.get_org_groups(org_id, -1, -1)
@@ -260,3 +400,43 @@ class AdminOrganization(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class AdminSearchOrganization(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Search organization by name.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not MULTI_TENANCY:
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            orgs = ccnet_api.search_orgs(query_str)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = []
+        for org in orgs:
+            org_info = get_org_info(org)
+            result.append(org_info)
+
+        return Response({'organization_list': result})

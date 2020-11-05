@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_base_style %}{% endblock %}
+{% block extra_style %}
+<style type="text/css">
+/* to overwrite the code from seahub.css */
+input[type=password] {
+  box-sizing: border-box;
+  height: auto;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+<style type="text/css">
+.small-panel {
+  max-width: 480px;
+  padding: 50px 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 14px 2px rgba(0, 0, 0, 0.1);
+}
+.intro {
+  font-size: 14px;
+  color: #999;
+}
+.sf-btn-submit {
+  background-image: none;
+}
+</style>
+{% endblock %}

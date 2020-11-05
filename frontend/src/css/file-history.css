@@ -56,6 +56,7 @@
   flex: 1;
   overflow: hidden;
   min-height: 0;
+  height: 500px;
 }
 
 .history-list-container {
@@ -150,5 +151,25 @@
   .history-side-panel {
     width: 260px;
   }
+  .history-content .main-panel {
+    max-width: calc(100% - 260px);
+  }
 }
 
+@media (max-width:991.8px) {
+  .history-content .main-panel {
+    max-width: calc(100% - 190px);
+  }
+}
+
+@media (max-width:768px) {
+  .history-content .main-panel {
+    max-width: 100%;
+  }
+  .markdown-viewer-render-content {
+    margin: 20px;
+  }
+  .markdown-viewer-render-content .diff-view {
+    padding: 20px;
+  }
+}

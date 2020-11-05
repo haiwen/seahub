@@ -19,22 +19,18 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
-    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
+    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
+    ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
+    CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
+    PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
 
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
-try:
-    from seahub.settings import SEACLOUD_MODE
-except ImportError:
-    SEACLOUD_MODE = False
 
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
-try:
-    from seahub.settings import ENABLE_PUBFILE
-except ImportError:
-    ENABLE_PUBFILE = False
 try:
     from seahub.settings import ENABLE_SYSADMIN_EXTRA
 except ImportError:
@@ -44,6 +40,18 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
+try:
+    from seahub.settings import ENABLE_FILE_SCAN
+except ImportError:
+    ENABLE_FILE_SCAN = False
+from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
+from seahub.weixin.settings import ENABLE_WEIXIN
+
+try:
+    from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
+except ImportError:
+    SIDE_NAV_FOOTER_CUSTOM_HTML = ''
+
 
 def base(request):
     """
@@ -65,8 +73,11 @@ def base(request):
 
     logo_path = LOGO_PATH
     favicon_path = FAVICON_PATH
+    login_bg_path = LOGIN_BG_IMAGE_PATH
 
     # filter ajax/api request out
+    avatar_url = ''
+    username = request.user.username
     if (not request.is_ajax()) and ("api2/" not in request.path) and \
             ("api/v2.1/" not in request.path):
 
@@ -80,23 +91,30 @@ def base(request):
         if os.path.exists(custom_favicon_file):
             favicon_path = CUSTOM_FAVICON_PATH
 
+        # get login bg path
+        custom_login_bg_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_PATH)
+        if os.path.exists(custom_login_bg_file):
+            login_bg_path = CUSTOM_LOGIN_BG_PATH
+
+        avatar_url, is_default, date_uploaded = api_avatar_url(username, 72)
+
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
         'branding_css': BRANDING_CSS,
         'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
+        'login_bg_path': login_bg_path,
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
         'logo_height': LOGO_HEIGHT,
-        'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
         'site_name': get_site_name(),
         'enable_signup': config.ENABLE_SIGNUP,
+        'enable_weixin': ENABLE_WEIXIN,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
-        'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
         'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
@@ -116,14 +134,21 @@ def base(request):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
-        'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
+        'is_docs': ENABLE_SEAFILE_DOCS,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
         'service_url': get_service_url().rstrip('/'),
+        'enable_file_scan': ENABLE_FILE_SCAN,
+        'enable_work_weixin': ENABLE_WORK_WEIXIN,
+        'avatar_url': avatar_url if avatar_url else '',
+        'privacy_policy_link': PRIVACY_POLICY_LINK,
+        'terms_of_service_link': TERMS_OF_SERVICE_LINK,
+        'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
     }
 
     if request.user.is_staff:
         result['is_default_admin'] = request.user.admin_role == DEFAULT_ADMIN
+        result['enable_share_link_report_abuse'] = ENABLE_SHARE_LINK_REPORT_ABUSE
 
     return result
 
@@ -133,8 +158,7 @@ def debug(request):
     """
     context_extras = {}
     if dj_settings.DEBUG and request.META.get('REMOTE_ADDR') in dj_settings.INTERNAL_IPS or \
-       dj_settings.DEBUG and request.GET.get('_dev', '') == '1' or \
-       dj_settings.DEBUG and not dj_settings.COMPRESS_ENABLED:
+       dj_settings.DEBUG and request.GET.get('_dev', '') == '1':
         context_extras['debug'] = True
         from django.db import connection
         # Return a lazy reference that computes connection.queries on access,

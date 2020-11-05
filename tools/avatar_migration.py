@@ -16,16 +16,16 @@ import MySQLdb
 
 
 if len(sys.argv) != 2:
-    seahub_root = raw_input("Please enter root path of seahub: ")
+    seahub_root = input("Please enter root path of seahub: ")
 else:
     seahub_root = sys.argv[1]
 
-host = raw_input("Please enter MySQL host:(leave blank for localhost) ")
+host = input("Please enter MySQL host:(leave blank for localhost) ")
 if not host:
     host = 'localhost'
-user = raw_input("Please enter MySQL user: ")
-passwd = raw_input("Please enter password: ")
-db = raw_input("Please enter seahub database: ")
+user = input("Please enter MySQL user: ")
+passwd = input("Please enter password: ")
+db = input("Please enter seahub database: ")
     
 '''Read user's avatar path from MySQL-avatar_avatar and avatar_groupavatar'''
 db = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
@@ -41,14 +41,14 @@ for row in rows:
     try:
         statinfo = os.stat(avatar_full_path)
     except OSError as e:
-        print e
+        print(e)
         continue
     size = statinfo.st_size
     mtime = statinfo.st_mtime
     mtime_str = datetime.datetime.fromtimestamp(int(mtime)).strftime('%Y-%m-%d %H:%M:%S')
     with file(avatar_full_path) as f:
         avatar_path = avatar_path.replace('\\', '/')
-        avatar_path_md5 = hashlib.md5(avatar_path).hexdigest()
+        avatar_path_md5 = hashlib.md5(avatar_path.encode('utf-8')).hexdigest()
         binary = f.read()
         encoded = base64.b64encode(binary)
 

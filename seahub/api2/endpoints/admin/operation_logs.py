@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.admin_log.models import AdminLog, ADMIN_LOG_OPERATION_TYPE
@@ -45,6 +45,9 @@ class AdminOperationLogs(APIView):
         Permission checking:
         1. Admin user;
         """
+
+        if not request.user.admin_permissions.can_view_admin_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         email = request.GET.get('email', '')
         operation = request.GET.get('operation', '')

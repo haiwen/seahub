@@ -1,0 +1,9 @@
+.insert-image-container {
+  max-width: 100%;
+  border: 1px solid #eee;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 365px;
+}

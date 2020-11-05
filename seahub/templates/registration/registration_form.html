@@ -43,7 +43,7 @@
             {% endif %}
 
             <p class="error hide"></p>
-            <button type="submit" class="submit">{% trans "Sign Up" %}</button>
+            <button type="submit" class="submit btn btn-primary btn-block">{% trans "Sign Up" %}</button>
         </form>
         <div class="login-panel-bottom-container">
             {# language will be shown here #}
@@ -51,6 +51,7 @@
         {% endif %}
     </div>
 </div>
+{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
@@ -68,7 +69,7 @@ $("#id_password1")
 })
 .on('keyup', function() {
     var pwd = $(this).val();
-    if ($.trim(pwd)) {
+    if (pwd.trim()) {
         var level = getStrengthLevel(pwd);
         showStrength(level);
     } else {
@@ -78,10 +79,9 @@ $("#id_password1")
 {% endif %}
 
 $('#signup-form').on('submit', function(){
-    var email = $.trim($('input[name="email"]').val()),
-        pwd1 = $.trim($('input[name="password1"]').val()),
-        pwd2 = $.trim($('input[name="password2"]').val());
-        level = getStrengthLevel(pwd1);
+    var email = $('input[name="email"]').val().trim(),
+        pwd1 = $('input[name="password1"]').val().trim(),
+        pwd2 = $('input[name="password2"]').val().trim();
 
         if (!email) {
             $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
@@ -100,6 +100,7 @@ $('#signup-form').on('submit', function(){
             return false;
         }
         {% if strong_pwd_required %}
+            var level = getStrengthLevel(pwd1);
             if (level < {{level}}) {
                 $('.error').html(passwd_tip).removeClass('hide');
                 return false;

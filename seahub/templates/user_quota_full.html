@@ -1,0 +1,18 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}Your quota is almost full on {{ site_name }}.{% endblocktrans %}
+</p>
+<p>{% trans "Used:" %} {{quota_usage|seahub_filesizeformat}} / {{quota_total|seahub_filesizeformat}}</p>
+
+{% endautoescape %}
+
+{% endblock %}

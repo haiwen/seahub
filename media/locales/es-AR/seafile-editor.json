@@ -1,0 +1,182 @@
+{
+  "bold": "Negrita",
+  "italic": "Itálica",
+  "inline_code": "Código",
+  "header_one": "Encabezado 1",
+  "header_two": "Encabezado 2",
+  "header_three": "Encabezado 3",
+  "header_four": "Encabezado 4",
+  "header_five": "Encabezado 5",
+  "header_six": "Encabezado 6",
+  "paragraph": "Párrafo",
+  "quote": "Cita",
+  "ordered_list": "Lista Ordenada",
+  "unordered_list": "Lista Desordenada",
+  "check_list_item": "Check List Item",
+  "insert_image": "Insertar Imagen",
+  "code": "Inline Code",
+  "code_block": "Bloque de Código",
+  "insert_link": "Insertar Enlace",
+  "insert_table": "Insertar Tabla",
+  "save": "Guardar",
+  "more": "Más",
+  "invalid_url": "URL Inválida",
+  "link_address": "Dirección del enlace",
+  "image_address": "Dirección de la imagen",
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+  "switch_to_plain_text_editor": "Cambiar a editor de texto sin formato",
+  "switch_to_rich_text_editor": "Cambiar a editor de texto enriquecido",
+  "switch_to_viewer": "Cambiar a visualizador Markdown",
+  "help": "Ayuda",
+  "remove_table": "Eliminar tabla",
+  "column": "Columna",
+  "row": "Fila",
+  "set_align": "Establecer alineación",
+  "left": "Izquierda",
+  "center": "Centrar",
+  "right": "derecha",
+  "file_saved": "Archivo guardado",
+  "file_failed_to_save": "Fallo al guardar archivo",
+  "star": "Add star",
+  "unstar": "Remove star",
+  "back_to_parent_directory":"Volver a la carpeta superior",
+  "edit": "Editar",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "internal_link": "Enlace interno",
+  "copy_internal_link": "El enlace interno ha sido copiado al portapapeles",
+  "internal_link_desc": "Un enlace interno es un enlace a un archivo o carpeta que puede ser accedido por usuarios con permiso de lectura al archivo o carpeta. ",
+  "share": "Compartir",
+  "share_link": "Compartir enlace",
+  "generate": "Generar",
+  "add_password_protection": "Agregar protección por contraseña",
+  "password": "Contraseña ",
+  "at_least_8_characters": "al menos 8 caracteres",
+  "password_again": "Repetir contraseña",
+  "add_auto_expiration": "Agregar vencimiento automático",
+  "days": "días",
+  "please_enter_password": "Ingresa una contraseña",
+  "greater_than_or_equal_to": "Mayor o igual que",
+  "less_than_or_equal_to": "Menor o igual que",
+  "set_permission": "Establecer permiso",
+  "preview_and_download": "Vista previa y descargar",
+  "preview_only": "Vista previa solamente",
+  "please_enter_valid_days": "Ingresa cantidad válida de días",
+  "please_enter_a_non-negative_integer": "Por favor, ingrese un número entero no negativo",
+  "please_enter_days": "Ingresa cantidad de días",
+  "password_is_too_short": "Contraseña demasiado corta",
+  "passwords_do_not_match": "Las contraseñas no concuerdan",
+  "return_to_wiki_page": "Volver a la página del Wiki",
+  "insert_network_image": "Insertar imágen desde la red",
+  "upload_local_image": "Subir imagen local",
+  "add_link": "Agregar enlace",
+  "file_history": "Historial del Archivo",
+  "history_version": "Historial de Versiones",
+  "back_to_viewer": "Volver al Visualizador",
+  "link_title": "Título del enlace",
+  "local_draft": "Borrador local",
+  "use_draft": "Usar borrador",
+  "delete_draft": "Eliminar borrador",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Tienes un borrador sin guardar. ¿Deseas utilizarlo?",
+  "local_draft_saved": "Borrador local guardado",
+  "new_draft": "Nuevo Borrador",
+  "view_draft": "Ver Borrador",
+  "publish": "Publicar",
+  "this_file_has_a_draft": "Este archivo tiene un borrador", 
+  "delete": "Borrar",
+  "comments": "Comentarios",
+  "add_a_comment": "Agregar un comentario...",
+  "no_comment_yet": "No hay comentarios.",
+  "mark_as_resolved": "Marcar como resuelto",
+  "ask_for_review": "Solicitar revisión",
+  "review_already_exists": "La revisión ya existe",
+  "view_review": "Ver revisión",
+  "there_is_an_associated_review_with_this_file": "Hay una revisión asociada con este archivo",
+  "start_review": "Iniciar revisión",
+  "this_file_is_in_draft_stage": "Este archivo está en la etapa de borrador",
+  "this_file_is_in_review_stage": "Este archivo está en estado de revisión.",
+  "this_file_has_been_updated": "Este archivo ha sido actualizado.",
+  "refresh": "Refrescar",
+  "related_files": "archivos relacionados",
+  "related_file": "archivo relacionado",
+  "no_tags": "Sin etiquetas",
+  "no_related_files": "Sin archivos relacionados",
+  "no_out_line": "No hay esquema",
+  "Please_use_Chrome_to_get_best_editing_experience": "Por favor utilice Chrome para obtener la mejor experiencia editando.",
+  "no_document_improvement_suggestion": "No hay sugerencias para mejorar el documento",
+  "markdownLint": {
+    "missing_h1": {
+      "description": "No hay h1 en el documento",
+      "issue" : "Falta h1"
+    },
+    "heading_end_with_colon": {
+      "description": "Un encabezado no debe finalizar con el signo Dos Puntos.",
+      "issue": "El encabezado finaliza con el signo Dos Puntos"
+    }
+  },
+  "userHelp": {
+    "title": "Atajos de teclado",
+    "userHelpData": [
+      {
+        "shortcutType":"Listar atajos",
+        "shortcutData": {
+          "Make_list": "Crear lista",
+          "Make_ordered_list": "Crear lista ordenada",
+          "Insert_new_item": "Insertar nuevo ítem",
+          "Insert_child_in_item": "Insert child in item",
+          "Increase_depth": "Increase depth"
+        }
+      }, {
+        "shortcutType": "Head shortcuts",
+        "shortcutData": {
+          "Heading_1": "Encabezado 1",
+          "Heading_2": "Encabezado 2",
+          "Heading_3": "Encabezado 3",
+          "Heading_4": "Encabezado 4",
+          "Heading_5": "Encabezado 5",
+          "Heading_6": "Encabezado 6"
+        }
+      }, {
+        "shortcutType": "Code block shortcuts",
+        "shortcutData": {
+          "Make_code_block": "Crear bloque de código",
+          "Insert_new_line": "Insertar nueva línea",
+          "Escape_code_block": "Escape code block",
+          "Insert_indent": "Insert indent"
+        }
+      }, {
+        "shortcutType": "Block quote shortcuts",
+        "shortcutData": {
+          "Make_Block_quote": "Make Block quote",
+          "Escape_Block_quote": "Escape Block quote"
+        }
+      }, {
+        "shortcutType": "Atajos de tabla",
+        "shortcutData": {
+          "Insert_Table_Row": "Insertar fila de tabla",
+          "Escape_table": "Escape table"
+        }
+      }, {
+        "shortcutType":"Inline shortcuts",
+        "shortcutData": {
+          "Bold": "Negrita",
+          "Italic": "Itálica",
+          "Italic_Bold": "Negrita itálica",
+          "Inline_code": "Inline code"
+        }
+      }, {
+        "shortcutType": "Guardar atajos",
+        "shortcutData": {
+          "Save_file": "Guardar archivo"
+        }
+      }, {
+        "shortcutType": "Atajos de imagen",
+        "shortcutData": {
+          "Paste_screen_shot": "Pegar captura de pantalla",
+          "Drag_image_from_anywhere_to_upload_it": "Arrastrar imagen desde cualquier sitio para subirla"
+        }
+      }
+    ]
+  }
+}

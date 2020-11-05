@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
+{% load seahub_tags i18n staticfiles %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -11,10 +11,11 @@
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+{% block extra_base_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jstree_default_theme/style.min.css" />
-<link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
+{% endblock %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %} 
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -33,57 +34,13 @@
 
         <div id="header" class="{% block header_css_class %}d-flex{% endblock %}">
             <a href="{{ SITE_ROOT }}" id="logo">
-                {% if seacloud_mode %}
-                <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
-                {% else %}
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
-                {% endif %}
             </a>
             <span class="sf2-icon-menu side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
 
             {% block header_right %}
-            {% if request.user.is_authenticated %}
-            <div class="d-flex">
-                {% block top_search %}
-                {% if has_file_search %}
-                    {% include 'snippets/search_form.html' %}
-                {% endif %}
-                {% endblock %}
-
-                <div id="account">
-                    <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
-                        {% avatar request.user 32 %} <span class="icon-caret-down vam"></span>
-                    </a>
-                    <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
-                    <div id="user-info-popup" class="account-popup sf-popover hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <div class="sf-popover-con">
-                            <div class="item ovhd">
-                                {% avatar request.user 36 %}
-                                <div class="txt">
-                                    {{ request.user.username|email2nickname }}
-                                </div>
-                            </div>
-                            <span class="loading-icon loading-tip"></span>
-                            <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
-                            <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                            {% block admin_link %}
-                            {% if request.user.is_staff %}
-                            <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
-                            {% endif %}
-                            {% if request.user.org and request.user.org.is_staff %}
-                            <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">{% trans "Organization Admin" %}</a>
-                            {% endif %}
-                            {% if request.user.inst_admin %}
-                            <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
-                            {% endif %}
-                            {% endblock %}
-                            <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% else %} {# for non-logged-in user #}
+            {% if not request.user.is_authenticated %}
+            {# for non-logged-in user #}
             <div id="lang">
                 <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="icon-caret-down"></span></a>
                 <div id="lang-context-selector" class="sf-popover hide">
@@ -142,7 +99,6 @@ var app = {
 </script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/jstree.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
 <script type="text/javascript">
@@ -185,10 +141,6 @@ $('#info-bar .close').on('click', function() {
         }
     }
 });
-{% endif %}
-
-{% if has_file_search %}
-    {% include 'snippets/search_js.html' %}
 {% endif %}
 
 {% else %} {# for non-logged-in user #}
@@ -236,11 +188,18 @@ $('#info-bar .close').on('click', function() {
 {% endif %}
 
 if ($('.side-nav').length) {
-     $('#logo').addClass('hidden-sm-down');
-     $('#js-toggle-side-nav').removeClass('hide');
+    $('#logo').addClass('hidden-sm-down');
+    $('#js-toggle-side-nav').removeClass('hide');
 }
 $('#js-toggle-side-nav').on('click', function() {
     $('.side-nav').addClass('side-nav-shown');
+    $('').modal({
+        overlayClose: true,
+        onClose: function() {
+            $('.side-nav').removeClass('side-nav-shown');
+            $.modal.close();
+        }});
+    $('#simplemodal-container').css({'display':'none'});
     return false;
 });
 $('.js-close-side-nav').on('click', function() {

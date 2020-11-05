@@ -13,6 +13,8 @@ from rest_framework import status
 
 from django.contrib.auth.hashers import check_password
 
+from django.utils.translation import ugettext as _
+
 from seaserv import seafile_api
 import seaserv
 
@@ -28,6 +30,7 @@ from seahub.utils import gen_file_get_url, gen_dir_zip_download_url, \
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.views.file import send_file_access_msg
+from seahub.wiki.models import Wiki
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +89,90 @@ def get_share_link_info(fileshare):
     return data
 
 
+class AdminShareLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all share links.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if order_by:
+            if order_by not in ('ctime', 'view_cnt'):
+                error_msg = 'order_by invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            direction = request.GET.get('direction', 'desc').lower().strip()
+            if direction not in ('asc', 'desc'):
+                error_msg = 'direction invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        end = start + per_page
+
+        if order_by:
+            if order_by == 'ctime':
+                if direction == 'desc':
+                    sql_parameter = '-ctime'
+                else:
+                    sql_parameter = 'ctime'
+            else:
+                if direction == 'desc':
+                    sql_parameter = '-view_cnt'
+                else:
+                    sql_parameter = 'view_cnt'
+            share_links = FileShare.objects.all().order_by(sql_parameter)[start:end]
+        else:
+            share_links = FileShare.objects.all().order_by('-ctime')[start:end]
+
+        count = FileShare.objects.all().count()
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        nickname_dict = {}
+        owner_email_set = set([link.username for link in share_links])
+        for e in owner_email_set:
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+
+        share_links_info = []
+        for link in share_links:
+
+            if link.expire_date:
+                expire_date = datetime_to_isoformat_timestr(link.expire_date)
+            else:
+                expire_date = ''
+
+            link_info = {}
+            link_info['obj_name'] = link.get_obj_name()
+            link_info['token'] = link.token
+
+            owner_email = link.username
+            link_info['creator_email'] = owner_email
+            link_info['creator_name'] = nickname_dict.get(owner_email, '')
+            link_info['ctime'] = datetime_to_isoformat_timestr(link.ctime)
+            link_info['view_cnt'] = link.view_cnt
+            link_info['expire_date'] = expire_date
+            link_info['is_expired'] = link.is_expired()
+            share_links_info.append(link_info)
+
+        return Response({"share_link_list": share_links_info, "count": count})
+
+
 class AdminShareLink(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -99,6 +186,9 @@ class AdminShareLink(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             sharelink = FileShare.objects.get(token=token)
         except FileShare.DoesNotExist:
@@ -107,6 +197,42 @@ class AdminShareLink(APIView):
 
         link_info = get_share_link_info(sharelink)
         return Response(link_info)
+
+    def delete(self, request, token):
+        """ Remove a special share link.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return Response({'success': True})
+
+        has_published_library = False
+        if share_link.path == '/':
+            try:
+                Wiki.objects.get(repo_id=share_link.repo_id)
+                has_published_library = True
+            except Wiki.DoesNotExist:
+                pass
+
+        if has_published_library:
+            error_msg = _('There is an associated published library.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            share_link.delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 
 class AdminShareLinkDirents(APIView):
@@ -121,6 +247,9 @@ class AdminShareLinkDirents(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)
@@ -193,6 +322,9 @@ class AdminShareLinkDownload(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)
@@ -335,6 +467,9 @@ class AdminShareLinkCheckPassword(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             sharelink = FileShare.objects.get(token=token)

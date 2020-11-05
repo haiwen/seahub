@@ -1,0 +1,49 @@
+{% extends "base_for_react.html" %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{{file_name}} - {% endblock %}
+
+{% block extra_style %}
+{% if filetype == 'PDF' %}
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+{% endif %}
+{% render_bundle 'historyTrashFileView' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  fromTrash: {% if from_trash %}true{% else %}false{% endif %},
+
+  fileName: '{{ file_name|escapejs }}',
+  commitTime: '{{ current_commit.props.ctime|tsstr_sec }}',
+
+  canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
+  repoID: '{{ repo.id }}',
+  objID: '{{ obj_id }}',
+  path: '{{ path|escapejs }}',
+
+  fileType: '{{filetype}}',
+  rawPath: '{{ raw_path|escapejs }}',
+  err: {% if err %}'{{ err }}'{% else %}''{% endif %},
+
+  // for text file
+  fileExt: '{{ fileext|escapejs }}',
+  // for text/markdown file
+  fileContent: '{{ file_content|escapejs }}'
+};
+</script>
+{% render_bundle 'historyTrashFileView' 'js' %}
+{% if filetype == 'PDF' %}
+<script type="text/javascript">
+  var sf_file_url = '{{ raw_path|escapejs }}';
+  var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
+  var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
+  var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
+{% endif %}
+{% endblock %}

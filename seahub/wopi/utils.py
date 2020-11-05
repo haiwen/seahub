@@ -2,8 +2,8 @@
 import os
 import re
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import requests
 import hashlib
 import logging
@@ -18,7 +18,7 @@ except ImportError:
 from seaserv import seafile_api
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.utils import get_site_scheme_and_netloc
 from .settings import OFFICE_WEB_APP_BASE_URL, WOPI_ACCESS_TOKEN_EXPIRATION, \
@@ -142,15 +142,15 @@ def get_wopi_dict(request_user, repo_id, file_path,
     fake_file_id = hashlib.sha1(repo_path_info.encode('utf8')).hexdigest()
     base_url = get_site_scheme_and_netloc()
     check_file_info_endpoint = reverse('WOPIFilesView', args=[fake_file_id])
-    WOPISrc = urlparse.urljoin(base_url, check_file_info_endpoint)
+    WOPISrc = urllib.parse.urljoin(base_url, check_file_info_endpoint)
 
     query_dict = {'WOPISrc': WOPISrc}
     if action_url[-1] in ('?', '&'):
-        full_action_url = action_url + urllib.urlencode(query_dict)
+        full_action_url = action_url + urllib.parse.urlencode(query_dict)
     elif '?' in action_url:
-        full_action_url = action_url + '&' + urllib.urlencode(query_dict)
+        full_action_url = action_url + '&' + urllib.parse.urlencode(query_dict)
     else:
-        full_action_url = action_url + '?' + urllib.urlencode(query_dict)
+        full_action_url = action_url + '?' + urllib.parse.urlencode(query_dict)
 
     # key, collected from seahub/settings.py
     # value, collected from https://wopi.readthedocs.io/en/latest/faq/languages.html#languages
@@ -204,9 +204,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
     uid = uuid.uuid4()
     access_token = uid.hex
     key = generate_access_token_cache_key(access_token)
-    if not cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION):
-        logger.error('Set wopi cache failed, key: %s' % key)
-        return None
+    cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION)
 
     # access_token_ttl property tells office web app
     # when access token expires

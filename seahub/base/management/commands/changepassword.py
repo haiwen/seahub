@@ -28,7 +28,7 @@ class Command(BaseCommand):
         except User.DoesNotExist:
             raise CommandError("user '%s' does not exist" % username)
 
-        print "Changing password for user '%s'" % u.username
+        print("Changing password for user '%s'" % u.username)
 
         MAX_TRIES = 3
         count = 0
@@ -37,7 +37,7 @@ class Command(BaseCommand):
             p1 = self._get_pass()
             p2 = self._get_pass("Password (again): ")
             if p1 != p2:
-                print "Passwords do not match. Please try again."
+                print("Passwords do not match. Please try again.")
                 count = count + 1
 
         if count == MAX_TRIES:

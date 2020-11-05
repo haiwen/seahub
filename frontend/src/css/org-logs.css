@@ -1,0 +1,21 @@
+.audit-unselect-item {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 1px 8px;
+  background: #f2f2f2;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 10px 5px 0;
+}
+.audit-unselect-item:hover {
+  background-color: #ddd;
+}
+.no-deco,
+.no-deco:hover,
+.no-deco:focus {
+  text-decoration: none;
+}
+.cur-view-path .nav .nav-item a {
+  padding: 7px 10px;
+}

@@ -10,7 +10,7 @@ class WikiTest(BaseTestCase):
         wiki = Wiki.objects.add('new wiki', self.user.username)
 
         d = wiki.to_dict()
-        assert 'wikis/new-wiki/' in d['link']
+        assert 'published/new-wiki/' in d['link']
         assert 'new-wiki' == d['slug']
         assert 'T' in d['created_at']
         assert 'T' in d['updated_at']

@@ -1,6 +1,8 @@
 import json
+from functools import cmp_to_key
+
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 from seahub.test_utils import BaseTestCase
 from seahub.trusted_ip.models import TrustedIP
@@ -24,6 +26,14 @@ class DeviceAccessibleIpSetting(BaseTestCase):
         assert '127.0.0.1' in  [x['ip'] for x in json_resp]
 
     @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_no_permission(self, mock_IsProVersion):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        mock_IsProVersion.return_value= True
+        resp = self.client.get(self.url)
+        assert resp.status_code == 403
+
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
     def test_can_post(self, mock_IsProVersion):
         mock_IsProVersion.return_value= True
         resp = self.client.post(self.url, {'ipaddress': self.test_ip})
@@ -44,33 +54,33 @@ class DeviceAccessibleIpSetting(BaseTestCase):
 
     def test_cmp_ip(self):
         ip_list = [{'ip': '200.1.1.1'}, {'ip': '192.1.1.1'}, {'ip': '111.1.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '192.1.1.1'}, {'ip': '192.*.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list
 
         ip_list = [{'ip': '192.*.1.1'}, {'ip': '192.1.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '111.1.1.1'}, {'ip': '111.8.1.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.1.*.1'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == ip_list[::-1]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.2.*.1'}, {'ip': '111.1.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[0], ip_list[2], ip_list[1]]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '112.2.*.1'}, {'ip': '110.1.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[2], ip_list[0], ip_list[1]]
 
         ip_list = [{'ip': '111.1.*.2'}, {'ip': '111.1.*.*'}, {'ip': '111.*.*.2'}]
-        new_ip_list = sorted(ip_list, cmp = cmp_ip)
+        new_ip_list = sorted(ip_list, key=cmp_to_key(cmp_ip))
         assert new_ip_list == [ip_list[0], ip_list[1], ip_list[2]]

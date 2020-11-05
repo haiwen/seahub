@@ -83,8 +83,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
         contact_email_dict = {}
-        modifier_set = set([x.modifier for x in file_list])
-        lock_owner_set = set([x.lock_owner for x in file_list])
+        modifier_set = {x.modifier for x in file_list}
+        lock_owner_set = {x.lock_owner for x in file_list}
         for e in modifier_set | lock_owner_set:
             if e not in nickname_dict:
                 nickname_dict[e] = email2nickname(e)
@@ -167,8 +167,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
             file_info_list.append(file_info)
 
-    dir_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    file_info_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    dir_info_list.sort(key=lambda x: x['name'].lower())
+    file_info_list.sort(key=lambda x: x['name'].lower())
 
     return dir_info_list, file_info_list
 
@@ -189,9 +189,9 @@ class DirView(APIView):
             'type': 'dir',
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(dir_path.rstrip('/')),
-            'obj_name': dir_obj.obj_name,
-            'obj_id': dir_obj.obj_id,
-            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
+            'obj_name': dir_obj.obj_name if dir_obj else '',
+            'obj_id': dir_obj.obj_id if dir_obj else '',
+            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime) if dir_obj else '',
         }
 
         return dir_info
@@ -296,6 +296,7 @@ class DirView(APIView):
                 parent_dir_list.append(tmp_parent_dir)
                 for folder_name in parent_dir.strip('/').split('/'):
                     tmp_parent_dir = posixpath.join(tmp_parent_dir, folder_name)
+                    tmp_parent_dir = normalize_dir_path(tmp_parent_dir)
                     parent_dir_list.append(tmp_parent_dir)
 
         all_dir_info_list = []
@@ -315,6 +316,7 @@ class DirView(APIView):
 
         response_dict = {}
         response_dict["user_perm"] = permission
+        response_dict["dir_id"] = dir_id
 
         if request_type == 'f':
             response_dict['dirent_list'] = all_file_info_list
@@ -443,7 +445,7 @@ class DirView(APIView):
                 dir_info = self.get_dir_info(repo_id, new_dir_path)
                 resp = Response(dir_info)
                 return resp
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -561,22 +563,18 @@ class DirDetailView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
         dir_info = {
             'repo_id': repo_id,
             'path': path,
-            'name': dir_obj.obj_name,
-            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
+            'name': dir_obj.obj_name if dir_obj else '',
+            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime) if dir_obj else '',
+            'permission': permission,
         }
 
         return Response(dir_info)

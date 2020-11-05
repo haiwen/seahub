@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.base.models import UserStarredFiles
 from seahub.test_utils import BaseTestCase, Fixtures
@@ -15,14 +15,14 @@ class StarredFileTest(BaseTestCase, Fixtures):
                          is_dir=False).save()
         self.unicode_file = self.create_file(repo_id=self.repo.id,
                                              parent_dir='/',
-                                             filename=u'März_中文_%2F_FG2_SW#1a.jpg',
+                                             filename='März_中文_%2F_FG2_SW#1a.jpg',
                                              username=self.user.username)
 
     def tearDown(self):
         self.remove_repo()
 
     def js_encodeURIComponent(self, string):
-        return urllib2.quote(string.encode('utf-8'), safe='~()*!.\'')
+        return urllib.parse.quote(string.encode('utf-8'), safe='~()*!.\'')
 
     ########## test cases ##########
     def test_can_list(self):
@@ -41,7 +41,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
             'p': self.file
         })
         self.assertEqual(201, resp.status_code)
-        self.assertEqual('"success"', resp.content)
+        self.assertEqual(b'"success"', resp.content)
 
     def test_cannot_add_random_filename(self):
         self.login_as(self.user)
@@ -75,7 +75,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
             'p': self.unicode_file,
         })
         self.assertEqual(201, resp.status_code)
-        self.assertEqual('"success"', resp.content)
+        self.assertEqual(b'"success"', resp.content)
         self.assertEqual(2, len(UserStarredFiles.objects.all()))
 
     def test_can_delete_unicode(self):
@@ -90,6 +90,6 @@ class StarredFileTest(BaseTestCase, Fixtures):
 
         resp = self.client.delete(reverse('starredfiles') + '?repo_id=' +
                                   self.repo.id + '&p=' +
-                                  urllib2.quote(self.unicode_file.encode('utf-8')))
+                                  urllib.parse.quote(self.unicode_file.encode('utf-8')))
         self.assertEqual(200, resp.status_code)
         self.assertEqual(1, len(UserStarredFiles.objects.all()))

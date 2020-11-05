@@ -4,7 +4,6 @@ from seaserv import seafile_api
 from seahub.tags.models import FileUUIDMap
 from seahub.base.models import UserStarredFiles
 from seahub.revision_tag.models import RevisionTags
-from seahub.wiki.models import PersonalWiki, GroupWiki
 from seahub.share.models import ExtraGroupsSharePermission, \
         ExtraSharePermission, UploadLinkShare
 
@@ -21,13 +20,12 @@ class Command(BaseCommand):
 
         #on_delete is  CASCADE, so FileTag/FileComment will be deleted
         self.tables = {'FileUUIDMap': FileUUIDMap, 'RevisionTags': RevisionTags,
-                       'PersonalWiki': PersonalWiki, 'GroupWiki': GroupWiki,
                        'UserStarredFiles': UserStarredFiles,
                        'ExtraGroupsSharePermission': ExtraGroupsSharePermission,
                        'ExtraSharePermission': ExtraSharePermission,
                        'UploadLinkShare': UploadLinkShare}
 
-        for table in self.tables.items():
+        for table in list(self.tables.items()):
             self.clear_table(table[0], table[1])
 
         self.stdout.write('All invalid repo data are deleted')

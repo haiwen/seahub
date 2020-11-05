@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seaserv import ccnet_api
 
@@ -31,6 +31,9 @@ class LoginLogs(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_view_admin_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # check the date format, should be like '2015-10-10'
         start = request.GET.get('start', None)
@@ -96,6 +99,9 @@ class AdminLoginLogs(APIView):
         return data
 
     def get(self, request):
+
+        if not request.user.admin_permissions.can_view_admin_log():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             page = int(request.GET.get('page', '1'))

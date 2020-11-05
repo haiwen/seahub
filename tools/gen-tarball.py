@@ -6,7 +6,7 @@ import sys
 import os
 import tempfile
 import shutil
-import commands
+import subprocess
 import subprocess
 import atexit
 import optparse
@@ -24,7 +24,7 @@ def highlight(content, is_error=False):
         return '\x1b[1;32m%s\x1b[m' % content
 
 def info(msg):
-    print highlight('[INFO] ') + msg
+    print(highlight('[INFO] ') + msg)
 
 def exist_in_path(prog):
     '''Test whether prog exists in system path'''
@@ -40,9 +40,9 @@ def exist_in_path(prog):
 
 def error(msg=None, usage=None):
     if msg:
-        print highlight('[ERROR] ') + msg
+        print(highlight('[ERROR] ') + msg)
     if usage:
-        print usage
+        print(usage)
     sys.exit(1)
 
 def run(cmdline, cwd=None, env=None, suppress_stdout=False, suppress_stderr=False):
@@ -78,14 +78,14 @@ def must_copy(src, dst):
     '''Copy src to dst, exit on failure'''
     try:
         shutil.copy(src, dst)
-    except Exception, e:
+    except Exception as e:
         error('failed to copy %s to %s: %s' % (src, dst, e))
 
 def must_move(src, dst):
     '''Copy src to dst, exit on failure'''
     try:
         shutil.move(src, dst)
-    except Exception, e:
+    except Exception as e:
         error('failed to move %s to %s: %s' % (src, dst, e))
 
 usage = '''\
@@ -109,7 +109,7 @@ def parse_args():
     usage = parser.format_help()
     options, remain = parser.parse_args()
     if remain or options.version == None or options.branch == None:
-        print usage
+        print(usage)
         sys.exit(1)
 
     return options.version, options.branch
@@ -123,7 +123,7 @@ def main():
         error('django-admin scripts not found in PATH')
 
     # Note: we double % to escape it in a format string
-    latest_commit_info = commands.getoutput('git log --format="%%H" %s -1' % branch)
+    latest_commit_info = subprocess.getoutput('git log --format="%%H" %s -1' % branch)
 
     # begin
     tmpdir = tempfile.mkdtemp()

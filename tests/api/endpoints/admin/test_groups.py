@@ -1,5 +1,6 @@
 import json
-from django.core.urlresolvers import reverse
+import random
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
@@ -11,6 +12,16 @@ class GroupsTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_group()
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.get(reverse('api-v2.1-admin-groups'))
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.post(reverse('api-v2.1-admin-groups'))
+        self.assertEqual(403, resp.status_code)
 
     def test_can_get(self):
         self.login_as(self.admin)
@@ -57,6 +68,42 @@ class GroupsTest(BaseTestCase):
 
         self.remove_group(json_resp['id'])
 
+    def test_can_create_by_limit_punctuation(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        limit_punctuation = """-'_."""
+        group_name = randstring(2) + random.choice(limit_punctuation) + randstring(2)
+
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == group_name
+        assert json_resp['owner'] == self.user.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_can_not_create_by_other_punctuation(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
+
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(400, resp.status_code)
+
     def test_create_without_group_owner(self):
         self.login_as(self.admin)
 
@@ -94,6 +141,16 @@ class GroupTest(BaseTestCase):
         self.user_name = self.user.username
         self.admin_name = self.admin.username
         self.group_id = self.group.id
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.put(reverse('api-v2.1-admin-group', args=[self.group_id]))
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_group)
+        resp = self.client.delete(reverse('api-v2.1-admin-group', args=[self.group_id]))
+        self.assertEqual(403, resp.status_code)
 
     def test_can_transfer_group(self):
 

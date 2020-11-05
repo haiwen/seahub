@@ -21,7 +21,7 @@ const publicPath = '/media/seafile-editor/';
 // For these, "homepage" can be set to "." to enable relative asset paths.
 const shouldUseRelativeAssetPaths = publicPath === './';
 // Source maps are resource heavy and can cause out of memory issue for large source files.
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+const shouldUseSourceMap = false;
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -59,17 +59,38 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry: {
     markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
+    TCAccept: [require.resolve('./polyfills'), paths.appSrc + "/tc-accept.js"],
+    TCView: [require.resolve('./polyfills'), paths.appSrc + "/tc-view.js"],
+    userNotifications: [require.resolve('./polyfills'), paths.appSrc + "/user-notifications.js"],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
-    repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
+    fileHistoryOld: [require.resolve('./polyfills'), paths.appSrc + "/file-history-old.js"],
     app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
-    draftReview: [require.resolve('./polyfills'), paths.appSrc + "/draft-review.js"],
-    draw: [require.resolve('./polyfills'), paths.appSrc + "/draw/draw.js"],
+    draft: [require.resolve('./polyfills'), paths.appSrc + "/draft.js"],
+    sharedDirView: [require.resolve('./polyfills'), paths.appSrc + "/shared-dir-view.js"],
     sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
     sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
     sharedFileViewImage: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-image.js"],
+    sharedFileViewVideo: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-video.js"],
+    sharedFileViewPDF: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-pdf.js"],
+    sharedFileViewSVG: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-svg.js"],
+    sharedFileViewAudio: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-audio.js"],
+    sharedFileViewDocument: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-document.js"],
+    sharedFileViewSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-spreadsheet.js"],
+    sharedFileViewUnknown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-unknown.js"],
+    historyTrashFileView: [require.resolve('./polyfills'), paths.appSrc + "/history-trash-file-view.js"],
+    fileView: [require.resolve('./polyfills'), paths.appSrc + "/file-view.js"],
     viewFileText: [require.resolve('./polyfills'), paths.appSrc + "/view-file-text.js"],
-    viewFileImage: [require.resolve('./polyfills'), paths.appSrc + "/view-file-image.js"],
+    viewFileDocument: [require.resolve('./polyfills'), paths.appSrc + "/view-file-document.js"],
+    viewFileSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/view-file-spreadsheet.js"],
+    settings: [require.resolve('./polyfills'), paths.appSrc + "/settings.js"],
+    repoHistory: [require.resolve('./polyfills'), paths.appSrc + "/repo-history.js"],
+    repoSnapshot: [require.resolve('./polyfills'), paths.appSrc + "/repo-snapshot.js"],
+    repoFolderTrash: [require.resolve('./polyfills'), paths.appSrc + "/repo-folder-trash.js"],
+    orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
+    sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
+    search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
+    uploadLink: [require.resolve('./polyfills'), paths.appSrc + "/pages/upload-link"],
   },
 
   output: {
@@ -250,6 +271,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      // test: /\.xxx$/, // may apply this only for some modules
+      options: {
+        concatenateModules: false
+      }
+    }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -302,6 +329,7 @@ module.exports = {
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
+      allChunks: true
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
@@ -348,6 +376,18 @@ module.exports = {
     //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new BundleTracker({filename: './webpack-stats.pro.json'}),
+
+    // https://webpack.js.org/plugins/commons-chunk-plugin/
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        filename: '[name]/bundle.common.js',
+        minChunks: function(module, count) {
+          if(module.resource && (/^.*\.(css|scss)$/).test(module.resource)) {
+            return false;
+          }
+          return module.context && module.context.includes('node_modules') && count >=5;
+        }
+      })
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

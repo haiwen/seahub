@@ -2,7 +2,7 @@ import json
 
 from mock import patch
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 
 class SysinfoTest(BaseTestCase):
@@ -12,6 +12,13 @@ class SysinfoTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo()
+
+    def test_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_view_system_info)
+        url = reverse('api-v2.1-sysinfo')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
 
     @patch('seahub.api2.endpoints.admin.sysinfo.is_pro_version')
     def test_get_sysinfo_in_community_edition(self, mock_is_pro_version):

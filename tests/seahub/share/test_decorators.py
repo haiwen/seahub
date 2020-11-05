@@ -103,7 +103,7 @@ class ShareLinkAuditTest(BaseTestCase):
         anon_req = self._anon_request()
         resp = self._fake_view_shared_file(anon_req, self.fs.token)
         self.assertEqual(resp.status_code, 200)
-        self.assertIn('<p class="tip">Please provide your email address to continue.</p>', resp.content)
+        self.assertIn(b'<p class="tip">Please provide your email address to continue.</p>', resp.content)
 
     @override_settings(ENABLE_SHARE_LINK_AUDIT=True)
     @patch('seahub.share.decorators.is_pro_version')
@@ -118,7 +118,7 @@ class ShareLinkAuditTest(BaseTestCase):
         resp = self._fake_view_shared_file(anon_req, self.fs.token)
 
         self.assertEqual(resp.status_code, 200)
-        self.assertIn('Invalid token, please try again.', resp.content)
+        self.assertIn(b'Invalid token, please try again.', resp.content)
 
     @override_settings(ENABLE_SHARE_LINK_AUDIT=True)
     @patch('seahub.share.decorators.is_pro_version')

@@ -12,7 +12,7 @@ class DirectTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         if self.extra_context is not None:
-            for key, value in self.extra_context.items():
+            for key, value in list(self.extra_context.items()):
                 if callable(value):
                     context[key] = value()
                 else:

@@ -15,7 +15,7 @@
 #####################################
 
 # python.
-import sys,os
+import sys, os
 import re
 import string
 class CConvert:
@@ -25,12 +25,12 @@ class CConvert:
 		self.spliter = '-'
 		"Load data table"
 		try:
-			fp=open(os.path.join(os.path.dirname(__file__), 'convert-utf-8.txt'))
+			fp=open(os.path.join(os.path.dirname(__file__), 'convert-utf-8.txt'), encoding='utf-8')
 		except IOError:
-			print "Can't load data from convert-utf-8.txt\nPlease make sure this file exists."
+			print("Can't load data from convert-utf-8.txt\nPlease make sure this file exists.")
 			sys.exit(1)
 		else:
-			self.data=fp.read().decode("utf-8")# decoded data to unicode
+			self.data=fp.read()  # decoded data to unicode
 			fp.close()
 	
 	def convert1(self, strIn):
@@ -95,7 +95,7 @@ class CConvert:
 			else:
 				if not self.has_shengdiao: p = p[:-1]
 				pinyin += self.spliter + p + self.spliter
-		pinyin = pinyin.replace(' ','') \
-				.replace(self.spliter+self.spliter,self.spliter) \
-				.strip(self.spliter+' ').replace(self.spliter+self.spliter,self.spliter)
+		pinyin = pinyin.replace(' ', '') \
+				.replace(self.spliter+self.spliter, self.spliter) \
+				.strip(self.spliter+' ').replace(self.spliter+self.spliter, self.spliter)
 		return pinyin

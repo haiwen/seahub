@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from seaserv import seafile_api
@@ -16,43 +16,6 @@ class WikiDoesNotExist(Exception):
 
 class WikiPageMissing(Exception):
     pass
-
-class PersonalWikiManager(models.Manager):
-    def save_personal_wiki(self, username, repo_id):
-        """
-        Create or update group wiki.
-        """
-        try:
-            wiki = self.get(username=username)
-            wiki.repo_id = repo_id
-        except self.model.DoesNotExist:
-            wiki = self.model(username=username, repo_id=repo_id)
-        wiki.save(using=self._db)
-        return wiki
-
-class PersonalWiki(models.Model):
-    username = LowerCaseCharField(max_length=255, unique=True)
-    repo_id = models.CharField(max_length=36)
-    objects = PersonalWikiManager()
-
-class GroupWikiManager(models.Manager):
-    def save_group_wiki(self, group_id, repo_id):
-        """
-        Create or update group wiki.
-        """
-        try:
-            groupwiki = self.get(group_id=group_id)
-            groupwiki.repo_id = repo_id
-        except self.model.DoesNotExist:
-            groupwiki = self.model(group_id=group_id, repo_id=repo_id)
-        groupwiki.save(using=self._db)
-        return groupwiki
-
-class GroupWiki(models.Model):
-    group_id = models.IntegerField(unique=True)
-    repo_id = models.CharField(max_length=36)
-    objects = GroupWikiManager()
-
 
 class DuplicateWikiNameError(Exception):
     pass
@@ -71,12 +34,10 @@ class WikiManager(models.Manager):
 
         now = timezone.now()
         if repo_id is None:     # create new repo to store the wiki pages
-            if org_id > 0:
-                repo_id = seafile_api.create_org_repo(wiki_name, '', username,
-                                                      passwd=None, org_id=org_id)
+            if org_id and org_id > 0:
+                repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
             else:
-                repo_id = seafile_api.create_repo(wiki_name, '', username,
-                                                  passwd=None)
+                repo_id = seafile_api.create_repo(wiki_name, '', username)
 
         repo = seafile_api.get_repo(repo_id)
         assert repo is not None
@@ -155,8 +116,7 @@ from django.dispatch import receiver
 from seahub.signals import repo_deleted
 
 @receiver(repo_deleted)
-def remove_personal_wiki(sender, **kwargs):
-    repo_owner = kwargs['repo_owner']
+def remove_wiki(sender, **kwargs):
     repo_id = kwargs['repo_id']
 
-    PersonalWiki.objects.filter(username=repo_owner, repo_id=repo_id).delete()
+    Wiki.objects.filter(repo_id=repo_id).delete()

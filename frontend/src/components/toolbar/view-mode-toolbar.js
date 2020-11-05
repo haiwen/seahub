@@ -21,11 +21,16 @@ class ViewModeToolbar extends React.Component {
   render() {
     let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
     return (
-      <div className="view-mode btn-group">
-        <button className={`${baseClass} sf2-icon-list-view ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
-        {/* <button className={`${baseClass} sf2-icon-grid-view ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button> */}
-        <button className={`${baseClass} sf2-icon-two-columns ${this.props.currentMode === 'column' ? 'current-mode' : ''}`} id='column' title={gettext('Column')} onClick={this.switchViewMode}></button>
-      </div>
+      <React.Fragment>
+        <div className="view-mode btn-group">
+          <button className={`${baseClass} sf2-icon-list-view ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
+          <button className={`${baseClass} sf2-icon-grid-view ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
+          <button className={`${baseClass} sf2-icon-two-columns ${this.props.currentMode === 'column' ? 'current-mode' : ''}`} id='column' title={gettext('Column')} onClick={this.switchViewMode}></button>
+        </div>
+        <div className="detail-btn btn-group">
+          <button className="btn btn-secondary btn-icon ml-1 fas fa-info" id='detail' title={gettext('Detail')} onClick={this.switchViewMode}></button>
+        </div>
+      </React.Fragment>
     );
   }
 }

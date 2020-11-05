@@ -65,7 +65,7 @@ class HistoryListView extends React.Component {
         {this.props.historyList.map((item, index) => {
           return (
             <HisotyListItem
-              key={index} 
+              key={index}
               item={item}
               index={index}
               currentItem={this.state.currentItem}

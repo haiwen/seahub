@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import moment from 'moment';
@@ -9,7 +9,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
-  addWiki: PropTypes.func.isRequired,
+  addWiki: PropTypes.func.isRequired
 };
 
 class WikiSelectDialog extends React.Component {
@@ -18,33 +18,46 @@ class WikiSelectDialog extends React.Component {
     super(props);
     this.state = {
       repos: [],
-      isExist: true,
-      name: '',
       repoID: '',
     };
   }
 
   componentDidMount() {
     seafileAPI.listRepos().then(res => {
-      let repoList = res.data.repos.map(item => {
-        let repo = new Repo(item);
-        return repo;
-      });
+      let repoList = res.data.repos
+        .filter(item => {
+          switch (item.type) {
+            case 'mine': // my libraries
+              return !item.encrypted;
+            case 'shared': // libraries shared with me
+              // 'is_admin': the library is shared with 'admin' permission
+              return !item.encrypted && item.is_admin;
+            case 'group':
+            default:
+              return !item.encrypted && !res.data.repos.some(repo => {
+                // just remove the duplicated libraries
+                return repo.type != item.type && repo.repo_id == item.repo_id;
+              });
+          }
+        })
+        .map(item => {
+          let repo = new Repo(item);
+          return repo;
+        });
       repoList = Utils.sortRepos(repoList, 'name', 'asc');
-      this.setState({repos: repoList}); 
+      this.setState({repos: repoList});
     });
   }
 
   onChange = (repo) => {
     this.setState({
-      name: repo.repo_name,
       repoID: repo.repo_id,
     });
   }
 
   handleSubmit = () => {
-    let { isExist, name, repoID } = this.state;
-    this.props.addWiki(isExist, name, repoID);
+    let { repoID } = this.state;
+    this.props.addWiki(repoID);
     this.props.toggleCancel();
   }
 
@@ -55,15 +68,15 @@ class WikiSelectDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.toggle}>{gettext('Choose a library as Wiki')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Publish a Library')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>
-                <th width='12%'>{/* select */}</th>
-                <th width='13%'>{/* icon */}</th>
-                <th width='50%'>{gettext('Name')}</th>
-                <th width='25%'>{gettext('Last Update')}</th>
+                <th width='6%'>{/* select */}</th>
+                <th width='9%'>{/* icon */}</th>
+                <th width='55%'>{gettext('Name')}</th>
+                <th width='30%'>{gettext('Last Update')}</th>
               </tr>
             </thead>
             <tbody>
@@ -71,7 +84,7 @@ class WikiSelectDialog extends React.Component {
                 return (
                   <tr key={index}>
                     <td className="text-center"><input type="radio" className="vam" name="repo" value={repo.repo_id} onChange={this.onChange.bind(this, repo)} /></td>
-                    <td className="text-center"><img src={siteRoot + 'media/img/lib/48/lib.png'} width="24" alt={gettext('icon')} /></td>
+                    <td className="text-center"><img src={Utils.getLibIconUrl(repo, false)} width="24" title={Utils.getLibIconTitle(repo)} alt={Utils.getLibIconTitle(repo)} /></td>
                     <td>{repo.repo_name}</td>
                     <td>{moment(repo.last_modified).fromNow()}</td>
                   </tr>
@@ -82,7 +95,10 @@ class WikiSelectDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          {this.state.repoID ?
+            <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>:
+            <Button color="primary" disabled>{gettext('Submit')}</Button>
+          }
         </ModalFooter>
       </Modal>
     );

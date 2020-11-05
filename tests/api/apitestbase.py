@@ -4,7 +4,7 @@ import requests
 import unittest
 from contextlib import contextmanager
 from nose.tools import assert_equal, assert_in # pylint: disable=E0611
-from urllib import quote
+from urllib.parse import quote
 
 from tests.common.common import USERNAME, PASSWORD, \
     ADMIN_USERNAME, ADMIN_PASSWORD
@@ -184,7 +184,7 @@ class ApiTestBase(unittest.TestCase):
         self.admin_delete(user_url)
 
     def create_file(self, repo, fname=None):
-        if isinstance(repo, basestring):
+        if isinstance(repo, str):
             repo = _Repo(repo)
         fname = fname or ('文件 %s.txt' % randstring())
         furl = repo.get_filepath_url('/' + fname)
@@ -198,7 +198,7 @@ class ApiTestBase(unittest.TestCase):
         dpath = '/目录 %s' % randstring()
         durl = repo.get_dirpath_url(dpath)
         res = self.post(durl, data=data, expected=201)
-        self.assertEqual(res.text, u'"success"')
+        self.assertEqual(res.text, '"success"')
         return dpath, durl
 
 

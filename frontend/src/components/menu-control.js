@@ -7,7 +7,7 @@ const propTypes = {
 };
 
 class MenuControl extends React.Component {
- 
+
   render() {
     return (
       <i className={`fas fa-ellipsis-v ${this.props.isShow ? '' : 'invisible'}`} onClick={this.props.onClick}></i>

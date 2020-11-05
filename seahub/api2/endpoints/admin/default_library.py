@@ -29,7 +29,7 @@ class AdminDefaultLibrary(APIView):
     def create_default_repo(self, username):
 
         default_repo_id = seafile_api.create_repo(name=_("My Library"),
-                desc=_("My Library"), username=username, passwd=None)
+                desc=_("My Library"), username=username)
 
         sys_repo_id = get_system_default_repo_id()
         if not sys_repo_id or not seafile_api.get_repo(sys_repo_id):
@@ -51,6 +51,9 @@ class AdminDefaultLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         user_email = request.GET.get('user_email', None)
@@ -88,6 +91,9 @@ class AdminDefaultLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         user_email = request.POST.get('user_email', None)

@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { reviewID, gettext, name } from '../../utils/constants';
+import { gettext, name, draftRepoID, draftFilePath } from '../../utils/constants';
 import { processor } from '../../utils/seafile-markdown2html';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
 
 import '../../css/review-comment-dialog.css';
 
@@ -27,43 +29,41 @@ class ReviewCommentDialog extends React.Component {
 
   handleCommentChange = (event) => {
     let comment = event.target.value;
-    this.setState({
-      comment: comment
-    });
+    this.setState({ comment: comment });
   }
 
   submitComment = () => {
-    let comment = this.state.comment.trim();
-    if (comment.length > 0) {
-      if (this.props.quote.length > 0) {
-        let detail = {
-          quote: this.props.quote,
-          newIndex: this.props.newIndex,
-          oldIndex: this.props.oldIndex
-        };
-        let detailJSON = JSON.stringify(detail);
-        seafileAPI.addReviewComment(reviewID, comment, detailJSON).then((response) => {
-          this.props.onCommentAdded();
-        });
-      }
-      else {
-        seafileAPI.addReviewComment(reviewID, comment).then((response) => {
-          this.props.onCommentAdded();
-        });
-      }
-      this.setState({
-        comment: ''
+    const { quote, newIndex, oldIndex } = this.props;
+    const comment = this.state.comment.trim();
+    if (comment.length === 0) return;
+    if (quote.length > 0) {
+      let detail = {
+        quote: quote,
+        newIndex: newIndex,
+        oldIndex: oldIndex
+      };
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment, JSON.stringify(detail)).then(() => {
+        this.props.onCommentAdded();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.postComment(draftRepoID, draftFilePath, comment).then(() => {
+        this.props.onCommentAdded();
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
+    this.setState({ comment: '' });
   }
 
   setQuoteText = (mdQuote) => {
     processor.process(mdQuote).then(
       (result) => {
         let quote = String(result);
-        this.setState({
-          quote: quote
-        });
+        this.setState({ quote: quote });
       }
     );
   }

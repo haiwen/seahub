@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
-import '../../css/dirent-detail.css';
 import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
+import '../../css/dirent-detail.css';
 
 const propTypes = {
   currentRepo: PropTypes.object.isRequired,
@@ -34,6 +35,9 @@ class LibDetail extends React.Component {
   getFileCounts = (repo) => {
     seafileAPI.getRepoInfo(repo.repo_id).then(res => {
       this.setState({fileCount: res.data.file_count});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, isDocs } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -17,9 +17,10 @@ class CreateFile extends React.Component {
     super(props);
     this.state = {
       parentPath: '',
-      childName: props.fileType,
+      childName: props.fileType || '',
       isDraft: false,
       errMessage: '',
+      isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
@@ -36,14 +37,25 @@ class CreateFile extends React.Component {
   }
 
   handleChange = (e) => {
+    if (!e.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     this.setState({
-      childName: e.target.value, 
+      childName: e.target.value,
     }) ;
   }
 
   handleSubmit = () => {
+    if (!this.state.isSubmitBtnActive) {
+      return;
+    }
+
     let isDuplicated = this.checkDuplicatedName();
     let newName = this.state.childName;
+
     if (isDuplicated) {
       let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
       errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
@@ -53,7 +65,7 @@ class CreateFile extends React.Component {
       let isDraft = this.state.isDraft;
       this.props.onAddFile(path, isDraft);
     }
-  } 
+  }
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -64,7 +76,7 @@ class CreateFile extends React.Component {
 
   handleCheck = () => {
     let pos = this.state.childName.lastIndexOf('.');
-    
+
     if (this.state.isDraft) {
       // from draft to not draft
       // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
@@ -75,7 +87,7 @@ class CreateFile extends React.Component {
       if (p === '(draft)') {
         // remove `(draft)` from file name
         this.setState({
-          childName: fileName + fileType, 
+          childName: fileName + fileType,
           isDraft: !this.state.isDraft
         });
       } else {
@@ -85,7 +97,7 @@ class CreateFile extends React.Component {
         });
       }
     }
-    
+
     if (!this.state.isDraft) {
       // from not draft to draft
       // case 1, test.md  ===> test(draft).md
@@ -100,14 +112,14 @@ class CreateFile extends React.Component {
         });
       } else if (pos === 0 ) {
         this.setState({
-          childName: '(draft)' + this.state.childName, 
+          childName: '(draft)' + this.state.childName,
           isDraft: !this.state.isdraft
         });
       } else {
         this.setState({
           isDraft: !this.state.isdraft
         });
-      } 
+      }
     }
   }
 
@@ -128,15 +140,15 @@ class CreateFile extends React.Component {
           <Form>
             <FormGroup>
               <Label for="fileName">{gettext('Name')}</Label>
-              <Input 
-                id="fileName" 
-                onKeyPress={this.handleKeyPress} 
-                innerRef={input => {this.newInput = input;}} 
-                value={this.state.childName} 
+              <Input
+                id="fileName"
+                onKeyPress={this.handleKeyPress}
+                innerRef={input => {this.newInput = input;}}
+                value={this.state.childName}
                 onChange={this.handleChange}
               />
             </FormGroup>
-            {this.props.fileType == '.md' && (
+            {this.props.fileType == '.md' && isDocs && (
               <FormGroup check>
                 <Label check>
                   <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
@@ -148,7 +160,7 @@ class CreateFile extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

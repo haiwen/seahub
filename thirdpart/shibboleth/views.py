@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from urllib import quote
+from urllib.parse import quote
 
 #Logout settings.
 from shibboleth.app_settings import LOGOUT_URL, LOGOUT_REDIRECT_URL, LOGOUT_SESSION_KEY
@@ -32,9 +32,9 @@ class ShibbolethView(TemplateView):
     
     def get(self, request, **kwargs):
         """Process the request."""
-        next = self.request.GET.get('next', None)
-        if next is not None:
-            return redirect(next)
+        next_page = self.request.GET.get('next', None)
+        if next_page is not None:
+            return redirect(next_page)
         return super(ShibbolethView, self).get(request)
     
     def get_context_data(self, **kwargs):

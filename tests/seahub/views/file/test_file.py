@@ -1,5 +1,5 @@
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import requests
 
 from seahub.test_utils import BaseTestCase
@@ -114,7 +114,7 @@ class FileAccessLogTest(BaseTestCase):
     def generate_file_audit_event_type(self, e):
         return {
             'file-download-web': ('web', ''),
-            'file-download-share-link': ('share-link',''),
+            'file-download-share-link': ('share-link', ''),
             'file-download-api': ('API', e.device),
             'repo-download-sync': ('download-sync', e.device),
             'repo-upload-sync': ('upload-sync', e.device),

@@ -2,7 +2,7 @@ class TreeNode {
 
   constructor({ path, object, isLoaded, isPreload, isExpanded, parentNode }) {
     this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
-    this.object = object.clone();
+    this.object = object;
     this.isLoaded = isLoaded || false;
     this.isPreload = isPreload || false;
     this.isExpanded = isExpanded || false;
@@ -76,7 +76,7 @@ class TreeNode {
 
   rename(newName) {
     this.object.name = newName;
-    this.path = this.generatePath(this.parentNode); 
+    this.path = this.generatePath(this.parentNode);
     if (this.isExpanded) {
       this.updateChildrenPath(this);
     } else {

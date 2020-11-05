@@ -3,7 +3,7 @@ import re
 import string
 
 from django.utils.safestring import SafeData, mark_safe
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from django.utils.functional import allow_lazy
 from django.utils.http import urlquote
 
@@ -21,8 +21,8 @@ def escape(html):
     """
     Returns the given HTML with ampersands, quotes and angle brackets encoded.
     """
-    return mark_safe(force_unicode(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;'))
-escape = allow_lazy(escape, unicode)
+    return mark_safe(force_text(html).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;').replace("'", '&#39;'))
+escape = allow_lazy(escape, str)
 
 ## modification of django's urlize, add '%' to safe:
 ##   urlquote('http://%s' % middle, safe='/&=:;#?+*%')
@@ -47,7 +47,7 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
     """
     trim_url = lambda x, limit=trim_url_limit: limit is not None and (len(x) > limit and ('%s...' % x[:max(0, limit - 3)])) or x
     safe_input = isinstance(text, SafeData)
-    words = word_split_re.split(force_unicode(text))
+    words = word_split_re.split(force_text(text))
     nofollow_attr = nofollow and ' rel="nofollow"' or ''
     for i, word in enumerate(words):
         match = None
@@ -83,5 +83,5 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
             words[i] = mark_safe(word)
         elif autoescape:
             words[i] = escape(word)
-    return u''.join(words)
-urlize = allow_lazy(urlize, unicode)
+    return ''.join(words)
+urlize = allow_lazy(urlize, str)

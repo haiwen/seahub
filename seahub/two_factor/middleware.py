@@ -1,15 +1,16 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 import re
 
+from django.utils.deprecation import MiddlewareMixin
 from constance import config
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from . import DEVICE_ID_SESSION_KEY
 from .models import Device
 from seahub.options.models import UserOptions
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, ENABLE_FORCE_2FA_TO_ALL_USERS
 
 
 class IsVerified(object):
@@ -21,7 +22,7 @@ class IsVerified(object):
         return (self.user.otp_device is not None)
 
 
-class OTPMiddleware(object):
+class OTPMiddleware(MiddlewareMixin):
     """
     This must be installed after
     :class:`~django.contrib.auth.middleware.AuthenticationMiddleware` and
@@ -61,7 +62,7 @@ class OTPMiddleware(object):
         return None
 
 
-class ForceTwoFactorAuthMiddleware(object):
+class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
     def filter_request(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'sys/.+', r'repo/.+', r'lib/', )
@@ -85,10 +86,11 @@ class ForceTwoFactorAuthMiddleware(object):
         if not self.filter_request(request):
             return None
 
-        if not UserOptions.objects.is_force_2fa(user.username):
-            return None
-
         if user.otp_device is not None:
             return None
 
-        return HttpResponseRedirect(reverse('two_factor:setup'))
+        if ENABLE_FORCE_2FA_TO_ALL_USERS or UserOptions.objects.is_force_2fa(user.username):
+            return HttpResponseRedirect(reverse('two_factor:setup'))
+
+        return None
+

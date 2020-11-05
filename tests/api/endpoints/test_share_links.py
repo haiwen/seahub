@@ -2,7 +2,7 @@
 import json
 
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
@@ -104,6 +104,23 @@ class ShareLinksTest(BaseTestCase):
         assert 'f' in json_resp['link']
 
         self._remove_share_link(json_resp['token'])
+
+    def test_create_duplicate_file_share_link(self):
+        self.login_as(self.user)
+
+        resp = self.client.post(self.url, {'path': self.file_path, 'repo_id': self.repo_id})
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['token'] is not None
+        token = json_resp['token']
+
+        resp = self.client.post(self.url, {'path': self.file_path, 'repo_id': self.repo_id})
+        self.assertEqual(400, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['error_msg'] is not None
+        assert token in json_resp['error_msg']
+
+        self._remove_share_link(token)
 
     def test_create_file_share_link_in_enc_repo(self):
         self.login_as(self.user)
@@ -207,6 +224,23 @@ class ShareLinksTest(BaseTestCase):
         assert 'd' in json_resp['link']
 
         self._remove_share_link(json_resp['token'])
+
+    def test_create_duplicate_dir_share_link(self):
+        self.login_as(self.user)
+
+        resp = self.client.post(self.url, {'path': self.folder_path, 'repo_id': self.repo_id})
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['token'] is not None
+        token = json_resp['token']
+
+        resp = self.client.post(self.url, {'path': self.folder_path, 'repo_id': self.repo_id})
+        self.assertEqual(400, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['error_msg'] is not None
+        assert token in json_resp['error_msg']
+
+        self._remove_share_link(token)
 
     def test_create_link_with_invalid_repo_permission(self):
         # login with admin to create share link in user repo

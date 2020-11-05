@@ -12,8 +12,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, \
-        CUSTOM_FAVICON_PATH
-from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+        CUSTOM_FAVICON_PATH, MEDIA_URL
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT, \
+    get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
@@ -26,6 +27,9 @@ class AdminFavicon(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         favicon_file = request.FILES.get('favicon', None)
         if not favicon_file:
@@ -55,7 +59,7 @@ class AdminFavicon(APIView):
                     CUSTOM_FAVICON_PATH)
 
             # save favicon file to custom dir
-            with open(custom_favicon_file, 'w') as fd:
+            with open(custom_favicon_file, 'wb') as fd:
                 fd.write(favicon_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,
@@ -70,4 +74,4 @@ class AdminFavicon(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        return Response({'favicon_path': get_service_url() + MEDIA_URL + CUSTOM_FAVICON_PATH})

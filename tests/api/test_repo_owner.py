@@ -1,7 +1,7 @@
 """seahub/api2/views.py::Repo api tests.
 """
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User
@@ -38,6 +38,15 @@ class RepoOwnerTest(BaseTestCase):
 
         resp = self.client.get(reverse("api2-repo-owner", args=[self.user_repo_id]))
         self.assertEqual(403, resp.status_code)
+
+    def test_can_not_transfer_repo_to_owner(self):
+        self.login_as(self.user)
+
+        url = reverse("api2-repo-owner", args=[self.user_repo_id])
+        data = 'owner=%s' % self.user.email
+
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(400, resp.status_code)
 
     def test_can_transfer_repo(self):
         self.login_as(self.user)

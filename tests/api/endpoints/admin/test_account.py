@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import seaserv
 from seaserv import seafile_api
 
@@ -24,12 +24,12 @@ class AccountTest(BaseTestCase):
 
     def _do_create(self):
         resp = self.client.put(
-            reverse('api2-account', args=['new_user@test.com']),
+            reverse('api2-account', args=['new_user_put_create@test.com']),
             'password=123456&is_staff=1&is_active=1',
             'application/x-www-form-urlencoded',
         )
         # manually remove this account
-        self.remove_user(email='new_user@test.com')
+        self.remove_user(email='new_user_put_create@test.com')
         return resp
 
     def _do_get_info(self):

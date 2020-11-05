@@ -62,7 +62,16 @@ class AuthenticationForm(forms.Form):
 
                 self.user_cache = authenticate(username=username, password=password)
                 if self.user_cache is None:
-                    raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
+                    err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
+
+                    if settings.LOGIN_ERROR_DETAILS:
+                        try:
+                            u = User.objects.get(email=username)
+                        except User.DoesNotExist:
+                            err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
+                            self.errors['not_found'] = err_msg
+
+                    raise forms.ValidationError(err_msg)
 
             # user found for login string but inactive
             if not self.user_cache.is_active:
@@ -103,7 +112,7 @@ class PasswordResetForm(forms.Form):
         Validates that a user exists with the given e-mail address.
         """
         if not IS_EMAIL_CONFIGURED:
-            raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
+            raise forms.ValidationError(_('Failed to send email, email service is not properly configured, please contact administrator.'))
 
         email = self.cleaned_data["email"].lower().strip()
 
@@ -228,3 +237,20 @@ class AdminPasswordChangeForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
+
+class SetContactEmailPasswordForm(SetPasswordForm):
+    contact_email = forms.EmailField(label=_("Contact Email"), max_length=255)
+
+    def clean_contact_email(self, ):
+        username = Profile.objects.get_username_by_contact_email(self.cleaned_data['contact_email'])
+        req_username = self.user.username
+        if username is not None and username != req_username:
+            raise forms.ValidationError(_('A user with this email already exists.'))
+        return self.cleaned_data['contact_email']
+
+    def save(self):
+        super(SetContactEmailPasswordForm, self).save()
+
+        contact_email = self.cleaned_data['contact_email']
+        Profile.objects.update_contact_email(self.user.username, contact_email)

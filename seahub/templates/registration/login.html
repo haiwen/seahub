@@ -2,7 +2,13 @@
 {% load i18n %}
 
 {% block sub_title %}{% trans "Log In" %} - {% endblock %}
+
 {% block header_css_class %}hide{% endblock %}
+
+{% block extra_base_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
+{% endblock %}
+
 {% block extra_style %}
 <style type="text/css">
 html, body, #wrapper { height:100%; }
@@ -46,6 +52,8 @@ html, body, #wrapper { height:100%; }
         <p class="error">{{ form.errors.freeze_account }}</p>
         {% elif form.errors.inactive %}
         <p class="error">{{ form.errors.inactive }}</p>
+        {% elif form.errors.not_found %}
+        <p class="error">{{ form.errors.not_found }}</p>
         {% else %}
         <p class="error">{% trans "Incorrect email or password" %}</p>
         {% endif %}
@@ -59,11 +67,20 @@ html, body, #wrapper { height:100%; }
         </label>
         <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal forgot-passwd">{% trans "Forgot password?" %}</a>
 
-        <button type="submit" class="submit">{% trans "Log In" %}</button>
+        <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
     </form>
 
     {% if enable_sso %}
     <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
+    {% endif %}
+
+    {% if enable_weixin %}
+    <div>
+    {% trans "Login with: " %}
+    <a href="{% url "weixin_oauth_login" %}">
+        <img src="{{MEDIA_URL}}img/weixin.png" width="32" alt="" title="{% if LANGUAGE_CODE == 'zh-cn' %}微信{% else %}WeChat{% endif %}" />
+    </a>
+    </div>
     {% endif %}
 
     <div class="login-panel-bottom-container">
@@ -73,6 +90,7 @@ html, body, #wrapper { height:100%; }
     </div>
 </div>
 </div>
+{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}
@@ -131,11 +149,11 @@ $('#refresh-captcha').on('click', function() {
 });
 
 $('#login-form').on('submit', function(){
-    if (!$.trim($('input[name="login"]').val())) {
+    if (!$('input[name="login"]').val().trim()) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
     }
-    if (!$.trim($('input[name="password"]').val())) {
+    if (!$('input[name="password"]').val().trim()) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
     }

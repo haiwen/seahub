@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import watermark from 'watermark-dom';
-import { seafileAPI } from './utils/seafile-api';
+import PropTypes from 'prop-types';
+import toaster from './components/toast';
 import { Utils } from './utils/utils';
-import { siteName } from './utils/constants';
-import FileInfo from './components/file-view/file-info';
-import FileToolbar from './components/file-view/file-toolbar';
+import { gettext } from './utils/constants';
+import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
-import CommentPanel from './components/file-view/comment-panel';
+import { seafileAPI } from './utils/seafile-api';
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -22,113 +21,128 @@ import 'codemirror/mode/python/python';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/lib/codemirror.css';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
-
-import './css/file-view.css';
 import './css/text-file-view.css';
 
-const { isStarred, isLocked, lockedByMe,
-  repoID, filePath, err, enableWatermark, userNickName,
-  // the following are only for text file view
-  fileExt, fileContent
+const {
+  err, fileExt, fileContent, repoID, filePath, fileName, canEditFile, username
 } = window.app.pageOptions;
 
 const options = {
-  lineNumbers: false,
-  mode: Utils.chooseLanguage(fileExt.slice(3, fileExt.length -3)),
+  lineNumbers: true,
+  mode: Utils.chooseLanguage(fileExt),
   extraKeys: {'Ctrl': 'autocomplete'},
   theme: 'default',
-  autoMatchParens: true,
   textWrapping: true,
   lineWrapping: true,
-  readOnly: 'nocursor'
+  readOnly: !canEditFile,
+  cursorBlinkRate: canEditFile ? 530 : -1,   // default is 530ms
 };
 
 class ViewFileText extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      isStarred: isStarred,
-      isLocked: isLocked,
-      lockedByMe: lockedByMe,
-      isCommentPanelOpen: false
+      content: fileContent,
+      needSave: false,
+      isSaving: false,
+      participants: [],
     };
+    this.onSave=this.onSave.bind(this);
+    this.isParticipant = false;
   }
 
-  toggleCommentPanel = () => {
+
+  updateContent = (newContent) => {
     this.setState({
-      isCommentPanelOpen: !this.state.isCommentPanelOpen
+      needSave: true,
+      content: newContent,
     });
   }
 
-  toggleStar = () => {
-    if (this.state.isStarred) {
-      seafileAPI.unStarFile(repoID, filePath).then((res) => {
-        this.setState({
-          isStarred: false
-        });
-      });
-    } else {
-      seafileAPI.starFile(repoID, filePath).then((res) => {
-        this.setState({
-          isStarred: true
-        });
-      });
+  onSave () {
+    if (!this.isParticipant) {
+      this.addParticipant();
     }
+    let dirPath = '/';
+    return (
+      seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
+        const uploadLink = res.data;
+        this.setState({
+          isSaving: true
+        });
+        return seafileAPI.updateFile(
+          uploadLink,
+          filePath,
+          fileName,
+          this.state.content
+        ).then(() => {
+          toaster.success(gettext('Successfully saved'), {
+            duration: 2
+          });
+          this.setState({
+            isSaving: false,
+            needSave: false
+          });
+        });
+      })
+    );
   }
 
-  toggleLockFile = () => {
-    if (this.state.isLocked) {
-      seafileAPI.unlockfile(repoID, filePath).then((res) => {
-        this.setState({
-          isLocked: false,
-          lockedByMe: false
+  addParticipant = () => {
+    seafileAPI.addFileParticipants(repoID, filePath, [username]).then((res) => {
+      if (res.status === 200) {
+        this.isParticipant = true;
+        this.getParticipants();
+      }
+    });
+  }
+
+  getParticipants = () => {
+    seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
+      const participants = res.data.participant_list;
+      this.setState({ participants: participants });
+      if (participants.length > 0) {
+        this.isParticipant = participants.every((participant) => {
+          return participant.email == username;
         });
-      });
-    } else {
-      seafileAPI.lockfile(repoID, filePath).then((res) => {
-        this.setState({
-          isLocked: true,
-          lockedByMe: true
-        });
-      });
-    }    
+      }
+    });
+  }
+
+  onParticipantsChange = () => {
+    this.getParticipants();
+  }
+
+  componentDidMount() {
+    this.getParticipants();
   }
 
   render() {
     return (
-      <div className="h-100 d-flex flex-column">
-        <div className="file-view-header d-flex justify-content-between">
-          <FileInfo
-            isStarred={this.state.isStarred}
-            isLocked={this.state.isLocked}
-            toggleStar={this.toggleStar}
+      <FileView
+        content={
+          <FileContent
+            content={this.state.content}
+            updateContent={this.updateContent}
           />
-          <FileToolbar
-            isLocked={this.state.isLocked}
-            lockedByMe={this.state.lockedByMe}
-            toggleLockFile={this.toggleLockFile}
-            toggleCommentPanel={this.toggleCommentPanel}
-          />
-        </div>
-        <div className="file-view-body flex-auto d-flex">
-          <FileContent />
-          {this.state.isCommentPanelOpen &&
-            <CommentPanel toggleCommentPanel={this.toggleCommentPanel} />
-          }
-        </div>
-      </div>
+        }
+        isSaving={this.state.isSaving}
+        needSave={this.state.needSave}
+        onSave={this.onSave}
+        participants={this.state.participants}
+        onParticipantsChange={this.onParticipantsChange}
+      />
     );
   }
 }
 
+const propTypes = {
+  updateContent: PropTypes.func.isRequired,
+  content: PropTypes.string.isRequired,
+};
+
 class FileContent extends React.Component {
-
   render() {
-
     if (err) {
       return <FileViewTip />;
     }
@@ -136,20 +150,16 @@ class FileContent extends React.Component {
       <div className="file-view-content flex-1 text-file-view">
         <CodeMirror
           ref="code-mirror-editor"
-          value={fileContent}
+          value={this.props.content}
           options={options}
+          onChange={this.props.updateContent}
         />
       </div>
     );
   }
 }
 
-if (enableWatermark) {
-  watermark.init({
-    watermark_txt: `${siteName} ${userNickName}`,
-    watermark_alpha: 0.075
-  });
-}
+FileContent.propTypes = propTypes;
 
 ReactDOM.render (
   <ViewFileText />,

@@ -13,7 +13,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import LICENSE_PATH
-from seahub.utils import get_file_type_and_ext
+from seahub.utils import get_file_type_and_ext, is_pro_version
+from seahub.utils.licenseparse import parse_license
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,10 @@ class AdminLicense(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request):
+
+        if not request.user.admin_permissions.can_config_system():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         license_file = request.FILES.get('license', None)
         if not license_file:
             error_msg = 'license can not be found.'
@@ -45,7 +50,7 @@ class AdminLicense(APIView):
                 error_msg = 'path %s invalid.' % LICENSE_PATH
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            with open(LICENSE_PATH, 'w') as fd:
+            with open(LICENSE_PATH, 'wb') as fd:
                 fd.write(license_file.read())
 
             ccnet_api.reload_license()
@@ -53,4 +58,28 @@ class AdminLicense(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        return Response({'success': True}, status=status.HTTP_200_OK)
+
+        # get license info
+        is_pro = is_pro_version()
+        if is_pro:
+            license_dict = parse_license()
+        else:
+            license_dict = {}
+
+        if license_dict:
+            try:
+                max_users = int(license_dict.get('MaxUsers', 3))
+            except ValueError as e:
+                logger.error(e)
+                max_users = 0
+        else:
+            max_users = 0
+
+        license_info = {
+            'license_expiration': license_dict.get('Expiration', ''),
+            'license_mode': license_dict.get('Mode', ''),
+            'license_maxusers': max_users,
+            'license_to': license_dict.get('Name', ''),
+        }
+
+        return Response(license_info, status=status.HTTP_200_OK)

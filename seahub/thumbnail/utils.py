@@ -3,12 +3,12 @@ import os
 import posixpath
 import timeit
 import tempfile
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import logging
-from StringIO import StringIO
+from io import BytesIO
 import zipfile
 try: # Py2 and Py3 compatibility
-    from urllib import urlretrieve
+    from urllib.request import urlretrieve
 except:
     from urllib.request import urlretrieve
 
@@ -142,8 +142,8 @@ def generate_thumbnail(request, repo_id, size, path):
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     try:
-        image_file = urllib2.urlopen(inner_path)
-        f = StringIO(image_file.read())
+        image_file = urllib.request.urlopen(inner_path)
+        f = BytesIO(image_file.read())
         return _create_thumbnail_common(f, thumbnail_file, size)
     except Exception as e:
         logger.error(e)
@@ -245,11 +245,11 @@ def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
     inner_path = gen_inner_file_get_url(fileserver_token, file_name)
 
     # extract xmind image
-    xmind_file = urllib2.urlopen(inner_path)
-    xmind_file_str = StringIO(xmind_file.read())
+    xmind_file = urllib.request.urlopen(inner_path)
+    xmind_file_str = BytesIO(xmind_file.read())
     xmind_zip_file = zipfile.ZipFile(xmind_file_str, 'r')
     extracted_xmind_image = xmind_zip_file.read('Thumbnails/thumbnail.png')
-    extracted_xmind_image_str = StringIO(extracted_xmind_image)
+    extracted_xmind_image_str = BytesIO(extracted_xmind_image)
 
     # save origin xmind image to thumbnail folder
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
@@ -257,4 +257,14 @@ def extract_xmind_image(repo_id, path, size=XMIND_IMAGE_SIZE):
         os.makedirs(thumbnail_dir)
     local_xmind_image = os.path.join(thumbnail_dir, file_id)
 
-    return _create_thumbnail_common(extracted_xmind_image_str, local_xmind_image, size)
+    try:
+        ret = _create_thumbnail_common(extracted_xmind_image_str, local_xmind_image, size)
+        return ret
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+
+def get_thumbnail_image_path(obj_id, image_size):
+    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))
+    thumbnail_image_path = os.path.join(thumbnail_dir, obj_id)
+    return thumbnail_image_path

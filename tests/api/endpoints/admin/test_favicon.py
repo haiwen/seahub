@@ -2,17 +2,23 @@ import os
 import json
 from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
-from seahub.utils import PREVIEW_FILEEXT
+from seahub.utils import PREVIEW_FILEEXT, get_service_url
 from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg
-from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH
+from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH, MEDIA_URL
 
 class AdminFaviconTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
+
+    def test_post_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.post(reverse('api-v2.1-admin-favicon'))
+        self.assertEqual(403, resp.status_code)
 
     def test_update_favicon(self):
 
@@ -27,12 +33,12 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
 
         assert resp.status_code == 200
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] == True
+        assert json_resp['favicon_path'] == get_service_url() + MEDIA_URL + CUSTOM_FAVICON_PATH
         assert os.path.exists(custom_symlink)
         assert os.path.islink(custom_symlink)
 
@@ -45,7 +51,7 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
         assert resp.status_code == 403
 
@@ -57,7 +63,7 @@ class AdminFaviconTest(BaseTestCase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'test.noico')
 
-        with open(logo_file) as f:
+        with open(logo_file, 'rb') as f:
             resp = self.client.post(logo_url, {'favicon': f})
         json_resp = json.loads(resp.content)
         assert resp.status_code == 400

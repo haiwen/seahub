@@ -1,0 +1,42 @@
+body {
+  overflow: hidden;
+}
+#wrapper {
+  height: 100%;
+}
+.top-header {
+  background: #f4f4f7;
+  border-bottom: 1px solid #e8e8e8;
+  padding: .5rem 1rem;
+  flex-shrink: 0;
+}
+.go-back {
+  color: #c0c0c0;
+  font-size: 1.75rem;
+  position: absolute;
+  left: -40px;
+  top: -5px;
+}
+.op-bar {
+  padding: 9px 10px;
+  background: #f2f2f2;
+  border-radius: 2px;
+}
+.more {
+  background: #efefef;
+  border: 0;
+  color: #777;
+}
+.more:hover {
+  color: #000;
+  background: #dfdfdf;
+}
+.clean {
+  border-color: #ccc;
+  border-radius: 2px;
+  height: 30px;
+  line-height: 28px;
+  font-weight: normal;
+  padding: 0 0.5rem;
+  min-width: 55px;
+}

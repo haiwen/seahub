@@ -52,7 +52,7 @@ class AddressBookGroupsSearchMember(APIView):
         email_list += search_user_from_ccnet(q)
         email_list += search_user_from_profile(q)
         # remove duplicate emails
-        email_list = {}.fromkeys(email_list).keys()
+        email_list = list({}.fromkeys(email_list).keys())
 
         try:
             # get all members in current group and its sub groups
@@ -64,7 +64,7 @@ class AddressBookGroupsSearchMember(APIView):
 
         group_email_list = [m.user_name for m in all_members]
         # remove duplicate emails
-        group_email_list = {}.fromkeys(group_email_list).keys()
+        group_email_list = list({}.fromkeys(group_email_list).keys())
 
         email_result = []
         for email in group_email_list:

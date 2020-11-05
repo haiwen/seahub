@@ -1,5 +1,5 @@
 from mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 
 try:
@@ -28,6 +28,16 @@ class DeviceErrorsTest(BaseTestCase):
             return
 
         self.login_as(self.user)
+        url = reverse('api-v2.1-admin-device-errors')
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_no_permission(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin_no_other_permission)
         url = reverse('api-v2.1-admin-device-errors')
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code)

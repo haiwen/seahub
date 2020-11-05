@@ -3,18 +3,18 @@
 from functools import partial
 import os
 import re
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import uuid
 import logging
 import hashlib
 import tempfile
 import locale
-import ConfigParser
+import configparser
 import mimetypes
 import contextlib
 from datetime import datetime
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 import json
 
 import ccnet
@@ -22,7 +22,7 @@ from constance import config
 import seaserv
 from seaserv import seafile_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import Context, loader
@@ -59,10 +59,16 @@ try:
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
 
+logger = logging.getLogger(__name__)
+
 # init Seafevents API
 if EVENTS_CONFIG_FILE:
-    from seafevents import seafevents_api
-    seafevents_api.init(EVENTS_CONFIG_FILE)
+    try:
+        from seafevents import seafevents_api
+        seafevents_api.init(EVENTS_CONFIG_FILE)
+    except ImportError:
+        logging.exception('Failed to import seafevents package.')
+        seafevents_api = None
 else:
     class RPCProxy(object):
         def __getattr__(self, name):
@@ -84,7 +90,7 @@ def is_pro_version():
         return False
 
 def is_cluster_mode():
-    cfg = ConfigParser.ConfigParser()
+    cfg = configparser.ConfigParser()
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
         confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
     else:
@@ -109,10 +115,6 @@ try:
     from seahub.settings import OFFICE_CONVERTOR_ROOT
 except ImportError:
     OFFICE_CONVERTOR_ROOT = ''
-try:
-    from seahub.settings import OFFICE_CONVERTOR_NODE
-except ImportError:
-    OFFICE_CONVERTOR_NODE = False
 
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
@@ -121,17 +123,17 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'eps', 'psd'),
+    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
-    DRAW: ('draw',),
     PDF: ('pdf', 'ai'),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
-    '3D': ('stl', 'obj'),
+    #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
+    CDOC: ('cdoc',),
 }
 
 def gen_fileext_type_map():
@@ -140,7 +142,7 @@ def gen_fileext_type_map():
 
     """
     d = {}
-    for filetype in PREVIEW_FILEEXT.keys():
+    for filetype in list(PREVIEW_FILEEXT.keys()):
         for fileext in PREVIEW_FILEEXT.get(filetype):
             d[fileext] = filetype
 
@@ -167,7 +169,7 @@ def render_error(request, msg=None, extra_ctx=None):
 
     """
     ctx = {}
-    ctx['error_msg'] = msg or _('Internal error')
+    ctx['error_msg'] = msg or _('Internal Server Error')
 
     if extra_ctx:
         for k in extra_ctx:
@@ -283,6 +285,11 @@ def is_valid_username(username):
     """
     return is_valid_email(username)
 
+def is_valid_username2(username):
+    """ New username check function, old version is used by many others, stay put
+    """
+    return (not username.startswith(' ')) and (not username.endswith(' '))
+
 def is_valid_dirent_name(name):
     """Check whether repo/dir/file name is valid.
     """
@@ -328,7 +335,7 @@ def check_filename_with_rename(repo_id, parent_dir, obj_name):
         return ''
     # TODO: what if parrent_dir does not exist?
     dirents = seafile_api.list_dir_by_commit_and_path(repo_id,
-            latest_commit.id, parent_dir.encode('utf-8'))
+            latest_commit.id, parent_dir)
 
     exist_obj_names = [dirent.obj_name for dirent in dirents]
     return get_no_duplicate_obj_name(obj_name, exist_obj_names)
@@ -346,7 +353,7 @@ def get_user_repos(username, org_id=None):
         if CLOUD_MODE:
             public_repos = []
         else:
-            public_repos = seaserv.list_inner_pub_repos(username)
+            public_repos = seafile_api.get_inner_pub_repo_list()
 
         for r in shared_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned or group
@@ -519,10 +526,6 @@ def gen_dir_zip_download_url(token):
     """
     return '%s/zip/%s' % (get_fileserver_root(), token)
 
-def get_ccnet_server_addr_port():
-    """get ccnet server host and port"""
-    return seaserv.CCNET_SERVER_ADDR, seaserv.CCNET_SERVER_PORT
-
 def string2list(string):
     """
     Split string contacted with different separators to a list, and remove
@@ -549,13 +552,17 @@ def is_org_context(request):
 
 # events related
 if EVENTS_CONFIG_FILE:
-    parsed_events_conf = ConfigParser.ConfigParser()
+    parsed_events_conf = configparser.ConfigParser()
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
-    import seafevents
-
-    EVENTS_ENABLED = True
-    SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+    try:
+        import seafevents
+        EVENTS_ENABLED = True
+        SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+    except ImportError:
+        logging.exception('Failed to import seafevents package.')
+        seafevents = None
+        EVENTS_ENABLED = False
 
     @contextlib.contextmanager
     def _get_seafevents_session():
@@ -641,7 +648,7 @@ if EVENTS_CONFIG_FILE:
         valid_events = []
         next_start = start
         while True:
-            if org_id > 0:
+            if org_id and org_id > 0:
                 events = seafevents.get_org_user_events(ev_session, org_id,
                                                         username, next_start,
                                                         limit)
@@ -705,11 +712,11 @@ if EVENTS_CONFIG_FILE:
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
-    def get_file_history(repo_id, path, start, count):
+    def get_file_history(repo_id, path, start, count, history_limit=-1):
         """Return file histories
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_history(session, repo_id, path, start, count)
+            res = seafevents.get_file_history(session, repo_id, path, start, count, history_limit)
         return res
 
     def get_log_events_by_time(log_type, tstart, tend):
@@ -724,14 +731,14 @@ if EVENTS_CONFIG_FILE:
 
         event_type_dict = {
             'file-download-web': ('web', ''),
-            'file-download-share-link': ('share-link',''),
+            'file-download-share-link': ('share-link', ''),
             'file-download-api': ('API', e.device),
             'repo-download-sync': ('download-sync', e.device),
             'repo-upload-sync': ('upload-sync', e.device),
             'seadrive-download-file': ('seadrive-download', e.device),
         }
 
-        if not event_type_dict.has_key(e.etype):
+        if e.etype not in event_type_dict:
             event_type_dict[e.etype] = (e.etype, e.device if e.device else '')
 
         return event_type_dict[e.etype]
@@ -816,18 +823,31 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
-    def get_virus_record(repo_id=None, start=-1, limit=-1):
+    def get_virus_files(repo_id=None, has_handled=None, start=-1, limit=-1):
         with _get_seafevents_session() as session:
-            r = seafevents.get_virus_record(session, repo_id, start, limit)
+            r = seafevents.get_virus_files(session, repo_id, has_handled, start, limit)
         return r if r else []
 
-    def handle_virus_record(vid):
+    def delete_virus_file(vid):
         with _get_seafevents_session() as session:
-            return True if seafevents.handle_virus_record(session, vid) == 0 else False
+            return True if seafevents.delete_virus_file(session, vid) == 0 else False
 
-    def get_virus_record_by_id(vid):
+    def operate_virus_file(vid, ignore):
         with _get_seafevents_session() as session:
-            return seafevents.get_virus_record_by_id(session, vid)
+            return True if seafevents.operate_virus_file(session, vid, ignore) == 0 else False
+
+    def get_virus_file_by_vid(vid):
+        with _get_seafevents_session() as session:
+            return seafevents.get_virus_file_by_vid(session, vid)
+
+    def get_file_scan_record(start=-1, limit=-1):
+        records = seafevents_api.get_content_scan_results(start, limit)
+        return records if records else []
+
+    def get_user_activities_by_timestamp(username, start, end):
+        events = seafevents.get_user_activities_by_timestamp(username, start, end)
+        return events if events else []
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -860,18 +880,25 @@ else:
         pass
     def get_perm_audit_events():
         pass
-    def get_virus_record():
+    def get_virus_files():
         pass
-    def handle_virus_record():
+    def delete_virus_file():
         pass
-    def get_virus_record_by_id(vid):
+    def operate_virus_file():
         pass
+    def get_virus_file_by_vid(vid):
+        pass
+    def get_file_scan_record():
+        pass
+    def get_user_activities_by_timestamp():
+        pass
+
 
 def calc_file_path_hash(path, bits=12):
-    if isinstance(path, unicode):
+    if isinstance(path, str):
         path = path.encode('UTF-8')
 
-    path_hash = hashlib.md5(urllib2.quote(path)).hexdigest()[:bits]
+    path_hash = hashlib.md5(urllib.parse.quote(path)).hexdigest()[:bits]
 
     return path_hash
 
@@ -959,6 +986,7 @@ def gen_shared_upload_link(token):
     service_url = service_url.rstrip('/')
     return '%s/u/d/%s/' % (service_url, token)
 
+
 def show_delete_days(request):
     if request.method == 'GET':
         days_str = request.GET.get('days', '')
@@ -996,12 +1024,8 @@ def mkstemp():
 
     '''
     fd, path = tempfile.mkstemp()
-    system_encoding = locale.getdefaultlocale()[1]
-    if system_encoding is not None:
-        path_utf8 = path.decode(system_encoding).encode('UTF-8')
-        return fd, path_utf8
-    else:
-        return fd, path
+
+    return fd, path
 
 # File or directory operations
 FILE_OP = ('Added or modified', 'Added', 'Modified', 'Renamed', 'Moved',
@@ -1092,132 +1116,41 @@ if EVENTS_CONFIG_FILE:
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 if HAS_OFFICE_CONVERTER:
 
+    import time
+    import requests
+    import jwt
+
     OFFICE_HTML_DIR = get_office_converter_html_dir()
     OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
-    from seafevents.office_converter import OfficeConverterRpcClient
-    office_converter_rpc = None
-
-    def _get_office_converter_rpc():
-        global office_converter_rpc
-        if office_converter_rpc is None:
-            pool = ccnet.ClientPool(
-                seaserv.CCNET_CONF_PATH,
-                central_config_dir=seaserv.SEAFILE_CENTRAL_CONF_DIR
-            )
-            office_converter_rpc = OfficeConverterRpcClient(pool)
-
-        return office_converter_rpc
-
-    def office_convert_cluster_token(file_id):
-        from django.core import signing
-        s = '-'.join([file_id, datetime.now().strftime('%Y%m%d')])
-        return signing.Signer().sign(s)
-
-    def _office_convert_token_header(file_id):
-        return {
-            'X-Seafile-Office-Preview-Token': office_convert_cluster_token(file_id),
-        }
-
-    def cluster_delegate(delegate_func):
-        '''usage:
-
-        @cluster_delegate(funcA)
-        def func(*args):
-            ...non-cluster logic goes here...
-
-        - In non-cluster mode, this decorator effectively does nothing.
-        - In cluster mode, if this node is not the office convert node,
-        funcA is called instead of the decorated function itself
-
-        '''
-        def decorated(func):
-            def real_func(*args, **kwargs):
-                cluster_internal = kwargs.pop('cluster_internal', False)
-                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not cluster_internal:
-                    return delegate_func(*args)
-                else:
-                    return func(*args)
-            return real_func
-
-        return decorated
-
-    def delegate_add_office_convert_task(file_id, doctype, raw_path):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        data = urllib.urlencode({
-            'file_id': file_id,
-            'doctype': doctype,
-            'raw_path': raw_path,
-        })
-
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, data=data, headers=headers).read()
-
-        return json.loads(ret)
-
-    def delegate_query_office_convert_status(file_id, doctype):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&doctype=%s' % (file_id, doctype)
-        headers = _office_convert_token_header(file_id)
-        ret = do_urlopen(url, headers=headers).read()
-
-        return json.loads(ret)
-
-    def delegate_get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT,
-                      '/office-convert/internal/static/%s/%s%s/%s' % (
-                          repo_id, commit_id, urlquote(path), urlquote(static_filename)))
-        url += '?file_id=' + file_id
-        headers = _office_convert_token_header(file_id)
-        timestamp = request.META.get('HTTP_IF_MODIFIED_SINCE')
-        if timestamp:
-            headers['If-Modified-Since'] = timestamp
-
-        try:
-            ret = do_urlopen(url, headers=headers)
-            data = ret.read()
-        except urllib2.HTTPError, e:
-            if timestamp and e.code == 304:
-                return HttpResponseNotModified()
-            else:
-                raise
-
-        content_type = ret.headers.get('content-type', None)
-        if content_type is None:
-            dummy, ext = os.path.splitext(os.path.basename(path))
-            content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
-
-        resp = HttpResponse(data, content_type=content_type)
-        if 'last-modified' in ret.headers:
-            resp['Last-Modified'] = ret.headers.get('last-modified')
-
-        return resp
-
-    @cluster_delegate(delegate_add_office_convert_task)
     def add_office_convert_task(file_id, doctype, raw_path):
-        rpc = _get_office_converter_rpc()
-        d = rpc.add_task(file_id, doctype, raw_path)
-        return {
-            'exists': False,
-        }
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
+        requests.get(url, params, headers=headers)
+        return {'exists': False}
 
-    @cluster_delegate(delegate_query_office_convert_status)
     def query_office_convert_status(file_id, doctype):
-        rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, doctype)
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'file_id': file_id, 'doctype': doctype}
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
+        d = requests.get(url, params, headers=headers)
+        d = d.json()
         ret = {}
-        if d.error:
-            ret['error'] = d.error
+        if 'error' in d:
+            ret['error'] = d['error']
             ret['status'] = 'ERROR'
         else:
             ret['success'] = True
-            ret['status'] = d.status
-            ret['info'] = d.info
+            ret['status'] = d['status']
         return ret
 
-    @cluster_delegate(delegate_get_office_converted_page)
-    def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+    def get_office_converted_page(request, static_filename, file_id):
         office_out_dir = OFFICE_HTML_DIR
         filepath = os.path.join(file_id, static_filename)
         if static_filename.endswith('.pdf'):
@@ -1227,12 +1160,35 @@ if HAS_OFFICE_CONVERTER:
                                    filepath,
                                    document_root=office_out_dir)
 
+    def cluster_get_office_converted_page(path, static_filename, file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
+        payload = {'exp': int(time.time()) + 300, }
+        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
+        headers = {"Authorization": "Token %s" % token.decode()}
+        params = {'static_filename': static_filename, 'file_id': file_id}
+        try:
+            ret = requests.get(url, params, headers=headers)
+        except urllib.error.HTTPError as e:
+            raise Exception(e)
+
+        content_type = ret.headers.get('content-type', None)
+        if content_type is None:
+            dummy, ext = os.path.splitext(os.path.basename(path))
+            content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
+
+        resp = HttpResponse(ret, content_type=content_type)
+        if 'last-modified' in ret.headers:
+            resp['Last-Modified'] = ret.headers.get('last-modified')
+
+        return resp
+
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
-        except:
-            logging.exception('failed to add_office_convert_task:')
-            return _(u'Internal error')
+        except Exception as e:
+            print(e)
+            logging.exception('failed to add_office_convert_task: %s' % e)
+            return _('Internal Server Error')
         return None
 
 # search realted
@@ -1327,14 +1283,14 @@ def calculate_bitwise(num):
     return level
 
 def do_md5(s):
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('UTF-8')
     return hashlib.md5(s).hexdigest()
 
 def do_urlopen(url, data=None, headers=None):
     headers = headers or {}
-    req = urllib2.Request(url, data=data, headers=headers)
-    ret = urllib2.urlopen(req)
+    req = urllib.request.Request(url, data=data, headers=headers)
+    ret = urllib.request.urlopen(req)
     return ret
 
 def clear_token(username):
@@ -1359,10 +1315,9 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     """
     msg = 'perm-change\t%s\t%s\t%s\t%s\t%s\t%s' % \
         (etype, from_user, to, repo_id, path, perm)
-    msg_utf8 = msg.encode('utf-8')
 
     try:
-        seaserv.send_message('seahub.audit', msg_utf8)
+        seafile_api.publish_event('seahub.audit', msg)
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
@@ -1395,7 +1350,7 @@ def get_system_admins():
     return admins
 
 def is_windows_operating_system(request):
-    if not request.META.has_key('HTTP_USER_AGENT'):
+    if 'HTTP_USER_AGENT' not in request.META:
         return False
 
     if 'windows' in request.META['HTTP_USER_AGENT'].lower():
@@ -1409,7 +1364,7 @@ def get_folder_permission_recursively(username, repo_id, path):
     Ger permission from the innermost layer of subdirectories to root
     directory.
     """
-    if not path or not isinstance(path, basestring):
+    if not path or not isinstance(path, str):
         raise Exception('path invalid.')
 
     if not seafile_api.get_dir_id_by_path(repo_id, path):

@@ -4,11 +4,12 @@
 import os
 import json
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import requests
 import hashlib
-import urlparse
+import urllib.parse
 import posixpath
+import datetime
 
 from rest_framework.views import APIView
 
@@ -170,6 +171,7 @@ class WOPIFilesView(APIView):
         result['Size'] = file_size
         result['UserId'] = request_user
         result['Version'] = obj_id
+        result['LastModifiedTime'] = ''
 
         try:
             if is_pro_version():
@@ -177,6 +179,11 @@ class WOPIFilesView(APIView):
                         seafile_api.get_org_repo_owner(repo_id)
             else:
                 result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
+
+            dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
+            if dirent:
+                last_modified = datetime.datetime.utcfromtimestamp(dirent.mtime)
+                result['LastModifiedTime'] = last_modified.isoformat()
         except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
@@ -190,7 +197,7 @@ class WOPIFilesView(APIView):
             result['IsAnonymousUser'] = True
 
         absolute_uri = request.build_absolute_uri('/')
-        result['PostMessageOrigin'] = urlparse.urljoin(absolute_uri, SITE_ROOT).strip('/')
+        result['PostMessageOrigin'] = urllib.parse.urljoin(absolute_uri, SITE_ROOT).strip('/')
         result['HideSaveOption'] = True
         result['HideExportOption'] = True
         result['EnableOwnerTermination'] = True
@@ -206,7 +213,7 @@ class WOPIFilesView(APIView):
 
         # new file creation feature is not implemented on wopi host(seahub)
         # hide save as button on view/edit file page
-        result['UserCanNotWriteRelative'] = False
+        result['UserCanNotWriteRelative'] = True
 
         return HttpResponse(json.dumps(result), status=200,
                             content_type=json_content_type)
@@ -345,8 +352,8 @@ class WOPIFilesContentsView(APIView):
         inner_path = gen_inner_file_get_url(fileserver_token, file_name)
 
         try:
-            file_content = urllib2.urlopen(inner_path).read()
-        except urllib2.URLError as e:
+            file_content = urllib.request.urlopen(inner_path).read()
+        except urllib.error.URLError as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
                                 content_type=json_content_type)

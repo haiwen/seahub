@@ -3,13 +3,14 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.utils.deprecation import MiddlewareMixin
 
 from seahub.utils.ip import get_remote_ip
 from seahub.trusted_ip.models import TrustedIP
 from seahub.settings import ENABLE_LIMIT_IPADDRESS, TRUSTED_IP_LIST
 
 
-class LimitIpMiddleware(object):
+class LimitIpMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if not ENABLE_LIMIT_IPADDRESS:
             return None

@@ -1,5 +1,5 @@
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 from seahub.share.models import FileShare, UploadLinkShare
@@ -11,6 +11,16 @@ class AdminLibrariesTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo()
+
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.libraries_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_post_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.post(self.libraries_url)
+        self.assertEqual(403, resp.status_code)
 
     def test_can_get(self):
         self.login_as(self.admin)
@@ -130,6 +140,50 @@ class AdminLibraryTest(BaseTestCase):
         self.fs_upload = UploadLinkShare.objects.create_upload_link_share(self.user.username,
              self.repo_id, self.folder, None, None)
 
+    def test_get_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.get(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_delete_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.delete(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_put_admin_permission_denied(self):
+        self.login_as(self.admin_cannot_manage_library)
+        resp = self.client.put(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_can_update_status_to_read_only(self):
+
+        self.login_as(self.admin)
+
+        data = 'status=%s' % 'read-only'
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['status'] == 'read-only'
+
+        data = 'status=%s' % 'normal'
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['status'] == 'normal'
+
+    def test_update_status_with_invalid_args(self):
+
+        self.login_as(self.admin)
+
+        data = 'status=%s' % 'invalid_args'
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(400, resp.status_code)
+
     def test_can_get(self):
 
         self.login_as(self.admin)
@@ -141,12 +195,22 @@ class AdminLibraryTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['owner'] == self.user_name
         assert json_resp['name'] == self.repo.repo_name
+        assert json_resp['status'] == 'normal'
 
     def test_get_with_invalid_user_permission(self):
 
         self.login_as(self.user)
         resp = self.client.get(self.library_url)
         self.assertEqual(403, resp.status_code)
+
+    def test_can_not_transfer_library_to_owner(self):
+
+        self.login_as(self.admin)
+
+        data = 'owner=%s' % self.user_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(400, resp.status_code)
 
     def test_can_transfer(self):
 

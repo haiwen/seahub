@@ -2,14 +2,14 @@
 import json
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
 from django.utils.translation import ugettext as _
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
@@ -133,7 +133,7 @@ def user_info(request, email):
 
     owned_repos = mute_seafile_api.get_owned_repo_list(email,
                                                        ret_corrupted=True)
-    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+    owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
     space_usage = mute_seafile_api.get_user_self_usage(email)
@@ -144,7 +144,7 @@ def user_info(request, email):
     d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
     try:
-        personal_groups = seaserv.get_personal_groups_by_user(email)
+        personal_groups = ccnet_api.get_groups(email)
     except SearpcError as e:
         logger.error(e)
         personal_groups = []
@@ -185,16 +185,16 @@ def user_remove(request, email):
     """Remove a institution user.
     """
     referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('institutions:useradmin') if referer is None else referer
+    next_page = reverse('institutions:useradmin') if referer is None else referer
 
     try:
         user = User.objects.get(email=email)
         user.delete()
-        messages.success(request, _(u'Successfully deleted %s') % user.username)
+        messages.success(request, _('Successfully deleted %s') % user.username)
     except User.DoesNotExist:
-        messages.error(request, _(u'Failed to delete: the user does not exist'))
+        messages.error(request, _('Failed to delete: the user does not exist'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 @login_required_ajax
 @require_POST
@@ -208,7 +208,7 @@ def user_set_quota(request, email):
     available_quota = get_institution_available_quota(request.user.institution)
     if available_quota < quota:
         result = {}
-        result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
+        result['error'] = _('Failed to set quota: maximum quota is %d MB' % \
                             (available_quota / 10 ** 6))
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 

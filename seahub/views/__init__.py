@@ -9,7 +9,7 @@ import logging
 import posixpath
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse, resolve
 from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
@@ -21,7 +21,7 @@ from django.views.decorators.http import condition
 
 import seaserv
 from seaserv import get_repo, get_commits, \
-    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
+    seafserv_threaded_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
     seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -31,7 +31,7 @@ from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import user_mods_check, require_POST
+from seahub.base.decorators import require_POST
 from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
@@ -49,20 +49,25 @@ from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
-from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
-    disable_mod_for_user
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
+    ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
+    UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
+    SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
+    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
+    DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
-from seahub.constants import HASH_URLS
+from seahub.ocm.settings import ENABLE_OCM
+from seahub.constants import HASH_URLS, PERMISSION_READ
+
+from seahub.weixin.settings import ENABLE_WEIXIN
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
+CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
 from constance import config
 
@@ -108,6 +113,10 @@ def check_folder_permission(request, repo_id, path):
     - `repo_id`:
     - `path`:
     """
+    repo_status = seafile_api.get_repo_status(repo_id)
+    if repo_status == 1:
+        return PERMISSION_READ
+
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
 
@@ -132,7 +141,7 @@ def gen_path_link(path, repo_name):
         paths.insert(0, repo_name)
         links.insert(0, '/')
 
-    zipped = zip(paths, links)
+    zipped = list(zip(paths, links))
 
     return zipped
 
@@ -295,8 +304,8 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -357,8 +366,8 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     except SearpcError as e:
         logger.error(e)
         referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
+        next_page = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next_page)
 
     if not commit:
         raise Http404
@@ -390,7 +399,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
 def repo_recycle_view(request, repo_id):
     if not seafile_api.get_dir_id_by_path(repo_id, '/') or \
         check_folder_permission(request, repo_id, '/') != 'rw':
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -405,8 +414,7 @@ def dir_recycle_view(request, repo_id):
 
     if not seafile_api.get_dir_id_by_path(repo_id, dir_path) or \
         check_folder_permission(request, repo_id, dir_path) != 'rw':
-
-        return render_permission_error(request, _(u'Unable to view recycle page'))
+        return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     referer = request.GET.get('referer', '') # for back to 'dir view' page
@@ -415,13 +423,37 @@ def dir_recycle_view(request, repo_id):
     else:
         return render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer)
 
+@login_required
+def repo_folder_trash(request, repo_id):
+    path = request.GET.get('path', '/')
+
+    if not seafile_api.get_dir_id_by_path(repo_id, path) or \
+        check_folder_permission(request, repo_id, path) != 'rw':
+        return render_permission_error(request, _('Unable to view recycle page'))
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    if path == '/':
+        name = repo.name
+    else:
+        name = os.path.basename(path.rstrip('/'))
+
+    return render(request, 'repo_folder_trash_react.html', {
+            'repo': repo,
+            'repo_folder_name': name,
+            'path': path,
+            'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
+            })
+
 def can_access_repo_setting(request, repo_id, username):
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         return (False, None)
 
     # no settings for virtual repo
-    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+    if repo.is_virtual:
         return (False, None)
 
     # check permission
@@ -442,7 +474,7 @@ def repo_history(request, repo_id):
     """
     user_perm = check_folder_permission(request, repo_id, '/')
     if not user_perm:
-        return render_permission_error(request, _(u'Unable to view library modification'))
+        return render_permission_error(request, _('Unable to view library modification'))
 
     repo = get_repo(repo_id)
     if not repo:
@@ -459,10 +491,10 @@ def repo_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -500,7 +532,10 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render(request, 'repo_history.html', {
+    #template = 'repo_history.html'
+    template = 'repo_history_react.html'
+
+    return render(request, template, {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
@@ -516,14 +551,14 @@ def repo_history(request, repo_id):
 @require_POST
 def repo_revert_history(request, repo_id):
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
+    next_page = request.META.get('HTTP_REFERER', None)
+    if not next_page:
+        next_page = settings.SITE_ROOT
 
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _("Library does not exist"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     # perm check
     perm = check_folder_permission(request, repo_id, '/')
@@ -532,7 +567,7 @@ def repo_revert_history(request, repo_id):
 
     if perm is None or repo_owner != username:
         messages.error(request, _("Permission denied"))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
@@ -544,10 +579,10 @@ def repo_revert_history(request, repo_id):
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
         try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, username)
+            ret = seafile_api.is_password_set(repo_id, username)
             if ret == 1:
                 password_set = True
-        except SearpcError, e:
+        except SearpcError as e:
             return render_error(request, e.msg)
 
         if not password_set:
@@ -556,22 +591,22 @@ def repo_revert_history(request, repo_id):
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return render_error(request, _(u'Please specify history ID'))
+        return render_error(request, _('Please specify history ID'))
 
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
         messages.success(request, _('Successfully restored the library.'))
-    except SearpcError, e:
+    except SearpcError as e:
         if e.msg == 'Bad arguments':
-            return render_error(request, _(u'Invalid arguments.'))
+            return render_error(request, _('Invalid arguments.'))
         elif e.msg == 'No such repo':
-            return render_error(request, _(u'Library does not exist'))
+            return render_error(request, _('Library does not exist'))
         elif e.msg == "Commit doesn't exist":
-            return render_error(request, _(u'History you specified does not exist'))
+            return render_error(request, _('History you specified does not exist'))
         else:
-            return render_error(request, _(u'Unknown error'))
+            return render_error(request, _('Unknown error'))
 
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)
 
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
@@ -629,13 +664,11 @@ def create_default_library(request):
         default_repo = seafile_api.create_org_repo(name=_("My Library"),
                                                    desc=_("My Library"),
                                                    username=username,
-                                                   passwd=None,
                                                    org_id=org_id)
     else:
         default_repo = seafile_api.create_repo(name=_("My Library"),
                                                desc=_("My Library"),
-                                               username=username,
-                                               passwd=None)
+                                               username=username)
     sys_repo_id = get_system_default_repo_id()
     if sys_repo_id is None:
         return
@@ -662,94 +695,6 @@ def get_owned_repo_list(request):
         return seafile_api.get_org_owned_repo_list(org_id, username)
     else:
         return seafile_api.get_owned_repo_list(username)
-
-@login_required
-@user_mods_check
-def libraries(request):
-    """
-    New URL to replace myhome
-    """
-    username = request.user.username
-
-    # options
-    if request.cloud_mode and request.user.org is None:
-        allow_public_share = False
-    else:
-        allow_public_share = True
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-    max_upload_file_size = get_max_upload_file_size()
-    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
-    if guide_enabled:
-        create_default_library(request)
-
-    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
-
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
-    else:
-        joined_groups = ccnet_api.get_groups(username, return_ancestors=True)
-
-    if joined_groups:
-        try:
-            joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
-        except Exception as e:
-            logger.error(e)
-            joined_groups = []
-
-    joined_groups_exclude_address_book = [item for item in joined_groups if
-            item.parent_group_id == 0]
-
-    try:
-        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
-    except Exception as e:
-        logger.error(e)
-        expire_days = -1
-
-    # Whether use new index page
-    use_new_page = True
-    if request.GET.get('_old', None):
-        use_new_page = False
-
-    if use_new_page:
-        return react_fake_view(request)
-
-    return render(request, 'libraries.html', {
-            "allow_public_share": allow_public_share,
-            "guide_enabled": guide_enabled,
-            "sub_lib_enabled": sub_lib_enabled,
-            'enable_wiki': request.user.permissions.can_use_wiki(),
-            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
-            'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
-            'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
-            'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            'enable_thumbnail': settings.ENABLE_THUMBNAIL,
-            'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
-            'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
-            'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
-            'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
-            'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
-            'max_upload_file_size': max_upload_file_size,
-            'folder_perm_enabled': folder_perm_enabled,
-            'is_pro': True if is_pro_version() else False,
-            'file_audit_enabled': FILE_AUDIT_ENABLED,
-            'can_add_public_repo': request.user.permissions.can_add_public_repo(),
-            'joined_groups': joined_groups,
-            'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
-            'storages': get_library_storages(request),
-            'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
-            'library_templates': LIBRARY_TEMPLATES.keys() if \
-                    isinstance(LIBRARY_TEMPLATES, dict) else [],
-            'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS,
-            'enable_group_discussion': settings.ENABLE_GROUP_DISCUSSION,
-            'enable_file_comment': settings.ENABLE_FILE_COMMENT,
-            'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
-            'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
-            'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
-            'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
-            'enable_onlyoffice': ENABLE_ONLYOFFICE,
-            'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
-            })
 
 @login_required
 def repo_set_access_property(request, repo_id):
@@ -786,12 +731,12 @@ def file_revisions(request, repo_id):
     """
     repo = get_repo(repo_id)
     if not repo:
-        error_msg = _(u"Library does not exist")
+        error_msg = _("Library does not exist")
         return render_error(request, error_msg)
 
     # perm check
     if not check_folder_permission(request, repo_id, '/'):
-        error_msg = _(u"Permission denied.")
+        error_msg = _("Permission denied.")
         return render_error(request, error_msg)
 
     path = request.GET.get('p', '/')
@@ -830,25 +775,17 @@ def file_revisions(request, repo_id):
     if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
-    # for 'go back'
-    referer = request.GET.get('referer', '')
-
-    # Whether use new file revisions page which read file history from db.
-    if request.GET.get('_new', None) is not None:
-        if request.GET.get('_new') == '0':
-            use_new_page = False
-        else:
-            use_new_page = True
+    # Whether use new file history API which read file history from db.
+    suffix_list = seafevents_api.get_file_history_suffix()
+    if suffix_list and isinstance(suffix_list, list):
+        suffix_list = [x.lower() for x in suffix_list]
     else:
-        suffix_list = seafevents_api.get_file_history_suffix()
-        if suffix_list and isinstance(suffix_list, list):
-            suffix_list = [x.lower() for x in suffix_list]
-        else:
-            logger.error('Wrong type of suffix_list: %s' % repr(suffix_list))
-            suffix_list = []
-        use_new_page = True if file_ext in suffix_list else False
+        suffix_list = []
 
-    if use_new_page:
+    use_new_api = True if file_ext in suffix_list else False
+    use_new_style = True if use_new_api and filetype == 'markdown' else False
+
+    if use_new_style:
         return render(request, 'file_revisions_new.html', {
             'repo': repo,
             'path': path,
@@ -857,10 +794,9 @@ def file_revisions(request, repo_id):
             'is_owner': is_owner,
             'can_compare': can_compare,
             'can_revert_file': can_revert_file,
-            'referer': referer,
         })
 
-    return render(request, 'file_revisions.html', {
+    return render(request, 'file_revisions_old.html', {
         'repo': repo,
         'path': path,
         'u_filename': u_filename,
@@ -869,8 +805,8 @@ def file_revisions(request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'can_download_file': parse_repo_perm(repo_perm).can_download,
-        'referer': referer,
-        })
+        'use_new_api': use_new_api,
+    })
 
 
 def demo(request):
@@ -901,10 +837,10 @@ def list_inner_pub_repos(request):
     username = request.user.username
     if is_org_context(request):
         org_id = request.user.org.org_id
-        return seaserv.list_org_inner_pub_repos(org_id, username)
+        return seafile_api.list_org_inner_pub_repos(org_id)
 
     if not request.cloud_mode:
-        return seaserv.list_inner_pub_repos(username)
+        return seafile_api.get_inner_pub_repo_list()
 
     return []
 
@@ -914,7 +850,7 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -932,7 +868,7 @@ def i18n(request):
             Profile.objects.add_or_update(request.user.username, '', '', lang)
 
     # set language code to client
-    res = HttpResponseRedirect(next)
+    res = HttpResponseRedirect(next_page)
     res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
     return res
 
@@ -940,7 +876,7 @@ def i18n(request):
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
-        return render_error(request, _(u'Library does not exist'))
+        return render_error(request, _('Library does not exist'))
 
     path = request.GET.get('p', '/')
     if path[-1] != '/':         # Normalize dir path
@@ -964,12 +900,12 @@ def repo_download_dir(request, repo_id):
         try:
             total_size = seafile_api.get_dir_size(repo.store_id,
                 repo.version, dir_id)
-        except Exception, e:
+        except Exception as e:
             logger.error(str(e))
-            return render_error(request, _(u'Internal Error'))
+            return render_error(request, _('Internal Server Error'))
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+            return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -985,10 +921,10 @@ def repo_download_dir(request, repo_id):
                 repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
         if not token:
-            return render_error(request, _(u'Internal Server Error'))
+            return render_error(request, _('Internal Server Error'))
 
     else:
-        return render_error(request, _(u'Unable to download "%s"') % dirname )
+        return render_error(request, _('Unable to download "%s"') % dirname )
 
     url = gen_file_get_url(token, dirname)
     from seahub.views.file import send_file_access_msg
@@ -1096,29 +1032,6 @@ def convert_cmmt_desc_link(request):
 
     raise Http404
 
-@login_required
-def toggle_modules(request):
-    """Enable or disable modules.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
-
-    username = request.user.username
-    personal_wiki = request.POST.get('personal_wiki', 'off')
-    if personal_wiki == 'on':
-        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        messages.success(request, _('Successfully enable "Personal Wiki".'))
-    else:
-        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        if referer.find('wiki') > 0:
-            next = settings.SITE_ROOT
-        messages.success(request, _('Successfully disable "Personal Wiki".'))
-
-    return HttpResponseRedirect(next)
-
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
     try:
@@ -1133,7 +1046,7 @@ def image_view(request, filename):
         raise Http404
 
     # read file from cache, if hit
-    filename_md5 = hashlib.md5(filename).hexdigest()
+    filename_md5 = hashlib.md5(filename.encode('utf-8')).hexdigest()
     cache_key = 'image_view__%s' % filename_md5
     file_content = cache.get(cache_key)
     if file_content is None:
@@ -1169,15 +1082,6 @@ def underscore_template(request, template):
 
     return render(request, template, {})
 
-def fake_view(request, **kwargs):
-    """
-    Used for 'view_common_lib_dir' and some other urls
-
-    As the urls start with '#',
-    http request will not access this function
-    """
-    return HttpResponse()
-
 def client_token_login(request):
     """Login from desktop client with a generated token.
     """
@@ -1212,24 +1116,97 @@ def choose_register(request):
     login_bg_image_path = get_login_bg_image_path()
 
     return render(request, 'choose_register.html', {
+        'enable_weixin': ENABLE_WEIXIN,
         'login_bg_image_path': login_bg_image_path
     })
+
 
 @login_required
 def react_fake_view(request, **kwargs):
 
+    username = request.user.username
+
+    if resolve(request.path).url_name == 'lib_view':
+
+        repo_id = kwargs.get('repo_id', '')
+        path = kwargs.get('path', '')
+
+        if repo_id and path and \
+                not check_folder_permission(request, repo_id, path):
+
+            converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+            if not converted_repo_path:
+                error_msg = 'Permission denied.'
+                return render_error(request, error_msg)
+
+            repo_path_dict = json.loads(converted_repo_path)
+
+            converted_repo_id = repo_path_dict['repo_id']
+            converted_repo = seafile_api.get_repo(converted_repo_id)
+            if not converted_repo:
+                error_msg = 'Library %s not found.' % converted_repo_id
+                return render_error(request, error_msg)
+
+            converted_path = repo_path_dict['path']
+            if not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+                error_msg = 'Dirent %s not found.' % converted_path
+                return render_error(request, error_msg)
+
+            if not check_folder_permission(request, converted_repo_id, converted_path):
+                error_msg = 'Permission denied.'
+                return render_error(request, error_msg)
+
+            next_url = reverse('lib_view', args=[converted_repo_id,
+                                                 converted_repo.repo_name,
+                                                 converted_path.strip('/')])
+            return HttpResponseRedirect(next_url)
+
+    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
+    if guide_enabled:
+        create_default_library(request)
+
+    try:
+        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+    except Exception as e:
+        logger.error(e)
+        expire_days = -1
+
+    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
+
+    try:
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+    except Exception as e:
+        logger.error(e)
+        max_upload_file_size = -1
+
     return render(request, "react_app.html", {
+        "guide_enabled": guide_enabled,
+        'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
+        'dtable_web_server': DTABLE_WEB_SERVER,
+        'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
+        'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
+        'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+        'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+        'upload_link_expire_days_default': UPLOAD_LINK_EXPIRE_DAYS_DEFAULT,
+        'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
+        'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,
         'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
         'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
         'enable_reset_encrypted_repo_password': ENABLE_RESET_ENCRYPTED_REPO_PASSWORD,
+        'enableFileComment': settings.ENABLE_FILE_COMMENT,
         'is_email_configured': IS_EMAIL_CONFIGURED,
+        'can_add_public_repo': request.user.permissions.can_add_public_repo(),
+        'folder_perm_enabled': folder_perm_enabled,
+        'file_audit_enabled': FILE_AUDIT_ENABLED,
+        'custom_nav_items': json.dumps(CUSTOM_NAV_ITEMS),
+        'enable_show_contact_email_when_search_user': settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
+        'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
+        'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
+        'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
+        'enable_ocm': ENABLE_OCM,
     })
-
-@login_required
-def react_group(request, group_id):
-    return render(request, "react_app.html")

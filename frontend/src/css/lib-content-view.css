@@ -1,3 +1,6 @@
+.cur-view-content.lib-content-container {
+  padding: 0;
+}
 
 .view-mode-container {
   display: flex;
@@ -5,6 +8,11 @@
   overflow: hidden !important;
   padding-left: 0 !important;
   min-height: 0;
+}
+
+.dir-colunm-view {
+  display: flex;
+  width: 100%;
 }
 
 .dir-content-nav {
@@ -21,23 +29,38 @@
 }
 
 .dir-content-main {
-  flex: 1 0 75% !important;
+  flex: 1 0 74.5%;
   display: flex;
   flex-direction: column;
-  margin-right: -1rem;
-  padding:0 0.75rem;
   overflow: auto;
 }
 
 /*tree view */
 .tree-view {
-  padding: 12px 12px 0 0;
+  margin-left: -9px;
+  padding: 12px 12px 12px 0;
   line-height: 1.5;
+  flex: 1;
+  border: 1px solid rgba(69,170,242,0);
+}
+
+.tree-view-drop {
+  border: 1px solid rgba(69,170,242);
+}
+
+.tree-view-drop::before {
+  border-left: 1px solid rgba(69,170,242);
+  content: '';
+  margin-left: 8px;
+  height: calc(100% + 24px);
+  display: block;
+  margin-top: -12px;
+  float: left;
 }
 
 .tree-node-inner {
   position: relative;
-  height: 26px;
+  height: 24px;
   cursor: pointer;
   line-height: 1.625;
 }
@@ -50,10 +73,11 @@
 .tree-node-inner .tree-node-text {
   padding-left: 2.8rem;
   width: calc(100% - 1.5rem);
-  font-size: 15px;
+  font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 24px;
 }
 
 .tree-node-inner .left-icon {
@@ -74,6 +98,10 @@
   display: flex;
   align-content: center;
   justify-content: center;
+}
+
+.tree-node-drop {
+  background-color:rgb(255,239,178);
 }
 
 .tree-node-icon {
@@ -151,6 +179,32 @@
   color:#eb8205;
 }
 
+.wiki-page-content .wiki-open-file {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 50%;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  user-select: none;
+  border: none;
+  right: 10px;
+  bottom: 10px;
+  color: #999;
+  z-index: 1050;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.wiki-page-content .wiki-open-file i {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.wiki-page-content .wiki-open-file:hover {
+  background-color: #f6f6f6;
+}
+
 .dir-content-main .wiki-page-content .article {
   padding: 0 10px;
 }
@@ -192,4 +246,17 @@
   padding: 40px 10px;
   font-size:12px;
   color: #666;
+}
+
+.dir-content-resize {
+  flex: 0 0 .5%;
+  cursor: ew-resize;
+}
+
+.readonly-tip-message {
+  display: flex;
+  padding: 0.25rem 0;
+  background-color: #FEFBDC;
+  justify-content: center;
+  align-items: center;
 }

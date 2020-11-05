@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import connection
 
+from seaserv import ccnet_api
 from seahub.auth.backends import RemoteUserBackend
 from seahub.base.accounts import User
 from registration.models import (
@@ -43,9 +44,12 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
             return
 
         username = self.clean_username(remote_user)
-        try:
-            user = User.objects.get(email=username)
-        except User.DoesNotExist:
+
+        local_ccnet_users = ccnet_api.search_emailusers('DB', username, -1, -1)
+        if not local_ccnet_users:
+            local_ccnet_users = ccnet_api.search_emailusers('LDAP', username, -1, -1)
+
+        if not local_ccnet_users:
             if self.create_unknown_user:
                 user = User.objects.create_user(
                     email=username, is_active=self.activate_after_creation)
@@ -58,5 +62,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
                     notify_admins_on_register_complete(user.email)
             else:
                 user = None
+        else:
+            user = User.objects.get(email=username)
 
         return user

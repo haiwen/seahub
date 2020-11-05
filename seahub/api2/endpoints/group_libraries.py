@@ -11,6 +11,7 @@ from seaserv import seafile_api, ccnet_api
 
 from constance import config
 
+from seahub import settings
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -29,6 +30,7 @@ from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
         share_dir_to_group
 from seahub.constants import PERMISSION_READ
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 
@@ -56,6 +58,7 @@ def get_group_repo_info(request, group_repo):
     return group_repo_info
 
 class GroupLibraries(APIView):
+
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -69,6 +72,7 @@ class GroupLibraries(APIView):
         """
 
         # only group member can get group libraries
+        username = request.user.username
         if not is_group_member(group_id, request.user.username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -79,7 +83,17 @@ class GroupLibraries(APIView):
         else:
             group_repos = seafile_api.get_repos_by_group(group_id)
 
-        group_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        group_repos.sort(key=lambda x: x.last_modified, reverse=True)
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        group_repos = group_repos[start:start+per_page]
 
         # get repo id owner dict
         all_repo_owner = []
@@ -113,6 +127,13 @@ class GroupLibraries(APIView):
                 else:
                     contact_email_dict[email] = email2contact_email(email)
 
+        try:
+            starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(username)
+            starred_repo_id_list = [item.repo_id for item in starred_repos]
+        except Exception as e:
+            logger.error(e)
+            starred_repo_id_list = []
+
         result = []
         for group_repo in group_repos:
             group_repo_info = get_group_repo_info(request, group_repo)
@@ -126,6 +147,8 @@ class GroupLibraries(APIView):
             group_repo_info['modifier_email'] = modifier
             group_repo_info['modifier_name'] = name_dict.get(modifier, '')
             group_repo_info['modifier_contact_email'] = contact_email_dict.get(modifier, '')
+
+            group_repo_info['starred'] = group_repo.id in starred_repo_id_list
 
             result.append(group_repo_info)
 
@@ -176,10 +199,10 @@ class GroupLibraries(APIView):
             is_org = True
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name,
-                    '', username, password, org_id)
+                    '', username, org_id, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
         else:
             repo_id = seafile_api.create_repo(repo_name,
-                    '', username, password)
+                    '', username, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
         repo = seafile_api.get_repo(repo_id)
         share_dir_to_group(repo, '/', username, username, group_id,
@@ -224,9 +247,9 @@ class GroupLibrary(APIView):
         """ Delete a group library.
 
         Permission checking:
-        1. is group admin;
         1. is repo owner;
-        1. repo is shared to group with `admin` permission;
+        2. is repo admin;
+        3. is group admin;
         """
 
         group_id = int(group_id)

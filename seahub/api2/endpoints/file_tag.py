@@ -60,7 +60,7 @@ class RepoFileTagsView(APIView):
             file_tags = FileTags.objects.get_file_tag_by_path(repo_id, file_path)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"file_tags": file_tags}, status=status.HTTP_200_OK)
@@ -109,7 +109,7 @@ class RepoFileTagsView(APIView):
             file_tag = FileTags.objects.add_file_tag(repo_id, repo_tag_id, file_path)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"file_tag": file_tag.to_dict()}, status=status.HTTP_201_CREATED)
@@ -143,7 +143,7 @@ class RepoFileTagView(APIView):
             FileTags.objects.delete_file_tag(file_tag_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": "true"}, status=status.HTTP_200_OK)
@@ -253,7 +253,7 @@ class FileTagsView(APIView):
             name_list = [name.strip() for name in names.split(",")]
             for name in name_list:
                 if not check_tagname(name):
-                    error_msg = _(u'Tag can only contain letters, numbers, dot, hyphen or underscore.')
+                    error_msg = _('Tag can only contain letters, numbers, dot, hyphen or underscore.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         FileTag.objects.delete_all_filetag_by_path(repo_id, parent_path,
@@ -277,7 +277,7 @@ class FileTagsView(APIView):
         name_list = [name.strip() for name in names.split(",")]
         for name in name_list:
             if not check_tagname(name):
-                error_msg = _(u'Tag can only contain letters, numbers, dot, hyphen or underscore.')
+                error_msg = _('Tag can only contain letters, numbers, dot, hyphen or underscore.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         res_tag_list = []
@@ -297,10 +297,10 @@ class FileTagView(APIView):
     @check_parameter
     def delete(self, request, repo_id, parent_path, filename, name, is_dir):
         if not name or not check_tagname(name):
-            error_msg = _(u'Tag can only contain letters, numbers, dot, hyphen or underscore.')
+            error_msg = _('Tag can only contain letters, numbers, dot, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if FileTag.objects.delete_file_tag_by_path(repo_id,
-                parent_path,filename,is_dir,name):
+                parent_path, filename, is_dir, name):
             return Response({"success": True}, status=status.HTTP_200_OK)
         else:
             return Response({"success": True}, status=status.HTTP_202_ACCEPTED)

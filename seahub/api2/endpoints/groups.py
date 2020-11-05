@@ -26,12 +26,11 @@ from seahub.utils.repo import get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
-    group_id_to_name
+    group_id_to_name, set_group_name_cache
 from seahub.group.views import remove_group_common
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, email2contact_email
-from seahub.views.modules import is_wiki_mod_enabled_for_group, \
-    enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.share.models import ExtraGroupsSharePermission
 
 from .utils import api_check_group
@@ -40,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 def get_group_admins(group_id):
     members = seaserv.get_group_members(group_id)
-    admin_members = filter(lambda m: m.is_staff, members)
+    admin_members = [m for m in members if m.is_staff]
 
     admins = []
     for u in admin_members:
@@ -65,8 +64,13 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "created_at": isoformat_timestr,
         "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
-        "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)
     }
+    # parent_group_id = 0: non department group
+    # parent_group_id = -1: top department group
+    # parent_group_id = n(n > 0):  sub department group, n is parent group's id
+    if group.parent_group_id != 0:
+        group_info['group_quota'] = seafile_api.get_group_quota(group_id)
+        group_info['group_quota_usage'] = seafile_api.get_group_quota_usage(group_id)
 
     return group_info
 
@@ -88,7 +92,7 @@ class Groups(APIView):
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
-            user_groups = seaserv.get_org_groups_by_user(org_id, username)
+            user_groups = seaserv.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
@@ -110,6 +114,13 @@ class Groups(APIView):
         if with_repos:
             gids = [g.id for g in user_groups]
             admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+
+            try:
+                starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(username)
+                starred_repo_id_list = [item.repo_id for item in starred_repos]
+            except Exception as e:
+                logger.error(e)
+                starred_repo_id_list = []
 
         for g in user_groups:
             group_info = get_group_info(request, g.id, avatar_size)
@@ -170,7 +181,8 @@ class Groups(APIView):
                         "owner_email": repo_owner,
                         "owner_name": name_dict.get(repo_owner, ''),
                         "owner_contact_email": contact_email_dict.get(repo_owner, ''),
-                        "is_admin": (r.id, g.id) in admin_info
+                        "is_admin": (r.id, g.id) in admin_info,
+                        "starred": r.repo_id in starred_repo_id_list,
                     }
                     repos.append(repo)
 
@@ -193,12 +205,12 @@ class Groups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
         if check_group_name_conflict(request, group_name):
-            error_msg = _(u'There is already a group with that name.')
+            error_msg = _('There is already a group with that name.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # create group.
@@ -269,15 +281,16 @@ class Group(APIView):
 
                 # Check whether group name is validate.
                 if not validate_group_name(new_group_name):
-                    error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+                    error_msg = _('Group name can only contain letters, numbers, blank, hyphen or underscore')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # Check whether group name is duplicated.
                 if check_group_name_conflict(request, new_group_name):
-                    error_msg = _(u'There is already a group with that name.')
+                    error_msg = _('There is already a group with that name.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                seaserv.ccnet_threaded_rpc.set_group_name(group_id, new_group_name)
+                ccnet_api.set_group_name(group_id, new_group_name)
+                set_group_name_cache(group_id, new_group_name)
 
             except SearpcError as e:
                 logger.error(e)
@@ -299,7 +312,7 @@ class Group(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 if is_group_owner(group_id, new_owner):
-                    error_msg = _(u'User %s is already group owner.') % new_owner
+                    error_msg = _('User %s is already group owner.') % new_owner
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # transfer a group
@@ -330,12 +343,6 @@ class Group(APIView):
                 if wiki_enabled != 'true' and wiki_enabled != 'false':
                     error_msg = 'wiki_enabled invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-                # turn on/off group wiki
-                if wiki_enabled == 'true':
-                    enable_mod_for_group(group_id, MOD_GROUP_WIKI)
-                else:
-                    disable_mod_for_group(group_id, MOD_GROUP_WIKI)
 
             except SearpcError as e:
                 logger.error(e)

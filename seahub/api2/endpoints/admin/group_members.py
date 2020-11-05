@@ -10,6 +10,7 @@ from rest_framework import status
 from seaserv import seafile_api, ccnet_api
 
 from seahub.group.utils import get_group_member_info, is_group_member
+from seahub.group.signals import add_user_to_group
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -33,6 +34,9 @@ class AdminGroupMembers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         group_id = int(group_id)
         group = ccnet_api.get_group(group_id)
@@ -73,6 +77,9 @@ class AdminGroupMembers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         group_id = int(group_id)
@@ -123,6 +130,11 @@ class AdminGroupMembers(APIView):
                     'error_msg': 'Internal Server Error'
                     })
 
+            add_user_to_group.send(sender=None,
+                                   group_staff=request.user.username,
+                                   group_id=group_id,
+                                   added_user=email)
+
         return Response(result)
 
 
@@ -138,6 +150,9 @@ class AdminGroupMember(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         group_id = int(group_id)
@@ -185,6 +200,9 @@ class AdminGroupMember(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # argument check
         group_id = int(group_id)

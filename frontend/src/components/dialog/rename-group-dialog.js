@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Input, Button } from 'reactstrap';
+import Utils from '../../utils/utils';
+import toaster from '../toast';
 
 class RenameGroupDialog extends React.Component {
 
@@ -10,10 +12,17 @@ class RenameGroupDialog extends React.Component {
     super(props);
     this.state = {
       newGroupName: this.props.currentGroupName,
+      isSubmitBtnActive: false,
     };
   }
 
   handleGroupNameChange = (event) => {
+    if (!event.target.value.trim()) {
+      this.setState({isSubmitBtnActive: false});
+    } else {
+      this.setState({isSubmitBtnActive: true});
+    }
+
     let name = event.target.value;
     this.setState({
       newGroupName: name
@@ -27,6 +36,9 @@ class RenameGroupDialog extends React.Component {
       seafileAPI.renameGroup(this.props.groupID, name).then((res)=> {
         that.props.loadGroup(this.props.groupID);
         that.props.onGroupChanged(res.data.id);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
     this.setState({
@@ -52,7 +64,7 @@ class RenameGroupDialog extends React.Component {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggleRenameGroupDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.renameGroup}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.renameGroup} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

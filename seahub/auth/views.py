@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
@@ -20,13 +20,14 @@ from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
-        PasswordResetForm, SetPasswordForm, PasswordChangeForm
+        PasswordResetForm, SetPasswordForm, PasswordChangeForm, \
+        SetContactEmailPasswordForm
 from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
 from seahub.auth.utils import (
     get_login_failed_attempts, incr_login_failed_attempts,
     clear_login_failed_attempts)
-from seahub.base.accounts import User
+from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
@@ -47,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
-    if not is_safe_url(url=redirect_to, host=request.get_host()):
+    if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     if request.session.test_cookie_worked():
@@ -85,15 +86,18 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
 @csrf_protect
 @never_cache
 def login(request, template_name='registration/login.html',
-          redirect_if_logged_in=None,
+          redirect_if_logged_in='libraries',
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm):
     """Displays the login form and handles the login action."""
 
-    if request.user.is_authenticated() and redirect_if_logged_in:
-        return HttpResponseRedirect(reverse(redirect_if_logged_in))
-
     redirect_to = request.GET.get(redirect_field_name, '')
+    if request.user.is_authenticated():
+        if redirect_to:
+            return HttpResponseRedirect(redirect_to)
+        else:
+            return HttpResponseRedirect(reverse(redirect_if_logged_in))
+
     ip = get_remote_ip(request)
 
     if request.method == "POST":
@@ -183,7 +187,10 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
                  getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
                  getattr(settings, 'ENABLE_OAUTH', False) or \
-                 getattr(settings, 'ENABLE_CAS', False)
+                 getattr(settings, 'ENABLE_DINGTALK', False) or \
+                 getattr(settings, 'ENABLE_CAS', False) or \
+                 getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False) or \
+                 getattr(settings, 'ENABLE_WORK_WEIXIN', False)
 
     login_bg_image_path = get_login_bg_image_path()
 
@@ -211,7 +218,7 @@ def login_simple_check(request):
         raise Http404
 
     today = datetime.now().strftime('%Y-%m-%d')
-    expect = hashlib.md5(settings.SECRET_KEY+username+today).hexdigest()
+    expect = hashlib.md5((settings.SECRET_KEY+username+today).encode('utf-8')).hexdigest()
     if expect == random_key:
         try:
             user = User.objects.get(email=username)
@@ -241,29 +248,34 @@ def logout(request, next_page=None,
         shib_logout_return = getattr(settings, 'SHIBBOLETH_LOGOUT_RETURN', '')
         if shib_logout_return:
             shib_logout_url += shib_logout_return
-        return HttpResponseRedirect(shib_logout_url)
+        response = HttpResponseRedirect(shib_logout_url)
+        response.delete_cookie('seahub_auth')
+        return response
 
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
-        return HttpResponseRedirect(reverse('cas_ng_logout'))
+        response = HttpResponseRedirect(reverse('cas_ng_logout'))
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, host=request.get_host()):
+        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
             next_page = request.path
 
     if next_page is None:
         redirect_to = request.GET.get(redirect_field_name, '')
         if redirect_to:
-            return HttpResponseRedirect(redirect_to)
+            response = HttpResponseRedirect(redirect_to)
         else:
-            return render(request, template_name, {
+            response = render(request, template_name, {
                 'title': _('Logged out')
             })
     else:
         # Redirect to this page until the session has been cleared.
-        return HttpResponseRedirect(next_page or request.path)
+        response = HttpResponseRedirect(next_page or request.path)
+
+    response.delete_cookie('seahub_auth')
+    return response
 
 def logout_then_login(request, login_url=None):
     "Logs out the user if he is logged in. Then redirects to the log-in page."
@@ -304,9 +316,9 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['domain_override'] = get_current_site(request).domain
             try:
                 form.save(**opts)
-            except Exception, e:
+            except Exception as e:
                 logger.error(str(e))
-                messages.error(request, _(u'Failed to send email, please contact administrator.'))
+                messages.error(request, _('Failed to send email, please contact administrator.'))
                 return render(request, template_name, {
                         'form': form,
                         })
@@ -366,6 +378,18 @@ def password_change(request, template_name='registration/password_change_form.ht
 
     if is_ldap_user(request.user):
         messages.error(request, _("Can not update password, please contact LDAP admin."))
+
+    if settings.ENABLE_USER_SET_CONTACT_EMAIL:
+        user_profile = Profile.objects.get_profile_by_user(request.user.username)
+        if user_profile is None or not user_profile.contact_email:
+            # set contact email and password
+            password_change_form = SetContactEmailPasswordForm
+            template_name = 'registration/password_set_form.html'
+
+        elif request.user.enc_password == UNUSABLE_PASSWORD:
+            # set password only
+            password_change_form = SetPasswordForm
+            template_name = 'registration/password_set_form.html'
 
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)

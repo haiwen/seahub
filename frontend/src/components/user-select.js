@@ -2,19 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import { seafileAPI } from '../utils/seafile-api.js';
-import { gettext } from '../utils/constants';
+import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
+import { Utils } from '../utils/utils.js';
+import toaster from './toast';
+
+import '../css/user-select.css';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('User not found')}</div>
-  );
+  className: PropTypes.string,
+  value: PropTypes.string,
 };
 
 class UserSelect extends React.Component {
@@ -22,6 +21,13 @@ class UserSelect extends React.Component {
   constructor(props) {
     super(props);
     this.options = [];
+    this.state = {
+      searchValue: '',
+    };
+  }
+
+  onInputChange = (searchValue) => {
+    this.setState({ searchValue });
   }
 
   handleSelectChange = (option) => {
@@ -40,13 +46,25 @@ class UserSelect extends React.Component {
           obj.value = item.name;
           obj.email = item.email;
           obj.label =
-            <React.Fragment>
-              <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-              <span className='select-module select-module-name'>{item.name}</span>
-            </React.Fragment>;
+              enableShowContactEmailWhenSearchUser ? (
+                <div className="d-flex">
+                  <img src={item.avatar_url} className="avatar" width="24" alt="" />
+                  <div className="ml-2">
+                    <span className="user-option-name">{item.name}</span><br />
+                    <span className="user-option-email">{item.contact_email}</span>
+                  </div>
+                </div>
+              ) : (
+                <React.Fragment>
+                  <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
+                  <span className='select-module select-module-name'>{item.name}</span>
+                </React.Fragment>);
           this.options.push(obj);
         }
         callback(this.options);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
@@ -56,16 +74,26 @@ class UserSelect extends React.Component {
   }
 
   render() {
+    const searchValue = this.state.searchValue;
+    const style = { margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)' };
     return (
       <AsyncSelect
         isClearable
         classNamePrefix
-        components={{ NoOptionsMessage }}
+        components={{
+          NoOptionsMessage: (props) => {
+            return (
+              <div {...props.innerProps} style={style}>{searchValue ? gettext('User not found') : gettext('Enter characters to start searching')}</div>
+            );
+          }
+        }}
         isMulti={this.props.isMulti}
         loadOptions={this.loadOptions}
         onChange={this.handleSelectChange}
+        onInputChange={this.onInputChange}
         placeholder={this.props.placeholder}
-        className={this.props.className}
+        className={`user-select ${this.props.className}`}
+        value={this.props.value}
         ref="userSelect"
       />
     );

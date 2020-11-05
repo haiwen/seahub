@@ -3,6 +3,7 @@ pytestmark = pytest.mark.django_db
 
 from seahub.test_utils import BaseTestCase
 from seaserv import seafile_api
+from mock import patch, MagicMock
 
 
 class SharedRepoTest(BaseTestCase):
@@ -26,15 +27,25 @@ class SharedRepoTest(BaseTestCase):
         url = self.shared_repo_url % self.repo_id
         resp = self.client.put(url)
         self.assertEqual(200, resp.status_code)
-        assert "success" in resp.content
+        assert b"success" in resp.content
 
+    @patch('seahub.base.accounts.UserPermissions.can_add_public_repo', MagicMock(return_value=True))
     def test_user_can_share_repo_to_public(self):
         self.login_as(self.user)
+        assert self.user.permissions.can_add_public_repo() is True
 
         url = self.shared_repo_url % self.repo.id
         resp = self.client.put(url)
         self.assertEqual(200, resp.status_code)
-        assert "success" in resp.content
+        assert b"success" in resp.content
+
+    def test_user_can_not_share_repo_to_public_when_add_public_repo_disabled(self):
+        self.login_as(self.user)
+        assert self.user.permissions.can_add_public_repo() is False
+
+        url = self.shared_repo_url % self.repo.id
+        resp = self.client.put(url)
+        self.assertEqual(403, resp.status_code)
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
@@ -45,7 +56,7 @@ class SharedRepoTest(BaseTestCase):
 
         resp = self.client.put(self.shared_repo_url % self.repo_id)
         self.assertEqual(200, resp.status_code)
-        assert "success" in resp.content
+        assert b"success" in resp.content
 
     def test_user_can_not_set_pub_repo_when_setting_disalbed(self):
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
@@ -65,7 +76,7 @@ class SharedRepoTest(BaseTestCase):
         url = self.shared_repo_url % self.repo_id
         resp = self.client.delete(url)
         self.assertEqual(200, resp.status_code)
-        assert "success" in resp.content
+        assert b"success" in resp.content
 
     def test_user_can_unshare_public_repo(self):
         seafile_api.add_inner_pub_repo(self.repo_id, "r")
@@ -75,4 +86,4 @@ class SharedRepoTest(BaseTestCase):
         url = self.shared_repo_url % self.repo_id
         resp = self.client.delete(url)
         self.assertEqual(403, resp.status_code)
-        assert 'You do not have permission to unshare library.' in resp.content
+        assert b'You do not have permission to unshare library.' in resp.content

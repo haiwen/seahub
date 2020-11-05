@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
-import { siteRoot, gettext } from '../../utils/constants';
-import editUtilties from '../../utils/editor-utilties';
+import { gettext } from '../../utils/constants';
+import editUtilities from '../../utils/editor-utilities';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import toaster from '../../components/toast';
+import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 
@@ -23,7 +24,7 @@ class DraftContent extends React.Component {
   onDeleteHandler = (draft) => {
     // let draft = this.state.currentDraft;
     let draft_name = Utils.getFileName(draft.draft_file_path);
-    editUtilties.deleteDraft(draft.id).then(res => {
+    editUtilities.deleteDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
@@ -35,21 +36,10 @@ class DraftContent extends React.Component {
     });
   }
 
-  onReviewHandler = (draft) => {
-    editUtilties.createDraftReview(draft.id).then(res => {
-      const w = window.open();
-      w.location = siteRoot + 'drafts/review/' + res.data.id;
-    }).catch((error) => { 
-      if (error.response.status == '409') {
-        toaster.danger(gettext('Review already exists.'));
-      }    
-    });
-  }
-
-  onPublishHandler = () => {
-    let draft = this.state.currentDraft;
+  onPublishHandler = (draft) => {
+    // let draft = this.state.currentDraft;
     let draft_name = Utils.getFileName(draft.draft_file_path);
-    editUtilties.publishDraft(draft.id).then(res => {
+    editUtilities.publishDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully published draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
@@ -60,7 +50,7 @@ class DraftContent extends React.Component {
       toaster.danger(msg_s);
     });
   }
-  
+
   render() {
     return (
       <div className="cur-view-content">
@@ -68,16 +58,16 @@ class DraftContent extends React.Component {
         {!this.props.isLoadingDraft && (
           <Fragment>
             {this.props.draftList.length === 0 && (
-              <div className="message empty-tip">
+              <EmptyTip>
                 <h2>{gettext('No draft yet')}</h2>
-                <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
-              </div>
+                <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft has been reviewed.')}</p>
+              </EmptyTip>
             )}
             {this.props.draftList.length !==0 && (
               <DraftListView
-                draftList={this.props.draftList} 
+                draftList={this.props.draftList}
                 onDeleteHandler={this.onDeleteHandler}
-                onReviewHandler={this.onReviewHandler}
+                onPublishHandler={this.onPublishHandler}
               />
             )}
           </Fragment>

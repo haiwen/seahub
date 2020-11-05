@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
+from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -23,11 +24,11 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out, get_related_users_by_repo
+        repo_has_been_shared_out, get_related_users_by_repo, normalize_repo_status_code
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
-from seaserv import seafile_api, send_message
+from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ class ReposView(APIView):
         request_type_list = request.GET.getlist('type', "")
         if not request_type_list:
             # set all to True, no filter applied
-            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+            filter_by = filter_by.fromkeys(iter(filter_by.keys()), True)
 
         for request_type in request_type_list:
             request_type = request_type.strip()
@@ -71,8 +72,16 @@ class ReposView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        try:
+            starred_repos = UserStarredFiles.objects.get_starred_repos_by_user(email)
+            starred_repo_id_list = [item.repo_id for item in starred_repos]
+        except Exception as e:
+            logger.error(e)
+            starred_repo_id_list = []
+
         repo_info_list = []
         if filter_by['mine']:
+
             if org_id:
                 owned_repos = seafile_api.get_org_owned_repo_list(org_id,
                         email, ret_corrupted=True)
@@ -81,14 +90,14 @@ class ReposView(APIView):
                         ret_corrupted=True)
 
             # Reduce memcache fetch ops.
-            modifiers_set = set([x.last_modifier for x in owned_repos])
+            modifiers_set = {x.last_modifier for x in owned_repos}
             for e in modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
 
                 # do not return virtual repos
@@ -109,6 +118,9 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
+                    "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status_code(r.status),
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -130,15 +142,15 @@ class ReposView(APIView):
                     get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
-            owners_set = set([x.user for x in shared_repos])
-            modifiers_set = set([x.last_modifier for x in shared_repos])
+            owners_set = {x.user for x in shared_repos}
+            modifiers_set = {x.last_modifier for x in shared_repos}
             for e in owners_set | modifiers_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
-            shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
 
                 owner_email = r.user
@@ -169,6 +181,9 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status_code(r.status),
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -185,11 +200,11 @@ class ReposView(APIView):
             else:
                 group_repos = seafile_api.get_group_repos_by_user(email)
 
-            group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            group_repos.sort(key=lambda x: x.last_modify, reverse=True)
 
             # Reduce memcache fetch ops.
-            share_from_set = set([x.user for x in group_repos])
-            modifiers_set = set([x.last_modifier for x in group_repos])
+            share_from_set = {x.user for x in group_repos}
+            modifiers_set = {x.last_modifier for x in group_repos}
             for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -210,6 +225,9 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status_code(r.status),
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
                 repo_info_list.append(repo_info)
 
@@ -228,8 +246,8 @@ class ReposView(APIView):
 
             # Reduce memcache fetch ops.
             owner_set = set(all_repo_owner)
-            share_from_set = set([x.user for x in public_repos])
-            modifiers_set = set([x.last_modifier for x in public_repos])
+            share_from_set = {x.user for x in public_repos}
+            modifiers_set = {x.last_modifier for x in public_repos}
             for e in modifiers_set | share_from_set | owner_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
@@ -252,6 +270,9 @@ class ReposView(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status_code(r.status),
+                    "salt": r.salt if r.enc_version == 3 else '',
                 }
                 repo_info_list.append(repo_info)
 
@@ -259,7 +280,7 @@ class ReposView(APIView):
         timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
         org_id = request.user.org.org_id if is_org_context(request) else -1
         try:
-            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
+            seafile_api.publish_event('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
 
@@ -324,6 +345,8 @@ class RepoView(APIView):
             "has_been_shared_out": has_been_shared_out,
 
             "lib_need_decrypt": lib_need_decrypt,
+            "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
+            "status": normalize_repo_status_code(repo.status),
         }
 
         return Response(result)
@@ -332,8 +355,17 @@ class RepoView(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            # for case of `seafile-data` has been damaged
+            # no `repo object` will be returned from seafile api
+            # delete the database record anyway
+            try:
+                seafile_api.remove_repo(repo_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
 
         # check permission
         username = request.user.username
@@ -342,15 +374,15 @@ class RepoView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # check repo status
+        repo_status = repo.status
+        if repo_status != 0:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         org_id = None
         if is_org_context(request):
             org_id = request.user.org.org_id
-
-        try:
-            related_users = get_related_users_by_repo(repo_id, org_id)
-        except Exception as e:
-            logger.error(e)
-            related_users = []
 
         # remove repo
         seafile_api.remove_repo(repo_id)
@@ -358,7 +390,6 @@ class RepoView(APIView):
         repo_deleted.send(sender=None,
                           org_id=org_id,
                           operator=username,
-                          usernames=related_users,
                           repo_owner=repo_owner,
                           repo_id=repo_id,
                           repo_name=repo.name)

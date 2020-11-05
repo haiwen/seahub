@@ -1,7 +1,7 @@
 import os
 import json
 from mock import patch 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.api2.endpoints.admin import license as license_api
 from seahub.settings import LICENSE_PATH
@@ -15,6 +15,12 @@ class AdminLicenseTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
 
+    def test_post_admin_permission_denied(self):
+        self.logout()
+        self.login_as(self.admin_cannot_config_system)
+        resp = self.client.post(reverse('api-v2.1-admin-license'))
+        self.assertEqual(403, resp.status_code)
+
     @patch.object(license_api, 'ccnet_api')
     def test_update_license(self, mock_ccnet_api):
         mock_ccnet_api.return_val = {}
@@ -22,11 +28,14 @@ class AdminLicenseTest(BaseTestCase):
         url = reverse('api-v2.1-admin-license')
         url = urljoin(BASE_URL, url)
         with open(
-                os.path.join(os.getcwd(), 'tests/seahub/utils/seafile-license.txt')) as f:
+                os.path.join(os.getcwd(), 'tests/seahub/utils/seafile-license.txt'), 'rb') as f:
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
 
-        assert json_resp['success'] is True
+        assert json_resp['license_expiration'] is not None
+        assert json_resp['license_mode'] is not None
+        assert json_resp['license_maxusers'] is not None
+        assert json_resp['license_to'] is not None
         assert os.path.exists(LICENSE_PATH)
 
     @patch.object(license_api, 'ccnet_api')
@@ -39,7 +48,7 @@ class AdminLicenseTest(BaseTestCase):
             f.write('1')
 
         with open(
-                os.path.join(os.getcwd(), 'temp.notxt')) as f:
+                os.path.join(os.getcwd(), 'temp.notxt'), 'rb') as f:
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
         assert 400 == resp.status_code

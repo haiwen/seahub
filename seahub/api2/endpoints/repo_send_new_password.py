@@ -9,7 +9,7 @@ from rest_framework import status
 from django.utils.translation import ugettext as _
 from django.utils.crypto import get_random_string
 
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -17,13 +17,14 @@ from seahub.api2.utils import api_error
 from seahub.api2.views import HTTP_520_OPERATION_FAILED
 
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email
-from seahub.utils.repo import is_repo_owner
+from seahub.utils.repo import get_repo_owner
 from seahub.base.models import RepoSecretKey
-from seahub.base.templatetags.seahub_tags import email2contact_email
+from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 from seahub.settings import ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 
 logger = logging.getLogger(__name__)
+
 
 class RepoSendNewPassword(APIView):
 
@@ -41,7 +42,7 @@ class RepoSendNewPassword(APIView):
 
         if not ENABLE_RESET_ENCRYPTED_REPO_PASSWORD or \
                 not IS_EMAIL_CONFIGURED:
-            error_msg = _(u'Feature disabled.')
+            error_msg = _('Feature disabled.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
@@ -55,23 +56,32 @@ class RepoSendNewPassword(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # permission check
-        username = request.user.username
-        if not is_repo_owner(request, repo_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+
+        if '@seafile_group' in repo_owner:
+            group_id = email2nickname(repo_owner)
+            if not ccnet_api.check_group_staff(int(group_id), username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            if username != repo_owner:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        secret_key = RepoSecretKey.objects.get_secret_key(repo_id)
         if not secret_key:
-            error_msg = _(u"Can not reset this library's password.")
+            error_msg = _("Can not reset this library's password.")
             return api_error(HTTP_520_OPERATION_FAILED, error_msg)
 
         new_password = get_random_string(10)
         try:
             seafile_api.reset_repo_passwd(repo_id, username, secret_key, new_password)
-            content = {'repo_name': repo.name, 'password': new_password,}
-            send_html_email(_(u'New password of library %s') % repo.name,
-                    'snippets/reset_repo_password.html', content,
-                    None, [email2contact_email(username)])
+            content = {'repo_name': repo.name, 'password': new_password}
+            send_html_email(_('New password of library %s') % repo.name,
+                            'snippets/reset_repo_password.html', content,
+                            None, [email2contact_email(username)])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

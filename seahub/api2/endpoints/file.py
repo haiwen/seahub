@@ -30,8 +30,8 @@ from seahub.utils.file_types import MARKDOWN, TEXT
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
 
-from seahub.drafts.models import Draft, DraftReview
-from seahub.drafts.utils import is_draft_file, get_file_draft_and_related_review
+from seahub.drafts.models import Draft
+from seahub.drafts.utils import is_draft_file, get_file_draft
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -53,11 +53,14 @@ class FileView(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
-        file_name = file_obj.obj_name
-        file_size = file_obj.size
-
-        can_preview, error_msg = can_preview_file(file_name, file_size, repo)
-        can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
+        if file_obj:
+            file_name = file_obj.obj_name
+            file_size = file_obj.size
+            can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+            can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
+        else:
+            can_preview = False
+            can_edit = False
 
         try:
             is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
@@ -70,9 +73,9 @@ class FileView(APIView):
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(file_path),
             'obj_name': file_name,
-            'obj_id': file_obj.obj_id,
+            'obj_id': file_obj.obj_id if file_obj else '',
             'size': file_size,
-            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime),
+            'mtime': timestamp_to_isoformat_timestr(file_obj.mtime) if file_obj else '',
             'is_locked': is_locked,
             'can_preview': can_preview,
             'can_edit': can_edit,
@@ -199,7 +202,7 @@ class FileView(APIView):
 
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, username)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -308,8 +311,7 @@ class FileView(APIView):
             filetype, fileext = get_file_type_and_ext(new_file_name)
             if filetype == MARKDOWN or filetype == TEXT:
                 is_draft = is_draft_file(repo.id, path)
-                review = get_file_draft_and_related_review(repo.id, path, is_draft)
-                review_id = review['review_id']
+                review = get_file_draft(repo.id, path, is_draft)
                 draft_id = review['draft_id']
                 if is_draft:
                     try:
@@ -318,14 +320,6 @@ class FileView(APIView):
                         draft.save()
                     except Draft.DoesNotExist:
                         pass
-
-                    if review_id is not None:
-                        try:
-                            review = DraftReview.objects.get(pk=review_id, draft_id=draft)
-                            review.draft_file_path = new_file_path
-                            review.save()
-                        except DraftReview.DoesNotExist:
-                            pass
 
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)
@@ -581,7 +575,7 @@ class FileView(APIView):
             expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
             try:
                 seafile_api.lock_file(repo_id, path, username, expire)
-            except SearpcError, e:
+            except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -596,7 +590,7 @@ class FileView(APIView):
                 # unlock file
                 try:
                     seafile_api.unlock_file(repo_id, path)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
@@ -614,7 +608,7 @@ class FileView(APIView):
                 # refresh lock file
                 try:
                     seafile_api.refresh_file_lock(repo_id, path)
-                except SearpcError, e:
+                except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

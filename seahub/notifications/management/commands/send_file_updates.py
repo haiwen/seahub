@@ -6,7 +6,7 @@ import os
 import re
 
 from django.core.management.base import BaseCommand
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.html import escape as e
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -63,8 +63,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         logger.debug('Start sending file updates emails...')
+        self.stdout.write('[%s] Start sending file updates emails...' % str(datetime.now()))
         self.do_action()
         logger.debug('Finish sending file updates emails.\n')
+        self.stdout.write('[%s] Finish sending file updates emails.\n\n' % str(datetime.now()))
 
     def get_avatar(self, username, default_size=32):
         img_tag = avatar(username, default_size)
@@ -176,9 +178,6 @@ class Command(BaseCommand):
         return (op, details)
 
     def do_action(self):
-        today = datetime.utcnow().replace(hour=0).replace(minute=0).replace(
-            second=0).replace(microsecond=0)
-
         emails = []
         user_file_updates_email_intervals = []
         for ele in UserOptions.objects.filter(
@@ -190,6 +189,7 @@ class Command(BaseCommand):
                 emails.append(ele.email)
             except Exception as e:
                 logger.error(e)
+                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
                 continue
 
         user_last_emailed_time_dict = {}
@@ -201,6 +201,7 @@ class Command(BaseCommand):
                     ele.option_val, "%Y-%m-%d %H:%M:%S")
             except Exception as e:
                 logger.error(e)
+                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
                 continue
 
         for (username, interval_val) in user_file_updates_email_intervals:
@@ -212,14 +213,18 @@ class Command(BaseCommand):
             translation.activate(user_language)
             logger.debug('Set language code to %s for user: %s' % (
                 user_language, username))
-            self.stdout.write('[%s] Set language code to %s' % (
-                str(datetime.now()), user_language))
+            self.stdout.write('[%s] Set language code to %s for user: %s' % (
+                str(datetime.now()), user_language, username))
 
-            # get last_emailed_time if any, defaults to today
-            last_emailed_time = user_last_emailed_time_dict.get(username, today)
+            # get last_emailed_time if any, defaults to today 00:00:00.0
+            last_emailed_time = user_last_emailed_time_dict.get(username, None)
             now = datetime.utcnow().replace(microsecond=0)
-            if (now - last_emailed_time).seconds < interval_val:
-                continue
+            if not last_emailed_time:
+                last_emailed_time = datetime.utcnow().replace(hour=0).replace(
+                                    minute=0).replace(second=0).replace(microsecond=0)
+            else:
+                if (now - last_emailed_time).total_seconds() < interval_val:
+                    continue
 
             # get file updates(from: last_emailed_time, to: now) for repos
             # user can access
@@ -229,7 +234,7 @@ class Command(BaseCommand):
                 continue
 
             # remove my activities
-            res = filter(lambda x: x.op_user != username, res)
+            res = [x for x in res if x.op_user != username]
             if not res:
                 continue
 
@@ -245,6 +250,9 @@ class Command(BaseCommand):
                 logger.error('Failed to format mail content for user: %s' %
                              username)
                 logger.error(e, exc_info=True)
+                self.stderr.write('[%s] Failed to format mail content for user: %s' %
+                                  (str(datetime.now()), username))
+                self.stderr.write('[%s]: %s' % (str(datetime.now()), e))
                 continue
 
             nickname = email2nickname(username)
@@ -263,11 +271,13 @@ class Command(BaseCommand):
                 # set new last_emailed_time
                 UserOptions.objects.set_file_updates_last_emailed_time(
                     username, now)
+                self.stdout.write('[%s] Successful to send email to %s' %
+                                  (str(datetime.now()), contact_email))
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' %
                              (contact_email, e))
                 self.stderr.write('[%s] Failed to send email to %s, error '
-                                  'detail: %s' % (str(now), contact_email, e))
+                                  'detail: %s' % (str(datetime.now()), contact_email, e))
             finally:
                 # reset lang
                 translation.activate(cur_language)

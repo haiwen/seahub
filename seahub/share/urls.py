@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import url
 
-from views import *
+from .views import *
 
 urlpatterns = [
     url(r'^link/send/$', send_shared_link, name='send_shared_link'),

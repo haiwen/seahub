@@ -53,23 +53,23 @@ FILEEXT_ICON_MAP = {
     'txt': 'txt.png',
 
     # pdf file
-    'pdf' : 'pdf.png',
+    'pdf': 'pdf.png',
 
     # document file
-    'doc' : 'word.png',
-    'docx' : 'word.png',
-    'odt' : 'word.png',
-    'fodt' : 'word.png',
+    'doc': 'word.png',
+    'docx': 'word.png',
+    'odt': 'word.png',
+    'fodt': 'word.png',
 
-    'ppt' : 'ppt.png',
-    'pptx' : 'ppt.png',
-    'odp' : 'ppt.png',
-    'fodp' : 'ppt.png',
+    'ppt': 'ppt.png',
+    'pptx': 'ppt.png',
+    'odp': 'ppt.png',
+    'fodp': 'ppt.png',
 
-    'xls' : 'excel.png',
-    'xlsx' : 'excel.png',
-    'ods' : 'excel.png',
-    'fods' : 'excel.png',
+    'xls': 'excel.png',
+    'xlsx': 'excel.png',
+    'ods': 'excel.png',
+    'fods': 'excel.png',
 
     # video
     'mp4': 'video.png',
@@ -81,25 +81,25 @@ FILEEXT_ICON_MAP = {
     'rmvb': 'video.png',
 
     # music file
-    'mp3' : 'music.png',
-    'oga' : 'music.png',
-    'ogg' : 'music.png',
-    'flac' : 'music.png',
-    'aac' : 'music.png',
-    'ac3' : 'music.png',
-    'wma' : 'music.png',
+    'mp3': 'music.png',
+    'oga': 'music.png',
+    'ogg': 'music.png',
+    'flac': 'music.png',
+    'aac': 'music.png',
+    'ac3': 'music.png',
+    'wma': 'music.png',
 
     # image file
-    'jpg' : 'pic.png',
-    'jpeg' : 'pic.png',
-    'png' : 'pic.png',
-    'svg' : 'pic.png',
-    'gif' : 'pic.png',
-    'bmp' : 'pic.png',
-    'ico' : 'pic.png',
+    'jpg': 'pic.png',
+    'jpeg': 'pic.png',
+    'png': 'pic.png',
+    'svg': 'pic.png',
+    'gif': 'pic.png',
+    'bmp': 'pic.png',
+    'ico': 'pic.png',
 
     # default
-    'default' : 'file.png',
+    'default': 'file.png',
 }
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value, size=None):
@@ -109,7 +109,7 @@ def file_icon_filter(value, size=None):
     else:
         file_ext = None
 
-    if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
+    if file_ext and file_ext in FILEEXT_ICON_MAP:
         if size == 192:
             return '192/' + FILEEXT_ICON_MAP.get(file_ext)
         else:
@@ -122,17 +122,17 @@ def file_icon_filter(value, size=None):
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {
-    'Added' : _('Added'),
-    'Deleted' : _('Deleted'),
-    'Removed' : _('Removed'),
-    'Modified' : _('Modified'),
-    'Renamed' : _('Renamed'),
-    'Moved' : _('Moved'),
-    'Added directory' : _('Added directory'),
-    'Removed directory' : _('Removed directory'),
-    'Renamed directory' : _('Renamed directory'),
-    'Moved directory' : _('Moved directory'),
-    'Added or modified' : _('Added or modified'),
+    'Added': _('Added'),
+    'Deleted': _('Deleted'),
+    'Removed': _('Removed'),
+    'Modified': _('Modified'),
+    'Renamed': _('Renamed'),
+    'Moved': _('Moved'),
+    'Added directory': _('Added directory'),
+    'Removed directory': _('Removed directory'),
+    'Renamed directory': _('Renamed directory'),
+    'Moved directory': _('Moved directory'),
+    'Added or modified': _('Added or modified'),
 }
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
@@ -164,7 +164,7 @@ def translate_commit_desc(value):
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
-        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
+        operations = '|'.join(list(COMMIT_MSG_TRANSLATION_MAP.keys()))
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         ret_list = []
@@ -186,14 +186,14 @@ def translate_commit_desc(value):
 
             if has_more:
                 if translation.get_language() == 'zh-cn':
-                    typ = u'文件' if more_type == 'files' else u'目录'
-                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                    typ = '文件' if more_type == 'files' else '目录'
+                    ret = op_trans + ' "' + file_name + '"以及另外' + n_files + '个' + typ + '.'
                 # elif translation.get_language() == 'ru':
                 #     ret = ...
                 else:
                     ret = e
             else:
-                ret = op_trans + u' "' + file_name + u'".'
+                ret = op_trans + ' "' + file_name + '".'
             ret_list.append(ret)
 
         return '\n'.join(ret_list)
@@ -235,7 +235,7 @@ def translate_commit_desc_escape(value):
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
-        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
+        operations = '|'.join(list(COMMIT_MSG_TRANSLATION_MAP.keys()))
         patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
 
         for e in value.split('\n'):
@@ -258,14 +258,14 @@ def translate_commit_desc_escape(value):
 
             if has_more:
                 if translation.get_language() == 'zh-cn':
-                    typ = u'文件' if more_type == 'files' else u'目录'
-                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                    typ = '文件' if more_type == 'files' else '目录'
+                    ret = op_trans + ' "' + file_name + '"以及另外' + n_files + '个' + typ + '.'
                 # elif translation.get_language() == 'ru':
                 #     ret = ...
                 else:
                     ret = e
             else:
-                ret = op_trans + u' "' + file_name + u'".'
+                ret = op_trans + ' "' + file_name + '".'
 
             # if not match, this commit desc will not convert link, so
             # escape it
@@ -278,7 +278,7 @@ def translate_commit_desc_escape(value):
 
 @register.filter(name='translate_seahub_time')
 def translate_seahub_time(value, autoescape=None):
-    if isinstance(value, int) or isinstance(value, long): # check whether value is int
+    if isinstance(value, int) or isinstance(value, int): # check whether value is int
         try:
             val = datetime.fromtimestamp(value) # convert timestamp to datetime
         except ValueError as e:
@@ -461,9 +461,9 @@ def char2pinyin(value):
 @register.filter(name='translate_permission')
 def translate_permission(value):
     if value == 'rw':
-        return _(u'Read-Write')
+        return _('Read-Write')
     elif value == 'r':
-        return _(u'Read-Only')
+        return _('Read-Only')
     else:
         return ''
 

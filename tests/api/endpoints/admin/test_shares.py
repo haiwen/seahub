@@ -1,6 +1,6 @@
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seaserv import seafile_api
 
@@ -41,6 +41,15 @@ class Shares(BaseTestCase):
         assert json_resp[0]['share_type'] == 'user'
         assert json_resp[0]['user_email'] == self.admin_name
         assert json_resp[0]['permission'] == 'rw'
+
+    def test_can__no_permission(self):
+
+        self.share_repo_to_admin_with_rw_permission()
+
+        self.login_as(self.admin_no_other_permission)
+
+        resp = self.client.get(self.url + self.para + '&share_type=user')
+        self.assertEqual(403, resp.status_code)
 
     def test_can_get_user_shared_with_admin(self):
 
@@ -146,7 +155,7 @@ class Shares(BaseTestCase):
 
         self.login_as(self.admin)
 
-        invalid_group_id = 'invalid_group_id'
+        invalid_group_id = -100
         permission = 'r'
 
         data = {
@@ -167,7 +176,7 @@ class Shares(BaseTestCase):
 
         self.login_as(self.admin)
 
-        invalid_group_id = 'invalid_group_id'
+        invalid_group_id = -100
         permission = 'admin'
 
         data = {

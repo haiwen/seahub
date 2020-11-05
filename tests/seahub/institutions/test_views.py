@@ -1,14 +1,15 @@
 from django.core import mail
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import override_settings
 
 from seahub.base.accounts import User
 from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.institutions.utils import is_institution_admin
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
-settings.MIDDLEWARE_CLASSES += (
+settings.MIDDLEWARE.append(
     'seahub.institutions.middleware.InstitutionMiddleware',
 )
 
@@ -32,7 +33,7 @@ class InstTestBase(BaseTestCase):
 
 class InfoTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_render(self):
@@ -45,7 +46,7 @@ class InfoTest(InstTestBase):
 
 class UseradminTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_list(self):
@@ -58,7 +59,7 @@ class UseradminTest(InstTestBase):
 
 class UseradminSearchTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_search(self):
@@ -72,7 +73,7 @@ class UseradminSearchTest(InstTestBase):
 
 class UserToggleStatusTest(InstTestBase):
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_activate(self):
@@ -94,7 +95,7 @@ class UserToggleStatusTest(InstTestBase):
         self.assertEqual(len(mail.outbox), 1)
 
     @override_settings(
-        MIDDLEWARE_CLASSES=settings.MIDDLEWARE_CLASSES,
+        MIDDLEWARE=settings.MIDDLEWARE,
         MULTI_INSTITUTION=True
     )
     def test_can_deactivate(self):
@@ -112,3 +113,16 @@ class UserToggleStatusTest(InstTestBase):
         u = User.objects.get(email=self.admin.username)
         assert u.is_active is False
         assert u.enc_password == old_passwd
+
+
+class UserIsAdminTest(InstTestBase):
+    @override_settings(
+        MIDDLEWARE=settings.MIDDLEWARE,
+        MULTI_INSTITUTION=True
+    )
+
+    def test_is_institution_admin(self):
+        assert is_institution_admin(self.user.username) == True
+        assert is_institution_admin(self.admin.username) == False
+        assert is_institution_admin(self.user.username, self.inst) == True
+        assert is_institution_admin(self.admin.username, self.inst) == False

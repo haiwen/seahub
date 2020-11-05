@@ -14,9 +14,9 @@ DEBUG = False
 
 CLOUD_MODE = False
 
-ADMINS = (
+ADMINS = [
     # ('Your Name', 'your_email@domain.com'),
-)
+]
 
 MANAGERS = ADMINS
 
@@ -102,33 +102,30 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
+ENABLE_REMOTE_USER_AUTHENTICATION = False
+
 # Order is important
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'seahub.auth.middleware.AuthenticationMiddleware',
-    'seahub.auth.middleware.RemoteUserMiddleware',
     'seahub.base.middleware.BaseMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
-    'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
-    'seahub.trusted_ip.middleware.LimitIpMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-)
-
+    'seahub.trusted_ip.middleware.LimitIpMiddleware'
+]
 
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'seahub.utils.rooturl'
@@ -154,9 +151,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
 
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
-
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
                 'seahub.base.context_processors.debug',
@@ -166,10 +160,10 @@ TEMPLATES = [
 ]
 
 
-LANGUAGES = (
+LANGUAGES = [
     # ('bg', gettext_noop(u'български език')),
-    ('ca', u'Català'),
-    ('cs', u'Čeština'),
+    ('ca', 'Català'),
+    ('cs', 'Čeština'),
     ('de', 'Deutsch'),
     ('en', 'English'),
     ('es', 'Español'),
@@ -201,14 +195,14 @@ LANGUAGES = (
     # ('lt', 'Lietuvių kalba'),
     ('zh-cn', '简体中文'),
     ('zh-tw', '繁體中文'),
-)
+]
 
-LOCALE_PATHS = (
+LOCALE_PATHS = [
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -221,14 +215,12 @@ INSTALLED_APPS = (
 
     'registration',
     'captcha',
-    'compressor',
     'statici18n',
     'constance',
     'constance.backends.database',
     'post_office',
     'termsandconditions',
     'webpack_loader',
-    'social_django',
 
     'seahub.api2',
     'seahub.avatar',
@@ -256,7 +248,17 @@ INSTALLED_APPS = (
     'seahub.repo_tags',
     'seahub.file_tags',
     'seahub.related_files',
-)
+    'seahub.work_weixin',
+    'seahub.file_participants',
+    'seahub.repo_api_tokens',
+    'seahub.abuse_reports',
+    'seahub.repo_auto_delete',
+    'seahub.ocm',
+]
+
+
+# Enable or disable view File Scan
+# ENABLE_FILE_SCAN = True
 
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
@@ -270,40 +272,29 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
-    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
-
-    'seahub.base.accounts.ProxyRemoteUserBackend',
     'seahub.base.accounts.AuthBackend',
-    'seahub.oauth.backends.OauthRemoteUserBackend',
-)
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_VERIFY_SSL = True
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/profile/'
-SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
-SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
-SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    'seahub.social_core.pipeline.social_auth.social_user',
-    'seahub.social_core.pipeline.user.get_username',
-    'seahub.social_core.pipeline.user.create_user',
-    'seahub.social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    # 'social_core.pipeline.user.user_details',
-    'seahub.social_core.pipeline.user.save_profile',
 )
 
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
+
+ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER = False
+
+# enable work weixin
+ENABLE_WORK_WEIXIN = False
+
+# enable weixin
+ENABLE_WEIXIN = False
+
+# enable dingtalk
+ENABLE_DINGTALK = False
 
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
+LOGIN_ERROR_DETAILS = False
 LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None
 
@@ -317,9 +308,6 @@ ENABLE_SEARCH_FROM_LDAP_DIRECTLY = False
 
 # show traffic on the UI
 SHOW_TRAFFIC = True
-
-# Enable or disable make group public
-ENABLE_MAKE_GROUP_PUBLIC = False
 
 # show or hide library 'download' button
 SHOW_REPO_DOWNLOAD_BUTTON = False
@@ -336,6 +324,7 @@ MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 1000
 
 # enable encrypt library
 ENABLE_ENCRYPTED_LIBRARY = True
+ENCRYPTED_LIBRARY_VERSION = 2
 
 # enable reset encrypt library's password when user forget password
 ENABLE_RESET_ENCRYPTED_REPO_PASSWORD = False
@@ -357,11 +346,22 @@ SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 # greater than or equal to MIN and less than or equal to MAX
 SHARE_LINK_EXPIRE_DAYS_DEFAULT = 0
 
+# min/max expire days for an upload link
+UPLOAD_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
+UPLOAD_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+
+# default expire days should be
+# greater than or equal to MIN and less than or equal to MAX
+UPLOAD_LINK_EXPIRE_DAYS_DEFAULT = 0
+
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
+
+# enable or disable report abuse file on share link page
+ENABLE_SHARE_LINK_REPORT_ABUSE = False
 
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
@@ -413,11 +413,11 @@ ENABLE_SHARE_TO_ALL_GROUPS = False
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
-# Enable group discussion
-ENABLE_GROUP_DISCUSSION = True
-
 # Enable file comments
 ENABLE_FILE_COMMENT = True
+
+# Enable seafile docs
+ENABLE_SEAFILE_DOCS = False
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
@@ -450,18 +450,6 @@ CACHE_DIR = "/tmp"
 install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
 
-if 'win32' in sys.platform:
-    try:
-        CCNET_CONF_PATH = os.environ['CCNET_CONF_DIR']
-        if not CCNET_CONF_PATH: # If it's set but is an empty string.
-            raise KeyError
-    except KeyError:
-        raise ImportError("Settings cannot be imported, because environment variable CCNET_CONF_DIR is undefined.")
-    else:
-        LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', os.path.join(CCNET_CONF_PATH, '..'))
-        CACHE_DIR = os.path.join(CCNET_CONF_PATH, '..')
-        install_topdir = os.path.join(CCNET_CONF_PATH, '..')
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -481,6 +469,9 @@ CACHES = {
 
 # rest_framwork
 REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
     'DEFAULT_THROTTLE_RATES': {
         'ping': '3000/minute',
         'anon': '60/minute',
@@ -541,11 +532,12 @@ FAVICON_PATH = 'img/favicon.ico'
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
 # logo size. the unit is 'px'
-LOGO_WIDTH = 128
+LOGO_WIDTH = ''
 LOGO_HEIGHT = 32
 
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
 CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
+CUSTOM_LOGIN_BG_PATH = 'custom/login-bg.jpg'
 
 # used before version 6.3: the relative path of css file under seahub-data (e.g. custom/custom.css)
 BRANDING_CSS = ''
@@ -562,6 +554,10 @@ ENABLE_SIGNUP = False
 
 # show 'log out' icon in top-bar or not.
 SHOW_LOGOUT_ICON = False
+
+# privacy policy link and service link
+PRIVACY_POLICY_LINK = ''
+TERMS_OF_SERVICE_LINK = ''
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
@@ -642,17 +638,6 @@ LOGIN_REMEMBER_DAYS = 7
 
 SEAFILE_VERSION = '6.3.3'
 
-# Compress static files(css, js)
-COMPRESS_ENABLED = False
-COMPRESS_URL = MEDIA_URL
-COMPRESS_ROOT = MEDIA_ROOT
-COMPRESS_DEBUG_TOGGLE = 'nocompress'
-COMPRESS_CSS_HASHING_METHOD = 'content'
-COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
-]
-
 CAPTCHA_IMAGE_SIZE = (90, 42)
 
 ###################
@@ -688,6 +673,7 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
 ENABLE_WEBDAV_SECRET = False
+ENABLE_USER_SET_CONTACT_EMAIL = False
 
 #####################
 # Global AddressBook #
@@ -724,13 +710,17 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 # Settings for Extra App #
 ##########################
 
-ENABLE_SUB_LIBRARY = True
-
 ##########################
 # Settings for frontend  #
 ##########################
 
 SEAFILE_COLLAB_SERVER = ''
+
+##########################
+# Settings for dtable web  #
+##########################
+
+DTABLE_WEB_SERVER = ''
 
 ############################
 # Settings for Seahub Priv #
@@ -748,15 +738,38 @@ CLOUD_DEMO_USER = 'demo@seafile.com'
 ENABLE_TWO_FACTOR_AUTH = False
 OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 TWO_FACTOR_DEVICE_REMEMBER_DAYS = 90
+ENABLE_FORCE_2FA_TO_ALL_USERS = False
 
-# Enable personal wiki, group wiki
-ENABLE_WIKI = False
+# Enable wiki
+ENABLE_WIKI = True
 
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False
 
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
+
+############################
+# HU berlin additional #
+############################
+
+# ADDITIONAL_SHARE_DIALOG_NOTE = {
+#     'title': 'Attention! Read before shareing files:',
+#     'content': 'Do not share personal or confidential official data with **.'
+# }
+ADDITIONAL_SHARE_DIALOG_NOTE = None
+
+# ADDITIONAL_APP_BOTTOM_LINKS = {
+#     'seafile': 'http://dev.seahub.com/seahub',
+#     'dtable-web': 'http://dev.seahub.com/dtable-web'
+# }
+ADDITIONAL_APP_BOTTOM_LINKS = None
+
+# ADDITIONAL_ABOUT_DIALOG_LINKS = {
+#     'seafile': 'http://dev.seahub.com/seahub',
+#     'dtable-web': 'http://dev.seahub.com/dtable-web'
+# }
+ADDITIONAL_ABOUT_DIALOG_LINKS = None
 
 ############################
 # Settings for SeafileDocs #
@@ -832,9 +845,9 @@ except ImportError:
 else:
     # In server release, sqlite3 db file is <topdir>/seahub.db
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
-    if 'win32' not in sys.platform:
-        # In server release, gunicorn is used to deploy seahub
-        INSTALLED_APPS += ('gunicorn', )
+
+    # In server release, gunicorn is used to deploy seahub
+    INSTALLED_APPS.append('gunicorn')
 
     load_local_settings(seahub_settings)
     del seahub_settings
@@ -842,42 +855,36 @@ else:
 # Remove install_topdir from path
 sys.path.pop(0)
 
-if 'win32' in sys.platform:
-    INSTALLED_APPS += ('django_wsgiserver', )
-    fp = open(os.path.join(install_topdir, "seahub.pid"), 'w')
-    fp.write("%d\n" % os.getpid())
-    fp.close()
-
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
-    'SERVICE_URL': (SERVICE_URL,''),
-    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),
-    'DISABLE_SYNC_WITH_ANY_FOLDER': (DISABLE_SYNC_WITH_ANY_FOLDER,''),
+    'SERVICE_URL': (SERVICE_URL, ''),
+    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT, ''),
+    'DISABLE_SYNC_WITH_ANY_FOLDER': (DISABLE_SYNC_WITH_ANY_FOLDER, ''),
 
-    'ENABLE_SIGNUP': (ENABLE_SIGNUP,''),
-    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
-    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
-    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
+    'ENABLE_SIGNUP': (ENABLE_SIGNUP, ''),
+    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION, ''),
+    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL, ''),
+    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS, ''),
     'LOGIN_ATTEMPT_LIMIT': (LOGIN_ATTEMPT_LIMIT, ''),
     'FREEZE_USER_ON_LOGIN_FAILED': (FREEZE_USER_ON_LOGIN_FAILED, ''),
 
     'ENABLE_USER_CREATE_ORG_REPO': (ENABLE_USER_CREATE_ORG_REPO, ''),
 
-    'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
-    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
-    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING,''),
+    'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY, ''),
+    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH, ''),
+    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING, ''),
     'FORCE_PASSWORD_CHANGE': (FORCE_PASSWORD_CHANGE, ''),
 
-    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED,''),
-    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH,''),
-    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL,''),
+    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED, ''),
+    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH, ''),
+    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL, ''),
 
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
-    'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH,''),
-    'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
+    'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH, ''),
+    'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH, ''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
     'ENABLE_SHARE_TO_ALL_GROUPS': (ENABLE_SHARE_TO_ALL_GROUPS, ''),
@@ -891,3 +898,24 @@ CONSTANCE_CONFIG = {
     'ENABLE_TERMS_AND_CONDITIONS': (ENABLE_TERMS_AND_CONDITIONS, ''),
     'ENABLE_USER_CLEAN_TRASH': (ENABLE_USER_CLEAN_TRASH, ''),
 }
+
+# if Seafile admin enable remote user authentication in conf/seahub_settings.py
+# then add 'seahub.auth.middleware.SeafileRemoteUserMiddleware' and
+# 'seahub.auth.backends.SeafileRemoteUserBackend' to settings.
+if ENABLE_REMOTE_USER_AUTHENTICATION:
+    MIDDLEWARE.append('seahub.auth.middleware.SeafileRemoteUserMiddleware')
+    AUTHENTICATION_BACKENDS += ('seahub.auth.backends.SeafileRemoteUserBackend',)
+
+if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
+    AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+#####################
+# Custom Nav Items  #
+#####################
+# an example:
+# CUSTOM_NAV_ITEMS = [
+#     {'icon': 'sf2-icon-star',
+#      'desc': 'test custom name',
+#      'link': 'http://127.0.0.1:8000/shared-libs/',
+#      },
+# ]

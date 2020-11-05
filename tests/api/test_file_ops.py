@@ -4,7 +4,7 @@ import json
 
 from seaserv import seafile_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
@@ -33,7 +33,7 @@ class FileOpsApiTest(BaseTestCase):
         return dirent_name_list
 
     def create_new_file(self, parent_dir='/'):
-        new_file_name = u'%s-中文' % randstring(6)
+        new_file_name = '%s-中文' % randstring(6)
         seafile_api.post_empty_file(self.repo_id,
                 parent_dir, new_file_name, self.user_name)
 

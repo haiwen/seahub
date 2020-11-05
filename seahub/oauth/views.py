@@ -3,16 +3,12 @@
 import os
 import logging
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
-from constance import config
-
-from seahub.api2.utils import get_token_v1, get_token_v2
+from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
-from seahub.utils import is_valid_email
+from seahub.utils import is_valid_email, render_error
 from seahub.base.accounts import User
 import seahub.settings as settings
 
@@ -43,9 +39,11 @@ if ENABLE_OAUTH:
     }
     ATTRIBUTE_MAP.update(getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {}))
 
+
 def oauth_check(func):
     """ Decorator for check if OAuth valid.
     """
+
     def _decorated(request):
 
         error = False
@@ -68,13 +66,13 @@ def oauth_check(func):
                 error = True
 
         if error:
-            return render(request, 'error.html', {
-                    'error_msg': _('Error, please contact administrator.'),
-                    })
+            return render_error(request,
+                                _('Error, please contact administrator.'))
 
         return func(request)
 
     return _decorated
+
 
 # https://requests-oauthlib.readthedocs.io/en/latest/examples/github.html
 # https://requests-oauthlib.readthedocs.io/en/latest/examples/google.html
@@ -85,22 +83,22 @@ def oauth_login(request):
     using an URL with a few key OAuth parameters.
     """
     session = OAuth2Session(client_id=CLIENT_ID,
-                            scope=SCOPE, redirect_uri=REDIRECT_URL)
+                            scope=SCOPE,
+                            redirect_uri=REDIRECT_URL)
 
     try:
-        authorization_url, state = session.authorization_url(
-                AUTHORIZATION_URL)
+        authorization_url, state = session.authorization_url(AUTHORIZATION_URL)
     except Exception as e:
         logger.error(e)
-        return render(request, 'error.html', {
-                'error_msg': _('Error, please contact administrator.'),
-                })
+        return render_error(request, _('Error, please contact administrator.'))
 
     request.session['oauth_state'] = state
+    request.session['oauth_redirect'] = request.GET.get(
+        auth.REDIRECT_FIELD_NAME, '/')
     return HttpResponseRedirect(authorization_url)
 
-# Step 2: User authorization, this happens on the provider.
 
+# Step 2: User authorization, this happens on the provider.
 @oauth_check
 def oauth_callback(request):
     """ Step 3: Retrieving an access token.
@@ -108,31 +106,34 @@ def oauth_callback(request):
     callback URL. With this redirection comes an authorization code included
     in the redirect URL. We will use that to obtain an access token.
     """
-    session = OAuth2Session(client_id=CLIENT_ID, scope=SCOPE,
+    session = OAuth2Session(client_id=CLIENT_ID,
+                            scope=SCOPE,
                             state=request.session.get('oauth_state', None),
                             redirect_uri=REDIRECT_URL)
 
     try:
-        token = session.fetch_token(TOKEN_URL, client_secret=CLIENT_SECRET,
-                authorization_response=request.get_full_path())
+        token = session.fetch_token(
+            TOKEN_URL,
+            client_secret=CLIENT_SECRET,
+            authorization_response=request.get_full_path())
 
-        if session._client.__dict__['token'].has_key('user_id'):
+        if 'user_id' in session._client.__dict__['token']:
             # used for sjtu.edu.cn
             # https://xjq12311.gitbooks.io/sjtu-engtc/content/
             user_id = session._client.__dict__['token']['user_id']
-            user_info_resp = session.get(USER_INFO_URL + '?user_id=%s' % user_id)
+            user_info_resp = session.get(USER_INFO_URL +
+                                         '?user_id=%s' % user_id)
         else:
             user_info_url = USER_INFO_URL
             if ACCESS_TOKEN_IN_URI:
                 code = request.GET.get('code')
-                user_info_url = USER_INFO_URL + '?access_token=%s&code=%s' % (token['access_token'], code)
+                user_info_url = USER_INFO_URL + '?access_token=%s&code=%s' % (
+                    token['access_token'], code)
             user_info_resp = session.get(user_info_url)
 
     except Exception as e:
         logger.error(e)
-        return render(request, 'error.html', {
-                'error_msg': _('Error, please contact administrator.'),
-                })
+        return render_error(request, _('Error, please contact administrator.'))
 
     def format_user_info(user_info_resp):
         logger.info('user info resp: %s' % user_info_resp.text)
@@ -140,7 +141,7 @@ def oauth_callback(request):
         user_info = {}
         user_info_json = user_info_resp.json()
 
-        for item, attr in ATTRIBUTE_MAP.items():
+        for item, attr in list(ATTRIBUTE_MAP.items()):
             required, user_attr = attr
             value = user_info_json.get(item, '')
 
@@ -160,45 +161,33 @@ def oauth_callback(request):
     if error:
         logger.error('Required user info not found.')
         logger.error(user_info)
-        return render(request, 'error.html', {
-                'error_msg': _('Error, please contact administrator.'),
-                })
+        return render_error(request, _('Error, please contact administrator.'))
 
     # seahub authenticate user
     email = user_info['email']
 
     try:
-        User.objects.get(email=email)
-    except User.DoesNotExist:
-        if not config.ENABLE_SIGNUP:
-            logger.error('%s not found but user registration is disabled.' % email)
-            return render(request, 'error.html', {
-                    'error_msg': _('Error, please contact administrator.'),
-                    })
-
-    try:
         user = auth.authenticate(remote_user=email)
     except User.DoesNotExist:
         user = None
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, _('Error, please contact administrator.'))
 
     if not user or not user.is_active:
         logger.error('User %s not found or inactive.' % email)
         # a page for authenticate user failed
-        return render(request, 'error.html', {
-                'error_msg': _(u'User %s not found.') % email
-                })
+        return render_error(request, _('User %s not found.') % email)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
     request.user = user
     auth.login(request, user)
-    user.set_unusable_password()
-    user.save()
 
     # update user's profile
-    name = user_info['name'] if user_info.has_key('name') else ''
+    name = user_info['name'] if 'name' in user_info else ''
     contact_email = user_info['contact_email'] if \
-            user_info.has_key('contact_email') else ''
+            'contact_email' in user_info else ''
 
     profile = Profile.objects.get_profile_by_user(email)
     if not profile:
@@ -213,27 +202,9 @@ def oauth_callback(request):
         profile.save()
 
     # generate auth token for Seafile client
-    keys = (
-        'platform',
-        'device_id',
-        'device_name',
-        'client_version',
-        'platform_version',
-    )
-
-    if all([key in request.GET for key in keys]):
-        platform = request.GET['platform']
-        device_id = request.GET['device_id']
-        device_name = request.GET['device_name']
-        client_version = request.GET['client_version']
-        platform_version = request.GET['platform_version']
-        token = get_token_v2(
-            request, request.user.username, platform, device_id,
-            device_name, client_version, platform_version)
-    else:
-        token = get_token_v1(request.user.username)
+    api_token = get_api_token(request)
 
     # redirect user to home page
-    response = HttpResponseRedirect(reverse('libraries'))
-    response.set_cookie('seahub_auth', email + '@' + token.key)
+    response = HttpResponseRedirect(request.session['oauth_redirect'])
+    response.set_cookie('seahub_auth', email + '@' + api_token.key)
     return response

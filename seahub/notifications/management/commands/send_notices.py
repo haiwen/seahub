@@ -7,7 +7,7 @@ import os
 import re
 
 from django.core.management.base import BaseCommand
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.html import escape
 from django.utils import translation
 from django.utils.translation import ugettext as _
@@ -67,19 +67,6 @@ class Command(BaseCommand):
         else:
             return ''
 
-    def format_group_message(self, notice):
-        d = notice.group_message_detail_to_dict()
-        group_id = d['group_id']
-        message = d['message']
-        group = ccnet_api.get_group(int(group_id))
-
-        notice.group_url = HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id}
-        notice.notice_from = escape(email2nickname(d['msg_from']))
-        notice.group_name = group.group_name
-        notice.avatar_src = self.get_avatar_src(d['msg_from'])
-        notice.grp_msg = message
-        return notice
-
     def format_repo_share_msg(self, notice):
         d = json.loads(notice.detail)
         repo_id = d['repo_id']
@@ -98,7 +85,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        repo_url = reverse('lib_view', args=[repo_id, repo.name, '']) 
+        repo_url = reverse('lib_view', args=[repo.id, repo.name, ''])
         notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
@@ -129,7 +116,7 @@ class Command(BaseCommand):
                 owner = seafile_api.get_repo_owner(repo_id)
                 repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        repo_url = reverse('lib_view', args=[repo_id, repo.name, '']) 
+        repo_url = reverse('lib_view', args=[repo.id, repo.name, ''])
         notice.repo_url = repo_url
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
@@ -248,7 +235,7 @@ class Command(BaseCommand):
             else:
                 email_ctx[notice.to_user] = 1
 
-        for to_user, count in email_ctx.items():
+        for to_user, count in list(email_ctx.items()):
             # save current language
             cur_language = translation.get_language()
 
@@ -282,9 +269,6 @@ class Command(BaseCommand):
                 if notice.to_user != to_user:
                     continue
 
-                elif notice.is_group_msg():
-                    notice = self.format_group_message(notice)
-
                 elif notice.is_repo_share_msg():
                     notice = self.format_repo_share_msg(notice)
 
@@ -314,12 +298,14 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
+            user_name = email2nickname(to_user)
             contact_email = Profile.objects.get_contact_email_by_user(to_user)
             to_user = contact_email  # use contact email if any
             c = {
                 'to_user': to_user,
                 'notice_count': count,
                 'notices': notices,
+                'user_name': user_name,
                 }
 
             try:

@@ -1,14 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
+import EmptyTip from '../../components/empty-tip';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
 import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
 import WikiListView from '../../components/wiki-list-view/wiki-list-view';
 
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 class Wikis extends Component {
   constructor(props) {
@@ -31,28 +39,13 @@ class Wikis extends Component {
     seafileAPI.listWikis().then(res => {
       this.setState({
         loading: false,
-        wikis: res.data.data,
+        wikis: res.data.data
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
@@ -73,8 +66,8 @@ class Wikis extends Component {
     this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
   }
 
-  addWiki = (isExist, name, repoID) => {
-    seafileAPI.addWiki(isExist, name, repoID).then((res) => {
+  addWiki = (repoID) => {
+    seafileAPI.addWiki(repoID).then((res) => {
       this.state.wikis.push(res.data);
       this.setState({wikis: this.state.wikis});
     }).catch((error) => {
@@ -123,15 +116,14 @@ class Wikis extends Component {
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
             <div className="operation">
-              <Dropdown tag="div" isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
-                <DropdownToggle className="btn btn-secondary operation-item">
-                  <i className="fa fa-plus-square text-secondary mr-1"></i>{gettext('Add Wiki')}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
-                  <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              <Fragment>
+                <MediaQuery query="(min-width: 768px)">
+                  <Button className="btn btn-secondary operation-item" onClick={this.onSelectToggle}>{gettext('Publish a Library')}</Button>
+                </MediaQuery>
+                <MediaQuery query="(max-width: 767.8px)">
+                  <span className="sf2-icon-plus mobile-toolbar-icon" title={gettext('Publish a Library')} onClick={this.onSelectToggle}></span>
+                </MediaQuery>
+              </Fragment>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
@@ -140,7 +132,7 @@ class Wikis extends Component {
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
               <div className="path-container">
-                <h3 className="sf-heading">{gettext('Wikis')}</h3>
+                <h3 className="sf-heading m-0">{gettext('Published Libraries')}</h3>
               </div>
             </div>
             <div className="cur-view-content">
@@ -152,10 +144,10 @@ class Wikis extends Component {
                 />
               }
               {(!this.state.loading && this.state.wikis.length === 0) &&
-                <div className="message empty-tip">
-                  <h2>{gettext('You do not have any wiki')}</h2>
-                  <p>{gettext('Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server.')}</p>
-                </div>
+                <EmptyTip>
+                  <h2>{gettext('No published libraries')}</h2>
+                  <p>{gettext('You have not published any libraries yet. A published library can be accessed by anyone, not only users, via its URL. You can publish a library by clicking the "Publish a Library" button in the menu bar.')}</p>
+                </EmptyTip>
               }
             </div>
           </div>
@@ -180,5 +172,7 @@ class Wikis extends Component {
     );
   }
 }
+
+Wikis.propTypes = propTypes;
 
 export default Wikis;

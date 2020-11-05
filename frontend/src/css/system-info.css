@@ -1,0 +1,31 @@
+.heading {
+  padding: 8px 16px;
+  background: #f9f9f9;
+  font-size: 1rem;
+  color: #322;
+  font-weight: normal;
+  line-height: 1.5;
+  margin: 0;
+}
+.content {
+  display: flex;
+  padding: 0rem 1rem 8rem;
+  overflow: auto;
+}
+.system-admin-info dt,
+.system-admin-info dd {
+  color: inherit;
+}
+.info-item-heading {
+  font-size: 1rem;
+  font-weight: normal;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 0.7em;
+}
+.info-item-content {
+  margin-bottom: 2em;
+}
+.btn {
+  min-width: 60px;
+}

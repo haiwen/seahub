@@ -16,14 +16,16 @@ class SearchResultItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let fileIconUrl = item.is_dir ? Utils.getFolderIconUrl(false, 192) : Utils.getFileIconUrl(item.name, 192);
+    let className = item.link_content ? 'item-img' : 'lib-item-img';
+    let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
+    let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
     return (
       <li className="search-result-item" onClick={this.onClickHandler}>
-        <img className="item-img" src={fileIconUrl} alt="" />
+        <img className={className} src={fileIconUrl} alt="" />
         <div className="item-content">
-          <dt className="item-name ellipsis">{item.name}</dt>
-          <dd className="item-link ellipsis">{item.repo_name}/{item.link_content}</dd>
-          <dd className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></dd>
+          <div className="item-name ellipsis">{item.name}</div>
+          <div className="item-link ellipsis">{item.repo_name}/{item.link_content}</div>
+          <div className="item-text ellipsis" dangerouslySetInnerHTML={{__html: item.content}}></div>
         </div>
       </li>
     );

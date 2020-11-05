@@ -1,17 +1,21 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import cookie from 'react-cookies';
+import MediaQuery from 'react-responsive';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, loginUrl } from '../../utils/constants';
+import { gettext, canAddPublicRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
+import EmptyTip from '../../components/empty-tip';
 import ModalPortal from '../../components/modal-portal';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -27,8 +31,9 @@ class PublicSharedView extends React.Component {
       errMessage: '',
       emptyTip: '',
       repoList: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc', // 'asc' or 'desc'
+      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false,
       libraryType: 'public',
       isCreateMenuShow: false,
       isCreateRepoDialogShow: false,
@@ -47,25 +52,10 @@ class PublicSharedView extends React.Component {
         repoList: Utils.sortRepos(repoList, this.state.sortBy, this.state.sortOrder)
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Permission denied')
-          });
-          location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
-        } else {
-          this.setState({
-            isLoading: false,
-            errMessage: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          isLoading: false,
-          errMessage: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        isLoading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
@@ -85,8 +75,9 @@ class PublicSharedView extends React.Component {
       let repoList = this.addRepoItem(repo);
       this.setState({repoList: repoList});
       this.onCreateRepoToggle();
-    }).catch(() => {
-      // todo
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
@@ -95,8 +86,9 @@ class PublicSharedView extends React.Component {
       seafileAPI.selectOwnedRepoToPublic(repo.repo_id, {share_type: 'public', permission: repo.sharePermission}).then(() => {
         let repoList = this.addRepoItem(repo);
         this.setState({repoList: repoList});
-      }).catch(() => {
-        // todo
+      }).catch((error) => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     });
   }
@@ -107,7 +99,14 @@ class PublicSharedView extends React.Component {
         return item.repo_id !== repo.repo_id;
       });
       this.setState({repoList: repoList});
-      toaster.success('Successfully unshared 1 item.');
+      let message = gettext('Successfully unshared {name}').replace('{name}', repo.repo_name);
+      toaster.success(message);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        errMessage = gettext('Failed to unshare {name}').replace('{name}', repo.repo_name);
+      }
+      toaster(errMessage);
     });
   }
 
@@ -148,6 +147,8 @@ class PublicSharedView extends React.Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
+    cookie.save('seafile-repo-dir-sort-by', sortBy);
+    cookie.save('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -155,44 +156,62 @@ class PublicSharedView extends React.Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     let errMessage = this.state.errMessage;
     let emptyTip = (
-      <div className="empty-tip">
+      <EmptyTip>
         <h2>{gettext('No public libraries')}</h2>
-        <p>{gettext('You can create a public library by clicking the "New Library" button, others can view and download this library.')}</p>
-      </div>
+        <p>{gettext('No public libraries have been created yet. A public library is accessible by all users. You can create a public library by clicking the "Add Library" button in the menu bar.')}</p>
+      </EmptyTip>
     );
     return (
       <Fragment>
         <div className="main-panel-north border-left-show">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
-            <div className="operation">
-              <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
-                <DropdownToggle className='btn btn-secondary operation-item'>
-                  <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
-                  <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+          {canAddPublicRepo &&
+            <div className="cur-view-toolbar">
+              <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+              <div className="operation">
+                <Dropdown isOpen={this.state.isCreateMenuShow} toggle={this.onAddRepoToggle}>
+                  <MediaQuery query="(min-width: 768px)">
+                    <DropdownToggle className='btn btn-secondary operation-item'>
+                      <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add Library')}
+                    </DropdownToggle>
+                  </MediaQuery>
+                  <MediaQuery query="(max-width: 767.8px)">
+                    <DropdownToggle
+                      tag="span"
+                      className="sf2-icon-plus mobile-toolbar-icon"
+                      title={gettext('Add Library')}
+                    />
+                  </MediaQuery>
+                  <DropdownMenu>
+                    <DropdownItem onClick={this.onSelectRepoToggle}>{gettext('Share existing libraries')}</DropdownItem>
+                    <DropdownItem onClick={this.onCreateRepoToggle}>{gettext('New Library')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
-          </div>
+          }
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Shared with all')}</h3>
+              <h3 className="sf-heading m-0">{gettext('Shared with all')}</h3>
+              {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
               {(!this.state.isLoading && errMessage) && errMessage}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <SharedRepoListView 
+                <SharedRepoListView
                   libraryType={this.state.libraryType}
                   repoList={this.state.repoList}
                   sortBy={this.state.sortBy}
@@ -205,9 +224,17 @@ class PublicSharedView extends React.Component {
             </div>
           </div>
         </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortItems={this.sortItems}
+        />
+        }
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
-            <CreateRepoDialog 
+            <CreateRepoDialog
               libraryType={this.state.libraryType}
               onCreateToggle={this.onCreateRepoToggle}
               onCreateRepo={this.onCreateRepo}
@@ -216,7 +243,7 @@ class PublicSharedView extends React.Component {
         )}
         {this.state.isSelectRepoDialpgShow && (
           <ModalPortal>
-            <ShareRepoDialog 
+            <ShareRepoDialog
               onRepoSelectedHandler={this.onRepoSelectedHandler}
               onShareRepoDialogClose={this.onSelectRepoToggle}
             />

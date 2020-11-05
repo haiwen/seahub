@@ -4,6 +4,8 @@
   position: relative;
   display: flex;
   flex: 1;
+  align-items: center;
+  height: 32px;
 }
 
 .border-left-show:before {
@@ -32,7 +34,7 @@
 }
 
 .group-operations {
-  margin-right: 0.5rem;
+  margin-right: 0.25rem;
 }
 
 .group-operations .group-op-item {
@@ -49,6 +51,7 @@
 /* end file-operation toolbar */
 
 /* begin view-mode toolbar */
+.detail-btn button,
 .sf-view-mode-btn {
   padding: 0;
   height: 30px;
@@ -58,7 +61,12 @@
   border: 1px solid #ccc;
   line-height: 29px;
   font-size: 18px;
-  border-radius: 0 !important;
+  border-radius: 2px;
+}
+
+.detail-btn button {
+  font-size: 15px;
+  padding-top: 1px;
 }
 
 .sf-view-mode-btn.current-mode {
@@ -75,6 +83,17 @@
 
 .common-toolbar > div{
   margin-left: .5rem;
+}
+
+.common-toolbar .logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  text-decoration: none;
+  color: #ccc;
 }
 /* end common-toolbar */
 
@@ -101,3 +120,8 @@
 }
 /* end path toolbar */
 
+@media (max-width: 767px) {
+  .border-left-show:before {
+    width: 0;
+  }
+}

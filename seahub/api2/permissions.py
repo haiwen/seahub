@@ -94,3 +94,12 @@ class IsProVersion(BasePermission):
 
     def has_permission(self, request, *args, **kwargs):
         return is_pro_version()
+
+class IsOrgAdminUser(BasePermission):
+    """
+    Check whether  user is org admin
+    """
+    def has_permission(self, request, view, obj=None):
+        org_id = int(view.kwargs.get('org_id', ''))
+        return True if request.user.org.is_staff and \
+            request.user.org.org_id == org_id else False

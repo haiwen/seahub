@@ -10,12 +10,11 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
-from seahub.group.models import GroupMessage
 from seahub.utils import calc_file_path_hash, within_time_range, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
-from fields import LowerCaseCharField
+from .fields import LowerCaseCharField
 
 
 # Get an instance of a logger
@@ -38,28 +37,11 @@ class TimestampedModel(models.Model):
         # default ordering for most models.
         ordering = ['-created_at', '-updated_at']
 
-
-class FileDiscuss(models.Model):
-    """
-    Model used to represents the relationship between group message and file/dir.
-    """
-    group_message = models.ForeignKey(GroupMessage)
-    repo_id = models.CharField(max_length=36)
-    path = models.TextField()
-    path_hash = models.CharField(max_length=12, db_index=True)
-
-    def save(self, *args, **kwargs):
-        if not self.path_hash:
-            self.path_hash = calc_file_path_hash(self.path)
-
-        super(FileDiscuss, self).save(*args, **kwargs)
-
-
 class FileCommentManager(models.Manager):
     def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
-        fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, 
-                                                                    parent_path, 
-                                                                    item_name, 
+        fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
+                                                                    parent_path,
+                                                                    item_name,
                                                                     False)
         c = self.model(uuid=fileuuidmap, author=author, comment=comment, detail=detail)
         c.save(using=self._db)
@@ -75,7 +57,7 @@ class FileCommentManager(models.Manager):
     def get_by_file_path(self, repo_id, file_path):
         parent_path = os.path.dirname(file_path)
         item_name = os.path.basename(file_path)
-        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, 
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path,
                                                            item_name, False)
 
         objs = super(FileCommentManager, self).filter(
@@ -84,7 +66,7 @@ class FileCommentManager(models.Manager):
         return objs
 
     def get_by_parent_path(self, repo_id, parent_path):
-        uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, 
+        uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id,
                                                                    parent_path)
         objs = super(FileCommentManager, self).filter(uuid__in=uuids)
         return objs
@@ -149,6 +131,11 @@ class StarredFile(object):
 
 class UserStarredFilesManager(models.Manager):
 
+    def get_starred_repos_by_user(self, email):
+
+        starred_repos = UserStarredFiles.objects.filter(email=email, path='/')
+        return starred_repos
+
     def get_starred_item(self, email, repo_id, path):
 
         path_list = [normalize_file_path(path), normalize_dir_path(path)]
@@ -181,13 +168,13 @@ class UserStarredFilesManager(models.Manager):
         - `username`:
         """
         starred_files = super(UserStarredFilesManager, self).filter(
-            email=username, org_id=-1)
+            email=username, is_dir=False, org_id=-1)
 
         ret = []
         repo_cache = {}
         for sfile in starred_files:
             # repo still exists?
-            if repo_cache.has_key(sfile.repo_id):
+            if sfile.repo_id in repo_cache:
                 repo = repo_cache[sfile.repo_id]
             else:
                 try:
@@ -236,7 +223,7 @@ class UserStarredFilesManager(models.Manager):
                 logger.error(e)
                 sfile.last_modified = 0
 
-        ret.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
+        ret.sort(key=lambda x: x.last_modified, reverse=True)
 
         return ret
 
@@ -252,15 +239,6 @@ class UserStarredFiles(models.Model):
     is_dir = models.BooleanField()
 
     objects = UserStarredFilesManager()
-
-########## user/group modules
-class UserEnabledModule(models.Model):
-    username = models.CharField(max_length=255, db_index=True)
-    module_name = models.CharField(max_length=20)
-
-class GroupEnabledModule(models.Model):
-    group_id = models.CharField(max_length=10, db_index=True)
-    module_name = models.CharField(max_length=20)
 
 ########## misc
 class UserLastLoginManager(models.Manager):
@@ -302,25 +280,6 @@ class CommandsLastCheck(models.Model):
     """
     command_type = models.CharField(max_length=100)
     last_check = models.DateTimeField()
-
-###### Deprecated
-class InnerPubMsg(models.Model):
-    """
-    Model used for leave message on inner pub page.
-    """
-    from_email = models.EmailField()
-    message = models.CharField(max_length=500)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        ordering = ['-timestamp']
-
-class InnerPubMsgReply(models.Model):
-    reply_to = models.ForeignKey(InnerPubMsg)
-    from_email = models.EmailField()
-    message = models.CharField(max_length=150)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
-##############################
 
 class DeviceToken(models.Model):
     """

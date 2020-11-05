@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import migrations, models
 import seahub.base.fields
@@ -30,6 +30,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='wiki',
-            unique_together=set([('username', 'repo_id')]),
+            unique_together={('username', 'repo_id')},
         ),
     ]

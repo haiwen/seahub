@@ -24,19 +24,19 @@ class Command(BaseCommand):
         elif 'sqlite' in engine:
             sqlite = True
         else:
-            print 'Unsupported database. Exit.'
+            print('Unsupported database. Exit.')
             return
 
-        print 'Start to update schema...'
+        print('Start to update schema...')
 
         comments = list(FileComment.objects.raw('SELECT * from base_filecomment'))
 
         with connection.cursor() as cursor:
             sql = 'ALTER TABLE base_filecomment RENAME TO base_filecomment_backup_%s' % (random_key())
             cursor.execute(sql)
-            print sql
+            print(sql)
 
-            print ''
+            print('')
 
             if mysql:
                 sql = '''CREATE TABLE `base_filecomment` (
@@ -54,23 +54,23 @@ class Command(BaseCommand):
             ''' % (random_key(), random_key(), random_key())
 
                 cursor.execute(sql)
-                print sql
+                print(sql)
 
             if sqlite:
                 sql = '''CREATE TABLE "base_filecomment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "author" varchar(255) NOT NULL, "comment" text NOT NULL, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "uuid_id" char(32) NOT NULL REFERENCES "tags_fileuuidmap" ("uuid"))
                 '''
                 cursor.execute(sql)
-                print sql
+                print(sql)
 
                 sql = '''CREATE INDEX "base_filecomment_%s" ON "base_filecomment" ("author")''' % random_key()
                 cursor.execute(sql)
-                print sql
+                print(sql)
 
                 sql = '''CREATE INDEX "base_filecomment_%s" ON "base_filecomment" ("uuid_id") ''' % random_key()
                 cursor.execute(sql)
-                print sql
+                print(sql)
 
-        print 'Start to migate comments data...'
+        print('Start to migate comments data...')
         for c in comments:
             repo_id = c.repo_id
             parent_path = c.parent_path
@@ -83,15 +83,15 @@ class Command(BaseCommand):
             uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, False)
             FileComment(uuid=uuid, author=author, comment=comment,
                         created_at=created_at, updated_at=updated_at).save()
-            print 'migrated comment ID: %d' % c.pk
+            print('migrated comment ID: %d' % c.pk)
 
-        print 'Done'
+        print('Done')
 
     def handle(self, *args, **options):
         # check table column `uuid`
         try:
             res = FileComment.objects.raw('SELECT uuid_id from base_filecomment limit 1')
             if 'uuid_id' in res.columns:
-                print 'base_filecomment is already migrated, exit.'
+                print('base_filecomment is already migrated, exit.')
         except OperationalError:
             self.migrate_schema()

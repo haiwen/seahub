@@ -4,11 +4,12 @@ import os
 from uuid import uuid4
 
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.http import SimpleCookie
 from django.test import RequestFactory
 from django.test import TestCase
+from django.test import override_settings
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
@@ -22,6 +23,8 @@ from seahub.utils.file_size import get_file_size_unit
 from seahub.base.templatetags.seahub_tags import email2nickname,\
         email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.role_permissions.models import AdminRole
+
 
 TRAVIS = 'TRAVIS' in os.environ
 
@@ -55,6 +58,60 @@ class Fixtures(Exam):
     @fixture
     def admin(self):
         return self.create_user('admin@test.com', is_staff=True)
+
+    @fixture
+    def admin_cannot_view_system_info(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_view_system_info')
+        return user
+
+    @fixture
+    def admin_cannot_view_statistic(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_view_statistic')
+        return user
+
+    @fixture
+    def admin_cannot_config_system(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_config_system')
+        return user
+
+    @fixture
+    def admin_cannot_manage_library(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_manage_library')
+        return user
+
+    @fixture
+    def admin_cannot_manage_user(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_manage_user')
+        return user
+
+    @fixture
+    def admin_cannot_manage_group(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_manage_group')
+        return user
+
+    @fixture
+    def admin_cannot_view_user_log(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_view_user_log')
+        return user
+
+    @fixture
+    def admin_cannot_view_admin_log(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'cannot_view_admin_log')
+        return user
+
+    @fixture
+    def admin_no_other_permission(self):
+        user = self.create_user('admin_no_permission@test.com', is_staff=True)
+        AdminRole.objects.add_admin_role(user.username, 'no_other_permission')
+        return user
 
     @fixture
     def repo(self):
@@ -142,7 +199,7 @@ class Fixtures(Exam):
             User.objects.get(email).delete()
         except User.DoesNotExist:
             pass
-        for g in seaserv.get_personal_groups_by_user(email):
+        for g in ccnet_api.get_groups(email):
             ccnet_threaded_rpc.remove_group(g.id, email)
 
     def create_repo(self, **kwargs):
@@ -175,7 +232,7 @@ class Fixtures(Exam):
         fd, tmp_file = mkstemp()
 
         try:
-            bytesWritten = os.write(fd, content)
+            bytesWritten = os.write(fd, content.encode('utf-8'))
         except:
             bytesWritten = -1
         finally:
@@ -204,7 +261,7 @@ class Fixtures(Exam):
     def create_org_group(self, **kwargs):
         group_name = kwargs['group_name']
         username = kwargs['username']
-        org_group_id = ccnet_threaded_rpc.create_org_group(self.org.org_id ,group_name, username)
+        org_group_id = ccnet_threaded_rpc.create_org_group(self.org.org_id, group_name, username)
         org_groups = ccnet_threaded_rpc.get_org_groups(self.org.org_id, -1, -1)
         res_group = None
         for group in org_groups:
@@ -356,7 +413,7 @@ class BaseTestCase(TestCase, Fixtures):
         self.remove_repo(self.enc_repo.id)
 
     def login_as(self, user, password=None):
-        if isinstance(user, basestring):
+        if isinstance(user, str):
             login = user
         elif isinstance(user, User):
             login = user.username

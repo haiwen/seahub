@@ -1,39 +1,100 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block main_class %}d-flex ovhd{% endblock %}
+{% block header_right %}
+{# removed the content on the top right corner #}
+{% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+.side-nav-con .first-hd {
+    margin-top: 0;
+}
+</style>
+{% endblock %}
+{% block main_class %}d-flex ovhd{% endblock %}
 {% block main_content %}
 <div class="row flex-1 d-flex">
     <div class="side-textnav col-md-3 side-nav">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
-        <h3 class="hd">{% trans "Desktop Client and Syncing" %}</h3>
-        <ul class="side-textnav-tabs">
-            <li class="tab"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and sync Files" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_existing/">{% trans "Syncing existing folders" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/selective_sync/">{% trans "Selective sync sub-folders" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/unsync_resync/">{% trans "Unsync and resync libraries" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_interval/">{% trans "Setting sync interval" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
-            <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
-        </ul>
-        <h3 class="hd">{% trans "Security and Encryption" %}</h3>
-        <ul class="side-textnav-tabs">
-            <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
-        </ul>
+        <div class="hidden-md-up logo-container">
+            <a href="{{ SITE_ROOT }}">
+                <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+            </a>
+        </div>
+        <div class="side-nav-con">
+
+            <h3 class="hd first-hd">{% trans "Introduction" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/introduction/">{% trans "Introduction" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "Managing files and folders" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/libraries_managing/">{% trans "Managing files with libraries" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/restoring_deleted_files/">{% trans "Restoring deleted files" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/finding_older_version_files/">{% trans "Finding old file versions" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/library_history_and_snapshots/">{% trans "Library history and snapshots" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/setting_library_history/">{% trans "Setting history retention period" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/deleting_a_library/">{% trans "Deleting a library" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/viewing_files_within_web_app/">{% trans "Viewing files within Web App" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/full_text_file_search/">{% trans "Full text file search" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "Sharing and collaboration" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/sharing_files_and_folders/">{% trans "Sharing files and folders" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/groups_managing/">{% trans "Managing groups" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/file_locking/">{% trans "Locking files" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/folder_permission/">{% trans "Folder permission" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/departments/">{% trans "Departments sharing" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "Wiki and knowledge management" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/manage_library_as_wiki/">{% trans "Manage library as Wiki" %}</a></li>
+            </ul>
+            
+            <h3 class="hd">{% trans "Desktop client and syncing" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/install_sync/">{% trans "Install and sync files" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/syncing_existing_folders/">{% trans "Syncing existing folders" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/selective_sync/">{% trans "Selectively sync sub-folders" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/read-only_syncing/">{% trans "Read-only syncing" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/unsync_resync/">{% trans "Unsync and resync libraries" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/sync_interval/">{% trans "Setting sync interval" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/install_linux_client/">{% trans "Install on Linux" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/linux_cli/">{% trans "Seafile client for a CLI server" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "Drive client" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/using_drive_client/">{% trans "Using Seafile drive client" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/drive_client_2.0_for_windows_10/">{% trans "Using drive client 2.0 on Windows" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/drive_client_for_linux/">{% trans "Drive client for Linux" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "Security and encryption" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
+            </ul>
+
+            <h3 class="hd">{% trans "FAQ" %}</h3>
+            <ul class="side-textnav-tabs">
+                <li class="tab"><a href="{{ SITE_ROOT }}help/faq/">{% trans "FAQ" %}</a></li>
+            </ul>
+        </div>
     </div>
-
     <div class="help-con article col-md-9 ov-auto flex-1" id="right-panel">{% block help_con %}{% endblock %}</div>
-
 </div>
 {% endblock %}
-
 {% block extra_script %}
 <script type="text/javascript">
 $('.side-nav li').each(function() {
     var link_href = $('a', $(this)).attr('href');
-    if (link_href == location.pathname || link_href == location.pathname + 'install/') {
+    if (link_href == location.pathname || link_href == location.pathname + 'introduction/') {
         $(this).addClass('tab-cur');
         if ($(this).offset().top > $(window).height()) {
             $('.side-nav').scrollTop($(this).offset().top + $(this).outerHeight(true) - $(window).height());

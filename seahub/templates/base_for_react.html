@@ -1,4 +1,5 @@
 {% load seahub_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -9,9 +10,11 @@
 {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}
+{% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+<link rel="shortcut icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
 {% block extra_style %}{% endblock %}
@@ -30,35 +33,45 @@
             logoPath: '{{ logo_path }}',
             logoWidth: '{{ logo_width }}',
             logoHeight: '{{ logo_height }}',
+            faviconPath: '{{ favicon_path }}',
+            loginBGPath: '{{ login_bg_path }}',
             siteTitle: '{{ site_title }}',
-            siteName: '{{ site_name }}',
+            siteName: '{{ site_name|escapejs }}',
             siteRoot: '{{ SITE_ROOT }}',
             loginUrl: '{{ LOGIN_URL }}',
             isPro: '{{ is_pro }}',
+            isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
+            avatarURL: '{{ avatar_url }}'
         },
         pageOptions: {
+            csrfToken: "{{ csrf_token }}",
+            dtableWebServer: "{{dtable_web_server}}",
             seafileCollabServer: '{{seafile_collab_server}}',
             name: "{{request.user.username|email2nickname|escapejs}}",
             contactEmail: "{{request.user.username|email2contact_email|escapejs}}",
             username: "{{request.user.username|escapejs}}",
+            guideEnabled: {% if guide_enabled %} true {% else %} false {% endif %},
+            trashReposExpireDays: {% if trash_repos_expire_days >= 0 %} {{ trash_repos_expire_days }} {% else %} null {% endif %},
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+            canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
+            canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
             canViewOrg:'{{ user.permissions.can_view_org }}',
-            fileAuditEnabled: '{{ file_audit_enabled }}',
-            enableFileComment: '{{ enable_file_comment }}',
-            folderPermEnabled: '{{ folder_perm_enabled }}',
+            fileAuditEnabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
+            enableFileComment: {% if enableFileComment %} true {% else %} false {% endif %},
+            folderPermEnabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
             enableResetEncryptedRepoPassword: '{{ enable_reset_encrypted_repo_password }}',
             isEmailConfigured: '{{ is_email_configured }}',
             enableUploadFolder: '{{ enable_upload_folder }}',
             enableResumableFileUpload: '{{ enable_resumable_fileupload }}',
+            resumableUploadFileBlockSize: '{{ resumable_upload_file_block_size }}',
             // storage backends
             storages: (function () {
-              // for 'create repo' & 'storage backend' column in 'my libs'
               var storages = [];
               {% for storage in storages %}
               storages.push({
@@ -69,19 +82,40 @@
               return storages;
             })(),
             enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
-            shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
-            shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
+            shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+            sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
-            enableWiki: {% if user.permissions.can_use_wiki %} true {% else %} false {% endif %},
-            enableEncryptedLibrary: '{{ enable_encrypted_library }}',
-            enableRepoHistorySetting: '{{ enable_repo_history_setting }}',
+            canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
+            enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
+            enableRepoHistorySetting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
             isSystemStaff: {% if request.user.is_staff %} true {% else %} false {% endif %},
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
+            canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
+            enableOCM: {% if enable_ocm %} true {% else %} false {% endif %},
+            canInvitePeople: {% if enable_guest_invitation and user.permissions.can_invite_guest %} true {% else %} false {% endif %},
+            customNavItems: {% if custom_nav_items %} JSON.parse('{{ custom_nav_items | escapejs }}') {% else %} {{'[]'}} {% endif %},
+            enableShowContactEmailWhenSearchUser: {% if enable_show_contact_email_when_search_user %} true {% else %} false {% endif %},
+            {% if max_upload_file_size > 0 %}
+            maxUploadFileSize: {{ max_upload_file_size }},
+            {% endif %}
+            {% if max_number_of_files_for_fileupload > 0 %}
+            maxNumberOfFilesForFileupload: {{ max_number_of_files_for_fileupload }},
+            {% endif %}
+            {% if request.user.is_authenticated and request.cur_note %}
+            curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
+            curNoteID: '{{ request.cur_note.id }}',
+            {% endif %}
+            enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
+            showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
+            additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
+            additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},
+            additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %}
         }
      };
 </script>
-<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+{% render_bundle 'commons' %}
 {% block extra_script %}{% endblock %}
 </body>
 </html>

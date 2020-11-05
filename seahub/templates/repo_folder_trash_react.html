@@ -1,0 +1,22 @@
+{% extends 'base_for_react.html' %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{% trans "Trash" %} - {% endblock %}
+
+{% block extra_style %}
+{% render_bundle 'repoFolderTrash' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  repoID: '{{repo.id}}',
+  repoFolderName: '{{repo_folder_name|escapejs}}',
+  path: '{{path|escapejs}}',
+  enableClean: {% if enable_clean %} true {% else %} false {% endif %}
+};
+</script>
+{% render_bundle 'repoFolderTrash' 'js' %}
+{% endblock %}

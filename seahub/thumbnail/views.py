@@ -36,19 +36,19 @@ def thumbnail_create(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u"Library does not exist.")
+        err_msg = _("Library does not exist.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     path = request.GET.get('path', None)
     if not path:
-        err_msg = _(u"Invalid arguments.")
+        err_msg = _("Invalid arguments.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     if repo.encrypted or not ENABLE_THUMBNAIL or \
         check_folder_permission(request, repo_id, path) is None:
-        err_msg = _(u"Permission denied.")
+        err_msg = _("Permission denied.")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
@@ -151,25 +151,25 @@ def share_link_thumbnail_create(request, token):
 
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if not fileshare:
-        err_msg = _(u"Invalid token.")
+        err_msg = _("Invalid token.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
     if not repo:
-        err_msg = _(u"Library does not exist.")
+        err_msg = _("Library does not exist.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     if repo.encrypted or not ENABLE_THUMBNAIL:
-        err_msg = _(u"Permission denied.")
+        err_msg = _("Permission denied.")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
     req_path = request.GET.get('path', None)
     if not req_path or '../' in req_path:
-        err_msg = _(u"Invalid arguments.")
+        err_msg = _("Invalid arguments.")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 

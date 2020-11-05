@@ -1,5 +1,5 @@
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seaserv import seafile_api
 from seahub.test_utils import BaseTestCase
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -31,6 +31,7 @@ class RepoViewTest(BaseTestCase):
         assert json_resp['owner_contact_email'] == email2contact_email(self.user_name)
 
         assert json_resp['permission'] == 'rw'
+        assert json_resp['status'] == 'normal'
 
         self.assertFalse(json_resp['encrypted'])
         self.assertIsNotNone(json_resp['file_count'])
@@ -63,6 +64,7 @@ class RepoViewTest(BaseTestCase):
         assert json_resp['owner_contact_email'] == email2contact_email(self.admin_name)
 
         assert json_resp['permission'] == permission
+        assert json_resp['status'] == 'normal'
 
         self.assertFalse(json_resp['encrypted'])
         self.assertIsNotNone(json_resp['file_count'])
@@ -100,3 +102,21 @@ class RepoViewTest(BaseTestCase):
         url = reverse('api-v2.1-repo-view', args=[invalid_repo_id])
         resp = self.client.get(url)
         self.assertEqual(404, resp.status_code)
+
+    def test_delete_with_normal_status(self):
+
+        self.login_as(self.user)
+
+        resp = self.client.delete(self.url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp == 'success'
+
+    def test_delete_with_read_only_status(self):
+        self.login_as(self.user)
+
+        seafile_api.set_repo_status(self.repo.id, 1)
+
+        resp = self.client.delete(self.url)
+        self.assertEqual(403, resp.status_code)

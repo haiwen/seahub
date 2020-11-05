@@ -2,7 +2,7 @@
 # encoding: utf-8
 from django.conf import settings
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib import messages
@@ -11,19 +11,20 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api
 
-from forms import DetailedProfileForm
-from models import Profile, DetailedProfile
+from .forms import DetailedProfileForm
+from .models import Profile, DetailedProfile
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
-from seahub.base.accounts import User
+from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.utils import is_ldap_user
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
-
+from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
+from seahub.dingtalk.settings import ENABLE_DINGTALK
 
 @login_required
 def edit_profile(request):
@@ -34,14 +35,14 @@ def edit_profile(request):
     form_class = DetailedProfileForm
 
     if request.method == 'POST':
-        form = form_class(request.POST)
+        form = form_class(user=request.user, data=request.POST)
         if form.is_valid():
-            form.save(username=username)
-            messages.success(request, _(u'Successfully edited profile.'))
+            form.save()
+            messages.success(request, _('Successfully edited profile.'))
 
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
-            messages.error(request, _(u'Failed to edit profile'))
+            messages.error(request, _('Failed to edit profile'))
     else:
         profile = Profile.objects.get_profile_by_user(username)
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
@@ -57,7 +58,7 @@ def edit_profile(request):
             init_dict['department'] = d_profile.department
             init_dict['telephone'] = d_profile.telephone
 
-        form = form_class(init_dict)
+        form = form_class(user=request.user, data=init_dict)
 
     # common logic
     try:
@@ -75,7 +76,7 @@ def edit_profile(request):
         default_repo = None
 
     owned_repos = get_owned_repo_list(request)
-    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+    owned_repos = [r for r in owned_repos if not r.is_virtual]
 
     if settings.ENABLE_WEBDAV_SECRET:
         decoded = UserOptions.objects.get_webdav_decoded_secret(username)
@@ -86,15 +87,25 @@ def edit_profile(request):
     email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
     email_inverval = email_inverval if email_inverval is not None else 0
 
-    if settings.SOCIAL_AUTH_WEIXIN_WORK_KEY:
+    if work_weixin_oauth_check():
         enable_wechat_work = True
 
-        from social_django.models import UserSocialAuth
-        social_connected = UserSocialAuth.objects.filter(
-            username=request.user.username, provider='weixin-work').count() > 0
+        from seahub.auth.models import SocialAuthUser
+        from seahub.work_weixin.settings import WORK_WEIXIN_PROVIDER
+        social_connected = SocialAuthUser.objects.filter(
+            username=request.user.username, provider=WORK_WEIXIN_PROVIDER).count() > 0
     else:
         enable_wechat_work = False
         social_connected = False
+
+    if ENABLE_DINGTALK:
+        enable_dingtalk = True
+        from seahub.auth.models import SocialAuthUser
+        social_connected_dingtalk = SocialAuthUser.objects.filter(
+            username=request.user.username, provider='dingtalk').count() > 0
+    else:
+        enable_dingtalk = False
+        social_connected_dingtalk = False
 
     resp_dict = {
             'form': form,
@@ -112,9 +123,13 @@ def edit_profile(request):
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
             'email_notification_interval': email_inverval,
-            'social_connected': social_connected,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
+            'social_connected': social_connected,
+            'enable_dingtalk': enable_dingtalk,
+            'social_connected_dingtalk': social_connected_dingtalk,
+            'ENABLE_USER_SET_CONTACT_EMAIL': settings.ENABLE_USER_SET_CONTACT_EMAIL,
+            'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
     }
 
     if has_two_factor_auth():
@@ -129,7 +144,9 @@ def edit_profile(request):
         resp_dict['default_device'] = default_device(request.user)
         resp_dict['backup_tokens'] = backup_tokens
 
-    return render(request, 'profile/set_profile.html', resp_dict)
+    #template = 'profile/set_profile.html'
+    template = 'profile/set_profile_react.html'
+    return render(request, template, resp_dict)
 
 @login_required
 def user_profile(request, username):
@@ -181,7 +198,7 @@ def get_user_profile(request, user):
             data['user_nickname'] = profile.nickname
             data['user_intro'] = profile.intro
     else:
-        data['user_intro'] = _(u'Has not accepted invitation yet')
+        data['user_intro'] = _('Has not accepted invitation yet')
 
     if user == request.user.username or \
             Contact.objects.filter(user_email=request.user.username,
@@ -195,9 +212,9 @@ def get_user_profile(request, user):
 @login_required
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
-        messages.error(request, _(u'Permission denied.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        messages.error(request, _('Permission denied.'))
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
         raise Http404
@@ -205,9 +222,9 @@ def delete_user_account(request):
     username = request.user.username
 
     if username == 'demo@seafile.com':
-        messages.error(request, _(u'Demo account can not be deleted.'))
-        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-        return HttpResponseRedirect(next)
+        messages.error(request, _('Demo account can not be deleted.'))
+        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
     user.delete()
@@ -227,18 +244,18 @@ def default_repo(request):
 
     repo_id = request.POST.get('dst_repo', '')
     referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
+    next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     if repo.encrypted:
         messages.error(request, _('Can not set encrypted library as default library.'))
-        return HttpResponseRedirect(next)
+        return HttpResponseRedirect(next_page)
 
     username = request.user.username
     UserOptions.objects.set_default_repo(username, repo.id)
     messages.success(request, _('Successfully set "%s" as your default library.') % repo.name)
-    return HttpResponseRedirect(next)
+    return HttpResponseRedirect(next_page)

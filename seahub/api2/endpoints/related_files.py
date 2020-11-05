@@ -83,7 +83,7 @@ class RelatedFilesView(APIView):
             file_uuid_list = RelatedFiles.objects.get_related_files_uuid(uuid)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         related_files = list()
@@ -172,7 +172,7 @@ class RelatedFilesView(APIView):
             related_file_uuid = RelatedFiles.objects.add_related_file_uuid(o_repo_id, r_repo_id, o_path, r_path)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         related_file = self.get_related_file(r_repo_id, r_path, related_file_uuid.r_uuid)
@@ -215,7 +215,7 @@ class RelatedFileView(APIView):
 
         # permission check
         if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
-            print check_folder_permission(request, repo_id, file_path)
+            print(check_folder_permission(request, repo_id, file_path))
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -223,7 +223,7 @@ class RelatedFileView(APIView):
             RelatedFiles.objects.delete_related_file_uuid(related_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error.'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": "true"}, status=status.HTTP_200_OK)

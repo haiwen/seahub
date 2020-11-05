@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { slug, repoID, siteRoot, initialPath, isDir } from './utils/constants';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
+import { slug, siteRoot, initialPath, isDir, sharedToken, hasIndex } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Dirent from './models/dirent';
@@ -46,11 +48,17 @@ class Wiki extends Component {
     this.homePath = '/home.md';
   }
 
+  componentWillMount() {
+    if (!Utils.isDesktop()) {
+      this.setState({ closeSideBar: true });
+    }
+  }
+
   componentDidMount() {
     this.loadWikiData(initialPath);
   }
 
-  loadWikiData = (initialPath) => {  
+  loadWikiData = (initialPath) => {
     this.loadSidePanel(initialPath);
 
     if (isDir === 'None') {
@@ -58,10 +66,10 @@ class Wiki extends Component {
         this.showDir('/');
       } else {
         this.setState({pathExist: false});
-        let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(initialPath);
+        let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
         window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
       }
-    } else if (isDir === 'True') {  
+    } else if (isDir === 'True') {
       this.showDir(initialPath);
     } else if (isDir === 'False') {
       this.showFile(initialPath);
@@ -69,40 +77,43 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-    if (initialPath === this.homePath || isDir === 'None') {
-      seafileAPI.listWikiDir(slug, '/').then(res => {
-        let tree = this.state.treeData;
-        this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
-        let indexNode = tree.getNodeByPath(this.indexPath);
-        let homeNode = tree.getNodeByPath(this.homePath);
-        if (homeNode && indexNode) {
-          seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
-            this.setState({
-              treeData: tree,
-              indexNode: indexNode,
-              indexContent: res.data.content,
-              isTreeDataLoading: false,
-            });
-          });
-        } else {
-          this.setState({
-            treeData: tree,
-            isTreeDataLoading: false,
-          });
-        }
-      }).catch(() => {
-        this.setState({isLoadFailed: true});
-      });
+
+    if (hasIndex) {
+      this.loadIndexNode();
     } else {
-      this.loadNodeAndParentsByPath(initialPath);
+      if (isDir === 'None') {
+        initialPath = '/';
+        this.loadNodeAndParentsByPath('/');
+      } else  {
+        this.loadNodeAndParentsByPath(initialPath);
+      }
     }
+
+  }
+
+  loadIndexNode = () => {
+    seafileAPI.listWikiDir(slug, '/').then(res => {
+      let tree = this.state.treeData;
+      this.addFirstResponseListToNode(res.data.dirent_list, tree.root);
+      let indexNode = tree.getNodeByPath(this.indexPath);
+      seafileAPI.getWikiFileContent(slug, indexNode.path).then(res => {
+        this.setState({
+          treeData: tree,
+          indexNode: indexNode,
+          indexContent: res.data.content,
+          isTreeDataLoading: false,
+        });
+      });
+    }).catch(() => {
+      this.setState({isLoadFailed: true});
+    });
   }
 
   showDir = (dirPath) => {
     this.loadDirentList(dirPath);
 
     // update location url
-    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(dirPath);
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
   }
 
@@ -110,7 +121,7 @@ class Wiki extends Component {
     this.setState({
       isDataLoading: true,
       isViewFile: true,
-      path: filePath, 
+      path: filePath,
     });
 
     seafileAPI.getWikiFileContent(slug, filePath).then(res => {
@@ -125,8 +136,12 @@ class Wiki extends Component {
     });
 
     const hash = window.location.hash;
-    let fileUrl = siteRoot + 'wikis/' + slug + Utils.encodePath(filePath) + hash;
-    window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(filePath) + hash;
+    if (filePath === '/home.md') {
+      window.history.replaceState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    } else {
+      window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
+    }
   }
 
   loadDirentList = (dirPath) => {
@@ -221,6 +236,9 @@ class Wiki extends Component {
     } else {
       window.location.href = url;
     }
+    if (!this.state.closeSideBar) {
+      this.setState({ closeSideBar: true });
+    }
   }
 
   onpopstate = (event) => {
@@ -237,9 +255,9 @@ class Wiki extends Component {
       }
     }
   }
-  
+
   onSearchedClick = (item) => {
-    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path; 
+    let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
     if (this.state.currentPath === path) {
       return;
     }
@@ -252,7 +270,7 @@ class Wiki extends Component {
       if (!node) {
         index = i;
         break;
-      } 
+      }
     }
     if (index === -1) { // all the data has been loaded already.
       let tree = this.state.treeData.clone();
@@ -270,7 +288,7 @@ class Wiki extends Component {
       if (Utils.isMarkdownFile(path)) {
         this.showFile(path);
       } else {
-        let url = siteRoot + 'lib/' + item.repo_id + '/file' + Utils.encodePath(path);
+        let url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(path);
         let newWindow = window.open('about:blank');
         newWindow.location.href = url;
       }
@@ -285,7 +303,6 @@ class Wiki extends Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
-
     this.setState({treeData: tree, currentNode: node});
     this.showDir(node.path);
   }
@@ -300,7 +317,7 @@ class Wiki extends Component {
         this.showFile(direntPath);
       } else {
         const w=window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(direntPath);
         w.location.href = url;
       }
     }
@@ -351,7 +368,7 @@ class Wiki extends Component {
         }
       } else {
         const w = window.open('about:blank');
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
+        const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(node.path);
         w.location.href = url;
       }
     }
@@ -443,6 +460,9 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onDirentClick={this.onDirentClick}
         />
+        <MediaQuery query="(max-width: 767.8px)">
+          <Modal isOpen={!this.state.closeSideBar} toggle={this.onCloseSide} contentClassName="d-none"></Modal>
+        </MediaQuery>
       </div>
     );
   }

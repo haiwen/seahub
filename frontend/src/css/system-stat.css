@@ -1,0 +1,111 @@
+.system-statistic-time-range {
+  margin: 15px 0 25px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.sys-stat-tool {
+  display: flex;
+  font-size: 13px;
+  color: #333;
+}
+
+.system-statistic-item {
+  border: 1px solid #c5c5c5;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.system-statistic-item:hover {
+  background: #efefef;
+}
+
+.sys-stat-tool .item-active {
+  background: #efefef;
+}
+
+.system-statistic-input-container {
+  display: flex;
+  margin-left: 1rem;
+  align-items: center;
+}
+
+.system-statistic-input {
+  height: 31px;
+  width: 120px;
+}
+
+.error-tip {
+  color: red;
+}
+
+.statistic-traffic-tab {
+  display: flex;
+  font-size: 13px;
+  color: #333;
+  margin-top: 10px;
+}
+
+.statistic-traffic-tab .statistic-traffic-tab-item {
+  margin-right: 10px;
+  padding: 3px 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: #8a948f;
+}
+
+.statistic-traffic-tab .statistic-traffic-tab-item:hover {
+  color: #eb8025;
+  border-bottom: 2px solid #eb8025;
+}
+
+.statistic-traffic-tab .statistic-traffic-tab-item.active {
+  color: #eb8025;
+  border-bottom: 2px solid #eb8025;
+}
+
+.statistic-reports-title {
+  background: #f7f7f7;
+  margin-top: 15px;
+  color: #222222;
+  padding: 3px 10px;
+}
+
+.statistic-reports-submit {
+  margin-left: 15px;
+}
+
+.statistic-reports-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.statistic-reports-input {
+  width: 80px;
+  height: 30px;
+}
+
+.statistic-reports-tip {
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+.system-statistic-connect {
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.system-statistic-button {
+  height: 31px;
+  margin-left: 1rem;
+}
+
+.rc-calendar table {
+  table-layout: initial;
+}
+
+.rc-calendar tbody tr {
+  height: 1.75rem;
+}

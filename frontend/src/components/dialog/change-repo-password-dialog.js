@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap'; 
+import { Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -76,33 +76,24 @@ class ChangeRepoPasswordDialog extends React.Component {
     }
 
     this.setState({
-      submitBtnDisabled: true  
+      submitBtnDisabled: true
     });
     seafileAPI.changeEncryptedRepoPassword(this.props.repoID, oldPassword, newPassword)
-    .then(() => {
-      this.props.toggleDialog();
-      toaster.success(gettext('Successfully changed library password.'));
-    }).catch((error) => {
-      let errorMsg = '';
-      if (error.response) {
-        if (error.response.data) {
-            errorMsg = error.response.data.error_msg;
-        } else {
-            errorMsg = gettext('Error');
-        }   
-      } else {
-          errorMsg = gettext('Please check the network.');
-      }   
-      this.setState({
-        errorMsg: errorMsg,
-        submitBtnDisabled: false
-      }); 
-    });
+      .then(() => {
+        this.props.toggleDialog();
+        toaster.success(gettext('Successfully changed library password.'));
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        this.setState({
+          errorMsg: errorMsg,
+          submitBtnDisabled: false
+        });
+      });
   }
 
 
   render() {
-    const { repoID, repoName, toggleDialog } = this.props;
+    const { repoName, toggleDialog } = this.props;
 
     return (
       <Modal isOpen={true} centered={true} style={{height: 'auto'}}>
@@ -121,7 +112,7 @@ class ChangeRepoPasswordDialog extends React.Component {
           </form>
         </ModalBody>
         <ModalFooter>
-            <button className="btn btn-primary" disabled={this.state.submitBtnDisabled} onClick={this.formSubmit}>{gettext('Submit')}</button>
+          <button className="btn btn-primary" disabled={this.state.submitBtnDisabled} onClick={this.formSubmit}>{gettext('Submit')}</button>
         </ModalFooter>
       </Modal>
     );

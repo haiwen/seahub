@@ -91,13 +91,13 @@ class GroupMembers(APIView):
 
         try:
             if is_group_member(group_id, email):
-                error_msg = _(u'User %s is already a group member.') % email2nickname(email)
+                error_msg = _('User %s is already a group member.') % email2nickname(email)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 if not ccnet_api.org_user_exists(org_id, email):
-                    error_msg = _(u'User %s not found in organization.') % email2nickname(email)
+                    error_msg = _('User %s not found in organization.') % email2nickname(email)
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             ccnet_api.group_add_member(group_id, username, email)
@@ -290,7 +290,7 @@ class GroupMembersBulk(APIView):
                 result['failed'].append({
                     'email': email,
                     'email_name': email_name,
-                    'error_msg': _(u'User %s is already a group member.') % email_name
+                    'error_msg': _('User %s is already a group member.') % email_name
                     })
                 continue
 
@@ -300,7 +300,7 @@ class GroupMembersBulk(APIView):
                 result['failed'].append({
                     'email': email,
                     'email_name': email_name,
-                    'error_msg': _(u'User %s not found in organization.') % email_name
+                    'error_msg': _('User %s not found in organization.') % email_name
                     })
                 continue
 

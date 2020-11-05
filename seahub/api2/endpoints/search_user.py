@@ -120,7 +120,8 @@ class SearchUser(APIView):
         ## search finished, now filter out some users
 
         # remove duplicate emails
-        email_list = {}.fromkeys(email_list).keys()
+        # get_emailusers_in_list can only accept 20 users at most
+        email_list = list({}.fromkeys(email_list).keys())[:20]
 
         email_result = []
 
@@ -170,7 +171,7 @@ def format_searched_user_result(request, users, size):
         url, is_default, date_uploaded = api_avatar_url(email, size)
         results.append({
             "email": email,
-            "avatar_url": request.build_absolute_uri(url),
+            "avatar_url": url,
             "name": email2nickname(email),
             "contact_email": email2contact_email(email),
         })

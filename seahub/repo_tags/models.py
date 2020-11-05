@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 from django.db import models
 
 
@@ -8,9 +8,9 @@ class RepoTagsManager(models.Manager):
     def get_all_by_repo_id(self, repo_id):
         return super(RepoTagsManager, self).filter(repo_id=repo_id)
 
-    def get_one_repo_tag(self, repo_id, tag_name, tag_color):
+    def get_repo_tag_by_name(self, repo_id, tag_name):
         try:
-            return super(RepoTagsManager, self).get(repo_id=repo_id, name=tag_name, color=tag_color)
+            return super(RepoTagsManager, self).get(repo_id=repo_id, name=tag_name)
         except self.model.DoesNotExist:
             return None
 

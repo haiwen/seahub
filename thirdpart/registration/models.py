@@ -110,9 +110,9 @@ class RegistrationManager(models.Manager):
         username and a random salt.
         
         """
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5].encode('utf-8')
         username = user.username
-        if isinstance(username, unicode):
+        if isinstance(username, str):
             username = username.encode('utf-8')
         activation_key = hashlib.sha1(salt+username).hexdigest()
         return self.create(emailuser_id=user.id,
@@ -184,7 +184,7 @@ class RegistrationProfile(models.Model):
     account registration and activation.
     
     """
-    ACTIVATED = u"ALREADY_ACTIVATED"
+    ACTIVATED = "ALREADY_ACTIVATED"
     
 #    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
     emailuser_id = models.IntegerField()
@@ -197,7 +197,7 @@ class RegistrationProfile(models.Model):
         verbose_name_plural = _('registration profiles')
     
     def __unicode__(self):
-        return u"Registration information for %s" % self.emailuser_id
+        return "Registration information for %s" % self.emailuser_id
     
     def activation_key_expired(self):
         """
@@ -290,7 +290,7 @@ class RegistrationProfile(models.Model):
 ########## signal handlers
 import logging
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.dispatch import receiver
 from django.utils.http import urlquote
 
@@ -305,8 +305,8 @@ logger = logging.getLogger(__name__)
 def notify_admins_on_activate_request(reg_email):
     ctx_dict = {
         "site_name": settings.SITE_NAME,
-        "user_search_link": "%s%s?email=%s" % (
-            get_site_scheme_and_netloc(), reverse("user_search"),
+        "user_search_link": "%s%s?query=%s" % (
+            get_site_scheme_and_netloc(), reverse("sys_search_users"),
             urlquote(reg_email)),
     }
 
@@ -328,8 +328,8 @@ def notify_admins_on_activate_request(reg_email):
 def notify_admins_on_register_complete(reg_email):
     ctx_dict = {
         "site_name": settings.SITE_NAME,
-        "user_search_link": "%s%s?email=%s" % (
-            get_site_scheme_and_netloc(), reverse("user_search"),
+        "user_search_link": "%s%s?query=%s" % (
+            get_site_scheme_and_netloc(), reverse("sys_search_users"),
             urlquote(reg_email)),
         "reg_email": reg_email,
     }

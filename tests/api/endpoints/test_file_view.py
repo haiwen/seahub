@@ -5,7 +5,7 @@ import posixpath
 
 from seaserv import seafile_api
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
@@ -41,7 +41,7 @@ class FileViewTest(BaseTestCase):
 
         if len(json_resp['dirent_list']) > 0:
             for dirent in json_resp['dirent_list']:
-                if dirent.has_key('is_file') and dirent['is_file']:
+                if 'is_file' in dirent and dirent['is_file']:
                     return dirent['obj_name']
                 else:
                     continue

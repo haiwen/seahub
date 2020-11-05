@@ -1,7 +1,20 @@
 {% extends "base_for_react.html" %}
 {% load render_bundle from webpack_loader %}
 
-{% block extra_script %}
+{% block extra_style %}
+{% render_bundle 'app' 'css' %}
+{% endblock %}
 
-{% render_bundle 'app' %}
+{% block extra_script %}
+<script type="text/javascript">
+  Object.assign(app.pageOptions, {
+    shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
+    shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
+    shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
+    uploadLinkExpireDaysDefault: {{ upload_link_expire_days_default }},
+    uploadLinkExpireDaysMin: {{ upload_link_expire_days_min }},
+    uploadLinkExpireDaysMax: {{ upload_link_expire_days_max }}
+  });
+</script>
+{% render_bundle 'app' 'js' %}
 {% endblock %}

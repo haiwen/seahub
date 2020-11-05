@@ -12,6 +12,7 @@ from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOU
 from seahub.institutions.models import Institution
 from registration.signals import user_registered
 from seahub.signals import institution_deleted
+from seahub.institutions.models import InstitutionAdmin
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class DuplicatedContactEmailError(Exception):
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
-                      login_id=None, contact_email=None, institution=None):
+                      login_id=None, contact_email=None, institution=None, list_in_address_book=None):
         """Add or update user profile.
         """
         try:
@@ -46,6 +47,8 @@ class ProfileManager(models.Manager):
         if institution is not None:
             institution = institution.strip()
             profile.institution = institution
+        if list_in_address_book is not None:
+            profile.list_in_address_book = list_in_address_book.lower() == 'true'
 
         try:
             profile.save(using=self._db)
@@ -180,8 +183,12 @@ class DetailedProfileManager(models.Manager):
     def add_or_update(self, username, department, telephone):
         try:
             d_profile = self.get(user=username)
-            d_profile.department = department
-            d_profile.telephone = telephone
+
+            if department is not None:
+                d_profile.department = department
+            if telephone is not None:
+                d_profile.telephone = telephone
+
         except DetailedProfile.DoesNotExist:
             d_profile = self.model(user=username, department=department,
                                    telephone=telephone)
@@ -232,4 +239,5 @@ def update_profile_cache(sender, instance, **kwargs):
 def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
     Profile.objects.filter(institution=inst_name).update(institution="")
+    InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
 

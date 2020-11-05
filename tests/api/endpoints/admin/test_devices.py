@@ -1,5 +1,5 @@
 import json
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.api2.models import TokenV2
 
@@ -40,6 +40,13 @@ class DevicesTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
         assert len(json_resp['devices']) == 2
+
+    def test_no_permission(self):
+        self.logout()
+        self.login_as(self.admin_no_other_permission)
+        url = reverse('api-v2.1-admin-devices')
+        resp = self.client.get(url)
+        assert resp.status_code == 403
 
     def test_can_get_desktop(self):
         self.login_as(self.admin)

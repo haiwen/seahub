@@ -26,3 +26,13 @@
   opacity: 1;
   color: #a4a4a4;
 }
+.add-reviewer {
+  display: flex;
+  justify-content: space-between;
+}
+.add-reviewer .reviewer-select {
+  width: 385px;
+}
+.add-reviewer .btn {
+  width: 75px;
+}

@@ -44,7 +44,7 @@ class QueryCopyMoveProgressView(APIView):
 
         # res can be None
         if not res:
-            error_msg = _(u'Error')
+            error_msg = _('Error')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = {}

@@ -1,16 +1,19 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/lib/Async';
-import toaster from '../toast';
-import { gettext } from '../../utils/constants';
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated';
 import { seafileAPI } from '../../utils/seafile-api.js';
+import { gettext, isPro } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import toaster from '../toast';
+import UserSelect from '../user-select';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
-  repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
+  canTransferToDept: PropTypes.bool
 };
 
 class TransferDialog extends React.Component {
@@ -19,71 +22,88 @@ class TransferDialog extends React.Component {
     this.state = {
       selectedOption: null,
       errorMsg: [],
-      sharedItems: []
+      transferToUser: true,
     };
     this.options = [];
   }
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-    this.options = [];
   }
 
-  loadOptions = (value, callback) => {
-    if (value.trim().length > 0) {
-      seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
+  submit = () => {
+    let user = this.state.selectedOption;
+    this.props.submit(user);
+  }
+
+  componentDidMount() {
+    if (isPro) {
+      seafileAPI.listDepartments().then((res) => {
+        for (let i = 0 ; i < res.data.length; i++) {
           let obj = {};
-          obj.value = res.data.users[i].name;
-          obj.email = res.data.users[i].email;
-          obj.label =
-            <Fragment>
-              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
-              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
-            </Fragment>;
+          obj.value = res.data[i].name;
+          obj.email = res.data[i].email;
+          obj.label = res.data[i].name;
           this.options.push(obj);
         }
-        callback(this.options);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       });
     }
   }
 
-  submit = () => {
-    let repoID = this.props.repoID;
-    let user = this.state.selectedOption.email;
-    seafileAPI.transferRepo(repoID, user).then(res => {
-      let message = gettext('Successfully transferred the library.');
-      toaster.success(message);
-      this.props.submit(repoID);
-    }).catch(res => {
-      let message = gettext('Failed. Please check the network.');
-      this.props.toggleDialog();
-      toaster.danger(message);
+  onClick = () => {
+    this.setState({
+      transferToUser: !this.state.transferToUser,
     });
-  } 
+  }
 
   render() {
     const itemName = this.props.itemName;
     const innerSpan = '<span class="op-target" title=' + itemName + '>' + itemName +'</span>';
-    let msg = gettext('Transfer Library {library_name} To');
+    let msg = gettext('Transfer Library {library_name}');
     let message = msg.replace('{library_name}', innerSpan);
+
+    let canTransferToDept = true;
+    if (this.props.canTransferToDept != undefined) {
+      canTransferToDept = this.props.canTransferToDept;
+    }
     return (
-      <Modal isOpen={true} centered={true}>
+      <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
           <div dangerouslySetInnerHTML={{__html:message}} />
         </ModalHeader>
         <ModalBody>
-          <AsyncSelect
-            className='reviewer-select' isFocused
-            loadOptions={this.loadOptions}
-            placeholder={gettext('Please enter 1 or more character')}
-            onChange={this.handleSelectChange}
-            isClearable classNamePrefix
-            inputId={'react-select-transfer-input'}
-          /><br />
-          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+          {this.state.transferToUser ?
+            <UserSelect
+              ref="userSelect"
+              isMulti={false}
+              className="reviewer-select"
+              placeholder={gettext('Select a user')}
+              onSelectChange={this.handleSelectChange}
+            /> :
+            <Select
+              isClearable
+              isMulti={false}
+              maxMenuHeight={200}
+              hideSelectedOptions={true}
+              components={makeAnimated()}
+              placeholder={gettext('Select a department')}
+              options={this.options}
+              onChange={this.handleSelectChange}
+            />
+          }
+          {isPro && canTransferToDept &&
+            <span className="action-link" onClick={this.onClick}>{this.state.transferToUser ?
+              gettext('Transfer to department'): gettext('Transfer to user')}
+            </span>
+          }
         </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggleDialog}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.submit}>{gettext('Submit')}</Button>
+        </ModalFooter>
       </Modal>
     );
   }

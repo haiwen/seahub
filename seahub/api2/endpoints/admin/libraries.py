@@ -21,7 +21,9 @@ from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
-from seahub.utils.repo import get_related_users_by_repo
+from seahub.utils.repo import get_related_users_by_repo, normalize_repo_status_code, normalize_repo_status_str
+from seahub.utils import is_valid_dirent_name, is_valid_email
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
@@ -48,16 +50,20 @@ def get_repo_info(repo):
     result['name'] = repo.repo_name
     result['owner'] = owner
     result['owner_email'] = owner
-    result['owner_name'] = email2nickname(owner)
     result['owner_contact_email'] = email2contact_email(owner)
     result['size'] = repo.size
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
+    result['status'] = normalize_repo_status_code(repo.status)
+    result['last_modified'] = timestamp_to_isoformat_timestr(repo.last_modified)
 
     if '@seafile_group' in owner:
         group_id = get_group_id_by_repo_owner(owner)
         result['group_name'] = group_id_to_name(group_id)
+        result['owner_name'] = group_id_to_name(group_id)
+    else:
+        result['owner_name'] = email2nickname(owner)
 
     return result
 
@@ -74,13 +80,27 @@ class AdminLibraries(APIView):
         1. only admin can perform this action.
         """
 
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        order_by = request.GET.get('order_by', '').lower().strip()
+        if order_by and order_by not in ('size', 'file_count'):
+            error_msg = 'order_by invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # search libraries (by name/owner)
         repo_name = request.GET.get('name', '')
         owner = request.GET.get('owner', '')
         repos = []
         if repo_name and owner:
             # search by name and owner
-            owned_repos = seafile_api.get_owned_repo_list(owner)
+            orgs = ccnet_api.get_orgs_by_user(owner)
+            if orgs:
+                org_id = orgs[0].org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id, owner)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(owner)
+
             for repo in owned_repos:
                 if not repo.name or repo.is_virtual:
                     continue
@@ -106,7 +126,13 @@ class AdminLibraries(APIView):
 
         elif owner:
             # search by owner
-            owned_repos = seafile_api.get_owned_repo_list(owner)
+            orgs = ccnet_api.get_orgs_by_user(owner)
+            if orgs:
+                org_id = orgs[0].org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id, owner)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(owner)
+
             for repo in owned_repos:
                 if repo.is_virtual:
                     continue
@@ -127,7 +153,10 @@ class AdminLibraries(APIView):
         start = (current_page - 1) * per_page
         limit = per_page + 1
 
-        repos_all = seafile_api.get_repo_list(start, limit)
+        if order_by:
+            repos_all = seafile_api.get_repo_list(start, limit, order_by)
+        else:
+            repos_all = seafile_api.get_repo_list(start, limit)
 
         if len(repos_all) > per_page:
             repos_all = repos_all[:per_page]
@@ -136,8 +165,8 @@ class AdminLibraries(APIView):
             has_next_page = False
 
         default_repo_id = get_system_default_repo_id()
-        repos_all = filter(lambda r: not r.is_virtual, repos_all)
-        repos_all = filter(lambda r: r.repo_id != default_repo_id, repos_all)
+        repos_all = [r for r in repos_all if not r.is_virtual]
+        repos_all = [r for r in repos_all if r.repo_id != default_repo_id]
 
         return_results = []
 
@@ -158,6 +187,8 @@ class AdminLibraries(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_name = request.data.get('name', None)
         if not repo_name:
@@ -176,7 +207,7 @@ class AdminLibraries(APIView):
             repo_owner = username
 
         try:
-            repo_id = seafile_api.create_repo(repo_name, '', repo_owner, None)
+            repo_id = seafile_api.create_repo(repo_name, '', repo_owner)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -207,6 +238,10 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -222,6 +257,10 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if get_system_default_repo_id() == repo_id:
             error_msg = _('System library can not be deleted.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -251,7 +290,7 @@ class AdminLibrary(APIView):
             try:
                 org_id = seafile_api.get_org_id_by_repo_id(repo_id)
                 related_usernames = get_related_users_by_repo(repo_id,
-                        org_id if org_id > 0 else None)
+                        org_id if org_id and org_id > 0 else None)
             except Exception as e:
                 logger.error(e)
                 org_id = -1
@@ -279,17 +318,48 @@ class AdminLibrary(APIView):
         return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
-        """ transfer a library, rename a library
+        """ update a library status, transfer a library, rename a library
 
         Permission checking:
         1. only admin can perform this action.
         """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # argument check
+        new_status = request.data.get('status', None)
+        if new_status:
+            if new_status not in ('normal', 'read-only'):
+                error_msg = 'status invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_repo_name = request.data.get('name', None)
+        if new_repo_name:
+            if not is_valid_dirent_name(new_repo_name):
+                error_msg = 'name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_owner = request.data.get('owner', None)
+        if new_owner:
+            if not is_valid_email(new_owner):
+                error_msg = 'owner invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        new_repo_name = request.data.get('name', None)
+        if new_status:
+            try:
+                seafile_api.set_repo_status(repo_id, normalize_repo_status_str(new_status))
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         if new_repo_name:
             try:
                 res = seafile_api.edit_repo(repo_id, new_repo_name, '', None)
@@ -305,7 +375,6 @@ class AdminLibrary(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        new_owner = request.data.get('owner', None)
         if new_owner:
             try:
                 new_owner_obj = User.objects.get(email=new_owner)
@@ -314,7 +383,7 @@ class AdminLibrary(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             if not new_owner_obj.permissions.can_add_repo():
-                error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
+                error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                         (new_owner, new_owner_obj.role)
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -333,6 +402,10 @@ class AdminLibrary(APIView):
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             repo_owner = seafile_api.get_repo_owner(repo_id)
+
+            if new_owner == repo_owner:
+                error_msg = _("Library can not be transferred to owner.")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # get repo shared to user/group list
             shared_users = seafile_api.list_repo_shared_to(
@@ -401,3 +474,90 @@ class AdminLibrary(APIView):
         repo_info = get_repo_info(repo)
 
         return Response(repo_info)
+
+
+class AdminSearchLibrary(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, format=None):
+        """ Search library by name.
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.can_manage_library():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        query_str = request.GET.get('query', '').lower().strip()
+        if not query_str:
+            error_msg = 'query invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repos = seafile_api.search_repos_by_name(query_str)
+
+        default_repo_id = get_system_default_repo_id()
+        repos = [r for r in repos if not r.is_virtual]
+        repos = [r for r in repos if r.repo_id != default_repo_id]
+
+        email_dict = {}
+        name_dict = {}
+        contact_email_dict = {}
+        for repo in repos:
+
+            # get owner email
+            repo_id = repo.repo_id
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+            if not repo_owner:
+                try:
+                    org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                except Exception:
+                    org_repo_owner = ''
+
+            owner_email = repo_owner or org_repo_owner or ''
+            if repo_id not in email_dict:
+                email_dict[repo_id] = owner_email
+
+            # get owner name
+            if repo_id not in name_dict:
+
+                # is department library
+                if '@seafile_group' in owner_email:
+                    group_id = get_group_id_by_repo_owner(owner_email)
+                    owner_name = group_id_to_name(group_id)
+                else:
+                    owner_name = email2nickname(owner_email)
+
+                name_dict[repo_id] = owner_name
+
+            # get owner contact_email
+            if repo_id not in contact_email_dict:
+
+                if '@seafile_group' in owner_email:
+                    owner_contact_email = ''
+                else:
+                    owner_contact_email = email2contact_email(owner_email)
+
+                contact_email_dict[repo_id] = owner_contact_email
+
+        result = []
+        for repo in repos:
+
+            info = {}
+            info['id'] = repo.repo_id
+            info['name'] = repo.repo_name
+
+            info['owner_email'] = email_dict.get(repo.repo_id, '')
+            info['owner_name'] = name_dict.get(repo.repo_id, '')
+            info['owner_contact_email'] = contact_email_dict.get(repo.repo_id, '')
+
+            info['size'] = repo.size
+            info['encrypted'] = repo.encrypted
+            info['file_count'] = repo.file_count
+            info['status'] = normalize_repo_status_code(repo.status)
+
+            result.append(info)
+
+        return Response({"repo_list": result})

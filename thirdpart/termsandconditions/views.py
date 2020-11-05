@@ -34,7 +34,8 @@ class TermsView(DetailView):
 
     url: /terms/view
     """
-    template_name = "termsandconditions/tc_view_terms.html"
+    #template_name = "termsandconditions/tc_view_terms.html"
+    template_name = "termsandconditions/tc_view_terms_react.html"
     context_object_name = 'terms'
 
     def get_object(self, queryset=None):
@@ -53,7 +54,8 @@ class AcceptTermsView(CreateView):
 
     model = UserTermsAndConditions
     form_class = UserTermsAndConditionsModelForm
-    template_name = "termsandconditions/tc_accept_terms.html"
+    #template_name = "termsandconditions/tc_accept_terms.html"
+    template_name = "termsandconditions/tc_accept_terms_react.html"
 
     def get_initial(self):
         """Override of CreateView method, queries for which T&C to accept and catches returnTo from URL"""
@@ -72,7 +74,7 @@ class AcceptTermsView(CreateView):
         else:  #Get user out of saved pipeline from django-socialauth
             # no support for social auth right now.
             assert False, 'TODO'
-            if self.request.session.has_key('partial_pipeline'):
+            if 'partial_pipeline' in self.request.session:
                 user_pk = self.request.session['partial_pipeline']['kwargs']['user']['pk']
                 form.instance.user = User.objects.get(id=user_pk)
             else:

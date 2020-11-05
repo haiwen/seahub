@@ -1,9 +1,11 @@
-import React, {Fragment} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SharedRepoListItem from './shared-repo-list-item';
 import toaster from '../toast';
+import LibsMobileThead from '../libs-mobile-thead';
+import Loading from '../loading';
 
 const propTypes = {
   libraryType: PropTypes.string,
@@ -14,9 +16,10 @@ const propTypes = {
   sortItems: PropTypes.func,
   repoList: PropTypes.array.isRequired,
   onItemUnshare: PropTypes.func.isRequired,
-  onItemDelete: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func,
   onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
+  hasNextPage: PropTypes.bool
 };
 
 class SharedRepoListView extends React.Component {
@@ -42,10 +45,18 @@ class SharedRepoListView extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   }
 
+  sortBySize = (e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  }
+
   getSortMetaData = () => {
     return {
       sortByName: this.props.sortBy == 'name',
       sortByTime: this.props.sortBy == 'time',
+      sortBySize: this.props.sortBy == 'size',
       sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
     };
   }
@@ -98,16 +109,17 @@ class SharedRepoListView extends React.Component {
   renderPCUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
 
-    const { sortByName, sortByTime, sortIcon } = this.getSortMetaData();
+    const { sortByName, sortByTime, sortBySize, sortIcon } = this.getSortMetaData();
 
     return (
       <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
         <thead>
           <tr>
+            <th width="4%"></th>
             <th width="4%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="40%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="36%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="12%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={'14%'}>{gettext('Size')}</th>
+            <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
             <th width={'14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="16%">{gettext('Owner')}</th>
           </tr>
@@ -120,23 +132,9 @@ class SharedRepoListView extends React.Component {
   }
 
   renderMobileUI = () => {
-    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
-
-    const { sortByName, sortByTime, sortIcon } = this.getSortMetaData();
-
     return (
-      <table className={isShowTableThread ? '' : 'table-thead-hidden'}>
-        <thead>
-          <tr>
-            <th width="18%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="68%">
-              {gettext('Sort:')}
-              <a className="table-sort-op" href="#" onClick={this.sortByName}>{gettext('name')} {sortByName && sortIcon}</a>
-              <a className="table-sort-op" href="#" onClick={this.sortByTime}>{gettext('last update')} {sortByTime && sortIcon}</a>
-            </th>
-            <th width="14%"><span className="sr-only">{gettext('Actions')}</span></th>
-          </tr>
-        </thead>
+      <table className="table-thead-hidden">
+        <LibsMobileThead />
         <tbody>
           {this.renderRepoListView()}
         </tbody>
@@ -145,10 +143,16 @@ class SharedRepoListView extends React.Component {
   }
 
   render() {
-    if (window.innerWidth >= 768) {
-      return this.renderPCUI();
+    const table = Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI();
+    if (this.props.hasNextPage) {
+      return (
+        <Fragment>
+          {table}
+          <Loading />
+        </Fragment>
+      );
     } else {
-      return this.renderMobileUI();
+      return table;
     }
   }
 }

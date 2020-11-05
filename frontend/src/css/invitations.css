@@ -1,0 +1,29 @@
+.invite-accept-icon {
+    color: green;
+    margin-left: 0.5rem;
+    font-size: 1.25rem;
+    font-style: normal;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.invite-link-in-popup,
+.invite-link-in-popup:hover {
+    text-decoration: none;
+}
+
+.invite-link-icon-in-popup {
+    color: #f89a68;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    font-style: normal;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.submit-btn .loading-icon {
+    margin: 1px auto;
+    width: 21px;
+    height: 21px;
+}

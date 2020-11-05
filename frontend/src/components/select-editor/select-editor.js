@@ -12,6 +12,7 @@ const propTypes = {
   translateOption: PropTypes.func.isRequired,
   translateExplanation: PropTypes.func,
   onOptionChanged: PropTypes.func.isRequired,
+  toggleItemFreezed: PropTypes.func,
 };
 
 class SelectEditor extends React.Component {
@@ -20,6 +21,7 @@ class SelectEditor extends React.Component {
     super(props);
     this.state = {
       isEditing: false,
+      options: []
     };
     this.options = [];
   }
@@ -35,9 +37,21 @@ class SelectEditor extends React.Component {
     for (let i = 0, length = options.length; i < length; i++) {
       let option = {};
       option.value = options[i];
-      option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
+      if (!options[i].length) { // it's ''. for example, intitution option in 'system admin - users' page can be ''.
+        option.label = <div style={{minHeight: '1em'}}></div>;
+      } else {
+        option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
+      }
       this.options.push(option);
     }
+
+    this.setState({
+      options: this.options
+    });
+  }
+
+  componentWillReceiveProps() {
+    this.setOptions();
   }
 
   componentWillUnmount() {
@@ -47,6 +61,7 @@ class SelectEditor extends React.Component {
   onEditPermission = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
   }
 
   onOptionChanged = (e) => {
@@ -55,6 +70,7 @@ class SelectEditor extends React.Component {
       this.props.onOptionChanged(permission);
     }
     this.setState({isEditing: false});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   }
 
   onSelectHandler = (e) => {
@@ -63,6 +79,7 @@ class SelectEditor extends React.Component {
 
   onHideSelect = () => {
     this.setState({isEditing: false});
+    this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   }
 
   render() {
@@ -74,21 +91,21 @@ class SelectEditor extends React.Component {
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
           <Select
-            options={this.options}
+            options={this.state.options}
             className="permission-editor-select"
             classNamePrefix="permission-editor"
-            placeholder={gettext('Select...')}
+            placeholder={this.props.translateOption(currentOption)}
             onChange={this.onOptionChanged}
-            menuPlacement="auto"
+            captureMenuScroll={false}
           />
         }
         {(isTextMode && !this.state.isEditing) &&
           <div>
             {this.props.translateOption(currentOption)}
             {this.props.isEditIconShow && (
-              <span 
-                title={gettext('Edit')} 
-                className="fa fa-pencil-alt attr-action-icon" 
+              <span
+                title={gettext('Edit')}
+                className="fa fa-pencil-alt attr-action-icon"
                 onClick={this.onEditPermission}>
               </span>
             )}

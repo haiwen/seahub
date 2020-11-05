@@ -169,7 +169,7 @@ class MoveFolderMergeView(APIView):
                     src_repo.version, dir_id)
 
             if seafile_api.check_quota(dst_repo_id, current_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+                return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         username = request.user.username
         move_folder_with_merge(username,

@@ -2,7 +2,7 @@
 import os
 import json
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from seahub.test_utils import BaseTestCase
 
@@ -27,6 +27,10 @@ class ZipTaskViewTest(BaseTestCase):
         self.remove_repo()
 
     def test_can_get_download_dir_zip_token(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.user)
 
         parent_dir = '/'
@@ -40,6 +44,9 @@ class ZipTaskViewTest(BaseTestCase):
         assert len(json_resp['zip_token']) == 36
 
     def test_can_get_download_multi_zip_token(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
 
         # create another folder for download multi
         another_folder_name = 'another_folder_name'
@@ -61,6 +68,10 @@ class ZipTaskViewTest(BaseTestCase):
         assert len(json_resp['zip_token']) == 36
 
     def test_can_get_zip_token_with_invalid_repo_permission(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.admin)
 
         parent_dir = '/'

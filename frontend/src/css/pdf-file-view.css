@@ -1,0 +1,125 @@
+.pdf-file-view {
+    overflow:hidden;
+    position:relative;
+}
+.sf-hide {
+    height:0;
+    overflow:hidden;
+}
+.hidden {
+    display:none;
+}
+#outerContainer,
+#mainContainer,
+#viewerContainer {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+#viewerContainer {
+    padding: 30px 0 15px;
+    overflow: auto;
+}
+#viewerContextMenu {
+    padding:0;
+    margin:0;
+}
+#viewerContainer:focus {
+    outline:none;
+}
+.zoom-toolbar {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 1030;
+}
+.zoom-toolbar .btn-icon {
+  box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.1);
+}
+.page {
+    position:relative;
+    background:#fff;
+    box-shadow:0 0 6px #ccc;
+    margin:0 auto 20px;
+}
+.page .loading-icon {
+    position:absolute;
+    top:50%;
+    left:50%;
+}
+.textLayer {
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    overflow:hidden;
+    opacity:0.2;
+    line-height:1.0;
+}
+.textLayer > div {
+    color:transparent;
+    position:absolute;
+    white-space:pre;
+    cursor:text;
+    -webkit-transform-origin:0% 0%;
+    -moz-transform-origin:0% 0%;
+    -o-transform-origin:0% 0%;
+    -ms-transform-origin:0% 0%;
+    transform-origin:0% 0%;
+}
+.textLayer ::selection {
+    background: blue;
+}
+.textLayer ::-moz-selection {
+    background: blue;
+}
+/* annotationLayer starts */
+.annotationLayer section {
+  position: absolute;
+}
+.annotationLayer .linkAnnotation > a,
+.annotationLayer .buttonWidgetAnnotation.pushButton > a {
+  position: absolute;
+  font-size: 1em;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.annotationLayer .linkAnnotation > a:hover,
+.annotationLayer .buttonWidgetAnnotation.pushButton > a:hover {
+  opacity: 0.2;
+  background: #ff0;
+  box-shadow: 0px 2px 10px #ff0;
+}
+
+.annotationLayer .textAnnotation img {
+  position: absolute;
+  cursor: pointer;
+}
+
+.annotationLayer .popupWrapper {
+  position: absolute;
+  width: 20em;
+}
+
+.annotationLayer .popup {
+  position: absolute;
+  z-index: 200;
+  max-width: 20em;
+  background-color: #FFFF99;
+  box-shadow: 0px 2px 5px #333;
+  border-radius: 2px;
+  padding: 0.6em;
+  margin-left: 5px;
+  cursor: pointer;
+  font: message-box;
+  word-wrap: break-word;
+}
+/* annotationLayer ends */
+#fileInput {
+    display:none;
+}

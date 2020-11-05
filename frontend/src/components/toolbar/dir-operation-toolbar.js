@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ShareDialog from '../../components/dialog/share-dialog';
+import ViewModeToolbar from './view-mode-toolbar';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -14,7 +16,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPerm: PropTypes.string.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
   onAddFile: PropTypes.func.isRequired,
@@ -22,6 +23,8 @@ const propTypes = {
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -36,6 +39,7 @@ class DirOperationToolbar extends React.Component {
       isCreateMenuShow: false,
       isShareDialogShow: false,
       operationMenuStyle: '',
+      isMobileOpMenuOpen: false
     };
   }
 
@@ -47,6 +51,10 @@ class DirOperationToolbar extends React.Component {
     document.removeEventListener('click', this.hideOperationMenu);
   }
 
+  toggleMobileOpMenu = () => {
+    this.setState({isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen});
+  }
+
   hideOperationMenu = () => {
     this.setState({
       isUploadMenuShow: false,
@@ -56,9 +64,9 @@ class DirOperationToolbar extends React.Component {
 
   toggleOperationMenu = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    let targetRect = e.target.getClientRects()[0];
-    let left = targetRect.x;
-    let top  = targetRect.y + targetRect.height;
+    let targetRect = e.target.getBoundingClientRect();
+    let left = targetRect.left;
+    let top  = targetRect.bottom;
     let style = {position: 'fixed', display: 'block', left: left, top: top};
     this.setState({operationMenuStyle: style});
   }
@@ -75,7 +83,7 @@ class DirOperationToolbar extends React.Component {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFile(e);
   }
-  
+
   onUploadFolder = (e) => {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFolder(e);
@@ -89,8 +97,7 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
-  onShareClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation(); //for document event
+  onShareClick = () => {
     this.setState({
       isShareDialogShow: !this.state.isShareDialogShow
     });
@@ -154,38 +161,63 @@ class DirOperationToolbar extends React.Component {
   }
 
   render() {
-    let { path, repoName } = this.props;
-    let itemType = 'dir';
+    let { path, repoName, userPerm } = this.props;
+
+    let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
-    return (
-      <Fragment>
-        <div className="operation">
+
+    let content = null;
+    if (Utils.isDesktop()) {
+      let { showShareBtn } = this.props;
+      content = (
+        <Fragment>
           {Utils.isSupportUploadFolder() ?
             <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
-          }
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
           <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
-          {this.props.showShareBtn &&
-          <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
-          }
-        </div>
-        {this.state.isUploadMenuShow && (
-          <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
-            <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
-          </ul>
+          {showShareBtn && <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
+        </Fragment>
+      );
+    } else {
+      content = (
+        <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
+          <DropdownToggle tag="span" className="sf2-icon-plus mobile-toolbar-icon" />
+          <DropdownMenu>
+            <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
+            <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
+            <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      );
+    }
+
+    return (
+      <Fragment>
+        {(userPerm === 'rw' || userPerm === 'admin') && (
+          <div className="dir-operation">
+            <div className="operation">
+              {content}
+            </div>
+            {this.state.isUploadMenuShow && (
+              <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
+                <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
+              </ul>
+            )}
+            {this.state.isCreateMenuShow && (
+              <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
+                <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
+                <li className="dropdown-divider"></li>
+                <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
+                <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
+                <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
+                <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
+              </ul>
+            )}
+          </div>
         )}
-        {this.state.isCreateMenuShow && (
-          <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-            <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
-            <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
-            <li className="dropdown-divider"></li>
-            <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
-            <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
-            <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
-            <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
-          </ul>
-        )}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile
@@ -209,7 +241,7 @@ class DirOperationToolbar extends React.Component {
         )}
         {this.state.isShareDialogShow &&
           <ModalPortal>
-            <ShareDialog 
+            <ShareDialog
               itemType={itemType}
               itemName={itemName}
               itemPath={this.props.path}
@@ -217,7 +249,6 @@ class DirOperationToolbar extends React.Component {
               repoEncrypted={this.props.repoEncrypted}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               userPerm={this.props.userPerm}
-              isAdmin={this.props.isAdmin}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareClick}
             />

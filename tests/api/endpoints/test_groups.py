@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 from mock import patch
+import random
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
@@ -32,7 +33,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 8
+        assert len(json_resp[0]) == 7
 
         group_ids = []
         for group in json_resp:
@@ -45,7 +46,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 9
+        assert len(json_resp[0]) == 8
 
         group_ids = []
         group_repos = []
@@ -68,19 +69,19 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 8
+        assert len(json_resp) == 7
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
         self.remove_group(json_resp['id'])
 
     def test_create_group_with_cn_name(self):
-        new_group_name = u'中文' + randstring(6)
+        new_group_name = '中文' + randstring(6)
         resp = self.client.post(self.url, {'name': new_group_name})
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 8
+        assert len(json_resp) == 7
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
@@ -88,6 +89,26 @@ class GroupsTest(BaseTestCase):
 
     def test_can_not_create_group_with_same_name(self):
         resp = self.client.post(self.url, {'group_name': self.group_name})
+        self.assertEqual(400, resp.status_code)
+
+    def test_can_create_by_limit_punctuation(self):
+        limit_punctuation = """-'_."""
+        new_group_name = randstring(2) + random.choice(limit_punctuation) + randstring(2)
+
+        resp = self.client.post(self.url, {'name': new_group_name})
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == new_group_name
+        assert json_resp['owner'] == self.user.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_can_not_create_by_other_punctuation(self):
+        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        new_group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
+
+        resp = self.client.post(self.url, {'name': new_group_name})
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_create_group_with_invalid_name(self):

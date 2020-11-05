@@ -10,12 +10,14 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.profile.models import Profile
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email, translate_commit_desc
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.revision_tag.models import RevisionTags
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import new_merge_with_no_conflict
 from seahub.views import check_folder_permission
+
+from seahub.settings import ENABLE_REPO_SNAPSHOT_LABEL
 
 from seaserv import seafile_api
 
@@ -30,12 +32,15 @@ class RepoHistory(APIView):
     def get_item_info(self, commit):
         email = commit.creator_name
         item_info = {
-            "name": email2nickname(email),
-            "contact_email": Profile.objects.get_contact_email_by_user(email),
             'email': email,
+            "name": email2nickname(email),
+            "contact_email": email2contact_email(email),
             'time': timestamp_to_isoformat_timestr(commit.ctime),
-            'description': commit.desc,
             'commit_id': commit.id,
+            'description': translate_commit_desc(commit.desc),
+            'client_version': commit.client_version,
+            'device_name': commit.device_name,
+            'second_parent_id': commit.second_parent_id,
         }
 
         return item_info
@@ -114,6 +119,26 @@ class RepoHistory(APIView):
 
             item_info = self.get_item_info(commit)
             items.append(item_info)
+
+        commit_tag_dict = {}
+        if ENABLE_REPO_SNAPSHOT_LABEL:
+            try:
+                revision_tags = RevisionTags.objects.filter(repo_id=repo_id)
+            except Exception as e:
+                logger.error(e)
+                revision_tags = []
+
+            for tag in revision_tags:
+                if tag.revision_id in commit_tag_dict:
+                    commit_tag_dict[tag.revision_id].append(tag.tag.name)
+                else:
+                    commit_tag_dict[tag.revision_id] = [tag.tag.name]
+
+        for item in items:
+            item['tags'] = []
+            for commit_id, tags in list(commit_tag_dict.items()):
+                if commit_id == item['commit_id']:
+                    item['tags'] = tags
 
         result = {
             'data': items,

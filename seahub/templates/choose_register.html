@@ -6,16 +6,21 @@
 <div class="login-panel-outer-container vh">
     <div class="login-panel">
         <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
-        <button id="personal" class="submit">{% trans "Create a personal account" %}</button>
-        <button id="org" class="submit">{% trans "Create an organization account" %}</button>
+        <button id="personal" class="submit btn btn-primary btn-block">{% trans "Create a personal account" %}</button>
+        <button id="org" class="submit btn btn-primary btn-block">{% trans "Create an organization account" %}</button>
     </div>
 </div>
+{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#personal').on('click', function() {
+    {% if enable_weixin %}
+    location.href = "{% url 'weixin_oauth_login'%}";
+    {% else  %}
     location.href = "{% url 'registration_register'%}";
+    {% endif %}
 });
 $('#org').on('click', function() {
     location.href = "{% url 'org_register'%}";
