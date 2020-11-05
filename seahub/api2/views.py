@@ -1061,9 +1061,26 @@ class Repos(APIView):
                                                       username, magic, random_key,
                                                       salt, enc_version, org_id)
         else:
-            repo_id = seafile_api.create_enc_repo(
-                repo_id, repo_name, repo_desc, username,
-                magic, random_key, salt, enc_version)
+            if is_pro_version() and ENABLE_STORAGE_CLASSES and \
+                    STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
+
+                storages = get_library_storages(request)
+
+                if not storages:
+                    logger.error('no library storage found.')
+                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
+                            repo_desc, username, magic, random_key, \
+                            salt, enc_version)
+                else:
+                    repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
+                            repo_desc, username, magic, random_key, \
+                            salt, enc_version, \
+                            storage_id=storages[0].get('storage_id', None))
+            else:
+                repo_id = seafile_api.create_enc_repo(repo_id, repo_name, \
+                        repo_desc, username, magic, random_key, \
+                        salt, enc_version)
+
         return repo_id, None
 
 
