@@ -607,7 +607,10 @@ class AdminUsers(APIView):
             c = {'user': request.user.username, 'email': email, 'password': password}
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
-                        'sysadmin/user_add_email.html', c, None, [email])
+                                'sysadmin/user_add_email.html',
+                                c,
+                                None,
+                                [email2contact_email(email)])
                 add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
             except Exception as e:
                 logger.error(str(e))
@@ -927,7 +930,10 @@ class AdminUser(APIView):
             if user_obj.is_active and IS_EMAIL_CONFIGURED:
                 try:
                     send_html_email(_(u'Your account on %s is activated') % get_site_name(),
-                                    'sysadmin/user_activation_email.html', {'username': user_obj.email}, None, [user_obj.email])
+                                    'sysadmin/user_activation_email.html',
+                                    {'username': user_obj.email},
+                                    None,
+                                    [email2contact_email(user_obj.email)])
                     update_status_tip = _('Edit succeeded, an email has been sent.')
                 except Exception as e:
                     logger.error(e)
