@@ -8,6 +8,7 @@ import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
 import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
+import SearchFileDialog from '../dialog/search-file-dialog.js';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -29,6 +30,7 @@ class DirTool extends React.Component {
       isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false,
+      isSearchFileDialogShow: false,
     };
   }
 
@@ -80,6 +82,18 @@ class DirTool extends React.Component {
     return name.indexOf('.md') > -1 ? true : false;
   }
 
+  showSearchFileDialog = () => {
+    this.setState({
+      isSearchFileDialogShow: true,
+    });
+  }
+
+  toggleSearchFileDialog = () => {
+    this.setState({
+      isSearchFileDialogShow: !this.state.isSearchFileDialogShow,
+    });
+  }
+
   render() {
     let { repoID, repoName, permission, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
@@ -99,10 +113,19 @@ class DirTool extends React.Component {
           return (
             <Fragment>
               <ul className="path-toolbar">
+                <li className="toolbar-item"><a className="op-link fas fa-search" onClick={this.showSearchFileDialog} title={gettext('Search File')} aria-label={gettext('Search File')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
               </ul>
+
+              {this.state.isSearchFileDialogShow &&
+                <SearchFileDialog
+                  repoID={repoID}
+                  repoName={repoName}
+                  toggleSearchFileDialog={this.toggleSearchFileDialog}
+                />
+              }
 
               {this.state.isRepoTagDialogShow && (
                 <ModalPortal>
