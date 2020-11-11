@@ -388,6 +388,18 @@ class FileUploader extends React.Component {
     this.setState({uploadFileList: uploadFileList});
   }
 
+  getFileServerErrorMessage = (key) => {
+    const errorMessage = {
+      'File locked by others.': gettext('File locked by others.'),          // 403
+      'Invalid filename.': gettext('Invalid filename.'),                    // 440
+      'File already exists.': gettext('File already exists.'),              // 441
+      'File size is too large.': gettext('File size is too large.'),        // 442
+      'Out of quota.': gettext('Out of quota.'),                            // 443
+      'Internal error.': gettext('Internal Server Error'),                  // 500
+    }
+    return errorMessage[key] || key;
+  }
+
   onFileError = (resumableFile, message) => {
     let error = '';
     if (!message) {
@@ -396,13 +408,7 @@ class FileUploader extends React.Component {
       // eg: '{"error": "Internal error" \n }'
       let errorMessage = message.replace(/\n/g, '');
       errorMessage  = JSON.parse(errorMessage); 
-      error = errorMessage.error;
-      if (error === 'File locked by others.') {
-        error = gettext('File is locked by others.');
-      }
-      if (error === 'Internal error.') {
-        error = gettext('Internal Server Error');
-      }
+      error = this.getFileServerErrorMessage(errorMessage.error);
     }
 
     let uploadFileList = this.state.uploadFileList.map(item => {
