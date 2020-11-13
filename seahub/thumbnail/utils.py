@@ -10,11 +10,16 @@ import zipfile
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
-    from urllib.request import urlretrieve
+    from urllib import urlretrieve
 
 from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
+
+from pyheif_pillow_opener import register_heif_opener
+
+register_heif_opener()
+
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
 from seahub.utils.file_types import VIDEO, XMIND
@@ -227,7 +232,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     if image_memory_cost > THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT:
         return (False, 403)
 
-    if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+    if image.mode not in ["1", "L", "P", "RGB", "RGBA"]: # remove RGBA for jpeg
         image = image.convert("RGB")
 
     image = get_rotated_image(image)

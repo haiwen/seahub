@@ -10,8 +10,6 @@ import './assets/css/fontawesome.css';
 import './index.css';
 
 ReactDOM.render(
-  <I18nextProvider i18n={ i18n } >
-    <MarkdownEditor />
-  </I18nextProvider>,
+  <I18nextProvider i18n={ i18n } > <MarkdownEditor /> </I18nextProvider>,
   document.getElementById('root')
 );

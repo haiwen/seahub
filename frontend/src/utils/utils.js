@@ -99,6 +99,7 @@ export const Utils = {
     'gif' : 'pic.png',
     'bmp' : 'pic.png',
     'ico' : 'pic.png',
+    'heic' : 'pic.png',
 
     // default
     'default' : 'file.png'
@@ -111,7 +112,7 @@ export const Utils = {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff'];
+    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'heic'];
     if (image_exts.indexOf(file_ext) != -1) {
       return true;
     } else {
