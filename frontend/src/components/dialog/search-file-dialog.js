@@ -17,6 +17,7 @@ class SearchFileDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isSubmitDisabled: true,
       q: '',
       errMessage: '',
       fileList: []
@@ -26,9 +27,6 @@ class SearchFileDialog extends React.Component {
   searchFile = () => {
     const { q } = this.state;
     if (!q.trim()) {
-      this.setState({
-        errMessage: gettext('Please input file name')
-      });
       return false;
     }
     seafileAPI.searchFileInRepo(this.props.repoID, q).then((res) => {
@@ -56,20 +54,22 @@ class SearchFileDialog extends React.Component {
   }
 
   handleInputChange = (e) => {
+    const q = e.target.value;
     this.setState({
-      q: e.target.value
+      q: q,
+      isSubmitDisabled: !q.trim()
     });
   }
 
   render() {
-    const { q, errMessage, fileList } = this.state;
+    const { q, errMessage, fileList, isSubmitDisabled } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
         <ModalBody style={{height: '250px'}} className="o-auto">
           <div className="d-flex">
             <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
-            <button type="submit" className="btn btn-primary flex-shrink-0" onClick={this.searchFile}>{gettext('Search')}</button>
+            <button type="submit" className="btn btn-primary flex-shrink-0" onClick={this.searchFile} disabled={isSubmitDisabled}>{gettext('Search')}</button>
           </div>
           {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
           <div className="mt-2">
