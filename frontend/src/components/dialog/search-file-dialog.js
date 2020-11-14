@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { gettext, siteRoot } from '../../utils/constants';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
-import toaster from '../toast';
-import '../../css/manage-members-dialog.css';
+import { gettext, siteRoot } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
+  toggleDialog: PropTypes.func.isRequired
 };
 
 class SearchFileDialog extends React.Component {
@@ -18,78 +17,86 @@ class SearchFileDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileList: [],
-      fileName: "",
-      errMessage: [],
+      q: '',
+      errMessage: '',
+      fileList: []
     };
   }
 
   searchFile = () => {
-    seafileAPI.searchFileInRepo(this.props.repoID, this.state.fileName).then((res) => {
+    const { q } = this.state;
+    if (!q.trim()) {
       this.setState({
-        fileList: res.data.data
+        errMessage: gettext('Please input file name')
+      });
+      return false;
+    }
+    seafileAPI.searchFileInRepo(this.props.repoID, q).then((res) => {
+      this.setState({
+        fileList: res.data.data,
+        errMessage: ''
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.setState({
+        errMessage: errMessage
+      });
     });
   }
 
-  toggle = () => {
-    this.props.toggleSearchFileDialog();
+  handleKeyDown = (e) => {
+    if (e.key == 'Enter') {
+      e.preventDefault();
+      this.searchFile();
+    }
   }
 
-  handleFileNameInputChange = (e) => {
+  toggle = () => {
+    this.props.toggleDialog();
+  }
+
+  handleInputChange = (e) => {
     this.setState({
-      fileName: e.target.value
+      q: e.target.value
     });
   }
 
   render() {
+    const { q, errMessage, fileList } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Search file by name')}</ModalHeader>
-
-        <ModalBody>
-          <div className='add-members'>
-            <input className="form-control" id="file-name" type="text" name="file-name" value={this.state.fileName} onChange={this.handleFileNameInputChange} />
-            <button type="submit" className="btn btn-outline-primary offset-sm-1"  onClick={this.searchFile}>{gettext('Submit')}</button>
+        <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
+        <ModalBody style={{height: '250px'}} className="o-auto">
+          <div className="d-flex">
+            <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
+            <button type="submit" className="btn btn-primary flex-shrink-0" onClick={this.searchFile}>{gettext('Search')}</button>
           </div>
-          {
-            this.state.errMessage.length > 0 &&
-            this.state.errMessage.map((item, index = 0) => {
-              return (
-                <div className="group-error error" key={index}>{item.error_msg}</div>
-              );
-            })
-          }
-          <div className="manage-members">
-            <Table size="sm" className="manage-members-table">
+          {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
+          <div className="mt-2">
+            {fileList.length > 0 &&
+            <table className="table-hover">
               <thead>
                 <tr>
-                  <th width="15%"></th>
-                  <th width="45%">{gettext('Name')}</th>
-                  <th width="20%">{gettext('Size')}</th>
-                  <th width="20%">{gettext('Last Update')}</th>
+                  <th width="8%"></th>
+                  <th width="42%">{gettext('Name')}</th>
+                  <th width="25%">{gettext('Size')}</th>
+                  <th width="25%">{gettext('Last Update')}</th>
                 </tr>
               </thead>
               <tbody>
-                {
-                  this.state.fileList.length > 0 &&
-                  this.state.fileList.map((item, index = 0) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <FileItem
-                          item={item}
-                          repoID={this.props.repoID}
-                          repoName={this.props.repoName}
-                        />
-                      </React.Fragment>
-                    );
-                  })
+                {fileList.map((item, index) => {
+                  return (
+                    <FileItem
+                      key={index}
+                      item={item}
+                      repoID={this.props.repoID}
+                      repoName={this.props.repoName}
+                    />
+                  );
+                })
                 }
               </tbody>
-            </Table>
+            </table>}
           </div>
         </ModalBody>
         <ModalFooter>
@@ -103,42 +110,25 @@ class SearchFileDialog extends React.Component {
 SearchFileDialog.propTypes = propTypes;
 
 const FileItemPropTypes = {
-  item: PropTypes.object.isRequired,
+  repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 class FileItem extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.state = ({
-      highlight: false,
-    });
-  }
-
-  handleMouseLeave = () => {
-    if (this.props.isItemFreezed) return;
-    this.setState({
-      highlight: false,
-    });
-  }
-
   render() {
-    const { item } = this.props;
-    let url = '';
-
-    if (item.type == 'file') {
-      url = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(item.path);
-    } else {
-      url = siteRoot + 'library/' + this.props.repoID + '/' + this.props.repoName + Utils.encodePath(item.path);
-    }
-
-    let fileName = item.path.substr(item.path.lastIndexOf('/') + 1);
+    const { item, repoID, repoName } = this.props;
+    const name = item.path.substr(item.path.lastIndexOf('/') + 1);
+    const url = item.type == 'file' ?
+      `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}` :
+      `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + item.path)}`;
 
     return(
-      <tr onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} className={this.state.highlight ? 'editing' : ''}>
+      <tr>
         <td className="text-center"><img src={item.type == 'file' ? Utils.getFileIconUrl(item.path) : Utils.getFolderIconUrl()} alt="" width="24" /></td>
-        <td className="name">
-          <a href={url}>{fileName}</a>
+        <td>
+          <a href={url}>{name}</a>
         </td>
         <td>{item.type == 'file' ? Utils.bytesToSize(item.size) : ''}</td>
         <td>{moment(item.mtime).fromNow()}</td>

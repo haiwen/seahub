@@ -38,9 +38,9 @@ class SearchFile(APIView):
             error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        file_name = request.GET.get('file_name', None)
-        if not file_name:
-            error_msg = 'file_name invalid.'
+        q = request.GET.get('q', None)
+        if not q:
+            error_msg = 'q invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -54,7 +54,7 @@ class SearchFile(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         result = []
-        searched_files = seafile_api.search_files(repo_id, file_name)
+        searched_files = seafile_api.search_files(repo_id, q)
 
         for searched_file in searched_files:
             # {'path': '/123.docx', 'size': 19446, 'mtime': 1604130882, 'is_dir': False}
