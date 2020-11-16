@@ -20,6 +20,8 @@ from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir,
 from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
         dingtalk_connect, dingtalk_connect_callback, dingtalk_disconnect
 
+from seahub.api2.endpoints.search_file import SearchFile
+
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -285,6 +287,9 @@ urlpatterns = [
     ## user::smart-link
     url(r'^api/v2.1/smart-link/$', SmartLink.as_view(), name="api-v2.1-smart-link"),
     url(r'^api/v2.1/smart-links/(?P<token>[-0-9a-f]{36})/$', SmartLinkToken.as_view(), name="api-v2.1-smart-links-token"),
+
+    # search file by name
+    url(r'^api/v2.1/search-file/$', SearchFile.as_view(), name='api-v2.1-search-file'),
 
     # departments
     url(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
