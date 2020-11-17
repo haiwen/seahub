@@ -13,7 +13,8 @@ from seaserv import seafile_api
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
         get_site_scheme_and_netloc, normalize_cache_key
-
+from seahub.utils.file_op import check_file_lock, \
+        ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.settings import ENABLE_WATERMARK
 from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
         ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET
@@ -61,21 +62,22 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         document_type = 'text'
 
     cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
-    doc_key = cache.get(cache_key)
-
-    # temporary solution when failed to get data from cache(django_pylibmc)
-    # when init process for the first time
-    if not doc_key:
+    if if_locked_by_online_office(repo_id, file_path):
         doc_key = cache.get(cache_key)
-
-    if not doc_key:
-        info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
-        doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
-
-    doc_info = json.dumps({'repo_id': repo_id,
-                           'file_path': file_path,
-                           'username': username})
-    cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
+        # temporary solution when failed to get data from cache(django_pylibmc)
+        # when init process for the first time
+        if not doc_key:
+            doc_key = cache.get(cache_key)
+        if not doc_key:
+            doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
+            cache.set(cache_key, doc_key, None)
+            doc_info = json.dumps({'repo_id': repo_id, 'file_path': file_path, 'username': username})
+            cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
+    else:
+        doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
+        cache.set(cache_key, doc_key, None)
+        doc_info = json.dumps({'repo_id': repo_id, 'file_path': file_path, 'username': username})
+        cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
     file_name = os.path.basename(file_path.rstrip('/'))
     doc_url = gen_file_get_url(dl_token, file_name)
