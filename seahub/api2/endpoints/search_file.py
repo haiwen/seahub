@@ -53,16 +53,26 @@ class SearchFile(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        result = []
+        file_list = []
+        folder_list = []
+
         searched_files = seafile_api.search_files(repo_id, q)
 
         for searched_file in searched_files:
             # {'path': '/123.docx', 'size': 19446, 'mtime': 1604130882, 'is_dir': False}
-            file_info = {}
-            file_info['path'] = searched_file.path
-            file_info['size'] = searched_file.size
-            file_info['mtime'] = timestamp_to_isoformat_timestr(searched_file.mtime)
-            file_info['type'] = 'folder' if searched_file.is_dir else 'file'
-            result.append(file_info)
+            dirent_info = {}
+            dirent_info['path'] = searched_file.path
+            dirent_info['size'] = searched_file.size
+            dirent_info['mtime'] = timestamp_to_isoformat_timestr(searched_file.mtime)
 
-        return Response({'data': result})
+            if searched_file.is_dir:
+                dirent_info['type'] = 'folder'
+                folder_list.append(dirent_info)
+            else:
+                dirent_info['type'] = 'file'
+                file_list.append(dirent_info)
+
+        folder_list.sort(key=lambda x: x['mtime'], reverse=True)
+        file_list.sort(key=lambda x: x['mtime'], reverse=True)
+
+        return Response({'data': folder_list + file_list})
