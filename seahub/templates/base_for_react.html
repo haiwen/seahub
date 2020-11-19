@@ -81,6 +81,14 @@
               {% endfor %}
               return storages;
             })(),
+            // library template
+            libraryTemplates: (function () {
+              var libraryTemplates = [];
+              {% for template in library_templates %}
+	      libraryTemplates.push("{{template}}");
+              {% endfor %}
+              return libraryTemplates;
+            })(),
             enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
             shareLinkPasswordMinLength: {{ share_link_password_min_length }},
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
