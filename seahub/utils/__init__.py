@@ -17,7 +17,6 @@ from datetime import datetime
 from urllib.parse import urlparse, urljoin
 import json
 
-import ccnet
 from constance import config
 import seaserv
 from seaserv import seafile_api
