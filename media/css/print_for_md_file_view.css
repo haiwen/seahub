@@ -8,3 +8,14 @@
 .editor {
   border: none!important;
 }
+.seafile-editor-main {
+  display: block!important;
+}
+.seafile-editor-main-panel {
+  display: block!important;
+  width: 100%!important;
+}
+.seafile-editor-resize,
+.seafile-editor-side-panel {
+  display: none;
+}
