@@ -1,5 +1,3 @@
-from _sha1 import sha1
-
 import hmac
 import uuid
 
