@@ -46,6 +46,7 @@ html, body { padding:0; margin:0; height:100%; }
                 "forcesave": {% if onlyoffice_force_save %}true{% else %}false{% endif %},
             },
             "user": {
+                "id": "{{ username|escapejs }}",
                 "name": "{{ username|email2nickname|escapejs }}"
             }
         }
