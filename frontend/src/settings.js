@@ -9,6 +9,7 @@ import CommonToolbar from './components/toolbar/common-toolbar';
 import SideNav from './components/user-settings/side-nav';
 import UserAvatarForm from './components/user-settings/user-avatar-form';
 import UserBasicInfoForm from './components/user-settings/user-basic-info-form';
+import WebAPIAuthToken from './components/user-settings/web-api-auth-token';
 import WebdavPassword from './components/user-settings/webdav-password';
 import LanguageSetting from './components/user-settings/language-setting';
 import ListInAddressBook from './components/user-settings/list-in-address-book';
@@ -25,8 +26,9 @@ import './css/user-settings.css';
 
 const {
   canUpdatePassword, passwordOperationText,
-  enableAddressBook,
+  enableGetAuthToken,
   enableWebdavSecret,
+  enableAddressBook,
   twoFactorAuthEnabled,
   enableWechatWork,
   enableDingtalk,
@@ -40,6 +42,7 @@ class Settings extends React.Component {
     this.sideNavItems = [
       {show: true, href: '#user-basic-info', text: gettext('Profile')},
       {show: canUpdatePassword, href: '#update-user-passwd', text: gettext('Password')},
+      {show: enableGetAuthToken, href: '#get-auth-token', text: gettext('Web API Auth Token')},
       {show: enableWebdavSecret, href: '#update-webdav-passwd', text: gettext('WebDav Password')},
       {show: enableAddressBook, href: '#list-in-address-book', text: gettext('Global Address Book')},
       {show: true, href: '#lang-setting', text: gettext('Language')},
@@ -129,9 +132,11 @@ class Settings extends React.Component {
                   <a href={`${siteRoot}accounts/password/change/`} className="btn btn-outline-primary">{passwordOperationText}</a>
                 </div>
                 }
+
+                {enableGetAuthToken && <WebAPIAuthToken />}
                 {enableWebdavSecret && <WebdavPassword />}
                 {enableAddressBook && this.state.userInfo &&
-                <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
+                  <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 <LanguageSetting />
                 {isPro && <EmailNotice />}
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}

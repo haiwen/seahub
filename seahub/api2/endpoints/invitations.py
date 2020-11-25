@@ -140,7 +140,6 @@ class InvitationsBatchView(APIView):
 
             i = Invitation.objects.add(inviter=request.user.username,
                     accepter=accepter)
-            result['success'].append(i.to_dict())
 
             m = i.send_to(email=accepter)
             if m.status != STATUS.sent:
@@ -148,5 +147,7 @@ class InvitationsBatchView(APIView):
                     'email': accepter,
                     'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),
                 })
+            else:
+                result['success'].append(i.to_dict())
 
         return Response(result)

@@ -42,6 +42,7 @@ export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 export const resumableUploadFileBlockSize = window.app.pageOptions.resumableUploadFileBlockSize;
 export const storages = window.app.pageOptions.storages; // storage backends
+export const libraryTemplates = window.app.pageOptions.libraryTemplates; // library templates
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
 export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswordMinLength;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;

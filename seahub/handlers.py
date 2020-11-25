@@ -50,14 +50,10 @@ try:
         library_template = kwargs['library_template']
 
         if LIBRARY_TEMPLATES and library_template:
-            if isinstance(library_template, str):
-                library_template = library_template.encode('utf-8')
-
             try:
                 dir_path_list = LIBRARY_TEMPLATES[library_template]
                 for dir_path in dir_path_list:
-                    seafile_api.mkdir_with_parents(repo_id, '/',
-                            dir_path.strip('/'), related_users)
+                    seafile_api.mkdir_with_parents(repo_id, '/', dir_path.strip('/'), creator)
             except Exception as e:
                 logger.error(e)
 

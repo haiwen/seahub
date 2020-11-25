@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages } from '../../utils/constants';
+import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -22,6 +22,7 @@ class CreateRepoDialog extends React.Component {
       errMessage: '',
       permission: 'rw',
       storage_id: storages.length ? storages[0].id : '',
+      library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
@@ -121,6 +122,10 @@ class CreateRepoDialog extends React.Component {
     this.setState({storage_id: selectedItem.value});
   }
 
+  handlelibraryTemplatesInputChange = (selectedItem) => {
+    this.setState({library_template: selectedItem.value});
+  }
+
   onEncrypted = (e) => {
     let isChecked = e.target.checked;
     this.setState({
@@ -162,6 +167,11 @@ class CreateRepoDialog extends React.Component {
       repo.storage_id = storage_id;
     }
 
+    const library_template = this.state.library_template;
+    if (library_template) {
+      repo.library_template = library_template;
+    }
+
     return repo;
   }
 
@@ -192,6 +202,19 @@ class CreateRepoDialog extends React.Component {
                 />
               </FormGroup>
             )}
+
+            {libraryTemplates.length > 0 && (
+              <FormGroup>
+                <Label for="library-templates">{gettext('Library Templates')}</Label>
+                <Select
+                  id="library-templates"
+                  defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
+                  options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
+                  onChange={this.handlelibraryTemplatesInputChange}
+                /> 
+              </FormGroup>
+            )}
+
             {this.props.libraryType === 'group' && (
               <FormGroup>
                 <Label for="exampleSelect">{gettext('Permission')}</Label>

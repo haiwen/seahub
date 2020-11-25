@@ -186,8 +186,7 @@ def oauth_callback(request):
 
     # update user's profile
     name = user_info['name'] if 'name' in user_info else ''
-    contact_email = user_info['contact_email'] if \
-            'contact_email' in user_info else ''
+    contact_email = user_info['contact_email'] if 'contact_email' in user_info else ''
 
     profile = Profile.objects.get_profile_by_user(email)
     if not profile:
@@ -205,6 +204,6 @@ def oauth_callback(request):
     api_token = get_api_token(request)
 
     # redirect user to home page
-    response = HttpResponseRedirect(request.session['oauth_redirect'])
+    response = HttpResponseRedirect(request.session.get('oauth_redirect', '/'))
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
     return response

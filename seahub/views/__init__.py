@@ -1186,6 +1186,7 @@ def react_fake_view(request, **kwargs):
         'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
+        'library_templates': list(LIBRARY_TEMPLATES.keys()),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
         'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,

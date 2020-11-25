@@ -12,8 +12,7 @@ from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
-        get_default_avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils import is_org_context
@@ -27,6 +26,7 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
 
 logger = logging.getLogger(__name__)
+
 
 def address_book_group_to_dict(group):
     if isinstance(group, int):
@@ -192,8 +192,7 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for m in members:
-            member_info = self._get_address_book_group_memeber_info(request,
-                    m, avatar_size)
+            member_info = self._get_address_book_group_memeber_info(request, m, avatar_size)
             if member_info['role'] == 'Owner':
                 continue
             ret_members.append(member_info)
@@ -264,6 +263,6 @@ class AdminAddressBookGroup(APIView):
             "owner": group_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation=GROUP_DELETE, detail=admin_op_detail)
+                             operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})

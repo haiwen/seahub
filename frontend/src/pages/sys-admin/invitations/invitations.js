@@ -275,7 +275,7 @@ class Invitations extends Component {
   deleteItemInBatch = () => {
     seafileAPI.sysAdminDeleteExpiredInvitations().then(res => {
       const prevItems = this.state.items;
-      const items = this.state.items.filter(item => !item.is_expired);
+      const items = this.state.items.filter(item => !item.is_expired || item.accept_time);
       if (items.length < prevItems.length) {
         this.setState({
           items: items

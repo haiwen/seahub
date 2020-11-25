@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
+import Paginator from '../../../components/paginator';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils.js';
 import toaster from '../../../components/toast';
@@ -35,6 +36,11 @@ class DepartmentDetail extends React.Component {
       isItemFreezed: false,
       ancestorGroups: [],
       members: [],
+      membersErrorMsg: '',
+      membersPageInfo: {
+      },
+      membersPage: 1,
+      membersPerPage: 25,
       deletedMember: {},
       isShowAddMemberDialog: false,
       showDeleteMemberDialog: false,
@@ -54,13 +60,15 @@ class DepartmentDetail extends React.Component {
   componentDidMount() {
     const groupID = this.props.groupID;
     this.listGroupRepo(groupID);
-    this.listMembers(groupID);
+    this.getDepartmentInfo(groupID);
+    this.listMembers(groupID, this.state.membersPage, this.state.membersPerPage);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listGroupRepo(nextProps.groupID);
-      this.listMembers(nextProps.groupID);
+      this.getDepartmentInfo(nextProps.groupID);
+      this.listMembers(nextProps.groupID, this.state.membersPage, this.state.membersPerPage);
     }
   }
 
@@ -73,10 +81,9 @@ class DepartmentDetail extends React.Component {
     });
   }
 
-  listMembers = (groupID) => {
+  getDepartmentInfo = (groupID) => {
     seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
       this.setState({
-        members: res.data.members,
         groups: res.data.groups,
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,
@@ -84,6 +91,34 @@ class DepartmentDetail extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  }
+
+  listMembers = (groupID, page, perPage) => {
+    seafileAPI.sysAdminListGroupMembers(groupID, page, perPage).then((res) => {
+      this.setState({
+        members: res.data.members,
+        membersPageInfo: res.data.page_info
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({membersErrorMsg: errMessage});
+    });
+  }
+
+  getPreviousPageList = () => {
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page - 1, this.state.membersPerPage);
+  }
+
+  getNextPageList = () => {
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page + 1, this.state.membersPerPage);
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      membersPerPage: perPage
+    }, () => {
+      this.listMembers(this.props.groupID, 1, perPage);
     });
   }
 
@@ -114,7 +149,7 @@ class DepartmentDetail extends React.Component {
   }
 
   onMemberChanged = () => {
-    this.listMembers(this.props.groupID);
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page, this.state.membersPerPage);
   }
 
   toggleItemFreezed = (isFreezed) => {
@@ -157,7 +192,7 @@ class DepartmentDetail extends React.Component {
   }
 
   render() {
-    const { members, repos, groups } = this.state;
+    const { members, membersErrorMsg, repos, groups } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
@@ -259,8 +294,10 @@ class DepartmentDetail extends React.Component {
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
               </div>
               <div className="cur-view-content">
-                {(members && members.length === 1 && members[0].role === 'Owner') ?
+                {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
+                  members.length == 0 ?
                   <p className="no-member">{gettext('No members')}</p> :
+                  <Fragment>
                   <table>
                     <thead>
                       <tr>
@@ -287,6 +324,17 @@ class DepartmentDetail extends React.Component {
                       })}
                     </tbody>
                   </table>
+                  {this.state.membersPageInfo &&
+                  <Paginator
+                    gotoPreviousPage={this.getPreviousPageList}
+                    gotoNextPage={this.getNextPageList}
+                    currentPage={this.state.membersPageInfo.current_page}
+                    hasNextPage={this.state.membersPageInfo.has_next_page}
+                    curPerPage={this.state.membersPerPage}
+                    resetPerPage={this.resetPerPage}
+                  />
+                  }
+                  </Fragment>
                 }
               </div>
             </div>

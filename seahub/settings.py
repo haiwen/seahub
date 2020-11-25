@@ -394,6 +394,9 @@ FORCE_PASSWORD_CHANGE = True
 # Enable a user to change password in 'settings' page.
 ENABLE_CHANGE_PASSWORD = True
 
+# Enable a user to get auth token in 'settings' page.
+ENABLE_GET_AUTH_TOKEN_BY_SESSION = False
+
 ENABLE_DELETE_ACCOUNT = True
 ENABLE_UPDATE_USER_INFO = True
 

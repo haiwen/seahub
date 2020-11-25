@@ -45,17 +45,32 @@ class AdminGroupMembers(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size',
-                AVATAR_DEFAULT_SIZE))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
             avatar_size = AVATAR_DEFAULT_SIZE
 
         try:
-            members = ccnet_api.get_group_members(group_id)
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            page = 1
+            per_page = 100
+
+        start = (page - 1) * per_page
+        limit = per_page + 1
+
+        try:
+            members = ccnet_api.get_group_members(group_id, start, limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(members) > per_page:
+            members = members[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
 
         group_members_info = []
         for m in members:
@@ -65,9 +80,12 @@ class AdminGroupMembers(APIView):
         group_members = {
             'group_id': group_id,
             'group_name': group.group_name,
-            'members': group_members_info
+            'members': group_members_info,
+            'page_info': {
+                'has_next_page': has_next_page,
+                'current_page': page
+            }
         }
-
         return Response(group_members)
 
     def post(self, request, group_id):

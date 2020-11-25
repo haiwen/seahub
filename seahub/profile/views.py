@@ -118,6 +118,7 @@ def edit_profile(request):
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': has_two_factor_auth(),
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
