@@ -12,7 +12,7 @@ from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_ldap_user, is_user_password_strong, get_site_name
+    is_ldap_user, is_user_password_strong, get_site_name, is_valid_email
 
 from captcha.fields import CaptchaField
 
@@ -51,11 +51,16 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
+
+            if not is_valid_email(username):
+                # convert login id to username if any
+                username = Profile.objects.convert_login_str_to_username(username)
+
             self.user_cache = authenticate(username=username,
                                            password=password)
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
-                # convert login id or contact email to username if any
+                # convert contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(username)
                 # convert username to primary id if any
                 username = self.get_primary_id_by_username(username)
