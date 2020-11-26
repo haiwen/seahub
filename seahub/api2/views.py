@@ -643,7 +643,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'mtime_relative': translate_seahub_time(repo.latest_modify),
         'encrypted': enc,
         'enc_version': enc_version,
-        'salt': repo.salt if enc_version == 3 else '',
+        'salt': repo.salt if enc_version >= 3 else '',
         'magic': magic,
         'random_key': random_key,
         'repo_version': repo_version,
@@ -735,7 +735,7 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
-                    "salt": r.salt if r.enc_version == 3 else '',
+                    "salt": r.salt if r.enc_version >= 3 else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -803,7 +803,7 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                     "group_name": library_group_name,
-                    "salt": r.salt if r.enc_version == 3 else '',
+                    "salt": r.salt if r.enc_version >= 3 else '',
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -861,7 +861,7 @@ class Repos(APIView):
                     "share_from": r.user,
                     "share_from_name": nickname_dict.get(r.user, ''),
                     "share_from_contact_email": contact_email_dict.get(r.user, ''),
-                    "salt": r.salt if r.enc_version == 3 else '',
+                    "salt": r.salt if r.enc_version >= 3 else '',
                 }
                 repos_json.append(repo)
 
@@ -902,7 +902,7 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
-                    "salt": r.salt if r.enc_version == 3 else '',
+                    "salt": r.salt if r.enc_version >= 3 else '',
                 }
                 repos_json.append(repo)
 
@@ -1294,7 +1294,7 @@ class Repo(APIView):
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
-            repo_json["salt"] = repo.salt if repo.enc_version == 3 else ''
+            repo_json["salt"] = repo.salt if repo.enc_version >= 3 else ''
             repo_json["magic"] = repo.magic
             repo_json["random_key"] = repo.random_key
 
