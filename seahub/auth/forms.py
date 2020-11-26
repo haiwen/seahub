@@ -53,13 +53,15 @@ class AuthenticationForm(forms.Form):
         if username and password:
 
             if not is_valid_email(username):
-                # convert login id or contact email to username if any
+                # convert login id to username if any
                 username = Profile.objects.convert_login_str_to_username(username)
 
             self.user_cache = authenticate(username=username,
                                            password=password)
             if self.user_cache is None:
-
+                """then try login id/contact email/primary id"""
+                # convert contact email to username if any
+                username = Profile.objects.convert_login_str_to_username(username)
                 # convert username to primary id if any
                 username = self.get_primary_id_by_username(username)
 
