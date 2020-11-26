@@ -72,7 +72,8 @@ class Command(BaseCommand):
             except User.DoesNotExist:
                 print('User %s not found' % email)
         else:
-            user_obj_list = ccnet_api.get_emailusers('DB', -1, -1)
+            user_obj_list = ccnet_api.get_emailusers('DB', -1, -1) + \
+                            ccnet_api.get_emailusers('LDAPImport', -1, -1)
             for user in user_obj_list:
                 self.send_email(user.email)
 
