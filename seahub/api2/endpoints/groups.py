@@ -70,6 +70,11 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     # parent_group_id = n(n > 0):  sub department group, n is parent group's id
     if group.parent_group_id != 0:
         group_info['group_quota'] = seafile_api.get_group_quota(group_id)
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        group_info['group_quota_usage'] = seafile_api.org_get_group_quota_usage(org_id, group_id)
+    else:
         group_info['group_quota_usage'] = seafile_api.get_group_quota_usage(group_id)
 
     return group_info
