@@ -118,12 +118,16 @@ class AdminLogsFileAccessLogs(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
-        limit = per_page
+        limit = per_page + 1
 
         # org_id = 0, show all file audit
         events = get_file_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
 
-        has_next_page = True if len(events) == per_page else False
+        if len(events) > per_page:
+            events = events[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
