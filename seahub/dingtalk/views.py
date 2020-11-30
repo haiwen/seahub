@@ -22,6 +22,7 @@ from seahub.utils.auth import gen_user_virtual_id
 from seahub.base.accounts import User
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
+from seahub.dingtalk.utils import dingtalk_get_detailed_user_info
 
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_QR_CONNECT_APP_ID, DINGTALK_QR_CONNECT_APP_SECRET, \
@@ -30,6 +31,7 @@ from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_QR_CONNECT_SCOPE, DINGTALK_QR_CONNECT_LOGIN_REMEMBER_ME
 
 logger = logging.getLogger(__name__)
+
 
 def dingtalk_login(request):
 
@@ -49,6 +51,7 @@ def dingtalk_login(request):
     }
     url = DINGTALK_QR_CONNECT_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
     return HttpResponseRedirect(url)
+
 
 def dingtalk_callback(request):
 
@@ -114,13 +117,20 @@ def dingtalk_callback(request):
         profile.nickname = name.strip()
         profile.save()
 
+    user_detail_info = dingtalk_get_detailed_user_info(user_info['unionid'])
+    contact_email = user_detail_info.get('email', '')
+    if contact_email:
+        profile.contact_email = contact_email
+        profile.save()
+
     # generate auth token for Seafile client
     api_token = get_api_token(request)
 
     # redirect user to home page
-    response = HttpResponseRedirect(request.session['dingtalk_login_redirect'])
+    response = HttpResponseRedirect(request.session.get('dingtalk_login_redirect', '/'))
     response.set_cookie('seahub_auth', email + '@' + api_token.key)
     return response
+
 
 @login_required
 def dingtalk_connect(request):
@@ -141,6 +151,7 @@ def dingtalk_connect(request):
     }
     url = DINGTALK_QR_CONNECT_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data)
     return HttpResponseRedirect(url)
+
 
 @login_required
 def dingtalk_connect_callback(request):
@@ -176,15 +187,14 @@ def dingtalk_connect_callback(request):
         return render_error(request, _('Error, please contact administrator.'))
 
     username = request.user.username
-    dingtalk_user_id = user_info['unionid']
+    dingtalk_union_id = user_info['unionid']
 
-    auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk',
-            dingtalk_user_id)
+    auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk', dingtalk_union_id)
     if auth_user:
-        logger.error('dingtalk account already exists %s' % dingtalk_user_id)
+        logger.error('dingtalk account already exists %s' % dingtalk_union_id)
         return render_error(request, '出错了，此钉钉账号已被绑定')
 
-    SocialAuthUser.objects.add(username, 'dingtalk', dingtalk_user_id)
+    SocialAuthUser.objects.add(username, 'dingtalk', dingtalk_union_id)
 
     # update user's profile
     name = user_info['nick'] if 'nick' in user_info else ''
@@ -197,8 +207,15 @@ def dingtalk_connect_callback(request):
         profile.nickname = name.strip()
         profile.save()
 
+    user_detail_info = dingtalk_get_detailed_user_info(user_info['unionid'])
+    contact_email = user_detail_info.get('email', '')
+    if contact_email:
+        profile.contact_email = contact_email
+        profile.save()
+
     response = HttpResponseRedirect(request.session['dingtalk_connect_redirect'])
     return response
+
 
 @login_required
 def dingtalk_disconnect(request):
