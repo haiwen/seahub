@@ -52,6 +52,11 @@ try:
 except ImportError:
     SIDE_NAV_FOOTER_CUSTOM_HTML = ''
 
+try:
+    from seahub.settings import ABOUT_DIALOG_CUSTOM_HTML
+except ImportError:
+    ABOUT_DIALOG_CUSTOM_HTML = ''
+
 
 def base(request):
     """
@@ -144,6 +149,7 @@ def base(request):
         'privacy_policy_link': PRIVACY_POLICY_LINK,
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
+        'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
     }
 
     if request.user.is_staff:
@@ -151,6 +157,7 @@ def base(request):
         result['enable_share_link_report_abuse'] = ENABLE_SHARE_LINK_REPORT_ABUSE
 
     return result
+
 
 def debug(request):
     """
