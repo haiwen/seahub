@@ -1607,9 +1607,19 @@ class RepoOwner(APIView):
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
-            error_msg = _('User %s not found in organization.') % new_owner
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        username = request.user.username
+        if org_id:
+            # transfer to department
+            if '@seafile_group' in new_owner:
+                group_id = get_group_id_by_repo_owner(new_owner)
+                if not is_group_admin(group_id, username):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            # transfer to org user
+            else:
+                if not ccnet_api.org_user_exists(org_id, new_owner):
+                    error_msg = _('User %s not found in organization.') % new_owner
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         if org_id:
@@ -1617,7 +1627,6 @@ class RepoOwner(APIView):
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
-        username = request.user.username
         if username != repo_owner:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

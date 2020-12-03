@@ -92,6 +92,7 @@
             enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
             shareLinkPasswordMinLength: {{ share_link_password_min_length }},
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
+            aboutDialogCustomHtml: "{{ about_dialog_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},

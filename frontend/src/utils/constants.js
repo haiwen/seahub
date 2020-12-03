@@ -48,6 +48,7 @@ export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswo
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const sideNavFooterCustomHtml = window.app.pageOptions.sideNavFooterCustomHtml;
+export const aboutDialogCustomHtml = window.app.pageOptions.aboutDialogCustomHtml;
 export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
 export const uploadLinkExpireDaysMin = window.app.pageOptions.uploadLinkExpireDaysMin;
 export const uploadLinkExpireDaysMax = window.app.pageOptions.uploadLinkExpireDaysMax;
