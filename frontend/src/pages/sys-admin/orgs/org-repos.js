@@ -103,9 +103,11 @@ class Item extends Component {
           <td>{item.repo_name}</td>
           <td>{item.repo_id}</td>
           <td>
-            {item.owner_email ?
+            {!item.owner_email ?
+              '--' :
+              item.owner_email.indexOf('@seafile_group') == -1 ?
               <UserLink email={item.owner_email} name={item.owner_name} /> :
-              '--'
+              item.owner_name
             }
           </td>
           <td>
