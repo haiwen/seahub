@@ -230,7 +230,15 @@ def login_simple_check(request):
 
         auth_login(request, user)
 
-        return HttpResponseRedirect(settings.SITE_ROOT)
+        # Ensure the user-originating redirection url is safe.
+        if REDIRECT_FIELD_NAME in request.GET:
+            next_page = request.GET[REDIRECT_FIELD_NAME]
+            if not is_safe_url(url=next_page, host=request.get_host()):
+                next_page = settings.LOGIN_REDIRECT_URL
+        else:
+            next_page = settings.SITE_ROOT
+
+        return HttpResponseRedirect(next_page)
     else:
         raise Http404
 
