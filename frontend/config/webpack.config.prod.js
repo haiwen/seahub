@@ -28,6 +28,7 @@ const shouldUseSourceMap = false;
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+const getEntries = require('./webpack.entry');
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
@@ -57,41 +58,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: {
-    markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
-    TCAccept: [require.resolve('./polyfills'), paths.appSrc + "/tc-accept.js"],
-    TCView: [require.resolve('./polyfills'), paths.appSrc + "/tc-view.js"],
-    userNotifications: [require.resolve('./polyfills'), paths.appSrc + "/user-notifications.js"],
-    wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
-    fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
-    fileHistoryOld: [require.resolve('./polyfills'), paths.appSrc + "/file-history-old.js"],
-    app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
-    draft: [require.resolve('./polyfills'), paths.appSrc + "/draft.js"],
-    sharedDirView: [require.resolve('./polyfills'), paths.appSrc + "/shared-dir-view.js"],
-    sharedFileViewMarkdown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-markdown.js"],
-    sharedFileViewText: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-text.js"],
-    sharedFileViewImage: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-image.js"],
-    sharedFileViewVideo: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-video.js"],
-    sharedFileViewPDF: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-pdf.js"],
-    sharedFileViewSVG: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-svg.js"],
-    sharedFileViewAudio: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-audio.js"],
-    sharedFileViewDocument: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-document.js"],
-    sharedFileViewSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-spreadsheet.js"],
-    sharedFileViewUnknown: [require.resolve('./polyfills'), paths.appSrc + "/shared-file-view-unknown.js"],
-    historyTrashFileView: [require.resolve('./polyfills'), paths.appSrc + "/history-trash-file-view.js"],
-    fileView: [require.resolve('./polyfills'), paths.appSrc + "/file-view.js"],
-    viewFileText: [require.resolve('./polyfills'), paths.appSrc + "/view-file-text.js"],
-    viewFileDocument: [require.resolve('./polyfills'), paths.appSrc + "/view-file-document.js"],
-    viewFileSpreadsheet: [require.resolve('./polyfills'), paths.appSrc + "/view-file-spreadsheet.js"],
-    settings: [require.resolve('./polyfills'), paths.appSrc + "/settings.js"],
-    repoHistory: [require.resolve('./polyfills'), paths.appSrc + "/repo-history.js"],
-    repoSnapshot: [require.resolve('./polyfills'), paths.appSrc + "/repo-snapshot.js"],
-    repoFolderTrash: [require.resolve('./polyfills'), paths.appSrc + "/repo-folder-trash.js"],
-    orgAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/org-admin"],
-    sysAdmin: [require.resolve('./polyfills'), paths.appSrc + "/pages/sys-admin"],
-    search: [require.resolve('./polyfills'), paths.appSrc + "/pages/search"],
-    uploadLink: [require.resolve('./polyfills'), paths.appSrc + "/pages/upload-link"],
-  },
+  entry: getEntries('production'), 
 
   output: {
     // The build folder.
