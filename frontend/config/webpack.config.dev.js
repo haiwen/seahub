@@ -10,8 +10,9 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
-const paths = require('./paths');
 const BundleTracker = require('webpack-bundle-tracker');
+const paths = require('./paths');
+const getEntries = require('./webpack.entry');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -33,190 +34,7 @@ module.exports = {
   // These are the "entry points" to our application.
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
-  entry: {
-    markdownEditor: [
-      // We ship a few polyfills by default:
-      require.resolve('./polyfills'),
-      // Include an alternative client for WebpackDevServer. A client's job is to
-      // connect to WebpackDevServer by a socket and get notified about changes.
-      // When you save a file, the client will either apply hot updates (in case
-      // of CSS changes), or refresh the page (in case of JS changes). When you
-      // make a syntax error, this client will display a syntax error overlay.
-      // Note: instead of the default WebpackDevServer client, we use a custom one
-      // to bring better experience for Create React App users. You can replace
-      // the line below with these two lines if you prefer the stock client:
-      // require.resolve('webpack-dev-server/client') + '?/',
-      // require.resolve('webpack/hot/dev-server'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      // Finally, this is your app's code:
-      paths.appIndexJs,
-      // We include the app code last so that if there is a runtime error during
-      // initialization, it doesn't blow up the WebpackDevServer client, and
-      // changing JS code would still trigger a refresh.
-    ],
-    TCAccept: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/tc-accept.js",
-    ],
-    TCView: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/tc-view.js",
-    ],
-    userNotifications: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/user-notifications.js",
-    ],
-    wiki: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/wiki.js",
-    ],
-    fileHistory: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/file-history.js",
-    ],
-    fileHistoryOld: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/file-history-old.js",
-    ],
-    app: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/app.js",
-    ],
-    draft: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/draft.js",
-    ],
-    sharedDirView: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-dir-view.js",
-    ],
-    sharedFileViewMarkdown: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-markdown.js",
-    ],
-    sharedFileViewText: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-text.js",
-    ],
-    sharedFileViewImage: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-image.js",
-    ],
-    sharedFileViewVideo: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-video.js",
-    ],
-    sharedFileViewPDF: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-pdf.js",
-    ],
-    sharedFileViewSVG: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-svg.js",
-    ],
-    sharedFileViewAudio: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-audio.js",
-    ],
-    sharedFileViewDocument: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-document.js",
-    ],
-    sharedFileViewSpreadsheet: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-spreadsheet.js",
-    ],
-    sharedFileViewUnknown: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/shared-file-view-unknown.js",
-    ],
-    historyTrashFileView: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/history-trash-file-view.js",
-    ],
-    fileView: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/file-view.js",
-    ],
-    viewFileText: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-text.js",
-    ],
-    viewFileDocument: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-document.js",
-    ],
-    viewFileSpreadsheet: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/view-file-spreadsheet.js",
-    ],
-    settings: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/settings.js",
-    ],
-    repoHistory: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/repo-history.js",
-    ],
-    repoSnapshot: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/repo-snapshot.js",
-    ],
-    repoFolderTrash: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/repo-folder-trash.js",
-    ],
-    orgAdmin: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/pages/org-admin",
-    ],
-    sysAdmin: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/pages/sys-admin",
-    ],
-
-    search: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/pages/search",
-    ],
-    uploadLink: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/pages/upload-link",
-    ]
-  },
-
+  entry: getEntries('development'),
   output: {
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
@@ -458,13 +276,7 @@ module.exports = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    },
-
-    // watchOptions: {
-    //   aggregateTimeout: 1000,
-    //   poll: 5000,
-    //   ignored: paths.appNodeModules,
-    // },
+    }
   },
 
 };
