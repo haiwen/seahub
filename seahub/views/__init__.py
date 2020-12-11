@@ -61,7 +61,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
-from seahub.ocm.settings import ENABLE_OCM
+from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.constants import HASH_URLS, PERMISSION_READ
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -1210,4 +1210,5 @@ def react_fake_view(request, **kwargs):
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
         'enable_ocm': ENABLE_OCM,
+        'ocm_remote_servers': OCM_REMOTE_SERVERS,
     })

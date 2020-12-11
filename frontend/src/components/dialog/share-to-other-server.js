@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, ocmRemoteServers } from '../../utils/constants';
 import { Input } from 'reactstrap';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
@@ -34,7 +35,7 @@ class ShareItem extends React.Component {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{item.to_sever_url}</td>
+        <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
         <td className="name">{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
@@ -67,9 +68,9 @@ class ShareList extends React.Component {
         <table className="table-thead-hidden">
           <thead>
             <tr>
-              <th width="40%">{gettext('Server URL')}</th>
+              <th width="30%">{gettext('Server')}</th>
               <th width="25%">{gettext('User Email')}</th>
-              <th width="20%">{gettext('Permission')}</th>
+              <th width="30%">{gettext('Permission')}</th>
               <th width="15%"></th>
             </tr>
           </thead>
@@ -155,7 +156,7 @@ class ShareToOtherServer extends React.Component {
 
   handleURLChange = (e) => {
     this.setState({
-      toServerURL: e.target.value,
+      toServerURL: e.value,
     });
   }
 
@@ -185,17 +186,17 @@ class ShareToOtherServer extends React.Component {
         <table>
           <thead>
             <tr>
-              <th width="40%">{gettext('Server URL')}</th>
+              <th width="30%">{gettext('Server')}</th>
               <th width="25%">{gettext('User Email')}</th>
-              <th width="20%">{gettext('Permission')}</th>
+              <th width="30%">{gettext('Permission')}</th>
               <th width="15%"></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <Input
-                  value={toServerURL}
+                <Select
+                  options={ocmRemoteServers}
                   onChange={this.handleURLChange}
                 />
               </td>
