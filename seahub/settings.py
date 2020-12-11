@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+
 # -*- coding: utf-8 -*-
 # Django settings for seahub project.
 
