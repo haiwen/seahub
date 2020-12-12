@@ -36,12 +36,12 @@ const entryFiles = {
   uploadLink: "/pages/upload-link",
 };
 
-const getEntries = (mode) => {
+const getEntries = (isEnvDevelopment) => {
   let entries = {};
   Object.keys(entryFiles).forEach(key => {
     let entry = [];
-    entry.push(require.resolve('./polyfills'));
-    if (mode === 'development') {
+    // entry.push(require.resolve('./polyfills'));
+    if (isEnvDevelopment) {
       entry.push(require.resolve('react-dev-utils/webpackHotDevClient'));
     }
     entry.push(paths.appSrc + entryFiles[key]);

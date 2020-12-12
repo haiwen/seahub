@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';

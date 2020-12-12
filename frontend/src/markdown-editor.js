@@ -389,7 +389,7 @@ class MarkdownEditor extends React.Component {
         return;
       case 'update_users':
         for (var prop in data.users) {
-          if (data.users.hasOwnProperty(prop)) {
+          if (Object.prototype.hasOwnProperty.call(data.users, prop)) {
             if (prop === this.socket_id) {
               data.users[prop]['myself'] = true;
               break;
@@ -625,7 +625,7 @@ class MarkdownEditor extends React.Component {
     setTimeout(() => {
       let url = new URL(window.location.href);
       if (url.hash) {
-        window.location.href = window.location.href;
+        window.location.href = url;
       }
     }, 100);
   }
