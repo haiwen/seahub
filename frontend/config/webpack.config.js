@@ -103,7 +103,8 @@ module.exports = function (webpackEnv) {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
-        options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {},
+        //! important
+        options: { publicPath: '../../' }
       },
       {
         loader: require.resolve('css-loader'),
@@ -634,6 +635,7 @@ module.exports = function (webpackEnv) {
           // both options are optional
           filename: 'static/css/[name].css',
           chunkFilename: 'static/css/[name].chunk.css',
+          ignoreOrder: true
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
