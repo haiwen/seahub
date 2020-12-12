@@ -47,6 +47,7 @@ def get_group_admins(group_id):
 
     return admins
 
+
 def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     group = seaserv.get_group(group_id)
     try:
