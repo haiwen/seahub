@@ -32,3 +32,5 @@ VIA_REPO_TOKEN_URL = {
     'UPLOAD_LINK': 'api/v2.1/via-repo-token/upload-link/',
     'DOWNLOAD_LINK': 'api/v2.1/via-repo-token/download-link/',
 }
+
+OCM_REMOTE_SERVERS = getattr(settings, 'OCM_REMOTE_SERVERS', {})
