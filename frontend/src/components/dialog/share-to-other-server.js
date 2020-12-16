@@ -104,22 +104,16 @@ class ShareToOtherServer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
-      errorMsg: [],
-      permission: 'rw',
-      ocmShares: [],
+      selectedServer: null,
       toUser: '',
-      toServerURL: '',
+      permission: 'rw',
+      btnDisabled: true,
+      isSubmitting: false,
+      ocmShares: [],
+      errorMsg: []
     };
     this.options = [];
     this.permissions = ['rw', 'r'];
-    this.UnshareMessage = 'File was unshared';
-
-  }
-
-  handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
-    this.options = [];
   }
 
   componentDidMount() {
@@ -131,32 +125,49 @@ class ShareToOtherServer extends React.Component {
     });
   }
 
-  startOCMShare = () => {
-    let { repoID, itemPath } = this.props;
-    let { toServerURL, toUser, permission } = this.state;
+  OCMShare = () => {
+    const { repoID, itemPath } = this.props;
+    const { selectedServer, toUser, permission } = this.state;
+    let toServerURL = selectedServer.value;
     if (!toServerURL.endsWith('/')) {
       toServerURL += '/';
     }
+    this.setState({
+      btnDisabled: true,
+      isSubmitting: true
+    });
     seafileAPI.addOCMSharePrepare(toUser, toServerURL, repoID, itemPath, permission).then((res) => {
-      toaster.success(gettext('share success.'));
       let ocmShares = this.state.ocmShares;
-      ocmShares.push(res.data);
-      this.setState({ocmShares: ocmShares});
+      ocmShares.unshift(res.data);
+      this.setState({
+        ocmShares: ocmShares,
+        selectedServer: null,
+        toUser: '',
+        permission: 'rw',
+        isSubmitting: false
+      });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      this.setState({
+        btnDisabled: false,
+        isSubmitting: false
+      });
     });
   }
 
   handleToUserChange = (e) => {
+    const toUser = e.target.value;
     this.setState({
-      toUser: e.target.value,
+      toUser: toUser,
+      btnDisabled: !this.state.selectedServer || !toUser.trim()
     });
   }
 
-  handleURLChange = (e) => {
+  handleServerChange = (selectedServer) => {
     this.setState({
-      toServerURL: e.value,
+      selectedServer,
+      btnDisabled: !this.state.toUser.trim()
     });
   }
 
@@ -180,7 +191,7 @@ class ShareToOtherServer extends React.Component {
 
 
   render() {
-    let { ocmShares, toUser, toServerURL, permission } = this.state;
+    const { ocmShares, toUser, selectedServer, permission, btnDisabled, isSubmitting } = this.state;
     return (
       <Fragment>
         <table>
@@ -196,8 +207,10 @@ class ShareToOtherServer extends React.Component {
             <tr>
               <td>
                 <Select
+                  placeholder={gettext('Select a server...')}
+                  value={selectedServer}
                   options={ocmRemoteServers}
-                  onChange={this.handleURLChange}
+                  onChange={this.handleServerChange}
                 />
               </td>
               <td>
@@ -216,7 +229,12 @@ class ShareToOtherServer extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.startOCMShare}>{gettext('Submit')}</Button>
+                <Button
+                  onClick={this.OCMShare}
+                  disabled={btnDisabled}
+                  className={isSubmitting ? 'btn-loading' : ''}>
+                  {gettext('Submit')}
+                </Button>
               </td>
             </tr>
           </tbody>
