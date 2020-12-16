@@ -752,8 +752,7 @@ def view_lib_file(request, repo_id, path):
             # then check if can edit file
             if ENABLE_OFFICE_WEB_APP_EDIT and parse_repo_perm(permission).can_edit_on_web and \
                     fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 action_name = 'edit'
 
             wopi_dict = get_wopi_dict(username, repo_id, path,
@@ -781,8 +780,7 @@ def view_lib_file(request, repo_id, path):
             can_edit = False
             if parse_repo_perm(permission).can_edit_on_web and \
                     fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
             onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
@@ -814,8 +812,7 @@ def view_lib_file(request, repo_id, path):
             # openEditor vs openPreview
             can_edit = False
             if parse_repo_perm(permission).can_edit_on_web and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
             if can_edit:
