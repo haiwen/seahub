@@ -14,7 +14,8 @@ class ShareItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false
+      isOperationShow: false,
+      isOpFrozen: false
     };
   }
 
@@ -27,16 +28,23 @@ class ShareItem extends React.Component {
   }
 
   deleteShareItem = () => {
+    this.setState({
+      // the 'delete' takes time,
+      // so 'lock' the op icon here to avoid multiple click on it
+      // avoid repeated requests
+      isOpFrozen: true
+    });
     let item = this.props.item;
     this.props.deleteShareItem(item);
   }
 
   render() {
     let item = this.props.item;
+    const { isOperationShow, isOpFrozen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
-        <td className="name">{item.to_user}</td>
+        <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
           <SharePermissionEditor
@@ -49,7 +57,7 @@ class ShareItem extends React.Component {
         </td> */}
         <td>
           <span
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 action-icon ${isOperationShow && !isOpFrozen ? '' : 'hide'}`}
             onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
@@ -109,10 +117,8 @@ class ShareToOtherServer extends React.Component {
       permission: 'rw',
       btnDisabled: true,
       isSubmitting: false,
-      ocmShares: [],
-      errorMsg: []
+      ocmShares: []
     };
-    this.options = [];
     this.permissions = ['rw', 'r'];
   }
 
@@ -121,7 +127,9 @@ class ShareToOtherServer extends React.Component {
       this.setState({ocmShares: res.data.ocm_share_list});
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.setState({
+        errorMsg: errMessage
+      });
     });
   }
 
@@ -172,13 +180,14 @@ class ShareToOtherServer extends React.Component {
   }
 
   deleteShareItem = (deletedItem) => {
-    let { id } = deletedItem;
+    const { id } = deletedItem;
+    toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.deleteOCMSharePrepare(id).then((res) => {
-      toaster.success(gettext('delete success.'));
       let ocmShares = this.state.ocmShares.filter(item => {
         return item.id != id;
       });
       this.setState({ocmShares: ocmShares});
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -189,9 +198,12 @@ class ShareToOtherServer extends React.Component {
     this.setState({permission: permission});
   }
 
-
   render() {
-    const { ocmShares, toUser, selectedServer, permission, btnDisabled, isSubmitting } = this.state;
+    const {
+      errorMsg, ocmShares,
+      toUser, selectedServer, permission,
+      btnDisabled, isSubmitting
+    } = this.state;
     return (
       <Fragment>
         <table>
@@ -239,10 +251,13 @@ class ShareToOtherServer extends React.Component {
             </tr>
           </tbody>
         </table>
-        <ShareList
-          items={ocmShares}
-          deleteShareItem={this.deleteShareItem}
-        />
+        {errorMsg ?
+          <p className="error text-center mt-4">{errorMsg}</p> :
+          <ShareList
+            items={ocmShares}
+            deleteShareItem={this.deleteShareItem}
+          />
+        }
       </Fragment>
     );
   }
