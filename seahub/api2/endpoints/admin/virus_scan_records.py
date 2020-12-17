@@ -197,7 +197,7 @@ class AdminVirusFilesBatchView(APIView):
             else:
                 result['failed'].append({
                     'virus_id': virus_id,
-                    'error_msg': _('Virus file not found.')
+                    'error_msg': _('Virus file is not found.')
                 })
                 continue
 
