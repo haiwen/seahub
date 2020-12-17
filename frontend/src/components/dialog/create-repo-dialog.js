@@ -191,6 +191,19 @@ class CreateRepoDialog extends React.Component {
                 onChange={this.handleRepoNameChange}
               />
             </FormGroup>
+
+            {libraryTemplates.length > 0 && (
+              <FormGroup>
+                <Label for="library-template">{gettext('Template')}</Label>
+                <Select
+                  id="library-template"
+                  defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
+                  options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
+                  onChange={this.handlelibraryTemplatesInputChange}
+                /> 
+              </FormGroup>
+            )}
+
             {storages.length > 0 && (
               <FormGroup>
                 <Label for="storage-backend">{gettext('Storage Backend')}</Label>
@@ -200,18 +213,6 @@ class CreateRepoDialog extends React.Component {
                   options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
                   onChange={this.handleStorageInputChange}
                 />
-              </FormGroup>
-            )}
-
-            {libraryTemplates.length > 0 && (
-              <FormGroup>
-                <Label for="library-templates">{gettext('Library Templates')}</Label>
-                <Select
-                  id="library-templates"
-                  defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
-                  options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
-                  onChange={this.handlelibraryTemplatesInputChange}
-                /> 
               </FormGroup>
             )}
 
