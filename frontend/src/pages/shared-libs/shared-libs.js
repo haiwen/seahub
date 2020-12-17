@@ -203,7 +203,6 @@ class Item extends Component {
 
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
-    data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
