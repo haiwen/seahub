@@ -52,10 +52,9 @@ class LibOldFilesAutoDelDialog extends React.Component {
 
     let repoID = this.props.repoID;
 
-    let message = gettext('Library old files auto delete days setted.');
     seafileAPI.setRepoOldFilesAutoDelDays(repoID, daysNeedTobeSet).then(res => {
-      toaster.success(message);
       this.props.toggleDialog();
+      toaster.success(gettext('Successfully set it.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

@@ -390,7 +390,7 @@ class FileUploader extends React.Component {
 
   getFileServerErrorMessage = (key) => {
     const errorMessage = {
-      'File locked by others.': gettext('File locked by others.'),          // 403
+      'File locked by others.': gettext('File is locked by others.'),       // 403
       'Invalid filename.': gettext('Invalid filename.'),                    // 440
       'File already exists.': gettext('File already exists.'),              // 441
       'File size is too large.': gettext('File size is too large.'),        // 442
