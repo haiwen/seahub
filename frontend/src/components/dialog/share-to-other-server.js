@@ -14,7 +14,8 @@ class ShareItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false
+      isOperationShow: false,
+      isOpFrozen: false
     };
   }
 
@@ -27,16 +28,23 @@ class ShareItem extends React.Component {
   }
 
   deleteShareItem = () => {
+    this.setState({
+      // the 'delete' takes time,
+      // so 'lock' the op icon here to avoid multiple click on it
+      // avoid repeated requests
+      isOpFrozen: true
+    });
     let item = this.props.item;
     this.props.deleteShareItem(item);
   }
 
   render() {
     let item = this.props.item;
+    const { isOperationShow, isOpFrozen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
-        <td className="name">{item.to_user}</td>
+        <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
           <SharePermissionEditor
@@ -49,7 +57,7 @@ class ShareItem extends React.Component {
         </td> */}
         <td>
           <span
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 action-icon ${isOperationShow && !isOpFrozen ? '' : 'hide'}`}
             onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
@@ -104,22 +112,14 @@ class ShareToOtherServer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
-      errorMsg: [],
-      permission: 'rw',
-      ocmShares: [],
+      selectedServer: null,
       toUser: '',
-      toServerURL: '',
+      permission: 'rw',
+      btnDisabled: true,
+      isSubmitting: false,
+      ocmShares: []
     };
-    this.options = [];
     this.permissions = ['rw', 'r'];
-    this.UnshareMessage = 'File was unshared';
-
-  }
-
-  handleSelectChange = (option) => {
-    this.setState({selectedOption: option});
-    this.options = [];
   }
 
   componentDidMount() {
@@ -127,47 +127,67 @@ class ShareToOtherServer extends React.Component {
       this.setState({ocmShares: res.data.ocm_share_list});
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      this.setState({
+        errorMsg: errMessage
+      });
     });
   }
 
-  startOCMShare = () => {
-    let { repoID, itemPath } = this.props;
-    let { toServerURL, toUser, permission } = this.state;
+  OCMShare = () => {
+    const { repoID, itemPath } = this.props;
+    const { selectedServer, toUser, permission } = this.state;
+    let toServerURL = selectedServer.value;
     if (!toServerURL.endsWith('/')) {
       toServerURL += '/';
     }
+    this.setState({
+      btnDisabled: true,
+      isSubmitting: true
+    });
     seafileAPI.addOCMSharePrepare(toUser, toServerURL, repoID, itemPath, permission).then((res) => {
-      toaster.success(gettext('share success.'));
       let ocmShares = this.state.ocmShares;
-      ocmShares.push(res.data);
-      this.setState({ocmShares: ocmShares});
+      ocmShares.unshift(res.data);
+      this.setState({
+        ocmShares: ocmShares,
+        selectedServer: null,
+        toUser: '',
+        permission: 'rw',
+        isSubmitting: false
+      });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      this.setState({
+        btnDisabled: false,
+        isSubmitting: false
+      });
     });
   }
 
   handleToUserChange = (e) => {
+    const toUser = e.target.value;
     this.setState({
-      toUser: e.target.value,
+      toUser: toUser,
+      btnDisabled: !this.state.selectedServer || !toUser.trim()
     });
   }
 
-  handleURLChange = (e) => {
+  handleServerChange = (selectedServer) => {
     this.setState({
-      toServerURL: e.value,
+      selectedServer,
+      btnDisabled: !this.state.toUser.trim()
     });
   }
 
   deleteShareItem = (deletedItem) => {
-    let { id } = deletedItem;
+    const { id } = deletedItem;
+    toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.deleteOCMSharePrepare(id).then((res) => {
-      toaster.success(gettext('delete success.'));
       let ocmShares = this.state.ocmShares.filter(item => {
         return item.id != id;
       });
       this.setState({ocmShares: ocmShares});
+      toaster.success(gettext('Successfully deleted 1 item.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -178,9 +198,12 @@ class ShareToOtherServer extends React.Component {
     this.setState({permission: permission});
   }
 
-
   render() {
-    let { ocmShares, toUser, toServerURL, permission } = this.state;
+    const {
+      errorMsg, ocmShares,
+      toUser, selectedServer, permission,
+      btnDisabled, isSubmitting
+    } = this.state;
     return (
       <Fragment>
         <table>
@@ -196,8 +219,10 @@ class ShareToOtherServer extends React.Component {
             <tr>
               <td>
                 <Select
+                  placeholder={gettext('Select a server...')}
+                  value={selectedServer}
                   options={ocmRemoteServers}
-                  onChange={this.handleURLChange}
+                  onChange={this.handleServerChange}
                 />
               </td>
               <td>
@@ -216,15 +241,23 @@ class ShareToOtherServer extends React.Component {
                 />
               </td>
               <td>
-                <Button onClick={this.startOCMShare}>{gettext('Submit')}</Button>
+                <Button
+                  onClick={this.OCMShare}
+                  disabled={btnDisabled}
+                  className={isSubmitting ? 'btn-loading' : ''}>
+                  {gettext('Submit')}
+                </Button>
               </td>
             </tr>
           </tbody>
         </table>
-        <ShareList
-          items={ocmShares}
-          deleteShareItem={this.deleteShareItem}
-        />
+        {errorMsg ?
+          <p className="error text-center mt-4">{errorMsg}</p> :
+          <ShareList
+            items={ocmShares}
+            deleteShareItem={this.deleteShareItem}
+          />
+        }
       </Fragment>
     );
   }

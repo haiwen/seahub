@@ -32,8 +32,8 @@ class Content extends Component {
             <tr>
               <th width="4%"></th>
               <th width="20%">{gettext('Name')}</th>
-              <th width="20%">{gettext('Shared from')}</th>
-              <th width="26%">{gettext('At site')}</th>
+              <th width="20%">{gettext('Shared by')}</th>
+              <th width="26%">{gettext('At server')}</th>
               <th width="20%">{gettext('Time')}</th>
               <th width="10%">{/* operations */}</th>
             </tr>
@@ -43,7 +43,7 @@ class Content extends Component {
               return <Item
                 key={index}
                 item={item}
-                deleteShare={this.props.deleteShare}
+                leaveShare={this.props.leaveShare}
               />;
             })}
           </tbody>
@@ -66,57 +66,46 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOpIcon: false,
-      isOpMenuOpen: false // for mobile
+      isOpIconShown: false
     };
-  }
-
-  toggleOpMenu = () => {
-    this.setState({
-      isOpMenuOpen: !this.state.isOpMenuOpen
-    });
   }
 
   handleMouseOver = () => {
     this.setState({
-      showOpIcon: true
+      isOpIconShown: true
     });
   }
 
   handleMouseOut = () => {
     this.setState({
-      showOpIcon: false
+      isOpIconShown: false
     });
   }
 
-  deleteShare = () => {
-    this.props.deleteShare(this.props.item);
+  leaveShare = (e) => {
+    e.preventDefault();
+    this.props.leaveShare(this.props.item);
   }
 
   render() {
     const item = this.props.item;
+    const { isOpIconShown } = this.state;
 
     item.icon_url = Utils.getLibIconUrl(item);
     item.icon_title = Utils.getLibIconTitle(item);
-    item.url = `${siteRoot}#shared-libs/lib/${item.repo_id}/`;
 
     let shareRepoUrl =`${siteRoot}remote-library/${this.props.item.provider_id}/${this.props.item.repo_id}/${Utils.encodePath(this.props.item.repo_name)}/`;
-    let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let deleteIcon = `action-icon sf2-icon-x3 ${iconVisibility ? 'invisible' : ''}`;
     return (
-      <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
-          <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
-          <td>{item.from_user}</td>
-          <td>{item.from_server_url}</td>
-          <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
-          <td>
-            <a href="#" className={deleteIcon} title={gettext('Remove')} onClick={this.deleteShare}></a>
-          </td>
-        </tr>
-
-      </Fragment>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
+        <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
+        <td>{item.from_user}</td>
+        <td>{item.from_server_url}</td>
+        <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
+        <td>
+          <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
+        </td>
+      </tr>
     );
   }
 }
@@ -131,7 +120,7 @@ class SharedWithOCM extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      items: [],
+      items: []
     };
   }
 
@@ -142,35 +131,21 @@ class SharedWithOCM extends Component {
         items: res.data.ocm_share_received_list
       });
     }).catch((error) => {
-      if (error.response) {
-        if (error.response.status == 403) {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Permission denied')
-          });
-        } else {
-          this.setState({
-            loading: false,
-            errorMsg: gettext('Error')
-          });
-        }
-      } else {
-        this.setState({
-          loading: false,
-          errorMsg: gettext('Please check the network.')
-        });
-      }
+      this.setState({
+        loading: false,
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
-  deleteShare = (item) => {
-    let { id } = item;
+  leaveShare = (item) => {
+    const { id, repo_name } = item;
     seafileAPI.deleteOCMShareReceived(id).then((res) => {
-      toaster.success(gettext('delete success.'));
       let items = this.state.items.filter(item => {
         return item.id != id;
       });
       this.setState({items: items});
+      toaster.success(gettext('Successfully unshared {name}').replace('{name}', repo_name));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -190,7 +165,7 @@ class SharedWithOCM extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
-                deleteShare={this.deleteShare}
+                leaveShare={this.leaveShare}
               />
             </div>
           </div>

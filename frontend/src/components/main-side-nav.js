@@ -219,7 +219,7 @@ class MainSideNav extends React.Component {
             {enableOCM &&
               <li className="nav-item">
                 <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
-                  <span className="sf2-icon-share" aria-hidden="true"></span>
+                  <span className="sf3-font-share-from-other-servers sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Shared from other servers')}</span>
                 </Link>
               </li>
