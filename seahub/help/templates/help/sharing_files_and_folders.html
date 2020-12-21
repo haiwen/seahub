@@ -20,25 +20,25 @@
 <ul>
   <li>{% trans "Preview and Download: the file or files in the folder can be downloaded. If the type of files can be previewd in web browser, they can also be viewed online (e.g. Office files)." %}</li>
   <li>{% trans "Preview only: the file or files in the folder can only be viewed in web browser, but cannot be downloaded. This is useful for sharing confidential data. For Office files, water mark can also be added to file preview. The water mark includes the link owner's name." %}</li>
-  <li>{% trans "Edit on cloud and download: Similar to \"Preview and Download\", but if the file type can be edited in web browser (e.g. Office files), any user who has access to the link is allowed to edit it." %}</li>
+  <li>{% blocktrans %}Edit on cloud and download: Similar to "Preview and Download", but if the file type can be edited in web browser (e.g. Office files), any user who has access to the link is allowed to edit it.{% endblocktrans %}</li>
 </ul>
 <p>{% trans "To create a share link in Seafile web app:" %}</p>
 <ol>
-  <li>{% trans "Navigate into the parent folder containing the file or folder. Hover your mouse over the file or folder and click on the \"Share\" icon that appears." %}</li>
-  <li>{% trans "A pop-up window will appear with all the share options. Click the \"Share Link\" tab on the left panel. Then click \"Generate\" button to create a link. You can use password, expiration time and permission to protect your link." %}</li>
+  <li>{% blocktrans %}Navigate into the parent folder containing the file or folder. Hover your mouse over the file or folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Share Link" tab on the left panel. Then click "Generate" button to create a link. You can use password, expiration time and permission to protect your link.{% endblocktrans %}</li>
   <li>{% trans "Copy the link to email, instant messaging client or any other tool to send it to others." %}</li>
 </ol>
 <p>{% trans "You can also create download links from the desktop clients." %}</p>
 <ul>
-  <li>{% trans "If the library is synced, double click the library in the main Window of Seafile client. The local folder of that library will be opened. Right click on the file or folder that you want to create a link to. In the pop-up menu, choose \"Seafile\" then \"Create share link\"." %}</li>
+  <li>{% blocktrans %}If the library is synced, double click the library in the main Window of Seafile client. The local folder of that library will be opened. Right click on the file or folder that you want to create a link to. In the pop-up menu, choose "Seafile" then "Create share link".{% endblocktrans %}</li>
   <li>{% trans "If the library is not synced, double click the library in the main Window of Seafile client. The cloud file browser window will be opened. You can create a link to file or folder in the cloud file browser." %}</li>
 </ul>
 <h4>{% trans "Creating upload links to folders" %}</h4>
 <p>{% trans "You can use upload links to collect files from others. You can only create upload link for a folder. Others cannot see the files in the folder. They can only upload files to the link." %}</p>
 <p>{% trans "To create an upload link in Seafile web app:" %}</p>
 <ol>
-  <li>{% trans "Navigate into the parent folder containing the folder. Hover your mouse over the folder and click on the \"Share\" icon that appears." %}</li>
-  <li>{% trans "A pop-up window will appear with all the share options. Click the \"Upload Link\" tab on the left panel. Then click \"Generate\" button to create a link. You can use password to protect your link." %}</li>
+  <li>{% blocktrans %}Navigate into the parent folder containing the folder. Hover your mouse over the folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Upload Link" tab on the left panel. Then click "Generate" button to create a link. You can use password to protect your link.{% endblocktrans %}</li>
   <li>{% trans "Copy the link to email, instant messaging client or any other tool to send it to others." %}</li>
 </ol>
 <h4>{% trans "Sharing libraries or folders" %}</h4>
@@ -59,11 +59,11 @@
 </ul>
 <p>{% trans "To share a library or folder to a user or group:" %}</p>
 <ol>
-  <li>{% trans "Hover your mouse over the library or folder and click on the \"Share\" icon that appears." %}</li>
-  <li>{% trans "A pop-up window will appear with all the share options. Click the \"Share to user\" or \"Share to group\" tab on the left panel. Enter the user name or group name to share to. Then click \"Submit\"." %}</li>
+  <li>{% blocktrans %}Hover your mouse over the library or folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Share to user" or "Share to group" tab on the left panel. Enter the user name or group name to share to. Then click "Submit".{% endblocktrans %}</li>
 </ol>
-<p>{% trans "After you share a folder or library to a user, the user can see it by clicking the \"Shared\" tab on the left panel in Seafile web app. If you share to a group, the group members can only see the shared folder or library by navigating into the group." %}</p>
-<p>{% trans "To share a library to the entire organization: In Seafile web app, click the \"Organization\" tab on the left panel. Click \"Add Library\" button. In the drop-down menu, you may choose sharing an existing library or creating a new library and share it." %}</p>
+<p>{% blocktrans %}After you share a folder or library to a user, the user can see it by clicking the "Shared" tab on the left panel in Seafile web app. If you share to a group, the group members can only see the shared folder or library by navigating into the group.{% endblocktrans %}</p>
+<p>{% blocktrans %}To share a library to the entire organization: In Seafile web app, click the "Organization" tab on the left panel. Click "Add Library" button. In the drop-down menu, you may choose sharing an existing library or creating a new library and share it.{% endblocktrans %}</p>
 <h4>{% trans "Internal links" %}</h4>
 <p>{% trans "Only logged in users who have share permissions to file or folder can access this link. It is used for internal file sharing. It's a convenient way for passing files among team members who has asscess to a common library. You may just copy the link and paste it into an email or IM software." %}</p>
 {% endblock %}

@@ -9,9 +9,9 @@
 <ol>
     <li>{% trans "A blank line matches no files." %}</li>
     <li>{% trans "A line starting with # serves as a comment." %}</li>
-    <li>{% trans "Seafile supports wildcards in the pattern. For example, \"foo/*\" matches \"foo/1\" and \"foo/hello\". \"foo/?\" matches \"foo/1\" but not \"foo/hello\". Note that the wildcard character * recursively matches all the paths under a folder. For instance, \"foo/*.html\" matches \"foo/a.html\" and \"foo/templates/b.html\"." %}</li>
-    <li>{% trans "If the pattern ends with a slash, it would only match a folder. In other words, \"foo/\" will match a folder \"foo\" and paths underneath it, but will not match a regular file or a symbolic link \"foo\"." %}</li>
-    <li>{% trans "If a pattern doesn't end with a slash or a wildcard, it would not match a folder. For example, \"foo\" can only match regular file \"foo\" or a symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under it." %}</li>
+    <li>{% blocktrans %}Seafile supports wildcards in the pattern. For example, "foo/*" matches "foo/1" and "foo/hello". "foo/?" matches "foo/1" but not "foo/hello". Note that the wildcard character * recursively matches all the paths under a folder. For instance, "foo/*.html" matches "foo/a.html" and "foo/templates/b.html".{% endblocktrans %}</li>
+    <li>{% blocktrans %}If the pattern ends with a slash, it would only match a folder. In other words, "foo/" will match a folder "foo" and paths underneath it, but will not match a regular file or a symbolic link "foo".{% endblocktrans %}</li>
+    <li>{% blocktrans %}If a pattern doesn't end with a slash or a wildcard, it would not match a folder. For example, "foo" can only match regular file "foo" or a symbolic link; while "foo/" and "foo*" match a folder and paths under it.{% endblocktrans %}</li>
 </ol>
 </p>
 

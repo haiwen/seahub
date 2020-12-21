@@ -4,12 +4,12 @@
 {% block help_con %}
 
 <h3 class="hd">{% trans "Library history and snapshots" %}</h3>
-<p>{% trans "Seafile tracks modification history for the entire library. Whenever a file operation applies to a library (file update, file deletion etc.), Seafile creates a \"snapshot\" of the previous state of the library. The snapshot contains the complete file and folder structure of the library." %}</p>
-<p>{% trans "In some cases, you have changed a lot of files in the library, and find that you want to revert all these changes. Restoring many files to their old versions can be tedious. At this time, the snapshot feature becomes very handy. You can restore the entire library to any point in the past. All the files in the library will be restored to that point of time, all at once. It works like a \"time machine\" for the library." %}</p>
+<p>{% blocktrans %}Seafile tracks modification history for the entire library. Whenever a file operation applies to a library (file update, file deletion etc.), Seafile creates a "snapshot" of the previous state of the library. The snapshot contains the complete file and folder structure of the library.{% endblocktrans %}</p>
+<p>{% blocktrans %}In some cases, you have changed a lot of files in the library, and find that you want to revert all these changes. Restoring many files to their old versions can be tedious. At this time, the snapshot feature becomes very handy. You can restore the entire library to any point in the past. All the files in the library will be restored to that point of time, all at once. It works like a "time machine" for the library.{% endblocktrans %}</p>
 <p>{% trans "To view library history and snapshots:" %}</p>
 <ul>
-  <li>{% trans "In Seafile Web App, navigate into the root folder of a library. Click the \"History\" icon in the library navigation top bar. All the change record of the library will be displayed in a list." %}</li>
-  <li>{% trans "Click the \"view snapshot\" link on any modification record. You'll see the library state at the point of time." %}</li>
+  <li>{% blocktrans %}In Seafile Web App, navigate into the root folder of a library. Click the "History" icon in the library navigation top bar. All the change record of the library will be displayed in a list.{% endblocktrans %}</li>
+  <li>{% blocktrans %}Click the "view snapshot" link on any modification record. You'll see the library state at the point of time.{% endblocktrans %}</li>
   <li>{% trans "In the snapshot view, you can download or restore any file or folder. If you're the library's owner, you can restore the enitre library to this point of time." %}</li>
 </ul>
 <p>{% blocktrans %}You can configure the retention period of library history: <a href="{{ SITE_ROOT }}help/setting_library_history/">setting history retention period</a>.{% endblocktrans %}</p>

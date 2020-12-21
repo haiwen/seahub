@@ -3,12 +3,12 @@
 
 {% block help_con %}
 <h3 class="hd">{% trans "Managing files with libraries" %}</h3>
-<p>{% trans "Seafile uses \"libraries\" to organize your files. A library is a top level container for a set of files and folders. You can create a library for each project you work on, or each document type you want to save in Seafile. A library works mostly like a top level folder. But it also has some special properties:" %}</p>
+<p>{% blocktrans %}Seafile uses "libraries" to organize your files. A library is a top level container for a set of files and folders. You can create a library for each project you work on, or each document type you want to save in Seafile. A library works mostly like a top level folder. But it also has some special properties:{% endblocktrans %}</p>
 <ul>
   <li>{% trans "Each library keeps its own file modification history. There is no global file modification history across all libraries." %}</li>
   <li>{% trans "Each library can be synced to desktop clients separately. You can choose which libraries to be synced." %}</li>
 </ul>
-<p>{% trans "When you log into Seafile's web app for the first time, Seafile automatically creates a default library named \"My Library\" for you. You can also create more libraries. Here is what it looks like when you've created a few libraries." %}</p>
+<p>{% blocktrans %}When you log into Seafile's web app for the first time, Seafile automatically creates a default library named "My Library" for you. You can also create more libraries. Here is what it looks like when you've created a few libraries.{% endblocktrans %}</p>
 <p><img src="{{ MEDIA_URL }}img/help/libraries_view.png" alt="" /></p>
 <p>{% trans "You can navigate into a library and manage your files and folders. You can upload, download, rename, move, copy and delete files." %}</p>
 <p><img src="{{ MEDIA_URL }}img/help/library_browse.png" alt="" /></p>
