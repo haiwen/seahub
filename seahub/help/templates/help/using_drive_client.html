@@ -4,8 +4,8 @@
 {% block help_con %}
 
 <h3 class="hd">{% trans "Using Seafile drive client" %}</h3>
-<p>{% trans "After installing Drive client with the instructions on the <a href=\"https://www.seafile.com/en/download/\">download page</a>, you can double click the \"SeaDrive\" app icon on your desktop to start the Drive client." %}</p>
-<p>{% trans "You'll be asked to choose a drive letter for the virtual drive. By default, \"S:\" will be used." %}</p>
+<p>{% blocktrans %}After installing Drive client with the instructions on the <a href="https://www.seafile.com/en/download/">download page</a>, you can double click the "SeaDrive" app icon on your desktop to start the Drive client.{% endblocktrans %}</p>
+<p>{% blocktrans %}You'll be asked to choose a drive letter for the virtual drive. By default, "S:" will be used.{% endblocktrans %}</p>
 <p>{% trans "Then you'll be asked to log into your Seafile server." %}</p>
 
 <img src="{{ MEDIA_URL }}img/help/drive-login.png" alt="Drive client login" />
@@ -44,7 +44,7 @@
 </table>
 
 <h4>{% trans "Special States" %}</h4>
-<p>{% trans "For files that are already synced to local computer, they may be in 3 other special states, besides the normal \"synced\" state." %}</p>
+<p>{% blocktrans %}For files that are already synced to local computer, they may be in 3 other special states, besides the normal "synced" state. {% endblocktrans %}</p>
 <table>
   <thead>
     <tr>

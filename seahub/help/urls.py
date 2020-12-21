@@ -40,6 +40,4 @@ urlpatterns = [
     url(r'^drive_client_for_linux/$', TemplateView.as_view(template_name="help/drive_client_for_linux.html") ),
 
     url(r'^encrypted_libraries/$', TemplateView.as_view(template_name="help/encrypted_libraries.html") ),
-
-    url(r'^faq/$', TemplateView.as_view(template_name="help/faq.html") ),
 ]
