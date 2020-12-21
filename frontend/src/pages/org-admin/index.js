@@ -23,9 +23,6 @@ import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
 
-import '../../assets/css/fa-solid.css';
-import '../../assets/css/fa-regular.css';
-import '../../assets/css/fontawesome.css';
 import '../../css/layout.css';
 import '../../css/toolbar.css';
 

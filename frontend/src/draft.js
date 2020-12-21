@@ -23,9 +23,6 @@ import { Range, Editor } from 'slate';
 import ModalPortal from './components/modal-portal';
 import reviewComment from './models/review-comment.js';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/dirent-detail.css';

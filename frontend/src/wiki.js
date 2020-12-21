@@ -12,9 +12,6 @@ import treeHelper from './components/tree-view/tree-helper';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/side-panel.css';
 import './css/wiki.css';
