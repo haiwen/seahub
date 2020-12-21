@@ -8,9 +8,6 @@ import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
 import { seafileAPI } from './utils/seafile-api';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/file-history.css';
 import './css/toolbar.css';
