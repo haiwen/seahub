@@ -27,14 +27,14 @@ def token_view(request, token):
     """
     i = get_object_or_404(Invitation, token=token)
     if i.is_expired():
-        raise Http404
+        return render(request, 'invitations/token_view.html', {'message': _('Invitation has expired!'), })
 
     if request.method == 'GET':
         try:
             user = User.objects.get(email=i.accepter)
             if user.is_active is True:
                 # user is active return exist
-                messages.error(request, _('A user with this email already exists.'))
+                return render(request, 'invitations/token_view.html', {'message': _('A user with this email already exists.'), })
         except User.DoesNotExist:
             pass
 
