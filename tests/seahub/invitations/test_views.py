@@ -31,7 +31,7 @@ class TokenViewTest(BaseTestCase):
         self.iv.expire_time = timezone.now()
         self.iv.save()
         resp = self.client.get(self.url)
-        self.assertEqual(404, resp.status_code)
+        self.assertEqual(410, resp.status_code)
 
     def test_post(self):
         assert self.iv.accept_time is None

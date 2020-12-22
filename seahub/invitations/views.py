@@ -27,7 +27,9 @@ def token_view(request, token):
     """
     i = get_object_or_404(Invitation, token=token)
     if i.is_expired():
-        return render(request, 'invitations/token_view.html', {'message': _('Invitation has expired!'), })
+        response = render(request, 'invitations/token_view.html', {'message': _('Invitation has expired!'), })
+        response.status_code = 410
+        return response
 
     if request.method == 'GET':
         try:
