@@ -41,11 +41,11 @@ body {
   color: #808080;
 }
 /* for mobile */
-.seafile-comment {
+.file-view-body .seafile-comment {
   width: 100%;
 }
 @media (min-width: 768px) {
-  .seafile-comment {
+  .file-view-body .seafile-comment {
     width: 29%;
   }
 }
