@@ -4,7 +4,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import Loading from '../../components/loading';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
@@ -49,7 +49,11 @@ class ReadmeDialog extends React.Component {
         <ModalBody>
           {this.state.isLoading ?
             <Loading />:
-            <MarkdownViewer markdownContent={this.state.readmeContent} showTOC={false}/>
+            <MarkdownViewer
+              markdownContent={this.state.readmeContent}
+              showTOC={false}
+              scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+            />
           }
         </ModalBody>
         <ModalFooter>

@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL } from './utils/constants';
+import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL, mediaUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -332,11 +332,13 @@ class Draft extends React.Component {
       <div>
         {this.state.isShowDiff ?
           <DiffViewer
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftOriginContent}
             ref="diffViewer"
           /> :
           <DiffViewer
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             newMarkdownContent={this.state.draftContent}
             oldMarkdownContent={this.state.draftContent}
             ref="diffViewer"

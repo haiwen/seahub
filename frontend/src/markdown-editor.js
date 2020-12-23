@@ -3,7 +3,7 @@ import { SeafileEditor } from '@seafile/seafile-editor/dist/editor/editor.js';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { gettext, isDocs } from './utils/constants';
+import { gettext, isDocs, mediaUrl } from './utils/constants';
 import io from 'socket.io-client';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
@@ -803,6 +803,7 @@ class MarkdownEditor extends React.Component {
             toggleLockFile={this.toggleLockFile}
           />
           <SeafileEditor
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             fileInfo={this.state.fileInfo}
             markdownContent={this.state.markdownContent}
             editorApi={editorApi}

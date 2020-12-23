@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
-import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot, sharedToken } from '../utils/constants';
+import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot, sharedToken, mediaUrl } from '../utils/constants';
 import { Card, CardTitle, CardText } from 'reactstrap';
 import Loading from './loading';
 import { seafileAPI } from '../utils/seafile-api';
@@ -196,6 +196,7 @@ class WikiMarkdownViewer extends React.Component {
       return (
         <MarkdownViewer
           showTOC={isTOCShow}
+          scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
           markdownContent={this.props.markdownContent}
           activeTitleIndex={this.state.activeTitleIndex}
           onContentRendered={this.onContentRendered}
@@ -207,6 +208,7 @@ class WikiMarkdownViewer extends React.Component {
     return (
       <MarkdownViewer
         showTOC={isTOCShow}
+        scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
         markdownContent={this.props.markdownContent}
         activeTitleIndex={this.state.activeTitleIndex}
         onContentRendered={this.onContentRendered}
