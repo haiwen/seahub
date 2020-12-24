@@ -14,6 +14,8 @@
   "unordered_list": "Unordered List",
   "check_list_item": "Check List Item",
   "insert_image": "Insert Image",
+  "insert_formula": "Insert Formula",
+  "formula": "Formula",
   "insert_file": "Insert File",
   "code": "Inline Code",
   "code_block": "Code Block",
@@ -147,6 +149,7 @@
       "issue": "Heading level issue"
     }
   },
+  "Shortcut_help": "Shortcut help",
   "userHelp": {
     "title": "Keyboard shortcuts",
     "userHelpData": [

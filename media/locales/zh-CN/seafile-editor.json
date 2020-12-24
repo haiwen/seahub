@@ -14,6 +14,8 @@
   "unordered_list": "无序列表",
   "check_list_item": "任务列表",
   "insert_image": "插入图片",
+  "insert_formula": "插入公式",
+  "formula": "公式",
   "insert_file": "插入文件",
   "code": "行内代码",
   "code_block": "代码块",
@@ -144,6 +146,7 @@
       "issue": "标题级别不规范"
     }
   },
+  "Shortcut_help": "快捷键帮助",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData": [
