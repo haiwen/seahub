@@ -73,8 +73,8 @@ class EditorApi {
     return this.serviceUrl + '/library/' + this.repoID + '/' + libName + path;
   }
 
-  _getImageURL(fileName) {
-    const url = this.serviceUrl + '/lib/' + repoID + '/file/images/auto-upload/' + fileName + '?raw=1';
+  _getImageURL(fileName, dirPath) {
+    const url = this.serviceUrl + '/lib/' + repoID + '/file' + dirPath + '/images/auto-upload/' + fileName + '?raw=1';
     return url;
   }
 
@@ -87,7 +87,7 @@ class EditorApi {
         const blob = imageFile.slice(0, -1, 'image/png');
         const newFile = new File([blob], name, {type: 'image/png'});
         const formData = new FormData();
-        formData.append('parent_dir', '/');
+        formData.append('parent_dir', dirPath);
         formData.append('relative_path', 'images/auto-upload');
         formData.append('file', newFile);
         return {uploadLink, formData};
@@ -96,7 +96,7 @@ class EditorApi {
       }).then ((res) => {
         let resArr = res.data[0];
         let filename = resArr.name;
-        return this._getImageURL(filename);
+        return this._getImageURL(filename, dirPath);
       })
     );
   }
@@ -108,12 +108,12 @@ class EditorApi {
         const name = getImageFileNameWithTimestamp();
         const newFile = new File([imageFile], name, {type: imageFile.type});
         const formData = new FormData();
-        formData.append('parent_dir', '/');
+        formData.append('parent_dir', dirPath);
         formData.append('relative_path', 'images/auto-upload');
         formData.append('file', newFile);
         return seafileAPI.uploadImage(uploadLink, formData);
       }).then ((res) => {
-        return this._getImageURL(res.data[0].name);
+        return this._getImageURL(res.data[0].name, dirPath);
       })
     );
   }
