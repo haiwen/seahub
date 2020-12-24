@@ -246,9 +246,6 @@ def to_python_boolean(string):
         return False
     raise ValueError("Invalid boolean value: '%s'" % string)
 
-def is_seafile_pro():
-    return any(['seahub_extra' in app for app in INSTALLED_APPS])
-
 def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
     avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
     return {
