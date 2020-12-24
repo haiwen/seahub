@@ -74,6 +74,9 @@ class EditorApi {
   }
 
   _getImageURL(fileName, dirPath) {
+    if (dirPath === '/') {
+      dirPath = '';
+    }
     const url = this.serviceUrl + '/lib/' + repoID + '/file' + dirPath + '/images/auto-upload/' + fileName + '?raw=1';
     return url;
   }
