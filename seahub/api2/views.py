@@ -34,7 +34,7 @@ from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
 from .utils import get_diff_details, to_python_boolean, \
     api_error, get_file_size, prepare_starred_files, is_web_request, \
-    get_groups, api_group_check, get_timestamp, json_response, is_seafile_pro
+    get_groups, api_group_check, get_timestamp, json_response
 from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
