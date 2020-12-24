@@ -9,7 +9,7 @@
     <ul>
       <li>{% trans "Share links: Any user who has access to the links can access the files or folders pointed by the link. No login is required." %}</li>
       <li>{% trans "Upload links: Any user who has access to the links can upload files to the folder pointed by the link. No login is required." %}</li>
-      <li>{% trans "Internal links: Only logged in users who have share permissions to file or folder can access this link. Used for internal file sharing." %}</li>
+      <li>{% trans "Internal links: Only logged in users who have read permission to the file or folder can access this link. Used for internal file sharing." %}</li>
     </ul>
   </li>
   <li>{% trans "Sharing libraries or folders: used for setting access permissions to a library or folder for specific users or groups. Users have to log in to access the folders." %}</li>
@@ -19,51 +19,51 @@
 <p>{% trans "You can also set access permission to share links. There are three types of permissions:" %}</p>
 <ul>
   <li>{% trans "Preview and Download: the file or files in the folder can be downloaded. If the type of files can be previewd in web browser, they can also be viewed online (e.g. Office files)." %}</li>
-  <li>{% trans "Preview only: the file or files in the folder can only be viewed in web browser, but cannot be downloaded. This is useful for sharing confidential data. For Office files, water mark can also be added to file preview. The water mark includes the link owner's name." %}</li>
-  <li>{% blocktrans %}Edit on cloud and download: Similar to "Preview and Download", but if the file type can be edited in web browser (e.g. Office files), any user who has access to the link is allowed to edit it.{% endblocktrans %}</li>
+  <li>{% trans "Preview only: the file or files in the folder can only be viewed in web browser, but cannot be downloaded. This is useful for sharing confidential data." %}</li>
+  <li>{% blocktrans %}Edit on cloud and download: Similar to "Preview and Download", but if the file can be edited in web browser (e.g. an Office file), any user who has access to the link is allowed to edit it.{% endblocktrans %}</li>
 </ul>
 <p>{% trans "To create a share link in Seafile web app:" %}</p>
 <ol>
   <li>{% blocktrans %}Navigate into the parent folder containing the file or folder. Hover your mouse over the file or folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
-  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Share Link" tab on the left panel. Then click "Generate" button to create a link. You can use password, expiration time and permission to protect your link.{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with share options. Click the "Share Link" tab on the left panel. Then click "Generate" button to create a link. You can use password, expiration time and permission to protect your link.{% endblocktrans %}</li>
   <li>{% trans "Copy the link to email, instant messaging client or any other tool to send it to others." %}</li>
 </ol>
-<p>{% trans "You can also create download links from the desktop clients." %}</p>
+<p>{% trans "You can also create share links from the desktop clients." %}</p>
 <ul>
-  <li>{% blocktrans %}If the library is synced, double click the library in the main Window of Seafile client. The local folder of that library will be opened. Right click on the file or folder that you want to create a link to. In the pop-up menu, choose "Seafile" then "Create share link".{% endblocktrans %}</li>
-  <li>{% trans "If the library is not synced, double click the library in the main Window of Seafile client. The cloud file browser window will be opened. You can create a link to file or folder in the cloud file browser." %}</li>
+  <li>{% blocktrans %}If the library is synced, double click the library in the main window of Seafile client. The local folder of that library will be opened. Right click on the file or folder that you want to create a link to. In the pop-up menu, choose "Seafile" then "Create share link".{% endblocktrans %}</li>
+  <li>{% trans "If the library is not synced, double click the library in the main window of Seafile client. The cloud file browser window will be opened, and you can create a link to a file or folder in it." %}</li>
 </ul>
 <h4>{% trans "Creating upload links to folders" %}</h4>
-<p>{% trans "You can use upload links to collect files from others. You can only create upload link for a folder. Others cannot see the files in the folder. They can only upload files to the link." %}</p>
+<p>{% trans "You can use upload links to collect files from others. You can only create upload links for folders. Others cannot see the files in the folders. They can only upload files to them." %}</p>
 <p>{% trans "To create an upload link in Seafile web app:" %}</p>
 <ol>
   <li>{% blocktrans %}Navigate into the parent folder containing the folder. Hover your mouse over the folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
-  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Upload Link" tab on the left panel. Then click "Generate" button to create a link. You can use password to protect your link.{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with share options. Click the "Upload Link" tab on the left panel. Then click "Generate" button to create a link. You can use password to protect your link.{% endblocktrans %}</li>
   <li>{% trans "Copy the link to email, instant messaging client or any other tool to send it to others." %}</li>
 </ol>
 <h4>{% trans "Sharing libraries or folders" %}</h4>
 <p>{% trans "You can share a library or folder to other registered Seafile users. The shared library or folder can be accessed by others with the web app and Seafile clients." %}</p>
-<p>{% trans "You can choose the member range of the share:" %}</p>
+<p>{% trans "You can choose the range of the share:" %}</p>
 <ul>
-  <li>{% trans "Share to user: You can share to one or more users, one by one." %}</li>
-  <li>{% trans "Share to group: You can share to a group of users. See how to manage groups in group sharing." %}</li>
+  <li>{% trans "Share to user: You can share to one or more users." %}</li>
+  <li>{% trans "Share to group: You can share to a group." %}</li>
   <li>{% trans "Share to organization: If you're using a private server, sometimes it's useful to share to all members on the server (the entire organization)." %}</li>
 </ul>
 <p>{% trans "You can also set permission on the share:" %}</p>
 <ul>
-  <li>{% trans "Read-Write share: the share members can do any update operations on the folder, including update file, upload file, delete, rename." %}</li>
-  <li>{% trans "Read-only share: the share members can only read the folder and files in it. They cannot do any update to the folder and files." %}</li>
-  <li>{% trans "Admin: the share members can re-share the library to other users. This permission can only be set when sharing a library, but not a folder." %}</li>
-  <li>{% trans "Online Read-Write: users can view and edit the file online via web browser. File cannot be downloaded. (New in 7.0)" %}</li>
-  <li>{% trans "Online Read-only: users can view the file online via web browser. File cannot be downloaded. (New in 7.0)" %}</li>
+  <li>{% trans "Read-Write: users can read, write, upload, download and sync files." %}</li>
+  <li>{% trans "Read-only: users can read, download and sync files." %}</li>
+  <li>{% trans "Admin: besides the write permission, users can also share the library." %}</li>
+  <li>{% trans "Online Read-Write: users can view and edit files online via a web browser. The files cannot be downloaded." %}</li>
+  <li>{% trans "Online Read-only: users can only view files online via a web browser. The files cannot be downloaded." %}</li>
 </ul>
 <p>{% trans "To share a library or folder to a user or group:" %}</p>
 <ol>
   <li>{% blocktrans %}Hover your mouse over the library or folder and click on the "Share" icon that appears.{% endblocktrans %}</li>
-  <li>{% blocktrans %}A pop-up window will appear with all the share options. Click the "Share to user" or "Share to group" tab on the left panel. Enter the user name or group name to share to. Then click "Submit".{% endblocktrans %}</li>
+  <li>{% blocktrans %}A pop-up window will appear with share options. Click the "Share to user" or "Share to group" tab on the left panel. Select the user or group. Then click "Submit".{% endblocktrans %}</li>
 </ol>
-<p>{% blocktrans %}After you share a folder or library to a user, the user can see it by clicking the "Shared" tab on the left panel in Seafile web app. If you share to a group, the group members can only see the shared folder or library by navigating into the group.{% endblocktrans %}</p>
-<p>{% blocktrans %}To share a library to the entire organization: In Seafile web app, click the "Organization" tab on the left panel. Click "Add Library" button. In the drop-down menu, you may choose sharing an existing library or creating a new library and share it.{% endblocktrans %}</p>
+<p>{% blocktrans %}After you share a library or folder to a user, the user can see it by clicking the "Shared with me" tab on the left panel in Seafile web app. If you share it to a group, the group members can only see it by navigating into the group.{% endblocktrans %}</p>
+<p>{% blocktrans %}To share a library to the entire organization: In Seafile web app, click the "Shared with all" tab on the left panel. Then click the "Add Library" button. In the drop-down menu, you can choose to share an existing library or create a new library and share it.{% endblocktrans %}</p>
 <h4>{% trans "Internal links" %}</h4>
-<p>{% trans "Only logged in users who have share permissions to file or folder can access this link. It is used for internal file sharing. It's a convenient way for passing files among team members who has asscess to a common library. You may just copy the link and paste it into an email or IM software." %}</p>
+<p>{% trans "Only logged in users who have read permission to the file or folder can access this link. It is used for internal file sharing. It's a convenient way for sharing files among team members who have access to a common library. You may just copy the link and paste it into an email or IM software." %}</p>
 {% endblock %}
