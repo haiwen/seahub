@@ -8,8 +8,7 @@
   <li>{% trans "There should be a common file sharing space for the organization. The folder hierarchy should map the department hierarchy. There will be separate folder or space assigned to each department." %}</li>
   <li>{% trans "The sharing space should be owned and managed by the organization, but not individual employees. So that the ownership of files doesn't have to be changed when an employee leaves the organization." %}</li>
 </ul>
-<p>{% blocktrans %}Before version 6.3.0, files in Seafile can only be owned by individual users and shared to other users or groups. In 6.3.0, we introduce the "Departments" feature to meet the above two use cases. This new feature works side by side with the existing sharing features. {% endblocktrans %}</p>
-<p>{% trans "We'll introduce this feature from 3 different perspectives:" %}</p>
+<p>{% blocktrans %}The "Departments" feature is designed to meet the above two use cases. We'll introduce this feature from 3 different perspectives:{% endblocktrans %}</p>
 <ul>
   <li><a href="#sys-admin">{% trans "System admin" %}</a></li>
   <li><a href="#dept-admin">{% trans "Department admin" %}</a></li>
@@ -25,10 +24,10 @@
 <h5 id="manage-department-hierarchy-and-members">{% trans "Manage department hierarchy and members" %}</h5>
 <p>{% trans "The system admin can set up the department hierarchy in two ways: manual setup or import from Active Directory." %}</p>
 <p>{% trans "The system admin can create any number of top level departments and create any levels of sub-departments under each department. And each level of department can be populated with members. The system admin can set the role of each member to 'member' or 'admin'. We'll introduce how a department admin can manage department later." %}</p>
-<p>{% blocktrans %}The system admin can also import the hierarchy from OUs (Organizational Units) in AD. Please refer to "Sync OU to departments" section in <a href="https://manual.seafile.com/deploy_pro/ldap_group_sync.html" target="_blank">LDAP Group Sync documentation</a>. Each OU will be imported as a department. And the sub-OUs under an OU will be imported as sub-departments. Department libraries can be automatically created in the import process. {% endblocktrans %}</p>
+<p>{% trans "The system admin can also import the hierarchy from OUs (Organizational Units) in AD. Each OU will be imported as a department. And the sub-OUs under an OU will be imported as sub-departments. Department libraries can be automatically created in the import process." %}</p>
 <p>{% trans "System admin can also delete a department after all the sub-departments and libraries are deleted." %}</p>
 <h5 id="assign-storage-quota-for-departments">{% trans "Assign storage quota for departments" %}</h5>
-<p>{% trans "The file libraries created inside a department are owned by the department itself, not by any individual user. So the system admin can assign storage quota to a department. The total size of all the libraries in a department cannot exceed the storage quota. <strong>Please note that the quota of sub-department doesn't depend on the quota of its parent department.</strong>" %}</p>
+<p>{% trans "The libraries created inside a department are owned by the department itself, not by any individual user. So the system admin can assign storage quota to a department. The total size of all the libraries in a department cannot exceed the storage quota. <strong>Please note that the quota of sub-department doesn't depend on the quota of its parent department.</strong>" %}</p>
 <h5 id="create-and-manage-shared-libraries-in-departments">{% trans "Create and manage shared libraries in departments" %}</h5>
 <p>{% trans "Department libraries can be created by the system admin or department admin. There is also an option to control whether individual users can share libraries to a department." %}</p>
 <p>{% trans "All the above operations can be done in the system admin interface. See the below screenshot for information." %}</p>
@@ -40,8 +39,6 @@
   <li>{% trans "Manage members in his/her department" %}</li>
   <li>{% trans "Manage libraries in his/her department" %}</li>
 </ul>
-<p>{% blocktrans %}For the end users, a department can be accessed as a special type of group. Each department is presented to its members as a group. A user can not only access to the libraries in the department he/she belongs to, but also the libraries in the parent departments of his/her department. For example, if John is in the "EMEA" sub-department under the "Sales" department, and "Sales" is a sub-department under the company "ACME", John can then access to the groups "EMEA", "Sales" and "ACME". The groups for departments are marked with a "building" icon next to its name. See the screenshot below for details.{% endblocktrans %}</p>
-<p><img src="{{ MEDIA_URL }}img/help/dept_admin.png" alt="" /></p>
 <p>{% trans "If a user is the admin of a department, he/she can add or delete members in the department. Any users registered in the system can be added as member of the department. But if the departments are imported from AD, the changes to membership will be overwritten on the next sync with AD." %}</p>
 <p><img src="{{ MEDIA_URL }}img/help/dept_admin_manage_members.png" alt=""></p>
 <p>{% trans "Department admin can manage the libraries in the department. The supported operations are:" %}</p>

@@ -7,8 +7,6 @@
 
 <p>{% trans "SeaDrive 2.0 (and future versions) is redesigned with deeper integration to Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall Update for Windows 10) and later versions. We recommend Windows 10 users to upgrade to SeaDrive 2.0 for more native virtual drive experience." %}</p>
 
-<p>{% trans "SeaDrive 2.0 is currently in Beta status. We'll mark it stable after we have more user feedbacks." %}</p>
-
 <h4>{% trans "Install and access the Virtual Drive" %}</h4>
 <p>{% trans "You can download SeaDrive 2.0 from official Seafile website. After installation and logging into your Seafile account, SeaDrive will start downloading library and file lists from the server (just as in SeaDrive 1.0.x). It may take some time, depending on the number of files available in your seafile account. The download is progressive, so in the mean time you can already access some files in the virtual drive." %}</p>
 <p>{% blocktrans %}To access the virtual drive, just open Windows file explorer. There is a "seadrive" node in the navigation pane of Windows file explorer.{% endblocktrans %}</p>
@@ -18,7 +16,7 @@
 <h4>{% trans "Accessing files in the Virtual Drive" %}</h4>
 <p>{% trans "Libraries are grouped into 4 categories in the virtual drive: My Libraries, Shared with me, Shared with groups and Shared with all." %}</p>
 <p>{% trans "As you can see, the file status icons is more integrated into Windows file explorer. The icons are a bit different form version 1.0." %}</p>
-<p>{% blocktrans %}Files in the virtual are created as "placeholders" in the local file system. They may be in 3 states:{% endblocktrans %}</p>
+<p>{% blocktrans %}Files in the virtual drive are created as "placeholders" in the local file system. They may be in 3 states:{% endblocktrans %}</p>
 <ul>
   <li>{% trans "<b>Placeholder file</b>: An empty representation of the file and can only be opened when there is network connection." %}</li>
   <li>{% trans "<b>Full file</b>: The file has been downloaded and saved locally. Download is automatic when a placeholder file is opened for the first time. These files are available whenever you open SeaDrive regardless to network connections. The operating system may decide to clear a full file when more disk space is needed." %}</li>
