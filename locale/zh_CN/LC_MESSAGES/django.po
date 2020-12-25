@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 16:27+0800\n"
-"PO-Revision-Date: 2020-12-25 08:33+0000\n"
-"Last-Translator: llj <lingjun.li1@gmail.com>\n"
+"POT-Creation-Date: 2020-12-25 18:22+0800\n"
+"PO-Revision-Date: 2020-12-25 10:22+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1678,13 +1678,6 @@ msgstr "安全和加密"
 msgid "How to use encrypted libraries"
 msgstr "怎样使用加密资料库"
 
-#: seahub/help/templates/help/base.html:81
-#: seahub/help/templates/help/base.html:83
-#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
-#: seahub/help/templates/help/using_drive_client.html:79
-msgid "FAQ"
-msgstr "常见问题"
-
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
 "Once you and your friends sync a shared file library onto your computers, "
@@ -2042,6 +2035,11 @@ msgid ""
 "disallow the application from automatically downloading files in the future."
 msgstr "有时后台的应用程序可能会尝试下载虚拟盘中的文件（如杀毒软件），操作系统将会通知您，您可以选择取消下载或禁止应用程序自动下载文件。"
 
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
+#: seahub/help/templates/help/using_drive_client.html:79
+msgid "FAQ"
+msgstr "常见问题"
+
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
 msgstr "我可以创建、删除、重命名资料库吗？"
@@ -2155,13 +2153,7 @@ msgid ""
 "text password is not stored on the client disk too."
 msgstr "如果你通过桌面客户端来同步资料库，密码并不会被发送到服务器。桌面客户端只在本地加密解密文件内容，密码明文也不会存储在本地磁盘上。"
 
-#: seahub/help/templates/help/encrypted_libraries.html:21
-msgid ""
-"iOS client supports client side encryption since version 2.1.6. Android "
-"client support it since version 2.1.0."
-msgstr "ISO 客户端从 2.1.6 版本、Android 客户端从 2.1.0 版本支持客户端加密。"
-
-#: seahub/help/templates/help/encrypted_libraries.html:25
+#: seahub/help/templates/help/encrypted_libraries.html:24
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."

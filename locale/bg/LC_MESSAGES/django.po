@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 16:27+0800\n"
-"PO-Revision-Date: 2020-12-25 08:26+0000\n"
+"POT-Creation-Date: 2020-12-25 18:22+0800\n"
+"PO-Revision-Date: 2020-12-25 10:22+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/haiwen/seahub/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -1670,13 +1670,6 @@ msgstr ""
 msgid "How to use encrypted libraries"
 msgstr ""
 
-#: seahub/help/templates/help/base.html:81
-#: seahub/help/templates/help/base.html:83
-#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
-#: seahub/help/templates/help/using_drive_client.html:79
-msgid "FAQ"
-msgstr ""
-
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
 "Once you and your friends sync a shared file library onto your computers, "
@@ -2034,6 +2027,11 @@ msgid ""
 "disallow the application from automatically downloading files in the future."
 msgstr ""
 
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
+#: seahub/help/templates/help/using_drive_client.html:79
+msgid "FAQ"
+msgstr ""
+
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
 msgstr ""
@@ -2147,13 +2145,7 @@ msgid ""
 "text password is not stored on the client disk too."
 msgstr ""
 
-#: seahub/help/templates/help/encrypted_libraries.html:21
-msgid ""
-"iOS client supports client side encryption since version 2.1.6. Android "
-"client support it since version 2.1.0."
-msgstr ""
-
-#: seahub/help/templates/help/encrypted_libraries.html:25
+#: seahub/help/templates/help/encrypted_libraries.html:24
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."
