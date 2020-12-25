@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 16:27+0800\n"
-"PO-Revision-Date: 2020-12-21 07:08+0000\n"
+"POT-Creation-Date: 2020-12-25 18:22+0800\n"
+"PO-Revision-Date: 2020-12-25 10:19+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -2900,7 +2900,7 @@ msgstr "群组共享"
 #: frontend/src/components/main-side-nav.js:221
 #: frontend/src/components/main-side-nav.js:223
 msgid "Shared from other servers"
-msgstr "其他服务器共享给我的"
+msgstr "其他服务器共享"
 
 #: frontend/src/components/main-side-nav.js:230
 msgid "Tools"
