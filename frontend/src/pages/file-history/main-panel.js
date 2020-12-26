@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
+import { mediaUrl } from '../../utils/constants';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 
 require('@seafile/seafile-editor/dist/editor/code-highlight-package');
@@ -34,6 +35,7 @@ class MainPanel extends React.Component {
                 (<Loading />) :
                 (<div className="diff-view article">
                   <DiffViewer
+                    scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                     newMarkdownContent={this.props.newMarkdownContent}
                     oldMarkdownContent={this.props.oldMarkdownContent}
                   />

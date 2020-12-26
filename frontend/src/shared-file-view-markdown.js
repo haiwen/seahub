@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { serviceURL } from './utils/constants';
+import { serviceURL, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
@@ -77,6 +77,7 @@ class FileContent extends React.Component {
       <div className="shared-file-view-body">
         <div className="md-view">
           <MarkdownViewer
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             markdownContent={this.state.markdownContent}
             showTOC={false}
             serviceURL={serviceURL}
