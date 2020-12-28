@@ -193,6 +193,11 @@
           "Escape_table": "Escape table"
         }
       }, {
+        "shortcutType": "Formula shortcuts",
+        "shortcutData": {
+          "Insert_Formula": "Insert Formula"
+        }
+      }, {
         "shortcutType":"Inline shortcuts",
         "shortcutData": {
           "Bold": "Bold",
