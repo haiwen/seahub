@@ -148,6 +148,11 @@ $('#info-bar .close').on('click', function() {
     var lang_context = $('#lang-context'),
         lang_selector = $('#lang-context-selector');
 
+    // for pages without '#lang', such as 'help' pages
+    if ($('#lang').length == 0) {
+        return;
+    }
+
     lang_context.parent().css({'position':'relative'});
 
     if ($('#header').is(':visible')) { // for login page
