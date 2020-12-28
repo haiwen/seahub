@@ -190,6 +190,11 @@
           "Escape_table": "退出表格"
         }
       }, {
+        "shortcutType": "公式快捷键",
+        "shortcutData": {
+          "Insert_Formula": "插入公式"
+        }
+      }, {
         "shortcutType":"行级操作",
         "shortcutData": {
           "Bold": "粗体",
