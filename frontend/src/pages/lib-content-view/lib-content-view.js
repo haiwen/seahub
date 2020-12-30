@@ -1176,8 +1176,7 @@ class LibContentView extends React.Component {
 
         let isWeChat = Utils.isWeChat();
         if (!isWeChat) {
-          let newWindow = window.open('about:blank');
-          newWindow.location.href = url;
+          window.open(url);
         } else {
           location.href = url;
         }
@@ -1535,9 +1534,8 @@ class LibContentView extends React.Component {
           this.showColumnMarkdownFile(node.path);
         }
       } else {
-        const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
-        w.location.href = url;
+        window.open(url);
       }
     }
   }
@@ -1546,6 +1544,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       if (res.data.size === 0) {
+        // loading of asynchronously obtained data may be blocked
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
         w.location.href = url;

@@ -340,6 +340,9 @@ class MultipleDirOperationToolbar extends React.Component {
                   <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
                 </Fragment>
               )}
+              {userPerm === 'r' && (
+                <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+              )}
               {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'r') && (
                 <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
               )}
