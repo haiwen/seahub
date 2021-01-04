@@ -1274,3 +1274,11 @@ CREATE TABLE IF NOT EXISTS `ocm_share_received` (
   KEY `ocm_share_received_repo_id_9e77a1b9` (`repo_id`),
   KEY `ocm_share_received_provider_id_60c873e0` (`provider_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `repo_auto_delete` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `repo_id` varchar(36) NOT NULL,
+    `days` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `repo_id` (`repo_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
