@@ -413,6 +413,9 @@ ENABLE_TERMS_AND_CONDITIONS = False
 # Enable or disable sharing to all groups
 ENABLE_SHARE_TO_ALL_GROUPS = False
 
+# Enable or disable sharing to departments
+ENABLE_SHARE_TO_DEPARTMENT = False
+
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 

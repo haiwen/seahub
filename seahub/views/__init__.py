@@ -1211,4 +1211,5 @@ def react_fake_view(request, **kwargs):
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
         'enable_ocm': ENABLE_OCM,
         'ocm_remote_servers': OCM_REMOTE_SERVERS,
+        'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
     })

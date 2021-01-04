@@ -8,6 +8,7 @@
 {% block extra_script %}
 <script type="text/javascript">
   Object.assign(app.pageOptions, {
+    enableShareToDepartment: {% if enable_share_to_department %} true {% else %} false {% endif %},
     shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
     shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
     shareLinkExpireDaysMax: {{ share_link_expire_days_max }},

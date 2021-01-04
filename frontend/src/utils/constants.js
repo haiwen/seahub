@@ -53,6 +53,7 @@ export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpire
 export const uploadLinkExpireDaysMin = window.app.pageOptions.uploadLinkExpireDaysMin;
 export const uploadLinkExpireDaysMax = window.app.pageOptions.uploadLinkExpireDaysMax;
 export const uploadLinkExpireDaysDefault = window.app.pageOptions.uploadLinkExpireDaysDefault;
+export const enableShareToDepartment = window.app.pageOptions.enableShareToDepartment;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
