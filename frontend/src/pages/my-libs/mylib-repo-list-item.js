@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, storages } from '../../utils/constants';
@@ -113,6 +113,12 @@ class MylibRepoListItem extends React.Component {
         break;
       default:
         break;
+    }
+  }
+
+  visitRepo = () => {
+    if (!this.state.isRenaming && this.props.repo.repo_name) {
+      navigate(this.repoURL);
     }
   }
 
@@ -308,12 +314,12 @@ class MylibRepoListItem extends React.Component {
     let repo = this.props.repo;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
-    let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
+    let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td>
+        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td onClick={this.visitRepo}>
           {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}
