@@ -171,8 +171,10 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.preventDefault();
-
     const dirent = this.props.dirent;
+    if (this.state.isRenameing) {
+      return;
+    }
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
@@ -664,19 +666,19 @@ class DirentListItem extends React.Component {
     ); 
     const mobileItem = (
       <tr>
-        <td>
+        <td onClick={this.onItemClick}>
           <div className="dir-icon">
             {dirent.encoded_thumbnail_src ?
-              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
               <img src={iconUrl} width="24" alt="" />
             }
             {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
         </td>
-        <td>
+        <td onClick={this.onItemClick}>
           {this.state.isRenameing ?
             <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-            <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+            <a href={dirent.type === 'dir' ? dirHref : fileHref}>{dirent.name}</a>
           }
           <br />
           {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
