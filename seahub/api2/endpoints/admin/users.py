@@ -700,43 +700,128 @@ class AdminSearchUser(APIView):
 
         users = []
 
-        # search user from ccnet db
-        users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
+        page = request.GET.get('page', '')
+        per_page = request.GET.get('per_page', '')
 
-        # search user from ccnet ldapimport
-        users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
+        if not page or not per_page:
 
-        ccnet_user_emails = [u.email for u in users]
+            # search user from ccnet db
+            users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
 
-        # get institution for user from ccnet
-        if getattr(settings, 'MULTI_INSTITUTION', False):
-            user_institution_dict = {}
-            profiles = Profile.objects.filter(user__in=ccnet_user_emails)
-            for profile in profiles:
+            # search user from ccnet ldapimport
+            users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
+
+            ccnet_user_emails = [u.email for u in users]
+
+            # get institution for user from ccnet
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                user_institution_dict = {}
+                profiles = Profile.objects.filter(user__in=ccnet_user_emails)
+                for profile in profiles:
+                    email = profile.user
+                    if email not in user_institution_dict:
+                        user_institution_dict[email] = profile.institution
+
+                for user in users:
+                    user.institution = user_institution_dict.get(user.email, '')
+
+            # search user from profile
+            searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
+                                                       Q(contact_email__icontains=query_str))[:10]
+
+            for profile in searched_profile:
                 email = profile.user
-                if email not in user_institution_dict:
-                    user_institution_dict[email] = profile.institution
+                institution = profile.institution
 
-            for user in users:
-                user.institution = user_institution_dict.get(user.email, '')
+                # remove duplicate emails
+                if email not in ccnet_user_emails:
+                    try:
+                        # get is_staff and is_active info
+                        user = User.objects.get(email=email)
+                        user.institution = institution
+                        users.append(user)
+                    except User.DoesNotExist:
+                        continue
 
-        # search user from profile
-        searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) |
-                Q(contact_email__icontains=query_str))[:10]
+            page_info = {
+                'has_next_page': '',
+                'current_page': ''
+            }
 
-        for profile in searched_profile:
-            email = profile.user
-            institution = profile.institution
+        else:
 
-            # remove duplicate emails
-            if email not in ccnet_user_emails:
-                try:
-                    # get is_staff and is_active info
-                    user = User.objects.get(email=email)
-                    user.institution = institution
-                    users.append(user)
-                except User.DoesNotExist:
-                    continue
+            try:
+                page = int(page)
+                per_page = int(per_page)
+            except ValueError:
+                page = 1
+                per_page = 25
+
+            start = (page - 1) * per_page
+            limit = per_page + 1
+
+            # search user from ccnet db
+            users += ccnet_api.search_emailusers('DB', query_str, start, limit)
+
+            # search user from ccnet ldapimport
+            users += ccnet_api.search_emailusers('LDAP', query_str, start, limit)
+
+            ccnet_user_emails = [u.email for u in users]
+
+            # get institution for user from ccnet
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                user_institution_dict = {}
+                profiles = Profile.objects.filter(user__in=ccnet_user_emails)
+                for profile in profiles:
+                    email = profile.user
+                    if email not in user_institution_dict:
+                        user_institution_dict[email] = profile.institution
+
+                for user in users:
+                    user.institution = user_institution_dict.get(user.email, '')
+
+            # search user from profile
+            searched_profile = []
+            if len(users) < per_page:
+                if len(users) != 0:
+                    searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
+                                                               Q(contact_email__icontains=query_str))[0:limit-len(users)]
+                    cache.set('admin-search-user-searched_page', page, 60 * 60)
+                    cache.set('admin-search-user-searched_profile_count', limit-len(users)-1, 60 * 60)
+                else:
+                    searched_page = cache.get('admin-search-user-searched_page')
+                    searched_profile_count = cache.get('admin-search-user-searched_profile_count')
+
+                    new_start = (page - searched_page - 1) * per_page + searched_profile_count
+                    searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
+                                                               Q(contact_email__icontains=query_str))[new_start:new_start+limit]
+
+            if len(ccnet_user_emails) + len(searched_profile) > per_page:
+                has_next_page = True
+            else:
+                has_next_page = False
+
+            page_info = {
+                'has_next_page': has_next_page,
+                'current_page': page
+            }
+
+            for profile in searched_profile:
+                email = profile.user
+                institution = profile.institution
+
+                # remove duplicate emails
+                if email not in ccnet_user_emails:
+                    try:
+                        # get is_staff and is_active info
+                        user = User.objects.get(email=email)
+                        user.institution = institution
+                        users.append(user)
+                    except User.DoesNotExist:
+                        continue
+
+            if len(users) > per_page:
+                users = users[:per_page]
 
         data = []
         for user in users:
@@ -772,7 +857,10 @@ class AdminSearchUser(APIView):
 
             data.append(info)
 
-        result = {'user_list': data}
+        result = {
+            'user_list': data,
+            'page_info': page_info,
+        }
         return Response(result)
 
 
