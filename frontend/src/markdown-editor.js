@@ -730,8 +730,14 @@ class MarkdownEditor extends React.Component {
   }
 
   getInsertLink = (repoID, filePath) => {
-    const innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     const fileName = Utils.getFileName(filePath);
+    if (fileName.endsWith('png') || fileName.endsWith('PNG') || fileName.endsWith('jpg') || fileName.endsWith('JPG') || fileName.endsWith('gif') || fileName.endsWith('GIF')) {
+      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {  
+        window.richMarkdownEditor.addLink(fileName, res.data, true);
+      });
+      return;
+    }
+    let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     window.richMarkdownEditor.addLink(fileName, innerURL);
   }
 
