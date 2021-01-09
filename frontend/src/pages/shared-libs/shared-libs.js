@@ -3,7 +3,7 @@ import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -194,6 +194,10 @@ class Item extends Component {
     }
   }
 
+  visitRepo = () => {
+    navigate(this.repoURL);
+  }
+
   render() {
     if (this.state.unshared) {
       return null;
@@ -208,7 +212,7 @@ class Item extends Component {
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
-    let shareRepoUrl =`${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
+    let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
     const desktopItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
@@ -249,8 +253,8 @@ class Item extends Component {
     const mobileItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td>
+          <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td onClick={this.visitRepo}>
             <Link to={shareRepoUrl}>{data.repo_name}</Link><br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>

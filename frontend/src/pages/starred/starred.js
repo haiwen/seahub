@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -170,6 +170,15 @@ class Item extends Component {
     });
   }
 
+  visitItem = () => {
+    const data = this.props.data;
+    if (data.is_dir) {
+      navigate(data.dirent_view_url);
+    } else {
+      window.open(data.dirent_view_url);
+    }
+  }
+
   render() {
 
     if (this.state.unstarred) {
@@ -206,14 +215,14 @@ class Item extends Component {
 
     const mobileItem = (
       <tr>
-        <td className="text-center">
+        <td className="text-center" onClick={this.visitItem}>
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
               <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
-        <td>
+        <td onClick={this.visitItem}>
           { data.is_dir ?
             <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
             <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
