@@ -26,6 +26,7 @@ const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
 let dirPath = Utils.getDirName(filePath);
+const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'gif', 'GIF'];
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -731,8 +732,9 @@ class MarkdownEditor extends React.Component {
 
   getInsertLink = (repoID, filePath) => {
     const fileName = Utils.getFileName(filePath);
-    if (fileName.endsWith('png') || fileName.endsWith('PNG') || fileName.endsWith('jpg') || fileName.endsWith('JPG') || fileName.endsWith('gif') || fileName.endsWith('GIF')) {
-      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {  
+    const suffix = fileName.slice(fileName.indexOf('.') + 1);
+    if (IMAGE_SUFFIXES.includes(suffix)) {
+       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {  
         window.richMarkdownEditor.addLink(fileName, res.data, true);
       });
       return;
