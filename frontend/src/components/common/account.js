@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, gettext, appAvatarURL } from '../../utils/constants';
+import { siteRoot, gettext, appAvatarURL, logoutUrl } from '../../utils/constants';
 import toaster from '../toast';
 
 const propTypes = {
@@ -164,7 +164,7 @@ class Account extends Component {
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
             {this.renderMenu()}
-            <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
+            <a href={logoutUrl} className="item">{gettext('Log out')}</a>
           </div>
         </div>
       </div>
