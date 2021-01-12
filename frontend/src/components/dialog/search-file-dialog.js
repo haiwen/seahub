@@ -18,9 +18,10 @@ class SearchFileDialog extends React.Component {
     super(props);
     this.state = {
       isSubmitDisabled: true,
+      isSubmitting: false,
       q: '',
       errMessage: '',
-      fileList: []
+      fileList: null
     };
   }
 
@@ -29,15 +30,23 @@ class SearchFileDialog extends React.Component {
     if (!q.trim()) {
       return false;
     }
+    this.setState({
+      isSubmitDisabled: true,
+      isSubmitting: true
+    });
     seafileAPI.searchFileInRepo(this.props.repoID, q).then((res) => {
       this.setState({
         fileList: res.data.data,
-        errMessage: ''
+        errMessage: '',
+        isSubmitDisabled: false,
+        isSubmitting: false
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({
-        errMessage: errMessage
+        errMessage: errMessage,
+        isSubmitDisabled: false,
+        isSubmitting: false
       });
     });
   }
@@ -62,41 +71,44 @@ class SearchFileDialog extends React.Component {
   }
 
   render() {
-    const { q, errMessage, fileList, isSubmitDisabled } = this.state;
+    const { q, errMessage, fileList, isSubmitDisabled, isSubmitting } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Search')}</ModalHeader>
         <ModalBody style={{height: '250px'}} className="o-auto">
           <div className="d-flex">
             <input className="form-control mr-2" type="text" placeholder={gettext('Search files in this library')} value={q} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
-            <button type="submit" className="btn btn-primary flex-shrink-0" onClick={this.searchFile} disabled={isSubmitDisabled}>{gettext('Search')}</button>
+            <button type="submit" className={`btn btn-primary flex-shrink-0 ${isSubmitting ? 'btn-loading' : ''}`} onClick={this.searchFile} disabled={isSubmitDisabled}>{gettext('Search')}</button>
           </div>
           {errMessage && <Alert color="danger" className="mt-2">{errMessage}</Alert>}
           <div className="mt-2">
-            {fileList.length > 0 &&
-            <table className="table-hover">
-              <thead>
-                <tr>
-                  <th width="8%"></th>
-                  <th width="42%">{gettext('Name')}</th>
-                  <th width="25%">{gettext('Size')}</th>
-                  <th width="25%">{gettext('Last Update')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fileList.map((item, index) => {
-                  return (
-                    <FileItem
-                      key={index}
-                      item={item}
-                      repoID={this.props.repoID}
-                      repoName={this.props.repoName}
-                    />
-                  );
-                })
-                }
-              </tbody>
-            </table>}
+            {!fileList ?
+              null :
+              fileList.length == 0 ?
+                <p>{gettext('No result')}</p> :
+                <table className="table-hover">
+                  <thead>
+                    <tr>
+                      <th width="8%"></th>
+                      <th width="42%">{gettext('Name')}</th>
+                      <th width="25%">{gettext('Size')}</th>
+                      <th width="25%">{gettext('Last Update')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fileList.map((item, index) => {
+                      return (
+                        <FileItem
+                          key={index}
+                          item={item}
+                          repoID={this.props.repoID}
+                          repoName={this.props.repoName}
+                        />
+                      );
+                    })
+                    }
+                  </tbody>
+                </table>}
           </div>
         </ModalBody>
         <ModalFooter>
