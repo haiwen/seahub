@@ -322,7 +322,7 @@ class User(object):
         return True
 
     def save(self):
-        emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
+        emailuser = ccnet_api.get_emailuser_with_import(self.username)
         if emailuser:
             if not hasattr(self, 'password'):
                 self.set_unusable_password()
@@ -538,7 +538,7 @@ class User(object):
 class AuthBackend(object):
 
     def get_user_with_import(self, username):
-        emailuser = seaserv.get_emailuser_with_import(username)
+        emailuser = ccnet_api.get_emailuser_with_import(username)
         if not emailuser:
             raise User.DoesNotExist('User matching query does not exits.')
 
