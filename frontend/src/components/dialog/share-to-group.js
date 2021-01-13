@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import Select from 'react-select';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext, isPro, enableShareToDepartment } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -135,6 +135,12 @@ class ShareToGroup extends React.Component {
     seafileAPI.shareableGroups().then((res) => {
       let options = [];
       for (let i = 0 ; i < res.data.length; i++) {
+        const item = res.data[i];
+        if (item.parent_group_id != 0) { // it's a department
+          if (!enableShareToDepartment) {
+            continue;
+          }
+        }
         let obj = {};
         obj.value = res.data[i].name;
         obj.id = res.data[i].id;
