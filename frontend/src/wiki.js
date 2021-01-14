@@ -293,7 +293,7 @@ class Wiki extends Component {
   }
 
   onMenuClick = () => {
-    this.setState({closeSideBar: !this.state.closeSideBar,});
+    this.setState({closeSideBar: !this.state.closeSideBar});
   }
 
   onMainNavBarClick = (nodePath) => {
