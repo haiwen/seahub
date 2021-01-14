@@ -74,7 +74,6 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-
     if (hasIndex) {
       this.loadIndexNode();
     } else {
@@ -363,6 +362,7 @@ class Wiki extends Component {
         if (node.path !== this.state.path) {
           this.showFile(node.path);
         }
+        this.onCloseSide();
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(node.path);
