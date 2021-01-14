@@ -68,7 +68,9 @@ class MylibRepoMenu extends React.Component {
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
-    operations.push('Old Files Auto Delete');
+    if (isPro) {
+      operations.push('Old Files Auto Delete');
+    }
     return operations;
   }
 
