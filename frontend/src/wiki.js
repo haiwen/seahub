@@ -74,7 +74,6 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-
     if (hasIndex) {
       this.loadIndexNode();
     } else {
@@ -293,7 +292,7 @@ class Wiki extends Component {
   }
 
   onMenuClick = () => {
-    this.setState({closeSideBar: !this.state.closeSideBar,});
+    this.setState({closeSideBar: !this.state.closeSideBar});
   }
 
   onMainNavBarClick = (nodePath) => {
@@ -363,6 +362,7 @@ class Wiki extends Component {
         if (node.path !== this.state.path) {
           this.showFile(node.path);
         }
+        this.onCloseSide();
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(node.path);
