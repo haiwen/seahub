@@ -322,8 +322,8 @@ class User(object):
         return True
 
     def save(self):
-        emailuser = ccnet_api.get_emailuser_with_import(self.username)
-        if emailuser:
+        emailuser = ccnet_api.get_emailuser(self.username)
+        if emailuser and emailuser.source.lower() in ("db", "ldapimport"):
             if not hasattr(self, 'password'):
                 self.set_unusable_password()
 
