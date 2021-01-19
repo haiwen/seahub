@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
+import Paginator from '../../../components/paginator';
 import toaster from '../../../components/toast';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
@@ -20,6 +21,12 @@ class SearchUsers extends Component {
       loading: true,
       errorMsg: '',
       userList: [],
+      pageInfo: {
+        has_next_page: false,
+        current_page: 1,
+      },
+      currentPage: 1,
+      perPage: 25,
       hasUserSelected: false,
       selectedUserList: [],
       isAllUsersSelected: false,
@@ -30,9 +37,12 @@ class SearchUsers extends Component {
 
   componentDidMount () {
     let params = (new URL(document.location)).searchParams;
+    const { currentPage, perPage } = this.state;
     this.setState({
-      query: params.get('query') || ''
-    }, this.getItems);
+      query: params.get('query') || '',
+      currentPage: parseInt(params.get('page') || currentPage),
+      perPage: parseInt(params.get('per_page') || perPage)
+    }, () => {this.getItems(this.state.currentPage);});
   }
 
   toggleBatchSetQuotaDialog = () => {
@@ -101,17 +111,26 @@ class SearchUsers extends Component {
     }
   }
 
-  getItems = () => {
-    seafileAPI.sysAdminSearchUsers(this.state.query.trim()).then(res => {
+  getItems = (page) => {
+    seafileAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
       this.setState({
         userList: res.data.user_list,
-        loading: false
+        loading: false,
+        pageInfo: res.data.page_info
       });
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
+    });
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getItems(1);
     });
   }
 
@@ -243,6 +262,14 @@ class SearchUsers extends Component {
     });
   }
 
+  getPreviousPageList = () => {
+    this.getItems(this.state.pageInfo.current_page - 1);
+  }
+
+  getNextPageList = () => {
+    this.getItems(this.state.pageInfo.current_page + 1);
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
     const {
@@ -317,6 +344,16 @@ class SearchUsers extends Component {
             confirmBtnText={gettext('Delete')}
             toggleDialog={this.toggleBatchDeleteUserDialog}
           />
+        }
+        {this.state.pageInfo &&
+        <Paginator
+          gotoPreviousPage={this.getPreviousPageList}
+          gotoNextPage={this.getNextPageList}
+          currentPage={this.state.pageInfo.current_page}
+          hasNextPage={this.state.pageInfo.has_next_page}
+          curPerPage={this.state.perPage}
+          resetPerPage={this.resetPerPage}
+        />
         }
       </Fragment>
     );
