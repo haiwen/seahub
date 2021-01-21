@@ -34,7 +34,7 @@ from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
 from .utils import get_diff_details, to_python_boolean, \
     api_error, get_file_size, prepare_starred_files, is_web_request, \
-    get_groups, api_group_check, get_timestamp, json_response, is_seafile_pro
+    get_groups, api_group_check, get_timestamp, json_response
 from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
@@ -72,6 +72,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
+from seahub.utils.file_types import IMAGE
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
@@ -424,6 +425,7 @@ class Search(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+
         if not HAS_FILE_SEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -600,6 +602,16 @@ class Search(APIView):
                 e['repo_type'] = repo_type_map[repo_id]
             else:
                 e['repo_type'] = ''
+
+            e['thumbnail_url'] = ''
+            filetype, fileext = get_file_type_and_ext(e.get('name', ''))
+
+            if filetype == IMAGE:
+                thumbnail_url = reverse('api2-thumbnail',
+                                        args=[e.get('repo_id', '')],
+                                        request=request)
+                params = '?p={}&size={}'.format(quote(e.get('fullpath', '').encode('utf-8')), 72)
+                e['thumbnail_url'] = thumbnail_url + params
 
         has_more = True if total > current_page * per_page else False
         return Response({"total":total, "results":results, "has_more":has_more})
@@ -5037,7 +5049,7 @@ class OfficeGenerateView(APIView):
         return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 class ThumbnailView(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 

@@ -178,6 +178,7 @@ class Search extends Component {
       items[i]['is_dir'] = data[i].is_dir;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
+      items[i]['thumbnail_url'] = data[i].thumbnail_url;
     }
     return items;
   }
