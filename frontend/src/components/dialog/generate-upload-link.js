@@ -10,6 +10,7 @@ import UploadLink from '../../models/upload-link';
 import toaster from '../toast';
 import SendLink from '../send-link';
 import DateTimePicker from '../date-and-time-picker';
+import SharedLink from '../shared-link';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -264,9 +265,12 @@ class GenerateUploadLink extends React.Component {
           <Form className="mb-4">
             <FormGroup>
               <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
-              <dd className="d-flex">
-                <span>{sharedUploadInfo.link}</span>
-                <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
+              <dd>
+                <SharedLink
+                  link={sharedUploadInfo.link}
+                  linkExpired={sharedUploadInfo.is_expired}
+                  copyLink={this.onCopyUploadLink}
+                />
               </dd>
             </FormGroup>
             {sharedUploadInfo.expire_date && (

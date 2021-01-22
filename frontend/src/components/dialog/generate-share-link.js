@@ -12,6 +12,7 @@ import toaster from '../toast';
 import Loading from '../loading';
 import SendLink from '../send-link';
 import DateTimePicker from '../date-and-time-picker';
+import SharedLink from '../shared-link';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -370,23 +371,23 @@ class GenerateShareLink extends React.Component {
           <Form className="mb-4">
             <FormGroup className="mb-0">
               <dt className="text-secondary font-weight-normal">{gettext('Link:')}</dt>
-              <dd className="d-flex">
-                <span>{sharedLinkInfo.link}</span>{' '}
-                {sharedLinkInfo.is_expired ?
-                  <span className="err-message">({gettext('Expired')})</span> :
-                  <span className="far fa-copy action-icon" onClick={this.onCopySharedLink}></span>
-                }
+              <dd>
+                <SharedLink
+                  link={sharedLinkInfo.link}
+                  linkExpired={sharedLinkInfo.is_expired}
+                  copyLink={this.onCopySharedLink}
+                />
               </dd>
             </FormGroup>
             {!sharedLinkInfo.is_dir && sharedLinkInfo.permissions.can_download &&(  //just for file
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Direct Download Link:')}</dt>
-                <dd className="d-flex">
-                  <span>{sharedLinkInfo.link}?dl=1</span>{' '}
-                  {sharedLinkInfo.is_expired ?
-                    <span className="err-message">({gettext('Expired')})</span> :
-                    <span className="far fa-copy action-icon" onClick={this.onCopyDownloadLink}></span>
-                  }
+                <dd>
+                  <SharedLink
+                    link={`${sharedLinkInfo.link}?dl=1`}
+                    linkExpired={sharedLinkInfo.is_expired}
+                    copyLink={this.onCopyDownloadLink}
+                  />
                 </dd>
               </FormGroup>
             )}
