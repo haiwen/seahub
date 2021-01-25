@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../i18n-seafile-editor';
 import { gettext, repoID, slug, serviceURL, isPublicWiki, siteRoot, sharedToken, mediaUrl } from '../utils/constants';
 import { Card, CardTitle, CardText } from 'reactstrap';
 import Loading from './loading';
@@ -194,25 +196,29 @@ class WikiMarkdownViewer extends React.Component {
     }
     if (this.props.isWiki) {
       return (
+        <I18nextProvider i18n={i18n}>
+          <MarkdownViewer
+            showTOC={isTOCShow}
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+            markdownContent={this.props.markdownContent}
+            activeTitleIndex={this.state.activeTitleIndex}
+            onContentRendered={this.onContentRendered}
+            modifyValueBeforeRender={this.modifyValueBeforeRender}
+          />
+        </I18nextProvider>
+      );
+    }
+
+    return (
+      <I18nextProvider i18n={i18n}>
         <MarkdownViewer
           showTOC={isTOCShow}
           scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
           markdownContent={this.props.markdownContent}
           activeTitleIndex={this.state.activeTitleIndex}
           onContentRendered={this.onContentRendered}
-          modifyValueBeforeRender={this.modifyValueBeforeRender}
         />
-      );
-    }
-
-    return (
-      <MarkdownViewer
-        showTOC={isTOCShow}
-        scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-        markdownContent={this.props.markdownContent}
-        activeTitleIndex={this.state.activeTitleIndex}
-        onContentRendered={this.onContentRendered}
-      />
+      </I18nextProvider>
     );
   }
 

@@ -228,3 +228,7 @@ img[src=""] {
   text-decoration: underline;
   color:#eb8205;
 }
+
+.wiki-main-panel .wiki-page-content .size-panel-no-content {
+  padding-left: 20px;
+}
