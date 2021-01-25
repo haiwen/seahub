@@ -135,7 +135,7 @@
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-{% render_bundle 'commons' %}
+{% render_bundle 'commons' 'js' %}
 {% render_bundle 'runtime' %}
 {% block extra_script %}{% endblock %}
 </body>
