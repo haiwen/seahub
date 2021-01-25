@@ -14,6 +14,8 @@
   "unordered_list": "Маркированный список",
   "check_list_item": "Проверка элемента списка",
   "insert_image": "Вставить изображение",
+  "insert_formula": "Insert Formula",
+  "formula": "Formula",
   "insert_file": "Вставить файл",
   "code": "Встроенный код",
   "code_block": "Блок кода",
@@ -147,6 +149,7 @@
       "issue": "Проблема уровня заголовка"
     }
   },
+  "Shortcut_help": "Shortcut help",
   "userHelp": {
     "title": "Горячие клавиши",
     "userHelpData": [
@@ -188,6 +191,11 @@
         "shortcutData": {
           "Insert_Table_Row": "Вставить строку таблицы",
           "Escape_table": "Выделить таблицу"
+        }
+      }, {
+        "shortcutType": "Formula shortcuts",
+        "shortcutData": {
+          "Insert_Formula": "Insert Formula"
         }
       }, {
         "shortcutType":"Встроенные горячие клавиши",

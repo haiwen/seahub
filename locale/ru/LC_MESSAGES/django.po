@@ -19,15 +19,15 @@
 # Oleg  Sergeev <djvnsk@ya.ru>, 2017
 # Rekby <timofey.koolin@gmail.com>, 2014
 # Rekby <timofey.koolin@gmail.com>, 2014
-# Vladimir <pash.vld@gmail.com>, 2015-2020
+# Vladimir <pash.vld@gmail.com>, 2015-2021
 # Vladimir <pash.vld@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 18:22+0800\n"
-"PO-Revision-Date: 2020-12-25 10:22+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-01-25 11:37+0800\n"
+"PO-Revision-Date: 2021-01-03 14:52+0000\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,7 +50,7 @@ msgid "Login id can't be empty"
 msgstr "Login ID не может быть пустым"
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:856
+#: seahub/api2/endpoints/admin/users.py:955
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Login ID %s уже существует."
@@ -164,8 +164,8 @@ msgstr "Email %s недействителен."
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:341
-#: seahub/api2/endpoints/dir_shared_items.py:443
+#: seahub/api2/endpoints/dir_shared_items.py:342
+#: seahub/api2/endpoints/dir_shared_items.py:455
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -316,53 +316,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "Добавлен пользователь %(user)s. Но уведомление на email не может быть отправлено, потому что не правильно настроена почтовая служба. "
 
-#: seahub/api2/endpoints/admin/users.py:929
+#: seahub/api2/endpoints/admin/users.py:1028
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Редактирование удалось."
 
-#: seahub/api2/endpoints/admin/users.py:932 seahub/views/sysadmin.py:499
+#: seahub/api2/endpoints/admin/users.py:1031 seahub/views/sysadmin.py:499
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Аккаунт на %s активирован"
 
-#: seahub/api2/endpoints/admin/users.py:937
+#: seahub/api2/endpoints/admin/users.py:1036
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Правка сохранена, письмо на email отправлено."
 
-#: seahub/api2/endpoints/admin/users.py:940
+#: seahub/api2/endpoints/admin/users.py:1039
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Правка сохранена, но отправка письма не удалась. Проверьте настройки электронной почты."
 
-#: seahub/api2/endpoints/admin/users.py:1018 seahub/views/sysadmin.py:540
+#: seahub/api2/endpoints/admin/users.py:1117 seahub/views/sysadmin.py:540
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Пароль на %s был сброшен"
 
-#: seahub/api2/endpoints/admin/users.py:1020 seahub/views/sysadmin.py:565
+#: seahub/api2/endpoints/admin/users.py:1119 seahub/views/sysadmin.py:565
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Пароль успешно изменен на %(passwd)s, сообщение было отправлено %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1024 seahub/views/sysadmin.py:570
+#: seahub/api2/endpoints/admin/users.py:1123 seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Пароль успешно изменен на %(passwd)s, но сообщение не было отправлено %(user)s, пожалуйста, проверьте настройки электронной почты."
 
-#: seahub/api2/endpoints/admin/users.py:1027 seahub/views/sysadmin.py:574
+#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:574
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Пароль успешно изменен на %(passwd)s для пользователя %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1030 seahub/views/sysadmin.py:577
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:577
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -435,13 +435,13 @@ msgstr "Файл заблокирован"
 msgid "Cancel failed"
 msgstr "Не удалось отменить"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:326
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "имя пользователя недействительно."
 
-#: seahub/api2/endpoints/dir_shared_items.py:334
+#: seahub/api2/endpoints/dir_shared_items.py:335
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:180
@@ -817,15 +817,15 @@ msgstr "Пользователь с таким email уже существует
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Этот аккаунт был заблокирован из-за слишком большого числа неудачных попыток входа."
 
-#: seahub/auth/views.py:271
+#: seahub/auth/views.py:279
 msgid "Logged out"
 msgstr "Выйти"
 
-#: seahub/auth/views.py:321
+#: seahub/auth/views.py:329
 msgid "Failed to send email, please contact administrator."
 msgstr "Невозможно отправить сообщение. Пожалуйста, обратитесь к администратору."
 
-#: seahub/auth/views.py:380
+#: seahub/auth/views.py:388
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Не удалось изменить пароль. Обратитесь к администратору службы LDAP."
 
@@ -1749,20 +1749,20 @@ msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr ""
+msgstr "В организации должно быть общее пространство для обмена файлами. Иерархия папок должна отображать иерархию отделов. Каждому отделу будет назначена отдельная папка или место."
 
 #: seahub/help/templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr ""
+msgstr "Совместное пространство должно принадлежать и управляться организацией, а не отдельными сотрудниками. Так что право собственности на файлы не нужно менять, когда сотрудник увольняется из организации."
 
 #: seahub/help/templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "Функция \"Отделы\" предназначена для двух вышеуказанных случаев использования. Мы представим эту функцию с 3 разных точек зрения:"
 
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
@@ -1802,7 +1802,7 @@ msgstr "Создание и управление общими библиотек
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
-msgstr ""
+msgstr "Системный администратор может настроить иерархию отделов двумя способами: вручную или импортировать из Active Directory."
 
 #: seahub/help/templates/help/departments.html:26
 msgid ""
@@ -1811,7 +1811,7 @@ msgid ""
 "department can be populated with members. The system admin can set the role "
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
-msgstr ""
+msgstr "Системный администратор может создавать любое количество отделов верхнего уровня и создавать подотделы любого уровня под каждым отделом. И каждый уровень отдела может быть заполнен членами. Системный администратор может установить роль каждого члена как \"член\" или \"администратор\". Позже мы расскажем, как администратор отдела может управлять отделом."
 
 #: seahub/help/templates/help/departments.html:27
 msgid ""
@@ -1819,13 +1819,13 @@ msgid ""
 "Units) in AD. Each OU will be imported as a department. And the sub-OUs "
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
-msgstr ""
+msgstr "Системный администратор также может импортировать иерархию из ОИ (организационных единиц) в AD. Каждое подразделение будет импортировано как отдел. А суб-ОИ в ОИ будут импортированы как суб-отделы. Библиотеки отделов могут быть автоматически созданы в процессе импорта."
 
 #: seahub/help/templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
-msgstr ""
+msgstr "Системный администратор также может удалить отдел после удаления всех подразделов и библиотек."
 
 #: seahub/help/templates/help/departments.html:30
 msgid ""
@@ -1834,27 +1834,27 @@ msgid ""
 "quota to a department. The total size of all the libraries in a department "
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
-msgstr ""
+msgstr "Библиотеки, созданные внутри отдела, принадлежат самому отделу, а не отдельным пользователям. Таким образом, системный администратор может назначить квоту хранилища отделу. Общий размер всех библиотек в отделе не может превышать квоту хранилища. <strong>Обратите внимание, что квота подотдела не зависит от квоты его родительского отдела.</strong>"
 
 #: seahub/help/templates/help/departments.html:32
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
 "libraries to a department."
-msgstr ""
+msgstr "Библиотеки отделов могут быть созданы системным администратором или администратором отдела. Также есть возможность контролировать, могут ли отдельные пользователи делиться библиотеками с отделом."
 
 #: seahub/help/templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "Все вышеперечисленные операции можно выполнить в интерфейсе системного администратора. Для получения информации смотреть скриншот ниже."
 
 #: seahub/help/templates/help/departments.html:36
 msgid ""
 "As noted above, department admin is a special role assigned by the system "
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
-msgstr ""
+msgstr "Как отмечалось выше, администратор отдела - это особая роль, которую системный администратор назначает некоторым членам отдела. Администраторы отделов могут выполнять следующие операции в отделе после входа в свой аккаунт."
 
 #: seahub/help/templates/help/departments.html:38
 msgid "Access to the libraries of the department"
@@ -1862,11 +1862,11 @@ msgstr "Доступ к библиотекам отдела"
 
 #: seahub/help/templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Управление членами своего отдела"
 
 #: seahub/help/templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Управление библиотеками в своем отделе"
 
 #: seahub/help/templates/help/departments.html:42
 msgid ""
@@ -1874,13 +1874,13 @@ msgid ""
 "the department. Any users registered in the system can be added as member of"
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
-msgstr ""
+msgstr "Если пользователь является администратором отдела, он/она может добавлять или удалять членов отдела. Любые пользователи, зарегистрированные в системе, могут быть добавлены в состав отдела. Но если отделы импортируются из AD, изменения в членстве будут перезаписаны при следующей синхронизации с AD."
 
 #: seahub/help/templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "Администратор отдела может управлять библиотеками в отделе. Поддерживаемые операции:"
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
@@ -1894,7 +1894,7 @@ msgstr "Изменить имя библиотеки"
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "Предоставьте доступ к библиотеке пользователям или группам за пределами этого отдела. Это очень полезно для сотрудничества между отделами."
 
 #: seahub/help/templates/help/departments.html:49
 #, python-format
@@ -1903,7 +1903,7 @@ msgid ""
 "departments in this department. This works like <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
-msgstr ""
+msgstr "Установите детальные разрешения для папок в библиотеках для пользователей или подразделений в этом отделе. <a href=\"%(SITE_ROOT)shelp/folder_permission/\">Это работает как функция разрешения папки</a>."
 
 #: seahub/help/templates/help/departments.html:53
 msgid ""
@@ -1915,11 +1915,11 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "Обычный член отдела может пользоваться отделом как группой. Каждый отдел представлен своим членам как группа. Пользователь может получить доступ не только к библиотекам в отделе, к которому он / она принадлежит, но и к библиотекам в родительских отделах его / ее отдела. Например, если Джон работает в подотделе \"EMEA\" в отделе \"Продажи\", а \"Продажи\" является подотделом компании \"ACME\", Джон может получить доступ к группам \"EMEA\", \"Продажи\" и \"ACME\". Группы отделов отмечены значком \"здание\" рядом с его названием."
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Использование прокси в клиенте Seafile"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1945,7 +1945,7 @@ msgstr "Чтобы изменить настройки прокси-сервер
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 для Windows 10"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1953,11 +1953,11 @@ msgid ""
 "Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
-msgstr ""
+msgstr " SeaDrive 2.0 (и будущие версии) переработан с более глубокой интеграцией с операционной системой Windows 10. Он поддерживает версию Windows 10 1709 (осеннее обновление 2017 г. для Windows 10) и более поздние версии. Мы рекомендуем пользователям Windows 10 перейти на SeaDrive 2.0, чтобы получить дополнительные возможности виртуального диска."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Установка и получение доступа к виртуальному диску"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -1967,41 +1967,41 @@ msgid ""
 "1.0.x). It may take some time, depending on the number of files available in"
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
-msgstr ""
+msgstr "Вы можете скачать SeaDrive 2.0 с официального сайта Seafile. После установки и входа в ваш аккаунт Seafile, SeaDrive начнет загружать библиотеки и списки файлов с сервера (как в SeaDrive 1.0.x). Это может занять некоторое время, в зависимости от количества файлов, доступных в вашем аккаунте seafile. Загрузка происходит постепенно, поэтому вы уже сможете получить доступ к некоторым файлам на виртуальном диске."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "Чтобы получить доступ к виртуальному диску, просто откройте проводник Windows. На панели навигации файлового проводника Windows есть узел \"seadrive\"."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Доступ к файлам на виртуальном диске"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "На виртуальном диске библиотеки сгруппированы в 4 категории: \"Мои библиотеки\", \"Общие со мной, \"Общие с группами\" и \"Общие со всеми\"."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "Как видите, значки состояния файлов теперь интегрированы в проводник Windows. Иконки немного отличаются от версии 1.0."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "Файлы на виртуальном диске создаются как \"заполнители\" в локальной файловой системе. Они могут быть в 3-х состояниях:"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>Файл-заполнитель</b>: пустое представление файла, которое можно открыть только при наличии сетевого подключения."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -2010,13 +2010,13 @@ msgid ""
 "files are available whenever you open SeaDrive regardless to network "
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
-msgstr ""
+msgstr "<b>Полный файл</b>: файл был загружен и сохранен локально. Загрузка происходит автоматически, когда файл-заполнитель открывается в первый раз. Эти файлы доступны всякий раз, когда вы открываете SeaDrive, независимо от сетевых подключений. Операционная система может решить очистить полный файл, когда потребуется больше места на диске."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
-msgstr ""
+msgstr "<b>Закрепленный полный файл</b>: файл был загружен и сохранен локально. Гарантированная доступность оффлайн."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -2025,14 +2025,14 @@ msgid ""
 "Choose \"Always keep on this device\" when you want to pin a file or folder "
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
-msgstr ""
+msgstr "Вы можете контролировать, какие файлы или папки кэшируются локально. Это можно изменить из контекстного меню, щелкнув правой кнопкой мыши файл или папку. Выберите \"Всегда сохранять на этом устройстве\", если хотите закрепить файл или папку локально; выберите \"Освободить место\", если вы хотите очистить кэш для файла или папки."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "В SeaDrive 1.0 кэшированные файлы не обновляются автоматически при обновлении на сервере. В SeaDrive 2.0 полные и закрепленные файлы автоматически синхронизируются с сервером."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
@@ -2044,7 +2044,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "Каждый раз, когда вы открываете файл-заполнитель, операционная система автоматически начинает его скачивание. Если для скачивания файла может потребоваться некоторое время, в проводнике будет отображаться индикатор выполнения, и вы можете отменить скачивание."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -2052,7 +2052,7 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr ""
+msgstr "Иногда фоновое приложение может попытаться загрузить файл на виртуальный диск (например, антивирусное программное обеспечение). Операционная система уведомит вас об этом, и вы можете отменить загрузку или запретить приложению автоматически загружать файлы в будущем."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
@@ -2069,22 +2069,22 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "Да. Когда вы создаете, удаляете или переименовываете папки библиотеки на виртуальном диске, операция будет отражена на сервере. Вы можете создавать, удалять и переименовывать библиотеки только в категории \"Мои библиотеки\". Создание, удаление или переименование библиотек в других категориях игнорируется."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Могу ли я создавать файлы или папки вне папки библиотеки?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "Да. Но файлы, созданные вне папки библиотеки, будут игнорироваться и НЕ синхронизироваться с сервером. Новая папка в папке \"Мои библиотеки\" будет обрабатываться как новая библиотека."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Могу ли я получить доступ к зашифрованным библиотекам?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -2093,11 +2093,11 @@ msgid ""
 "enter the password. Just right click on the SeaDrive icon in the system tray"
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
-msgstr ""
+msgstr "Да. По умолчанию зашифрованные библиотеки не синхронизируются и не отображаются на виртуальном диске. Вам необходимо вручную выбрать, какие зашифрованные библиотеки синхронизировать, и ввести пароль. Просто щелкните правой кнопкой мыши значок SeaDrive в области панели задач и выберите \"Показать зашифрованные библиотеки\". Появится окно, в котором вы можете выбрать синхронизацию или рассинхронизацию зашифрованной библиотеки."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Совместимо ли оно с SeaDrive 1.0?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -2106,11 +2106,11 @@ msgid ""
 "files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
-msgstr ""
+msgstr "SeaDrive 2.0 будет использовать любые существующие аккаунты и их метаданные (хранящиеся в папке C:\\users\\username\\seadrive\\). Но он не будет использовать кэшированные файлы из SeaDrive 1.0. Таким образом, любые локально кэшированные файлы в версии 1.0 не будут доступны в версии 2.0. Вы можете снова запустить SeaDrive 1.0, чтобы загрузить файлы на сервер или скопировать их."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Как очистить кэш?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -2120,7 +2120,7 @@ msgid ""
 " need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
-msgstr ""
+msgstr "Вы можете вручную выбрать, какие папки или файлы следует кэшировать локально. Если вы обнаружите, что папка занимает слишком много места, просто выберите \"Освободить место\" в этой папке, и все кэшированные файлы в этой папке будут очищены. Нет необходимости устанавливать время очистки и ограничение размера кэша, как в SeaDrive 1.0. Поскольку заполнители - это обычные файлы, созданные на вашем локальном диске, размер вашего кэша ограничен только доступным дисковым пространством на вашем компьютере."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2152,7 +2152,7 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
-msgstr ""
+msgstr "Если вы создаете зашифрованную библиотеку из локальной папки с помощью настольного клиента (см. <a href=\"%(SITE_ROOT)shelp/install_sync/\">Синхронизация файлов</a>), пароль не отправляется на сервер."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -2180,7 +2180,7 @@ msgstr "Обратите внимание, что в зашифрованной 
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Блокировка файлов"
 
 #: seahub/help/templates/help/file_locking.html:6
 msgid ""
@@ -2189,23 +2189,23 @@ msgid ""
 "situation nicely with conflict files. But it's often more convenient to lock"
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
-msgstr ""
+msgstr "Когда над файлом работают более одного человека, вероятно, что более одного человека изменят файл примерно в одно и то же время. Seafile прекрасно справляется с этой ситуацией с конфликтными файлами. Но часто бывает удобнее заблокировать файл, когда один человек хочет изменить файл исключительно. Seafile Professional Edition поддерживает блокировку файлов."
 
 #: seahub/help/templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "Блокировка файлов работает как в веб-приложении, так и в настольном клиенте. Мы познакомимся с каждым из них."
 
 #: seahub/help/templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Блокировка файлов в веб-приложении"
 
 #: seahub/help/templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "Чтобы заблокировать файл, вы можете перейти в папку файла в веб-приложении и щелкнуть раскрывающееся меню \"Операции\"."
 
 #: seahub/help/templates/help/file_locking.html:11
 msgid ""
@@ -2213,46 +2213,46 @@ msgid ""
 "the file icon. Moving the mouse on the stop sign, you can see who locks the "
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
-msgstr ""
+msgstr "После того, как файл заблокирован, вы увидите красный \"знак остановки\" в углу значка файла. Перемещая указатель мыши на знак остановки, вы можете увидеть, кто заблокировал файл. И вы также можете разблокировать файл, который заблокирован вами. Но вы не можете разблокировать файлы, заблокированные другими."
 
 #: seahub/help/templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Блокировка файлов в настольном клиенте"
 
 #: seahub/help/templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
-msgstr ""
+msgstr "После синхронизации библиотеки с настольным клиентом вы можете заблокировать / разблокировать файлы в этой библиотеке в проводнике в Windows или Finder в Mac OS."
 
 #: seahub/help/templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "Чтобы заблокировать файл, просто щелкните правой кнопкой мыши синхронизированный файл и выберите \"заблокировать файл\" в меню \"Seafile\"."
 
 #: seahub/help/templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "Если файл заблокирован вами, вы можете увидеть оранжевый \"значок стоп\" на значке файла. Вы можете разблокировать его."
 
 #: seahub/help/templates/help/file_locking.html:19
 msgid ""
 "If a file is locked by other user, you can see a red \"stop sign\" on the "
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
-msgstr ""
+msgstr "Если файл заблокирован другим пользователем, вы можете увидеть красный \"значок стоп\" на значке файла. Файл автоматически становится доступным только для чтения. Вы не можете изменить его, пока он не будет разблокирован."
 
 #: seahub/help/templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "Если библиотека не синхронизирована, вы все равно можете использовать облачный файловый браузер для блокировки и разблокировки файлов в ней."
 
 #: seahub/help/templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Автоматическая блокировка офисных файлов"
 
 #: seahub/help/templates/help/file_locking.html:23
 msgid ""
@@ -2261,19 +2261,19 @@ msgid ""
 "close the file, Seafile automatically unlocks the file. The locking state is"
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
-msgstr ""
+msgstr "После синхронизации библиотеки с настольным клиентом, когда вы открываете файл Microsoft Office внутри библиотеки, Seafile автоматически блокирует файл. Когда вы закрываете файл, Seafile автоматически разблокирует файл. Состояние блокировки распространяется на другие компьютеры, синхронизирующие эту библиотеку. Это предотвращает одновременное редактирование одного и того же файла Office и удобно для совместной работы."
 
 #: seahub/help/templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Подробности о блокировке файлов"
 
 #: seahub/help/templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Вот несколько полезных советов о том, как работает блокировка файлов:"
 
 #: seahub/help/templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "Заблокированный файл может быть разблокирован только пользователем, который его заблокировал."
 
 #: seahub/help/templates/help/file_locking.html:28
 msgid ""
@@ -2281,17 +2281,17 @@ msgid ""
 "But other users can still move, delete or rename the parent folder of a "
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
-msgstr ""
+msgstr "Заблокированный файл не может быть изменен, перемещен, переименован или удален другими пользователями. Но другие пользователи по-прежнему могут перемещать, удалять или переименовывать родительскую папку заблокированного файла. Блокировка файлов предназначена главным образом для предотвращения одновременного редактирования."
 
 #: seahub/help/templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "Когда родительская папка заблокированного файла переименовывается или перемещается внутри той же библиотеки, она остается заблокированной после операции."
 
 #: seahub/help/templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Поиск более старых версий файлов"
 
 #: seahub/help/templates/help/finding_older_version_files.html:7
 msgid ""
@@ -2299,28 +2299,28 @@ msgid ""
 "modified, a new version is created, while the old version is still kept for "
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
-msgstr ""
+msgstr "Seafile отслеживает историю изменений всех файлов. Каждый раз, когда файл изменяется, создается новая версия, а старая версия сохраняется в течение настраиваемого периода. Когда вы хотите получить доступ к более старой версии файла, функция истории файлов становится очень удобной."
 
 #: seahub/help/templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Чтобы перечислить все версии файла:"
 
 #: seahub/help/templates/help/finding_older_version_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the folder containing the file. Move the "
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
-msgstr ""
+msgstr "В веб-приложении Seafile перейдите в папку, содержащую файл. Переместите курсор на строку этого файла. Появится меню операций. Вы можете нажать кнопку \"История\" в этом меню."
 
 #: seahub/help/templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
-msgstr ""
+msgstr "Список всех версий этого файла будет отображаться в порядке времени, от более новой к более старой. В списке также содержится история переименования файла."
 
 #: seahub/help/templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Вы можете скачать, восстановить, просмотреть любую версию файла."
 
 #: seahub/help/templates/help/finding_older_version_files.html:14
 #, python-format
@@ -2328,11 +2328,11 @@ msgid ""
 "You can configure the retention period of file versions: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "Вы можете настроить срок хранения версий файлов: <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">установив срок хранения истории</a>."
 
 #: seahub/help/templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Используйте разрешения папки для детального контроля доступа"
 
 #: seahub/help/templates/help/folder_permission.html:8
 #, python-format
@@ -2342,14 +2342,14 @@ msgid ""
 "described in <a "
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
-msgstr ""
+msgstr "Для общих библиотек или папок вы можете установить разрешения на их подпапки для человека или группы. Доступные разрешения такие же, как и в разделе <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">Совместное использование библиотек</a>. Вот несколько примеров использования:"
 
 #: seahub/help/templates/help/folder_permission.html:10
 msgid ""
 "You shared a library to a group with \"read only\" permission. You also want"
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
-msgstr ""
+msgstr "Вы поделились библиотекой с группой с разрешением \"только чтение\". Вы также хотите разрешить определенному члену группы изменять файлы в одной подпапке. Вы можете предоставить этому человеку разрешение на запись в эту подпапку."
 
 #: seahub/help/templates/help/folder_permission.html:11
 msgid ""
@@ -2357,7 +2357,7 @@ msgid ""
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
-msgstr ""
+msgstr "Вы поделились библиотекой с 3 группами. В этой библиотеке есть 3 подпапки, по одной для каждой группы для загрузки файлов. Однако вы не хотите, чтобы пользователи изменяли файлы, не принадлежащие его / ее группе. Вы можете предоставить разрешение на запись в подпапку только этой группе."
 
 #: seahub/help/templates/help/folder_permission.html:13
 msgid ""
@@ -2365,18 +2365,18 @@ msgid ""
 " others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
-msgstr ""
+msgstr "Разрешения для папок действуют только для библиотек и папок, которыми вы делитесь с другими. Чтобы эффективно установить разрешения папки для ее подпапок, вы должны сначала предоставить общий доступ к родительской библиотеке или папке; в противном случае разрешение на доступ к папке не вступит в силу."
 
 #: seahub/help/templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "Одна из важных целей разработки разрешений для папок - поддержка иерархических разрешений:"
 
 #: seahub/help/templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Подпапки автоматически наследуют права доступа к папке от ее родительской папки."
 
 #: seahub/help/templates/help/folder_permission.html:17
 msgid ""
@@ -2385,11 +2385,11 @@ msgid ""
 "files\" for user A, and you set \"read only\" permission on sub-folder "
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
-msgstr ""
+msgstr "Разрешения, установленные для подпапок, перезаписывают разрешения, установленные для его родительской папки. Например, вы устанавливаете разрешение \"чтение и запись\" для папки \"файлы собрания\" для пользователя A, и вы устанавливаете разрешение \"только чтение\" для подпапки \"файлы собрания / сегодня\" для пользователя A. Затем разрешение пользователя A на \"файлы собрания / сегодня\" \"только для чтения\"."
 
 #: seahub/help/templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Основное использование"
 
 #: seahub/help/templates/help/folder_permission.html:20
 msgid ""
@@ -2397,7 +2397,7 @@ msgid ""
 "file browsing interface, click \"more operations\" button, choose "
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
-msgstr ""
+msgstr "Только владелец библиотеки может устанавливать права доступа к подпапкам. В интерфейсе просмотра файлов нажмите кнопку \"Дополнительные операции\" и выберите \"Разрешения\" в раскрывающемся меню. Во всплывающем окне вы можете увидеть и установить права доступа к этой папке."
 
 #: seahub/help/templates/help/folder_permission.html:21
 msgid ""
@@ -2405,24 +2405,24 @@ msgid ""
 "on the library. Click \"more operations\" button, choose \"Folder "
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
-msgstr ""
+msgstr "Если вы хотите увидеть все разрешения для папок, установленные в библиотеке, наведите указатель мыши на библиотеку. Нажмите кнопку \"Дополнительные операции\" и в раскрывающемся меню выберите \"Разрешения для папки\". Во всплывающем окне вы можете увидеть и установить права доступа к папке в этой библиотеке."
 
 #: seahub/help/templates/help/folder_permission.html:22
 msgid ""
 "When other users navigate into a folder, there will be a small \"eye\" icon "
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
-msgstr ""
+msgstr "Когда другие пользователи переходят в папку, рядом с подпапками \"только для чтения\" появляется маленький значок \"глаз\". Когда пользователь переходит в эту подпапку, он / она не сможет добавлять / изменять / удалять файлы."
 
 #: seahub/help/templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
-msgstr ""
+msgstr "Если папка \"только для чтения\" синхронизируется с ПК с настольным приложением Seafile, изменения в папке \"только для чтения\" не будут загружены в облако."
 
 #: seahub/help/templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Дополнительно: приоритет между разными разрешениями"
 
 #: seahub/help/templates/help/folder_permission.html:27
 msgid ""
@@ -2431,7 +2431,7 @@ msgid ""
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
-msgstr ""
+msgstr "Разрешения папки имеют более высокий приоритет, чем разрешения, установленные для общего доступа. Например, если вы предоставили доступ к библиотеке пользователю A с разрешением \"чтение и запись\", а также установили разрешение \"только чтение\" для подпапки этой библиотеки. Тогда пользователь A имеет доступ \"только для чтения\" к подпапке, тогда как он / она имеет доступ на \"чтение и запись\" ко всем другим подпапкам и файлам."
 
 #: seahub/help/templates/help/folder_permission.html:28
 msgid ""
@@ -2439,17 +2439,17 @@ msgid ""
 "permissions set to a group. That is, when checking permission for a folder, "
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
-msgstr ""
+msgstr "Права доступа к папке, установленные для определенного пользователя, имеют более высокий приоритет, чем разрешения, установленные для группы. То есть, при проверке разрешения для папки, если система соответствует разрешению, специфическому для пользователя, она игнорирует все разрешения, установленные для групп, к которым принадлежит пользователь."
 
 #: seahub/help/templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "Разрешения для подпапок имеют более высокий приоритет, чем для родительских папок."
 
 #: seahub/help/templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Вот более сложный пример:"
 
 #: seahub/help/templates/help/folder_permission.html:32
 msgid ""
@@ -2460,110 +2460,110 @@ msgid ""
 "only\". That's because, according to rule 2, \"read only\" permission is "
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
-msgstr ""
+msgstr "Предположим, что структура папок выглядит как \"A/B\", пользователь \"Джон\" находится в группе \"Персонал\". Если вы установили разрешение \"только чтение\" для папки A для Джона, и вы также установили разрешение \"чтение и запись\" для папки \"A/B\" для группы \"Персонал\". Тогда разрешение Джона на папку \"A/B\" останется только \"только для чтения\". Это потому, что, согласно правилу 2, разрешение \"только чтение\" сначала сопоставляется с папкой \"A/B\" и пользователем \"Джон\", который унаследован от родительского элемента \"A\"."
 
 #: seahub/help/templates/help/full_text_file_search.html:6
 msgid ""
 "If you're using a Pro Edition Server, you can search file and folder names, "
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
-msgstr ""
+msgstr "Если вы используете Pro Edition Server, вы можете искать имена файлов и папок, а также содержимое определенных файлов в веб-приложении Seafile. В настоящее время Seafile может искать содержимое следующих типов файлов:"
 
 #: seahub/help/templates/help/full_text_file_search.html:8
 #: seahub/help/templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Документ Microsoft Office: .doc, .docx (Только Pro Edition Server)"
 
 #: seahub/help/templates/help/full_text_file_search.html:9
 #: seahub/help/templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (Только Pro Edition Server)"
 
 #: seahub/help/templates/help/full_text_file_search.html:10
 #: seahub/help/templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (Только Pro Edition Server)"
 
 #: seahub/help/templates/help/full_text_file_search.html:11
 #: seahub/help/templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice файлы"
 
 #: seahub/help/templates/help/full_text_file_search.html:12
 #: seahub/help/templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF файлы"
 
 #: seahub/help/templates/help/full_text_file_search.html:13
 #: seahub/help/templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown файлы: .md"
 
 #: seahub/help/templates/help/full_text_file_search.html:14
 #: seahub/help/templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Различные файлы исходного кода"
 
 #: seahub/help/templates/help/full_text_file_search.html:15
 #: seahub/help/templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Текстовые файлы: .txt, .log"
 
 #: seahub/help/templates/help/full_text_file_search.html:17
 msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "Обратите внимание, что ваш системный администратор Seafile, возможно, не включил функцию полнотекстового поиска. В этом случае вы можете искать только имена файлов и папок."
 
 #: seahub/help/templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "Создание группы - удобный способ поделиться файлами с множеством людей. В Seafile вы можете легко создавать группы и управлять ими."
 
 #: seahub/help/templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Вот как группы работают в Seafile:"
 
 #: seahub/help/templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "У каждой группы есть владелец. По умолчанию владелец является создателем группы. Он / она может передать право собственности на группу другому участнику."
 
 #: seahub/help/templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "В каждой группе может быть несколько администраторов. Владелец группы и администраторы группы могут добавлять дополнительных администраторов группы."
 
 #: seahub/help/templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "Администратор группы может добавлять / удалять участников в группе. И он / она также может отключить доступ к библиотеке в группе."
 
 #: seahub/help/templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "Щелкните вкладку \"Общие с группами\" на левой панели, и вы увидите все группы, в которых вы состоите. Щелкнув любую группу, вы увидите библиотеки, к которым предоставлен общий доступ в этой группе."
 
 #: seahub/help/templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "Чтобы создать новую группу, щелкните вкладку \"Общие с группами\" на левой панели. Затем щелкните \"Все группы\". На странице вы можете нажать кнопку \"Новая группа\", чтобы создать группу."
 
 #: seahub/help/templates/help/groups_managing.html:15
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
-msgstr ""
+msgstr "См. Раздел <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">Совместное использование файлов и папок</a> о том, как предоставить общий доступ к библиотекам или папкам группе."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -2647,7 +2647,7 @@ msgstr "через seafile-ignore.txt игнорируются только фа
 
 #: seahub/help/templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Установка клиентской программы Seafile"
 
 #: seahub/help/templates/help/install_sync.html:8
 msgid ""
@@ -2708,7 +2708,7 @@ msgstr "В некоторых случаях, вы хотите изменить
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafile - это платформа для корпоративного файлового хостинга с высокой надежностью и производительностью."
 
 #: seahub/help/templates/help/introduction.html:9
 #, python-format
@@ -2718,21 +2718,21 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
-msgstr ""
+msgstr "Seafile содержит веб-интерфейс для управления файлами и обмена ими. Он имеет два типа клиентов для настольных ПК: <a href=\"%(SITE_ROOT)shelp/install_sync/\">клиент синхронизации файлов</a> и <a href=\"%(SITE_ROOT)shelp/using_drive_client\">клиент диска</a>. Также есть мобильные клиенты для Android и iOS."
 
 #: seahub/help/templates/help/introduction.html:10
 msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr ""
+msgstr "Вы можете скачать клиенты на <a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">сайте Seafile</a>."
 
 #: seahub/help/templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr ""
+msgstr "Если это руководство не содержит необходимой вам информации, вы можете обратиться за помощью на наш форум: <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a>."
 
 #: seahub/help/templates/help/libraries_managing.html:6
 msgid ""
@@ -2741,19 +2741,19 @@ msgid ""
 "project you work on, or each document type you want to save in Seafile. A "
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
-msgstr ""
+msgstr "Seafile использует \"библиотеки\" для организации ваших файлов. Библиотека - это контейнер верхнего уровня для набора файлов и папок. Вы можете создать библиотеку для каждого проекта, над которым вы работаете, или для каждого типа документа, который хотите сохранить в Seafile. Библиотека работает в основном как папка верхнего уровня. Но у него также есть некоторые особые свойства:"
 
 #: seahub/help/templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
-msgstr ""
+msgstr "Каждая библиотека хранит свою историю изменений файлов. Глобальная история изменений файлов для всех библиотек отсутствует."
 
 #: seahub/help/templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
-msgstr ""
+msgstr "Каждую библиотеку можно синхронизировать с клиентами для настольных ПК отдельно. Вы можете выбрать библиотеки для синхронизации."
 
 #: seahub/help/templates/help/libraries_managing.html:11
 msgid ""
@@ -2761,13 +2761,13 @@ msgid ""
 "automatically creates a default library named \"My Library\" for you. You "
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
-msgstr ""
+msgstr "Когда вы впервые входите в веб-приложение Seafile, Seafile автоматически создает для вас библиотеку по умолчанию с именем \"Моя библиотека\". Вы также можете создать больше библиотек. Вот как это выглядит, когда вы создали несколько библиотек."
 
 #: seahub/help/templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
-msgstr ""
+msgstr "Вы можете переходить в библиотеку и управлять своими файлами и папками. Вы можете загружать, скачивать, переименовывать, перемещать, копировать и удалять файлы."
 
 #: seahub/help/templates/help/libraries_managing.html:15
 #, python-format
@@ -2775,7 +2775,7 @@ msgid ""
 "After <a href=\"%(SITE_ROOT)shelp/install_sync/\">syncing a library with "
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
-msgstr ""
+msgstr "После <a href=\"%(SITE_ROOT)shelp/install_sync/\">синхронизации библиотеки с настольным клиентом</a> вы можете выполнять любые файловые операции внутри папки локальной библиотеки. Операции будут загружены на сервер."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -2783,7 +2783,7 @@ msgid ""
 "operation applies to a library (file update, file deletion etc.), Seafile "
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
-msgstr ""
+msgstr "Seafile отслеживает историю изменений для всей библиотеки. Каждый раз, когда файловая операция применяется к библиотеке (обновление файла, удаление файла и т. д.), Seafile создает \"снимок\" предыдущего состояния библиотеки. Снимок содержит полную структуру файлов и папок библиотеки."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -2793,7 +2793,7 @@ msgid ""
 "handy. You can restore the entire library to any point in the past. All the "
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
-msgstr ""
+msgstr "В некоторых случаях вы изменили много файлов в библиотеке и обнаружите, что хотите отменить все эти изменения. Восстановление многих файлов до их старых версий может быть утомительным. В это время функция моментального снимка становится очень удобной. Вы можете восстановить всю библиотеку до любого момента в прошлом. Все файлы в библиотеке будут восстановлены на этот момент одновременно. Для библиотеки он работает как \"машина времени\"."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
@@ -2804,20 +2804,20 @@ msgid ""
 "In Seafile Web App, navigate into the root folder of a library. Click the "
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
-msgstr ""
+msgstr "В веб-приложении Seafile перейдите в корневую папку библиотеки. Щелкните значок \"История\" на верхней панели навигации библиотеки. Все записи об изменениях библиотеки будут отображаться в списке."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
-msgstr ""
+msgstr "Щелкните ссылку \"просмотреть снимок\" в любой записи об изменении. Вы увидите состояние библиотеки на определенный момент времени."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:13
 msgid ""
 "In the snapshot view, you can download or restore any file or folder. If "
 "you're the library's owner, you can restore the enitre library to this point"
 " of time."
-msgstr ""
+msgstr "В режиме просмотра снимков вы можете загрузить или восстановить любой файл или папку. Если вы являетесь владельцем библиотеки, вы можете восстановить библиотеку до этого момента времени."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -2825,7 +2825,7 @@ msgid ""
 "You can configure the retention period of library history: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "Вы можете настроить срок хранения истории библиотеки: <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">установив срок хранения истории</a>."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -2834,7 +2834,7 @@ msgid ""
 "(MD), a simple markup language, to ensure cross platform compatibility. MD "
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
-msgstr ""
+msgstr "Сбор и хранение небольших структурированных данных в удобной форме - вот для чего нужны вики-сайты Seafile. Wiki-страницы написаны на Markdown (MD), простом языке разметки, чтобы гарантировать кросс-платформенную совместимость. Файлы MD хранят текстовую, табличную, а также графическую информацию; Вы также можете добавалять ссылки на другие документы в файле Markdown."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -2842,11 +2842,11 @@ msgid ""
 "View\" introduced in 7.0 version. Since Seafile implements wikis as standard"
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
-msgstr ""
+msgstr "Вы можете управлять стандартной библиотекой в ​​Seafile, как Wiki, с помощью \"Вид столбцов\", представленного в версии 7.0. Поскольку Seafile реализует вики как стандартные библиотеки Seafile, они могут быть синхронизированы и предоставлены другим пользователям, как и любая обычная библиотека."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Вид столбцов"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -2856,11 +2856,11 @@ msgid ""
 "can browse in it and move files and folders just by dragging and dropping. "
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
-msgstr ""
+msgstr "Вики-сайты обычно имеют боковую панель, содержащую древовидную структуру папок, чтобы обеспечить быстрый и легкий просмотр страниц вики. \"Вид столбцов\" в Seafile позволяет вам управлять файлами в библиотеке так же, как и в Wiki. Пользователи могут просматривать в нем и перемещать файлы и папки, просто перетаскивая их. Действия с файлом, такие как переименование, перемещение и открытие через клиент, доступны в контекстном меню, доступном по щелчку правой кнопкой мыши."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Редактор WYSIWYG Markdown"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -2875,24 +2875,24 @@ msgid ""
 "inserted and modified with just a few clicks. The same thing goes for a "
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
-msgstr ""
+msgstr "Вики-страницы в Seafile сохраняются как обычные документы в формате Markdown. Чтобы создать новую страницу Wiki в библиотеке, просто создайте новый документ Markdown. Файлы MD можно редактировать прямо из веб-интерфейса Seafile с помощью онлайн-редактора MD. Веб-редактор предлагает удобное взаимодействие с пользователем и богатые возможности форматирования текста, изображений и таблиц. Изображения можно импортировать в файлы MD из библиотек и локального хранилища, а также по гиперссылкам. Основные функции редактирования изображений, такие как масштабирование, также можно выполнять в интерфейсе редактора \"что видишь, то и получаешь\" (WYSIWYG). Таблицы можно вставлять и изменять всего несколькими щелчками мыши. То же самое и с содержимым таблицы: таблицу можно скопировать полностью или частично, не выходя из представления WYSIWYG."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
-msgstr ""
+msgstr "К истории изменений файла Markdown можно легко получить доступ, нажав кнопку \"История файла\" в меню в верхней части интерфейса редактора."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:17
 msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, formatting suggestions, and "
 "collaborative commenting are provided in this side bar."
-msgstr ""
+msgstr "Вы можете открыть скрытую боковую панель в правой части редактора Markdown. На этой боковой панели представлены оглавление, информация о файле, предложения по форматированию и совместные комментарии."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Пометка файлов и связанные документы"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -2900,19 +2900,19 @@ msgid ""
 "allows users to define tags for each library and apply tags to files. Tags "
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
-msgstr ""
+msgstr "Пометка файлов - важная функция для управления знаниями. Seafile позволяет пользователям определять теги для каждой библиотеки и применять теги к файлам. Тегами можно управлять с боковой панели редактора Markdown или из интерфейса файлового браузера."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "Интерфейс обозревателя файлов предоставляет сводку всех тегов файлов в текущей библиотеке."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:25
 msgid ""
 "You can also add related files to a Markdown document from the \"File "
 "Information\" tab in the side bar."
-msgstr ""
+msgstr "Вы также можете добавить связанные файлы в документ Markdown на вкладке \"Информация о файле\" на боковой панели."
 
 #: seahub/help/templates/help/read-only_syncing.html:6
 #, python-format
@@ -2925,55 +2925,55 @@ msgid ""
 "popup a notification, saying that the local modified copy conflicts with the"
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
-msgstr ""
+msgstr "Для готовых библиотек или папок Seafile покажет запрещающий значок (<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />), чтобы указать, что они доступны только для чтения. Однако пользователи по-прежнему могут изменять синхронизированные локальные копии. Когда локальная копия изменена, Seafile проигнорирует изменение. Когда копия на сервере также изменяется, клиент выдает всплывающее уведомление о том, что локальная измененная копия конфликтует с копией на стороне сервера. Чтобы предотвратить потерю данных, локальная копия переименовывается в файл конфликта."
 
 #: seahub/help/templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
-msgstr ""
+msgstr "Если вы хотите, чтобы общие пользователи не могли изменять локальные копии, вы можете рассмотреть возможность использования клиента Seafile Drive."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Восстановление удаленных файлов и папок"
 
 #: seahub/help/templates/help/restoring_deleted_files.html:7
 msgid ""
 "Each library in Seafile tracks your file deletion operations automatically. "
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
-msgstr ""
+msgstr "Каждая библиотека в Seafile автоматически отслеживает ваши операции удаления файлов. Иногда вы можете обнаружить, что файлы удалены по ошибке. Вы можете найти свои удаленные файлы в корзине каждой библиотеки."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Вот как использовать функцию корзины для мусора:"
 
 #: seahub/help/templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "В веб-приложении Seafile перейдите в родительскую папку, содержащую удаленный файл или папку."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:11
 msgid ""
 "Click the \"trash\" icon in the library operation bar. The deleted files and"
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
-msgstr ""
+msgstr "Щелкните значок корзины на панели операций библиотеки. Удаленные файлы и папки будут перечислены в порядке времени удаления. Внизу списка вы можете нажать кнопку \"Еще\", чтобы загрузить больше удаленных файлов."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:12
 msgid ""
 "In the deleted files list, you can restore file and folders. If a file or "
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
-msgstr ""
+msgstr "В списке удаленных файлов вы можете восстановить файлы и папки. Если родительская папка файла или папки была удалена, она будет восстановлена ​​в корневую папку библиотеки."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:13
 msgid ""
 "Note that the trash bin only contains files and sub-folders deleted under "
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
-msgstr ""
+msgstr "Обратите внимание, что корзина для мусора содержит только файлы и подпапки, удаленные в текущей папке. Файлы, удаленные в подпапках текущей папки, также включаются в список."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -2981,7 +2981,7 @@ msgid ""
 "You can configure the retention period of deleted files: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "Вы можете настроить срок хранения удаленных файлов: <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">установив срок хранения истории</a>."
 
 #: seahub/help/templates/help/selective_sync.html:8
 msgid ""
@@ -2989,7 +2989,7 @@ msgid ""
 "currently only interested in a sub-folder inside one library. Then you can "
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
-msgstr ""
+msgstr "У вас могут быть очень большие библиотеки на сервере Seafile. И в настоящее время вас интересует только подпапка внутри одной библиотеки. Затем вы можете выборочно синхронизировать подпапку в библиотеке вместо синхронизации всей библиотеки."
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -3007,156 +3007,156 @@ msgstr "После синхронизации подпапки, вы может�
 
 #: seahub/help/templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Установка срока хранения истории библиотеки"
 
 #: seahub/help/templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "Продолжительность периода хранения истории библиотеки определяет, как долго вы можете получить доступ к данным истории в следующих функциях:"
 
 #: seahub/help/templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "Восстановить удаленные файлы: вы не можете восстановить файлы и папки, удаленные до истечения срока хранения."
 
 #: seahub/help/templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "Версии файлов: вы не можете получить доступ к версиям файлов старше срока хранения."
 
 #: seahub/help/templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "История и снимки библиотеки: вы не можете получить доступ к снимкам библиотеки старше срока хранения."
 
 #: seahub/help/templates/help/setting_library_history.html:13
 msgid ""
 "The retention period of old files versions can be configured for each "
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
-msgstr ""
+msgstr "Срок хранения старых версий файлов можно настроить для каждой библиотеки отдельно. Вы должны быть владельцем библиотеки, чтобы установить срок хранения. Чтобы установить срок хранения:"
 
 #: seahub/help/templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
-msgstr ""
+msgstr "В веб-приложении Seafile щелкните вкладку \"Мои\" на панели навигации (как на скриншоте ниже). Будут перечислены все принадлежащие вам библиотеки."
 
 #: seahub/help/templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "Переместите курсор на строку библиотеки. Появится меню операций . В раскрывающемся меню выберите \"Настройка истории\"."
 
 #: seahub/help/templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "Во всплывающем диалоговом окне вы можете установить срок хранения файла."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "В Seafile есть несколько способов поделиться файлами и папками с другими:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "Использование ссылок: существует несколько типов ссылок, которыми можно поделиться с различными соавторами."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "Общедоступные ссылки: любой пользователь, имеющий доступ к ссылкам, может получить доступ к файлам или папкам, указанным ссылкой. Вход в систему не требуется."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "Ссылки для загрузки: любой пользователь, имеющий доступ к ссылкам, может загружать файлы в папку, на которую указывает ссылка. Вход в систему не требуется."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
-msgstr ""
+msgstr "Внутренние ссылки: только зарегистрированные пользователи, у которых есть разрешение на чтение файла или папки, могут получить доступ к этой ссылке. Используется для внутреннего обмена файлами."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:15
 msgid ""
 "Sharing libraries or folders: used for setting access permissions to a "
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
-msgstr ""
+msgstr "Совместное использование библиотек или папок: используется для настройки прав доступа к библиотеке или папке для определенных пользователей или групп. Пользователи должны войти в систему, чтобы получить доступ к папкам."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Создание общих ссылок на файлы или папки"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:18
 msgid ""
 "Share links are public links to files or folders. They can be accessed by "
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
-msgstr ""
+msgstr "Ссылки для общего доступа - это общедоступные ссылки на файлы или папки. К ним может получить доступ кто угодно, включая тех, у кого нет учетной записи Seafile. Вы также можете использовать пароль и срок действия для защиты своих ссылок."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "Вы также можете установить разрешения доступа для обмена ссылками. Есть три типа разрешений:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:21
 msgid ""
 "Preview and Download: the file or files in the folder can be downloaded. If "
 "the type of files can be previewd in web browser, they can also be viewed "
 "online (e.g. Office files)."
-msgstr ""
+msgstr "Предварительный просмотр и скачиване: файл или файлы в папке можно скачать. Если тип файлов можно предварительно просмотреть в веб-браузере, их также можно будет просматривать онлайн (например, файлы Office)."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
-msgstr ""
+msgstr "Только предварительный просмотр: файл или файлы в папке можно просматривать только в веб-браузере, но нельзя скачать. Это полезно для обмена конфиденциальными данными."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:23
 msgid ""
 "Edit on cloud and download: Similar to \"Preview and Download\", but if the "
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
-msgstr ""
+msgstr "Редактировать в облаке и скачивание: аналогично \"Предварительному просмотру и скачиванию\", но если файл можно редактировать в веб-браузере (например, файл Office), любой пользователь, имеющий доступ к ссылке, может его редактировать."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Чтобы создать ссылку для общего доступа в веб-приложении Seafile:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "Перейдите в родительскую папку, содержащую файл или папку. Наведите указатель мыши на файл или папку и щелкните появившийся значок \"Поделиться\"."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:28
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share Link\" tab"
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
-msgstr ""
+msgstr "Появится всплывающее окно с параметрами общего доступа. Щелкните вкладку \"Поделиться ссылкой\" на левой панели. Затем нажмите кнопку \"Создать\", чтобы создать ссылку. Вы можете использовать пароль, срок действия и разрешения, чтобы защитить свою ссылку."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:29
 #: seahub/help/templates/help/sharing_files_and_folders.html:42
 msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
-msgstr ""
+msgstr "Скопируйте ссылку на электронную почту, клиент обмена мгновенными сообщениями или любой другой инструмент, чтобы отправить ее другим."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Вы также можете создавать ссылки для общего доступа из клиентов для настольных ПК."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -3164,116 +3164,116 @@ msgid ""
 "Seafile client. The local folder of that library will be opened. Right click"
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
-msgstr ""
+msgstr "Если библиотека синхронизирована, дважды щелкните библиотеку в главном окне клиента Seafile. Будет открыта локальная папка этой библиотеки. Щелкните правой кнопкой мыши файл или папку, для которых вы хотите создать ссылку. Во всплывающем меню выберите \"Seafile\", затем \"Создать ссылку для общего доступа\"."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:34
 msgid ""
 "If the library is not synced, double click the library in the main window of"
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
-msgstr ""
+msgstr "Если библиотека не синхронизирована, дважды щелкните библиотеку в главном окне клиента Seafile. Откроется окно обозревателя облачных файлов, в котором вы сможете создать ссылку на файл или папку."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Создание ссылок для загрузки в папки"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:37
 msgid ""
 "You can use upload links to collect files from others. You can only create "
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
-msgstr ""
+msgstr "Вы можете использовать ссылки для загрузки, чтобы собирать файлы от других. Вы можете создавать ссылки для загрузки только для папок. Остальные не могут видеть файлы в папках. Они могут только загружать в них файлы."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Чтобы создать ссылку для загрузки в веб-приложении Seafile:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "Перейдите в родительскую папку, содержащую папку. Наведите указатель мыши на папку и щелкните появившийся значок \"Поделиться\"."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:41
 msgid ""
 "A pop-up window will appear with share options. Click the \"Upload Link\" "
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
-msgstr ""
+msgstr "Появится всплывающее окно с параметрами общего доступа. Щелкните вкладку \"Ссылка для загрузки\" на левой панели. Затем нажмите кнопку \"Создать\", чтобы создать ссылку. Вы можете использовать пароль для защиты своей ссылки."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Совместное использование библиотек или папок"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:45
 msgid ""
 "You can share a library or folder to other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
-msgstr ""
+msgstr "Вы можете поделиться библиотекой или папкой с другими зарегистрированными пользователями Seafile. К общей библиотеке или папке могут получить доступ другие пользователи с помощью веб-приложения и клиентов Seafile."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Вы можете выбрать размер доли:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Поделиться с пользователем: вы можете поделиться с одним или несколькими пользователями."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Поделиться с группой: вы можете поделиться с группой."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "Поделиться с организацией: если вы используете частный сервер, иногда полезно предоставить общий доступ всем участникам на сервере (всей организации)."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Вы также можете установить разрешения на общий ресурс:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "Чтение и запись: пользователи могут читать, писать, заружать, скачивать и синхронизировать файлы."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Только для чтения: пользователи могут читать, скачивать и синхронизировать файлы."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "Администратор: помимо разрешения на запись, пользователи также могут делиться библиотекой."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
-msgstr ""
+msgstr "Чтение и запись онлайн: пользователи могут просматривать и редактировать файлы в режиме онлайн через веб-браузер. Файлы не могут быть загружены."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
-msgstr ""
+msgstr "Только для чтения онлайн: пользователи могут просматривать файлы в Интернете только через веб-браузер. Файлы не могут быть скачаны."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Чтобы предоставить доступ к библиотеке или папке пользователю или группе:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
-msgstr ""
+msgstr "Наведите указатель мыши на библиотеку или папку и щелкните появившийся значок \"Поделиться\"."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:63
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share to user\" "
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
-msgstr ""
+msgstr "Появится всплывающее окно с параметрами общего доступа. Перейдите на вкладку \"Поделиться с пользователем\" или \"Поделиться с группой\" на левой панели. Выберите пользователя или группу. Затем нажмите \"Отправить\"."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -3281,7 +3281,7 @@ msgid ""
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
-msgstr ""
+msgstr "После того, как вы предоставили пользователю доступ к библиотеке или папке, пользователь может увидеть ее, щелкнув вкладку \"Общие со мной\" на левой панели в веб-приложении Seafile. Если вы поделитесь им с группой, участники группы смогут увидеть его, только перейдя в группу."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -3289,7 +3289,7 @@ msgid ""
 " \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
-msgstr ""
+msgstr "Чтобы предоставить доступ к библиотеке для всей организации: В веб-приложении Seafile щелкните вкладку \"Общие со всеми\" на левой панели. Затем нажмите кнопку \"Добавить библиотеку\". В раскрывающемся меню вы можете выбрать общий доступ для существующей библиотеки или создать новую библиотеку и ей поделиться."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
@@ -3302,7 +3302,7 @@ msgid ""
 "way for sharing files among team members who have access to a common "
 "library. You may just copy the link and paste it into an email or IM "
 "software."
-msgstr ""
+msgstr "Только зарегистрированные пользователи, у которых есть разрешение на чтение файла или папки, могут получить доступ к этой ссылке. Она используется для внутреннего обмена файлами. Это удобный способ обмена файлами между членами команды, имеющими доступ к общей библиотеке. Вы можете просто скопировать ссылку и вставить ее в электронную почту или программу обмена мгновенными сообщениями."
 
 #: seahub/help/templates/help/sync_interval.html:8
 msgid ""
@@ -3316,7 +3316,7 @@ msgstr "Обычно Seafile клиент автоматически обнар�
 
 #: seahub/help/templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Синхронизация с существующей папкой"
 
 #: seahub/help/templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -3358,7 +3358,7 @@ msgid ""
 " you want to sync the library with the local folder again, you can use the "
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
-msgstr ""
+msgstr "Если вы больше не хотите синхронизировать локальную папку с библиотекой, вы можете отменить ее. После того, как вы отмените синхронизацию библиотеки, изменения в локальной папке и файлах не будут выгружены, а изменения в библиотеке не будут скачаны. Если вы хотите снова синхронизировать библиотеку с локальной папкой, вы можете использовать <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">функцию синхронизации с существующей папкой</a>."
 
 #: seahub/help/templates/help/unsync_resync.html:10
 msgid ""
@@ -3373,17 +3373,17 @@ msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr ""
+msgstr "После установки клиента диска, согласно справе на <a href=\"https://www.seafile.com/en/download/\">странице загрузки</a> вы можете запустить его, дважды щелкнув значок приложения \"SeaDrive\" на рабочем столе."
 
 #: seahub/help/templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
-msgstr ""
+msgstr "Вам будет предложено выбрать букву диска для виртуального диска. По умолчанию будет использоваться \"S:\"."
 
 #: seahub/help/templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Затем вам будет предложено войти на сервер Seafile."
 
 #: seahub/help/templates/help/using_drive_client.html:12
 msgid ""
@@ -3391,7 +3391,7 @@ msgid ""
 "library and file list from the server. The file contents are not downloaded "
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
-msgstr ""
+msgstr "После успешного входа на сервер, клиент Диска начинает получать библиотеку и список файлов с сервера. В данный момент содержимое файла не загружается. Так что это не займет много времени. Вы можете позволить ему работать в фоновом режиме. Вы будете оповещены, когда выборка будет завершена."
 
 #: seahub/help/templates/help/using_drive_client.html:14
 msgid ""
@@ -3400,7 +3400,7 @@ msgid ""
 "drive are libraries on the Seafile server. File contents will be downloaded "
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
-msgstr ""
+msgstr "Откроется папка виртуального диска. Вы обнаружите, что он работает как обычный жесткий диск на вашем компьютере. Папки верхнего уровня на виртуальном диске - это библиотеки на сервере Seafile. Содержимое файла будет загружено при открытии файла. Недавно открытый файл будет кэширован на вашем локальном диске. Все кэшированные файлы будут отмечены зеленой галочкой."
 
 #: seahub/help/templates/help/using_drive_client.html:17
 msgid "Synced State"
@@ -3410,12 +3410,12 @@ msgstr "Синхронизированное состояние"
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
-msgstr ""
+msgstr "Файлы и папки на виртуальном диске находятся либо в облачном, синхронизированном, либо в частично синхронизированном состоянии."
 
 #: seahub/help/templates/help/using_drive_client.html:22
 #: seahub/help/templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Состояние"
 
 #: seahub/help/templates/help/using_drive_client.html:23
 #: seahub/help/templates/help/using_drive_client.html:52
@@ -3429,7 +3429,7 @@ msgstr "Детали"
 
 #: seahub/help/templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Облачный контент"
 
 #: seahub/help/templates/help/using_drive_client.html:31
 msgid ""
@@ -3438,7 +3438,7 @@ msgid ""
 "file, but the content isn’t fully downloaded until you need it. What "
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
-msgstr ""
+msgstr "Облачный контент отображается на виртуальном диске, но не использует весь объем пространства, который мог бы использовать файл. В проводнике файлов вы видите файл, но его содержимое не загружается полностью, пока оно вам не понадобится. Загружается только информация о файле, такая как его имя, размер и дата обновления."
 
 #: seahub/help/templates/help/using_drive_client.html:34
 msgid "Synced content"
@@ -3448,7 +3448,7 @@ msgstr "Синхронизированный контент"
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
-msgstr ""
+msgstr "Синхронизированный контент загружается и сохраняется на жестком диске вашего компьютера. Вы можете редактировать эти файлы напрямую из приложений на вашем компьютере."
 
 #: seahub/help/templates/help/using_drive_client.html:39
 msgid "Partially synced content"
@@ -3458,7 +3458,7 @@ msgstr "Частично синхронизированный контент"
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
-msgstr ""
+msgstr "Частично синхронизированные папки содержат как синхронизированные, так и только облачные файлы или папки."
 
 #: seahub/help/templates/help/using_drive_client.html:46
 msgid "Special States"
@@ -3468,7 +3468,7 @@ msgstr "Особые состояния"
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
-msgstr ""
+msgstr "Для файлов, которые уже синхронизированы с локальным компьютером, они могут находиться в 3 других особых состояниях, помимо обычного состояния \"синхронизировано\"."
 
 #: seahub/help/templates/help/using_drive_client.html:58
 msgid "Locked by other user"
@@ -3478,7 +3478,7 @@ msgstr "Заблокировано другим пользователем"
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
-msgstr ""
+msgstr "Файл заблокирован другим пользователем на сервере. Вы можете открыть файл только в режиме для чтения. Вы не можете изменять, удалять, переименовывать или перемещать файл."
 
 #: seahub/help/templates/help/using_drive_client.html:63
 msgid "Locked by me"
@@ -3497,24 +3497,24 @@ msgstr "Только чтение"
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr ""
+msgstr "Папка или библиотека этого файла доступны вам только для чтения. Вы не можете изменять, удалять или перемещать файл."
 
 #: seahub/help/templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
-msgstr ""
+msgstr "Клиент Диска регулярно очищает неиспользуемые кэшированные файлы в фоновом режиме. Вы также можете ограничить пространство локального кэша."
 
 #: seahub/help/templates/help/using_drive_client.html:76
 msgid ""
 "You can log into multiple accounts in the Drive client. However, only files "
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
-msgstr ""
+msgstr "Вы можете войти в несколько аккаунтов в клиенте Диска. Однако на виртуальном диске будут отображаться только файлы на текущем выбранном сервере. Вы можете переключаться между аккаунтами."
 
 #: seahub/help/templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. Почему я не могу создавать новые файлы или удалять папки в корневой папке?"
 
 #: seahub/help/templates/help/using_drive_client.html:81
 msgid ""
@@ -3524,17 +3524,17 @@ msgid ""
 "files in root folder. Since the top level folders in the virtual drive "
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
-msgstr ""
+msgstr "Корневая папка виртуального диска содержит только папки библиотеки. Seafile может синхронизировать файлы только внутри библиотек. Файлы в корневой папке не могут быть загружены на сервер Seafile. Поэтому нет смысла поддерживать создание файлов в корневой папке. Поскольку папки верхнего уровня на виртуальном диске представляют собой библиотеки, мы не хотим, чтобы пользователи удаляли свои библиотеки по ошибке. Таким образом, клиент Диска не поддерживает удаление папок верхнего уровня."
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
-msgstr ""
+msgstr "Некоторые типы файлов можно напрямую открывать и просматривать в веб-приложении Seafile. В настоящее время это:"
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Файлы изображений"
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"

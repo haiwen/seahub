@@ -14,6 +14,8 @@
   "unordered_list": "Nečíslovaný seznam",
   "check_list_item": "Zkontrolovat položku seznamu",
   "insert_image": "Vložit obrázek",
+  "insert_formula": "Insert Formula",
+  "formula": "Formula",
   "insert_file": "Vložit soubor",
   "code": "Řádkový kód",
   "code_block": "Blok kódu",
@@ -147,6 +149,7 @@
       "issue": "Problém s úrovní nadpisu"
     }
   },
+  "Shortcut_help": "Shortcut help",
   "userHelp": {
     "title": "Klávesové zkratky",
     "userHelpData": [
@@ -188,6 +191,11 @@
         "shortcutData": {
           "Insert_Table_Row": "Vložit řádku tabulky",
           "Escape_table": "Opustit tabulku"
+        }
+      }, {
+        "shortcutType": "Formula shortcuts",
+        "shortcutData": {
+          "Insert_Formula": "Insert Formula"
         }
       }, {
         "shortcutType":"Řádkové zkratky",
