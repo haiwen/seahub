@@ -14,6 +14,8 @@
   "unordered_list": "Lista non ordinata",
   "check_list_item": "Controlla la voce dell'elenco",
   "insert_image": "Inserisci Immagine",
+  "insert_formula": "Insert Formula",
+  "formula": "Formula",
   "insert_file": "Insert File",
   "code": "Codice in linea",
   "code_block": "Codice",
@@ -147,6 +149,7 @@
       "issue": "Heading level issue"
     }
   },
+  "Shortcut_help": "Shortcut help",
   "userHelp": {
     "title": "Tasti rapidi",
     "userHelpData": [
@@ -188,6 +191,11 @@
         "shortcutData": {
           "Insert_Table_Row": "Inserisci riga nella tabella",
           "Escape_table": "Escape tabella"
+        }
+      }, {
+        "shortcutType": "Formula shortcuts",
+        "shortcutData": {
+          "Insert_Formula": "Insert Formula"
         }
       }, {
         "shortcutType":"Scorciatoie in linea",

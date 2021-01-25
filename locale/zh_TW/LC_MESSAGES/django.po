@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 18:22+0800\n"
+"POT-Creation-Date: 2021-01-25 11:37+0800\n"
 "PO-Revision-Date: 2020-12-25 10:22+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
@@ -39,7 +39,7 @@ msgid "Login id can't be empty"
 msgstr "登入ID不能為空"
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:856
+#: seahub/api2/endpoints/admin/users.py:955
 #, python-format
 msgid "Login id %s already exists."
 msgstr "登入ID%s已存在"
@@ -153,8 +153,8 @@ msgstr "電子郵件 %s 含有無效字元"
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:341
-#: seahub/api2/endpoints/dir_shared_items.py:443
+#: seahub/api2/endpoints/dir_shared_items.py:342
+#: seahub/api2/endpoints/dir_shared_items.py:455
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -305,53 +305,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:929
+#: seahub/api2/endpoints/admin/users.py:1028
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "權限修改成功"
 
-#: seahub/api2/endpoints/admin/users.py:932 seahub/views/sysadmin.py:499
+#: seahub/api2/endpoints/admin/users.py:1031 seahub/views/sysadmin.py:499
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "你的 %s 帳戶已開通。"
 
-#: seahub/api2/endpoints/admin/users.py:937
+#: seahub/api2/endpoints/admin/users.py:1036
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "編輯成功，一封郵件已發送。"
 
-#: seahub/api2/endpoints/admin/users.py:940
+#: seahub/api2/endpoints/admin/users.py:1039
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "編輯成功, 但發送郵件失敗，請檢查你的郵件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1018 seahub/views/sysadmin.py:540
+#: seahub/api2/endpoints/admin/users.py:1117 seahub/views/sysadmin.py:540
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "密碼已重置為: %s"
 
-#: seahub/api2/endpoints/admin/users.py:1020 seahub/views/sysadmin.py:565
+#: seahub/api2/endpoints/admin/users.py:1119 seahub/views/sysadmin.py:565
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "成功將重置密碼為 %(passwd)s, 一封通知郵件已經發送給 %(user)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1024 seahub/views/sysadmin.py:570
+#: seahub/api2/endpoints/admin/users.py:1123 seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "成功將用戶密碼重置為 %(passwd)s, 但發送通知郵件到 %(user)s 失敗，請檢查你的郵件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1027 seahub/views/sysadmin.py:574
+#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:574
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功將用戶 %(user)s 的密碼重置為 %(passwd)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1030 seahub/views/sysadmin.py:577
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:577
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -424,13 +424,13 @@ msgstr "檔案已鎖定"
 msgid "Cancel failed"
 msgstr "取消失敗"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:326
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "使用者名稱無效"
 
-#: seahub/api2/endpoints/dir_shared_items.py:334
+#: seahub/api2/endpoints/dir_shared_items.py:335
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:180
@@ -806,15 +806,15 @@ msgstr "這個電子郵件已被註冊"
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "登入出錯次數超過限制，該帳號已被凍結。"
 
-#: seahub/auth/views.py:271
+#: seahub/auth/views.py:279
 msgid "Logged out"
 msgstr "退出"
 
-#: seahub/auth/views.py:321
+#: seahub/auth/views.py:329
 msgid "Failed to send email, please contact administrator."
 msgstr "郵件發送失敗，請聯繫管理員。"
 
-#: seahub/auth/views.py:380
+#: seahub/auth/views.py:388
 msgid "Can not update password, please contact LDAP admin."
 msgstr "不能更新密碼，請聯繫 LDAP 管理員。"
 

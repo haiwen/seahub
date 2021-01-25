@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 18:22+0800\n"
-"PO-Revision-Date: 2020-12-25 10:22+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-01-25 11:37+0800\n"
+"PO-Revision-Date: 2020-12-31 21:29+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgid "Login id can't be empty"
 msgstr "Login id no puede estar vacio"
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:856
+#: seahub/api2/endpoints/admin/users.py:955
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Login id %s ya existe."
@@ -151,8 +151,8 @@ msgstr "Email %s es inválido."
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:341
-#: seahub/api2/endpoints/dir_shared_items.py:443
+#: seahub/api2/endpoints/dir_shared_items.py:342
+#: seahub/api2/endpoints/dir_shared_items.py:455
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -303,53 +303,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "El usuario%(user)s fue agregado con éxito. Pero el correo de notificación no pudo ser enviado, porque el servicio de correo no está configurado correctamente."
 
-#: seahub/api2/endpoints/admin/users.py:929
+#: seahub/api2/endpoints/admin/users.py:1028
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Editado con éxito"
 
-#: seahub/api2/endpoints/admin/users.py:932 seahub/views/sysadmin.py:499
+#: seahub/api2/endpoints/admin/users.py:1031 seahub/views/sysadmin.py:499
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Tu cuenta en %s está activada."
 
-#: seahub/api2/endpoints/admin/users.py:937
+#: seahub/api2/endpoints/admin/users.py:1036
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Editado con éxito, se envió un email."
 
-#: seahub/api2/endpoints/admin/users.py:940
+#: seahub/api2/endpoints/admin/users.py:1039
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Edición exitosa, pero hubo un fallo al enviar el correo, revisa la configuración de email."
 
-#: seahub/api2/endpoints/admin/users.py:1018 seahub/views/sysadmin.py:540
+#: seahub/api2/endpoints/admin/users.py:1117 seahub/views/sysadmin.py:540
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "La contraseña ha sido reestablecida en %s"
 
-#: seahub/api2/endpoints/admin/users.py:1020 seahub/views/sysadmin.py:565
+#: seahub/api2/endpoints/admin/users.py:1119 seahub/views/sysadmin.py:565
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Contraseña restablecida con éxito a %(passwd)s, un correo fue enviado a %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1024 seahub/views/sysadmin.py:570
+#: seahub/api2/endpoints/admin/users.py:1123 seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Contraseña restablecida a %(passwd)s, pero hubo un fallo al enviar el correo a %(user)s, revise su configuracion de email."
 
-#: seahub/api2/endpoints/admin/users.py:1027 seahub/views/sysadmin.py:574
+#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:574
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Contraseña de %(user)s restablecida a %(passwd)s con éxito."
 
-#: seahub/api2/endpoints/admin/users.py:1030 seahub/views/sysadmin.py:577
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:577
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -422,13 +422,13 @@ msgstr "El archivo está bloqueado"
 msgid "Cancel failed"
 msgstr "Falló al cancelar"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:326
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "nombre de usuario inválido"
 
-#: seahub/api2/endpoints/dir_shared_items.py:334
+#: seahub/api2/endpoints/dir_shared_items.py:335
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:180
@@ -804,15 +804,15 @@ msgstr "Ya existe un usuario con este correo"
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Esta cuenta ha sido inmovilizada debido a muchos intentos de acceso fallidos."
 
-#: seahub/auth/views.py:271
+#: seahub/auth/views.py:279
 msgid "Logged out"
 msgstr "Desconectado"
 
-#: seahub/auth/views.py:321
+#: seahub/auth/views.py:329
 msgid "Failed to send email, please contact administrator."
 msgstr "Fallo al enviar el correo, por favor, contacta al administrador"
 
-#: seahub/auth/views.py:380
+#: seahub/auth/views.py:388
 msgid "Can not update password, please contact LDAP admin."
 msgstr "No se puede actualizar la contraseña, por favor contacte al administrador de LDAP."
 
@@ -1607,7 +1607,7 @@ msgstr "Administración de Wiki y conocimiento"
 #: seahub/help/templates/help/base.html:54
 #: seahub/help/templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Administrando una  biblioteca como Wiki"
 
 #: seahub/help/templates/help/base.html:57
 msgid "Desktop client and syncing"
@@ -1695,7 +1695,7 @@ msgstr "Cuando varias personas editan el mismo archivo simultáneamente, los cam
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
-msgstr ""
+msgstr "Puede eliminar una biblioeca propia. Puede ser restaurada por Ud o por un administrador del servidor Seafile."
 
 #: seahub/help/templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
@@ -1739,7 +1739,7 @@ msgstr "El espacio para compartir debe ser propiedad de la organización y ser a
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "La característica \"Departamentos\"  está diseñada para cumplir con dos tipos de uso. Introduciremos esta característica desde 3 perspectivas diferentes:"
 
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
@@ -1796,7 +1796,7 @@ msgid ""
 "Units) in AD. Each OU will be imported as a department. And the sub-OUs "
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
-msgstr ""
+msgstr "El administrador del sistema también puede importar la jerarquía desde OUs (Organizational Units) en AD. Cada OU será importada como un deparamento. Las sub-OUs bajo una OU se importarán como sub-departamentos. Las bibliotecas departamentales pueden ser creadas automáticamente durante el proceso de importación."
 
 #: seahub/help/templates/help/departments.html:28
 msgid ""
@@ -1811,7 +1811,7 @@ msgid ""
 "quota to a department. The total size of all the libraries in a department "
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
-msgstr ""
+msgstr "Las bibliotecas creadas dentro de un departamento son propiedad del departamento mismo, no de usuarios individuales. Así, el administrador del sistema puede asignar una cuota de almacenamiento al departamento. El tamaño total de las bibliotecas en un departamento no puede exceder la cuota de almacenamiento. <strong>Por favor notar que la cuota de un sub-departamento no depende de la cuota del departamento superior.</strong>"
 
 #: seahub/help/templates/help/departments.html:32
 msgid ""
@@ -1851,27 +1851,27 @@ msgid ""
 "the department. Any users registered in the system can be added as member of"
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
-msgstr ""
+msgstr "Si un usuario es el administrador de un departamento, puede agregar o eliminar miembros en el departamento. Cualquier usuario registrado en el sistema puede ser agregado como miembro del departamento. Pero si los departamentos son importados desde AD, los cambios en la membresía serán sobreescritos en la siguiente sincronización con AD."
 
 #: seahub/help/templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "El administrador departamental puede gestionar las bibliotecas en el departamento. Las operaciones soportadas son:"
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Crear o eliminar una biblioteca"
 
 #: seahub/help/templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Renombrar una biblioteca"
 
 #: seahub/help/templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "Compartir una biblioteca a usuarios o grupos fuera de este departamento. Ësto es muy útil para la colaboración inter-departamental."
 
 #: seahub/help/templates/help/departments.html:49
 #, python-format
@@ -1880,7 +1880,7 @@ msgid ""
 "departments in this department. This works like <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
-msgstr ""
+msgstr "Establecer permisos detallados a carpetas en las bibliotecas para usuarios y sub-departamentos de este departamento. Ésto funciona como <a href=\"%(SITE_ROOT)shelp/folder_permission/\">la característica de los permisos de carpetas</a>."
 
 #: seahub/help/templates/help/departments.html:53
 msgid ""
@@ -1892,11 +1892,11 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "Un miembro normal del departamento puede usarlo sencillamente como un grupo. Cada departamento se presenta a sus miembros como un grupo. Un usuario puede no sólo acceder a las bibliotecas en el departamento al cual pertenece, sino también a las del departamento superior. Por ejemplo: si Juan está en el sub-departamento \"EMEA\" debajo del departamento \"Ventas\", y \"Ventas\" es un sub-departamento debajo de la compañía \"ACME\", entonces Juan puede acceder a los grupos \"EMEA\", \"Ventas\" y \"ACME\". Los grupos para departamentos esán identificados con un icono \"edificio\" junto a su nombre."
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Utilizando un proxy en el cliente Seafile"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1922,7 +1922,7 @@ msgstr "Para cambiar la configuración del proxy haga click en el icono Seafile 
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 para Windows 10"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1930,11 +1930,11 @@ msgid ""
 "Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
-msgstr ""
+msgstr "SeaDrive 2.0 (y versiones futuras) está rediseñado con una profunda integración al sistema operativo Windows 10. Soporta la versión 1709 de Windows 10 (Actualización de otoño de 2017 de Windows 10). Recomendamos a los usuarios de Windows 10 actualizar a la versión 2.0 de Seadrive para una experiencia de disco virtual más natural."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Instalar y acceder al Disco Virtual"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -1944,41 +1944,41 @@ msgid ""
 "1.0.x). It may take some time, depending on the number of files available in"
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
-msgstr ""
+msgstr "Puede descargar SeaDrive 2.0 del sitio oficial de Seafile. Después de instalarlo e ingresar a su cuenta de Seafile, SeaDrive comenzará a descargar listas de bibliotecas y archivos desde el servidor (igual que en SeaDrive 1.0.x). Ësto puede llevar un tiempo, dependiendo de la cantidad de archivos disponibles en su cuenta de Seafile. La descarga es progresiva, por lo tanto durante la descarga Ud ya puede acceder a algunos archivos en el disco virtual."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "Para acceder al disco virtual, sencillamente abra el explorador de archivos de Windows. Encontrará un nodo \"seadrive\" en el panel de navegación del explorador de archivos."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Accediendo a los archivos en el Disco Virtual"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "Las bibliotecas están agrupadas en 4 categorías en el disco virtual: MisBibliotecas, Compartidas conmigo, Compartidas con grupos y Compartidas con todos."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "Como se puede ver, los iconos de estado están más integrados al esplorador de archivos de Windows. Los iconos difieren de los de la versión 1.0."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "Los archivos en el disco viertual son creados como \"indicadores\" en el sistema de archivos local. Pueden estar en 3 estados:"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>Indicador de archivo</b>: Una representación vacía del archivo que sólo puede ser abierto cuando existe una conexión de red."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -1987,13 +1987,13 @@ msgid ""
 "files are available whenever you open SeaDrive regardless to network "
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
-msgstr ""
+msgstr "<b>Archivo completo</b>: El archivo ha sido descargado y guardado localmente. La descarga es automática cuando un indicador de archivo es abierto por primera vez. Estos archivos están disponibles cada vez que abra SeaDrive, independientemente de las conexiones de red. El sispema operativo puede decidir borrar un archivo completo cuando necesite más espacio en disco."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
-msgstr ""
+msgstr "<b>Archivo completo fijado</b>: El archivo ha sido descargado y guardado localmente. se garantiza que estará disponible aún sin conexión de red."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -2002,18 +2002,18 @@ msgid ""
 "Choose \"Always keep on this device\" when you want to pin a file or folder "
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
-msgstr ""
+msgstr "Ud puede controlar cuales archivos o carpetas se almacenarán en el caché de forma local. Ésto se puede modificar desde el menú contextual cuando haga click derecho en un archivo o carpeta. Elija \"Guardar siempre en este dispositivo\" cuando desee fijar un archivo o carpeta localmente; elija \"Liberar espacio\" cuando desee borrar el caché para un archivo o carpeta."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "En SeaDrive 1.0, los archivos almacenados en el caché no se actualizan automáticmente cuando son actualizados en el servidor. En SeaDrive 2.0 los archivos completos y los fijados son automáticamente sincronizados con el servidor."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Descarga y Control de Archivos"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -2021,7 +2021,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "Cada vez que abra un indicador de archivo, el sistema operativo automáticamente comenzará a descargarlo. Si la descarga llevase algún tiempo, habrá una barra indicadora del progreso en el explorador y podrá cancelar la descarga."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -2029,7 +2029,7 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr ""
+msgstr "A veces una aplicación en segundo plano puede intentar descargar un archivo en el disco virtual (como ser un software Anti-Virus). Ud será notificado por el sistema operativo acerca de esta acción y podrá elegir cancelar la descarga o deshabilitar que la aplicación intente descargar archivos en el futuro."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
@@ -2038,7 +2038,7 @@ msgstr "FAQ"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "¿Puedo crear, eliminar, renombrar bibliotecas?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -2046,22 +2046,22 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "Sí, Cuando cree, elimine o renombre bibliotecas en el disco virtual, la operación se verá reflejada en el servidor. Sólo puede crear, eliminar o renombrar bibliotecas en la categoría \"Mis Bibliotecas\". En las otras categorías, la operación será ignorada."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "¿Puedo crear archivos o carpetas fuera de una carpeta de biblioteca?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "Sí. Pero loas archivos creados fuera de una carpeta de biblioteca serán ignorados y NO se sincronizarán con el servidor. Una nueva carpeta debajo de la carpeta \"Mis Bibliotecas\" será tratada como una nueva biblioteca."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "¿Puedo acceder a bibliotecas encriptadas?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -2070,11 +2070,11 @@ msgid ""
 "enter the password. Just right click on the SeaDrive icon in the system tray"
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
-msgstr ""
+msgstr "Sí. Por defecto, las bibliotecas encriptadas no se sincronizan ni se muestran en el disco virtual. Ud debe elegir manualmente cuales bibliotecas encriptadas desea sincronizar e ingresar la contraseña. Simplemente haga click derecho en el icono de SeaDrive que está en la barra de tareas y elija \"Mostrar bibliotecas encriptadas\". Una ventana aparecerá y podrá elegir sincronizar o desincronizar una biblioteca encriptada."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "¿Es compatible con SeaDrive 1.0?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -2083,11 +2083,11 @@ msgid ""
 "files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
-msgstr ""
+msgstr "SeaDrive 2.0 utilizará cualquier cuenta existente y sus metadatos (almacenados en la carpeta C:\\usuarios\\nombredeusuario\\seadrive\\ ). Pero no utilizará los archivos almacenados en el caché de  SeaDrive 1.0. Por lo tanto los archivos en el caché de la versión 1.0 no serán accesibles en la versión 2.0. Puede iniciar nuevamente SeaDrive 1.0 para subir los archivos al servidor o copiarlos."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "¿Cómo borro el caché?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -2097,7 +2097,7 @@ msgid ""
 " need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
-msgstr ""
+msgstr "Puede elegir manualmente cuales archivos y carpetas se almacenarán en el caché localmente. Si encuentra una carpeta que consume mucho espacio puede elegir \"Liberar espacio\" en esa carpeta y todos los archivos en caché de esa carpeta seran borrados. No hay necesidad de establecer un tiempo de borrado de caché o límite de tamaño de caché como en SeaDrive 1.0. Como los indicadores son sólo archivos normales creados en el disco local, el tamaño del caché está limitado sólo por el espacio disponible en su computadora."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2129,7 +2129,7 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
-msgstr ""
+msgstr "Si crea una biblioteca encriptada a partir de una carpeta local mediante el cliente de escritorio (ver <a href=\"%(SITE_ROOT)shelp/install_sync/\">sincronizar archivos</a>), la contraseña no es enviada al servidor."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -2157,7 +2157,7 @@ msgstr "Notar que una biblioteca encriptada sólo encripta el contenido de los a
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Bloqueo de archivos"
 
 #: seahub/help/templates/help/file_locking.html:6
 msgid ""

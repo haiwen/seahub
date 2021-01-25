@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-25 18:22+0800\n"
-"PO-Revision-Date: 2020-12-25 10:22+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-01-25 11:37+0800\n"
+"PO-Revision-Date: 2020-12-28 06:16+0000\n"
+"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>\n"
 "Language-Team: Japanese (http://www.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgid "Login id can't be empty"
 msgstr "ログインアカウントを空にすることはできません"
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:856
+#: seahub/api2/endpoints/admin/users.py:955
 #, python-format
 msgid "Login id %s already exists."
 msgstr "ログインID%sはすでに存在します"
@@ -152,8 +152,8 @@ msgstr "メール%sが無効"
 
 #: seahub/api2/endpoints/admin/shares.py:209
 #: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:341
-#: seahub/api2/endpoints/dir_shared_items.py:443
+#: seahub/api2/endpoints/dir_shared_items.py:342
+#: seahub/api2/endpoints/dir_shared_items.py:455
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
 #: seahub/api2/endpoints/repo_share_invitations.py:186
@@ -304,53 +304,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:929
+#: seahub/api2/endpoints/admin/users.py:1028
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "編集完了"
 
-#: seahub/api2/endpoints/admin/users.py:932 seahub/views/sysadmin.py:499
+#: seahub/api2/endpoints/admin/users.py:1031 seahub/views/sysadmin.py:499
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "%sのあなたのアカウントを有効化しました。"
 
-#: seahub/api2/endpoints/admin/users.py:937
+#: seahub/api2/endpoints/admin/users.py:1036
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "編集完了、歓迎メールを送信しました。"
 
-#: seahub/api2/endpoints/admin/users.py:940
+#: seahub/api2/endpoints/admin/users.py:1039
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "編集完了しました。しかし、メール送信に失敗しました。メール設定を確認してください。"
 
-#: seahub/api2/endpoints/admin/users.py:1018 seahub/views/sysadmin.py:540
+#: seahub/api2/endpoints/admin/users.py:1117 seahub/views/sysadmin.py:540
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "パスワードは「%s」にリセットされました。"
 
-#: seahub/api2/endpoints/admin/users.py:1020 seahub/views/sysadmin.py:565
+#: seahub/api2/endpoints/admin/users.py:1119 seahub/views/sysadmin.py:565
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "パスワードを %(passwd)sに変更しました。電子メールが %(user)sに送信されました。"
 
-#: seahub/api2/endpoints/admin/users.py:1024 seahub/views/sysadmin.py:570
+#: seahub/api2/endpoints/admin/users.py:1123 seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "パスワードが %(passwd)sにリセットされましたが、 %(user)sへのメール送信が失敗しました。,メール設定を確認してください。"
 
-#: seahub/api2/endpoints/admin/users.py:1027 seahub/views/sysadmin.py:574
+#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:574
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "%(user)sのパスワードを %(passwd)s にリセットしました。"
 
-#: seahub/api2/endpoints/admin/users.py:1030 seahub/views/sysadmin.py:577
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:577
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -360,7 +360,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/users_batch.py:173
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "0以上の整数である必要があります。"
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:200
 msgid "Virus file is not found."
@@ -423,13 +423,13 @@ msgstr "ファイルがロックされています"
 msgid "Cancel failed"
 msgstr "キャンセル失敗"
 
-#: seahub/api2/endpoints/dir_shared_items.py:325
+#: seahub/api2/endpoints/dir_shared_items.py:326
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:917
 msgid "username invalid."
 msgstr "ユーザ名無効"
 
-#: seahub/api2/endpoints/dir_shared_items.py:334
+#: seahub/api2/endpoints/dir_shared_items.py:335
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:926
 #: seahub/oauth/views.py:180
@@ -458,20 +458,20 @@ msgstr "このファイルのロックを更新することはできません"
 
 #: seahub/api2/endpoints/file_participants.py:120
 msgid "The participant already exists."
-msgstr ""
+msgstr "参加者はすでに存在します。"
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr ""
+msgstr "タグには、文字、数字、ドット、ハイフン、またはアンダースコアのみを含めることができます。"
 
 #: seahub/api2/endpoints/group_members.py:104
 #: seahub/api2/endpoints/group_members.py:303
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "ユーザー%sはすでにグループメンバーです。"
 
 #: seahub/api2/endpoints/group_members.py:110
 #: seahub/api2/endpoints/group_members.py:313 seahub/api2/views.py:1621
@@ -480,12 +480,12 @@ msgstr ""
 #: seahub/organizations/api/admin/users.py:322
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "ユーザー%sが組織に見つかりません。"
 
 #: seahub/api2/endpoints/group_owned_libraries.py:372
 #: seahub/api2/endpoints/group_owned_libraries.py:644
 msgid "Permission already exists."
-msgstr ""
+msgstr "許可が既に存在します。"
 
 #: seahub/api2/endpoints/groups.py:289 seahub/group/forms.py:36
 msgid ""
@@ -507,7 +507,7 @@ msgstr ""
 #: seahub/api2/endpoints/invitations.py:125
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%sはすでに招待されています。"
 
 #: seahub/api2/endpoints/invitations.py:67
 #: seahub/api2/endpoints/invitations.py:135
@@ -515,7 +515,7 @@ msgstr ""
 #: seahub/base/accounts.py:791
 #, python-format
 msgid "User %s already exists."
-msgstr ""
+msgstr "ユーザー%sはすでに存在します。"
 
 #: seahub/api2/endpoints/invitations.py:148
 #: seahub/api2/endpoints/repo_share_invitations.py:210
@@ -534,22 +534,22 @@ msgstr "エラー"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:68
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "このライブラリは復号化されていません。"
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
-msgstr ""
+msgstr "機能が無効"
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "このライブラリのパスワードをリセットできません。"
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "ライブラリ%sの新しいパスワード"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3830
 msgid "Wrong password"
@@ -568,7 +568,7 @@ msgstr "間違った古いパスワード"
 #: seahub/api2/endpoints/repos_batch.py:1562
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "ファイル%sはロックされています。"
 
 #: seahub/api2/endpoints/repos_batch.py:1263
 #: seahub/api2/endpoints/repos_batch.py:1482
@@ -613,7 +613,7 @@ msgstr "%sのディレクトリが共有されました。"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:73
 msgid "email invalid."
-msgstr ""
+msgstr "メールが無効"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:95
 #: seahub/share/views.py:301
@@ -630,41 +630,41 @@ msgstr "ディレクトリー「%s」のダウンロードできません：サ�
 #: seahub/api2/endpoints/share_link_zip_task.py:243
 #: seahub/api2/endpoints/zip_task.py:139 seahub/api2/endpoints/zip_task.py:273
 msgid "Total size exceeds limit."
-msgstr ""
+msgstr "合計サイズが制限を超えています。"
 
 #: seahub/api2/endpoints/share_links.py:263
 msgid "Password is too short."
-msgstr ""
+msgstr "パスワードが短すぎます"
 
 #: seahub/api2/endpoints/share_links.py:286
 #: seahub/api2/endpoints/upload_links.py:181 seahub/api2/views.py:3401
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "有効期限は%s以上である必要があります"
 
 #: seahub/api2/endpoints/share_links.py:292
 #: seahub/api2/endpoints/upload_links.py:187 seahub/api2/views.py:3407
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "有効期限は%s以下である必要があります"
 
 #: seahub/api2/endpoints/share_links.py:314
 #: seahub/api2/endpoints/upload_links.py:209
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "有効期限は%sより遅くする必要があります"
 
 #: seahub/api2/endpoints/share_links.py:323
 #: seahub/api2/endpoints/upload_links.py:218
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "有効期限は%sより早くする必要があります"
 
 #: seahub/api2/endpoints/share_links.py:392
 #: seahub/api2/endpoints/share_links.py:401
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "共有リンク%sはすでに存在します。"
 
 #: seahub/api2/endpoints/upload_links.py:158
 #: seahub/templates/snippets/repo_create_js.html:50
@@ -674,11 +674,11 @@ msgstr "パスワードが短すぎます。"
 #: seahub/api2/endpoints/user.py:99
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "連絡先メールアドレス%sはすでに存在します。"
 
 #: seahub/api2/endpoints/user.py:113
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "電話が長すぎます（最大100文字）。"
 
 #: seahub/api2/endpoints/user_avatar.py:49 seahub/utils/error_msg.py:8
 #, python-format
@@ -704,11 +704,11 @@ msgstr " すでに %(nb_avatars)d このプロフィール画像を有してい�
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr ""
+msgstr "%sは他人に取られています。別の名前を試してください。"
 
 #: seahub/api2/endpoints/wikis.py:197
 msgid "Wiki not found."
-msgstr ""
+msgstr "ウィキが見つかりません"
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Name is required."
@@ -720,7 +720,7 @@ msgstr "ログインしてください。"
 
 #: seahub/auth/forms.py:26 seahub/templates/registration/login.html:37
 msgid "Email or Username"
-msgstr ""
+msgstr "メールアドレスまたはユーザ名"
 
 #: seahub/auth/forms.py:27 seahub/auth/forms.py:222
 #: seahub/base/accounts.py:769
@@ -805,15 +805,15 @@ msgstr "この電子メールアドレスのユーザが既に存在します。
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr ""
 
-#: seahub/auth/views.py:271
+#: seahub/auth/views.py:279
 msgid "Logged out"
 msgstr "ログアウト"
 
-#: seahub/auth/views.py:321
+#: seahub/auth/views.py:329
 msgid "Failed to send email, please contact administrator."
 msgstr "メールアドレスの送信に失敗しました。"
 
-#: seahub/auth/views.py:380
+#: seahub/auth/views.py:388
 msgid "Can not update password, please contact LDAP admin."
 msgstr "パスワード更新に失敗しました。LDAPインフラ管理者にご連絡ください。"
 
@@ -954,19 +954,19 @@ msgstr "日付"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
-msgstr ""
+msgstr "ライブラリ名"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr ""
+msgstr "ライブラリID"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr ""
+msgstr "ライブラリの所有者"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
-msgstr ""
+msgstr "ファイルパス"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:126
@@ -977,7 +977,7 @@ msgstr "削除"
 #: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr ""
+msgstr "匿名ユーザー"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1005,7 +1005,7 @@ msgstr "作成日"
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:214
 msgid "Last Login"
-msgstr ""
+msgstr "前回のログイン"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
@@ -1018,7 +1018,7 @@ msgstr "管理"
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:214
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP（輸入）"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/institutions/templates/institutions/useradmin.html:33
@@ -1092,7 +1092,7 @@ msgstr "フォルダ移動"
 
 #: seahub/base/templatetags/seahub_tags.py:135
 msgid "Added or modified"
-msgstr ""
+msgstr "追加または変更"
 
 #: seahub/base/templatetags/seahub_tags.py:150
 #: seahub/base/templatetags/seahub_tags.py:221
@@ -1169,32 +1169,32 @@ msgstr "読みのみ"
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
+msgstr[0] "%(size)dバイト"
 
 #: seahub/base/templatetags/seahub_tags.py:504
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%sKB"
 
 #: seahub/base/templatetags/seahub_tags.py:506
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%sMB"
 
 #: seahub/base/templatetags/seahub_tags.py:508
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%sGB"
 
 #: seahub/base/templatetags/seahub_tags.py:510
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%sTB"
 
 #: seahub/base/templatetags/seahub_tags.py:512
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%sPB"
 
 #: seahub/contacts/models.py:78
 #: seahub/contacts/templates/contacts/contact_list.html:119
@@ -1348,12 +1348,12 @@ msgstr "%s を削除しました。"
 #: seahub/work_weixin/views.py:182 seahub/work_weixin/views.py:192
 #: seahub/work_weixin/views.py:196
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "エラー、管理者に連絡してください。"
 
 #: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "ユーザー%sが見つからないか、非アクティブです。"
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1417,11 +1417,11 @@ msgstr "名前は必須項目です。"
 
 #: seahub/forms.py:185
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "有効な数値を入力してください"
 
 #: seahub/forms.py:186
 msgid "Text is required"
-msgstr ""
+msgstr "テキストが必要"
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
@@ -1527,33 +1527,33 @@ msgstr "グループ %s に参加するように招待する。"
 #: seahub/help/templates/help/base.html:28
 #: seahub/help/templates/help/introduction.html:6
 msgid "Introduction"
-msgstr ""
+msgstr "紹介"
 
 #: seahub/help/templates/help/base.html:31
 msgid "Managing files and folders"
-msgstr ""
+msgstr "ファイルとフォルダの管理"
 
 #: seahub/help/templates/help/base.html:33
 #: seahub/help/templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "ライブラリとファイルの管理"
 
 #: seahub/help/templates/help/base.html:34
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "削除されたファイルの復元"
 
 #: seahub/help/templates/help/base.html:35
 msgid "Finding old file versions"
-msgstr ""
+msgstr "古いファイルバージョンの検索"
 
 #: seahub/help/templates/help/base.html:36
 #: seahub/help/templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "ライブラリの履歴とスナップショット"
 
 #: seahub/help/templates/help/base.html:37
 msgid "Setting history retention period"
-msgstr ""
+msgstr "履歴保存期間の設定"
 
 #: seahub/help/templates/help/base.html:38
 #: seahub/help/templates/help/deleting_a_library.html:5
@@ -1563,82 +1563,82 @@ msgstr "ライブラリーの削除"
 #: seahub/help/templates/help/base.html:39
 #: seahub/help/templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Webアプリ内でのファイルの表示"
 
 #: seahub/help/templates/help/base.html:40
 #: seahub/help/templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "全文ファイル検索"
 
 #: seahub/help/templates/help/base.html:43
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "共有とコラボレーション"
 
 #: seahub/help/templates/help/base.html:45
 #: seahub/help/templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "ファイルとフォルダの共有"
 
 #: seahub/help/templates/help/base.html:46
 #: seahub/help/templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "グループの管理"
 
 #: seahub/help/templates/help/base.html:47
 msgid "Locking files"
-msgstr ""
+msgstr "ファイルのロック"
 
 #: seahub/help/templates/help/base.html:48
 msgid "Folder permission"
-msgstr ""
+msgstr "フォルダーの許可"
 
 #: seahub/help/templates/help/base.html:49
 msgid "Departments sharing"
-msgstr ""
+msgstr "共有する部門"
 
 #: seahub/help/templates/help/base.html:52
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "ウィキと知識管理"
 
 #: seahub/help/templates/help/base.html:54
 #: seahub/help/templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "ライブラリをWikiとして管理する"
 
 #: seahub/help/templates/help/base.html:57
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "デスクトップクライアントと同期"
 
 #: seahub/help/templates/help/base.html:59
 msgid "Install and sync files"
-msgstr ""
+msgstr "インストールとファイルを同期"
 
 #: seahub/help/templates/help/base.html:60
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "既存のフォルダを同期"
 
 #: seahub/help/templates/help/base.html:61
 #: seahub/help/templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "サブフォルダを選択的に同期"
 
 #: seahub/help/templates/help/base.html:62
 #: seahub/help/templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "読み取り専用の同期"
 
 #: seahub/help/templates/help/base.html:63
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "ライブラリの同期解除と再同期"
 
 #: seahub/help/templates/help/base.html:64
 #: seahub/help/templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "同期間隔の設定"
 
 #: seahub/help/templates/help/base.html:65
 msgid "Proxy settings"
-msgstr ""
+msgstr "代理設定"
 
 #: seahub/help/templates/help/base.html:66
 #: seahub/help/templates/help/conflicts.html:5
@@ -1651,24 +1651,24 @@ msgstr "除外するファイル"
 
 #: seahub/help/templates/help/base.html:70
 msgid "Drive client"
-msgstr ""
+msgstr "ドライブクライアント"
 
 #: seahub/help/templates/help/base.html:72
 #: seahub/help/templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Seafileドライブクライアントの使用"
 
 #: seahub/help/templates/help/base.html:73
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Windowsでドライブクライアント2.0を使用する"
 
 #: seahub/help/templates/help/base.html:76
 msgid "Security and encryption"
-msgstr ""
+msgstr "セキュリティと暗号化"
 
 #: seahub/help/templates/help/base.html:78
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "暗号化されたライブラリの使用方法"
 
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
@@ -1740,17 +1740,17 @@ msgstr ""
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "システム管理者"
 
 #: seahub/help/templates/help/departments.html:14
 #: seahub/help/templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "部門管理者"
 
 #: seahub/help/templates/help/departments.html:15
 #: seahub/help/templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "部門のメンバー"
 
 #: seahub/help/templates/help/departments.html:18
 msgid "The system admin can:"
@@ -3661,7 +3661,7 @@ msgstr "所有者"
 
 #: seahub/institutions/views.py:164
 msgid "Member"
-msgstr ""
+msgstr "会員"
 
 #: seahub/institutions/views.py:193 seahub/views/sysadmin.py:390
 #, python-format
@@ -4333,7 +4333,7 @@ msgstr ""
 
 #: seahub/templates/home_base.html:56
 msgid "Drafts"
-msgstr ""
+msgstr "ドラフト"
 
 #: seahub/templates/home_base.html:59
 msgid "Share Admin"
@@ -4971,7 +4971,7 @@ msgstr "開始"
 
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
-msgstr ""
+msgstr "ネットワークエラー"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
 #: seahub/views/__init__.py:601

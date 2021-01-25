@@ -14,6 +14,8 @@
   "unordered_list": "Ungeordnete Liste",
   "check_list_item": "Checkbox Liste",
   "insert_image": "Bild",
+  "insert_formula": "Insert Formula",
+  "formula": "Formula",
   "insert_file": "Datei",
   "code": "Inline-Code",
   "code_block": "Codeblock",
@@ -147,6 +149,7 @@
       "issue": "Stufe der Überschrift überprüfen"
     }
   },
+  "Shortcut_help": "Shortcut help",
   "userHelp": {
     "title": "Tastenkombinationen",
     "userHelpData": [
@@ -188,6 +191,11 @@
         "shortcutData": {
           "Insert_Table_Row": "Tabellenzeile einfügen",
           "Escape_table": "Tabelle beenden"
+        }
+      }, {
+        "shortcutType": "Formula shortcuts",
+        "shortcutData": {
+          "Insert_Formula": "Insert Formula"
         }
       }, {
         "shortcutType":"Textformatierung",
