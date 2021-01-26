@@ -12,7 +12,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.ocm.models import OCMShareReceived
-from seahub.ocm.settings import  VIA_REPO_TOKEN_URL
+from seahub.ocm.settings import VIA_REPO_TOKEN_URL
 from seahub.constants import PERMISSION_READ_WRITE
 
 
@@ -41,21 +41,21 @@ class OCMReposDirView(APIView):
             error_msg = 'with_thumbnail invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
+        username = request.user.username
+        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id,
+                                                             repo_id=repo_id,
+                                                             to_user=username)
         if not ocm_share_received:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if ocm_share_received.to_user != request.user.username:
-            error_msg = 'permission denied.'
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DIR']
+        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['DIR']
         params = {
             'path': path,
             'with_thumbnail': with_thumbnail,
         }
-        headers = {'Authorization': 'token ' + ocm_share_received.shared_secret}
+        headers = {'Authorization': 'token ' + ocm_share_received[0].shared_secret}
+
         try:
             resp = send_get_request(url, params=params, headers=headers)
         except Exception as e:
