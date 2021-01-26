@@ -29,6 +29,11 @@ class ResultsItem extends React.Component {
     let linkContent = decodeURI(item.fullpath).substring(1);
     let folderIconUrl = linkContent ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
+
+    if (item.thumbnail_url !== '') {
+      fileIconUrl = item.thumbnail_url;
+    }
+
     return (
       <li className="search-result-item">
         <img className={linkContent ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt=""/>
