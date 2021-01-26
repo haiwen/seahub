@@ -525,7 +525,7 @@ export const Utils = {
 
       if (isPro) {
         if (dirent.is_locked) {
-          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.id_admin) {
+          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
             list.push(UNLOCK);
           }   
         } else {
