@@ -54,6 +54,11 @@ class ManageMembersDialog extends React.Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      this.setState({
+        isLoading: false,
+        isLoadingMore: false,
+        hasNextPage: false
+      });
     });
   }
 
@@ -70,8 +75,9 @@ class ManageMembersDialog extends React.Component {
       emails.push(this.state.selectedOption[i].email);
     }
     seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
-      this.onGroupMembersChange();
+      const newMembers = res.data.success;
       this.setState({
+        groupMembers: [].concat(newMembers, this.state.groupMembers),
         selectedOption: null,
       });
       this.refs.userSelect.clearSelect();
@@ -84,10 +90,6 @@ class ManageMembersDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  onGroupMembersChange = () => {
-    this.listGroupMembers();
   }
 
   toggleItemFreezed = (isFreezed) => {
@@ -114,6 +116,25 @@ class ManageMembersDialog extends React.Component {
         }); 
       }   
     }   
+  }
+
+  changeMember = (targetMember) => {
+    this.setState({
+      groupMembers: this.state.groupMembers.map((item) => {
+        if (item.email == targetMember.email) {
+          item = targetMember;
+        }
+        return item;
+      })
+    });
+  }
+
+  deleteMember = (targetMember) => {
+    const groupMembers = this.state.groupMembers;
+    groupMembers.splice(groupMembers.indexOf(targetMember), 1);
+    this.setState({
+      groupMembers: groupMembers
+    });
   }
 
   render() {
@@ -159,18 +180,18 @@ class ManageMembersDialog extends React.Component {
                   <tbody>
                     {
                       this.state.groupMembers.length > 0 &&
-                  this.state.groupMembers.map((item, index = 0) => {
+                  this.state.groupMembers.map((item, index) => {
                     return (
-                      <React.Fragment key={index}>
                         <Member
+                          key={index}
                           item={item}
-                          onGroupMembersChange={this.onGroupMembersChange}
+                          changeMember={this.changeMember}
+                          deleteMember={this.deleteMember}
                           groupID={this.props.groupID}
                           isOwner={this.props.isOwner}
                           isItemFreezed={this.state.isItemFreezed}
                           toggleItemFreezed={this.toggleItemFreezed}
                         />
-                      </React.Fragment>
                     );
                   })
                     }
@@ -193,7 +214,8 @@ ManageMembersDialog.propTypes = propTypes;
 
 const MemberPropTypes = {
   item: PropTypes.object.isRequired,
-  onGroupMembersChange: PropTypes.func.isRequired,
+  changeMember: PropTypes.func.isRequired,
+  deleteMember: PropTypes.func.isRequired,
   groupID: PropTypes.string.isRequired,
   isOwner: PropTypes.bool.isRequired,
 };
@@ -211,16 +233,18 @@ class Member extends React.PureComponent {
   onChangeUserRole = (role) => {
     let isAdmin = role === 'Admin' ? 'True' : 'False';
     seafileAPI.setGroupAdmin(this.props.groupID, this.props.item.email, isAdmin).then((res) => {
-      this.props.onGroupMembersChange();
-    });
-    this.setState({
-      highlight: false,
+      this.props.changeMember(res.data);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   }
 
-  deleteMember = (name) => {
-    seafileAPI.deleteGroupMember(this.props.groupID, name).then((res) => {
-      this.props.onGroupMembersChange();
+  deleteMember = () => {
+    const { item } = this.props;
+    seafileAPI.deleteGroupMember(this.props.groupID, item.email).then((res) => {
+      this.props.deleteMember(item);
+      toaster.success(gettext('Successfully deleted {name}.').replace('{name}', item.name));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -279,8 +303,7 @@ class Member extends React.PureComponent {
           {(deleteAuthority && !this.props.isItemFreezed) &&
             <i
               className="fa fa-times delete-group-member-icon"
-              name={item.email}
-              onClick={this.deleteMember.bind(this, item.email)}>
+              onClick={this.deleteMember}>
             </i>
           }
         </td>
