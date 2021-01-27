@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
-import RoleEditor from '../select-editor/role-editor';
-import UserSelect from '../user-select.js';
 import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import RoleEditor from '../select-editor/role-editor';
+import UserSelect from '../user-select';
 import toaster from '../toast';
+import Loading from '../loading';
+
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
@@ -21,11 +23,38 @@ class ManageMembersDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true, // first loading
+      isLoadingMore: false,
       groupMembers: [],
+      page: 1,
+      perPage: 100,
+      hasNextPage: false,
       selectedOption: null,
       errMessage: [],
-      isItemFreezed: false,
+      isItemFreezed: false
     };
+  }
+
+  componentDidMount() {
+    this.listGroupMembers(this.state.page);
+  }
+
+  listGroupMembers = (page) => {
+    const { groupID } = this.props;
+    const { perPage, groupMembers } = this.state;
+    seafileAPI.listGroupMembers(groupID, page, perPage).then((res) => {
+      const members = res.data;
+      this.setState({
+        isLoading: false,
+        isLoadingMore: false,
+        page: page,
+        hasNextPage: members.length < perPage ? false : true,
+        groupMembers: groupMembers.concat(members) 
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   onSelectChange = (option) => {
@@ -57,17 +86,6 @@ class ManageMembersDialog extends React.Component {
     });
   }
 
-  listGroupMembers = () => {
-    seafileAPI.listGroupMembers(this.props.groupID).then((res) => {
-      this.setState({
-        groupMembers: res.data
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   onGroupMembersChange = () => {
     this.listGroupMembers();
   }
@@ -82,11 +100,24 @@ class ManageMembersDialog extends React.Component {
     this.props.toggleManageMembersDialog();
   }
 
-  componentDidMount() {
-    this.listGroupMembers();
+  handleScroll = (event) => {
+    // isLoadingMore: to avoid repeated request
+    const { page, hasNextPage, isLoadingMore } = this.state;
+    if (hasNextPage && !isLoadingMore) {
+      const clientHeight = event.target.clientHeight;
+      const scrollHeight = event.target.scrollHeight;
+      const scrollTop    = event.target.scrollTop;
+      const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+      if (isBottom) { // scroll to the bottom
+        this.setState({isLoadingMore: true}, () => {
+          this.listGroupMembers(page + 1); 
+        }); 
+      }   
+    }   
   }
 
   render() {
+    const { isLoading, hasNextPage } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('Manage group members')}</ModalHeader>
@@ -113,19 +144,21 @@ class ManageMembersDialog extends React.Component {
               );
             })
           }
-          <div className="manage-members">
-            <Table size="sm" className="manage-members-table">
-              <thead>
-                <tr>
-                  <th width="15%"></th>
-                  <th width="45%">{gettext('Name')}</th>
-                  <th width="30%">{gettext('Role')}</th>
-                  <th width="10%"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  this.state.groupMembers.length > 0 &&
+          <div className="manage-members" onScroll={this.handleScroll}>
+            {isLoading ? <Loading /> : (
+              <Fragment>
+                <Table size="sm" className="manage-members-table">
+                  <thead>
+                    <tr>
+                      <th width="15%"></th>
+                      <th width="45%">{gettext('Name')}</th>
+                      <th width="30%">{gettext('Role')}</th>
+                      <th width="10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      this.state.groupMembers.length > 0 &&
                   this.state.groupMembers.map((item, index = 0) => {
                     return (
                       <React.Fragment key={index}>
@@ -140,9 +173,12 @@ class ManageMembersDialog extends React.Component {
                       </React.Fragment>
                     );
                   })
-                }
-              </tbody>
-            </Table>
+                    }
+                  </tbody>
+                </Table>
+                {hasNextPage && <Loading />}
+              </Fragment>
+            )}
           </div>
         </ModalBody>
         <ModalFooter>
