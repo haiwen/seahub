@@ -6,7 +6,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
 
@@ -14,8 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.invitations.models import Invitation, RepoShareInvitation
-from post_office.models import STATUS
+from seahub.invitations.models import RepoShareInvitation
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context
@@ -82,7 +80,7 @@ class RepoShareInvitationView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response({'success': True})
 
     def delete(self, request, repo_id, format=None):
@@ -124,11 +122,11 @@ class RepoShareInvitationView(APIView):
             if not shared_obj:
                 error_msg = 'repo share invitation not found.'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-            
+
             shared_obj.delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         return Response({'success': True})

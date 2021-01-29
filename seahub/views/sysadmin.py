@@ -57,7 +57,6 @@ from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license, user_number_over_limit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
-from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.user_permissions import get_basic_user_roles, \
         get_user_role, get_basic_admin_roles
