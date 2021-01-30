@@ -3,34 +3,30 @@
 import os
 import logging
 import json
-from dateutil.relativedelta import relativedelta
-from constance import config
 
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.utils.translation import ugettext as _, activate
 from django.contrib import messages
-from django.utils import timezone
 from django.utils.html import escape
+
 import seaserv
 from seaserv import seafile_api
-from seaserv import ccnet_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.share.forms import FileLinkShareForm, \
     UploadLinkShareForm
-from seahub.share.models import FileShare, UploadLinkShare, OrgFileShare
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import require_POST
 from seahub.contacts.signals import mail_sended
 from seahub.views import is_registered_user, check_folder_permission
-from seahub.utils import string2list, gen_shared_link, \
-    gen_shared_upload_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
+from seahub.utils import string2list, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
     gen_token, normalize_cache_key, get_site_name
-from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
         ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
         SHARE_LINK_AUDIT_CODE_TIMEOUT
@@ -39,21 +35,25 @@ from seahub.profile.models import Profile
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-########## rpc wrapper
+
+# rpc wrapper
 def is_org_repo_owner(username, repo_id):
     owner = seaserv.seafserv_threaded_rpc.get_org_repo_owner(repo_id)
     return True if owner == username else False
+
 
 def org_share_repo(org_id, repo_id, from_user, to_user, permission):
     return seaserv.seafserv_threaded_rpc.org_add_share(org_id, repo_id,
                                                        from_user, to_user,
                                                        permission)
 
+
 def org_remove_share(org_id, repo_id, from_user, to_user):
     return seaserv.seafserv_threaded_rpc.org_remove_share(org_id, repo_id,
                                                           from_user, to_user)
 
-########## functions
+
+# functions
 def share_to_group(request, repo, group, permission):
     """Share repo to group with given permission.
     """
@@ -83,6 +83,7 @@ def share_to_group(request, repo, group, permission):
         logger.error(e)
         return False
 
+
 def share_to_user(request, repo, to_user, permission):
     """Share repo to a user with given permission.
     """
@@ -109,8 +110,8 @@ def share_to_user(request, repo, to_user, permission):
         else:
             seafile_api.share_repo(repo_id, from_user, to_user, permission)
     except SearpcError as e:
-            return False
-            logger.error(e)
+        logger.error(e)
+        return False
     else:
         # send a signal when sharing repo successful
         share_repo_to_user_successful.send(sender=None,
@@ -119,7 +120,8 @@ def share_to_user(request, repo, to_user, permission):
                                            path='/', org_id=org_id)
         return True
 
-########## share link
+
+# share link
 @login_required_ajax
 def send_shared_link(request):
     """
@@ -131,7 +133,8 @@ def send_shared_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error':_('Sending shared link failed. Email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Sending shared link failed. \
+                Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = FileLinkShareForm(request.POST)
@@ -207,6 +210,7 @@ def send_shared_link(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
+
 @login_required
 def save_shared_link(request):
     """Save public share link to one's library.
@@ -246,6 +250,7 @@ def save_shared_link(request):
     messages.success(request, _('Successfully saved.'))
     return HttpResponseRedirect(next_page)
 
+
 @login_required_ajax
 def send_shared_upload_link(request):
     """
@@ -257,7 +262,8 @@ def send_shared_upload_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error':_('Sending shared upload link failed. Email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Sending shared upload link failed. \
+                Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = UploadLinkShareForm(request.POST)
@@ -317,6 +323,7 @@ def send_shared_upload_link(request):
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
 
+
 @login_required_ajax
 @require_POST
 def ajax_private_share_dir(request):
@@ -359,8 +366,7 @@ def ajax_private_share_dir(request):
                     sub_repo_id = seaserv.seafserv_threaded_rpc.create_org_virtual_repo(
                         org_id, repo_id, path, name, name, username)
                 else:
-                    sub_repo_id = seafile_api.create_virtual_repo(repo_id, path,
-                        name, name, username)
+                    sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
                 sub_repo = seafile_api.get_repo(sub_repo_id)
             except SearpcError as e:
                 result['error'] = e.msg
@@ -423,6 +429,7 @@ def ajax_private_share_dir(request):
         data = json.dumps({"error": _("Please check the email(s) you entered")})
         return HttpResponse(data, status=400, content_type=content_type)
 
+
 def ajax_get_link_audit_code(request):
     """
     Generate a token, and record that token with email in cache, expires in
@@ -455,19 +462,18 @@ def ajax_get_link_audit_code(request):
 
     # send code to user via email
     subject = _("Verification code for visiting share links")
-    c = {
-        'code': code,
-    }
-    try:
-        send_html_email_with_dj_template(
-            email, dj_template='share/audit_code_email.html',
-            context=c, subject=subject, priority=MAIL_PRIORITY.now
-        )
-        return HttpResponse(json.dumps({'success': True}), status=200,
-                            content_type=content_type)
-    except Exception as e:
+    c = {'code': code}
+
+    send_success = send_html_email_with_dj_template(email,
+                                                    subject=subject,
+                                                    dj_template='share/audit_code_email.html',
+                                                    context=c)
+
+    if not send_success:
         logger.error('Failed to send audit code via email to %s')
-        logger.error(e)
         return HttpResponse(json.dumps({
             "error": _("Failed to send a verification code, please try again later.")
         }), status=500, content_type=content_type)
+
+    return HttpResponse(json.dumps({'success': True}), status=200,
+                        content_type=content_type)

@@ -15,7 +15,6 @@ from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
 
-import seahub.settings as settings
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -218,7 +217,7 @@ class AdminUsersBatch(APIView):
                     "email": email,
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
-                        operation=USER_DELETE, detail=admin_op_detail)
+                                     operation=USER_DELETE, detail=admin_op_detail)
 
         if operation == 'set-institution':
             institution = request.POST.get('institution', None)
@@ -228,7 +227,7 @@ class AdminUsersBatch(APIView):
 
             if institution != '':
                 try:
-                    obj_insti = Institution.objects.get(name=institution)
+                    Institution.objects.get(name=institution)
                 except Institution.DoesNotExist:
                     error_msg = 'Institution %s does not exist' % institution
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -372,14 +371,14 @@ class AdminImportUsers(APIView):
                 except Exception as e:
                     logger.error(e)
 
-            send_html_email_with_dj_template(
-                email, dj_template='sysadmin/user_batch_add_email.html',
-                subject=_('You are invited to join %s') % get_site_name(),
-                context={
-                    'user': email2nickname(request.user.username),
-                    'email': email,
-                    'password': password,
-                })
+            send_html_email_with_dj_template(email,
+                                             subject=_('You are invited to join %s') % get_site_name(),
+                                             dj_template='sysadmin/user_batch_add_email.html',
+                                             context={
+                                                 'user': email2nickname(request.user.username),
+                                                 'email': email,
+                                                 'password': password
+                                             })
 
             user = User.objects.get(email=email)
 
@@ -407,4 +406,3 @@ class AdminImportUsers(APIView):
                                  operation=USER_ADD, detail=admin_op_detail)
 
         return Response(result)
-

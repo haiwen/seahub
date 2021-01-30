@@ -2,7 +2,6 @@
 from datetime import timedelta
 
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
@@ -10,10 +9,11 @@ from seahub.base.fields import LowerCaseCharField
 from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token, get_site_name
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 GUEST = 'Guest'
+
 
 class InvitationManager(models.Manager):
     def add(self, inviter, accepter, invite_type=GUEST):
@@ -26,8 +26,7 @@ class InvitationManager(models.Manager):
         return i
 
     def get_by_inviter(self, inviter):
-        return super(InvitationManager,
-                self).filter(inviter=inviter).order_by('-invite_time')
+        return super(InvitationManager, self).filter(inviter=inviter).order_by('-invite_time')
 
     def delete_all_expire_invitation(self):
         super(InvitationManager, self).filter(expire_time__lte=timezone.now(), accept_time__isnull=True).delete()
@@ -93,16 +92,13 @@ class Invitation(models.Model):
         context = self.to_dict()
         context['site_name'] = get_site_name()
 
-        # subject = render_to_string('invitations/invitation_email_subject.txt',
-        #                            context).rstrip()
         subject = _('%(user)s invited you to join %(site_name)s.') % {
             'user': self.inviter, 'site_name': get_site_name()}
-        return send_html_email_with_dj_template(
-            email, dj_template='invitations/invitation_email.html',
-            context=context,
-            subject=subject,
-            priority=MAIL_PRIORITY.now
-        )
+
+        return send_html_email_with_dj_template(email,
+                                                subject=subject,
+                                                dj_template='invitations/invitation_email.html',
+                                                context=context)
 
 
 class RepoShareInvitationManager(models.Manager):
@@ -115,7 +111,7 @@ class RepoShareInvitationManager(models.Manager):
         )
         obj.save()
         return obj
-    
+
     def list_by_repo_id_and_path(self, repo_id, path):
         return self.select_related('invitation').filter(
             invitation__expire_time__gte=timezone.now(),
@@ -132,11 +128,13 @@ class RepoShareInvitationManager(models.Manager):
             return qs[0]
         else:
             return None
-    
+
     def list_by_invitation(self, invitation):
         return self.select_related('invitation').filter(invitation=invitation)
 
+
 class RepoShareInvitation(models.Model):
+
     PERMISSION_CHOICES = (
         (PERMISSION_READ, 'read only'),
         (PERMISSION_READ_WRITE, 'read and write')
