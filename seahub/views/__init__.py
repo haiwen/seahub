@@ -60,7 +60,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
-from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
+from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN
 from seahub.constants import HASH_URLS, PERMISSION_READ
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -1179,6 +1179,7 @@ def react_fake_view(request, **kwargs):
         max_upload_file_size = -1
 
     return render(request, "react_app.html", {
+        "onlyoffice_desktop_editors_portal_login": ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN,
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'dtable_web_server': DTABLE_WEB_SERVER,
