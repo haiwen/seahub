@@ -24,7 +24,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import AnonRateThrottle, UserRateThrottle
 from seahub.api2.permissions import CanGenerateUploadLink
 
-from seahub.share.models import UploadLinkShare
+from seahub.share.models import UploadLinkShare, check_share_link_common
 from seahub.utils import gen_shared_upload_link, gen_file_upload_url
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -33,6 +33,7 @@ from seahub.settings import UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
         UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX
 
 logger = logging.getLogger(__name__)
+
 
 def get_upload_link_info(uls):
     data = {}
@@ -101,7 +102,7 @@ class UploadLinks(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # filter share links by repo
-            upload_link_shares = [ufs for ufs in upload_link_shares if ufs.repo_id==repo_id]
+            upload_link_shares = [ufs for ufs in upload_link_shares if ufs.repo_id == repo_id]
 
             path = request.GET.get('path', None)
             if path:
@@ -120,7 +121,7 @@ class UploadLinks(APIView):
                     path = path + '/'
 
                 # filter share links by path
-                upload_link_shares = [ufs for ufs in upload_link_shares if ufs.path==path]
+                upload_link_shares = [ufs for ufs in upload_link_shares if ufs.path == path]
 
         result = []
         for uls in upload_link_shares:
@@ -248,10 +249,14 @@ class UploadLinks(APIView):
         uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)
         if not uls:
             uls = UploadLinkShare.objects.create_upload_link_share(username,
-                repo_id, path, password, expire_date)
+                                                                   repo_id,
+                                                                   path,
+                                                                   password,
+                                                                   expire_date)
 
         link_info = get_upload_link_info(uls)
         return Response(link_info)
+
 
 class UploadLink(APIView):
 
@@ -320,9 +325,10 @@ class UploadLinkUpload(APIView):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # currently not support encrypted upload link
-        if uls.is_encrypted():
-            error_msg = 'Upload link %s is encrypted.' % token
+        password_check_passed, error_msg = check_share_link_common(request,
+                                                                   uls,
+                                                                   is_upload_link=True)
+        if not password_check_passed:
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         repo_id = uls.repo_id
@@ -344,7 +350,10 @@ class UploadLinkUpload(APIView):
 
         obj_id = json.dumps({'parent_dir': path})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'upload-link', uls.username, use_onetime=False)
+                                                        obj_id,
+                                                        'upload-link',
+                                                        uls.username,
+                                                        use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
