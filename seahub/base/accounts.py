@@ -10,7 +10,6 @@ from django.utils.encoding import smart_text
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
     seafile_api, ccnet_api
 from constance import config
@@ -24,7 +23,7 @@ from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, 
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
-from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
 
@@ -41,7 +40,8 @@ logger = logging.getLogger(__name__)
 
 ANONYMOUS_EMAIL = 'Anonymous'
 
-UNUSABLE_PASSWORD = '!' # This will never be a valid hash
+UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
+
 
 class UserManager(object):
 
@@ -121,6 +121,7 @@ class UserManager(object):
             user.admin_role = ''
 
         return user
+
 
 class UserPermissions(object):
     def __init__(self, user):
@@ -222,6 +223,7 @@ class UserPermissions(object):
 
         return self._get_perm_by_roles('can_publish_repo')
 
+
 class AdminPermissions(object):
     def __init__(self, user):
         self.user = user
@@ -322,8 +324,8 @@ class User(object):
         return True
 
     def save(self):
-        emailuser = ccnet_threaded_rpc.get_emailuser(self.username)
-        if emailuser:
+        emailuser = ccnet_api.get_emailuser(self.username)
+        if emailuser and emailuser.source.lower() in ("db", "ldapimport"):
             if not hasattr(self, 'password'):
                 self.set_unusable_password()
 
@@ -385,12 +387,10 @@ class User(object):
         if orgs:
             for org in orgs:
                 org_id = org.org_id
-                shared_in_repos = seafile_api.get_org_share_in_repo_list(org_id,
-                        username, -1, -1)
+                shared_in_repos = seafile_api.get_org_share_in_repo_list(org_id, username, -1, -1)
 
                 for r in shared_in_repos:
-                    seafile_api.org_remove_share(org_id,
-                            r.repo_id, r.user, username)
+                    seafile_api.org_remove_share(org_id, r.repo_id, r.user, username)
         else:
             shared_in_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
             for r in shared_in_repos:
@@ -478,15 +478,12 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(
-                    u.email, dj_template='sysadmin/user_freeze_email.html',
-                    subject=_('Account %(account)s froze on %(site)s.') % {
-                        "account": self.email,
-                        "site": get_site_name(),
-                    },
-                    context={'user': self.email},
-                    priority=MAIL_PRIORITY.now
-                )
+                send_html_email_with_dj_template(u.email,
+                                                 subject=_('Account %(account)s froze on %(site)s.') % {
+                                                     "account": self.email,
+                                                     "site": get_site_name()},
+                                                 dj_template='sysadmin/user_freeze_email.html',
+                                                 context={'user': self.email})
 
                 # restore current language
                 translation.activate(cur_language)
@@ -535,10 +532,11 @@ class User(object):
         for r in passwd_setted_repos:
             unset_repo_passwd(r.id, self.email)
 
+
 class AuthBackend(object):
 
     def get_user_with_import(self, username):
-        emailuser = seaserv.get_emailuser_with_import(username)
+        emailuser = ccnet_api.get_emailuser_with_import(username)
         if not emailuser:
             raise User.DoesNotExist('User matching query does not exits.')
 
@@ -580,7 +578,8 @@ class AuthBackend(object):
         if user.check_password(password):
             return user
 
-########## Register related
+
+# Register related
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:
@@ -653,10 +652,10 @@ class RegistrationBackend(object):
             # since user will be activated after registration,
             # so we will not use email sending, just create acitvated user
             new_user = RegistrationProfile.objects.create_active_user(username, email,
-                                                                        password, site,
-                                                                        send_email=False)
+                                                                      password, site,
+                                                                      send_email=False)
             # login the user
-            new_user.backend=settings.AUTHENTICATION_BACKENDS[0]
+            new_user.backend = settings.AUTHENTICATION_BACKENDS[0]
 
             login(request, new_user)
         else:
@@ -702,7 +701,7 @@ class RegistrationBackend(object):
                                         user=activated,
                                         request=request)
             # login the user
-            activated.backend=settings.AUTHENTICATION_BACKENDS[0]
+            activated.backend = settings.AUTHENTICATION_BACKENDS[0]
             login(request, activated)
 
         return activated
@@ -753,17 +752,17 @@ class RegistrationForm(forms.Form):
     Validates that the requested email is not already in use, and
     requires the password to be entered twice to catch typos.
     """
-    attrs_dict = { 'class': 'input' }
+    attrs_dict = {'class': 'input'}
 
-    email = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict,
-                                                               maxlength=75)),
-                             label=_("Email address"))
+    email = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict, maxlength=75)),
+                            label=_("Email address"))
+
     userid = forms.RegexField(regex=r'^\w+$',
                               max_length=40,
                               required=False,
                               widget=forms.TextInput(),
                               label=_("Username"),
-                              error_messages={ 'invalid': _("This value must be of length 40") })
+                              error_messages={'invalid': _("This value must be of length 40")})
 
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_("Password"))
@@ -825,12 +824,13 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(_("The two password fields didn't match."))
         return self.cleaned_data
 
+
 class DetailedRegistrationForm(RegistrationForm):
-    attrs_dict = { 'class': 'input' }
+    attrs_dict = {'class': 'input'}
 
     try:
         from seahub.settings import REGISTRATION_DETAILS_MAP
-    except:
+    except ImportError:
         REGISTRATION_DETAILS_MAP = None
 
     if REGISTRATION_DETAILS_MAP:

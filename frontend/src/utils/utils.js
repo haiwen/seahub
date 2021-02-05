@@ -484,7 +484,7 @@ export const Utils = {
     return list;
   },
 
-  getFileOperationList: function(currentRepoInfo, dirent, isContextmenu) {
+  getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
       COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
@@ -516,7 +516,7 @@ export const Utils = {
 
       if (isPro) {
         if (dirent.is_locked) {
-          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice') {
+          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
             list.push(UNLOCK);
           }
         } else {
@@ -551,7 +551,7 @@ export const Utils = {
   getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     return dirent.type == 'dir' ?
       Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu) :
-      Utils.getFileOperationList(currentRepoInfo, dirent, isContextmenu);
+      Utils.getFileOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   },
 
   sharePerms: function(permission) {

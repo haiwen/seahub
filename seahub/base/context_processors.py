@@ -133,6 +133,7 @@ def base(request):
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
         'LOGIN_URL': dj_settings.LOGIN_URL,
+        'LOGOUT_URL': dj_settings.LOGOUT_URL,
         'enable_thumbnail': ENABLE_THUMBNAIL,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,

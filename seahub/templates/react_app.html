@@ -1,5 +1,6 @@
 {% extends "base_for_react.html" %}
 {% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
 
 {% block extra_style %}
 {% render_bundle 'app' 'css' %}
@@ -16,6 +17,15 @@
     uploadLinkExpireDaysMin: {{ upload_link_expire_days_min }},
     uploadLinkExpireDaysMax: {{ upload_link_expire_days_max }}
   });
+  {% if onlyoffice_desktop_editors_portal_login %}
+  let params = {
+    "displayName": "{{request.user.username|email2nickname|escapejs}}",
+    "email": "{{request.user.username|escapejs}}",
+    "domain": "{{service_url}}",
+    "provider": "{{site_name}}"
+  }
+  window.AscDesktopEditor.execCommand('portal:login', JSON.stringify(params));
+  {% endif %}
 </script>
 {% render_bundle 'app' 'js' %}
 {% endblock %}

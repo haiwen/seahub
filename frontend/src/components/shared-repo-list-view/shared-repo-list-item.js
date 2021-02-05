@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
@@ -479,14 +479,21 @@ class SharedRepoListItem extends React.Component {
     );
   }
 
+  visitRepo = () => {
+    if (!this.state.isRenaming) {
+      navigate(this.repoURL);
+    }
+  }
+  
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo } = this.props;
+    this.repoURL = libPath;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-          <td><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
-          <td>
+          <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} width="24" alt={iconTitle}/></td>
+          <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
               <Link to={libPath}>{repo.repo_name}</Link>

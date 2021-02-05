@@ -19,6 +19,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.models import TokenV2
 
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -33,9 +34,12 @@ from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX,
 from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
-        gen_shared_link, gen_shared_upload_link
+        gen_shared_link, gen_shared_upload_link, \
+        get_file_audit_events, get_file_update_events
+
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
+        datetime_to_isoformat_timestr, utc_to_local
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.constants import DEFAULT_ADMIN
@@ -55,6 +59,43 @@ from seahub.share.models import FileShare, UploadLinkShare
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+
+def get_user_last_access_time(email, last_login_time):
+
+    device_last_access = ''
+    audit_last_access = ''
+    update_last_access = ''
+
+    devices = TokenV2.objects.filter(user=email).order_by('-last_accessed')
+    if devices:
+        device_last_access = devices[0].last_accessed
+
+    audit_events = get_file_audit_events(email, 0, None, 0, 1) or []
+    if audit_events:
+        audit_last_access = audit_events[0].timestamp
+
+    update_events = get_file_update_events(email, 0, None, 0, 1) or []
+    if update_events:
+        update_last_access = update_events[0].timestamp
+
+    last_access_time_list = []
+    if last_login_time:
+        last_access_time_list.append(last_login_time)
+
+    if device_last_access:
+        last_access_time_list.append(device_last_access)
+
+    if audit_last_access:
+        last_access_time_list.append(utc_to_local(audit_last_access))
+
+    if update_last_access:
+        last_access_time_list.append(utc_to_local(update_last_access))
+
+    if not last_access_time_list:
+        return ''
+    else:
+        return datetime_to_isoformat_timestr(sorted(last_access_time_list)[-1])
 
 
 def get_user_upload_link_info(uls):
@@ -204,6 +245,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
             logger.error(e)
             seafile_api.set_user_quota(email, -1)
 
+
 def get_user_info(email):
 
     user = User.objects.get(email=email)
@@ -297,8 +339,15 @@ class AdminAdminUsers(APIView):
                 user_info['quota_total'] = -1
 
             user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                user_info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                          last_login_obj.last_login)
+            else:
+                user_info['last_login'] = ''
+                user_info['last_access_time'] = get_user_last_access_time(user.email, '')
 
             try:
                 admin_role = AdminRole.objects.get_admin_role(user.email)
@@ -311,6 +360,7 @@ class AdminAdminUsers(APIView):
             'admin_user_list': admin_users_info,
         }
         return Response(result)
+
 
 class AdminUsers(APIView):
 
@@ -363,7 +413,13 @@ class AdminUsers(APIView):
             info['quota_total'] = seafile_api.get_user_quota(user.email)
 
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
 
             info['role'] = get_user_role(user)
 
@@ -423,8 +479,10 @@ class AdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
-                            page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(source,
+                                                                       direction,
+                                                                       page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -448,8 +506,10 @@ class AdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
-                            page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(source,
+                                                                       direction,
+                                                                       page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -489,10 +549,19 @@ class AdminUsers(APIView):
                 info['quota_usage'] = -1
                 info['quota_total'] = -1
 
-            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
             info['role'] = get_user_role(user)
+
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             if getattr(settings, 'MULTI_INSTITUTION', False):
                 info['institution'] = profile.institution if profile else ''
 
@@ -569,8 +638,7 @@ class AdminUsers(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                org_quota_mb = seafile_api.get_org_quota(org_id) / \
-                        get_file_size_unit('MB')
+                org_quota_mb = seafile_api.get_org_quota(org_id) / get_file_size_unit('MB')
 
                 if quota_total_mb > org_quota_mb:
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
@@ -611,6 +679,7 @@ class AdminUsers(APIView):
                                 c,
                                 None,
                                 [email2contact_email(email)])
+
                 add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
             except Exception as e:
                 logger.error(str(e))
@@ -669,8 +738,16 @@ class AdminLDAPUsers(APIView):
             info['quota_total'] = seafile_api.get_user_quota(user.email)
             info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             data.append(info)
 
         result = {'ldap_user_list': data, 'has_next_page': has_next_page}
@@ -859,8 +936,16 @@ class AdminSearchUser(APIView):
                 info['quota_total'] = seafile_api.get_user_quota(user.email)
 
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             info['role'] = get_user_role(user)
 
             if getattr(settings, 'MULTI_INSTITUTION', False):
@@ -984,8 +1069,7 @@ class AdminUser(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                org_quota_mb = seafile_api.get_org_quota(org_id) / \
-                        get_file_size_unit('MB')
+                org_quota_mb = seafile_api.get_org_quota(org_id) / get_file_size_unit('MB')
 
                 if quota_total_mb > org_quota_mb:
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
@@ -1115,7 +1199,7 @@ class AdminUserResetPassword(APIView):
                 contact_email = Profile.objects.get_contact_email_by_user(email)
                 try:
                     send_html_email(_(u'Password has been reset on %s') % get_site_name(),
-                                'sysadmin/user_reset_email.html', c, None, [contact_email])
+                                    'sysadmin/user_reset_email.html', c, None, [contact_email])
                     reset_tip = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
                         {'passwd': new_password, 'user': contact_email}
                 except Exception as e:
@@ -1299,7 +1383,7 @@ class AdminUserBeSharedRepos(APIView):
             if email not in nickname_dict:
                 if '@seafile_group' in email:
                     group_id = get_group_id_by_repo_owner(email)
-                    group_name= group_id_to_name(group_id)
+                    group_name = group_id_to_name(group_id)
                     nickname_dict[email] = group_name
                 else:
                     nickname_dict[email] = email2nickname(email)
