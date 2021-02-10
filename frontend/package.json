@@ -34,7 +34,7 @@
     "react-responsive": "^6.1.2",
     "react-select": "^2.4.1",
     "reactstrap": "^6.4.0",
-    "seafile-js": "0.2.165",
+    "seafile-js": "0.2.166",
     "socket.io-client": "^2.2.0",
     "unified": "^7.0.0",
     "url-parse": "^1.4.3",
