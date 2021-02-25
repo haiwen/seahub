@@ -105,13 +105,11 @@ class GroupLibraries(APIView):
                 all_repo_owner.append(repo_owner)
                 repo_id_owner_dict[repo_id] = repo_owner
 
-        all_modifier = [r.last_modifier for r in group_repos]
-
         # Use dict to reduce memcache fetch cost in large for-loop.
         name_dict = {}
         contact_email_dict = {}
 
-        for email in set(all_repo_owner + all_modifier):
+        for email in all_repo_owner:
 
             if email not in name_dict:
                 if '@seafile_group' in email:
@@ -143,7 +141,7 @@ class GroupLibraries(APIView):
             group_repo_info['owner_name'] = name_dict.get(repo_owner, '')
             group_repo_info['owner_contact_email'] = contact_email_dict.get(repo_owner, '')
 
-            modifier = group_repo.last_modifier
+            modifier = repo_owner
             group_repo_info['modifier_email'] = modifier
             group_repo_info['modifier_name'] = name_dict.get(modifier, '')
             group_repo_info['modifier_contact_email'] = contact_email_dict.get(modifier, '')
