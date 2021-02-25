@@ -1,18 +1,33 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import logging
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
+
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
 from seahub.utils import is_valid_email, render_error
+from seahub.utils.file_size import get_quota_from_string
 from seahub.base.accounts import User
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
+
+try:
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    seafile_conf_dir = os.path.join(current_path, '../../../../conf')
+    sys.path.append(seafile_conf_dir)
+    from seahub_custom_functions import custom_get_user_role
+    CUSTOM_GET_USER_ROLE = True
+except ImportError:
+    CUSTOM_GET_USER_ROLE = False
+
 
 ENABLE_OAUTH = getattr(settings, 'ENABLE_OAUTH', False)
 if ENABLE_OAUTH:
@@ -199,6 +214,20 @@ def oauth_callback(request):
     if contact_email:
         profile.contact_email = contact_email.strip()
         profile.save()
+
+    if CUSTOM_GET_USER_ROLE:
+        remote_role_value = user_info.get('role', '')
+        if remote_role_value:
+            role = custom_get_user_role(remote_role_value)
+
+            # update user role
+            ccnet_api.update_role_emailuser(user_info['email'], role)
+
+            # update user role quota
+            role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
+            if role_quota:
+                quota = get_quota_from_string(role_quota)
+                seafile_api.set_role_quota(role, quota)
 
     # generate auth token for Seafile client
     api_token = get_api_token(request)
