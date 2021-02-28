@@ -4,6 +4,11 @@
 {% block sub_title %}{% trans "Create Account" %} - {% endblock %}
 
 {% block main_content %}
+{% if message %}
+<div class="text-panel">
+  <p>{{ message }}</p>
+</div>
+{% else %}
 <div class="new-narrow-panel">
     <h2 class="hd">{% trans "Set your password" %}</h2>
     <form action="" method="post" class="con">{% csrf_token %}
@@ -17,6 +22,7 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
