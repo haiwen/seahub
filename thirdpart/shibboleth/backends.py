@@ -49,7 +49,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         if not local_ccnet_users:
             local_ccnet_users = ccnet_api.search_emailusers('LDAP', username, -1, -1)
 
-        if username not in [item.email for item in local_ccnet_users]:
+        if username.lower() not in [item.email for item in local_ccnet_users]:
             local_ccnet_users = []
 
         if not local_ccnet_users:
