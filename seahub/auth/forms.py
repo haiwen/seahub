@@ -7,6 +7,7 @@ from django.utils.http import int_to_base36
 from seaserv import ccnet_api
 
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
@@ -152,7 +153,8 @@ class PasswordResetForm(forms.Form):
         }
 
         send_html_email(_("Reset Password on %s") % site_name,
-                  email_template_name, c, None, [user.username])
+                        email_template_name, c, None,
+                        [email2contact_email(user.username)])
 
 class SetPasswordForm(forms.Form):
     """
