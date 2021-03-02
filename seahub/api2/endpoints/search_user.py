@@ -117,7 +117,7 @@ class SearchUser(APIView):
             # search user from user's contacts
             email_list += search_user_when_global_address_book_disabled(request, q)
 
-        ## search finished, now filter out some users
+        # search finished, now filter out some users
 
         # remove duplicate emails
         # get_emailusers_in_list can only accept 20 users at most
@@ -128,7 +128,8 @@ class SearchUser(APIView):
         # remove nonexistent or inactive user
         email_list_json = json.dumps(email_list)
         user_obj_list = ccnet_api.get_emailusers_in_list('DB', email_list_json) + \
-                ccnet_api.get_emailusers_in_list('LDAP', email_list_json)
+                        ccnet_api.get_emailusers_in_list('LDAP', email_list_json)
+
         for user_obj in user_obj_list:
             if user_obj.is_active:
                 email_result.append(user_obj.email)
@@ -136,7 +137,7 @@ class SearchUser(APIView):
         if django_settings.ENABLE_ADDRESSBOOK_OPT_IN:
             # get users who has setted to show in address book
             listed_users = Profile.objects.filter(list_in_address_book=True).values('user')
-            listed_user_list = [ u['user'] for u in listed_users ]
+            listed_user_list = [u['user'] for u in listed_users]
 
             email_result = list(set(email_result) & set(listed_user_list))
 
@@ -164,6 +165,7 @@ class SearchUser(APIView):
 
         return Response({"users": formated_result})
 
+
 def format_searched_user_result(request, users, size):
     results = []
 
@@ -177,6 +179,7 @@ def format_searched_user_result(request, users, size):
         })
 
     return results
+
 
 def search_user_from_ccnet(q):
     """ Return 10 items at most.
@@ -204,26 +207,30 @@ def search_user_from_ccnet(q):
 
     return email_list
 
+
 def search_user_from_profile(q):
     """ Return 10 items at most.
     """
     # 'nickname__icontains' for search by nickname
     # 'contact_email__icontains' for search by contact email
     users = Profile.objects.filter(Q(nickname__icontains=q) | \
-            Q(contact_email__icontains=q)).values('user')[:10]
+                                   Q(contact_email__icontains=q) | \
+                                   Q(login_id__icontains=q)).values('user')[:10]
 
     email_list = []
     for user in users:
         email_list.append(user['user'])
 
     return email_list
+
 
 def search_user_from_profile_with_limits(q, limited_emails):
     """ Return 10 items at most.
     """
     # search within limited_emails
-    users = Profile.objects.filter(Q(user__in=limited_emails) &
-            (Q(nickname__icontains=q) | Q(contact_email__icontains=q))).values('user')[:10]
+    users = Profile.objects.filter(Q(user__in=limited_emails) & (Q(nickname__icontains=q) | \
+                                                                 Q(contact_email__icontains=q) | \
+                                                                 Q(login_id__icontains=q))).values('user')[:10]
 
     email_list = []
     for user in users:
@@ -231,7 +238,9 @@ def search_user_from_profile_with_limits(q, limited_emails):
 
     return email_list
 
+
 def search_user_when_global_address_book_disabled(request, q):
+
     """ Return 10 items at most.
     """
 
@@ -242,6 +251,7 @@ def search_user_when_global_address_book_disabled(request, q):
     # get user's contact list
     contacts = Contact.objects.get_contacts_by_user(username)
     for contact in contacts:
+
         # search user from contact list
         if q in contact.contact_email:
             email_list.append(contact.contact_email)
@@ -254,13 +264,21 @@ def search_user_when_global_address_book_disabled(request, q):
     email_list += search_user_from_profile_with_limits(q, limited_emails)
 
     current_user = User.objects.get(email=username)
-    if is_valid_email(q) and current_user.role.lower() != 'guest':
-        # if `q` is a valid email and current is not a guest user
-        email_list.append(q)
+    if current_user.role.lower() != 'guest':
 
-        # get user whose `contact_email` is `q`
-        users = Profile.objects.filter(contact_email=q).values('user')
-        for user in users:
-            email_list.append(user['user'])
+        if is_valid_email(q):
+
+            # if `q` is a valid email
+            email_list.append(q)
+
+            # get user whose `contact_email` is `q`
+            users = Profile.objects.filter(contact_email=q).values('user')
+            for user in users:
+                email_list.append(user['user'])
+
+        # get user whose `login_id` is `q`
+        username_by_login_id = Profile.objects.get_username_by_login_id(q)
+        if username_by_login_id:
+            email_list.append(username_by_login_id)
 
     return email_list
