@@ -17,3 +17,4 @@ pillow
 pyjwt
 pycryptodome
 requests_oauthlib
+pyheif-pillow-opener==0.1.0
