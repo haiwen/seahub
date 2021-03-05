@@ -2,7 +2,6 @@ import json
 from mock import patch
 
 from django.test import override_settings
-from post_office.models import Email
 
 from django.urls import reverse
 from seahub.base.accounts import UserPermissions

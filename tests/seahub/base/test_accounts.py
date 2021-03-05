@@ -4,7 +4,7 @@ from seahub.base.accounts import User, RegistrationForm
 
 from seahub.options.models import UserOptions
 from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
-from post_office.models import Email
+from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.test import override_settings
 from mock import patch
@@ -22,7 +22,7 @@ MULTI_TENANCY_FALSE = False
 
 class UserTest(BaseTestCase):
     def test_freeze_user(self):
-        assert len(Email.objects.all()) == 0
+        assert len(EmailMessage.objects.all()) == 0
 
         u = User.objects.get(self.user.username)
         u.freeze_user(notify_admins=False)
