@@ -4588,7 +4588,7 @@ class Groups(APIView):
         group_name = request.data.get('group_name', None)
         group_name = group_name.strip()
         if not validate_group_name(group_name):
-            result['error'] = 'Failed to rename group, group name can only contain letters, numbers, blank, hyphen or underscore.'
+            result['error'] = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote, brackets or underscore')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
 

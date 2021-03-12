@@ -77,7 +77,7 @@ class AdminAddressBookGroups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
+            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote, brackets or underscore')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
