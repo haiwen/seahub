@@ -30,7 +30,7 @@ def validate_group_name(group_name):
     """
     if len(group_name) > 255:
         return False
-    return re.match('^[\w\s\'\.-]+$', group_name, re.U)
+    return re.match('^[()（）\w\s\'\.-]+$', group_name, re.U)
 
 def check_group_name_conflict(request, new_group_name):
     """Check if new group name conflict with existed group.
