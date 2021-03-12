@@ -56,6 +56,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         username = options.get('username', None)
         email = options.get('email', None)
+        password = options.get('password', None)
         interactive = options.get('interactive')
         
         # Do quick and dirty validation if --noinput
@@ -68,8 +69,6 @@ class Command(BaseCommand):
                 is_valid_email(email)
             except exceptions.ValidationError:
                 raise CommandError("Invalid email address.")
-
-        password = ''
 
         # Try to determine the current system user's username to use as a default.
         try:
