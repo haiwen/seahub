@@ -1404,3 +1404,347 @@ class AdminUserBeSharedRepos(APIView):
             repos_info.append(repo_info)
 
         return Response({'repo_list': repos_info})
+
+
+class AdminUpdateUserCcnetEmail(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request):
+        """update ccnet email
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        # argument check
+        old_ccnet_email = request.data.get("old_email", None)
+        if not old_ccnet_email:
+            error_msg = 'old_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_ccnet_email = request.data.get("new_email", None)
+        if not new_ccnet_email:
+            error_msg = 'new_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_ccnet_email = new_ccnet_email.strip()
+        if not is_valid_email(new_ccnet_email):
+            error_msg = 'new_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not ccnet_api.get_emailuser(old_ccnet_email):
+            error_msg = 'User %s not found.' % old_ccnet_email
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if ccnet_api.get_emailuser(new_ccnet_email):
+            error_msg = "User %s already exists." % new_ccnet_email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # update
+        try:
+            ccnet_api.update_emailuser_id(old_ccnet_email, new_ccnet_email)
+            logger.debug('the ccnet database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.api2.models import Token
+            token_list = Token.objects.filter(user=old_ccnet_email)
+            for token in token_list:
+                token.user = new_ccnet_email
+                token.save()
+            logger.debug('the api2_token table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.api2.models import TokenV2
+            tokenv2_list = TokenV2.objects.filter(user=old_ccnet_email)
+            for tokenv2 in tokenv2_list:
+                tokenv2.user = new_ccnet_email
+                tokenv2.save()
+            logger.debug('the api2_tokenv2 table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.admin_log.models import AdminLog
+            adminlog_list = AdminLog.objects.filter(email=old_ccnet_email)
+            for adminlog in adminlog_list:
+                adminlog.email = new_ccnet_email
+                adminlog.save()
+            logger.debug('the admin_log_adminlog table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.avatar.models import Avatar
+            avatar_list = Avatar.objects.filter(emailuser=old_ccnet_email)
+            for avatar in avatar_list:
+                avatar.emailuser = new_ccnet_email
+                avatar.save()
+            logger.debug('the avatar_avatar table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import ClientLoginToken
+            clientlogintoken_list = ClientLoginToken.objects.filter(username=old_ccnet_email)
+            for clientlogintoken in clientlogintoken_list:
+                clientlogintoken.username = new_ccnet_email
+                clientlogintoken.save()
+            logger.debug('the base_clientlogintoken table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import DeviceToken
+            devicetoken_list = DeviceToken.objects.filter(user=old_ccnet_email)
+            for devicetoken in devicetoken_list:
+                devicetoken.user = new_ccnet_email
+                devicetoken.save()
+            logger.debug('the base_devicetoken table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import FileComment
+            filecomment_list = FileComment.objects.filter(author=old_ccnet_email)
+            for filecomment in filecomment_list:
+                filecomment.author = new_ccnet_email
+                filecomment.save()
+            logger.debug('the base_filecomment table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import UserLastLogin
+            userlastlogin_list = UserLastLogin.objects.filter(username=old_ccnet_email)
+            for userlastlogin in userlastlogin_list:
+                userlastlogin.username = new_ccnet_email
+                userlastlogin.save()
+            logger.debug('the base_userlastlogin table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import UserStarredFiles
+            userstarredfiles_list = UserStarredFiles.objects.filter(email=old_ccnet_email)
+            for userstarredfiles in userstarredfiles_list:
+                userstarredfiles.email = new_ccnet_email
+                userstarredfiles.save()
+            logger.debug('the base_userstarredfiles table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.drafts.models import Draft
+            draft_list = Draft.objects.filter(username=old_ccnet_email)
+            for draft in draft_list:
+                draft.username = new_ccnet_email
+                draft.save()
+            logger.debug('the drafts_draft table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.drafts.models import DraftReviewer
+            draftreviewer_list = DraftReviewer.objects.filter(reviewer=old_ccnet_email)
+            for draftreviewer in draftreviewer_list:
+                draftreviewer.reviewer = new_ccnet_email
+                draftreviewer.save()
+            logger.debug('the drafts_draftreviewer table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.file_participants.models import FileParticipant
+            fileparticipant_list = FileParticipant.objects.filter(username=old_ccnet_email)
+            for fileparticipant in fileparticipant_list:
+                fileparticipant.username = new_ccnet_email
+                fileparticipant.save()
+            logger.debug('the file_participants_fileparticipant table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.institutions.models import InstitutionAdmin
+            institutionadmin_list = InstitutionAdmin.objects.filter(user=old_ccnet_email)
+            for institutionadmin in institutionadmin_list:
+                institutionadmin.user = new_ccnet_email
+                institutionadmin.save()
+            logger.debug('the institutions_institutionadmin table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.invitations.models import Invitation
+            invitation_list = Invitation.objects.filter(inviter=old_ccnet_email)
+            for invitation in invitation_list:
+                invitation.inviter = new_ccnet_email
+                invitation.save()
+            logger.debug('the invitations_invitation table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.notifications.models import UserNotification
+            usernotification_list = UserNotification.objects.filter(to_user=old_ccnet_email)
+            for usernotification in usernotification_list:
+                usernotification.to_user = new_ccnet_email
+                usernotification.save()
+            logger.debug('the notifications_usernotification table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.options.models import UserOptions
+            useroptions_list = UserOptions.objects.filter(email=old_ccnet_email)
+            for useroptions in useroptions_list:
+                useroptions.email = new_ccnet_email
+                useroptions.save()
+            logger.debug('the options_useroptions table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.profile.models import DetailedProfile
+            detailedprofile_list = DetailedProfile.objects.filter(user=old_ccnet_email)
+            for detailedprofile in detailedprofile_list:
+                detailedprofile.user = new_ccnet_email
+                detailedprofile.save()
+            logger.debug('the profile_detailedprofile table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.profile.models import Profile
+            profile_list = Profile.objects.filter(user=old_ccnet_email)
+            for profile in profile_list:
+                profile.user = new_ccnet_email
+                profile.save()
+            logger.debug('the profile_profile table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.role_permissions.models import AdminRole
+            adminrole_list = AdminRole.objects.filter(email=old_ccnet_email)
+            for adminrole in adminrole_list:
+                adminrole.email = new_ccnet_email
+                adminrole.save()
+            logger.debug('the role_permissions_adminrole table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import AnonymousShare
+            anonymousshare_list = AnonymousShare.objects.filter(repo_owner=old_ccnet_email)
+            for anonymousshare in anonymousshare_list:
+                anonymousshare.repo_owner = new_ccnet_email
+                anonymousshare.save()
+            logger.debug('the share_anonymousshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import FileShare
+            fileshare_list = FileShare.objects.filter(username=old_ccnet_email)
+            for fileshare in fileshare_list:
+                fileshare.username = new_ccnet_email
+                fileshare.save()
+            logger.debug('the share_fileshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import UploadLinkShare
+            uploadlinkshare_list = UploadLinkShare.objects.filter(username=old_ccnet_email)
+            for uploadlinkshare in uploadlinkshare_list:
+                uploadlinkshare.username = new_ccnet_email
+                uploadlinkshare.save()
+            logger.debug('the share_uploadlinkshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.auth.models import SocialAuthUser
+            socialauthuser_list = SocialAuthUser.objects.filter(username=old_ccnet_email)
+            for socialauthuser in socialauthuser_list:
+                socialauthuser.username = new_ccnet_email
+                socialauthuser.save()
+            logger.debug('the social_auth_usersocialauth table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub_extra.sysadmin_extra.models import UserLoginLog
+            userlastlogin_list = UserLoginLog.objects.filter(username=old_ccnet_email)
+            for userlastlogin in userlastlogin_list:
+                userlastlogin.username = new_ccnet_email
+                userlastlogin.save()
+            logger.debug('the sysadmin_extra_userloginlog table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.tags.models import FileTag
+            filetag_list = FileTag.objects.filter(username=old_ccnet_email)
+            for filetag in filetag_list:
+                filetag.username = new_ccnet_email
+                filetag.save()
+            logger.debug('the tags_filetag table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from termsandconditions.models import UserTermsAndConditions
+            usertermsandconditions_list = UserTermsAndConditions.objects.filter(username=old_ccnet_email)
+            for usertermsandconditions in usertermsandconditions_list:
+                usertermsandconditions.username = new_ccnet_email
+                usertermsandconditions.save()
+            logger.debug('the termsandconditions_usertermsandconditions table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.wiki.models import Wiki
+            wiki_list = Wiki.objects.filter(username=old_ccnet_email)
+            for wiki in wiki_list:
+                wiki.username = new_ccnet_email
+                wiki.save()
+            logger.debug('the wiki_wiki table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.ocm.models import OCMShare
+            ocmshare_list = OCMShare.objects.filter(from_user=old_ccnet_email)
+            for ocmshare in ocmshare_list:
+                ocmshare.from_user = new_ccnet_email
+                ocmshare.save()
+            logger.debug('the ocm_share table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.ocm.models import OCMShareReceived
+            ocmsharereceived_list = OCMShareReceived.objects.filter(to_user=old_ccnet_email)
+            for ocmsharereceived in ocmsharereceived_list:
+                ocmsharereceived.to_user = new_ccnet_email
+                ocmsharereceived.save()
+            logger.debug('the ocm_share_received table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        return Response({'success': True})
