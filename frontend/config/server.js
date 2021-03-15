@@ -13,7 +13,14 @@ const compiler = Webpack(config);
 const devServerOptions = Object.assign({}, config.devServer, {
   stats: {
     colors: true
-  }
+  },
+  hot: true,
+  // Use 'ws' instead of 'sockjs-node' on server since we're using native
+  // websockets in `webpackHotDevClient`.
+  transportMode: 'ws',
+  // Prevent a WS client from getting injected as we're already including
+  // `webpackHotDevClient`.
+  injectClient: false,
 });
 
 console.log('Dev server options:', devServerOptions);
