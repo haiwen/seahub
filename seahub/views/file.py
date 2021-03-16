@@ -7,6 +7,7 @@ view_snapshot_file, view_shared_file, etc.
 
 import os
 import json
+import time
 import stat
 import urllib.request, urllib.error, urllib.parse
 import chardet
@@ -792,9 +793,11 @@ def view_lib_file(request, repo_id, path):
                 if is_pro_version() and can_edit:
                     try:
                         if not is_locked:
-                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                                  int(time.time()) + 40 * 60)
                         elif locked_by_online_office:
-                            seafile_api.refresh_file_lock(repo_id, path)
+                            seafile_api.refresh_file_lock(repo_id, path,
+                                                          int(time.time()) + 40 * 60)
                     except Exception as e:
                         logger.error(e)
 
@@ -1166,9 +1169,11 @@ def view_shared_file(request, fileshare):
             locked_by_online_office = if_locked_by_online_office(repo_id, path)
             try:
                 if not is_locked:
-                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                          int(time.time()) + 40 * 60)
                 elif locked_by_online_office:
-                    seafile_api.refresh_file_lock(repo_id, path)
+                    seafile_api.refresh_file_lock(repo_id, path,
+                                                  int(time.time()) + 40 * 60)
             except Exception as e:
                 logger.error(e)
 
