@@ -146,7 +146,7 @@ class FileToolbar extends React.Component {
           {filePerm == 'rw' && (
             <IconButton
               id="open-via-client"
-              icon="fas fa-desktop"
+              icon="sf3-font sf3-font-desktop"
               text={gettext('Open via Client')}
               tag="a"
               href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
