@@ -2,6 +2,7 @@
 import os
 import stat
 import json
+import time
 import logging
 import posixpath
 from constance import config
@@ -112,6 +113,7 @@ def get_share_link_info(fileshare):
 
     return data
 
+
 def check_permissions_arg(request):
 
     permissions = request.data.get('permissions', '')
@@ -143,6 +145,7 @@ def check_permissions_arg(request):
         perm = FileShare.PERM_VIEW_DL_UPLOAD
 
     return perm
+
 
 class ShareLinks(APIView):
 
@@ -213,7 +216,8 @@ class ShareLinks(APIView):
 
                 try:
                     permission = seafile_api.check_permission_by_path(repo_id,
-                            folder_path, fileshare.username)
+                                                                      folder_path,
+                                                                      fileshare.username)
                 except Exception as e:
                     logger.error(e)
                     permission = ''
@@ -223,8 +227,7 @@ class ShareLinks(APIView):
         links_info = []
         for fs in fileshares:
             link_info = get_share_link_info(fs)
-            link_info['repo_folder_permission'] = \
-                    repo_folder_permission_dict.get(link_info['repo_id'], '')
+            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(link_info['repo_id'], '')
             links_info.append(link_info)
 
         if len(links_info) == 1:
@@ -401,11 +404,12 @@ class ShareLinks(APIView):
                 error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
-                                                    password, expire_date,
-                                                    permission=perm, org_id=org_id)
+                                                   password, expire_date,
+                                                   permission=perm, org_id=org_id)
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
+
 
 class ShareLink(APIView):
 
@@ -477,7 +481,8 @@ class ShareLink(APIView):
 
         username = request.user.username
         repo_folder_permission = seafile_api.check_permission_by_path(repo_id,
-                folder_path, username)
+                                                                      folder_path,
+                                                                      username)
         if not repo_folder_permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -561,6 +566,17 @@ class ShareLinkOnlineOfficeLock(APIView):
         3, File must have been locked by OnlineOffice.
         """
 
+        expire = request.data.get('expire', 0)
+        try:
+            expire = int(expire)
+        except ValueError:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if expire < 0:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if SHARE_LINK_LOGIN_REQUIRED and \
                 not request.user.is_authenticated():
             error_msg = 'Permission denied.'
@@ -581,7 +597,8 @@ class ShareLinkOnlineOfficeLock(APIView):
         path = normalize_file_path(share_link.path)
         parent_dir = os.path.dirname(path)
         if seafile_api.check_permission_by_path(repo_id,
-                parent_dir, shared_by) != PERMISSION_READ_WRITE:
+                                                parent_dir,
+                                                shared_by) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -593,9 +610,11 @@ class ShareLinkOnlineOfficeLock(APIView):
 
         locked_by_online_office = if_locked_by_online_office(repo_id, path)
         if locked_by_online_office:
+
             # refresh lock file
             try:
-                seafile_api.refresh_file_lock(repo_id, path)
+                seafile_api.refresh_file_lock(repo_id, path,
+                                              int(time.time()) + expire)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -681,7 +700,8 @@ class ShareLinkDirents(APIView):
         try:
             current_commit = seafile_api.get_commit_list(repo_id, 0, 1)[0]
             dirent_list = seafile_api.list_dir_by_commit_and_path(repo_id,
-                    current_commit.id, path, -1, -1)
+                                                                  current_commit.id,
+                                                                  path, -1, -1)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

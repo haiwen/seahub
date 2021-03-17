@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import time
 import logging
 import posixpath
 import requests
@@ -27,8 +28,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
 from seahub.utils.file_types import MARKDOWN, TEXT
 
-from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
-    FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import is_draft_file, get_file_draft
@@ -569,10 +569,24 @@ class FileView(APIView):
                 error_msg = _("File is locked")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # lock file
-            expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+            expire = request.data.get('expire', 0)
             try:
-                seafile_api.lock_file(repo_id, path, username, expire)
+                expire = int(expire)
+            except ValueError:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire < 0:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # lock file
+            try:
+                if expire > 0:
+                    seafile_api.lock_file(repo_id, path, username,
+                                          int(time.time()) + expire)
+                else:
+                    seafile_api.lock_file(repo_id, path, username)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -604,10 +618,25 @@ class FileView(APIView):
                 error_msg = _("File is not locked.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            expire = request.data.get('expire', 0)
+            try:
+                expire = int(expire)
+            except ValueError:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire < 0:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             if locked_by_me or locked_by_online_office:
                 # refresh lock file
                 try:
-                    seafile_api.refresh_file_lock(repo_id, path)
+                    if expire > 0:
+                        seafile_api.refresh_file_lock(repo_id, path,
+                                                      int(time.time()) + expire)
+                    else:
+                        seafile_api.refresh_file_lock(repo_id, path)
                 except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
