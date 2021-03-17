@@ -60,6 +60,7 @@
             trashReposExpireDays: {% if trash_repos_expire_days >= 0 %} {{ trash_repos_expire_days }} {% else %} null {% endif %},
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
             canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
+            groupImportMembersExtraMsg: "{{group_import_members_extra_msg}}",
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
             canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},

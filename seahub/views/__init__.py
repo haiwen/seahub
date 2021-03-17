@@ -63,6 +63,7 @@ from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.constants import HASH_URLS, PERMISSION_READ
+from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
 
@@ -1213,4 +1214,5 @@ def react_fake_view(request, **kwargs):
         'enable_ocm': ENABLE_OCM,
         'ocm_remote_servers': OCM_REMOTE_SERVERS,
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
+        'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
     })

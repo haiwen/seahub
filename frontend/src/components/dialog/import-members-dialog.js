@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, groupImportMembersExtraMsg } from '../../utils/constants';
 
 const propTypes = {
   toggleImportMembersDialog: PropTypes.func.isRequired,
@@ -50,6 +50,7 @@ class ImportMembersDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('Import members from a .xlsx file')}</ModalHeader>
 
         <ModalBody>
+          <p>{groupImportMembersExtraMsg}</p>
           <p><a className="text-secondary small" href={`${siteRoot}api/v2.1/group-members-import-example/`}>{gettext('Download an example file')}</a></p>
           <button className="btn btn-outline-primary" onClick={this.openFileInput}>{gettext('Upload file')}</button>
           <input className="d-none" type="file" onChange={this.uploadFile} ref={this.fileInputRef} />
