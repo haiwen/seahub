@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ButtonGroup, ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -14,11 +14,12 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
-  toggleCommentPanel: PropTypes.func.isRequired
+  toggleCommentPanel: PropTypes.func.isRequired,
+  toggleDetailsPanel: PropTypes.func.isRequired
 };
 
 const {
-  canLockUnlockFile, canGenerateShareLink,
+  canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
   fileName,
   canEditFile, err,
@@ -32,12 +33,19 @@ class FileToolbar extends React.Component {
     super(props);
     this.state = {
       dropdownOpen: false,
-      isShareDialogOpen: false
+      moreDropdownOpen: false,
+      isShareDialogOpen: false,
     };
   }
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
+  }
+
+  toggleMoreOpMenu = () => {
+    this.setState({
+      moreDropdownOpen: !this.state.moreDropdownOpen
+    });
   }
 
   toggle = () => {
@@ -46,8 +54,13 @@ class FileToolbar extends React.Component {
     });
   }
 
+  openFileViaClient = () => {
+    location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`;
+  }
+
   render() {
     const { isLocked, lockedByMe } = this.props;
+    const { moreDropdownOpen } = this.state;
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -140,6 +153,17 @@ class FileToolbar extends React.Component {
               onClick={this.props.toggleCommentPanel}
             />
           )}
+          <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
+            <DropdownToggle>
+              <span className="fas fa-ellipsis-v"></span>
+            </DropdownToggle>
+            <DropdownMenu right={true}>
+              {filePerm == 'rw' && (
+                <DropdownItem onClick={this.openFileViaClient}>{gettext('Open via Client')}</DropdownItem>
+              )}
+              <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
         </ButtonGroup>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
@@ -202,6 +226,7 @@ class FileToolbar extends React.Component {
                 {gettext('Comment')}
               </DropdownItem>
             )}
+            <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
