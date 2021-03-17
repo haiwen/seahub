@@ -9,6 +9,7 @@ import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
+import RenameDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
@@ -46,6 +47,7 @@ class DepartmentDetail extends React.Component {
       showDeleteMemberDialog: false,
       repos: [],
       deletedRepo: {},
+      isShowRenameDepartDialog: false,
       isShowAddRepoDialog: false,
       showDeleteRepoDialog: false,
       groups: [],
@@ -144,6 +146,12 @@ class DepartmentDetail extends React.Component {
     this.listSubDepartGroups(this.props.groupID);
   }
 
+  onDepartNameChanged = (name) => {
+    this.setState({
+      groupName: name,
+    });
+  }
+
   onRepoChanged = () => {
     this.listGroupRepo(this.props.groupID);
   }
@@ -162,6 +170,10 @@ class DepartmentDetail extends React.Component {
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
+  }
+
+  toggleRenameDepartDialog = () => {
+    this.setState({ isShowRenameDepartDialog: !this.state.isShowRenameDepartDialog});
   }
 
   toggleAddRepoDialog = () => {
@@ -199,16 +211,17 @@ class DepartmentDetail extends React.Component {
       <Fragment>
         {groupID &&
           <Fragment>
+            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartDialog}>{gettext('Rename Department')}</button>
             <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
             <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
             <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
           </Fragment>
         }
-        {this.state.isShowAddMemberDialog && (
+        {this.state.isShowRenameDepartDialog && (
           <ModalPortal>
-            <AddMemberDialog
-              toggle={this.toggleAddMemberDialog}
-              onMemberChanged={this.onMemberChanged}
+            <RenameDepartDialog
+              toggle={this.toggleRenameDepartDialog}
+              onDepartNameChanged={this.onDepartNameChanged}
               groupID={groupID}
             />
           </ModalPortal>

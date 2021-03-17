@@ -1,0 +1,96 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
+import { gettext, orgID } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+
+const propTypes = {
+  groupID: PropTypes.string,
+  toggle: PropTypes.func.isRequired,
+  onDepartNameChanged: PropTypes.func.isRequired,
+};
+
+class RenameDepartDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      departName: '',
+      errMessage: '',
+    };
+    this.newInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0, 0);
+  }
+
+  handleSubmit = () => {
+    let isValid = this.validateName();
+    if (isValid) {
+        seafileAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departName.trim()).then((res) => {
+        this.props.toggle();
+        this.props.onDepartNameChanged(res.data.name);
+      }).catch(error => {
+        let errorMsg = gettext(error.response.data.error_msg);
+        this.setState({ errMessage: errorMsg });
+      });
+    }
+  }
+
+  validateName = () => {
+    let errMessage = '';
+    const name = this.state.departName.trim();
+    if (!name.length) {
+      errMessage = gettext('Name is required');
+      this.setState({ errMessage: errMessage });
+      return false;
+    }
+    return true;
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      departName: e.target.value,
+    });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+      e.preventDefault();
+    }
+  }
+
+  render() {
+    let header = gettext('Rename Department');
+    return (
+      <Modal isOpen={true} toggle={this.props.toggle}>
+        <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="departName">{gettext('Name')}</Label>
+              <Input
+                id="departName"
+                onKeyPress={this.handleKeyPress}
+                value={this.state.departName}
+                onChange={this.handleChange}
+                innerRef={input => {this.newInput = input;}}
+              />
+            </FormGroup>
+          </Form>
+          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+RenameDepartDialog.propTypes = propTypes;
+
+export default RenameDepartDialog;
