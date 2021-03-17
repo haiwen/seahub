@@ -106,7 +106,7 @@ class GroupsTest(BaseTestCase):
         self.remove_group(json_resp['id'])
 
     def test_can_not_create_by_other_punctuation(self):
-        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        other_punctuation = """!"#$%&*+,/:;<=>?@[\]^`{|}~"""
         new_group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
 
         resp = self.client.post(self.url, {'name': new_group_name})
