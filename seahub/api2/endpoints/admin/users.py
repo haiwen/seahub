@@ -63,9 +63,6 @@ json_content_type = 'application/json; charset=utf-8'
 
 def get_user_last_access_time(email, last_login_time):
 
-    if not is_pro_version():
-        return ''
-
     device_last_access = ''
     audit_last_access = ''
     update_last_access = ''
@@ -74,13 +71,15 @@ def get_user_last_access_time(email, last_login_time):
     if devices:
         device_last_access = devices[0].last_accessed
 
-    audit_events = get_file_audit_events(email, 0, None, 0, 1) or []
-    if audit_events:
-        audit_last_access = audit_events[0].timestamp
+    if is_pro_version():
+        audit_events = get_file_audit_events(email, 0, None, 0, 1) or []
+        if audit_events:
+            audit_last_access = audit_events[0].timestamp
 
-    update_events = get_file_update_events(email, 0, None, 0, 1) or []
-    if update_events:
-        update_last_access = update_events[0].timestamp
+    if is_pro_version():
+        update_events = get_file_update_events(email, 0, None, 0, 1) or []
+        if update_events:
+            update_last_access = update_events[0].timestamp
 
     last_access_time_list = []
     if last_login_time:
