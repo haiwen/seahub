@@ -108,15 +108,7 @@ class FileToolbar extends React.Component {
               onClick={this.toggleShareDialog}
             />
           )}
-          {filePerm == 'rw' && (
-            <IconButton
-              id="history"
-              icon="fa fa-history"
-              text={gettext('History')}
-              tag="a"
-              href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}`}
-            />
-          )}
+
           {(canEditFile && !err) &&
             ( this.props.isSaving ?
               <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
@@ -145,12 +137,19 @@ class FileToolbar extends React.Component {
               href="?dl=1"
             />
           )}
-          {enableComment && (
+          <IconButton
+            id="file-details"
+            icon='fas fa-info'
+            text={gettext('Details')}
+            onClick={this.props.toggleDetailsPanel}
+          />
+          {filePerm == 'rw' && (
             <IconButton
-              id="comment"
-              icon="fa fa-comments"
-              text={gettext('Comment')}
-              onClick={this.props.toggleCommentPanel}
+              id="open-via-client"
+              icon="fas fa-desktop"
+              text={gettext('Open via Client')}
+              tag="a"
+              href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
@@ -158,10 +157,18 @@ class FileToolbar extends React.Component {
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
-              {filePerm == 'rw' && (
-                <DropdownItem onClick={this.openFileViaClient}>{gettext('Open via Client')}</DropdownItem>
+              {enableComment && (
+                <DropdownItem onClick={this.props.toggleCommentPanel}>
+                  {gettext('Comment')}
+                </DropdownItem>
               )}
-              <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
+              {filePerm == 'rw' && (
+                <DropdownItem>
+                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
+                    {gettext('History')}
+                  </a>
+                </DropdownItem>
+              )}
             </DropdownMenu>
           </ButtonDropdown>
         </ButtonGroup>
