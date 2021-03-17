@@ -45,6 +45,7 @@
     document.getElementById('office_form').submit();
     document.getElementById('office_frame').className = '';
 </script>
-{% include 'snippets/wopi_onlyoffice_js.html' %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
 </body>
 </html>
