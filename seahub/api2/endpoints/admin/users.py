@@ -63,6 +63,9 @@ json_content_type = 'application/json; charset=utf-8'
 
 def get_user_last_access_time(email, last_login_time):
 
+    if not is_pro_version():
+        return ''
+
     device_last_access = ''
     audit_last_access = ''
     update_last_access = ''

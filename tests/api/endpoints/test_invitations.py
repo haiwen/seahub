@@ -2,7 +2,6 @@ import json
 from mock import patch
 
 from django.test import override_settings
-from post_office.models import Email
 
 from seahub.base.accounts import UserPermissions
 from seahub.invitations.models import Invitation
