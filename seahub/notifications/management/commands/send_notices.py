@@ -23,6 +23,7 @@ from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
 from seahub.constants import HASH_URLS
 from seahub.utils import get_site_name
+from seahub.options.models import UserOptions, KEY_COLLABORATE_EMAIL_INTERVAL, KEY_COLLABORATE_LAST_EMAILED_TIME
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -208,64 +209,73 @@ class Command(BaseCommand):
         return Profile.objects.get_user_language(username)
 
     def do_action(self):
-        now = datetime.datetime.now()
+        emails = []
+        user_file_updates_email_intervals = []
+        for ele in UserOptions.objects.filter(
+                option_key=KEY_COLLABORATE_EMAIL_INTERVAL):
+            try:
+                user_file_updates_email_intervals.append(
+                    (ele.email, int(ele.option_val))
+                )
+                emails.append(ele.email)
+            except Exception as e:
+                logger.error(e)
+                self.stderr.write('[%s]: %s' % (str(datetime.datetime.now()), e))
+                continue
 
-        try:
-            cmd_last_check = CommandsLastCheck.objects.get(command_type=self.label)
-            logger.debug('Last check time is %s' % cmd_last_check.last_check)
+        user_last_emailed_time_dict = {}
+        for ele in UserOptions.objects.filter(option_key=KEY_COLLABORATE_LAST_EMAILED_TIME).filter(email__in=emails):
+            try:
+                user_last_emailed_time_dict[ele.email] = datetime.datetime.strptime(
+                    ele.option_val, "%Y-%m-%d %H:%M:%S")
+            except Exception as e:
+                logger.error(e)
+                self.stderr.write('[%s]: %s' % (str(datetime.datetime.now()), e))
+                continue
 
-            unseen_notices = UserNotification.objects.get_all_notifications(
-                seen=False, time_since=cmd_last_check.last_check)
-
-            logger.debug('Update last check time to %s' % now)
-            cmd_last_check.last_check = now
-            cmd_last_check.save()
-        except CommandsLastCheck.DoesNotExist:
-            logger.debug('No last check time found, get all unread notices.')
-            unseen_notices = UserNotification.objects.get_all_notifications(
-                seen=False)
-
-            logger.debug('Create new last check time: %s' % now)
-            CommandsLastCheck(command_type=self.label, last_check=now).save()
-
-        email_ctx = {}
-        for notice in unseen_notices:
-            if notice.to_user in email_ctx:
-                email_ctx[notice.to_user] += 1
+        # save current language
+        cur_language = translation.get_language()
+        for (to_user, interval_val) in user_file_updates_email_intervals:
+            # get last_emailed_time if any, defaults to today 00:00:00.0
+            last_emailed_time = user_last_emailed_time_dict.get(to_user, None)
+            now = datetime.datetime.now().replace(microsecond=0)
+            if not last_emailed_time:
+                last_emailed_time = datetime.datetime.now().replace(hour=0).replace(
+                                    minute=0).replace(second=0).replace(microsecond=0)
             else:
-                email_ctx[notice.to_user] = 1
+                if (now - last_emailed_time).total_seconds() < interval_val:
+                    continue
 
-        for to_user, count in list(email_ctx.items()):
-            # save current language
-            cur_language = translation.get_language()
+            # get notices
+            user_notices_qs = UserNotification.objects.get_all_notifications(seen=False, time_since=last_emailed_time)
+            user_notices, count = list(user_notices_qs), user_notices_qs.count()
+            if not count:
+                continue
 
             # get and active user language
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
-            logger.debug('Set language code to %s for user: %s' % (user_language, to_user))
-            self.stdout.write('[%s] Set language code to %s' % (
-                str(datetime.datetime.now()), user_language))
+            logger.debug('Set language code to %s for user: %s' % (
+                user_language, to_user))
+            self.stdout.write('[%s] Set language code to %s for user: %s' % (
+                str(datetime.datetime.now()), user_language, to_user))
 
+            # format mail content and send
             notices = []
-            for notice in unseen_notices:
-                logger.info('Processing unseen notice: [%s]' % (notice))
-
+            for notice in user_notices:
                 d = json.loads(notice.detail)
-
-                repo_id = d.get('repo_id', None)
-                group_id = d.get('group_id', None)
+                repo_id = d.get('repo_id')
+                group_id = d.get('group_id')
                 try:
                     if repo_id and not seafile_api.get_repo(repo_id):
                         notice.delete()
                         continue
-
                     if group_id and not ccnet_api.get_group(group_id):
                         notice.delete()
                         continue
                 except Exception as e:
                     logger.error(e)
                     continue
-
                 if notice.to_user != to_user:
                     continue
 
@@ -297,7 +307,6 @@ class Command(BaseCommand):
 
             if not notices:
                 continue
-
             user_name = email2nickname(to_user)
             contact_email = Profile.objects.get_contact_email_by_user(to_user)
             to_user = contact_email  # use contact email if any
@@ -312,7 +321,9 @@ class Command(BaseCommand):
                 send_html_email(_('New notice on %s') % get_site_name(),
                                 'notifications/notice_email.html', c,
                                 None, [to_user])
-
+                # set new last_emailed_time
+                UserOptions.objects.set_collaborate_last_emailed_time(
+                    to_user, now)
                 logger.info('Successfully sent email to %s' % to_user)
                 self.stdout.write('[%s] Successfully sent email to %s' % (str(datetime.datetime.now()), to_user))
             except Exception as e:
