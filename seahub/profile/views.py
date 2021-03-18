@@ -84,8 +84,10 @@ def edit_profile(request):
     else:
         webdav_passwd = ''
 
-    email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
-    email_inverval = email_inverval if email_inverval is not None else 0
+    file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
+    file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
+    collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
+    collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else 0
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
@@ -123,7 +125,8 @@ def edit_profile(request):
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
-            'email_notification_interval': email_inverval,
+            'file_updates_email_interval': file_updates_email_interval,
+            'collaborate_email_interval': collaborate_email_interval,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
             'social_connected': social_connected,
