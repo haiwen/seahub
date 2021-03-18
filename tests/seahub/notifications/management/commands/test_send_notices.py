@@ -106,12 +106,12 @@ class CommandTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         detail = file_comment_msg_to_json(self.repo.id, '/foo',
-                                          self.user.username, 'test comment')
-        UserNotification.objects.add_file_comment_msg('a@a.com', detail)
+                                          'bar@bar.com', 'test comment')
+        UserNotification.objects.add_file_comment_msg(self.user.username, detail)
 
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
-        assert mail.outbox[0].to[0] == 'a@a.com'
+        assert mail.outbox[0].to[0] == self.user.username
         assert 'new comment from user %s' % self.user.username in mail.outbox[0].body
         assert '/foo' in mail.outbox[0].body
 
