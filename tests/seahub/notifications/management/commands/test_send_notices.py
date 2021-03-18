@@ -28,9 +28,9 @@ class CommandTest(BaseTestCase):
         UserOptions.objects.set_collaborate_email_interval(self.user.username, 3600)
 
     def tearDown(self):
-        super(CommandTest, self).tearDown()
         UserOptions.objects.unset_file_updates_last_emailed_time(self.user.username)
         UserOptions.objects.unset_collaborate_last_emailed_time(self.user.username)
+        super(CommandTest, self).tearDown()
 
     def test_can_send_repo_share_msg(self):
         self.assertEqual(len(mail.outbox), 0)
@@ -112,7 +112,7 @@ class CommandTest(BaseTestCase):
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == self.user.username
-        assert 'new comment from user %s' % self.user.username in mail.outbox[0].body
+        assert 'new comment from user %s' % 'bar@bar.com' in mail.outbox[0].body
         assert '/foo' in mail.outbox[0].body
 
     def test_send_guest_invitation_notice(self):
