@@ -336,8 +336,10 @@ class AccountInfo(APIView):
             except InstitutionAdmin.DoesNotExist:
                 info['is_inst_admin'] = False
 
-        interval = UserOptions.objects.get_file_updates_email_interval(email)
-        info['email_notification_interval'] = 0 if interval is None else interval
+        file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(email)
+        info['file_updates_email_interval'] = 0 if file_updates_email_interval is None else file_updates_email_interval
+        collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(email)
+        info['collaborate_email_interval'] = 0 if collaborate_email_interval is None else collaborate_email_interval
         return info
 
     def get(self, request, format=None):
