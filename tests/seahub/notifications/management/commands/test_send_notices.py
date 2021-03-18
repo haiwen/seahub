@@ -12,6 +12,7 @@ from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from seahub.notifications.management.commands.send_notices import Command
 from seahub.share.utils import share_dir_to_user, share_dir_to_group
+from seahub.options.models import UserOptions
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -20,6 +21,16 @@ except ImportError:
 
 
 class CommandTest(BaseTestCase):
+
+    def setUp(self):
+        super(CommandTest, self).setUp()
+        UserOptions.objects.set_file_updates_email_interval(self.user.username, 3600)
+        UserOptions.objects.set_collaborate_email_interval(self.user.username, 3600)
+
+    def tearDown(self):
+        super(CommandTest, self).tearDown()
+        UserOptions.objects.unset_file_updates_last_emailed_time(self.user.username)
+        UserOptions.objects.unset_collaborate_last_emailed_time(self.user.username)
 
     def test_can_send_repo_share_msg(self):
         self.assertEqual(len(mail.outbox), 0)
