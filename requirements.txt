@@ -10,7 +10,7 @@ openpyxl
 qrcode
 django-formtools
 django-simple-captcha
-djangorestframework==3.11.1
+djangorestframework==3.11.2
 python-dateutil
 requests
 pillow
