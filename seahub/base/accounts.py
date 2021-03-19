@@ -243,6 +243,9 @@ class AdminPermissions(object):
     def can_manage_user(self):
         return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_manage_user']
 
+    def can_update_user(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_update_user']
+
     def can_manage_group(self):
         return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_manage_group']
 
