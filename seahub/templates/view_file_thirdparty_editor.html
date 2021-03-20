@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>iframe lian test</title>
+<style>
+html, body {
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+iframe {
+    width:100%;
+    height:100%;
+    margin:0;
+    border:none;
+}
+</style>
+</head>
+<body>
+
+<form id="office_form" name="office_form" target="office_frame" action="{{action_url}}" method="post">
+    <input name="access_token" value="{{access_token}}" type="hidden"/>
+    <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
+</form>
+
+<iframe id="office_frame" name="office_frame"></iframe>
+
+<script type="text/javascript">
+    document.getElementById('office_form').submit();
+</script>
+
+</body>
+</html>
