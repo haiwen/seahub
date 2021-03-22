@@ -81,7 +81,7 @@ class EmailNotice extends React.Component {
         </form>
 
         <h6 className="mt-4">{gettext('Notifications of collaboration')}</h6>
-        <p className="mb-1">{gettext('Whether the notifications of collaboration such as share repo or join group should be sent to your mailbox.')}</p>
+        <p className="mb-1">{gettext('Whether the notifications of collaboration such as sharing library or joining group should be sent to your mailbox.')}</p>
         <form method="post" action="" id="set-email-notice-interval-form" onSubmit={this.formSubmit}>
           {this.collaborateOptions.map((item, index) => {
             return (
