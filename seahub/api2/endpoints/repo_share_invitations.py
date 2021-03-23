@@ -207,8 +207,7 @@ class RepoShareInvitationsBatchView(APIView):
             if not send_sucess:
                 result['failed'].append({
                     'email': accepter,
-                    'error_msg': _('Failed to send email, email service is not properly configured, \
-                            please contact administrator.'),
+                    'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),
                 })
 
         return Response(result)

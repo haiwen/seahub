@@ -148,8 +148,7 @@ class InvitationsBatchView(APIView):
             if not send_success:
                 result['failed'].append({
                     'email': accepter,
-                    'error_msg': _('Failed to send email, email service is not properly configured, \
-                                please contact administrator.'),
+                    'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),
                 })
             else:
                 result['success'].append(i.to_dict())
