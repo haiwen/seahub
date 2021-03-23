@@ -33,7 +33,7 @@ class GroupAddForm(forms.Form):
         group_name = self.cleaned_data['group_name']
         group_name = group_name.strip()
         if not validate_group_name(group_name):
-            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote, brackets or underscore')
+            error_msg = _('Name can only contain letters, numbers, spaces, hyphen, dot, single quote, brackets or underscore.')
             raise forms.ValidationError(error_msg)
         else:
             return group_name
