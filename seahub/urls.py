@@ -193,6 +193,7 @@ urlpatterns = [
     url(r'^sso/$', sso, name='sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
+    url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
 
     url(r'^$', react_fake_view, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
