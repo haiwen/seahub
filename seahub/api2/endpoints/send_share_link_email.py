@@ -30,7 +30,7 @@ class SendShareLinkView(APIView):
     def post(self, request):
 
         if not IS_EMAIL_CONFIGURED:
-            error_msg = _('Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check args
