@@ -366,14 +366,14 @@ class AccountInfo(APIView):
                 file_updates_email_interval = int(file_updates_email_interval)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'email_interval invalid')
+                                 'file_updates_email_interval invalid')
         collaborate_email_interval = request.data.get("collaborate_email_interval", None)
         if collaborate_email_interval is not None:
             try:
                 collaborate_email_interval = int(collaborate_email_interval)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'email_interval invalid')
+                                 'collaborate_email_interval invalid')
 
         # update user info
 
