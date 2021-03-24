@@ -180,8 +180,8 @@ class AdminGroup(APIView):
         """ Admin update a group
 
         1. transfer a group.
-        2. set group quota
-        3. rename group quota
+        2. set group quota.
+        3. rename group.
 
         Permission checking:
         1. Admin user;
