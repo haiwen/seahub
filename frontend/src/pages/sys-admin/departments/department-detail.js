@@ -226,6 +226,15 @@ class DepartmentDetail extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isShowAddMemberDialog && (
+          <ModalPortal>
+            <AddMemberDialog
+              toggle={this.toggleAddMemberDialog}
+              onMemberChanged={this.onMemberChanged}
+              groupID={groupID}
+            />
+          </ModalPortal>
+        )}
         {this.state.isShowAddRepoDialog && (
           <ModalPortal>
             <AddRepoDialog
