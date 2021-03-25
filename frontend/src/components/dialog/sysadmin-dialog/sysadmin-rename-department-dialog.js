@@ -4,9 +4,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGr
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
+import toaster from '../../../components/toast';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
   name: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   onDepartmentNameChanged: PropTypes.func.isRequired
@@ -33,7 +37,8 @@ class RenameDepartmentDialog extends React.Component {
     if (isValid) {
       seafileAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onDepartmentNameChanged(res.data.name);
+        this.props.onDepartmentNameChanged(res.data);
+        toaster.success(gettext('Success'));
       }).catch(error => {
         let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });
