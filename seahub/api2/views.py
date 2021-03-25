@@ -336,8 +336,10 @@ class AccountInfo(APIView):
             except InstitutionAdmin.DoesNotExist:
                 info['is_inst_admin'] = False
 
-        interval = UserOptions.objects.get_file_updates_email_interval(email)
-        info['email_notification_interval'] = 0 if interval is None else interval
+        file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(email)
+        info['file_updates_email_interval'] = 0 if file_updates_email_interval is None else file_updates_email_interval
+        collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(email)
+        info['collaborate_email_interval'] = 0 if collaborate_email_interval is None else collaborate_email_interval
         return info
 
     def get(self, request, format=None):
@@ -358,13 +360,20 @@ class AccountInfo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                         _("Name should not include '/'."))
 
-        email_interval = request.data.get("email_notification_interval", None)
-        if email_interval is not None:
+        file_updates_email_interval = request.data.get("file_updates_email_interval", None)
+        if file_updates_email_interval is not None:
             try:
-                email_interval = int(email_interval)
+                file_updates_email_interval = int(file_updates_email_interval)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'email_interval invalid')
+                                 'file_updates_email_interval invalid')
+        collaborate_email_interval = request.data.get("collaborate_email_interval", None)
+        if collaborate_email_interval is not None:
+            try:
+                collaborate_email_interval = int(collaborate_email_interval)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'collaborate_email_interval invalid')
 
         # update user info
 
@@ -375,12 +384,19 @@ class AccountInfo(APIView):
             profile.nickname = name
             profile.save()
 
-        if email_interval is not None:
-            if email_interval <= 0:
+        if file_updates_email_interval is not None:
+            if file_updates_email_interval <= 0:
                 UserOptions.objects.unset_file_updates_email_interval(username)
             else:
                 UserOptions.objects.set_file_updates_email_interval(
-                    username, email_interval)
+                    username, file_updates_email_interval)
+
+        if collaborate_email_interval is not None:
+            if collaborate_email_interval <= 0:
+                UserOptions.objects.unset_collaborate_email_interval(username)
+            else:
+                UserOptions.objects.set_collaborate_email_interval(
+                    username, collaborate_email_interval)
 
         return Response(self._get_account_info(request))
 

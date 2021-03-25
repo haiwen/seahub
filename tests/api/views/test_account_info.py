@@ -26,22 +26,23 @@ class AccountInfoTest(BaseTestCase):
     def test_update(self, ):
         self.login_as(self.user)
 
-        resp = self._do_put('name=foo&email_notification_interval=3000')
+        resp = self._do_put('name=foo&file_updates_email_interval=3000&collaborate_email_interval=3000')
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['email_notification_interval'] == 3000
+        assert json_resp['file_updates_email_interval'] == 3000
+        assert json_resp['collaborate_email_interval'] == 3000
         assert json_resp['name'] == 'foo'
 
     def test_update_email_nofification_interval(self, ):
         self.login_as(self.user)
 
-        resp = self._do_put('email_notification_interval=3000')
+        resp = self._do_put('file_updates_email_interval=3000')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['email_notification_interval'] == 3000
+        assert json_resp['file_updates_email_interval'] == 3000
 
-        resp = self._do_put('email_notification_interval=0')
+        resp = self._do_put('file_updates_email_interval=0')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['email_notification_interval'] == 0
+        assert json_resp['file_updates_email_interval'] == 0

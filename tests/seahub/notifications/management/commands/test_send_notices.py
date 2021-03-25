@@ -12,6 +12,7 @@ from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from seahub.notifications.management.commands.send_notices import Command
 from seahub.share.utils import share_dir_to_user, share_dir_to_group
+from seahub.options.models import UserOptions
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -20,6 +21,16 @@ except ImportError:
 
 
 class CommandTest(BaseTestCase):
+
+    def setUp(self):
+        super(CommandTest, self).setUp()
+        UserOptions.objects.set_file_updates_email_interval(self.user.username, 3600)
+        UserOptions.objects.set_collaborate_email_interval(self.user.username, 3600)
+
+    def tearDown(self):
+        UserOptions.objects.unset_file_updates_last_emailed_time(self.user.username)
+        UserOptions.objects.unset_collaborate_last_emailed_time(self.user.username)
+        super(CommandTest, self).tearDown()
 
     def test_can_send_repo_share_msg(self):
         self.assertEqual(len(mail.outbox), 0)
@@ -95,13 +106,13 @@ class CommandTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         detail = file_comment_msg_to_json(self.repo.id, '/foo',
-                                          self.user.username, 'test comment')
-        UserNotification.objects.add_file_comment_msg('a@a.com', detail)
+                                          'bar@bar.com', 'test comment')
+        UserNotification.objects.add_file_comment_msg(self.user.username, detail)
 
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
-        assert mail.outbox[0].to[0] == 'a@a.com'
-        assert 'new comment from user %s' % self.user.username in mail.outbox[0].body
+        assert mail.outbox[0].to[0] == self.user.username
+        assert 'new comment from user %s' % 'bar@bar.com' in mail.outbox[0].body
         assert '/foo' in mail.outbox[0].body
 
     def test_send_guest_invitation_notice(self):
