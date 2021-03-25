@@ -16,7 +16,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
-        validate_group_name
+        validate_group_name, check_group_name_conflict, set_group_name_cache
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
@@ -25,6 +25,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.share.models import ExtraGroupsSharePermission
 
 logger = logging.getLogger(__name__)
+
 
 def get_group_info(group_id):
     group = ccnet_api.get_group(group_id)
@@ -40,6 +41,7 @@ def get_group_info(group_id):
     }
 
     return group_info
+
 
 class AdminGroups(APIView):
 
@@ -160,7 +162,7 @@ class AdminGroups(APIView):
             "owner": new_owner,
         }
         admin_operation.send(sender=None, admin_name=username,
-                operation=GROUP_CREATE, detail=admin_op_detail)
+                             operation=GROUP_CREATE, detail=admin_op_detail)
 
         # get info of new group
         group_info = get_group_info(group_id)
@@ -178,7 +180,8 @@ class AdminGroup(APIView):
         """ Admin update a group
 
         1. transfer a group.
-        2. set group quota
+        2. set group quota.
+        3. rename group.
 
         Permission checking:
         1. Admin user;
@@ -188,7 +191,7 @@ class AdminGroup(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # recourse check
-        group_id = int(group_id) # Checked by URL Conf
+        group_id = int(group_id)  # Checked by URL Conf
         group = ccnet_api.get_group(group_id)
         if not group:
             error_msg = 'Group %d not found.' % group_id
@@ -236,7 +239,7 @@ class AdminGroup(APIView):
                 "to": new_owner,
             }
             admin_operation.send(sender=None, admin_name=request.user.username,
-                    operation=GROUP_TRANSFER, detail=admin_op_detail)
+                                 operation=GROUP_TRANSFER, detail=admin_op_detail)
 
         # set group quota
         group_quota = request.data.get('quota', '')
@@ -253,6 +256,25 @@ class AdminGroup(APIView):
 
             try:
                 seafile_api.set_group_quota(group_id, group_quota)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        new_name = request.data.get('name', '')
+        if new_name:
+            if not validate_group_name(new_name):
+
+                error_msg = _('Name can only contain letters, numbers, spaces, hyphen, dot, single quote, brackets or underscore.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if check_group_name_conflict(request, new_name):
+                error_msg = _('There is already a group with that name.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                ccnet_api.set_group_name(group_id, new_name)
+                set_group_name_cache(group_id, new_name)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -296,7 +318,7 @@ class AdminGroup(APIView):
             "owner": group_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation=GROUP_DELETE, detail=admin_op_detail)
+                             operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
 

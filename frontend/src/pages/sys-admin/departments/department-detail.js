@@ -9,6 +9,7 @@ import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
+import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
@@ -46,6 +47,7 @@ class DepartmentDetail extends React.Component {
       showDeleteMemberDialog: false,
       repos: [],
       deletedRepo: {},
+      isShowRenameDepartmentDialog: false,
       isShowAddRepoDialog: false,
       showDeleteRepoDialog: false,
       groups: [],
@@ -144,6 +146,12 @@ class DepartmentDetail extends React.Component {
     this.listSubDepartGroups(this.props.groupID);
   }
 
+  onDepartmentNameChanged = (dept) => {
+    this.setState({
+      groupName: dept.name
+    });
+  }
+
   onRepoChanged = () => {
     this.listGroupRepo(this.props.groupID);
   }
@@ -162,6 +170,10 @@ class DepartmentDetail extends React.Component {
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
+  }
+
+  toggleRenameDepartmentDialog = () => {
+    this.setState({ isShowRenameDepartmentDialog: !this.state.isShowRenameDepartmentDialog });
   }
 
   toggleAddRepoDialog = () => {
@@ -192,18 +204,29 @@ class DepartmentDetail extends React.Component {
   }
 
   render() {
-    const { members, membersErrorMsg, repos, groups } = this.state;
+    const { members, membersErrorMsg, repos, groups, groupName } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
       <Fragment>
         {groupID &&
           <Fragment>
+            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartmentDialog}>{gettext('Rename Department')}</button>
             <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
             <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
             <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
           </Fragment>
         }
+        {this.state.isShowRenameDepartmentDialog && (
+          <ModalPortal>
+            <RenameDepartmentDialog
+              groupID={groupID}
+              name={groupName}
+              toggle={this.toggleRenameDepartmentDialog}
+              onDepartmentNameChanged={this.onDepartmentNameChanged}
+            />
+          </ModalPortal>
+        )}
         {this.state.isShowAddMemberDialog && (
           <ModalPortal>
             <AddMemberDialog
@@ -296,45 +319,45 @@ class DepartmentDetail extends React.Component {
               <div className="cur-view-content">
                 {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
                   members.length == 0 ?
-                  <p className="no-member">{gettext('No members')}</p> :
-                  <Fragment>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th width="5%"></th>
-                        <th width="50%">{gettext('Name')}</th>
-                        <th width="15%">{gettext('Role')}</th>
-                        <th width="30%"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {members.map((member, index) => {
-                        return (
-                          <Fragment key={index}>
-                            <MemberItem
-                              member={member}
-                              showDeleteMemberDialog={this.showDeleteMemberDialog}
-                              isItemFreezed={this.state.isItemFreezed}
-                              onMemberChanged={this.onMemberChanged}
-                              toggleItemFreezed={this.toggleItemFreezed}
-                              groupID={groupID}
-                            />
-                          </Fragment>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                  {this.state.membersPageInfo &&
-                  <Paginator
-                    gotoPreviousPage={this.getPreviousPageList}
-                    gotoNextPage={this.getNextPageList}
-                    currentPage={this.state.membersPageInfo.current_page}
-                    hasNextPage={this.state.membersPageInfo.has_next_page}
-                    curPerPage={this.state.membersPerPage}
-                    resetPerPage={this.resetPerPage}
-                  />
-                  }
-                  </Fragment>
+                    <p className="no-member">{gettext('No members')}</p> :
+                    <Fragment>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th width="5%"></th>
+                            <th width="50%">{gettext('Name')}</th>
+                            <th width="15%">{gettext('Role')}</th>
+                            <th width="30%"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member, index) => {
+                            return (
+                              <Fragment key={index}>
+                                <MemberItem
+                                  member={member}
+                                  showDeleteMemberDialog={this.showDeleteMemberDialog}
+                                  isItemFreezed={this.state.isItemFreezed}
+                                  onMemberChanged={this.onMemberChanged}
+                                  toggleItemFreezed={this.toggleItemFreezed}
+                                  groupID={groupID}
+                                />
+                              </Fragment>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {this.state.membersPageInfo &&
+                      <Paginator
+                        gotoPreviousPage={this.getPreviousPageList}
+                        gotoNextPage={this.getNextPageList}
+                        currentPage={this.state.membersPageInfo.current_page}
+                        hasNextPage={this.state.membersPageInfo.has_next_page}
+                        curPerPage={this.state.membersPerPage}
+                        resetPerPage={this.resetPerPage}
+                      />
+                      }
+                    </Fragment>
                 }
               </div>
             </div>
