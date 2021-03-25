@@ -9,7 +9,7 @@ import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
-import RenameDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
+import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
@@ -47,7 +47,7 @@ class DepartmentDetail extends React.Component {
       showDeleteMemberDialog: false,
       repos: [],
       deletedRepo: {},
-      isShowRenameDepartDialog: false,
+      isShowRenameDepartmentDialog: false,
       isShowAddRepoDialog: false,
       showDeleteRepoDialog: false,
       groups: [],
@@ -146,9 +146,9 @@ class DepartmentDetail extends React.Component {
     this.listSubDepartGroups(this.props.groupID);
   }
 
-  onDepartNameChanged = (name) => {
+  onDepartmentNameChanged = (name) => {
     this.setState({
-      groupName: name,
+      groupName: name
     });
   }
 
@@ -172,8 +172,8 @@ class DepartmentDetail extends React.Component {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
   }
 
-  toggleRenameDepartDialog = () => {
-    this.setState({ isShowRenameDepartDialog: !this.state.isShowRenameDepartDialog});
+  toggleRenameDepartmentDialog = () => {
+    this.setState({ isShowRenameDepartmentDialog: !this.state.isShowRenameDepartmentDialog });
   }
 
   toggleAddRepoDialog = () => {
@@ -204,25 +204,26 @@ class DepartmentDetail extends React.Component {
   }
 
   render() {
-    const { members, membersErrorMsg, repos, groups } = this.state;
+    const { members, membersErrorMsg, repos, groups, groupName } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
       <Fragment>
         {groupID &&
           <Fragment>
-            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartDialog}>{gettext('Rename Department')}</button>
+            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartmentDialog}>{gettext('Rename Department')}</button>
             <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
             <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
             <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
           </Fragment>
         }
-        {this.state.isShowRenameDepartDialog && (
+        {this.state.isShowRenameDepartmentDialog && (
           <ModalPortal>
-            <RenameDepartDialog
-              toggle={this.toggleRenameDepartDialog}
-              onDepartNameChanged={this.onDepartNameChanged}
+            <RenameDepartmentDialog
               groupID={groupID}
+              name={groupName}
+              toggle={this.toggleRenameDepartmentDialog}
+              onDepartmentNameChanged={this.onDepartmentNameChanged}
             />
           </ModalPortal>
         )}

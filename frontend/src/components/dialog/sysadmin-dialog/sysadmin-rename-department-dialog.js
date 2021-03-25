@@ -1,39 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
 
 const propTypes = {
-  groupID: PropTypes.string,
+  groupID: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
-  onDepartNameChanged: PropTypes.func.isRequired,
+  onDepartmentNameChanged: PropTypes.func.isRequired
 };
 
-class RenameDepartDialog extends React.Component {
+class RenameDepartmentDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      departName: '',
-      errMessage: '',
+      departmentName: this.props.name,
+      errMessage: ''
     };
     this.newInput = React.createRef();
   }
 
   componentDidMount() {
+    this.newInput.select();
     this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
-        seafileAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departName.trim()).then((res) => {
+      seafileAPI.sysAdminRenameDepartment(this.props.groupID, this.state.departmentName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onDepartNameChanged(res.data.name);
+        this.props.onDepartmentNameChanged(res.data.name);
       }).catch(error => {
-        let errorMsg = gettext(error.response.data.error_msg);
+        let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });
       });
     }
@@ -41,7 +43,7 @@ class RenameDepartDialog extends React.Component {
 
   validateName = () => {
     let errMessage = '';
-    const name = this.state.departName.trim();
+    const name = this.state.departmentName.trim();
     if (!name.length) {
       errMessage = gettext('Name is required');
       this.setState({ errMessage: errMessage });
@@ -52,7 +54,7 @@ class RenameDepartDialog extends React.Component {
 
   handleChange = (e) => {
     this.setState({
-      departName: e.target.value,
+      departmentName: e.target.value
     });
   }
 
@@ -71,17 +73,17 @@ class RenameDepartDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="departName">{gettext('Name')}</Label>
+              <Label for="departmentName">{gettext('Name')}</Label>
               <Input
-                id="departName"
+                id="departmentName"
                 onKeyPress={this.handleKeyPress}
-                value={this.state.departName}
+                value={this.state.departmentName}
                 onChange={this.handleChange}
                 innerRef={input => {this.newInput = input;}}
               />
             </FormGroup>
           </Form>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {this.state.errMessage && <p className="error">{this.state.errMessage}</p>}
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
@@ -91,6 +93,6 @@ class RenameDepartDialog extends React.Component {
   }
 }
 
-RenameDepartDialog.propTypes = propTypes;
+RenameDepartmentDialog.propTypes = propTypes;
 
-export default RenameDepartDialog;
+export default RenameDepartmentDialog;
