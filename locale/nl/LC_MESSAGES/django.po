@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 13:53+0800\n"
+"POT-Creation-Date: 2021-03-30 11:01+0800\n"
 "PO-Revision-Date: 2021-03-23 05:54+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/haiwen/seahub/language/nl/)\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
-#: seahub/api2/views.py:355
+#: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
-#: seahub/api2/views.py:359 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr ""
 
@@ -61,16 +61,18 @@ msgid "Failed to set quota: maximum quota is %d MB"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:80
-#: seahub/api2/endpoints/admin/groups.py:127
+#: seahub/api2/endpoints/admin/groups.py:129
+#: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
-#: seahub/api2/views.py:4591 seahub/group/forms.py:36
+#: seahub/api2/views.py:4607 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:85
-#: seahub/api2/endpoints/admin/groups.py:134
+#: seahub/api2/endpoints/admin/groups.py:136
+#: seahub/api2/endpoints/admin/groups.py:272
 #: seahub/api2/endpoints/groups.py:221 seahub/api2/endpoints/groups.py:294
 msgid "There is already a group with that name."
 msgstr ""
@@ -90,7 +92,7 @@ msgstr ""
 msgid "My Library"
 msgstr ""
 
-#: seahub/api2/endpoints/admin/groups.py:213
+#: seahub/api2/endpoints/admin/groups.py:216
 #: seahub/api2/endpoints/groups.py:320
 #, python-format
 msgid "User %s is already group owner."
@@ -113,12 +115,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:386 seahub/api2/views.py:1647
+#: seahub/api2/endpoints/admin/libraries.py:386 seahub/api2/views.py:1663
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1652
+#: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1668
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -367,7 +369,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:196
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3845
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3861
 #: seahub/notifications/models.py:465 seahub/notifications/models.py:506
 #: seahub/notifications/models.py:557 seahub/notifications/models.py:613
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
@@ -391,11 +393,11 @@ msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1790
-#: seahub/api2/views.py:1830 seahub/api2/views.py:1879
-#: seahub/api2/views.py:1923 seahub/api2/views.py:1969
-#: seahub/api2/views.py:2018 seahub/api2/views.py:2429
-#: seahub/api2/views.py:2543
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1806
+#: seahub/api2/views.py:1846 seahub/api2/views.py:1895
+#: seahub/api2/views.py:1939 seahub/api2/views.py:1985
+#: seahub/api2/views.py:2034 seahub/api2/views.py:2445
+#: seahub/api2/views.py:2559
 msgid "Out of quota."
 msgstr ""
 
@@ -434,7 +436,7 @@ msgstr ""
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:216 seahub/thumbnail/views.py:51
+#: seahub/profile/views.py:219 seahub/thumbnail/views.py:51
 #: seahub/thumbnail/views.py:166 seahub/views/__init__.py:740
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
@@ -468,7 +470,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:319
-#: seahub/api2/endpoints/group_members.py:451 seahub/api2/views.py:1633
+#: seahub/api2/endpoints/group_members.py:451 seahub/api2/views.py:1649
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -560,11 +562,11 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3842
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3858
 msgid "Wrong password"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3848
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3864
 msgid "Decrypt library error"
 msgstr ""
 
@@ -638,13 +640,13 @@ msgid "Password is too short."
 msgstr ""
 
 #: seahub/api2/endpoints/share_links.py:289
-#: seahub/api2/endpoints/upload_links.py:182 seahub/api2/views.py:3413
+#: seahub/api2/endpoints/upload_links.py:182 seahub/api2/views.py:3429
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
 #: seahub/api2/endpoints/share_links.py:295
-#: seahub/api2/endpoints/upload_links.py:188 seahub/api2/views.py:3419
+#: seahub/api2/endpoints/upload_links.py:188 seahub/api2/views.py:3435
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
@@ -3814,7 +3816,7 @@ msgstr ""
 msgid "New file updates on %s"
 msgstr ""
 
-#: seahub/notifications/management/commands/send_notices.py:312
+#: seahub/notifications/management/commands/send_notices.py:321
 #, python-format
 msgid "New notice on %s"
 msgstr ""
@@ -4125,23 +4127,23 @@ msgstr ""
 msgid "Failed to edit profile"
 msgstr ""
 
-#: seahub/profile/views.py:202
+#: seahub/profile/views.py:205
 msgid "Has not accepted invitation yet"
 msgstr ""
 
-#: seahub/profile/views.py:226
+#: seahub/profile/views.py:229
 msgid "Demo account can not be deleted."
 msgstr ""
 
-#: seahub/profile/views.py:252
+#: seahub/profile/views.py:255
 msgid "Failed to set default library."
 msgstr ""
 
-#: seahub/profile/views.py:256
+#: seahub/profile/views.py:259
 msgid "Can not set encrypted library as default library."
 msgstr ""
 
-#: seahub/profile/views.py:261
+#: seahub/profile/views.py:264
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr ""
