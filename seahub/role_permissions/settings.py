@@ -87,6 +87,7 @@ DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_config_system': True,
         'can_manage_library': True,
         'can_manage_user': True,
+        'can_update_user': True,
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,

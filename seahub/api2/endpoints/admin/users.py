@@ -970,7 +970,8 @@ class AdminUser(APIView):
 
     def get(self, request, email):
 
-        if not request.user.admin_permissions.can_manage_user():
+        if not (request.user.admin_permissions.can_manage_user() or \
+            request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         avatar_size = request.data.get('avatar_size', 64)
@@ -994,7 +995,8 @@ class AdminUser(APIView):
 
     def put(self, request, email):
 
-        if not request.user.admin_permissions.can_manage_user():
+        if not (request.user.admin_permissions.can_manage_user() or \
+            request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # basic user info check
