@@ -25,7 +25,7 @@ class EmailNotice extends React.Component {
 
     this.collaborateOptions = [
       {interval: 0, text: gettext('Don\'t send emails')},
-      {interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not be read within one hour, they will be sent to your mailbox') + ')'}
+      {interval: 3600, text: gettext('Per hour') + ' (' + gettext('If notifications have not been read within one hour, they will be sent to your mailbox.') + ')'}
     ];
 
     this.state = {

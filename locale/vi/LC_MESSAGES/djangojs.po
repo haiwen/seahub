@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 13:53+0800\n"
-"PO-Revision-Date: 2021-03-23 03:31+0000\n"
+"POT-Creation-Date: 2021-03-30 11:01+0800\n"
+"PO-Revision-Date: 2021-03-30 03:04+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr ""
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/search/advanced-search.js:91
 #: frontend/src/pages/share-admin/libraries.js:313
-#: frontend/src/pages/sys-admin/departments/department-detail.js:344
+#: frontend/src/pages/sys-admin/departments/department-detail.js:367
 #: frontend/src/pages/sys-admin/groups/group-nav.js:16
 #: frontend/src/pages/sys-admin/info.js:112
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:18
@@ -209,7 +209,8 @@ msgid "Contact information is required."
 msgstr ""
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:37
-#: frontend/src/components/user-settings/email-notice.js:41
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:41
+#: frontend/src/components/user-settings/email-notice.js:57
 #: frontend/src/components/user-settings/user-avatar-form.js:60
 #: frontend/src/components/user-settings/webdav-password.js:34
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:89
@@ -411,6 +412,7 @@ msgstr "Hủy"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:57
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:144
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:110
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:94
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:83
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:66
@@ -428,7 +430,7 @@ msgstr "Hủy"
 #: frontend/src/components/markdown-view/comment-dialog.js:77
 #: frontend/src/components/review-list-view/review-comment-dialog.js:90
 #: frontend/src/components/review-list-view/review-comments.js:172
-#: frontend/src/components/user-settings/email-notice.js:64
+#: frontend/src/components/user-settings/email-notice.js:96
 #: frontend/src/components/user-settings/user-basic-info-form.js:86
 #: frontend/src/pages/search/advanced-search.js:241
 #: frontend/src/pages/search/advanced-search.js:263
@@ -653,6 +655,7 @@ msgstr "Bạn có thật sự muốn xóa tài khoản của bạn?"
 #: frontend/src/pages/org-admin/org-links.js:215
 #: frontend/src/pages/org-admin/org-user-item.js:173
 #: frontend/src/pages/org-admin/org-user-repos.js:169
+#: frontend/src/pages/sys-admin/departments/group-item.js:64
 #: frontend/src/pages/sys-admin/groups/groups-content.js:170
 #: frontend/src/pages/sys-admin/groups/groups-content.js:221
 #: frontend/src/pages/sys-admin/institutions/institutions.js:119
@@ -784,6 +787,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-add-user-dialog.js:112
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:47
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:53
 msgid "Name is required"
 msgstr "Yêu cầu tên"
 
@@ -824,6 +828,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog.js:74
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:70
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:68
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:81
 #: frontend/src/components/dialog/update-tag-dialog.js:101
 #: frontend/src/components/dialog/wiki-select-dialog.js:78
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:561
@@ -856,10 +861,10 @@ msgstr ""
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:34
 #: frontend/src/pages/shared-libs/shared-libs.js:68
 #: frontend/src/pages/starred/starred.js:33
-#: frontend/src/pages/sys-admin/departments/department-detail.js:267
-#: frontend/src/pages/sys-admin/departments/department-detail.js:305
-#: frontend/src/pages/sys-admin/departments/department-detail.js:352
-#: frontend/src/pages/sys-admin/departments/departments-list.js:95
+#: frontend/src/pages/sys-admin/departments/department-detail.js:290
+#: frontend/src/pages/sys-admin/departments/department-detail.js:328
+#: frontend/src/pages/sys-admin/departments/department-detail.js:375
+#: frontend/src/pages/sys-admin/departments/departments-list.js:114
 #: frontend/src/pages/sys-admin/groups/group-members.js:49
 #: frontend/src/pages/sys-admin/groups/group-repos.js:39
 #: frontend/src/pages/sys-admin/groups/search-groups.js:109
@@ -950,7 +955,7 @@ msgstr "Mật khẩu không trùng khớp"
 #: frontend/src/pages/groups/group-view.js:426
 #: frontend/src/pages/org-admin/org-department-item.js:166
 #: frontend/src/pages/shared-with-all/public-shared-view.js:195
-#: frontend/src/pages/sys-admin/departments/department-detail.js:204
+#: frontend/src/pages/sys-admin/departments/department-detail.js:217
 #: frontend/src/pages/sys-admin/repos/all-repos.js:132
 msgid "New Library"
 msgstr "Tạo thư viện mới"
@@ -1655,7 +1660,7 @@ msgstr ""
 #: frontend/src/pages/search/advanced-search.js:226
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:97
 #: frontend/src/pages/shared-libs/shared-libs.js:70
-#: frontend/src/pages/sys-admin/departments/department-detail.js:353
+#: frontend/src/pages/sys-admin/departments/department-detail.js:376
 #: frontend/src/pages/sys-admin/repos/dir-content.js:105
 #: frontend/src/pages/sys-admin/repos/repos.js:81
 #: frontend/src/pages/sys-admin/repos/repos.js:83
@@ -1783,7 +1788,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:137
 #: frontend/src/pages/org-admin/org-department-item.js:265
 #: frontend/src/pages/org-admin/org-group-members.js:81
-#: frontend/src/pages/sys-admin/departments/department-detail.js:306
+#: frontend/src/pages/sys-admin/departments/department-detail.js:329
 #: frontend/src/pages/sys-admin/users/user-groups.js:50
 #: frontend/src/pages/sys-admin/users/users-content.js:91
 msgid "Role"
@@ -1874,14 +1879,14 @@ msgstr ""
 #: frontend/src/components/dialog/org-add-department-dialog.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:72
 #: frontend/src/pages/org-admin/org-department-item.js:160
-#: frontend/src/pages/sys-admin/departments/department-detail.js:202
+#: frontend/src/pages/sys-admin/departments/department-detail.js:215
 msgid "New Sub-department"
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:72
 #: frontend/src/pages/org-admin/org-departments-list.js:68
-#: frontend/src/pages/sys-admin/departments/departments-list.js:67
+#: frontend/src/pages/sys-admin/departments/departments-list.js:86
 msgid "New Department"
 msgstr ""
 
@@ -1891,7 +1896,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:123
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-add-member-dialog.js:39
 #: frontend/src/pages/org-admin/org-department-item.js:163
-#: frontend/src/pages/sys-admin/departments/department-detail.js:203
+#: frontend/src/pages/sys-admin/departments/department-detail.js:216
 #: frontend/src/pages/sys-admin/groups/group-members.js:281
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:337
 #: frontend/src/pages/sys-admin/orgs/org-users.js:319
@@ -2418,6 +2423,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:95
 msgid "End date"
+msgstr ""
+
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:74
+#: frontend/src/pages/sys-admin/departments/department-detail.js:214
+msgid "Rename Department"
 msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
@@ -2987,7 +2997,7 @@ msgstr ""
 #: frontend/src/pages/groups/group-view.js:502
 #: frontend/src/pages/groups/group-view.js:508
 #: frontend/src/pages/org-admin/org-department-item.js:255
-#: frontend/src/pages/sys-admin/departments/department-detail.js:294
+#: frontend/src/pages/sys-admin/departments/department-detail.js:317
 #: frontend/src/pages/sys-admin/groups/group-nav.js:17
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:16
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:16
@@ -3134,6 +3144,7 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:256
 #: frontend/src/pages/groups/group-view.js:471
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:93
+#: frontend/src/pages/sys-admin/departments/group-item.js:61
 #: frontend/src/utils/text-translation.js:11
 msgid "Rename"
 msgstr "Đổi tên"
@@ -3315,33 +3326,56 @@ msgstr ""
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "Xóa tài khoản sẽ không thể phục hồi. Vui lòng suy nghĩ lần nữa!"
 
-#: frontend/src/components/user-settings/email-notice.js:18
+#: frontend/src/components/user-settings/email-notice.js:19
+#: frontend/src/components/user-settings/email-notice.js:27
 msgid "Don't send emails"
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:19
+#: frontend/src/components/user-settings/email-notice.js:20
+#: frontend/src/components/user-settings/email-notice.js:28
 msgid "Per hour"
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:20
+#: frontend/src/components/user-settings/email-notice.js:21
 msgid "Per 4 hours"
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:21
+#: frontend/src/components/user-settings/email-notice.js:22
 msgid "Per day"
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:22
+#: frontend/src/components/user-settings/email-notice.js:23
 msgid "Per week"
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:52
-msgid "Email Notification of File Changes"
+#: frontend/src/components/user-settings/email-notice.js:28
+msgid ""
+"If notifications have not been read within one hour, they will be sent to "
+"your mailbox."
 msgstr ""
 
-#: frontend/src/components/user-settings/email-notice.js:53
+#: frontend/src/components/user-settings/email-notice.js:68
+#: frontend/src/settings.js:49
+msgid "Email Notification"
+msgstr ""
+
+#: frontend/src/components/user-settings/email-notice.js:69
+msgid "Notifications of file changes"
+msgstr ""
+
+#: frontend/src/components/user-settings/email-notice.js:70
 msgid ""
 "The list of added, deleted and modified files will be sent to your mailbox."
+msgstr ""
+
+#: frontend/src/components/user-settings/email-notice.js:83
+msgid "Notifications of collaboration"
+msgstr ""
+
+#: frontend/src/components/user-settings/email-notice.js:84
+msgid ""
+"Whether the notifications of collaboration such as sharing library or "
+"joining group should be sent to your mailbox."
 msgstr ""
 
 #: frontend/src/components/user-settings/language-setting.js:30
@@ -3703,7 +3737,7 @@ msgstr ""
 #: frontend/src/pages/groups/groups-view.js:80
 #: frontend/src/pages/my-libs/my-libs.js:39
 #: frontend/src/pages/org-admin/org-department-item.js:316
-#: frontend/src/pages/sys-admin/departments/department-detail.js:368
+#: frontend/src/pages/sys-admin/departments/department-detail.js:391
 msgid "No libraries"
 msgstr ""
 
@@ -3983,8 +4017,8 @@ msgstr "Dung lượng đã dùng"
 #: frontend/src/pages/org-admin/org-department-item.js:230
 #: frontend/src/pages/org-admin/org-departments-list.js:98
 #: frontend/src/pages/org-admin/org-users-list.js:67
-#: frontend/src/pages/sys-admin/departments/department-detail.js:269
-#: frontend/src/pages/sys-admin/departments/departments-list.js:97
+#: frontend/src/pages/sys-admin/departments/department-detail.js:292
+#: frontend/src/pages/sys-admin/departments/departments-list.js:116
 #: frontend/src/pages/sys-admin/users/ldap-users.js:45
 #: frontend/src/pages/sys-admin/users/users-content.js:83
 msgid "Quota"
@@ -3996,8 +4030,8 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups.js:96
 #: frontend/src/pages/org-admin/org-links.js:102
 #: frontend/src/pages/org-admin/org-users-list.js:69
-#: frontend/src/pages/sys-admin/departments/department-detail.js:268
-#: frontend/src/pages/sys-admin/departments/departments-list.js:96
+#: frontend/src/pages/sys-admin/departments/department-detail.js:291
+#: frontend/src/pages/sys-admin/departments/departments-list.js:115
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:63
 #: frontend/src/pages/sys-admin/institutions/institutions.js:48
@@ -4020,30 +4054,30 @@ msgstr "Lần đăng nhập cuối"
 #: frontend/src/pages/org-admin/org-department-item.js:208
 #: frontend/src/pages/org-admin/org-departments-list.js:88
 #: frontend/src/pages/org-admin/side-panel.js:62
-#: frontend/src/pages/sys-admin/departments/department-detail.js:246
-#: frontend/src/pages/sys-admin/departments/department-detail.js:247
-#: frontend/src/pages/sys-admin/departments/departments-list.js:87
+#: frontend/src/pages/sys-admin/departments/department-detail.js:269
+#: frontend/src/pages/sys-admin/departments/department-detail.js:270
+#: frontend/src/pages/sys-admin/departments/departments-list.js:106
 #: frontend/src/pages/sys-admin/side-panel.js:126
 msgid "Departments"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-department-item.js:221
-#: frontend/src/pages/sys-admin/departments/department-detail.js:260
+#: frontend/src/pages/sys-admin/departments/department-detail.js:283
 msgid "Sub-departments"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-department-item.js:248
-#: frontend/src/pages/sys-admin/departments/department-detail.js:287
+#: frontend/src/pages/sys-admin/departments/department-detail.js:310
 msgid "No sub-departments"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-department-item.js:259
-#: frontend/src/pages/sys-admin/departments/department-detail.js:299
+#: frontend/src/pages/sys-admin/departments/department-detail.js:322
 msgid "No members"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-departments-list.js:117
-#: frontend/src/pages/sys-admin/departments/departments-list.js:116
+#: frontend/src/pages/sys-admin/departments/departments-list.js:139
 msgid "No departments"
 msgstr ""
 
@@ -5496,10 +5530,6 @@ msgstr "Hồ Sơ Cá Nhân"
 #: frontend/src/settings.js:48
 msgid "Language"
 msgstr "Ngôn ngữ"
-
-#: frontend/src/settings.js:49
-msgid "Email Notification"
-msgstr ""
 
 #: frontend/src/settings.js:125
 msgid "Profile Setting"

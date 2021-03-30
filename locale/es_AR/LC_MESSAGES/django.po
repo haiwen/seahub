@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 13:53+0800\n"
-"PO-Revision-Date: 2021-03-23 05:54+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-03-30 11:01+0800\n"
+"PO-Revision-Date: 2021-03-23 17:32+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,12 +23,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
-#: seahub/api2/views.py:355
+#: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "El nombre es demasiado largo (máximo 64 caracteres)"
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
-#: seahub/api2/views.py:359 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "El nombre no debe contener ' / '."
 
@@ -66,16 +66,18 @@ msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Fallo al definir cuota: la cuota máxima es %d MB"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:80
-#: seahub/api2/endpoints/admin/groups.py:127
+#: seahub/api2/endpoints/admin/groups.py:129
+#: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
-#: seahub/api2/views.py:4591 seahub/group/forms.py:36
+#: seahub/api2/views.py:4607 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "El nombre sólo puede tener letras, números, espacios, guión, comilla simple, corchetes o guión bajo"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:85
-#: seahub/api2/endpoints/admin/groups.py:134
+#: seahub/api2/endpoints/admin/groups.py:136
+#: seahub/api2/endpoints/admin/groups.py:272
 #: seahub/api2/endpoints/groups.py:221 seahub/api2/endpoints/groups.py:294
 msgid "There is already a group with that name."
 msgstr "Ya existe un grupo con ese nombre"
@@ -95,7 +97,7 @@ msgstr "Hay sub-departamentos en este departamento."
 msgid "My Library"
 msgstr "Mi Biblioteca"
 
-#: seahub/api2/endpoints/admin/groups.py:213
+#: seahub/api2/endpoints/admin/groups.py:216
 #: seahub/api2/endpoints/groups.py:320
 #, python-format
 msgid "User %s is already group owner."
@@ -118,12 +120,12 @@ msgstr "Fallo al agregar a %s a la institución: el usuario ya pertenece a esta 
 msgid "System library can not be deleted."
 msgstr "La bibilioteca del sistema no puede ser eliminada."
 
-#: seahub/api2/endpoints/admin/libraries.py:386 seahub/api2/views.py:1647
+#: seahub/api2/endpoints/admin/libraries.py:386 seahub/api2/views.py:1663
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "La transferencia falló: el rol de %s es %s, no puede agregar una biblioteca."
 
-#: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1652
+#: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1668
 msgid "Library can not be transferred to owner."
 msgstr "La biblioteca no puede ser transferida al propietario."
 
@@ -372,7 +374,7 @@ msgstr "Archivo con virus no encontrado"
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:196
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3845
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3861
 #: seahub/notifications/models.py:465 seahub/notifications/models.py:506
 #: seahub/notifications/models.py:557 seahub/notifications/models.py:613
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
@@ -396,11 +398,11 @@ msgstr "Ruta de destino inválida"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1790
-#: seahub/api2/views.py:1830 seahub/api2/views.py:1879
-#: seahub/api2/views.py:1923 seahub/api2/views.py:1969
-#: seahub/api2/views.py:2018 seahub/api2/views.py:2429
-#: seahub/api2/views.py:2543
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1806
+#: seahub/api2/views.py:1846 seahub/api2/views.py:1895
+#: seahub/api2/views.py:1939 seahub/api2/views.py:1985
+#: seahub/api2/views.py:2034 seahub/api2/views.py:2445
+#: seahub/api2/views.py:2559
 msgid "Out of quota."
 msgstr "Cuota agotada."
 
@@ -439,7 +441,7 @@ msgstr "Usuario %s no encontrado."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:216 seahub/thumbnail/views.py:51
+#: seahub/profile/views.py:219 seahub/thumbnail/views.py:51
 #: seahub/thumbnail/views.py:166 seahub/views/__init__.py:740
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
@@ -473,7 +475,7 @@ msgstr "El usuario %s ya es miembro del grupo."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:319
-#: seahub/api2/endpoints/group_members.py:451 seahub/api2/views.py:1633
+#: seahub/api2/endpoints/group_members.py:451 seahub/api2/views.py:1649
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -486,7 +488,7 @@ msgstr "El usuario %s no se encuentra en la organización."
 #: seahub/api2/endpoints/group_members.py:459
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "El usuario %s es un usuario de la organización."
 
 #: seahub/api2/endpoints/group_members.py:381 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:457
@@ -565,11 +567,11 @@ msgstr "No se puede restablecer la contraseña de esta biblioteca."
 msgid "New password of library %s"
 msgstr "Nueva contraseña de la biblioteca %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3842
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3858
 msgid "Wrong password"
 msgstr "Contraseña incorrecta"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3848
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3864
 msgid "Decrypt library error"
 msgstr "Error en el desencriptado de la biblioteca"
 
@@ -643,13 +645,13 @@ msgid "Password is too short."
 msgstr "La contraseña es demasiado corta."
 
 #: seahub/api2/endpoints/share_links.py:289
-#: seahub/api2/endpoints/upload_links.py:182 seahub/api2/views.py:3413
+#: seahub/api2/endpoints/upload_links.py:182 seahub/api2/views.py:3429
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Días al vencimiento de be ser mayor o igual que %s"
 
 #: seahub/api2/endpoints/share_links.py:295
-#: seahub/api2/endpoints/upload_links.py:188 seahub/api2/views.py:3419
+#: seahub/api2/endpoints/upload_links.py:188 seahub/api2/views.py:3435
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Días al vencimiento de be ser menor o igual que %s"
@@ -2497,56 +2499,56 @@ msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "Notar que su administrador del sistema Seafile puede no haber habilitado la característica de búsqueda de texto completo. En ese caso, sólo podrá buscar nombres de archivos y carpetas."
 
 #: seahub/help/templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "Crear un grupo es una manera conveniente de compartir archivos con muchas personas. En Seafile puede crear y gesionar un grupo fácilmente."
 
 #: seahub/help/templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Así es como funcionan los grupos en Seafile:"
 
 #: seahub/help/templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "Cada grupo tiene un propietario. El propietario es el creador del grupo por defecto. El/ella puede transferir la propiedad del grupo a otro miembro."
 
 #: seahub/help/templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "Cada grupo puede tener múltiples administradores. El propietario y los administradores del grupo pueden agregar más administradores al grupo."
 
 #: seahub/help/templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "El administrador del grupo puede agregar/eliminar miembros en el grupo. También puede dejar de compartir una biblioteca en el grupo."
 
 #: seahub/help/templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "Haga click en la pestaña \"Compartido con grupos\" del panel izquierdo, y verá todos los grupos a los que pertenece. Haciendo click en cualquier grupo, verá las bibliotecas compartidas con ese grupo."
 
 #: seahub/help/templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "Para crear un grupo nuevo, haga click en la pestaña \"Compartido con grupos\" en el panel izquierdo. Luego haga click en \"Todos los grupos\". En la página puede hacer click en \"Nuevo Grupo\" para crear uno."
 
 #: seahub/help/templates/help/groups_managing.html:15
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
-msgstr ""
+msgstr "Vea <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">compartiendo archivos y carpetas</a> acerca de como compartir bibliotecas o carpetas con un grupo."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -2630,7 +2632,7 @@ msgstr "seafile-ignore.txt sólo ignora archivos que aún no han sido sincroniza
 
 #: seahub/help/templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Instalando el programa cliente Seafile"
 
 #: seahub/help/templates/help/install_sync.html:8
 msgid ""
@@ -2691,7 +2693,7 @@ msgstr "En ciertas ocasiones el usuario desea modificar archivos en la nube dire
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafile es una plataforma de alojamiento de archivos para empresas con alta fiabilidad y rendimiento."
 
 #: seahub/help/templates/help/introduction.html:9
 #, python-format
@@ -2701,21 +2703,21 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
-msgstr ""
+msgstr "Seafile contiene una interface web para que Ud. gestione y comparta archivos.. Tiene dos clases de clientes de escritorio, <a href=\"%(SITE_ROOT)shelp/install_sync/\">el cliente que sincroniza</a> y <a href=\"%(SITE_ROOT)shelp/using_drive_client\">el cliente de unidad de disco</a>. Tambien tiene clientes moviles para Android e iOS."
 
 #: seahub/help/templates/help/introduction.html:10
 msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr ""
+msgstr "Puede descargar los clientes en el <a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">sitio web de Seafile</a>."
 
 #: seahub/help/templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr ""
+msgstr "Si este manual no contiene la información que Ud. necesita, puede buscar ayuda en nuestro foro: <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a>."
 
 #: seahub/help/templates/help/libraries_managing.html:6
 msgid ""
@@ -2724,19 +2726,19 @@ msgid ""
 "project you work on, or each document type you want to save in Seafile. A "
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
-msgstr ""
+msgstr "Seafile utiliza \"bibliotecas\" para organizar sus archivos. Una biblioteca es un contenedor de nivel superior para un conjunto de archivos y carpetas. Puede crear una biblioteca para cada proyecto en el que Ud. trabaja, o para cada tipo de archivo que Ud. quiere guardar en Seafile. Una biblioteca funciona principalmente como una carpeta de nivel superior. Pero también tiene algunas propiedades especiales:"
 
 #: seahub/help/templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
-msgstr ""
+msgstr "Cada biblioteca mantiene su propio historial de modificaciones de archivos. No existe un historial global de modificación de archivos en todas las bibliotecas."
 
 #: seahub/help/templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
-msgstr ""
+msgstr "Cada biblioteca se puede sincronizar con los clientes de escritorio por separado. Puede elegir qué bibliotecas se van a sincronizar."
 
 #: seahub/help/templates/help/libraries_managing.html:11
 msgid ""
@@ -3819,7 +3821,7 @@ msgstr "Carpeta movida"
 msgid "New file updates on %s"
 msgstr "Nuevas actualizaciones en %s"
 
-#: seahub/notifications/management/commands/send_notices.py:312
+#: seahub/notifications/management/commands/send_notices.py:321
 #, python-format
 msgid "New notice on %s"
 msgstr "Nueva notificación en %s"
@@ -4130,23 +4132,23 @@ msgstr "Perfil editado con éxito."
 msgid "Failed to edit profile"
 msgstr "Fallo al editar el perfil."
 
-#: seahub/profile/views.py:202
+#: seahub/profile/views.py:205
 msgid "Has not accepted invitation yet"
 msgstr "Aún no ha aceptado la invitación"
 
-#: seahub/profile/views.py:226
+#: seahub/profile/views.py:229
 msgid "Demo account can not be deleted."
 msgstr "La cuenta demo no puede ser eliminada."
 
-#: seahub/profile/views.py:252
+#: seahub/profile/views.py:255
 msgid "Failed to set default library."
 msgstr "Fallo al definir biblioteca predeterminada."
 
-#: seahub/profile/views.py:256
+#: seahub/profile/views.py:259
 msgid "Can not set encrypted library as default library."
 msgstr "No es posible establecer una biblioteca encriptada como biblioteca predeterminada."
 
-#: seahub/profile/views.py:261
+#: seahub/profile/views.py:264
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" definida con éxito como biblioteca predeterminada."
