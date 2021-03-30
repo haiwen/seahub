@@ -8,6 +8,7 @@ view_snapshot_file, view_shared_file, etc.
 import os
 import json
 import time
+import uuid
 import stat
 import urllib.request, urllib.error, urllib.parse
 import chardet
@@ -131,6 +132,10 @@ from seahub.bisheng_office.utils import get_bisheng_dict, \
         get_bisheng_editor_url, get_bisheng_preivew_url
 from seahub.bisheng_office.settings import ENABLE_BISHENG_OFFICE
 from seahub.bisheng_office.settings import BISHENG_OFFICE_FILE_EXTENSION
+
+from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
+from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
+from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -311,7 +316,6 @@ def convert_md_link(file_content, repo_id, username):
 
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
-            from seahub.base.templatetags.seahub_tags import file_icon_filter
 
             # convert other types of filelinks to clickable links
             path = "/" + link_name
@@ -512,10 +516,8 @@ def view_lib_file(request, repo_id, path):
 
         return HttpResponseRedirect(dl_or_raw_url)
 
-    from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
     if ENABLE_THIRDPARTY_EDITOR:
 
-        from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 
         filename = os.path.basename(path)
         filetype, fileext = get_file_type_and_ext(filename)
@@ -523,7 +525,6 @@ def view_lib_file(request, repo_id, path):
         action_url = THIRDPARTY_EDITOR_ACTION_URL_DICT.get(fileext, '')
         if action_url:
 
-            from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 
             user_repo_path_info = {
                 'request_user': request.user.username,
@@ -535,8 +536,6 @@ def view_lib_file(request, repo_id, path):
                 }
             }
 
-            import uuid
-            import time
             uid = uuid.uuid4()
             access_token = uid.hex
             cache.set('thirdparty_editor_access_token_' + access_token,
