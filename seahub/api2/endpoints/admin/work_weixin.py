@@ -226,6 +226,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
     permission_classes = (IsAdminUser,)
 
     def _list_departments_from_work_weixin(self, access_token, department_id):
+        # https://work.weixin.qq.com/api/doc/90000/90135/90208
         data = {
             'access_token': access_token,
             'id': department_id,
@@ -341,6 +342,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
         if api_department_list is None:
             error_msg = '获取企业微信组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        api_department_list = sorted(api_department_list, key=lambda x:x['id'])
 
         # list department members from work weixin
         api_user_list = self._list_department_members_from_work_weixin(access_token, department_id)
