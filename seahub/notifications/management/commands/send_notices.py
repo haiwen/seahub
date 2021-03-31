@@ -247,7 +247,7 @@ class Command(BaseCommand):
                     continue
 
             # get notices
-            user_notices_qs = UserNotification.objects.get_all_notifications(seen=False, time_since=last_emailed_time)
+            user_notices_qs = UserNotification.objects.get_user_all_notifications(to_user, seen=False, time_since=last_emailed_time)
             user_notices, count = list(user_notices_qs), user_notices_qs.count()
             if not count:
                 continue
