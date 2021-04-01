@@ -152,6 +152,17 @@ class DepartmentDetail extends React.Component {
     });
   }
 
+  onSubDepartmentNameChanged = (dept) => {
+    this.setState({
+      groups: this.state.groups.map(item => {
+        if (item.id == dept.id) {
+          item.name = dept.name;
+        }
+        return item;
+      })
+    });
+  }
+
   onRepoChanged = () => {
     this.listGroupRepo(this.props.groupID);
   }
@@ -162,6 +173,14 @@ class DepartmentDetail extends React.Component {
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   showDeleteMemberDialog = (member) => {
@@ -298,6 +317,10 @@ class DepartmentDetail extends React.Component {
                         return(
                           <Fragment key={group.id}>
                             <GroupItem
+                              isItemFreezed={this.state.isItemFreezed}
+                              onFreezedItem={this.onFreezedItem}
+                              onUnfreezedItem={this.onUnfreezedItem}
+                              onDepartmentNameChanged={this.onSubDepartmentNameChanged}
                               group={group}
                               showDeleteDepartDialog={this.showDeleteDepartDialog}
                               showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
