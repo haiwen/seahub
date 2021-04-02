@@ -140,7 +140,9 @@
 .seafile-comment-footer .seafile-add-comment .comment-btn,
 .seafile-edit-comment .comment-btn {
   height: 28px;
-  width: 60px;
+  margin-top: 5px;
+  width: fit-content;
+  display: inline-block;
 }
 .seafile-edit-comment {
   margin-top: 10px;
