@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 import hashlib
+from seahub.group.utils import group_id_to_name
 import urllib.request, urllib.parse, urllib.error
 import logging
 
@@ -160,6 +161,30 @@ class SocialAuthUser(models.Model):
         app_label = "base"
         unique_together = ('provider', 'uid')
         db_table = 'social_auth_usersocialauth'
+
+
+class ExternalDepartmentManager(models.Manager):
+    def get_by_provider_and_outer_id(self, provider, outer_id):
+        return self.filter(provider=provider, outer_id=outer_id).first()
+
+    def delete_by_group_id(self, group_id):
+        self.filter(group_id=group_id).delete()
+
+
+class ExternalDepartment(models.Model):
+    group_id = models.IntegerField(unique=True)
+    parent_group_id = models.IntegerField()
+    outer_id = models.IntegerField()
+    outer_parent_id = models.IntegerField()
+    provider = models.CharField(max_length=32)
+
+    objects = ExternalDepartmentManager()
+
+    class Meta:
+        """Meta data"""
+        app_label = "base"
+        unique_together = ('provider', 'outer_id')
+        db_table = 'external_department'
 
 
 # # handle signals

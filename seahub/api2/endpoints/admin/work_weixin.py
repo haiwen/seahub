@@ -26,6 +26,7 @@ from seahub.base.accounts import User
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.group.utils import validate_group_name
+from seahub.auth.models import ExternalDepartment
 
 logger = logging.getLogger(__name__)
 WORK_WEIXIN_DEPARTMENT_FIELD = 'department'

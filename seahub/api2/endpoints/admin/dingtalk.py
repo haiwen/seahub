@@ -26,6 +26,7 @@ from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile
 from seahub.avatar.models import Avatar
 from seahub.group.utils import validate_group_name
+from seahub.auth.models import ExternalDepartment
 
 from seahub.dingtalk.utils import dingtalk_get_access_token
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
