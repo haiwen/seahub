@@ -1286,10 +1286,9 @@ CREATE TABLE `repo_auto_delete` (
 CREATE TABLE `external_department` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `group_id` int(11) NOT NULL,
-    `parent_group_id` int(11) NOT NULL,
-    `outer_id` int(11) NOT NULL,
-    `outer_parent_id` int(11) NOT NULL,
     `provider` varchar(32) NOT NULL,
+    `outer_id` bigint(20) NOT NULL,
+    `outer_parent_id` bigint(20) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `group_id` (`group_id`),
     UNIQUE KEY `external_department_provider_outer_id_8dns6vkw_uniq` (`provider`,`outer_id`)

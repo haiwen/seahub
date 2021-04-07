@@ -351,7 +351,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
             # check department argument
             new_group_name = department_obj.get('name')
             department_obj_id = department_obj.get('id')
-            parent_department_id = department_obj.get('parentid')
+            parent_department_id = department_obj.get('parentid', 0)
             if department_obj_id is None or not new_group_name or not validate_group_name(new_group_name):
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门参数错误')
@@ -389,10 +389,9 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
                 ExternalDepartment.objects.create(
                     group_id=group_id,
-                    parent_group_id=parent_group_id,
+                    provider=WORK_WEIXIN_PROVIDER,
                     outer_id=department_obj_id,
                     outer_parent_id=parent_department_id,
-                    provider=WORK_WEIXIN_PROVIDER,
                 )
 
                 department_map_to_group_dict[department_obj_id] = group_id

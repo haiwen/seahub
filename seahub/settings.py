@@ -248,6 +248,7 @@ INSTALLED_APPS = [
     'seahub.file_tags',
     'seahub.related_files',
     'seahub.work_weixin',
+    'seahub.dingtalk',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
     'seahub.abuse_reports',

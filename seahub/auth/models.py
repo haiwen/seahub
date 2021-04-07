@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 import hashlib
-from seahub.group.utils import group_id_to_name
 import urllib.request, urllib.parse, urllib.error
 import logging
 
@@ -173,10 +172,9 @@ class ExternalDepartmentManager(models.Manager):
 
 class ExternalDepartment(models.Model):
     group_id = models.IntegerField(unique=True)
-    parent_group_id = models.IntegerField()
-    outer_id = models.IntegerField()
-    outer_parent_id = models.IntegerField()
     provider = models.CharField(max_length=32)
+    outer_id = models.BigIntegerField()
+    outer_parent_id = models.BigIntegerField()
 
     objects = ExternalDepartmentManager()
 

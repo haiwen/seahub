@@ -28,3 +28,6 @@ DINGTALK_DEPARTMENT_USER_SIZE = 100
 DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL = getattr(settings, 'DINGTALK_MESSAGE_SEND_TO_CONVERSATION_URL', 'https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2')
 
 DINGTALK_GET_DETAILED_USER_INFO_URL = getattr(settings, 'DINGTALK_GET_DETAILED_USER_INFO_URL', 'https://oapi.dingtalk.com/user/get')
+
+# constants
+DINGTALK_PROVIDER = 'dingtalk'
