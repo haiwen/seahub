@@ -293,7 +293,7 @@ class AdminDingtalkDepartmentsImport(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # get department list
-        # https://developers.dingtalk.com/document/app/obtain-the-department-list-v2
+        # https://developers.dingtalk.com/document/app/obtain-the-department-list
         data = {'access_token': access_token, 'id': department_id}
         current_department_resp_json = requests.get(DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, params=data).json()
         current_department_list = [current_department_resp_json]
