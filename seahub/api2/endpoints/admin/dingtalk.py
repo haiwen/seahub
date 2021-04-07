@@ -36,6 +36,7 @@ from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_USER_SIZE
 
 DEPARTMENT_OWNER = 'system admin'
+DINGTALK_PROVIDER = 'dingtalk'
 
 logger = logging.getLogger(__name__)
 
@@ -233,15 +234,6 @@ class AdminDingtalkDepartmentsImport(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser, IsProVersion)
 
-    def _admin_check_group_name_conflict(self, new_group_name):
-        checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
-
-        for g in checked_groups:
-            if g.group_name == new_group_name:
-                return True, g
-
-        return False, None
-
     def _api_department_success_msg(self, department_obj_id, department_obj_name, group_id):
         return {
             'type': 'department',
@@ -330,6 +322,7 @@ class AdminDingtalkDepartmentsImport(APIView):
             # check department argument
             new_group_name = department_obj.get('name')
             department_obj_id = department_obj.get('id')
+            parent_department_id = department_obj.get('parentid')
             if department_obj_id is None or not new_group_name or not validate_group_name(new_group_name):
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门参数错误')
@@ -340,7 +333,6 @@ class AdminDingtalkDepartmentsImport(APIView):
             if index == 0:
                 parent_group_id = -1
             else:
-                parent_department_id = department_obj.get('parentid')
                 parent_group_id = department_map_to_group_dict.get(parent_department_id)
 
             if parent_group_id is None:
@@ -349,10 +341,11 @@ class AdminDingtalkDepartmentsImport(APIView):
                 failed.append(failed_msg)
                 continue
 
-            # check department exist by group name
-            exist, exist_group = self._admin_check_group_name_conflict(new_group_name)
-            if exist:
-                department_map_to_group_dict[department_obj_id] = exist_group.id
+            # check department exist
+            exist_department = ExternalDepartment.objects.get_by_provider_and_outer_id(
+                DINGTALK_PROVIDER, department_obj_id)
+            if exist_department:
+                department_map_to_group_dict[department_obj_id] = exist_department.group_id
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门已存在')
                 failed.append(failed_msg)
@@ -364,6 +357,14 @@ class AdminDingtalkDepartmentsImport(APIView):
                     new_group_name, DEPARTMENT_OWNER, parent_group_id=parent_group_id)
 
                 seafile_api.set_group_quota(group_id, -2)
+
+                ExternalDepartment.objects.create(
+                    group_id=group_id,
+                    parent_group_id=parent_group_id,
+                    outer_id=department_obj_id,
+                    outer_parent_id=parent_department_id,
+                    provider=DINGTALK_PROVIDER,
+                )
 
                 department_map_to_group_dict[department_obj_id] = group_id
                 success_msg = self._api_department_success_msg(
