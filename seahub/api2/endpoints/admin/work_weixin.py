@@ -391,7 +391,6 @@ class AdminWorkWeixinDepartmentsImport(APIView):
                     group_id=group_id,
                     provider=WORK_WEIXIN_PROVIDER,
                     outer_id=department_obj_id,
-                    outer_parent_id=parent_department_id,
                 )
 
                 department_map_to_group_dict[department_obj_id] = group_id

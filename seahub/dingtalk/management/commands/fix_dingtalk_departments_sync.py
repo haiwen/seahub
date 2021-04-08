@@ -98,7 +98,6 @@ class Command(BaseCommand):
             # check department argument
             group_name = department_obj.get('name')
             department_obj_id = department_obj.get('id')
-            parent_department_id = department_obj.get('parentid', 0)
             if department_obj_id is None or not group_name:
                 continue
 
@@ -116,7 +115,6 @@ class Command(BaseCommand):
                     group_id=group.id,
                     provider=DINGTALK_PROVIDER,
                     outer_id=department_obj_id,
-                    outer_parent_id=parent_department_id,
                 )
                 count += 1
 

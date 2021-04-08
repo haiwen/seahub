@@ -174,7 +174,6 @@ class ExternalDepartment(models.Model):
     group_id = models.IntegerField(unique=True)
     provider = models.CharField(max_length=32)
     outer_id = models.BigIntegerField()
-    outer_parent_id = models.BigIntegerField()
 
     objects = ExternalDepartmentManager()
 
