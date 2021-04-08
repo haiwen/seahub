@@ -6,17 +6,16 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 
 from seaserv import ccnet_api
-from seahub.work_weixin.utils import handler_work_weixin_api_response, \
-    get_work_weixin_access_token, admin_work_weixin_departments_check
-from seahub.work_weixin.settings import WORK_WEIXIN_DEPARTMENTS_URL, \
-    WORK_WEIXIN_PROVIDER
+from seahub.dingtalk.utils import dingtalk_get_access_token
+from seahub.dingtalk.settings import ENABLE_DINGTALK, \
+    DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, DINGTALK_PROVIDER
 from seahub.auth.models import ExternalDepartment
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "Sync the imported work-weixin departments to the database."
+    help = "Fix sync the imported dingtalk departments to the database."
 
     def println(self, msg):
         self.stdout.write('[%s] %s\n' % (str(datetime.now()), msg))
@@ -34,9 +33,9 @@ class Command(BaseCommand):
         self.println(msg)
 
     def handle(self, *args, **options):
-        self.log_debug('Start sync work-weixin departments...')
+        self.log_debug('Start fix sync dingtalk departments...')
         self.do_action()
-        self.log_debug('Finish sync work-weixin departments.\n')
+        self.log_debug('Finish fix sync dingtalk departments.\n')
 
     def get_group_by_name(self, group_name):
         checked_groups = ccnet_api.search_groups(group_name, -1, -1)
@@ -47,48 +46,50 @@ class Command(BaseCommand):
 
         return None
 
-    def list_departments_from_work_weixin(self, access_token):
-        # https://work.weixin.qq.com/api/doc/90000/90135/90208
+    def list_departments_from_dingtalk(self, access_token):
+        # https://developers.dingtalk.com/document/app/obtain-the-department-list
         data = {
             'access_token': access_token,
         }
-        api_response = requests.get(WORK_WEIXIN_DEPARTMENTS_URL, params=data)
-        api_response_dic = handler_work_weixin_api_response(api_response)
+        api_response = requests.get(
+            DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, params=data)
+        api_response_dic = api_response.json()
 
         if not api_response_dic:
-            self.log_error('can not get work weixin departments response')
+            self.log_error('can not get dingtalk departments response')
             return None
 
         if 'department' not in api_response_dic:
             self.log_error(json.dumps(api_response_dic))
             self.log_error(
-                'can not get department list in work weixin departments response')
+                'can not get department list in dingtalk departments response')
             return None
 
         return api_response_dic['department']
 
     def do_action(self):
-       # work weixin check
-        if not admin_work_weixin_departments_check():
+       # dingtalk check
+        if not ENABLE_DINGTALK:
             self.log_error('Feature is not enabled.')
             return
 
-        access_token = get_work_weixin_access_token()
+        access_token = dingtalk_get_access_token()
         if not access_token:
-            self.log_error('can not get work weixin access_token')
+            self.log_error('can not get dingtalk access_token')
             return
 
-        # list departments from work weixin
-        api_department_list = self.list_departments_from_work_weixin(
+        # get department list
+        # https://developers.dingtalk.com/document/app/obtain-the-department-list-v2
+        api_department_list = self.list_departments_from_dingtalk(
             access_token)
         if api_department_list is None:
-            self.log_error('获取企业微信组织架构失败')
+            self.log_error('获取钉钉组织架构失败')
             return
         api_department_list = sorted(
             api_department_list, key=lambda x: x['id'])
 
         self.log_debug(
-            'Total %d work-weixin departments.' % len(api_department_list))
+            'Total %d dingtalk departments.' % len(api_department_list))
 
         # main
         count = 0
@@ -103,7 +104,7 @@ class Command(BaseCommand):
 
             # check department exist
             exist_department = ExternalDepartment.objects.get_by_provider_and_outer_id(
-                WORK_WEIXIN_PROVIDER, department_obj_id)
+                DINGTALK_PROVIDER, department_obj_id)
             if exist_department:
                 exists_count += 1
                 continue
@@ -113,11 +114,11 @@ class Command(BaseCommand):
             if group:
                 ExternalDepartment.objects.create(
                     group_id=group.id,
-                    provider=WORK_WEIXIN_PROVIDER,
+                    provider=DINGTALK_PROVIDER,
                     outer_id=department_obj_id,
                     outer_parent_id=parent_department_id,
                 )
                 count += 1
 
-        self.log_debug('%d work-weixin departments exists in db.' % exists_count)
-        self.log_debug('Sync %d work-weixin departments to db.' % count)
+        self.log_debug('%d dingtalk departments exists in db.' % exists_count)
+        self.log_debug('Sync %d dingtalk departments to db.' % count)
