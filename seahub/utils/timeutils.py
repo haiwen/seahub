@@ -60,6 +60,11 @@ def timestamp_to_isoformat_timestr(timestamp):
 
 # https://pypi.org/project/pytz/
 def datetime_to_isoformat_timestr(datetime):
+
+    from django.utils.timezone import make_naive, is_aware
+    if is_aware(datetime):
+        datetime = make_naive(datetime)
+
     try:
         # This library only supports two ways of building a localized time.
         # The first is to use the localize() method provided by the pytz library.
