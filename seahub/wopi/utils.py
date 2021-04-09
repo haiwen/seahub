@@ -123,6 +123,15 @@ def get_wopi_dict(request_user, repo_id, file_path,
 
                 if wopi_key == tmp_wopi_key:
                     action_url = tmp_action_url
+
+                # if edit is possible we can also view the filie
+                if name == 'edit':
+                    tmp_wopi_key = generate_discovery_cache_key('view', ext)
+                    cache.set(tmp_wopi_key, tmp_action_url,
+                            OFFICE_WEB_APP_DISCOVERY_EXPIRATION)
+                    if wopi_key == tmp_wopi_key:
+                        action_url = tmp_action_url
+
             else:
                 continue
 
