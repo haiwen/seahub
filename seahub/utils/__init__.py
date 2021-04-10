@@ -29,6 +29,7 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
 from django.utils.html import escape
+from django.utils.timezone import make_naive, is_aware
 from django.views.static import serve as django_static_serve
 
 from seahub.auth import REDIRECT_FIELD_NAME
@@ -1332,6 +1333,12 @@ def get_origin_repo_info(repo_id):
 
 def within_time_range(d1, d2, maxdiff_seconds):
     '''Return true if two datetime.datetime object differs less than the given seconds'''
+    if is_aware(d1):
+        d1 = make_naive(d1)
+
+    if is_aware(d2):
+        d2 = make_naive(d2)
+
     delta = d2 - d1 if d2 > d1 else d1 - d2
     # delta.total_seconds() is only available in python 2.7+
     diff = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6

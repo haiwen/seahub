@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import ugettext as _
+from django.utils.timezone import make_naive, is_aware
 
 from seaserv import seafile_api, ccnet_api
 
@@ -81,17 +82,32 @@ def get_user_last_access_time(email, last_login_time):
         if update_events:
             update_last_access = update_events[0].timestamp
 
+    # before make_naive
+    # 2021-04-09 05:32:30+00:00
+    # tzinfo: UTC
+
+    # after make_naive
+    # 2021-04-09 13:32:30
+    # tzinfo: None
     last_access_time_list = []
     if last_login_time:
+        if is_aware(last_login_time):
+            last_login_time = make_naive(last_login_time)
         last_access_time_list.append(last_login_time)
 
     if device_last_access:
+        if is_aware(device_last_access):
+            device_last_access = make_naive(device_last_access)
         last_access_time_list.append(device_last_access)
 
     if audit_last_access:
+        if is_aware(audit_last_access):
+            audit_last_access = make_naive(audit_last_access)
         last_access_time_list.append(utc_to_local(audit_last_access))
 
     if update_last_access:
+        if is_aware(update_last_access):
+            update_last_access = make_naive(update_last_access)
         last_access_time_list.append(utc_to_local(update_last_access))
 
     if not last_access_time_list:
