@@ -162,6 +162,28 @@ class SocialAuthUser(models.Model):
         db_table = 'social_auth_usersocialauth'
 
 
+class ExternalDepartmentManager(models.Manager):
+    def get_by_provider_and_outer_id(self, provider, outer_id):
+        return self.filter(provider=provider, outer_id=outer_id).first()
+
+    def delete_by_group_id(self, group_id):
+        self.filter(group_id=group_id).delete()
+
+
+class ExternalDepartment(models.Model):
+    group_id = models.IntegerField(unique=True)
+    provider = models.CharField(max_length=32)
+    outer_id = models.BigIntegerField()
+
+    objects = ExternalDepartmentManager()
+
+    class Meta:
+        """Meta data"""
+        app_label = "base"
+        unique_together = ('provider', 'outer_id')
+        db_table = 'external_department'
+
+
 # # handle signals
 from django.dispatch import receiver
 from registration.signals import user_deleted

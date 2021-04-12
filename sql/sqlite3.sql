@@ -600,4 +600,6 @@ CREATE INDEX "ocm_share_received_from_server_url_10527b80" ON "ocm_share_receive
 CREATE INDEX "ocm_share_received_repo_id_9e77a1b9" ON "ocm_share_received" ("repo_id");
 CREATE INDEX "ocm_share_received_provider_id_60c873e0" ON "ocm_share_received" ("provider_id");
 CREATE TABLE "repo_auto_delete" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL UNIQUE, "days" integer NOT NULL);
+CREATE TABLE "external_department" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL UNIQUE, "provider" varchar(32) NOT NULL, "outer_id" bigint NOT NULL);
+CREATE UNIQUE INDEX "external_department_provider_outer_id_8dns6vkw_uniq" ON "external_department" (`provider`,`outer_id`);
 COMMIT;
