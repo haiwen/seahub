@@ -172,16 +172,6 @@ class UserNotificationManager(models.Manager):
             qs = qs.filter(timestamp__gt=time_since)
         return qs
 
-    def get_user_all_notifications(self, username, seen=None, time_since=None):
-        """Get all notifications of the user.
-        """
-        qs = super(UserNotificationManager, self).filter(to_user=username)
-        if seen is not None:
-            qs = qs.filter(seen=seen)
-        if time_since is not None:
-            qs = qs.filter(timestamp__gt=time_since)
-        return qs
-
     def get_user_notifications(self, username, seen=None):
         """Get all notifications(group_msg, grpmsg_reply, etc) of a user.
 

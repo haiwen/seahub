@@ -11,7 +11,6 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils import translation
 from django.utils.translation import ugettext as _
-from django.db import connection
 
 from seaserv import seafile_api, ccnet_api
 from seahub.base.models import CommandsLastCheck
@@ -210,36 +209,49 @@ class Command(BaseCommand):
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
-    def get_all_to_user_and_intervals(self):
+    def get_user_intervals_and_notices(self):
         """
-        filter users who set 'collaborate_email_interval' a positive val or do not set any val
+        filter users who have collaborate-notices in last longest interval
+        And right now, the longest interval is DEFAULT_COLLABORATE_EMAIL_INTERVAL
         """
-        sql = '''
-        SELECT p.user, ou.option_val FROM profile_profile p
-        LEFT JOIN (
-            SELECT email, option_val FROM options_useroptions
-            WHERE option_key=%s
-        ) ou ON p.user = ou.email
-        WHERE ou.option_val IS NULL OR CAST(ou.option_val AS SIGNED) > 0
-        '''
-        with connection.cursor() as cursor:
-            cursor.execute(sql, (KEY_COLLABORATE_EMAIL_INTERVAL,))
-            user_intervals = cursor.fetchall()
-        results = []
-        for to_user, interval in user_intervals:
-            if not interval:
+        last_longest_interval_time = datetime.datetime.now() - datetime.timedelta(
+            seconds=DEFAULT_COLLABORATE_EMAIL_INTERVAL)
+
+        all_unseen_notices = UserNotification.objects.get_all_notifications(
+            seen=False, time_since=last_longest_interval_time).order_by('-timestamp')
+
+        results = {}
+        for notice in all_unseen_notices:
+            if notice.to_user not in results:
+                results[notice.to_user] = {'notices': [notice], 'interval': DEFAULT_COLLABORATE_EMAIL_INTERVAL}
+            else:
+                results[notice.to_user]['notices'].append(notice)
+
+        user_options = UserOptions.objects.filter(
+            email__in=results.keys(), option_key=KEY_COLLABORATE_EMAIL_INTERVAL)
+        for option in user_options:
+            email, interval = option.email, option.option_val
+            try:
+                interval = int(interval)
+            except ValueError:
+                logger.warning('user: %s, %s invalid, val: %s', email, KEY_COLLABORATE_EMAIL_INTERVAL, interval)
                 interval = DEFAULT_COLLABORATE_EMAIL_INTERVAL
-            results.append((to_user, int(interval)))
-        return results
+            if interval <= 0:
+                del results[email]
+            else:
+                results[email]['interval'] = interval
+
+        return [(key, value['interval'], value['notices']) for key, value in results.items()]
+
 
     def do_action(self):
-        user_collaborate_email_intervals = self.get_all_to_user_and_intervals()
+        user_interval_notices = self.get_user_intervals_and_notices()
         last_emailed_list = UserOptions.objects.filter(option_key=KEY_COLLABORATE_LAST_EMAILED_TIME).values_list('email', 'option_val')
         user_last_emailed_time_dict = {le[0]: datetime.datetime.strptime(le[1], "%Y-%m-%d %H:%M:%S") for le in last_emailed_list}
 
         # save current language
         cur_language = translation.get_language()
-        for (to_user, interval_val) in user_collaborate_email_intervals:
+        for (to_user, interval_val, notices) in user_interval_notices:
             # get last_emailed_time if any, defaults to today 00:00:00.0
             last_emailed_time = user_last_emailed_time_dict.get(to_user, None)
             now = datetime.datetime.now().replace(microsecond=0)
@@ -250,10 +262,8 @@ class Command(BaseCommand):
                 if (now - last_emailed_time).total_seconds() < interval_val:
                     continue
 
-            # get notices
-            user_notices_qs = UserNotification.objects.get_user_all_notifications(to_user, seen=False, time_since=last_emailed_time)
-            user_notices, count = list(user_notices_qs), user_notices_qs.count()
-            if not count:
+            user_notices = list(filter(lambda notice: notice.timestamp > last_emailed_time, notices))
+            if not user_notices:
                 continue
 
             # get and active user language
@@ -316,7 +326,7 @@ class Command(BaseCommand):
             to_user = contact_email  # use contact email if any
             c = {
                 'to_user': to_user,
-                'notice_count': count,
+                'notice_count': len(notices),
                 'notices': notices,
                 'user_name': user_name,
                 }
