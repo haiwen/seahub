@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils import translation
 from django.utils.translation import ugettext as _
+from django.db import connection
 
 from seaserv import seafile_api, ccnet_api
 from seahub.base.models import CommandsLastCheck
@@ -23,7 +24,8 @@ from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
 from seahub.constants import HASH_URLS
 from seahub.utils import get_site_name
-from seahub.options.models import UserOptions, KEY_COLLABORATE_EMAIL_INTERVAL, KEY_COLLABORATE_LAST_EMAILED_TIME
+from seahub.options.models import UserOptions, KEY_COLLABORATE_EMAIL_INTERVAL, \
+    KEY_COLLABORATE_LAST_EMAILED_TIME, DEFAULT_COLLABORATE_EMAIL_INTERVAL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -208,34 +210,36 @@ class Command(BaseCommand):
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
-    def do_action(self):
-        emails = []
-        user_file_updates_email_intervals = []
-        for ele in UserOptions.objects.filter(
-                option_key=KEY_COLLABORATE_EMAIL_INTERVAL):
-            try:
-                user_file_updates_email_intervals.append(
-                    (ele.email, int(ele.option_val))
-                )
-                emails.append(ele.email)
-            except Exception as e:
-                logger.error(e)
-                self.stderr.write('[%s]: %s' % (str(datetime.datetime.now()), e))
-                continue
+    def get_all_to_user_and_intervals(self):
+        """
+        filter users who set 'collaborate_email_interval' a positive val or do not set any val
+        """
+        sql = '''
+        SELECT p.user, ou.option_val FROM profile_profile p
+        LEFT JOIN (
+            SELECT email, option_val FROM options_useroptions
+            WHERE option_key=%s
+        ) ou ON p.user = ou.email
+        WHERE ou.option_val IS NULL OR CAST(ou.option_val AS SIGNED) > 0
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute(sql, (KEY_COLLABORATE_EMAIL_INTERVAL,))
+            user_intervals = cursor.fetchall()
+        results = []
+        for to_user, interval in user_intervals:
+            if not interval:
+                interval = DEFAULT_COLLABORATE_EMAIL_INTERVAL
+            results.append((to_user, int(interval)))
+        return results
 
-        user_last_emailed_time_dict = {}
-        for ele in UserOptions.objects.filter(option_key=KEY_COLLABORATE_LAST_EMAILED_TIME).filter(email__in=emails):
-            try:
-                user_last_emailed_time_dict[ele.email] = datetime.datetime.strptime(
-                    ele.option_val, "%Y-%m-%d %H:%M:%S")
-            except Exception as e:
-                logger.error(e)
-                self.stderr.write('[%s]: %s' % (str(datetime.datetime.now()), e))
-                continue
+    def do_action(self):
+        user_collaborate_email_intervals = self.get_all_to_user_and_intervals()
+        last_emailed_list = UserOptions.objects.filter(option_key=KEY_COLLABORATE_LAST_EMAILED_TIME).values_list('email', 'option_val')
+        user_last_emailed_time_dict = {le[0]: datetime.datetime.strptime(le[1], "%Y-%m-%d %H:%M:%S") for le in last_emailed_list}
 
         # save current language
         cur_language = translation.get_language()
-        for (to_user, interval_val) in user_file_updates_email_intervals:
+        for (to_user, interval_val) in user_collaborate_email_intervals:
             # get last_emailed_time if any, defaults to today 00:00:00.0
             last_emailed_time = user_last_emailed_time_dict.get(to_user, None)
             now = datetime.datetime.now().replace(microsecond=0)
@@ -247,7 +251,7 @@ class Command(BaseCommand):
                     continue
 
             # get notices
-            user_notices_qs = UserNotification.objects.get_all_notifications(seen=False, time_since=last_emailed_time)
+            user_notices_qs = UserNotification.objects.get_user_all_notifications(to_user, seen=False, time_since=last_emailed_time)
             user_notices, count = list(user_notices_qs), user_notices_qs.count()
             if not count:
                 continue
