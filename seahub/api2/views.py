@@ -392,11 +392,8 @@ class AccountInfo(APIView):
                     username, file_updates_email_interval)
 
         if collaborate_email_interval is not None:
-            if collaborate_email_interval < 0:
-                UserOptions.objects.unset_collaborate_email_interval(username)
-            else:
-                UserOptions.objects.set_collaborate_email_interval(
-                    username, collaborate_email_interval)
+            UserOptions.objects.set_collaborate_email_interval(
+                username, collaborate_email_interval)
 
         return Response(self._get_account_info(request))
 
