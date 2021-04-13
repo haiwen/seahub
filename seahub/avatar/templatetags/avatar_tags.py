@@ -65,10 +65,10 @@ def api_avatar_url(user, size=AVATAR_DEFAULT_SIZE):
         url = avatar.avatar_url(size)
         date_uploaded = avatar.date_uploaded
         # /media/avatars/6/9/5011f01afac2a506b9544c5ce21a0a/resized/32/109af9901c0fd38ab39d018f5cd4baf6.png
-        return service_url + url, False, date_uploaded
+        return url, False, date_uploaded
     else:
         # /media/avatars/default.png
-        return service_url + get_default_avatar_url(), True, None
+        return get_default_avatar_url(), True, None
 
 @cache_result
 @register.simple_tag
