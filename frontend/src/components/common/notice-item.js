@@ -33,6 +33,7 @@ class NoticeItem extends React.Component {
 
       let groupStaff = detail.group_staff_name;
       
+      // group name does not support special characters
       let userHref = siteRoot + 'profile/' + detail.group_staff_email + '/';
       let groupHref = siteRoot + 'group/' + detail.group_id + '/';
       let groupName = detail.group_name;
@@ -58,15 +59,22 @@ class NoticeItem extends React.Component {
 
       let path = detail.path;
       let notice = '';
-      let repoLink = '<a href=' + repoUrl + '>' + repoName + '</a>';
+      // 1. handle translate
       if (path === '/') { // share repo
         notice = gettext('{share_from} has shared a library named {repo_link} to you.');
       } else { // share folder
         notice = gettext('{share_from} has shared a folder named {repo_link} to you.');
       }
 
+      // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
-      notice = notice.replace('{repo_link}', repoLink);
+      notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = Utils.HTMLescape(notice);
+      
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
+      notice = notice.replace('{/tagA}', '</a>');
+
       return {avatar_url, notice};
     }
 
@@ -84,16 +92,24 @@ class NoticeItem extends React.Component {
 
       let path = detail.path;
       let notice = '';
-      let repoLink = '<a href=' + repoUrl + '>' + repoName + '</a>';
-      let groupLink = '<a href=' + groupUrl + '>' + groupName + '</a>';
+      // 1. handle translate
       if (path === '/') {
         notice =  gettext('{share_from} has shared a library named {repo_link} to group {group_link}.');
       } else {
         notice =  gettext('{share_from} has shared a folder named {repo_link} to group {group_link}.');
       }
+      
+      // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
-      notice = notice.replace('{repo_link}', repoLink);
-      notice = notice.replace('{group_link}', groupLink);
+      notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = notice.replace('{group_link}', `{tagB}${groupName}{/tagB}`);
+      notice = Utils.HTMLescape(notice);
+      
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
+      notice = notice.replace('{/tagA}', '</a>');
+      notice = notice.replace('{tagB}', `<a href='${Utils.encodePath(groupUrl)}'>`);
+      notice = notice.replace('{/tagB}', '</a>');
       return {avatar_url, notice};
     }
 
@@ -105,32 +121,50 @@ class NoticeItem extends React.Component {
 
       let repoName = detail.repo_name;
       let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' + repoName + '/';
+      // 1. handle translate
       let notice = gettext('{user} has transfered a library named {repo_link} to you.');
-      let repoLink = '<a href=' + repoUrl + '>' + repoName + '</a>';
+
+      // 2. handle xss(cross-site scripting)
       notice = notice.replace('{user}', repoOwner);
-      notice = notice.replace('{repo_link}', repoLink);
+      notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
+      notice = Utils.HTMLescape(notice);
+      
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(repoUrl)}>`);
+      notice = notice.replace('{/tagA}', '</a>');
       return {avatar_url, notice};
     }
 
     if (noticeType === MSG_TYPE_FILE_UPLOADED) {
       let avatar_url = detail.uploaded_user_avatar_url;
       let fileName = detail.file_name;
-      let fileLink = siteRoot + 'lib/' + detail.repo_id + '/' + 'file' + Utils.encodePath(detail.file_path);
+      let fileLink = siteRoot + 'lib/' + detail.repo_id + '/' + 'file' + detail.file_path;
 
       let folderName = detail.folder_name;
-      let folderLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + Utils.encodePath(detail.folder_path);
+      let folderLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + detail.folder_path;
       let notice = '';
       if (detail.repo_id) { // todo is repo exist ?
-        let uploadFileLink = '<a href=' + fileLink + '>' + fileName + '</a>';
-        let uploadedLink = '<a href=' + folderLink  + '>' + folderName + '</a>';
+        // 1. handle translate
+        notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
 
-        notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
-        notice = notice.replace('{upload_file_link}', uploadFileLink);
-        notice = notice.replace('{uploaded_link}', uploadedLink);
+        // 2. handle xss(cross-site scripting)
+        notice = notice.replace('{upload_file_link}', `{tagA}${fileName}{/tagA}`);
+        notice = notice.replace('{uploaded_link}', `{tagB}${folderName}{/tagB}`);
+        notice = Utils.HTMLescape(notice);
+        
+        // 3. add jump link
+        notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileLink)}>`);
+        notice = notice.replace('{/tagA}', '</a>');
+        notice = notice.replace('{tagB}', `<a href=${Utils.encodePath(folderLink)}>`);
+        notice = notice.replace('{/tagB}', '</a>');
       } else {
+        // 1. handle translate
         notice = gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
-        notice = notice.replace('{upload_file_link}', fileName);
-        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
+
+        // 2. handle xss(cross-site scripting)
+        notice = notice.replace('{upload_file_link}', `${fileName}`);
+        notice = Utils.HTMLescape(notice);
+        notice = notice.replace('{uploaded_link}', `<strong>Deleted Library</strong>`);
       }
       return {avatar_url, notice};
     }
@@ -144,10 +178,17 @@ class NoticeItem extends React.Component {
       let fileName = detail.file_name;
       let fileUrl = siteRoot + 'lib/' + detail.repo_id + '/' + 'file' + detail.file_path;
 
+      // 1. handle translate
       let notice = gettext('File {file_link} has a new comment form user {author}.');
-      let fileLink = '<a href=' + fileUrl + '>' + fileName + '</a>';
-      notice = notice.replace('{file_link}', fileLink);
+      
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
       notice = notice.replace('{author}', author);
+      notice = Utils.HTMLescape(notice);
+      
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
+      notice = notice.replace('{/tagA}', '</a>');
       return {avatar_url, notice};
     }
     
