@@ -930,7 +930,14 @@ class AdminSearchUser(APIView):
                         user.institution = profile.institution
 
         data = []
+        has_appended = []
+
         for user in users:
+
+            if user.email in has_appended:
+                continue
+            else:
+                has_appended.append(user.email)
 
             info = {}
             info['email'] = user.email
