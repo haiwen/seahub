@@ -20,7 +20,7 @@ moment.locale(window.app.config.lang);
 
 let loginUser = window.app.pageOptions.name;
 const {
-  token, dirName, sharedBy,
+  token, dirName, dirPath, sharedBy,
   repoID, path,
   mode, thumbnailSize, zipped,
   trafficOverLimit, canDownload,
@@ -309,7 +309,7 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={path}
+                  path={dirPath}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />

@@ -20,6 +20,7 @@
     window.shared = {
         pageOptions: {
             dirName: '{{ dir_name|escapejs }}',
+            dirPath: '{{ dir_path|escapejs }}',
             sharedBy: '{{ username|email2nickname|escapejs }}',
             repoID: '{{repo.id}}',
             path: '{{ path|escapejs }}',
