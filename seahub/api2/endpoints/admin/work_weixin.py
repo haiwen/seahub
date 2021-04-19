@@ -26,6 +26,7 @@ from seahub.base.accounts import User
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.group.utils import validate_group_name
+from seahub.auth.models import ExternalDepartment
 
 logger = logging.getLogger(__name__)
 WORK_WEIXIN_DEPARTMENT_FIELD = 'department'
@@ -226,6 +227,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
     permission_classes = (IsAdminUser,)
 
     def _list_departments_from_work_weixin(self, access_token, department_id):
+        # https://work.weixin.qq.com/api/doc/90000/90135/90208
         data = {
             'access_token': access_token,
             'id': department_id,
@@ -263,15 +265,6 @@ class AdminWorkWeixinDepartmentsImport(APIView):
             return None
 
         return api_response_dic[WORK_WEIXIN_DEPARTMENT_MEMBERS_FIELD]
-
-    def _admin_check_group_name_conflict(self, new_group_name):
-        checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
-
-        for g in checked_groups:
-            if g.group_name == new_group_name:
-                return True, g
-
-        return False, None
 
     def _api_department_success_msg(self, department_obj_id, department_obj_name, group_id):
         return {
@@ -341,6 +334,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
         if api_department_list is None:
             error_msg = '获取企业微信组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        api_department_list = sorted(api_department_list, key=lambda x:x['id'])
 
         # list department members from work weixin
         api_user_list = self._list_department_members_from_work_weixin(access_token, department_id)
@@ -357,6 +351,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
             # check department argument
             new_group_name = department_obj.get('name')
             department_obj_id = department_obj.get('id')
+            parent_department_id = department_obj.get('parentid', 0)
             if department_obj_id is None or not new_group_name or not validate_group_name(new_group_name):
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门参数错误')
@@ -367,7 +362,6 @@ class AdminWorkWeixinDepartmentsImport(APIView):
             if index == 0:
                 parent_group_id = -1
             else:
-                parent_department_id = department_obj.get('parentid')
                 parent_group_id = department_map_to_group_dict.get(parent_department_id)
 
             if parent_group_id is None:
@@ -376,10 +370,11 @@ class AdminWorkWeixinDepartmentsImport(APIView):
                 failed.append(failed_msg)
                 continue
 
-            # check department exist by group name
-            exist, exist_group = self._admin_check_group_name_conflict(new_group_name)
-            if exist:
-                department_map_to_group_dict[department_obj_id] = exist_group.id
+            # check department exist
+            exist_department = ExternalDepartment.objects.get_by_provider_and_outer_id(
+                WORK_WEIXIN_PROVIDER, department_obj_id)
+            if exist_department:
+                department_map_to_group_dict[department_obj_id] = exist_department.group_id
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门已存在')
                 failed.append(failed_msg)
@@ -391,6 +386,12 @@ class AdminWorkWeixinDepartmentsImport(APIView):
                     new_group_name, DEPARTMENT_OWNER, parent_group_id=parent_group_id)
 
                 seafile_api.set_group_quota(group_id, -2)
+
+                ExternalDepartment.objects.create(
+                    group_id=group_id,
+                    provider=WORK_WEIXIN_PROVIDER,
+                    outer_id=department_obj_id,
+                )
 
                 department_map_to_group_dict[department_obj_id] = group_id
                 success_msg = self._api_department_success_msg(

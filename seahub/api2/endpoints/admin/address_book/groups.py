@@ -24,6 +24,7 @@ from seahub.api2.utils import to_python_boolean, api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
+from seahub.auth.models import ExternalDepartment
 
 logger = logging.getLogger(__name__)
 
@@ -253,6 +254,12 @@ class AdminAddressBookGroup(APIView):
         if ret_code == -1:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # del external department
+        try:
+            ExternalDepartment.objects.delete_by_group_id(group_id)
+        except Exception as e:
+            logger.error(e)
 
         # send admin operation log signal
         group_owner = group.creator_name

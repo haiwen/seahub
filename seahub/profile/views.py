@@ -18,7 +18,7 @@ from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
-from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
 from seahub.utils import is_ldap_user
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
@@ -87,7 +87,7 @@ def edit_profile(request):
     file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
-    collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else 0
+    collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else DEFAULT_COLLABORATE_EMAIL_INTERVAL
 
     if work_weixin_oauth_check():
         enable_wechat_work = True

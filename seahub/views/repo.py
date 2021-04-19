@@ -344,6 +344,7 @@ def view_shared_dir(request, fileshare):
             'path': req_path,
             'username': username,
             'dir_name': dir_name,
+            'dir_path': real_path,
             'file_list': file_list,
             'dir_list': dir_list,
             'zipped': zipped,
