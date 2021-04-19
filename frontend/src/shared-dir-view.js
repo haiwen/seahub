@@ -19,7 +19,7 @@ import './css/grid-view.css';
 moment.locale(window.app.config.lang);
 
 let loginUser = window.app.pageOptions.name;
-const {
+let {
   token, dirName, dirPath, sharedBy,
   repoID, path,
   mode, thumbnailSize, zipped,
@@ -27,6 +27,8 @@ const {
   noQuota, canUpload
 } = window.shared.pageOptions;
 
+dirPath = dirPath.replace(/\/+$/, ""); // used for upload file
+const uploadUrlPath = path.replace(/\/+$/, "");   // used for get dir upload link
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
 class SharedDirView extends React.Component {
@@ -311,6 +313,7 @@ class SharedDirView extends React.Component {
                   dragAndDrop={false}
                   token={token}
                   path={dirPath}
+                  uploadUrlPath={uploadUrlPath}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
