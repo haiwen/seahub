@@ -21,14 +21,12 @@ moment.locale(window.app.config.lang);
 let loginUser = window.app.pageOptions.name;
 let {
   token, dirName, dirPath, sharedBy,
-  repoID, path,
+  repoID, relativePath,
   mode, thumbnailSize, zipped,
   trafficOverLimit, canDownload,
   noQuota, canUpload
 } = window.shared.pageOptions;
 
-dirPath = dirPath.replace(/\/+$/, ""); // used for upload file
-const uploadUrlPath = path.replace(/\/+$/, "");   // used for get dir upload link
 const showDownloadIcon = !trafficOverLimit && canDownload;
 
 class SharedDirView extends React.Component {
@@ -62,7 +60,7 @@ class SharedDirView extends React.Component {
       });
     }
 
-    seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
+    seafileAPI.listSharedDir(token, relativePath, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'].map(item => {
         item.isSelected = false;
         return item;
@@ -149,7 +147,7 @@ class SharedDirView extends React.Component {
   zipDownloadSelectedItems = () => {
     this.setState({
       isZipDialogOpen: true,
-      zipFolderPath: path,
+      zipFolderPath: relativePath,
       selectedItems: this.state.items.filter(item => item.isSelected)
         .map(item => item.file_name || item.folder_name)
     });
@@ -254,7 +252,7 @@ class SharedDirView extends React.Component {
     const newItem = {
       isSelected: false,
       file_name: name,
-      file_path: Utils.joinPath(path, name),
+      file_path: Utils.joinPath(relativePath, name),
       is_dir: false,
       last_modified: moment().format(),
       size: size
@@ -287,8 +285,8 @@ class SharedDirView extends React.Component {
                 <div>
                   {isDesktop &&
                   <div className="view-mode btn-group">
-                    <a href={`?p=${encodeURIComponent(path)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')}></a>
-                    <a href={`?p=${encodeURIComponent(path)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
+                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')}></a>
+                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
                   </div>
                   }
                   {canUpload && (
@@ -300,7 +298,7 @@ class SharedDirView extends React.Component {
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ?
                       <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button> :
-                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, path)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
+                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
                     }
                   </Fragment>
                   }
@@ -311,8 +309,8 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={dirPath}
-                  uploadUrlPath={uploadUrlPath}
+                  path={dirPath.replace(/\/+$/, "")}
+                  relativePath={relativePath.replace(/\/+$/, "")}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
