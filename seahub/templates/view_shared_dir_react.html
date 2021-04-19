@@ -23,7 +23,7 @@
             dirPath: '{{ dir_path|escapejs }}',
             sharedBy: '{{ username|email2nickname|escapejs }}',
             repoID: '{{repo.id}}',
-            path: '{{ path|escapejs }}',
+            relativePath: '{{ path|escapejs }}',
             zipped: (function() {
               var list = [];
               {% for name, path in zipped %}
