@@ -6,6 +6,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'r
 import FileInfo from '@seafile/seafile-editor/dist/components/topbar-component/file-info';
 
 const { seafileCollabServer } = window.app.config;
+const { canDownloadFile } = window.app.pageOptions;
 
 const propTypes = {
   isDocs: PropTypes.bool.isRequired,
@@ -62,6 +63,10 @@ class MoreMenu extends React.PureComponent {
     this.setState({ dropdownOpen:!this.state.dropdownOpen });
   }
 
+  downloadFile = () => {
+    location.href = '?dl=1';
+  }
+
   render() {
     const editorMode = this.props.editorMode;
     const isSmall = this.props.isSmallScreen;
@@ -77,13 +82,18 @@ class MoreMenu extends React.PureComponent {
             <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
           {(!this.props.readOnly && editorMode === 'plain') &&
             <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
+          {!isSmall && this.props.showFileHistory &&
+            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>}
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
           }
-          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {isSmall && <DropdownItem onMouseDown={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
+          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {(isSmall && this.props.showFileHistory) &&
-            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('File History')}</DropdownItem>
+            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>
+          }
+          {isSmall && canDownloadFile &&
+            <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>
           }
         </DropdownMenu>
       </Dropdown>
@@ -98,6 +108,15 @@ class MarkdownViewerToolbar extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  downloadFile = () => {
+    location.href = '?dl=1';
+  }
+
+  openFileViaClient = () => {
+    const { repoID, path } = this.props.fileInfo;
+    location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(path)}`;
   }
 
   render() {
@@ -160,10 +179,6 @@ class MarkdownViewerToolbar extends React.Component {
                   <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                     onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
-                {
-                  this.props.showFileHistory && <IconButton id={'historyButton'}
-                    text={gettext('File History')} onMouseDown={this.props.toggleHistory} icon={'fa fa-history'}/>
-                }
                 { saving ?
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
@@ -171,12 +186,30 @@ class MarkdownViewerToolbar extends React.Component {
                   <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
+                {canDownloadFile && (
+                  <IconButton
+                    id="download-file"
+                    icon="fa fa-download"
+                    text={gettext('Download')}
+                    onClick={this.downloadFile}
+                  />
+                )}
+                {this.props.fileInfo.permission == 'rw' &&
+                <IconButton
+                  id="open-via-client"
+                  icon="sf3-font sf3-font-desktop"
+                  text={gettext('Open via Client')}
+                  onClick={this.openFileViaClient}
+                />
+                }
               </ButtonGroup>
               <MoreMenu
                 readOnly={this.props.readOnly}
                 openDialogs={this.props.openDialogs}
                 editorMode={this.props.editorMode}
                 onEdit={this.props.onEdit}
+                showFileHistory={this.props.showFileHistory}
+                toggleHistory={this.props.toggleHistory}
                 isSmallScreen={false}
               />
             </div>

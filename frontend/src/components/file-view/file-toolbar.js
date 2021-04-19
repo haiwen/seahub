@@ -54,10 +54,6 @@ class FileToolbar extends React.Component {
     });
   }
 
-  openFileViaClient = () => {
-    location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`;
-  }
-
   render() {
     const { isLocked, lockedByMe } = this.props;
     const { moreDropdownOpen } = this.state;
