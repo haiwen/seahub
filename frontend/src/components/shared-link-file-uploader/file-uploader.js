@@ -27,7 +27,7 @@ const propTypes = {
   fileTypeErrorCallback: PropTypes.func,
   dragAndDrop: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  uploadUrlPath: PropTypes.string.isRequired,
+  relativePath: PropTypes.string.isRequired,
   onFileUploadSuccess: PropTypes.func.isRequired
 };
 
@@ -204,8 +204,8 @@ class FileUploader extends React.Component {
         });
       } else {
         this.setUploadFileList(this.resumable.files);
-        let { token, uploadUrlPath } = this.props;
-        seafileAPI.sharedLinkGetFileUploadUrl(token, uploadUrlPath).then(res => {
+        let { token, relativePath } = this.props;
+        seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
           this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
           this.resumableUpload(resumableFile);
         }).catch(error => {
@@ -217,8 +217,8 @@ class FileUploader extends React.Component {
       this.setUploadFileList(this.resumable.files);
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
-        let { token, uploadUrlPath } = this.props;
-        seafileAPI.sharedLinkGetFileUploadUrl(token, uploadUrlPath).then(res => {
+        let { token, relativePath } = this.props;
+        seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
           this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
           this.resumable.upload();
         }).catch(error => {
@@ -564,8 +564,8 @@ class FileUploader extends React.Component {
 
   onUploadRetry = (resumableFile) => {
 
-    let { token, uploadUrlPath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, uploadUrlPath).then(res => {
+    let { token, relativePath } = this.props;
+    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
       this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
 
       let retryFileList = this.state.retryFileList.filter(item => {
@@ -591,8 +591,8 @@ class FileUploader extends React.Component {
 
   onUploadRetryAll = () => {
 
-    let { token, uploadUrlPath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, uploadUrlPath).then(res => {
+    let { token, relativePath } = this.props;
+    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
       this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
       this.state.retryFileList.forEach(item => {
         item.error = false;
@@ -645,8 +645,8 @@ class FileUploader extends React.Component {
   uploadFile = () => {
     let resumableFile = this.resumable.files[this.resumable.files.length - 1];
 
-    let { token, uploadUrlPath } = this.props;
-    seafileAPI.sharedLinkGetFileUploadUrl(token, uploadUrlPath).then(res => {
+    let { token, relativePath } = this.props;
+    seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
       this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
       this.setState({
         isUploadRemindDialogShow: false,
