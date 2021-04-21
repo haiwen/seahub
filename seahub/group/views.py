@@ -43,7 +43,7 @@ def org_user_exists(org_id, username):
 
 ########## helper functions
 def is_group_staff(group, user):
-    if user.is_anonymous():
+    if user.is_anonymous:
         return False
     return seaserv.check_group_staff(group.id, user.username)
 
@@ -81,7 +81,7 @@ def group_check(func):
         group.is_staff = False
         group.is_pub = False
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             if not group.is_pub:
                 login_url = settings.LOGIN_URL
                 path = urlquote(request.get_full_path())

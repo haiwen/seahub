@@ -69,7 +69,7 @@ class AcceptTermsView(CreateView):
 
     def form_valid(self, form):
         """Override of CreateView method, assigns default values based on user situation"""
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             form.instance.username = self.request.user.username
         else:  #Get user out of saved pipeline from django-socialauth
             # no support for social auth right now.

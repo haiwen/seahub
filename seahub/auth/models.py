@@ -120,9 +120,11 @@ class AnonymousUser(object):
     def get_and_delete_messages(self):
         return []
 
+    @property
     def is_anonymous(self):
         return True
 
+    @property
     def is_authenticated(self):
         return False
 

@@ -8,7 +8,7 @@ def inst_admin_required(func):
     Decorator for views check whether user is a institution admin.
     """
     def _decorated(request, *args, **kwargs):
-        if request.user.is_authenticated() and request.user.inst_admin is True:
+        if request.user.is_authenticated and request.user.inst_admin is True:
             return func(request, *args, **kwargs)
         raise Http404
     return _decorated
