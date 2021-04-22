@@ -859,7 +859,7 @@ def i18n(request):
         lang = settings.LANGUAGE_CODE
 
     # set language code to user profile if user is logged in
-    if not request.user.is_anonymous():
+    if not request.user.is_anonymous:
         p = Profile.objects.get_profile_by_user(request.user.username)
         if p is not None:
             # update exist record
@@ -1102,7 +1102,7 @@ def client_token_login(request):
                 pass
 
     if user:
-        if request.user.is_authenticated() and request.user.username == user.username:
+        if request.user.is_authenticated and request.user.username == user.username:
             pass
         else:
             request.client_token_login = True

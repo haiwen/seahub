@@ -1178,7 +1178,7 @@ def view_shared_file(request, fileshare):
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             username = ANONYMOUS_EMAIL
         else:
             username = request.user.username
@@ -1387,7 +1387,7 @@ def view_file_via_shared_dir(request, fileshare):
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             username = ANONYMOUS_EMAIL
         else:
             username = request.user.username
@@ -1749,7 +1749,7 @@ def _check_office_convert_perm(request, repo_id, path, ret):
             return True
         return False
     else:
-        return request.user.is_authenticated() and \
+        return request.user.is_authenticated and \
             check_folder_permission(request, repo_id, '/') is not None
 
 def _check_cluster_internal_token(request, file_id):

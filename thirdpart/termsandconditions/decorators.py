@@ -18,7 +18,7 @@ def terms_required(view_func):
     @wraps(view_func, assigned=available_attrs(view_func))
     def _wrapped_view(request, *args, **kwargs):
         """Method to wrap the view passed in"""
-        if not request.user.is_authenticated() or TermsAndConditions.agreed_to_latest(request.user):
+        if not request.user.is_authenticated or TermsAndConditions.agreed_to_latest(request.user):
             return view_func(request, *args, **kwargs)
 
         currentPath = request.path

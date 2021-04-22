@@ -92,7 +92,7 @@ def login(request, template_name='registration/login.html',
     """Displays the login form and handles the login action."""
 
     redirect_to = request.GET.get(redirect_field_name, '')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if redirect_to:
             return HttpResponseRedirect(redirect_to)
         else:

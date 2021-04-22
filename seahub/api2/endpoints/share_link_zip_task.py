@@ -187,13 +187,13 @@ class ShareLinkZipTaskView(APIView):
         # permission check
         # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check share link audit
         if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated() and \
+                not request.user.is_authenticated and \
                 not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

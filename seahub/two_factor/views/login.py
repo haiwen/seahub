@@ -238,7 +238,7 @@ def is_device_remembered(request_header, user):
         return False
 
     # User must be authenticated, otherwise this function is wrong used.
-    assert user.is_authenticated()
+    assert user.is_authenticated
 
     SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
     s = SessionStore(request_header)
