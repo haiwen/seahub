@@ -310,8 +310,8 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={dirPath.replace(/\/+$/, "")}
-                  relativePath={relativePath.replace(/\/+$/, "")}
+                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, "")}
+                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, "")}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
