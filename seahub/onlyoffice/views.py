@@ -83,7 +83,12 @@ def onlyoffice_editor_callback(request):
 
     # get file basic info
     doc_key = post_data.get('key')
-    doc_info = json.loads(cache.get("ONLYOFFICE_%s" % doc_key))
+    doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
+    if not doc_info_from_cache:
+        logger.error('cache.get("ONLYOFFICE_%s" % {}) return None'.format(doc_key))
+        return HttpResponse('{"error": 0}')
+
+    doc_info = json.loads(doc_info_from_cache)
 
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
@@ -127,7 +132,6 @@ def onlyoffice_editor_callback(request):
         if status == 2:
 
             cache.delete(cache_key)
-            cache.delete("ONLYOFFICE_%s" % doc_key)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
                 seafile_api.unlock_file(repo_id, file_path)
@@ -141,7 +145,6 @@ def onlyoffice_editor_callback(request):
     if status == 4:
 
         cache.delete(cache_key)
-        cache.delete("ONLYOFFICE_%s" % doc_key)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
             seafile_api.unlock_file(repo_id, file_path)
