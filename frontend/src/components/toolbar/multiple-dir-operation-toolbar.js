@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled, name } from '../../utils/constants';
+import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -83,9 +83,23 @@ class MultipleDirOperationToolbar extends React.Component {
         location.href= url;
         return;
       }
-      this.setState({
-        isZipDialogOpen: true
-      });
+      if (!useGoFileserver) {
+        this.setState({
+          isZipDialogOpen: true
+        });
+      } else {
+        const target = this.props.selectedDirentList.map(dirent => dirent.name);
+        seafileAPI.zipDownload(repoID, path, target).then((res) => {
+          const zipToken = res.data['zip_token'];
+          location.href = `${fileServerRoot}zip/${zipToken}`;
+        }).catch((error) => {
+          let errorMsg = Utils.getErrorMsg(error);
+          this.setState({
+            isLoading: false,
+            errorMsg: errorMsg
+          });
+        });
+      }
     }
   }
 
