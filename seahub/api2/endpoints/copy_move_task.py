@@ -139,18 +139,16 @@ class CopyMoveTaskView(APIView):
             current_size = 0
             if file_id:
                 current_size = seafile_api.get_file_size(src_repo.store_id,
-                        src_repo.version, file_id)
-
-            if dir_id:
-                current_size = seafile_api.get_dir_size(src_repo.store_id,
-                        src_repo.version, dir_id)
+                                                         src_repo.version,
+                                                         file_id)
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo_id, current_size) < 0:
                 return api_error(HTTP_443_ABOVE_QUOTA, _("Out of quota."))
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
-                dst_parent_dir, src_dirent_name)
+                                                     dst_parent_dir,
+                                                     src_dirent_name)
 
         username = request.user.username
         if operation == 'move':
@@ -170,7 +168,8 @@ class CopyMoveTaskView(APIView):
                 # check file lock
                 try:
                     is_locked, locked_by_me = check_file_lock(src_repo_id,
-                            src_dirent_path, username)
+                                                              src_dirent_path,
+                                                              username)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
