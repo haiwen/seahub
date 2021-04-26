@@ -21,7 +21,7 @@ def share_link_audit(func):
             return func(request, fileshare, *args, **kwargs)
 
         # no audit for authenticated user, since we've already got email address
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return func(request, fileshare, *args, **kwargs)
 
         # anonymous user
@@ -60,7 +60,7 @@ def share_link_audit(func):
 def share_link_login_required(func):
 
     def _decorated(request, *args, **kwargs):
-        if not request.user.is_authenticated() \
+        if not request.user.is_authenticated \
                 and settings.SHARE_LINK_LOGIN_REQUIRED:
             return redirect_to_login(request)
         else:

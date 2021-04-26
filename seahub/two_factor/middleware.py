@@ -45,7 +45,7 @@ class OTPMiddleware(MiddlewareMixin):
         user.otp_device = None
         user.is_verified = IsVerified(user)
 
-        if user.is_anonymous():
+        if user.is_anonymous:
             return None
 
         device_id = request.session.get(DEVICE_ID_SESSION_KEY)
@@ -80,7 +80,7 @@ class ForceTwoFactorAuthMiddleware(MiddlewareMixin):
         if user is None:
             return None
 
-        if user.is_anonymous():
+        if user.is_anonymous:
             return None
 
         if not self.filter_request(request):

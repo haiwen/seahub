@@ -29,7 +29,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
-from seahub.share.models import FileShare, check_share_link_access
+from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
         check_filename_with_rename, gen_file_upload_url
@@ -47,6 +47,7 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
 from seahub.views import check_folder_permission
+from seahub.signals import upload_file_successful
 
 logger = logging.getLogger(__name__)
 
@@ -578,7 +579,7 @@ class ShareLinkOnlineOfficeLock(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -651,13 +652,13 @@ class ShareLinkDirents(APIView):
 
         # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check share link audit
         if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated() and \
+                not request.user.is_authenticated and \
                 not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -756,13 +757,13 @@ class ShareLinkUpload(APIView):
 
         # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check share link audit
         if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated() and \
+                not request.user.is_authenticated and \
                 not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -774,7 +775,7 @@ class ShareLinkUpload(APIView):
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if share_link.s_type != 'd':
+        if not share_link.is_dir_share_link():
             error_msg = 'Share link %s is not a folder share link.' % token
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -803,11 +804,15 @@ class ShareLinkUpload(APIView):
 
         if not share_link.get_permissions()['can_upload']:
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # generate token
         obj_id = json.dumps({'parent_dir': path})
         token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'upload-link', share_link.username, use_onetime=False)
+                                                        obj_id,
+                                                        'upload-link',
+                                                        share_link.username,
+                                                        use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -816,6 +821,137 @@ class ShareLinkUpload(APIView):
         result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
+
+
+class ShareLinkUploadDone(APIView):
+
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, token):
+
+        """ Only used for saving notification after user upload file via folder share link and upload link.
+
+        Permission checking:
+        1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
+        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        3, If share link is encrypted, share link password must have been checked.
+        4, Share link must be a folder share link and has can_upload permission.
+        """
+
+        # resource check
+
+        share_link = None
+        upload_link = None
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            upload_link = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_link:
+
+            # check if login required
+            if SHARE_LINK_LOGIN_REQUIRED and \
+                    not request.user.is_authenticated:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check share link audit
+            if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
+                    not request.user.is_authenticated and \
+                    not request.session.get('anonymous_email'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check share link validation
+            if share_link.is_encrypted() and not check_share_link_access(request, token):
+                error_msg = 'Share link is encrypted.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not share_link.get_permissions()['can_upload']:
+                error_msg = 'Share link has no can_upload permission'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if share_link.is_expired():
+                error_msg = 'Share link is expired'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not share_link.is_dir_share_link():
+                error_msg = 'Share link %s is not a folder share link.' % token
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # recourse check
+            repo_id = share_link.repo_id
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            parent_dir = share_link.path
+            if seafile_api.check_permission_by_path(repo_id, parent_dir, share_link.username) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            file_path = request.data.get('file_path')
+            if not file_path:
+                error_msg = 'file_path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            if not file_id:
+                error_msg = 'File %s not found.' % file_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # send singal
+            upload_file_successful.send(sender=None,
+                                        repo_id=repo_id,
+                                        file_path=file_path,
+                                        owner=share_link.username)
+
+            return Response({'success': True})
+
+        if upload_link:
+
+            if upload_link.is_encrypted() and not check_share_link_access(request,
+                                                                          token,
+                                                                          is_upload_link=True):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if upload_link.is_expired():
+                error_msg = 'Upload link is expired'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            repo_id = upload_link.repo_id
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            parent_dir = upload_link.path
+            if seafile_api.check_permission_by_path(repo_id, parent_dir, upload_link.username) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            file_path = request.data.get('file_path')
+            if not file_path:
+                error_msg = 'file_path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            if not file_id:
+                error_msg = 'File %s not found.' % file_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            upload_file_successful.send(sender=None,
+                                        repo_id=repo_id,
+                                        file_path=file_path,
+                                        owner=upload_link.username)
+
+            return Response({'success': True})
 
 
 class ShareLinkSaveFileToRepo(APIView):

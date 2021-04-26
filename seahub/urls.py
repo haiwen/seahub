@@ -40,7 +40,8 @@ from seahub.api2.endpoints.group_members import GroupMembers, GroupMember, \
         GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
-        ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, ShareLinkUpload
+        ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
+        ShareLinkUpload, ShareLinkUploadDone
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -336,6 +337,7 @@ urlpatterns = [
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/online-office-lock/$',
             ShareLinkOnlineOfficeLock.as_view(), name='api-v2.1-share-link-online-office-lock'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/upload/$', ShareLinkUpload.as_view(), name='api-v2.1-share-link-upload'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/upload/done/$', ShareLinkUploadDone.as_view(), name='api-v2.1-share-link-upload-done'),
 
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),

@@ -90,7 +90,7 @@ class Wiki(models.Model):
         if self.permission == 'public':
             return True
         else:   # private
-            if not request.user.is_authenticated():
+            if not request.user.is_authenticated:
                 return False
             repo_perm = check_folder_permission(request, self.repo_id, '/')
             if not repo_perm:

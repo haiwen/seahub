@@ -312,6 +312,7 @@ class User(object):
     def __unicode__(self):
         return self.username
 
+    @property
     def is_anonymous(self):
         """
         Always returns False. This is a way of comparing User objects to
@@ -319,6 +320,7 @@ class User(object):
         """
         return False
 
+    @property
     def is_authenticated(self):
         """
         Always return True. This is a way to tell if the user has been

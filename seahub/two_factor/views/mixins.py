@@ -61,7 +61,7 @@ class OTPRequiredMixin(object):
         return self.verification_url and str(self.verification_url)
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated() or \
+        if not request.user.is_authenticated or \
                 (not request.user.is_verified() and default_device(request.user)):
             # If the user has not authenticated raise or redirect to the login
             # page. Also if the user just enabled two-factor authentication and

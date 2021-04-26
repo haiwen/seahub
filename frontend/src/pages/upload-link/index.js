@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Account from '../../components/common/account';
@@ -21,6 +22,11 @@ const {
 
 
 class SharedUploadLink extends React.Component {
+
+  onFileUploadSuccess = (direntObject) => {
+    const { name, size } = direntObject;
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(path, name));
+  }
 
   render() {
     return (
@@ -55,7 +61,7 @@ class SharedUploadLink extends React.Component {
                   token={token}
                   repoID={repoID}
                   path={path}
-                  onFileUploadSuccess={() => {}}
+                  onFileUploadSuccess={this.onFileUploadSuccess}
                 />
               </Fragment>
             )}

@@ -586,7 +586,7 @@ class FileView(APIView):
                     seafile_api.lock_file(repo_id, path, username,
                                           int(time.time()) + expire)
                 else:
-                    seafile_api.lock_file(repo_id, path, username)
+                    seafile_api.lock_file(repo_id, path, username, 0)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

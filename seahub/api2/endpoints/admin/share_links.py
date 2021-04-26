@@ -418,12 +418,6 @@ class AdminShareLinkDownload(APIView):
                 dir_name = repo.name if real_path == '/' else \
                         os.path.basename(real_path.rstrip('/'))
 
-                dir_size = seafile_api.get_dir_size(
-                        repo.store_id, repo.version, real_obj_id)
-                if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                    error_msg = 'Unable to download directory "%s": size is too large.' % dir_name
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
                 # get file server access token
                 is_windows = 0
                 if is_windows_operating_system(request):

@@ -22,8 +22,7 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, is_repo_owner, \
-    get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
-    seafile_api, ccnet_api
+    get_file_size, seafile_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -859,7 +858,7 @@ def i18n(request):
         lang = settings.LANGUAGE_CODE
 
     # set language code to user profile if user is logged in
-    if not request.user.is_anonymous():
+    if not request.user.is_anonymous:
         p = Profile.objects.get_profile_by_user(request.user.username)
         if p is not None:
             # update exist record
@@ -898,15 +897,6 @@ def repo_download_dir(request, repo_id):
 
         dir_id = seafile_api.get_dir_id_by_commit_and_path(repo.id,
             repo.head_cmmt_id, path)
-        try:
-            total_size = seafile_api.get_dir_size(repo.store_id,
-                repo.version, dir_id)
-        except Exception as e:
-            logger.error(str(e))
-            return render_error(request, _('Internal Server Error'))
-
-        if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -1102,7 +1092,7 @@ def client_token_login(request):
                 pass
 
     if user:
-        if request.user.is_authenticated() and request.user.username == user.username:
+        if request.user.is_authenticated and request.user.username == user.username:
             pass
         else:
             request.client_token_login = True

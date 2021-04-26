@@ -262,6 +262,7 @@ class SharedDirView extends React.Component {
     let items = Array.from(this.state.items);
     items.splice(folderItems.length, 0, newItem);
     this.setState({items: items});
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
   }
 
   render() {
@@ -309,8 +310,8 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={dirPath.replace(/\/+$/, "")}
-                  relativePath={relativePath.replace(/\/+$/, "")}
+                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, "")}
+                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, "")}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
