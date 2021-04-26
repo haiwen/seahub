@@ -472,22 +472,8 @@ class ReposBatchCopyDirView(APIView):
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # get total size of file/dir to be copied
-        total_size = 0
-        for path_item in path_list:
-            src_path = path_item['src_path']
-            src_path = normalize_dir_path(src_path)
-
-            current_size = 0
-            current_dir_id = seafile_api.get_dir_id_by_path(src_repo_id,
-                    src_path)
-            current_size = seafile_api.get_dir_size(src_repo.store_id,
-                    src_repo.version, current_dir_id)
-
-            total_size += current_size
-
         # check if above quota for dst repo
-        if seafile_api.check_quota(dst_repo_id, total_size) < 0:
+        if seafile_api.check_quota(dst_repo_id, 0) < 0:
             return api_error(HTTP_443_ABOVE_QUOTA,  _("Out of quota."))
 
         result = {}

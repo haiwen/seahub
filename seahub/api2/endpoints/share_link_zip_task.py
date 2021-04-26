@@ -97,12 +97,6 @@ class ShareLinkZipTaskView(APIView):
         dir_name = repo.name if real_path == '/' else \
                 os.path.basename(real_path.rstrip('/'))
 
-        dir_size = seafile_api.get_dir_size(
-                repo.store_id, repo.version, dir_id)
-        if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-            error_msg = _('Unable to download directory "%s": size is too large.') % dir_name
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         is_windows = 0
         if is_windows_operating_system(request):
             is_windows = 1
@@ -221,7 +215,6 @@ class ShareLinkZipTaskView(APIView):
             is_windows = 1
 
         dirent_list = []
-        total_size = 0
         for dirent_name in dirent_name_list:
 
             dirent_name = dirent_name.strip('/')
@@ -231,17 +224,7 @@ class ShareLinkZipTaskView(APIView):
             if not current_dirent:
                 continue
 
-            if stat.S_ISDIR(current_dirent.mode):
-                total_size += seafile_api.get_dir_size(repo.store_id,
-                    repo.version, current_dirent.obj_id)
-            else:
-                total_size += current_dirent.size
-
             dirent_list.append(dirent_name)
-
-        if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-            error_msg = _('Total size exceeds limit.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not dirent_list:
             error_msg = 'No valid dirent.'
