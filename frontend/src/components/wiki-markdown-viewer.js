@@ -135,8 +135,7 @@ class WikiMarkdownViewer extends React.Component {
   changeInlineNode = (item) => {
     let url, imagePath;
 
-    // change image url
-    if (item.type == 'image' && isPublicWiki) {
+    if (item.type == 'image' && isPublicWiki) { // change image url
       url = item.data.src;
       const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
       // different repo
@@ -153,9 +152,8 @@ class WikiMarkdownViewer extends React.Component {
         return;
       }
       item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
-    } else if (item.type == 'link') {
+    } else if (item.type == 'link') { // change link url
       url = item.data.href;
-      console.log(Utils.isInternalFileLink(url, repoID));
       if (Utils.isInternalFileLink(url, repoID)) { // change file url
         if (Utils.isInternalMarkdownLink(url, repoID)) {
           let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
