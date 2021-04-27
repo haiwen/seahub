@@ -133,49 +133,43 @@ class WikiMarkdownViewer extends React.Component {
   }
 
   changeInlineNode = (item) => {
-    if (item.object == 'inline') {
-      let url, imagePath;
+    let url, imagePath;
 
-      // change image url
-      if (item.type == 'image' && isPublicWiki) {
-        url = item.data.src;
-        const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
-        // different repo
-        if (re.test(url)) {
-          // get image path
-          let index = url.indexOf('/file');
-          let index2 = url.indexOf('?');
-          imagePath = url.substring(index + 5, index2);
-        } else if (/^\.\.\/*/.test(url) || /^\.\/*/.test(url)) {
-          const path = this.props.path;
-          const originalPath = path.slice(0, path.lastIndexOf('/')) + '/' + url;
-          imagePath = Utils.pathNormalize(originalPath);
-        } else {
-          return;
-        }
-        item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
+    // change image url
+    if (item.type == 'image' && isPublicWiki) {
+      url = item.data.src;
+      const re = new RegExp(serviceURL + '/lib/' + repoID +'/file.*raw=1');
+      // different repo
+      if (re.test(url)) {
+        // get image path
+        let index = url.indexOf('/file');
+        let index2 = url.indexOf('?');
+        imagePath = url.substring(index + 5, index2);
+      } else if (/^\.\.\/*/.test(url) || /^\.\/*/.test(url)) {
+        const path = this.props.path;
+        const originalPath = path.slice(0, path.lastIndexOf('/')) + '/' + url;
+        imagePath = Utils.pathNormalize(originalPath);
+      } else {
+        return;
       }
-
-      else if (item.type == 'link') {
-        url = item.data.href;
-        // change file url
-        if (Utils.isInternalFileLink(url, repoID)) {
-          if (Utils.isInternalMarkdownLink(url, repoID)) {
-            let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
-            // replace url
-            item.data.href = serviceURL + '/published/' + slug + path;
-          } else {
-            item.data.href = url.replace(/(.*)lib\/([-0-9a-f]{36})\/file(.*)/g, (match, p1, p2, p3) => {
-              return `${p1}d/${sharedToken}/files/?p=${p3}&dl=1`;
-            });
-          }
-        }
-        // change dir url
-        else if (Utils.isInternalDirLink(url, repoID)) {
-          let path = Utils.getPathFromInternalDirLink(url, repoID);
+      item.data.src = serviceURL + '/view-image-via-public-wiki/?slug=' + slug + '&path=' + imagePath;
+    } else if (item.type == 'link') {
+      url = item.data.href;
+      console.log(Utils.isInternalFileLink(url, repoID));
+      if (Utils.isInternalFileLink(url, repoID)) { // change file url
+        if (Utils.isInternalMarkdownLink(url, repoID)) {
+          let path = Utils.getPathFromInternalMarkdownLink(url, repoID);
           // replace url
           item.data.href = serviceURL + '/published/' + slug + path;
+        } else {
+          item.data.href = url.replace(/(.*)lib\/([-0-9a-f]{36})\/file(.*)/g, (match, p1, p2, p3) => {
+            return `${p1}d/${sharedToken}/files/?p=${p3}&dl=1`;
+          });
         }
+      } else if (Utils.isInternalDirLink(url, repoID)) { // change dir url
+        let path = Utils.getPathFromInternalDirLink(url, repoID);
+        // replace url
+        item.data.href = serviceURL + '/published/' + slug + path;
       }
     }
 
