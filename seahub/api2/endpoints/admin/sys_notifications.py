@@ -156,6 +156,8 @@ class AdminSysNotificationView(APIView):
             error_msg = 'notification %s not found.' % nid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        cache.delete('CUR_TOPINFO')
+
         for notification in notification_list:
             try:
                 notification.delete()
