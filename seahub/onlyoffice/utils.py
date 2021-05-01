@@ -65,7 +65,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     else:
         document_type = 'text'
 
-    cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
+    cache_key = generate_onlyoffice_cache_key(origin_repo_id, origin_file_path)
     doc_key = cache.get(cache_key)
 
     # temporary solution when failed to get data from cache(django_pylibmc)
@@ -80,8 +80,8 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
         doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
 
-    doc_info = json.dumps({'repo_id': repo_id,
-                           'file_path': file_path,
+    doc_info = json.dumps({'repo_id': origin_repo_id,
+                           'file_path': origin_file_path,
                            'username': username})
     cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
