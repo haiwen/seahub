@@ -524,7 +524,7 @@ class LibContentView extends React.Component {
 
   getThumbnails = (repoID, path, direntList) => {
     let items = direntList.filter((item) => {
-      return Utils.imageCheck(item.name) && !item.encoded_thumbnail_src;
+      return (Utils.imageCheck(item.name) || Utils.videoCheck(item.name)) && !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
       return ;
