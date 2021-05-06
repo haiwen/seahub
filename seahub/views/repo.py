@@ -22,10 +22,10 @@ from seahub.share.models import FileShare, UploadLinkShare, \
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
 
-from seahub.utils import  gen_dir_share_link, \
+from seahub.utils import gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext, get_service_url
-from seahub.utils.repo import is_repo_owner
+from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
@@ -34,24 +34,28 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_SHARE_LINK_REPORT_ABUSE
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
-from seahub.constants import HASH_URLS
 from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 def get_repo(repo_id):
     return seafile_api.get_repo(repo_id)
+
 
 def get_commit(repo_id, repo_version, commit_id):
     return seaserv.get_commit(repo_id, repo_version, commit_id)
 
+
 def get_repo_size(repo_id):
     return seafile_api.get_repo_size(repo_id)
 
+
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
+
 
 def get_path_from_request(request):
     path = request.GET.get('p', '/')
@@ -59,22 +63,27 @@ def get_path_from_request(request):
         path = path + '/'
     return path
 
+
 def get_next_url_from_request(request):
     return request.GET.get('next', None)
+
 
 def get_nav_path(path, repo_name):
     return gen_path_link(path, repo_name)
 
+
 def is_no_quota(repo_id):
     return True if seaserv.check_quota(repo_id) < 0 else False
+
 
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
         return None
 
-    l = FileShare.objects.filter(repo_id=repo_id).filter(
+    share_list = FileShare.objects.filter(repo_id=repo_id).filter(
         username=username).filter(path=path)
-    return l[0] if len(l) > 0 else None
+    return share_list[0] if len(share_list) > 0 else None
+
 
 def get_dir_share_link(fileshare):
     # dir shared link
@@ -84,13 +93,15 @@ def get_dir_share_link(fileshare):
         dir_shared_link = ''
     return dir_shared_link
 
+
 def get_uploadlink(repo_id, username, path):
     if path == '/':    # no shared upload link for root dir
         return None
 
-    l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
+    share_list = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
         username=username).filter(path=path)
-    return l[0] if len(l) > 0 else None
+    return share_list[0] if len(share_list) > 0 else None
+
 
 def get_dir_shared_upload_link(uploadlink):
     # dir shared upload link
@@ -99,6 +110,7 @@ def get_dir_shared_upload_link(uploadlink):
     else:
         dir_shared_upload_link = ''
     return dir_shared_upload_link
+
 
 @login_required
 def repo_history_view(request, repo_id):
@@ -123,7 +135,7 @@ def repo_history_view(request, repo_id):
     reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-        and not is_password_set(repo.id, username):
+            and not is_password_set(repo.id, username):
         return render(request, 'decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or reverse_url,
@@ -157,6 +169,7 @@ def repo_history_view(request, repo_id):
             'referer': referer,
             })
 
+
 @login_required
 def repo_snapshot(request, repo_id):
     """View repo in history.
@@ -179,7 +192,7 @@ def repo_snapshot(request, repo_id):
     reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-        and not is_password_set(repo.id, username):
+            and not is_password_set(repo.id, username):
         return render(request, 'decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or reverse_url,
@@ -195,7 +208,7 @@ def repo_snapshot(request, repo_id):
     has_perm = is_repo_owner(request, repo.id, username)
     # department admin
     if not has_perm:
-        repo_owner = seafile_api.get_repo_owner(repo_id)
+        repo_owner = get_repo_owner(request, repo_id)
         if '@seafile_group' in repo_owner:
             group_id = get_group_id_by_repo_owner(repo_owner)
             has_perm = is_group_admin(group_id, username)
@@ -205,6 +218,7 @@ def repo_snapshot(request, repo_id):
             "can_restore_repo": has_perm,
             'current_commit': current_commit,
             })
+
 
 @login_required
 def view_lib_as_wiki(request, repo_id, path):
@@ -244,7 +258,8 @@ def view_lib_as_wiki(request, repo_id, path):
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         })
 
-########## shared dir/uploadlink
+
+# shared dir/uploadlink
 @share_link_audit
 @share_link_login_required
 def view_shared_dir(request, fileshare):
@@ -328,8 +343,7 @@ def view_shared_dir(request, fileshare):
                 req_image_path = posixpath.join(req_path, f.obj_name)
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
-    
-    #template = 'view_shared_dir.html'
+
     template = 'view_shared_dir_react.html'
 
     dir_share_link = request.path
@@ -353,6 +367,7 @@ def view_shared_dir(request, fileshare):
             'desc_for_ogp': desc_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             })
+
 
 @share_link_audit
 def view_shared_upload_link(request, uploadlink):

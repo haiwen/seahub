@@ -13,10 +13,8 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.views import check_folder_permission
 from seaserv import seafile_api
-from seahub.utils.repo import is_repo_owner
-from seahub.constants import PERMISSION_READ_WRITE
+from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
@@ -50,7 +48,7 @@ class RepoCommitRevertView(APIView):
         # permission check
         has_perm = is_repo_owner(request, repo.id, username)
         if not has_perm:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
+            repo_owner = get_repo_owner(request, repo_id)
             # department admin
             if '@seafile_group' in repo_owner:
                 group_id = get_group_id_by_repo_owner(repo_owner)
