@@ -52,7 +52,6 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
 
 class ViaRepoDirView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get_dir_info(self, repo_id, dir_path):
@@ -342,7 +341,6 @@ class ViaRepoDirView(APIView):
 
 class ViaRepoUploadLinkView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
@@ -396,7 +394,6 @@ class ViaRepoUploadLinkView(APIView):
 
 class ViaRepoDownloadLinkView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -422,7 +419,6 @@ class ViaRepoDownloadLinkView(APIView):
 
 class RepoInfoView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
