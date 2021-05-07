@@ -25,12 +25,14 @@ from seahub.api2.throttling import AnonRateThrottle, UserRateThrottle
 from seahub.api2.permissions import CanGenerateUploadLink
 
 from seahub.share.models import UploadLinkShare, check_share_link_common
-from seahub.utils import gen_shared_upload_link, gen_file_upload_url
+from seahub.utils import gen_shared_upload_link, gen_file_upload_url, \
+        is_pro_version
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seahub.settings import UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
-        UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX
+        UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, \
+        ENABLE_UPLOAD_LINK_VIRUS_CHECK
 
 logger = logging.getLogger(__name__)
 
@@ -349,11 +351,17 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         obj_id = json.dumps({'parent_dir': path})
+
+        check_virus = False
+        if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
+            check_virus = True
+
         token = seafile_api.get_fileserver_access_token(repo_id,
                                                         obj_id,
                                                         'upload-link',
                                                         uls.username,
-                                                        use_onetime=False)
+                                                        use_onetime=False,
+                                                        check_virus=check_virus)
 
         if not token:
             error_msg = 'Internal Server Error'
