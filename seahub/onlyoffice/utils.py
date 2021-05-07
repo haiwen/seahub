@@ -139,6 +139,6 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             }
         }
 
-        return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET).decode('utf-8')
+        return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
 
     return return_dict
