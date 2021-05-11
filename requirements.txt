@@ -14,6 +14,6 @@ djangorestframework==3.11.1
 python-dateutil
 requests
 pillow
-pyjwt
+pyjwt==2.1.*
 pycryptodome
 requests_oauthlib

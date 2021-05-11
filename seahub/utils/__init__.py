@@ -1121,7 +1121,7 @@ if HAS_OFFICE_CONVERTER:
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
         requests.get(url, params, headers=headers)
@@ -1130,7 +1130,7 @@ if HAS_OFFICE_CONVERTER:
     def query_office_convert_status(file_id, doctype):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'file_id': file_id, 'doctype': doctype}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
         d = requests.get(url, params, headers=headers)
@@ -1158,7 +1158,7 @@ if HAS_OFFICE_CONVERTER:
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'static_filename': static_filename, 'file_id': file_id}
         try:
             ret = requests.get(url, params, headers=headers)
