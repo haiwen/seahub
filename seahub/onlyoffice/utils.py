@@ -107,7 +107,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'can_download': can_download,
         'username': username,
         'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
-        'enable_watermark': ENABLE_WATERMARK and not can_edit,
+        'enable_watermark': ENABLE_WATERMARK,
     }
 
     if ONLYOFFICE_JWT_SECRET:
