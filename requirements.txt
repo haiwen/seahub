@@ -2,7 +2,7 @@ Django==1.11.29
 future
 captcha
 django-statici18n
-django-webpack_loader
+django-webpack_loader==0.7.0
 gunicorn
 pymysql
 django-picklefield==2.1.1
