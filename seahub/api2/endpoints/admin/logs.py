@@ -120,8 +120,18 @@ class AdminLogsFileAccessLogs(APIView):
         start = per_page * (current_page - 1)
         limit = per_page + 1
 
+        if user_selected:
+            org_id = -1
+            orgs = ccnet_api.get_orgs_by_user(user_selected)
+            if orgs:
+                org_id = orgs[0].org_id
+        elif repo_id_selected:
+            org_id = seafile_api.get_org_id_by_repo_id(repo_id_selected)
+        else:
+            org_id = 0
+
         # org_id = 0, show all file audit
-        events = get_file_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
+        events = get_file_audit_events(user_selected, org_id, repo_id_selected, start, limit) or []
 
         if len(events) > per_page:
             events = events[:per_page]
