@@ -9,6 +9,7 @@ from rest_framework import status
 
 from pysearpc import SearpcError
 
+from seahub.utils import is_pro_version
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -19,6 +20,7 @@ from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 logger = logging.getLogger(__name__)
+
 
 class AdminDevices(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -75,7 +77,7 @@ class AdminDevices(APIView):
 
     def delete(self, request, format=None):
 
-        if not request.user.admin_permissions.other_permission():
+        if is_pro_version() and not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         platform = request.data.get('platform', '')
