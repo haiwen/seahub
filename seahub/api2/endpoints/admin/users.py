@@ -250,7 +250,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         if institution_name == '':
             InstitutionAdmin.objects.filter(user=email).delete()
 
-    if quota_total_mb:
+    if quota_total_mb is not None:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
         orgs = ccnet_api.get_orgs_by_user(email)
         try:
