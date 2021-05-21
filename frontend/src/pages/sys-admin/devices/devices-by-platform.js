@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, isPro } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -133,9 +133,7 @@ class Item extends Component {
             <span title={moment(item.last_accessed).format('llll')}>{moment(item.last_accessed).fromNow()}</span>
           </td>
           <td>
-            {isPro &&
             <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
-            }
           </td>
         </tr>
         {isUnlinkDeviceDialogOpen &&
