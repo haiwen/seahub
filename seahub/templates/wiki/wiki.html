@@ -4,6 +4,8 @@
 {% render_bundle 'wiki' 'css' %}
 {% endblock %}
 
+{% block sub_title %} {{filename}} - {% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
     window.wiki = {
