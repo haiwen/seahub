@@ -35,12 +35,11 @@ from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX,
 from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
-        gen_shared_link, gen_shared_upload_link, \
-        get_file_audit_events, get_file_update_events
+        gen_shared_link, gen_shared_upload_link
 
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
-        datetime_to_isoformat_timestr, utc_to_local
+        datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.constants import DEFAULT_ADMIN
@@ -65,22 +64,9 @@ json_content_type = 'application/json; charset=utf-8'
 def get_user_last_access_time(email, last_login_time):
 
     device_last_access = ''
-    audit_last_access = ''
-    update_last_access = ''
-
     devices = TokenV2.objects.filter(user=email).order_by('-last_accessed')
     if devices:
         device_last_access = devices[0].last_accessed
-
-    if is_pro_version():
-        audit_events = get_file_audit_events(email, 0, None, 0, 1) or []
-        if audit_events:
-            audit_last_access = audit_events[0].timestamp
-
-    if is_pro_version():
-        update_events = get_file_update_events(email, 0, None, 0, 1) or []
-        if update_events:
-            update_last_access = update_events[0].timestamp
 
     # before make_naive
     # 2021-04-09 05:32:30+00:00
@@ -99,16 +85,6 @@ def get_user_last_access_time(email, last_login_time):
         if is_aware(device_last_access):
             device_last_access = make_naive(device_last_access)
         last_access_time_list.append(device_last_access)
-
-    if audit_last_access:
-        if is_aware(audit_last_access):
-            audit_last_access = make_naive(audit_last_access)
-        last_access_time_list.append(utc_to_local(audit_last_access))
-
-    if update_last_access:
-        if is_aware(update_last_access):
-            update_last_access = make_naive(update_last_access)
-        last_access_time_list.append(utc_to_local(update_last_access))
 
     if not last_access_time_list:
         return ''
