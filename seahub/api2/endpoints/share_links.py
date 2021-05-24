@@ -43,7 +43,7 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
         ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
-        THUMBNAIL_ROOT
+        THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
 from seahub.views import check_folder_permission
@@ -808,11 +808,17 @@ class ShareLinkUpload(APIView):
 
         # generate token
         obj_id = json.dumps({'parent_dir': path})
+
+        check_virus = False
+        if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
+            check_virus = True
+
         token = seafile_api.get_fileserver_access_token(repo_id,
                                                         obj_id,
                                                         'upload-link',
                                                         share_link.username,
-                                                        use_onetime=False)
+                                                        use_onetime=False,
+                                                        check_virus=check_virus)
 
         if not token:
             error_msg = 'Internal Server Error'
