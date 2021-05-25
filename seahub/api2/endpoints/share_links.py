@@ -813,12 +813,19 @@ class ShareLinkUpload(APIView):
         if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
             check_virus = True
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        obj_id,
-                                                        'upload-link',
-                                                        share_link.username,
-                                                        use_onetime=False,
-                                                        check_virus=check_virus)
+        if check_virus:
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                                                            obj_id,
+                                                            'upload-link',
+                                                            share_link.username,
+                                                            use_onetime=False,
+                                                            check_virus=check_virus)
+        else:
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                                                            obj_id,
+                                                            'upload-link',
+                                                            share_link.username,
+                                                            use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
