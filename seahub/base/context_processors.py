@@ -15,6 +15,8 @@ from django.conf import settings as dj_settings
 from django.utils.functional import lazy
 from constance import config
 
+import seaserv
+
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
@@ -132,6 +134,7 @@ def base(request):
         'CSRF_COOKIE_NAME': dj_settings.CSRF_COOKIE_NAME,
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
+        'USE_GO_FILESERVER': seaserv.USE_GO_FILESERVER if hasattr(seaserv, 'USE_GO_FILESERVER') else False,
         'LOGIN_URL': dj_settings.LOGIN_URL,
         'LOGOUT_URL': dj_settings.LOGOUT_URL,
         'enable_thumbnail': ENABLE_THUMBNAIL,

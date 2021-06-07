@@ -45,6 +45,7 @@
             isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+            useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
             avatarURL: '{{ avatar_url }}'
