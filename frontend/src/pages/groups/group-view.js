@@ -488,7 +488,7 @@ class GroupView extends React.Component {
                             </ul>
                           }
                           {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
-                          {(!this.state.isOwner && !this.state.isStaff && !isDepartmentGroup) &&
+                          {(!this.state.isOwner && !isDepartmentGroup) &&
                           <ul className="sf-popover-list">
                             <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
                           </ul>
