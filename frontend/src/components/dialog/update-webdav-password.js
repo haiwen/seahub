@@ -57,7 +57,7 @@ class UpdateWebdavPassword extends Component {
         <ModalHeader toggle={toggle}>{gettext('WebDav Password')}</ModalHeader>
         <ModalBody>
           <InputGroup className="">
-            <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} />
+            <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <InputGroupAddon addonType="append">
               <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
               <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
