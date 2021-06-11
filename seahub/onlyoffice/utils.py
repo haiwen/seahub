@@ -73,8 +73,10 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     if not doc_key:
         doc_key = cache.get(cache_key)
 
+    # In theory, file is unlocked when editing finished.
+    # This can happend if memcache is restarted or memcache is full and doc key is deleted.
     if not doc_key and if_locked_by_online_office(repo_id, file_path):
-        logger.error('no doc_key in cache and locked by online office')
+        logger.warning('no doc_key in cache and file({} in {}) is locked by online office'.format(file_path, repo_id))
 
     if not doc_key:
         info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
