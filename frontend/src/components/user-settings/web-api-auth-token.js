@@ -1,4 +1,5 @@
 import React from 'react';
+import ModalPortal from '../modal-portal';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -9,8 +10,13 @@ class WebAPIAuthToken extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      authToken: '******'
+      authToken: '',
+      isAuthTokenVisible: false,
     };
+  }
+
+  componentDidMount() {
+    this.getAuthToken();
   }
 
   getAuthToken = () => {
@@ -24,16 +30,58 @@ class WebAPIAuthToken extends React.Component {
     });
   }
 
+  createAuthToken = () => {
+    seafileAPI.createAuthTokenBySession().then((res) => {
+      this.setState({
+        authToken: res.data.token,
+        isAuthTokenVisible: false
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }
+
+  deleteAuthToken = () => {
+    seafileAPI.deleteAuthTokenBySession().then((res) => {
+      this.setState({
+        authToken: '',
+        isAuthTokenVisible: false
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  }
+
+  toggleAuthTokenVisible = () => {
+    this.setState({
+      isAuthTokenVisible: !this.state.isAuthTokenVisible
+    });
+  }
+
   render() {
-    const { authToken } = this.state;
+    const { authToken, isAuthTokenVisible } = this.state;
     return (
-      <div id="get-auth-token" className="setting-item">
-        <h3 className="setting-item-heading">{gettext('Web API Auth Token')}</h3>
-        <div className="d-flex align-items-center">
-          <input type="text" readOnly={true} value={authToken} className="form-control mr-2 col-sm-5" />
-          <button className="btn btn-outline-primary" onClick={this.getAuthToken}>{gettext('Get')}</button>
+      <React.Fragment>
+        <div id="get-auth-token" className="setting-item">
+          <h3 className="setting-item-heading">{gettext('Web API Auth Token')}</h3>
+          {authToken ? (
+            <React.Fragment>
+              <div className="d-flex align-items-center">
+                <label className="m-0 mr-2">{gettext('Token:')}</label>
+                <input className="border-0 mr-1" type="text" value={isAuthTokenVisible ? authToken : '****************************************'} readOnly={true} size={Math.max(authToken.length, 10)} />
+                <span onClick={this.toggleAuthTokenVisible} className={`eye-icon fas ${this.state.isAuthTokenVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+              </div>
+              <button className="btn btn-outline-primary mt-2" onClick={this.deleteAuthToken}>{gettext('Delete')}</button>
+            </React.Fragment>
+          ) : (
+            <button className="btn btn-outline-primary" onClick={this.createAuthToken}>{gettext('Generate')}</button>
+          )}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

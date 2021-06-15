@@ -15,6 +15,27 @@ from seahub.base.fields import LowerCaseCharField
 DESKTOP_PLATFORMS = ('windows', 'linux', 'mac')
 MOBILE_PLATFORMS = ('ios', 'android')
 
+
+class TokenManager(models.Manager):
+
+    def add_or_update(self, username, key=''):
+
+        """Add or update user auth token.
+        """
+        try:
+            token_obj = self.get(user=username)
+        except Token.DoesNotExist:
+            token_obj = self.model(user=username)
+
+        if key is not None:
+            token_obj.key = key
+        else:
+            token_obj.key = self.generate_key()
+
+        token_obj.save(using=self._db)
+        return token_obj
+
+
 class Token(models.Model):
     """
     The default authorization token model.
@@ -22,6 +43,8 @@ class Token(models.Model):
     key = models.CharField(max_length=40, primary_key=True)
     user = LowerCaseCharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    objects = TokenManager()
 
     def save(self, *args, **kwargs):
         if not self.key:
