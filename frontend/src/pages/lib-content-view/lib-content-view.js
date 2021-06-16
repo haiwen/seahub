@@ -1885,6 +1885,7 @@ class LibContentView extends React.Component {
               updateUsedRepoTags={this.updateUsedRepoTags}
               isDirentListLoading={this.state.isDirentListLoading}
               direntList={direntItemsList}
+              fullDirentList={this.state.direntList}
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
               sortItems={this.sortItems}
