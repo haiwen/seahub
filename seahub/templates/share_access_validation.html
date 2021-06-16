@@ -5,9 +5,17 @@
 <div class="mt-9 mb-4 mx-auto small-panel">
   <p class="intro">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
   {% if path %}
+  {% if direct_download %}
+  <form action="{% url view_name token %}?p={{ path }}&dl=1" method="post" id="share-passwd-form">
+  {% else %}
   <form action="{% url view_name token %}?p={{ path }}" method="post" id="share-passwd-form">
+  {% endif %}
+  {% else %}
+  {% if direct_download %}
+  <form action="{% url view_name token %}?dl=1" method="post" id="share-passwd-form">
   {% else %}
   <form action="{% url view_name token %}" method="post" id="share-passwd-form">
+  {% endif %}
   {% endif %}
     {% csrf_token %}
     <input type="hidden" name="token" value="{{ token }}" />

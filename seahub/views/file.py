@@ -1106,8 +1106,10 @@ def view_shared_file(request, fileshare):
 
     # check if share link is encrypted
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    direct_download = request.GET.get('dl', '') == '1'
     if not password_check_passed:
-        d = {'token': token, 'view_name': 'view_shared_file', 'err_msg': err_msg}
+        d = {'token': token, 'view_name': 'view_shared_file',
+             'err_msg': err_msg, 'direct_download': direct_download}
         return render(request, 'share_access_validation.html', d)
 
     # recourse check
