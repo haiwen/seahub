@@ -1132,9 +1132,22 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
+    if not request.user.is_authenticated:
+        username = ANONYMOUS_EMAIL
+    else:
+        username = request.user.username
+
+    # check file lock info
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked = False
+        locked_by_me = False
+
     # get share link permission
     can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit']
+    can_edit = fileshare.get_permissions()['can_edit'] and not is_locked
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1180,19 +1193,7 @@ def view_shared_file(request, fileshare):
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
-        if not request.user.is_authenticated:
-            username = ANONYMOUS_EMAIL
-        else:
-            username = request.user.username
-
         def online_office_lock_or_refresh_lock(repo_id, path, username):
-            # check file lock info
-            try:
-                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-            except Exception as e:
-                logger.error(e)
-                is_locked = False
-
             locked_by_online_office = if_locked_by_online_office(repo_id, path)
             try:
                 if not is_locked:
