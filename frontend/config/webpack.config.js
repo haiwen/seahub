@@ -190,7 +190,7 @@ module.exports = function (webpackEnv) {
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
-      output = Object.assign({}, output, {publicPath: "http://192.168.1.199:3000/assets/bundles/"});
+      output = Object.assign({}, output, {publicPath: "http://127.0.0.1:3000/assets/bundles/"});
     }
     return output;
   };
