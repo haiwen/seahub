@@ -313,7 +313,7 @@ class DirentGridView extends React.Component{
   }
 
   showImagePopup = (curItem) => {
-    let items = this.props.direntList.filter((item) => {
+    let items = this.props.fullDirentList.filter((item) => {
       return Utils.imageCheck(item.name);
     });
 
