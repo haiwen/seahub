@@ -8,7 +8,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-  Object.assign(app.pageOptions, {
+  var newOptions = {
     enableShareToDepartment: {% if enable_share_to_department %} true {% else %} false {% endif %},
     shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
     shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
@@ -16,14 +16,17 @@
     uploadLinkExpireDaysDefault: {{ upload_link_expire_days_default }},
     uploadLinkExpireDaysMin: {{ upload_link_expire_days_min }},
     uploadLinkExpireDaysMax: {{ upload_link_expire_days_max }}
-  });
+  };
+  for (var key in newOptions) {
+    app.pageOptions[key] = newOptions[key];
+  }
   {% if onlyoffice_desktop_editors_portal_login %}
-  let params = {
+  var params = {
     "displayName": "{{request.user.username|email2nickname|escapejs}}",
     "email": "{{request.user.username|escapejs}}",
     "domain": "{{service_url}}",
     "provider": "{{site_name}}"
-  }
+  };
   window.AscDesktopEditor.execCommand('portal:login', JSON.stringify(params));
   {% endif %}
 </script>
