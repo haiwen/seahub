@@ -14,8 +14,8 @@
   "unordered_list": "Enumeration",
   "check_list_item": "Case à chocher",
   "insert_image": "Image",
-  "insert_formula": "Insert Formula",
-  "formula": "Formula",
+  "insert_formula": "Insérer formule",
+  "formula": "Formule",
   "insert_file": "Fichier",
   "code": "Ligne de code",
   "code_block": "Bloc de code",
@@ -149,7 +149,7 @@
       "issue": "Problème niveau de titre"
     }
   },
-  "Shortcut_help": "Shortcut help",
+  "Shortcut_help": "Aide raccourcis",
   "userHelp": {
     "title": "Raccourcis clavier",
     "userHelpData": [
@@ -193,9 +193,9 @@
           "Escape_table": "Sortir de la table"
         }
       }, {
-        "shortcutType": "Formula shortcuts",
+        "shortcutType": "Raccourcis formule",
         "shortcutData": {
-          "Insert_Formula": "Insert Formula"
+          "Insert_Formula": "Insérer formule"
         }
       }, {
         "shortcutType":"Raccourcis en ligne",
