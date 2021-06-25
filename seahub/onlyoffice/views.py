@@ -4,13 +4,13 @@ import logging
 import os
 import requests
 
-from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from seaserv import seafile_api
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
-from seahub.onlyoffice.utils import generate_onlyoffice_cache_key
+from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.utils import gen_inner_file_upload_url, is_pro_version
 from seahub.utils.file_op import if_locked_by_online_office
 
@@ -83,18 +83,14 @@ def onlyoffice_editor_callback(request):
 
     # get file basic info
     doc_key = post_data.get('key')
-    doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
-    if not doc_info_from_cache:
-        logger.error('cache.get("ONLYOFFICE_%s" % {}) return None'.format(doc_key))
+    doc_info = get_file_info_by_doc_key(doc_key)
+    if not doc_info:
+        logger.error('can not get file info by doc_key: {}'.format(doc_key))
         return HttpResponse('{"error": 0}')
-
-    doc_info = json.loads(doc_info_from_cache)
 
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
     username = doc_info['username']
-
-    cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
 
     # save file
     if status in (2, 6):
@@ -131,20 +127,15 @@ def onlyoffice_editor_callback(request):
         # 2 - document is ready for saving,
         if status == 2:
 
-            cache.delete(cache_key)
+            delete_doc_key(doc_key)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
                 seafile_api.unlock_file(repo_id, file_path)
 
-        # 6 - document is being edited, but the current document state is saved,
-        if status == 6:
-            # cache document key when forcesave
-            cache.set(cache_key, doc_key)
-
     # 4 - document is closed with no changes,
     if status == 4:
 
-        cache.delete(cache_key)
+        delete_doc_key(doc_key)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
             seafile_api.unlock_file(repo_id, file_path)
