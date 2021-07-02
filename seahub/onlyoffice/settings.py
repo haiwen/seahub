@@ -20,3 +20,27 @@ ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')
 ONLYOFFICE_FORCE_SAVE = getattr(settings, 'ONLYOFFICE_FORCE_SAVE', False)
 
 ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN = getattr(settings, 'ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN', False)
+
+EXT_SPREADSHEET = [
+    ".xls", ".xlsx", ".xlsm",
+    ".xlt", ".xltx", ".xltm",
+    ".ods", ".fods", ".ots", ".csv"
+]
+
+EXT_PRESENTATION = [
+    ".pps", ".ppsx", ".ppsm",
+    ".ppt", ".pptx", ".pptm",
+    ".pot", ".potx", ".potm",
+    ".odp", ".fodp", ".otp"
+]
+
+EXT_DOCUMENT = [
+    ".doc", ".docx", ".docm",
+    ".dot", ".dotx", ".dotm",
+    ".odt", ".fodt", ".ott", ".rtf", ".txt",
+    ".html", ".htm", ".mht", ".xml",
+    ".pdf", ".djvu", ".fb2", ".epub", ".xps"
+]
+
+DOC_SERV_SITE_URL = 'http://172.17.0.1:9090/'
+DOC_SERV_CONVERTER_URL = 'ConvertService.ashx' 

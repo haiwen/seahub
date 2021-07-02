@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username, serviceURL } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -343,7 +343,30 @@ class DirentListItem extends React.Component {
   }
 
   onConvertViaONLYOFFICE = ()=> {
-    
+    let repoID = this.props.repoID;
+    let user = username;
+    let libUri = 'http://172.17.0.1:8090/lib/c3936767-57f5-4f36-b9dd-f24f5f43aac1/file/';
+    let direntPath = this.getDirentPath(this.props.dirent)
+    let downloadUri = serviceURL + URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+    let fileUri = this.getDirentPath(this.props.dirent)//serviceURL + URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
+    fetch(siteRoot+'onlyoffice/convert', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: user,
+        libUri: libUri,
+        fileUri: fileUri,
+        repo_id: repoID,
+        downloadUri
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(`Error: ${err}`);
+    })
   }
 
   onItemDownload = (e) => {

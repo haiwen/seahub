@@ -18,7 +18,8 @@ from seahub.utils.file_op import if_locked_by_online_office
 
 from seahub.settings import ENABLE_WATERMARK
 from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
-        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET
+        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET, EXT_DOCUMENT, \
+        EXT_SPREADSHEET, EXT_PRESENTATION
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
@@ -160,3 +161,36 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
 
     return return_dict
+
+def getFileName(fileUri):
+    ind = fileUri.rfind('.')
+    return fileUri[ind+1:]
+
+def getFileNameWithoutExt(fileUri):
+    fn = getFileName(fileUri)
+    ind = fn.rfind('.')
+    return fn[:ind]
+
+def getFileExt(fileUri):
+    fn = getFileName(fileUri)
+    ind = fn.rfind('.')
+    return fn[ind:].lower()
+
+def getFileType(fileUri):
+    ext = getFileExt(fileUri)
+    if ext in EXT_DOCUMENT:
+        return 'word'
+    if ext in EXT_SPREADSHEET:
+        return 'cell'
+    if ext in EXT_PRESENTATION:
+        return 'slide'
+
+    return 'word'
+
+def getInternalExtension(fileType):
+    mapping = {
+        'word': '.docx',
+        'cell': '.xlsx',
+        'slide': '.pptx'
+    }
+    return mapping.get(fileType, None)
