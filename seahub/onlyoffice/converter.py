@@ -28,7 +28,7 @@ def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
 
     if ONLYOFFICE_JWT_SECRET:
         import jwt
-        payload['token'] = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET)
+        payload['token'] = jwt.encode(payload, ONLYOFFICE_JWT_SECRET)
 
     response = requests.post(ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers )
     json = response.json()
