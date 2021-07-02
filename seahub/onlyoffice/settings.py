@@ -5,6 +5,16 @@ ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
 ONLYOFFICE_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_FILE_EXTENSION', ())
 ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_EDIT_FILE_EXTENSION', ())
+VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
+ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')
+# if True, file will be saved when user click save btn on file editing page
+ONLYOFFICE_FORCE_SAVE = getattr(settings, 'ONLYOFFICE_FORCE_SAVE', False)
+ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN = getattr(settings, 'ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN', False)
+
+# ONLYOFFICE Document Server root
+DOC_SERV_SITE_URL = 'http://172.17.0.1:9090/'
+DOC_SERV_CONVERTER_URL = 'ConvertService.ashx' 
+
 ONLYOFFICE_CONVERTER_EXTENSIONS = [
     ".docm", ".doc", ".dotx", ".dotm", ".dot", ".odt",
     ".fodt", ".ott", ".xlsm", ".xls", ".xltx", ".xltm",
@@ -12,14 +22,6 @@ ONLYOFFICE_CONVERTER_EXTENSIONS = [
     ".ppsx", ".ppsm", ".pps", ".potx", ".potm", ".pot",
     ".odp", ".fodp", ".otp", ".rtf", ".mht", ".html", ".htm", ".xml", ".epub", ".fb2"
 ]
-VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
-
-ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')
-
-# if True, file will be saved when user click save btn on file editing page
-ONLYOFFICE_FORCE_SAVE = getattr(settings, 'ONLYOFFICE_FORCE_SAVE', False)
-
-ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN = getattr(settings, 'ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN', False)
 
 EXT_SPREADSHEET = [
     ".xls", ".xlsx", ".xlsm",
@@ -41,6 +43,3 @@ EXT_DOCUMENT = [
     ".html", ".htm", ".mht", ".xml",
     ".pdf", ".djvu", ".fb2", ".epub", ".xps"
 ]
-
-DOC_SERV_SITE_URL = 'http://172.17.0.1:9090/'
-DOC_SERV_CONVERTER_URL = 'ConvertService.ashx' 

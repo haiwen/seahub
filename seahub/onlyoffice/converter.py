@@ -1,17 +1,18 @@
-import json
+import logging
 import requests
-from seahub.onlyoffice.utils import getFileName, getFileExt
-from seahub.onlyoffice.settings import DOC_SERV_SITE_URL, DOC_SERV_CONVERTER_URL
 
-# convert file and give url to a new file
-# TODO: Add JWT checks
+from seahub.onlyoffice.converterUtils import getFileName, getFileExt
+from seahub.onlyoffice.settings import DOC_SERV_SITE_URL, DOC_SERV_CONVERTER_URL, ONLYOFFICE_JWT_SECRET
+
+logger = logging.getLogger(__name__)
+
 def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
-    if not fromExt: # check if the extension from the request matches the real file extension
-        fromExt = getFileExt(docUri) # if not, overwrite the extension value
+    if not fromExt:
+        fromExt = getFileExt(docUri)
 
     title = getFileName(docUri)
 
-    payload = { # write all the necessary data to the payload object
+    payload = {
         'url': docUri,
         'outputtype': toExt.replace('.', ''),
         'filetype': fromExt.replace('.', ''),
@@ -22,8 +23,12 @@ def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
 
     headers={'accept': 'application/json'}
 
-    if (isAsync):
+    if isAsync:
         payload.setdefault('async', True)
+
+    if ONLYOFFICE_JWT_SECRET:
+        import jwt
+        payload['token'] = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET)
 
     response = requests.post(DOC_SERV_SITE_URL + DOC_SERV_CONVERTER_URL, json=payload, headers=headers )
     json = response.json()
@@ -52,5 +57,5 @@ def processError(error):
         '-2': f'{prefix}Error convertation timeout',
         '-1': f'{prefix}Error convertation unknown'
     }
-
+    logger.error(f'[OnlyOffice] Converter URI Error Code: {error}')
     raise Exception(mapping.get(str(error), f'Error Code: {error}')) 
