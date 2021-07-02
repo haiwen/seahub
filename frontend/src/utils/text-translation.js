@@ -21,6 +21,7 @@ const TextTranslation = {
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},
   'TAGS': {key: 'Tags', value: gettext('Tags')},
   'RELATED_FILES': {key: 'Related Files', value: gettext('Related Files')},
+  'ONLYOFFICE_CONVERT': {key: 'Convert via ONLYOFFICE', value: gettext('Convert via ONLYOFFICE')}
 };
 
 export default TextTranslation;

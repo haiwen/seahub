@@ -5,6 +5,13 @@ ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
 ONLYOFFICE_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_FILE_EXTENSION', ())
 ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_EDIT_FILE_EXTENSION', ())
+ONLYOFFICE_CONVERTER_EXTENSIONS = [
+    ".docm", ".doc", ".dotx", ".dotm", ".dot", ".odt",
+    ".fodt", ".ott", ".xlsm", ".xls", ".xltx", ".xltm",
+    ".xlt", ".ods", ".fods", ".ots", ".pptm", ".ppt",
+    ".ppsx", ".ppsm", ".pps", ".potx", ".potm", ".pot",
+    ".odp", ".fodp", ".otp", ".rtf", ".mht", ".html", ".htm", ".xml", ".epub", ".fb2"
+]
 VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
 
 ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')

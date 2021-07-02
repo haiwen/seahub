@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -487,7 +487,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
 
     if (isContextmenu) {
@@ -545,7 +545,18 @@ export const Utils = {
       list.push(HISTORY);
     }
 
+    if (permission == 'rw' && enableOnlyoffice &&
+      onlyofficeConverterExtensions.includes(this.getFileExtension(dirent.name, false))) {
+      list.push(ONLYOFFICE_CONVERT);
+    }
+
     return list;
+  },
+
+  getFileExtension: function (fileName, withoutDot) {
+    let parts = fileName.toLowerCase().split(".");
+
+    return withoutDot ? parts.pop() : "." + parts.pop();
   },
 
   getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {

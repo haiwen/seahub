@@ -24,6 +24,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
 
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_CONVERTER_EXTENSIONS
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -133,6 +134,8 @@ def base(request):
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
         'LOGIN_URL': dj_settings.LOGIN_URL,
+        'enableOnlyoffice': ENABLE_ONLYOFFICE,
+        'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'LOGOUT_URL': dj_settings.LOGOUT_URL,
         'enable_thumbnail': ENABLE_THUMBNAIL,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
