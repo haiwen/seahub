@@ -2,7 +2,7 @@ import logging
 import requests
 
 from seahub.onlyoffice.converterUtils import getFileName, getFileExt
-from seahub.onlyoffice.settings import DOC_SERV_SITE_URL, DOC_SERV_CONVERTER_URL, ONLYOFFICE_JWT_SECRET
+from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL, ONLYOFFICE_JWT_SECRET
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
         import jwt
         payload['token'] = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET)
 
-    response = requests.post(DOC_SERV_SITE_URL + DOC_SERV_CONVERTER_URL, json=payload, headers=headers )
+    response = requests.post(ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers )
     json = response.json()
 
     return getResponseUri(json)
