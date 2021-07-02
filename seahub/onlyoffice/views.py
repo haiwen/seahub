@@ -139,7 +139,7 @@ def onlyoffice_editor_callback(request):
         # 6 - document is being edited, but the current document state is saved,
         if status == 6:
             # cache document key when forcesave
-            cache.set(cache_key, doc_key)
+            cache.set(cache_key, doc_key, None)
 
     # 4 - document is closed with no changes,
     if status == 4:
