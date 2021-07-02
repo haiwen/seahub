@@ -21,7 +21,7 @@ from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
         ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('onlyoffice')
 
 
 def generate_onlyoffice_cache_key(repo_id, file_path):
@@ -32,6 +32,8 @@ def generate_onlyoffice_cache_key(repo_id, file_path):
 
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                         can_edit=False, can_download=True):
+
+    logger.info('{} open file {} in repo {}'.format(username, file_path, repo_id))
 
     repo = seafile_api.get_repo(repo_id)
     if repo.is_virtual:
@@ -65,8 +67,10 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     else:
         document_type = 'text'
 
-    cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
+    cache_key = generate_onlyoffice_cache_key(origin_repo_id, origin_file_path)
     doc_key = cache.get(cache_key)
+
+    logger.info('get doc_key {} from cache by cache_key {}'.format(doc_key, cache_key))
 
     # temporary solution when failed to get data from cache(django_pylibmc)
     # when init process for the first time
@@ -79,11 +83,13 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     if not doc_key:
         info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
         doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
+        logger.info('generate new doc_key {} by info {}'.format(doc_key, info_bytes))
 
-    doc_info = json.dumps({'repo_id': repo_id,
-                           'file_path': file_path,
+    doc_info = json.dumps({'repo_id': origin_repo_id,
+                           'file_path': origin_file_path,
                            'username': username})
     cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
+    logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
 
     file_name = os.path.basename(file_path.rstrip('/'))
     doc_url = gen_file_get_url(dl_token, file_name)
