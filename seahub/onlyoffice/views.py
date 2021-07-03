@@ -16,7 +16,7 @@ from seahub.utils.file_op import if_locked_by_online_office
 
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('onlyoffice')
 
 
 @csrf_exempt
@@ -94,6 +94,8 @@ def onlyoffice_editor_callback(request):
     file_path = doc_info['file_path']
     username = doc_info['username']
 
+    logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
+
     cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
 
     # save file
@@ -131,6 +133,7 @@ def onlyoffice_editor_callback(request):
         # 2 - document is ready for saving,
         if status == 2:
 
+            logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
             cache.delete(cache_key)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
@@ -139,11 +142,13 @@ def onlyoffice_editor_callback(request):
         # 6 - document is being edited, but the current document state is saved,
         if status == 6:
             # cache document key when forcesave
-            cache.set(cache_key, doc_key)
+            logger.info('status {}: set cache_key {} and doc_key {} to cache'.format(status, cache_key, doc_key))
+            cache.set(cache_key, doc_key, None)
 
     # 4 - document is closed with no changes,
     if status == 4:
 
+        logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
         cache.delete(cache_key)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
