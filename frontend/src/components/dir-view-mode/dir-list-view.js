@@ -76,6 +76,7 @@ class DirListView extends React.Component {
           userPerm={this.props.userPerm}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
+          fullDirentList={this.props.fullDirentList}
           sortBy={this.props.sortBy}
           sortOrder={this.props.sortOrder}
           sortItems={this.props.sortItems}

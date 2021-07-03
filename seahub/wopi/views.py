@@ -65,12 +65,13 @@ def lock_file(request):
     key, value = generate_file_lock_key_value(request)
     cache.set(key, value, WOPI_LOCK_EXPIRATION)
 
-    token = request.GET.get('access_token', None)
-    info_dict = get_file_info_by_token(token)
-    repo_id = info_dict['repo_id']
-    file_path = info_dict['file_path']
-    seafile_api.lock_file(repo_id, file_path, ONLINE_OFFICE_LOCK_OWNER,
-                          int(time.time()) + 40 * 60)
+    if is_pro_version():
+        token = request.GET.get('access_token', None)
+        info_dict = get_file_info_by_token(token)
+        repo_id = info_dict['repo_id']
+        file_path = info_dict['file_path']
+        seafile_api.lock_file(repo_id, file_path, ONLINE_OFFICE_LOCK_OWNER,
+                              int(time.time()) + 40 * 60)
 
 
 def unlock_file(request):
@@ -78,11 +79,12 @@ def unlock_file(request):
     key, value = generate_file_lock_key_value(request)
     cache.delete(key)
 
-    token = request.GET.get('access_token', None)
-    info_dict = get_file_info_by_token(token)
-    repo_id = info_dict['repo_id']
-    file_path = info_dict['file_path']
-    seafile_api.unlock_file(repo_id, file_path)
+    if is_pro_version():
+        token = request.GET.get('access_token', None)
+        info_dict = get_file_info_by_token(token)
+        repo_id = info_dict['repo_id']
+        file_path = info_dict['file_path']
+        seafile_api.unlock_file(repo_id, file_path)
 
 
 def refresh_file_lock(request):
@@ -90,15 +92,20 @@ def refresh_file_lock(request):
     key, value = generate_file_lock_key_value(request)
     cache.set(key, value, WOPI_LOCK_EXPIRATION)
 
-    token = request.GET.get('access_token', None)
-    info_dict = get_file_info_by_token(token)
-    repo_id = info_dict['repo_id']
-    file_path = info_dict['file_path']
-    seafile_api.refresh_file_lock(repo_id, file_path,
-                                  int(time.time()) + 40 * 60)
+    if is_pro_version():
+        token = request.GET.get('access_token', None)
+        info_dict = get_file_info_by_token(token)
+        repo_id = info_dict['repo_id']
+        file_path = info_dict['file_path']
+        seafile_api.refresh_file_lock(repo_id, file_path,
+                                      int(time.time()) + 40 * 60)
 
 
 def file_is_locked(request):
+
+    if not is_pro_version():
+        key, value = generate_file_lock_key_value(request)
+        return True if cache.get(key, '') else False
 
     token = request.GET.get('access_token', None)
     info_dict = get_file_info_by_token(token)

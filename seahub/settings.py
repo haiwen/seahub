@@ -606,6 +606,14 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
+        'onlyoffice_handler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'onlyoffice.log'),
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -625,6 +633,11 @@ LOGGING = {
         },
         'py.warnings': {
             'handlers': ['console', ],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'onlyoffice': {
+            'handlers': ['onlyoffice_handler', ],
             'level': 'INFO',
             'propagate': False
         },

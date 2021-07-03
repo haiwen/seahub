@@ -36,13 +36,13 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 
 logger = logging.getLogger(__name__)
 
+
 def get_group_repo_info(request, group_repo):
 
     group_id = group_repo.group_id
     repo_id = group_repo.repo_id
 
-    is_admin = ExtraGroupsSharePermission.objects.get_group_permission(repo_id,
-            group_id)
+    is_admin = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
 
     group_repo_info = {}
     group_repo_info['repo_id'] = repo_id
@@ -57,13 +57,14 @@ def get_group_repo_info(request, group_repo):
 
     return group_repo_info
 
+
 class GroupLibraries(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    @api_check_group # check whether group exists or not
+    @api_check_group  # check whether group exists or not
     def get(self, request, group_id):
         """ Get all group libraries.
 
@@ -113,10 +114,13 @@ class GroupLibraries(APIView):
 
         for email in set(all_repo_owner + all_modifier):
 
+            if not email:
+                continue
+
             if email not in name_dict:
                 if '@seafile_group' in email:
                     group_id = get_group_id_by_repo_owner(email)
-                    group_name= group_id_to_name(group_id)
+                    group_name = group_id_to_name(group_id)
                     name_dict[email] = group_name
                 else:
                     name_dict[email] = email2nickname(email)
@@ -236,6 +240,7 @@ class GroupLibraries(APIView):
         group_repo_info['modifier_contact_email'] = email2contact_email(modifier)
 
         return Response(group_repo_info)
+
 
 class GroupLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

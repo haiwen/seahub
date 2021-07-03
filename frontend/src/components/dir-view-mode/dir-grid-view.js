@@ -66,6 +66,7 @@ class DirGridView extends React.Component {
           userPerm={this.props.userPerm}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
+          fullDirentList={this.props.fullDirentList}
           onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
           onItemDelete={this.props.onItemDelete}

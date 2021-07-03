@@ -216,6 +216,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    fullDirentList={this.props.fullDirentList}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
@@ -256,6 +257,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    fullDirentList={this.props.fullDirentList}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemDelete={this.props.onItemDelete}
