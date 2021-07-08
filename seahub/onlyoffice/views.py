@@ -137,6 +137,7 @@ def onlyoffice_editor_callback(request):
             cache.delete(cache_key)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
+                logger.info('status {}: unlock {} in repo_id {}'.format(status, repo_id, file_path))
                 seafile_api.unlock_file(repo_id, file_path)
 
     # 4 - document is closed with no changes,
@@ -146,6 +147,7 @@ def onlyoffice_editor_callback(request):
         cache.delete(cache_key)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
+            logger.info('status {}: unlock {} in repo_id {}'.format(status, repo_id, file_path))
             seafile_api.unlock_file(repo_id, file_path)
 
     return HttpResponse('{"error": 0}')
