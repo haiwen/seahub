@@ -4924,7 +4924,7 @@ msgstr "Drag & Släpp av mappar stöds för Chrome"
 #: seahub/templates/view_shared_upload_link.html:39
 #, python-format
 msgid "File size should be smaller than %(max_file_size)s"
-msgstr "Filstorleken måste vara mindra än %(max_file_size)s"
+msgstr "Filstorleken måste vara mindre än %(max_file_size)s"
 
 #: seahub/templates/view_shared_upload_link.html:48
 msgid "Saving..."
