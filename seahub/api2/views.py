@@ -4122,17 +4122,14 @@ class SharedDirView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, "Invalid Password")
 
         req_path = request.GET.get('p', '/')
-
-        if req_path[-1] != '/':
-            req_path += '/'
+        req_path = normalize_dir_path(req_path)
 
         if req_path == '/':
             real_path = fileshare.path
         else:
             real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
 
-        if real_path[-1] != '/':         # Normalize dir path
-            real_path += '/'
+        real_path = normalize_dir_path(real_path)
 
         dir_id = seafile_api.get_dir_id_by_path(repo_id, real_path)
         if not dir_id:

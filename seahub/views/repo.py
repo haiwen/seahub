@@ -24,7 +24,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 
 from seahub.utils import gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
-    get_file_type_and_ext, get_service_url
+    get_file_type_and_ext, get_service_url, normalize_dir_path
 from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
@@ -55,13 +55,6 @@ def get_repo_size(repo_id):
 
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
-
-
-def get_path_from_request(request):
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
-    return path
 
 
 def get_next_url_from_request(request):
@@ -121,7 +114,10 @@ def repo_history_view(request, repo_id):
         raise Http404
 
     username = request.user.username
-    path = get_path_from_request(request)
+
+    path = request.GET.get('p', '/')
+    path = normalize_dir_path(path)
+
     user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
         return render_error(request, _('Permission denied'))
@@ -277,15 +273,14 @@ def view_shared_dir(request, fileshare):
     # Get path from frontend, use '/' if missing, and construct request path
     # with fileshare.path to real path, used to fetch dirents by RPC.
     req_path = request.GET.get('p', '/')
-    if req_path[-1] != '/':
-        req_path += '/'
+    req_path = normalize_dir_path(req_path)
 
     if req_path == '/':
         real_path = fileshare.path
     else:
         real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
-    if real_path[-1] != '/':         # Normalize dir path
-        real_path += '/'
+
+    real_path = normalize_dir_path(real_path)
 
     repo = get_repo(repo_id)
     if not repo:
