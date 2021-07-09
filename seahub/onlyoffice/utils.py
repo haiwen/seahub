@@ -94,11 +94,12 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             logger.info('set cache_key {} and doc_key {} to cache'.format(cache_key, doc_key))
             cache.set(cache_key, doc_key, None)
 
-        doc_info = json.dumps({'repo_id': origin_repo_id,
-                               'file_path': origin_file_path,
-                               'username': username})
-
         if not cache.get("ONLYOFFICE_%s" % doc_key):
+
+            doc_info = json.dumps({'repo_id': origin_repo_id,
+                                   'file_path': origin_file_path,
+                                   'username': username})
+
             cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
             logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
 
@@ -108,8 +109,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
 
     base_url = get_site_scheme_and_netloc()
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
-    callback_url = urllib.parse.urljoin(base_url,
-                                        onlyoffice_editor_callback_url)
+    callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
 
     return_dict = {
         'repo_id': repo_id,
