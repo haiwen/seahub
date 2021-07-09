@@ -819,9 +819,11 @@ def view_lib_file(request, repo_id, path):
                 if is_pro_version() and can_edit:
                     try:
                         if not is_locked:
+                            logger.info('{} lock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
                             seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
                                                   int(time.time()) + 40 * 60)
                         elif locked_by_online_office:
+                            logger.info('{} relock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
                             seafile_api.refresh_file_lock(repo_id, path,
                                                           int(time.time()) + 40 * 60)
                     except Exception as e:

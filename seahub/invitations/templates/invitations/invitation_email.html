@@ -1,6 +1,6 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags%}
 
 {% block email_con %}
 
@@ -9,7 +9,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ inviter }} invited you to join {{ site_name }}. Please click the link below:{% endblocktrans %}
+{% blocktrans with inviter_name=inviter|email2nickname %}{{ inviter_name }} invited you to join {{ site_name }}. Please click the link below:{% endblocktrans %}
 </p>
 
 <a href="{{ url_base }}{% url 'invitations:token_view' token %}" target="_blank">{{ url_base }}{% url 'invitations:token_view' token %}</a>
