@@ -263,6 +263,14 @@ def logout(request, next_page=None,
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
         response = HttpResponseRedirect(reverse('cas_ng_logout'))
+        response.delete_cookie('seahub_auth')
+        return response
+
+    from seahub.settings import LOGOUT_REDIRECT_URL
+    if LOGOUT_REDIRECT_URL:
+        response = HttpResponseRedirect(LOGOUT_REDIRECT_URL)
+        response.delete_cookie('seahub_auth')
+        return response
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]

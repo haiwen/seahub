@@ -33,7 +33,7 @@ def generate_onlyoffice_cache_key(repo_id, file_path):
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                         can_edit=False, can_download=True):
 
-    logger.info('{} open file {} in repo {}'.format(username, file_path, repo_id))
+    logger.info('{} open file {} in repo {} with can_edit {}'.format(username, file_path, repo_id, can_edit))
 
     repo = seafile_api.get_repo(repo_id)
     if repo.is_virtual:
@@ -55,7 +55,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                                                        file_id,
                                                        'download',
                                                        username,
-                                                       use_onetime=True)
+                                                       use_onetime=False)
     if not dl_token:
         return None
 
@@ -67,39 +67,52 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     else:
         document_type = 'text'
 
-    cache_key = generate_onlyoffice_cache_key(origin_repo_id, origin_file_path)
-    doc_key = cache.get(cache_key)
-
-    logger.info('get doc_key {} from cache by cache_key {}'.format(doc_key, cache_key))
-
-    # temporary solution when failed to get data from cache(django_pylibmc)
-    # when init process for the first time
-    if not doc_key:
-        doc_key = cache.get(cache_key)
-
-    # In theory, file is unlocked when editing finished.
-    # This can happend if memcache is restarted or memcache is full and doc key is deleted.
-    if not doc_key and if_locked_by_online_office(repo_id, file_path):
-        logger.warning('no doc_key in cache and file({} in {}) is locked by online office'.format(file_path, repo_id))
-
-    if not doc_key:
+    if not can_edit:
         info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
         doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
-        logger.info('generate new doc_key {} by info {}'.format(doc_key, info_bytes))
+    else:
+        cache_key = generate_onlyoffice_cache_key(origin_repo_id, origin_file_path)
+        doc_key = cache.get(cache_key)
 
-    doc_info = json.dumps({'repo_id': origin_repo_id,
-                           'file_path': origin_file_path,
-                           'username': username})
-    cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
-    logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
+        # temporary solution when failed to get data from cache(django_pylibmc)
+        # when init process for the first time
+        if not doc_key:
+            doc_key = cache.get(cache_key)
 
+        if doc_key:
+            logger.info('get doc_key {} from cache by cache_key {}'.format(doc_key, cache_key))
+        else:
+            # In theory, file is unlocked when editing finished.
+            # This can happend if memcache is restarted or memcache is full and doc key is deleted.
+            if if_locked_by_online_office(repo_id, file_path):
+                logger.warning('no doc_key in cache, but file {} in {} is locked by online office'.format(file_path, repo_id))
+
+            # generate doc_key
+            info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
+            doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
+            logger.info('generate new doc_key {} by repo_id {} file_path {} file_id {}'.format(doc_key,
+                                                                                               origin_repo_id,
+                                                                                               origin_file_path,
+                                                                                               file_id))
+            logger.info('set cache_key {} and doc_key {} to cache'.format(cache_key, doc_key))
+            cache.set(cache_key, doc_key, None)
+
+        if not cache.get("ONLYOFFICE_%s" % doc_key):
+
+            doc_info = json.dumps({'repo_id': origin_repo_id,
+                                   'file_path': origin_file_path,
+                                   'username': username})
+
+            cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
+            logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
+
+    # for render onlyoffice html
     file_name = os.path.basename(file_path.rstrip('/'))
     doc_url = gen_file_get_url(dl_token, file_name)
 
     base_url = get_site_scheme_and_netloc()
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
-    callback_url = urllib.parse.urljoin(base_url,
-                                        onlyoffice_editor_callback_url)
+    callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
 
     return_dict = {
         'repo_id': repo_id,

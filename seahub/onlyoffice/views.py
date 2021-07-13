@@ -77,15 +77,19 @@ def onlyoffice_editor_callback(request):
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
 
-    if status not in (1, 2, 4, 6):
-        logger.error('onlyoffice status invalid: {}'.format(status))
+    if status == 1:
+        logger.info('status {}'.format(status))
+        return HttpResponse('{"error": 0}')
+
+    if status not in (2, 4, 6):
+        logger.error('status {}: invalid status'.format(status))
         return HttpResponse('{"error": 0}')
 
     # get file basic info
     doc_key = post_data.get('key')
     doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
     if not doc_info_from_cache:
-        logger.error('cache.get("ONLYOFFICE_%s" % {}) return None'.format(doc_key))
+        logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
         return HttpResponse('{"error": 0}')
 
     doc_info = json.loads(doc_info_from_cache)
@@ -136,14 +140,12 @@ def onlyoffice_editor_callback(request):
             logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
             cache.delete(cache_key)
 
-            if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
-                seafile_api.unlock_file(repo_id, file_path)
+            logger.info('status {}: delete doc_key {} from cache'.format(status, doc_key))
+            cache.delete("ONLYOFFICE_%s" % doc_key)
 
-        # 6 - document is being edited, but the current document state is saved,
-        if status == 6:
-            # cache document key when forcesave
-            logger.info('status {}: set cache_key {} and doc_key {} to cache'.format(status, cache_key, doc_key))
-            cache.set(cache_key, doc_key, None)
+            if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
+                logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))
+                seafile_api.unlock_file(repo_id, file_path)
 
     # 4 - document is closed with no changes,
     if status == 4:
@@ -151,7 +153,11 @@ def onlyoffice_editor_callback(request):
         logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
         cache.delete(cache_key)
 
+        logger.info('status {}: delete doc_key {} from cache'.format(status, doc_key))
+        cache.delete("ONLYOFFICE_%s" % doc_key)
+
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
+            logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))
             seafile_api.unlock_file(repo_id, file_path)
 
     return HttpResponse('{"error": 0}')
