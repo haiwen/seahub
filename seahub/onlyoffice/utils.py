@@ -90,7 +90,10 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             # generate doc_key
             info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
             doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
-            logger.info('generate new doc_key {} by info {}'.format(doc_key, info_bytes))
+            logger.info('generate new doc_key {} by repo_id {} file_path {} file_id {}'.format(doc_key,
+                                                                                               origin_repo_id,
+                                                                                               origin_file_path,
+                                                                                               file_id))
             logger.info('set cache_key {} and doc_key {} to cache'.format(cache_key, doc_key))
             cache.set(cache_key, doc_key, None)
 
