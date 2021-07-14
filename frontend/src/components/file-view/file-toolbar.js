@@ -107,7 +107,7 @@ class FileToolbar extends React.Component {
 
           {(canEditFile && !err) &&
             ( this.props.isSaving ?
-              <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+              <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
               (
                 this.props.needSave ?
@@ -149,7 +149,7 @@ class FileToolbar extends React.Component {
             />
           )}
           <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-            <DropdownToggle>
+            <DropdownToggle aria-label={gettext('More Operations')}>
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
