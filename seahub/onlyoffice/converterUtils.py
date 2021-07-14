@@ -36,4 +36,4 @@ def getInternalExtension(fileType):
         'cell': '.xlsx',
         'slide': '.pptx'
     }
-    return mapping.get(fileType, None)  
+    return mapping.get(fileType, None)

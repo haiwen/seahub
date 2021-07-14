@@ -246,8 +246,8 @@ class DirentListItem extends React.Component {
       case 'Open via Client':
         this.onOpenViaClient();
         break;
-      case 'Convert via ONLYOFFICE':
-        this.onConvertViaONLYOFFICE();
+      case 'Convert with ONLYOFFICE':
+        this.onConvertWithONLYOFFICE();
         break;
       default:
         break;
@@ -342,7 +342,7 @@ class DirentListItem extends React.Component {
     location.href = url;
   }
 
-  onConvertViaONLYOFFICE = ()=> {
+  onConvertWithONLYOFFICE = ()=> {
     let repoID = this.props.repoID;
     let user = username;
     let fileUri = this.getDirentPath(this.props.dirent)

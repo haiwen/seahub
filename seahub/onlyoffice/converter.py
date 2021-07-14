@@ -58,4 +58,4 @@ def processError(error):
         '-1': f'{prefix}Error convertation unknown'
     }
     logger.error(f'[OnlyOffice] Converter URI Error Code: {error}')
-    raise Exception(mapping.get(str(error), f'Error Code: {error}')) 
+    raise Exception(mapping.get(str(error), f'Error Code: {error}'))
