@@ -193,7 +193,7 @@ def onlyoffice_convert(request):
     downloadUri = doc_dic["doc_url"]
     key = doc_dic["doc_key"]
 
-    newUri = getConverterUri(downloadUri, fileExt, newExt, key, True, filePass)
+    newUri = getConverterUri(downloadUri, fileExt, newExt, key, False, filePass)
 
     if(not newUri):
         logger.error('[OnlyOffice] No response from file converter.')
