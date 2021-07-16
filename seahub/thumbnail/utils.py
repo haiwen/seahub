@@ -191,7 +191,7 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
 
     try:
-        subprocess.check_output(['ffmpeg', '-ss', '00:00:01', '-vframes', '1', tmp_path, '-i', inner_path])
+        subprocess.check_output(['ffmpeg', '-ss', str(THUMBNAIL_VIDEO_FRAME_TIME), '-vframes', '1', tmp_path, '-i', inner_path])
     except Exception as e:
         logger.error(e)
         return (False, 500)
