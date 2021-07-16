@@ -8,6 +8,7 @@ import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import SysAdminUserStatusEditor from '../../../components/select-editor/sysadmin-user-status-editor';
+import SysAdminUserMembershipEditor from '../../../components/select-editor/sysadmin-user-membership-editor';
 import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
@@ -50,9 +51,10 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="25%">{gettext('Name')}</th>
-                <th width="20%">{gettext('Status')}</th>
-                <th width="20%">{gettext('Space Used')}</th>
-                <th width="30%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
+                <th width="15%">{gettext('Status')}</th>
+                <th width="15%">{gettext('Membership')}</th>
+                <th width="15%">{gettext('Space Used')}</th>
+                <th width="25%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -65,6 +67,7 @@ class Content extends Component {
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
                   updateStatus={this.props.updateStatus}
+                  updateMembership={this.props.updateMembership}
                   deleteUser={this.props.deleteUser}
                 />);
               })}
@@ -146,6 +149,10 @@ class Item extends Component {
     this.props.updateStatus(this.props.item.email, statusValue);
   }
 
+  updateMembership= (membershipValue) => {
+    this.props.updateMembership(this.props.item.email, membershipValue);
+  }
+
   deleteUser = () => {
     const { item } = this.props;
     this.props.deleteUser(item.org_id, item.email);
@@ -193,6 +200,15 @@ class Item extends Component {
               currentStatus={item.active ? 'active' : 'inactive'}
               statusOptions={['active', 'inactive']}
               onStatusChanged={this.updateStatus}
+            />
+          </td>
+          <td>
+            <SysAdminUserMembershipEditor
+              isTextMode={true}
+              isEditIconShow={isOpIconShown}
+              currentStatus={item.is_org_staff ? 'is_org_staff' : 'not_is_org_staff'}
+              statusOptions={['is_org_staff', 'not_is_org_staff']}
+              onStatusChanged={this.updateMembership}
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
@@ -311,6 +327,22 @@ class OrgUsers extends Component {
     });
   }
 
+  updateMembership = (email, membershipValue) => {
+    const isOrgStaff = membershipValue == 'is_org_staff';
+    seafileAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
+      let newUserList = this.state.userList.map(item => {
+        if (item.email == email) {
+          item.is_org_staff = res.data.is_org_staff;
+        }
+        return item;
+      });
+      this.setState({userList: newUserList});
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     const { isAddUserDialogOpen, orgName } = this.state;
     return (
@@ -331,6 +363,7 @@ class OrgUsers extends Component {
                 errorMsg={this.state.errorMsg}
                 items={this.state.userList}
                 updateStatus={this.updateStatus}
+                updateMembership={this.updateMembership}
                 deleteUser={this.deleteUser}
               />
             </div>
