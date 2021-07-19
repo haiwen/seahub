@@ -129,6 +129,7 @@
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
             enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
+            enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% endif %},
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},

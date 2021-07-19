@@ -24,7 +24,7 @@ let {
   repoID, relativePath,
   mode, thumbnailSize, zipped,
   trafficOverLimit, canDownload,
-  noQuota, canUpload
+  noQuota, canUpload, enableVideoThumbnail
 } = window.shared.pageOptions;
 
 const showDownloadIcon = !trafficOverLimit && canDownload;
@@ -90,7 +90,10 @@ class SharedDirView extends React.Component {
 
   getThumbnails = () => {
     let items = this.state.items.filter((item) => {
-      return !item.is_dir && Utils.imageCheck(item.file_name) && !item.encoded_thumbnail_src;
+      return !item.is_dir && 
+        (Utils.imageCheck(item.file_name) || 
+        (enableVideoThumbnail && Utils.videoCheck(item.file_name))) &&
+        !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
       return ;

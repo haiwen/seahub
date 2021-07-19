@@ -27,7 +27,7 @@ from seahub.utils import gen_dir_share_link, \
     get_file_type_and_ext, get_service_url, normalize_dir_path
 from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
-    ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
+    ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER, \
@@ -366,6 +366,7 @@ def view_shared_dir(request, fileshare):
             'dir_share_link': dir_share_link,
             'desc_for_ogp': desc_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
+            'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
             })
 
 

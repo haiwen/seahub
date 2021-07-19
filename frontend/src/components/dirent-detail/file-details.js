@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -110,7 +110,8 @@ class FileDetails extends React.Component {
     const smallIconUrl = Utils.getFileIconUrl(dirent.name);
     let bigIconUrl = Utils.getFileIconUrl(dirent.name, 192);
     const isImg = Utils.imageCheck(dirent.name);
-    if (isImg) {
+    const isVideo = Utils.videoCheck(dirent.name);
+    if (isImg || (enableVideoThumbnail && isVideo)) {
       bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     }
     return (

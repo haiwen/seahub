@@ -37,6 +37,7 @@
             token: '{{ token }}',
             mode: '{{ mode }}',
             thumbnailSize: {{ thumbnail_size }},
+            enableVideoThumbnail: {% if enable_video_thumbnail %}true{% else %}false{% endif %},
             trafficOverLimit: {% if traffic_over_limit %}true{% else %}false{% endif %},
             canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
             noQuota: {% if no_quota %}true{% else %}false{% endif %},
