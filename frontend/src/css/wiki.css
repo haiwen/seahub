@@ -56,7 +56,12 @@ img[src=""] {
   display:flex;
   flex-direction:column;
   overflow:hidden;
-  z-index: 1051; /* for mobile */
+}
+
+@media (max-width: 767px) {
+  .wiki-side-panel {
+    z-index: 1051;
+  }
 }
 
 .wiki-main-panel {
