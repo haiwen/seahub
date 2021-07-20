@@ -15,6 +15,14 @@ jobs:
 
       - name: apt install
         run: |
+          sudo pip3 list
+          sudo pip3 show chardet
+          sudo echo '********'
+          sudo pip3 install chardet
+          sudo pip3 show chardet
+          sudo echo '********'
+          sudo pip3 list
+          sudo echo '********'
           sudo apt-get update --fix-missing
           sudo apt-get install -y libevent-dev libcurl4-openssl-dev libglib2.0-dev
           sudo apt-get install -y uuid-dev intltool libsqlite3-dev build-essential
