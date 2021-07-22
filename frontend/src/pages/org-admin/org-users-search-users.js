@@ -82,7 +82,7 @@ class OrgUsersSearchUsers extends Component {
   }
 
   getItems = () => {
-    seafileAPI.orgAdminSearchUser(1, this.state.query.trim()).then(res => {
+    seafileAPI.orgAdminSearchUser(orgID, this.state.query.trim()).then(res => {
       let userList = res.data.user_list.map(item => {
         return new OrgUserInfo(item);
       });
