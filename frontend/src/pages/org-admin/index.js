@@ -4,6 +4,7 @@ import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import OrgUsers from './org-users-users';
+import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
 import OrgUserProfile from './org-user-profile';
 import OrgUserRepos from './org-user-repos';
@@ -68,6 +69,7 @@ class Org extends React.Component {
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
             <OrgUsers path={siteRoot + 'org/useradmin'} />
+            <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
             <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
             <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />

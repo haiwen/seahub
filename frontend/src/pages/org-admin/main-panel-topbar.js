@@ -18,6 +18,7 @@ class MainPanelTopbar extends Component {
           </div>
         </div>
         <div className="common-toolbar">
+          {this.props.search && this.props.search}
           <Account isAdminPanel={true}/>
         </div>
       </div>
