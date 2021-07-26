@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import DetailCommentList from './detail-comments-list';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -225,7 +225,8 @@ class DirentDetail extends React.Component {
     let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
     let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
     const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
-    if (isImg) {
+    const isVideo = dirent ? Utils.videoCheck(dirent.name) : Utils.videoCheck(folderDirent.name);
+    if (isImg || (enableVideoThumbnail && isVideo)) {
       bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     }
     let direntName = dirent ? dirent.name : folderDirent.name;

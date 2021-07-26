@@ -368,6 +368,7 @@ def view_shared_dir(request, fileshare):
             'dir_share_link': dir_share_link,
             'desc_for_ogp': desc_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
+            'enable_video_thumbnail': ENABLE_VIDEO_THUMBNAIL,
             })
 
 

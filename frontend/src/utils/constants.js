@@ -78,6 +78,8 @@ export const curNoteID = window.app.pageOptions.curNoteID;
 
 export const enableTC = window.app.pageOptions.enableTC;
 
+export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
+
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
