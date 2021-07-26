@@ -263,7 +263,7 @@ def list_lib_dir(request, repo_id):
                 f_['is_xmind'] = True
 
             if file_type in (IMAGE, XMIND) or \
-                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                    (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                 # if thumbnail has already been created, return its src.
                 # Then web browser will use this src to get thumbnail instead of
                 # recreating it.
