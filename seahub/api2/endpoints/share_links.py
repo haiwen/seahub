@@ -42,7 +42,7 @@ from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-        ENABLE_SHARE_LINK_AUDIT, ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, \
+        ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
@@ -729,9 +729,8 @@ class ShareLinkDirents(APIView):
                 dirent_info['file_name'] = dirent.obj_name
 
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
-                if ENABLE_THUMBNAIL and \
-                        (file_type in (IMAGE, XMIND) or \
-                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL)):
+                if file_type in (IMAGE, XMIND) or \
+                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
 
                     if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)

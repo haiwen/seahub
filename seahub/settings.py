@@ -662,9 +662,6 @@ CAPTCHA_IMAGE_SIZE = (90, 42)
 # Image Thumbnail #
 ###################
 
-# Enable or disable thumbnail
-ENABLE_THUMBNAIL = True
-
 # Absolute filesystem path to the directory that will hold thumbnail files.
 SEAHUB_DATA_ROOT = os.path.join(PROJECT_ROOT, '../../seahub-data')
 if os.path.exists(SEAHUB_DATA_ROOT):

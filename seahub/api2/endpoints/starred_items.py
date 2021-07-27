@@ -23,7 +23,7 @@ from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.settings import ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, \
+from seahub.settings import ENABLE_VIDEO_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 
@@ -58,7 +58,7 @@ class StarredItems(APIView):
             dirent = seafile_api.get_dirent_by_path(repo_id, path)
             item_info['mtime'] = timestamp_to_isoformat_timestr(dirent.mtime) if \
                     dirent else ''
-            if ENABLE_THUMBNAIL and not starred_item.is_dir:
+            if not starred_item.is_dir:
                 file_type, file_ext = get_file_type_and_ext(item_info['obj_name'])
                 if file_type in (IMAGE, XMIND) or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
