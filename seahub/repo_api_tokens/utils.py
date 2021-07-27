@@ -8,7 +8,7 @@ from seaserv import seafile_api
 
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.settings import ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
+from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, XMIND, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
@@ -196,7 +196,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     file_info['file_tags'].append(file_tag)
 
             # get thumbnail info
-            if ENABLE_THUMBNAIL and with_thumbnail and not repo_obj.encrypted:
+            if with_thumbnail and not repo_obj.encrypted:
 
                 # used for providing a way to determine
                 # if send a request to create thumbnail.

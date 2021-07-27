@@ -82,7 +82,6 @@ def generate_thumbnail(request, repo_id, size, path):
     before generate thumbnail, you should check:
     1. if repo exist: should exist;
     2. if repo is encrypted: not encrypted;
-    3. if ENABLE_THUMBNAIL: enabled;
     """
 
     try:

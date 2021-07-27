@@ -27,7 +27,7 @@ from seahub.utils import gen_dir_share_link, \
     get_file_type_and_ext, get_service_url, normalize_dir_path
 from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
-    ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, ENABLE_VIDEO_THUMBNAIL, \
+    ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_VIDEO_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SEAFILE_COLLAB_SERVER, \
@@ -333,9 +333,8 @@ def view_shared_dir(request, fileshare):
         if file_type == VIDEO:
             f.is_video = True
 
-        if ENABLE_THUMBNAIL and \
-                (file_type in (IMAGE, XMIND) or \
-                (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL)):
+        if file_type in (IMAGE, XMIND) or \
+                (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
                 req_image_path = posixpath.join(req_path, f.obj_name)
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
@@ -362,7 +361,6 @@ def view_shared_dir(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'no_quota': no_quota,
             'permissions': permissions,
-            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,
             'dir_share_link': dir_share_link,

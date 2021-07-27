@@ -24,7 +24,7 @@ class InnerFileView extends React.Component {
     let content;
     switch (fileType) {
       case 'Image':
-        content = <Image tip={<FileViewTip />} canUseThumbnail={true} />;
+        content = <Image tip={<FileViewTip />} />;
         break;
       case 'XMind':
         content = <Image tip={<FileViewTip />} />;

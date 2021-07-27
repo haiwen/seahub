@@ -16,7 +16,7 @@ from seaserv import get_repo, get_file_id_by_path
 from seahub.auth.decorators import login_required_ajax, login_required
 from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
-    THUMBNAIL_ROOT, ENABLE_THUMBNAIL
+    THUMBNAIL_ROOT
 from seahub.thumbnail.utils import generate_thumbnail, \
     get_thumbnail_src, get_share_link_thumbnail_src
 from seahub.share.models import FileShare, check_share_link_common
@@ -46,7 +46,7 @@ def thumbnail_create(request, repo_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    if repo.encrypted or not ENABLE_THUMBNAIL or \
+    if repo.encrypted or \
         check_folder_permission(request, repo_id, path) is None:
         err_msg = _("Permission denied.")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
@@ -97,7 +97,7 @@ def thumbnail_get(request, repo_id, size, path):
         return HttpResponse()
 
     # check if is allowed
-    if repo.encrypted or not ENABLE_THUMBNAIL or \
+    if repo.encrypted or \
         check_folder_permission(request, repo_id, path) is None:
         return HttpResponse()
 
@@ -162,7 +162,7 @@ def share_link_thumbnail_create(request, token):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    if repo.encrypted or not ENABLE_THUMBNAIL:
+    if repo.encrypted:
         err_msg = _("Permission denied.")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
@@ -245,7 +245,7 @@ def share_link_thumbnail_get(request, token, size, path):
         return HttpResponse()
 
     # check if is allowed
-    if repo.encrypted or not ENABLE_THUMBNAIL:
+    if repo.encrypted:
         return HttpResponse()
 
     success = True

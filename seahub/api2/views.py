@@ -99,7 +99,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, STORAGE_CLASS_MAPPING_POLICY, \
+    STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 
@@ -5089,7 +5089,7 @@ class ThumbnailView(APIView):
         if path is None or obj_id is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
 
-        if repo.encrypted or not ENABLE_THUMBNAIL or \
+        if repo.encrypted or \
             check_folder_permission(request, repo_id, path) is None:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
