@@ -94,6 +94,11 @@ def generate_thumbnail(request, repo_id, size, path):
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
 
+    filetype, fileext = get_file_type_and_ext(os.path.basename(path))
+
+    if filetype == VIDEO and not ENABLE_VIDEO_THUMBNAIL:
+        return (False, 400)
+
     file_id = get_file_id_by_path(repo_id, path)
     if not file_id:
         return (False, 400)
@@ -104,7 +109,6 @@ def generate_thumbnail(request, repo_id, size, path):
 
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
-    filetype, fileext = get_file_type_and_ext(os.path.basename(path))
 
     if filetype == VIDEO:
         # video thumbnails
