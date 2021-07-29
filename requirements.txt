@@ -17,3 +17,4 @@ pillow
 pyjwt==2.1.*
 pycryptodome
 requests_oauthlib
+chardet
