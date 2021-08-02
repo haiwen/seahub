@@ -689,6 +689,9 @@ class AdminUsers(APIView):
         admin_operation.send(sender=None, admin_name=request.user.username,
                              operation=USER_ADD, detail=admin_op_detail)
 
+        if config.FORCE_PASSWORD_CHANGE:
+            UserOptions.objects.set_force_passwd_change(email)
+
         return Response(user_info)
 
 
