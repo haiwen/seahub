@@ -286,7 +286,7 @@ class QRGeneratorView(View):
 
         otpauth_url = get_otpauth_url(
             accountname=self.request.user.username,
-            issuer=get_current_site(self.request).name,
+            issuer=config.SITE_NAME,
             secret=key,
             digits=totp_digits())
 
