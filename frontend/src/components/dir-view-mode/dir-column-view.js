@@ -205,6 +205,7 @@ class DirColumnView extends React.Component {
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               isDirentListLoading={this.props.isDirentListLoading}
               direntList={this.props.direntList}
+              fullDirentList={this.props.fullDirentList}
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
               sortItems={this.props.sortItems}
