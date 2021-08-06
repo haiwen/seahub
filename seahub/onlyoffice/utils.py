@@ -13,7 +13,7 @@ from seaserv import seafile_api
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
-        get_site_scheme_and_netloc, normalize_cache_key
+        get_site_scheme_and_netloc, encrypt_with_sha1
 from seahub.utils.file_op import if_locked_by_online_office
 
 from seahub.settings import ENABLE_WATERMARK
@@ -25,9 +25,8 @@ logger = logging.getLogger('onlyoffice')
 
 
 def generate_onlyoffice_cache_key(repo_id, file_path):
-    prefix = "ONLYOFFICE_"
-    value = "%s_%s" % (repo_id, file_path)
-    return normalize_cache_key(value, prefix)
+
+    return "ONLYOFFICE_{}_{}".format(repo_id, encrypt_with_sha1(file_path))
 
 
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
