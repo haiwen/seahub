@@ -1387,3 +1387,8 @@ def is_valid_org_id(org_id):
         return True
     else:
         return False
+
+
+def encrypt_with_sha1(origin_str):
+
+    return hashlib.sha1(origin_str.encode()).hexdigest()
