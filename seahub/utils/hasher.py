@@ -51,4 +51,5 @@ class AESPasswordHasher:
             raise AESPasswordDecodeError
         data = data.encode('utf-8')
 
+        data += b'='*4
         return DecodeAES(self.cipher, data)

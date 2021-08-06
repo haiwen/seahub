@@ -61,6 +61,8 @@ def get_org_user_info(org_id, user_obj):
     if last_login:
         user_info['last_login'] = datetime_to_isoformat_timestr(last_login)
 
+    user_info['is_org_staff'] = True if ccnet_api.is_org_staff(org_id, email) == 1 else False
+
     return user_info
 
 def check_org_user(func):
@@ -351,6 +353,28 @@ class AdminOrgUser(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             seafile_api.set_org_user_quota(org_id, email, user_quota)
+
+        # update is_org_staff
+        is_org_staff = request.data.get("is_org_staff", '')
+        if is_org_staff:
+
+            is_org_staff = is_org_staff.lower()
+            if is_org_staff not in ('true', 'false'):
+                error_msg = 'is_org_staff invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if is_org_staff == 'true':
+                if ccnet_api.is_org_staff(org_id, email):
+                    error_msg = '%s is already organization staff.' % email
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                ccnet_api.set_org_staff(org_id, email)
+            else:
+                if not ccnet_api.is_org_staff(org_id, email):
+                    error_msg = '%s is not organization staff.' % email
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                ccnet_api.unset_org_staff(org_id, email)
 
         user_info = get_org_user_info(org_id, user)
         user_info['active'] = user.is_active

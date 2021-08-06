@@ -1,7 +1,9 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 
 import logging
+from datetime import timedelta
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -19,6 +21,7 @@ from seahub.base.accounts import User
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.utils import block_accepter
+from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, GUEST_USER
 from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context
@@ -175,6 +178,8 @@ class RepoShareInvitationsBatchView(APIView):
 
             if invitation_queryset.filter(accepter=accepter).exists():
                 invitation = invitation_queryset.filter(accepter=accepter)[0]
+                invitation.expire_time = timezone.now() + timedelta(hours=int(INVITATIONS_TOKEN_AGE))
+                invitation.save()
             else:
                 invitation = Invitation.objects.add(
                     inviter=request.user.username, accepter=accepter)

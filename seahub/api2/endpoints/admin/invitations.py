@@ -89,7 +89,7 @@ class AdminInvitations(APIView):
 
             data['invite_type'] = invitation.invite_type
             data['invite_time'] = datetime_to_isoformat_timestr(invitation.invite_time)
-            data['accept_time'] = datetime_to_isoformat_timestr(invitation.accept_time)
+            data['accept_time'] = datetime_to_isoformat_timestr(invitation.accept_time) if invitation.accept_time else ''
             data['expire_time'] = datetime_to_isoformat_timestr(invitation.expire_time)
             data['is_expired'] = invitation.is_expired()
 

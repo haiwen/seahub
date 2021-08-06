@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.utils.translation import ugettext as _
+
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -43,6 +45,9 @@ class WebdavSecretView(APIView):
 
         username = request.user.username
         secret = request.data.get("secret", None)
+        if len(secret) >= 30:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             _("Length of WebDav password should be less then 30."))
 
         if secret:
             encoded = aes.encode(secret)

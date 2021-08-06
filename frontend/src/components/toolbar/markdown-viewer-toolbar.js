@@ -72,7 +72,7 @@ class MoreMenu extends React.PureComponent {
     const isSmall = this.props.isSmallScreen;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
-        <DropdownToggle id="moreButton">
+        <DropdownToggle id="moreButton" aria-label={gettext('More Operations')}>
           <i className="fa fa-ellipsis-v"/>
           <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
           </Tooltip>
@@ -179,11 +179,11 @@ class MarkdownViewerToolbar extends React.Component {
                   <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                     onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
-                { saving ?
-                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                {saving ?
+                  <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
+                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'} disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
                 {canDownloadFile && (
@@ -224,7 +224,7 @@ class MarkdownViewerToolbar extends React.Component {
             <div className="topbar-btn-container">
               <ButtonGroup>
                 {saving ?
-                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                  <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
                   <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}

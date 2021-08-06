@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 # https://docs.djangoproject.com/en/1.11/ref/utils/#django.utils.timezone.get_current_timezone
 current_timezone = get_current_timezone()
 
+
 def dt(value):
     """Convert 32/64 bits timestamp to datetime object.
     """
@@ -20,6 +21,7 @@ def dt(value):
     except ValueError:
         # TODO: need a better way to handle 64 bits timestamp.
         return datetime.datetime.utcfromtimestamp(value/1000000)
+
 
 def value_to_db_datetime(value):
     if value is None:
@@ -35,12 +37,14 @@ def value_to_db_datetime(value):
     # MySQL doesn't support microseconds
     return six.text_type(value.replace(microsecond=0))
 
+
 def utc_to_local(dt):
     # change from UTC timezone to current seahub timezone
     tz = timezone.get_default_timezone()
     utc = dt.replace(tzinfo=timezone.utc)
     local = timezone.make_naive(utc, tz)
     return local
+
 
 def timestamp_to_isoformat_timestr(timestamp):
     try:
@@ -58,8 +62,12 @@ def timestamp_to_isoformat_timestr(timestamp):
         logger.error(e)
         return ''
 
+
 # https://pypi.org/project/pytz/
 def datetime_to_isoformat_timestr(datetime):
+
+    if not datetime:
+        return ''
 
     from django.utils.timezone import make_naive, is_aware
     if is_aware(datetime):
@@ -76,6 +84,7 @@ def datetime_to_isoformat_timestr(datetime):
         logger.error(e)
         return ''
 
+
 def utc_datetime_to_isoformat_timestr(utc_datetime):
     try:
         # The second way of building a localized time is by converting an existing
@@ -87,6 +96,7 @@ def utc_datetime_to_isoformat_timestr(utc_datetime):
     except Exception as e:
         logger.error(e)
         return ''
+
 
 def datetime_to_timestamp(datetime_obj):
     epoch = datetime.datetime(1970, 1, 1)

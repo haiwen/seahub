@@ -61,13 +61,21 @@ class ZipDownloadDialog extends React.Component {
     const zipToken = this.state.zipToken;
     seafileAPI.queryZipProgress(zipToken).then((res) => {
       const data = res.data;
-      this.setState({
-        zipProgress: data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%'
-      });
-      if (data['total'] == data['zipped']) {
+      if (data.failed == 1) {
         clearInterval(interval);
-        this.props.toggleDialog();
-        location.href = `${fileServerRoot}zip/${zipToken}`;
+        this.setState({
+          isLoading: false,
+          errorMsg: data.failed_reason
+        });
+      } else {
+        this.setState({
+          zipProgress: data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%'
+        });
+        if (data['total'] == data['zipped']) {
+          clearInterval(interval);
+          this.props.toggleDialog();
+          location.href = `${fileServerRoot}zip/${zipToken}`;
+        }
       }
     }).catch((error) => {
       clearInterval(interval);
