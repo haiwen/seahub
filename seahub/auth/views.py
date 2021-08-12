@@ -203,6 +203,7 @@ def login(request, template_name='registration/login.html',
         'signup_url': signup_url,
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
+        'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
 
 def login_simple_check(request):
