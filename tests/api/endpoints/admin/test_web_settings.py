@@ -27,7 +27,7 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 28
+        assert len(json_resp) == 30
 
     @override_settings(ENABLE_SETTINGS_VIA_WEB = False)
     def test_get_with_enable_settings(self):
