@@ -3,6 +3,7 @@ import operator
 import datetime
 import logging
 import os
+import json
 
 from django.db import models
 from django.db.models import Q
@@ -559,6 +560,40 @@ class PrivateFileDirShare(models.Model):
     s_type = models.CharField(max_length=5, default='f') # `f` or `d`
     objects = PrivateFileDirShareManager()
 
+
+class CustomSharePermissionsManager(models.Manager):
+    def get_permissions_by_path(self, repo_id, path):
+        return super(CustomSharePermissionsManager, self).filter(
+            repo_id=repo_id, path=path)
+
+    def add_permission(self, repo_id, path, name, description, permission):
+        permission_obj = self.model(repo_id=repo_id, path=path, name=name,
+                                    description=description, permission=permission)
+        permission_obj.save(using=self._db)
+        return permission_obj
+
+
+class CustomSharePermissions(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    path = models.TextField()
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=500)
+    permission = models.TextField()
+
+    objects = CustomSharePermissionsManager()
+
+    class Meta:
+        db_table = 'custom_share_permission'
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'name': self.name,
+            'description': self.description,
+            'permission': json.loads(self.permission),
+        }
+
+
 ###### signal handlers
 from django.dispatch import receiver
 from seahub.signals import repo_deleted
@@ -573,3 +608,5 @@ def remove_share_info(sender, **kwargs):
     # remove record of extra share
     ExtraSharePermission.objects.filter(repo_id=repo_id).delete()
     ExtraGroupsSharePermission.objects.filter(repo_id=repo_id).delete()
+
+    CustomSharePermissions.objects.filter(repo_id=repo_id).delete()
