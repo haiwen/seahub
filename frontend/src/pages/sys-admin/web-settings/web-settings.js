@@ -299,12 +299,26 @@ class WebSettings extends Component {
                       value={config_dict['REPO_PASSWORD_MIN_LENGTH']}
                       helpTip={gettext('The least number of characters an encrypted library password should include.')}
                     />
+                    <CheckboxItem
+                      saveSetting={this.saveSetting}
+                      displayName={gettext('share/upload link force password')}
+                      keyText='SHARE_LINK_FORCE_USE_PASSWORD'
+                      value={config_dict['SHARE_LINK_FORCE_USE_PASSWORD']}
+                      helpTip={gettext('Force user use password when generating share/upload link.')}
+                    />
                     <InputItem
                       saveSetting={this.saveSetting}
-                      displayName={gettext('download/upload link password minimum length')}
+                      displayName={gettext('share/upload link password minimum length')}
                       keyText='SHARE_LINK_PASSWORD_MIN_LENGTH'
                       value={config_dict['SHARE_LINK_PASSWORD_MIN_LENGTH']}
-                      helpTip={gettext('The least number of characters a download/upload link password should include.')}
+                      helpTip={gettext('The least number of characters a share/upload link password should include.')}
+                    />
+                    <InputItem
+                      saveSetting={this.saveSetting}
+                      displayName={gettext('share/upload link password strength level')}
+                      keyText='SHARE_LINK_PASSWORD_STRENGTH_LEVEL'
+                      value={config_dict['SHARE_LINK_PASSWORD_STRENGTH_LEVEL']}
+                      helpTip={gettext('The level(1-4) of a share/upload link password\'s strength. For example, \'3\' means password must have at least 3 of the following: num, upper letter, lower letter and other symbols')}
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
