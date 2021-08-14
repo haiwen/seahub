@@ -10,7 +10,9 @@ import json
 import time
 import uuid
 import stat
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import chardet
 import logging
 import posixpath
@@ -45,7 +47,7 @@ from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
-from seahub.base.templatetags.seahub_tags import file_icon_filter, email2nickname
+from seahub.base.templatetags.seahub_tags import file_icon_filter
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -87,6 +89,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
+    SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
 
 
@@ -564,7 +567,9 @@ def view_lib_file(request, repo_id, path):
         'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
         'enable_file_comment': settings.ENABLE_FILE_COMMENT,
         'enable_watermark': ENABLE_WATERMARK,
+        'share_link_force_use_password': SHARE_LINK_FORCE_USE_PASSWORD,
         'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
+        'share_link_password_strength_level': SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,

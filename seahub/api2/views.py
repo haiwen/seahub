@@ -3996,7 +3996,7 @@ class SharedFileDetailView(APIView):
             password = request.GET.get('password', '')
 
             if not password:
-                return api_error(status.HTTP_403_FORBIDDEN, "Password is required")
+                return api_error(status.HTTP_403_FORBIDDEN, _('Password is required.'))
 
             if not check_password(password, fileshare.password):
                 return api_error(status.HTTP_403_FORBIDDEN, "Invalid Password")
@@ -4116,7 +4116,7 @@ class SharedDirView(APIView):
             password = request.GET.get('password', '')
 
             if not password:
-                return api_error(status.HTTP_403_FORBIDDEN, "Password is required")
+                return api_error(status.HTTP_403_FORBIDDEN, _('Password is required.'))
 
             if not check_password(password, fileshare.password):
                 return api_error(status.HTTP_403_FORBIDDEN, "Invalid Password")
