@@ -562,12 +562,11 @@ class PrivateFileDirShare(models.Model):
 
 
 class CustomSharePermissionsManager(models.Manager):
-    def get_permissions_by_path(self, repo_id, path):
-        return super(CustomSharePermissionsManager, self).filter(
-            repo_id=repo_id, path=path)
+    def get_permissions_by_repo_id(self, repo_id):
+        return super(CustomSharePermissionsManager, self).filter(repo_id=repo_id)
 
-    def add_permission(self, repo_id, path, name, description, permission):
-        permission_obj = self.model(repo_id=repo_id, path=path, name=name,
+    def add_permission(self, repo_id, name, description, permission):
+        permission_obj = self.model(repo_id=repo_id, name=name,
                                     description=description, permission=permission)
         permission_obj.save(using=self._db)
         return permission_obj
@@ -575,7 +574,6 @@ class CustomSharePermissionsManager(models.Manager):
 
 class CustomSharePermissions(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
-    path = models.TextField()
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=500)
     permission = models.TextField()

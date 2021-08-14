@@ -25,7 +25,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
 from seahub.group.utils import is_group_member, is_group_admin
-from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
         update_group_dir_permission, check_user_share_out_permission, \
@@ -230,7 +230,13 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            try:
+                permission = int(permission)
+                CustomSharePermissions.objects.get(id=permission)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            except CustomSharePermissions.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         repo_owner = self.get_repo_owner(request, repo_id)
         if repo_owner != username and not is_repo_admin(username, repo_id):
@@ -311,7 +317,13 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            try:
+                permission = int(permission)
+                CustomSharePermissions.objects.get(id=permission)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            except CustomSharePermissions.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         result = {}
         result['failed'] = []

@@ -12,7 +12,6 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils.repo import get_repo_owner
 from seahub.share.utils import is_repo_admin
 from seahub.share.models import CustomSharePermissions
 from seahub.views import check_folder_permission
@@ -34,14 +33,8 @@ class CustomSharePermissionsView(APIView):
     def get(self, request, repo_id):
         """List custom share permissions
         """
-        # argument check
-        path = request.GET.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # resource check
@@ -50,12 +43,9 @@ class CustomSharePermissionsView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
-
         # main
         try:
-            permission_query = CustomSharePermissions.objects.get_permissions_by_path(repo_id, path)
+            permission_query = CustomSharePermissions.objects.get_permissions_by_repo_id(repo_id)
             permission_list = [item.to_dict() for item in permission_query]
         except Exception as e:
             logger.error(e)
@@ -69,10 +59,6 @@ class CustomSharePermissionsView(APIView):
         """
         username = request.user.username
         # argument check
-        path = request.data.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         permission = request.data.get('permission', None)
         if not permission:
             error_msg = 'permission invalid.'
@@ -93,20 +79,10 @@ class CustomSharePermissionsView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
-
         # main
-        repo_owner = get_repo_owner(request, repo_id)
         try:
             permission_obj = CustomSharePermissions.objects.add_permission(
-                repo_id, path, permission_name, description, permission)
-            custom_perm = normalize_custom_permission_name(permission_obj.pk)
-            if '@seafile_group' not in repo_owner:
-                seafile_api.add_folder_user_perm(repo_id, path, custom_perm, username)
-            else:
-                group_id = int(repo_owner.split('@')[0])
-                seafile_api.add_folder_group_perm(repo_id, path, custom_perm, group_id)
+                repo_id, permission_name, description, permission)
             res = permission_obj.to_dict()
         except Exception as e:
             logger.error(e)
@@ -126,10 +102,6 @@ class CustomSharePermissionView(APIView):
         """
         username = request.user.username
         # argument check
-        path = request.data.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         permission = request.data.get('permission', None)
         if not permission:
             error_msg = 'permission invalid.'
@@ -149,9 +121,6 @@ class CustomSharePermissionView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id)
@@ -180,17 +149,16 @@ class CustomSharePermissionView(APIView):
         """Delete a custom share permission
         """
         username = request.user.username
-        # argument check
-        path = request.data.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # permission check
         if not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id)
         except Exception as e:
@@ -201,17 +169,11 @@ class CustomSharePermissionView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'custom permission %s not found.' % permission_id)
 
         # main
-        repo_owner = get_repo_owner(request, repo_id)
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id)
             if not permission_obj:
                 return api_error(status.HTTP_404_NOT_FOUND, 'Permission %s not found.' % permission_id)
             permission_obj.delete()
-            if '@seafile_group' not in repo_owner:
-                seafile_api.rm_folder_user_perm(repo_id, path, username)
-            else:
-                group_id = int(repo_owner.split('@')[0])
-                seafile_api.rm_folder_group_perm(repo_id, path, group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
