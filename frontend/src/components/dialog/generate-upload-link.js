@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, FormText } from 'reactstrap';
-import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
+import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
@@ -42,10 +42,10 @@ class GenerateUploadLink extends React.Component {
     this.expirationLimitTip = expirationLimitTip;
 
     this.state = {
-      showPasswordInput: false,
+      showPasswordInput: shareLinkForceUsePassword ? true : false,
       passwordVisible: false,
       password: '',
-      passwdnew: '',
+      passwordnew: '',
       sharedUploadInfo: null,
       isSendLinkShown: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
@@ -80,7 +80,7 @@ class GenerateUploadLink extends React.Component {
     this.setState({
       showPasswordInput: !this.state.showPasswordInput,
       password: '',
-      passwdnew: '',
+      passwordnew: '',
       errorInfo: ''
     });
   }
@@ -153,6 +153,10 @@ class GenerateUploadLink extends React.Component {
       }
       if (password !== passwordnew) {
         this.setState({errorInfo: gettext('Passwords don\'t match')});
+        return false;
+      }
+      if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
+        this.setState({errorInfo: gettext('Password is too weak, should have at least {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols'.replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel))});
         return false;
       }
     }
@@ -233,7 +237,7 @@ class GenerateUploadLink extends React.Component {
     let sharedUploadInfo = this.state.sharedUploadInfo;
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
-        showPasswordInput: false,
+        showPasswordInput: shareLinkForceUsePassword ? true : false,
         expireDays: this.defaultExpireDays,
         isExpireChecked: !this.isExpireDaysNoLimit,
         password: '',
@@ -256,8 +260,10 @@ class GenerateUploadLink extends React.Component {
 
     const { isSendLinkShown } = this.state;
 
-    let passwordLengthTip = gettext('(at least {passwordLength} characters)');
-    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
+    let passwordLengthTip = gettext('(at least {passwordLength} characters and has {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength)
+                                         .replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel);
+
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;
       return (
@@ -297,8 +303,17 @@ class GenerateUploadLink extends React.Component {
       <Form className="generate-upload-link">
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" onChange={this.addPassword} />
-            <span>{gettext('Add password protection')}</span>
+            {shareLinkForceUsePassword ? (
+            <Label check>
+              <Input type="checkbox" checked readOnly disabled />
+              <span>{gettext('Add password protection')}</span>
+            </Label>
+            ) : (
+            <Label check>
+              <Input type="checkbox" onChange={this.addPassword} />
+              <span>{gettext('Add password protection')}</span>
+            </Label>
+            )}
           </Label>
           {this.state.showPasswordInput &&
           <div className="ml-4">

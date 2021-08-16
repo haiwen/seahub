@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -1342,6 +1342,44 @@ export const Utils = {
 
   hasNextPage(curPage, perPage, totalCount) {
     return curPage * perPage < totalCount;
-  }
+  },
+
+  getStrengthLevel: function(pwd) {
+    const _this = this;
+    var num = 0;
+
+    if (pwd.length < shareLinkPasswordMinLength) {
+        return 0;
+    } else {
+        for (var i = 0; i < pwd.length; i++) {
+            // return the unicode
+            // bitwise OR
+            num |= _this.getCharMode(pwd.charCodeAt(i));
+        }
+        return _this.calculateBitwise(num);
+    }
+  },
+
+  getCharMode: function(n) {
+    if (n >= 48 && n <= 57) // nums
+        return 1;
+    if (n >= 65 && n <= 90) // uppers
+        return 2;
+    if (n >= 97 && n <= 122) // lowers
+        return 4;
+    else
+        return 8;
+  },
+
+  calculateBitwise: function(num) {
+    var level = 0;
+    for (var i = 0; i < 4; i++){
+        // bitwise AND
+        if (num&1) level++;
+        // Right logical shift
+        num>>>=1;
+    }
+    return level;
+  },
 
 };

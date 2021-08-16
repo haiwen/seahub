@@ -353,8 +353,17 @@ UPLOAD_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 # greater than or equal to MIN and less than or equal to MAX
 UPLOAD_LINK_EXPIRE_DAYS_DEFAULT = 0
 
-# mininum length for the password of a share link
-SHARE_LINK_PASSWORD_MIN_LENGTH = 8
+# force use password when generate a share/upload link
+SHARE_LINK_FORCE_USE_PASSWORD = False
+
+# mininum length for the password of a share/upload link
+SHARE_LINK_PASSWORD_MIN_LENGTH = 10
+
+# LEVEL for the password of a share/upload link
+# based on four types of input:
+# num, upper letter, lower letter, other symbols
+# '3' means password must have at least 3 types of the above.
+SHARE_LINK_PASSWORD_STRENGTH_LEVEL = 1
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
@@ -898,7 +907,9 @@ CONSTANCE_CONFIG = {
     'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL, ''),
 
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
+    'SHARE_LINK_FORCE_USE_PASSWORD': (SHARE_LINK_FORCE_USE_PASSWORD, ''),
     'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH, ''),
+    'SHARE_LINK_PASSWORD_STRENGTH_LEVEL': (SHARE_LINK_PASSWORD_STRENGTH_LEVEL, ''),
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH, ''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),

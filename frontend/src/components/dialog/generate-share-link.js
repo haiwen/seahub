@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, FormText } from 'reactstrap';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkPasswordMinLength, canSendShareLinkEmail } from '../../utils/constants';
+import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -47,7 +47,7 @@ class GenerateShareLink extends React.Component {
     this.state = {
       isOpIconShown: false,
       isValidate: false,
-      isShowPasswordInput: false,
+      isShowPasswordInput: shareLinkForceUsePassword ? true : false,
       isPasswordVisible: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
       setExp: 'by-days',
@@ -232,8 +232,8 @@ class GenerateShareLink extends React.Component {
     seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
       this.setState({
         password: '',
-        passwordnew: '',
-        isShowPasswordInput: false,
+        passwdnew: '',
+        isShowPasswordInput: shareLinkForceUsePassword ? true : false,
         expireDays: this.defaultExpireDays,
         isExpireChecked: !this.isExpireDaysNoLimit,
         errorInfo: '',
@@ -270,6 +270,10 @@ class GenerateShareLink extends React.Component {
       }
       if (password !== passwdnew) {
         this.setState({errorInfo: 'Passwords don\'t match'});
+        return false;
+      }
+      if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
+        this.setState({errorInfo: gettext('Password is too weak, should have at least {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols'.replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel))});
         return false;
       }
     }
@@ -359,8 +363,9 @@ class GenerateShareLink extends React.Component {
       return <Loading />;
     }
 
-    let passwordLengthTip = gettext('(at least {passwordLength} characters)');
-    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
+    let passwordLengthTip = gettext('(at least {passwordLength} characters and has {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength)
+                                         .replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel);
 
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
@@ -442,10 +447,17 @@ class GenerateShareLink extends React.Component {
       return (
         <Form className="generate-share-link">
           <FormGroup check>
+            {shareLinkForceUsePassword ? (
+            <Label check>
+              <Input type="checkbox" checked readOnly disabled />
+              <span>{gettext('Add password protection')}</span>
+            </Label>
+            ) : (
             <Label check>
               <Input type="checkbox" onChange={this.onPasswordInputChecked} />
               <span>{gettext('Add password protection')}</span>
             </Label>
+            )}
             {this.state.isShowPasswordInput &&
             <div className="ml-4">
               <FormGroup>

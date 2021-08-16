@@ -32,7 +32,7 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
-        check_filename_with_rename, gen_file_upload_url
+        check_filename_with_rename, gen_file_upload_url, get_password_strength_level
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
@@ -263,9 +263,20 @@ class ShareLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get('password', None)
-        if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            error_msg = _('Password is too short.')
+
+        if config.SHARE_LINK_FORCE_USE_PASSWORD and not password:
+            error_msg = _('Password is required.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if password:
+
+            if len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+                error_msg = _('Password is too short.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
+                error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')

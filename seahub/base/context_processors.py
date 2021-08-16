@@ -17,7 +17,7 @@ from constance import config
 
 import seaserv
 
-from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
+from seahub.settings import SEAFILE_VERSION, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
@@ -123,7 +123,9 @@ def base(request):
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
+        'share_link_force_use_password': config.SHARE_LINK_FORCE_USE_PASSWORD,
         'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
+        'share_link_password_strength_level': config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
