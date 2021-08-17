@@ -13,6 +13,8 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import CustomPermissionManager from './custom-permission/custom-permission-manager';
+
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
@@ -133,6 +135,11 @@ class ShareDialog extends React.Component {
                     {gettext('Share to group')}
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
+                    {gettext('Custom share permission')}
+                  </NavLink>
+                </NavItem>
                 {canInvitePeople &&
                   <NavItem>
                     <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
@@ -199,6 +206,11 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
+            {activeTab === 'customSharePermission' && (
+              <TabPane tabId="customSharePermission">
+                <CustomPermissionManager repoID={this.props.repoID}/>
+              </TabPane>
+            )}
             {enableOCM && itemType === 'library' && activeTab === 'shareToOtherServer' &&
               <TabPane tabId="shareToOtherServer">
                 <ShareToOtherServer itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
