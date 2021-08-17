@@ -20,6 +20,10 @@ class CustomPermissionItem extends React.Component {
     this.setState({isShowOperations: true});
   }
   
+  onMouseOver = () => {
+    this.setState({isShowOperations: true});
+  }
+  
   onMouseLeave = () => {
     this.setState({isShowOperations: false});
   }
@@ -38,7 +42,7 @@ class CustomPermissionItem extends React.Component {
     const { permission } = this.props;
     const { id, name, description } = permission;
     return (
-      <tr key={id} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr key={id} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
         <td width='22%' className="text-truncate" title={name}>{name}</td>
         <td width='56%' className="text-truncate">{description}</td>
         <td width='22%'>

@@ -17,13 +17,13 @@ class ListCustomPermissions extends React.Component {
 
     return (
       <div className="custom-permission">
-        <div className="header">
+        <div className="permission-header">
           <div className="title">{gettext('Permission')}</div>
           <div className="operation">
             <button type="button" className="btn btn-outline-primary" onClick={this.props.onAddCustomPermission}>{gettext('Add permission')}</button>
           </div>
         </div>
-        <div className="main">
+        <div className="permission-main mt-4">
           <table className="permissions-list-header">
             <thead>
               <tr>

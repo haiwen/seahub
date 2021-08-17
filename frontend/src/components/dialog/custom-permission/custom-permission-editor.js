@@ -109,7 +109,7 @@ class CustomPermissionEditor extends React.Component {
 
     return (
       <div className="custom-permission">
-        <div className="header">
+        <div className="permission-header">
           <div className="title">
             <div onClick={this.props.onChangeMode} >
               <i className="fa fa-arrow-left"></i>
@@ -120,7 +120,7 @@ class CustomPermissionEditor extends React.Component {
             <button type="button" className="btn btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
           </div>
         </div>
-        <div className="main">
+        <div className="permission-main mt-4">
           {isLoading && <Loading />}
           {!isLoading && (
             <Fragment>
