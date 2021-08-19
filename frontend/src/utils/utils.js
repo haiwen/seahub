@@ -1381,5 +1381,16 @@ export const Utils = {
     }
     return level;
   },
+  
+  getSharedPermission(item) {
+    let permission = item.permission;
+    if (item.is_admin) {
+      permission = 'admin';
+    }
+    if (item.permission.startsWith('custom-')) {
+      permission = item.permission.slice(7);
+    }
+    return permission;
+  }
 
 };

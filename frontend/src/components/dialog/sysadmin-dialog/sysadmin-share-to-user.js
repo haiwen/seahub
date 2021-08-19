@@ -37,12 +37,13 @@ class UserItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let currentPermission = item.is_admin ? 'admin' : item.permission;
+    let currentPermission = Utils.getSharedPermission(item);
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">{item.user_name}</td>
         <td>
           <SharePermissionEditor
+            repoID={item.repo_id}
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -227,6 +228,7 @@ class SysAdminShareToUser extends React.Component {
               </td>
               <td>
                 <SharePermissionEditor
+                  repoID={this.props.repoID}
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}

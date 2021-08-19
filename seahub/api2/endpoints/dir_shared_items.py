@@ -34,7 +34,7 @@ from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-        PERMISSION_ADMIN
+        PERMISSION_ADMIN, CUSTOM_PERMISSION_PREFIX
 from seahub.utils.repo import get_available_repo_perms
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_SHARE_TO_DEPARTMENT
@@ -233,6 +233,7 @@ class DirSharedItemsEndpoint(APIView):
             try:
                 permission = int(permission)
                 CustomSharePermissions.objects.get(id=permission)
+                permission = CUSTOM_PERMISSION_PREFIX + '-' + str(permission)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
             except CustomSharePermissions.DoesNotExist:
@@ -320,6 +321,7 @@ class DirSharedItemsEndpoint(APIView):
             try:
                 permission = int(permission)
                 CustomSharePermissions.objects.get(id=permission)
+                permission = CUSTOM_PERMISSION_PREFIX + '-' + str(permission)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
             except CustomSharePermissions.DoesNotExist:

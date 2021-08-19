@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {gettext, isPro, siteRoot} from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
@@ -49,7 +49,7 @@ class UserItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let currentPermission = item.is_admin ? 'admin' : item.permission;
+    let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -79,6 +79,7 @@ class UserItem extends React.Component {
         </td>
         <td>
           <SharePermissionEditor
+            repoID={this.props.repoID}
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -110,6 +111,7 @@ class UserList extends React.Component {
             <UserItem
               key={index}
               item={item}
+              repoID={this.props.repoID}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
@@ -333,6 +335,7 @@ class ShareToUser extends React.Component {
               </td>
               <td>
                 <SharePermissionEditor
+                  repoID={this.props.repoID}
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
@@ -365,6 +368,7 @@ class ShareToUser extends React.Component {
           <table className="table-thead-hidden w-xs-200">
             {thead}
             <UserList
+              repoID={this.props.repoID}
               items={sharedItems}
               permissions={this.permissions}
               deleteShareItem={this.deleteShareItem}
