@@ -92,8 +92,7 @@ class Invitation(models.Model):
         context = self.to_dict()
         context['site_name'] = get_site_name()
 
-        subject = _('%(user)s invited you to join %(site_name)s.') % {
-            'user': self.inviter, 'site_name': get_site_name()}
+        subject = _('You are invited to join %(site_name)s.') % {'site_name': get_site_name()}
 
         return send_html_email_with_dj_template(email,
                                                 subject=subject,
