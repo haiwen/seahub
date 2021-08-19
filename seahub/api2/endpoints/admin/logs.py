@@ -362,9 +362,10 @@ class AdminLogsSharePermissionLogs(APIView):
         for group_id in to_group_id_set:
             if group_id not in to_group_name_dict:
                 group = ccnet_api.get_group(int(group_id))
-                to_group_name_dict[group_id] = group.group_name
-                if group.parent_group_id != 0:
-                    department_set.add(group_id)
+                if group:
+                    to_group_name_dict[group_id] = group.group_name
+                    if group.parent_group_id != 0:
+                        department_set.add(group_id)
 
         events_info = []
         for ev in events:
