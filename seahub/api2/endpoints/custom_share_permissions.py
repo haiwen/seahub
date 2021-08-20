@@ -15,14 +15,8 @@ from seahub.api2.utils import api_error
 from seahub.share.utils import is_repo_admin
 from seahub.share.models import CustomSharePermissions
 from seahub.views import check_folder_permission
-from seahub.constants import CUSTOM_PERMISSION_PREFIX
-
 
 logger = logging.getLogger(__name__)
-
-
-def normalize_custom_permission_name(permission_id):
-    return CUSTOM_PERMISSION_PREFIX + '-' + str(permission_id)
 
 
 class CustomSharePermissionsView(APIView):
@@ -96,6 +90,32 @@ class CustomSharePermissionView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id, permission_id):
+        """get a custom share permission
+        """
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # main
+        try:
+            permission_obj = CustomSharePermissions.objects.get(id=permission_id)
+            if not permission_obj:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Permission %s not found.' % permission_id)
+            res = permission_obj.to_dict()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'permission': res})
 
     def put(self, request, repo_id, permission_id):
         """Update a custom share permission

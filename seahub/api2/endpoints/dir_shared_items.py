@@ -25,16 +25,16 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
 from seahub.group.utils import is_group_member, is_group_admin
-from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
         update_group_dir_permission, check_user_share_out_permission, \
-        check_group_share_out_permission
+        check_group_share_out_permission, normalize_custom_permission_name
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-        PERMISSION_ADMIN, CUSTOM_PERMISSION_PREFIX
+        PERMISSION_ADMIN
 from seahub.utils.repo import get_available_repo_perms
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_SHARE_TO_DEPARTMENT
@@ -230,13 +230,8 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            try:
-                permission = int(permission)
-                CustomSharePermissions.objects.get(id=permission)
-                permission = CUSTOM_PERMISSION_PREFIX + '-' + str(permission)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
-            except CustomSharePermissions.DoesNotExist:
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         repo_owner = self.get_repo_owner(request, repo_id)
@@ -318,13 +313,8 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            try:
-                permission = int(permission)
-                CustomSharePermissions.objects.get(id=permission)
-                permission = CUSTOM_PERMISSION_PREFIX + '-' + str(permission)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
-            except CustomSharePermissions.DoesNotExist:
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         result = {}
