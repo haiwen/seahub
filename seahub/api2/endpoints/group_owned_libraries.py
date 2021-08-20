@@ -37,7 +37,8 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_user_dir_permission, \
         check_user_share_out_permission, update_group_dir_permission, \
-        check_group_share_out_permission, check_user_share_in_permission
+        check_group_share_out_permission, check_user_share_in_permission, \
+        normalize_custom_permission_name
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 from seahub.views import check_folder_permission
 
@@ -316,8 +317,10 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -409,8 +412,10 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -589,8 +594,10 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -677,8 +684,10 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         group_id = request.data.get('group_id')
         if not group_id:

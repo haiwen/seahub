@@ -26,6 +26,7 @@ from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
+from seahub.utils.repo import parse_repo_perm
 
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 
@@ -413,7 +414,7 @@ class DirView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, path) != 'rw':
+            if parse_repo_perm(check_folder_permission(request, repo_id, path)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -504,7 +505,7 @@ class DirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, path) != 'rw':
+        if parse_repo_perm(check_folder_permission(request, repo_id, path)).can_delete is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

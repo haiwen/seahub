@@ -21,7 +21,8 @@ from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 from seahub.group.utils import is_group_member
 from seahub.base.accounts import User
 from seahub.share.utils import is_repo_admin, \
-        check_user_share_out_permission, check_group_share_out_permission
+        check_user_share_out_permission, check_group_share_out_permission, \
+        normalize_custom_permission_name
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
@@ -148,8 +149,10 @@ class ReposBatchView(APIView):
 
             permission = request.data.get('permission', 'rw')
             if permission not in get_available_repo_perms():
-                error_msg = 'permission invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                permission = normalize_custom_permission_name(permission)
+                if not permission:
+                    error_msg = 'permission invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # share repo to user
             if share_type == 'user':

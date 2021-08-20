@@ -45,7 +45,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey, FileComment
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin, check_group_share_in_permission
+from seahub.share.utils import is_repo_admin, check_group_share_in_permission, normalize_custom_permission_name
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -1835,7 +1835,7 @@ class UploadLinkView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_upload is False:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
 
@@ -1853,6 +1853,8 @@ class UploadLinkView(APIView):
         if req_from == 'api':
             try:
                 replace = to_python_boolean(request.GET.get('replace', '0'))
+                if 'custom' in check_folder_permission(request, repo_id, parent_dir):
+                    replace = False
             except ValueError:
                 replace = False
             url = gen_file_upload_url(token, 'upload-api', replace)
@@ -1884,7 +1886,7 @@ class UpdateLinkView(APIView):
 
         # permission check
         perm = check_folder_permission(request, repo_id, parent_dir)
-        if perm not in (PERMISSION_PREVIEW_EDIT, PERMISSION_READ_WRITE):
+        if parse_repo_perm(perm).can_edit_on_web is False:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
 
@@ -3338,9 +3340,10 @@ class FileHistory(APIView):
 
         permission = check_folder_permission(request, repo_id, path)
         if permission not in get_available_repo_perms():
-
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             commits = get_file_revisions_after_renamed(repo_id, path)
@@ -4296,8 +4299,10 @@ class SharedRepo(APIView):
         permission = request.GET.get('permission')
 
         if permission not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if share_type not in ('personal', 'group', 'public'):
             error_msg = 'share_type invalid.'
@@ -4753,7 +4758,9 @@ class GroupRepos(APIView):
 
         permission = request.data.get("permission", 'r')
         if permission not in get_available_repo_perms():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
         org_id = -1
         if is_org_context(request):
@@ -5470,8 +5477,10 @@ class RepoUserFolderPerm(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -5558,8 +5567,10 @@ class RepoUserFolderPerm(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         user = request.data.get('user_email', None)
         if not user:
@@ -5745,8 +5756,10 @@ class RepoGroupFolderPerm(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -5832,8 +5845,10 @@ class RepoGroupFolderPerm(APIView):
 
         perm = request.data.get('permission', None)
         if not perm or perm not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            perm = normalize_custom_permission_name(perm)
+            if not perm:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         group_id = request.data.get('group_id')
         if not group_id:
