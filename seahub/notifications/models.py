@@ -14,15 +14,12 @@ from django.utils.translation import ugettext as _
 from django.core.cache import cache
 from django.template.loader import render_to_string
 
-import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
-from seahub.utils.repo import get_repo_shared_users
 from seahub.utils import normalize_cache_key
-from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.constants import HASH_URLS
 from seahub.drafts.models import DraftReviewer
 from seahub.file_participants.utils import list_file_participants
