@@ -6,7 +6,7 @@ import sys
 import os
 import re
 
-from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -798,6 +798,10 @@ ADDITIONAL_APP_BOTTOM_LINKS = None
 # }
 ADDITIONAL_ABOUT_DIALOG_LINKS = None
 
+# Following settings are private, can not be overwrite.
+SERVICE_URL = 'http://127.0.0.1:8000'
+INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
 ############################
 # Settings for SeafileDocs #
 ############################
@@ -882,8 +886,6 @@ else:
 # Remove install_topdir from path
 sys.path.pop(0)
 
-# Following settings are private, can not be overwrite.
-INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
