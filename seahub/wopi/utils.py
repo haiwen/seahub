@@ -108,7 +108,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
             logger.error(e)
             return None
 
-        for action in root.getiterator('action'):
+        for action in root.iter('action'):
             attr = action.attrib
             ext = attr.get('ext')
             name = attr.get('name')
