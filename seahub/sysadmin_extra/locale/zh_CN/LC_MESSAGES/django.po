@@ -1,0 +1,168 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-25 15:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: templates/sys_file_audit.html:8 templates/sys_file_update.html:8
+#: templates/sys_login_admin.html:8 templates/sys_perm_audit.html:8
+msgid "Login"
+msgstr "登录"
+
+#: templates/sys_file_audit.html:9 templates/sys_file_update.html:9
+#: templates/sys_login_admin.html:9 templates/sys_perm_audit.html:9
+msgid "File Access"
+msgstr "文件访问"
+
+#: templates/sys_file_audit.html:10 templates/sys_file_update.html:10
+#: templates/sys_login_admin.html:10 templates/sys_perm_audit.html:10
+msgid "File Update"
+msgstr "文件更新"
+
+#: templates/sys_file_audit.html:11 templates/sys_file_update.html:11
+#: templates/sys_login_admin.html:11 templates/sys_perm_audit.html:11
+#: templates/sys_perm_audit.html.py:21
+msgid "Permission"
+msgstr "权限"
+
+#: templates/sys_file_audit.html:18 templates/sys_file_update.html:18
+msgid "User"
+msgstr "用户名"
+
+#: templates/sys_file_audit.html:19
+msgid "Type"
+msgstr "类型"
+
+#: templates/sys_file_audit.html:20
+msgid "IP / Device"
+msgstr "IP / 设备"
+
+#: templates/sys_file_audit.html:21 templates/sys_file_update.html:19
+#: templates/sys_perm_audit.html:24
+msgid "Date"
+msgstr "日期"
+
+#: templates/sys_file_audit.html:22 templates/sys_file_update.html:20
+#: templates/sys_perm_audit.html:22
+msgid "Library"
+msgstr "资料库"
+
+#: templates/sys_file_audit.html:23
+msgid "File"
+msgstr "文件"
+
+#: templates/sys_file_audit.html:43 templates/sys_file_audit.html.py:65
+#: templates/sys_file_update.html:40 templates/sys_file_update.html.py:51
+#: templates/sys_perm_audit.html:43 templates/sys_perm_audit.html.py:83
+msgid "Only Show"
+msgstr "只显示"
+
+#: templates/sys_file_audit.html:85
+msgid "No File Audit Infomation"
+msgstr "暂无文件审计信息"
+
+#: templates/sys_file_update.html:21 templates/sys_perm_audit.html:20
+msgid "Action"
+msgstr "操作"
+
+#: templates/sys_file_update.html:61
+msgid "Details"
+msgstr "详情"
+
+#: templates/sys_file_update.html:71
+msgid "No File Update Infomation"
+msgstr "暂无文件更新信息"
+
+#: templates/sys_file_update.html:90
+msgid "Modification Details"
+msgstr "修改详情"
+
+#: templates/sys_file_update.html:103
+msgid "New files"
+msgstr "新文件"
+
+#: templates/sys_file_update.html:104
+msgid "Deleted files"
+msgstr "删除文件"
+
+#: templates/sys_file_update.html:105
+msgid "Renamed or Moved files"
+msgstr "重命名或移动文件"
+
+#: templates/sys_file_update.html:106
+msgid "Modified files"
+msgstr "修改文件"
+
+#: templates/sys_file_update.html:107
+msgid "New directories"
+msgstr "新文件夹"
+
+#: templates/sys_file_update.html:108
+msgid "Deleted directories"
+msgstr "删除文件夹"
+
+#: templates/sys_file_update.html:118
+msgid "Unknown error."
+msgstr "未知错误"
+
+#: templates/sys_login_admin.html:18
+msgid "Name"
+msgstr "名称"
+
+#: templates/sys_login_admin.html:20
+msgid "Time"
+msgstr "时间"
+
+#: templates/sys_login_admin.html:33 templates/sysadmin_log_paginator.html:4
+msgid "Previous"
+msgstr "上一页"
+
+#: templates/sys_login_admin.html:36 templates/sysadmin_log_paginator.html:7
+msgid "Next"
+msgstr "下一页"
+
+#: templates/sys_login_admin.html:41 templates/sysadmin_log_paginator.html:12
+msgid "Per page: "
+msgstr "每页"
+
+#: templates/sys_login_admin.html:59
+msgid "None"
+msgstr ""
+
+#: templates/sys_perm_audit.html:18
+msgid "From"
+msgstr "来源"
+
+#: templates/sys_perm_audit.html:19
+msgid "To"
+msgstr "共享给"
+
+#: templates/sys_perm_audit.html:23
+msgid "Folder"
+msgstr "目录"
+
+#: templates/sys_perm_audit.html:72
+msgid "Read-Write"
+msgstr "读写"
+
+#: templates/sys_perm_audit.html:74
+msgid "Read-Only"
+msgstr "只读"
+
+#: templates/sys_perm_audit.html:106
+msgid "No Library Permission Infomation"
+msgstr "暂无资料库权限信息"

@@ -48,7 +48,7 @@ class LoginLogs(APIView):
         end = end + ' 23:59:59'
 
         result = []
-        from seahub_extra.sysadmin_extra.models import UserLoginLog
+        from seahub.sysadmin_extra.models import UserLoginLog
         logs = UserLoginLog.objects.filter(login_date__range=(start, end))
         for log in logs:
             result.append({
@@ -120,7 +120,7 @@ class AdminLoginLogs(APIView):
 
         offset = per_page * (page -1)
 
-        from seahub_extra.sysadmin_extra.models import UserLoginLog
+        from seahub.sysadmin_extra.models import UserLoginLog
         admin_user_emails = self._get_admin_user_emails()
         all_logs = UserLoginLog.objects.filter(username__in=admin_user_emails)
 

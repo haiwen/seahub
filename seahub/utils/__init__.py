@@ -1213,8 +1213,8 @@ def user_traffic_over_limit(username):
     if not CHECK_SHARE_LINK_TRAFFIC:
         return False
 
-    from seahub_extra.plan.models import UserPlan
-    from seahub_extra.plan.settings import PLAN
+    from seahub.plan.models import UserPlan
+    from seahub.plan.settings import PLAN
     up = UserPlan.objects.get_valid_plan_by_user(username)
     plan = 'Free' if up is None else up.plan_type
     traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024

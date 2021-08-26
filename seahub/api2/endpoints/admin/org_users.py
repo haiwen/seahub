@@ -197,7 +197,7 @@ class AdminOrgUsers(APIView):
         # check user number limit by org member quota
         org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
         if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub_extra.organizations.models import OrgMemberQuota
+            from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
             if org_members_quota is not None and org_members >= org_members_quota:
                 error_msg = 'Failed. You can only invite %d members.' % org_members_quota

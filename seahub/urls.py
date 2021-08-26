@@ -697,7 +697,6 @@ urlpatterns = [
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
-    url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
@@ -797,14 +796,14 @@ urlpatterns += [
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search, pubuser_search
+    from seahub.search.views import search, pubuser_search
     urlpatterns += [
         url(r'^search/$', search, name='search'),
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     ]
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import \
+    from seahub.sysadmin_extra.views import \
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += [
@@ -823,8 +822,8 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
 
 if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += [
-        url(r'^api/v2.1/org/', include('seahub_extra.organizations.api_urls')),
-        url(r'^org/', include('seahub_extra.organizations.urls')),
+        url(r'^api/v2.1/org/', include('seahub.organizations.api_urls')),
+        url(r'^org/', include('seahub.organizations.urls')),
     ]
 
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
@@ -852,7 +851,7 @@ if HAS_OFFICE_CONVERTER:
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
-    from seahub_extra.adfs_auth.views import assertion_consumer_service, \
+    from seahub.adfs_auth.views import assertion_consumer_service, \
         auth_complete
     urlpatterns += [
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
@@ -873,9 +872,9 @@ if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):
     ]
 
 if getattr(settings, 'ENABLE_CAS', False):
-    from seahub_extra.django_cas_ng.views import login as cas_login
-    from seahub_extra.django_cas_ng.views import logout as cas_logout
-    from seahub_extra.django_cas_ng.views import callback as cas_callback
+    from seahub.django_cas_ng.views import login as cas_login
+    from seahub.django_cas_ng.views import logout as cas_logout
+    from seahub.django_cas_ng.views import callback as cas_callback
     urlpatterns += [
         url(r'^accounts/cas-login/$', cas_login, name='cas_ng_login'),
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),

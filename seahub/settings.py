@@ -16,6 +16,8 @@ SERVICE_URL = 'http://127.0.0.1:8000'
 
 CLOUD_MODE = False
 
+MULTI_TENANCY = False
+
 ADMINS = [
     # ('Your Name', 'your_email@domain.com'),
 ]
@@ -126,7 +128,8 @@ MIDDLEWARE = [
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
-    'seahub.trusted_ip.middleware.LimitIpMiddleware'
+    'seahub.trusted_ip.middleware.LimitIpMiddleware',
+    'seahub.organizations.middleware.RedirectMiddleware',
 ]
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -256,11 +259,19 @@ INSTALLED_APPS = [
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',
+
+    'seahub.search',
+    'seahub.sysadmin_extra',
+    'seahub.organizations',
+    'seahub.krb5_auth',
+    'seahub.django_cas_ng',
 ]
 
 
 # Enable or disable view File Scan
-# ENABLE_FILE_SCAN = True
+ENABLE_FILE_SCAN = False
+
+ENABLE_SYSADMIN_EXTRA = False
 
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
@@ -276,6 +287,10 @@ CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
 )
+
+ENABLE_CAS = False
+
+ENABLE_ADFS_LOGIN = False
 
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
@@ -842,16 +857,6 @@ def load_local_settings(module):
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
 
-
-# Load seahub_extra_settings.py
-try:
-    from seahub_extra import seahub_extra_settings
-except ImportError:
-    pass
-else:
-    load_local_settings(seahub_extra_settings)
-    del seahub_extra_settings
-
 # Load local_settings.py
 try:
     import seahub.local_settings
@@ -936,6 +941,12 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+if ENABLE_CAS:
+    AUTHENTICATION_BACKENDS += ('seahub.django_cas_ng.backends.CASBackend',)
+
+if ENABLE_ADFS_LOGIN:
+    AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
 
 #####################
 # Custom Nav Items  #
