@@ -6,11 +6,13 @@ import sys
 import os
 import re
 
-from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
+
+SERVICE_URL = 'http://127.0.0.1:8000'
 
 CLOUD_MODE = False
 
