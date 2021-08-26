@@ -5,7 +5,7 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 
 const propTypes = {
-  repoPermission: PropTypes.bool,
+  userPerm: PropTypes.string,
   node: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
@@ -191,7 +191,7 @@ class TreeNodeView extends React.Component {
               key={item.path}
               node={item}
               paddingLeft={paddingLeft}
-              repoPermission={this.props.repoPermission}
+              userPerm={this.props.userPerm}
               currentPath={this.props.currentPath}
               isNodeMenuShow={this.props.isNodeMenuShow}
               isItemFreezed={this.props.isItemFreezed}
@@ -247,7 +247,7 @@ class TreeNodeView extends React.Component {
           </div>
           {isNodeMenuShow && (
             <div className="right-icon">
-              {((this.props.repoPermission || permission) && this.state.isShowOperationMenu) && (
+              {((this.props.userPerm === 'rw' || permission) && this.state.isShowOperationMenu) && (
                 <ItemDropdownMenu
                   item={this.props.node}
                   toggleClass={'fas fa-ellipsis-v'}

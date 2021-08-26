@@ -7,7 +7,7 @@ import { hideMenu, showMenu } from '../context-menu/actions';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  repoPermission: PropTypes.bool,
+  userPerm: PropTypes.string,
   isNodeMenuShow: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
@@ -277,7 +277,7 @@ class TreeView extends React.Component {
         onContextMenu={this.onContextMenu}
       >
         <TreeNodeView
-          repoPermission={this.props.repoPermission}
+          userPerm={this.props.userPerm}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}

@@ -39,7 +39,6 @@ class LibContentView extends React.Component {
       hash: '',
       currentRepoInfo: null,
       repoName: '',
-      repoPermission: true,
       repoEncrypted: false,
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
@@ -124,35 +123,33 @@ class LibContentView extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let repoID = this.props.repoID;
     let location = window.location.href.split('#')[0];
     location = decodeURIComponent(location);
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      let repoInfo = new RepoInfo(res.data);
-      let isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+    let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
+    path = path.slice(path.indexOf('/')); // get current path
+
+    try {
+      const repoRes = await seafileAPI.getRepoInfo(repoID);
+      const repoInfo = new RepoInfo(repoRes.data);
+      const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+
+      this.isNeedUpdateHistoryState = false;
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
-        repoPermission: repoInfo.permission === 'rw',
         isGroupOwnedRepo: isGroupOwnedRepo,
+        path: path
       });
-
-      let repoID = repoInfo.repo_id;
-      let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
-      path = path.slice(path.indexOf('/')); // get current path
-
-      this.isNeedUpdateHistoryState = false;
-
-      this.setState({path: path});
-
+      
       if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
-    }).catch(error => {
+    } catch (error) {
       if (error.response) {
         if (error.response.status == 403) {
           this.setState({
@@ -174,7 +171,7 @@ class LibContentView extends React.Component {
           errorMsg: gettext('Please check the network.')
         });
       }
-    });
+    }
   }
 
   componentWillUnmount() {
@@ -1849,7 +1846,6 @@ class LibContentView extends React.Component {
               pathExist={this.state.pathExist}
               currentRepoInfo={this.state.currentRepoInfo}
               repoID={this.props.repoID}
-              repoPermission={this.state.repoPermission}
               enableDirPrivateShare={enableDirPrivateShare}
               userPerm={userPerm}
               isGroupOwnedRepo={this.state.isGroupOwnedRepo}

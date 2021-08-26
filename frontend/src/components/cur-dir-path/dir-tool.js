@@ -12,7 +12,7 @@ import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
-  permission: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
@@ -81,12 +81,12 @@ class DirTool extends React.Component {
   }
 
   render() {
-    let { repoID, repoName, permission, currentPath } = this.props;
+    let { repoID, repoName, userPerm, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-    if (permission) {
+    if (userPerm === 'rw') {
       if (!isFile) {
         if (name) { // name not '' is not root path
           trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);

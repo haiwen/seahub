@@ -14,7 +14,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
-  repoPermission: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentNode: PropTypes.object,
@@ -256,7 +256,7 @@ class DirColumnNav extends React.Component {
           {this.props.isTreeDataLoading ?
             (<Loading/>) :
             (<TreeView
-              repoPermission={this.props.repoPermission}
+              userPerm={this.props.userPerm}
               isNodeMenuShow={this.isNodeMenuShow}
               treeData={this.props.treeData}
               currentPath={this.props.currentPath}
