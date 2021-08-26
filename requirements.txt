@@ -18,3 +18,7 @@ pyjwt==2.1.*
 pycryptodome
 requests_oauthlib
 chardet
+python-cas
+djangosaml2==0.20.0
+pysaml2==6.5.1
+cffi

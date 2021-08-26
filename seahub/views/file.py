@@ -56,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
-    user_traffic_over_limit, get_file_audit_events_by_path, \
+    get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
@@ -1088,11 +1088,6 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
 
-    # check whether owner's traffic over the limit
-    if user_traffic_over_limit(fileshare.username):
-        messages.error(request, _('Unable to download file, share link traffic is used up.'))
-        return HttpResponseRedirect(next_page)
-
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'download-link', fileshare.username, use_onetime=False)
 
@@ -1181,12 +1176,6 @@ def view_shared_file(request, fileshare):
     if request.GET.get('raw', '') == '1':
         if can_download is False:
             raise Http404
-
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(shared_by):
-            messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next_page)
 
         # send file audit message
         send_file_access_msg(request, repo, path, 'share-link')
@@ -1278,7 +1267,6 @@ def view_shared_file(request, fileshare):
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
-    traffic_over_limit = user_traffic_over_limit(shared_by)
 
     permissions = fileshare.get_permissions()
 
@@ -1307,7 +1295,7 @@ def view_shared_file(request, fileshare):
             'filetype': ret_dict['filetype'],
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
-            'traffic_over_limit': traffic_over_limit,
+            'traffic_over_limit': False,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
             'file_share_link': file_share_link,
@@ -1380,12 +1368,6 @@ def view_file_via_shared_dir(request, fileshare):
     if request.GET.get('raw', '0') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
-
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(shared_by):
-            messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next_page)
 
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
@@ -1484,7 +1466,6 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         ret_dict['err'] = err_msg
 
-    traffic_over_limit = user_traffic_over_limit(shared_by)
     permissions = fileshare.get_permissions()
 
     # generate dir navigator
@@ -1521,7 +1502,7 @@ def view_file_via_shared_dir(request, fileshare):
             'zipped': zipped,
             'img_prev': img_prev,
             'img_next': img_next,
-            'traffic_over_limit': traffic_over_limit,
+            'traffic_over_limit': False,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
             'file_share_link': file_share_link,

@@ -23,7 +23,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
 
 from seahub.utils import gen_dir_share_link, \
-    gen_shared_upload_link, user_traffic_over_limit, render_error, \
+    gen_shared_upload_link, render_error, \
     get_file_type_and_ext, get_service_url, normalize_dir_path
 from seahub.utils.repo import is_repo_owner, get_repo_owner
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
@@ -316,8 +316,6 @@ def view_shared_dir(request, fileshare):
         fileshare.view_cnt = F('view_cnt') + 1
         fileshare.save()
 
-    traffic_over_limit = user_traffic_over_limit(fileshare.username)
-
     permissions = fileshare.get_permissions()
 
     # mode to view dir/file items
@@ -358,7 +356,7 @@ def view_shared_dir(request, fileshare):
             'file_list': file_list,
             'dir_list': dir_list,
             'zipped': zipped,
-            'traffic_over_limit': traffic_over_limit,
+            'traffic_over_limit': False,
             'no_quota': no_quota,
             'permissions': permissions,
             'mode': mode,

@@ -53,10 +53,6 @@ try:
     from seahub.settings import ENABLE_INNER_FILESERVER
 except ImportError:
     ENABLE_INNER_FILESERVER = True
-try:
-    from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
-except ImportError:
-    CHECK_SHARE_LINK_TRAFFIC = False
 
 logger = logging.getLogger(__name__)
 
@@ -1206,32 +1202,6 @@ if EVENTS_CONFIG_FILE:
 
     HAS_FILE_SEARCH = check_search_enabled()
 
-
-def user_traffic_over_limit(username):
-    """Return ``True`` if user traffic over the limit, otherwise ``False``.
-    """
-    if not CHECK_SHARE_LINK_TRAFFIC:
-        return False
-
-    from seahub.plan.models import UserPlan
-    from seahub.plan.settings import PLAN
-    up = UserPlan.objects.get_valid_plan_by_user(username)
-    plan = 'Free' if up is None else up.plan_type
-    traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
-
-    try:
-        stat = seafevents_api.get_user_traffic_by_month(username, datetime.now())
-    except Exception as e:
-        logger = logging.getLogger(__name__)
-        logger.error('Failed to get user traffic stat: %s' % username,
-                     exc_info=True)
-        return True
-
-    if not stat:            # No traffic record yet
-        return False
-
-    month_traffic = stat['link_file_upload'] + stat['link_file_download']
-    return True if month_traffic >= traffic_limit else False
 
 def is_user_password_strong(password):
     """Return ``True`` if user's password is STRONG, otherwise ``False``.
