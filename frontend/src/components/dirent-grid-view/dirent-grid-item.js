@@ -27,6 +27,14 @@ class DirentGridItem extends React.Component {
       isGridSelected: false,
       isGridDropTipShow: false,
     };
+
+    const { dirent } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
+    const canPreview = isCustomPermission ? customPermission.permission.preview : true;
+
+    this.isCustomPermission = isCustomPermission;
+    this.customPermission = customPermission;
+    this.canPreview = canPreview;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,8 +53,18 @@ class DirentGridItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const dirent = this.props.dirent;
-    if (this.props.dirent === this.props.activeDirent) {
+    const { dirent, activeDirent } = this.props;
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    // is have preview permission
+    if (!this.canPreview) {
+      return;
+    }
+
+    if (dirent === activeDirent) {
       this.setState({isGridSelected: false});
       if (Utils.imageCheck(dirent.name)) {
         this.props.showImagePopup(dirent);
@@ -62,6 +80,17 @@ class DirentGridItem extends React.Component {
   onItemLinkClick = (e) => {
     e.preventDefault();
     const dirent = this.props.dirent;
+
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    // is have preview permission
+    if (!this.canPreview) {
+      return;
+    }
+
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
@@ -158,7 +187,7 @@ class DirentGridItem extends React.Component {
     let lockedInfo = gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
-    return(
+    return (
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
           <div
@@ -193,7 +222,10 @@ class DirentGridItem extends React.Component {
                 </UncontrolledTooltip>
               </Fragment>
             )}
-            <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+            {(!dirent.isDir() && !this.canPreview) ? 
+              <a className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} onClick={this.onItemLinkClick}>{dirent.name}</a> :
+              <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+            }
           </div>
         </li>
       </Fragment>

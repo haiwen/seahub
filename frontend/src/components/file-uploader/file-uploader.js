@@ -26,9 +26,14 @@ const propTypes = {
   dragAndDrop: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
   onFileUploadSuccess: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
 };
 
 class FileUploader extends React.Component {
+  
+  static defaultProps = {
+    isCustomPermission: false
+  }
 
   constructor(props) {
     super(props);
@@ -181,9 +186,10 @@ class FileUploader extends React.Component {
   }
 
   onFileAdded = (resumableFile, files) => {
+    const { isCustomPermission } = this.props;
     let isFile = resumableFile.fileName === resumableFile.relativePath;
     // uploading is file and only upload one file
-    if (isFile && files.length === 1) {
+    if (!isCustomPermission && isFile && files.length === 1) {
       let hasRepetition = false;
       let direntList = this.props.direntList;
       for (let i = 0; i < direntList.length; i++) {

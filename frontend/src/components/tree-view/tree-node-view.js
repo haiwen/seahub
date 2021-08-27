@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -73,6 +74,17 @@ class TreeNodeView extends React.Component {
   }
 
   onNodeClick = () => {
+    const { node } = this.props;
+    const { object } = node;
+    if (object.isDir()) {
+      this.props.onNodeClick(this.props.node);
+      return;
+    }
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(object.permission);
+    if (isCustomPermission) {
+      const { preview: canPreview } = customPermission.permission;
+      if (!canPreview) return;
+    } 
     this.props.onNodeClick(this.props.node);
   }
 
@@ -168,14 +180,35 @@ class TreeNodeView extends React.Component {
     return {icon, type};
   }
 
-  caculateMenuList(node) {
+  calculateMenuList = (node) => {
     let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT} =  TextTranslation;
 
+    let menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
     if (node.object.type === 'dir') {
-      return [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
+       menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
     }
 
-    return [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
+    const { userPerm } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (!isCustomPermission) {
+      return menuList;
+    }
+
+    menuList = [];
+    const { modify: canModify, delete: canDelete } = customPermission.permission;
+    if (node.object.type === 'dir') { 
+      canModify && menuList.push(NEW_FOLDER, NEW_FILE, RENAME);
+    } else {
+      canModify && menuList.push(RENAME);
+    }
+
+    canDelete && menuList.push(DELETE);
+
+    if (node.object.type !== 'dir') { 
+      menuList.push(OPEN_VIA_CLIENT);
+    }
+
+    return menuList;
   }
 
   renderChildren = () => {
@@ -215,12 +248,14 @@ class TreeNodeView extends React.Component {
   }
 
   render() {
-    let { currentPath, node, isNodeMenuShow } = this.props;
+    let { currentPath, node, isNodeMenuShow, userPerm } = this.props;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = this.state.isHighlight ? 'tree-node-inner-hover ' : '';
     if (node.path === currentPath) {
       hlClass = 'tree-node-hight-light';
     }
+
+    const { isCustomPermission } = Utils.getUserPermission(userPerm)
     return (
       <div className="tree-node">
         <div
@@ -247,11 +282,11 @@ class TreeNodeView extends React.Component {
           </div>
           {isNodeMenuShow && (
             <div className="right-icon">
-              {((this.props.userPerm === 'rw' || permission) && this.state.isShowOperationMenu) && (
+              {((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
                 <ItemDropdownMenu
                   item={this.props.node}
                   toggleClass={'fas fa-ellipsis-v'}
-                  getMenuList={this.caculateMenuList}
+                  getMenuList={this.calculateMenuList}
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}

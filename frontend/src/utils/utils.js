@@ -121,9 +121,15 @@ export const Utils = {
 
   getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
     // itemType: library, dir, file
-    // permission: rw, r, admin, cloud-edit, preview
+    // permission: rw, r, admin, cloud-edit, preview, custom-*
 
     let permissionOptions = [];
+
+    const { isCustomPermission } = Utils.getUserPermission(permission);
+    if (isCustomPermission) {
+      permissionOptions.push('preview_download');
+      return permissionOptions;
+    }
 
     if (permission == 'rw' || permission == 'admin' || permission == 'r') {
       permissionOptions.push('preview_download');
@@ -454,23 +460,43 @@ export const Utils = {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
-      if (permission == 'rw' || permission == 'r') {
-        list.push(DOWNLOAD);
+      if (permission == 'rw' || permission == 'r' || isCustomPermission) {
+        if (isCustomPermission) {
+          const { download: canDownload } = customPermission.permission;
+          if (canDownload) list.push(DOWNLOAD);
+        } else {
+          list.push(DOWNLOAD);
+        }
       }
 
       if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
-        list.push(DELETE, 'Divider');
+      if (permission == 'rw' || isCustomPermission) {
+        if (isCustomPermission) {
+          const { delete: canDelete } = customPermission.permission;
+          if (canDelete) list.push(DELETE, 'Divider');
+        } else {
+          list.push(DELETE, 'Divider');
+        }
+      }
+    }
+
+    if (permission == 'rw' || isCustomPermission) {
+      if (isCustomPermission) {
+        const { modify: canModify } = customPermission.permission;
+        if (canModify) list.push(RENAME);
+      } else {
+        list.push(RENAME);
       }
     }
 
     if (permission == 'rw') {
-      list.push(RENAME, MOVE, COPY);
+      list.push(MOVE, COPY);
       if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
       }
@@ -489,29 +515,56 @@ export const Utils = {
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
       COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
-      if (permission == 'rw' || permission == 'r') {
-        list.push(DOWNLOAD);
+      if (permission == 'rw' || permission == 'r' || isCustomPermission) {
+        if (isCustomPermission) {
+          const { download: canDownload } = customPermission.permission;
+          if (canDownload) list.push(DOWNLOAD);
+        } else {
+          list.push(DOWNLOAD);
+        }
       }
 
       if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
-        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-          list.push(DELETE);
+      if (permission == 'rw' || isCustomPermission) {
+        if (isCustomPermission) {
+          const { delete: canDelete } = customPermission.permission;
+          if (canDelete) list.push(DELETE, 'Divider');
+        } else {
+          list.push(DELETE, 'Divider');
         }
       }
+    }
 
-      list.push('Divider');
+    if (permission == 'rw' || isCustomPermission) {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        if (isCustomPermission) {
+          const { modify: canModify } = customPermission.permission;
+          if (canModify) list.push(RENAME, 'Divider');
+          if (enableFileComment) {
+            list.push(COMMENT);
+          }
+          list.push(HISTORY);
+          if (isPro && fileAuditEnabled) {
+            list.push(ACCESS_LOG);
+          }
+          list.push('Divider', OPEN_VIA_CLIENT);
+        } else {
+          list.push(RENAME);
+        }
+      }
     }
 
     if (permission == 'rw') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        list.push(RENAME, MOVE);
+        list.push(MOVE);
       }
+      
       list.push(COPY, TAGS);
 
       if (isPro) {
@@ -1269,6 +1322,12 @@ export const Utils = {
    */
   isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
 
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userDirPermission);
+    if (isCustomPermission) {
+      const { download_external_link } = customPermission.permission;
+      return download_external_link;
+    }
+
     let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
     let isRepoOwner = ownerEmail === username;
 
@@ -1391,6 +1450,25 @@ export const Utils = {
       permission = item.permission.slice(7);
     }
     return permission;
+  },
+
+  getUserPermission(userPerm) {
+    const { custom_permission } = window;
+    const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    // visit the shared repo(virtual repo) by custom permission 
+    if (!custom_permission || common_permissions.indexOf(userPerm) > -1) {
+      return { isCustomPermission: false };
+    } 
+    // userPerm is startsWith 'custom-'
+    if (custom_permission) {
+      const permissionId = custom_permission.id;
+      const userPermId = parseInt(userPerm.split('-')[1]);
+      if (permissionId === userPermId) {
+        return { isCustomPermission: true, customPermission: custom_permission };
+      }
+      // TODO
+    }
+    return { isCustomPermission: false }; 
   }
 
 };

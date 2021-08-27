@@ -553,7 +553,16 @@ class MarkdownEditor extends React.Component {
     const value = deserialize(markdownContent);
 
     // init permission
-    const hasPermission = permission === 'rw' || permission === 'cloud-edit';
+    let hasPermission = permission === 'rw' || permission === 'cloud-edit';
+
+    // get custom permission
+    if (permission.startsWith('custom-')) {
+      const permissionID = permission.split('-')[1];
+      const customPermissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+      const customPermission = customPermissionRes.data.permission;
+      const { modify: canModify } = customPermission.permission;
+      hasPermission = canModify ? true : hasPermission;
+    }
 
     // Goto rich edit page
     // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access

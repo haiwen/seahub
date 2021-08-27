@@ -168,7 +168,7 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('download_external_link')} checked={permission.external_link}/>
+                    <Input type="checkbox" onChange={this.onChangePermission('download_external_link')} checked={permission.download_external_link}/>
                     <span>{gettext('Can generate download external link')}</span>
                   </Label>
                 </FormGroup>

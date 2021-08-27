@@ -136,6 +136,12 @@ class LibContentView extends React.Component {
       const repoInfo = new RepoInfo(repoRes.data);
       const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
 
+      if (repoInfo.permission.startsWith('custom-')) {
+        const permissionID = repoInfo.permission.split('-')[1];
+        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+        window.custom_permission = permissionRes.data.permission;
+      }
+
       this.isNeedUpdateHistoryState = false;
       this.setState({
         currentRepoInfo: repoInfo,
@@ -1273,7 +1279,7 @@ class LibContentView extends React.Component {
         }
       }
     } else {
-      direntObject.permission = 'rw';
+      direntObject.permission = this.state.direntList[0].permission;
       let dirent = new Dirent(direntObject);
       if (this.state.currentMode === 'column') {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
@@ -1792,6 +1798,13 @@ class LibContentView extends React.Component {
       return index < this.state.itemsShowLength;
     });
 
+    let canUpload = true;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { upload } = customPermission.permission;
+      canUpload = upload;
+    }
+
     return (
       <Fragment>
         <div className="main-panel o-hidden">
@@ -1913,7 +1926,7 @@ class LibContentView extends React.Component {
               updateDetail={this.state.updateDetail}
               onListContainerScroll={this.onListContainerScroll}
             />
-            {this.state.pathExist && !this.state.isViewFile && (
+            {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader
                 ref={uploader => this.uploader = uploader}
                 dragAndDrop={true}
@@ -1921,6 +1934,7 @@ class LibContentView extends React.Component {
                 repoID={this.props.repoID}
                 direntList={this.state.direntList}
                 onFileUploadSuccess={this.onFileUploadSuccess}
+                isCustomPermission={isCustomPermission}
               />
             )}
           </div>
