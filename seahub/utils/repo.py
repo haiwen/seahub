@@ -65,13 +65,13 @@ def parse_repo_perm(perm):
             if CUSTOM_PERMISSION_PREFIX in perm:
                 perm = perm.split('-')[1]
             custom_perm_obj = CustomSharePermissions.objects.get(id=int(perm)).to_dict()
-            RP.can_download = to_python_boolean(custom_perm_obj['permission'].get('download', False))
-            RP.can_upload = to_python_boolean(custom_perm_obj['permission'].get('upload', False))
-            RP.can_edit_on_web = to_python_boolean(custom_perm_obj['permission'].get('modify', False))
-            RP.can_delete = to_python_boolean(custom_perm_obj['permission'].get('delete', False))
-            RP.can_preview = to_python_boolean(custom_perm_obj['permission'].get('preview', False))
-            RP.can_generate_share_link = \
-                to_python_boolean(custom_perm_obj['permission'].get('generate_share_link', False))
+            RP.can_download = to_python_boolean(str(custom_perm_obj['permission'].get('download', False)))
+            RP.can_upload = to_python_boolean(str(custom_perm_obj['permission'].get('upload', False)))
+            RP.can_edit_on_web = to_python_boolean(str(custom_perm_obj['permission'].get('modify', False)))
+            RP.can_delete = to_python_boolean(str(custom_perm_obj['permission'].get('delete', False)))
+            RP.can_preview = to_python_boolean(str(custom_perm_obj['permission'].get('preview', False)))
+            RP.can_generate_share_link = to_python_boolean(
+                str(custom_perm_obj['permission'].get('download_external_link', False)))
             return RP
         except Exception as e:
             logger.warning(e)

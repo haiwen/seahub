@@ -3682,7 +3682,7 @@ class DirView(APIView):
                 error_msg = 'Folder %s not found.' % path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            if check_folder_permission(request, repo.id, path) != 'rw':
+            if parse_repo_perm(check_folder_permission(request, repo.id, path)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
