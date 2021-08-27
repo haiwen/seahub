@@ -536,46 +536,39 @@ class MarkdownEditor extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
-    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name, id } = res.data;
-      let lastModifier = last_modifier_name;
+    // get file info
+    const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);
+    const { mtime, size, starred, permission, last_modifier_name, id } = fileInfoRes.data;
+    const lastModifier = last_modifier_name;
 
-      this.setState((prevState, props) => ({
-        fileInfo: {
-          ...prevState.fileInfo,
-          mtime,
-          size,
-          starred,
-          permission,
-          lastModifier,
-          id
-        }
-      }));
+    // get file download url
+    const fileDownloadUrlRes = await seafileAPI.getFileDownloadLink(repoID, filePath);
+    const downloadUrl = fileDownloadUrlRes.data;
 
-      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-        const downLoadUrl = res.data;
-        seafileAPI.getFileContent(downLoadUrl).then((res) => {
-          const contentLength = res.data.length;
-          let isBlankFile =  (contentLength === 0 || contentLength === 1);
-          let permission = this.state.fileInfo.permission;
-          let hasPermission = (permission === 'rw' || permission === 'cloud-edit');
-          let value = deserialize(res.data);
-          this.setState({
-            markdownContent: res.data,
-            loading: false,
-            // Goto rich edit page
-            // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
-            // case1: If file is draft file
-            // case2: If mode == 'edit' and the file has no draft
-            // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
-            readOnly: !hasPermission || hasDraft,
-            value: value,
-          });
-        });
-      });
+    // get file content 
+    const fileContentRes = await seafileAPI.getFileContent(downloadUrl);
+    const markdownContent = fileContentRes.data;
+    const value = deserialize(markdownContent);
+
+    // init permission
+    const hasPermission = permission === 'rw' || permission === 'cloud-edit';
+
+    // Goto rich edit page
+    // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
+    // case1: If file is draft file
+    // case2: If mode == 'edit' and the file has no draft
+    // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
+    const { fileInfo } = this.state;
+    this.setState({
+      loading: false,
+      fileInfo: {...fileInfo, mtime, size, starred, permission, lastModifier, id},
+      markdownContent,
+      value,
+      readOnly: !hasPermission || hasDraft,
     });
+
     if (userInfo && this.socket) {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
