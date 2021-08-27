@@ -29,7 +29,7 @@ class CustomPermissionEditor extends React.Component {
         modify: false,
         delete: false,
         preview: false,
-        external_link: false,
+        download_external_link: false,
       },
       errMessage: '',
     };
@@ -168,8 +168,8 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('external_link')} checked={permission.external_link}/>
-                    <span>{gettext('Generate external link')}</span>
+                    <Input type="checkbox" onChange={this.onChangePermission('download_external_link')} checked={permission.external_link}/>
+                    <span>{gettext('Can generate download external link')}</span>
                   </Label>
                 </FormGroup>
               </div>
