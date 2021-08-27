@@ -12,7 +12,7 @@ except ImportError:
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.utils import six
+import six
 
 def get_otpauth_url(accountname, secret, issuer=None, digits=None):
     # For a complete run-through of all the parameters, have a look at the

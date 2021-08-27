@@ -2,8 +2,7 @@
 # encoding: utf-8
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from django.contrib import messages
@@ -86,18 +85,6 @@ def add(request, extra_context=None, next_override=None,
         # Only allow post request to change avatar.
         raise Http404
 
-    # return render_to_response(
-    #         'avatar/add.html',
-    #         extra_context,
-    #         context_instance = RequestContext(
-    #             request,
-    #             { 'avatar': avatar,
-    #               'avatars': avatars,
-    #               'upload_avatar_form': upload_avatar_form,
-    #               'next': next_override or _get_next(request), }
-    #         )
-    #     )
-
 
 @login_required
 def change(request, extra_context=None, next_override=None,
@@ -125,17 +112,15 @@ def change(request, extra_context=None, next_override=None,
         if updated:
             avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
         return HttpResponseRedirect(next_override or _get_next(request))
-    return render_to_response(
+    return render(
+        request,
         'avatar/change.html',
-        extra_context,
-        context_instance = RequestContext(
-            request,
-            { 'avatar': avatar,
-              'avatars': avatars,
-              'upload_avatar_form': upload_avatar_form,
-              'primary_avatar_form': primary_avatar_form,
-              'next': next_override or _get_next(request), }
-        )
+        extra_context.update({
+            'avatar': avatar,
+            'avatars': avatars,
+            'upload_avatar_form': upload_avatar_form,
+            'primary_avatar_form': primary_avatar_form,
+            'next': next_override or _get_next(request), }),
     )
 
 @login_required
@@ -165,16 +150,14 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
 
             messages.success(request, _("Successfully deleted the requested avatars."))
             return HttpResponseRedirect(next_override or _get_next(request))
-    return render_to_response(
+    return render(
+        request,
         'avatar/confirm_delete.html',
-        extra_context,
-        context_instance = RequestContext(
-            request,
-            { 'avatar': avatar,
-              'avatars': avatars,
-              'delete_avatar_form': delete_avatar_form,
-              'next': next_override or _get_next(request), }
-        )
+        extra_context.update({
+            'avatar': avatar,
+            'avatars': avatars,
+            'delete_avatar_form': delete_avatar_form,
+            'next': next_override or _get_next(request), }),
     )
 
 def render_primary(request, extra_context={}, user=None, size=AVATAR_DEFAULT_SIZE, *args, **kwargs):

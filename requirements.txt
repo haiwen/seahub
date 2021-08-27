@@ -1,4 +1,4 @@
-Django==2.2.14
+Django==3.2.6
 future
 captcha
 django-statici18n
@@ -8,7 +8,7 @@ mysqlclient
 django-picklefield==2.1.1
 openpyxl
 qrcode
-django-formtools
+django-formtools==2.3
 django-simple-captcha
 djangorestframework==3.11.1
 python-dateutil

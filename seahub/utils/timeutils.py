@@ -3,7 +3,7 @@ import logging
 import pytz
 import datetime
 from django.conf import settings
-from django.utils import six
+import six
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
 
