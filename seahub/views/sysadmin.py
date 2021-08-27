@@ -82,10 +82,7 @@ try:
     from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
-try:
-    from seahub.settings import ENABLE_SYSADMIN_EXTRA
-except ImportError:
-    ENABLE_SYSADMIN_EXTRA = False
+
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from termsandconditions.models import TermsAndConditions
 try:
@@ -119,7 +116,7 @@ def sysadmin_react_fake_view(request, **kwargs):
         'multi_institution': multi_institution,
         'institutions': institutions,
         'send_email_on_adding_system_member': SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER,
-        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
+        'sysadmin_extra_enabled': True if is_pro_version() else False,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'enable_file_scan': ENABLE_FILE_SCAN,

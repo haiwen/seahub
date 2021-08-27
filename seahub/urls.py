@@ -802,7 +802,8 @@ if HAS_FILE_SEARCH:
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     ]
 
-if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
+from seahub.utils import is_pro_version
+if is_pro_version():
     from seahub.sysadmin_extra.views import \
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
