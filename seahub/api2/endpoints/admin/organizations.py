@@ -29,11 +29,11 @@ except ImportError:
     ORG_MEMBER_QUOTA_ENABLED= False
 
 if ORG_MEMBER_QUOTA_ENABLED:
-    from seahub_extra.organizations.models import OrgMemberQuota
+    from seahub.organizations.models import OrgMemberQuota
 
 try:
     from seahub.settings import MULTI_TENANCY
-    from seahub_extra.organizations.models import OrgSettings
+    from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
 

@@ -166,20 +166,6 @@ class Account(APIView):
             profile.institution = institution
             profile.save()
 
-        # update is_trial
-        is_trial = request.data.get("is_trial", None)
-        if is_trial is not None:
-            try:
-                from seahub_extra.trialaccount.models import TrialAccount
-            except ImportError:
-                pass
-            else:
-                if is_trial is True:
-                    expire_date = timezone.now() + relativedelta(days=7)
-                    TrialAccount.object.create_or_update(email, expire_date)
-                else:
-                    TrialAccount.objects.filter(user_or_org=email).delete()
-
     def put(self, request, email, format=None):
 
         # argument check for email

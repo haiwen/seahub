@@ -1694,7 +1694,7 @@ class AdminUpdateUserCcnetEmail(APIView):
             logger.error(e)
 
         try:
-            from seahub_extra.sysadmin_extra.models import UserLoginLog
+            from seahub.sysadmin_extra.models import UserLoginLog
             userlastlogin_list = UserLoginLog.objects.filter(username=old_ccnet_email)
             for userlastlogin in userlastlogin_list:
                 userlastlogin.username = new_ccnet_email

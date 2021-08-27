@@ -34,11 +34,6 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
 try:
-    from seahub.settings import ENABLE_SYSADMIN_EXTRA
-except ImportError:
-    ENABLE_SYSADMIN_EXTRA = False
-
-try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
@@ -128,7 +123,7 @@ def base(request):
         'share_link_password_strength_level': config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
-        'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
+        'sysadmin_extra_enabled': True if is_pro_version() else False,
         'multi_tenancy': MULTI_TENANCY,
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         'search_repo_id': search_repo_id,

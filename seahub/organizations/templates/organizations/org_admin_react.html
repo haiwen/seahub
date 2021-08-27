@@ -1,0 +1,21 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'orgAdmin' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+   <script type="text/javascript">
+     window.org = {
+       pageOptions: {
+         orgID: '{{ org.org_id }}',
+         orgName: '{{ org.org_name|escapejs }}',
+         groupID: '{{ group_id }}',
+         invitationLink: '{{ invitation_link|escapejs }}',
+         orgMemberQuotaEnabled: '{{ org_member_quota_enabled }}'
+       }
+      }
+    </script>
+    {% render_bundle 'orgAdmin' 'js' %}
+{% endblock %}

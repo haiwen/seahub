@@ -1,0 +1,20 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+    {% render_bundle 'search' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+      window.search = {
+        pageOptions: {
+          q: '{{ keyword }}',
+          search_repo: '{{ search_repo }}',
+          search_ftypes: '{{ search_ftypes }}',
+          repo_name:'{{ repo.name }}',
+        }
+      }
+    </script>
+    {% render_bundle 'search' 'js' %}
+{% endblock %}

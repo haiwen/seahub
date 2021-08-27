@@ -50,7 +50,7 @@ class AdminLogsLoginLogs(APIView):
         start = (current_page - 1) * per_page
         end = start + per_page
 
-        from seahub_extra.sysadmin_extra.models import UserLoginLog
+        from seahub.sysadmin_extra.models import UserLoginLog
         logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
         count = UserLoginLog.objects.all().count()
 

@@ -279,7 +279,7 @@ class User(object):
             return None
 
         if not hasattr(self, '_cached_org_role'):
-            from seahub_extra.organizations.models import OrgSettings
+            from seahub.organizations.models import OrgSettings
             self._cached_org_role = OrgSettings.objects.get_role_by_org(
                 self._cached_orgs[0])
 
