@@ -1442,13 +1442,13 @@ class ReposSyncBatchMoveItemView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # 1. User must has `rw` permission for src parent dir.
-        if check_folder_permission(request, src_repo_id, src_parent_dir) != PERMISSION_READ_WRITE:
+        # 1. User must has `rw` or `modify` permission for src parent dir.
+        if parse_repo_perm(check_folder_permission(request, src_repo_id, src_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # 2. User must has `rw` permission for dst parent dir.
-        if check_folder_permission(request, dst_repo_id, dst_parent_dir) != PERMISSION_READ_WRITE:
+        # 2. User must has `rw` or `modify` permission for dst parent dir.
+        if parse_repo_perm(check_folder_permission(request, dst_repo_id, dst_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
