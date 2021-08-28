@@ -344,10 +344,14 @@ class MultipleDirOperationToolbar extends React.Component {
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canDelete = true;
     let canDownload = true;
+    let canCopy = true;
+    let canModify = true;
     if (isCustomPermission) {
       const { permission } = customPermission;
       canDelete = permission.delete;
-      canDownload = permission.download
+      canDownload = permission.download;
+      canCopy = permission.copy;
+      canModify = permission.modify;
     }
 
     return (
@@ -357,12 +361,8 @@ class MultipleDirOperationToolbar extends React.Component {
             <ButtonGroup className="flex-row group-operations">
               {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
                 <Fragment>
-                  {!isCustomPermission && (
-                    <Fragment>
-                      <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-                      <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-                    </Fragment>
-                  )}
+                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>}
+                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
                   {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
                   {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>}
                 </Fragment>

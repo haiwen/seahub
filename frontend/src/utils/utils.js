@@ -489,14 +489,22 @@ export const Utils = {
     if (permission == 'rw' || isCustomPermission) {
       if (isCustomPermission) {
         const { modify: canModify } = customPermission.permission;
-        if (canModify) list.push(RENAME);
+        if (canModify) list.push(RENAME, MOVE);
       } else {
-        list.push(RENAME);
+        list.push(RENAME, MOVE);
+      }
+    }
+
+    if (permission == 'rw' || isCustomPermission) {
+      if (isCustomPermission) {
+        const { copy: canCopy } = customPermission.permission;
+        if (canCopy) list.push(COPY);
+      } else {
+        list.push(COPY);
       }
     }
 
     if (permission == 'rw') {
-      list.push(MOVE, COPY);
       if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
       }
@@ -545,28 +553,36 @@ export const Utils = {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         if (isCustomPermission) {
           const { modify: canModify } = customPermission.permission;
-          if (canModify) list.push(RENAME, 'Divider');
-          if (enableFileComment) {
-            list.push(COMMENT);
-          }
-          list.push(HISTORY);
-          if (isPro && fileAuditEnabled) {
-            list.push(ACCESS_LOG);
-          }
-          list.push('Divider', OPEN_VIA_CLIENT);
+          if (canModify) {
+            list.push(RENAME);
+            list.push(MOVE);
+          } 
         } else {
           list.push(RENAME);
+          list.push(MOVE);
         }
       }
     }
 
-    if (permission == 'rw') {
-      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        list.push(MOVE);
+    if (permission == 'rw' || isCustomPermission) {
+      if (isCustomPermission) {
+        const { copy: canCopy } = customPermission.permission;
+        if (canCopy) list.push(COPY);
+        if (enableFileComment) {
+          list.push(COMMENT);
+        }
+        list.push(HISTORY);
+        if (isPro && fileAuditEnabled) {
+          list.push(ACCESS_LOG);
+        }
+        list.push('Divider', OPEN_VIA_CLIENT);
+      } else {
+        list.push(COPY);
       }
-      
-      list.push(COPY, TAGS);
+    }
 
+    if (permission == 'rw') {
+      list.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {

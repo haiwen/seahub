@@ -170,6 +170,12 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
+                    <Input type="checkbox" onChange={this.onChangePermission('copy')} checked={permission.copy}/>
+                    <span>{gettext('Copy')}</span>
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('delete')} checked={permission.delete}/>
                     <span>{gettext('Delete')}</span>
                   </Label>
