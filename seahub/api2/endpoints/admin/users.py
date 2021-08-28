@@ -1019,7 +1019,7 @@ class AdminUser(APIView):
                 error_msg = 'is_active invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if is_active and user_number_over_limit(new_users=1):
+            if is_pro_version() and is_active and user_number_over_limit(new_users=1):
                 error_msg = _("The number of users exceeds the limit.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
