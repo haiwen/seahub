@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
-import { Alert, FormGroup, Input, Label } from 'reactstrap';
+import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 
 const propTypes = {
   mode: PropTypes.string,
@@ -32,6 +32,7 @@ class CustomPermissionEditor extends React.Component {
         download_external_link: false,
       },
       errMessage: '',
+      tooltipOpen: false,
     };
   }
 
@@ -100,6 +101,10 @@ class CustomPermissionEditor extends React.Component {
     this.props.onUpdateCustomPermission(permission_name, permission_desc, permission);
   }
 
+  toggle = () => {
+    this.setState({tooltipOpen: !this.state.tooltipOpen});
+  }
+
   render() {
 
     const { mode } = this.props;
@@ -130,7 +135,7 @@ class CustomPermissionEditor extends React.Component {
                   <Input value={permission_name || ''} onChange={this.onChangePermissionName} />
                 </FormGroup>
                 <FormGroup className="permission-desc">
-                  <Label>{gettext('Permission description')}</Label>
+                  <Label>{gettext('Description')}</Label>
                   <Input value={permission_desc || ''} onChange={this.onChangePermissionDescription} />
                 </FormGroup>
               </div>
@@ -152,6 +157,15 @@ class CustomPermissionEditor extends React.Component {
                   <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
+                    <span id="modify-tip" className="fa fa-question-circle ml-2" style={{color: '#999'}}></span>
+                    <Tooltip
+                      toggle={this.toggle}
+                      delay={{show: 0, hide: 0}}
+                      target={'modify-tip'}
+                      placement='bottom'
+                      isOpen={this.state.tooltipOpen}>
+                      ({gettext('Modify includes modify file, create file and folder, move/rename/copy file and folder')})
+                    </Tooltip>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
@@ -169,7 +183,7 @@ class CustomPermissionEditor extends React.Component {
                 <FormGroup check>
                   <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('download_external_link')} checked={permission.download_external_link}/>
-                    <span>{gettext('Can generate download external link')}</span>
+                    <span>{gettext('Generate share link')}</span>
                   </Label>
                 </FormGroup>
               </div>
