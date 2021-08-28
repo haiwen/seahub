@@ -584,11 +584,16 @@ class CustomSharePermissions(models.Model):
         db_table = 'custom_share_permission'
 
     def to_dict(self):
+        try:
+            permission = json.loads(self.permission)
+        except Exception as e:
+            logger.error('Failed to deserialize permission: %s' % e)
+            permission = {}
         return {
             'id': self.pk,
             'name': self.name,
             'description': self.description,
-            'permission': json.loads(self.permission),
+            'permission': permission,
         }
 
 
