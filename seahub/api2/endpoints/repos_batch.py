@@ -1246,7 +1246,7 @@ class ReposAsyncBatchMoveItemView(APIView):
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1463,7 +1463,7 @@ class ReposSyncBatchMoveItemView(APIView):
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
