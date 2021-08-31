@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -345,9 +345,22 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
     if (dirent.type === 'dir') {
-      this.setState({
-        isZipDialogOpen: true
-      });
+      if (!useGoFileserver) {
+        this.setState({
+          isZipDialogOpen: true
+        });
+      } else {
+        seafileAPI.zipDownload(repoID, this.props.path, this.props.dirent.name).then((res) => {
+          const zipToken = res.data['zip_token'];
+          location.href = `${fileServerRoot}zip/${zipToken}`;
+        }).catch((error) => {
+          let errorMsg = Utils.getErrorMsg(error);
+          this.setState({
+            isLoading: false,
+            errorMsg: errorMsg
+          });
+        });
+      }
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
