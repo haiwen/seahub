@@ -7,7 +7,7 @@ class URLDecorator {
     let params = '';
     switch (options.type) {
       case 'download_historic_file':
-        params = 'p=' + options.filePath;
+        params = 'p=' + Utils.encodePath(options.filePath);
         url = siteRoot + 'repo/' + historyRepoID + '/' + options.objID + '/download?' + params;
         break;
       case 'download_file_url':
