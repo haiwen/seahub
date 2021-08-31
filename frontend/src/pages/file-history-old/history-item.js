@@ -46,8 +46,8 @@ class HistoryItem extends React.Component {
     let item = this.props.item;
     let downloadUrl = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id});
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`;
-    let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${filePath}`;
-    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${filePath}`;
+    let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
+    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
     return (
       <Fragment>
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
