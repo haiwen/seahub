@@ -164,7 +164,7 @@ class CustomPermissionEditor extends React.Component {
                       target={'modify-tip'}
                       placement='bottom'
                       isOpen={this.state.tooltipOpen}>
-                      ({gettext('Modify includes modify file, create file and folder, move/rename/copy file and folder')})
+                      ({gettext('Modify includes modify file, create file and folder, move/rename file and folder')})
                     </Tooltip>
                   </Label>
                 </FormGroup>
