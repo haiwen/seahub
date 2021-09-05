@@ -1630,8 +1630,10 @@ class LibContentView extends React.Component {
   }
 
   createDirent(name, type, size) {
+    const { direntList } = this.state;
+    const permission = direntList[0].permission;
     let mtime = new Date().getTime()/1000;
-    let dirent = new Dirent({name, type, mtime, size});
+    let dirent = new Dirent({name, type, mtime, size, permission});
     return dirent;
   }
 
