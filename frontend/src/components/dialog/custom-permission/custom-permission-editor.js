@@ -27,6 +27,7 @@ class CustomPermissionEditor extends React.Component {
         upload: false,
         download: false,
         modify: false,
+        copy: false,
         delete: false,
         preview: false,
         download_external_link: false,
