@@ -80,11 +80,11 @@ class CustomPermissionEditor extends React.Component {
     let isValid = false;
     let errMessage = '';
     if (!permission_name || !permission_name.trim()) {
-      errMessage = 'Name is required';
+      errMessage = gettext('Name is required');
       return { isValid, errMessage };
     }
     if (!permission_desc || !permission_desc.trim()) {
-      errMessage = 'Description is required';
+      errMessage = gettext('Description is required');
       return { isValid, errMessage };
     }
     
@@ -140,7 +140,7 @@ class CustomPermissionEditor extends React.Component {
                   <Input value={permission_desc || ''} onChange={this.onChangePermissionDescription} />
                 </FormGroup>
               </div>
-              {errMessage && <Alert color="danger">{gettext(`${errMessage}`)}</Alert>}
+              {errMessage && <Alert color="danger">{errMessage}</Alert>}
               <div className="permission-options">
                 <FormGroup check>
                   <Label check>

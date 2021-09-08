@@ -534,28 +534,30 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
                 <ul className="operation-group">
-                  {(dirent.permission === 'rw' || dirent.permission === 'r' || isCustomPermission) && (
-                    <Fragment>
-                      {canDownload && (
-                        <li className="operation-group-item">
-                          <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                        </li>
-                      )}
-                    </Fragment>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
+                  {(isCustomPermission && canDownload) && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
                   )}
                   {showShareBtn && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                     </li>
                   )}
-                  {(dirent.permission === 'rw' || isCustomPermission) && (
-                    <Fragment>
-                      {canDelete && (
-                        <li className="operation-group-item">
-                          <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                        </li>
-                      )}
-                    </Fragment>
+                  {dirent.permission === 'rw' && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
+                  {(isCustomPermission && canDelete) && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
                   )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
@@ -576,28 +578,30 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow &&
               <div className="operations">
                 <ul className="operation-group">
-                {(dirent.permission === 'rw' || dirent.permission === 'r' || isCustomPermission) && (
-                    <Fragment>
-                      {canDownload && (
-                        <li className="operation-group-item">
-                          <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                        </li>
-                      )}
-                    </Fragment>
+                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
+                  )}
+                  {(isCustomPermission && canDownload) && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                    </li>
                   )}
                   {showShareBtn && (
                     <li className="operation-group-item">
                       <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
                     </li>
                   )}
-                  {(dirent.permission === 'rw' || isCustomPermission) && (
-                    <Fragment>
-                      {canDelete && (
-                        <li className="operation-group-item">
-                          <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                        </li>
-                      )}
-                    </Fragment>
+                  {(dirent.permission === 'rw') && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
+                  )}
+                  {(isCustomPermission && canDelete) && (
+                    <li className="operation-group-item">
+                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                    </li>
                   )}
                   <li className="operation-group-item">
                     <ItemDropdownMenu
