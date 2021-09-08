@@ -576,11 +576,6 @@ export const Utils = {
       if (enableFileComment) {
         list.push(COMMENT);
       }
-      list.push(HISTORY);
-      if (isPro && fileAuditEnabled) {
-        list.push(ACCESS_LOG);
-      }
-      list.push('Divider', OPEN_VIA_CLIENT);
     }
 
     if (permission == 'rw') {
