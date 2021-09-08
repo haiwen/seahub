@@ -315,12 +315,19 @@ class DirentListView extends React.Component {
     event.preventDefault();
     // Display menu items based on the permissions of the current path
     let permission = this.props.userPerm;
-    if (permission !== 'admin' && permission !== 'rw') {
+
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(this.props.userPerm);
+    if (permission !== 'admin' && permission !== 'rw' && !isCustomPermission) {
       return;
     }
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
+      
+      // custom permission judgement
+      const { modify } = customPermission.permission;
+      if (!modify) return;
+
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
     } else {
@@ -334,6 +341,11 @@ class DirentListView extends React.Component {
           this.onDirentClick(null);
           event.preventDefault();
           event.persist();
+
+          // custom permission judgement
+          const { modify } = customPermission.permission;
+          if (!modify) return;
+
           setTimeout(() => {
             let id = 'dirent-container-menu';
             let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -342,7 +354,14 @@ class DirentListView extends React.Component {
         }
       } else {
         let id = 'dirents-menu';
-        let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        let { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
+        let menuList = [];
+        TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE
+        canModify && menuList.push(TextTranslation.MOVE);
+        canCopy && menuList.push(TextTranslation.COPY);
+        canDownload && menuList.push(TextTranslation.DOWNLOAD);
+        canDelete && menuList.push(TextTranslation.DELETE);
+
         this.handleContextClick(event, id, menuList);
       }
     }
