@@ -17,7 +17,7 @@ class EditCustomPermission extends React.Component {
       description: permission_desc,
       permission: permission
     });
-    this.props.editCustomPermission(newPermission)
+    this.props.editCustomPermission(newPermission);
   }
 
   render() {

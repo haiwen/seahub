@@ -137,7 +137,7 @@ class ShareDialog extends React.Component {
                 </NavItem>
                 <NavItem>
                   <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
-                    {gettext('Custom share permission')}
+                    {gettext('Customize share permission')}
                   </NavLink>
                 </NavItem>
                 {canInvitePeople &&

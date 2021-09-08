@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
-import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 
 const propTypes = {
   mode: PropTypes.string,
@@ -117,7 +117,7 @@ class CustomPermissionEditor extends React.Component {
       <div className="custom-permission">
         <div className="permission-header">
           <div className="title">
-            <div onClick={this.props.onChangeMode} >
+            <div onClick={this.props.onChangeMode}>
               <i className="fa fa-arrow-left"></i>
             </div>
             <div>{title}</div>

@@ -25,13 +25,6 @@ class ListCustomPermissions extends React.Component {
         </div>
         <div className="permission-main mt-4">
           <table className="permissions-list-header">
-            <thead>
-              <tr>
-                <th width='22%'>{gettext('Permission name')}</th>
-                <th width='56%'>{gettext('Description')}</th>
-                <th width='22%'>{gettext('Operation')}</th>
-              </tr>
-            </thead>
           </table>
           <div className="permissions-list-body">
             <table>

@@ -463,45 +463,41 @@ export const Utils = {
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
-      if (permission == 'rw' || permission == 'r' || isCustomPermission) {
-        if (isCustomPermission) {
-          const { download: canDownload } = customPermission.permission;
-          if (canDownload) list.push(DOWNLOAD);
-        } else {
+      if (permission == 'rw' || permission == 'r') {
           list.push(DOWNLOAD);
-        }
+      }
+
+      if (isCustomPermission && customPermission.permission.download) {
+        list.push(DOWNLOAD);
       }
 
       if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
         list.push(SHARE);
       }
 
-      if (permission == 'rw' || isCustomPermission) {
-        if (isCustomPermission) {
-          const { delete: canDelete } = customPermission.permission;
-          if (canDelete) list.push(DELETE, 'Divider');
-        } else {
-          list.push(DELETE, 'Divider');
-        }
+      if (permission == 'rw') {
+        list.push(DELETE, 'Divider');
+      }
+      
+      if (isCustomPermission && customPermission.permission.delete) {
+        list.push(DELETE, 'Divider');
       }
     }
 
-    if (permission == 'rw' || isCustomPermission) {
-      if (isCustomPermission) {
-        const { modify: canModify } = customPermission.permission;
-        if (canModify) list.push(RENAME, MOVE);
-      } else {
-        list.push(RENAME, MOVE);
-      }
+    if (permission == 'rw') {
+      list.push(RENAME, MOVE);
+    }
+    
+    if (isCustomPermission && customPermission.permission.modify) {
+      list.push(RENAME, MOVE);
     }
 
-    if (permission == 'rw' || isCustomPermission) {
-      if (isCustomPermission) {
-        const { copy: canCopy } = customPermission.permission;
-        if (canCopy) list.push(COPY);
-      } else {
-        list.push(COPY);
-      }
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+    
+    if (isCustomPermission && customPermission.permission.copy) {
+      list.push(COPY);
     }
 
     if (permission == 'rw') {
@@ -515,6 +511,11 @@ export const Utils = {
       list.push(COPY);
     }
 
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
+    }
+
     return list;
   },
 
@@ -526,59 +527,60 @@ export const Utils = {
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
-      if (permission == 'rw' || permission == 'r' || isCustomPermission) {
-        if (isCustomPermission) {
-          const { download: canDownload } = customPermission.permission;
-          if (canDownload) list.push(DOWNLOAD);
-        } else {
-          list.push(DOWNLOAD);
-        }
+      if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+      
+      if (isCustomPermission && customPermission.permission.download) {
+        list.push(DOWNLOAD);
       }
 
       if (Utils.isHasPermissionToShare(currentRepoInfo, permission, dirent)) {
         list.push(SHARE);
       }
 
-      if (permission == 'rw' || isCustomPermission) {
-        if (isCustomPermission) {
-          const { delete: canDelete } = customPermission.permission;
-          if (canDelete) list.push(DELETE, 'Divider');
-        } else {
-          list.push(DELETE, 'Divider');
+      if (permission == 'rw') {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
         }
+        list.push('Divider');
+      }
+      
+      if (isCustomPermission && customPermission.permission.delete) {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
+        }
+        list.push('Divider');
       }
     }
 
-    if (permission == 'rw' || isCustomPermission) {
+    if (permission == 'rw') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        if (isCustomPermission) {
-          const { modify: canModify } = customPermission.permission;
-          if (canModify) {
-            list.push(RENAME);
-            list.push(MOVE);
-          } 
-        } else {
-          list.push(RENAME);
-          list.push(MOVE);
-        }
+        list.push(RENAME, MOVE);
       }
     }
 
-    if (permission == 'rw' || isCustomPermission) {
-      if (isCustomPermission) {
-        const { copy: canCopy } = customPermission.permission;
-        if (canCopy) list.push(COPY);
-        if (enableFileComment) {
-          list.push(COMMENT);
-        }
-        list.push(HISTORY);
-        if (isPro && fileAuditEnabled) {
-          list.push(ACCESS_LOG);
-        }
-        list.push('Divider', OPEN_VIA_CLIENT);
-      } else {
+    if (isCustomPermission && customPermission.permission.modify) {
+      list.push(RENAME, MOVE);
+    }
+
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+
+    if (isCustomPermission) {
+      if (customPermission.permission.copy) {
         list.push(COPY);
       }
+
+      if (enableFileComment) {
+        list.push(COMMENT);
+      }
+      list.push(HISTORY);
+      if (isPro && fileAuditEnabled) {
+        list.push(ACCESS_LOG);
+      }
+      list.push('Divider', OPEN_VIA_CLIENT);
     }
 
     if (permission == 'rw') {
@@ -1482,7 +1484,7 @@ export const Utils = {
       if (permissionId === userPermId) {
         return { isCustomPermission: true, customPermission: custom_permission };
       }
-      // TODO
+      // TODO user set custom permission on folder
     }
     return { isCustomPermission: false }; 
   }

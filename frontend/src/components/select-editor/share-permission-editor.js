@@ -46,7 +46,7 @@ class SharePermissionEditor extends React.Component {
     const cacheData = localStorage.getItem(this.CACHE_KEY);
     if (cacheData) {
       const { permission_list: permissions } = JSON.parse(cacheData);
-      const customPermissions = permissions.map(item => new CustomPermission(item))
+      const customPermissions = permissions.map(item => new CustomPermission(item));
       this.setState({
         isLoading: false,
         customPermissions: customPermissions
@@ -77,7 +77,6 @@ class SharePermissionEditor extends React.Component {
       value = item && item.name;
     }
     return value;
-    
   }
   
   translateExplanation = (explanation) => {

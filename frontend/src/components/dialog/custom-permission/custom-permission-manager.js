@@ -121,7 +121,6 @@ class CustomPermissionManager extends React.Component {
 
   render() {
 
-    
     if (this.state.isLoading) {
       return <Loading />
     }
