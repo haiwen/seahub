@@ -559,9 +559,11 @@ export const Utils = {
         list.push(RENAME, MOVE);
       }
     }
-
+    
     if (isCustomPermission && customPermission.permission.modify) {
-      list.push(RENAME, MOVE);
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME, MOVE);
+      }
     }
 
     if (permission == 'rw') {
