@@ -178,8 +178,7 @@ def onlyoffice_convert(request):
     body = json.loads(request.body)
 
     username = body.get('username')
-    file_uri = body.get('fileUri')
-    file_pass = body.get('filePass') or None
+    file_uri = body.get('file_uri')
     repo_id = body.get('repo_id')
     folder_name = get_file_path_without_mame(file_uri) + '/'
     file_ext = get_file_ext(file_uri)
@@ -195,8 +194,7 @@ def onlyoffice_convert(request):
     download_uri = doc_dic["doc_url"]
     key = doc_dic["doc_key"]
 
-    newUri = get_converter_uri(download_uri, file_ext, new_ext,
-                               key, False, file_pass)
+    newUri = get_converter_uri(download_uri, file_ext, new_ext, key, False)
 
     if not newUri:
         logger.error('[OnlyOffice] No response from file converter.')

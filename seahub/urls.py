@@ -869,7 +869,7 @@ if getattr(settings, 'ENABLE_ONLYOFFICE', False):
     from seahub.onlyoffice.views import onlyoffice_convert
     urlpatterns += [
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
-        url(r'^onlyoffice/convert', onlyoffice_convert, name='onlyoffice_convert')
+        url(r'^onlyoffice/convert/', onlyoffice_convert, name='onlyoffice_convert')
     ]
 
 if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):

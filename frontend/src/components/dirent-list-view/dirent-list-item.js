@@ -372,11 +372,11 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let user = username;
     let fileUri = this.getDirentPath(this.props.dirent)
-    fetch(siteRoot+'onlyoffice/convert', {
+    fetch(siteRoot+'onlyoffice/convert/', {
       method: 'POST',
       body: JSON.stringify({
         username: user,
-        fileUri: fileUri,
+        file_uri: fileUri,
         repo_id: repoID,
       }),
       headers: {
