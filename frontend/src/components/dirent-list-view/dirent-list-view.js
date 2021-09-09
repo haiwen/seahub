@@ -325,8 +325,10 @@ class DirentListView extends React.Component {
       let id = 'dirent-container-menu';
       
       // custom permission judgement
-      const { modify } = customPermission.permission;
-      if (!modify) return;
+      if (isCustomPermission) {
+        const { modify } = customPermission.permission;
+        if (!modify) return;
+      }
 
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
@@ -343,8 +345,10 @@ class DirentListView extends React.Component {
           event.persist();
 
           // custom permission judgement
-          const { modify } = customPermission.permission;
-          if (!modify) return;
+          if (isCustomPermission) {
+            const { modify } = customPermission.permission;
+            if (!modify) return;
+          }
 
           setTimeout(() => {
             let id = 'dirent-container-menu';
@@ -354,13 +358,16 @@ class DirentListView extends React.Component {
         }
       } else {
         let id = 'dirents-menu';
-        let { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
         let menuList = [];
-        TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE
-        canModify && menuList.push(TextTranslation.MOVE);
-        canCopy && menuList.push(TextTranslation.COPY);
-        canDownload && menuList.push(TextTranslation.DOWNLOAD);
-        canDelete && menuList.push(TextTranslation.DELETE);
+        if (isCustomPermission) {
+          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
+          canModify && menuList.push(TextTranslation.MOVE);
+          canCopy && menuList.push(TextTranslation.COPY);
+          canDownload && menuList.push(TextTranslation.DOWNLOAD);
+          canDelete && menuList.push(TextTranslation.DELETE);
+        } else {
+          menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        }
 
         this.handleContextClick(event, id, menuList);
       }
