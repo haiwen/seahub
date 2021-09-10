@@ -44,7 +44,7 @@ class SharePermissionEditor extends React.Component {
   }
 
   componentWillUnmount() {
-    localStorage.removeItem(this.CACHE_KEY);
+    isPro && localStorage.removeItem(this.CACHE_KEY);
   }
 
   listCustomPermissions = () => {
