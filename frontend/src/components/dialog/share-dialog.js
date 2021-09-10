@@ -102,6 +102,8 @@ class ShareDialog extends React.Component {
       enableDirPrivateShare = itemType == 'library';
     }
 
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
+
     return (
       <Fragment>
         <div className="share-dialog-side">
@@ -148,7 +150,7 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
-            {isPro && (
+            {isPro && !isCustomPermission && (
               <NavItem>
                 <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
                   {gettext('Custom sharing permissions')}
