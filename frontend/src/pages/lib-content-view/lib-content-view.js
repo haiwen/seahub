@@ -1279,7 +1279,8 @@ class LibContentView extends React.Component {
         }
       }
     } else {
-      direntObject.permission = this.state.direntList[0].permission;
+      // use current dirent parent's permission as it's permission
+      direntObject.permission = this.state.userPerm;
       let dirent = new Dirent(direntObject);
       if (this.state.currentMode === 'column') {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
@@ -1630,8 +1631,8 @@ class LibContentView extends React.Component {
   }
 
   createDirent(name, type, size) {
-    const { direntList } = this.state;
-    const permission = direntList[0].permission;
+    // use current dirent parent's permission as it's permission
+    const { userPerm: permission } = this.state;
     let mtime = new Date().getTime()/1000;
     let dirent = new Dirent({name, type, mtime, size, permission});
     return dirent;
