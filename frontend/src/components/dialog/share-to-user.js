@@ -129,6 +129,7 @@ const propTypes = {
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
+  onAddCustomPermissionToggle: PropTypes.func,
 };
 
 class ShareToUser extends React.Component {
@@ -341,6 +342,8 @@ class ShareToUser extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
+                  enableAddCustomPermission={isPro}
+                  onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />
               </td>
               <td>

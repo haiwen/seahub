@@ -13,7 +13,9 @@ const propTypes = {
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
-  onPermissionChanged: PropTypes.func.isRequired
+  onPermissionChanged: PropTypes.func.isRequired,
+  enableAddCustomPermission: PropTypes.bool,
+  onAddCustomPermissionToggle: PropTypes.func,
 };
 
 class SharePermissionEditor extends React.Component {
@@ -124,6 +126,8 @@ class SharePermissionEditor extends React.Component {
         onOptionChanged={this.props.onPermissionChanged}
         translateOption={this.translatePermission}
         translateExplanation={this.translateExplanation}
+        enableAddCustomPermission={this.props.enableAddCustomPermission}
+        onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
       />
     );
   }

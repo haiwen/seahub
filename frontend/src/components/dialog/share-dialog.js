@@ -81,6 +81,10 @@ class ShareDialog extends React.Component {
     }
   }
 
+  onAddCustomPermissionToggle = () => {
+    this.toggle('customSharePermission');
+  }
+
   renderDirContent = () => {
 
     if (!this.state.isRepoJudgemented) {
@@ -147,7 +151,7 @@ class ShareDialog extends React.Component {
             {isPro && (
               <NavItem>
                 <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
-                  {gettext('Customize share permission')}
+                  {gettext('Custom sharing permissions')}
                 </NavLink>
               </NavItem>
             )}
@@ -193,12 +197,26 @@ class ShareDialog extends React.Component {
               <Fragment>
                 {activeTab === 'shareToUser' &&
                   <TabPane tabId="shareToUser">
-                    <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+                    <ShareToUser 
+                      itemType={this.props.itemType} 
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
+                      itemPath={this.props.itemPath} 
+                      repoID={this.props.repoID} 
+                      isRepoOwner={this.state.isRepoOwner} 
+                      onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                    />
                   </TabPane>
                 }
                 {activeTab === 'shareToGroup' &&
                   <TabPane tabId="shareToGroup">
-                    <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+                    <ShareToGroup 
+                      itemType={this.props.itemType} 
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
+                      itemPath={this.props.itemPath} 
+                      repoID={this.props.repoID} 
+                      isRepoOwner={this.state.isRepoOwner} 
+                      onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                    />
                   </TabPane>
                 }
                 {(canInvitePeople && activeTab === 'invitePeople') &&

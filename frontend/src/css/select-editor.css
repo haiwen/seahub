@@ -31,3 +31,34 @@
 .cur-view-content .permission-editor-select .permission-editor__indicators .permission-editor__indicator {
   padding: 0 0.5rem;
 }
+
+.permission-editor .permission-editor__menu .permission-editor__option--is-disabled {
+  color: #9c9c9c;
+  border-top: 1px solid #dedede;
+}
+
+.permission-editor .permission-editor__menu .permission-editor__option--is-disabled:hover {
+  background-color: #f0f0f0 !important;
+  color: #9c9c9c !important;
+}
+
+.permission-editor .btn-add-custom-permission {
+  display: flex;
+  align-items: center;
+  padding: .5rem 0;
+  font-size: 12px;
+  line-height: 13px;
+}
+
+.permission-editor .btn-add-custom-permission .fa {
+  font-size: 12px;
+  line-height: 13px;
+  margin-right: .25rem;
+}
+
+.share-dialog-main .permission-editor .permission-editor__placeholder,
+.share-dialog-main .true__menu,
+.share-dialog-main .true__placeholder,
+.permission-editor .btn-add-custom-permission span {
+  word-break: keep-all;
+}
