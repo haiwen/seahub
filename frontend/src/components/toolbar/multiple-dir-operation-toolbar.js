@@ -385,7 +385,7 @@ class MultipleDirOperationToolbar extends React.Component {
             </ButtonGroup>
           </div>
         </div>
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}

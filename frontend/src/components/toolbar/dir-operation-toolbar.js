@@ -236,7 +236,7 @@ class DirOperationToolbar extends React.Component {
             )}
           </div>
         )}
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile

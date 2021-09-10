@@ -574,10 +574,6 @@ export const Utils = {
       if (customPermission.permission.copy) {
         list.push(COPY);
       }
-
-      if (enableFileComment) {
-        list.push(COMMENT);
-      }
     }
 
     if (permission == 'rw') {
