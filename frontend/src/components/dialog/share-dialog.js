@@ -141,6 +141,13 @@ class ShareDialog extends React.Component {
                     {gettext('Share to group')}
                   </NavLink>
                 </NavItem>
+                {isPro && !isCustomPermission && (
+                  <NavItem>
+                    <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
+                      {gettext('Custom sharing permissions')}
+                    </NavLink>
+                  </NavItem>
+                )}
                 {canInvitePeople &&
                   <NavItem>
                     <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
@@ -150,13 +157,6 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
-            {isPro && !isCustomPermission && (
-              <NavItem>
-                <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
-                  {gettext('Custom sharing permissions')}
-                </NavLink>
-              </NavItem>
-            )}
             {enableOCM && itemType === 'library' && this.state.isRepoOwner &&
               <NavItem>
                 <NavLink className={activeTab === 'shareToOtherServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToOtherServer')}>
