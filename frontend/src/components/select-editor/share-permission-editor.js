@@ -5,6 +5,7 @@ import SelectEditor from './select-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import CustomPermission from '../../models/custom-permission';
 import toaster from '../toast';
+import { isPro } from '../../utils/constants';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -30,10 +31,13 @@ class SharePermissionEditor extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.repoID) {
+    if (this.props.repoID && isPro) {
       this.listCustomPermissions();
     } else {
-      this.setState({isLoading: false});
+      this.setState({
+        isLoading: false,
+        customPermissions: [],
+      });
     }
   }
 
