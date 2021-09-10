@@ -189,13 +189,15 @@ class FileUploader extends React.Component {
     const { isCustomPermission } = this.props;
     let isFile = resumableFile.fileName === resumableFile.relativePath;
     // uploading is file and only upload one file
-    if (!isCustomPermission && isFile && files.length === 1) {
+    if (isFile && files.length === 1) {
       let hasRepetition = false;
-      let direntList = this.props.direntList;
-      for (let i = 0; i < direntList.length; i++) {
-        if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
-          hasRepetition = true;
-          break;
+      if (!isCustomPermission) {
+        let direntList = this.props.direntList;
+        for (let i = 0; i < direntList.length; i++) {
+          if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
+            hasRepetition = true;
+            break;
+          }
         }
       }
       if (hasRepetition) {
