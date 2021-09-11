@@ -31,6 +31,13 @@ class TreeView extends React.Component {
       isItemFreezed: false,
       isTreeViewDropTipShow: false,
     };
+    const { userPerm } = props;
+    this.canDrop = userPerm === 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { modify } = customPermission.permission;
+      this.canDrop = modify;
+    }
   }
 
   onItemMove = (repo, dirent, selectedPath, currentPath) => {
@@ -49,7 +56,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragEnter = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     e.persist();
@@ -61,7 +68,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragMove = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     e.preventDefault();
@@ -69,7 +76,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragLeave = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     if (e.target.className === 'tree-view tree tree-view-drop') {
@@ -80,7 +87,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDrop = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     if (e.dataTransfer.files.length) { // uploaded files
@@ -295,7 +302,7 @@ class TreeView extends React.Component {
   render() {
     return (
       <div
-        className={`tree-view tree ${this.state.isTreeViewDropTipShow ? 'tree-view-drop' : ''}`}
+        className={`tree-view tree ${(this.state.isTreeViewDropTipShow && this.canDrop) ? 'tree-view-drop' : ''}`}
         onDrop={this.onNodeDrop}
         onDragEnter={this.onNodeDragEnter}
         onDragLeave={this.onNodeDragLeave}

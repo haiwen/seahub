@@ -84,8 +84,9 @@ class DirentListView extends React.Component {
 
     this.zipToken = null;
 
+    const { userPerm } = props;
     this.canDrop = userPerm === 'rw';
-    const { isCustomPermission, customPermission } = Utils.getUserPermission(props.userPerm);
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     if (isCustomPermission) {
       const { modify } = customPermission.permission;
       this.canDrop = modify;
