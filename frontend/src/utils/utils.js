@@ -128,6 +128,7 @@ export const Utils = {
     const { isCustomPermission } = Utils.getUserPermission(permission);
     if (isCustomPermission) {
       permissionOptions.push('preview_download');
+      permissionOptions.push('preview_only');
       return permissionOptions;
     }
 
