@@ -35,8 +35,8 @@ class TreeNodeView extends React.Component {
       isShowOperationMenu: false,
       isNodeDropShow: false,
     };
-    this.canDrag = true;
     const { userPerm } = props;
+    this.canDrag = userPerm === 'rw';
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     if (isCustomPermission) {
       const { modify } = customPermission.permission;

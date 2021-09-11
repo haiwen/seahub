@@ -33,7 +33,7 @@ class DirentGridItem extends React.Component {
     this.isCustomPermission = isCustomPermission;
     this.customPermission = customPermission;
     this.canPreview = true;
-    this.canDrag = true;
+    this.canDrag = dirent.permission === 'rw';
     if (isCustomPermission) {
       const { preview, modify } = customPermission.permission;
       this.canPreview = preview || modify;
