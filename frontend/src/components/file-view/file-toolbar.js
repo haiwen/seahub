@@ -6,6 +6,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -32,10 +34,31 @@ class FileToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       dropdownOpen: false,
       moreDropdownOpen: false,
       isShareDialogOpen: false,
     };
+  }
+
+  async componentDidMount() {
+    if (filePerm && filePerm.startsWith('custom-')) {
+      this.isCustomPermission = true;
+      const permissionID = filePerm.split('-')[1];
+      try {
+        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+        this.customPermission = permissionRes.data.permission;
+        // share dialog need a global custom_permission
+        window.custom_permission = this.customPermission;
+        this.setState({isLoading: false});
+      } catch(error) {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        this.setState({isLoading: false});
+      }
+    } else {
+      this.setState({isLoading: false});
+    }
   }
 
   toggleShareDialog = () => {
@@ -55,6 +78,10 @@ class FileToolbar extends React.Component {
   }
 
   render() {
+    if (this.state.isLoading) {
+      return null;
+    }
+
     const { isLocked, lockedByMe } = this.props;
     const { moreDropdownOpen } = this.state;
     let showLockUnlockBtn = false;
@@ -76,6 +103,14 @@ class FileToolbar extends React.Component {
       showShareBtn = true; // for internal link
     } else if (filePerm == 'rw' || filePerm == 'r') {
       showShareBtn = true;
+    }
+
+    let canComment = enableComment;
+    const { isCustomPermission, customPermission } = this;
+    if (isCustomPermission) {
+      const { download_external_link } = customPermission.permission;
+      showShareBtn = download_external_link;
+      canComment = false;
     }
 
     return (
@@ -153,7 +188,7 @@ class FileToolbar extends React.Component {
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
-              {enableComment && (
+              {canComment && (
                 <DropdownItem onClick={this.props.toggleCommentPanel}>
                   {gettext('Comment')}
                 </DropdownItem>
@@ -192,8 +227,7 @@ class FileToolbar extends React.Component {
                 )}
           </ButtonGroup>
 
-          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More Operations')}>
-          </DropdownToggle>
+          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More Operations')}></DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
@@ -224,7 +258,7 @@ class FileToolbar extends React.Component {
                 </a>
               </DropdownItem>
             )}
-            {enableComment && (
+            {canComment && (
               <DropdownItem onClick={this.props.toggleCommentPanel}>
                 {gettext('Comment')}
               </DropdownItem>
@@ -233,19 +267,19 @@ class FileToolbar extends React.Component {
           </DropdownMenu>
         </Dropdown>
 
-        {this.state.isShareDialogOpen &&
-        <ModalPortal>
-          <ShareDialog
-            itemType='file'
-            itemName={fileName}
-            itemPath={filePath}
-            userPerm={filePerm}
-            repoID={repoID}
-            repoEncrypted={repoEncrypted}
-            toggleDialog={this.toggleShareDialog}
-          />
-        </ModalPortal>
-        }
+        {this.state.isShareDialogOpen && (
+          <ModalPortal>
+            <ShareDialog
+              itemType='file'
+              itemName={fileName}
+              itemPath={filePath}
+              userPerm={filePerm}
+              repoID={repoID}
+              repoEncrypted={repoEncrypted}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }
