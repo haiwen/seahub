@@ -610,6 +610,11 @@ export const Utils = {
       list.push(HISTORY);
     }
 
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
+    }
+
     return list;
   },
 
