@@ -82,8 +82,8 @@ class TreeNodeView extends React.Component {
     }
     const { isCustomPermission, customPermission } = Utils.getUserPermission(object.permission);
     if (isCustomPermission) {
-      const { preview: canPreview } = customPermission.permission;
-      if (!canPreview) return;
+      const { preview: canPreview, modify: canModify } = customPermission.permission;
+      if (!canPreview && !canModify) return;
     } 
     this.props.onNodeClick(this.props.node);
   }

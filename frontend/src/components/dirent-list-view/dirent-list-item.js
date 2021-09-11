@@ -76,11 +76,13 @@ class DirentListItem extends React.Component {
 
     const { dirent } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
-    const canPreview = isCustomPermission ? customPermission.permission.preview : true;
-
     this.isCustomPermission = isCustomPermission;
     this.customPermission = customPermission;
-    this.canPreview = canPreview;
+    this.canPreview = true;
+    if (isCustomPermission) {
+      const { preview, modify } = customPermission.permission;
+      this.canPreview = preview || modify;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
