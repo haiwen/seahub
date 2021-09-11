@@ -291,7 +291,7 @@ class TreeNodeView extends React.Component {
           onContextMenu={this.onItemContextMenu}
           onClick={this.onNodeClick}
         >
-          <div className="tree-node-text" draggable="true" onDragStart={this.onNodeDragStart} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
+          <div className="tree-node-text" draggable={this.canDrag} onDragStart={this.onNodeDragStart} onDragEnter={this.onNodeDragEnter} onDragLeave={this.onNodeDragLeave} onDragOver={this.onNodeDragMove} onDrop={this.onNodeDrop}>{node.object.name}</div>
           <div className="left-icon">
             {type === 'dir' && (!node.isLoaded ||  (node.isLoaded && node.hasChildren())) && (
               <i

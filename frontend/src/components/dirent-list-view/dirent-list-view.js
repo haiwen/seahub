@@ -83,6 +83,13 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
 
     this.zipToken = null;
+
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(props.userPerm);
+    this.canDrag = true;
+    if (isCustomPermission) {
+      const { modify } = customPermission.permission;
+      this.canDrag = modify;
+    }
   }
 
   freezeItem = () => {
@@ -474,7 +481,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragEnter = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.enteredCounter++;
@@ -487,7 +494,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragOver = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -498,7 +505,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragLeave = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.enteredCounter--;
@@ -508,7 +515,7 @@ class DirentListView extends React.Component {
   }
 
   tableDrop = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     e.persist();
@@ -566,7 +573,7 @@ class DirentListView extends React.Component {
 
     return (
       <div
-        className={`table-container ${this.state.isListDropTipShow ? 'table-drop-active' : ''}`}
+        className={`table-container ${(this.state.isListDropTipShow && this.canDrag) ? 'table-drop-active' : ''}`}
         onMouseDown={this.onContainerMouseDown}
         onContextMenu={this.onContainerContextMenu}
         onClick={this.onContainerClick}

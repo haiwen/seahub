@@ -660,7 +660,7 @@ class DirentListItem extends React.Component {
     const desktopItem = (
       <tr
         className={trClass}
-        draggable="true"
+        draggable={this.canDrag}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}

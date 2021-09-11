@@ -212,7 +212,7 @@ class DirentGridItem extends React.Component {
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
           <div
             className={gridClass}
-            draggable="true"
+            draggable={this.canDrag}
             onClick={this.onItemClick}
             onDragStart={this.onGridItemDragStart}
             onDragEnter={this.onGridItemDragEnter}
@@ -226,7 +226,7 @@ class DirentGridItem extends React.Component {
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
-          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
+          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
             {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
