@@ -35,6 +35,13 @@ class TreeNodeView extends React.Component {
       isShowOperationMenu: false,
       isNodeDropShow: false,
     };
+    this.canDrag = true;
+    const { userPerm } = props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { modify } = customPermission.permission;
+      this.canDrag = modify;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -99,10 +106,16 @@ class TreeNodeView extends React.Component {
   }
 
   onNodeDragStart = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.props.onNodeDragStart(e, this.props.node);
   }
 
   onNodeDragEnter = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     if (this.props.node.object.type === 'dir') {
       this.setState({isNodeDropShow: true});
     }
@@ -110,15 +123,24 @@ class TreeNodeView extends React.Component {
   }
 
   onNodeDragMove = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.props.onNodeDragMove(e);
   }
 
   onNodeDragLeave = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.setState({isNodeDropShow: false});
     this.props.onNodeDragLeave(e, this.props.node);
   }
 
   onNodeDrop = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     e.stopPropagation();
     this.setState({isNodeDropShow: false});
     this.props.onNodeDrop(e, this.props.node);

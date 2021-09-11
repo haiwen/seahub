@@ -79,9 +79,11 @@ class DirentListItem extends React.Component {
     this.isCustomPermission = isCustomPermission;
     this.customPermission = customPermission;
     this.canPreview = true;
+    this.canDrag = true;
     if (isCustomPermission) {
       const { preview, modify } = customPermission.permission;
       this.canPreview = preview || modify;
+      this.canDrag = modify;
     }
   }
 
@@ -112,7 +114,9 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    if (this.canDrag) {
+      this.setState({isDragTipShow: true});
+    }
   }
 
   onMouseOver = () => {
@@ -122,7 +126,9 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    if (this.canDrag) {
+      this.setState({isDragTipShow: true});
+    }
   }
 
   onMouseLeave = () => {
@@ -395,7 +401,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragStart = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     e.dataTransfer.effectAllowed = 'move';
@@ -425,7 +431,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragEnter = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -435,7 +441,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragOver = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -446,7 +452,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragLeave = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
 
@@ -457,7 +463,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragDrop = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.setState({isDropTipshow: false});

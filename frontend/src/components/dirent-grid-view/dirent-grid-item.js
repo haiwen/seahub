@@ -33,9 +33,11 @@ class DirentGridItem extends React.Component {
     this.isCustomPermission = isCustomPermission;
     this.customPermission = customPermission;
     this.canPreview = true;
+    this.canDrag = true;
     if (isCustomPermission) {
       const { preview, modify } = customPermission.permission;
       this.canPreview = preview || modify;
+      this.canDrag = modify;
     }
 
   }
@@ -102,6 +104,9 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragStart = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
@@ -110,21 +115,33 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragEnter = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     if (this.props.dirent.type === 'dir') {
       this.setState({isGridDropTipShow: true});
     }
   }
 
   onGridItemDragOver = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
 
   onGridItemDragLeave = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.setState({isGridDropTipShow: false});
   }
 
   onGridItemDragDrop = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.setState({isGridDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
