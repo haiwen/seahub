@@ -82,6 +82,9 @@ export const enableTC = window.app.pageOptions.enableTC;
 
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 
+export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
+export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
+
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;
 export const showLogoutIcon = window.app.pageOptions.showLogoutIcon;
