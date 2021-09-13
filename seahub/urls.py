@@ -106,6 +106,7 @@ from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotific
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
 from seahub.api2.endpoints.ocm_repos import OCMReposDirView, OCMReposDownloadLinkView, \
     OCMReposUploadLinkView
+from seahub.api2.endpoints.custom_share_permissions import CustomSharePermissionsView, CustomSharePermissionView
 
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
@@ -321,6 +322,9 @@ urlpatterns = [
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/user-share/$', GroupOwnedLibraryUserShare.as_view(), name='api-v2.1-group-owned-library-user-share'),
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', GroupOwnedLibraryGroupShare.as_view(), name='api-v2.1-group-owned-library-group-share'),
     url(r'^api/v2.1/group-owned-libraries/user-share-in-libraries/(?P<repo_id>[-0-9-a-f]{36})/$', GroupOwnedLibraryUserShareInLibrary.as_view(), name='api-v2.1-group-owned-library-user-share-in-library'),
+
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/$', CustomSharePermissionsView.as_view(), name='api-v2.1-custom-share-permissions'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/(?P<permission_id>\d+)/$', CustomSharePermissionView.as_view(), name='api-v2.1-custom-share-permission'),
 
     ## user::shared-folders
     url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),

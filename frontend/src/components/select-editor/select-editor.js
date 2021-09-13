@@ -13,9 +13,16 @@ const propTypes = {
   translateExplanation: PropTypes.func,
   onOptionChanged: PropTypes.func.isRequired,
   toggleItemFreezed: PropTypes.func,
+  enableAddCustomPermission: PropTypes.bool,
+  onAddCustomPermissionToggle: PropTypes.func,
+
 };
 
 class SelectEditor extends React.Component {
+
+  static defaultProps = {
+    enableAddCustomPermission: false,
+  }
 
   constructor(props) {
     super(props);
@@ -42,6 +49,21 @@ class SelectEditor extends React.Component {
       } else {
         option.label = <div>{this.props.translateOption(options[i])}{ this.props.translateExplanation && <div className="permission-editor-explanation">{this.props.translateExplanation(options[i])}</div>}</div>;
       }
+      this.options.push(option);
+    }
+
+    const { enableAddCustomPermission } = this.props;
+    if (enableAddCustomPermission) {
+      const option = {
+        value: gettext('Add custom permission'),
+        isDisabled: true,
+        label: (
+          <div className="btn-add-custom-permission" onClick={this.props.onAddCustomPermissionToggle}>
+            <i className="fa fa-plus"></i>
+            <span>{gettext('Add custom permission')}</span>
+          </div>
+        )
+      };
       this.options.push(option);
     }
 

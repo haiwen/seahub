@@ -37,12 +37,13 @@ class GroupItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let currentPermission = item.is_admin ? 'admin' : item.permission;
+    let currentPermission = Utils.getSharedPermission(item);
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className='name'>{item.group_info.name}</td>
         <td>
           <SharePermissionEditor
+            repoID={this.props.repoID}
             isTextMode={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
@@ -74,6 +75,7 @@ class GroupList extends React.Component {
             <GroupItem
               key={index}
               item={item}
+              repoID={this.props.repoID}
               permissions={this.props.permissions}
               deleteShareItem={this.props.deleteShareItem}
               onChangeUserPermission={this.props.onChangeUserPermission}
@@ -91,6 +93,7 @@ const propTypes = {
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
+  onAddCustomPermissionToggle: PropTypes.func,
 };
 
 const NoOptionsMessage = (props) => {
@@ -322,11 +325,14 @@ class ShareToGroup extends React.Component {
               </td>
               <td>
                 <SharePermissionEditor
+                  repoID={this.props.repoID}
                   isTextMode={false}
                   isEditIconShow={false}
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
+                  enableAddCustomPermission={isPro}
+                  onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />
               </td>
               <td>
@@ -349,6 +355,7 @@ class ShareToGroup extends React.Component {
           <table className="table-thead-hidden w-xs-200">
             {thead}
             <GroupList
+              repoID={this.props.repoID}
               items={this.state.sharedItems}
               permissions={this.permissions}
               deleteShareItem={this.deleteShareItem}

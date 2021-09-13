@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import ShareToInvitePeople from './share-to-invite-people';
@@ -13,6 +13,8 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../loading';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import CustomPermissionManager from './custom-permission/custom-permission-manager';
+
 import '../../css/share-link-dialog.css';
 
 const propTypes = {
@@ -79,6 +81,10 @@ class ShareDialog extends React.Component {
     }
   }
 
+  onAddCustomPermissionToggle = () => {
+    this.toggle('customSharePermission');
+  }
+
   renderDirContent = () => {
 
     if (!this.state.isRepoJudgemented) {
@@ -95,6 +101,8 @@ class ShareDialog extends React.Component {
     if (repoEncrypted) {
       enableDirPrivateShare = itemType == 'library';
     }
+
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
 
     return (
       <Fragment>
@@ -133,6 +141,13 @@ class ShareDialog extends React.Component {
                     {gettext('Share to group')}
                   </NavLink>
                 </NavItem>
+                {isPro && !isCustomPermission && (
+                  <NavItem>
+                    <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
+                      {gettext('Custom sharing permissions')}
+                    </NavLink>
+                  </NavItem>
+                )}
                 {canInvitePeople &&
                   <NavItem>
                     <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
@@ -184,12 +199,26 @@ class ShareDialog extends React.Component {
               <Fragment>
                 {activeTab === 'shareToUser' &&
                   <TabPane tabId="shareToUser">
-                    <ShareToUser itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+                    <ShareToUser 
+                      itemType={this.props.itemType} 
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
+                      itemPath={this.props.itemPath} 
+                      repoID={this.props.repoID} 
+                      isRepoOwner={this.state.isRepoOwner} 
+                      onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                    />
                   </TabPane>
                 }
                 {activeTab === 'shareToGroup' &&
                   <TabPane tabId="shareToGroup">
-                    <ShareToGroup itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
+                    <ShareToGroup 
+                      itemType={this.props.itemType} 
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
+                      itemPath={this.props.itemPath} 
+                      repoID={this.props.repoID} 
+                      isRepoOwner={this.state.isRepoOwner} 
+                      onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                    />
                   </TabPane>
                 }
                 {(canInvitePeople && activeTab === 'invitePeople') &&
@@ -199,6 +228,11 @@ class ShareDialog extends React.Component {
                 }
               </Fragment>
             }
+            {isPro && activeTab === 'customSharePermission' && (
+              <TabPane tabId="customSharePermission">
+                <CustomPermissionManager repoID={this.props.repoID}/>
+              </TabPane>
+            )}
             {enableOCM && itemType === 'library' && activeTab === 'shareToOtherServer' &&
               <TabPane tabId="shareToOtherServer">
                 <ShareToOtherServer itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
@@ -212,7 +246,7 @@ class ShareDialog extends React.Component {
 
   renderFileContent = () => {
     let activeTab = this.state.activeTab;
-    const { itemType, itemName, repoEncrypted } = this.props;
+    const { itemType, itemName, repoEncrypted, userPerm } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
 
     return (
@@ -242,6 +276,7 @@ class ShareDialog extends React.Component {
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
                   itemType={itemType}
+                  userPerm={userPerm}
                 />
               </TabPane>
             }

@@ -176,7 +176,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -278,7 +278,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -677,7 +677,7 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
 
         username = request.user.username
-        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

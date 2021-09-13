@@ -6,6 +6,7 @@ import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
 import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
 import MultipleDirOperationToolbar from '../../components/toolbar/multiple-dir-operation-toolbar';
 import ViewFileToolbar from '../../components/toolbar/view-file-toolbar';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   isViewFile: PropTypes.bool.isRequired,
@@ -55,6 +56,9 @@ class LibContentToolbar extends React.Component {
 
   render() {
 
+    const { userPerm } = this.props;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
+
     if (this.props.isViewFile) {
       return (
         <Fragment>
@@ -76,7 +80,7 @@ class LibContentToolbar extends React.Component {
               onRelatedFileChange={this.props.onRelatedFileChange}
               showShareBtn={this.props.showShareBtn}
             />
-            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode}/>
+            <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />
           </div>
           <CommonToolbar isLibView={true} repoID={this.props.repoID} repoName={this.props.repoName} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={gettext('Search files in this library')}/>
         </Fragment>

@@ -339,26 +339,39 @@ class MultipleDirOperationToolbar extends React.Component {
 
     const { repoID, userPerm } = this.props;
     const dirent = this.props.selectedDirentList[0];
+    const direntPath = this.getDirentPath(dirent);
 
-    let direntPath = this.getDirentPath(dirent);
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    let canDelete = true;
+    let canDownload = true;
+    let canCopy = true;
+    let canModify = true;
+    if (isCustomPermission) {
+      const { permission } = customPermission;
+      canDelete = permission.delete;
+      canDownload = permission.download;
+      canCopy = permission.copy;
+      canModify = permission.modify;
+    }
 
     return (
       <Fragment>
         <div className="dir-operation">
           <div className="d-flex">
             <ButtonGroup className="flex-row group-operations">
-              {(userPerm === 'rw' || userPerm === 'admin') && (
+              {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
                 <Fragment>
-                  <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-                  <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>}
+                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
+                  {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>}
                 </Fragment>
               )}
               {userPerm === 'r' && (
-                <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-              )}
-              {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'r') && (
-                <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+                <Fragment>
+                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+                  <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+                </Fragment>
               )}
               {this.props.selectedDirentList.length === 1 &&
                 <ItemDropdownMenu
@@ -372,7 +385,7 @@ class MultipleDirOperationToolbar extends React.Component {
             </ButtonGroup>
           </div>
         </div>
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}

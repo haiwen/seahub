@@ -7,7 +7,7 @@ import { hideMenu, showMenu } from '../context-menu/actions';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  repoPermission: PropTypes.bool,
+  userPerm: PropTypes.string,
   isNodeMenuShow: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   currentPath: PropTypes.string.isRequired,
@@ -31,6 +31,13 @@ class TreeView extends React.Component {
       isItemFreezed: false,
       isTreeViewDropTipShow: false,
     };
+    const { userPerm } = props;
+    this.canDrop = userPerm === 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { modify } = customPermission.permission;
+      this.canDrop = modify;
+    }
   }
 
   onItemMove = (repo, dirent, selectedPath, currentPath) => {
@@ -49,7 +56,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragEnter = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     e.persist();
@@ -61,7 +68,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragMove = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     e.preventDefault();
@@ -69,7 +76,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDragLeave = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     if (e.target.className === 'tree-view tree tree-view-drop') {
@@ -80,7 +87,7 @@ class TreeView extends React.Component {
   }
 
   onNodeDrop = (e, node) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     if (e.dataTransfer.files.length) { // uploaded files
@@ -255,6 +262,32 @@ class TreeView extends React.Component {
       menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
     }
 
+    const { userPerm } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (!isCustomPermission) {
+      return menuList;
+    }
+
+    menuList = [];
+
+    const { modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
+    if (!node) {
+      canModify && menuList.push(NEW_FOLDER, NEW_FILE);
+      return menuList;
+    }
+
+    if (node.object.type === 'dir') { 
+      canModify && menuList.push(NEW_FOLDER, NEW_FILE);
+    }
+    
+    canCopy && menuList.push(COPY);
+    canModify && menuList.push(MOVE, RENAME);
+    canDelete && menuList.push(DELETE);
+
+    if (node.object.type !== 'dir') { 
+      menuList.push(OPEN_VIA_CLIENT);
+    }
+
     return menuList;
   }
 
@@ -269,7 +302,7 @@ class TreeView extends React.Component {
   render() {
     return (
       <div
-        className={`tree-view tree ${this.state.isTreeViewDropTipShow ? 'tree-view-drop' : ''}`}
+        className={`tree-view tree ${(this.state.isTreeViewDropTipShow && this.canDrop) ? 'tree-view-drop' : ''}`}
         onDrop={this.onNodeDrop}
         onDragEnter={this.onNodeDragEnter}
         onDragLeave={this.onNodeDragLeave}
@@ -277,7 +310,7 @@ class TreeView extends React.Component {
         onContextMenu={this.onContextMenu}
       >
         <TreeNodeView
-          repoPermission={this.props.repoPermission}
+          userPerm={this.props.userPerm}
           node={this.props.treeData.root}
           currentPath={this.props.currentPath}
           paddingLeft={PADDING_LEFT}

@@ -121,9 +121,16 @@ export const Utils = {
 
   getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
     // itemType: library, dir, file
-    // permission: rw, r, admin, cloud-edit, preview
+    // permission: rw, r, admin, cloud-edit, preview, custom-*
 
     let permissionOptions = [];
+
+    const { isCustomPermission } = Utils.getUserPermission(permission);
+    if (isCustomPermission) {
+      permissionOptions.push('preview_download');
+      permissionOptions.push('preview_only');
+      return permissionOptions;
+    }
 
     if (permission == 'rw' || permission == 'admin' || permission == 'r') {
       permissionOptions.push('preview_download');
@@ -454,9 +461,14 @@ export const Utils = {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
+          list.push(DOWNLOAD);
+      }
+
+      if (isCustomPermission && customPermission.permission.download) {
         list.push(DOWNLOAD);
       }
 
@@ -467,10 +479,29 @@ export const Utils = {
       if (permission == 'rw') {
         list.push(DELETE, 'Divider');
       }
+      
+      if (isCustomPermission && customPermission.permission.delete) {
+        list.push(DELETE, 'Divider');
+      }
     }
 
     if (permission == 'rw') {
-      list.push(RENAME, MOVE, COPY);
+      list.push(RENAME, MOVE);
+    }
+    
+    if (isCustomPermission && customPermission.permission.modify) {
+      list.push(RENAME, MOVE);
+    }
+
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+    
+    if (isCustomPermission && customPermission.permission.copy) {
+      list.push(COPY);
+    }
+
+    if (permission == 'rw') {
       if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
       }
@@ -481,6 +512,11 @@ export const Utils = {
       list.push(COPY);
     }
 
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
+    }
+
     return list;
   },
 
@@ -489,9 +525,14 @@ export const Utils = {
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
       COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+      
+      if (isCustomPermission && customPermission.permission.download) {
         list.push(DOWNLOAD);
       }
 
@@ -503,17 +544,41 @@ export const Utils = {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
         }
+        list.push('Divider');
       }
-
-      list.push('Divider');
+      
+      if (isCustomPermission && customPermission.permission.delete) {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
+        }
+        list.push('Divider');
+      }
     }
 
     if (permission == 'rw') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
       }
-      list.push(COPY, TAGS);
+    }
+    
+    if (isCustomPermission && customPermission.permission.modify) {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME, MOVE);
+      }
+    }
 
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+
+    if (isCustomPermission) {
+      if (customPermission.permission.copy) {
+        list.push(COPY);
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
@@ -543,6 +608,11 @@ export const Utils = {
         list.push(COMMENT);
       }
       list.push(HISTORY);
+    }
+
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
     }
 
     return list;
@@ -1269,6 +1339,12 @@ export const Utils = {
    */
   isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
 
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userDirPermission);
+    if (isCustomPermission) {
+      const { download_external_link } = customPermission.permission;
+      return download_external_link;
+    }
+
     let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
     let isRepoOwner = ownerEmail === username;
 
@@ -1381,5 +1457,35 @@ export const Utils = {
     }
     return level;
   },
+  
+  getSharedPermission(item) {
+    let permission = item.permission;
+    if (item.is_admin) {
+      permission = 'admin';
+    }
+    if (item.permission.startsWith('custom-')) {
+      permission = item.permission.slice(7);
+    }
+    return permission;
+  },
+
+  getUserPermission(userPerm) {
+    const { custom_permission } = window;
+    const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    // visit the shared repo(virtual repo) by custom permission 
+    if (!custom_permission || common_permissions.indexOf(userPerm) > -1) {
+      return { isCustomPermission: false };
+    } 
+    // userPerm is startsWith 'custom-'
+    if (custom_permission) {
+      const permissionId = custom_permission.id;
+      const userPermId = parseInt(userPerm.split('-')[1]);
+      if (permissionId === userPermId) {
+        return { isCustomPermission: true, customPermission: custom_permission };
+      }
+      // TODO user set custom permission on folder
+    }
+    return { isCustomPermission: false }; 
+  }
 
 };

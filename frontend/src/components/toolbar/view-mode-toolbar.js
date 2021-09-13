@@ -5,9 +5,14 @@ import { gettext } from '../../utils/constants';
 const propTypes = {
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
+  isCustomPermission: PropTypes.bool,
 };
 
 class ViewModeToolbar extends React.Component {
+
+  static defaultProps = {
+    isCustomPermission: false,
+  }
 
   switchViewMode = (e) => {
     e.preventDefault();
@@ -27,9 +32,11 @@ class ViewModeToolbar extends React.Component {
           <button className={`${baseClass} sf2-icon-grid-view ${this.props.currentMode === 'grid' ? 'current-mode' : ''}`} id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
           <button className={`${baseClass} sf2-icon-two-columns ${this.props.currentMode === 'column' ? 'current-mode' : ''}`} id='column' title={gettext('Column')} onClick={this.switchViewMode}></button>
         </div>
-        <div className="detail-btn btn-group">
-          <button className="btn btn-secondary btn-icon ml-1 fas fa-info" id='detail' title={gettext('Detail')} onClick={this.switchViewMode}></button>
-        </div>
+        {!this.props.isCustomPermission && (
+          <div className="detail-btn btn-group">
+            <button className="btn btn-secondary btn-icon ml-1 fas fa-info" id='detail' title={gettext('Detail')} onClick={this.switchViewMode}></button>
+          </div>
+        )}
       </React.Fragment>
     );
   }

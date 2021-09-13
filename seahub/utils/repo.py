@@ -10,11 +10,13 @@ from seaserv import seafile_api, ccnet_api
 from seahub.constants import (
     PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
     PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
-    REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY
+    REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY, CUSTOM_PERMISSION_PREFIX
 )
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
+from seahub.api2.utils import to_python_boolean
 from seahub.base.models import RepoSecretKey
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.share.models import CustomSharePermissions
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
@@ -50,12 +52,30 @@ def get_available_repo_perms():
 
 def parse_repo_perm(perm):
     RP = namedtuple('RepoPerm', [
-        'can_download', 'can_upload',  # download/uplaod files/folders
+        'can_download', 'can_upload',  # download/upload files/folders
         'can_edit_on_web',             # edit files on web
+        'can_delete',                  # delete files/folders
         'can_copy',                    # copy files/folders on web
         'can_preview',                 # preview files on web
         'can_generate_share_link',     # generate share link
     ])
+
+    if perm not in get_available_repo_perms():
+        try:
+            if CUSTOM_PERMISSION_PREFIX in perm:
+                perm = perm.split('-')[1]
+            custom_perm_obj = CustomSharePermissions.objects.get(id=int(perm)).to_dict()
+            RP.can_download = to_python_boolean(str(custom_perm_obj['permission'].get('download', False)))
+            RP.can_upload = to_python_boolean(str(custom_perm_obj['permission'].get('upload', False)))
+            RP.can_edit_on_web = to_python_boolean(str(custom_perm_obj['permission'].get('modify', False)))
+            RP.can_copy = to_python_boolean(str(custom_perm_obj['permission'].get('copy', False)))
+            RP.can_delete = to_python_boolean(str(custom_perm_obj['permission'].get('delete', False)))
+            RP.can_preview = to_python_boolean(str(custom_perm_obj['permission'].get('preview', False)))
+            RP.can_generate_share_link = to_python_boolean(
+                str(custom_perm_obj['permission'].get('download_external_link', False)))
+            return RP
+        except Exception as e:
+            logger.warning(e)
 
     RP.can_download = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
@@ -66,6 +86,9 @@ def parse_repo_perm(perm):
     ] else False
     RP.can_copy = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+    ] else False
+    RP.can_delete = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN,
     ] else False
     RP.can_preview = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,

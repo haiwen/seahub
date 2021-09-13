@@ -17,7 +17,7 @@ from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import update_user_dir_permission, \
         update_group_dir_permission, share_dir_to_user, share_dir_to_group, \
         has_shared_to_user, has_shared_to_group, check_user_share_out_permission, \
-        check_group_share_out_permission
+        check_group_share_out_permission, normalize_custom_permission_name
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 
 from seahub.base.accounts import User
@@ -162,8 +162,10 @@ class AdminShares(APIView):
         # argument check
         permission = request.data.get('permission', None)
         if not permission or permission not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         result = {}
         result['failed'] = []
@@ -309,8 +311,10 @@ class AdminShares(APIView):
         # argument check
         permission = request.data.get('permission', None)
         if not permission or permission not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         share_info = {}
         share_info['repo_id'] = repo.repo_id

@@ -124,3 +124,44 @@ input.expire-input {
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
 }
+
+.custom-permission .permission-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .375rem 0;
+    border-bottom: 1px solid #efefef;
+}
+
+.custom-permission .permission-header .title {
+    display: flex;
+}
+
+.custom-permission .permission-header .title .fa {
+    color: #999;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.custom-permission .permission-name-desc {
+    margin-top: .375rem;
+}
+  
+.custom-permission .permission-name-desc label {
+    font-size: 14px;
+    color: #999;
+}   
+
+.custom-permission .permission-name-desc .permission-name,
+.custom-permission .permission-name-desc .permission-desc {
+    flex: 1;
+}
+
+.custom-permission .permission-name-desc .permission-desc {
+    margin-left: .4rem;
+}
+
+.custom-permission .permissions-list-body {
+    max-height: 350px;
+    overflow-y: scroll;
+  }

@@ -166,15 +166,28 @@ class DirOperationToolbar extends React.Component {
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    let canUpload = true;
+    let canModify = true;
+    if (isCustomPermission) {
+      const { permission } = customPermission;
+      canUpload = permission.upload;
+      canModify = permission.modify;
+    }
+
     let content = null;
     if (Utils.isDesktop()) {
       let { showShareBtn } = this.props;
       content = (
         <Fragment>
-          {Utils.isSupportUploadFolder() ?
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
-          <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>
+          {canUpload && (
+            <Fragment>
+              {Utils.isSupportUploadFolder() ?
+                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
+            </Fragment>
+          )}
+          {canModify && <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>}
           {showShareBtn && <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
         </Fragment>
       );
@@ -183,9 +196,15 @@ class DirOperationToolbar extends React.Component {
         <Dropdown isOpen={this.state.isMobileOpMenuOpen} toggle={this.toggleMobileOpMenu}>
           <DropdownToggle tag="span" className="sf2-icon-plus mobile-toolbar-icon" />
           <DropdownMenu>
-            <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
-            <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
-            <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+            {canUpload && (
+              <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
+            )}
+            {canModify && (
+              <Fragment>
+                <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
+                <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+              </Fragment>
+            )}
           </DropdownMenu>
         </Dropdown>
       );
@@ -193,7 +212,7 @@ class DirOperationToolbar extends React.Component {
 
     return (
       <Fragment>
-        {(userPerm === 'rw' || userPerm === 'admin') && (
+        {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
           <div className="dir-operation">
             <div className="operation">
               {content}
@@ -217,7 +236,7 @@ class DirOperationToolbar extends React.Component {
             )}
           </div>
         )}
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isCreateFileDialogShow && (
           <ModalPortal>
             <CreateFile

@@ -28,7 +28,7 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
-        share_dir_to_group
+        share_dir_to_group, normalize_custom_permission_name
 from seahub.constants import PERMISSION_READ
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -181,8 +181,10 @@ class GroupLibraries(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # permission check
         if not request.user.permissions.can_add_repo():

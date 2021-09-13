@@ -9,7 +9,6 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
-  repoPermission: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
@@ -152,7 +151,7 @@ class DirColumnView extends React.Component {
       <div className="dir-colunm-view" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="viewModeContainer">
         <DirColumnNav
           currentPath={this.props.path}
-          repoPermission={this.props.repoPermission}
+          userPerm={this.props.userPerm}
           isTreeDataLoading={this.props.isTreeDataLoading}
           treeData={this.props.treeData}
           currentNode={this.props.currentNode}

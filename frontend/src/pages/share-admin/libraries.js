@@ -202,6 +202,11 @@ class Item extends Component {
       share_permission = 'admin';
     }
 
+    // custom defined permission
+    if (share_permission.startsWith('custom-')) {
+      share_permission = share_permission.slice(7);
+    }
+
     const desktopItem = (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
@@ -211,6 +216,7 @@ class Item extends Component {
         </td>
         <td>
           <SharePermissionEditor
+            repoID={item.repo_id}
             isTextMode={true}
             isEditIconShow={this.state.isOpIconShown}
             currentPermission={share_permission}
@@ -251,14 +257,15 @@ class Item extends Component {
             </Dropdown>
           </td>
         </tr>
-        {isPermSelectDialogOpen &&
-        <PermSelect
-          currentPerm={share_permission}
-          permissions={this.permissions}
-          changePerm={this.changePerm}
-          toggleDialog={this.togglePermSelectDialog}
-        />
-        }
+        {isPermSelectDialogOpen && (
+          <PermSelect
+            repoID={item.repo_id}
+            currentPerm={share_permission}
+            permissions={this.permissions}
+            changePerm={this.changePerm}
+            toggleDialog={this.togglePermSelectDialog}
+          />
+        )}
       </Fragment>
     );
 

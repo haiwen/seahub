@@ -21,7 +21,8 @@ from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 from seahub.group.utils import is_group_member
 from seahub.base.accounts import User
 from seahub.share.utils import is_repo_admin, \
-        check_user_share_out_permission, check_group_share_out_permission
+        check_user_share_out_permission, check_group_share_out_permission, \
+        normalize_custom_permission_name
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
@@ -148,8 +149,10 @@ class ReposBatchView(APIView):
 
             permission = request.data.get('permission', 'rw')
             if permission not in get_available_repo_perms():
-                error_msg = 'permission invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                permission = normalize_custom_permission_name(permission)
+                if not permission:
+                    error_msg = 'permission invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # share repo to user
             if share_type == 'user':
@@ -1118,16 +1121,14 @@ class ReposAsyncBatchCopyItemView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # 1. User must has `r/rw` permission for src parent dir.
-        src_parent_permission = check_folder_permission(request, src_repo_id, src_parent_dir)
-        if src_parent_permission not in (PERMISSION_READ_WRITE,
-                PERMISSION_READ):
+        # 1. User must has `r/rw` or `copy` permission for src parent dir.
+        if parse_repo_perm(check_folder_permission(request, src_repo_id, src_parent_dir)).can_copy is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # 2. User must has `rw` permission for dst parent dir.
         dst_parent_permission = check_folder_permission(request, dst_repo_id, dst_parent_dir)
-        if dst_parent_permission != PERMISSION_READ_WRITE:
+        if parse_repo_perm(dst_parent_permission).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1220,13 +1221,13 @@ class ReposAsyncBatchMoveItemView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # 1. User must has `rw` permission for src parent dir.
-        if check_folder_permission(request, src_repo_id, src_parent_dir) != PERMISSION_READ_WRITE:
+        # 1. User must has `rw` or `modify` permission for src parent dir.
+        if parse_repo_perm(check_folder_permission(request, src_repo_id, src_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # 2. User must has `rw` permission for dst parent dir.
-        if check_folder_permission(request, dst_repo_id, dst_parent_dir) != PERMISSION_READ_WRITE:
+        # 2. User must has `rw` or `modify` permission for dst parent dir.
+        if parse_repo_perm(check_folder_permission(request, dst_repo_id, dst_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1245,7 +1246,7 @@ class ReposAsyncBatchMoveItemView(APIView):
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1337,16 +1338,14 @@ class ReposSyncBatchCopyItemView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # 1. User must has `r/rw` permission for src parent dir.
-        src_parent_permission = check_folder_permission(request, src_repo_id, src_parent_dir)
-        if src_parent_permission not in (PERMISSION_READ_WRITE,
-                PERMISSION_READ):
+        # 1. User must has `r/rw` or `copy` permission for src parent dir.
+        if parse_repo_perm(check_folder_permission(request, src_repo_id, src_parent_dir)).can_copy is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # 2. User must has `rw` permission for dst parent dir.
         dst_parent_permission = check_folder_permission(request, dst_repo_id, dst_parent_dir)
-        if dst_parent_permission != PERMISSION_READ_WRITE:
+        if parse_repo_perm(dst_parent_permission).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1439,13 +1438,13 @@ class ReposSyncBatchMoveItemView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # 1. User must has `rw` permission for src parent dir.
-        if check_folder_permission(request, src_repo_id, src_parent_dir) != PERMISSION_READ_WRITE:
+        # 1. User must has `rw` or `modify` permission for src parent dir.
+        if parse_repo_perm(check_folder_permission(request, src_repo_id, src_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # 2. User must has `rw` permission for dst parent dir.
-        if check_folder_permission(request, dst_repo_id, dst_parent_dir) != PERMISSION_READ_WRITE:
+        # 2. User must has `rw` or `modify` permission for dst parent dir.
+        if parse_repo_perm(check_folder_permission(request, dst_repo_id, dst_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1464,7 +1463,7 @@ class ReposSyncBatchMoveItemView(APIView):
                 src_repo_id, src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
                 error_msg = _("Can't move folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1534,7 +1533,7 @@ class ReposBatchDeleteItemView(APIView):
 
         # permission check
         # User must has `rw` permission for parent dir.
-        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

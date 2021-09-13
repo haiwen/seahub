@@ -1,14 +1,26 @@
 import logging
 
 from seahub.group.utils import is_group_admin
-from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
-from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.utils import is_valid_org_id
 
 import seaserv
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
+
+
+def normalize_custom_permission_name(permission):
+    try:
+        if CUSTOM_PERMISSION_PREFIX in permission:
+            permission = permission.split('-')[1]
+        CustomSharePermissions.objects.get(id=int(permission))
+    except Exception as e:
+        logger.warning(e)
+        return None
+    return CUSTOM_PERMISSION_PREFIX + '-' + str(permission)
+
 
 def is_repo_admin(username, repo_id):
 

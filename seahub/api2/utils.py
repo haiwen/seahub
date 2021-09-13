@@ -23,11 +23,9 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter, email2contact_email
 from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member
-from seahub.notifications.models import UserNotification
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.settings import INSTALLED_APPS
 
 logger = logging.getLogger(__name__)
 

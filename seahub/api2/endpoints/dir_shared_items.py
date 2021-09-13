@@ -29,7 +29,7 @@ from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
         update_group_dir_permission, check_user_share_out_permission, \
-        check_group_share_out_permission
+        check_group_share_out_permission, normalize_custom_permission_name
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
@@ -230,7 +230,9 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         repo_owner = self.get_repo_owner(request, repo_id)
         if repo_owner != username and not is_repo_admin(username, repo_id):
@@ -311,7 +313,9 @@ class DirSharedItemsEndpoint(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         result = {}
         result['failed'] = []

@@ -146,6 +146,11 @@ a:hover { color:#eb8205; }
   margin: 0;
 }
 
+.sf-link {
+    color: #ee8204 !important;
+    cursor: pointer;
+}
+
 .vh {
     visibility: hidden;
 }

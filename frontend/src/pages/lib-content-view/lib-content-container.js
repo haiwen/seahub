@@ -18,7 +18,6 @@ const propTypes = {
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoPermission: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
@@ -184,7 +183,7 @@ class LibContentContainer extends React.Component {
               repoName={this.props.currentRepoInfo.repo_name}
               pathPrefix={this.props.pathPrefix}
               currentPath={this.props.path}
-              permission={this.props.repoPermission}
+              userPerm={this.props.userPerm}
               isViewFile={this.props.isViewFile}
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
@@ -245,7 +244,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
@@ -277,7 +275,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}

@@ -39,7 +39,6 @@ class LibContentView extends React.Component {
       hash: '',
       currentRepoInfo: null,
       repoName: '',
-      repoPermission: true,
       repoEncrypted: false,
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
@@ -124,35 +123,39 @@ class LibContentView extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let repoID = this.props.repoID;
     let location = window.location.href.split('#')[0];
     location = decodeURIComponent(location);
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      let repoInfo = new RepoInfo(res.data);
-      let isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+    let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
+    path = path.slice(path.indexOf('/')); // get current path
+
+    try {
+      const repoRes = await seafileAPI.getRepoInfo(repoID);
+      const repoInfo = new RepoInfo(repoRes.data);
+      const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+
+      if (repoInfo.permission.startsWith('custom-')) {
+        const permissionID = repoInfo.permission.split('-')[1];
+        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+        window.custom_permission = permissionRes.data.permission;
+      }
+
+      this.isNeedUpdateHistoryState = false;
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
-        repoPermission: repoInfo.permission === 'rw',
         isGroupOwnedRepo: isGroupOwnedRepo,
+        path: path
       });
-
-      let repoID = repoInfo.repo_id;
-      let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
-      path = path.slice(path.indexOf('/')); // get current path
-
-      this.isNeedUpdateHistoryState = false;
-
-      this.setState({path: path});
-
+      
       if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
-    }).catch(error => {
+    } catch (error) {
       if (error.response) {
         if (error.response.status == 403) {
           this.setState({
@@ -174,7 +177,7 @@ class LibContentView extends React.Component {
           errorMsg: gettext('Please check the network.')
         });
       }
-    });
+    }
   }
 
   componentWillUnmount() {
@@ -1276,7 +1279,8 @@ class LibContentView extends React.Component {
         }
       }
     } else {
-      direntObject.permission = 'rw';
+      // use current dirent parent's permission as it's permission
+      direntObject.permission = this.state.userPerm;
       let dirent = new Dirent(direntObject);
       if (this.state.currentMode === 'column') {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
@@ -1627,8 +1631,10 @@ class LibContentView extends React.Component {
   }
 
   createDirent(name, type, size) {
+    // use current dirent parent's permission as it's permission
+    const { userPerm: permission } = this.state;
     let mtime = new Date().getTime()/1000;
-    let dirent = new Dirent({name, type, mtime, size});
+    let dirent = new Dirent({name, type, mtime, size, permission});
     return dirent;
   }
 
@@ -1795,6 +1801,13 @@ class LibContentView extends React.Component {
       return index < this.state.itemsShowLength;
     });
 
+    let canUpload = true;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { upload } = customPermission.permission;
+      canUpload = upload;
+    }
+
     return (
       <Fragment>
         <div className="main-panel o-hidden">
@@ -1849,7 +1862,6 @@ class LibContentView extends React.Component {
               pathExist={this.state.pathExist}
               currentRepoInfo={this.state.currentRepoInfo}
               repoID={this.props.repoID}
-              repoPermission={this.state.repoPermission}
               enableDirPrivateShare={enableDirPrivateShare}
               userPerm={userPerm}
               isGroupOwnedRepo={this.state.isGroupOwnedRepo}
@@ -1917,7 +1929,7 @@ class LibContentView extends React.Component {
               updateDetail={this.state.updateDetail}
               onListContainerScroll={this.onListContainerScroll}
             />
-            {this.state.pathExist && !this.state.isViewFile && (
+            {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader
                 ref={uploader => this.uploader = uploader}
                 dragAndDrop={true}
@@ -1925,6 +1937,7 @@ class LibContentView extends React.Component {
                 repoID={this.props.repoID}
                 direntList={this.state.direntList}
                 onFileUploadSuccess={this.onFileUploadSuccess}
+                isCustomPermission={isCustomPermission}
               />
             )}
           </div>

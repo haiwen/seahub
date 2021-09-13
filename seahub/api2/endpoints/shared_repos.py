@@ -19,7 +19,8 @@ from seahub.utils.repo import get_available_repo_perms
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
-        check_user_share_out_permission, check_group_share_out_permission
+        check_user_share_out_permission, check_group_share_out_permission, \
+        normalize_custom_permission_name
 
 logger = logging.getLogger(__name__)
 
@@ -112,8 +113,10 @@ class SharedRepo(APIView):
         # argument check
         permission = request.data.get('permission', None)
         if permission not in get_available_repo_perms():
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         share_type = request.data.get('share_type', None)
         if not share_type:

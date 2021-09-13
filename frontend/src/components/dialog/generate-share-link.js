@@ -18,6 +18,7 @@ const propTypes = {
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   closeShareDialog: PropTypes.func.isRequired,
+  userPerm: PropTypes.string,
 };
 
 const inputWidth = Utils.isDesktop() ? 250 : 210;
@@ -367,6 +368,9 @@ class GenerateShareLink extends React.Component {
     passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength)
                                          .replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel);
 
+    const { userPerm } = this.props;
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
+
     if (this.state.sharedLinkInfo) {
       let sharedLinkInfo = this.state.sharedLinkInfo;
       let currentPermission = Utils.getShareLinkPermissionStr(sharedLinkInfo.permissions);
@@ -525,7 +529,7 @@ class GenerateShareLink extends React.Component {
               </div>
             }
           </FormGroup>
-          {isPro && (
+          {(isPro && !isCustomPermission) && (
             <FormGroup check>
               <Label check>
                 <span>{gettext('Set permission')}</span>
