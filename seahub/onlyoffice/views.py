@@ -12,8 +12,9 @@ from django.shortcuts import render
 from seaserv import seafile_api
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
 from seahub.onlyoffice.utils import generate_onlyoffice_cache_key, get_onlyoffice_dict
-from seahub.onlyoffice.converterUtils import getFileNameWithoutExt, getFileExt, getFileType, getInternalExtension, getFilePathWithoutName
-from seahub.onlyoffice.converter import getConverterUri
+from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
+        get_file_ext, get_file_type, get_internal_extension, get_file_path_without_mame
+from seahub.onlyoffice.converter import get_converter_uri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version
 from seahub.utils.file_op import if_locked_by_online_office
 
@@ -165,6 +166,7 @@ def onlyoffice_editor_callback(request):
 
     return HttpResponse('{"error": 0}')
 
+
 @csrf_exempt
 def onlyoffice_convert(request):
 
@@ -175,27 +177,27 @@ def onlyoffice_convert(request):
     body = json.loads(request.body)
 
     username = body.get('username')
-    fileUri = body.get('fileUri')
-    filePass = body.get('filePass') or None
+    file_uri = body.get('fileUri')
+    file_pass = body.get('filePass') or None
     repo_id = body.get('repo_id')
-    folderName = getFilePathWithoutName(fileUri)+'/'
-    fileExt = getFileExt(fileUri)
-    fileType = getFileType(fileUri)
-    newExt = getInternalExtension(fileType)
+    folder_name = get_file_path_without_mame(file_uri) + '/'
+    file_ext = get_file_ext(file_uri)
+    file_type = get_file_type(file_uri)
+    new_ext = get_internal_extension(file_type)
 
-    if(not newExt):
+    if not new_ext:
         logger.error('[OnlyOffice] Could not generate internal extension.')
         return HttpResponse(status=500)
 
-    doc_dic = get_onlyoffice_dict(request, username, repo_id, fileUri)
+    doc_dic = get_onlyoffice_dict(request, username, repo_id, file_uri)
 
-
-    downloadUri = doc_dic["doc_url"]
+    download_uri = doc_dic["doc_url"]
     key = doc_dic["doc_key"]
 
-    newUri = getConverterUri(downloadUri, fileExt, newExt, key, False, filePass)
+    newUri = get_converter_uri(download_uri, file_ext, new_ext,
+                               key, False, file_pass)
 
-    if(not newUri):
+    if not newUri:
         logger.error('[OnlyOffice] No response from file converter.')
         return HttpResponse(status=500)
 
@@ -216,14 +218,13 @@ def onlyoffice_convert(request):
         logger.error('[OnlyOffice] No fileserver access token.')
         return HttpResponse(status=500)
 
+    file_name = get_file_name_without_ext(file_uri) + new_ext
 
-    fileName = getFileNameWithoutExt(fileUri)+newExt
-
-    seafile_api.post_empty_file(repo_id, folderName, fileName, username)
+    seafile_api.post_empty_file(repo_id, folder_name, file_name, username)
 
     files = {
         'file': onlyoffice_resp.content,
-        'target_file': folderName+fileName,
+        'target_file': folder_name + file_name,
     }
 
     update_url = gen_inner_file_upload_url('update-api', update_token)
