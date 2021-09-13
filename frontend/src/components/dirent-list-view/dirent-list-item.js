@@ -272,6 +272,9 @@ class DirentListItem extends React.Component {
       case 'Open via Client':
         this.onOpenViaClient();
         break;
+      case 'Convert with ONLYOFFICE':
+        this.onConvertWithONLYOFFICE();
+        break;
       default:
         break;
     }
@@ -363,6 +366,31 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
+  }
+
+  onConvertWithONLYOFFICE = ()=> {
+    let repoID = this.props.repoID;
+    let user = username;
+    let fileUri = this.getDirentPath(this.props.dirent)
+    fetch(siteRoot+'onlyoffice/convert', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: user,
+        fileUri: fileUri,
+        repo_id: repoID,
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      if(res.status >= 400) throw new Error()
+      //Replace with changes in the state
+      //like this one => this.addNodeToTree(name, parentPath, 'file');
+      window.location.reload();
+    })
+    .catch(() => {
+      toaster.danger('Could not convert the file');
+    })
   }
 
   onItemDownload = (e) => {

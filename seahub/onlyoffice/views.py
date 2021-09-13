@@ -7,10 +7,13 @@ import requests
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from seaserv import seafile_api
+from django.shortcuts import render
 
+from seaserv import seafile_api
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
-from seahub.onlyoffice.utils import generate_onlyoffice_cache_key
+from seahub.onlyoffice.utils import generate_onlyoffice_cache_key, get_onlyoffice_dict
+from seahub.onlyoffice.converterUtils import getFileNameWithoutExt, getFileExt, getFileType, getInternalExtension, getFilePathWithoutName
+from seahub.onlyoffice.converter import getConverterUri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version
 from seahub.utils.file_op import if_locked_by_online_office
 
@@ -161,3 +164,70 @@ def onlyoffice_editor_callback(request):
             seafile_api.unlock_file(repo_id, file_path)
 
     return HttpResponse('{"error": 0}')
+
+@csrf_exempt
+def onlyoffice_convert(request):
+
+    if request.method != 'POST':
+        logger.error('Request method if not POST.')
+        return render(request, '404.html')
+
+    body = json.loads(request.body)
+
+    username = body.get('username')
+    fileUri = body.get('fileUri')
+    filePass = body.get('filePass') or None
+    repo_id = body.get('repo_id')
+    folderName = getFilePathWithoutName(fileUri)+'/'
+    fileExt = getFileExt(fileUri)
+    fileType = getFileType(fileUri)
+    newExt = getInternalExtension(fileType)
+
+    if(not newExt):
+        logger.error('[OnlyOffice] Could not generate internal extension.')
+        return HttpResponse(status=500)
+
+    doc_dic = get_onlyoffice_dict(request, username, repo_id, fileUri)
+
+
+    downloadUri = doc_dic["doc_url"]
+    key = doc_dic["doc_key"]
+
+    newUri = getConverterUri(downloadUri, fileExt, newExt, key, False, filePass)
+
+    if(not newUri):
+        logger.error('[OnlyOffice] No response from file converter.')
+        return HttpResponse(status=500)
+
+    onlyoffice_resp = requests.get(newUri, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+
+    if not onlyoffice_resp:
+        logger.error('[OnlyOffice] No response from file content url.')
+        return HttpResponse(status=500)
+
+    fake_obj_id = {'online_office_update': True}
+
+    update_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                           json.dumps(fake_obj_id),
+                                                           'update',
+                                                           username)
+
+    if not update_token:
+        logger.error('[OnlyOffice] No fileserver access token.')
+        return HttpResponse(status=500)
+
+
+    fileName = getFileNameWithoutExt(fileUri)+newExt
+
+    seafile_api.post_empty_file(repo_id, folderName, fileName, username)
+
+    files = {
+        'file': onlyoffice_resp.content,
+        'target_file': folderName+fileName,
+    }
+
+    update_url = gen_inner_file_upload_url('update-api', update_token)
+
+    requests.post(update_url, files=files)
+
+    return HttpResponse(status=200)

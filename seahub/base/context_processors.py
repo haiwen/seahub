@@ -26,6 +26,7 @@ from seahub.settings import SEAFILE_VERSION, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
 
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_CONVERTER_EXTENSIONS
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -133,6 +134,8 @@ def base(request):
         'FILE_SERVER_ROOT': file_server_root,
         'USE_GO_FILESERVER': seaserv.USE_GO_FILESERVER if hasattr(seaserv, 'USE_GO_FILESERVER') else False,
         'LOGIN_URL': dj_settings.LOGIN_URL,
+        'enableOnlyoffice': ENABLE_ONLYOFFICE,
+        'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
