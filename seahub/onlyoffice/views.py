@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import requests
+import email.utils
 
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -207,28 +208,43 @@ def onlyoffice_convert(request):
         logger.error('[OnlyOffice] No response from file content url.')
         return HttpResponse(status=500)
 
-    fake_obj_id = {'online_office_update': True}
+    fake_obj_id = {'parent_dir': folder_name}
 
-    update_token = seafile_api.get_fileserver_access_token(repo_id,
+    upload_token = seafile_api.get_fileserver_access_token(repo_id,
                                                            json.dumps(fake_obj_id),
-                                                           'update',
+                                                           'upload-link',
                                                            username)
 
-    if not update_token:
+    if not upload_token:
         logger.error('[OnlyOffice] No fileserver access token.')
         return HttpResponse(status=500)
 
     file_name = get_file_name_without_ext(file_uri) + new_ext
 
-    seafile_api.post_empty_file(repo_id, folder_name, file_name, username)
-
     files = {
-        'file': onlyoffice_resp.content,
-        'target_file': folder_name + file_name,
+        'file': (file_name, onlyoffice_resp.content),
+        'parent_dir': folder_name,
     }
 
-    update_url = gen_inner_file_upload_url('update-api', update_token)
+    upload_url = gen_inner_file_upload_url('upload-api', upload_token)
 
-    requests.post(update_url, files=files)
+    def rewrite_request(prepared_request):
+
+        old_content = 'filename*=' + email.utils.encode_rfc2231(file_name, 'utf-8')
+        old_content = old_content.encode()
+
+        new_content = 'filename="{}"\r\n\r\n'.format(file_name)
+        new_content = new_content.encode()
+
+        prepared_request.body = prepared_request.body.replace(old_content, new_content)
+
+        return prepared_request
+
+    try:
+        file_name.encode('ascii')
+    except UnicodeEncodeError:
+        requests.post(upload_url, files=files, auth=rewrite_request)
+    else:
+        requests.post(upload_url, files=files)
 
     return HttpResponse(status=200)
