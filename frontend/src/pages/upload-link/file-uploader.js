@@ -302,8 +302,8 @@ class FileUploader extends React.Component {
 
   // start uploading
   onUploadStart = () => {
-    const message = gettext('File upload started.');
-    toaster.info(message);
+    const message = gettext('File upload started');
+    toaster.notify(message);
   }
 
   onProgress = () => {
@@ -418,12 +418,14 @@ class FileUploader extends React.Component {
       retryFileList: this.state.retryFileList,
       uploadFileList: uploadFileList
     });
-
   }
 
   onComplete = () => {
-    const message = gettext('All files uploaded');
-    toaster.success(message);
+    if (!this.error) {
+      const message = gettext('All files uploaded');
+      toaster.success(message);
+    }
+    this.error = false; // reset it
 
     this.notifiedFolders = [];
     // reset upload link loaded
@@ -431,9 +433,14 @@ class FileUploader extends React.Component {
     this.setState({allFilesUploaded: true});
   }
 
-  onError = (message) => {
-    const msg = gettext('Error');
+  onError = (message, file) => {
+    let msg = gettext('Error');
+    if (file && file.fileName) {
+      msg = gettext('Failed to upload {file_name}.')
+        .replace('{file_name}', file.fileName);
+    }
     toaster.danger(msg);
+    this.error = true;
 
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
