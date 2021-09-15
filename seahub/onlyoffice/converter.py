@@ -1,53 +1,64 @@
 import logging
 import requests
 
-from seahub.onlyoffice.converterUtils import getFileName, getFileExt
-from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL, ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER
+from seahub.onlyoffice.converter_utils import get_file_name, get_file_ext
+from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL, \
+        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER
 
 logger = logging.getLogger(__name__)
 
-def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
-    if not fromExt:
-        fromExt = getFileExt(docUri)
 
-    title = getFileName(docUri)
+def get_converter_uri(doc_uri, from_ext, to_ext, doc_key, is_async, file_password=None):
+
+    if not from_ext:
+        from_ext = get_file_ext(doc_uri)
+
+    title = get_file_name(doc_uri)
 
     payload = {
-        'url': docUri,
-        'outputtype': toExt.replace('.', ''),
-        'filetype': fromExt.replace('.', ''),
+        'url': doc_uri,
+        'outputtype': to_ext.replace('.', ''),
+        'filetype': from_ext.replace('.', ''),
         'title': title,
-        'key': docKey,
-        'password': filePass
+        'key': doc_key,
+        'password': file_password
     }
 
-    headers={'accept': 'application/json'}
+    if file_password:
+        payload['password'] = file_password
 
-    if isAsync:
+    if is_async:
         payload.setdefault('async', True)
 
-    if ONLYOFFICE_JWT_SECRET:
-        import jwt
-        token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
-        headerToken = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
-        payload['token'] = token
-        headers[ONLYOFFICE_JWT_HEADER] = f'Bearer {headerToken}'
+    headers = {'accept': 'application/json'}
 
-    response = requests.post(ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers )
+    if ONLYOFFICE_JWT_SECRET:
+
+        import jwt
+
+        token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
+        payload['token'] = token
+
+        header_token = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
+        headers[ONLYOFFICE_JWT_HEADER] = f'Bearer {header_token}'
+
+    response = requests.post(ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers)
     json = response.json()
 
-    return getResponseUri(json)
+    return get_response_uri(json)
 
-def getResponseUri(json):
-    isEnd = json.get('endConvert')
+
+def get_response_uri(json):
+    is_end = json.get('endConvert')
     error = json.get('error')
     if error:
-        processError(error)
+        process_error(error)
 
-    if isEnd:
+    if is_end:
         return json.get('fileUrl')
 
-def processError(error):
+
+def process_error(error):
     prefix = 'Error occurred in the ConvertService: '
 
     mapping = {
