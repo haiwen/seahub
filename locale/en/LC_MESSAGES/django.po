@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 11:21+0800\n"
+"POT-Creation-Date: 2021-09-17 12:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,6 +157,7 @@ msgstr ""
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/sysadmin_extra/views.py:57
 msgid "Time"
 msgstr ""
 
@@ -164,6 +165,7 @@ msgstr ""
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/templates/file_access.html:24
 msgid "User"
 msgstr ""
@@ -227,6 +229,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/user_info.html:105
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/sysadmin_extra/views.py:57
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
@@ -374,9 +377,9 @@ msgstr ""
 #: seahub/notifications/models.py:640 seahub/notifications/models.py:662
 #: seahub/notifications/models.py:688 seahub/notifications/models.py:705
 #: seahub/notifications/models.py:722 seahub/notifications/models.py:751
-#: seahub/utils/__init__.py:167 seahub/utils/__init__.py:1186
-#: seahub/views/__init__.py:915 seahub/views/ajax.py:401
-#: seahub/views/ajax.py:405
+#: seahub/search/views.py:200 seahub/utils/__init__.py:167
+#: seahub/utils/__init__.py:1186 seahub/views/__init__.py:915
+#: seahub/views/ajax.py:401 seahub/views/ajax.py:405
 msgid "Internal Server Error"
 msgstr ""
 
@@ -434,9 +437,10 @@ msgstr ""
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:219 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:739
-#: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
+#: seahub/profile/views.py:219 seahub/search/views.py:174
+#: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
+#: seahub/views/__init__.py:739 seahub/views/ajax.py:83
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
 msgstr ""
 
@@ -933,46 +937,56 @@ msgid "Enter a valid e-mail address."
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:25
+#: seahub/sysadmin_extra/views.py:96 seahub/templates/file_access.html:25
 msgid "Type"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/sysadmin_extra/views.py:57 seahub/sysadmin_extra/views.py:96
 #: seahub/templates/file_access.html:26
 msgid "IP"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/sysadmin_extra/views.py:96
 msgid "Device"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:27
+#: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
+#: seahub/sysadmin_extra/views.py:209 seahub/templates/file_access.html:27
 msgid "Date"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library Name"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library ID"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:154
 msgid "Library Owner"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97
 msgid "File Path"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/sysadmin_extra/views.py:111 seahub/sysadmin_extra/views.py:167
+#: seahub/sysadmin_extra/views.py:215 seahub/sysadmin_extra/views.py:221
 msgid "Deleted"
 msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/sysadmin_extra/views.py:114 seahub/sysadmin_extra/views.py:170
 #: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
@@ -982,7 +996,8 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
-#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
+#: seahub/sysadmin_extra/views.py:57 seahub/views/sysadmin.py:198
+#: seahub/views/sysadmin.py:202
 msgid "Status"
 msgstr ""
 
@@ -1160,10 +1175,12 @@ msgstr[1] ""
 
 #: seahub/base/templatetags/seahub_tags.py:464
 #: seahub/institutions/templates/institutions/user_info.html:72
+#: seahub/sysadmin_extra/views.py:237
 msgid "Read-Write"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:466
+#: seahub/sysadmin_extra/views.py:239
 msgid "Read-Only"
 msgstr ""
 
@@ -1242,6 +1259,7 @@ msgstr ""
 #: seahub/contacts/templates/contacts/contact_list.html:30
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
+#: seahub/sysadmin_extra/views.py:232
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "Delete"
 msgstr ""
@@ -1268,6 +1286,8 @@ msgstr ""
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/organizations/templates/organizations/org_register.html:42
+#: seahub/search/templates/search_results.html:26
+#: seahub/search/templates/search_results.html:47
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/home_base.html:103
@@ -1357,6 +1377,28 @@ msgstr ""
 #: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
+msgstr ""
+
+#: seahub/django_cas_ng/__init__.py:25
+#, python-format
+msgid "Login succeeded. Welcome, %s."
+msgstr ""
+
+#: seahub/django_cas_ng/__init__.py:26
+#, python-format
+msgid "You are logged in as %s."
+msgstr ""
+
+#: seahub/django_cas_ng/middleware.py:74
+msgid "You do not have staff privileges."
+msgstr ""
+
+#: seahub/django_cas_ng/views.py:123
+msgid "Login failed."
+msgstr ""
+
+#: seahub/django_cas_ng/views.py:172 seahub/django_cas_ng/views.py:182
+msgid "ok"
 msgstr ""
 
 #: seahub/forms.py:59
@@ -3584,12 +3626,14 @@ msgid "Available quota:"
 msgstr ""
 
 #: seahub/institutions/templates/institutions/user_info.html:62
+#: seahub/search/templates/search_results.html:39
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
 msgid "Size"
 msgstr ""
 
 #: seahub/institutions/templates/institutions/user_info.html:63
+#: seahub/search/templates/search_results.html:31
 msgid "Last Update"
 msgstr ""
 
@@ -3891,12 +3935,14 @@ msgid "Operation"
 msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
+#: seahub/search/templates/search_results.html:67
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 msgid "File"
 msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
+#: seahub/sysadmin_extra/views.py:208
 msgid "Library"
 msgstr ""
 
@@ -4062,12 +4108,14 @@ msgid "Confirm Password"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
+#: seahub/search/templates/search_results.html:98
 #: seahub/templates/file_access.html:55
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
+#: seahub/search/templates/search_results.html:101
 #: seahub/templates/file_access.html:58
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
@@ -4130,6 +4178,66 @@ msgstr ""
 #: seahub/profile/views.py:264
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
+msgstr ""
+
+#: seahub/search/templates/search_results.html:25
+msgid "Search Files"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:28
+msgid "advanced"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:56
+msgid "No result found"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:58
+#, python-format
+msgid "%(total)s result"
+msgid_plural "%(total)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: seahub/search/templates/search_results.html:63
+msgid "Directory icon"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:168
+msgid "Invalid start date, should be yyyy-mm-dd"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:172
+msgid "Invalid end date, should be yyyy-mm-dd"
+msgstr ""
+
+#: seahub/search/templates/search_results.html:176
+msgid "Start date should be earlier than end date."
+msgstr ""
+
+#: seahub/search/views.py:33
+msgid "Invalid argument."
+msgstr ""
+
+#: seahub/search/views.py:81 seahub/search/views.py:89
+msgid "Invalid date."
+msgstr ""
+
+#: seahub/search/views.py:97 seahub/search/views.py:105
+msgid "Invalid file size."
+msgstr ""
+
+#: seahub/search/views.py:112
+msgid "Invalid file size range."
+msgstr ""
+
+#: seahub/search/views.py:117
+msgid "Invalid date range."
+msgstr ""
+
+#: seahub/search/views.py:166
+#, python-format
+msgid "Library %s not found."
 msgstr ""
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
@@ -4213,6 +4321,78 @@ msgstr ""
 
 #: seahub/share/views.py:473
 msgid "Failed to send a verification code, please try again later."
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:42 seahub/sysadmin_extra/views.py:53
+#: seahub/sysadmin_extra/views.py:91 seahub/sysadmin_extra/views.py:148
+#: seahub/sysadmin_extra/views.py:203
+msgid "Failed to export excel, invalid start or end date"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:61 seahub/views/sysadmin.py:703
+msgid "Success"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:61
+msgid "Failed"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:65
+msgid "login-logs"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:67 seahub/sysadmin_extra/views.py:124
+#: seahub/sysadmin_extra/views.py:179 seahub/sysadmin_extra/views.py:256
+msgid "Failed to export excel"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:85 seahub/sysadmin_extra/views.py:142
+#: seahub/sysadmin_extra/views.py:197
+msgid "Failed to export excel, this feature is only in professional version."
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:122
+msgid "file-access-logs"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:154 seahub/sysadmin_extra/views.py:208
+msgid "Action"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:177
+msgid "file-update-logs"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "From"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "To"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "Permission"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:209
+msgid "Folder Path"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:223
+msgid "Organization"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:228
+msgid "Add"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:230
+msgid "Modify"
+msgstr ""
+
+#: seahub/sysadmin_extra/views.py:250
+msgid "perm-audit-logs"
 msgstr ""
 
 #: seahub/templates/404.html:6
@@ -5271,10 +5451,6 @@ msgstr ""
 
 #: seahub/views/sysadmin.py:697
 msgid "Input should be a number"
-msgstr ""
-
-#: seahub/views/sysadmin.py:703
-msgid "Success"
 msgstr ""
 
 #: seahub/views/sysadmin.py:707
