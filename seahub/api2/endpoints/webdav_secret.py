@@ -47,7 +47,7 @@ class WebdavSecretView(APIView):
         secret = request.data.get("secret", None)
         if len(secret) >= 30:
             return api_error(status.HTTP_400_BAD_REQUEST,
-                             _("Length of WebDav password should be less then 30."))
+                             _("Length of WebDav password should be less than 30."))
 
         if secret:
             encoded = aes.encode(secret)
