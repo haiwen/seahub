@@ -25,6 +25,7 @@
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # LowMemory, 2016
 # MathieuP, 2014-2015,2019
+# chadek <meyer.fabrice@gmx.fr>, 2021
 # Nicolas Delvaux <contact@nicolas-delvaux.org>, 2015
 # Pierrick B. <pierrick.brun@gmail.com>, 2013
 # Pierrick B. <pierrick.brun@gmail.com>, 2013-2014
@@ -35,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-23 14:18+0800\n"
-"PO-Revision-Date: 2021-06-23 06:48+0000\n"
+"POT-Creation-Date: 2021-09-17 11:21+0800\n"
+"PO-Revision-Date: 2021-09-17 03:22+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -45,45 +46,45 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
+#: seahub/api2/endpoints/admin/account.py:181 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Le nom est trop long (le maximum est de 64 caractères)"
 
-#: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
+#: seahub/api2/endpoints/admin/account.py:185 seahub/api2/endpoints/user.py:85
 #: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Le nom ne doit pas comporter de '/'."
 
-#: seahub/api2/endpoints/admin/account.py:214
+#: seahub/api2/endpoints/admin/account.py:200
 msgid "Login id can't be empty"
 msgstr "L'identifiant de connexion ne peut être vide"
 
-#: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:1043
+#: seahub/api2/endpoints/admin/account.py:204
+#: seahub/api2/endpoints/admin/users.py:1046
 #, python-format
 msgid "Login id %s already exists."
 msgstr "L'identifiant de connexion %s existe déjà."
 
-#: seahub/api2/endpoints/admin/account.py:225
+#: seahub/api2/endpoints/admin/account.py:211
 msgid "Department is too long (maximum is 512 characters)"
 msgstr "Le département est trop long (le maximum est de 512 caractères)"
 
-#: seahub/api2/endpoints/admin/account.py:241 seahub/forms.py:155
+#: seahub/api2/endpoints/admin/account.py:227 seahub/forms.py:155
 msgid "Space quota can't be empty"
 msgstr "Le quota ne peut pas être vide"
 
-#: seahub/api2/endpoints/admin/account.py:247
+#: seahub/api2/endpoints/admin/account.py:233
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "Doit être un entier supérieur ou égal à 0."
 
-#: seahub/api2/endpoints/admin/account.py:251
+#: seahub/api2/endpoints/admin/account.py:237
 #: seahub/api2/endpoints/admin/users_batch.py:176 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "Le quota est trop faible (la valeur minimale est 0)"
 
-#: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:334
+#: seahub/api2/endpoints/admin/account.py:245 seahub/institutions/views.py:211
+#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Impossible de définir le quota : quota maximum %d Mo"
@@ -92,11 +93,11 @@ msgstr "Impossible de définir le quota : quota maximum %d Mo"
 #: seahub/api2/endpoints/admin/groups.py:129
 #: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
-#: seahub/api2/views.py:4592 seahub/group/forms.py:36
+#: seahub/api2/views.py:4594 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "Le nom peut être composé uniquement de lettres, chiffres, espace, tiret, point, simple guillemet, d'accolades ou de tiret bas"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:86
 #: seahub/api2/endpoints/admin/groups.py:136
@@ -139,7 +140,7 @@ msgid ""
 "institution"
 msgstr "Impossible d'ajouter %s à l'organisation : l'utilisateur appartient déjà à cette organisation."
 
-#: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:749
+#: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:721
 msgid "System library can not be deleted."
 msgstr "La bibliothèque système ne peut pas être supprimée."
 
@@ -154,30 +155,30 @@ msgstr "La bibliothèque ne peut pas être transférée au propriétaire."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:542
+#: seahub/api2/endpoints/share_links.py:553
 msgid "There is an associated published library."
 msgstr "Il existe une bibliothèque publiée associée."
 
-#: seahub/api2/endpoints/admin/shares.py:183
+#: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
 msgstr "L'utilisateur %s est déjà le propriétaire de la bibliothèque."
 
-#: seahub/api2/endpoints/admin/shares.py:191
+#: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:50
 #: seahub/api2/endpoints/invitations.py:110
-#: seahub/api2/endpoints/repo_share_invitations.py:153
+#: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
 msgstr "L'e-mail %s n'est pas valide."
 
-#: seahub/api2/endpoints/admin/shares.py:209
-#: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:342
-#: seahub/api2/endpoints/dir_shared_items.py:455
-#: seahub/api2/endpoints/group_owned_libraries.py:933
-#: seahub/api2/endpoints/group_owned_libraries.py:1201
-#: seahub/api2/endpoints/repo_share_invitations.py:185
+#: seahub/api2/endpoints/admin/shares.py:211
+#: seahub/api2/endpoints/admin/shares.py:268
+#: seahub/api2/endpoints/dir_shared_items.py:346
+#: seahub/api2/endpoints/dir_shared_items.py:459
+#: seahub/api2/endpoints/group_owned_libraries.py:942
+#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
 msgstr "Cet objet a été partagé avec %s."
@@ -241,8 +242,8 @@ msgstr "Lien d'envoi"
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
-#: seahub/views/sysadmin.py:818
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
+#: seahub/views/sysadmin.py:790
 msgid "Email"
 msgstr "E-mail"
 
@@ -258,9 +259,9 @@ msgstr "E-mail"
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
-#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:207
-#: seahub/views/sysadmin.py:211 seahub/views/sysadmin.py:696
-#: seahub/views/sysadmin.py:818
+#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
+#: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
+#: seahub/views/sysadmin.py:790
 msgid "Name"
 msgstr "Nom"
 
@@ -271,7 +272,7 @@ msgstr "Nom"
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/password_set_form.html:16
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
 msgstr "E-mail de contact"
 
@@ -279,7 +280,7 @@ msgstr "E-mail de contact"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
 msgstr "Espace utilisé"
 
@@ -287,8 +288,8 @@ msgstr "Espace utilisé"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
-#: seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
+#: seahub/views/sysadmin.py:791
 msgid "Space Quota"
 msgstr "Quota de l'espace"
 
@@ -309,7 +310,7 @@ msgid "Successfully added user %(user)s."
 msgstr "L'utilisateur %(user)s a été ajouté avec succès."
 
 #: seahub/api2/endpoints/admin/users.py:671
-#: seahub/api2/endpoints/admin/users_batch.py:375 seahub/views/sysadmin.py:595
+#: seahub/api2/endpoints/admin/users_batch.py:376 seahub/views/sysadmin.py:567
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Vous êtes invité à rejoindre %s"
@@ -326,53 +327,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "L'utilisateur %(user)s a été ajouté avec succès. L'e-mail de notification n'a pu être envoyé, le service d'e-mail n'est pas configuré correctement"
 
-#: seahub/api2/endpoints/admin/users.py:1115
+#: seahub/api2/endpoints/admin/users.py:1118
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "L'édition a réussi."
 
-#: seahub/api2/endpoints/admin/users.py:1118 seahub/views/sysadmin.py:498
+#: seahub/api2/endpoints/admin/users.py:1121 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Votre compte sur %s a été activé"
 
-#: seahub/api2/endpoints/admin/users.py:1123
+#: seahub/api2/endpoints/admin/users.py:1126
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Édité avec succès, un e-mail a été envoyé."
 
-#: seahub/api2/endpoints/admin/users.py:1126
+#: seahub/api2/endpoints/admin/users.py:1129
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Édité avec succès, mais échec de l'envoi de l'e-mail, veuillez vérifier votre configuration."
 
-#: seahub/api2/endpoints/admin/users.py:1204 seahub/views/sysadmin.py:539
+#: seahub/api2/endpoints/admin/users.py:1207 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Le mot de passe a été réinitialisé sur %s"
 
-#: seahub/api2/endpoints/admin/users.py:1206 seahub/views/sysadmin.py:564
+#: seahub/api2/endpoints/admin/users.py:1209 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Le mot de passe de %(passwd)s a été réinitialisé avec succès, un e-mail a été envoyé à %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1210 seahub/views/sysadmin.py:569
+#: seahub/api2/endpoints/admin/users.py:1213 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Mot de passe remplacé par %(passwd)s avec succès, mais impossible d'envoyer l'e-mail à %(user)s. Le service d'e-mail n'est pas configuré correctement."
 
-#: seahub/api2/endpoints/admin/users.py:1213 seahub/views/sysadmin.py:573
+#: seahub/api2/endpoints/admin/users.py:1216 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Mot de passe de l'utilisateur %(user)s remplacé par %(passwd)s avec succès."
 
-#: seahub/api2/endpoints/admin/users.py:1216 seahub/views/sysadmin.py:576
+#: seahub/api2/endpoints/admin/users.py:1219 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -386,7 +387,7 @@ msgstr "Doit être un nombre entier supérieur ou égal à 0."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:200
 msgid "Virus file is not found."
-msgstr ""
+msgstr "Fichier de virus introuvable"
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:218
 #: seahub/api2/endpoints/admin/virus_scan_records.py:233
@@ -395,15 +396,15 @@ msgstr ""
 #: seahub/api2/endpoints/file_tag.py:175
 #: seahub/api2/endpoints/invitations.py:78
 #: seahub/api2/endpoints/repo_set_password.py:72
-#: seahub/api2/endpoints/repo_share_invitations.py:196
+#: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3846
-#: seahub/notifications/models.py:465 seahub/notifications/models.py:506
-#: seahub/notifications/models.py:557 seahub/notifications/models.py:613
-#: seahub/notifications/models.py:643 seahub/notifications/models.py:665
-#: seahub/notifications/models.py:691 seahub/notifications/models.py:708
-#: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1191
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3849
+#: seahub/notifications/models.py:462 seahub/notifications/models.py:503
+#: seahub/notifications/models.py:554 seahub/notifications/models.py:610
+#: seahub/notifications/models.py:640 seahub/notifications/models.py:662
+#: seahub/notifications/models.py:688 seahub/notifications/models.py:705
+#: seahub/notifications/models.py:722 seahub/notifications/models.py:751
+#: seahub/utils/__init__.py:167 seahub/utils/__init__.py:1186
 #: seahub/views/__init__.py:915 seahub/views/ajax.py:401
 #: seahub/views/ajax.py:405
 msgid "Internal Server Error"
@@ -421,11 +422,11 @@ msgstr "Chemin de destination invalide"
 
 #: seahub/api2/endpoints/copy_move_task.py:147
 #: seahub/api2/endpoints/move_folder_merge.py:168
-#: seahub/api2/endpoints/repos_batch.py:477 seahub/api2/views.py:1803
-#: seahub/api2/views.py:1843 seahub/api2/views.py:1892
-#: seahub/api2/views.py:1936 seahub/api2/views.py:1982
-#: seahub/api2/views.py:2031 seahub/api2/views.py:2436
-#: seahub/api2/views.py:2544
+#: seahub/api2/endpoints/repos_batch.py:480 seahub/api2/views.py:1803
+#: seahub/api2/views.py:1843 seahub/api2/views.py:1894
+#: seahub/api2/views.py:1938 seahub/api2/views.py:1984
+#: seahub/api2/views.py:2033 seahub/api2/views.py:2438
+#: seahub/api2/views.py:2546
 msgid "Out of quota."
 msgstr "Quota dépassé."
 
@@ -445,15 +446,15 @@ msgstr "Le fichier est verrouillé"
 msgid "Cancel failed"
 msgstr "L'annulation a échoué"
 
-#: seahub/api2/endpoints/dir_shared_items.py:326
+#: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:917
+#: seahub/api2/endpoints/group_owned_libraries.py:926
 msgid "username invalid."
 msgstr "Nom d'utilisateur incorrect."
 
-#: seahub/api2/endpoints/dir_shared_items.py:335
+#: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:935
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -474,7 +475,7 @@ msgstr "Autorisation refusée."
 msgid "File is not locked."
 msgstr "Le fichier n'est pas verrouillé."
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:624
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:635
 msgid "You can not refresh this file's lock."
 msgstr "Impossible de rafraichir. Ce fichier est verrouillé."
 
@@ -511,21 +512,21 @@ msgstr "L'utilisateur %s n'a pas été trouvé dans l’organisation."
 #: seahub/api2/endpoints/group_members.py:459
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "L'utilisateur %s est un utilisateur de l'organisation"
 
 #: seahub/api2/endpoints/group_members.py:381 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:461
+#: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Le groupe n'existe pas"
 
-#: seahub/api2/endpoints/group_members.py:499 seahub/views/sysadmin.py:198
-#: seahub/views/sysadmin.py:304 seahub/views/sysadmin.py:693
-#: seahub/views/sysadmin.py:705 seahub/views/sysadmin.py:830
+#: seahub/api2/endpoints/group_members.py:499 seahub/views/sysadmin.py:189
+#: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:802
 msgid "Failed to export Excel"
 msgstr "Impossible d'exporter vers Excel"
 
-#: seahub/api2/endpoints/group_owned_libraries.py:372
-#: seahub/api2/endpoints/group_owned_libraries.py:644
+#: seahub/api2/endpoints/group_owned_libraries.py:375
+#: seahub/api2/endpoints/group_owned_libraries.py:651
 msgid "Permission already exists."
 msgstr "Cette permission est déjà affectée"
 
@@ -536,7 +537,7 @@ msgstr "%(user)s a révoqué votre accès à %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
-#: seahub/api2/endpoints/repo_share_invitations.py:160
+#: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "L'adresse e-mail n'est pas autorisée à être invitée en tant qu'invité."
 
@@ -548,14 +549,14 @@ msgstr "%s est déjà invité."
 
 #: seahub/api2/endpoints/invitations.py:66
 #: seahub/api2/endpoints/invitations.py:137
-#: seahub/api2/endpoints/repo_share_invitations.py:170
+#: seahub/api2/endpoints/repo_share_invitations.py:173
 #: seahub/base/accounts.py:795
 #, python-format
 msgid "User %s already exists."
 msgstr "L'utilisateur %s existe déjà."
 
 #: seahub/api2/endpoints/invitations.py:151
-#: seahub/api2/endpoints/repo_share_invitations.py:210
+#: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32 seahub/auth/forms.py:121
 #: seahub/share/views.py:136 seahub/share/views.py:264
@@ -590,11 +591,11 @@ msgstr "Impossible de réinitialiser le mot de passe de cette bibliothèque."
 msgid "New password of library %s"
 msgstr "Nouveau mot de passe de la bibliothèque %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3843
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3846
 msgid "Wrong password"
 msgstr "Le mot de passe est erroné"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3849
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3852
 msgid "Decrypt library error"
 msgstr "Erreur de déchiffrement de la bibliothèque"
 
@@ -602,20 +603,20 @@ msgstr "Erreur de déchiffrement de la bibliothèque"
 msgid "Wrong old password"
 msgstr "Ancien mot de passe erroné"
 
-#: seahub/api2/endpoints/repos_batch.py:1240
-#: seahub/api2/endpoints/repos_batch.py:1459
-#: seahub/api2/endpoints/repos_batch.py:1548
+#: seahub/api2/endpoints/repos_batch.py:1241
+#: seahub/api2/endpoints/repos_batch.py:1458
+#: seahub/api2/endpoints/repos_batch.py:1547
 #, python-format
 msgid "File %s is locked."
 msgstr "Le fichier %s est verrouillé."
 
-#: seahub/api2/endpoints/repos_batch.py:1249
-#: seahub/api2/endpoints/repos_batch.py:1468
+#: seahub/api2/endpoints/repos_batch.py:1250
+#: seahub/api2/endpoints/repos_batch.py:1467
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "Le dossier %s ne peut être déplacé, veuillez vérifier les permissions."
 
-#: seahub/api2/endpoints/repos_batch.py:1556
+#: seahub/api2/endpoints/repos_batch.py:1555
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "Le dossier %s ne peut être supprimé, veuillez vérifier les permissions."
@@ -652,44 +653,51 @@ msgstr "L'adresse e-mail n'est pas valide"
 msgid "An upload link is shared to you on %s"
 msgstr "Un lien d'envoi a été partagé pour vous sur %s"
 
-#: seahub/api2/endpoints/share_links.py:267
+#: seahub/api2/endpoints/share_links.py:268
+#: seahub/api2/endpoints/upload_links.py:162 seahub/api2/views.py:4002
+#: seahub/api2/views.py:4122
+msgid "Password is required."
+msgstr "Le mot de passe est obligatoire."
+
+#: seahub/api2/endpoints/share_links.py:274
+#: seahub/api2/endpoints/upload_links.py:168
 msgid "Password is too short."
 msgstr "Le mot de passe est trop court."
 
-#: seahub/api2/endpoints/share_links.py:290
-#: seahub/api2/endpoints/upload_links.py:184 seahub/api2/views.py:3414
+#: seahub/api2/endpoints/share_links.py:278
+#: seahub/api2/endpoints/upload_links.py:172
+msgid "Password is too weak."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:301
+#: seahub/api2/endpoints/upload_links.py:195 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Les jours d’expiration doivent être supérieurs ou égaux à %s"
 
-#: seahub/api2/endpoints/share_links.py:296
-#: seahub/api2/endpoints/upload_links.py:190 seahub/api2/views.py:3420
+#: seahub/api2/endpoints/share_links.py:307
+#: seahub/api2/endpoints/upload_links.py:201 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Les jours d’expiration doivent être inférieurs ou égaux à %s"
 
-#: seahub/api2/endpoints/share_links.py:318
-#: seahub/api2/endpoints/upload_links.py:212
+#: seahub/api2/endpoints/share_links.py:329
+#: seahub/api2/endpoints/upload_links.py:223
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "Le délai d'expiration doit être supérieur à  %s."
 
-#: seahub/api2/endpoints/share_links.py:327
-#: seahub/api2/endpoints/upload_links.py:221
+#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/upload_links.py:232
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "Le délai d'expiration devrait être plus court que %s."
 
-#: seahub/api2/endpoints/share_links.py:396
-#: seahub/api2/endpoints/share_links.py:405
+#: seahub/api2/endpoints/share_links.py:407
+#: seahub/api2/endpoints/share_links.py:416
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Le lien de partage %s existe déjà."
-
-#: seahub/api2/endpoints/upload_links.py:161
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "Le mot de passe est trop court"
 
 #: seahub/api2/endpoints/user.py:99
 #, python-format
@@ -720,6 +728,10 @@ msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
 msgstr "Vous avez déjà %(nb_avatars)d avatars et la valeur maximale autorisée est de %(nb_max_avatars)d."
+
+#: seahub/api2/endpoints/webdav_secret.py:50
+msgid "Length of WebDav password should be less than 30."
+msgstr ""
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
@@ -755,7 +767,7 @@ msgstr "E-mail ou nom d'utilisateur"
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
-#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:818
+#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:790
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -829,15 +841,15 @@ msgstr "Un utilisateur avec cette adresse e-mail existe déjà."
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Ce compte a été bloqué suite à de trop nombreuses tentatives de connexions."
 
-#: seahub/auth/views.py:279
+#: seahub/auth/views.py:288
 msgid "Logged out"
 msgstr "Déconnecté"
 
-#: seahub/auth/views.py:329
+#: seahub/auth/views.py:338
 msgid "Failed to send email, please contact administrator."
 msgstr "Échec de l'envoi de l'e-mail, veuillez contacter l'administrateur."
 
-#: seahub/auth/views.py:388
+#: seahub/auth/views.py:397
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Impossible de mettre à jour votre mot de passe, veuillez contacter votre administrateur LDAP."
 
@@ -1007,40 +1019,40 @@ msgstr "Utilisateur anonyme"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Status"
 msgstr "Statut"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:791
 msgid "Role"
 msgstr "Rôle"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/templates/institutions/user_info.html:107
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
-#: seahub/views/sysadmin.py:696
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
+#: seahub/views/sysadmin.py:668
 msgid "Create At"
 msgstr "Créé le"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "Last Login"
 msgstr "Dernière connexion"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:209
-#: seahub/views/sysadmin.py:213
+#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "Administration"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "LDAP(imported)"
 msgstr "LDAP (importé)"
 
@@ -1048,7 +1060,7 @@ msgstr "LDAP (importé)"
 #: seahub/institutions/templates/institutions/useradmin.html:33
 #: seahub/institutions/templates/institutions/useradmin.html:40
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
-#: seahub/views/sysadmin.py:267
+#: seahub/views/sysadmin.py:258
 msgid "Active"
 msgstr "Actif"
 
@@ -1056,25 +1068,25 @@ msgstr "Actif"
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
-#: seahub/views/sysadmin.py:269
+#: seahub/views/sysadmin.py:260
 msgid "Inactive"
 msgstr "Inactif"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:84 seahub/views/sysadmin.py:275
-#: seahub/views/sysadmin.py:276
+#: seahub/templates/base.html:84 seahub/views/sysadmin.py:266
+#: seahub/views/sysadmin.py:267
 msgid "Yes"
 msgstr "Oui"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/views/sysadmin.py:281
+#: seahub/views/sysadmin.py:272
 msgid "Guest"
 msgstr "Invité"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
-#: seahub/views/sysadmin.py:283 seahub/views/sysadmin.py:287
+#: seahub/views/sysadmin.py:274 seahub/views/sysadmin.py:278
 msgid "Default"
 msgstr "Défaut"
 
@@ -1411,7 +1423,7 @@ msgstr "Le nom %s n'est pas valide"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1858
+#: seahub/views/file.py:1848
 msgid "Argument missing"
 msgstr "Argument manquant"
 
@@ -1535,10 +1547,10 @@ msgstr "L'équipe de %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1129
-#: seahub/views/file.py:1350 seahub/views/file.py:1867
-#: seahub/views/repo.py:127 seahub/views/repo.py:184 seahub/views/repo.py:242
-#: seahub/views/repo.py:296 seahub/views/repo.py:407
+#: seahub/views/ajax.py:427 seahub/views/file.py:1133
+#: seahub/views/file.py:1347 seahub/views/file.py:1857
+#: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
+#: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
 msgstr "Autorisation refusée"
 
@@ -1555,29 +1567,29 @@ msgstr "Introduction"
 
 #: seahub/help/templates/help/base.html:31
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Gestion des fichiers et dossiers"
 
 #: seahub/help/templates/help/base.html:33
 #: seahub/help/templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Gestion des fichiers avec les librairies"
 
 #: seahub/help/templates/help/base.html:34
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Restauration des fichiers supprimés"
 
 #: seahub/help/templates/help/base.html:35
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Recherche des anciennes versions de fichier"
 
 #: seahub/help/templates/help/base.html:36
 #: seahub/help/templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Historique des librairies et images "
 
 #: seahub/help/templates/help/base.html:37
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Paramètres de période de rétention de l'historisation "
 
 #: seahub/help/templates/help/base.html:38
 #: seahub/help/templates/help/deleting_a_library.html:5
@@ -1587,55 +1599,55 @@ msgstr "Supprimer une bibliothèque"
 #: seahub/help/templates/help/base.html:39
 #: seahub/help/templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Visualiser des fichiers depuis l'application Web"
 
 #: seahub/help/templates/help/base.html:40
 #: seahub/help/templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Recherche textuel dans un fichier"
 
 #: seahub/help/templates/help/base.html:43
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Partage et collaboration"
 
 #: seahub/help/templates/help/base.html:45
 #: seahub/help/templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Partage de fichiers et dossiers"
 
 #: seahub/help/templates/help/base.html:46
 #: seahub/help/templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Gestion des groupes"
 
 #: seahub/help/templates/help/base.html:47
 msgid "Locking files"
-msgstr ""
+msgstr "Verrouiller des fichiers"
 
 #: seahub/help/templates/help/base.html:48
 msgid "Folder permission"
-msgstr ""
+msgstr "Permission de dossier"
 
 #: seahub/help/templates/help/base.html:49
 msgid "Departments sharing"
-msgstr ""
+msgstr "Partages des départements"
 
 #: seahub/help/templates/help/base.html:52
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki et gestion de la base de connaissance "
 
 #: seahub/help/templates/help/base.html:54
 #: seahub/help/templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Gestion d'une librairie comme Wiki"
 
 #: seahub/help/templates/help/base.html:57
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Client de bureau et de synchronisation"
 
 #: seahub/help/templates/help/base.html:59
 msgid "Install and sync files"
-msgstr ""
+msgstr "Installation et synchronisation des fichiers"
 
 #: seahub/help/templates/help/base.html:60
 msgid "Syncing existing folders"
@@ -1644,12 +1656,12 @@ msgstr "Synchroniser les dossiers existants"
 #: seahub/help/templates/help/base.html:61
 #: seahub/help/templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Synchronisation sélective de sous-dossiers"
 
 #: seahub/help/templates/help/base.html:62
 #: seahub/help/templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Synchronisation en lecture seule"
 
 #: seahub/help/templates/help/base.html:63
 msgid "Unsync and resync libraries"
@@ -1675,20 +1687,20 @@ msgstr "Exclure des fichiers/dossiers"
 
 #: seahub/help/templates/help/base.html:70
 msgid "Drive client"
-msgstr ""
+msgstr "Client Drive"
 
 #: seahub/help/templates/help/base.html:72
 #: seahub/help/templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Utilisation du client Seafile Drive"
 
 #: seahub/help/templates/help/base.html:73
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Utilisation du client drive 2.0 sur Windows"
 
 #: seahub/help/templates/help/base.html:76
 msgid "Security and encryption"
-msgstr ""
+msgstr "Sécurité et chiffrement"
 
 #: seahub/help/templates/help/base.html:78
 msgid "How to use encrypted libraries"
@@ -1715,91 +1727,91 @@ msgstr "Parfois, vous et vos amis pouvez éditer le même fichier en même temps
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
-msgstr ""
+msgstr "Vous pouvez supprimer les librairies vous appartenant. Une librairie supprimé peut être restauré par vous ou un administrateur du serveur Seafile. "
 
 #: seahub/help/templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "La suppression d'un librairie a les effets suivant :"
 
 #: seahub/help/templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Les partage de fichiers et dossiers de la librairie sont annulés"
 
 #: seahub/help/templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
-msgstr ""
+msgstr "Les clients de bureau ne peuvent plus synchroniser cette librairie mais les fichiers local du client ne seront pas supprimés"
 
 #: seahub/help/templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Gestion et usage des départements"
 
 #: seahub/help/templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr ""
+msgstr "Certaines organisations sont constituées d'une hiérarchie de département complexe. Deux cas d'usages fréquent se présentent dans ces organisations :"
 
 #: seahub/help/templates/help/departments.html:8
 msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr ""
+msgstr "Il faudrait un espace de partage commun à l'organisation. L'organisation du dossier doit respecter la hiérarchie du département. Des dossiers ou espaces séparés seront assignés à chaque départements. "
 
 #: seahub/help/templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr ""
+msgstr "L'espace de partage devrait être détenu et géré par l'organisation, non pas par des employés individuels afin que le propriétaire du dossier n'ait pas à être modifier si l'employé qui l'organisme."
 
 #: seahub/help/templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "La fonctionnalité \"Départements\" est faite pour répondre aux deux cas d'usages ci-dessus. Nous introduirons cette fonctionnalité sous 3 différentes perspectives :"
 
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Administrateur système"
 
 #: seahub/help/templates/help/departments.html:14
 #: seahub/help/templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Administrateur de département"
 
 #: seahub/help/templates/help/departments.html:15
 #: seahub/help/templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Membre de département"
 
 #: seahub/help/templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "L'administrateur système peut :"
 
 #: seahub/help/templates/help/departments.html:20
 #: seahub/help/templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Gestion de la hiérarchie d'un département et de ces membres"
 
 #: seahub/help/templates/help/departments.html:21
 #: seahub/help/templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Assignation de quota d'espace pour les départements"
 
 #: seahub/help/templates/help/departments.html:22
 #: seahub/help/templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Création et gestion des librairies partagées dans les départements"
 
 #: seahub/help/templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
-msgstr ""
+msgstr "L'administrateur système peut définir la hiérarchie du département de deux manières : import manuel ou import depuis un Active Directory."
 
 #: seahub/help/templates/help/departments.html:26
 msgid ""
@@ -1808,7 +1820,7 @@ msgid ""
 "department can be populated with members. The system admin can set the role "
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
-msgstr ""
+msgstr "L'administrateur système peut créer autant de département au sommet de la hiérarchie qu'il le souhaite et autant de niveaux de sous-départements qu'il le souhaite dans chaque département principale. Chaque niveau de département peut être peuplés par des membres. L'administrateur système peut définir le rôle de chaque membre comme 'membre' ou 'admin'. Nous introduirons comment l'administrateur d'un département peut le gérer plus tard."
 
 #: seahub/help/templates/help/departments.html:27
 msgid ""
@@ -1816,13 +1828,13 @@ msgid ""
 "Units) in AD. Each OU will be imported as a department. And the sub-OUs "
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
-msgstr ""
+msgstr "L'administrateur système peut aussi importer la hiérarchie depuis une OU (Organizational Units) depuis l'AD. Chaque OU sera importé en tant que département et toutes les sous-OU seront importés en tant que sous-département. Les librairies de département peuvent être créé automatiquement durant le processus d'import."
 
 #: seahub/help/templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
-msgstr ""
+msgstr "L'administrateur système peut aussi supprimer le département après avoir supprimé tout les sous départements et toutes les librairies"
 
 #: seahub/help/templates/help/departments.html:30
 msgid ""
@@ -1831,39 +1843,39 @@ msgid ""
 "quota to a department. The total size of all the libraries in a department "
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
-msgstr ""
+msgstr "Les librairies créées au sein d'un département sont détenus par le département lui-même et non par un utilisateur. Ainsi, l'administrateur système peut définir un quota par département. La taille total de toutes les librairies du département ne peut excéder la taille du quota.<strong>Attention, le quota d'un sous-département ne dépend pas du quota du département parent.</strong>"
 
 #: seahub/help/templates/help/departments.html:32
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
 "libraries to a department."
-msgstr ""
+msgstr "Les librairies de départements peuvent être créées par l'administrateur système ou l'administrateur du département. Il existe aussi une option permettant d'autoriser ou non les utilisateurs à partager des librairies avec un département."
 
 #: seahub/help/templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "Toute les opérations ci-dessus peuvent être réalisé depuis l'interface d'administration système. Voir ci-dessous les capture d'écran pour plus de détails."
 
 #: seahub/help/templates/help/departments.html:36
 msgid ""
 "As noted above, department admin is a special role assigned by the system "
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
-msgstr ""
+msgstr "Comme décrit ci-dessus, l'administrateur de département est un rôle particulier attribué par l'administrateur système à certains membres du département. Les administrateurs de département peuvent effectuer les opérations suivantes dans un département après s'être authentifié."
 
 #: seahub/help/templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Accès aux librairies du département"
 
 #: seahub/help/templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Gestion des membres dans son département"
 
 #: seahub/help/templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Gestion des librairies dans son département"
 
 #: seahub/help/templates/help/departments.html:42
 msgid ""
@@ -1871,27 +1883,27 @@ msgid ""
 "the department. Any users registered in the system can be added as member of"
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
-msgstr ""
+msgstr "Si un utilisateur est administrateur de son département, il peut ajouter ou supprimer des membres du département. Tout utilisateur enregistré dans le système peut être ajouter comme membre du département. Cependant, si le département est importé depuis un AD, les changements effectué manuellement seront écrasés à la prochaine synchronisation de l'AD."
 
 #: seahub/help/templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "L'administrateur du département peut gérer les librairies de son département. Les opérations supportées sont les suivantes :"
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Création ou suppression d'une librairie"
 
 #: seahub/help/templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Renommer une librairie"
 
 #: seahub/help/templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "Partage d'une librairie avec des utilisateurs ou groupes extérieur au département. Ceci est très utile pour la collaboration entre différents départements."
 
 #: seahub/help/templates/help/departments.html:49
 #, python-format
@@ -1900,7 +1912,7 @@ msgid ""
 "departments in this department. This works like <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
-msgstr ""
+msgstr "Définition de permissions fines d'accès aux dossiers dans les librairies pour des utilisateurs de sous-département fonctionne comme <a href=\"%(SITE_ROOT)shelp/folder_permission/\"> fonctionnalité de permission de dossier </a>. "
 
 #: seahub/help/templates/help/departments.html:53
 msgid ""
@@ -1912,11 +1924,11 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "Un membre de département peut utiliser un département exactement comme un groupe. Chaque département est présenté à ces membres comme un groupe. Un utilisateur peut accéder aux librairies des départements dont il est membre mais aussi aux librairies des département parents de son département. Par exemple, si John est dans le sous-département \"EMEA\" du département \"Sales\", et que \"Sales\" est un sous-département de la compagnie \"ACME\", John peut accéder aux groupes \"EMEA\", \"Sales\" et \"ACME\". Les groupes de département sont marqué par un icône \"d'immeuble\" à côté de son nom. "
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Usage d'un proxy dans le client Seafile"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1942,7 +1954,7 @@ msgstr "Pour modifier les paramètres de proxy, cliquez sur l'icône Seafile dan
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 pour Windows 10"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1950,11 +1962,11 @@ msgid ""
 "Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
-msgstr ""
+msgstr "SeaDrive 2.0 (et les version futurs) est repensé avec une intégration avec Windows 10 plus pousser. Il supporte la version Windows 10 1709 (2017 Fall Update for Windows 10) et les versions supérieurs. Nous recommandons aux utilisateurs de Windows de passer à la version 2.0 de SeaDrive pour une expérience utilisateur plus confortable."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Installation et accès au Virtual Drive"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -1964,41 +1976,41 @@ msgid ""
 "1.0.x). It may take some time, depending on the number of files available in"
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
-msgstr ""
+msgstr "Vous pouvez télécharger SeaDrive 2.0 depuis le site officiel de Seafile. Après installation et authentification à votre compte Seafile, Seadrive commencera à télécharger une liste de librairie et bibliothèque depuis le serveur (comme avec SeaDrive 1.0.x). Cela peut prendre un certain temps, dépendant du nombre de fichiers disponibles depuis votre compte Seafile. Le téléchargement est progressif, vous don déjà accéder à une partie de vos fichiers de l'espace de stockage virtuel."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "Pour accéder au disque virtuel, il suffit d'ouvrir l'explorateur de fichier Windows. Une icône \"Seadrive\" se trouve dans la barre de navigation de l'explorateur de fichier Windows."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Accéder à des fichiers dans le Virtual Drive"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "Les librairies sont regroupées en 4 catégories dans le disque virtuel : Mes librairies, Partagé avec moi, Partagé avec des groupes et Partagé avec tout le monde"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "Comme vous pouvez le voir, l'icône de statut du fichier est mieux intégré à l'explorateur de fichier Windows. Les icônes diffèrent légèrement de la version 1.0. "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "Les fichiers dans le disque virtuel sont créés comme des \"fichier virtuels\" dans le système de fichier sous la forme d'un des 3 états suivants : "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>Fichier virtuel</b>: Une représentation vide du fichier qui peut être ouvert uniquement si un accès réseau est disponible."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -2007,13 +2019,13 @@ msgid ""
 "files are available whenever you open SeaDrive regardless to network "
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
-msgstr ""
+msgstr "<b>Fichier entier</b>: Le fichier a été téléchargé et sauvegardé localement. Le téléchargement est automatique quand un fichier virtuel est ouvert pour la première fois. Ces fichiers sont toujours disponibles lorsque vous ouvrez SeaDrive même sans connexion réseau. L'OS peut décider de libérer l'espace monopolisé par un fichier lorsque plus d'espace disque est requis  "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
-msgstr ""
+msgstr "<b>Fichier entier épinglé</b>: Le fichier a été téléchargé et sauvegardé localement. Il est garanti disponible hors-connexion."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -2022,18 +2034,18 @@ msgid ""
 "Choose \"Always keep on this device\" when you want to pin a file or folder "
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
-msgstr ""
+msgstr "Vous pouvez contrôler quels fichiers ou dossiers sont stocker localement. Cela peut être modifier depuis le menu contextuel apparaissant après un clique droit sur un fichier ou dossier. Choisir \"Always keep on this device\"  lorsque vous souhaitez conserver un fichier ou dossier localement; choisissez \"Free up space\" lorsque vous souhaitez libérer l'espace monopolisé par un fichier ou dossier. "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "Dans SeaDrive 1.0, les fichiers en cache ne sont pas mise-à-jour automatiquement lorsqu'une modification survient sur le serveur. Dans SeaDrive 2.0, les fichiers entiers et épinglés sont automatiquement synchronisés avec le serveur."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Téléchargement et contrôle de fichiers"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -2041,7 +2053,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "Lorsque vous ouvrez un fichier virtuel, l'os va automatiquement le télécharger. Si la durée du téléchargement du fichier est importante, une barre de progression apparaîtra dans l'explorateur de fichier permettant d'éventuellement annuler le téléchargement.  "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -2049,16 +2061,16 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr ""
+msgstr "Parfois, une application en tâche de fond peut essayer de télécharger un fichier du disque virtuel (comme un logiciel anti-virus). Vous serez notifié par l'os et vous pourrez choisir d'annuler le téléchargement ou d’empêcher l'application de télécharger automatiquement les fichiers à l'avenir"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Puis-je créer, supprimer, renommer des librairies ?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -2066,22 +2078,22 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "Oui. Lorsque vous créez, supprimez, ou renommez les dossiers de librairies du disque virtuel, l'opération sera reporté côté serveur. Vous pouvez uniquement créer, supprimer et renommer les librairies de la catégorie \"Mes librairies\". La création, suppression ou le renommage de librairies depuis les autres catégories seront ignorés."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Puis-je créer des fichiers et dossiers en dehors du dossier d'une librairie ?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "Oui mais les fichiers en dehors du dossier de la librairie seront ignorés et PAS synchroniser sur le serveur. Un nouveau dossier dans le dossier \"Mes librairies\" sur créer en tant que nouvelle librairie. "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Puis-je accéder à une librairie chiffrée ?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -2090,11 +2102,11 @@ msgid ""
 "enter the password. Just right click on the SeaDrive icon in the system tray"
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
-msgstr ""
+msgstr "Oui. Par défaut, les librairies chiffré ne sont pas synchronisés mais sont visible dans le dossier virtuel. Vous devez choisir manuellement quel librairie synchroniser et entrer le mot de passe. Il suffit de cliquer sur l'icône de SeaDrive dans la barre d'accès rapide et de choisir \"Voir les bibliothèques chiffrées\". Une fenêtre apparaîtra et vous pourrez choisir de synchroniser ou désynchroniser une librairie chiffée"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Est-ce compatible avec SeaDrive 1.0 ?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -2103,11 +2115,11 @@ msgid ""
 "files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
-msgstr ""
+msgstr "SeaDrive 2.0 utilisera tout les comptes existant et leurs metadata (stocké dans le dossier C:\\users\\username\\seadrive\\). Cependant, il n'utilisera pas les fichiers en cache de SeaDrive 1.0. Ainsi, tout les fichiers en cache de la version 1.0 ne seront pas accessible depuis la version 2.0. Vous pouvez lancer SeaDrive 1.0 afin de déposer les fichiers en cache sur le serveur ou les copier ailleurs."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Comment nettoyer le cache ?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -2117,7 +2129,7 @@ msgid ""
 " need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
-msgstr ""
+msgstr "Vous pouvez choisir manuellement quel dossiers ou fichiers mettre en cache local. Si constater qu'un dossier prend trop d'espace, choisissez l'option \"Free up space\" en faisant un clique droit sur le dossier et tout les fichiers en cache seront effacer. Il n'est pas nécessaire de définir une date de purge et une limite de taille du cache comme avec SeaDrive 1.0. Comme les fichiers virtuels sont des fichiers normaux créés sur votre disque, la taille du cache est uniquement limité par la quantité d'espace disque disponible sur votre PC."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2149,7 +2161,7 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
-msgstr ""
+msgstr "Si vous créez un librairie chiffrée depuis un dossier local avec le client de bureau (voir <a href=\"%(SITE_ROOT)shelp/install_sync/\">Synchronisation de fichier</a>), le mot de passe n'est pas envoyé au serveur."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -2177,7 +2189,7 @@ msgstr "Notez que la bibliothèque cryptée ne chiffre que le contenu des fichie
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Verrouillage de fichier"
 
 #: seahub/help/templates/help/file_locking.html:6
 msgid ""
@@ -2186,23 +2198,23 @@ msgid ""
 "situation nicely with conflict files. But it's often more convenient to lock"
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
-msgstr ""
+msgstr "Quand plus d'une personne collaborent sur un fichier, il est probable que plus d'un personne modifient le fichier en même temps. Seafile gère cette situation intelligemment au moyen de fichiers de conflit. Par contre, il est souvent plus pratique de verrouiller le fichier quand une personne souhaite l'exclusivité de la modification. La version Seafile Professional Edition support le verrouillage de fichier"
 
 #: seahub/help/templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "Le verrouillage de fichier fonctionne aussi bien depuis l'interface web qu'avec le client de synchronisation de bureau. Nous allons décrire chacun d'eux."
 
 #: seahub/help/templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Verrouillage de fichier depuis l'interface web"
 
 #: seahub/help/templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "Pour verrouiller un fichier, vous pouvez naviguer jusqu'au dossier du fichier dans l'interface web et cliquer sur l'option \"opérations\" du menu déroulant "
 
 #: seahub/help/templates/help/file_locking.html:11
 msgid ""
@@ -2210,46 +2222,46 @@ msgid ""
 "the file icon. Moving the mouse on the stop sign, you can see who locks the "
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
-msgstr ""
+msgstr "Une fois qu'un fichier est verrouillé, vous pouvez observer un signe \"stop\" rouge au coin de l'icône du fichier. En déplaçant la souris sur le signe stop, vous pouvez voir qui verrouille le fichier. Vous pouvez également déverrouiller un fichier que vous avez verrouillé mais pas ceux des autres utilisateurs."
 
 #: seahub/help/templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Verrouillage de fichier depuis le client de bureau "
 
 #: seahub/help/templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
-msgstr ""
+msgstr "Après qu'une librairie soit synchronisé, vous pouvez verrouiller/déverrouiller les fichiers de cette librairie depuis l'explorateur de fichier Windows ou Finder depuis un Mac."
 
 #: seahub/help/templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "Pour verrouiller un fichier, il suffit de faire un clique droit sur un fichier synchronisé et de choisir \"verrouiller ce fichier\" dans le menu \"Seafile\"."
 
 #: seahub/help/templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "Si un fichier est verrouillé par vous, vous verrez un signe \"stop\" orange sur l'icône du fichier. Vous pouvez choisir de le déverrouiller."
 
 #: seahub/help/templates/help/file_locking.html:19
 msgid ""
 "If a file is locked by other user, you can see a red \"stop sign\" on the "
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
-msgstr ""
+msgstr "Si un fichier est verrouiller par un autre utilisateur, vous verrez un signe \"stop\" sur le l'icône du fichier. Le fichier est automatiquement accessible en lecture seul. Vous ne pouvez le modifier jusqu'à ce qu'il soit déverrouillé."
 
 #: seahub/help/templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "Si une librairie n'est pas synchronisé, vous pouvez toujours utiliser l'interface web pour verrouiller et déverrouiller les fichiers de celle-ci."
 
 #: seahub/help/templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Verrouillage automatique des fichiers de office"
 
 #: seahub/help/templates/help/file_locking.html:23
 msgid ""
@@ -2258,19 +2270,19 @@ msgid ""
 "close the file, Seafile automatically unlocks the file. The locking state is"
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
-msgstr ""
+msgstr "Après qu'une librairie soit synchronisé sur le bureau, à l'ouverture d'un fichier Microsoft Office depuis une librairie, Seafile verrouille automatiquement le fichier. Lorsque vous fermer le fichier, Seafile débloque automatiquement le fichier. L'état de verrouillage est propagé aux autres ordinateurs synchronisant cette librairie. Cela empêche l'édition concurrente du même fichier Office."
 
 #: seahub/help/templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Détails du verrouillage de fichier"
 
 #: seahub/help/templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Quelques conseils pratiquent sur la façon dont le verrouillage de fichier fonctionne : "
 
 #: seahub/help/templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "Un fichier verrouillé peut uniquement être déverrouillé par un utilisateur qui l'a verrouillé."
 
 #: seahub/help/templates/help/file_locking.html:28
 msgid ""
@@ -2278,17 +2290,17 @@ msgid ""
 "But other users can still move, delete or rename the parent folder of a "
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
-msgstr ""
+msgstr "Un fichier verrouiller ne peut être modifié, déplacé, renommé ou supprimé par un autre utilisateur. Cependant, les autres utilisateurs peuvent toujours déplacer, supprimer, ou renommer le dossier parent d'un fichier verrouillé. L'objectif d'un fichier verrouillé est principalement d'éviter l'écriture concurrentiel."
 
 #: seahub/help/templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "Quand le dossier parent d'un fichier verrouillé est renommé ou déplacé dans la même librairie, il reste verrouillé après l'opération. "
 
 #: seahub/help/templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Trouver d'anciennes version de fichiers"
 
 #: seahub/help/templates/help/finding_older_version_files.html:7
 msgid ""
@@ -2296,28 +2308,28 @@ msgid ""
 "modified, a new version is created, while the old version is still kept for "
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
-msgstr ""
+msgstr "Seafile suit l'historique de modification de tout les fichiers. Dès qu'un fichier est modifié, une nouvelle version est créé, tandis que l'ancienne version est conservé pendant une période de temps configurable. Lorsque vous voulez accéder à une ancienne version d'un fichier, l'historique des fichiers devient vraiment pratique."
 
 #: seahub/help/templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Lister toute les versions d'un fichier :"
 
 #: seahub/help/templates/help/finding_older_version_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the folder containing the file. Move the "
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
-msgstr ""
+msgstr "Depuis l'interface web, naviguer dans le dossier contenu le fichier. Cliquer sur la flèche \"Plus d'action\" du fichier. Un menu déroulant apparaît. Vous pouvez cliquer sur l'option \"Historique\" du menu.  "
 
 #: seahub/help/templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
-msgstr ""
+msgstr "Une liste de toute les versions du fichier sera afficher par ordre décroissant de date. La liste contient également l'historique de renommage du fichier "
 
 #: seahub/help/templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Vous pouvez télécharger, restaurer, voir toute les version du fichier"
 
 #: seahub/help/templates/help/finding_older_version_files.html:14
 #, python-format
@@ -2325,11 +2337,11 @@ msgid ""
 "You can configure the retention period of file versions: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "Vous pouvez configurer la période de rétention des versions de fichier : <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">Paramètre de l'historique</a>."
 
 #: seahub/help/templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Utilisez les permissions de dossier pour un contrôle d'accès précis"
 
 #: seahub/help/templates/help/folder_permission.html:8
 #, python-format
@@ -2339,14 +2351,14 @@ msgid ""
 "described in <a "
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
-msgstr ""
+msgstr "Pour les librairies et dossiers partagés, vous pouvez définir des permissions pour un utilisateur ou un groupe. Les permissions disponibles sont les même que celles décrites dans <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">librairie partagées</a>. Voici quelques cas d'usages :"
 
 #: seahub/help/templates/help/folder_permission.html:10
 msgid ""
 "You shared a library to a group with \"read only\" permission. You also want"
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
-msgstr ""
+msgstr "Vous partagez une librairie avec un groupe en \"lecture seul\". Vous voulez également autoriser un membre du groupe à modifier les fichiers d'un sous-dossier. Vous pouvez ajouter des droits en écriture au sous-dossier à cette personne."
 
 #: seahub/help/templates/help/folder_permission.html:11
 msgid ""
@@ -2354,7 +2366,7 @@ msgid ""
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
-msgstr ""
+msgstr "Vous partager une librairie avec 3 groupes. Cette librairie contient 3 sous-dossiers, un pour que chaque groupe puisse déposer des fichiers. Cependant vous ne voulez pas que les utilisateurs puissent modifier des fichiers n'appartenant pas à leur groupe. Vous pouvez définir des droits en écriture a un sous-dossier uniquement à son groupe."
 
 #: seahub/help/templates/help/folder_permission.html:13
 msgid ""
@@ -2362,18 +2374,18 @@ msgid ""
 " others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
-msgstr ""
+msgstr "Les permissions de dossier sont effectives uniquement pour les librairies et dossier que vous partagés. Pour définir des permissions à des sous-dossiers d'un dossier, il faut préalablement partager la librairie ou le dossier parent, sans cela les permissions du dossier n'auront aucun effet. "
 
 #: seahub/help/templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "Un des objectifs des permissions de dossier est de supporter des permissions hiérarchiques : "
 
 #: seahub/help/templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Les sous-dossiers héritent automatiquement des permissions de son dossiers parent."
 
 #: seahub/help/templates/help/folder_permission.html:17
 msgid ""
@@ -2382,11 +2394,11 @@ msgid ""
 "files\" for user A, and you set \"read only\" permission on sub-folder "
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
-msgstr ""
+msgstr "Les permissions définis au niveau d'un sous-dossier remplacent les permissions de son dossier parent. Par exemple, si vous définissez un accès en \"lecture écriture\" du dossier \"fichier réunion\" pour un utilisateur A, et que vous définissez un accès en \"lecture seul\" du sous-dossier \"fichier réunion/ce_jour\" pour l'utilisateur A, alors les droits d'accès au fichier \"fichier réunion/ce_jour\" sont \"lecture seul\". "
 
 #: seahub/help/templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Usage basique"
 
 #: seahub/help/templates/help/folder_permission.html:20
 msgid ""
@@ -2394,7 +2406,7 @@ msgid ""
 "file browsing interface, click \"more operations\" button, choose "
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
-msgstr ""
+msgstr "Seul les propriétaires de librairies peuvent définir des droits d'accès aux dossiers. Depuis l'interface web, cliquer sur le bouton \"Plus d'actions\", choisissez l'option \"permission\" du menu déroulant. Depuis la fenêtre pop-up, vous pouvez visualiser et définir les permissions de ce dossier. "
 
 #: seahub/help/templates/help/folder_permission.html:21
 msgid ""
@@ -2402,24 +2414,24 @@ msgid ""
 "on the library. Click \"more operations\" button, choose \"Folder "
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
-msgstr ""
+msgstr "Si vous voulez voir toutes les permissions de dossier défini dans une librairie, placer la souris sur la librairie, cliquer sur le bouton \"Plus d'action\", choisir \"Permission de dossier\" du menu déroulant. Depuis la fenêtre pop-up, vous pouvez visualiser et définir les permissions de cette librairie"
 
 #: seahub/help/templates/help/folder_permission.html:22
 msgid ""
 "When other users navigate into a folder, there will be a small \"eye\" icon "
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
-msgstr ""
+msgstr "Quand d'autres utilisateurs naviguent dans un dossier, apparaîtra l'icône d'un petit \"œil\" à côté des dossiers en \"lecture seul\". Quand un utilisateur navigue dans ce dossier, il ne sera pas capable d'ajouter/modifier/supprimer les fichiers."
 
 #: seahub/help/templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
-msgstr ""
+msgstr "Si un dossier en \"lecture seul\" est synchronisé vers un PC avec l'application Seafile desktop, les modifications apportés au dossier en \"lecture seul\" ne seront pas téléversées vers le cloud."
 
 #: seahub/help/templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Avancé : priorité des permissions"
 
 #: seahub/help/templates/help/folder_permission.html:27
 msgid ""
@@ -2428,7 +2440,7 @@ msgid ""
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
-msgstr ""
+msgstr "Les permissions des dossiers ont une prioritée plus importante que celles définis depuis un partage. Par exemple, si vous partagez une librairie avec un utilisateur A avec des droits d'accès en \"lecture écriture\" et que vous définissez également une permission en \"lecture seul\" a un sous-dossier de cette librairie, alors l'utilisateur A aura uniquement un accès en \"lecture seul\" à ce sous-dossier, alors qu'il aura un accès en \"lecture écriture\" aux autres sous-dossiers et fichiers."
 
 #: seahub/help/templates/help/folder_permission.html:28
 msgid ""
@@ -2436,17 +2448,17 @@ msgid ""
 "permissions set to a group. That is, when checking permission for a folder, "
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
-msgstr ""
+msgstr "Les permissions de dossier définis pour un utilisateur spécifique on une priorité plus importante que les permission d'un groupe. Ainsi, lorsque les permissions d'un dossier sont évaluées, si le système détecte une permission spécifique à l'utilisateur, il ignorera les permissions des groupes desquels l'utilisateur fait partis"
 
 #: seahub/help/templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "Les permissions de sous-dossiers ont une priorité plus importante que celles des dossiers parent."
 
 #: seahub/help/templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Voici un exemple complexe : "
 
 #: seahub/help/templates/help/folder_permission.html:32
 msgid ""
@@ -2457,110 +2469,110 @@ msgid ""
 "only\". That's because, according to rule 2, \"read only\" permission is "
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
-msgstr ""
+msgstr "Supposons que la structure des dossier ressemble à \"A/B\", l'utilisateur \"John\" est dans un groupe \"Staff\". Si vous définissez un accès en \"lecture seul\" au dossier A pour John et que vous définissez un accès en \"lecture écriture\" au dossier \"A/B\" pour le groupe \"Staff\", alors les droits d'accès de John au dossier \"A/B\" est toujours \"lecture seul\". Cela parce que, selon la règle 2, la permission \"lecture seul\" est la première permission rencontré pour le dossier \"A/B\" et l'utilisateur John, héritant de son parent A."
 
 #: seahub/help/templates/help/full_text_file_search.html:6
 msgid ""
 "If you're using a Pro Edition Server, you can search file and folder names, "
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
-msgstr ""
+msgstr "Si vous utilisez \"Pro Edition Server\", vous pouvez chercher noms de fichier et dossiers aussi bien que le contenu de certains fichiers depuis l'interface web. Actuellement Seafile peut chercher le contenu des types de fichiers suivant : "
 
 #: seahub/help/templates/help/full_text_file_search.html:8
 #: seahub/help/templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (Édition Serveur Pro uniquement)"
 
 #: seahub/help/templates/help/full_text_file_search.html:9
 #: seahub/help/templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (Édition Serveur Pro uniquement)"
 
 #: seahub/help/templates/help/full_text_file_search.html:10
 #: seahub/help/templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (Édition Serveur Pro uniquement) "
 
 #: seahub/help/templates/help/full_text_file_search.html:11
 #: seahub/help/templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "Fichiers LibreOffice"
 
 #: seahub/help/templates/help/full_text_file_search.html:12
 #: seahub/help/templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "Fichiers PDF"
 
 #: seahub/help/templates/help/full_text_file_search.html:13
 #: seahub/help/templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Fichiers Markdown: .md"
 
 #: seahub/help/templates/help/full_text_file_search.html:14
 #: seahub/help/templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Divers fichiers de code source"
 
 #: seahub/help/templates/help/full_text_file_search.html:15
 #: seahub/help/templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Fichiers texte : .txt, .log"
 
 #: seahub/help/templates/help/full_text_file_search.html:17
 msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "A noté que l'administrateur système de votre Seafile peut ne pas avoir activé l'option de recherche de contenu. Dans ce cas, vous pourrez uniquement rechercher les noms de fichiers et dossiers."
 
 #: seahub/help/templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "Créé un groupe est une façon simple de partager des fichiers avec de nombreuses personnes. Dans Seafile, vous pouvez créer et gérer un groupe facilement."
 
 #: seahub/help/templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Voici comment fonctionne les groupes dans Seafile :"
 
 #: seahub/help/templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "Chaque groupe a un propriétaire qui est, par défaut, le créateur du groupe. Il peut transférer la propriété du groupe à un autre membre."
 
 #: seahub/help/templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "Chaque groupe peut avoir plusieurs administrateurs. Le propriétaire et les administrateurs du groupe peuvent ajouter de nouveaux administrateurs."
 
 #: seahub/help/templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "L'administrateur du groupe peut ajouter/supprimer des membres du groupe et peut également annuler le partage d'une librairie avec le groupe "
 
 #: seahub/help/templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "Cliquer sur l'onglet \"Partagé avec des groupes\" du panneau gauche et vous verrez tout les groupes dont vous faites parti. Cliquer sur l'un des groupes, vous verrez les librairies partagées avec ce groupe.  "
 
 #: seahub/help/templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "Pour créer un nouveau groupe, cliquer sur l'onglet \"Partagé avec des groupes\" du panneau gauche puis cliquer sur \"Mes groupes\". Sur la page, vous pouvez cliquer sur \"Nouveau groupe\" pour créer un groupe."
 
 #: seahub/help/templates/help/groups_managing.html:15
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
-msgstr ""
+msgstr "Voir <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">Partage des fichiers et dossiers</a> pour le partage des librairies et dossiers avec un groupe"
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -2644,7 +2656,7 @@ msgstr "Seafile-ignore.txt ignore seulement les fichiers/dossiers qui ne sont pa
 
 #: seahub/help/templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Installation du client Seafile"
 
 #: seahub/help/templates/help/install_sync.html:8
 msgid ""
@@ -2705,7 +2717,7 @@ msgstr "Dans certaines circonstances, vous souhaitez modifier des fichiers dans 
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafile est une plateforme d'hébergement de fichier hautement fiable et performante."
 
 #: seahub/help/templates/help/introduction.html:9
 #, python-format
@@ -2794,14 +2806,14 @@ msgstr ""
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Pour voir l'historique et les images d'une librairie :"
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:11
 msgid ""
 "In Seafile Web App, navigate into the root folder of a library. Click the "
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
-msgstr ""
+msgstr "Dans l'interface Web de Seafile, se rendre dans le dossier racine de la librairie. Cliquer sur l'icône \"Historique\" dans la barre de navigation situé en haut. Tout les changements de la librairie apparaîtront sous forme de liste"
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:12
 msgid ""
@@ -2843,7 +2855,7 @@ msgstr ""
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Vue colonne"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -2857,7 +2869,7 @@ msgstr ""
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Éditeur Markdown WYSIWYG"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -3091,7 +3103,7 @@ msgstr ""
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Création de liens de partages de fichier ou dossiers"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -3200,44 +3212,44 @@ msgstr ""
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Partage de librairies et dossiers :"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:45
 msgid ""
 "You can share a library or folder to other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
-msgstr ""
+msgstr "Vous pouvez partager une librairie ou un dossier avec un autre utilisateur enregistrer de Seafile. La bibliothèque ou dossier partagé peut être accédé par d'autres par l'interface web et par les clients Seafile."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Vous pouvez choisir la portée du partage :"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Partage avec une utilisateur : vous pouvez partager avec un ou plusieurs utilisateurs."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Partage avec un groupe : Vous pouvez partager avec un groupe"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "Partager avec une organisation : si vous avez un serveur privé, il est parfois utile de partager avec l'ensemble des membres du serveur (l'organisation entière)"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Vous pouvez aussi définir des permissions sur les partages :"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "Lecture-écriture : les utilisateurs peuvent lire, écrire, téléverser, télécharger et synchroniser les fichiers."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Lecture seule : les utilisateurs peuvent lire, télécharger et synchroniser les fichiers."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
@@ -3290,7 +3302,7 @@ msgstr ""
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Liens interne"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -3299,7 +3311,7 @@ msgid ""
 "way for sharing files among team members who have access to a common "
 "library. You may just copy the link and paste it into an email or IM "
 "software."
-msgstr ""
+msgstr "Seul les utilisateurs authentifiés ayant le droit de lecture peuvent accéder à ce lien. Ce lien est utilisé pour du partage interne. C'est un bon moyen de partager des documents entres membres d'une équipe ayant accès à une librairie commune. Il suffit de copier le lien et de le transmettre par mail ou messagerie instantanée. "
 
 #: seahub/help/templates/help/sync_interval.html:8
 msgid ""
@@ -3313,7 +3325,7 @@ msgstr "Habituellement le client Seafile détecte automatiquement les modificati
 
 #: seahub/help/templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Synchronisation avec un dossier existant"
 
 #: seahub/help/templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -3344,7 +3356,7 @@ msgstr "Ensuite, choisissez un dossier existant à synchroniser avec cette bibli
 
 #: seahub/help/templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Bibliothèque désynchronisé et resynchronisé"
 
 #: seahub/help/templates/help/unsync_resync.html:8
 #, python-format
@@ -3401,7 +3413,7 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "État de synchronisation"
 
 #: seahub/help/templates/help/using_drive_client.html:18
 msgid ""
@@ -3412,12 +3424,12 @@ msgstr ""
 #: seahub/help/templates/help/using_drive_client.html:22
 #: seahub/help/templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "État "
 
 #: seahub/help/templates/help/using_drive_client.html:23
 #: seahub/help/templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Icône"
 
 #: seahub/help/templates/help/using_drive_client.html:24
 #: seahub/help/templates/help/using_drive_client.html:53
@@ -3439,7 +3451,7 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Contenu synchronisé"
 
 #: seahub/help/templates/help/using_drive_client.html:36
 msgid ""
@@ -3449,7 +3461,7 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Contenu partiellement synchronisé"
 
 #: seahub/help/templates/help/using_drive_client.html:41
 msgid ""
@@ -3469,7 +3481,7 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Verrouiller par un autre utilisateur"
 
 #: seahub/help/templates/help/using_drive_client.html:60
 msgid ""
@@ -3479,16 +3491,16 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Verrouillé par moi"
 
 #: seahub/help/templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Vous avez verrouillé le fichier. Cela empêche les autres de le modifier"
 
 #: seahub/help/templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Lecture seule"
 
 #: seahub/help/templates/help/using_drive_client.html:70
 msgid ""
@@ -3527,11 +3539,11 @@ msgstr ""
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
-msgstr ""
+msgstr "Certains types de fichiers peuvent être ouvert directement depuis l'interface Web de Seafile :"
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Fichiers image"
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"
@@ -3687,12 +3699,12 @@ msgstr "Propriétaire"
 msgid "Member"
 msgstr "Membre"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:389
+#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s a été supprimé avec succès."
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:399
+#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
 msgid "Failed to delete: the user does not exist"
 msgstr "Impossible de supprimer : l'utilisateur n'existe pas"
 
@@ -3724,8 +3736,9 @@ msgstr "Bonjour,"
 #: seahub/invitations/templates/invitations/invitation_email.html:12
 #, python-format
 msgid ""
-"%(inviter)s invited you to join %(site_name)s. Please click the link below:"
-msgstr "%(inviter)s vous invite à rejoindre %(site_name)s. Veuillez cliquer sur le lien ci-dessous :"
+"%(inviter_name)s invited you to join %(site_name)s. Please click the link "
+"below:"
+msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -3843,21 +3856,21 @@ msgstr " Nouvelle notification sur %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr "Vous avez %(num)s nouvelles notifications sur %(site_name)s :\n"
 
-#: seahub/notifications/models.py:483
+#: seahub/notifications/models.py:480
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "Un fichier nommé <a href='%(file_link)s'>%(file_name)s</a> est envoyé vers <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:490
+#: seahub/notifications/models.py:487
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "Un fichier nommé <strong>%(file_name)s</strong> est envoyé vers <strong>Bibliothèque supprimée</strong>"
 
-#: seahub/notifications/models.py:624
+#: seahub/notifications/models.py:621
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -3865,35 +3878,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "L'utilisateur <a href='%(user_profile)s'>%(username)s</a> a demandé à rejoindre un groupe <a href='%(href)s'>%(group_name)s</a>, message de vérification: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:653
+#: seahub/notifications/models.py:650
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "L'utilisateur <a href='%(user_profile)s'>%(group_staff)s</a> a été ajouté au groupe <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:679
+#: seahub/notifications/models.py:676
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "Le fichier <a href='%(file_url)s'>%(file_name)s</a>a un nouveau commentaire de l'utilisateur %(author)s"
 
-#: seahub/notifications/models.py:696
+#: seahub/notifications/models.py:693
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "<a href='%(file_url)s'>Brouillon #%(draft_id)s</a> a une nouveau commentaire de l'utilisateur %(author)s"
 
-#: seahub/notifications/models.py:713
+#: seahub/notifications/models.py:710
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s a envoyé une requête pour <a href='%(file_url)s'>brouillon #%(draft_id)s</a>"
 
-#: seahub/notifications/models.py:736
+#: seahub/notifications/models.py:733
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
@@ -3901,7 +3914,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "l'invité %(user)s a accepté votre <a href=\"%(url_base)s%(inv_url)s\">invitation</a> à %(time)s."
 
-#: seahub/notifications/models.py:760
+#: seahub/notifications/models.py:757
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
@@ -4062,7 +4075,7 @@ msgstr "L'adresse e-mail n'est pas valide"
 #: seahub/organizations/templates/organizations/org_register.html:8
 #: seahub/templates/choose_register.html:3
 #: seahub/templates/choose_register.html:8
-#: seahub/templates/registration/login.html:88
+#: seahub/templates/registration/login.html:90
 #: seahub/templates/registration/registration_form.html:3
 #: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
@@ -4173,11 +4186,11 @@ msgstr "L'adresse e-mail est obligatoire"
 msgid "Email is not longer than 512 characters"
 msgstr "L'e-mail ne peut pas dépasser 512 caractères."
 
-#: seahub/share/models.py:78
+#: seahub/share/models.py:79
 msgid "Password can't be empty"
 msgstr "Le mot de passe ne peut pas être vide"
 
-#: seahub/share/models.py:85
+#: seahub/share/models.py:86
 msgid "Please enter a correct password."
 msgstr "Saisissez un mot de passe correct."
 
@@ -4421,7 +4434,7 @@ msgstr "S'inscrire"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:35
-#: seahub/templates/registration/login.html:70
+#: seahub/templates/registration/login.html:72
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -4442,27 +4455,27 @@ msgstr "Mot de passe ou e-mail incorrect"
 msgid "Remember me for %(remember_days)s days "
 msgstr "Mémoriser pendant %(remember_days)s jours"
 
-#: seahub/templates/registration/login.html:68
+#: seahub/templates/registration/login.html:69
 msgid "Forgot password?"
 msgstr "Mot de passe oublié ?"
 
-#: seahub/templates/registration/login.html:74
+#: seahub/templates/registration/login.html:76
 msgid "Single Sign-On"
 msgstr "Authentification unique"
 
-#: seahub/templates/registration/login.html:79
+#: seahub/templates/registration/login.html:81
 msgid "Login with: "
 msgstr "S'identifier avec :"
 
-#: seahub/templates/registration/login.html:145
+#: seahub/templates/registration/login.html:147
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Impossible de rafraichir le CAPTCHA, veuillez essayer ultérieurement."
 
-#: seahub/templates/registration/login.html:153
+#: seahub/templates/registration/login.html:155
 msgid "Email or username cannot be blank"
 msgstr "L'e-mail ou le nom d'utilisateur ne peut être vide"
 
-#: seahub/templates/registration/login.html:157
+#: seahub/templates/registration/login.html:159
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -4806,6 +4819,10 @@ msgstr "La description est requise"
 msgid "Please enter password"
 msgstr "Veuillez entrer le mot de passe"
 
+#: seahub/templates/snippets/repo_create_js.html:50
+msgid "Password is too short"
+msgstr "Le mot de passe est trop court"
+
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
 msgid ""
@@ -5106,7 +5123,7 @@ msgstr "Vous êtes sur le point de désactiver l'authentification à deux facteu
 msgid "Disable"
 msgstr "Désactiver"
 
-#: seahub/utils/__init__.py:158
+#: seahub/utils/__init__.py:153
 msgid "permission error"
 msgstr "Erreur de permission"
 
@@ -5121,7 +5138,7 @@ msgstr "Impossible d'afficher les modifications de la bibliothèque"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:734 seahub/views/__init__.py:879
-#: seahub/views/ajax.py:376 seahub/views/file.py:1853
+#: seahub/views/ajax.py:376 seahub/views/file.py:1843
 msgid "Library does not exist"
 msgstr "La bibliothèque n'existe pas"
 
@@ -5141,7 +5158,7 @@ msgstr "L'historique que vous avez spécifié n'existe pas"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: seahub/views/__init__.py:886 seahub/views/repo.py:300
+#: seahub/views/__init__.py:886 seahub/views/repo.py:295
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" n'existe pas."
@@ -5167,9 +5184,9 @@ msgstr "Mauvais ID de repo"
 msgid "Bad upload link token."
 msgstr "Mauvais token de lien d'envoi."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1124 seahub/views/file.py:1345
-#: seahub/views/file.py:1862
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1128 seahub/views/file.py:1342
+#: seahub/views/file.py:1852
 msgid "File does not exist"
 msgstr "Le fichier n'existe pas"
 
@@ -5181,166 +5198,153 @@ msgstr "Mauvais id de dépôt dans le lien d'envoi."
 msgid "No conflict in the merge."
 msgstr "Pas de conflit dans la fusion."
 
-#: seahub/views/file.py:189
+#: seahub/views/file.py:192
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: impossible d'ouvrir le fichier en ligne"
 
-#: seahub/views/file.py:193
+#: seahub/views/file.py:196
 msgid "URLError: failed to open file online"
 msgstr "URLError: impossible d'ouvrir le fichier en ligne"
 
-#: seahub/views/file.py:200
+#: seahub/views/file.py:203
 msgid "The encoding you chose is not proper."
 msgstr "L'encodage que vous avez choisi n'est pas approprié."
 
-#: seahub/views/file.py:217 seahub/views/file.py:220
+#: seahub/views/file.py:220 seahub/views/file.py:223
 msgid "Unknown file encoding"
 msgstr "Encodage de fichier inconnu"
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:655
-#: seahub/views/file.py:746 seahub/views/file.py:865
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:660
+#: seahub/views/file.py:753 seahub/views/file.py:874
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "La taille du fichier dépasse %s, il ne peut donc pas être visionné en ligne."
 
-#: seahub/views/file.py:347 seahub/views/file.py:781
+#: seahub/views/file.py:350 seahub/views/file.py:788
 msgid "The library is encrypted, can not open file online."
 msgstr "La bibliothèque est cryptée. Elle ne peut pas être ouverte en ligne."
 
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:510 seahub/views/file.py:734 seahub/views/file.py:987
-#: seahub/views/file.py:1010 seahub/views/file.py:1037
-#: seahub/views/file.py:1167 seahub/views/file.py:1263
-#: seahub/views/file.py:1366 seahub/views/file.py:1471
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:741 seahub/views/file.py:996
+#: seahub/views/file.py:1019 seahub/views/file.py:1046
+#: seahub/views/file.py:1171 seahub/views/file.py:1261
+#: seahub/views/file.py:1363 seahub/views/file.py:1462
 msgid "Unable to view file"
 msgstr "Impossible d'afficher le fichier"
 
-#: seahub/views/file.py:805 seahub/views/file.py:935 seahub/views/file.py:1224
-#: seahub/views/file.py:1410
+#: seahub/views/file.py:812 seahub/views/file.py:944 seahub/views/file.py:1222
+#: seahub/views/file.py:1401
 msgid "Error when prepare Office Online file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du document Office Online"
 
-#: seahub/views/file.py:834 seahub/views/file.py:947 seahub/views/file.py:1243
-#: seahub/views/file.py:1425
+#: seahub/views/file.py:843 seahub/views/file.py:956 seahub/views/file.py:1241
+#: seahub/views/file.py:1416
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Erreur en préparant la page de prévisualisation du fichier OnlyOffice"
 
-#: seahub/views/file.py:1070
+#: seahub/views/file.py:1079
 msgid "Unable to download file, invalid file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier invalide"
 
-#: seahub/views/file.py:1079
+#: seahub/views/file.py:1088
 msgid "Unable to download file, wrong file path"
 msgstr "Impossible de télécharger le fichier, chemin de fichier erroné"
 
-#: seahub/views/file.py:1084
-msgid "Unable to download file, share link traffic is used up."
-msgstr "Impossible de télécharger le fichier, le volume de transfert du lien de partage est dépassé."
-
-#: seahub/views/file.py:1091
+#: seahub/views/file.py:1095
 msgid "Unable to download file."
 msgstr "Impossible de télécharger le fichier."
 
-#: seahub/views/file.py:1178 seahub/views/file.py:1377
-msgid "Unable to view raw file, share link traffic is used up."
-msgstr "Impossible de voir le fichier brut, le trafic de lien de partage est épuisé."
-
-#: seahub/views/file.py:1280 seahub/views/file.py:1491
-#: seahub/views/repo.py:353
+#: seahub/views/file.py:1277 seahub/views/file.py:1481
+#: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "Partager le lien pour %s."
 
-#: seahub/views/file.py:1609 seahub/views/file.py:1614
+#: seahub/views/file.py:1599 seahub/views/file.py:1604
 msgid "Unable to download file"
 msgstr "Impossible de télécharger le fichier"
 
-#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:366
+#: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:357
 msgid "Failed to set quota: internal server error"
 msgstr "Échec de mise en place du quota : erreur interne du serveur"
 
-#: seahub/views/sysadmin.py:385
+#: seahub/views/sysadmin.py:376
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Impossible de supprimer : l'utilisateur est le créateur de l'organisation"
 
-#: seahub/views/sysadmin.py:420
-#, python-format
-msgid "Successfully remove trial for: %s"
-msgstr "Suppression du test pour : %s avec succès"
-
-#: seahub/views/sysadmin.py:449
+#: seahub/views/sysadmin.py:421
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Permissions administrateur de %s supprimées avec succès"
 
-#: seahub/views/sysadmin.py:451
+#: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Impossible de supprimer les droits administrateur : l'utilisateur n'existe pas"
 
-#: seahub/views/sysadmin.py:579
+#: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"
 msgstr "Impossible de réinitialiser le mot de passe : l'utilisateur n'existe pas"
 
-#: seahub/views/sysadmin.py:628
+#: seahub/views/sysadmin.py:600
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Échec de l'ajout de l'utilisateur %s."
 
-#: seahub/views/sysadmin.py:653 seahub/views/sysadmin.py:666
+#: seahub/views/sysadmin.py:625 seahub/views/sysadmin.py:638
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Utilisateur %s ajouté avec succès. Une notification par e-mail a été envoyée."
 
-#: seahub/views/sysadmin.py:656 seahub/views/sysadmin.py:669
+#: seahub/views/sysadmin.py:628 seahub/views/sysadmin.py:641
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Utilisateur %s ajouté avec succès. Une erreur s'est produite lors de l'envoi de notification par e-mail. Le service de courrier électronique n'est pas configuré correctement."
 
-#: seahub/views/sysadmin.py:658 seahub/views/sysadmin.py:671
+#: seahub/views/sysadmin.py:630 seahub/views/sysadmin.py:643
 #, python-format
 msgid "Successfully added user %s."
 msgstr "L'utilisateur %s a été ajouté avec succès."
 
-#: seahub/views/sysadmin.py:673
+#: seahub/views/sysadmin.py:645
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "L'utilisateur %s a été ajouté avec succès. La notification par e-mail ne peut être envoyée, le service d'e-mail n'est pas configuré correctement."
 
-#: seahub/views/sysadmin.py:696
+#: seahub/views/sysadmin.py:668
 msgid "Creator"
 msgstr "Créateur"
 
-#: seahub/views/sysadmin.py:725
+#: seahub/views/sysadmin.py:697
 msgid "Input should be a number"
 msgstr "La saisie doit être un nombre"
 
-#: seahub/views/sysadmin.py:731
+#: seahub/views/sysadmin.py:703
 msgid "Success"
 msgstr "Succès"
 
-#: seahub/views/sysadmin.py:735
+#: seahub/views/sysadmin.py:707
 msgid "Input number should be greater than 0"
 msgstr "Le nombre saisi doit être supérieur à 0"
 
-#: seahub/views/sysadmin.py:773
+#: seahub/views/sysadmin.py:745
 msgid "Successfully deleted."
 msgstr "Supprimé avec succès."
 
-#: seahub/views/sysadmin.py:803
+#: seahub/views/sysadmin.py:775
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s défini en tant qu'administrateur avec succès."
 
-#: seahub/views/sysadmin.py:805
+#: seahub/views/sysadmin.py:777
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Impossible de définir %s en tant qu'administrateur : l'utilisateur n'existe pas."
 
-#: seahub/views/sysadmin.py:818 seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:791
 msgid "Optional"
 msgstr "Optionnel"
 

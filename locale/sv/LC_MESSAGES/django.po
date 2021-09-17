@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Radapompa <radapompa@gmail.com>, 2015-2016
+# llj <lingjun.li1@gmail.com>, 2021
 # Radapompa <radapompa@gmail.com>, 2016-2020
 # Robert Högberg <robert.hogberg@gmail.com>, 2016-2017,2020
 # Tomas <data4@tutanota.com>, 2014
@@ -12,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-23 14:18+0800\n"
-"PO-Revision-Date: 2021-06-23 06:48+0000\n"
+"POT-Creation-Date: 2021-09-17 11:21+0800\n"
+"PO-Revision-Date: 2021-09-17 03:22+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -22,45 +23,45 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
+#: seahub/api2/endpoints/admin/account.py:181 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Namnet är för långt (max 64 tecken)"
 
-#: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
+#: seahub/api2/endpoints/admin/account.py:185 seahub/api2/endpoints/user.py:85
 #: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Namn ska inte innehålla '/'."
 
-#: seahub/api2/endpoints/admin/account.py:214
+#: seahub/api2/endpoints/admin/account.py:200
 msgid "Login id can't be empty"
 msgstr "Login-id kan inte vara tomt"
 
-#: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:1043
+#: seahub/api2/endpoints/admin/account.py:204
+#: seahub/api2/endpoints/admin/users.py:1046
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Login-id%s existerar redan"
 
-#: seahub/api2/endpoints/admin/account.py:225
+#: seahub/api2/endpoints/admin/account.py:211
 msgid "Department is too long (maximum is 512 characters)"
 msgstr "Avdelning är för långt (max 512 tecken)"
 
-#: seahub/api2/endpoints/admin/account.py:241 seahub/forms.py:155
+#: seahub/api2/endpoints/admin/account.py:227 seahub/forms.py:155
 msgid "Space quota can't be empty"
 msgstr "Utrymmeskvot måste anges"
 
-#: seahub/api2/endpoints/admin/account.py:247
+#: seahub/api2/endpoints/admin/account.py:233
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "Måste vara ett heltal större eller lika med 0."
 
-#: seahub/api2/endpoints/admin/account.py:251
+#: seahub/api2/endpoints/admin/account.py:237
 #: seahub/api2/endpoints/admin/users_batch.py:176 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "Utrymmeskvot är för lågt (minsta värde är 0)"
 
-#: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:334
+#: seahub/api2/endpoints/admin/account.py:245 seahub/institutions/views.py:211
+#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Misslyckades att sätta kvot: max kvot är %d MB"
@@ -69,7 +70,7 @@ msgstr "Misslyckades att sätta kvot: max kvot är %d MB"
 #: seahub/api2/endpoints/admin/groups.py:129
 #: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
-#: seahub/api2/views.py:4592 seahub/group/forms.py:36
+#: seahub/api2/views.py:4594 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -116,7 +117,7 @@ msgid ""
 "institution"
 msgstr "Misslyckades att lägga till %s till institutionen: användaren tillhör redan till denna institution"
 
-#: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:749
+#: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:721
 msgid "System library can not be deleted."
 msgstr "Systemkatalog kan inte tas bort."
 
@@ -131,30 +132,30 @@ msgstr "Katalogen kan inte överföras till ägaren."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:542
+#: seahub/api2/endpoints/share_links.py:553
 msgid "There is an associated published library."
 msgstr "Det finns en associerad publicerad katalog."
 
-#: seahub/api2/endpoints/admin/shares.py:183
+#: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
 msgstr "Användaren %s äger redan katalogen."
 
-#: seahub/api2/endpoints/admin/shares.py:191
+#: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:50
 #: seahub/api2/endpoints/invitations.py:110
-#: seahub/api2/endpoints/repo_share_invitations.py:153
+#: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
 msgstr "Mejladressen %s är ogiltig."
 
-#: seahub/api2/endpoints/admin/shares.py:209
-#: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:342
-#: seahub/api2/endpoints/dir_shared_items.py:455
-#: seahub/api2/endpoints/group_owned_libraries.py:933
-#: seahub/api2/endpoints/group_owned_libraries.py:1201
-#: seahub/api2/endpoints/repo_share_invitations.py:185
+#: seahub/api2/endpoints/admin/shares.py:211
+#: seahub/api2/endpoints/admin/shares.py:268
+#: seahub/api2/endpoints/dir_shared_items.py:346
+#: seahub/api2/endpoints/dir_shared_items.py:459
+#: seahub/api2/endpoints/group_owned_libraries.py:942
+#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
 msgstr "Denna fil har delats med %s."
@@ -218,8 +219,8 @@ msgstr "Länk-uppladdning"
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
-#: seahub/views/sysadmin.py:818
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
+#: seahub/views/sysadmin.py:790
 msgid "Email"
 msgstr "Email"
 
@@ -235,9 +236,9 @@ msgstr "Email"
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
-#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:207
-#: seahub/views/sysadmin.py:211 seahub/views/sysadmin.py:696
-#: seahub/views/sysadmin.py:818
+#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
+#: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
+#: seahub/views/sysadmin.py:790
 msgid "Name"
 msgstr "Namn"
 
@@ -248,7 +249,7 @@ msgstr "Namn"
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/password_set_form.html:16
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
 msgstr "Kontakt Mejladress"
 
@@ -256,7 +257,7 @@ msgstr "Kontakt Mejladress"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
 msgstr "Använt utrymme"
 
@@ -264,8 +265,8 @@ msgstr "Använt utrymme"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
-#: seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
+#: seahub/views/sysadmin.py:791
 msgid "Space Quota"
 msgstr "Utrymmeskvot"
 
@@ -286,7 +287,7 @@ msgid "Successfully added user %(user)s."
 msgstr "Lyckades lägga till användare %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:671
-#: seahub/api2/endpoints/admin/users_batch.py:375 seahub/views/sysadmin.py:595
+#: seahub/api2/endpoints/admin/users_batch.py:376 seahub/views/sysadmin.py:567
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Du är inbjuden till att gå med i %s"
@@ -303,53 +304,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "Lyckades lägga till användare %(user)s. Men mailnotifikationen kunde inte skickas, pga. mailtjänsten inte är korrekt konfigurerad."
 
-#: seahub/api2/endpoints/admin/users.py:1115
+#: seahub/api2/endpoints/admin/users.py:1118
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Ändring lyckades"
 
-#: seahub/api2/endpoints/admin/users.py:1118 seahub/views/sysadmin.py:498
+#: seahub/api2/endpoints/admin/users.py:1121 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Ditt konto på %s är aktiverad"
 
-#: seahub/api2/endpoints/admin/users.py:1123
+#: seahub/api2/endpoints/admin/users.py:1126
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Ändring genomförd, email har skickats"
 
-#: seahub/api2/endpoints/admin/users.py:1126
+#: seahub/api2/endpoints/admin/users.py:1129
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Ändring genomförd, men email kunde inte skickas, kontrollera email-konfiguration"
 
-#: seahub/api2/endpoints/admin/users.py:1204 seahub/views/sysadmin.py:539
+#: seahub/api2/endpoints/admin/users.py:1207 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Lösenordet har blivit återställt på %s"
 
-#: seahub/api2/endpoints/admin/users.py:1206 seahub/views/sysadmin.py:564
+#: seahub/api2/endpoints/admin/users.py:1209 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Återställde lösenordet till %(passwd)s, ett email har skickats till %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1210 seahub/views/sysadmin.py:569
+#: seahub/api2/endpoints/admin/users.py:1213 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Återställde lösenordet till %(passwd)s, men misslyckades skicka email till %(user)s, kontrollera dina email-inställningar."
 
-#: seahub/api2/endpoints/admin/users.py:1213 seahub/views/sysadmin.py:573
+#: seahub/api2/endpoints/admin/users.py:1216 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Återställde lösenord till %(passwd)s för användare %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1216 seahub/views/sysadmin.py:576
+#: seahub/api2/endpoints/admin/users.py:1219 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -372,15 +373,15 @@ msgstr "Virusfilen kunde inte hittas."
 #: seahub/api2/endpoints/file_tag.py:175
 #: seahub/api2/endpoints/invitations.py:78
 #: seahub/api2/endpoints/repo_set_password.py:72
-#: seahub/api2/endpoints/repo_share_invitations.py:196
+#: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3846
-#: seahub/notifications/models.py:465 seahub/notifications/models.py:506
-#: seahub/notifications/models.py:557 seahub/notifications/models.py:613
-#: seahub/notifications/models.py:643 seahub/notifications/models.py:665
-#: seahub/notifications/models.py:691 seahub/notifications/models.py:708
-#: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1191
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3849
+#: seahub/notifications/models.py:462 seahub/notifications/models.py:503
+#: seahub/notifications/models.py:554 seahub/notifications/models.py:610
+#: seahub/notifications/models.py:640 seahub/notifications/models.py:662
+#: seahub/notifications/models.py:688 seahub/notifications/models.py:705
+#: seahub/notifications/models.py:722 seahub/notifications/models.py:751
+#: seahub/utils/__init__.py:167 seahub/utils/__init__.py:1186
 #: seahub/views/__init__.py:915 seahub/views/ajax.py:401
 #: seahub/views/ajax.py:405
 msgid "Internal Server Error"
@@ -398,11 +399,11 @@ msgstr "Felaktig destination"
 
 #: seahub/api2/endpoints/copy_move_task.py:147
 #: seahub/api2/endpoints/move_folder_merge.py:168
-#: seahub/api2/endpoints/repos_batch.py:477 seahub/api2/views.py:1803
-#: seahub/api2/views.py:1843 seahub/api2/views.py:1892
-#: seahub/api2/views.py:1936 seahub/api2/views.py:1982
-#: seahub/api2/views.py:2031 seahub/api2/views.py:2436
-#: seahub/api2/views.py:2544
+#: seahub/api2/endpoints/repos_batch.py:480 seahub/api2/views.py:1803
+#: seahub/api2/views.py:1843 seahub/api2/views.py:1894
+#: seahub/api2/views.py:1938 seahub/api2/views.py:1984
+#: seahub/api2/views.py:2033 seahub/api2/views.py:2438
+#: seahub/api2/views.py:2546
 msgid "Out of quota."
 msgstr "Slut på kvoten."
 
@@ -422,15 +423,15 @@ msgstr "Filen är låst"
 msgid "Cancel failed"
 msgstr "Avbrytning misslyckades"
 
-#: seahub/api2/endpoints/dir_shared_items.py:326
+#: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:917
+#: seahub/api2/endpoints/group_owned_libraries.py:926
 msgid "username invalid."
 msgstr "ogiltigt användarnam."
 
-#: seahub/api2/endpoints/dir_shared_items.py:335
+#: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:935
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -451,7 +452,7 @@ msgstr "Åtkomst nekas"
 msgid "File is not locked."
 msgstr "Filen är inte låst."
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:624
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:635
 msgid "You can not refresh this file's lock."
 msgstr "Du kan inte uppdatera denna fillåsning."
 
@@ -491,18 +492,18 @@ msgid "User %s is an organization user."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:381 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:461
+#: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Gruppen finns inte"
 
-#: seahub/api2/endpoints/group_members.py:499 seahub/views/sysadmin.py:198
-#: seahub/views/sysadmin.py:304 seahub/views/sysadmin.py:693
-#: seahub/views/sysadmin.py:705 seahub/views/sysadmin.py:830
+#: seahub/api2/endpoints/group_members.py:499 seahub/views/sysadmin.py:189
+#: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:802
 msgid "Failed to export Excel"
 msgstr "Misslyckades att exportera till Excel"
 
-#: seahub/api2/endpoints/group_owned_libraries.py:372
-#: seahub/api2/endpoints/group_owned_libraries.py:644
+#: seahub/api2/endpoints/group_owned_libraries.py:375
+#: seahub/api2/endpoints/group_owned_libraries.py:651
 msgid "Permission already exists."
 msgstr "Rättigheter existerar redan."
 
@@ -513,7 +514,7 @@ msgstr "%(user)s tog bort accessen till %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
-#: seahub/api2/endpoints/repo_share_invitations.py:160
+#: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "Mejladressen är inte tillåten att bli inbjuden som gäst."
 
@@ -525,14 +526,14 @@ msgstr "%s är redan inbjuden."
 
 #: seahub/api2/endpoints/invitations.py:66
 #: seahub/api2/endpoints/invitations.py:137
-#: seahub/api2/endpoints/repo_share_invitations.py:170
+#: seahub/api2/endpoints/repo_share_invitations.py:173
 #: seahub/base/accounts.py:795
 #, python-format
 msgid "User %s already exists."
 msgstr "Användaren %s existerar redan."
 
 #: seahub/api2/endpoints/invitations.py:151
-#: seahub/api2/endpoints/repo_share_invitations.py:210
+#: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32 seahub/auth/forms.py:121
 #: seahub/share/views.py:136 seahub/share/views.py:264
@@ -567,11 +568,11 @@ msgstr "Kan inte återställa katalogens lösenord."
 msgid "New password of library %s"
 msgstr "Nytt lösenord för katalog %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3843
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3846
 msgid "Wrong password"
 msgstr "Fel lösenord"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3849
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3852
 msgid "Decrypt library error"
 msgstr "Fel vid avkryptering av katalog"
 
@@ -579,20 +580,20 @@ msgstr "Fel vid avkryptering av katalog"
 msgid "Wrong old password"
 msgstr "Felaktigt gammalt lösenord"
 
-#: seahub/api2/endpoints/repos_batch.py:1240
-#: seahub/api2/endpoints/repos_batch.py:1459
-#: seahub/api2/endpoints/repos_batch.py:1548
+#: seahub/api2/endpoints/repos_batch.py:1241
+#: seahub/api2/endpoints/repos_batch.py:1458
+#: seahub/api2/endpoints/repos_batch.py:1547
 #, python-format
 msgid "File %s is locked."
 msgstr "Filen %s är låst."
 
-#: seahub/api2/endpoints/repos_batch.py:1249
-#: seahub/api2/endpoints/repos_batch.py:1468
+#: seahub/api2/endpoints/repos_batch.py:1250
+#: seahub/api2/endpoints/repos_batch.py:1467
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "Kan inte flytta mappen %s, vänligen kontrollera dess rättigheter."
 
-#: seahub/api2/endpoints/repos_batch.py:1556
+#: seahub/api2/endpoints/repos_batch.py:1555
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "Kan inte ta bort mappen %s, vänligen kontrollera dess rättigheter."
@@ -629,44 +630,51 @@ msgstr "mailadress ogiltig."
 msgid "An upload link is shared to you on %s"
 msgstr "En uppladdningslänk är delad med dig på %s"
 
-#: seahub/api2/endpoints/share_links.py:267
+#: seahub/api2/endpoints/share_links.py:268
+#: seahub/api2/endpoints/upload_links.py:162 seahub/api2/views.py:4002
+#: seahub/api2/views.py:4122
+msgid "Password is required."
+msgstr "Lösenord krävs."
+
+#: seahub/api2/endpoints/share_links.py:274
+#: seahub/api2/endpoints/upload_links.py:168
 msgid "Password is too short."
 msgstr "Lösenordet är för kort."
 
-#: seahub/api2/endpoints/share_links.py:290
-#: seahub/api2/endpoints/upload_links.py:184 seahub/api2/views.py:3414
+#: seahub/api2/endpoints/share_links.py:278
+#: seahub/api2/endpoints/upload_links.py:172
+msgid "Password is too weak."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:301
+#: seahub/api2/endpoints/upload_links.py:195 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Utgångsdatum ska vara större eller lika med %s"
 
-#: seahub/api2/endpoints/share_links.py:296
-#: seahub/api2/endpoints/upload_links.py:190 seahub/api2/views.py:3420
+#: seahub/api2/endpoints/share_links.py:307
+#: seahub/api2/endpoints/upload_links.py:201 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Utgångsdagar ska vara minde än eller lika med %s"
 
-#: seahub/api2/endpoints/share_links.py:318
-#: seahub/api2/endpoints/upload_links.py:212
+#: seahub/api2/endpoints/share_links.py:329
+#: seahub/api2/endpoints/upload_links.py:223
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "Utgångstid bör vara senare än %s."
 
-#: seahub/api2/endpoints/share_links.py:327
-#: seahub/api2/endpoints/upload_links.py:221
+#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/upload_links.py:232
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "Utgångstid bör vara tidigare än %s."
 
-#: seahub/api2/endpoints/share_links.py:396
-#: seahub/api2/endpoints/share_links.py:405
+#: seahub/api2/endpoints/share_links.py:407
+#: seahub/api2/endpoints/share_links.py:416
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Delningslänk %s existerar redan."
-
-#: seahub/api2/endpoints/upload_links.py:161
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "Lösenordet är för kort"
 
 #: seahub/api2/endpoints/user.py:99
 #, python-format
@@ -697,6 +705,10 @@ msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
 msgstr "Du har redan %(nb_avatars)d avatarer, och max antal tillåtet är %(nb_max_avatars)d"
+
+#: seahub/api2/endpoints/webdav_secret.py:50
+msgid "Length of WebDav password should be less than 30."
+msgstr ""
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
@@ -732,7 +744,7 @@ msgstr "Mejladress eller Användarnamn"
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
-#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:818
+#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:790
 msgid "Password"
 msgstr "Lösenord"
 
@@ -806,15 +818,15 @@ msgstr "En användare med denna e-postadress finns redan."
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Detta konto har blivit låst på grund av för många misslyckde inloggningsförsök."
 
-#: seahub/auth/views.py:279
+#: seahub/auth/views.py:288
 msgid "Logged out"
 msgstr "Utloggad"
 
-#: seahub/auth/views.py:329
+#: seahub/auth/views.py:338
 msgid "Failed to send email, please contact administrator."
 msgstr "Misslyckades att skicka email. Kontakta en administratör"
 
-#: seahub/auth/views.py:388
+#: seahub/auth/views.py:397
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Kan inte uppdatera lösenord, kontakta LDAP admin."
 
@@ -984,40 +996,40 @@ msgstr "Anonnym användare"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:211
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Status"
 msgstr "Status"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/views/sysadmin.py:207 seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:791
 msgid "Role"
 msgstr "Roll"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/templates/institutions/user_info.html:107
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
-#: seahub/views/sysadmin.py:696
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
+#: seahub/views/sysadmin.py:668
 msgid "Create At"
 msgstr "Skapad"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "Last Login"
 msgstr "Senast Inloggning"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:209
-#: seahub/views/sysadmin.py:213
+#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "Administrera"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "LDAP(imported)"
 msgstr "LDAP(importerad)"
 
@@ -1025,7 +1037,7 @@ msgstr "LDAP(importerad)"
 #: seahub/institutions/templates/institutions/useradmin.html:33
 #: seahub/institutions/templates/institutions/useradmin.html:40
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
-#: seahub/views/sysadmin.py:267
+#: seahub/views/sysadmin.py:258
 msgid "Active"
 msgstr "Aktiv"
 
@@ -1033,25 +1045,25 @@ msgstr "Aktiv"
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
-#: seahub/views/sysadmin.py:269
+#: seahub/views/sysadmin.py:260
 msgid "Inactive"
 msgstr "Inaktiv"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:84 seahub/views/sysadmin.py:275
-#: seahub/views/sysadmin.py:276
+#: seahub/templates/base.html:84 seahub/views/sysadmin.py:266
+#: seahub/views/sysadmin.py:267
 msgid "Yes"
 msgstr "Ja"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/views/sysadmin.py:281
+#: seahub/views/sysadmin.py:272
 msgid "Guest"
 msgstr "Gäst"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
-#: seahub/views/sysadmin.py:283 seahub/views/sysadmin.py:287
+#: seahub/views/sysadmin.py:274 seahub/views/sysadmin.py:278
 msgid "Default"
 msgstr "Standard"
 
@@ -1388,7 +1400,7 @@ msgstr "Namn %s är inte giltigt"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1858
+#: seahub/views/file.py:1848
 msgid "Argument missing"
 msgstr "Argument saknas"
 
@@ -1512,10 +1524,10 @@ msgstr "%(site_name)s teamet"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1129
-#: seahub/views/file.py:1350 seahub/views/file.py:1867
-#: seahub/views/repo.py:127 seahub/views/repo.py:184 seahub/views/repo.py:242
-#: seahub/views/repo.py:296 seahub/views/repo.py:407
+#: seahub/views/ajax.py:427 seahub/views/file.py:1133
+#: seahub/views/file.py:1347 seahub/views/file.py:1857
+#: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
+#: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
 msgstr "Åtkomst nekas"
 
@@ -3664,12 +3676,12 @@ msgstr "Ägare"
 msgid "Member"
 msgstr "Medlem"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:389
+#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Tog bort %s"
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:399
+#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
 msgid "Failed to delete: the user does not exist"
 msgstr "Misslyckades ta bort: användaren existerar inte"
 
@@ -3701,8 +3713,9 @@ msgstr "Hej,"
 #: seahub/invitations/templates/invitations/invitation_email.html:12
 #, python-format
 msgid ""
-"%(inviter)s invited you to join %(site_name)s. Please click the link below:"
-msgstr "%(inviter)s bjöd in dig till att gå med i %(site_name)s. Vänligen klicka på länken nedan:"
+"%(inviter_name)s invited you to join %(site_name)s. Please click the link "
+"below:"
+msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -3820,21 +3833,21 @@ msgstr "Ny notis på %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr ""
 
-#: seahub/notifications/models.py:483
+#: seahub/notifications/models.py:480
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "En fil med namn <a href='%(file_link)s'>%(file_name)s</a> är uppladdad till <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:490
+#: seahub/notifications/models.py:487
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "En fil med namn <strong>%(file_name)s</strong> laddades upp till <strong>Borttagen katalog</strong>"
 
-#: seahub/notifications/models.py:624
+#: seahub/notifications/models.py:621
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -3842,35 +3855,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "Användare <a href='%(user_profile)s'>%(username)s</a> har bett dig anluta till gruppen <a href='%(href)s'>%(group_name)s</a>, Meddelande: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:653
+#: seahub/notifications/models.py:650
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "Användaren <a href='%(user_profile)s'>%(group_staff)s</a> har lagt till dig till gruppen <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:679
+#: seahub/notifications/models.py:676
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "Filen <a href='%(file_url)s'>%(file_name)s</a> har en ny kommentar från användaren %(author)s"
 
-#: seahub/notifications/models.py:696
+#: seahub/notifications/models.py:693
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "<a href='%(file_url)s'>Förslag #%(draft_id)s</a> har en ny kommentar från användare %(author)s"
 
-#: seahub/notifications/models.py:713
+#: seahub/notifications/models.py:710
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s har skickat en förfrågan för <a href='%(file_url)s'>förlsag #%(draft_id)s</a>"
 
-#: seahub/notifications/models.py:736
+#: seahub/notifications/models.py:733
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
@@ -3878,7 +3891,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "Gästen %(user)s accepterade din <a href=\"%(url_base)s%(inv_url)s\">inbjudan</a> vid %(time)s."
 
-#: seahub/notifications/models.py:760
+#: seahub/notifications/models.py:757
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
@@ -4039,7 +4052,7 @@ msgstr "Mejladressen är inte giltig"
 #: seahub/organizations/templates/organizations/org_register.html:8
 #: seahub/templates/choose_register.html:3
 #: seahub/templates/choose_register.html:8
-#: seahub/templates/registration/login.html:88
+#: seahub/templates/registration/login.html:90
 #: seahub/templates/registration/registration_form.html:3
 #: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
@@ -4150,11 +4163,11 @@ msgstr "Email måste anges"
 msgid "Email is not longer than 512 characters"
 msgstr "Email får inte vara längre än 512 tecken"
 
-#: seahub/share/models.py:78
+#: seahub/share/models.py:79
 msgid "Password can't be empty"
 msgstr "Lösenord måste anges"
 
-#: seahub/share/models.py:85
+#: seahub/share/models.py:86
 msgid "Please enter a correct password."
 msgstr "Skriv in rätt lösenord."
 
@@ -4398,7 +4411,7 @@ msgstr "Registrera dig"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:35
-#: seahub/templates/registration/login.html:70
+#: seahub/templates/registration/login.html:72
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -4419,27 +4432,27 @@ msgstr "Felaktigt användarnamn eller lösenord"
 msgid "Remember me for %(remember_days)s days "
 msgstr "Kom ihåg mig i %(remember_days)s dagar "
 
-#: seahub/templates/registration/login.html:68
+#: seahub/templates/registration/login.html:69
 msgid "Forgot password?"
 msgstr "Glömt lösenord?"
 
-#: seahub/templates/registration/login.html:74
+#: seahub/templates/registration/login.html:76
 msgid "Single Sign-On"
 msgstr "Singleinlogg"
 
-#: seahub/templates/registration/login.html:79
+#: seahub/templates/registration/login.html:81
 msgid "Login with: "
 msgstr "Logga in med:"
 
-#: seahub/templates/registration/login.html:145
+#: seahub/templates/registration/login.html:147
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Misslyckades att uppdatera CAPTCHA. Försök igen senare."
 
-#: seahub/templates/registration/login.html:153
+#: seahub/templates/registration/login.html:155
 msgid "Email or username cannot be blank"
 msgstr "Mejladress eller användarnamn kan inte vara blankt"
 
-#: seahub/templates/registration/login.html:157
+#: seahub/templates/registration/login.html:159
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -4783,6 +4796,10 @@ msgstr "Beskrivning krävs"
 msgid "Please enter password"
 msgstr "Ange lösenord"
 
+#: seahub/templates/snippets/repo_create_js.html:50
+msgid "Password is too short"
+msgstr "Lösenordet är för kort"
+
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
 msgid ""
@@ -4924,7 +4941,7 @@ msgstr "Drag & Släpp av mappar stöds för Chrome"
 #: seahub/templates/view_shared_upload_link.html:39
 #, python-format
 msgid "File size should be smaller than %(max_file_size)s"
-msgstr "Filstorleken måste vara mindra än %(max_file_size)s"
+msgstr "Filstorleken måste vara mindre än %(max_file_size)s"
 
 #: seahub/templates/view_shared_upload_link.html:48
 msgid "Saving..."
@@ -5083,7 +5100,7 @@ msgstr "Du håller på att inaktivera två-faktors autensiering. Detta sänker d
 msgid "Disable"
 msgstr "Inaktivera"
 
-#: seahub/utils/__init__.py:158
+#: seahub/utils/__init__.py:153
 msgid "permission error"
 msgstr "behörighetsfel"
 
@@ -5098,7 +5115,7 @@ msgstr "Kan inte visa katalogsändringar"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:734 seahub/views/__init__.py:879
-#: seahub/views/ajax.py:376 seahub/views/file.py:1853
+#: seahub/views/ajax.py:376 seahub/views/file.py:1843
 msgid "Library does not exist"
 msgstr "Katalogen existerar inte"
 
@@ -5118,7 +5135,7 @@ msgstr "Historiken du angett existerar inte"
 msgid "Unknown error"
 msgstr "Okänt fel"
 
-#: seahub/views/__init__.py:886 seahub/views/repo.py:300
+#: seahub/views/__init__.py:886 seahub/views/repo.py:295
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" existerar inte."
@@ -5144,9 +5161,9 @@ msgstr "Fel repo id"
 msgid "Bad upload link token."
 msgstr "Dålig uppladdningslänk symbol."
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1124 seahub/views/file.py:1345
-#: seahub/views/file.py:1862
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1128 seahub/views/file.py:1342
+#: seahub/views/file.py:1852
 msgid "File does not exist"
 msgstr "Filen existerar inte"
 
@@ -5158,166 +5175,153 @@ msgstr "Dålig katalog id i uppladdningslänk."
 msgid "No conflict in the merge."
 msgstr "Ingen konflikt i sammanslagningen"
 
-#: seahub/views/file.py:189
+#: seahub/views/file.py:192
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:193
+#: seahub/views/file.py:196
 msgid "URLError: failed to open file online"
 msgstr "URL-fel: kunde inte öppna filen online"
 
-#: seahub/views/file.py:200
+#: seahub/views/file.py:203
 msgid "The encoding you chose is not proper."
 msgstr "Krypteringen du har valt är inte korrekt."
 
-#: seahub/views/file.py:217 seahub/views/file.py:220
+#: seahub/views/file.py:220 seahub/views/file.py:223
 msgid "Unknown file encoding"
 msgstr "Okänd fil-kodning"
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:655
-#: seahub/views/file.py:746 seahub/views/file.py:865
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:660
+#: seahub/views/file.py:753 seahub/views/file.py:874
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Filen är större än %s och kan inte öppnas online."
 
-#: seahub/views/file.py:347 seahub/views/file.py:781
+#: seahub/views/file.py:350 seahub/views/file.py:788
 msgid "The library is encrypted, can not open file online."
 msgstr "Katalogen är krypterad, kan inte öppna filen online."
 
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:510 seahub/views/file.py:734 seahub/views/file.py:987
-#: seahub/views/file.py:1010 seahub/views/file.py:1037
-#: seahub/views/file.py:1167 seahub/views/file.py:1263
-#: seahub/views/file.py:1366 seahub/views/file.py:1471
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:741 seahub/views/file.py:996
+#: seahub/views/file.py:1019 seahub/views/file.py:1046
+#: seahub/views/file.py:1171 seahub/views/file.py:1261
+#: seahub/views/file.py:1363 seahub/views/file.py:1462
 msgid "Unable to view file"
 msgstr "Kan inte läsa fil"
 
-#: seahub/views/file.py:805 seahub/views/file.py:935 seahub/views/file.py:1224
-#: seahub/views/file.py:1410
+#: seahub/views/file.py:812 seahub/views/file.py:944 seahub/views/file.py:1222
+#: seahub/views/file.py:1401
 msgid "Error when prepare Office Online file preview page."
 msgstr "Fel vid förberedelse av Office Online filvisningssidan."
 
-#: seahub/views/file.py:834 seahub/views/file.py:947 seahub/views/file.py:1243
-#: seahub/views/file.py:1425
+#: seahub/views/file.py:843 seahub/views/file.py:956 seahub/views/file.py:1241
+#: seahub/views/file.py:1416
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Fel vid förberedelse av OnlyOffice filvisningssidan."
 
-#: seahub/views/file.py:1070
+#: seahub/views/file.py:1079
 msgid "Unable to download file, invalid file path"
 msgstr "Kan inte ladda ner fil. Felaktig filsökväg"
 
-#: seahub/views/file.py:1079
+#: seahub/views/file.py:1088
 msgid "Unable to download file, wrong file path"
 msgstr "Kan inte ladda ner fil. Felaktig sökväg"
 
-#: seahub/views/file.py:1084
-msgid "Unable to download file, share link traffic is used up."
-msgstr "Kan inte ladda ner fil. All delningstrafik har använts."
-
-#: seahub/views/file.py:1091
+#: seahub/views/file.py:1095
 msgid "Unable to download file."
 msgstr "Kan inte ladda ner fil."
 
-#: seahub/views/file.py:1178 seahub/views/file.py:1377
-msgid "Unable to view raw file, share link traffic is used up."
-msgstr "Kan inte visa råfil, all delningslänktrafik har använts. "
-
-#: seahub/views/file.py:1280 seahub/views/file.py:1491
-#: seahub/views/repo.py:353
+#: seahub/views/file.py:1277 seahub/views/file.py:1481
+#: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "Dela länk för %s."
 
-#: seahub/views/file.py:1609 seahub/views/file.py:1614
+#: seahub/views/file.py:1599 seahub/views/file.py:1604
 msgid "Unable to download file"
 msgstr "Kan inte ladda ner fil"
 
-#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:366
+#: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:357
 msgid "Failed to set quota: internal server error"
 msgstr "Misslyckades att sätta kvoten: internt server fel"
 
-#: seahub/views/sysadmin.py:385
+#: seahub/views/sysadmin.py:376
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Misslyckades att ta bort: användaren är skapare av en organisation"
 
-#: seahub/views/sysadmin.py:420
-#, python-format
-msgid "Successfully remove trial for: %s"
-msgstr "Lyckades ta bort testperiod för: %s"
-
-#: seahub/views/sysadmin.py:449
+#: seahub/views/sysadmin.py:421
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Tog bort adminbehörighet för %s"
 
-#: seahub/views/sysadmin.py:451
+#: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Misslyckades ta bort adminbehörighet för %s"
 
-#: seahub/views/sysadmin.py:579
+#: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"
 msgstr "Misslyckades återställa lösenordet: användaren finns inte"
 
-#: seahub/views/sysadmin.py:628
+#: seahub/views/sysadmin.py:600
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Misslyckades att lägga till användare %s."
 
-#: seahub/views/sysadmin.py:653 seahub/views/sysadmin.py:666
+#: seahub/views/sysadmin.py:625 seahub/views/sysadmin.py:638
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Skapade användare %s. Ett email har sänts."
 
-#: seahub/views/sysadmin.py:656 seahub/views/sysadmin.py:669
+#: seahub/views/sysadmin.py:628 seahub/views/sysadmin.py:641
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Skapade användare %s. Ett fel uppstod när email skulle skickas. Vänligen kontrollera email-inställningarna."
 
-#: seahub/views/sysadmin.py:658 seahub/views/sysadmin.py:671
+#: seahub/views/sysadmin.py:630 seahub/views/sysadmin.py:643
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Skapade användare %s"
 
-#: seahub/views/sysadmin.py:673
+#: seahub/views/sysadmin.py:645
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Skapade användare %s. Men email kunde inte skickas, eftersom email-service inte är korrekt konfigurerad."
 
-#: seahub/views/sysadmin.py:696
+#: seahub/views/sysadmin.py:668
 msgid "Creator"
 msgstr "Skapad av"
 
-#: seahub/views/sysadmin.py:725
+#: seahub/views/sysadmin.py:697
 msgid "Input should be a number"
 msgstr "Måste vara ett nummer"
 
-#: seahub/views/sysadmin.py:731
+#: seahub/views/sysadmin.py:703
 msgid "Success"
 msgstr "Lyckades"
 
-#: seahub/views/sysadmin.py:735
+#: seahub/views/sysadmin.py:707
 msgid "Input number should be greater than 0"
 msgstr "Måste vara större än 0"
 
-#: seahub/views/sysadmin.py:773
+#: seahub/views/sysadmin.py:745
 msgid "Successfully deleted."
 msgstr "Lyckades ta bort."
 
-#: seahub/views/sysadmin.py:803
+#: seahub/views/sysadmin.py:775
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "Lyckades sätta %s som admin."
 
-#: seahub/views/sysadmin.py:805
+#: seahub/views/sysadmin.py:777
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Misslyckades att sätta %s som admin: användaren existerar inte."
 
-#: seahub/views/sysadmin.py:818 seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:791
 msgid "Optional"
 msgstr "Valfritt"
 
