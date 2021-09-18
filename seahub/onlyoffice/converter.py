@@ -21,7 +21,6 @@ def get_converter_uri(doc_uri, from_ext, to_ext, doc_key, is_async, file_passwor
         'filetype': from_ext.replace('.', ''),
         'title': title,
         'key': doc_key,
-        'password': file_password
     }
 
     if file_password:

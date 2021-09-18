@@ -866,10 +866,10 @@ if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):
     from seahub.onlyoffice.views import onlyoffice_editor_callback
-    from seahub.onlyoffice.views import onlyoffice_convert
+    from seahub.onlyoffice.views import OnlyofficeConvert
     urlpatterns += [
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
-        url(r'^onlyoffice/convert', onlyoffice_convert, name='onlyoffice_convert')
+        url(r'^onlyoffice-api/convert/$', OnlyofficeConvert.as_view(), name='onlyoffice_api_convert'),
     ]
 
 if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):

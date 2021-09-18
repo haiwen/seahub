@@ -369,28 +369,16 @@ class DirentListItem extends React.Component {
   }
 
   onConvertWithONLYOFFICE = ()=> {
+
     let repoID = this.props.repoID;
-    let user = username;
-    let fileUri = this.getDirentPath(this.props.dirent)
-    fetch(siteRoot+'onlyoffice/convert', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: user,
-        fileUri: fileUri,
-        repo_id: repoID,
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
-      if(res.status >= 400) throw new Error()
-      //Replace with changes in the state
-      //like this one => this.addNodeToTree(name, parentPath, 'file');
-      window.location.reload();
-    })
-    .catch(() => {
-      toaster.danger('Could not convert the file');
-    })
+    let filePath = this.getDirentPath(this.props.dirent)
+
+    seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
+      this.props.loadDirentList(res.data.parent_dir)
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   onItemDownload = (e) => {
