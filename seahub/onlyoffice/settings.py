@@ -3,7 +3,8 @@ from django.conf import settings
 
 ENABLE_ONLYOFFICE = getattr(settings, 'ENABLE_ONLYOFFICE', False)
 ONLYOFFICE_APIJS_URL = getattr(settings, 'ONLYOFFICE_APIJS_URL', '')
-ONLYOFFICE_CONVERTER_URL = getattr(settings, 'ONLYOFFICE_CONVERTER_URL', '')
+ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/documents/api.js",
+                                                        "/ConvertService.ashx")
 ONLYOFFICE_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_FILE_EXTENSION', ())
 ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings, 'ONLYOFFICE_EDIT_FILE_EXTENSION', ())
 VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
