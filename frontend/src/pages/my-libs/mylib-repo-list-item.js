@@ -165,11 +165,13 @@ class MylibRepoListItem extends React.Component {
     }
   }
 
-  onShareToggle = () => {
+  onShareToggle = (e) => {
+    e.preventDefault();
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
-  onDeleteToggle = () => {
+  onDeleteToggle = (e) => {
+    e.preventDefault();
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
@@ -310,8 +312,8 @@ class MylibRepoListItem extends React.Component {
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div>
-              <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onShareToggle}></a>
-              <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+              <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
+              <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
               <MylibRepoMenu
                 isPC={true}
                 repo={this.props.repo}
