@@ -27,8 +27,20 @@ class MylibRepoMenu extends React.Component {
     this.props.onMenuItemClick(operation);
   }
 
+  onMenuItemKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(e);
+    }
+  }
+
   onDropdownToggleClick = (e) => {
     this.toggleOperationMenu(e);
+  }
+
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onDropdownToggleClick(e);
+    }
   }
 
   toggleOperationMenu = (e) => {
@@ -134,19 +146,20 @@ class MylibRepoMenu extends React.Component {
       return (
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
           <DropdownToggle
-            tag="i"
-            className="sf-dropdown-toggle sf2-icon-caret-down"
+            className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
             title={gettext('More Operations')}
-            // onClick={this.clickOperationMenuToggle}
+            onClick={this.onDropdownToggleClick}
+            onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
-            aria-expanded={this.state.isItemMenuShow}
+            aria-haspopup={true}
+            style={{'minWidth': '0'}}
           />
           <DropdownMenu>
             {operations.map((item, index)=> {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
               } else {
-                return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
+                return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateOperations(item)}</DropdownItem>);
               }
             })}
           </DropdownMenu>

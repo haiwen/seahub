@@ -78,7 +78,7 @@ class MylibRepoListItem extends React.Component {
     switch(item) {
       case 'Star':
       case 'Unstar':
-        this.onStarRepo();
+        this.onToggleStarRepo();
         break;
       case 'Share':
         this.onShareToggle();
@@ -131,7 +131,8 @@ class MylibRepoListItem extends React.Component {
     this.props.onRepoClick(this.props.repo);
   }
 
-  onStarRepo = () => {
+  onToggleStarRepo = (e) => {
+    e.preventDefault();
     const repoName = this.props.repo.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
@@ -278,8 +279,9 @@ class MylibRepoListItem extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
         <td className="text-center">
-          {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
-          {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
+            <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
+          </a>
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
