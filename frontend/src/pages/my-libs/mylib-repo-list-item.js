@@ -56,6 +56,14 @@ class MylibRepoListItem extends React.Component {
     };
   }
 
+  onFocus = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShow: true
+      });
+    }
+  }
+
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -277,7 +285,7 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick} onFocus={this.onFocus}>
         <td className="text-center">
           <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
             <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
