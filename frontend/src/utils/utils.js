@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -523,7 +523,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -610,12 +610,22 @@ export const Utils = {
       list.push(HISTORY);
     }
 
+    if (permission == 'rw' && enableOnlyoffice &&
+      onlyofficeConverterExtensions.includes(this.getFileExtension(dirent.name, false))) {
+      list.push(ONLYOFFICE_CONVERT);
+    }
+
     // if the last item of menuList is ‘Divider’, delete the last item
     if (list[list.length - 1] === 'Divider') {
       list.pop();
     }
-
     return list;
+  },
+
+  getFileExtension: function (fileName, withoutDot) {
+    let parts = fileName.toLowerCase().split(".");
+
+    return withoutDot ? parts.pop() : "." + parts.pop();
   },
 
   getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {

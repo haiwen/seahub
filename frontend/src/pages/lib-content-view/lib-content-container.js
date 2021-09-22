@@ -86,6 +86,7 @@ const propTypes = {
   onListContainerScroll: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -237,6 +238,7 @@ class LibContentContainer extends React.Component {
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
                     showDirentDetail={this.props.showDirentDetail}
+                    loadDirentList={this.props.loadDirentList}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (

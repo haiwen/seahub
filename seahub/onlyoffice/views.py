@@ -1,17 +1,33 @@
 # Copyright (c) 2012-2017 Seafile Ltd.
+import os
 import json
 import logging
-import os
 import requests
+import posixpath
+import email.utils
+
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from seahub.api2.utils import api_error
+from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.authentication import TokenAuthentication
 
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from seaserv import seafile_api
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
-from seahub.onlyoffice.utils import generate_onlyoffice_cache_key
-from seahub.utils import gen_inner_file_upload_url, is_pro_version
+from seahub.onlyoffice.utils import generate_onlyoffice_cache_key, get_onlyoffice_dict
+from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
+        get_file_ext, get_file_type, get_internal_extension
+from seahub.onlyoffice.converter import get_converter_uri
+from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
+        normalize_file_path, check_filename_with_rename
 from seahub.utils.file_op import if_locked_by_online_office
 
 
@@ -161,3 +177,99 @@ def onlyoffice_editor_callback(request):
             seafile_api.unlock_file(repo_id, file_path)
 
     return HttpResponse('{"error": 0}')
+
+
+class OnlyofficeConvert(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(400, error_msg)
+
+        file_path = request.data.get('file_path')
+        if not file_path:
+            error_msg = 'file_path invalid.'
+            return api_error(400, error_msg)
+
+        file_path = normalize_file_path(file_path)
+        parent_dir = os.path.dirname(file_path)
+
+        file_ext = get_file_ext(file_path)
+        file_type = get_file_type(file_path)
+        new_ext = get_internal_extension(file_type)
+
+        if not new_ext:
+            logger.error('[OnlyOffice] Could not generate internal extension.')
+            error_msg = 'Internal Server Error'
+            return api_error(500, error_msg)
+
+        username = request.user.username
+        doc_dic = get_onlyoffice_dict(request, username, repo_id, file_path)
+        new_uri = get_converter_uri(doc_dic["doc_url"], file_ext, new_ext,
+                                    doc_dic["doc_key"], False,
+                                    request.data.get('file_password'))
+
+        if not new_uri:
+            logger.error('[OnlyOffice] No response from file converter.')
+            error_msg = 'Internal Server Error'
+            return api_error(500, error_msg)
+
+        onlyoffice_resp = requests.get(new_uri, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        if not onlyoffice_resp:
+            logger.error('[OnlyOffice] No response from file content url.')
+            error_msg = 'Internal Server Error'
+            return api_error(500, error_msg)
+
+        fake_obj_id = {'parent_dir': parent_dir}
+        upload_token = seafile_api.get_fileserver_access_token(repo_id,
+                                                               json.dumps(fake_obj_id),
+                                                               'upload-link',
+                                                               username)
+
+        if not upload_token:
+            logger.error('[OnlyOffice] No fileserver access token.')
+            error_msg = 'Internal Server Error'
+            return api_error(500, error_msg)
+
+        file_name = get_file_name_without_ext(file_path) + new_ext
+        file_name = check_filename_with_rename(repo_id, parent_dir, file_name)
+
+        files = {
+            'file': (file_name, onlyoffice_resp.content),
+            'parent_dir': parent_dir,
+        }
+        upload_url = gen_inner_file_upload_url('upload-api', upload_token)
+
+        try:
+            file_name.encode('ascii')
+        except UnicodeEncodeError:
+
+            def rewrite_request(prepared_request):
+
+                old_content = 'filename*=' + email.utils.encode_rfc2231(file_name, 'utf-8')
+                old_content = old_content.encode()
+
+                # new_content = 'filename="{}"\r\n\r\n'.format(file_name)
+                new_content = 'filename="{}"'.format(file_name)
+                new_content = new_content.encode()
+
+                prepared_request.body = prepared_request.body.replace(old_content, new_content)
+
+                return prepared_request
+
+            requests.post(upload_url, files=files, auth=rewrite_request)
+        else:
+            requests.post(upload_url, files=files)
+
+        result = {}
+        result['parent_dir'] = parent_dir
+        result['file_name'] = file_name
+        result['file_path'] = posixpath.join(parent_dir, file_name)
+
+        return Response(result)

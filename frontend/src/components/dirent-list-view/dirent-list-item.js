@@ -272,6 +272,9 @@ class DirentListItem extends React.Component {
       case 'Open via Client':
         this.onOpenViaClient();
         break;
+      case 'Convert with ONLYOFFICE':
+        this.onConvertWithONLYOFFICE();
+        break;
       default:
         break;
     }
@@ -363,6 +366,19 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
+  }
+
+  onConvertWithONLYOFFICE = ()=> {
+
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent)
+
+    seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
+      this.props.loadDirentList(res.data.parent_dir)
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   onItemDownload = (e) => {

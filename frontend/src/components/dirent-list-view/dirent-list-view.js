@@ -49,6 +49,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -645,6 +646,7 @@ class DirentListView extends React.Component {
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
                   onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
+                  loadDirentList={this.props.loadDirentList}
                 />
               );
             })}
