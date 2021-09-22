@@ -6,7 +6,7 @@
 import sys
 import types
 
-from django.utils.six.moves import urllib_parse
+from six.moves import urllib_parse
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied

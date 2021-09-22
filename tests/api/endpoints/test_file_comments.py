@@ -31,10 +31,8 @@ class FileCommentsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(resp._headers.get('links')) == 2
-        assert resp._headers.get('links')[0] == 'Links'
         link = reverse('api2-file-comments', args=[self.repo.id]) + '?page=1&per_page=5'
-        assert link in resp._headers.get('links')[1]
+        assert link in resp.headers.get('links')
         assert len(json_resp['comments']) == 5
         assert json_resp['comments'][0]['comment'] == 'test comment5'
         assert json_resp['comments'][0]['user_email'] == self.tmp_user.email

@@ -65,7 +65,6 @@ class UserRemoveTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        assert 'Successfully deleted %s' % username in resp.cookies['messages'].value
         assert len(ccnet_threaded_rpc.search_emailusers('DB', username, -1, -1))  == 0
 
 
@@ -101,7 +100,7 @@ class SysGroupAdminExportExcelTest(BaseTestCase):
     def test_can_export_excel(self):
         resp = self.client.get(reverse('sys_group_admin_export_excel'))
         self.assertEqual(200, resp.status_code)
-        assert 'application/ms-excel' in resp._headers['content-type']
+        assert 'application/ms-excel' in resp.headers['content-type']
 
 
 class SysUserAdminExportExcelTest(BaseTestCase):
@@ -111,7 +110,7 @@ class SysUserAdminExportExcelTest(BaseTestCase):
     def test_can_export_excel(self):
         resp = self.client.get(reverse('sys_useradmin_export_excel'))
         self.assertEqual(200, resp.status_code)
-        assert 'application/ms-excel' in resp._headers['content-type']
+        assert 'application/ms-excel' in resp.headers['content-type']
 
     def write_xls(self, sheet_name, head, data_list):
         assert 'Role' in head
@@ -126,7 +125,7 @@ class SysUserAdminExportExcelTest(BaseTestCase):
         # mock_write_xls.assert_called_once()
         resp = self.client.get(reverse('sys_useradmin_export_excel'))
         self.assertEqual(200, resp.status_code)
-        assert 'application/ms-excel' in resp._headers['content-type']
+        assert 'application/ms-excel' in resp.headers['content-type']
 
 class BatchAddUserHelpTest(BaseTestCase):
     def setUp(self):
