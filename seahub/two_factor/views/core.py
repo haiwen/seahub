@@ -20,12 +20,6 @@ from django.views.generic.base import View
 import qrcode
 import qrcode.image.svg
 
-try:
-    from formtools.wizard.views import SessionWizardView
-except ImportError:
-    # pylint: disable=import-error,no-name-in-module
-    from django.contrib.formtools.wizard.views import SessionWizardView
-
 from seahub.auth import login as login, REDIRECT_FIELD_NAME
 from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm

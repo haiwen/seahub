@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import django.conf
-from django.utils.six import iteritems
+from six import iteritems
 
 
 class Settings(object):

@@ -56,10 +56,10 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegex(resp._headers['location'][1],
+        self.assertRegex(resp.headers['location'],
                                  r'http(.*)/f/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         self.assertIsNotNone(FileShare.objects.get(token=token))
 
     def test_can_create_file_download_link_with_exipre(self):
@@ -72,10 +72,10 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegex(resp._headers['location'][1],
+        self.assertRegex(resp.headers['location'],
                                  r'http(.*)/f/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.expire_date)
 
@@ -89,10 +89,10 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegex(resp._headers['location'][1],
+        self.assertRegex(resp.headers['location'],
                                  r'http(.*)/f/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.password)
 
@@ -106,10 +106,10 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.assertRegex(resp._headers['location'][1],
+        self.assertRegex(resp.headers['location'],
                                  r'http(.*)/f/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.expire_date)
         self.assertIsNotNone(fileshare.password)
@@ -124,11 +124,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         self.assertIsNotNone(FileShare.objects.get(token=token))
 
     def test_can_create_dir_download_link_with_exipre(self):
@@ -141,11 +141,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.expire_date)
 
@@ -159,11 +159,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.password)
 
@@ -177,11 +177,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
         self.assertIsNotNone(fileshare.expire_date)
         self.assertIsNotNone(fileshare.password)
@@ -196,11 +196,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/u/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         self.assertIsNotNone(UploadLinkShare.objects.get(token=token))
 
     def test_can_create_dir_upload_link_with_password(self):
@@ -213,11 +213,11 @@ class FileSharedLinkApiTest(BaseTestCase):
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(201, resp.status_code)
-        self.dir_link_location = resp._headers['location'][1]
+        self.dir_link_location = resp.headers['location']
         self.assertRegex(self.dir_link_location,
                                  r'http(.*)/u/d/(\w{10,100})/')
 
-        token = resp._headers['location'][1].split('/')[-2]
+        token = resp.headers['location'].split('/')[-2]
         uls = UploadLinkShare.objects.get(token=token)
         self.assertIsNotNone(uls.password)
 

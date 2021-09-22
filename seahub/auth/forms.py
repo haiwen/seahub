@@ -3,6 +3,7 @@ from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
+from collections import OrderedDict
 
 from seaserv import ccnet_api
 
@@ -215,7 +216,11 @@ class PasswordChangeForm(SetPasswordForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
+
+
+field_order = ['old_password', 'new_password1', 'new_password2']
+PasswordChangeForm.base_fields = OrderedDict((k, PasswordChangeForm.base_fields[k]) for k in field_order)
+
 
 class AdminPasswordChangeForm(forms.Form):
     """

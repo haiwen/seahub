@@ -10,4 +10,4 @@ class RepoDownloadDirTest(BaseTestCase):
         resp = self.client.get(reverse('repo_download_dir', args=[self.repo.id]) + '?p=' + self.folder)
 
         self.assertEqual(302, resp.status_code)
-        assert '8082' in resp._headers['location'][1]
+        assert '8082' in resp.headers['location']

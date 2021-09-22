@@ -1,6 +1,6 @@
 from django.conf import settings as django_settings
 from django.contrib.auth.models import AnonymousUser
-from urllib import parse as urllib_parse
+from six.moves import urllib_parse
 from django.shortcuts import resolve_url
 
 from seahub.auth import REDIRECT_FIELD_NAME, SESSION_KEY, BACKEND_SESSION_KEY, load_backend
