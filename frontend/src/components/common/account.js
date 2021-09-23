@@ -67,7 +67,8 @@ class Account extends Component {
     });
   }
 
-  onClickAccount = () => {
+  onClickAccount = (e) => {
+    e.preventDefault();
     if (this.isFirstMounted) {
       seafileAPI.getAccountInfo().then(resp => {
         this.setState({
@@ -142,11 +143,11 @@ class Account extends Component {
   render() {
     return (
       <div id="account">
-        <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
+        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext("View profile and more")}>
           <span>{this.renderAvatar()}</span>
           <span className="fas fa-caret-down vam"></span>
         </a>
-        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
+        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext("View profile and more")} onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
           <div className="outer-caret up-outer-caret">
             <div className="inner-caret"></div>
