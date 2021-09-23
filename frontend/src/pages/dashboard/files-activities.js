@@ -154,7 +154,7 @@ class ActivityItem extends Component {
       details = (
         <Fragment>
           <p className="m-0 d-inline" dangerouslySetInnerHTML={{__html: firstLine}}></p>
-          {isDesktop && <span onClick={this.onListCreatedFilesToggle} className="activity-details text-secondary ml-2">{gettext('details')}</span>}
+          {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details text-secondary ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
         </Fragment>
       );
       moreDetails = true;
