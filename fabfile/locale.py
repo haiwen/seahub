@@ -10,7 +10,7 @@ from fabric.colors import red, green
 def make(default=True, lang='en'):
     """Update source language.
     """
-    local('django-admin.py makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html" -i "seahub/two_factor/models/phone.py" -i "seahub/two_factor/models/base.py" -i "seahub/two_factor/templates/two_factor/core/setup_complete.html"' % lang)
+    local('django-admin makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html" -i "seahub/two_factor/models/phone.py" -i "seahub/two_factor/models/base.py" -i "seahub/two_factor/templates/two_factor/core/setup_complete.html"' % lang)
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".
@@ -21,7 +21,7 @@ def make(default=True, lang='en'):
 
 @task
 def makejs(lang='en'):
-    local('django-admin.py makemessages -l %s -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" -i "frontend/build" -i "frontend/config" -i "frontend/scripts" --verbosity 2' % lang)
+    local('django-admin makemessages -l %s -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" -i "frontend/build" -i "frontend/config" -i "frontend/scripts" --verbosity 2' % lang)
 
 @task
 def push():
@@ -39,7 +39,7 @@ def pull():
 def compile():
     """Compile po files.
     """
-    local('django-admin.py compilemessages && pushd seahub/trusted_ip && django-admin.py compilemessages')
+    local('django-admin compilemessages && pushd seahub/trusted_ip && django-admin compilemessages')
 
 ########## utility functions
 def _inplace_change(filename, old_string, new_string):

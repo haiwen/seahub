@@ -9,7 +9,7 @@ dist: locale statici18n collectstatic
 
 locale:
 	@echo "--> Compile locales"
-	django-admin.py compilemessages
+	django-admin compilemessages
 	@echo ""
 
 statici18n:
