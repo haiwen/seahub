@@ -81,8 +81,8 @@ from seahub.drafts.utils import get_file_draft, \
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, cluster_get_office_converted_page,
-        prepare_converted_html, get_office_converted_page, CLUSTER_MODE
+        query_office_convert_status, get_office_converted_page,
+        prepare_converted_html, 
     )
 
 import seahub.settings as settings
@@ -876,7 +876,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
-        error_msg = prepare_converted_html(inner_path, file_id, fileext, return_dict)
+        error_msg = prepare_converted_html(raw_path, file_id, fileext, return_dict)
         if error_msg:
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
@@ -1815,10 +1815,7 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename):
     if filename.endswith('.pdf'):
         filename = "{0}.pdf".format(file_id)
 
-    if CLUSTER_MODE:
-        resp = cluster_get_office_converted_page(path, filename, file_id)
-    else:
-        resp = get_office_converted_page(request, filename, file_id)
+    resp = get_office_converted_page(path, filename, file_id)
 
     if filename.endswith('.page'):
         content_type = 'text/html'

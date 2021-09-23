@@ -1088,13 +1088,13 @@ HAS_OFFICE_CONVERTER = False
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_office_converter_enabled'):
-            enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
+        if is_pro_version() and OFFICE_CONVERTOR_ROOT:
+            enabled = True
 
-            if enabled:
-                logging.debug('office converter: enabled')
-            else:
-                logging.debug('office converter: not enabled')
+        if enabled:
+            logging.debug('office converter: enabled')
+        else:
+            logging.debug('office converter: not enabled')
         return enabled
 
     def get_office_converter_html_dir():
@@ -1145,17 +1145,7 @@ if HAS_OFFICE_CONVERTER:
             ret['status'] = d['status']
         return ret
 
-    def get_office_converted_page(request, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        return django_static_serve(request,
-                                   filepath,
-                                   document_root=office_out_dir)
-
-    def cluster_get_office_converted_page(path, static_filename, file_id):
+    def get_office_converted_page(path, static_filename, file_id):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
