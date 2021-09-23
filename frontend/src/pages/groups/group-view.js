@@ -456,19 +456,20 @@ class GroupView extends React.Component {
                   <div className="path-tool">
                     { isShowSettingIcon &&
                     <React.Fragment>
-                      <a href="#" className="sf2-icon-cog1 action-icon group-top-action-icon" title="Settings" id="settings"
-                        onClick={this.toggleGroupDropdown}></a>
+                      <a href="#" role="button" aria-label={gettext('Settings')} className="sf2-icon-cog1 action-icon group-top-action-icon" title={gettext("Settings")} id="settings" onClick={this.toggleGroupDropdown}></a>
                       <Popover placement="bottom" isOpen={this.state.showGroupDropdown} target="settings"
                         toggle={this.toggleGroupDropdown} hideArrow={true} className="sf-popover">
                         <div className="sf-popover-hd sf-popover-title">
                           <span>{gettext('Settings')}</span>
                           <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
+                            role="button"
+                            aria-label={gettext('Close')}
                             onClick={this.toggleGroupDropdown}></a>
                         </div>
                         <div className="sf-popover-con">
                           {(this.state.isStaff || this.state.isOwner) &&
                           <ul className="sf-popover-list">
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog} >{gettext('Rename')}</a></li>
+                            <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog}>{gettext('Rename')}</a></li>
                             {
                               this.state.isOwner &&
                               <li><a href="#" className="sf-popover-item" onClick={this.toggleTransferGroupDialog} >{gettext('Transfer')}</a></li>
