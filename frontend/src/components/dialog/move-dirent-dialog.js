@@ -159,7 +159,9 @@ class MoveDirent extends React.Component {
       title = gettext('Move selected item(s) to:');
     }
     let mode = this.props.repoEncrypted ? 'only_current_library':'current_repo_and_other_repos';
-    const { permission } = this.props.dirent;
+    const { dirent, selectedDirentList } = this.props;
+    const movedDirent = dirent ? dirent : selectedDirentList[0];
+    const { permission } = movedDirent;
     const { isCustomPermission } = Utils.getUserPermission(permission);
     if (isCustomPermission) {
       mode = 'only_current_library';
