@@ -81,6 +81,7 @@ class SelectEditor extends React.Component {
   }
 
   onEditPermission = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
@@ -126,11 +127,13 @@ class SelectEditor extends React.Component {
           <div>
             {this.props.translateOption(currentOption)}
             {this.props.isEditIconShow && (
-              <span
+              <a href="#"
+                role="button"
+                aria-label={gettext('Edit')}
                 title={gettext('Edit')}
                 className="fa fa-pencil-alt attr-action-icon"
                 onClick={this.onEditPermission}>
-              </span>
+              </a>
             )}
           </div>
         }
