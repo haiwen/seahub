@@ -5061,7 +5061,7 @@ class OfficeGenerateView(APIView):
 
         ret_dict = {}
         if HAS_OFFICE_CONVERTER:
-            err = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
+            err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
             # populate return value dict
             ret_dict['err'] = err
             ret_dict['obj_id'] = obj_id

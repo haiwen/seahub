@@ -1084,40 +1084,20 @@ if EVENTS_CONFIG_FILE:
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
 
 # office convert related
-HAS_OFFICE_CONVERTER = False
-if EVENTS_CONFIG_FILE:
-    def check_office_converter_enabled():
-        enabled = False
-        if hasattr(seafevents, 'is_office_converter_enabled'):
-            enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
+def check_office_converter_enabled():
+    if OFFICE_CONVERTOR_ROOT:
+        return True
+    return False
 
-            if enabled:
-                logging.debug('office converter: enabled')
-            else:
-                logging.debug('office converter: not enabled')
-        return enabled
-
-    def get_office_converter_html_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'html')
-
-    def get_office_converter_pdf_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'pdf')
-
-    def get_office_converter_limit():
-        return seafevents.get_office_converter_limit(parsed_events_conf)
-
-    HAS_OFFICE_CONVERTER = check_office_converter_enabled()
-
+HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
+OFFICE_PREVIEW_MAX_PAGES = 50
+
 if HAS_OFFICE_CONVERTER:
 
     import time
     import requests
     import jwt
-
-    OFFICE_HTML_DIR = get_office_converter_html_dir()
-    OFFICE_PDF_DIR = get_office_converter_pdf_dir()
-    OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
@@ -1145,17 +1125,7 @@ if HAS_OFFICE_CONVERTER:
             ret['status'] = d['status']
         return ret
 
-    def get_office_converted_page(request, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        return django_static_serve(request,
-                                   filepath,
-                                   document_root=office_out_dir)
-
-    def cluster_get_office_converted_page(path, static_filename, file_id):
+    def get_office_converted_page(path, static_filename, file_id):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
