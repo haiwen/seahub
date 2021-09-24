@@ -1084,40 +1084,20 @@ if EVENTS_CONFIG_FILE:
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
 
 # office convert related
-HAS_OFFICE_CONVERTER = False
-if EVENTS_CONFIG_FILE:
-    def check_office_converter_enabled():
-        enabled = False
-        if is_pro_version() and OFFICE_CONVERTOR_ROOT:
-            enabled = True
+def check_office_converter_enabled():
+    if is_pro_version() and OFFICE_CONVERTOR_ROOT:
+        return True
+    return False
 
-        if enabled:
-            logging.debug('office converter: enabled')
-        else:
-            logging.debug('office converter: not enabled')
-        return enabled
-
-    def get_office_converter_html_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'html')
-
-    def get_office_converter_pdf_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'pdf')
-
-    def get_office_converter_limit():
-        return seafevents.get_office_converter_limit(parsed_events_conf)
-
-    HAS_OFFICE_CONVERTER = check_office_converter_enabled()
-
+HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
+OFFICE_PREVIEW_MAX_PAGES = 50
+
 if HAS_OFFICE_CONVERTER:
 
     import time
     import requests
     import jwt
-
-    OFFICE_HTML_DIR = get_office_converter_html_dir()
-    OFFICE_PDF_DIR = get_office_converter_pdf_dir()
-    OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
