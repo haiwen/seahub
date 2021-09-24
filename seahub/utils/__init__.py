@@ -1085,7 +1085,7 @@ if EVENTS_CONFIG_FILE:
 
 # office convert related
 def check_office_converter_enabled():
-    if is_pro_version() and OFFICE_CONVERTOR_ROOT:
+    if OFFICE_CONVERTOR_ROOT:
         return True
     return False
 
