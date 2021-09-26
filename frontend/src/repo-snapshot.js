@@ -140,7 +140,7 @@ class RepoSnapshot extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Snapshot'), repoName) + ` <span class="heading-commit-time">(${commitTime})</span>`}}></h2>
-                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack}>
+                <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 {folderPath == '/' && (
@@ -279,21 +279,21 @@ class FolderItem extends React.Component {
     const { folderPath } = this.props;
 
     return item.type == 'dir' ? (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td></td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')}></a>
+          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
         </td>
       </tr>
     ) : (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')}></a>
+          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
           <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`action-icon sf2-icon-download ${isIconShown ? '': 'invisible'}`} title={gettext('Download')}></a>
         </td>
       </tr>
