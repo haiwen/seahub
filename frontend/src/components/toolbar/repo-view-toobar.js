@@ -36,6 +36,12 @@ class RepoViewToolbar extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.toggleMore();
+    }
+  }
+
   visitDeletedviaKey = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       navigate(`${siteRoot}my-libs/deleted/`);
@@ -53,7 +59,7 @@ class RepoViewToolbar extends React.Component {
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
               </button>
               <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
-                <DropdownToggle className='btn btn-secondary operation-item'>
+                <DropdownToggle className='btn btn-secondary operation-item' onKeyDown={this.onDropdownToggleKeyDown}>
                   {gettext('More')}
                 </DropdownToggle>
                 <DropdownMenu>
