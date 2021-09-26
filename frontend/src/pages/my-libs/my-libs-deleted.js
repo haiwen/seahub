@@ -137,7 +137,8 @@ class DeletedRepoItem extends Component {
     }
   }
 
-  restoreDeletedRepo = () => {
+  restoreDeletedRepo = (e) => {
+    e.preventDefault();
     let repoID = this.props.repo.repo_id;
     let repoName = this.props.repo.repo_name;
     seafileAPI.restoreDeletedRepo(repoID).then(res => {
@@ -159,13 +160,20 @@ class DeletedRepoItem extends Component {
     let iconUrl = Utils.getLibIconUrl(this.props.repo);
 
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr
+        className={this.state.highlight ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        tabIndex="0"
+        onFocus={this.onMouseEnter}
+      >
         <td className="text-center"><img src={iconUrl} alt='' width="24" /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
         <td>
-          <span onClick={this.restoreDeletedRepo} title={gettext('Restore')}
-            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}></span>
+          <a href="#" onClick={this.restoreDeletedRepo} title={gettext('Restore')}
+            role="button" aria-label={gettext('Restore')}
+            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}></a>
         </td>
       </tr>
     );
