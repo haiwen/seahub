@@ -193,7 +193,7 @@ class RepoFolderTrash extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Trash'), repoFolderName)}}></h2>
-                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack}>
+                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" role={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
@@ -340,23 +340,23 @@ class Item extends React.Component {
     }
 
     return item.is_dir ? (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Directory')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.obj_name}</a></td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td></td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     ) : (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank">{item.obj_name}</a></td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem}>{gettext('Restore')}</a>
+          <a href="#" className={isIconShown ? '': 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>
         </td>
       </tr>
     );
