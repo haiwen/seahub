@@ -61,6 +61,7 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
+from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
 from seahub.constants import HASH_URLS, PERMISSION_READ
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
@@ -1201,6 +1202,7 @@ def react_fake_view(request, **kwargs):
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
+        'enable_ocm_via_webdav': ENABLE_OCM_VIA_WEBDAV,
         'enable_ocm': ENABLE_OCM,
         'ocm_remote_servers': OCM_REMOTE_SERVERS,
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
