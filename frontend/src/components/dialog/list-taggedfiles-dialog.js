@@ -135,24 +135,29 @@ class TaggedFile extends React.Component {
     });
   }
 
+  deleteFile = (e) => {
+    e.preventDefault();
+    this.props.onDeleteTaggedFile(this.props.taggedFile);
+  }
+
   render() {
     const taggedFile = this.props.taggedFile;
     let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
     let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
     return ( taggedFile.file_deleted ?
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td colSpan='3' className="name">{taggedFile.filename}{' '}
           <span style={{color:'red'}}>{gettext('deleted')}</span>
         </td>
-        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
+        <td><a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a></td>
       </tr>
       :
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
         <td>{Utils.bytesToSize(taggedFile.size)}</td>
         <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
+        <td><a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a></td>
       </tr>
     );
   }

@@ -54,11 +54,11 @@ class TagListItem extends React.Component {
         <div className="tag-demo" style={{backgroundColor:color}} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
           <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
           <span className="tag-name">{this.props.item.name}</span>
-          <span className="tag-files" onClick={this.onListTaggedFiles}>
+          <button className="tag-files border-0 bg-transparent" onClick={this.onListTaggedFiles}>
             {fileCount}{' '}{fileTranslation}
-          </span>
+          </button>
         </div>
-        <i className="tag-edit fa fa-pencil-alt" onClick={this.onTagUpdate}></i>
+        <button className="tag-edit fa fa-pencil-alt border-0" onClick={this.onTagUpdate} aria-label={gettext('Edit')} title={gettext('Edit')}></button>
       </li>
     );
   }
