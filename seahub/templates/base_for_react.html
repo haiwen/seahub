@@ -106,6 +106,7 @@
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
             canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
+            enableOCMViaWebdav: {% if enable_ocm_via_webdav %} true {% else %} false {% endif %},
             enableOCM: {% if enable_ocm %} true {% else %} false {% endif %},
             ocmRemoteServers: (function () {
               var servers = [];

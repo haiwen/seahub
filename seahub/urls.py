@@ -106,6 +106,8 @@ from seahub.api2.endpoints.ocm_repos import OCMReposDirView, OCMReposDownloadLin
     OCMReposUploadLinkView
 from seahub.api2.endpoints.custom_share_permissions import CustomSharePermissionsView, CustomSharePermissionView
 
+from seahub.ocm_via_webdav.ocm_api import OCMProviderView
+
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
 
@@ -194,6 +196,7 @@ urlpatterns = [
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
     url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
+    url(r'^ocm-via-webdav/', include('seahub.ocm_via_webdav.urls')),
 
     url(r'^$', react_fake_view, name='libraries'),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
@@ -474,7 +477,7 @@ urlpatterns = [
 
     ## user::ocm
     # ocm inter-server api, interact with other server
-    url(r'ocm-provider/$', OCMProtocolView.as_view(), name='api-v2.1-ocm-protocol'),
+    url(r'ocm-provider/$', OCMProviderView.as_view(), name='api-v2.1-ocm-protocol'),
     url(r'' + OCM_ENDPOINT + 'shares/$', OCMSharesView.as_view(), name='api-v2.1-ocm-shares'),
     url(r'' + OCM_ENDPOINT + 'notifications/$', OCMNotificationsView.as_view(), name='api-v2.1-ocm-notifications'),
 

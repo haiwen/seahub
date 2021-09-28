@@ -263,7 +263,7 @@ INSTALLED_APPS = [
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',
-
+    'seahub.ocm_via_webdav',
     'seahub.search',
     'seahub.sysadmin_extra',
     'seahub.organizations',

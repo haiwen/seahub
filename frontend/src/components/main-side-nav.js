@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { Badge } from 'reactstrap';
-import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM } from '../utils/constants';
+import { gettext, siteRoot, canPublishRepo, canAddRepo, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, dtableWebServer, enableOCM, enableOCMViaWebdav } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
@@ -219,6 +219,14 @@ class MainSideNav extends React.Component {
             {enableOCM &&
               <li className="nav-item">
                 <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
+                  <span className="sf3-font-share-from-other-servers sf3-font" aria-hidden="true"></span>
+                  <span className="nav-text">{gettext('Shared from other servers')}</span>
+                </Link>
+              </li>
+            }
+            {enableOCMViaWebdav &&
+              <li className="nav-item">
+                <Link to={siteRoot + 'ocm-via-webdav/'} className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}>
                   <span className="sf3-font-share-from-other-servers sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Shared from other servers')}</span>
                 </Link>
