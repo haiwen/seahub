@@ -182,9 +182,18 @@ class DirOperationToolbar extends React.Component {
         <Fragment>
           {canUpload && (
             <Fragment>
-              {Utils.isSupportUploadFolder() ?
-                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
+          {Utils.isSupportUploadFolder() ?
+            <Fragment>
+              <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick} aria-haspopup="true" aria-expanded={this.state.isUploadMenuShow} aria-controls="upload-menu">{gettext('Upload')}</button>
+              {this.state.isUploadMenuShow && (
+                <div className="menu dropdown-menu" style={this.state.operationMenuStyle} role="menu" id="upload-menu">
+                  <button type="button" className="dropdown-item" onClick={this.onUploadFile} role="menuitem">{gettext('Upload Files')}</button>
+                  <button type="button" className="dropdown-item" onClick={this.onUploadFolder} role="menuitem">{gettext('Upload Folder')}</button>
+                </div>
+              )}
+            </Fragment>
+            :
+            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
             </Fragment>
           )}
           {canModify && <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>}
@@ -217,12 +226,6 @@ class DirOperationToolbar extends React.Component {
             <div className="operation">
               {content}
             </div>
-            {this.state.isUploadMenuShow && (
-              <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                <li className="dropdown-item" onClick={this.onUploadFile}>{gettext('Upload Files')}</li>
-                <li className="dropdown-item" onClick={this.onUploadFolder}>{gettext('Upload Folder')}</li>
-              </ul>
-            )}
             {this.state.isCreateMenuShow && (
               <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
                 <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
