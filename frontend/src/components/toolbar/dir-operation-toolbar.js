@@ -74,7 +74,7 @@ class DirOperationToolbar extends React.Component {
   onUploadClick = (e) => {
     this.toggleOperationMenu(e);
     this.setState({
-      isUploadMenuShow: true,
+      isUploadMenuShow: !this.state.isUploadMenuShow,
       isCreateMenuShow: false,
     });
   }
@@ -92,7 +92,7 @@ class DirOperationToolbar extends React.Component {
   onCreateClick = (e) => {
     this.toggleOperationMenu(e);
     this.setState({
-      isCreateMenuShow: true,
+      isCreateMenuShow: !this.state.isCreateMenuShow,
       isUploadMenuShow: false,
     });
   }
@@ -182,21 +182,36 @@ class DirOperationToolbar extends React.Component {
         <Fragment>
           {canUpload && (
             <Fragment>
-          {Utils.isSupportUploadFolder() ?
-            <Fragment>
-              <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick} aria-haspopup="true" aria-expanded={this.state.isUploadMenuShow} aria-controls="upload-menu">{gettext('Upload')}</button>
-              {this.state.isUploadMenuShow && (
-                <div className="menu dropdown-menu" style={this.state.operationMenuStyle} role="menu" id="upload-menu">
-                  <button type="button" className="dropdown-item" onClick={this.onUploadFile} role="menuitem">{gettext('Upload Files')}</button>
-                  <button type="button" className="dropdown-item" onClick={this.onUploadFolder} role="menuitem">{gettext('Upload Folder')}</button>
-                </div>
-              )}
-            </Fragment>
-            :
-            <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
+              {Utils.isSupportUploadFolder() ?
+                <Fragment>
+                  <button className="btn btn-secondary operation-item" onClick={this.onUploadClick} aria-haspopup="true" aria-expanded={this.state.isUploadMenuShow} aria-controls="upload-menu">{gettext('Upload')}</button>
+                  {this.state.isUploadMenuShow && (
+                    <div className="menu dropdown-menu" style={this.state.operationMenuStyle} role="menu" id="upload-menu">
+                      <button type="button" className="dropdown-item" onClick={this.onUploadFile} role="menuitem">{gettext('Upload Files')}</button>
+                      <button type="button" className="dropdown-item" onClick={this.onUploadFolder} role="menuitem">{gettext('Upload Folder')}</button>
+                    </div>
+                  )}
+                </Fragment>
+                :
+                <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
             </Fragment>
           )}
-          {canModify && <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onCreateClick}>{gettext('New')}</button>}
+          {canModify &&
+          <Fragment>
+            <button className="btn btn-secondary operation-item" onClick={this.onCreateClick} aria-haspopup="true" aria-expanded={this.state.isUploadMenuShow} aria-controls="new-menu">{gettext('New')}</button>
+            {this.state.isCreateMenuShow && (
+              <div className="menu dropdown-menu" style={this.state.operationMenuStyle} role="menu" id="new-menu">
+                <button className="dropdown-item" onClick={this.onCreateFolderToggle} role="menuitem">{gettext('New Folder')}</button>
+                <button className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</button>
+                <div className="dropdown-divider"></div>
+                <button className="dropdown-item" onClick={this.onCreateMarkdownToggle} role="menuitem">{gettext('New Markdown File')}</button>
+                <button className="dropdown-item" onClick={this.onCreateExcelToggle} role="menuitem">{gettext('New Excel File')}</button>
+                <button className="dropdown-item" onClick={this.onCreatePPTToggle} role="menuitem">{gettext('New PowerPoint File')}</button>
+                <button className="dropdown-item" onClick={this.onCreateWordToggle} role="menuitem">{gettext('New Word File')}</button>
+              </div>
+            )}
+          </Fragment>
+          }
           {showShareBtn && <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>}
         </Fragment>
       );
@@ -223,20 +238,7 @@ class DirOperationToolbar extends React.Component {
       <Fragment>
         {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
           <div className="dir-operation">
-            <div className="operation">
-              {content}
-            </div>
-            {this.state.isCreateMenuShow && (
-              <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                <li className="dropdown-item" onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</li>
-                <li className="dropdown-item" onClick={this.onCreateFileToggle}>{gettext('New File')}</li>
-                <li className="dropdown-divider"></li>
-                <li className="dropdown-item" onClick={this.onCreateMarkdownToggle}>{gettext('New Markdown File')}</li>
-                <li className="dropdown-item" onClick={this.onCreateExcelToggle}>{gettext('New Excel File')}</li>
-                <li className="dropdown-item" onClick={this.onCreatePPTToggle}>{gettext('New PowerPoint File')}</li>
-                <li className="dropdown-item" onClick={this.onCreateWordToggle}>{gettext('New Word File')}</li>
-              </ul>
-            )}
+            {content}
           </div>
         )}
         {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
