@@ -72,7 +72,7 @@ class UploadProgressDialog extends React.Component {
                     onUploadRetry={this.props.onUploadRetry}
                   />
                 );
-              })
+              }).reverse()
               }
             </tbody>
           </table>
