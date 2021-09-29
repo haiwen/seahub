@@ -13,9 +13,7 @@ class SideNavFooter extends React.Component {
   }
 
   onAboutDialogToggle = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
+    e.preventDefault();
     this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
   }
 

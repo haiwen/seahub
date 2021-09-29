@@ -26,10 +26,6 @@ class DeleteRepoDialog extends Component {
     }
   }
 
-  toggle = () => {
-    this.props.toggle();
-  }
-
   onDeleteRepo = () => {
     this.setState({isRequestSended: true}, () => {
       this.props.onDeleteRepo(this.props.repo);
@@ -44,14 +40,16 @@ class DeleteRepoDialog extends Component {
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
 
+    const { toggle: toggleDialog } = this.props;
+
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Delete Library')}</ModalHeader>
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" disabled={isRequestSended} onClick={this.onDeleteRepo}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>

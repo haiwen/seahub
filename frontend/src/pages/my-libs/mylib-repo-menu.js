@@ -146,13 +146,15 @@ class MylibRepoMenu extends React.Component {
       return (
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
           <DropdownToggle
-            className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
+            tag="i"
+            role="button"
+            tabIndex="0"
+            className="sf-dropdown-toggle sf2-icon-caret-down"
             title={gettext('More Operations')}
+            aria-label={gettext('More Operations')}
             onClick={this.onDropdownToggleClick}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
-            aria-haspopup={true}
-            style={{'minWidth': '0'}}
           />
           <DropdownMenu>
             {operations.map((item, index)=> {

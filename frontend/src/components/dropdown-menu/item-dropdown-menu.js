@@ -146,6 +146,8 @@ class ItemDropdownMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
         <DropdownToggle
           tag={tagName || 'i'}
+          role="button"
+          tabIndex="0"
           className={toggleClass}
           title={gettext('More Operations')}
           data-toggle="dropdown"
