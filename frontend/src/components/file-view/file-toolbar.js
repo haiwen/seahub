@@ -194,11 +194,9 @@ class FileToolbar extends React.Component {
                 </DropdownItem>
               )}
               {filePerm == 'rw' && (
-                <DropdownItem>
-                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="text-inherit">
+                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                     {gettext('History')}
                   </a>
-                </DropdownItem>
               )}
             </DropdownMenu>
           </ButtonDropdown>

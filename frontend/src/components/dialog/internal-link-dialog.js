@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types';
 import toaster from '../toast';
@@ -60,8 +60,8 @@ class InternalLinkDialog extends React.Component {
 
   render() {
     return (
-      <span className={'file-internal-link'} title={gettext('Internal Link')}>
-        <i className="fa fa-link" onClick={this.getInternalLink}></i>
+      <Fragment>
+        <i title={gettext('Internal Link')} role="button" tabIndex="0" aria-label={gettext('Internal Link')} className="file-internal-link fa fa-link" onClick={this.getInternalLink}></i>
         <Modal isOpen={this.state.isOpen} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{gettext('Internal Link')}</ModalHeader>
           <ModalBody>
@@ -77,7 +77,7 @@ class InternalLinkDialog extends React.Component {
             <Button color="primary" onClick={this.copyToClipBoard}>{gettext('Copy')}</Button>
           </ModalFooter>
         </Modal>
-      </span>
+      </Fragment>
     );
   }
 }
