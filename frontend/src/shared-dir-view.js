@@ -289,8 +289,8 @@ class SharedDirView extends React.Component {
                 <div>
                   {isDesktop &&
                   <div className="view-mode btn-group">
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')}></a>
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')}></a>
+                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')} aria-label={gettext('List')}></a>
+                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')} aria-label={gettext('Grid')}></a>
                   </div>
                   }
                   {canUpload && (
@@ -516,7 +516,7 @@ class Item extends React.Component {
 
     if (item.is_dir) {
       return isDesktop ? (
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           {showDownloadIcon &&
             <td className="text-center">
               <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
@@ -530,7 +530,7 @@ class Item extends React.Component {
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
+            <a role="button" className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
             </a>
             }
           </td>
@@ -568,7 +568,7 @@ class Item extends React.Component {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       return isDesktop ? (
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           {showDownloadIcon &&
             <td className="text-center">
               <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
@@ -669,13 +669,13 @@ class GridItem extends React.Component {
     if (item.is_dir) {
       const folderURL = `?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`;
       return (
-        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <a href={folderURL} className="grid-file-img-link d-block">
             <img src={Utils.getFolderIconUrl(false, 192)} alt="" width="96" height="96" />
           </a>
           <a href={folderURL} className="grid-file-name grid-file-name-link">{item.folder_name}</a>
           {showDownloadIcon &&
-            <a className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
+            <a role="button" className={`action-icon sf2-icon-download${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
             </a>
           }
         </li>
@@ -684,7 +684,7 @@ class GridItem extends React.Component {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       return (
-        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <li className="grid-item" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <a href={fileURL} className="grid-file-img-link d-block" onClick={this.handleFileClick}>
             {thumbnailURL ?
               <img className="thumbnail" src={thumbnailURL} alt="" /> :
