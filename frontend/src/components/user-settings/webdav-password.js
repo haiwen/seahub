@@ -45,6 +45,12 @@ class WebdavPassword extends React.Component {
     });
   }
 
+  onIconKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      e.target.click();
+    }
+  }
+
   render() {
     const { password, isPasswordVisible } = this.state;
     return (
@@ -54,9 +60,9 @@ class WebdavPassword extends React.Component {
           {password ? (
             <React.Fragment>
               <div className="d-flex align-items-center">
-                <label className="m-0 mr-2">{gettext('Password:')}</label>
-                <input className="border-0 mr-1" type="text" value={isPasswordVisible ? password : '**********'} readOnly={true} size={Math.max(password.length, 10)} />
-                <span onClick={this.togglePasswordVisible} className={`eye-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                <label className="m-0 mr-2" htmlFor="passwd">{gettext('Password:')}</label>
+                <input id="passwd" className="border-0 mr-1" type="text" value={isPasswordVisible ? password : '**********'} readOnly={true} size={Math.max(password.length, 10)} />
+                <span tabIndex="0" role="button" aria-label={isPasswordVisible? gettext('Hide') : gettext('Show')} onClick={this.togglePasswordVisible} onKeyDown={this.onIconKeyDown} className={`eye-icon fas ${this.state.isPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
               </div>
               <button className="btn btn-outline-primary mt-2" onClick={this.toggleDialog}>{gettext('Update')}</button>
             </React.Fragment>

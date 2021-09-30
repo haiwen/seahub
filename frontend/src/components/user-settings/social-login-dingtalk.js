@@ -19,8 +19,7 @@ class SocialLoginDintalk extends React.Component {
     };
   }
 
-  confirmDisconnect = (e) => {
-    e.preventDefault();
+  confirmDisconnect = () => {
     this.setState({
       isConfirmDialogOpen: true
     });
@@ -39,7 +38,7 @@ class SocialLoginDintalk extends React.Component {
           <h3 className="setting-item-heading">{gettext('Social Login')}</h3>
           <p className="mb-2">{langCode == 'zh-cn' ? '钉钉': 'Dingtalk'}</p>
           {socialConnectedDingtalk ?
-            <a href="#" className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</a> :
+            <button className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</button> :
             <a href={`${siteRoot}dingtalk/connect/?next=${encodeURIComponent(socialNextPage)}`} className="btn btn-outline-primary">{gettext('Connect')}</a>
           }
         </div>

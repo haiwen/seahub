@@ -62,6 +62,12 @@ class WebAPIAuthToken extends React.Component {
     });
   }
 
+  onIconKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      e.target.click();
+    }
+  }
+
   render() {
     const { authToken, isAuthTokenVisible } = this.state;
     return (
@@ -71,9 +77,9 @@ class WebAPIAuthToken extends React.Component {
           {authToken ? (
             <React.Fragment>
               <div className="d-flex align-items-center">
-                <label className="m-0 mr-2">{gettext('Token:')}</label>
-                <input className="border-0 mr-1" type="text" value={isAuthTokenVisible ? authToken : '****************************************'} readOnly={true} size={Math.max(authToken.length, 10)} />
-                <span onClick={this.toggleAuthTokenVisible} className={`eye-icon fas ${this.state.isAuthTokenVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                <label className="m-0 mr-2" htmlFor="token">{gettext('Token:')}</label>
+                <input id="token" className="border-0 mr-1" type="text" value={isAuthTokenVisible ? authToken : '****************************************'} readOnly={true} size={Math.max(authToken.length, 10)} />
+                <span tabIndex="0" role="button" aria-label={isAuthTokenVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleAuthTokenVisible} className={`eye-icon fas ${this.state.isAuthTokenVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
               </div>
               <button className="btn btn-outline-primary mt-2" onClick={this.deleteAuthToken}>{gettext('Delete')}</button>
             </React.Fragment>
