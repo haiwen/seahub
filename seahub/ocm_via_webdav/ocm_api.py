@@ -107,7 +107,7 @@ def get_remote_ocm_endpoint(remote_domain):
         logger.error(resp.content)
         return ''
 
-    return end_point
+    return end_point if end_point.endswith('/') else end_point + '/'
 
 
 class OCMProviderView(APIView):
@@ -379,7 +379,7 @@ class ReceivedShareView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(501, error_msg)
 
-        notifications_url = urljoin(ocm_endpoint, OCM_VIA_WEBDAV_NOTIFICATIONS_URI)
+        notifications_url = urljoin(ocm_endpoint, OCM_VIA_WEBDAV_NOTIFICATIONS_URI.lstrip('/'))
 
         # send SHARE_DECLINED notification
         data = {
