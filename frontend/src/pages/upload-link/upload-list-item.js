@@ -121,10 +121,10 @@ class UploadListItem extends React.Component {
         <td className="upload-operation">
           <Fragment>
             {this.state.uploadState === UPLOAD_UPLOADING && (
-              <a href="#" onClick={this.onUploadCancel}>{gettext('Cancel')}</a>
+              <a href="#" onClick={this.onUploadCancel} role="button">{gettext('Cancel')}</a>
             )}
             {this.state.uploadState === UPLOAD_ERROR && (
-              <a href="#" onClick={this.onUploadRetry}>{gettext('Retry')}</a>
+              <a href="#" onClick={this.onUploadRetry} role="button">{gettext('Retry')}</a>
             )}
             {this.state.uploadState === UPLOAD_ISSAVING && (
               <span className="saving">{gettext('Saving...')}</span>
