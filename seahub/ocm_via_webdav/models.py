@@ -23,3 +23,4 @@ class ReceivedShares(models.Model):
     shared_by = models.CharField(max_length=255, db_index=True)
     shared_by_display_name = models.CharField(max_length=255, blank=True, null=True)
     ctime = models.DateTimeField(default=timezone.now)
+    is_dir = models.BooleanField(default=False)
