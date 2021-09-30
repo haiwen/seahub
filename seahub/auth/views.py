@@ -234,7 +234,7 @@ def login_simple_check(request):
         # Ensure the user-originating redirection url is safe.
         if REDIRECT_FIELD_NAME in request.GET:
             next_page = request.GET[REDIRECT_FIELD_NAME]
-            if not is_safe_url(url=next_page, host=request.get_host()):
+            if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
                 next_page = settings.LOGIN_REDIRECT_URL
         else:
             next_page = settings.SITE_ROOT
