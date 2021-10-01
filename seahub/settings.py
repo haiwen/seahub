@@ -550,6 +550,9 @@ INIT_PASSWD = genpassword
 # browser tab title
 SITE_TITLE = 'Private Seafile'
 
+# html head meta tag for search engine preview text
+SITE_DESCRIPTION = ''
+
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 

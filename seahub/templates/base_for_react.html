@@ -7,6 +7,7 @@
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+{% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}

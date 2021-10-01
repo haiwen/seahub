@@ -17,7 +17,7 @@ from constance import config
 
 import seaserv
 
-from seahub.settings import SEAFILE_VERSION, \
+from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
@@ -104,6 +104,7 @@ def base(request):
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
+        'site_description': SITE_DESCRIPTION,
         'branding_css': BRANDING_CSS,
         'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
