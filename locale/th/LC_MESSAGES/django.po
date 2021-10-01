@@ -231,7 +231,7 @@ msgid "繁體中文"
 msgstr "จีนตัวเต็ม"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
-msgid "File Collaboration Team Organization"
+msgid "File, Collaboration, Team, Organization"
 msgstr "องค์การร่วมกันทำงานบนแฟ้มเอกสาร"
 
 #: seahub/api2/templates/api2/discussion.html:6

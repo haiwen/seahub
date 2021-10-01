@@ -193,8 +193,8 @@ msgid "繁體中文"
 msgstr "Čínsky"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
-msgid "File Collaboration Team Organization"
-msgstr ""
+msgid "File, Collaboration, Team, Organization"
+msgstr "Súbor, Spolupráca, Tím, Organizácia"
 
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:25

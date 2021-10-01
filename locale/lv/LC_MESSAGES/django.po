@@ -4245,8 +4245,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Atvainojiet, bet pieprasīto lapu nevarēja atrast."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Datņu koplietošana"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Faili, Sadarbība, Komanda, Organizēšana"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"

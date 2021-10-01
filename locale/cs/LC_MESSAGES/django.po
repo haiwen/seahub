@@ -4257,8 +4257,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Požadovaná stránka nebyla nalezena."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Práce se soubory a týmová organizace"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Soubor, Spolupráce, Tým, Organizace"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"

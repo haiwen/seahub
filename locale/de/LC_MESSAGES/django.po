@@ -4307,8 +4307,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Es tut uns leid, aber die angefragte Seite wurde nicht gefunden."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "File Collaboration Team Organization"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Datei, Zusammenarbeit, Team, Organisation"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"

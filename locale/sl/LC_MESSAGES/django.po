@@ -226,8 +226,8 @@ msgid "繁體中文"
 msgstr "繁體中文"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Datoteka Sodelovanje Ekipa Organizacija"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Datoteka, Sodelovanje, Ekipa, Organizacija"
 
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23

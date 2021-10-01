@@ -4240,8 +4240,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Üzgünüm, ama istediğiniz sayfa bulunamadı."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Dosya Kolabrasyon Takım Organizasyonu"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Dosya, Kolabrasyon, Takım, Organizasyonu"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"

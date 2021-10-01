@@ -4233,7 +4233,7 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "죄송합니다만, 요청한 페이지가 없습니다."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
+msgid "File, Collaboration, Team, Organization"
 msgstr "파일 협업 팀 조직"
 
 #: seahub/templates/base.html:39

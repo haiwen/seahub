@@ -4243,8 +4243,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Ledsen, den önskade sidan hittas inte."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Samarbetande Team"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Fil, Samarbete, Team, Organisation"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"

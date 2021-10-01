@@ -4240,8 +4240,8 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Afsakið, en síðan sem þú baðst um fannst ekki."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Skrá Samvinna Teymi Samfélag"
+msgid "File, Collaboration, Team, Organization"
+msgstr "Skrá, Samstarf, Teymi, Skipulag"
 
 #: seahub/templates/base.html:39
 msgid "Side Nav Menu"
