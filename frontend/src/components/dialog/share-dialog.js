@@ -109,57 +109,57 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-side">
           <Nav pills>
             {enableShareLink &&
-              <NavItem>
-                <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
-                  {gettext('Share Link')}
-                </NavLink>
-              </NavItem>
+            <NavItem role="tab" aria-selected={activeTab === 'shareLink'} aria-controls="share-link-panel">
+              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={(this.toggle.bind(this, 'shareLink'))} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                {gettext('Share Link')}
+              </NavLink>
+            </NavItem>
             }
             {enableUploadLink &&
-              <NavItem>
-                <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
+              <NavItem role="tab" aria-selected={activeTab === 'uploadLink'} aria-controls="upload-link-panel">
+                <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                   {gettext('Upload Link')}
                 </NavLink>
               </NavItem>
             }
             {itemType === 'dir' &&
-              <NavItem>
-                <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')}>
+              <NavItem role="tab" aria-selected={activeTab === 'internalLink'} aria-controls="internal-link-panel">
+                <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                   {gettext('Internal Link')}
                 </NavLink>
               </NavItem>
             }
             {enableDirPrivateShare &&
               <Fragment>
-                <NavItem>
-                  <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
+                <NavItem role="tab" aria-selected={activeTab === 'shareToUser'} aria-controls="share-to-user-panel">
+                  <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                     {gettext('Share to user')}
                   </NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
+                <NavItem role="tab" aria-selected={activeTab === 'shareToGroup'} aria-controls="share-to-group-panel">
+                  <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                     {gettext('Share to group')}
                   </NavLink>
                 </NavItem>
                 {isPro && !isCustomPermission && (
-                  <NavItem>
-                    <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')}>
+                  <NavItem role="tab" aria-selected={activeTab === 'customSharePermission'} aria-controls="custom-share-perm-panel">
+                    <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                       {gettext('Custom sharing permissions')}
                     </NavLink>
                   </NavItem>
                 )}
                 {canInvitePeople &&
-                  <NavItem>
-                    <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')}>
-                      {gettext('Invite Guest')}
-                    </NavLink>
-                  </NavItem>
+                <NavItem role="tab" aria-selected={activeTab === 'invitePeople'} aria-controls="invite-people-panel">
+                  <NavLink className={activeTab === 'invitePeople' ? 'active' : ''} onClick={this.toggle.bind(this, 'invitePeople')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
+                    {gettext('Invite Guest')}
+                  </NavLink>
+                </NavItem>
                 }
               </Fragment>
             }
             {enableOCM && itemType === 'library' && this.state.isRepoOwner &&
-              <NavItem>
-                <NavLink className={activeTab === 'shareToOtherServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToOtherServer')}>
+              <NavItem role="tab" aria-selected={activeTab === 'shareToOtherServer'} aria-controls="share-to-other-server-panel">
+                <NavLink className={activeTab === 'shareToOtherServer' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToOtherServer')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                   {gettext('Share to other server')}
                 </NavLink>
               </NavItem>
@@ -169,7 +169,7 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             {(enableShareLink && activeTab === 'shareLink') &&
-              <TabPane tabId="shareLink">
+              <TabPane tabId="shareLink" role="tabpanel" id="share-link-panel">
                 <GenerateShareLink
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
@@ -180,7 +180,7 @@ class ShareDialog extends React.Component {
               </TabPane>
             }
             {(enableUploadLink && activeTab === 'uploadLink') &&
-              <TabPane tabId="uploadLink">
+              <TabPane tabId="uploadLink" role="tabpanel" id="upload-link-panel">
                 <GenerateUploadLink
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
@@ -189,52 +189,54 @@ class ShareDialog extends React.Component {
               </TabPane>
             }
             {(itemType === 'dir' && activeTab === 'internalLink') &&
-              <InternalLink
-                path={this.props.itemPath}
-                repoID={this.props.repoID}
-                direntType={itemType}
-              />
+              <TabPane tabId="internalLink" role="tabpanel" id="internal-link-panel">
+                <InternalLink
+                  path={this.props.itemPath}
+                  repoID={this.props.repoID}
+                  direntType={itemType}
+                />
+              </TabPane>
             }
             {enableDirPrivateShare &&
               <Fragment>
                 {activeTab === 'shareToUser' &&
-                  <TabPane tabId="shareToUser">
-                    <ShareToUser 
-                      itemType={this.props.itemType} 
-                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
-                      itemPath={this.props.itemPath} 
-                      repoID={this.props.repoID} 
-                      isRepoOwner={this.state.isRepoOwner} 
+                  <TabPane tabId="shareToUser" role="tabpanel" id="share-to-user-panel">
+                    <ShareToUser
+                      itemType={this.props.itemType}
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                      itemPath={this.props.itemPath}
+                      repoID={this.props.repoID}
+                      isRepoOwner={this.state.isRepoOwner}
                       onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
                     />
                   </TabPane>
                 }
                 {activeTab === 'shareToGroup' &&
-                  <TabPane tabId="shareToGroup">
-                    <ShareToGroup 
-                      itemType={this.props.itemType} 
-                      isGroupOwnedRepo={this.props.isGroupOwnedRepo} 
-                      itemPath={this.props.itemPath} 
-                      repoID={this.props.repoID} 
-                      isRepoOwner={this.state.isRepoOwner} 
+                  <TabPane tabId="shareToGroup" role="tabpanel" id="share-to-group-panel">
+                    <ShareToGroup
+                      itemType={this.props.itemType}
+                      isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+                      itemPath={this.props.itemPath}
+                      repoID={this.props.repoID}
+                      isRepoOwner={this.state.isRepoOwner}
                       onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
                     />
                   </TabPane>
                 }
+                {isPro && activeTab === 'customSharePermission' && (
+                  <TabPane tabId="customSharePermission" role="tabpanel" id="custom-share-perm-panel">
+                    <CustomPermissionManager repoID={this.props.repoID} />
+                  </TabPane>
+                )}
                 {(canInvitePeople && activeTab === 'invitePeople') &&
-                  <TabPane tabId="invitePeople">
+                  <TabPane tabId="invitePeople" role="tabpanel" id="invite-people-panel">
                     <ShareToInvitePeople itemPath={this.props.itemPath} repoID={this.props.repoID} />
                   </TabPane>
                 }
               </Fragment>
             }
-            {isPro && activeTab === 'customSharePermission' && (
-              <TabPane tabId="customSharePermission">
-                <CustomPermissionManager repoID={this.props.repoID}/>
-              </TabPane>
-            )}
             {enableOCM && itemType === 'library' && activeTab === 'shareToOtherServer' &&
-              <TabPane tabId="shareToOtherServer">
+              <TabPane tabId="shareToOtherServer" role="tabpanel" id="share-to-other-server-panel">
                 <ShareToOtherServer itemType={this.props.itemType} isGroupOwnedRepo={this.props.isGroupOwnedRepo} itemPath={this.props.itemPath} repoID={this.props.repoID} isRepoOwner={this.state.isRepoOwner} />
               </TabPane>
             }
@@ -242,6 +244,12 @@ class ShareDialog extends React.Component {
         </div>
       </Fragment>
     );
+  }
+
+  onTabKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      e.target.click();
+    }
   }
 
   renderFileContent = () => {
@@ -254,14 +262,14 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-side">
           <Nav pills>
             {enableShareLink &&
-            <NavItem>
-              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={(this.toggle.bind(this, 'shareLink'))}>
+            <NavItem role="tab" aria-selected={activeTab === 'shareLink'} aria-controls="share-link-panel">
+              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={(this.toggle.bind(this, 'shareLink'))} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                 {gettext('Share Link')}
               </NavLink>
             </NavItem>
             }
-            <NavItem>
-              <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')}>
+            <NavItem role="tab" aria-selected={activeTab === 'internalLink'} aria-controls="internal-link-panel">
+              <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                 {gettext('Internal Link')}
               </NavLink>
             </NavItem>
@@ -270,7 +278,7 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             {enableShareLink && activeTab === 'shareLink' &&
-              <TabPane tabId="shareLink">
+              <TabPane tabId="shareLink" role="tabpanel" id="share-link-panel">
                 <GenerateShareLink
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
@@ -281,10 +289,12 @@ class ShareDialog extends React.Component {
               </TabPane>
             }
             {activeTab === 'internalLink' &&
-              <InternalLink
-                path={this.props.itemPath}
-                repoID={this.props.repoID}
-              />
+              <TabPane tabId="internalLink" role="tabpanel" id="internal-link-panel">
+                <InternalLink
+                  path={this.props.itemPath}
+                  repoID={this.props.repoID}
+                />
+              </TabPane>
             }
           </TabContent>
         </div>
@@ -313,7 +323,7 @@ class ShareDialog extends React.Component {
             {gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span>
             {this.renderExternalShareMessage()}
           </ModalHeader>
-          <ModalBody className="share-dialog-content">
+          <ModalBody className="share-dialog-content" role="tablist">
             {(itemType === 'library' || itemType === 'dir') && this.renderDirContent()}
             {itemType === 'file' && this.renderFileContent()}
           </ModalBody>
