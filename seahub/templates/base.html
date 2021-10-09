@@ -10,7 +10,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}/favicon.ico" sizes="any">
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ favicon_path }}/apple-touch-icon.png">
+<link rel="manifest" href="{{ MEDIA_URL }}{{ favicon_path }}/manifest.webmanifest">
 {% block extra_base_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
 {% endblock %}
