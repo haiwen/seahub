@@ -12,9 +12,12 @@ import xml.etree.ElementTree as ET
 from django.http import HttpResponse
 
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
 
+from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
@@ -242,6 +245,8 @@ class SharesView(APIView):
 
 class ReceivedSharesView(APIView):
 
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -276,6 +281,8 @@ class ReceivedSharesView(APIView):
 
 class ReceivedShareView(APIView):
 
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, share_id):
@@ -411,6 +418,8 @@ class ReceivedShareView(APIView):
 
 class DownloadReceivedFileView(APIView):
 
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -520,4 +529,4 @@ class NotificationsView(APIView):
 
             share.delete()
 
-        return Response({}, status=status.HTTP_201_CREATED)
+        return Response({'success': True}, status=status.HTTP_201_CREATED)
