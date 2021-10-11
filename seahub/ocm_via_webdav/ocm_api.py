@@ -287,16 +287,25 @@ class ReceivedShareView(APIView):
 
     def get(self, request, share_id):
 
+        if not ENABLE_OCM_VIA_WEBDAV:
+            error_msg = 'OCM via webdav feature is not enabled.'
+            return api_error(501, error_msg)
+
+        path = request.GET.get('path')
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(400, error_msg)
+
         try:
             share = ReceivedShares.objects.get(id=share_id)
         except ReceivedShares.DoesNotExist:
             error_msg = "OCM share {} not found.".format(share_id)
             return api_error(404, error_msg)
 
-        path = request.GET.get('path')
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(400, error_msg)
+        username = request.user.username
+        if share.share_with != username:
+            error_msg = 'Permission denied.'
+            return api_error(403, error_msg)
 
         remote_domain = get_remote_domain_by_shared_by(share.shared_by)
         webdav_root_uri = get_remote_webdav_root_uri(remote_domain)
@@ -455,6 +464,11 @@ class DownloadReceivedFileView(APIView):
         except ReceivedShares.DoesNotExist:
             error_msg = "OCM share {} not found.".format(share_id)
             return api_error(404, error_msg)
+
+        username = request.user.username
+        if share.share_with != username:
+            error_msg = 'Permission denied.'
+            return api_error(403, error_msg)
 
         # download file via webdav
         remote_domain = get_remote_domain_by_shared_by(share.shared_by)
