@@ -1,5 +1,4 @@
 import React,{ Fragment } from 'react';
-import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
@@ -12,6 +11,7 @@ import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import Repo from '../../models/repo';
 import toaster from '../../components/toast';
+import OpIcon from '../../components/op-icon';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
@@ -456,46 +456,50 @@ class GroupView extends React.Component {
                   <div className="path-tool">
                     { isShowSettingIcon &&
                     <React.Fragment>
-                      <a href="#" role="button" aria-label={gettext('Settings')} className="sf2-icon-cog1 action-icon group-top-action-icon" title={gettext("Settings")} id="settings" onClick={this.toggleGroupDropdown}></a>
-                      <Popover placement="bottom" isOpen={this.state.showGroupDropdown} target="settings"
-                        toggle={this.toggleGroupDropdown} hideArrow={true} className="sf-popover">
-                        <div className="sf-popover-hd sf-popover-title">
-                          <span>{gettext('Settings')}</span>
-                          <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
-                            role="button"
-                            aria-label={gettext('Close')}
-                            onClick={this.toggleGroupDropdown}></a>
-                        </div>
-                        <div className="sf-popover-con">
-                          {(this.state.isStaff || this.state.isOwner) &&
-                          <ul className="sf-popover-list">
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog}>{gettext('Rename')}</a></li>
+                      <OpIcon
+                        className="sf2-icon-cog1 action-icon group-top-action-icon"
+                        title={gettext('Settings')}
+                        op={this.toggleGroupDropdown}
+                      />
+                      {this.state.showGroupDropdown &&
+                        <div className="sf-popover" id="group-setting-popover">
+                          <div className="sf-popover-hd sf-popover-title">
+                            <span>{gettext('Settings')}</span>
+                            <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
+                              role="button"
+                              aria-label={gettext('Close')}
+                              onClick={this.toggleGroupDropdown}></a>
+                          </div>
+                          <div className="sf-popover-con">
+                            {(this.state.isStaff || this.state.isOwner) &&
+                            <ul className="sf-popover-list">
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleRenameGroupDialog}>{gettext('Rename')}</a></li>
+                              {
+                                this.state.isOwner &&
+                                <li><a href="#" className="sf-popover-item" onClick={this.toggleTransferGroupDialog} >{gettext('Transfer')}</a></li>
+                              }
+                            </ul>
+                            }
+                            {(this.state.isStaff || this.state.isOwner) &&
+                            <ul className="sf-popover-list">
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
+                            </ul>
+                            }
                             {
                               this.state.isOwner &&
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleTransferGroupDialog} >{gettext('Transfer')}</a></li>
+                              <ul className="sf-popover-list">
+                                <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Delete Group')}</a></li>
+                              </ul>
                             }
-                          </ul>
-                          }
-                          {(this.state.isStaff || this.state.isOwner) &&
-                          <ul className="sf-popover-list">
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleImportMembersDialog} >{gettext('Import Members')}</a></li>
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleManageMembersDialog} >{gettext('Manage Members')}</a></li>
-                          </ul>
-                          }
-                          {
-                            this.state.isOwner &&
+                            {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
+                            {(!this.state.isOwner && !isDepartmentGroup) &&
                             <ul className="sf-popover-list">
-                              <li><a href="#" className="sf-popover-item" onClick={this.toggleDismissGroupDialog}>{gettext('Delete Group')}</a></li>
+                              <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
                             </ul>
-                          }
-                          {/* gourp owner only can dissmiss group, admin could not quit, department member could not quit */}
-                          {(!this.state.isOwner && !isDepartmentGroup) &&
-                          <ul className="sf-popover-list">
-                            <li><a href="#" className="sf-popover-item" onClick={this.toggleLeaveGroupDialog}>{gettext('Leave Group')}</a></li>
-                          </ul>
-                          }
-                        </div>
-                      </Popover>
+                            }
+                          </div>
+                        </div>}
                     </React.Fragment>
                     }
                     <a href="#"
@@ -503,8 +507,8 @@ class GroupView extends React.Component {
                       title={gettext('Members')} id="groupMembers"
                       onClick={() => this.toggleGroupMembersPopover('open')}>
                     </a>
-                    <Popover placement="bottom" isOpen={this.state.showGroupMembersPopover} target="groupMembers"
-                      toggle={this.toggleGroupMembersPopover} hideArrow={true} className="sf-popover">
+                    {this.state.showGroupMembersPopover &&
+                    <div className="sf-popover" id="group-members-popover">
                       <div className="sf-popover-hd sf-popover-title group-member-list-header">
                         <span>{gettext('Members')}</span>
                         <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
@@ -527,7 +531,7 @@ class GroupView extends React.Component {
                           })}
                         </ul>
                       </div>
-                    </Popover>
+                    </div>}
                     {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
