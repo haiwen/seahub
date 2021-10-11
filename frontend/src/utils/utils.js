@@ -465,7 +465,7 @@ export const Utils = {
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
-          list.push(DOWNLOAD);
+        list.push(DOWNLOAD);
       }
 
       if (isCustomPermission && customPermission.permission.download) {
@@ -479,7 +479,7 @@ export const Utils = {
       if (permission == 'rw') {
         list.push(DELETE, 'Divider');
       }
-      
+
       if (isCustomPermission && customPermission.permission.delete) {
         list.push(DELETE, 'Divider');
       }
@@ -488,7 +488,7 @@ export const Utils = {
     if (permission == 'rw') {
       list.push(RENAME, MOVE);
     }
-    
+
     if (isCustomPermission && customPermission.permission.modify) {
       list.push(RENAME, MOVE);
     }
@@ -496,7 +496,7 @@ export const Utils = {
     if (permission == 'rw') {
       list.push(COPY);
     }
-    
+
     if (isCustomPermission && customPermission.permission.copy) {
       list.push(COPY);
     }
@@ -531,7 +531,7 @@ export const Utils = {
       if (permission == 'rw' || permission == 'r') {
         list.push(DOWNLOAD);
       }
-      
+
       if (isCustomPermission && customPermission.permission.download) {
         list.push(DOWNLOAD);
       }
@@ -546,7 +546,7 @@ export const Utils = {
         }
         list.push('Divider');
       }
-      
+
       if (isCustomPermission && customPermission.permission.delete) {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
@@ -560,7 +560,7 @@ export const Utils = {
         list.push(RENAME, MOVE);
       }
     }
-    
+
     if (isCustomPermission && customPermission.permission.modify) {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
@@ -623,9 +623,9 @@ export const Utils = {
   },
 
   getFileExtension: function (fileName, withoutDot) {
-    let parts = fileName.toLowerCase().split(".");
+    let parts = fileName.toLowerCase().split('.');
 
-    return withoutDot ? parts.pop() : "." + parts.pop();
+    return withoutDot ? parts.pop() : '.' + parts.pop();
   },
 
   getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
@@ -1467,8 +1467,8 @@ export const Utils = {
     }
     return level;
   },
-  
-  getSharedPermission(item) {
+
+  getSharedPermission: function(item) {
     let permission = item.permission;
     if (item.is_admin) {
       permission = 'admin';
@@ -1479,13 +1479,13 @@ export const Utils = {
     return permission;
   },
 
-  getUserPermission(userPerm) {
+  getUserPermission: function(userPerm) {
     const { custom_permission } = window;
     const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
-    // visit the shared repo(virtual repo) by custom permission 
+    // visit the shared repo(virtual repo) by custom permission
     if (!custom_permission || common_permissions.indexOf(userPerm) > -1) {
       return { isCustomPermission: false };
-    } 
+    }
     // userPerm is startsWith 'custom-'
     if (custom_permission) {
       const permissionId = custom_permission.id;
@@ -1495,8 +1495,8 @@ export const Utils = {
       }
       // TODO user set custom permission on folder
     }
-    return { isCustomPermission: false }; 
-  }
+    return { isCustomPermission: false };
+  },
 
   // for a11y
   onKeyDown: function(e) {
