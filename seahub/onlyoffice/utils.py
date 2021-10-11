@@ -60,11 +60,11 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
 
     filetype, fileext = get_file_type_and_ext(file_path)
     if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
-        document_type = 'spreadsheet'
+        document_type = 'cell'
     elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
-        document_type = 'presentation'
+        document_type = 'slide'
     else:
-        document_type = 'text'
+        document_type = 'word'
 
     if not can_edit:
         info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
