@@ -7,6 +7,7 @@ import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 
 class ShareItem extends React.Component {
@@ -42,7 +43,7 @@ class ShareItem extends React.Component {
     let item = this.props.item;
     const { isOperationShow, isOpFrozen } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
         <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
@@ -56,12 +57,11 @@ class ShareItem extends React.Component {
           />
         </td> */}
         <td>
-          <span
+          <OpIcon
             className={`sf2-icon-x3 action-icon ${isOperationShow && !isOpFrozen ? '' : 'hide'}`}
-            onClick={this.deleteShareItem}
+            op={this.deleteShareItem}
             title={gettext('Delete')}
-          >
-          </span>
+          />
         </td>
       </tr>
     );
