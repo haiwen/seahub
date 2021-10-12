@@ -133,11 +133,7 @@ input.expire-input {
     border-bottom: 1px solid #efefef;
 }
 
-.custom-permission .permission-header .title {
-    display: flex;
-}
-
-.custom-permission .permission-header .title .fa {
+.custom-permission .permission-header .back-icon {
     color: #999;
     margin-right: 10px;
     cursor: pointer;
