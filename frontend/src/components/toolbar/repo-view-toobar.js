@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateRepoDialog from '../dialog/create-repo-dialog';
@@ -36,6 +36,18 @@ class RepoViewToolbar extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.toggleMore();
+    }
+  }
+
+  visitDeletedviaKey = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      navigate(`${siteRoot}my-libs/deleted/`);
+    }
+  }
+
   render() {
     return (
       <Fragment>
@@ -47,11 +59,11 @@ class RepoViewToolbar extends React.Component {
                 <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
               </button>
               <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
-                <DropdownToggle className='btn btn-secondary operation-item'>
+                <DropdownToggle className='btn btn-secondary operation-item' onKeyDown={this.onDropdownToggleKeyDown}>
                   {gettext('More')}
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem className="link-dropdown-container">
+                  <DropdownItem className="link-dropdown-container" onKeyDown={this.visitDeletedviaKey}>
                     <Link className="link-dropdown-item" to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
                   </DropdownItem>
                 </DropdownMenu>

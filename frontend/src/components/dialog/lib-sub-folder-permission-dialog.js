@@ -38,13 +38,13 @@ class LibSubFolderPermissionDialog extends React.Component {
       <Fragment>
         <div className="share-dialog-side">
           <Nav pills>
-            <NavItem>
-              <NavLink className={activeTab === 'userPermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'userPermission')}>
+            <NavItem role="tab" aria-selected={activeTab === 'userPermission'} aria-controls="user-perm-panel">
+              <NavLink className={activeTab === 'userPermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'userPermission')} tabIndex="0" onKeyDown={Utils.onKeyDown}>
                 {gettext('User Permission')}
               </NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink className={activeTab === 'groupPermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'groupPermission')}>
+            <NavItem role="tab" aria-selected={activeTab === 'groupPermission'} aria-controls="group-perm-panel">
+              <NavLink className={activeTab === 'groupPermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'groupPermission')} tabIndex="0" onKeyDown={Utils.onKeyDown}>
                 {gettext('Group Permission')}
               </NavLink>
             </NavItem>
@@ -52,10 +52,10 @@ class LibSubFolderPermissionDialog extends React.Component {
         </div>
         <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="userPermission">
+            <TabPane tabId="userPermission" role="tabpanel" id="user-perm-panel">
               <LibSubFolderSetUserPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath} isDepartmentRepo={this.props.isDepartmentRepo} />
             </TabPane>
-            <TabPane tabId="groupPermission">
+            <TabPane tabId="groupPermission" role="tabpanel" id="group-perm-panel">
               <LibSubFolderSetGroupPermissionDialog repoID={this.props.repoID} repoName={this.props.repoName} folderPath={this.props.folderPath} isDepartmentRepo={this.props.isDepartmentRepo} />
             </TabPane>
           </TabContent>
@@ -73,7 +73,7 @@ class LibSubFolderPermissionDialog extends React.Component {
           <ModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{__html: repoName ? Utils.generateDialogTitle(gettext('{placeholder} Folder Permission'), repoName) : Utils.generateDialogTitle(gettext('Set {placeholder}\'s permission'), folderName)}}></span>
           </ModalHeader>
-          <ModalBody className="dialog-list-container share-dialog-content">
+          <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
             {this.renderContent()}
           </ModalBody>
         </Modal>

@@ -45,8 +45,9 @@
 
 .tag-demo .tag-files {
   margin-right: 0.5rem;
+  color: #fff;
   cursor: pointer;
-  border-bottom: 1px solid;
+  text-decoration: underline;
 }
 
 .tag-list-item .tag-edit {
@@ -58,6 +59,8 @@
   height: 2.25rem;
   border-radius: 0.25rem;
   color: #798d99;
+  cursor: pointer;
+  background: transparent;
 }
 
 .tag-list-item .tag-edit:hover {

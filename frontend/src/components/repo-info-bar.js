@@ -69,9 +69,9 @@ class RepoInfoBar extends React.Component {
                 <li key={usedRepoTag.id} className="used-tag-item">
                   <span className="used-tag" style={{backgroundColor:usedRepoTag.color}}></span>
                   <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
-                  <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
+                  <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
                     {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
-                  </span>
+                  </button>
                 </li>
               );
             })}
@@ -94,9 +94,9 @@ class RepoInfoBar extends React.Component {
             <span className="file-info">
               <span className="info-icon sf2-icon-drafts"></span>
               <span className="used-tag-name">{gettext('draft')}</span>
-              <span className="used-tag-files" onClick={this.toggleDrafts}>
+              <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.toggleDrafts}>
                 {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
-              </span>
+              </button>
             </span>
           }
         </div>

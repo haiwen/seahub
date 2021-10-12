@@ -85,6 +85,12 @@ class SharedRepoListItem extends React.Component {
     this.toggleOperationMenu(e);
   }
 
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.clickOperationMenuToggle(e);
+    }
+  }
+
   toggleOperationMenu = (e) => {
     let dataset = e.target ? e.target.dataset : null;
     if (dataset && dataset.toggle && dataset.toggle === 'Rename') {
@@ -116,6 +122,12 @@ class SharedRepoListItem extends React.Component {
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return { iconUrl, iconTitle, libPath };
+  }
+
+  onMenuItemKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(e);
+    }
   }
 
   onMenuItemClick = (e) => {
@@ -186,15 +198,18 @@ class SharedRepoListItem extends React.Component {
     this.props.onItemDetails(this.props.repo);
   }
 
-  onItemShare = () => {
+  onItemShare = (e) => {
+    e.preventDefault();
     this.setState({isShowSharedDialog: true});
   }
 
-  onItemUnshare = () => {
+  onItemUnshare = (e) => {
+    e.preventDefault();
     this.props.onItemUnshare(this.props.repo);
   }
 
-  onItemDeleteToggle = () => {
+  onItemDeleteToggle = (e) => {
+    e.preventDefault();
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
@@ -389,9 +404,9 @@ class SharedRepoListItem extends React.Component {
       // scene two: (Share, Unshare), (Share), (Unshare)
       operations = this.generatorOperations();
     }
-    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></a>;
-    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
-    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
+    const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
+    const unshareOperation = <a href="#" className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></a>;
+    const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
 
     if (this.isDeparementOnwerGroupMember) {
       return (
@@ -400,16 +415,18 @@ class SharedRepoListItem extends React.Component {
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
-              tag="i"
-              className="sf-dropdown-toggle sf2-icon-caret-down"
+              className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
               title={gettext('More Operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.isItemMenuShow}
+              aria-haspopup={true}
+              style={{'minWidth': '0'}}
               onClick={this.clickOperationMenuToggle}
+              onKeyDown={this.onDropdownToggleKeyDown}
             />
             <DropdownMenu>
               {operations.map((item, index) => {
-                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{this.translateMenuItem(item)}</DropdownItem>;
+                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>;
               })}
             </DropdownMenu>
           </Dropdown>
@@ -435,10 +452,15 @@ class SharedRepoListItem extends React.Component {
     return null;
   }
 
-  onStarRepo = () => {
+  onToggleStarRepo = (e) => {
+    e.preventDefault();
+    const { repo_name: repoName } = this.props.repo;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -446,6 +468,9 @@ class SharedRepoListItem extends React.Component {
     } else {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
+        const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
@@ -458,15 +483,16 @@ class SharedRepoListItem extends React.Component {
     let { repo } = this.props;
     return (
       <Fragment>
-        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
           <td className="text-center">
-            {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
-            {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
+            <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
+          </a>
           </td>
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>
             {this.state.isRenaming ?
-              <Rename  name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+              <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <Link to={libPath}>{repo.repo_name}</Link>
             }
           </td>

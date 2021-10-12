@@ -134,13 +134,13 @@ class Item extends Component {
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td>{data.platform}</td>
         <td>{data.device_name}</td>
         <td>{data.last_login_ip}</td>
         <td>{moment(data.last_accessed).fromNow()}</td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unlink')} aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
+          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
         </td>
       </tr>
     );

@@ -52,7 +52,7 @@ class UserItem extends React.Component {
     let currentPermission = Utils.getSharedPermission(item);
     const { isUserDetailsPopoverOpen } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">
           <div className="position-relative">
             <img src={item.user_info.avatar_url}
@@ -89,9 +89,13 @@ class UserItem extends React.Component {
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteShareItem}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>

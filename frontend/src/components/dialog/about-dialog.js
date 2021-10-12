@@ -9,10 +9,6 @@ const propTypes = {
 
 class AboutDialog extends React.Component {
 
-  toggle = () => {
-    this.props.onCloseAboutDialog();
-  }
-
   renderExternalAboutLinks = () => {
     if (additionalAboutDialogLinks && (typeof additionalAboutDialogLinks) === 'object') {
       let keys = Object.keys(additionalAboutDialogLinks);
@@ -26,21 +22,22 @@ class AboutDialog extends React.Component {
   render() {
 
     let href = lang === lang == 'zh-cn' ? 'http://seafile.com/about/' : 'http://seafile.com/en/about/';
+    const { onCloseAboutDialog: toggleDialog } = this.props;
 
     if (aboutDialogCustomHtml) {
       return (
-        <Modal isOpen={true} toggle={this.toggle}>
+        <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
+            <button type="button" className="close" onClick={toggleDialog}><span aria-hidden="true">×</span></button>
             <div className="about-content" dangerouslySetInnerHTML={{__html: aboutDialogCustomHtml}}></div>
           </ModalBody>
         </Modal>
       );
     } else {
       return (
-        <Modal isOpen={true} toggle={this.toggle}>
+        <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
+            <button type="button" className="close" onClick={toggleDialog}><span aria-hidden="true">×</span></button>
             <div className="about-content">
               <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
               <p>{gettext('Server Version: ')}{seafileVersion}<br />© {(new Date()).getFullYear()} {gettext('Seafile')}</p>

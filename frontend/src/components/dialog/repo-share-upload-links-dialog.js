@@ -55,19 +55,23 @@ class RepoShareUploadLinkItem extends React.Component {
     }
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td className="name">{item.creator_name}</td>
         <td>
-          <a href={objUrl} target="_blank" className="text-inherit">{item.obj_name}</a>
+          <a href={objUrl} target="_blank" className="text-inherit" rel="noreferrer">{item.obj_name}</a>
         </td>
         <td>
-          <a href={item.link} target="_blank" className="text-inherit">{item.link}</a>
+          <a href={item.link} target="_blank" className="text-inherit" rel="noreferrer">{item.link}</a>
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
             onClick={this.onDeleteLink}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           />
         </td>
       </tr>
@@ -159,18 +163,18 @@ class RepoShareUploadLinksDialog extends React.Component {
         </ModalHeader>
         <ModalBody className="p-0 pb-4">
           <div className="main-panel-center">
-            <div className="cur-view-container">
+            <div className="cur-view-container" role="tablist">
               <div className="cur-view-path share-upload-nav">
                 <ul className="nav">
-                  <li className="nav-item">
-                    <NavLink className={activeTab === 'shareLinks' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLinks')}>{gettext('Share Links')}</NavLink>
+                  <li className="nav-item" role="tab" aria-selected={activeTab === 'shareLinks'} aria-controls="share-links-panel">
+                    <NavLink className={activeTab === 'shareLinks' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLinks')} tabIndex="0" onKeyDown={Utils.onKeyDown}>{gettext('Share Links')}</NavLink>
                   </li>
-                  <li className="nav-item">
-                    <NavLink className={activeTab === 'uploadLinks' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLinks')}>{gettext('Upload Links')}</NavLink>
+                  <li className="nav-item" role="tab" aria-selected={activeTab === 'uploadLinks'} aria-controls="upload-links-panel">
+                    <NavLink className={activeTab === 'uploadLinks' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLinks')} tabIndex="0" onKeyDown={Utils.onKeyDown}>{gettext('Upload Links')}</NavLink>
                   </li>
                 </ul>
               </div>
-              <div className="cur-view-content" style={{minHeight: '20rem', maxHeight: '20rem'}}>
+              <div className="cur-view-content" style={{minHeight: '20rem', maxHeight: '20rem'}} role="tabpanel" id={activeTab === 'shareLinks' ? 'share-links-panel' : 'upload-links-panel'}>
                 {loading && <Loading />}
                 {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
                 {!loading && !errorMsg && !repoShareUploadLinkList.length &&

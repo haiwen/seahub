@@ -195,7 +195,7 @@ class Item extends Component {
     }
 
     const desktopItem = (
-      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+      <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
@@ -218,8 +218,8 @@ class Item extends Component {
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} onClick={this.viewLink}></a>}
-          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} onClick={this.removeLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '': 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
     );

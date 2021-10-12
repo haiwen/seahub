@@ -43,7 +43,8 @@ class Item extends React.Component {
     });
   }
 
-  deleteItem = () => {
+  deleteItem = (e) => {
+    e.preventDefault();
     // make the icon avoid being clicked repeatedly
     this.setState({
       isOpIconShown: false
@@ -65,7 +66,8 @@ class Item extends React.Component {
     this.setState({deleted: true});
   }
 
-  toggleRevokeDialog = () => {
+  toggleRevokeDialog = (e) => {
+    e.preventDefault();
     this.setState({
       isRevokeDialogOpen: !this.state.isRevokeDialogOpen
     });
@@ -81,7 +83,7 @@ class Item extends React.Component {
     const item = this.props.invitation;
 
     const desktopItem = (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter} tabIndex="0">
         <td>{item.accepter}</td>
         <td>{moment(item.invite_time).format('YYYY-MM-DD')}</td>
         <td>{moment(item.expire_time).format('YYYY-MM-DD')}</td>
@@ -89,16 +91,20 @@ class Item extends React.Component {
         <td>
           {isOpIconShown && (
             item.accept_time ?
-              <i
+              <a href="#"
+                role="button"
                 className="action-icon sf3-font sf3-font-cancel-invitation"
                 title={gettext('Revoke Access')}
+                aria-label={gettext('Revoke Access')}
                 onClick={this.toggleRevokeDialog}>
-              </i> :
-              <i
+              </a> :
+              <a href="#"
+                role="button"
                 className="action-icon sf2-icon-x3"
                 title={gettext('Delete')}
+                aria-label={gettext('Delete')}
                 onClick={this.deleteItem}>
-              </i>
+              </a>
           )}
         </td>
       </tr>

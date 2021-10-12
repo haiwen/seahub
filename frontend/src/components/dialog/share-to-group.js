@@ -39,7 +39,7 @@ class GroupItem extends React.Component {
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className='name'>{item.group_info.name}</td>
         <td>
           <SharePermissionEditor
@@ -53,9 +53,13 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteShareItem}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>

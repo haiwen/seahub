@@ -208,7 +208,7 @@ class Item extends Component {
     }
 
     const desktopItem = (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         <td>
@@ -224,7 +224,7 @@ class Item extends Component {
             onPermissionChanged={this.changePerm}
           />
         </td>
-        <td><a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+        <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>
     );
 

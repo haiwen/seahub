@@ -8,26 +8,6 @@
   vertical-align: middle;
   text-align: left;
 }
-.toggle-group-admin-icon,
-.delete-group-member-icon {
-  opacity: 0;
-  cursor: pointer;
-  color: #888;
-  margin-left: 5px;
-}
-.manage-members-table tr:hover .toggle-group-admin-icon,
-.manage-members-table tr:hover .delete-group-member-icon {
-  opacity: 1;
-}
-
-.manage-members-table .editing {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.toggle-group-admin-icon:hover,
-.delete-group-member-icon:hover {
-  color: #333;
-}
 
 .add-members-select .true__indicator-separator {
   display: none;

@@ -39,7 +39,7 @@ class GroupItem extends React.Component {
   render() {
     let item = this.props.item;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
           <a href={`${siteRoot}group/${item.group_id}/`} target="_blank">{item.group_name}</a>
         </td>
@@ -59,9 +59,13 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteGroupPermissionItem}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>

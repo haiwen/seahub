@@ -280,10 +280,11 @@ class Search extends Component {
                   autoComplete="off"
                 />
                 {(this.state.isCloseShow && username) &&
-                  <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                    onClick={this.onSearchPage}></i>
+                  <a href={`${siteRoot}search/`} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
                 }
-                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                {this.state.isCloseShow &&
+                  <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                }
               </div>
               <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
@@ -313,10 +314,11 @@ class Search extends Component {
                     autoComplete="off"
                   />
                   {(this.state.isCloseShow && username) &&
-                    <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                      onClick={this.onSearchPage}></i>
+                    <a href={`${siteRoot}search/`} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
                   }
-                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                  {this.state.isCloseShow &&
+                    <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                  }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}

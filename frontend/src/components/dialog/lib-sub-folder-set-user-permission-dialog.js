@@ -39,7 +39,7 @@ class UserItem extends React.Component {
     let item = this.props.item;
     let currentPermission = item.permission;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
           <a href={`${siteRoot}profile/${encodeURIComponent(item.user_email)}/`} target="_blank">{item.user_name}</a>
         </td>
@@ -59,9 +59,13 @@ class UserItem extends React.Component {
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteUserFolderPermission}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>

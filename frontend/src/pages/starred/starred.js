@@ -191,7 +191,7 @@ class Item extends Component {
     opClasses += this.state.showOpIcon ? '' : ' invisible';
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center">
           {
             data.thumbnail_url ?
@@ -208,7 +208,7 @@ class Item extends Component {
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
+          <a href="#" role="button" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
         </td>
       </tr>
     );

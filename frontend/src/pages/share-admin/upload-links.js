@@ -123,15 +123,15 @@ class Item extends Component {
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
         <td><Link to={objUrl}>{item.obj_name}</Link></td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} onClick={this.viewLink}></a>}
-          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.removeLink}></a>
+          {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
+          <a href="#" className={`sf2-icon-delete action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
         </td>
       </tr>
     );

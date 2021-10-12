@@ -8,6 +8,7 @@ import RoleEditor from '../select-editor/role-editor';
 import UserSelect from '../user-select';
 import toaster from '../toast';
 import Loading from '../loading';
+import OpIcon from '../op-icon';
 
 import '../../css/manage-members-dialog.css';
 
@@ -49,7 +50,7 @@ class ManageMembersDialog extends React.Component {
         isLoadingMore: false,
         page: page,
         hasNextPage: members.length < perPage ? false : true,
-        groupMembers: groupMembers.concat(members) 
+        groupMembers: groupMembers.concat(members)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -112,10 +113,10 @@ class ManageMembersDialog extends React.Component {
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
         this.setState({isLoadingMore: true}, () => {
-          this.listGroupMembers(page + 1); 
-        }); 
-      }   
-    }   
+          this.listGroupMembers(page + 1);
+        });
+      }
+    }
   }
 
   changeMember = (targetMember) => {
@@ -182,16 +183,16 @@ class ManageMembersDialog extends React.Component {
                       this.state.groupMembers.length > 0 &&
                   this.state.groupMembers.map((item, index) => {
                     return (
-                        <Member
-                          key={index}
-                          item={item}
-                          changeMember={this.changeMember}
-                          deleteMember={this.deleteMember}
-                          groupID={this.props.groupID}
-                          isOwner={this.props.isOwner}
-                          isItemFreezed={this.state.isItemFreezed}
-                          toggleItemFreezed={this.toggleItemFreezed}
-                        />
+                      <Member
+                        key={index}
+                        item={item}
+                        changeMember={this.changeMember}
+                        deleteMember={this.deleteMember}
+                        groupID={this.props.groupID}
+                        isOwner={this.props.isOwner}
+                        isItemFreezed={this.state.isItemFreezed}
+                        toggleItemFreezed={this.toggleItemFreezed}
+                      />
                     );
                   })
                     }
@@ -281,8 +282,8 @@ class Member extends React.PureComponent {
     const { item, isOwner } = this.props;
     const deleteAuthority = (item.role !== 'Owner' && isOwner === true) || (item.role === 'Member' && isOwner === false);
     return(
-      <tr onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} className={this.state.highlight ? 'editing' : ''}>
-        <th scope="row"><img className="avatar" src={item.avatar_url} alt=""/></th>
+      <tr onMouseOver={this.handleMouseOver} onMouseLeave={this.handleMouseLeave} className={this.state.highlight ? 'tr-highlight' : ''} tabIndex="0" onFocus={this.handleMouseOver}>
+        <th scope="row"><img className="avatar" src={item.avatar_url} alt="" /></th>
         <td>{item.name}</td>
         <td>
           {((isOwner === false) || (isOwner === true && item.role === 'Owner')) &&
@@ -300,11 +301,12 @@ class Member extends React.PureComponent {
           }
         </td>
         <td>
-          {(deleteAuthority && !this.props.isItemFreezed) &&
-            <i
-              className="fa fa-times delete-group-member-icon"
-              onClick={this.deleteMember}>
-            </i>
+          {(deleteAuthority && this.state.highlight) &&
+            <OpIcon
+              className="action-icon sf2-icon-x3"
+              title={gettext('Delete')}
+              op={this.deleteMember}
+            />
           }
         </td>
       </tr>

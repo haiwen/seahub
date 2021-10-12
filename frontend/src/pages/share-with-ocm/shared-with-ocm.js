@@ -96,14 +96,14 @@ class Item extends Component {
 
     let shareRepoUrl =`${siteRoot}remote-library/${this.props.item.provider_id}/${this.props.item.repo_id}/${Utils.encodePath(this.props.item.repo_name)}/`;
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
         <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
         <td>{item.from_user}</td>
         <td>{item.from_server_url}</td>
         <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
+          <a href="#" role="button" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
         </td>
       </tr>
     );

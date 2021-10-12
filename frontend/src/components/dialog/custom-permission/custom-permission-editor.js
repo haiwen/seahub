@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
+import OpIcon from '../../op-icon';
 
 const propTypes = {
   mode: PropTypes.string,
@@ -58,7 +59,7 @@ class CustomPermissionEditor extends React.Component {
     if (newName === permission_name) return;
     this.setState({permission_name: newName});
   }
-  
+
   onChangePermissionDescription = (evt) => {
     const { permission_desc } = this.state;
     const newDescription = evt.target.value;
@@ -72,7 +73,7 @@ class CustomPermissionEditor extends React.Component {
       const value = !permission[type];
       const newPermission = Object.assign({}, permission, {[type]: value});
       this.setState({permission: newPermission});
-    }
+    };
   }
 
   validParams = () => {
@@ -87,7 +88,7 @@ class CustomPermissionEditor extends React.Component {
       errMessage = gettext('Description is required');
       return { isValid, errMessage };
     }
-    
+
     isValid = true;
     return { isValid };
   }
@@ -110,17 +111,19 @@ class CustomPermissionEditor extends React.Component {
 
     const { mode } = this.props;
     const title = mode === 'add' ? gettext('Add permission') : gettext('Edit permission');
-    
+
     const { isLoading, permission_name, permission_desc, permission, errMessage } = this.state;
 
     return (
       <div className="custom-permission">
         <div className="permission-header">
-          <div className="title">
-            <div onClick={this.props.onChangeMode}>
-              <i className="fa fa-arrow-left"></i>
-            </div>
-            <div>{title}</div>
+          <div className="d-flex align-items-center">
+            <OpIcon
+              className="fa fa-arrow-left back-icon"
+              op={this.props.onChangeMode}
+              title={gettext('Back')}
+            />
+            <span>{title}</span>
           </div>
           <div className="operation">
             <button type="button" className="btn btn-outline-primary" onClick={this.onUpdateCustomPermission}>{gettext('Submit')}</button>
@@ -200,7 +203,7 @@ class CustomPermissionEditor extends React.Component {
       </div>
     );
   }
-  
+
 }
 
 CustomPermissionEditor.propTypes = propTypes;

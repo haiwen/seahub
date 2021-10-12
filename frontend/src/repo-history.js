@@ -105,7 +105,7 @@ class RepoHistory extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Modification History'), repoName)}}></h2>
-                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack}>
+                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
@@ -234,7 +234,8 @@ class Item extends React.Component {
     });
   }
 
-  editLabel = () => {
+  editLabel = (e) => {
+    e.preventDefault();
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
@@ -269,11 +270,11 @@ class Item extends React.Component {
 
     return (
       <React.Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <td>
             {item.description}
             {item.showDetails &&
-            <a href="#" className="details" onClick={this.showCommitDetails}>{gettext('Details')}</a>
+            <a href="#" className="details" onClick={this.showCommitDetails} role="button">{gettext('Details')}</a>
             }
           </td>
           <td title={moment(item.time).format('LLLL')}>{moment(item.time).format('YYYY-MM-DD')}</td>
@@ -287,7 +288,7 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <span className={`attr-action-icon fa fa-pencil-alt ${isIconShown ? '': 'invisible'}`} title={gettext('Edit')} onClick={this.editLabel}></span>
+            <a href="#" role="button" className={`attr-action-icon fa fa-pencil-alt ${isIconShown ? '': 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
             }
           </td>
           }

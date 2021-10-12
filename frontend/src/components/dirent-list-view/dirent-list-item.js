@@ -154,10 +154,12 @@ class DirentListItem extends React.Component {
     this.props.onItemSelected(this.props.dirent);
   }
 
-  onItemStarred = () => {
+  onItemStarred = (e) => {
     let dirent = this.props.dirent;
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
+
+    e.preventDefault();
 
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
@@ -209,11 +211,13 @@ class DirentListItem extends React.Component {
   }
 
   onItemDelete = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(this.props.dirent);
   }
 
   onItemShare = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
@@ -382,6 +386,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDownload = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
     let dirent = this.props.dirent;
     let repoID = this.props.repoID;
@@ -570,88 +575,48 @@ class DirentListItem extends React.Component {
           <Fragment>
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
-                <ul className="operation-group">
-                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {(isCustomPermission && canDownload) && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {showShareBtn && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                    </li>
-                  )}
-                  {dirent.permission === 'rw' && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  {(isCustomPermission && canDelete) && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  <li className="operation-group-item">
-                    <ItemDropdownMenu
-                      item={this.props.dirent}
-                      toggleClass={'sf2-icon-caret-down'}
-                      isHandleContextMenuEvent={true}
-                      getMenuList={this.props.getDirentItemMenuList}
-                      onMenuItemClick={this.onMenuItemClick}
-                      unfreezeItem={this.unfreezeItem}
-                      freezeItem={this.props.freezeItem}
-                    />
-                  </li>
-                </ul>
+                {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
+                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                )}
+                {showShareBtn && (
+                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                )}
+                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                )}
+                <ItemDropdownMenu
+                  item={this.props.dirent}
+                  toggleClass={'sf2-icon-caret-down'}
+                  isHandleContextMenuEvent={true}
+                  getMenuList={this.props.getDirentItemMenuList}
+                  onMenuItemClick={this.onMenuItemClick}
+                  unfreezeItem={this.unfreezeItem}
+                  freezeItem={this.props.freezeItem}
+                />
               </div>
             }
           </Fragment> :
           <Fragment>
             {this.state.isOperationShow &&
               <div className="operations">
-                <ul className="operation-group">
-                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {(isCustomPermission && canDownload) && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {showShareBtn && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                    </li>
-                  )}
-                  {(dirent.permission === 'rw') && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  {(isCustomPermission && canDelete) && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  <li className="operation-group-item">
-                    <ItemDropdownMenu
-                      item={this.props.dirent}
-                      toggleClass={'sf2-icon-caret-down'}
-                      isHandleContextMenuEvent={true}
-                      getMenuList={this.props.getDirentItemMenuList}
-                      onMenuItemClick={this.onMenuItemClick}
-                      unfreezeItem={this.unfreezeItem}
-                      freezeItem={this.props.freezeItem}
-                    />
-                  </li>
-                </ul>
+                {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
+                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                )}
+                {showShareBtn && (
+                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                )}
+                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                )}
+                <ItemDropdownMenu
+                  item={this.props.dirent}
+                  toggleClass={'sf2-icon-caret-down'}
+                  isHandleContextMenuEvent={true}
+                  getMenuList={this.props.getDirentItemMenuList}
+                  onMenuItemClick={this.onMenuItemClick}
+                  unfreezeItem={this.unfreezeItem}
+                  freezeItem={this.props.freezeItem}
+                />
               </div>
             }
           </Fragment>
@@ -690,6 +655,7 @@ class DirentListItem extends React.Component {
       <tr
         className={trClass}
         draggable={this.canDrag}
+        onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
@@ -706,8 +672,11 @@ class DirentListItem extends React.Component {
           <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
         </td>
         <td className="pl10">
-          {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
-          {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
+          {dirent.starred !== undefined &&
+          <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
+            <i className={`fa-star ${dirent.starred ? 'fas' : 'far star-empty'}`}></i>
+          </a>
+          }
         </td>
         <td className="pl10">
           <div className="dir-icon">
@@ -796,6 +765,8 @@ class DirentListItem extends React.Component {
                     return (
                       <DropdownItem className="mobile-menu-item" key={index} data-op={item.key} onClick={this.onMobileMenuItemClick}>{item.value}</DropdownItem>
                     );
+                  } else {
+                    return null;
                   }
                 })}
               </div>

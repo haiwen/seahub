@@ -1,3 +1,8 @@
+#group-setting-popover,
+#group-members-popover {
+  top: 42px;
+  right: 0;
+}
 .group-member-list-header {
   border-bottom: 1px solid #e3e3e5;
   padding-bottom: 10px;

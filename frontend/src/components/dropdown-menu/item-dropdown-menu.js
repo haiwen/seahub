@@ -67,6 +67,12 @@ class ItemDropdownMenu extends React.Component {
     }
   }
 
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onDropdownToggleClick(e);
+    }
+  }
+
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -87,6 +93,12 @@ class ItemDropdownMenu extends React.Component {
     );
   }
 
+  onMenuItemKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(e);
+    }
+  }
+
   onMenuItemClick = (event) => {
     let operation = Utils.getEventData(event, 'toggle');
     let item = this.props.item;
@@ -104,12 +116,14 @@ class ItemDropdownMenu extends React.Component {
 
     if (tagName && tagName === 'button') {
       return (
-        <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} title={gettext('More Operations')}>
+        <ButtonDropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
             className={toggleClass}
             data-toggle="dropdown"
             title={gettext('More Operations')}
+            aria-label={gettext('More Operations')}
             aria-expanded={this.state.isItemMenuShow}
+            onKeyDown={this.onDropdownToggleKeyDown}
             // onClick={this.onDropdownToggleClick}
           >
           </DropdownToggle>
@@ -119,7 +133,7 @@ class ItemDropdownMenu extends React.Component {
                 return <DropdownItem key={index} divider />;
               } else {
                 return (
-                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick}>{menuItem.value}</DropdownItem>
+                  <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
                 );
               }
             })}
@@ -132,10 +146,14 @@ class ItemDropdownMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
         <DropdownToggle
           tag={tagName || 'i'}
+          role="button"
+          tabIndex="0"
           className={toggleClass}
           title={gettext('More Operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
+          aria-label={gettext('More Operations')}
+          onKeyDown={this.onDropdownToggleKeyDown}
           // onClick={this.onDropdownToggleClick}
         />
         <DropdownMenu>
@@ -144,7 +162,7 @@ class ItemDropdownMenu extends React.Component {
               return <DropdownItem key={index} divider />;
             } else {
               return (
-                <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick}>{menuItem.value}</DropdownItem>
+                <DropdownItem key={index} data-toggle={menuItem.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{menuItem.value}</DropdownItem>
               );
             }
           })}
