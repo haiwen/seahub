@@ -118,6 +118,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.generate_user_auth_token import AdminGenerateUserAuthToken
 from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
@@ -499,6 +500,9 @@ urlpatterns = [
     url(r'^api/v2.1/admin/abuse-reports/$', AdminAbuseReportsView.as_view(), name='api-v2.1-admin-abuse-reports'),
     url(r'^api/v2.1/admin/abuse-reports/(?P<pk>\d+)/$', AdminAbuseReportView.as_view(), name='api-v2.1-admin-abuse-report'),
 
+
+    ## admin::generate user auth token
+    url(r'^api/v2.1/admin/generate-user-auth-token/$', AdminGenerateUserAuthToken.as_view(), name='api-v2.1-admin-generate-user-auth-token'),
 
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),

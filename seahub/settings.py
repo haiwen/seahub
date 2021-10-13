@@ -22,8 +22,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '%s/seahub/seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '%s/seahub/seahub.db' % PROJECT_ROOT,  # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -300,10 +300,13 @@ LOGOUT_REDIRECT_URL = None
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# allow seafile amdin view user's repo
+# allow seafile admin view user's repo
 ENABLE_SYS_ADMIN_VIEW_REPO = False
 
-#allow search from LDAP directly during auto-completion (not only search imported users)
+# allow seafile admin generate user auth token
+ENABLE_SYS_ADMIN_GENERATE_USER_AUTH_TOKEN = False
+
+# allow search from LDAP directly during auto-completion (not only search imported users)
 ENABLE_SEARCH_FROM_LDAP_DIRECTLY = False
 
 # show traffic on the UI
