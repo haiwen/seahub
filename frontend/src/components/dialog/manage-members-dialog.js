@@ -100,7 +100,6 @@ class ManageMembersDialog extends React.Component {
   }
 
   searchGroupMember = () => {
-
     seafileAPI.searchGroupMember(this.props.groupID, this.state.searchGroupMemberInputValue).then((res) => {
       this.setState({
         groupMembers: res.data,
