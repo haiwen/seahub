@@ -36,7 +36,7 @@ from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
-from seahub.api2.endpoints.group_members import GroupMembers, GroupMember, \
+from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
         GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
@@ -307,6 +307,7 @@ urlpatterns = [
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/search-member/$', GroupSearchMember.as_view(), name='api-v2.1-group-search-member'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/import/$', GroupMembersImport.as_view(), name='api-v2.1-group-members-import'),
     url(r'^api/v2.1/group-members-import-example/$', GroupMembersImportExample.as_view(), name='api-v2.1-group-members-import-example'),

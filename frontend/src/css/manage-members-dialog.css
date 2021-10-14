@@ -33,17 +33,22 @@
   display: none;
 }
 
-.add-members {
+.add-members,
+.search-members {
   display: flex;
   justify-content: space-between;
 }
 
-.add-members .add-members-select {
+.add-members .add-members-select,
+.search-members .search-members-input {
   width: 385px;
 }
-.add-members .btn {
+
+.add-members .btn,
+.search-members .btn {
   width: 75px;
 }
+
 .group-error {
   margin-top: 10px;
 }
