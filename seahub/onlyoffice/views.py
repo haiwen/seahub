@@ -15,14 +15,14 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
-from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 
 from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
-from seahub.onlyoffice.utils import generate_onlyoffice_cache_key, get_onlyoffice_dict
+from seahub.onlyoffice.utils import get_onlyoffice_dict
+from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
         get_file_ext, get_file_type, get_internal_extension
 from seahub.onlyoffice.converter import get_converter_uri
@@ -103,20 +103,16 @@ def onlyoffice_editor_callback(request):
 
     # get file basic info
     doc_key = post_data.get('key')
-    doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
-    if not doc_info_from_cache:
-        logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+    doc_info = get_file_info_by_doc_key(doc_key)
+    if not doc_info:
+        logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
         return HttpResponse('{"error": 0}')
-
-    doc_info = json.loads(doc_info_from_cache)
+    else:
+        logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
     username = doc_info['username']
-
-    logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
-
-    cache_key = generate_onlyoffice_cache_key(repo_id, file_path)
 
     # save file
     if status in (2, 6):
@@ -153,11 +149,8 @@ def onlyoffice_editor_callback(request):
         # 2 - document is ready for saving,
         if status == 2:
 
-            logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
-            cache.delete(cache_key)
-
-            logger.info('status {}: delete doc_key {} from cache'.format(status, doc_key))
-            cache.delete("ONLYOFFICE_%s" % doc_key)
+            logger.info('status {}: delete doc_key {} from database'.format(status, doc_key))
+            delete_doc_key(doc_key)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
                 logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))
@@ -166,11 +159,8 @@ def onlyoffice_editor_callback(request):
     # 4 - document is closed with no changes,
     if status == 4:
 
-        logger.info('status {}: delete cache_key {} from cache'.format(status, cache_key))
-        cache.delete(cache_key)
-
-        logger.info('status {}: delete doc_key {} from cache'.format(status, doc_key))
-        cache.delete("ONLYOFFICE_%s" % doc_key)
+        logger.info('status {}: delete doc_key {} from database'.format(status, doc_key))
+        delete_doc_key(doc_key)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
             logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))

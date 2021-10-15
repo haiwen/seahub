@@ -1,11 +1,9 @@
 import os
-import json
 import hashlib
 import logging
 import urllib.parse
 import posixpath
 
-from django.core.cache import cache
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 
@@ -13,8 +11,10 @@ from seaserv import seafile_api
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
-        get_site_scheme_and_netloc, encrypt_with_sha1
+        get_site_scheme_and_netloc
 from seahub.utils.file_op import if_locked_by_online_office
+
+from seahub.onlyoffice.models import OnlyOfficeDocKey
 
 from seahub.settings import ENABLE_WATERMARK
 from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
@@ -24,9 +24,56 @@ from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
 logger = logging.getLogger('onlyoffice')
 
 
-def generate_onlyoffice_cache_key(repo_id, file_path):
+def generate_onlyoffice_doc_key(repo_id, file_path, file_id):
 
-    return "ONLYOFFICE_{}_{}".format(repo_id, encrypt_with_sha1(file_path))
+    info_bytes = force_bytes(repo_id + file_path + file_id)
+    doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
+
+    logger.info('generate new doc_key {} by repo_id {} file_path {} file_id {}'.format(doc_key,
+                                                                                       repo_id,
+                                                                                       file_path,
+                                                                                       file_id))
+    return doc_key
+
+
+def get_doc_key_by_repo_id_file_path(repo_id, file_path):
+
+    md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
+    try:
+        doc_key_obj = OnlyOfficeDocKey.objects.get(repo_id_file_path_md5=md5)
+        return doc_key_obj.doc_key
+    except OnlyOfficeDocKey.DoesNotExist:
+        return ''
+
+
+def get_file_info_by_doc_key(doc_key):
+
+    try:
+        doc_key_obj = OnlyOfficeDocKey.objects.get(doc_key=doc_key)
+        return {
+            'username': doc_key_obj.username,
+            'repo_id': doc_key_obj.repo_id,
+            'file_path': doc_key_obj.file_path,
+        }
+    except OnlyOfficeDocKey.DoesNotExist:
+        return {}
+
+
+def save_doc_key(doc_key, username, repo_id, file_path):
+
+    md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
+    doc_key_obj = OnlyOfficeDocKey.objects.create(doc_key=doc_key,
+                                                  username=username,
+                                                  repo_id=repo_id,
+                                                  file_path=file_path,
+                                                  repo_id_file_path_md5=md5)
+
+    return doc_key_obj.doc_key
+
+
+def delete_doc_key(doc_key):
+
+    OnlyOfficeDocKey.objects.filter(doc_key=doc_key).delete()
 
 
 def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
@@ -39,16 +86,14 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         origin_repo_id = repo.origin_repo_id
         origin_file_path = posixpath.join(repo.origin_path,
                                           file_path.strip('/'))
-        # for view history/trash/snapshot file
-        if not file_id:
-            file_id = seafile_api.get_file_id_by_path(origin_repo_id,
-                                                      origin_file_path)
     else:
         origin_repo_id = repo_id
         origin_file_path = file_path
-        if not file_id:
-            file_id = seafile_api.get_file_id_by_path(repo_id,
-                                                      file_path)
+
+    # for view history/trash/snapshot file
+    if not file_id:
+        file_id = seafile_api.get_file_id_by_path(origin_repo_id,
+                                                  origin_file_path)
 
     dl_token = seafile_api.get_fileserver_access_token(repo_id,
                                                        file_id,
@@ -67,43 +112,20 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         document_type = 'text'
 
     if not can_edit:
-        info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
-        doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
+        doc_key = generate_onlyoffice_doc_key(origin_repo_id, origin_file_path, file_id)
     else:
-        cache_key = generate_onlyoffice_cache_key(origin_repo_id, origin_file_path)
-        doc_key = cache.get(cache_key)
-
-        # temporary solution when failed to get data from cache(django_pylibmc)
-        # when init process for the first time
-        if not doc_key:
-            doc_key = cache.get(cache_key)
-
+        doc_key = get_doc_key_by_repo_id_file_path(origin_repo_id, origin_file_path)
         if doc_key:
-            logger.info('get doc_key {} from cache by cache_key {}'.format(doc_key, cache_key))
+            logger.info('get doc_key {} from database by repo_id {} file_path {}'.format(doc_key,
+                                                                                         origin_repo_id,
+                                                                                         origin_file_path))
         else:
-            # In theory, file is unlocked when editing finished.
-            # This can happend if memcache is restarted or memcache is full and doc key is deleted.
             if if_locked_by_online_office(repo_id, file_path):
-                logger.warning('no doc_key in cache, but file {} in {} is locked by online office'.format(file_path, repo_id))
+                logger.warning('no doc_key in database, but file {} in {} is locked by online office'.format(file_path, repo_id))
 
-            # generate doc_key
-            info_bytes = force_bytes(origin_repo_id + origin_file_path + file_id)
-            doc_key = hashlib.md5(info_bytes).hexdigest()[:20]
-            logger.info('generate new doc_key {} by repo_id {} file_path {} file_id {}'.format(doc_key,
-                                                                                               origin_repo_id,
-                                                                                               origin_file_path,
-                                                                                               file_id))
-            logger.info('set cache_key {} and doc_key {} to cache'.format(cache_key, doc_key))
-            cache.set(cache_key, doc_key, None)
-
-        if not cache.get("ONLYOFFICE_%s" % doc_key):
-
-            doc_info = json.dumps({'repo_id': origin_repo_id,
-                                   'file_path': origin_file_path,
-                                   'username': username})
-
-            cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
-            logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
+            doc_key = generate_onlyoffice_doc_key(origin_repo_id, origin_file_path, file_id)
+            save_doc_key(doc_key, username, origin_repo_id, origin_file_path)
+            logger.info('save doc_key {} to database'.format(doc_key))
 
     # for render onlyoffice html
     file_name = os.path.basename(file_path.rstrip('/'))
