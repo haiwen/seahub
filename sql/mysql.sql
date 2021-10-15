@@ -1331,3 +1331,16 @@ CREATE TABLE `ocm_via_webdav_received_shares` (
   KEY `ocm_via_webdav_share_received_share_with_5a23eb17` (`share_with`),
   KEY `ocm_via_webdav_share_received_shared_by_1786d580` (`shared_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `onlyoffice_onlyofficedockey` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_key` varchar(36) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `file_path` longtext NOT NULL,
+  `repo_id_file_path_md5` varchar(100) NOT NULL,
+  `created_time` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`),
+  KEY `onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073` (`repo_id_file_path_md5`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
