@@ -612,4 +612,7 @@ CREATE INDEX IF NOT EXISTS "ocm_via_webdav_share_received_resource_type_a3c71b57
 CREATE INDEX IF NOT EXISTS "ocm_via_webdav_share_received_share_type_7615aaab" ON "ocm_via_webdav_received_shares" ("share_type");
 CREATE INDEX IF NOT EXISTS "ocm_via_webdav_share_received_share_with_5a23eb17" ON "ocm_via_webdav_received_shares" ("share_with");
 CREATE INDEX IF NOT EXISTS "ocm_via_webdav_share_received_shared_by_1786d580" ON "ocm_via_webdav_received_shares" ("shared_by");
+CREATE TABLE IF NOT EXISTS "onlyoffice_onlyofficedockey" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "doc_key" varchar(36) NOT NULL, "username" varchar(255) NOT NULL, "repo_id" varchar(36) NULL, "file_path" TEXT NOT NULL, "repo_id_file_path_md5" varchar(100) NOT NULL, "created_time" datetime NOT NULL);
+CREATE INDEX IF NOT EXISTS "onlyoffice_onlyofficedockey_doc_key_edba1352" ON "onlyoffice_onlyofficedockey" ("doc_key");
+CREATE INDEX IF NOT EXISTS "onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073" ON "onlyoffice_onlyofficedockey" ("repo_id_file_path_md5");
 COMMIT;
