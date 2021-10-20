@@ -25,10 +25,10 @@
 {% elif filetype == 'Audio' %}
     {% render_bundle 'sharedFileViewAudio' 'css' %}
 {% elif filetype == 'PDF' %}
-    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
     {% render_bundle 'sharedFileViewPDF' 'css' %}
 {% elif filetype == 'Document' %}
-    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
     {% render_bundle 'sharedFileViewDocument' 'css' %}
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
@@ -104,23 +104,19 @@ body {
 {% elif filetype == 'PDF' %}
     {% render_bundle 'sharedFileViewPDF' 'js' %}
     <script type="text/javascript">
-    var sf_file_url = '{{ raw_path|escapejs }}';
-    var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
-    var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
-    var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
+      var SEAFILE_FILE_URL = '{{ raw_path|escapejs }}';
+      var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
     </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/web/viewer.js"></script>
 {% elif filetype == 'Document' %}
     {% render_bundle 'sharedFileViewDocument' 'js' %}
     <script type="text/javascript">
       var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
-      var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf?token={{shared_token}}';
-      var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
-      var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
-      var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
+      var SEAFILE_FILE_URL = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf?token={{shared_token}}';
+      var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
     </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'js' %}
 {% elif filetype == 'Unknown' %}

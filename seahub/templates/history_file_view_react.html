@@ -6,7 +6,7 @@
 
 {% block extra_style %}
 {% if filetype == 'PDF' %}
-    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
 {% endif %}
 {% render_bundle 'historyTrashFileView' 'css' %}
 {% endblock %}
@@ -38,12 +38,10 @@ window.app.pageOptions = {
 {% render_bundle 'historyTrashFileView' 'js' %}
 {% if filetype == 'PDF' %}
 <script type="text/javascript">
-  var sf_file_url = '{{ raw_path|escapejs }}';
-  var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
-  var sf_pdf_images_path = '{{MEDIA_URL}}js/pdf/images/';
-  var sf_pdf_cmaps_path = '{{MEDIA_URL}}js/pdf/cmaps/';
+  var SEAFILE_FILE_URL = '{{ raw_path|escapejs }}';
+  var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
 </script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/web/viewer.js"></script>
 {% endif %}
 {% endblock %}

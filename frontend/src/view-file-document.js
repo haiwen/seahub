@@ -61,7 +61,7 @@ class FileContent extends React.Component {
 
             let scriptNode = document.createElement('script');
             scriptNode.type = 'text/javascript';
-            scriptNode.src = `${mediaUrl}js/pdf/viewer.js`;
+            scriptNode.src = `${mediaUrl}js/pdf/web/viewer.js`;
             document.body.append(scriptNode);
         }
       }).catch((error) => {

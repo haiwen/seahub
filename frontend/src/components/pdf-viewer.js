@@ -10,16 +10,31 @@ class PDFViewer extends React.Component {
 
           <div id="sidebarContainer" className="sf-hide">
             <div id="toolbarSidebar">
-              <div className="splitToolbarButton toggled">
-                <button id="viewThumbnail" className="toolbarButton toggled" title="Show Thumbnails" tabIndex="2" data-l10n-id="thumbs">
-                  <span data-l10n-id="thumbs_label">Thumbnails</span>
-                </button>
-                <button id="viewOutline" className="toolbarButton" title="Show Document Outline (double-click to expand/collapse all items)" tabIndex="3" data-l10n-id="document_outline">
-                  <span data-l10n-id="document_outline_label">Document Outline</span>
-                </button>
-                <button id="viewAttachments" className="toolbarButton" title="Show Attachments" tabIndex="4" data-l10n-id="attachments">
-                  <span data-l10n-id="attachments_label">Attachments</span>
-                </button>
+              <div id="toolbarSidebarLeft">
+                <div className="splitToolbarButton toggled">
+                  <button id="viewThumbnail" className="toolbarButton toggled" title="Show Thumbnails" tabIndex="2" data-l10n-id="thumbs">
+                    <span data-l10n-id="thumbs_label">Thumbnails</span>
+                  </button>
+                  <button id="viewOutline" className="toolbarButton" title="Show Document Outline (double-click to expand/collapse all items)" tabIndex="3" data-l10n-id="document_outline">
+                    <span data-l10n-id="document_outline_label">Document Outline</span>
+                  </button>
+                  <button id="viewAttachments" className="toolbarButton" title="Show Attachments" tabIndex="4" data-l10n-id="attachments">
+                    <span data-l10n-id="attachments_label">Attachments</span>
+                  </button>
+                  <button id="viewLayers" className="toolbarButton" title="Show Layers (double-click to reset all layers to the default state)" tabIndex="5" data-l10n-id="layers">
+                    <span data-l10n-id="layers_label">Layers</span>
+                  </button>
+                </div>
+              </div>
+
+              <div id="toolbarSidebarRight">
+                <div id="outlineOptionsContainer" className="hidden">
+                  <div className="verticalToolbarSeparator"></div>
+
+                  <button id="currentOutlineItem" className="toolbarButton" disabled="disabled" title="Find Current Outline Item" tabIndex="6" data-l10n-id="current_outline_item">
+                    <span data-l10n-id="current_outline_item_label">Current Outline Item</span>
+                  </button>
+                </div>
               </div>
             </div>
             <div id="sidebarContent">
@@ -29,9 +44,12 @@ class PDFViewer extends React.Component {
               </div>
               <div id="attachmentsView" className="hidden">
               </div>
+              <div id="layersView" className="hidden">
+              </div>
             </div>
-            <div id="sidebarResizer" className="hidden"></div>
+            <div id="sidebarResizer"></div>
           </div>
+          {/* <!-- sidebarContainer --> */}
 
           <div id="mainContainer">
             <div className="findbar hidden doorHanger sf-hide" id="findbar">
@@ -64,6 +82,7 @@ class PDFViewer extends React.Component {
                 <span id="findMsg" className="toolbarLabel"></span>
               </div>
             </div>
+            {/*<!-- findbar -->*/}
 
             <div id="secondaryToolbar" className="secondaryToolbar hidden doorHangerRight sf-hide">
               <div id="secondaryToolbarButtonContainer">
@@ -145,16 +164,17 @@ class PDFViewer extends React.Component {
                 </button>
               </div>
             </div>
+            {/*<!-- secondaryToolbar -->*/}
 
             <div className="toolbar">
               <div id="toolbarContainer">
                 <div id="toolbarViewer">
                   <div id="toolbarViewerLeft" className="sf-hide">
-                    <button id="sidebarToggle" className="toolbarButton" title="Toggle Sidebar" tabIndex="11" data-l10n-id="toggle_sidebar">
+                    <button id="sidebarToggle" className="toolbarButton" title="Toggle Sidebar" tabIndex="11" data-l10n-id="toggle_sidebar" aria-expanded="false" aria-controls="sidebarContainer">
                       <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
                     </button>
                     <div className="toolbarButtonSpacer"></div>
-                    <button id="viewFind" className="toolbarButton" title="Find in Document" tabIndex="12" data-l10n-id="findbar">
+                    <button id="viewFind" className="toolbarButton" title="Find in Document" tabIndex="12" data-l10n-id="findbar" aria-expanded="false" aria-controls="findbar">
                       <span data-l10n-id="findbar_label">Find</span>
                     </button>
                     <div className="splitToolbarButton hiddenSmallView">
@@ -166,7 +186,7 @@ class PDFViewer extends React.Component {
                         <span data-l10n-id="next_label">Next</span>
                       </button>
                     </div>
-                    <input type="number" id="pageNumber" className="toolbarField pageNumber" title="Page"  defaultValue="1" size="4" min="1" tabIndex="15" data-l10n-id="page" />
+                    <input type="number" id="pageNumber" className="toolbarField pageNumber" title="Page" defaultValue="1" size="4" min="1" tabIndex="15" data-l10n-id="page" autoComplete="off" />
                     <span id="numPages" className="toolbarLabel"></span>
                   </div>
                   <div id="toolbarViewerRight" className="sf-hide">
@@ -191,19 +211,14 @@ class PDFViewer extends React.Component {
 
                     <div className="verticalToolbarSeparator hiddenSmallView"></div>
 
-                    <button id="secondaryToolbarToggle" className="toolbarButton" title="Tools" tabIndex="36" data-l10n-id="tools">
+                    <button id="secondaryToolbarToggle" className="toolbarButton" title="Tools" tabIndex="36" data-l10n-id="tools" aria-expanded="false" aria-controls="secondaryToolbar">
                       <span data-l10n-id="tools_label">Tools</span>
                     </button>
                   </div>
-                  <div id="toolbarViewerMiddle" className="zoom-toolbar">
-                    <div className="splitToolbarButton d-flex flex-column">
-                      <button id="restoreToAuto" title={gettext('Default Size')} className="sf3-font sf3-font-page-size btn btn-icon rounded mb-4"></button>
-                      <button id="zoomIn" className="toolbarButton zoomIn sf3-font sf3-font-enlarge btn btn-icon rounded mb-2" title={gettext('Zoom In')} tabIndex="22" data-l10n-id="zoom_in"></button>
-                      <button id="zoomOut" className="toolbarButton zoomOut sf3-font sf3-font-narrow btn btn-icon rounded" title={gettext('Zoom Out')} tabIndex="21" data-l10n-id="zoom_out">
-                      </button>
-                      <div className="splitToolbarButtonSeparator"></div>
+                  <div id="toolbarViewerMiddle" className="d-none">
+                    <div className="splitToolbarButton">
                     </div>
-                    <span id="scaleSelectContainer" className="dropdownToolbarButton hidden">
+                    <span id="scaleSelectContainer" className="dropdownToolbarButton">
                       <select id="scaleSelect" title="Zoom" tabIndex="23" data-l10n-id="zoom" defaultValue="auto">
                         <option id="pageAutoOption" title="" value="auto" data-l10n-id="page_scale_auto">Automatic Zoom</option>
                         <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
@@ -223,8 +238,7 @@ class PDFViewer extends React.Component {
                   </div>
                 </div>
                 <div id="loadingBar">
-                  <span className="loading-icon loading-tip"></span>
-                  <div className="progress hide">
+                  <div className="progress">
                     <div className="glimmer">
                     </div>
                   </div>
@@ -232,44 +246,38 @@ class PDFViewer extends React.Component {
               </div>
             </div>
 
-            {/*
-        <menu type="context" id="viewerContextMenu">
-          <menuitem id="contextFirstPage" label="First Page"
-                    data-l10n-id="first_page"></menuitem>
-          <menuitem id="contextLastPage" label="Last Page"
-                    data-l10n-id="last_page"></menuitem>
-          <menuitem id="contextPageRotateCw" label="Rotate Clockwise"
-                    data-l10n-id="page_rotate_cw"></menuitem>
-          <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise"
-                    data-l10n-id="page_rotate_ccw"></menuitem>
-        </menu>
-        */}
+            <div className="d-flex flex-column" id="zoom-toolbar">
+              <button id="restoreToAuto" title={gettext('Default Size')} aria-label={gettext('Default Size')} className="sf3-font sf3-font-page-size btn btn-icon rounded mb-4"></button>
+              <button id="zoomIn" className="toolbarButton zoomIn sf3-font sf3-font-enlarge btn btn-icon rounded mb-2" title={gettext('Zoom In')} aria-label={gettext('Zoom In')} tabIndex="22"></button>
+              <button id="zoomOut" className="toolbarButton zoomOut sf3-font sf3-font-narrow btn btn-icon rounded" title={gettext('Zoom Out')} aria-label={gettext('Zoom Out')} tabIndex="21"></button>
+            </div>
 
             <div id="viewerContainer" tabIndex="0">
               <div id="viewer" className="pdfViewer"></div>
             </div>
 
-            <div id="errorWrapper" className="hidden">
+            <div id="errorWrapper" hidden={true}>
               <div id="errorMessageLeft">
                 <span id="errorMessage"></span>
                 <button id="errorShowMore" data-l10n-id="error_more_info">
-              More Information
+                  More Information
                 </button>
-                <button id="errorShowLess" data-l10n-id="error_less_info">
-              Less Information
+                <button id="errorShowLess" data-l10n-id="error_less_info" hidden={true}>
+                  Less Information
                 </button>
               </div>
               <div id="errorMessageRight">
                 <button id="errorClose" data-l10n-id="error_close">
-              Close
+                  Close
                 </button>
               </div>
               <div className="clearBoth"></div>
-              <textarea id="errorMoreInfo" readOnly="readonly"></textarea>
+              <textarea id="errorMoreInfo" hidden={true} readOnly={true}></textarea>
             </div>
           </div>
+          {/*<!-- mainContainer -->*/}
 
-          <div id="overlayContainer" className="hidden sf-hide">
+          <div id="overlayContainer" className="hidden">
             <div id="passwordOverlay" className="container hidden">
               <div className="dialog">
                 <div className="row">
@@ -336,7 +344,7 @@ class PDFViewer extends React.Component {
                 </div>
               </div>
             </div>
-            <div id="printServiceOverlay" className="container hidden">
+            <div id="printServiceOverlay" className="container hidden sf-hide">
               <div className="dialog">
                 <div className="row">
                   <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
@@ -351,9 +359,11 @@ class PDFViewer extends React.Component {
               </div>
             </div>
           </div>
+          {/*<!-- overlayContainer -->*/}
 
         </div>
-        <div id="printContainer"></div>
+        {/*<!-- outerContainer -->*/}
+        <div id="printContainer" className="sf-hide"></div>
       </React.Fragment>
     );
   }
