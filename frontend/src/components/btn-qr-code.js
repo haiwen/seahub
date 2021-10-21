@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import QRCode from 'react-qr-code';
+import QRCode from 'qrcode.react';
 import { Button, Popover, PopoverBody } from 'reactstrap';
 import { gettext } from '../utils/constants';
 
