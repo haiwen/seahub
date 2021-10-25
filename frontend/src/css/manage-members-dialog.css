@@ -8,47 +8,27 @@
   vertical-align: middle;
   text-align: left;
 }
-.toggle-group-admin-icon,
-.delete-group-member-icon {
-  opacity: 0;
-  cursor: pointer;
-  color: #888;
-  margin-left: 5px;
-}
-.manage-members-table tr:hover .toggle-group-admin-icon,
-.manage-members-table tr:hover .delete-group-member-icon {
-  opacity: 1;
-}
-
-.manage-members-table .editing {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.toggle-group-admin-icon:hover,
-.delete-group-member-icon:hover {
-  color: #333;
-}
 
 .add-members-select .true__indicator-separator {
   display: none;
 }
 
-.add-members,
-.search-members {
+.add-members {
   display: flex;
   justify-content: space-between;
 }
 
-.add-members .add-members-select,
-.search-members .search-members-input {
+.add-members .add-members-select {
   width: 385px;
 }
-
-.add-members .btn,
-.search-members .btn {
+.add-members .btn {
   width: 75px;
 }
-
 .group-error {
   margin-top: 10px;
+}
+
+.group-manage-members-dialog .back-icon {
+  color: #999; 
+  cursor: pointer;
 }
