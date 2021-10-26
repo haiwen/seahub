@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
+import moment from 'moment';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
@@ -718,7 +719,7 @@ class DirentListItem extends React.Component {
         </td>
         <td className="operation">{this.renderItemOperation()}</td>
         <td className="file-size">{dirent.size && dirent.size}</td>
-        <td className="last-update">{dirent.mtime_relative}</td>
+        <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
       </tr>
     );
     const mobileItem = (
