@@ -134,7 +134,7 @@ class ManageMembersDialog extends React.Component {
     const { isLoading, hasNextPage, groupMembers } = this.state;
     return (
       <Fragment>
-        <p>{gettext('Add group member')}</p>
+        <p className="mb-2">{gettext('Add group member')}</p>
         <div className='add-members'>
           <UserSelect
             placeholder={gettext('Search users...')}
