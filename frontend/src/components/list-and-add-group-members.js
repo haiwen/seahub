@@ -157,9 +157,10 @@ class ManageMembersDialog extends React.Component {
             })
         }
         {groupMembers.length > 10 &&
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-link px-0" onClick={this.props.changeMode}>{gettext('Search group members')}</button>
-          </div>
+          <button className="btn btn-secondary btn-block search-group-members-btn text-left border-0" onClick={this.props.changeMode}>
+            <i className="fas fa-search mr-1" aria-hidden={true}></i>
+            {gettext('Search group members')}
+          </button>
         }
         <div className="manage-members" onScroll={this.handleScroll}>
           {isLoading ? <Loading /> : (

@@ -1,7 +1,7 @@
 .manage-members {
   max-height: 300px;
   overflow-y: scroll;
-  margin: 1rem 0 2rem;
+  margin: 10px 0 2rem;
 }
 .manage-members-table th,
 .manage-members-table td {
@@ -31,4 +31,13 @@
 .group-manage-members-dialog .back-icon {
   color: #999; 
   cursor: pointer;
+}
+
+.group-manage-members-dialog .search-group-members-btn {
+  background: #f1f1f1;
+  margin: 12px 0 0;
+}
+
+.group-manage-members-dialog .search-group-members-btn:hover {
+  background: #dbdbdb;
 }
