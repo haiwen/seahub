@@ -1,10 +1,18 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import jwt
+import time
+
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.http import is_safe_url, urlquote
+from django.utils.translation import ugettext as _
+
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.auth import REDIRECT_FIELD_NAME
+from seahub.utils import render_error
+
 
 def sso(request):
     # Ensure the user-originating redirection url is safe.
@@ -42,6 +50,40 @@ def sso(request):
         return HttpResponseRedirect(reverse('work_weixin_oauth_login') + next_param)
 
     return HttpResponseRedirect(next_page)
+
+
+def jwt_sso(request):
+
+    ENABLE_JWT_SSO = getattr(settings, 'ENABLE_JWT_SSO', False)
+    JWT_SSO_SECRET_KEY = getattr(settings, 'JWT_SSO_SECRET_KEY', '')
+    JWT_SSO_EXPIRATION = getattr(settings, 'JWT_SSO_EXPIRATION', 60 * 60)
+    JWT_SSO_ALGORITHM = getattr(settings, 'JWT_SSO_ALGORITHM', 'HS256')
+
+    if not ENABLE_JWT_SSO:
+        error_msg = _("jwt sso feature is not enabled.")
+        return render_error(request, error_msg)
+
+    if not JWT_SSO_SECRET_KEY:
+        error_msg = _("jwt sso secret key is not set.")
+        return render_error(request, error_msg)
+
+    page_url = request.GET.get('page', '')
+    if not page_url:
+        error_msg = _("page parameter is not passed.")
+        return render_error(request, error_msg)
+
+    username = request.user.username
+
+    data = {
+        'exp': time.time() + JWT_SSO_EXPIRATION,
+        'email': username,
+        'name': email2nickname(username)
+    }
+
+    jwt_token = jwt.encode(data, JWT_SSO_SECRET_KEY, JWT_SSO_ALGORITHM)
+    redirect_to = "{}?jwt-token={}".format(page_url, jwt_token)
+    return HttpResponseRedirect(redirect_to)
+
 
 def shib_login(request):
     # client platform args used to create api v2 token

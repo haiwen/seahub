@@ -193,6 +193,7 @@ urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
     url(r'^sso/$', sso, name='sso'),
+    url(r'^jwt-sso/$', jwt_sso, name='jwt_sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
     url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
