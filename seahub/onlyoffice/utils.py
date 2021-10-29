@@ -106,6 +106,9 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
             logger.info('set doc_key {} and doc_info {} to cache'.format(doc_key, doc_info))
 
+            cache.set("ONLYOFFICE_%s" % 'backup_' + doc_key, doc_info, None)
+            logger.info('set doc_key {} and doc_info {} to cache'.format('backup_' + doc_key, doc_info))
+
     # for render onlyoffice html
     file_name = os.path.basename(file_path.rstrip('/'))
     doc_url = gen_file_get_url(dl_token, file_name)

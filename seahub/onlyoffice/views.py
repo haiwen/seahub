@@ -90,7 +90,11 @@ def onlyoffice_editor_callback(request):
     doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
     if not doc_info_from_cache:
         logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
-        return HttpResponse('{"error": 0}')
+
+        doc_info_from_cache = cache.get("ONLYOFFICE_%s" % 'backup_' + doc_key)
+        if not doc_info_from_cache:
+            logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, 'backup_' + doc_key))
+            return HttpResponse('{"error": 0}')
 
     doc_info = json.loads(doc_info_from_cache)
 
