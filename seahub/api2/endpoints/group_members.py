@@ -133,10 +133,42 @@ class GroupMembers(APIView):
         return Response(member_info, status=status.HTTP_201_CREATED)
 
 
+class GroupSearchMember(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    @api_check_group
+    def get(self, request, group_id, format=None):
+        """
+        Search group member by email.
+        """
+
+        q = request.GET.get('q', '')
+        if not q:
+            error_msg = 'q invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_group_member(group_id, request.user.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        group_members = []
+        members = ccnet_api.search_group_members(group_id, q)
+        for member in members:
+
+            member_info = get_group_member_info(request, group_id, member.user_name)
+
+            group_members.append(member_info)
+
+        return Response(group_members)
+
+
 class GroupMember(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     @api_check_group
     def get(self, request, group_id, email):
