@@ -14,7 +14,6 @@ try:
     from django.urls import reverse
 except ImportError:
     from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 
 try:
     # Django > 1.10 uses MiddlewareMixin
@@ -71,6 +70,6 @@ class CASMiddleware(MiddlewareMixin):
             if request.user.is_staff:
                 return None
             else:
-                raise PermissionDenied(_('You do not have staff privileges.'))
+                raise PermissionDenied('You do not have staff privileges.')
         params = urllib_parse.urlencode({REDIRECT_FIELD_NAME: request.get_full_path()})
         return HttpResponseRedirect(reverse(cas_login) + '?' + params)

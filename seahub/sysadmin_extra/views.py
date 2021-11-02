@@ -62,7 +62,7 @@ def sys_login_admin_export_excel(request):
         row = [log.username, log.login_ip, status, login_time]
         data_list.append(row)
 
-    wb = write_xls(_('login-logs'), head, data_list)
+    wb = write_xls('login-logs', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export excel'))
         return HttpResponseRedirect(next_page)
@@ -119,7 +119,7 @@ def sys_log_file_audit_export_excel(request):
                date, repo_name, ev.repo_id, repo_owner, ev.file_path]
         data_list.append(row)
 
-    wb = write_xls(_('file-access-logs'), head, data_list)
+    wb = write_xls('file-access-logs', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export excel'))
         return HttpResponseRedirect(next_page)
@@ -174,7 +174,7 @@ def sys_log_file_update_export_excel(request):
         row = [username, date, repo_name, ev.repo_id, repo_owner, ev.file_oper.strip()]
         data_list.append(row)
 
-    wb = write_xls(_('file-update-logs'), head, data_list)
+    wb = write_xls('file-update-logs', head, data_list)
     if not wb:
         messages.error(request, _('Failed to export excel'))
         return HttpResponseRedirect(next_page)
@@ -247,7 +247,7 @@ def sys_log_perm_audit_export_excel(request):
                ev.file_path, date]
         data_list.append(row)
 
-    wb = write_xls(_('perm-audit-logs'), head, data_list)
+    wb = write_xls('perm-audit-logs', head, data_list)
     if not wb:
         next_page = request.META.get('HTTP_REFERER', None)
         if not next_page:

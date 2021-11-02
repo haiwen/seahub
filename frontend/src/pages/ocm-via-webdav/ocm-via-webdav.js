@@ -159,7 +159,7 @@ class Content extends Component {
             <tr>
               <th width="5%"></th>
               <th width="30%">{gettext('Name')}</th>
-              <th width="35%">{gettext('Shared by')}</th>
+              <th width="35%">{gettext('Shared By')}</th>
               <th width="20%">{gettext('Time')}</th>
               <th width="5%">{/* operations */}</th>
               <th width="5%">{/* operations */}</th>
