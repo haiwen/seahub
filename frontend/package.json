@@ -39,7 +39,7 @@
     "seafile-js": "0.2.178",
     "socket.io-client": "^2.2.0",
     "unified": "^7.0.0",
-    "url-parse": "^1.4.3",
+    "url-parse": "^1.5.2",
     "vfile": "^3.0.0",
     "video.js": "^7.4.1",
     "watermark-dom": "^1.0.0",
