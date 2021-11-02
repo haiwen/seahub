@@ -14,7 +14,6 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from importlib import import_module
@@ -120,7 +119,7 @@ def login(request, next_page=None, required=False):
         elif settings.CAS_RETRY_LOGIN or required:
             return HttpResponseRedirect(client.get_login_url())
         else:
-            raise PermissionDenied(_('Login failed.'))
+            raise PermissionDenied('Login failed.')
     else:
         if settings.CAS_STORE_NEXT:
             request.session['CASNEXT'] = next_page
@@ -169,7 +168,7 @@ def callback(request):
     """Read PGT and PGTIOU sent by CAS"""
     if request.method == 'POST' and request.POST.get('logoutRequest'):
         clean_sessions(get_cas_client(request=request), request)
-        return HttpResponse("{0}\n".format(_('ok')), content_type="text/plain")
+        return HttpResponse("{0}\n".format('ok'), content_type="text/plain")
     elif request.method == 'GET':
         pgtid = request.GET.get('pgtId')
         pgtiou = request.GET.get('pgtIou')
@@ -179,7 +178,7 @@ def callback(request):
             session_key=None,
             date__lt=(timezone.now() - timedelta(seconds=60))
         ).delete()
-        return HttpResponse("{0}\n".format(_('ok')), content_type="text/plain")
+        return HttpResponse("{0}\n".format('ok'), content_type="text/plain")
 
 
 def clean_sessions(client, request):

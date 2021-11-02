@@ -4,7 +4,6 @@
 
 
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
 
 __all__ = []
 
@@ -22,8 +21,8 @@ _DEFAULTS = {
     'CAS_VERSION': '2',
     'CAS_USERNAME_ATTRIBUTE': 'uid',
     'CAS_PROXY_CALLBACK': None,
-    'CAS_LOGIN_MSG': _("Login succeeded. Welcome, %s."),
-    'CAS_LOGGED_MSG': _("You are logged in as %s."),
+    'CAS_LOGIN_MSG': "Login succeeded. Welcome, %s.",
+    'CAS_LOGGED_MSG': "You are logged in as %s.",
     'CAS_STORE_NEXT': False,
     'CAS_APPLY_ATTRIBUTES_TO_USER': False,
     'CAS_RENAME_ATTRIBUTES': {},
