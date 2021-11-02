@@ -60,16 +60,16 @@ def jwt_sso(request):
     JWT_SSO_ALGORITHM = getattr(settings, 'JWT_SSO_ALGORITHM', 'HS256')
 
     if not ENABLE_JWT_SSO:
-        error_msg = _("jwt sso feature is not enabled.")
+        error_msg = "jwt sso feature is not enabled."
         return render_error(request, error_msg)
 
     if not JWT_SSO_SECRET_KEY:
-        error_msg = _("jwt sso secret key is not set.")
+        error_msg = "jwt sso secret key is not set."
         return render_error(request, error_msg)
 
     page_url = request.GET.get('page', '')
     if not page_url:
-        error_msg = _("page parameter is not passed.")
+        error_msg = "page parameter is not passed."
         return render_error(request, error_msg)
 
     username = request.user.username
