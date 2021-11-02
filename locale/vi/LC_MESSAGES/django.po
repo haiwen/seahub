@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-23 14:18+0800\n"
-"PO-Revision-Date: 2021-06-23 06:48+0000\n"
+"POT-Creation-Date: 2021-11-02 16:46+0800\n"
+"PO-Revision-Date: 2021-11-02 08:46+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgid "Login id can't be empty"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:1043
+#: seahub/api2/endpoints/admin/users.py:1051
 #, python-format
 msgid "Login id %s already exists."
 msgstr ""
@@ -64,7 +64,7 @@ msgstr "Thiết lập Quota thất bại: quota tối đa là %d MB"
 #: seahub/api2/endpoints/admin/groups.py:129
 #: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
-#: seahub/api2/views.py:4592 seahub/group/forms.py:36
+#: seahub/api2/views.py:4589 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -126,7 +126,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:542
+#: seahub/api2/endpoints/share_links.py:553
 msgid "There is an associated published library."
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 #: seahub/api2/endpoints/admin/shares.py:191
 #: seahub/api2/endpoints/invitations.py:50
 #: seahub/api2/endpoints/invitations.py:110
-#: seahub/api2/endpoints/repo_share_invitations.py:153
+#: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
 msgstr ""
@@ -149,7 +149,7 @@ msgstr ""
 #: seahub/api2/endpoints/dir_shared_items.py:455
 #: seahub/api2/endpoints/group_owned_libraries.py:933
 #: seahub/api2/endpoints/group_owned_libraries.py:1201
-#: seahub/api2/endpoints/repo_share_invitations.py:185
+#: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
 msgstr ""
@@ -200,7 +200,7 @@ msgid "Link Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:492
+#: seahub/api2/endpoints/group_members.py:524
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -270,7 +270,8 @@ msgstr ""
 msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:573 seahub/base/accounts.py:785
+#: seahub/api2/endpoints/admin/users.py:573
+#: seahub/api2/endpoints/admin/users.py:1023 seahub/base/accounts.py:785
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr ""
@@ -281,7 +282,7 @@ msgid "Successfully added user %(user)s."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:671
-#: seahub/api2/endpoints/admin/users_batch.py:375 seahub/views/sysadmin.py:595
+#: seahub/api2/endpoints/admin/users_batch.py:376 seahub/views/sysadmin.py:595
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Bạn được mời sử dụng lưu trữ đám mây %s"
@@ -298,53 +299,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1115
+#: seahub/api2/endpoints/admin/users.py:1123
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Chỉnh sửa thành công"
 
-#: seahub/api2/endpoints/admin/users.py:1118 seahub/views/sysadmin.py:498
+#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:498
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Tài khoản của bạn trên %s đã được kích hoạt"
 
-#: seahub/api2/endpoints/admin/users.py:1123
+#: seahub/api2/endpoints/admin/users.py:1131
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Đã sửa đổi thành công, email đã được gởi."
 
-#: seahub/api2/endpoints/admin/users.py:1126
+#: seahub/api2/endpoints/admin/users.py:1134
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Sửa đổi thành công, nhưng không thể gởi mail, vui lòng kiểm tra cấu hình."
 
-#: seahub/api2/endpoints/admin/users.py:1204 seahub/views/sysadmin.py:539
+#: seahub/api2/endpoints/admin/users.py:1212 seahub/views/sysadmin.py:539
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Mật khẩu đã được thay đổi trên %s"
 
-#: seahub/api2/endpoints/admin/users.py:1206 seahub/views/sysadmin.py:564
+#: seahub/api2/endpoints/admin/users.py:1214 seahub/views/sysadmin.py:564
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s, một email đã được gửi đến %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1210 seahub/views/sysadmin.py:569
+#: seahub/api2/endpoints/admin/users.py:1218 seahub/views/sysadmin.py:569
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s, nhưng không thể gửi email đến %(user)s. Vui lòng kiểm tra lại cấu hình email."
 
-#: seahub/api2/endpoints/admin/users.py:1213 seahub/views/sysadmin.py:573
+#: seahub/api2/endpoints/admin/users.py:1221 seahub/views/sysadmin.py:573
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s cho người dùng %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1216 seahub/views/sysadmin.py:576
+#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:576
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -367,7 +368,7 @@ msgstr ""
 #: seahub/api2/endpoints/file_tag.py:175
 #: seahub/api2/endpoints/invitations.py:78
 #: seahub/api2/endpoints/repo_set_password.py:72
-#: seahub/api2/endpoints/repo_share_invitations.py:196
+#: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:105
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3846
 #: seahub/notifications/models.py:465 seahub/notifications/models.py:506
@@ -375,7 +376,7 @@ msgstr ""
 #: seahub/notifications/models.py:643 seahub/notifications/models.py:665
 #: seahub/notifications/models.py:691 seahub/notifications/models.py:708
 #: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1191
+#: seahub/utils/__init__.py:171 seahub/utils/__init__.py:1190
 #: seahub/views/__init__.py:915 seahub/views/ajax.py:401
 #: seahub/views/ajax.py:405
 msgid "Internal Server Error"
@@ -446,7 +447,7 @@ msgstr ""
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:624
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:635
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -462,15 +463,15 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:310
-#: seahub/api2/endpoints/group_members.py:442
+#: seahub/api2/endpoints/group_members.py:342
+#: seahub/api2/endpoints/group_members.py:474
 #, python-format
 msgid "User %s is already a group member."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:319
-#: seahub/api2/endpoints/group_members.py:451 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:351
+#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -479,18 +480,18 @@ msgid "User %s not found in organization."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:327
-#: seahub/api2/endpoints/group_members.py:459
+#: seahub/api2/endpoints/group_members.py:359
+#: seahub/api2/endpoints/group_members.py:491
 #, python-format
 msgid "User %s is an organization user."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:381 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:461
+#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Group không tồn tại"
 
-#: seahub/api2/endpoints/group_members.py:499 seahub/views/sysadmin.py:198
+#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:198
 #: seahub/views/sysadmin.py:304 seahub/views/sysadmin.py:693
 #: seahub/views/sysadmin.py:705 seahub/views/sysadmin.py:830
 msgid "Failed to export Excel"
@@ -508,7 +509,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
-#: seahub/api2/endpoints/repo_share_invitations.py:160
+#: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
 msgstr ""
 
@@ -520,14 +521,14 @@ msgstr ""
 
 #: seahub/api2/endpoints/invitations.py:66
 #: seahub/api2/endpoints/invitations.py:137
-#: seahub/api2/endpoints/repo_share_invitations.py:170
+#: seahub/api2/endpoints/repo_share_invitations.py:173
 #: seahub/base/accounts.py:795
 #, python-format
 msgid "User %s already exists."
 msgstr ""
 
 #: seahub/api2/endpoints/invitations.py:151
-#: seahub/api2/endpoints/repo_share_invitations.py:210
+#: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:33
 #: seahub/api2/endpoints/send_upload_link_email.py:32 seahub/auth/forms.py:121
 #: seahub/share/views.py:136 seahub/share/views.py:264
@@ -624,44 +625,51 @@ msgstr ""
 msgid "An upload link is shared to you on %s"
 msgstr "Một link tải lên được chia sẻ với bạn tại %s"
 
-#: seahub/api2/endpoints/share_links.py:267
+#: seahub/api2/endpoints/share_links.py:268
+#: seahub/api2/endpoints/upload_links.py:162 seahub/api2/views.py:3999
+#: seahub/api2/views.py:4119
+msgid "Password is required."
+msgstr "Yêu cầu mật khẩu."
+
+#: seahub/api2/endpoints/share_links.py:274
+#: seahub/api2/endpoints/upload_links.py:168
 msgid "Password is too short."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:290
-#: seahub/api2/endpoints/upload_links.py:184 seahub/api2/views.py:3414
+#: seahub/api2/endpoints/share_links.py:278
+#: seahub/api2/endpoints/upload_links.py:172
+msgid "Password is too weak."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:301
+#: seahub/api2/endpoints/upload_links.py:195 seahub/api2/views.py:3414
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:296
-#: seahub/api2/endpoints/upload_links.py:190 seahub/api2/views.py:3420
+#: seahub/api2/endpoints/share_links.py:307
+#: seahub/api2/endpoints/upload_links.py:201 seahub/api2/views.py:3420
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:318
-#: seahub/api2/endpoints/upload_links.py:212
+#: seahub/api2/endpoints/share_links.py:329
+#: seahub/api2/endpoints/upload_links.py:223
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:327
-#: seahub/api2/endpoints/upload_links.py:221
+#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/upload_links.py:232
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:396
-#: seahub/api2/endpoints/share_links.py:405
+#: seahub/api2/endpoints/share_links.py:407
+#: seahub/api2/endpoints/share_links.py:416
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
-
-#: seahub/api2/endpoints/upload_links.py:161
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "Mật khẩu quá ngắn"
 
 #: seahub/api2/endpoints/user.py:99
 #, python-format
@@ -691,6 +699,10 @@ msgstr "File của bạn quá lớn (%(size)s), tối đa là %(max_valid_size)s
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
+msgstr ""
+
+#: seahub/api2/endpoints/webdav_secret.py:50
+msgid "Length of WebDav password should be less then 30."
 msgstr ""
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
@@ -801,15 +813,15 @@ msgstr "Email này đã tồn tại."
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr ""
 
-#: seahub/auth/views.py:279
+#: seahub/auth/views.py:288
 msgid "Logged out"
 msgstr "Đã đăng xuất"
 
-#: seahub/auth/views.py:329
+#: seahub/auth/views.py:338
 msgid "Failed to send email, please contact administrator."
 msgstr "Gửi email thất bại, vui lòng liên hệ với admin."
 
-#: seahub/auth/views.py:388
+#: seahub/auth/views.py:397
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Không thể cập nhật mật khẩu, vui lòng liên hệ admin LDAP."
 
@@ -1378,7 +1390,7 @@ msgstr "Tên %s không hợp lệ"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1858
+#: seahub/views/file.py:1865
 msgid "Argument missing"
 msgstr "Thiếu tham số"
 
@@ -1502,10 +1514,10 @@ msgstr "%(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1129
-#: seahub/views/file.py:1350 seahub/views/file.py:1867
-#: seahub/views/repo.py:127 seahub/views/repo.py:184 seahub/views/repo.py:242
-#: seahub/views/repo.py:296 seahub/views/repo.py:407
+#: seahub/views/ajax.py:427 seahub/views/file.py:1136
+#: seahub/views/file.py:1357 seahub/views/file.py:1874
+#: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
+#: seahub/views/repo.py:291 seahub/views/repo.py:402
 msgid "Permission denied"
 msgstr "Không có quyền"
 
@@ -3665,8 +3677,8 @@ msgstr "Xóa thất bại: người dùng không tồn tại"
 
 #: seahub/invitations/models.py:95
 #, python-format
-msgid "%(user)s invited you to join %(site_name)s."
-msgstr "%(user)s mời bạn tham gia %(site_name)s."
+msgid "You are invited to join %(site_name)s."
+msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -3691,7 +3703,8 @@ msgstr "Xin chào,"
 #: seahub/invitations/templates/invitations/invitation_email.html:12
 #, python-format
 msgid ""
-"%(inviter)s invited you to join %(site_name)s. Please click the link below:"
+"%(inviter_name)s invited you to join %(site_name)s. Please click the link "
+"below:"
 msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
@@ -4027,7 +4040,7 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_register.html:8
 #: seahub/templates/choose_register.html:3
 #: seahub/templates/choose_register.html:8
-#: seahub/templates/registration/login.html:88
+#: seahub/templates/registration/login.html:90
 #: seahub/templates/registration/registration_form.html:3
 #: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
@@ -4386,7 +4399,7 @@ msgstr "Đăng ký"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:35
-#: seahub/templates/registration/login.html:70
+#: seahub/templates/registration/login.html:72
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -4407,27 +4420,27 @@ msgstr "Không đúng địa chỉ email hoặc mật khẩu"
 msgid "Remember me for %(remember_days)s days "
 msgstr "Ghi nhớ đăng nhập trong %(remember_days)s ngày "
 
-#: seahub/templates/registration/login.html:68
+#: seahub/templates/registration/login.html:69
 msgid "Forgot password?"
 msgstr ""
 
-#: seahub/templates/registration/login.html:74
+#: seahub/templates/registration/login.html:76
 msgid "Single Sign-On"
 msgstr ""
 
-#: seahub/templates/registration/login.html:79
+#: seahub/templates/registration/login.html:81
 msgid "Login with: "
 msgstr ""
 
-#: seahub/templates/registration/login.html:145
+#: seahub/templates/registration/login.html:147
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Lỗi làm mới CAPTCHA, vui lòng thử lại sau."
 
-#: seahub/templates/registration/login.html:153
+#: seahub/templates/registration/login.html:155
 msgid "Email or username cannot be blank"
 msgstr "Email hoặc tên tài khoản không được để trống"
 
-#: seahub/templates/registration/login.html:157
+#: seahub/templates/registration/login.html:159
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -4771,6 +4784,10 @@ msgstr "Yêu cầu mô tả"
 msgid "Please enter password"
 msgstr "Vui lòng nhập mật khẩu"
 
+#: seahub/templates/snippets/repo_create_js.html:50
+msgid "Password is too short"
+msgstr "Mật khẩu quá ngắn"
+
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
 msgid ""
@@ -5071,7 +5088,7 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: seahub/utils/__init__.py:158
+#: seahub/utils/__init__.py:157
 msgid "permission error"
 msgstr ""
 
@@ -5086,7 +5103,7 @@ msgstr "Không thể xem sự sửa đổi của thư viện"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:734 seahub/views/__init__.py:879
-#: seahub/views/ajax.py:376 seahub/views/file.py:1853
+#: seahub/views/ajax.py:376 seahub/views/file.py:1860
 msgid "Library does not exist"
 msgstr "Thư viện không tồn tại"
 
@@ -5106,7 +5123,7 @@ msgstr "Lịch sử mà bạn chỉ định không tồn tại"
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:886 seahub/views/repo.py:300
+#: seahub/views/__init__.py:886 seahub/views/repo.py:295
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" không tồn tại."
@@ -5132,9 +5149,9 @@ msgstr ""
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1124 seahub/views/file.py:1345
-#: seahub/views/file.py:1862
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1131 seahub/views/file.py:1352
+#: seahub/views/file.py:1869
 msgid "File does not exist"
 msgstr "File không tồn tại"
 
@@ -5146,77 +5163,77 @@ msgstr ""
 msgid "No conflict in the merge."
 msgstr "Không có xung đột trong khi hợp nhất."
 
-#: seahub/views/file.py:189
+#: seahub/views/file.py:192
 msgid "HTTPError: failed to open file online"
 msgstr "Lỗi HTTP: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:193
+#: seahub/views/file.py:196
 msgid "URLError: failed to open file online"
 msgstr "Lỗi URL: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:200
+#: seahub/views/file.py:203
 msgid "The encoding you chose is not proper."
 msgstr ""
 
-#: seahub/views/file.py:217 seahub/views/file.py:220
+#: seahub/views/file.py:220 seahub/views/file.py:223
 msgid "Unknown file encoding"
 msgstr ""
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:655
-#: seahub/views/file.py:746 seahub/views/file.py:865
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:660
+#: seahub/views/file.py:751 seahub/views/file.py:872
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dung lượng %s quá nặng, không thể mở trực tuyến"
 
-#: seahub/views/file.py:347 seahub/views/file.py:781
+#: seahub/views/file.py:350 seahub/views/file.py:786
 msgid "The library is encrypted, can not open file online."
 msgstr " Thư viện đã mã hóa, không thể mở file trực tuyến"
 
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:510 seahub/views/file.py:734 seahub/views/file.py:987
-#: seahub/views/file.py:1010 seahub/views/file.py:1037
-#: seahub/views/file.py:1167 seahub/views/file.py:1263
-#: seahub/views/file.py:1366 seahub/views/file.py:1471
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:994
+#: seahub/views/file.py:1017 seahub/views/file.py:1044
+#: seahub/views/file.py:1174 seahub/views/file.py:1270
+#: seahub/views/file.py:1373 seahub/views/file.py:1478
 msgid "Unable to view file"
 msgstr ""
 
-#: seahub/views/file.py:805 seahub/views/file.py:935 seahub/views/file.py:1224
-#: seahub/views/file.py:1410
+#: seahub/views/file.py:810 seahub/views/file.py:942 seahub/views/file.py:1231
+#: seahub/views/file.py:1417
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:834 seahub/views/file.py:947 seahub/views/file.py:1243
-#: seahub/views/file.py:1425
+#: seahub/views/file.py:841 seahub/views/file.py:954 seahub/views/file.py:1250
+#: seahub/views/file.py:1432
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1070
+#: seahub/views/file.py:1077
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:1079
+#: seahub/views/file.py:1086
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:1084
+#: seahub/views/file.py:1091
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Không thể tải file, link chia sẻ đã hết băng thông."
 
-#: seahub/views/file.py:1091
+#: seahub/views/file.py:1098
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1178 seahub/views/file.py:1377
+#: seahub/views/file.py:1185 seahub/views/file.py:1384
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1280 seahub/views/file.py:1491
-#: seahub/views/repo.py:353
+#: seahub/views/file.py:1287 seahub/views/file.py:1498
+#: seahub/views/repo.py:348
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1609 seahub/views/file.py:1614
+#: seahub/views/file.py:1616 seahub/views/file.py:1621
 msgid "Unable to download file"
 msgstr "Không thể tải file"
 
