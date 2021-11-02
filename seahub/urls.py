@@ -34,7 +34,7 @@ from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
-from seahub.api2.endpoints.group_members import GroupMembers, GroupMember, \
+from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
         GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
@@ -119,6 +119,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.generate_user_auth_token import AdminGenerateUserAuthToken
 from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
@@ -193,6 +194,7 @@ urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
     url(r'^sso/$', sso, name='sso'),
+    url(r'^jwt-sso/$', jwt_sso, name='jwt_sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
     url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
@@ -308,6 +310,7 @@ urlpatterns = [
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/search-member/$', GroupSearchMember.as_view(), name='api-v2.1-group-search-member'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/import/$', GroupMembersImport.as_view(), name='api-v2.1-group-members-import'),
     url(r'^api/v2.1/group-members-import-example/$', GroupMembersImportExample.as_view(), name='api-v2.1-group-members-import-example'),
@@ -503,6 +506,9 @@ urlpatterns = [
     url(r'^api/v2.1/admin/abuse-reports/$', AdminAbuseReportsView.as_view(), name='api-v2.1-admin-abuse-reports'),
     url(r'^api/v2.1/admin/abuse-reports/(?P<pk>\d+)/$', AdminAbuseReportView.as_view(), name='api-v2.1-admin-abuse-report'),
 
+
+    ## admin::generate user auth token
+    url(r'^api/v2.1/admin/generate-user-auth-token/$', AdminGenerateUserAuthToken.as_view(), name='api-v2.1-admin-generate-user-auth-token'),
 
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
