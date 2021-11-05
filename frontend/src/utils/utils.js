@@ -1304,12 +1304,34 @@ export const Utils = {
     }
   },
 
-  generatePassword: function(passwordLength) {
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
-    let password = '';
-    for (let i = 0; i < passwordLength; i++) {
-      password += possible.charAt(Math.floor(Math.random() * possible.length));
+  generatePassword: function(length, hasNum=1, hasChar=1, hasSymbol=1) {
+
+    var password = "";
+
+    // 65~90：A~Z
+    password += String.fromCharCode(Math.floor((Math.random() * (90-65)) + 65));
+
+    // 97~122：a~z
+    password += String.fromCharCode(Math.floor((Math.random() * (122-97)) + 97));
+
+    // 48~57：0~9
+    password += String.fromCharCode(Math.floor((Math.random() * (57-48)) + 48));
+
+    // 33~47：!~/
+    password += String.fromCharCode(Math.floor((Math.random() * (47-33)) + 33));
+
+    // 33~47：!~/
+    // 48~57：0~9
+    // 58~64：:~@
+    // 65~90：A~Z
+    // 91~96：[~`
+    // 97~122：a~z
+    // 123~127：{~
+    for (var i = 0; i <= length-4; i++) {
+      var num = Math.floor((Math.random() * (127-33)) + 33);
+      password += String.fromCharCode(num);
     }
+
     return password;
   },
 
@@ -1502,7 +1524,7 @@ export const Utils = {
   onKeyDown: function(e) {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
-    }    
+    }
   }
 
 };
