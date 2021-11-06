@@ -9,7 +9,7 @@
 # LowMemory, 2016
 # FLEURY Kévin <kevinfleury.todae@gmail.com>, 2017
 # JulienDemangeon <freelance@demangeon.fr>, 2017
-# Gaspard <info@widelinkpc.be>, 2013-2020
+# Gaspard <info@widelinkpc.be>, 2013-2021
 # Gautier Auburtin <gautier.auburtin@campus-condorcet.fr>, 2016,2018,2020
 # Gilles Chauvin <gilles.chauvin@univ-rouen.fr>, 2016
 # imwhatiam <imwhatiam123@gmail.com>, 2017
@@ -36,9 +36,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 15:46+0800\n"
-"PO-Revision-Date: 2021-11-02 07:46+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-11-02 17:00+0800\n"
+"PO-Revision-Date: 2021-11-03 14:01+0000\n"
+"Last-Translator: Gaspard <info@widelinkpc.be>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2864,7 +2864,7 @@ msgid ""
 "(MD), a simple markup language, to ensure cross platform compatibility. MD "
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
-msgstr ""
+msgstr "Saisir et stocker des données peu structurées d'une manière facile à utiliser - voilà à quoi servent les wikis de Seafile. Les pages du wiki sont écrites en Markdown (MD), un langage de balisage simple, pour assurer la compatibilité entre les plateformes. Les fichiers MD stockent des informations textuelles, tabulaires et graphiques. Vous pouvez également ajouter des liens vers d'autres documents dans un fichier Markdown."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -2872,7 +2872,7 @@ msgid ""
 "View\" introduced in 7.0 version. Since Seafile implements wikis as standard"
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
-msgstr ""
+msgstr "Vous pouvez gérer une bibliothèque standard dans Seafile comme un Wiki, avec la \"Vue en colonne\" introduite dans la version 7.0. Puisque Seafile implémente les wikis comme des bibliothèques Seafile standard, ils peuvent être synchronisés et partagés avec d'autres utilisateurs comme n'importe quelle bibliothèque ordinaire."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
@@ -2886,7 +2886,7 @@ msgid ""
 "can browse in it and move files and folders just by dragging and dropping. "
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
-msgstr ""
+msgstr "Les wikis ont généralement une barre latérale contenant une structure de dossiers en forme d'arbre, pour permettre une navigation rapide et facile des pages du wiki. La vue en colonnes de Seafile permet de gérer les fichiers d'une bibliothèque de la même manière qu'un espace Wiki. Les utilisateurs peuvent y naviguer et déplacer des fichiers et des dossiers par simple glisser-déposer. Les actions sur les fichiers telles que le renommage, le déplacement et l'ouverture via le client sont disponibles dans un menu contextuel accessible par un clic droit."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
@@ -2905,24 +2905,24 @@ msgid ""
 "inserted and modified with just a few clicks. The same thing goes for a "
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
-msgstr ""
+msgstr "Les pages Wiki de Seafile sont enregistrées comme des documents ordinaires au format Markdown. Pour créer une nouvelle page Wiki dans une bibliothèque, il suffit de créer un nouveau document Markdown. Les fichiers MD peuvent être édités directement depuis l'interface web de Seafile avec l'éditeur MD en ligne. L'éditeur en ligne offre une expérience utilisateur fluide et des options de formatage riches pour le texte, les images et les tableaux. Les images peuvent être importées dans les fichiers MD depuis les bibliothèques et le stockage local, ainsi que par des hyperliens. Les fonctions d'édition d'images de base, telles que la mise à l'échelle, peuvent également être exécutées dans l'interface WYSIWYG (what-you-see-is-what-you-get) de l'éditeur. Les tableaux peuvent être insérés et modifiés en quelques clics. Il en va de même pour le contenu d'un tableau : Un tableau peut être copié dans sa totalité ou en partie sans quitter la vue WYSIWYG."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
-msgstr ""
+msgstr "L'historique des modifications d'un fichier Markdown est facilement accessible en cliquant sur le bouton \"Historique du fichier\" dans le menu en haut de l'interface de l'éditeur."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:17
 msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, formatting suggestions, and "
 "collaborative commenting are provided in this side bar."
-msgstr ""
+msgstr "Vous pouvez ouvrir une barre latérale cachée sur le côté droit de l'éditeur Markdown. La table des matières, les informations sur les fichiers, les suggestions de formatage et les commentaires collaboratifs sont fournis dans cette barre latérale."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Étiquetage des fichiers et documents connexes"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -2930,19 +2930,19 @@ msgid ""
 "allows users to define tags for each library and apply tags to files. Tags "
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
-msgstr ""
+msgstr "L'étiquetage des fichiers est une fonctionnalité importante pour la gestion des connaissances. Seafile permet aux utilisateurs de définir des balises pour chaque bibliothèque et d'appliquer des balises aux fichiers. Les balises peuvent être gérées à partir de la barre latérale de l'éditeur Markdown ou depuis l'interface du navigateur de fichiers."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "L'interface du navigateur de fichiers fournit un résumé de toutes les balises de fichiers dans la bibliothèque actuelle."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:25
 msgid ""
 "You can also add related files to a Markdown document from the \"File "
 "Information\" tab in the side bar."
-msgstr ""
+msgstr "Vous pouvez également ajouter des fichiers connexes à un document Markdown à partir de l'onglet \"Informations sur les fichiers\" depuis la barre latérale."
 
 #: seahub/help/templates/help/read-only_syncing.html:6
 #, python-format
@@ -2955,55 +2955,55 @@ msgid ""
 "popup a notification, saying that the local modified copy conflicts with the"
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
-msgstr ""
+msgstr "Pour les bibliothèques ou dossiers en lecture seule, Seafile affichera une icône interdite (<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) pour indiquer qu'ils sont en lecture seule. Cependant, les utilisateurs peuvent toujours modifier les copies locales synchronisées. Lorsqu'une copie locale est modifiée, Seafile ignorera la copie modifiée. Lorsque la copie sur le serveur est également modifiée, le client affichera une notification indiquant que la copie locale modifiée est en conflit avec la copie sur le serveur. Pour éviter la perte de données, la copie locale est renommée en fichier de conflit."
 
 #: seahub/help/templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
-msgstr ""
+msgstr "Si vous voulez que les utilisateurs partagés ne soient pas en mesure de modifier les copies locales, vous pouvez envisager d'utiliser le client Seafile Drive."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Restauration des fichiers et dossiers supprimés"
 
 #: seahub/help/templates/help/restoring_deleted_files.html:7
 msgid ""
 "Each library in Seafile tracks your file deletion operations automatically. "
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
-msgstr ""
+msgstr "Chaque bibliothèque de Seafile suit automatiquement vos opérations de suppression de fichiers. Parfois, vous constatez que des fichiers sont supprimés par erreur. Vous pouvez retrouver vos fichiers supprimés dans la corbeille de chaque bibliothèque."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Voici comment utiliser la fonction \"corbeille\" : "
 
 #: seahub/help/templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "Dans Seafile Web App, naviguez dans le dossier parent contenant le fichier ou le dossier supprimé."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:11
 msgid ""
 "Click the \"trash\" icon in the library operation bar. The deleted files and"
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
-msgstr ""
+msgstr "Cliquez sur l'icône \"corbeille\" dans la barre de fonctions de la bibliothèque. Les fichiers et dossiers supprimés sont répertoriés dans l'ordre de leur suppression. En bas de la liste, vous pouvez cliquer sur le bouton \"plus\" pour charger d'autres fichiers supprimés."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:12
 msgid ""
 "In the deleted files list, you can restore file and folders. If a file or "
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
-msgstr ""
+msgstr "Dans la liste des fichiers supprimés, vous pouvez restaurer des fichiers et des dossiers. Si le dossier parent d'un fichier ou d'un dossier a été supprimé, il sera restauré dans le dossier racine de la bibliothèque."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:13
 msgid ""
 "Note that the trash bin only contains files and sub-folders deleted under "
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
-msgstr ""
+msgstr "Notez que la corbeille ne contient que les fichiers et sous-dossiers supprimés dans le dossier en cours. Les fichiers supprimés dans les sous-dossiers du dossier en cours sont également inclus dans la liste."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -3011,7 +3011,7 @@ msgid ""
 "You can configure the retention period of deleted files: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "Vous pouvez configurer la période de rétention des fichiers supprimés : <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">paramétrage la période de rétention de l'historique</a>."
 
 #: seahub/help/templates/help/selective_sync.html:8
 msgid ""
@@ -3019,7 +3019,7 @@ msgid ""
 "currently only interested in a sub-folder inside one library. Then you can "
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
-msgstr ""
+msgstr "Vous avez peut-être de très grandes bibliothèques sur le serveur Seafile. Et vous n'êtes actuellement intéressé que par un sous-dossier dans une bibliothèque. Vous pouvez alors synchroniser sélectivement un sous-dossier dans une bibliothèque, au lieu de synchroniser la bibliothèque entière."
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -3037,90 +3037,90 @@ msgstr "Après la synchronisation du sous-dossier, vous pouvez voir son statut d
 
 #: seahub/help/templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Paramétrage de la période de rétention de l'historique de la bibliothèque"
 
 #: seahub/help/templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "La durée de la période de rétention de l'historique d'une bibliothèque contrôle la durée pendant laquelle vous pouvez accéder aux données de votre historique dans les fonctions suivantes : "
 
 #: seahub/help/templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "Restaurer les fichiers supprimés : vous ne pouvez pas restaurer les fichiers et dossiers supprimés en dehors de la période de rétention."
 
 #: seahub/help/templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "Versions de fichiers : vous ne pouvez pas accéder aux versions de fichiers antérieures en dehors de la période de rétention."
 
 #: seahub/help/templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "Historique et instantanés de la bibliothèque : vous ne pouvez pas accéder aux instantanés de la bibliothèque antérieurs à la période de rétention."
 
 #: seahub/help/templates/help/setting_library_history.html:13
 msgid ""
 "The retention period of old files versions can be configured for each "
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
-msgstr ""
+msgstr "La période de rétention des anciennes versions des fichiers peut être configurée pour chaque bibliothèque, séparément. Vous devez être le propriétaire de la bibliothèque pour définir la période de rétention. Comment définir la durée de la période de rétention : "
 
 #: seahub/help/templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
-msgstr ""
+msgstr "Dans Seafile Web App, cliquez sur l'onglet \"Mes bibliothèques\" dans le panneau de navigation (comme dans la capture d'écran ci-dessous). Toutes les bibliothèques que vous possédez seront listées."
 
 #: seahub/help/templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "Déplacez le curseur sur la ligne de la bibliothèque. Un menu d'opération apparaît. Cliquez sur \"Paramètres de l'historique\" dans le menu déroulant."
 
 #: seahub/help/templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "Dans la boîte de dialogue contextuelle, vous pouvez définir la durée de la période de rétention des fichiers."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "Dans Seafile, il existe plusieurs façons de partager des fichiers et des dossiers avec d'autres personnes : "
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "Utilisation de liens : il existe plusieurs types de liens qui peuvent être utilisés pour partager avec différents types de collaborateurs."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "Partager des liens : Tout utilisateur ayant accès aux liens peut accéder aux fichiers ou dossiers pointés par le lien. Aucune authentification n'est requise."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "Liens de téléchargement : Tout utilisateur ayant accès aux liens peut télécharger des fichiers vers le dossier indiqué par le lien. Aucune authentification n'est requise."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
-msgstr ""
+msgstr "Liens internes : Seuls les utilisateurs connectés qui ont le droit de lire le fichier ou le dossier peuvent accéder à ce lien. Utilisé pour le partage en interne de fichiers."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:15
 msgid ""
 "Sharing libraries or folders: used for setting access permissions to a "
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
-msgstr ""
+msgstr "Partage de bibliothèques ou de dossiers : utilisé pour définir les autorisations d'accès d'une bibliothèque ou d'un dossier pour des utilisateurs ou des groupes spécifiques. Les utilisateurs doivent se connecter pour accéder aux dossiers."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
@@ -3131,51 +3131,51 @@ msgid ""
 "Share links are public links to files or folders. They can be accessed by "
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
-msgstr ""
+msgstr "Les liens de partage sont des liens publics vers des fichiers ou des dossiers. Ils sont accessibles par tous, y compris à ceux qui n'ont pas de compte Seafile. Vous pouvez également utiliser un mot de passe et un délai d'expiration pour protéger vos liens."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "Vous pouvez également définir des autorisations d'accès pour partager des liens. Il existe trois types de permissions : "
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:21
 msgid ""
 "Preview and Download: the file or files in the folder can be downloaded. If "
 "the type of files can be previewd in web browser, they can also be viewed "
 "online (e.g. Office files)."
-msgstr ""
+msgstr "Prévisualisation et téléchargement : le ou les fichiers du dossier peuvent être téléchargés. Si le type de fichiers peut être prévisualisé dans le navigateur web, ils peuvent également être visualisés en ligne (par exemple, les fichiers Office)."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
-msgstr ""
+msgstr "Prévisualisation uniquement : le ou les fichiers du dossier peuvent uniquement être visualisés dans le navigateur web, mais ne peuvent pas être téléchargés. Cette option est utile pour partager des données confidentielles."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:23
 msgid ""
 "Edit on cloud and download: Similar to \"Preview and Download\", but if the "
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
-msgstr ""
+msgstr "Modifier sur le cloud et télécharger : Similaire à \"Prévisualiser et télécharger\", mais si le fichier peut être édité dans un navigateur web (par exemple un fichier Office), tout utilisateur ayant accès au lien est autorisé à l'éditer."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Comment créer un lien de partage dans l'application web Seafile : "
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "Naviguez dans le dossier parent contenant le fichier ou le dossier. Passez votre souris sur le fichier ou le dossier et cliquez sur l'icône \"Partager\" qui apparaît."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:28
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share Link\" tab"
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
-msgstr ""
+msgstr "Une fenêtre pop-up apparaîtra avec des options de partage. Cliquez sur l'onglet \"Lien de partage\" dans le panneau de gauche. Cliquez ensuite sur le bouton \"Générer\" pour créer un lien. Vous pouvez utiliser un mot de passe, un délai d'expiration et une autorisation pour protéger votre lien."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:29
 #: seahub/help/templates/help/sharing_files_and_folders.html:42
@@ -3540,11 +3540,11 @@ msgid ""
 "You can log into multiple accounts in the Drive client. However, only files "
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
-msgstr ""
+msgstr "Vous pouvez vous connecter à plusieurs comptes au client Drive. Cependant, seuls les fichiers du serveur actuellement sélectionné seront affichés dans le lecteur virtuel. Vous pouvez passer d'un compte à l'autre."
 
 #: seahub/help/templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. Pourquoi ne puis-je pas créer de nouveaux fichiers ou supprimer des dossiers dans le dossier racine ?"
 
 #: seahub/help/templates/help/using_drive_client.html:81
 msgid ""
@@ -3554,7 +3554,7 @@ msgid ""
 "files in root folder. Since the top level folders in the virtual drive "
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
-msgstr ""
+msgstr "Le dossier racine du lecteur virtuel ne contient que des dossiers de bibliothèque. Seafile peut seulement synchroniser les fichiers à l'intérieur des bibliothèques. Les fichiers dans le dossier racine ne peuvent pas être téléchargés vers le serveur Seafile. Il n'est donc pas logique de soutenir la création de fichiers dans le dossier racine. Puisque les dossiers de niveau supérieur dans le lecteur virtuel représentent des bibliothèques, nous ne voulons pas que les utilisateurs suppriment leurs bibliothèques par erreur. Donc le client Drive ne supporte pas la suppression des dossiers de niveau supérieur."
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:6
 msgid ""
@@ -3734,7 +3734,7 @@ msgstr "Impossible de supprimer : l'utilisateur n'existe pas"
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Vous avez invité %(site_name)s à rejoindre."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -3761,7 +3761,7 @@ msgstr "Bonjour,"
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s vous a invité à rejoindre %(site_name)s. Veuillez cliquer sur le lien suivant :"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -4215,7 +4215,7 @@ msgstr "avancé"
 
 #: seahub/search/templates/search_results.html:56
 msgid "No result found"
-msgstr ""
+msgstr "Aucun résultat trouvé"
 
 #: seahub/search/templates/search_results.html:58
 #, python-format
@@ -4242,15 +4242,15 @@ msgstr "La date de début doit être plus récente que la date de fin."
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr ""
+msgstr "Argument non valide."
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
-msgstr ""
+msgstr "Date non valide."
 
 #: seahub/search/views.py:97 seahub/search/views.py:105
 msgid "Invalid file size."
-msgstr ""
+msgstr "Taille de fichier non valide."
 
 #: seahub/search/views.py:112
 msgid "Invalid file size range."
@@ -4258,12 +4258,12 @@ msgstr "L'intervalle de la taille de fichier n'est pas valide."
 
 #: seahub/search/views.py:117
 msgid "Invalid date range."
-msgstr ""
+msgstr "Plage de dates non valide."
 
 #: seahub/search/views.py:166
 #, python-format
 msgid "Library %s not found."
-msgstr ""
+msgstr "Bibliothèque %s non trouvée."
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -4352,7 +4352,7 @@ msgstr "L'envoi du code de vérification a échoué, veuillez réessayer plus ta
 #: seahub/sysadmin_extra/views.py:91 seahub/sysadmin_extra/views.py:148
 #: seahub/sysadmin_extra/views.py:203
 msgid "Failed to export excel, invalid start or end date"
-msgstr ""
+msgstr "Échec de l'exportation d'Excel, date de début ou de fin non valide."
 
 #: seahub/sysadmin_extra/views.py:61 seahub/views/sysadmin.py:703
 msgid "Success"
@@ -4365,12 +4365,12 @@ msgstr "Échec"
 #: seahub/sysadmin_extra/views.py:67 seahub/sysadmin_extra/views.py:124
 #: seahub/sysadmin_extra/views.py:179 seahub/sysadmin_extra/views.py:256
 msgid "Failed to export excel"
-msgstr ""
+msgstr "Échec de l'exportation d'excel"
 
 #: seahub/sysadmin_extra/views.py:85 seahub/sysadmin_extra/views.py:142
 #: seahub/sysadmin_extra/views.py:197
 msgid "Failed to export excel, this feature is only in professional version."
-msgstr ""
+msgstr "Impossible d'exporter l'Excel, cette fonction n'est disponible que dans la version professionnelle."
 
 #: seahub/sysadmin_extra/views.py:154 seahub/sysadmin_extra/views.py:208
 msgid "Action"
@@ -4390,7 +4390,7 @@ msgstr "Droit"
 
 #: seahub/sysadmin_extra/views.py:209
 msgid "Folder Path"
-msgstr ""
+msgstr "Chemin du dossier"
 
 #: seahub/sysadmin_extra/views.py:223
 msgid "Organization"
