@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 16:46+0800\n"
-"PO-Revision-Date: 2021-11-02 08:34+0000\n"
+"POT-Creation-Date: 2021-11-06 11:48+0800\n"
+"PO-Revision-Date: 2021-11-06 03:52+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1184,7 +1184,7 @@ msgstr "直接下载连接已复制到剪切板。"
 msgid ""
 "Password is too weak, should have at least {shareLinkPasswordStrengthLevel} "
 "of the following: num, upper letter, lower letter and other symbols"
-msgstr "密码强度太弱，以下至少需要 {shareLinkPasswordStengthLevel} 种: 数字，大写字母，小写字母和其他符号"
+msgstr "密码强度太弱，以下至少需要 {shareLinkPasswordStrengthLevel} 种: 数字，大写字母，小写字母和其他符号"
 
 #: frontend/src/components/dialog/generate-share-link.js:353
 #: frontend/src/pages/share-admin/folders.js:166
@@ -1199,7 +1199,7 @@ msgid ""
 "(at least {passwordLength} characters and has "
 "{shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower "
 "letter and other symbols)"
-msgstr "（至少需要 {passwordLength} 个字符并且以下至少需要{shareLinkPasswordStengthLevel} 种: 数字，大写字母，小写字母和其他符号）"
+msgstr "（至少需要 {passwordLength} 个字符并且以下至少需要{shareLinkPasswordStrengthLevel} 种: 数字，大写字母，小写字母和其他符号）"
 
 #: frontend/src/components/dialog/generate-share-link.js:378
 msgid "Link:"
