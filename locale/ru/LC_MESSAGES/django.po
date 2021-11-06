@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 15:46+0800\n"
-"PO-Revision-Date: 2021-11-02 07:46+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2021-11-02 17:00+0800\n"
+"PO-Revision-Date: 2021-11-02 18:58+0000\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3733,7 +3733,7 @@ msgstr "Не удалось удалить: Пользователь не сущ
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Вы приглашены присоединиться к %(site_name)s."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -4218,16 +4218,16 @@ msgstr "расширенный"
 
 #: seahub/search/templates/search_results.html:56
 msgid "No result found"
-msgstr ""
+msgstr "Результатов не найдено"
 
 #: seahub/search/templates/search_results.html:58
 #, python-format
 msgid "%(total)s result"
 msgid_plural "%(total)s results"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%(total)s результат"
+msgstr[1] "%(total)s результатов"
+msgstr[2] "%(total)s результатов"
+msgstr[3] "%(total)s результатов"
 
 #: seahub/search/templates/search_results.html:63
 msgid "Directory icon"
@@ -4247,15 +4247,15 @@ msgstr "Дата начала должна быть раньше даты око
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr ""
+msgstr "Недопустимый аргумент."
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
-msgstr ""
+msgstr "Недопустимая дата."
 
 #: seahub/search/views.py:97 seahub/search/views.py:105
 msgid "Invalid file size."
-msgstr ""
+msgstr "Недопустимый размер файла."
 
 #: seahub/search/views.py:112
 msgid "Invalid file size range."
@@ -4263,12 +4263,12 @@ msgstr "Неверный диапазон размеров файла."
 
 #: seahub/search/views.py:117
 msgid "Invalid date range."
-msgstr ""
+msgstr "Недопустимый диапазон дат."
 
 #: seahub/search/views.py:166
 #, python-format
 msgid "Library %s not found."
-msgstr ""
+msgstr "Библиотека %s не найдена."
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -4357,7 +4357,7 @@ msgstr "Не удалось отправить проверочный код, п
 #: seahub/sysadmin_extra/views.py:91 seahub/sysadmin_extra/views.py:148
 #: seahub/sysadmin_extra/views.py:203
 msgid "Failed to export excel, invalid start or end date"
-msgstr ""
+msgstr "Не удалось экспортировать Excel, неверная дата начала или окончания"
 
 #: seahub/sysadmin_extra/views.py:61 seahub/views/sysadmin.py:703
 msgid "Success"
@@ -4370,12 +4370,12 @@ msgstr "Не удалось"
 #: seahub/sysadmin_extra/views.py:67 seahub/sysadmin_extra/views.py:124
 #: seahub/sysadmin_extra/views.py:179 seahub/sysadmin_extra/views.py:256
 msgid "Failed to export excel"
-msgstr ""
+msgstr "Не удалось экспортировать Excel"
 
 #: seahub/sysadmin_extra/views.py:85 seahub/sysadmin_extra/views.py:142
 #: seahub/sysadmin_extra/views.py:197
 msgid "Failed to export excel, this feature is only in professional version."
-msgstr ""
+msgstr "Не удалось экспортировать Excel, эта функция есть только в профессиональной версии."
 
 #: seahub/sysadmin_extra/views.py:154 seahub/sysadmin_extra/views.py:208
 msgid "Action"
@@ -4395,7 +4395,7 @@ msgstr "Доступ"
 
 #: seahub/sysadmin_extra/views.py:209
 msgid "Folder Path"
-msgstr ""
+msgstr "Путь к папке"
 
 #: seahub/sysadmin_extra/views.py:223
 msgid "Organization"
