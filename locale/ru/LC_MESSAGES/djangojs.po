@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 16:46+0800\n"
-"PO-Revision-Date: 2021-11-02 08:34+0000\n"
+"POT-Creation-Date: 2021-11-06 11:48+0800\n"
+"PO-Revision-Date: 2021-11-06 03:52+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -1802,7 +1802,7 @@ msgstr "Управление членами группы"
 #: frontend/src/components/dialog/manage-members-dialog.js:47
 #: frontend/src/components/list-and-add-group-members.js:162
 msgid "Search group members"
-msgstr ""
+msgstr "Поиск участников группы"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:155
 msgid "Move {placeholder} to"
@@ -5501,15 +5501,15 @@ msgstr "Включить системного администратора до�
 
 #: frontend/src/pages/upload-link/file-uploader.js:305
 msgid "File upload started"
-msgstr ""
+msgstr "Загрузка файла началась"
 
 #: frontend/src/pages/upload-link/file-uploader.js:425
 msgid "All files uploaded"
-msgstr ""
+msgstr " Все файлы загружены"
 
 #: frontend/src/pages/upload-link/file-uploader.js:439
 msgid "Failed to upload {file_name}."
-msgstr ""
+msgstr "Не удалось загрузить {file_name}."
 
 #: frontend/src/pages/upload-link/index.js:40
 msgid "Upload files to {folder_name_placeholder}"
