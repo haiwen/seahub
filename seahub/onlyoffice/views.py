@@ -81,12 +81,22 @@ def onlyoffice_editor_callback(request):
     doc_key = post_data.get('key')
     doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
     if not doc_info_from_cache:
-        logger.error('can not get doc_info from cache by doc_key {}'.format(doc_key))
+        logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
         logger.info(post_data)
         return HttpResponse('{"error": 1}')
 
     if status == 1:
-        logger.info(post_data)
+        logger.info('status {}: {}'.format(status, post_data))
+
+        actions = post_data.get('actions')
+        if actions:
+
+            if actions[0].get('type') == 1:
+                logger.info('status {}: user connects to the document co-editing'.format(status))
+
+            if actions[0].get('type') == 0:
+                logger.info('status {}: user disconnects to the document co-editing'.format(status))
+
         return HttpResponse('{"error": 0}')
 
     if status not in (2, 4, 6):
