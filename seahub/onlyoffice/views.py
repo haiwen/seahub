@@ -86,16 +86,15 @@ def onlyoffice_editor_callback(request):
         return HttpResponse('{"error": 1}')
 
     if status == 1:
-        logger.info('status {}: {}'.format(status, post_data))
 
         actions = post_data.get('actions')
         if actions:
-
             if actions[0].get('type') == 1:
-                logger.info('status {}: user connects to the document co-editing'.format(status))
-
+                logger.info('status {}, user connects: {}'.format(status, post_data))
             if actions[0].get('type') == 0:
-                logger.info('status {}: user disconnects to the document co-editing'.format(status))
+                logger.info('status {}, user disconnects: {}'.format(status, post_data))
+        else:
+            logger.info('status {}: {}'.format(status, post_data))
 
         return HttpResponse('{"error": 0}')
 
