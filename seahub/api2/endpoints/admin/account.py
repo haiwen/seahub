@@ -92,6 +92,11 @@ class Account(APIView):
             for r in seafile_api.get_owned_repo_list(from_user):
                 seafile_api.set_repo_owner(r.id, user2.username)
 
+            # transfer shared repos to new user
+            for r in seafile_api.get_share_in_repo_list(from_user, 0, -1):
+                owner = seafile_api.get_repo_owner(r.repo_id)
+                seafile_api.share_repo(r.repo_id, owner, to_user, r.permission)
+
             # transfer joined groups to new user
             for g in ccnet_api.get_groups(from_user):
                 if not is_group_member(g.id, user2.username):
