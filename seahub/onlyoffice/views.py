@@ -48,7 +48,7 @@ def onlyoffice_editor_callback(request):
         logger.error('Request method if not POST.')
         # The document storage service must return the following response.
         # otherwise the document editor will display an error message.
-        return HttpResponse('{"error": 0}')
+        return HttpResponse('{"error": 1}')
 
     # body info of POST rquest when open file on browser
     # {u'actions': [{u'type': 1, u'userid': u'uid-1527736776860'}],
@@ -93,22 +93,32 @@ def onlyoffice_editor_callback(request):
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
 
+    # get doc key and file basic info from cache
+    doc_key = post_data.get('key')
+    doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
+    if not doc_info_from_cache:
+        logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+        logger.info(post_data)
+        return HttpResponse('{"error": 1}')
+
     if status == 1:
-        logger.info('status {}'.format(status))
+
+        actions = post_data.get('actions')
+        if actions:
+            if actions[0].get('type') == 1:
+                logger.info('status {}, user connects: {}'.format(status, post_data))
+            if actions[0].get('type') == 0:
+                logger.info('status {}, user disconnects: {}'.format(status, post_data))
+        else:
+            logger.info('status {}: {}'.format(status, post_data))
+
         return HttpResponse('{"error": 0}')
 
     if status not in (2, 4, 6):
         logger.error('status {}: invalid status'.format(status))
-        return HttpResponse('{"error": 0}')
+        return HttpResponse('{"error": 1}')
 
-    # get file basic info
-    doc_key = post_data.get('key')
-    doc_info = get_file_info_by_doc_key(doc_key)
-    if not doc_info:
-        logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
-        return HttpResponse('{"error": 0}')
-    else:
-        logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
+    doc_info = json.loads(doc_info_from_cache)
 
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
@@ -123,7 +133,7 @@ def onlyoffice_editor_callback(request):
         onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
         if not onlyoffice_resp:
             logger.error('[OnlyOffice] No response from file content url.')
-            return HttpResponse('{"error": 0}')
+            return HttpResponse('{"error": 1}')
 
         fake_obj_id = {'online_office_update': True}
         update_token = seafile_api.get_fileserver_access_token(repo_id,
@@ -133,7 +143,7 @@ def onlyoffice_editor_callback(request):
 
         if not update_token:
             logger.error('[OnlyOffice] No fileserver access token.')
-            return HttpResponse('{"error": 0}')
+            return HttpResponse('{"error": 1}')
 
         # get file content
         files = {
