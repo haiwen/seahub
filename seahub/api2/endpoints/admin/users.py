@@ -905,7 +905,7 @@ class AdminSearchUser(APIView):
             if getattr(settings, 'MULTI_INSTITUTION', False):
                 for user in users:
                     if not hasattr(user, 'institution'):
-                        profile = Profile.objects.filter(user=user.email)
+                        profile = Profile.objects.get(user=user.email)
                         user.institution = profile.institution
 
         data = []
