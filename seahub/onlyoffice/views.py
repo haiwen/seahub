@@ -45,7 +45,7 @@ def onlyoffice_editor_callback(request):
     """
 
     if request.method != 'POST':
-        logger.error('Request method if not POST.')
+        logger.error('Request method is not POST.')
         # The document storage service must return the following response.
         # otherwise the document editor will display an error message.
         return HttpResponse('{"error": 1}')
@@ -95,9 +95,9 @@ def onlyoffice_editor_callback(request):
 
     # get doc key and file basic info from cache
     doc_key = post_data.get('key')
-    doc_info_from_cache = cache.get("ONLYOFFICE_%s" % doc_key)
-    if not doc_info_from_cache:
-        logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+    doc_info = get_file_info_by_doc_key(doc_key)
+    if not doc_info:
+        logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
         logger.info(post_data)
         return HttpResponse('{"error": 1}')
 
@@ -118,11 +118,11 @@ def onlyoffice_editor_callback(request):
         logger.error('status {}: invalid status'.format(status))
         return HttpResponse('{"error": 1}')
 
-    doc_info = json.loads(doc_info_from_cache)
-
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
     username = doc_info['username']
+
+    logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     # save file
     if status in (2, 6):
