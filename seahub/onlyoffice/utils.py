@@ -12,7 +12,6 @@ from seaserv import seafile_api
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
         get_site_scheme_and_netloc
-from seahub.utils.file_op import if_locked_by_online_office
 
 from seahub.onlyoffice.models import OnlyOfficeDocKey
 
@@ -105,11 +104,11 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
 
     filetype, fileext = get_file_type_and_ext(file_path)
     if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
-        document_type = 'spreadsheet'
+        document_type = 'cell'
     elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
-        document_type = 'presentation'
+        document_type = 'slide'
     else:
-        document_type = 'text'
+        document_type = 'word'
 
     if not can_edit:
         doc_key = generate_onlyoffice_doc_key(origin_repo_id, origin_file_path, file_id)
@@ -120,9 +119,6 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                                                                                          origin_repo_id,
                                                                                          origin_file_path))
         else:
-            if if_locked_by_online_office(repo_id, file_path):
-                logger.warning('no doc_key in database, but file {} in {} is locked by online office'.format(file_path, repo_id))
-
             doc_key = generate_onlyoffice_doc_key(origin_repo_id, origin_file_path, file_id)
             save_doc_key(doc_key, username, origin_repo_id, origin_file_path)
             logger.info('save doc_key {} to database'.format(doc_key))
@@ -176,6 +172,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                     "forcesave": ONLYOFFICE_FORCE_SAVE,
                 },
                 "user": {
+                    "id": username,
                     "name": email2nickname(username)
                 }
             }

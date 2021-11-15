@@ -521,13 +521,11 @@ def view_lib_file(request, repo_id, path):
 
     if ENABLE_THIRDPARTY_EDITOR:
 
-
         filename = os.path.basename(path)
         filetype, fileext = get_file_type_and_ext(filename)
 
         action_url = THIRDPARTY_EDITOR_ACTION_URL_DICT.get(fileext, '')
         if action_url:
-
 
             user_repo_path_info = {
                 'request_user': request.user.username,
@@ -627,6 +625,7 @@ def view_lib_file(request, repo_id, path):
     except Exception as e:
         logger.error(e)
         latest_contributor, last_modified = None, 0
+
     return_dict['latest_contributor'] = latest_contributor
     return_dict['last_modified'] = last_modified
 
@@ -667,8 +666,7 @@ def view_lib_file(request, repo_id, path):
         if file_enc not in FILE_ENCODING_LIST:
             file_enc = 'auto'
 
-        error_msg, file_content, encoding = get_file_content(filetype,
-                inner_path, file_enc)
+        error_msg, file_content, encoding = get_file_content(filetype, inner_path, file_enc)
         if error_msg:
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
@@ -744,7 +742,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['xmind_image_src'] = urlquote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
 
         return render(request, template, return_dict)
-        
+
     elif filetype == IMAGE:
 
         if file_size > FILE_PREVIEW_MAX_SIZE:
@@ -799,9 +797,9 @@ def view_lib_file(request, repo_id, path):
                 action_name = 'edit'
 
             wopi_dict = get_wopi_dict(username, repo_id, path,
-                    action_name=action_name,
-                    language_code=request.LANGUAGE_CODE,
-                    can_download=parse_repo_perm(permission).can_download)
+                                      action_name=action_name,
+                                      language_code=request.LANGUAGE_CODE,
+                                      can_download=parse_repo_perm(permission).can_download)
 
             if wopi_dict:
                 send_file_access_msg(request, repo, path, 'web')
@@ -818,7 +816,8 @@ def view_lib_file(request, repo_id, path):
                 can_edit = True
 
             onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
-                    can_edit=can_edit, can_download=parse_repo_perm(permission).can_download)
+                                                  can_edit=can_edit,
+                                                  can_download=parse_repo_perm(permission).can_download)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
