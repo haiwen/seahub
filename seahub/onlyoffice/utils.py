@@ -171,12 +171,21 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "customization": {
                     "forcesave": ONLYOFFICE_FORCE_SAVE,
                 },
-                "user": {
-                    "id": username,
-                    "name": email2nickname(username)
-                }
             }
         }
+
+        if request.user.is_authenticated:
+            user_dict = {
+                "id": username,
+                "name": email2nickname(username)
+            }
+            config['editorConfig']['user'] = user_dict
+        else:
+            anonymous_dict = {
+                "request": True,
+                "label": "Guest"
+            }
+            config['editorConfig']['customization']['anonymous'] = anonymous_dict
 
         return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
 
