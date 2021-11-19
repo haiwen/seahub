@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username, \
+from seahub.utils import IS_EMAIL_CONFIGURED, \
     is_valid_email, string2list, gen_shared_link, send_html_email, \
     get_site_name
 from seahub.share.models import FileShare
@@ -21,9 +21,10 @@ from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
 
+
 class SendShareLinkView(APIView):
 
-    authentication_classes = (TokenAuthentication, SessionAuthentication )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -80,6 +81,7 @@ class SendShareLinkView(APIView):
                 'email': username,
                 'to_email': to_email,
                 'extra_msg': extra_msg,
+                'password': link.get_password(),
             }
 
             if REPLACE_FROM_EMAIL:

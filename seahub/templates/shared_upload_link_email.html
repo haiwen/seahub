@@ -16,6 +16,10 @@
 <a href="{{ shared_upload_link }}">{{ shared_upload_link }}</a>
 </p>
 
+{% if password %}
+<p>{% trans "Password:"%} {{ password }}</p>
+{% endif %}
+
 {% if extra_msg %}
 <p>" {{ extra_msg }} "</p>
 {% endif %}

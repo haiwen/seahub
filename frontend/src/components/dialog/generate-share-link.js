@@ -400,6 +400,14 @@ class GenerateShareLink extends React.Component {
                 </dd>
               </FormGroup>
             )}
+            {sharedLinkInfo.password && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
+                <dd className="d-flex">
+                  <span>{sharedLinkInfo.password}</span>
+                </dd>
+              </FormGroup>
+            )}
             {sharedLinkInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
