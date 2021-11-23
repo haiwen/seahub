@@ -56,6 +56,7 @@ class GenerateShareLink extends React.Component {
       expDate: null,
       password: '',
       passwdnew: '',
+      storedPasswordVisible: false,
       errorInfo: '',
       sharedLinkInfo: null,
       isNoticeMessageShow: false,
@@ -179,6 +180,12 @@ class GenerateShareLink extends React.Component {
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
     this.setState({passwdnew: passwd});
+  }
+
+  toggleStoredPasswordVisible = () => {
+    this.setState({
+      storedPasswordVisible: !this.state.storedPasswordVisible
+    });
   }
 
   setPermission = (e) => {
@@ -404,7 +411,10 @@ class GenerateShareLink extends React.Component {
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
                 <dd className="d-flex">
-                  <span>{sharedLinkInfo.password}</span>
+                  <div className="d-flex align-items-center">
+                    <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedLinkInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedLinkInfo.password.length, 10)} />
+                    <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                  </div>
                 </dd>
               </FormGroup>
             )}

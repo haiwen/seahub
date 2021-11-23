@@ -46,6 +46,7 @@ class GenerateUploadLink extends React.Component {
       passwordVisible: false,
       password: '',
       passwordnew: '',
+      storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
@@ -108,6 +109,12 @@ class GenerateUploadLink extends React.Component {
   inputPasswordNew = (e) => {
     this.setState({
       passwordnew: e.target.value
+    });
+  }
+
+  toggleStoredPasswordVisible = () => {
+    this.setState({
+      storedPasswordVisible: !this.state.storedPasswordVisible
     });
   }
 
@@ -279,6 +286,19 @@ class GenerateUploadLink extends React.Component {
                 />
               </dd>
             </FormGroup>
+
+            {sharedUploadInfo.password && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
+                <dd className="d-flex">
+                  <div className="d-flex align-items-center">
+                    <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedUploadInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedUploadInfo.password.length, 10)} />
+                    <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                  </div>
+                </dd>
+              </FormGroup>
+            )}
+
             {sharedUploadInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
