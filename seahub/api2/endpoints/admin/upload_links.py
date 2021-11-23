@@ -276,7 +276,7 @@ class AdminUploadLinkCheckPassword(APIView):
             error_msg = 'password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if check_password(password, uploadlink.password):
+        if check_password(password, uploadlink.password) or password == uploadlink.get_password():
             return Response({'success': True})
         else:
             error_msg = 'Password is not correct.'

@@ -506,6 +506,18 @@ class UploadLinkShare(models.Model):
         else:
             return False
 
+    def get_password(self):
+
+        if self.password:
+            try:
+                aes = AESPasswordHasher()
+                return aes.decode(self.password)
+            except Exception:
+                logger.error('Error occurred when get share link password')
+                return ''
+        else:
+            return ''
+
 
 class PrivateFileDirShareManager(models.Manager):
 
