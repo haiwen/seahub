@@ -880,6 +880,14 @@ def view_lib_file(request, repo_id, path):
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
+    elif getattr(settings, 'ENABLE_CAD', False) and path.endswith('.dwg'):
+
+        from seahub.cad.utils import get_cad_dict
+        cad_dict = get_cad_dict(request, username, repo_id, path)
+
+        return_dict.update(cad_dict)
+
+        return render(request, 'view_file_cad.html', return_dict)
     else:
         return_dict['err'] = "File preview unsupported"
         return render(request, template, return_dict)

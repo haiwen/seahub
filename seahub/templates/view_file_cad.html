@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{filename}}</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #webcad {
+      width: 100%;
+      height: 100%;
+    }
+
+    /*
+    如果不需要布局功能，可以取消这个注释，布局按钮就隐藏了。
+	  电脑网页布局按钮隐藏
+    #GStarSDK-pc-toolsbar-floatbar-layout {
+      display: none;
+    }
+    */
+
+    /*手机网页布局按钮隐藏
+    .GStarSDK #GStarSDK-panel-list li:nth-child(3) {
+      display: none;
+    }
+   */
+  </style>
+</head>
+
+<body>
+  <div id="webcad"></div>
+  <script type="text/javascript" src="{{ MEDIA_URL }}js/GStarSDK.js"></script>
+  <script>
+    //先判断是否是IE浏览器，IE10及以下的IE浏览器不支持，直接弹出提示告知
+    window.onload = function () {
+      var browser = getBrowerInfo()
+      var ieversion = getIeVersion();
+      if (browser == 'IE') {
+        if (ieversion != '11.0') {
+          alert('不支持IE10及以下的浏览器，请使用其他浏览器打开重试！')
+        }
+      }
+    }
+
+    // 初始化SDK
+    var gstarSDK = new GStarSDK({
+      wrapId: 'webcad',  //容器ID
+      switchLayoutCB: switchLayout, // 点击布局功能会触发此回调
+      apiHost: window.location.host,  //API域名，转换PDF、另存功能需要向该域名发送请求，如果没有用的转PDF、版本转换功能，则无须关注这个参数。
+
+      tipsTime: 3000, //错误提示信息存在时间(毫秒)，默认3000（3秒）
+      mobileSizeLimit: {{cad_mobile_size_limit}}, //移动端可打开ocf文件的最大限制（字节数），默认5242880(5M)
+      pcSizeLimit: {{cad_pc_size_limit}},  //PC端可打开ocf文件最大限制（字节数），默认12582912(12M)
+      sizeLimitCB: sizeLimit, //当ocf文件超过设置的最大值后，执行该回调函数
+      language: 'zh', //语言设置，可选'zh'（简中）/'en'(英语)/'ko'(韩语),默认'zh'
+      measureAccuracy: 3,  //测量数值的精度位数
+      mode: 'default', //填充显示模式，"default":默认值，粗文字不填充，其他填充图案正常填充；"line":所有元素都不填充；"fill":所有需要填充元素都填充
+    })
+
+    gstarSDK.enableZoom(5)  // 开启鼠标缩放功能,数字是缩放的速度
+    gstarSDK.enablePan(1)    // 开启鼠标平移功能
+
+    var fileId = "{{file_id}}"; //自定义，当前图纸的唯一标识
+
+    // 当ocf文件超过设置的最大值后，执行这个函数，里面逻辑可以自己定义
+    function sizeLimit(ocfSize, limitSize) {
+      alert('图纸太大，超过了系统设置的最大值')
+      //alert('图纸太大，当前图纸大小:' + parseInt(ocfSize / 1048576) + 'M,大于系统限制的：' + parseInt(limitSize / 1048576)+'M')
+    }
+
+    //测试用的ocf样例文件
+    var demoocfurl = {
+      '*MODEL_SPACE': 'https://resource-cn.gstarcad.com/sampledraw/0000012863.ocf',
+      '*PAPER_SPACE': 'https://resource-cn.gstarcad.com/sampledraw/0000012863.257.ocf',
+    }
+
+    // 初始化渲染默认ocf文件
+    //var defaultocfurl = 'http://127.0.0.1/file/ocf/1001/test.ocf'  //默认显示的ocf文件url地址
+    //var defaultocfurl = demoocfurl['*MODEL_SPACE']
+    var defaultocfurl = "{{doc_url|safe}}";
+    getDrawSheet(defaultocfurl, function (arraybuffer) {
+      gstarSDK.render('ocf', arraybuffer, fileId, true)
+    })
+
+    // 切换布局回调方法
+    function switchLayout(obj) {
+      alert(obj.globalName) //布局名称
+      //var makeocfurl = 'http://127.0.0.1/transform.do?fileId=' + fileId + '&layout=' + obj.globalName //根据布局globalName获取相应布局名称，由于布局图形必须有对应的布局名称，后台才能转换生成，需要将布局名传给后台，然后后台返回转换后的ocf地址
+      //var layoutocfurl = getLayoutOcfUrl(makeocfurl)
+
+      var layoutocfurl = demoocfurl[String(obj.globalName)] //样例布局ocf文件
+      getDrawSheet(layoutocfurl, function (arraybuffer) {
+        gstarSDK.render('ocf', arraybuffer, fileId, true)
+      })
+    }
+
+    // 下载图纸数据
+    function getDrawSheet(url, cb) {
+      var req
+      if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest()
+      } else {
+        req = new ActiveXObject('Microsoft.XMLHTTP')
+      }
+      gstarSDK.Tips.showProgress(0, '下载中...')
+      req.onload = function () {
+        if ((req.status >= 200 && req.status < 300) || req.status === 304) {
+          cb(req.response)
+        }
+        if (req.status === 404) {
+		  gstarSDK.Tips.showProgress(0, url+' 此ocf文件下载失败')
+        }
+      }
+      req.open('GET', url, true)
+      req.responseType = 'arraybuffer'
+      req.send(null)
+    }
+
+    // 获取布局图纸转换请求链接返回的ocf地址
+    function getLayoutOcfUrl(url) {
+      var req
+      if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest()
+      } else {
+        req = new ActiveXObject('Microsoft.XMLHTTP')
+      }
+      req.open('GET', url, false)
+      req.send(null)
+
+      req.onreadystatechange = function () {
+        if (req.status == 200 && req.readyState == 4) {
+          alert(req.responseText)
+        }
+      }
+      return req.responseText
+    }
+
+    //获取浏览器信息
+    function getBrowerInfo() {
+      var userAgent = window.navigator.userAgent.toLowerCase()
+      var browserType = ''
+      // 浏览器类型IE
+      if (userAgent.match(/msie/) != null || userAgent.match(/trident/) != null) {
+        browserType = 'IE'
+      }
+      return browserType
+    }
+
+    //获取IE浏览器版本
+    function getIeVersion() {
+      var IEMode = document.documentMode
+      var rMsie = /(msie\s|trident.*rv:)([\w.]+)/;
+      var ma = window.navigator.userAgent.toLowerCase()
+      var match = rMsie.exec(ma);
+      try {
+        return match[2];
+      } catch (e) {
+        return IEMode;
+      }
+    }
+
+  </script>
+</body>
+
+</html>
