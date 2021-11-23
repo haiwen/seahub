@@ -1,26 +1,35 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import operator
-import datetime
-import logging
 import os
 import json
+import logging
+import operator
+import datetime
+from functools import reduce
+from constance import config
 
 from django.db import models
 from django.db.models import Q
+from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.hashers import make_password, check_password
-from constance import config
+from django.contrib.auth.hashers import check_password
 
+from seahub.signals import repo_deleted
 from seahub.base.fields import LowerCaseCharField
+from seahub.utils.hasher import AESPasswordHasher
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
-    get_service_url
+    get_service_url, is_valid_org_id
 from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
-from seahub.utils import is_valid_org_id
-from functools import reduce
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+def make_password(password):
+
+    aes = AESPasswordHasher()
+    return aes.encode(password)
 
 
 class AnonymousShare(models.Model):
@@ -32,9 +41,11 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
+
 def _get_link_key(token, is_upload_link=False):
     return 'visited_ufs_' + token if is_upload_link else \
         'visited_fs_' + token
+
 
 def set_share_link_access(request, token, is_upload_link=False):
     """Remember which shared download/upload link user can access without
@@ -48,6 +59,7 @@ def set_share_link_access(request, token, is_upload_link=False):
         logger.warn('Failed to remember shared link password, request.session'
                     ' is None when set shared link access.')
 
+
 def check_share_link_access(request, token, is_upload_link=False):
     """Check whether user can access shared download/upload link without
     providing password.
@@ -57,6 +69,7 @@ def check_share_link_access(request, token, is_upload_link=False):
         return True
     else:
         return False
+
 
 def check_share_link_common(request, sharelink, is_upload_link=False):
     """Check if user can view a share link
@@ -79,17 +92,20 @@ def check_share_link_common(request, sharelink, is_upload_link=False):
         msg = _("Password can\'t be empty")
         return (False, msg)
 
-    if check_password(password, sharelink.password):
+    if check_password(password, sharelink.password) or password == sharelink.get_password():
         set_share_link_access(request, sharelink.token, is_upload_link)
         return (True, msg)
     else:
         msg = _("Please enter a correct password.")
         return (False, msg)
 
+
 class FileShareManager(models.Manager):
+
     def _add_file_share(self, username, repo_id, path, s_type,
                         password=None, expire_date=None,
                         permission='view_download', org_id=None):
+
         if password is not None:
             password_enc = make_password(password)
         else:
@@ -131,7 +147,7 @@ class FileShareManager(models.Manager):
             else:
                 return fs
 
-    ########## public methods ##########
+    # public methods
     def create_file_link(self, username, repo_id, path, password=None,
                          expire_date=None, permission='view_download',
                          org_id=None):
@@ -199,7 +215,7 @@ class ExtraSharePermissionManager(models.Manager):
         return [e.share_to for e in shared_repos]
 
     def batch_is_admin(self, in_datas):
-        """return the data that input data is admin 
+        """return the data that input data is admin
         e.g.
             in_datas:
                 [(repo_id1, username1), (repo_id2, admin1)]
@@ -216,21 +232,22 @@ class ExtraSharePermissionManager(models.Manager):
         return [(e.repo_id, e.share_to) for e in db_data]
 
     def create_share_permission(self, repo_id, username, permission):
-        self.model(repo_id=repo_id, share_to=username, 
+        self.model(repo_id=repo_id, share_to=username,
                    permission=permission).save()
 
     def delete_share_permission(self, repo_id, share_to):
-        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id, 
-                                                   share_to=share_to).delete()
+        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id,
+                                                        share_to=share_to).delete()
 
     def update_share_permission(self, repo_id, share_to, permission):
-        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id, 
-                                                   share_to=share_to).delete()
+        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id,
+                                                        share_to=share_to).delete()
         if permission in [PERMISSION_ADMIN]:
             self.create_share_permission(repo_id, share_to, permission)
 
 
 class ExtraGroupsSharePermissionManager(models.Manager):
+
     def get_group_permission(self, repo_id, gid):
         record_list = super(ExtraGroupsSharePermissionManager, self).filter(
             repo_id=repo_id, group_id=gid
@@ -239,7 +256,6 @@ class ExtraGroupsSharePermissionManager(models.Manager):
             return record_list[0].permission
         else:
             return None
-
 
     def get_repos_with_admin_permission(self, gid):
         """ return admin repo in specific group
@@ -258,7 +274,7 @@ class ExtraGroupsSharePermissionManager(models.Manager):
         ).values_list('group_id', flat=True)
 
     def batch_get_repos_with_admin_permission(self, gids):
-        """ 
+        """
         """
         if len(gids) <= 0:
             return []
@@ -269,12 +285,12 @@ class ExtraGroupsSharePermissionManager(models.Manager):
         self.model(repo_id=repo_id, group_id=gid, permission=permission).save()
 
     def delete_share_permission(self, repo_id, gid):
-        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id, 
-                                                             group_id=gid).delete()
+        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id,
+                                                              group_id=gid).delete()
 
     def update_share_permission(self, repo_id, gid, permission):
-        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id, 
-                                                       group_id=gid).delete()
+        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id,
+                                                              group_id=gid).delete()
         if permission in [PERMISSION_ADMIN]:
             self.create_share_permission(repo_id, gid, permission)
 
@@ -319,7 +335,7 @@ class FileShare(models.Model):
     token = models.CharField(max_length=100, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
-    s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
+    s_type = models.CharField(max_length=2, db_index=True, default='f')  # `f` or `d`
     password = models.CharField(max_length=128, null=True)
     expire_date = models.DateTimeField(null=True)
     permission = models.CharField(max_length=50, db_index=True,
@@ -384,6 +400,18 @@ class FileShare(models.Model):
             return '/' if self.path == '/' else os.path.basename(self.path.rstrip('/'))
         return ''
 
+    def get_password(self):
+
+        if self.password:
+            try:
+                aes = AESPasswordHasher()
+                return aes.decode(self.password)
+            except Exception:
+                logger.error('Error occurred when get share link password')
+                return ''
+        else:
+            return ''
+
 
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
@@ -397,6 +425,7 @@ class OrgFileShareManager(models.Manager):
         ofs.save(using=self._db)
         return ofs
 
+
 class OrgFileShare(models.Model):
     """
     Model used for organization file or dir shared link.
@@ -407,6 +436,7 @@ class OrgFileShare(models.Model):
 
 
 class UploadLinkShareManager(models.Manager):
+
     def _get_upload_link_by_path(self, username, repo_id, path):
         ufs = list(super(UploadLinkShareManager, self).filter(repo_id=repo_id).filter(
             username=username).filter(path=path))
@@ -449,6 +479,7 @@ class UploadLinkShareManager(models.Manager):
             else:
                 return fs
 
+
 class UploadLinkShare(models.Model):
     """
     Model used for shared upload link.
@@ -475,7 +506,21 @@ class UploadLinkShare(models.Model):
         else:
             return False
 
+    def get_password(self):
+
+        if self.password:
+            try:
+                aes = AESPasswordHasher()
+                return aes.decode(self.password)
+            except Exception:
+                logger.error('Error occurred when get share link password')
+                return ''
+        else:
+            return ''
+
+
 class PrivateFileDirShareManager(models.Manager):
+
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):
         """
         """
@@ -550,14 +595,15 @@ class PrivateFileDirShareManager(models.Manager):
         return super(PrivateFileDirShareManager, self).filter(
             to_user=to_user, repo_id=repo_id, s_type='d')
 
+
 class PrivateFileDirShare(models.Model):
     from_user = LowerCaseCharField(max_length=255, db_index=True)
     to_user = LowerCaseCharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
     token = models.CharField(max_length=10, unique=True)
-    permission = models.CharField(max_length=5)           # `r` or `rw`
-    s_type = models.CharField(max_length=5, default='f') # `f` or `d`
+    permission = models.CharField(max_length=5)  # `r` or `rw`
+    s_type = models.CharField(max_length=5, default='f')  # `f` or `d`
     objects = PrivateFileDirShareManager()
 
 
@@ -597,9 +643,7 @@ class CustomSharePermissions(models.Model):
         }
 
 
-###### signal handlers
-from django.dispatch import receiver
-from seahub.signals import repo_deleted
+# signal handlers
 
 @receiver(repo_deleted)
 def remove_share_info(sender, **kwargs):

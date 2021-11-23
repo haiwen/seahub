@@ -75,6 +75,7 @@ def get_upload_link_info(uls):
     data['username'] = uls.username
     data['expire_date'] = expire_date
     data['is_expired'] = uls.is_expired()
+    data['password'] = uls.get_password()
 
     return data
 
