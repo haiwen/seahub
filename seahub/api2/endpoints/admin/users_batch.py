@@ -281,9 +281,9 @@ class AdminImportUsers(APIView):
             logger.error(e)
 
         # example file is like:
-        # Email    Password Name(Optional) Role(Optional) Space Quota(MB, Optional)
-        # a@a.com  a        a              default        1024
-        # b@b.com  b        b              default        2048
+        # Email    Password Name(Optional) Role(Optional) Space Quota(MB, Optional) Login ID
+        # a@a.com  a        a              default        1024                      login id a
+        # b@b.com  b        b              default        2048                      login id b
 
         rows = wb.worksheets[0].rows
         records = []
@@ -354,6 +354,7 @@ class AdminImportUsers(APIView):
                         Profile.objects.add_or_update(email, nickname, '')
                 except Exception as e:
                     logger.error(e)
+
             # update role
             if record[3]:
                 try:
@@ -362,6 +363,7 @@ class AdminImportUsers(APIView):
                         User.objects.update_role(email, role)
                 except Exception as e:
                     logger.error(e)
+
             # update quota
             if record[4]:
                 try:
@@ -369,6 +371,13 @@ class AdminImportUsers(APIView):
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
                         seafile_api.set_user_quota(email, space_quota)
+                except Exception as e:
+                    logger.error(e)
+
+            # login id
+            if record[5]:
+                try:
+                    Profile.objects.add_or_update(email, login_id=record[5])
                 except Exception as e:
                     logger.error(e)
 
