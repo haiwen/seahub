@@ -49,8 +49,7 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
+from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
@@ -1163,8 +1162,6 @@ def react_fake_view(request, **kwargs):
         logger.error(e)
         expire_days = -1
 
-    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
-
     try:
         max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
     except Exception as e:
@@ -1195,7 +1192,7 @@ def react_fake_view(request, **kwargs):
         'enableFileComment': settings.ENABLE_FILE_COMMENT,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
-        'folder_perm_enabled': folder_perm_enabled,
+        'folder_perm_enabled': is_pro_version(),
         'file_audit_enabled': FILE_AUDIT_ENABLED,
         'custom_nav_items': json.dumps(CUSTOM_NAV_ITEMS),
         'enable_show_contact_email_when_search_user': settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
