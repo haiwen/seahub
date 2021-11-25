@@ -322,13 +322,6 @@ class WebSettings extends Component {
                     />
                     <CheckboxItem
                       saveSetting={this.saveSetting}
-                      displayName='ENABLE_USER_CREATE_ORG_REPO'
-                      keyText='ENABLE_USER_CREATE_ORG_REPO'
-                      value={config_dict['ENABLE_USER_CREATE_ORG_REPO']}
-                      helpTip={gettext('Allow user to add organization libraries. Otherwise, only system admin can add organization libraries.')}
-                    />
-                    <CheckboxItem
-                      saveSetting={this.saveSetting}
                       displayName='ENABLE_USER_CLEAN_TRASH'
                       keyText='ENABLE_USER_CLEAN_TRASH'
                       value={config_dict['ENABLE_USER_CLEAN_TRASH']}

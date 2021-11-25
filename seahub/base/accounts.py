@@ -181,8 +181,7 @@ class UserPermissions(object):
                 return False
         elif self.user.is_staff:
             return True
-        elif self._get_perm_by_roles('can_add_public_repo') and \
-                bool(config.ENABLE_USER_CREATE_ORG_REPO):
+        elif self._get_perm_by_roles('can_add_public_repo'):
             return True
         else:
             return False
