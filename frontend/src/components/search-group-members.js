@@ -24,6 +24,7 @@ class SearchGroupMembers extends React.Component {
       errMessage: [],
       isItemFreezed: false
     };
+    this.isInit = true;
   }
 
   toggleItemFreezed = (isFreezed) => {
@@ -66,6 +67,7 @@ class SearchGroupMembers extends React.Component {
         groupMembers: res.data,
         errorMsg: ''
       });
+      this.isInit = false;
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({
@@ -106,6 +108,7 @@ class SearchGroupMembers extends React.Component {
         <div className="manage-members">
           {isLoading ? <Loading /> : (
             <Fragment>
+              {groupMembers.length === 0 && !this.isInit && <div className="mx-2 my-4">{gettext('No users')}</div>}
               {groupMembers.length > 0 && (
                 <GroupMembers
                   groupMembers={groupMembers}

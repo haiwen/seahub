@@ -49,7 +49,7 @@ class ManageMembersDialog extends React.Component {
             )
           }
         </ModalHeader>
-        <ModalBody>
+        <ModalBody className="pb-0">
           {currentMode == MANAGEMENT_MODE.LIST_AND_ADD ?
             <ListAndAddGroupMembers
               groupID={groupID}
