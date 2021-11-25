@@ -732,11 +732,6 @@ ENABLE_USER_SET_CONTACT_EMAIL = False
 ENABLE_GLOBAL_ADDRESSBOOK = True
 ENABLE_ADDRESSBOOK_OPT_IN = False
 
-#####################
-# Folder Permission #
-#####################
-ENABLE_FOLDER_PERM = False
-
 ####################
 # Guest Invite     #
 ####################
