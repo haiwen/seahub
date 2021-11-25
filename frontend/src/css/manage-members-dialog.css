@@ -1,8 +1,9 @@
 .manage-members {
   max-height: 300px;
   overflow-y: scroll;
-  margin: 10px 0 2rem;
+  padding: 0.5rem 0;
 }
+
 .manage-members-table th,
 .manage-members-table td {
   vertical-align: middle;
@@ -21,15 +22,17 @@
 .add-members .add-members-select {
   width: 385px;
 }
+
 .add-members .btn {
   width: 75px;
 }
+
 .group-error {
   margin-top: 10px;
 }
 
 .group-manage-members-dialog .back-icon {
-  color: #999; 
+  color: #999999; 
   cursor: pointer;
 }
 
