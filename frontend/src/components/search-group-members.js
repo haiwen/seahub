@@ -62,12 +62,12 @@ class SearchGroupMembers extends React.Component {
       isLoading: true
     });
     seafileAPI.searchGroupMember(this.props.groupID, q).then((res) => {
+      this.isInit = false;
       this.setState({
         isLoading: false,
         groupMembers: res.data,
         errorMsg: ''
       });
-      this.isInit = false;
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({
