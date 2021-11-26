@@ -787,15 +787,20 @@ def batch_add_user_example(request):
     if not next_page:
         next_page = SITE_ROOT
     data_list = []
-    head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')',
-            _('Role') + '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
+    head = [_('Email'),
+            _('Password'),
+            _('Name') + '(' + _('Optional') + ')',
+            _('Role') + '(' + _('Optional') + ')',
+            _('Space Quota') + '(MB, ' + _('Optional') + ')',
+            'Login ID']
     for i in range(5):
-        username = "test" + str(i) +"@example.com"
+        username = "test" + str(i) + "@example.com"
         password = "123456"
         name = "test" + str(i)
         role = "default"
         quota = "1000"
-        data_list.append([username, password, name, role, quota])
+        login_id = "login id " + str(i)
+        data_list.append([username, password, name, role, quota, login_id])
 
     wb = write_xls('sample', head, data_list)
     if not wb:
