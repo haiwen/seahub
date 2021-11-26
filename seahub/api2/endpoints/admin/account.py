@@ -93,7 +93,7 @@ class Account(APIView):
                 seafile_api.set_repo_owner(r.id, user2.username)
 
             # transfer shared repos to new user
-            for r in seafile_api.get_share_in_repo_list(from_user, 0, -1):
+            for r in seafile_api.get_share_in_repo_list(from_user, -1, -1):
                 owner = seafile_api.get_repo_owner(r.repo_id)
                 seafile_api.share_repo(r.repo_id, owner, to_user, r.permission)
 
