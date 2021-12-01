@@ -26,7 +26,7 @@ import seahub.settings as settings
 from seahub.repo_api_tokens.utils import get_dir_file_recursively
 from seahub.constants import PERMISSION_READ
 from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_file_upload_url, is_valid_dirent_name, \
-    normalize_file_path, render_error, gen_file_get_url, is_pro_version, is_org_context
+    normalize_file_path, render_error, gen_file_get_url, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -123,11 +123,8 @@ class ViaRepoDirView(APIView):
 
         # get dir/file list recursively
         # username = request.user.username
-        if is_org_context(request):
-            username = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            username = seafile_api.get_repo_owner(repo_id)
-
+        # Get username by repo_id. Can not use is_org_context, because 'AnonymousUser' object has no attribute 'org'.
+        username = seafile_api.get_repo_owner(repo_id) or seafile_api.get_org_repo_owner(repo_id)
         if recursive == '1':
 
             try:
