@@ -132,7 +132,7 @@ function upgrade_seafile_server_latest_symlink() {
     seafile_server_symlink=${TOPDIR}/seafile-server-latest
     if [[ -L "${seafile_server_symlink}" || ! -e "${seafile_server_symlink}" ]]; then
         echo
-        printf "updating \033[33m${seafile_server_symlink}\033[m symbolic link to \033[33m${INSTALLPATH}\033[m ...\n\n"
+        printf "updating \033[32m${seafile_server_symlink}\033[m symbolic link to \033[32m${INSTALLPATH}\033[m ...\n\n"
         echo
         if ! rm -f "${seafile_server_symlink}"; then
             echo "Failed to remove ${seafile_server_symlink}"
@@ -148,10 +148,27 @@ function upgrade_seafile_server_latest_symlink() {
     fi
 }
 
+function show_notice_for_s3_ceph_user() {
+    echo "-----------------------------------------------------------------"
+    echo "Important: You are using ${backend} storage, please follow the following "
+    echo "upgrade notice to migrate your data to 3.0 format"
+    echo
+    echo "  http://seacloud.cc/group/180/wiki/seafile-pro-3.0-upgrade-notice/"
+    echo "-----------------------------------------------------------------"
+    echo
+    echo
+}
+
+check_backend_py=${UPGRADE_DIR}/check_backend.py
+backend=
 function migrate_seafile_data_format() {
+    backend=$($PYTHON ${check_backend_py})
+    if [[ "${backend}" == "s3" || "${backend}" == "ceph" ]]; then
+        return
+    fi
     seaf_migrate=${INSTALLPATH}/seafile/bin/seaf-migrate
     echo
-    echo "now migrating seafile data to 3.0 format"
+    echo "Now migrating your seafile data to 3.0 format. It may take a while."
     echo
     if ! LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${seaf_migrate} \
             -c "${default_ccnet_conf_dir}" -d "${seafile_data_dir}"; then
@@ -183,9 +200,12 @@ update_database;
 
 upgrade_seafile_server_latest_symlink;
 
-
-echo
-echo "-----------------------------------------------------------------"
-echo "Upgraded your seafile server successfully."
-echo "-----------------------------------------------------------------"
-echo
+if [[ "${backend}" == "s3" || "${backend}" == "ceph" ]]; then
+    show_notice_for_s3_ceph_user;
+else
+    echo
+    echo "-----------------------------------------------------------------"
+    echo "Upgraded your seafile server successfully."
+    echo "-----------------------------------------------------------------"
+    echo
+fi

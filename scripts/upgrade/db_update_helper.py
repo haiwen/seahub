@@ -25,6 +25,7 @@ class EnvManager(object):
         self.ccnet_dir = os.environ['CCNET_CONF_DIR']
         self.seafile_dir = os.environ['SEAFILE_CONF_DIR']
         self.central_config_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR')
+        self.seafevents_db_dir = os.path.join(os.path.dirname(self.install_path), 'pro-data')
 
 
 env_mgr = EnvManager()
@@ -77,6 +78,7 @@ class DBUpdater(object):
         self.sql_dir = os.path.join(env_mgr.upgrade_dir, 'sql', version, name)
         pro_path = os.path.join(env_mgr.install_path, 'pro')
         self.is_pro = os.path.exists(pro_path)
+        self.version = version
 
     @staticmethod
     def get_instance(version):
@@ -269,7 +271,7 @@ class SQLiteDBUpdater(DBUpdater):
         self.ccnet_db = CcnetSQLiteDB(env_mgr.ccnet_dir)
         self.seafile_db = os.path.join(env_mgr.seafile_dir, 'seafile.db')
         self.seahub_db = os.path.join(env_mgr.top_dir, 'seahub.db')
-        self.seafevents_db = os.path.join(env_mgr.top_dir, 'seafevents.db')
+        self.seafevents_db = os.path.join(env_mgr.seafevents_db_dir, 'seafevents.db')
 
     def update_db(self):
         super(SQLiteDBUpdater, self).update_db()
@@ -338,7 +340,7 @@ class MySQLDBUpdater(DBUpdater):
         try:
             conn = pymysql.connect(**kw)
         except Exception as e:
-            if isinstance(e, pymysql.err.OperationalError):
+            if isinstance(e, pymysql.OperationalError):
                 msg = str(e.args[1])
             else:
                 msg = str(e)

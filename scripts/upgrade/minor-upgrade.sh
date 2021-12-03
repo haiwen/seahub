@@ -19,6 +19,7 @@ dest_avatar_dir=${TOPDIR}/seahub-data/avatars
 seafile_server_symlink=${TOPDIR}/seafile-server-latest
 default_conf_dir=${TOPDIR}/conf
 default_ccnet_conf_dir=${TOPDIR}/ccnet
+default_seafile_data_dir=${TOPDIR}/seafile-data
 seahub_data_dir=${TOPDIR}/seahub-data
 elasticsearch_config_file=${seafile_server_symlink}/pro/elasticsearch/config/jvm.options
 
@@ -115,23 +116,12 @@ function move_old_elasticsearch_config_to_latest() {
     fi
 }
 
-function read_seafile_data_dir() {
-    seafile_ini=${default_ccnet_conf_dir}/seafile.ini
-    if [[ -f ${seafile_ini} ]]; then
-        seafile_data_dir=$(cat "${seafile_ini}")
-        if [[ ! -d ${seafile_data_dir} ]]; then
-            echo "Your seafile server data directory \"${seafile_data_dir}\" is invalid or doesn't exits."
-            echo "Please check it first, or create this directory yourself."
-            echo ""
-            exit 1;
-        else
-            if [[ ${seafile_data_dir} != ${TOPDIR}/seafile-data ]]; then
-                if [[ ! -L ${TOPDIR}/seafile-data ]]; then
-                    ln -s ${seafile_data_dir} ${TOPDIR}/seafile-data
-                    echo "Created the symlink ${TOPDIR}/seafile-data for ${seafile_data_dir}."
-                fi  
-            fi  
-        fi
+function validate_seafile_data_dir() {
+    if [[ ! -d ${default_seafile_data_dir} ]]; then
+        echo "Error: there is no seafile server data directory."
+        echo "Have you run setup-seafile.sh before this?"
+        echo ""
+        exit 1;
     fi
 }
 
@@ -151,7 +141,7 @@ function rename_gunicorn_config() {
     fi
 }
  
-read_seafile_data_dir;
+validate_seafile_data_dir;
 rename_gunicorn_config;
 migrate_avatars;
 

@@ -192,6 +192,13 @@ function move_old_customdir_outside() {
     cp -rf "${old_customdir}" "${seahub_data_dir}/"
 }
 
+function remove_es_index() {
+    local es_data_dir=$TOPDIR/pro-data/search/data
+    echo -n "Removing old search index ... "
+    rm -rf $es_data_dir && mkdir -p $es_data_dir
+    echo "Done"
+}
+
 #################
 # The main execution flow of the script
 ################
@@ -201,6 +208,9 @@ read_seafile_data_dir;
 ensure_server_not_running;
 
 update_database;
+
+# We changed elasticsearch index settings in 4.2.0, need to recreate the index.
+remove_es_index;
 
 migrate_avatars;
 

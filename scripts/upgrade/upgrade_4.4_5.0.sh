@@ -9,6 +9,7 @@ default_conf_dir=${TOPDIR}/conf
 seafile_server_symlink=${TOPDIR}/seafile-server-latest
 seahub_data_dir=${TOPDIR}/seahub-data
 seahub_settings_py=${TOPDIR}/seahub_settings.py
+pro_data_dir=${TOPDIR}/pro-data
 
 manage_py=${INSTALLPATH}/seahub/manage.py
 
@@ -205,6 +206,7 @@ function copy_confs_to_central_conf_dir() {
         $default_ccnet_conf_dir/ccnet.conf
         $seafile_data_dir/seafile.conf
         $seahub_settings_py
+        $pro_data_dir/seafevents.conf
     )
     for conffile in ${confs[*]}; do
         if grep -q "This file has been moved" $conffile; then

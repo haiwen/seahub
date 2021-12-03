@@ -200,6 +200,17 @@ function regenerate_secret_key() {
     fi
 }
 
+function remove_es_index() {
+    local es_data_dir=$TOPDIR/pro-data/search/data
+    echo -n "Removing old search index ... "
+    rm -rf $es_data_dir && mkdir -p $es_data_dir
+    echo "Done"
+}
+
+function remove_office_files() {
+    rm -rf /tmp/seafile-office-output/html/*
+}
+
 #################
 # The main execution flow of the script
 ################
@@ -211,6 +222,10 @@ ensure_server_not_running;
 regenerate_secret_key;
 
 update_database;
+
+# We changed elasticsearch index settings in 4.3.0, need to recreate the index.
+remove_es_index;
+remove_office_files;
 
 migrate_avatars;
 

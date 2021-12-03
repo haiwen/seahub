@@ -82,3 +82,7 @@ CREATE TABLE IF NOT EXISTS `role_permissions_adminrole` (
 ALTER TABLE `sysadmin_extra_userloginlog` ADD COLUMN `login_success` tinyint(1) NOT NULL default 1;
 ALTER TABLE `profile_profile` ADD COLUMN `list_in_address_book` tinyint(1) NOT NULL default 0;
 ALTER TABLE `profile_profile` ADD INDEX `profile_profile_3d5d3631` (`list_in_address_book`);
+ALTER TABLE `FileAudit` ADD INDEX `fileaudit_timestamp` (`timestamp`);
+ALTER TABLE `Event` ADD INDEX `event_timestamp` (`timestamp`);
+ALTER TABLE `UserTrafficStat` ADD INDEX `usertrafficstat_timestamp` (`month`);
+ALTER TABLE `FileUpdate` ADD INDEX `fileupdate_timestamp` (`timestamp`);

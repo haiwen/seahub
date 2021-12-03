@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Lifted from:
 http://stackoverflow.com/questions/18671/quick-easy-way-to-migrate-sqlite3-to-mysql

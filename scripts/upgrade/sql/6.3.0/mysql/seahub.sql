@@ -168,3 +168,8 @@ ALTER TABLE notifications_notification ADD INDEX `notifications_notification_386
 ALTER TABLE institutions_institutionadmin ADD INDEX `institutions_institutionadmin_user_7560167c8413ff0e_uniq` (`user`);
 
 ALTER TABLE `post_office_attachment` add column `mimetype` varchar(255) NOT NULL;
+
+ALTER TABLE Event ADD INDEX `ix_event_timestamp` (`timestamp`);
+ALTER TABLE FileAudit ADD INDEX `ix_FileAudit_timestamp` (`timestamp`);
+ALTER TABLE FileUpdate ADD INDEX `ix_FileUpdate_timestamp` (`timestamp`);
+ALTER TABLE UserTrafficStat ADD INDEX `ix_UserTrafficStat_month` (`month`);
