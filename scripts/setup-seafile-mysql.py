@@ -304,6 +304,7 @@ class EnvManager(object):
         self.central_pids_dir = os.path.join(self.top_dir, 'pids')
         self.central_logs_dir = os.path.join(self.top_dir, 'logs')
         Utils.must_mkdir(self.central_config_dir)
+        self.is_pro = os.path.exists(os.path.join(self.install_path, 'pro'))
 
     def check_pre_condiction(self):
         def error_if_not_exists(path):
@@ -327,6 +328,7 @@ class EnvManager(object):
         env = dict(os.environ)
         env['CCNET_CONF_DIR'] = ccnet_config.ccnet_dir
         env['SEAFILE_CONF_DIR'] = seafile_config.seafile_dir
+        env['SEAFES_DIR'] = os.path.join(self.install_path, 'pro', 'python', 'seafes')
         self.setup_python_path(env)
         return env
 
@@ -1216,6 +1218,31 @@ share_name = /
         with open(self.seafdav_conf, 'w') as fp:
             fp.write(text)
 
+class ProfessionalConfigurator(AbstractConfigurator):
+    '''Seafile Pro related configuration'''
+    def __init__(self):
+        AbstractConfigurator.__init__(self)
+        self.pro_py = os.path.join(env_mgr.install_path, 'pro', 'pro.py')
+        self.pro_data_dir = os.path.join(env_mgr.top_dir, 'pro-data')
+
+    def ask_questions(self):
+        pass
+
+    def generate(self):
+        argv = [
+            Utils.get_python_executable(),
+            self.pro_py,
+            'setup',
+            '--mysql',
+            '--mysql_host=%s' % db_config.mysql_host,
+            '--mysql_port=%s' % db_config.mysql_port,
+            '--mysql_user=%s' % db_config.seafile_mysql_user,
+            '--mysql_password=%s' % db_config.seafile_mysql_password,
+            '--mysql_db=%s' % db_config.seahub_db_name,
+        ]
+        if Utils.run_argv(argv, env=env_mgr.get_seahub_env()) != 0:
+            Utils.error('Failed to generate seafile pro configuration')
+
 class GunicornConfigurator(AbstractConfigurator):
     def __init__(self):
         AbstractConfigurator.__init__(self)
@@ -1349,6 +1376,8 @@ seafdav_config = SeafDavConfigurator()
 gunicorn_config = GunicornConfigurator()
 seahub_config = SeahubConfigurator()
 user_manuals_handler = UserManualHandler()
+if env_mgr.is_pro:
+    pro_config = ProfessionalConfigurator()
 # Would be created after AbstractDBConfigurator.ask_use_existing_db()
 db_config = None
 need_pause = True
@@ -1494,6 +1523,8 @@ def main():
     ccnet_config.ask_questions()
     seafile_config.ask_questions()
     seahub_config.ask_questions()
+    if env_mgr.is_pro:
+        pro_config.ask_questions()
 
     # pylint: disable=redefined-variable-type
     if not db_config:
@@ -1513,6 +1544,8 @@ def main():
     seafdav_config.generate()
     gunicorn_config.generate()
     seahub_config.generate()
+    if env_mgr.is_pro:
+        pro_config.generate()
 
     ccnet_config.do_syncdb()
     seafile_config.do_syncdb()

@@ -26,6 +26,8 @@ pidfile=${TOPDIR}/pids/seahub.pid
 errorlog=${TOPDIR}/logs/gunicorn_error.log
 accesslog=${TOPDIR}/logs/gunicorn_access.log
 gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
+pro_pylibs_dir=${INSTALLPATH}/pro/python
+seafesdir=$pro_pylibs_dir/seafes
 
 script_name=$0
 function usage () {
@@ -144,12 +146,30 @@ function before_start() {
     warning_if_seafile_not_running;
     validate_seahub_running;
     prepare_seahub_log_dir;
+
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        if [[ -z "$LANG" ]]; then
+            echo "LANG is not set in ENV, set to en_US.UTF-8"
+            export LANG='en_US.UTF-8'
+        fi
+        if [[ -z "$LC_ALL" ]]; then
+            echo "LC_ALL is not set in ENV, set to en_US.UTF-8"
+            export LC_ALL='en_US.UTF-8'
+        fi
+
+        export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
+        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
+        export SEAFES_DIR=$seafesdir
+    fi
 }
 
 function start_seahub () {
     before_start;
     echo "Starting seahub at port ${port} ..."
     check_init_admin;
+
+    export DJANGO_SETTINGS_MODULE=seahub.settings
     $PYTHON $gunicorn_exe seahub.wsgi:application -c "${gunicorn_conf}" --preload
 
     # Ensure seahub is started successfully
@@ -178,7 +198,7 @@ function start_seahub_fastcgi () {
 
     # Ensure seahub is started successfully
     sleep 5
-    if ! pgrep -f "${manage_py}" 1>/dev/null; then
+    if ! pgrep -f "${manage_py}" >/dev/null; then
         printf "\033[33mError:Seahub failed to start.\033[m\n"
         exit 1;
     fi
@@ -247,6 +267,13 @@ function run_python_env() {
     local pyexec
 
     prepare_env;
+
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
+        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
+        export SEAFES_DIR=$seafesdir
+    fi
 
     if which ipython 2>/dev/null; then
         pyexec=ipython

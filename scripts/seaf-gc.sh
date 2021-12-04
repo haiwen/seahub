@@ -8,6 +8,7 @@ TOPDIR=$(dirname "${INSTALLPATH}")
 default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
+check_db_py=${INSTALLPATH}/check-db-type.py
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
 seaf_gc_opts=""
 
@@ -17,10 +18,38 @@ export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafil
 script_name=$0
 function usage () {
     echo "usage : "
-    echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
+    else
+        echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
+    fi 
     echo ""
 }
 
+function check_python_executable() {
+    if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
+        return 0
+    fi
+
+    if which python3 2>/dev/null 1>&2; then
+        PYTHON=python3
+    elif !(python --version 2>&1 | grep "3\.[0-9]\.[0-9]") 2>/dev/null 1>&2; then
+        echo
+        echo "The current version of python is not 3.x.x, please use Python 3.x.x ."
+        echo
+        exit 1
+    else
+        PYTHON="python"$(python --version | cut -b 8-10)
+        if !which $PYTHON 2>/dev/null 1>&2; then
+            echo
+            echo "Can't find a python executable of $PYTHON in PATH"
+            echo "Install $PYTHON before continue."
+            echo "Or if you installed it in a non-standard PATH, set the PYTHON enviroment varirable to it"
+            echo
+            exit 1
+        fi
+    fi
+}
 
 function validate_seafile_data_dir () {
     if [[ ! -d ${default_seafile_data_dir} ]]; then
@@ -58,7 +87,18 @@ function validate_already_running () {
 }
 
 function run_seaf_gc () {
-    validate_already_running;
+
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        seafile_conf=${default_conf_dir}/seafile.conf
+        db_type=$($PYTHON $check_db_py $seafile_conf)
+
+        if [ $db_type = "sqlite" ]; then
+            validate_already_running;
+        fi
+    else
+        validate_already_running;
+    fi
+
     validate_seafile_data_dir;
 
     echo "Starting seafserv-gc, please wait ..."
@@ -72,6 +112,8 @@ function run_seaf_gc () {
     echo "seafserv-gc run done"
     echo
 }
+
+check_python_executable;
 
 if [ $# -gt 0 ];
 then

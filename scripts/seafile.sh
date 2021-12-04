@@ -19,6 +19,8 @@ default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 seaf_controller="${INSTALLPATH}/seafile/bin/seafile-controller"
+pro_pylibs_dir=${INSTALLPATH}/pro/python
+seafesdir=$pro_pylibs_dir/seafes
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
@@ -48,6 +50,14 @@ function validate_running_user () {
     fi
 }
 
+export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+if [[ -d ${INSTALLPATH}/pro ]]; then
+    export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
+    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
+    export SEAFES_DIR=$seafesdir
+fi
+
 function validate_central_conf_dir () {
     if [[ ! -d ${central_config_dir} ]]; then
         echo "Error: there is no conf/ directory."
@@ -64,6 +74,12 @@ function validate_seafile_data_dir () {
         echo ""
         exit 1;
     fi
+}
+
+function test_config() {	
+    if ! LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} -t -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" -F "${central_config_dir}" ; then	
+        exit 1;	
+    fi	
 }
 
 function check_component_running() {
@@ -90,6 +106,14 @@ function validate_already_running () {
     check_component_running "seaf-server" "seaf-server -c ${default_ccnet_conf_dir}"
     check_component_running "fileserver" "fileserver -c ${default_ccnet_conf_dir}"
     check_component_running "seafdav" "wsgidav.server.server_cli"
+    check_component_running "seafevents" "seafevents.main --config-file ${central_config_dir}"
+}
+
+function test_java {
+    if ! which java 2>/dev/null 1>&2; then
+        echo "java is not found on your machine. Please install it first."
+        exit 1;
+    fi
 }
 
 function start_seafile_server () {
@@ -98,13 +122,29 @@ function start_seafile_server () {
     validate_seafile_data_dir;
     validate_running_user;
 
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        test_config;
+        test_java;
+    fi
+
     echo "Starting seafile server, please wait ..."
 
     mkdir -p $TOPDIR/logs
-    LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} \
-                   -c "${default_ccnet_conf_dir}" \
-                   -d "${default_seafile_data_dir}" \
-                   -F "${central_config_dir}"
+
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        if ! LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} -c "${default_ccnet_conf_dir}" -d "${default_seafile_data_dir}" -F "${central_config_dir}"; then
+            controller_log="$default_seafile_data_dir/controller.log"
+            echo
+            echo "Failed to start seafile server. See $controller_log for more details."
+            echo
+            exit 1
+        fi
+    else
+        LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_controller} \
+                    -c "${default_ccnet_conf_dir}" \
+                    -d "${default_seafile_data_dir}" \
+                    -F "${central_config_dir}"
+    fi
 
     sleep 3
 
@@ -118,24 +158,32 @@ function start_seafile_server () {
     echo
 }
 
+function kill_all () {
+    pkill -f "seaf-server -c ${default_ccnet_conf_dir}"
+    pkill -f "fileserver -c ${default_ccnet_conf_dir}"
+    pkill -f "seafevents.main"
+    pkill -f "convert_server.py"
+    pkill -f "soffice.*--invisible --nocrashreport"
+    pkill -f  "wsgidav.server.server_cli"
+}
+
 function stop_seafile_server () {
     if ! pgrep -f "seafile-controller -c ${default_ccnet_conf_dir}" 2>/dev/null 1>&2; then
         echo "seafile server not running yet"
-        return 1;
+        kill_all
+        return 1
     fi
 
     echo "Stopping seafile server ..."
     pkill -SIGTERM -f "seafile-controller -c ${default_ccnet_conf_dir}"
-    pkill -f "seaf-server -c ${default_ccnet_conf_dir}"
-    pkill -f "fileserver -c ${default_ccnet_conf_dir}"
-    pkill -f "soffice.*--invisible --nocrashreport"
-    pkill -f  "wsgidav.server.server_cli"
+    kill_all
+
     return 0
 }
 
 function restart_seafile_server () {
     stop_seafile_server;
-    sleep 2
+    sleep 5
     start_seafile_server;
 }
 

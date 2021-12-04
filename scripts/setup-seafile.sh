@@ -16,7 +16,11 @@ server_manual_http='https://download.seafile.com/published/seafile-manual/home.m
 
 function welcome () {
     echo "-----------------------------------------------------------------"
-    echo "This script will guide you to config and setup your seafile server."
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        echo "This script will guide you to config and setup your seafile professional server."
+    else
+        echo "This script will guide you to config and setup your seafile server."
+    fi
     echo -e "\nMake sure you have read seafile server manual at \n\n\t${server_manual_http}\n"
     echo -e "Note: This script will guide your to setup seafile server using sqlite3,"
     echo "which may have problems if your disk is on a NFS/CIFS/USB."
@@ -148,10 +152,26 @@ function check_sqlite3 () {
     printf "Done.\n\n"
 }
 
+function check_java () {
+    echo -n "Checking for java ..."
+    if ! which java 2>/dev/null 1>&2; then
+        echo -e "\nJava is not found. install it first.\n"
+        echo "On Debian/Ubuntu:     apt-get install default-jre"
+        echo "On CentOS/RHEL:       yum install jre"
+        err_and_quit;
+    fi
+    printf "Done.\n\n"
+}
+
 function check_system_dependency () {
     printf "Checking packages needed by seafile ...\n\n"
     check_python;
     check_sqlite3;
+
+    if [[ -d ${INSTALLPATH}/pro ]]; then
+        check_java;
+    fi
+
     printf "Checking Done.\n\n"
 }
 
@@ -489,7 +509,9 @@ fi
 
 echo "Generating ccnet configuration in ${default_ccnet_conf_dir}..."
 echo
+
 gen_ccnet_conf;
+
 echo
 
 # -------------------------------------------
@@ -498,16 +520,10 @@ echo
 
 echo "Generating seafile configuration in ${default_seafile_data_dir} ..."
 echo
+
 gen_seafile_conf;
+
 echo
-
-
-# -------------------------------------------
-# Write seafile.ini
-# -------------------------------------------
-
-## use default seafile-data path: seafile_data_dir=${TOPDIR}/seafile-data
-# echo "${seafile_data_dir}" > "${default_ccnet_conf_dir}/seafile.ini"
 
 # -------------------------------------------
 # Generate gunicorn.conf.py
@@ -707,6 +723,11 @@ chmod 0600 "$dest_settings_py"
 chmod 0700 "$default_ccnet_conf_dir"
 chmod 0700 "$default_seafile_data_dir"
 chmod 0700 "$default_conf_dir"
+
+if [[ -d ${INSTALLPATH}/pro ]]; then
+    pro_py=${INSTALLPATH}/pro/pro.py
+    $PYTHON ${pro_py} setup
+fi
 
 # -------------------------------------------
 # copy user manuals to library template
