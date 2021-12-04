@@ -425,7 +425,9 @@ class FileUploader extends React.Component {
       const message = gettext('All files uploaded');
       toaster.success(message);
     }
-    this.error = false; // reset it
+    // reset it
+    this.error = false;
+    this.hasShownErrorMsg = false;
 
     this.notifiedFolders = [];
     // reset upload link loaded
@@ -439,7 +441,12 @@ class FileUploader extends React.Component {
       msg = gettext('Failed to upload {file_name}.')
         .replace('{file_name}', file.fileName);
     }
-    toaster.danger(msg);
+
+    // only show the error msg for once
+    if (!this.hasShownErrorMsg) {
+      toaster.danger(msg);
+      this.hasShownErrorMsg = true;
+    }
     this.error = true;
 
     // reset upload link loaded
