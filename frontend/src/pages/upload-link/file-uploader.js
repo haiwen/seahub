@@ -439,7 +439,7 @@ class FileUploader extends React.Component {
       msg = gettext('Failed to upload {file_name}.')
         .replace('{file_name}', file.fileName);
     }
-    toaster.danger(msg);
+    toaster.danger(msg, {'id': 'file-error-msg'});
     this.error = true;
 
     // reset upload link loaded
