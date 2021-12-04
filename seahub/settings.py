@@ -565,7 +565,10 @@ LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
-FAVICON_PATH = 'img/favicon.ico'
+FAVICON_PATH = 'favicons/favicon.ico'
+FAVICON_SVG_PATH = 'favicons/favicon.svg'
+APPLE_TOUCH_ICON_PATH = 'favicons/favicon.svg'
+MANIFEST_WEBMANIFEST_PATH = 'favicons/manifest.webmanifest'
 
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'

@@ -20,7 +20,8 @@ import seaserv
 from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     MAX_FILE_NAME, LOGO_PATH, BRANDING_CSS, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
-    FAVICON_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
+    FAVICON_PATH, FAVICON_SVG_PATH, APPLE_TOUCH_ICON_PATH, \
+    MANIFEST_WEBMANIFEST_PATH, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH, \
     ENABLE_SEAFILE_DOCS, LOGIN_BG_IMAGE_PATH, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
@@ -108,6 +109,9 @@ def base(request):
         'branding_css': BRANDING_CSS,
         'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
+        'favicon_svg_path': FAVICON_SVG_PATH,
+        'apple_touch_icon_path': APPLE_TOUCH_ICON_PATH,
+        'manifest_webmanifest_path': MANIFEST_WEBMANIFEST_PATH,
         'login_bg_path': login_bg_path,
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
