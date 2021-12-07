@@ -120,7 +120,6 @@ ENABLE_REMOTE_USER_AUTHENTICATION = False
 
 # Order is important
 MIDDLEWARE = [
-    'seahub.base.middleware.SameSiteNoneMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
