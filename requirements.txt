@@ -15,10 +15,10 @@ python-dateutil
 requests
 pillow
 pyjwt==2.1.*
-pycryptodome
+pycryptodome==3.12.0
 requests_oauthlib
 chardet
 python-cas
 djangosaml2==0.20.0
 pysaml2==6.5.1
-cffi
+cffi==1.14.0
