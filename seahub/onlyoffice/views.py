@@ -15,6 +15,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 
+from django.core.cache import cache
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -93,12 +94,19 @@ def onlyoffice_editor_callback(request):
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
 
-    # get doc key and file basic info from cache
+    # get doc key and file basic info from database
     doc_key = post_data.get('key')
     doc_info = get_file_info_by_doc_key(doc_key)
     if not doc_info:
+
         logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+
+        doc_info = cache.get(doc_key)
+        if not doc_info:
+            logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+
         logger.info(post_data)
+
         return HttpResponse('{"error": 1}')
 
     if status == 1:
@@ -161,6 +169,7 @@ def onlyoffice_editor_callback(request):
 
             logger.info('status {}: delete doc_key {} from database'.format(status, doc_key))
             delete_doc_key(doc_key)
+            cache.set(doc_key, doc_info, 24 * 60 * 60)
 
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
                 logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))
@@ -171,6 +180,7 @@ def onlyoffice_editor_callback(request):
 
         logger.info('status {}: delete doc_key {} from database'.format(status, doc_key))
         delete_doc_key(doc_key)
+        cache.set(doc_key, doc_info, 24 * 60 * 60)
 
         if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
             logger.info('status {}: unlock {} in repo_id {}'.format(status, file_path, repo_id))
