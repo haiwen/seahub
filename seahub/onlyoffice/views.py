@@ -154,15 +154,18 @@ def onlyoffice_editor_callback(request):
             return HttpResponse('{"error": 1}')
 
         # get file content
-        files = {
-            'file': onlyoffice_resp.content,
-            'file_name': os.path.basename(file_path),
-            'target_file': file_path,
-        }
+        files = {'file': (os.path.basename(file_path), onlyoffice_resp.content)}
+        data = {'target_file': file_path}
 
         # update file
         update_url = gen_inner_file_upload_url('update-api', update_token)
-        requests.post(update_url, files=files)
+        resp = requests.post(update_url, files=files, data=data)
+        if resp.status_code != 200:
+            logger.error('update_url: {}'.format(update_url))
+            logger.error('parameter file: {}'.format(files['file'][:100]))
+            logger.error('parameter file_name: {}'.format(files['file_name']))
+            logger.error('parameter target_file: {}'.format(files['target_file']))
+            logger.error('response: {}'.format(resp.__dict__))
 
         # 2 - document is ready for saving,
         if status == 2:
@@ -250,10 +253,8 @@ class OnlyofficeConvert(APIView):
         file_name = get_file_name_without_ext(file_path) + new_ext
         file_name = check_filename_with_rename(repo_id, parent_dir, file_name)
 
-        files = {
-            'file': (file_name, onlyoffice_resp.content),
-            'parent_dir': parent_dir,
-        }
+        files = {'file': (file_name, onlyoffice_resp.content)}
+        data = {'parent_dir': parent_dir}
         upload_url = gen_inner_file_upload_url('upload-api', upload_token)
 
         try:
@@ -273,9 +274,15 @@ class OnlyofficeConvert(APIView):
 
                 return prepared_request
 
-            requests.post(upload_url, files=files, auth=rewrite_request)
+            resp = requests.post(upload_url, files=files, data=data, auth=rewrite_request)
         else:
-            requests.post(upload_url, files=files)
+            resp = requests.post(upload_url, files=files, data=data)
+
+        if resp.status_code != 200:
+            logger.error('upload_url: {}'.format(upload_url))
+            logger.error('parameter file: {}'.format(files['file'][:100]))
+            logger.error('parameter parent_dir: {}'.format(files['parent_dir']))
+            logger.error('response: {}'.format(resp.__dict__))
 
         result = {}
         result['parent_dir'] = parent_dir
