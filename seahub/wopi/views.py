@@ -440,12 +440,9 @@ class WOPIFilesContentsView(APIView):
             update_url = gen_inner_file_upload_url('update-api', token)
 
             # update file
-            files = {
-                'file': file_obj,
-                'file_name': os.path.basename(file_path),
-                'target_file': file_path,
-            }
-            resp = requests.post(update_url, files=files)
+            files = {'file': (os.path.basename(file_path), file_obj)}
+            data = {'target_file': file_path}
+            resp = requests.post(update_url, files=files, data=data)
             if resp.status_code != 200:
                 logger.error('update_url: {}'.format(update_url))
                 logger.error('parameter file: {}'.format(files['file'][:100]))
