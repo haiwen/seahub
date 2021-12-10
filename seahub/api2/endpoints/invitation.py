@@ -15,6 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.invitations.models import Invitation
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils import get_site_name
 
@@ -103,9 +104,9 @@ class InvitationRevokeView(APIView):
         # send email
         site_name = get_site_name()
         subject = _('%(user)s revoked your access to %(site_name)s.') % {
-            'user': inviter, 'site_name': site_name}
+            'user': email2nickname(inviter), 'site_name': site_name}
         context = {
-            'inviter': inviter,
+            'inviter': email2nickname(inviter),
             'site_name': site_name,
         }
 
