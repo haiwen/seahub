@@ -97,12 +97,12 @@ class TreeViewItem extends React.Component {
       }
     }
 
-    return(
+    return (
       <div className="file-chooser-item">
         <div className={`${node.path === '/'? 'hide': ''}`}>
           <div className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`} onClick={this.onItemClick}>
             <div className="item-text">
-              <span className="name user-select-none ellipsis">{node.object && node.object.name}</span>
+              <span className="name user-select-none ellipsis" title={node.object && node.object.name}>{node.object && node.object.name}</span>
             </div>
             <div className="item-left-icon">
               {
