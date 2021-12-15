@@ -323,9 +323,8 @@ class Command(BaseCommand):
                 continue
             user_name = email2nickname(to_user)
             contact_email = Profile.objects.get_contact_email_by_user(to_user)
-            to_user = contact_email  # use contact email if any
             c = {
-                'to_user': to_user,
+                'to_user': contact_email,
                 'notice_count': len(notices),
                 'notices': notices,
                 'user_name': user_name,
@@ -334,15 +333,15 @@ class Command(BaseCommand):
             try:
                 send_html_email(_('New notice on %s') % get_site_name(),
                                 'notifications/notice_email.html', c,
-                                None, [to_user])
+                                None, [contact_email])
                 # set new last_emailed_time
                 UserOptions.objects.set_collaborate_last_emailed_time(
                     to_user, now)
-                logger.info('Successfully sent email to %s' % to_user)
-                self.stdout.write('[%s] Successfully sent email to %s' % (str(datetime.datetime.now()), to_user))
+                logger.info('Successfully sent email to %s' % contact_email)
+                self.stdout.write('[%s] Successfully sent email to %s' % (str(datetime.datetime.now()), contact_email))
             except Exception as e:
-                logger.error('Failed to send email to %s, error detail: %s' % (to_user, e))
-                self.stderr.write('[%s] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now()), to_user, e))
+                logger.error('Failed to send email to %s, error detail: %s' % (contact_email, e))
+                self.stderr.write('[%s] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now()), contact_email, e))
 
             # restore current language
             translation.activate(cur_language)
