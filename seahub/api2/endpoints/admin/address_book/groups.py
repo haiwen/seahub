@@ -34,6 +34,7 @@ def address_book_group_to_dict(group):
         group = ccnet_api.get_group(group)
 
     return {
+        "org_id": ccnet_api.get_org_id_by_group(group.id),
         "id": group.id,
         "name": group.group_name,
         "owner": group.creator_name,

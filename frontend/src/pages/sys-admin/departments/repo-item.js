@@ -34,9 +34,13 @@ class RepoItem extends React.Component {
         <td><img src={iconUrl} width="24" alt={gettext('icon')}/></td>
         <td><a href={siteRoot + 'sys/libraries/' + repo.repo_id + '/' + repo.name + '/'}>{repo.name}</a></td>
         <td>{Utils.bytesToSize(repo.size)}{' '}</td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
+	{ this.props.orgID == -1 ?
+          <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
+            <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+          </td>
+          :
+          <td></td>
+	}
       </tr>
     );
   }

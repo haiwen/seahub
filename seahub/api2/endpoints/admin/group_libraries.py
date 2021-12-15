@@ -67,7 +67,11 @@ class AdminGroupLibraries(APIView):
             org_id = request.user.org.org_id
             repos = seafile_api.get_org_group_repos(org_id, group_id)
         else:
-            repos = seafile_api.get_repos_by_group(group_id)
+            org_id = ccnet_api.get_org_id_by_group(group_id)
+            if org_id != -1:
+                repos = seafile_api.get_org_group_repos(org_id, group_id)
+            else:
+                repos = seafile_api.get_repos_by_group(group_id)
 
         group_repos_info = []
         for repo in repos:
