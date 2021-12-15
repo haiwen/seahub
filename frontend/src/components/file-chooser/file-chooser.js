@@ -32,7 +32,7 @@ class FileChooser extends React.Component {
       repoList: [],
       currentRepoInfo: null,
       selectedRepo: null,
-      selectedPath: '',
+      selectedPath: this.props.currentPath || '/',
       isSearching: false,
       isResultGot: false,
       searchInfo: '',
@@ -132,7 +132,7 @@ class FileChooser extends React.Component {
     }
     this.setState({
       selectedRepo: repo,
-      selectedPath: '',
+      selectedPath: '/',
     });
   }
 
@@ -386,6 +386,7 @@ class FileChooser extends React.Component {
                 <RepoListView
                   initToShowChildren={true}
                   currentRepoInfo={this.state.currentRepoInfo}
+                  currentPath={this.props.currentPath}
                   selectedRepo={this.state.selectedRepo}
                   selectedPath={this.state.selectedPath}
                   onRepoItemClick={this.onRepoItemClick}
@@ -429,6 +430,7 @@ class FileChooser extends React.Component {
               <RepoListView
                 initToShowChildren={true}
                 currentRepoInfo={this.state.currentRepoInfo}
+                currentPath={this.props.currentPath}
                 selectedRepo={this.state.selectedRepo}
                 selectedPath={this.state.selectedPath}
                 onRepoItemClick={this.onRepoItemClick}

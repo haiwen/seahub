@@ -172,6 +172,7 @@ class MoveDirent extends React.Component {
         <ModalBody>
           <FileChooser
             repoID={this.props.repoID}
+            currentPath={this.props.path}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
             mode={mode}
