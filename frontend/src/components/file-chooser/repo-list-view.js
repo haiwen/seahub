@@ -19,7 +19,7 @@ const propTypes = {
 class RepoListView extends React.Component {
 
   render() {
-    let { currentRepoInfo, repoList } = this.props;
+    let { currentRepoInfo, currentPath, repoList } = this.props;
     if (currentRepoInfo) {
       repoList = [];
       repoList.push(currentRepoInfo);
@@ -30,6 +30,8 @@ class RepoListView extends React.Component {
           return (
             <RepoListItem
               key={index}
+              isCurrentRepo={currentRepoInfo ? true : false}
+              currentPath={currentPath}
               repo={repoItem}
               initToShowChildren={this.props.initToShowChildren}
               selectedRepo={this.props.selectedRepo}

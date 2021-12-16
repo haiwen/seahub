@@ -230,7 +230,8 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     if (this.state.showFileChooser) {
       return (
         <div>
-          <FileChooser repoID={this.props.repoID}
+          <FileChooser
+            repoID={this.props.repoID}
             mode={'only_current_library'}
             onDirentItemClick={this.toggleSubFolder}
             onRepoItemClick={this.onRepoItemClick}
