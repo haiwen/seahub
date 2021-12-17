@@ -39,10 +39,10 @@ class ResultsItem extends React.Component {
         <img className={linkContent ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt=""/>
         <div className="item-content">
           <div className="item-name ellipsis">
-            <a href={this.handlerFileURL(item)} target="_blank" title={item.name}>{item.name}</a>
+            <a href={this.handlerFileURL(item)} target="_blank" title={item.name} rel="noreferrer">{item.name}</a>
           </div>
           <div className="item-link ellipsis">
-            <a href={this.handlerParentDirURL(item)} target="_blank" >{item.repo_name}{this.handlerParentDirPath(item)}</a>
+            <a href={this.handlerParentDirURL(item)} target="_blank" rel="noreferrer" >{item.repo_name}{this.handlerParentDirPath(item)}</a>
           </div>
           <div className="item-link ellipsis">
             {Utils.bytesToSize(item.size) + ' ' + moment(item.last_modified * 1000).format('YYYY-MM-DD')}
@@ -67,12 +67,11 @@ class SearchResults extends React.Component {
   }
 
   render() {
-    const { resultItems } = this.props;
-    const total = resultItems.length;
+    const { resultItems, total } = this.props;
     return (
       <div className="search-result-container position-static">
+        <p className="tip">{total > 0 ? (total + ' ' + (total === 1 ? gettext('result') : gettext('results'))) : gettext('No result')}</p>
         <ul className="search-result-list">
-          <p className="tip">{total > 0 ? (total + ' ' + (total === 1 ? gettext('result') : gettext('results'))) : gettext('No result')}</p>
           {resultItems.map((item, index) => {
             return <ResultsItem key={index} item={item}/>;
           })}
@@ -84,6 +83,7 @@ class SearchResults extends React.Component {
 
 const searchResultsPropTypes = {
   resultItems: PropTypes.array.isRequired,
+  total: PropTypes.number.isRequired
 };
 
 SearchResults.propTypes = searchResultsPropTypes;
