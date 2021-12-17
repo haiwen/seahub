@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
-import { isPro, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
+import { isPro, useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -141,19 +141,48 @@ class SharedDirView extends React.Component {
   }
 
   zipDownloadFolder = (folderPath) => {
-    this.setState({
-      isZipDialogOpen: true,
-      zipFolderPath: folderPath
-    });
+    if (!useGoFileserver) {
+      this.setState({
+        isZipDialogOpen: true,
+        zipFolderPath: folderPath
+      });
+    }
+    else {
+      seafileAPI.getShareLinkZipTask(token, folderPath).then((res) => {
+        const zipToken = res.data['zip_token'];
+        location.href = `${fileServerRoot}zip/${zipToken}`;
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        this.setState({
+          isLoading: false,
+          errorMsg: errorMsg
+        });
+      });
+    }
   }
 
   zipDownloadSelectedItems = () => {
-    this.setState({
-      isZipDialogOpen: true,
-      zipFolderPath: relativePath,
-      selectedItems: this.state.items.filter(item => item.isSelected)
-        .map(item => item.file_name || item.folder_name)
-    });
+    if (!useGoFileserver) {
+      this.setState({
+        isZipDialogOpen: true,
+        zipFolderPath: relativePath,
+        selectedItems: this.state.items.filter(item => item.isSelected)
+          .map(item => item.file_name || item.folder_name)
+      });
+    }
+    else {
+      let target = this.state.items.filter(item => item.isSelected).map(item => item.file_name || item.folder_name);
+      seafileAPI.getShareLinkDirentsZipTask(token, relativePath, target).then((res) => {
+        const zipToken = res.data['zip_token'];
+        location.href = `${fileServerRoot}zip/${zipToken}`;
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        this.setState({
+          isLoading: false,
+          errorMsg: errorMsg
+        });
+      });
+    }
   }
 
   closeZipDialog = () => {
