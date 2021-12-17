@@ -9,10 +9,10 @@
     <script type="text/javascript">
       window.search = {
         pageOptions: {
-          q: '{{ keyword }}',
-          search_repo: '{{ search_repo }}',
-          search_ftypes: '{{ search_ftypes }}',
-          repo_name:'{{ repo.name }}',
+          q: '{{ keyword|escapejs }}',
+          search_repo: '{{ search_repo|escapejs }}',
+          search_ftypes: '{{ search_ftypes|escapejs }}',
+          repo_name:'{{ repo.name|escapejs }}',
         }
       }
     </script>
