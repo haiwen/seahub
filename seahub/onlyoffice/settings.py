@@ -12,7 +12,6 @@ ONLYOFFICE_JWT_HEADER = getattr(settings, 'ONLYOFFICE_JWT_HEADER', 'Authorizatio
 ONLYOFFICE_JWT_SECRET = getattr(settings, 'ONLYOFFICE_JWT_SECRET', '')
 # if True, file will be saved when user click save btn on file editing page
 ONLYOFFICE_FORCE_SAVE = getattr(settings, 'ONLYOFFICE_FORCE_SAVE', False)
-ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN = getattr(settings, 'ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN', False)
 
 ONLYOFFICE_CONVERTER_EXTENSIONS = [
     ".docm", ".doc", ".dotx", ".dotm", ".dot", ".odt",
