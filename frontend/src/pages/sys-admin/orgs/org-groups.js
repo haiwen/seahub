@@ -96,7 +96,7 @@ class Item extends Component {
 
     const groupUrl = item.parent_group_id == 0 ?
       `${siteRoot}sys/groups/${item.group_id}/libraries/` :
-      `${siteRoot}sysadmin/#address-book/groups/${item.group_id}/`;
+      `${siteRoot}sys/departments/${item.group_id}/`;
 
     return (
       <Fragment>

@@ -61,17 +61,21 @@ class MemberItem extends React.Component {
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
         <td><UserLink email={member.email} name={member.name} /></td>
-        <td>
-          <RoleEditor
-            isTextMode={true}
-            isEditIconShow={highlight}
-            currentRole={member.role}
-            roles={this.roles}
-            onRoleChanged={this.onChangeUserRole}
-            toggleItemFreezed={this.props.toggleItemFreezed}
-          />
-        </td>
-        {!this.props.isItemFreezed ?
+	{ this.props.orgID == -1 ?
+          <td>
+            <RoleEditor
+              isTextMode={true}
+              isEditIconShow={highlight}
+              currentRole={member.role}
+              roles={this.roles}
+              onRoleChanged={this.onChangeUserRole}
+              toggleItemFreezed={this.props.toggleItemFreezed}
+            />
+          </td>
+          :
+          <td>{member.role}</td>
+        }
+        {this.props.orgID == -1 && !this.props.isItemFreezed ?
           <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
             <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
           </td> : <td></td>

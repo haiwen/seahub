@@ -33,6 +33,7 @@ class DepartmentDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      orgID: '',
       groupName: '',
       isItemFreezed: false,
       ancestorGroups: [],
@@ -89,6 +90,7 @@ class DepartmentDetail extends React.Component {
         groups: res.data.groups,
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,
+        orgID: res.data.org_id,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -317,6 +319,7 @@ class DepartmentDetail extends React.Component {
                         return(
                           <Fragment key={group.id}>
                             <GroupItem
+                              orgID={this.state.orgID}
                               isItemFreezed={this.state.isItemFreezed}
                               onFreezedItem={this.onFreezedItem}
                               onUnfreezedItem={this.onUnfreezedItem}
@@ -358,6 +361,7 @@ class DepartmentDetail extends React.Component {
                             return (
                               <Fragment key={index}>
                                 <MemberItem
+                                  orgID={this.state.orgID}
                                   member={member}
                                   showDeleteMemberDialog={this.showDeleteMemberDialog}
                                   isItemFreezed={this.state.isItemFreezed}
@@ -404,7 +408,7 @@ class DepartmentDetail extends React.Component {
                       {repos.map((repo, index) => {
                         return(
                           <Fragment key={index}>
-                            <RepoItem repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
+                            <RepoItem repo={repo} orgID={this.state.orgID} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
                           </Fragment>
                         );
                       })}
