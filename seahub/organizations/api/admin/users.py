@@ -253,19 +253,22 @@ class OrgAdminUsers(APIView):
             error_msg = "Name should not include '/'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            user = User.objects.get(email=email)
-            error_msg = 'User %s already exists.' % email
+        from seahub.utils.auth import gen_user_virtual_id
+        contact_email = email
+        email = gen_user_virtual_id()
+
+        if Profile.objects.get_profile_by_contact_email(contact_email):
+            error_msg = "User %s already exists." % contact_email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        except User.DoesNotExist:
-            pass
 
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
+            Profile.objects.add_or_update(username=user.username,
+                                          contact_email=contact_email)
         except User.DoesNotExist as e:
             logger.error(e)
-            error_msg = 'Fail to add user %s.' % email
+            error_msg = 'Fail to add user %s.' % contact_email
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if user and name:
@@ -276,7 +279,7 @@ class OrgAdminUsers(APIView):
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
                 try:
-                    send_user_add_mail(request, email, password)
+                    send_user_add_mail(request, contact_email, password)
                 except Exception as e:
                     logger.error(str(e))
 
