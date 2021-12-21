@@ -211,14 +211,21 @@ def org_register(request):
             org_name = form.cleaned_data['org_name']
             url_prefix = form.cleaned_data['url_prefix']
 
-            new_user = User.objects.create_user(email, password,
-                                                is_staff=False, is_active=True)
+            from seahub.utils.auth import gen_user_virtual_id
+            contact_email = email
+            email = gen_user_virtual_id()
+
+            try:
+                new_user = User.objects.create_user(email, password,
+                                                    is_staff=False, is_active=True)
+                Profile.objects.add_or_update(username=new_user.username,
+                                              contact_email=contact_email, nickname=name)
+            except User.DoesNotExist as e:
+                logger.error(e)
+
             create_org(org_name, url_prefix, new_user.username)
             new_org = get_org_by_url_prefix(url_prefix)
             org_created.send(sender=None, org=new_org)
-
-            if name:
-                Profile.objects.add_or_update(new_user.username, name)
 
             # login the user
             new_user.backend = settings.AUTHENTICATION_BACKENDS[0]
