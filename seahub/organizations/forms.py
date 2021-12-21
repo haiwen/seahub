@@ -12,6 +12,7 @@ import seaserv
 from seahub.base.accounts import User
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import is_valid_username
+from seahub.profile.models import Profile
 
 slug_re = re.compile(r'^[-a-zA-Z0-9_]+$')
 
@@ -39,12 +40,10 @@ class OrgRegistrationForm(forms.Form):
         if not is_valid_username(email):
             raise forms.ValidationError(_("Email address is not valid"))
 
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return email
+        if Profile.objects.get_profile_by_contact_email(email):
+            raise forms.ValidationError(_("A user with this email already exists."))
 
-        raise forms.ValidationError(_("A user with this email already exists."))
+        return email
 
     def clean_url_prefix(self):
         url_prefix = self.cleaned_data['url_prefix']
