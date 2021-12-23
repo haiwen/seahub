@@ -1,6 +1,5 @@
-// manifest.webmanifest
 {
   "icons": [
-    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "32x32" },
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "32x32" }
   ]
 }
