@@ -556,7 +556,8 @@ def copy_scripts_and_libs():
 
     '''
     builddir = conf[CONF_BUILDDIR]
-    scripts_srcdir = os.path.join(builddir, Seafile().projdir, 'scripts')
+    src_seahubdir = Seahub().projdir
+    scripts_srcdir = os.path.join(builddir, src_seahubdir, 'scripts')
     serverdir = os.path.join(builddir, 'seafile-server')
 
     must_copy(os.path.join(scripts_srcdir, 'setup-seafile.sh'),
@@ -603,7 +604,6 @@ def copy_scripts_and_libs():
               runtimedir)
 
     # move seahub to seafile-server/seahub
-    src_seahubdir = Seahub().projdir
     dst_seahubdir = os.path.join(serverdir, 'seahub')
     try:
         shutil.move(src_seahubdir, dst_seahubdir)
