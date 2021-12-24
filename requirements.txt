@@ -12,7 +12,8 @@ django-formtools==2.3
 django-simple-captcha
 djangorestframework==3.11.1
 python-dateutil
-requests
+requests==2.26.0
+urllib3==1.26.7
 pillow
 pyjwt==2.1.*
 pycryptodome==3.12.0
