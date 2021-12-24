@@ -25,6 +25,7 @@ import subprocess
 import optparse
 import atexit
 import platform
+import distro
 
 ####################
 ### Global variables
@@ -539,6 +540,15 @@ def copy_user_manuals():
     for path in glob.glob(src_pattern):
         must_copy(path, dst_dir)
 
+# copy go_fileserver "fileserver" to directory seafile-server/seafile/bin
+def copy_go_fileserver():
+    builddir = conf[CONF_BUILDDIR]
+    srcdir = conf[CONF_SRCDIR]
+    src_go_fileserver = os.path.join(srcdir, 'fileserver')
+    dst_bin_dir = os.path.join(builddir, 'seafile-server', 'seafile', 'bin')
+
+    must_copy(src_go_fileserver, dst_bin_dir)
+
 def copy_seafdav():
     dst_dir = os.path.join(conf[CONF_BUILDDIR], 'seafile-server', 'seahub', 'thirdpart')
     tarball = os.path.join(conf[CONF_SRCDIR], 'seafdav.tar.gz')
@@ -613,6 +623,9 @@ def copy_scripts_and_libs():
     # copy shared c libs
     copy_shared_libs()
     copy_user_manuals()
+
+    # copy go_fileserver
+    copy_go_fileserver()
 
 def copy_pdf2htmlex():
     '''Copy pdf2htmlEX exectuable and its dependent libs'''
@@ -777,10 +790,14 @@ def create_tarball(tarball_name):
     excludes_list = [ '--exclude=%s' % pattern for pattern in ignored_patterns ]
     excludes = ' '.join(excludes_list)
 
-    tar_cmd = 'tar czf %(tarball_name)s %(versioned_serverdir)s %(excludes)s' \
+    # tar will copy the content the directory python3.[7-9]/ to python3.6/
+    transform = '--transform=\'s,python3.[7-9]/,python3/,\''
+
+    tar_cmd = 'tar czf %(tarball_name)s %(transform)s %(versioned_serverdir)s %(excludes)s' \
               % dict(tarball_name=tarball_name,
                      versioned_serverdir=versioned_serverdir,
-                     excludes=excludes)
+                     excludes=excludes,
+                     transform=transform)
 
     if run(tar_cmd) < 0:
         error('failed to generate the tarball')
@@ -798,17 +815,20 @@ def gen_tarball():
     # 32-bit: seafile-server_1.2.2_i386.tar.gz
     version = conf[CONF_VERSION]
     arch = os.uname()[-1].replace('_', '-')
-    if 'arm' in platform.machine():
-        arch = 'pi'
+    if 'arm' in platform.machine() or 'aarch64' in platform.machine():
+        arch = platform.machine()
     elif arch != 'x86-64':
         arch = 'i386'
+
+    # determine linux distribution
+    distribution = distro.linux_distribution()[-1].replace(' ', '-')
 
     dbg = ''
     if conf[CONF_NO_STRIP]:
         dbg = '.dbg'
 
-    tarball_name = 'seafile-server_%(version)s_%(arch)s%(dbg)s.tar.gz' \
-                   % dict(version=version, arch=arch, dbg=dbg)
+    tarball_name = 'seafile-server-%(version)s-%(distribution)s-%(arch)s%(dbg)s.tar.gz' \
+                   % dict(version=version, distribution=distribution, arch=arch, dbg=dbg)
     dst_tarball = os.path.join(conf[CONF_OUTPUTDIR], tarball_name)
 
     # generate the tarball
