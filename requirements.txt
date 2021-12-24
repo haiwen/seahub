@@ -13,7 +13,6 @@ django-simple-captcha
 djangorestframework==3.11.1
 python-dateutil
 requests
-urllib3==1.25.11
 pillow
 pyjwt==2.1.*
 pycryptodome==3.12.0
