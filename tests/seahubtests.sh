@@ -28,7 +28,7 @@ SEAHUB_TESTSDIR=$(python -c "import os; print(os.path.dirname(os.path.realpath('
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 
 export SEAHUB_LOG_DIR='/tmp/logs'
-export PYTHONPATH="/usr/local/lib/python3.6/site-packages:/usr/local/lib/python3.6/dist-packages:/usr/lib/python3.6/site-packages:/usr/lib/python3.6/dist-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
+export PYTHONPATH="/usr/local/lib/python3.8/site-packages:/usr/local/lib/python3.8/dist-packages:/usr/lib/python3.8/site-packages:/usr/lib/python3.8/dist-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
 cd "$SEAHUB_SRCDIR"
 set +x
 
@@ -62,7 +62,7 @@ function run_tests() {
     py.test $nose_opts tests
     rvalue=$?
 
-    # ignore 120 exited code in python3.6
+    # ignore 120 exited code in python3.8
     if [[ $rvalue == 120 ]]; then
     	  rvalue=0
     fi
