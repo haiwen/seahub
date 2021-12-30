@@ -366,12 +366,16 @@ class SharedDirView extends React.Component {
                     {this.state.items.some(item => item.isSelected) ?
                       <div>
                       <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
-                      <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
+                      {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
+                      }
                       </div>
                       :
                       <div>
                       <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
-                      <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
+                      {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
+                      }
                       </div>
                     }
                   </Fragment>
