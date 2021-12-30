@@ -13,6 +13,8 @@ import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
 
+import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
+
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
 
@@ -46,6 +48,9 @@ class SharedDirView extends React.Component {
 
       isZipDialogOpen: false,
       zipFolderPath: '',
+
+      isSaveSharedDirDialogShow: false,
+      itemsForSave: [],
 
       isImagePopupOpen: false,
       imageItems: [],
@@ -183,6 +188,35 @@ class SharedDirView extends React.Component {
         });
       });
     }
+  }
+
+  saveSelectedItems = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: true,
+      itemsForSave: this.state.items.filter(item => item.isSelected)
+	.map(item => item.file_name || item.folder_name)
+    });
+  }
+
+  saveAllItems = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: true,
+      itemsForSave: this.state.items
+	.map(item => item.file_name || item.folder_name)
+    });
+  }
+
+  toggleSaveSharedDirCancel = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: false,
+      itemsForSave: []
+    });
+  }
+
+  handleSaveSharedDir = () => {
+    toaster.success(gettext('Successfully saved'), {
+      duration: 3
+    });
   }
 
   closeZipDialog = () => {
@@ -330,8 +364,15 @@ class SharedDirView extends React.Component {
                   {showDownloadIcon &&
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ?
-                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button> :
+                      <div>
+                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
+                      <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
+                      </div>
+                      :
+                      <div>
                       <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
+                      <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
+                      </div>
                     }
                   </Fragment>
                   }
@@ -374,6 +415,15 @@ class SharedDirView extends React.Component {
             toggleDialog={this.closeZipDialog}
           />
         </ModalPortal>
+        }
+        {this.state.isSaveSharedDirDialogShow &&
+          <SaveSharedDirDialog
+            sharedToken={token}
+            parentDir={relativePath}
+            items={this.state.itemsForSave}
+            toggleCancel={this.toggleSaveSharedDirCancel}
+            handleSaveSharedDir={this.handleSaveSharedDir}
+          />
         }
         {this.state.isImagePopupOpen &&
         <ModalPortal>
