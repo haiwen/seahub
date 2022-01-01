@@ -821,7 +821,7 @@ def gen_tarball():
         arch = 'i386'
 
     # determine linux distribution
-    distribution = distro.linux_distribution()[-1].replace(' ', '-')
+    distribution = distro.codename().replace(' ', '-').lower()
 
     dbg = ''
     if conf[CONF_NO_STRIP]:
