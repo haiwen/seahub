@@ -599,6 +599,14 @@ def copy_scripts_and_libs():
     except Exception as e:
         error('failed to copy upgrade scripts: %s' % e)
 
+    # copy sql scripts
+    sql_scriptsdir = os.path.join(Seafile().projdir, 'scripts', 'sql')
+    dst_sql_scriptsdir = os.path.join(serverdir, 'sql')
+    try:
+        shutil.copytree(sql_scriptsdir, dst_sql_scriptsdir)
+    except Exception as e:
+        error('failed to copy sql scripts: %s' % e)
+
     # copy runtime/seahub.conf
     runtimedir = os.path.join(serverdir, 'runtime')
     must_mkdir(runtimedir)
