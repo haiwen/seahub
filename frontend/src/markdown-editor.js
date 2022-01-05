@@ -734,9 +734,8 @@ class MarkdownEditor extends React.Component {
     const fileName = Utils.getFileName(filePath);
     const suffix = fileName.slice(fileName.indexOf('.') + 1);
     if (IMAGE_SUFFIXES.includes(suffix)) {
-      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-        window.richMarkdownEditor.addLink(fileName, res.data, true);
-      });
+      let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
+      window.richMarkdownEditor.addLink(fileName, innerURL, true);
       return;
     }
     let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
