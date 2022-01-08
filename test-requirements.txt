@@ -6,3 +6,4 @@ exam
 splinter
 pytest
 pytest-django
+selenium
