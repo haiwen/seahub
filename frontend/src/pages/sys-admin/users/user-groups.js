@@ -7,8 +7,6 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import OpMenu from '../../../components/dialog/op-menu';
-import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
 
@@ -48,8 +46,7 @@ class Content extends Component {
               <tr>
                 <th width="35%">{gettext('Name')}</th>
                 <th width="30%">{gettext('Role')}</th>
-                <th width="30%">{gettext('Created At')}</th>
-                <th width="5%">{/* Operations */}</th>
+                <th width="35%">{gettext('Created At')}</th>
               </tr>
             </thead>
             <tbody>
@@ -60,7 +57,6 @@ class Content extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
-                  deleteItem={this.props.deleteItem}
                 />);
               })}
             </tbody>
@@ -79,7 +75,6 @@ class Item extends Component {
     this.state = {
       isOpIconShown: false,
       highlight: false,
-      isDeleteDialogOpen: false
     };
   }
 
@@ -109,33 +104,6 @@ class Item extends Component {
     this.props.onUnfreezedItem();
   }
 
-  toggleDeleteDialog = () => {
-    this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
-
-  deleteItem = () => {
-    this.props.deleteItem(this.props.item.id);
-  }
-
-  translateOperations = (item) => {
-    let translateResult = '';
-    switch (item) {
-      case 'Delete':
-        translateResult = gettext('Delete');
-        break;
-    }
-
-    return translateResult;
-  }
-
-  onMenuItemClick = (operation) => {
-    switch(operation) {
-      case 'Delete':
-        this.toggleDeleteDialog();
-        break;
-    }
-  }
-
   getRoleText = () => {
     let roleText;
     const { item } = this.props;
@@ -155,10 +123,9 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { isOpIconShown } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
-    const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
 
     const url = item.parent_group_id == 0 ?
       `${siteRoot}sys/groups/${item.id}/libraries/` :
@@ -170,27 +137,7 @@ class Item extends Component {
           <td><Link to={url}>{item.name}</Link></td>
           <td>{this.getRoleText()}</td>
           <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm')}</td>
-          <td>
-            {(isOpIconShown && item.parent_group_id == 0) &&
-            <OpMenu
-              operations={['Delete']}
-              translateOperations={this.translateOperations}
-              onMenuItemClick={this.onMenuItemClick}
-              onFreezedItem={this.props.onFreezedItem}
-              onUnfreezedItem={this.onUnfreezedItem}
-            />
-            }
-          </td>
         </tr>
-        {isDeleteDialogOpen &&
-          <CommonOperationConfirmationDialog
-            title={gettext('Delete Group')}
-            message={deleteDialogMsg}
-            executeOperation={this.deleteItem}
-            confirmBtnText={gettext('Delete')}
-            toggleDialog={this.toggleDeleteDialog}
-          />
-        }
       </Fragment>
     );
   }
@@ -227,19 +174,6 @@ class Groups extends Component {
     });
   }
 
-  deleteItem = (groupID) => {
-    seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
-      let items = this.state.items.filter(item => {
-        return item.id != groupID;
-      });
-      this.setState({items: items});
-      toaster.success(gettext('Successfully deleted 1 item.'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   render() {
     return (
       <Fragment>
@@ -252,7 +186,6 @@ class Groups extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
-                deleteItem={this.deleteItem}
               />
             </div>
           </div>
