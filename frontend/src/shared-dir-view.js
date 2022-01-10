@@ -133,14 +133,14 @@ class SharedDirView extends React.Component {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`}>{item.name}</a>
+                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`} className="mx-1 ellipsis" title={item.name}>{item.name}</a>
                 <span> / </span>
               </React.Fragment>
             );
           }
         })
         }
-        {zipped[zipped.length - 1].name}
+        <span className="ml-1 ellipsis" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
       </React.Fragment>
     );
   }
@@ -348,8 +348,8 @@ class SharedDirView extends React.Component {
               <h2 className="h3">{dirName}</h2>
               <p>{gettext('Shared by: ')}{sharedBy}</p>
               <div className="d-flex justify-content-between align-items-center op-bar">
-                <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
-                <div>
+                <p className="m-0 mr-4 ellipsis d-flex align-items-center"><span className="flex-none">{gettext('Current path: ')}</span>{this.renderPath()}</p>
+                <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
                     <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')} aria-label={gettext('List')}></a>
@@ -364,19 +364,19 @@ class SharedDirView extends React.Component {
                   {showDownloadIcon &&
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ?
-                      <div>
+                      <Fragment>
                       <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
                       {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
                       }
-                      </div>
+                      </Fragment>
                       :
-                      <div>
+                      <Fragment>
                       <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
                       {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
                       }
-                      </div>
+                      </Fragment>
                     }
                   </Fragment>
                   }
