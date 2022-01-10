@@ -42,6 +42,8 @@ from constance import config
 
 from seahub.password_session import update_session_auth_hash
 
+from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -248,6 +250,7 @@ def logout(request, next_page=None,
            template_name='registration/logged_out.html',
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
+
     from seahub.auth import logout
     logout(request)
 
@@ -285,7 +288,8 @@ def logout(request, next_page=None,
             response = HttpResponseRedirect(redirect_to)
         else:
             response = render(request, template_name, {
-                'title': _('Logged out')
+                'title': _('Logged out'),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
             })
     else:
         # Redirect to this page until the session has been cleared.
