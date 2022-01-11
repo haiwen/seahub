@@ -12,7 +12,6 @@ import ModalPortal from './components/modal-portal';
 import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
-
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 
 import './css/shared-dir-view.css';
@@ -95,8 +94,8 @@ class SharedDirView extends React.Component {
 
   getThumbnails = () => {
     let items = this.state.items.filter((item) => {
-      return !item.is_dir && 
-        (Utils.imageCheck(item.file_name) || 
+      return !item.is_dir &&
+        (Utils.imageCheck(item.file_name) ||
         (enableVideoThumbnail && Utils.videoCheck(item.file_name))) &&
         !item.encoded_thumbnail_src;
     });
@@ -194,7 +193,7 @@ class SharedDirView extends React.Component {
     this.setState({
       isSaveSharedDirDialogShow: true,
       itemsForSave: this.state.items.filter(item => item.isSelected)
-	.map(item => item.file_name || item.folder_name)
+        .map(item => item.file_name || item.folder_name)
     });
   }
 
@@ -202,7 +201,7 @@ class SharedDirView extends React.Component {
     this.setState({
       isSaveSharedDirDialogShow: true,
       itemsForSave: this.state.items
-	.map(item => item.file_name || item.folder_name)
+        .map(item => item.file_name || item.folder_name)
     });
   }
 
@@ -365,17 +364,17 @@ class SharedDirView extends React.Component {
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ?
                       <Fragment>
-                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
-                      {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
+                        {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
-                      }
+                        }
                       </Fragment>
                       :
                       <Fragment>
-                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
-                      {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
+                        {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
-                      }
+                        }
                       </Fragment>
                     }
                   </Fragment>
@@ -387,8 +386,8 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, "")}
-                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, "")}
+                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, '')}
+                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, '')}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
