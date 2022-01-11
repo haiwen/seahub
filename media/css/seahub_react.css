@@ -117,6 +117,7 @@ a:hover { color:#eb8205; }
 .vam { vertical-align:middle; }
 .flex-auto { flex:auto; }
 .flex-1 { flex:1; }
+.flex-none { flex: none; }
 .hide { display:none; }
 .error { color:red; }
 .no-deco,

@@ -39,7 +39,7 @@ from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember,
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
-        ShareLinkUpload, ShareLinkUploadDone
+        ShareLinkUpload, ShareLinkUploadDone, ShareLinkSaveItemsToRepo
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -341,6 +341,7 @@ urlpatterns = [
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-file-to-repo/$', ShareLinkSaveFileToRepo.as_view(), name='api-v2.1-share-link-save-file-to-repo'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-items-to-repo/$', ShareLinkSaveItemsToRepo.as_view(), name='api-v2.1-share-link-save-items-to-repo'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/dirents/$', ShareLinkDirents.as_view(), name='api-v2.1-share-link-dirents'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/online-office-lock/$',
             ShareLinkOnlineOfficeLock.as_view(), name='api-v2.1-share-link-online-office-lock'),
