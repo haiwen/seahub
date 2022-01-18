@@ -26,7 +26,7 @@ const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
 let dirPath = Utils.getDirName(filePath);
-const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
+const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'gif', 'GIF'];
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
