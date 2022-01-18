@@ -26,7 +26,7 @@ const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
 let dirPath = Utils.getDirName(filePath);
-const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'gif', 'GIF'];
+const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'jpeg', 'JPG', 'gif', 'GIF'];
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -734,7 +734,7 @@ class MarkdownEditor extends React.Component {
     const fileName = Utils.getFileName(filePath);
     const suffix = fileName.slice(fileName.indexOf('.') + 1);
     if (IMAGE_SUFFIXES.includes(suffix)) {
-      let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
+      let innerURL = serviceUrl + '/lib/' + repoID + '/file' + filePath + '?raw=1';
       window.richMarkdownEditor.addLink(fileName, innerURL, true);
       return;
     }
