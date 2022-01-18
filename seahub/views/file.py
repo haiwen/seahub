@@ -5,7 +5,6 @@ File related views, including view_file, view_history_file, view_trash_file,
 view_snapshot_file, view_shared_file, etc.
 """
 
-from asyncio.proactor_events import constants
 import os
 import json
 import time
