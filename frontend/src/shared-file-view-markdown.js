@@ -55,6 +55,7 @@ class FileContent extends React.Component {
       let index2 = imagePath.indexOf('?');
       imagePath = imagePath.substring(index + 5, index2);
       // change image url
+      // the image path has been encoded when inserting the image
       innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
     }
     return innerNode;

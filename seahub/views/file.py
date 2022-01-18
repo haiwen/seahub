@@ -5,6 +5,7 @@ File related views, including view_file, view_history_file, view_trash_file,
 view_snapshot_file, view_shared_file, etc.
 """
 
+from asyncio.proactor_events import constants
 import os
 import json
 import time
@@ -1972,8 +1973,9 @@ def view_media_file_via_share_link(request):
     # Translation ‘(’ ')'
     image_file_name = image_file_name.replace('(', '\(')
     image_file_name = image_file_name.replace(')', '\)')
+    encoded_image_file_name = urllib.parse.quote(image_file_name)
 
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
+    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, encoded_image_file_name))
     result = re.search(p, file_content)
     if not result:
         return render_error(request, 'Image does not exist')
