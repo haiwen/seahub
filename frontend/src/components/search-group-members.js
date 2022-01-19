@@ -108,7 +108,7 @@ class SearchGroupMembers extends React.Component {
         <div className="manage-members">
           {isLoading ? <Loading /> : (
             <Fragment>
-              {groupMembers.length === 0 && !this.isInit && <div className="mx-2 my-4">{gettext('No users')}</div>}
+              {groupMembers.length === 0 && !this.isInit && <div className="mx-2 my-4">{gettext('No members')}</div>}
               {groupMembers.length > 0 && (
                 <GroupMembers
                   groupMembers={groupMembers}
