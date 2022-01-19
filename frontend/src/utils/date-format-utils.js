@@ -12,7 +12,7 @@ function translateCalendar() {
   const locale = window.app.config ?  window.app.config.lang : 'en';
   let language;
   switch (locale) {
-    case 'zh-CH':
+    case 'zh-cn':
       language = zhCN;
       break;
     case 'zh-tw':
