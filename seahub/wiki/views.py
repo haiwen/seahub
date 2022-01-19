@@ -86,8 +86,11 @@ def slug(request, slug, file_path="home.md"):
         wiki.save()
         is_public_wiki = True
 
+    repo = seafile_api.get_repo(wiki.repo_id)
+
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
+        "repo_name": repo.name if repo else '',
         "page_name": file_path,
         "shared_token": fs.token,
         "shared_type": fs.s_type,
