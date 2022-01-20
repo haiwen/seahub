@@ -14,7 +14,7 @@ class ForbidUploadListItem extends React.Component {
     return (
       <tr className="file-upload-item">
         <td className="upload-name">
-          <div className="ellipsis">{file.name}</div>
+          <div className="ellipsis" title={file.name}>{file.name}</div>
         </td>
 
         <td colSpan={3} className="error">{msg}</td>
