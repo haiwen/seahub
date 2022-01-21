@@ -19,14 +19,14 @@
 # Oleg  Sergeev <djvnsk@ya.ru>, 2017
 # Rekby <timofey.koolin@gmail.com>, 2014
 # Rekby <timofey.koolin@gmail.com>, 2014
-# Vladimir <pash.vld@gmail.com>, 2015-2021
+# Vladimir <pash.vld@gmail.com>, 2015-2022
 # Vladimir <pash.vld@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-19 16:56+0800\n"
-"PO-Revision-Date: 2022-01-19 07:23+0000\n"
+"POT-Creation-Date: 2022-01-21 16:50+0800\n"
+"PO-Revision-Date: 2022-01-20 05:36+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -4224,10 +4224,10 @@ msgstr "Результатов не найдено"
 #, python-format
 msgid "%(total)s result"
 msgid_plural "%(total)s results"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%(total)s результат"
+msgstr[1] "%(total)s результатов"
+msgstr[2] "%(total)s результатов"
+msgstr[3] "%(total)s результатов"
 
 #: seahub/search/templates/search_results.html:63
 msgid "Directory icon"
@@ -4415,7 +4415,7 @@ msgstr "Извините, но запрошенная страница не мо
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Файл, Сотрудничество, Команда, Сообщество"
 
 #: seahub/templates/base.html:41
 msgid "Side Nav Menu"
