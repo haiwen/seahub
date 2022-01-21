@@ -3,7 +3,7 @@
   display: none;
 }
 .seafile-editor {
-  position: static;
+  position: static!important;
 }
 .editor {
   border: none!important;
