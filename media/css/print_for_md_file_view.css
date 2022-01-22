@@ -1,3 +1,6 @@
+#root {
+  height: auto;
+}
 .sf-md-viewer-topbar,
 .seafile-rich-editor-topbar {
   display: none;
