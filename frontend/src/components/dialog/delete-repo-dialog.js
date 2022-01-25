@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -17,6 +18,8 @@ class DeleteRepoDialog extends Component {
     super(props);
     this.state = {
       isRequestSended: false,
+      sharedToUserCount: 0,
+      sharedToGroupCount: 0,
     };
   }
 
@@ -24,6 +27,15 @@ class DeleteRepoDialog extends Component {
     if (!nextProps.isRepoDeleted) {
       this.setState({isRequestSended: false});
     }
+  }
+
+  componentDidMount() {
+    seafileAPI.getRepoShareInfo(this.props.repo.repo_id).then((res) => {
+      this.setState({
+        sharedToUserCount: res.data['shared_user_emails'].length,
+        sharedToGroupCount: res.data['shared_group_ids'].length,
+      });
+    })
   }
 
   onDeleteRepo = () => {
@@ -40,6 +52,10 @@ class DeleteRepoDialog extends Component {
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
 
+    let alert_message = gettext('This library has been shared to {user_placeholder} users and {group_placeholder} groups.');
+    alert_message = alert_message.replace('{user_placeholder}', this.state.sharedToUserCount);
+    alert_message = alert_message.replace('{group_placeholder}', this.state.sharedToGroupCount);
+
     const { toggle: toggleDialog } = this.props;
 
     return (
@@ -47,6 +63,7 @@ class DeleteRepoDialog extends Component {
         <ModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
+          <p className="error" dangerouslySetInnerHTML={{__html: alert_message}}></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>

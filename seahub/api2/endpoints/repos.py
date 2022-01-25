@@ -24,7 +24,7 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out, get_related_users_by_repo, normalize_repo_status_code
+        repo_has_been_shared_out, normalize_repo_status_code
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class ReposView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -84,10 +84,11 @@ class ReposView(APIView):
 
             if org_id:
                 owned_repos = seafile_api.get_org_owned_repo_list(org_id,
-                        email, ret_corrupted=True)
+                                                                  email,
+                                                                  ret_corrupted=True)
             else:
                 owned_repos = seafile_api.get_owned_repo_list(email,
-                        ret_corrupted=True)
+                                                              ret_corrupted=True)
 
             # Reduce memcache fetch ops.
             modifiers_set = {x.last_modifier for x in owned_repos}
@@ -133,13 +134,11 @@ class ReposView(APIView):
 
             if org_id:
                 shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
-                        email, -1, -1)
+                                                                      email, -1, -1)
             else:
-                shared_repos = seafile_api.get_share_in_repo_list(
-                        email, -1, -1)
+                shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
 
-            repos_with_admin_share_to = ExtraSharePermission.objects.\
-                    get_repos_with_admin_permission(email)
+            repos_with_admin_share_to = ExtraSharePermission.objects.get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
             owners_set = {x.user for x in shared_repos}
@@ -160,12 +159,10 @@ class ReposView(APIView):
                 if '@seafile_group' in owner_email:
                     is_group_owned_repo = True
                     group_id = get_group_id_by_repo_owner(owner_email)
-                    group_name= group_id_to_name(group_id)
+                    group_name = group_id_to_name(group_id)
 
-                owner_name = group_name if is_group_owned_repo else \
-                        nickname_dict.get(owner_email, '')
-                owner_contact_email = '' if is_group_owned_repo else \
-                        contact_email_dict.get(owner_email, '')
+                owner_name = group_name if is_group_owned_repo else nickname_dict.get(owner_email, '')
+                owner_contact_email = '' if is_group_owned_repo else contact_email_dict.get(owner_email, '')
 
                 repo_info = {
                     "type": "shared",
@@ -290,8 +287,8 @@ class ReposView(APIView):
 class RepoView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
         """ Return repo info
@@ -395,3 +392,46 @@ class RepoView(APIView):
                           repo_name=repo.name)
 
         return Response('success', status=status.HTTP_200_OK)
+
+
+class RepoShareInfoView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        """ Return repo share info
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repo_owner = seafile_api.get_org_repo_owner(org_id, repo_id)
+            shared_users = seafile_api.list_org_repo_shared_to(repo_owner, repo_id)
+            shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+            shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+            shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+
+        result = {
+            "shared_user_emails": [item.user for item in shared_users],
+            "shared_group_ids": [item.group_id for item in shared_groups],
+        }
+
+        return Response(result)
