@@ -146,8 +146,8 @@ def generate_thumbnail(request, repo_id, size, path):
         f = BytesIO(image_file.read())
         return _create_thumbnail_common(f, thumbnail_file, size)
     except Exception as e:
-        logger.error(e)
-        return (False, 500)
+        logger.warning(e)
+        return (False, 400)
 
 def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     try:
