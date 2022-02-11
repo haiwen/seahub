@@ -52,9 +52,9 @@ class DeleteRepoDialog extends Component {
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
 
-    let alert_message = gettext('This library has been shared to {user_placeholder} users and {group_placeholder} groups.');
-    alert_message = alert_message.replace('{user_placeholder}', this.state.sharedToUserCount);
-    alert_message = alert_message.replace('{group_placeholder}', this.state.sharedToGroupCount);
+    let alert_message = gettext('This library has been shared to {user_amount} user(s) and {group_amount} group(s).');
+    alert_message = alert_message.replace('{user_amount}', this.state.sharedToUserCount);
+    alert_message = alert_message.replace('{group_amount}', this.state.sharedToGroupCount);
 
     const { toggle: toggleDialog } = this.props;
 
