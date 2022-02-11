@@ -26,14 +26,7 @@ class SaveSharedDirDialog extends React.Component {
   }
 
   onSaveSharedFile = () => {
-    const { sharedToken, parentDir, items } = this.props;
-    seafileAPI.saveSharedDir(this.state.repo.repo_id, this.state.selectedPath, sharedToken, parentDir, items).then((res) => {
-      this.props.toggleCancel();
-      this.props.handleSaveSharedDir();
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      this.setState({errMessage: errMessage});
-    });
+    this.props.handleSaveSharedDir(this.state.repo.repo_id, this.state.selectedPath)
   }
 
   onDirentItemClick = (repo, selectedPath, dirent) => {

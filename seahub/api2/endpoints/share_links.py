@@ -1131,12 +1131,20 @@ class ShareLinkSaveItemsToRepo(APIView):
             dst_dirent_name = "\t".join(formated_src_dirents)
 
         try:
-            seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
-                                  dst_repo_id, dst_parent_dir, dst_dirent_name,
-                                  username, need_progress=0)
+            res = seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
+                                        dst_repo_id, dst_parent_dir, dst_dirent_name,
+                                        username, need_progress=1, synchronous=0)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        if not res:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        if res.background:
+            result['task_id'] = res.task_id
+
+        return Response(result)
