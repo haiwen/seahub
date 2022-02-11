@@ -275,7 +275,7 @@ class SharedDirView extends React.Component {
     });
   }
 
-  onMoveProgressDialogToggle = () => {
+  onProgressDialogToggle = () => {
     let { asyncOperationProgress } = this.state;
     if (asyncOperationProgress !== 100) {
       let taskId = this.state.asyncCopyMoveTaskId;
@@ -503,7 +503,7 @@ class SharedDirView extends React.Component {
             type='copy'
             asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
             asyncOperationProgress={this.state.asyncOperationProgress}
-            toggleDialog={this.onMoveProgressDialogToggle}
+            toggleDialog={this.onProgressDialogToggle}
           />
         )}
         {this.state.isImagePopupOpen &&
