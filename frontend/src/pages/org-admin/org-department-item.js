@@ -15,6 +15,8 @@ import AddRepoDialog from '../../components/dialog/org-add-repo-dialog';
 import DeleteRepoDialog from '../../components/dialog/org-delete-repo-dialog';
 import DeleteDepartDialog from '../../components/dialog/org-delete-department-dialog';
 import SetGroupQuotaDialog from '../../components/dialog/org-set-group-quota-dialog';
+import RenameDepartmentDialog from '../../components/dialog/org-rename-department-dialog';
+import OpMenu from '../../components/dialog/op-menu';
 import { serviceURL, siteRoot, gettext, orgID, lang } from '../../utils/constants';
 import '../../css/org-department-item.css';
 
@@ -27,6 +29,7 @@ class OrgDepartmentItem extends React.Component {
     this.state = {
       groupName: '',
       isItemFreezed: false,
+      isDepartFreezed: false,
       ancestorGroups: [],
       members: [],
       deletedMember: {},
@@ -96,6 +99,25 @@ class OrgDepartmentItem extends React.Component {
       showDeleteRepoDialog: false,
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
+    });
+  }
+
+  onFreezedDepart = () => {
+    this.setState({isDepartFreezed: true});
+  }
+
+  onUnfreezedDepart = () => {
+    this.setState({isDepartFreezed: false});
+  }
+
+  onDepartmentNameChanged = (dept) => {
+    this.setState({
+      groups: this.state.groups.map(item => {
+        if (item.id == dept.id) {
+          item.name = dept.name;
+        }
+        return item;
+      })
     });
   }
 
@@ -237,6 +259,10 @@ class OrgDepartmentItem extends React.Component {
                           <React.Fragment key={group.id}>
                             <GroupItem
                               group={group}
+                              isItemFreezed={this.state.isDepartFreezed}
+                              onFreezedItem={this.onFreezedDepart}
+                              onUnfreezedItem={this.onUnfreezedDepart}
+                              onDepartmentNameChanged={this.onDepartmentNameChanged}
                               showDeleteDepartDialog={this.showDeleteDepartDialog}
                               showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
                             />
@@ -490,33 +516,108 @@ class GroupItem extends React.Component {
     super(props);
     this.state = {
       highlight: false,
+      isOpIconShown: false,
+      isRenameDialogOpen: false,
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ highlight: true });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: true,
+        highlight: true
+      });
+    }
   }
 
   onMouseLeave = () => {
-    this.setState({ highlight: false });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShown: false,
+        highlight: false
+      });
+    }
+  }
+
+  translateOperations = (item) => {
+    let translateResult = '';
+    switch(item) {
+      case 'Rename':
+        translateResult = gettext('Rename');
+        break;
+      case 'Delete':
+        translateResult = gettext('Delete');
+        break;
+      default:
+        break;
+    }
+
+    return translateResult;
+  }
+
+  onMenuItemClick = (operation) => {
+    const { group } = this.props;
+    switch(operation) {
+      case 'Rename':
+        this.toggleRenameDialog();
+        break;
+      case 'Delete':
+        this.props.showDeleteDepartDialog(group);
+        break;
+      default:
+        break;
+    }
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({
+      highlight: false,
+      isOpIconShow: false
+    });
+    this.props.onUnfreezedItem();
+  }
+
+  toggleRenameDialog = () => {
+    this.setState({
+      isRenameDialogOpen: !this.state.isRenameDialogOpen
+    });
   }
 
   render() {
     const group = this.props.group;
-    const highlight = this.state.highlight;
+    const { highlight, isOpIconShown, isRenameDialogOpen } = this.state;
     const newHref = siteRoot+ 'org/departmentadmin/groups/' + group.id + '/';
     return (
-      <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td><Link to={newHref}>{group.name}</Link></td>
-        <td>{moment(group.created_at).fromNow()}</td>
-        <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
-          {Utils.bytesToSize(group.quota)}{' '}
-          <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
-        </td>
-        <td className="cursor-pointer text-center" onClick={this.props.showDeleteDepartDialog.bind(this, group)}>
-          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-        </td>
-      </tr>
+      <Fragment>
+        <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td><Link to={newHref}>{group.name}</Link></td>
+          <td>{moment(group.created_at).fromNow()}</td>
+          <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
+            {Utils.bytesToSize(group.quota)}{' '}
+            <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
+          </td>
+          <td>
+            {isOpIconShown &&
+              <OpMenu
+                operations={['Rename', 'Delete']}
+                translateOperations={this.translateOperations}
+                onMenuItemClick={this.onMenuItemClick}
+                onFreezedItem={this.props.onFreezedItem}
+                onUnfreezedItem={this.onUnfreezedItem}
+              />
+            }
+          </td>
+        </tr>
+        {isRenameDialogOpen && (
+          <RenameDepartmentDialog
+            orgID={orgID}
+            groupID={group.id}
+            name={group.name}
+            toggle={this.toggleRenameDialog}
+            onDepartmentNameChanged={this.props.onDepartmentNameChanged}
+          />
+        )}
+      </Fragment>
     );
   }
 }
@@ -524,6 +625,10 @@ class GroupItem extends React.Component {
 const GroupItemPropTypes = {
   group: PropTypes.object.isRequired,
   groupID: PropTypes.string,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onDepartmentNameChanged: PropTypes.func.isRequired,
   showSetGroupQuotaDialog: PropTypes.func.isRequired,
   showDeleteDepartDialog: PropTypes.func.isRequired,
   isSubdepartChanged: PropTypes.bool,

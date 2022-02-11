@@ -99,7 +99,7 @@ class GroupItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
           <td><Link to={newHref}>{group.name}</Link></td>
           <td>{moment(group.created_at).fromNow()}</td>
-	  { this.props.orgID == -1 ?
+          {group.org_id === -1 ?
             <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
               {Utils.bytesToSize(group.quota)}{' '}
               <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
@@ -107,7 +107,7 @@ class GroupItem extends React.Component {
             :
             <td>{Utils.bytesToSize(group.quota)}</td>
           }
-	  { this.props.orgID == -1 ?
+          {group.org_id === -1 ?
             <td>
               {isOpIconShown &&
               <OpMenu
