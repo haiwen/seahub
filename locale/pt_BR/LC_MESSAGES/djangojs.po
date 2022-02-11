@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-21 16:50+0800\n"
-"PO-Revision-Date: 2022-01-21 08:51+0000\n"
+"POT-Creation-Date: 2022-02-11 11:51+0800\n"
+"PO-Revision-Date: 2022-02-11 03:55+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/haiwen/seahub/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -281,7 +281,7 @@ msgstr "Descrição"
 #: frontend/src/components/dialog/create-repo-dialog.js:267
 #: frontend/src/components/dialog/create-tag-dialog.js:114
 #: frontend/src/components/dialog/delete-dialog.js:32
-#: frontend/src/components/dialog/delete-repo-dialog.js:52
+#: frontend/src/components/dialog/delete-repo-dialog.js:69
 #: frontend/src/components/dialog/dismiss-group-dialog.js:33
 #: frontend/src/components/dialog/generate-share-link.js:463
 #: frontend/src/components/dialog/import-members-dialog.js:60
@@ -633,7 +633,7 @@ msgstr "Você realmente deseja excluir essa conta?"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:60
 #: frontend/src/components/dialog/delete-dialog.js:33
-#: frontend/src/components/dialog/delete-repo-dialog.js:53
+#: frontend/src/components/dialog/delete-repo-dialog.js:70
 #: frontend/src/components/dialog/dismiss-group-dialog.js:34
 #: frontend/src/components/dialog/file-participant-dialog.js:43
 #: frontend/src/components/dialog/generate-share-link.js:456
@@ -1237,12 +1237,18 @@ msgstr ""
 msgid "Are you sure to delete"
 msgstr ""
 
-#: frontend/src/components/dialog/delete-repo-dialog.js:40
+#: frontend/src/components/dialog/delete-repo-dialog.js:52
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Você tem certeza que deseja excluir %s ?"
 
-#: frontend/src/components/dialog/delete-repo-dialog.js:47
+#: frontend/src/components/dialog/delete-repo-dialog.js:55
+msgid ""
+"This library has been shared to {user_amount} user(s) and {group_amount} "
+"group(s)."
+msgstr ""
+
+#: frontend/src/components/dialog/delete-repo-dialog.js:63
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:32
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:32
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:88
