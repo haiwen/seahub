@@ -27,6 +27,8 @@ window.app.pageOptions = {
   enableGetAuthToken: {% if ENABLE_GET_AUTH_TOKEN_BY_SESSION %} true {% else %} false {% endif %},
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
+  webdavSecretMinLength: {{ WEBDAV_SECRET_MIN_LENGTH }},
+  webdavSecretStrengthLevel: {{ WEBDAV_SECRET_STRENGTH_LEVEL }},
   {% if ENABLE_WEBDAV_SECRET %}
   webdavPasswd: '{{ webdav_passwd|escapejs }}',
   {% endif %}
