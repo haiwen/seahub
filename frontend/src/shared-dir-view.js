@@ -13,6 +13,7 @@ import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
+import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -50,6 +51,11 @@ class SharedDirView extends React.Component {
 
       isSaveSharedDirDialogShow: false,
       itemsForSave: [],
+
+      asyncCopyMoveTaskId: '',
+      asyncOperationProgress: 0,
+      asyncOperatedFilesLength: 0,
+      isCopyMoveProgressDialogShow: false,
 
       isImagePopupOpen: false,
       imageItems: [],
@@ -189,6 +195,43 @@ class SharedDirView extends React.Component {
     }
   }
 
+  async getAsyncCopyMoveProgress() {
+    let { asyncCopyMoveTaskId } = this.state;
+    try {
+      let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
+      let data = res.data;
+      if (data.failed) {
+        let message = gettext('Failed to copy files to another library.');
+        toaster.danger(message);
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        return;
+      }
+
+      if (data.successful) {
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        let message = gettext('Successfully copied files to another library.');
+        toaster.success(message);
+        return;
+      }
+      // init state: total is 0
+      let asyncOperationProgress = !data.total ? 0 : parseInt((data.done/data.total * 100).toFixed(2));
+
+      this.getAsyncCopyMoveProgress();
+      this.setState({asyncOperationProgress: asyncOperationProgress});
+    } catch (error) {
+      this.setState({
+        asyncOperationProgress: 0,
+        isCopyMoveProgressDialogShow: false,
+      });
+    }
+  }
+
   saveSelectedItems = () => {
     this.setState({
       isSaveSharedDirDialogShow: true,
@@ -212,9 +255,36 @@ class SharedDirView extends React.Component {
     });
   }
 
-  handleSaveSharedDir = () => {
-    toaster.success(gettext('Successfully saved'), {
-      duration: 3
+  handleSaveSharedDir = (destRepoID, dstPath) => {
+
+    const itemsForSave = this.state.itemsForSave;
+
+    seafileAPI.saveSharedDir(destRepoID, dstPath, token, relativePath, itemsForSave).then((res) => {
+      this.setState({
+        isSaveSharedDirDialogShow: false,
+        itemsForSave: [],
+	isCopyMoveProgressDialogShow: true,
+        asyncCopyMoveTaskId: res.data.task_id,
+        asyncOperatedFilesLength: itemsForSave.length,
+      }, () => {
+        this.getAsyncCopyMoveProgress();
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({errMessage: errMessage});
+    });
+  }
+
+  onProgressDialogToggle = () => {
+    let { asyncOperationProgress } = this.state;
+    if (asyncOperationProgress !== 100) {
+      let taskId = this.state.asyncCopyMoveTaskId;
+      seafileAPI.cancelCopyMoveOperation(taskId);
+    }
+
+    this.setState({
+      asyncOperationProgress: 0,
+      isCopyMoveProgressDialogShow: false,
     });
   }
 
@@ -428,6 +498,14 @@ class SharedDirView extends React.Component {
             handleSaveSharedDir={this.handleSaveSharedDir}
           />
         }
+        {this.state.isCopyMoveProgressDialogShow && (
+          <CopyMoveDirentProgressDialog
+            type='copy'
+            asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
+            asyncOperationProgress={this.state.asyncOperationProgress}
+            toggleDialog={this.onProgressDialogToggle}
+          />
+        )}
         {this.state.isImagePopupOpen &&
         <ModalPortal>
           <ImageDialog
