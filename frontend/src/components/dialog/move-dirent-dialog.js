@@ -23,9 +23,9 @@ class MoveDirent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repo: null,
-      selectedPath: '',
-      errMessage: '',
+      repo: { repo_id: this.props.repoID },
+      selectedPath: this.props.path,
+      errMessage: ''
     };
   }
 
@@ -139,7 +139,7 @@ class MoveDirent extends React.Component {
     this.setState({
       repo: repo,
       selectedPath: selectedPath,
-      errMessage: '',
+      errMessage: ''
     });
   }
 
@@ -177,7 +177,7 @@ class MoveDirent extends React.Component {
             onRepoItemClick={this.onRepoItemClick}
             mode={mode}
           />
-          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
