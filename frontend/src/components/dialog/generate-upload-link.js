@@ -171,7 +171,7 @@ class GenerateUploadLink extends React.Component {
     if (isExpireChecked) {
       if (setExp == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: 'Please select an expiration time'});
+          this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
         }
         return true;

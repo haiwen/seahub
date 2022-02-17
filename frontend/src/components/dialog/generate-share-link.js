@@ -289,7 +289,7 @@ class GenerateShareLink extends React.Component {
     if (isExpireChecked) {
       if (setExp == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: 'Please select an expiration time'});
+          this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
         }
         return true;
@@ -298,11 +298,11 @@ class GenerateShareLink extends React.Component {
       // by days
       let reg = /^\d+$/;
       if (!expireDays) {
-        this.setState({errorInfo: 'Please enter days'});
+        this.setState({errorInfo: gettext('Please enter days')});
         return false;
       }
       if (!reg.test(expireDays)) {
-        this.setState({errorInfo: 'Please enter a non-negative integer'});
+        this.setState({errorInfo: gettext('Please enter a non-negative integer')});
         return false;
       }
 
