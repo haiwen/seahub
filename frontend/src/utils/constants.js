@@ -84,6 +84,7 @@ export const enableTC = window.app.pageOptions.enableTC;
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
+export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
 // dtable

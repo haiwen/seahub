@@ -140,6 +140,7 @@
             additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
             enableOnlyoffice: {% if enableOnlyoffice %} true {% else %} false {% endif %},
+            onlyofficeEditFileExtension: {% if onlyofficeEditFileExtension %} JSON.parse('{{ onlyofficeEditFileExtension | escapejs }}') {% else %} {{ '[]' }} {% endif %},
             onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %}
         }
      };

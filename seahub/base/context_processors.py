@@ -137,6 +137,7 @@ def base(request):
         'USE_GO_FILESERVER': seaserv.USE_GO_FILESERVER if hasattr(seaserv, 'USE_GO_FILESERVER') else False,
         'LOGIN_URL': dj_settings.LOGIN_URL,
         'enableOnlyoffice': ENABLE_ONLYOFFICE,
+        'onlyofficeEditFileExtension': ONLYOFFICE_EDIT_FILE_EXTENSION,
         'onlyofficeConverterExtensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,

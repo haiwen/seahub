@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, onlyofficeEditFileExtension } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -177,7 +177,7 @@ export const Utils = {
       return false;
     }
     var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    var exts = ['docx', 'pptx', 'xlsx'];
+    var exts = onlyofficeEditFileExtension.length > 0 ? onlyofficeEditFileExtension : ['docx', 'pptx', 'xlsx'];
     if (exts.indexOf(file_ext) != -1) {
       return true;
     } else {
