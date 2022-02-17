@@ -14,6 +14,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.options.models import UserOptions
 from seahub.utils.hasher import AESPasswordHasher
+from seahub.utils import get_password_strength_level
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -37,6 +38,7 @@ class WebdavSecretView(APIView):
         })
 
     def put(self, request, format=None):
+
         if not settings.ENABLE_WEBDAV_SECRET:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Feature is not enabled.')
@@ -45,11 +47,20 @@ class WebdavSecretView(APIView):
 
         username = request.user.username
         secret = request.data.get("secret", None)
-        if len(secret) >= 30:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             _("Length of WebDav password should be less than 30."))
 
         if secret:
+            if len(secret) >= 30:
+                error_msg = _('Length of WebDav password should be less than 30.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if len(secret) < settings.WEBDAV_SECRET_MIN_LENGTH:
+                error_msg = _('Password is too short.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if get_password_strength_level(secret) < settings.WEBDAV_SECRET_STRENGTH_LEVEL:
+                error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             encoded = aes.encode(secret)
             UserOptions.objects.set_webdav_secret(username, encoded)
         else:
