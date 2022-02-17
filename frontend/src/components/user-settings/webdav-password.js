@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UpdateWebdavPassword from '../dialog/update-webdav-password';
 
-const { webdavPasswd, webdavSecretMinLength, webdavSecretStrengthLevel} = window.app.pageOptions;
+const { webdavPasswd } = window.app.pageOptions;
 
 class WebdavPassword extends React.Component {
 
