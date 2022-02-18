@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-11 11:51+0800\n"
+"POT-Creation-Date: 2022-02-18 10:13+0800\n"
 "PO-Revision-Date: 2022-01-19 07:23+0000\n"
 "Last-Translator: Sami Lahtinen <sami.lahtinen@tietovirta.fi>\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
@@ -445,7 +445,7 @@ msgstr "Käyttäjää %s ei löydy."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:219 seahub/search/views.py:174
+#: seahub/profile/views.py:225 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:739 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119
@@ -642,11 +642,13 @@ msgstr "Salasana vaaditaan"
 
 #: seahub/api2/endpoints/share_links.py:275
 #: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Salasana on liian lyhyt."
 
 #: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr ""
 
@@ -710,7 +712,7 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "Sinulla on jo %(nb_avatars)d avataria, maksimi sallittu määrä on %(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/webdav_secret.py:50
+#: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
 msgstr ""
 
@@ -4152,31 +4154,31 @@ msgstr ""
 msgid "Update"
 msgstr "Päivitä"
 
-#: seahub/profile/views.py:41
+#: seahub/profile/views.py:42
 msgid "Successfully edited profile."
 msgstr "Profiili muokattu onnistuneesti."
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:46
 msgid "Failed to edit profile"
 msgstr "Profiilin muokkaus epäonnistui"
 
-#: seahub/profile/views.py:205
+#: seahub/profile/views.py:210
 msgid "Has not accepted invitation yet"
 msgstr "Ei ole vielä hyväksynyt kutsua"
 
-#: seahub/profile/views.py:229
+#: seahub/profile/views.py:235
 msgid "Demo account can not be deleted."
 msgstr "Demo-tiliä ei voi poistaa."
 
-#: seahub/profile/views.py:255
+#: seahub/profile/views.py:262
 msgid "Failed to set default library."
 msgstr "Oletuskirjaston asetus epäonnistui."
 
-#: seahub/profile/views.py:259
+#: seahub/profile/views.py:266
 msgid "Can not set encrypted library as default library."
 msgstr "Salattua kirjasto ei voi asettaa oletuskirjastoksi."
 
-#: seahub/profile/views.py:264
+#: seahub/profile/views.py:271
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Onnistuneesti asetettu \"%s\" sinun oletuskirjastoksi."
