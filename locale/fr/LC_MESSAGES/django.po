@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-11 11:51+0800\n"
+"POT-Creation-Date: 2022-02-18 10:13+0800\n"
 "PO-Revision-Date: 2022-02-04 10:39+0000\n"
 "Last-Translator: chadek <meyer.fabrice@gmx.fr>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
@@ -469,7 +469,7 @@ msgstr "L'utilisateur %s est introuvable."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:219 seahub/search/views.py:174
+#: seahub/profile/views.py:225 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:739 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119
@@ -666,11 +666,13 @@ msgstr "Le mot de passe est obligatoire."
 
 #: seahub/api2/endpoints/share_links.py:275
 #: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Le mot de passe est trop court."
 
 #: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr "Mot de passe trop faible"
 
@@ -734,7 +736,7 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "Vous avez déjà %(nb_avatars)d avatars et la valeur maximale autorisée est de %(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/webdav_secret.py:50
+#: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
 msgstr "La longueur du mot de passe WebDav doit être inférieur à 30 caractères."
 
@@ -4176,31 +4178,31 @@ msgstr "Définir un mot de passe"
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: seahub/profile/views.py:41
+#: seahub/profile/views.py:42
 msgid "Successfully edited profile."
 msgstr "Profil modifié avec succès."
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:46
 msgid "Failed to edit profile"
 msgstr "Impossible de modifier le profil"
 
-#: seahub/profile/views.py:205
+#: seahub/profile/views.py:210
 msgid "Has not accepted invitation yet"
 msgstr "L'invitation n'a pas encore été acceptée."
 
-#: seahub/profile/views.py:229
+#: seahub/profile/views.py:235
 msgid "Demo account can not be deleted."
 msgstr "Le compte de démo ne peut pas être supprimé."
 
-#: seahub/profile/views.py:255
+#: seahub/profile/views.py:262
 msgid "Failed to set default library."
 msgstr "Impossible à définir comme bibliothèque par défaut."
 
-#: seahub/profile/views.py:259
+#: seahub/profile/views.py:266
 msgid "Can not set encrypted library as default library."
 msgstr "Impossible de définir une bibliothèque cryptée comme bibliothèque par défaut."
 
-#: seahub/profile/views.py:264
+#: seahub/profile/views.py:271
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "%s définie comme votre bibliothèque par défaut avec succès."

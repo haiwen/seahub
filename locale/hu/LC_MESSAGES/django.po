@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-11 11:51+0800\n"
+"POT-Creation-Date: 2022-02-18 10:13+0800\n"
 "PO-Revision-Date: 2022-01-19 07:23+0000\n"
 "Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -450,7 +450,7 @@ msgstr "%s felhasználó nem található."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:219 seahub/search/views.py:174
+#: seahub/profile/views.py:225 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:739 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119
@@ -647,11 +647,13 @@ msgstr "Jelszó szükséges."
 
 #: seahub/api2/endpoints/share_links.py:275
 #: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "A jelszó túl rövid"
 
 #: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr ""
 
@@ -715,7 +717,7 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám %(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/webdav_secret.py:50
+#: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
 msgstr ""
 
@@ -4157,31 +4159,31 @@ msgstr ""
 msgid "Update"
 msgstr "Frissítés"
 
-#: seahub/profile/views.py:41
+#: seahub/profile/views.py:42
 msgid "Successfully edited profile."
 msgstr "A profil szerkesztése sikeres."
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:46
 msgid "Failed to edit profile"
 msgstr "A profil szerkesztése sikertelen"
 
-#: seahub/profile/views.py:205
+#: seahub/profile/views.py:210
 msgid "Has not accepted invitation yet"
 msgstr "Még nem fogadta el a meghívást"
 
-#: seahub/profile/views.py:229
+#: seahub/profile/views.py:235
 msgid "Demo account can not be deleted."
 msgstr "A demó fiók nem törölhető."
 
-#: seahub/profile/views.py:255
+#: seahub/profile/views.py:262
 msgid "Failed to set default library."
 msgstr "Az alapértelmezett kötet beállítása nem sikerült."
 
-#: seahub/profile/views.py:259
+#: seahub/profile/views.py:266
 msgid "Can not set encrypted library as default library."
 msgstr "Titkosított kötetet nem lehet alapértelmezettnek beállítani."
 
-#: seahub/profile/views.py:264
+#: seahub/profile/views.py:271
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Az alapértelmezett kötet mostantól a következő: \"%s\"."
