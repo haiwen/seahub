@@ -5,25 +5,33 @@
 }
 
 .add-tag-link {
-  display: block;
   color: #666;
-  padding: .4rem .5rem;
-  border-radius: 4px;
-  text-decoration: underline;
 }
+
 .add-tag-link:hover {
   color: #444;
-  background: #eee;
+  text-decoration: none;
+  background: #f5f5f5;
 }
 
 .tag-list-item {
-  position: relative;
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 0.5rem;
   height: 2.25rem;
+  cursor: pointer;
 }
 
+.tag-list-item.hl {
+  background: #f5f5f5;
+}
+
+.tag-color {
+  margin-right: 10px;
+}
+
+.tag-selected-icon {
+  color: #999;
+}
+
+/*
 .tag-list-item .tag-demo {
   flex: 1;
   border-radius: 0.25rem;
@@ -42,6 +50,7 @@
   flex: 1;
   padding-left: 0.5rem;
 }
+*/
 
 .tag-demo .tag-files {
   margin-right: 0.5rem;
@@ -68,10 +77,12 @@
   background-color: rgba(9,45,66,.13);
 }
 
+/*
 .tag-list-item .tag-operation {
   position: absolute;
   right: 0.5rem;
 }
+*/
 
 .file-tag-item {
   margin: 0.25rem 0;
