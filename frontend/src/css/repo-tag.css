@@ -102,7 +102,21 @@
   cursor: pointer;
   margin-right: 10px;
 }
+
 .tag-dialog-back:hover,
 .tag-dialog-back:focus {
   color: #444;
+}
+
+/* overwrite the code from seafile-ui */
+.tag-color-option .colorinput-color::before {
+  display: none;
+}
+
+.tag-color-option .color-selected {
+    opacity: 0;
+}
+
+.tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
+    opacity: 1;
 }
