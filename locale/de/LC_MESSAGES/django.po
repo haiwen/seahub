@@ -3934,7 +3934,7 @@ msgstr "Die Datei <a href='%(file_link)s'>%(file_name)s</a> wurde in <a href='%(
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
-msgstr "Eine Datei mit dem Namen <strong>%(file_name)s</strong> wurde in die Bibliothek <strong>Deleted Library</strong> hochgeladen."
+msgstr "Eine Datei mit dem Namen <strong>%(file_name)s</strong> wurde in die Bibliothek <strong>Gelöschte Bibliothek</strong> hochgeladen."
 
 #: seahub/notifications/models.py:621
 #, python-format
