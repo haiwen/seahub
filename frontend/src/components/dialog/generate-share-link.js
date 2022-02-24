@@ -51,6 +51,8 @@ class GenerateShareLink extends React.Component {
       isShowPasswordInput: shareLinkForceUsePassword ? true : false,
       isPasswordVisible: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
+      isExpirationEditIconShow: false,
+      isEditingExpiration: false,
       setExp: 'by-days',
       expireDays: this.defaultExpireDays,
       expDate: null,
@@ -337,6 +339,46 @@ class GenerateShareLink extends React.Component {
     return true;
   }
 
+  handleMouseOverExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: true});
+  }
+
+  handleMouseOutExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: false});
+  }
+
+  editingExpirationToggle = () => {
+    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
+  }
+
+  updateExpiration = (e) => {
+
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+
+    let { setExp, expireDays, expDate } = this.state;
+
+    let expirationTime = '';
+    if (setExp == 'by-days') {
+      expirationTime = moment().add(parseInt(expireDays), 'days').format();
+    } else {
+      expirationTime = expDate.format();
+    }
+
+    seafileAPI.updateShareLink(this.state.sharedLinkInfo.token, '', expirationTime).then((res) => {
+      let sharedLinkInfo = new ShareLink(res.data);
+      this.setState({
+	sharedLinkInfo: sharedLinkInfo,
+	isEditingExpiration: false,
+      });
+      let message = gettext('Successfully update expiration.');
+      toaster.success(message);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onNoticeMessageToggle = () => {
     this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
   }
@@ -421,7 +463,59 @@ class GenerateShareLink extends React.Component {
             {sharedLinkInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}</dd>
+                {!this.state.isEditingExpiration &&
+                  <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
+		    {moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
+                    {this.state.isExpirationEditIconShow && (
+                      <a href="#"
+                        role="button"
+                        aria-label={gettext('Edit')}
+                        title={gettext('Edit')}
+                        className="fa fa-pencil-alt attr-action-icon"
+                        onClick={this.editingExpirationToggle}>
+                      </a>
+                    )}
+                  </dd>
+                }
+                {this.state.isEditingExpiration &&
+                  <div className="ml-4">
+                    <FormGroup check>
+                      <Label check>
+                        <Input type="radio" name="set-exp" value="by-days" checked={this.state.setExp == 'by-days'} onChange={this.setExp} className="mr-1" />
+                        <span>{gettext('Expiration days')}</span>
+                      </Label>
+                      {this.state.setExp == 'by-days' && (
+                        <Fragment>
+                          <InputGroup style={{width: inputWidth}}>
+                            <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
+                            <InputGroupAddon addonType="append">
+                              <InputGroupText>{gettext('days')}</InputGroupText>
+                            </InputGroupAddon>
+                          </InputGroup>
+                          {!this.state.isExpireDaysNoLimit && (
+                            <FormText color="muted">{this.expirationLimitTip}</FormText>
+                          )}
+                        </Fragment>
+                      )}
+                    </FormGroup>
+                    <FormGroup check>
+                      <Label check>
+                        <Input type="radio" name="set-exp" value="by-date" checked={this.state.setExp == 'by-date'} onChange={this.setExp} className="mr-1" />
+                        <span>{gettext('Expiration time')}</span>
+                      </Label>
+                      {this.state.setExp == 'by-date' && (
+                        <DateTimePicker
+                          inputWidth={inputWidth}
+                          disabledDate={this.disabledDate}
+                          value={this.state.expDate}
+                          onChange={this.onExpDateChanged}
+                        />
+                      )}
+                    </FormGroup>
+                    <button className="btn btn-primary" onClick={this.updateExpiration}>{gettext('Update')}</button>{' '}
+                    <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
+                  </div>
+                }
               </FormGroup>
             )}
 

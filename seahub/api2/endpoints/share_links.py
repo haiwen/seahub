@@ -447,18 +447,11 @@ class ShareLink(APIView):
         return Response(link_info)
 
     def put(self, request, token):
-        """ Update share link, currently only available for permission.
+        """ Update share link's permission and expiration.
 
         Permission checking:
         share link creater
         """
-
-        # argument check
-        try:
-            perm = check_permissions_arg(request)
-        except Exception:
-            error_msg = 'permissions invalud.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         try:
@@ -500,26 +493,102 @@ class ShareLink(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
-                and perm != FileShare.PERM_VIEW_ONLY:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # argument check
+        permissions = request.data.get('permissions', '')
+        if permissions:
+            try:
+                perm = check_permissions_arg(request)
+            except Exception:
+                error_msg = 'permissions invalud.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if repo_folder_permission in (PERMISSION_READ) \
-                and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if fs.s_type == 'f':
-            file_name = os.path.basename(fs.path.rstrip('/'))
-            can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
-            if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+            if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
+                    and perm != FileShare.PERM_VIEW_ONLY:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # update share link permission
-        fs.permission = perm
-        fs.save()
+            if repo_folder_permission in (PERMISSION_READ) \
+                    and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if fs.s_type == 'f':
+                file_name = os.path.basename(fs.path.rstrip('/'))
+                can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
+                if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # update share link permission
+            fs.permission = perm
+            fs.save()
+
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if expire_days:
+
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+            fs.expire_date = expire_date
+            fs.save()
+
+        if expiration_time:
+
+            try:
+                expire_date = dateutil.parser.isoparse(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
+
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s.') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
+
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s.') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            fs.expire_date = expire_date
+            fs.save()
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
