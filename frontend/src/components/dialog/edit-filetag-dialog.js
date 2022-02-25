@@ -83,14 +83,14 @@ class TagItem extends React.Component {
     const isTagSelected = repoTagIdList.indexOf(repoTag.id) != -1;
     return (
       <li
-        className={`tag-list-item px-4 d-flex justify-content-between align-items-center ${isTagHighlighted ? 'hl' : ''}`}
+        className={`tag-list-item cursor-pointer px-4 d-flex justify-content-between align-items-center ${isTagHighlighted ? 'hl' : ''}`}
         onClick={this.onEditFileTag}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
         <div className="d-flex align-items-center">
           <span className="tag-color w-4 h-4 rounded-circle" style={{backgroundColor: repoTag.color}}></span>
-          <span className="tag-name">{repoTag.name}</span>
+          <span className="tag-name mx-2">{repoTag.name}</span>
         </div>
         {isTagSelected && <i className="fas fa-check tag-selected-icon"></i>}
       </li>

@@ -113,8 +113,6 @@ class DirTool extends React.Component {
                         repoID={repoID}
                         onListTagCancel={this.onCloseRepoTagDialog}
                         onCreateRepoTag={this.onCreateRepoTagToggle}
-                        onUpdateRepoTag={this.onUpdateRepoTagToggle}
-                        onListTaggedFiles={this.onListTaggedFileToggle}
                       />
                     )}
                     {this.state.isCreateRepoTagShow && (

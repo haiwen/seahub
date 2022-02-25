@@ -16,73 +16,23 @@
 
 .tag-list-item {
   height: 2.25rem;
-  cursor: pointer;
 }
 
 .tag-list-item.hl {
   background: #f5f5f5;
 }
 
-.tag-color {
-  margin-right: 10px;
-}
-
 .tag-selected-icon {
   color: #999;
 }
 
-/*
-.tag-list-item .tag-demo {
-  flex: 1;
-  border-radius: 0.25rem;
-  display: flex;
-  align-items: center;
-  color: #ffffff;
-  overflow: hidden;
+.tag-delete-icon {
+  color: #999;
 }
 
-.show-tag-selected {
-  width: 0.5rem;
-  align-self: stretch;
+.tag-delete-icon:hover {
+  color: #444;
 }
-
-.tag-demo .tag-name {
-  flex: 1;
-  padding-left: 0.5rem;
-}
-*/
-
-.tag-demo .tag-files {
-  margin-right: 0.5rem;
-  color: #fff;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.tag-list-item .tag-edit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 0.5rem;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.25rem;
-  color: #798d99;
-  cursor: pointer;
-  background: transparent;
-}
-
-.tag-list-item .tag-edit:hover {
-  color: #092d42;
-  background-color: rgba(9,45,66,.13);
-}
-
-/*
-.tag-list-item .tag-operation {
-  position: absolute;
-  right: 0.5rem;
-}
-*/
 
 .file-tag-item {
   margin: 0.25rem 0;
