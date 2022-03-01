@@ -14,7 +14,7 @@ migrate=${INSTALLPATH}/migrate.py
 script_name=$0
 function usage () {
     echo "usage : "
-    echo "    ./$(basename ${script_name}) destination_config_file_path"
+    echo "    ./$(basename ${script_name}) destination_config_file_path <--decrypt>"
     echo ""
 }
 
@@ -51,7 +51,7 @@ function do_migrate () {
 
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
 
-    $PYTHON ${migrate}
+    $PYTHON ${migrate} $@
 }
 
 check_python_executable;
@@ -68,13 +68,13 @@ then
     done
 fi
 
-if [ $# -ne 1 ];
+if [ $# -ne 1 ] && [ $# -ne 2 ];
 then
     usage;
     exit 1;
 fi
 
 dest_seafile_central_conf_dir="$1"
-do_migrate;
+do_migrate $@;
 
 echo "Done."
