@@ -6,12 +6,10 @@ import ModalPortal from '../modal-portal';
 import { Modal } from 'reactstrap';
 import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
-import UpdateTagDialog from '../dialog/update-tag-dialog';
 import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
   userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -26,7 +24,6 @@ class DirTool extends React.Component {
       isRepoTagDialogShow: false,
       currentTag: null,
       isListRepoTagShow: false,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false,
     };
@@ -37,7 +34,6 @@ class DirTool extends React.Component {
     this.setState({
       isRepoTagDialogShow: true,
       isListRepoTagShow: true,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
@@ -47,7 +43,6 @@ class DirTool extends React.Component {
     this.setState({
       isRepoTagDialogShow: false,
       isListRepoTagShow: false,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
@@ -57,14 +52,6 @@ class DirTool extends React.Component {
     this.setState({
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
       isListRepoTagShow: !this.state.isListRepoTagShow,
-    });
-  }
-
-  onUpdateRepoTagToggle = (currentTag) => {
-    this.setState({
-      currentTag: currentTag,
-      isListRepoTagShow: !this.state.isListRepoTagShow,
-      isUpdateRepoTagShow: !this.state.isUpdateRepoTagShow,
     });
   }
 
@@ -82,7 +69,7 @@ class DirTool extends React.Component {
   }
 
   render() {
-    let { repoID, repoName, userPerm, currentPath } = this.props;
+    let { repoID, userPerm, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
@@ -113,8 +100,6 @@ class DirTool extends React.Component {
                         repoID={repoID}
                         onListTagCancel={this.onCloseRepoTagDialog}
                         onCreateRepoTag={this.onCreateRepoTagToggle}
-                        onUpdateRepoTag={this.onUpdateRepoTagToggle}
-                        onListTaggedFiles={this.onListTaggedFileToggle}
                       />
                     )}
                     {this.state.isCreateRepoTagShow && (
@@ -122,16 +107,6 @@ class DirTool extends React.Component {
                         repoID={repoID}
                         onClose={this.onCloseRepoTagDialog}
                         toggleCancel={this.onCreateRepoTagToggle}
-                      />
-                    )}
-                    {this.state.isUpdateRepoTagShow && (
-                      <UpdateTagDialog
-                        repoID={repoID}
-                        currentTag={this.state.currentTag}
-                        onClose={this.onCloseRepoTagDialog}
-                        toggleCancel={this.onUpdateRepoTagToggle}
-                        onDeleteRepoTag={this.props.onDeleteRepoTag}
-                        updateUsedRepoTags={this.props.updateUsedRepoTags}
                       />
                     )}
                     {this.state.isListTaggedFileShow && (
