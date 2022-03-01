@@ -798,8 +798,8 @@ def create_tarball(tarball_name):
     excludes_list = [ '--exclude=%s' % pattern for pattern in ignored_patterns ]
     excludes = ' '.join(excludes_list)
 
-    # tar will copy the content the directory python3.[7-9]/ to python3.6/
-    transform = '--transform=\'s,python3.[7-9]/,python3/,\''
+    # tar will copy the content the directory python3.[0-9]+/ to python3/
+    transform = '--transform=\'s,python3\.[0-9]\+/,python3/,\''
 
     tar_cmd = 'tar czf %(tarball_name)s %(transform)s %(versioned_serverdir)s %(excludes)s' \
               % dict(tarball_name=tarball_name,
