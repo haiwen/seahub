@@ -1,10 +1,11 @@
 import logging
 
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.utils import api_error
 from seahub.organizations.views import get_org_id_by_group
@@ -17,6 +18,10 @@ from seahub.api2.endpoints.admin.address_book.groups import (
 )
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.api.utils import check_org_admin
+from seahub.utils import is_pro_version
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.group.utils import validate_group_name, set_group_name_cache
 
 
 logger = logging.getLogger(__name__)
@@ -83,3 +88,51 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return SysAdminAddressBookGroup().delete(request, group_id)
+
+    @check_org_admin
+    def put(self, request, org_id, group_id):
+        """ Update an org address book group.
+        """
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        new_group_name = request.data.get('group_name', '').strip()
+        if not new_group_name:
+            error_msg = 'name %s invalid.' % new_group_name
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # Check whether group name is validate.
+        if not validate_group_name(new_group_name):
+            error_msg = 'Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            ccnet_api.set_group_name(group_id, new_group_name)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        set_group_name_cache(group_id, new_group_name)
+
+        group = ccnet_api.get_group(group_id)
+        isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
+        group_info = {
+            "id": group.id,
+            "name": group.group_name,
+            "owner": group.creator_name,
+            "owner_name": email2nickname(group.creator_name),
+            "created_at": isoformat_timestr,
+            "quota": seafile_api.get_group_quota(group_id) if is_pro_version() else 0,
+            "parent_group_id": group.parent_group_id if is_pro_version() else 0
+        }
+
+        return Response(group_info)

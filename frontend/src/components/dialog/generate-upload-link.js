@@ -151,11 +151,11 @@ class GenerateUploadLink extends React.Component {
     // check password params
     if (showPasswordInput) {
       if (password.length === 0) {
-        this.setState({errorInfo: gettext('Please enter password')});
+        this.setState({errorInfo: gettext('Please enter a password.')});
         return false;
       }
       if (password.length < shareLinkPasswordMinLength) {
-        this.setState({errorInfo: gettext('Password is too short')});
+        this.setState({errorInfo: gettext('The password is too short.')});
         return false;
       }
       if (password !== passwordnew) {
@@ -163,7 +163,7 @@ class GenerateUploadLink extends React.Component {
         return false;
       }
       if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
-        this.setState({errorInfo: gettext('Password is too weak, should have at least {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols'.replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel))});
+        this.setState({errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)});
         return false;
       }
     }
@@ -171,7 +171,7 @@ class GenerateUploadLink extends React.Component {
     if (isExpireChecked) {
       if (setExp == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: 'Please select an expiration time'});
+          this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
         }
         return true;
@@ -267,9 +267,9 @@ class GenerateUploadLink extends React.Component {
 
     const { isSendLinkShown } = this.state;
 
-    let passwordLengthTip = gettext('(at least {passwordLength} characters and has {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols)');
-    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength)
-                                         .replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel);
+    let passwordLengthTip = gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordMinLength}', shareLinkPasswordMinLength)
+                                         .replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel);
 
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;

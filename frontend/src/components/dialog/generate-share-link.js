@@ -269,19 +269,19 @@ class GenerateShareLink extends React.Component {
     // validate password
     if (isShowPasswordInput) {
       if (password.length === 0) {
-        this.setState({errorInfo: 'Please enter password'});
+        this.setState({errorInfo: gettext('Please enter a password.')});
         return false;
       }
       if (password.length < shareLinkPasswordMinLength) {
-        this.setState({errorInfo: 'Password is too short'});
+        this.setState({errorInfo: gettext('The password is too short.')});
         return false;
       }
       if (password !== passwdnew) {
-        this.setState({errorInfo: 'Passwords don\'t match'});
+        this.setState({errorInfo: gettext('Passwords don\'t match')});
         return false;
       }
       if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
-        this.setState({errorInfo: gettext('Password is too weak, should have at least {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols'.replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel))});
+        this.setState({errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)});
         return false;
       }
     }
@@ -289,7 +289,7 @@ class GenerateShareLink extends React.Component {
     if (isExpireChecked) {
       if (setExp == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: 'Please select an expiration time'});
+          this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
         }
         return true;
@@ -298,11 +298,11 @@ class GenerateShareLink extends React.Component {
       // by days
       let reg = /^\d+$/;
       if (!expireDays) {
-        this.setState({errorInfo: 'Please enter days'});
+        this.setState({errorInfo: gettext('Please enter days')});
         return false;
       }
       if (!reg.test(expireDays)) {
-        this.setState({errorInfo: 'Please enter a non-negative integer'});
+        this.setState({errorInfo: gettext('Please enter a non-negative integer')});
         return false;
       }
 
@@ -371,9 +371,9 @@ class GenerateShareLink extends React.Component {
       return <Loading />;
     }
 
-    let passwordLengthTip = gettext('(at least {passwordLength} characters and has {shareLinkPasswordStrengthLevel} of the following: num, upper letter, lower letter and other symbols)');
-    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength)
-                                         .replace('{shareLinkPasswordStrengthLevel}', shareLinkPasswordStrengthLevel);
+    let passwordLengthTip = gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordMinLength}', shareLinkPasswordMinLength)
+                                         .replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel);
 
     const { userPerm } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);

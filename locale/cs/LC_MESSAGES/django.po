@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 17:00+0800\n"
-"PO-Revision-Date: 2021-11-02 08:55+0000\n"
-"Last-Translator: Tomáš Holan <mail@tomasholan.eu>\n"
+"POT-Creation-Date: 2022-02-18 10:13+0800\n"
+"PO-Revision-Date: 2022-01-19 07:23+0000\n"
+"Last-Translator: Tomáš Kubalík <tkubalik@ifrog.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,50 +23,50 @@ msgstr ""
 "Language: cs\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: seahub/api2/endpoints/admin/account.py:181 seahub/api2/endpoints/user.py:81
+#: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "Jméno je příliš dlouhé (maximum je 64 znaků)"
 
-#: seahub/api2/endpoints/admin/account.py:185 seahub/api2/endpoints/user.py:85
+#: seahub/api2/endpoints/admin/account.py:190 seahub/api2/endpoints/user.py:85
 #: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "Jméno by nemělo obsahovat '/'."
 
-#: seahub/api2/endpoints/admin/account.py:200
+#: seahub/api2/endpoints/admin/account.py:205
 msgid "Login id can't be empty"
 msgstr "Uživatelské ID nemůže být prázdné"
 
-#: seahub/api2/endpoints/admin/account.py:204
-#: seahub/api2/endpoints/admin/users.py:1051
+#: seahub/api2/endpoints/admin/account.py:209
+#: seahub/api2/endpoints/admin/users.py:1054
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Uživatelské ID %s již existuje."
 
-#: seahub/api2/endpoints/admin/account.py:211
+#: seahub/api2/endpoints/admin/account.py:216
 msgid "Department is too long (maximum is 512 characters)"
 msgstr "Oddělení je příliš dlouhé (maximum je 512 znaků)"
 
-#: seahub/api2/endpoints/admin/account.py:227 seahub/forms.py:155
+#: seahub/api2/endpoints/admin/account.py:232 seahub/forms.py:155
 msgid "Space quota can't be empty"
 msgstr "Kvóta nemůže být prázdná"
 
-#: seahub/api2/endpoints/admin/account.py:233
+#: seahub/api2/endpoints/admin/account.py:238
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "Musí být číslo které je větší nebo rovno 0."
 
-#: seahub/api2/endpoints/admin/account.py:237
+#: seahub/api2/endpoints/admin/account.py:242
 #: seahub/api2/endpoints/admin/users_batch.py:176 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "Kvóta je příliš malá (minimum je 0)"
 
-#: seahub/api2/endpoints/admin/account.py:245 seahub/institutions/views.py:211
+#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:211
 #: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Chyba při nastavení kvóty: maximum je %d MB"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:81
+#: seahub/api2/endpoints/admin/address_book/groups.py:82
 #: seahub/api2/endpoints/admin/groups.py:129
 #: seahub/api2/endpoints/admin/groups.py:268
 #: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
@@ -76,25 +76,25 @@ msgid ""
 "brackets or underscore."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:86
+#: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:136
 #: seahub/api2/endpoints/admin/groups.py:272
 #: seahub/api2/endpoints/groups.py:221 seahub/api2/endpoints/groups.py:294
 msgid "There is already a group with that name."
 msgstr "Skupina s tímto názvem již existuje."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:240
+#: seahub/api2/endpoints/admin/address_book/groups.py:241
 msgid "There are libraries in this department."
 msgstr "Toto oddělení obsahuje knihovny."
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:244
+#: seahub/api2/endpoints/admin/address_book/groups.py:245
 msgid "There are sub-departments in this department."
 msgstr "Toto oddělení obsahuje pododdělení."
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:665 seahub/views/__init__.py:666
-#: seahub/views/__init__.py:670 seahub/views/__init__.py:671
+#: seahub/views/__init__.py:664 seahub/views/__init__.py:665
+#: seahub/views/__init__.py:669 seahub/views/__init__.py:670
 msgid "My Library"
 msgstr "Moje knihovna"
 
@@ -132,7 +132,7 @@ msgstr "Knihovnu nelze převést na vlastníka."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:553
+#: seahub/api2/endpoints/share_links.py:554
 msgid "There is an associated published library."
 msgstr "Existuje přidružená publikovaná knihovna."
 
@@ -241,7 +241,7 @@ msgstr "Email"
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
 #: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
-#: seahub/views/sysadmin.py:790
+#: seahub/views/sysadmin.py:792
 msgid "Name"
 msgstr "Jméno"
 
@@ -269,7 +269,7 @@ msgstr "Využití prostoru"
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
-#: seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:794
 msgid "Space Quota"
 msgstr "Kvóta úložiště"
 
@@ -280,7 +280,7 @@ msgid "There are more than 500 users, and sort is not offered."
 msgstr "Je více než 500 uživatelů a třídění se nenabízí."
 
 #: seahub/api2/endpoints/admin/users.py:573
-#: seahub/api2/endpoints/admin/users.py:1023 seahub/base/accounts.py:785
+#: seahub/api2/endpoints/admin/users.py:1026 seahub/base/accounts.py:784
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "Počet uživatelů překročil limit."
@@ -291,7 +291,7 @@ msgid "Successfully added user %(user)s."
 msgstr "Úspěšně přidán uživatel %(user)s."
 
 #: seahub/api2/endpoints/admin/users.py:671
-#: seahub/api2/endpoints/admin/users_batch.py:376 seahub/views/sysadmin.py:567
+#: seahub/api2/endpoints/admin/users_batch.py:385 seahub/views/sysadmin.py:567
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Jste pozván pro připojení se do %s"
@@ -308,53 +308,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "Úspěšně přidán uživatel %(user)s. Emailová notifikace nemohla být odeslána protože emailová služba není správně nakonfigurována."
 
-#: seahub/api2/endpoints/admin/users.py:1123
+#: seahub/api2/endpoints/admin/users.py:1126
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Editace byla úspěšná"
 
-#: seahub/api2/endpoints/admin/users.py:1126 seahub/views/sysadmin.py:470
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Váš účet na %s byl aktivován"
 
-#: seahub/api2/endpoints/admin/users.py:1131
+#: seahub/api2/endpoints/admin/users.py:1134
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Editace byla úspěšná, email byl odeslán."
 
-#: seahub/api2/endpoints/admin/users.py:1134
+#: seahub/api2/endpoints/admin/users.py:1137
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Editace byla úspěšná, ale selhalo odesílání emailu. Prosím zkontrolujte Vaší emailovou konfiguraci."
 
-#: seahub/api2/endpoints/admin/users.py:1212 seahub/views/sysadmin.py:511
+#: seahub/api2/endpoints/admin/users.py:1215 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Heslo bylo vyresetováno na %s"
 
-#: seahub/api2/endpoints/admin/users.py:1214 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1217 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Úspěšně vyresetováno heslo na %(passwd)s, email byl odeslán na %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1218 seahub/views/sysadmin.py:541
+#: seahub/api2/endpoints/admin/users.py:1221 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Úspěšně vyresetováno heslo na %(passwd)s, ale selhalo odeslání emailu na%(user)s, prosím zkontrolujte vaší emailovou konfiguraci."
 
-#: seahub/api2/endpoints/admin/users.py:1221 seahub/views/sysadmin.py:545
+#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Úspěšně vyresetováno heslo na %(passwd)s pro uživatele %(user)s"
 
-#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:548
+#: seahub/api2/endpoints/admin/users.py:1227 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -378,7 +378,7 @@ msgstr ""
 #: seahub/api2/endpoints/invitations.py:78
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:201
-#: seahub/api2/endpoints/send_upload_link_email.py:105
+#: seahub/api2/endpoints/send_upload_link_email.py:107
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3849
 #: seahub/notifications/models.py:462 seahub/notifications/models.py:503
 #: seahub/notifications/models.py:554 seahub/notifications/models.py:610
@@ -386,7 +386,7 @@ msgstr ""
 #: seahub/notifications/models.py:688 seahub/notifications/models.py:705
 #: seahub/notifications/models.py:722 seahub/notifications/models.py:751
 #: seahub/search/views.py:200 seahub/utils/__init__.py:166
-#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:916
+#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:915
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405
 msgid "Internal Server Error"
 msgstr "Vnitřní chyba serveru"
@@ -446,9 +446,9 @@ msgstr "Uživatel %s nebyl nalezen."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:219 seahub/search/views.py:174
+#: seahub/profile/views.py:225 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
-#: seahub/views/__init__.py:740 seahub/views/ajax.py:83
+#: seahub/views/__init__.py:739 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
 msgstr "Přístup odmítnut."
@@ -457,7 +457,7 @@ msgstr "Přístup odmítnut."
 msgid "File is not locked."
 msgstr "Soubor není uzamčen."
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:635
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
 msgid "You can not refresh this file's lock."
 msgstr "Nemůžete obnovit zámek tohoto souboru."
 
@@ -503,7 +503,7 @@ msgstr "Skupina neexistuje"
 
 #: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
-#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:802
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"
 msgstr "Chyba při exportu do Excelu"
 
@@ -512,7 +512,7 @@ msgstr "Chyba při exportu do Excelu"
 msgid "Permission already exists."
 msgstr "Oprávnění již existuje."
 
-#: seahub/api2/endpoints/invitation.py:105
+#: seahub/api2/endpoints/invitation.py:106
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
 msgstr "%(user)s zrušil váš přístup k %(site_name)s."
@@ -532,15 +532,15 @@ msgstr "%s už je pozván."
 #: seahub/api2/endpoints/invitations.py:66
 #: seahub/api2/endpoints/invitations.py:137
 #: seahub/api2/endpoints/repo_share_invitations.py:173
-#: seahub/base/accounts.py:795
+#: seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "Uživatel %s už existuje."
 
 #: seahub/api2/endpoints/invitations.py:151
 #: seahub/api2/endpoints/repo_share_invitations.py:215
-#: seahub/api2/endpoints/send_share_link_email.py:33
-#: seahub/api2/endpoints/send_upload_link_email.py:32 seahub/auth/forms.py:122
+#: seahub/api2/endpoints/send_share_link_email.py:34
+#: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:122
 #: seahub/share/views.py:136 seahub/share/views.py:264
 msgid ""
 "Failed to send email, email service is not properly configured, please "
@@ -603,80 +603,82 @@ msgstr "Nelze přesunout složku %s, zkontrolujte prosím její oprávnění."
 msgid "Can't delete folder %s, please check its permission."
 msgstr "Nelze odstranit složku %s, zkontrolujte prosím její oprávnění."
 
-#: seahub/api2/endpoints/send_share_link_email.py:100
+#: seahub/api2/endpoints/send_share_link_email.py:102
 #: seahub/share/views.py:185
 msgid "file"
 msgstr "soubor"
 
-#: seahub/api2/endpoints/send_share_link_email.py:101
+#: seahub/api2/endpoints/send_share_link_email.py:103
 #: seahub/share/views.py:186
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr "Na %s je s vámi sdílen soubor"
 
-#: seahub/api2/endpoints/send_share_link_email.py:103
+#: seahub/api2/endpoints/send_share_link_email.py:105
 #: seahub/share/views.py:192
 msgid "directory"
 msgstr "adresář"
 
-#: seahub/api2/endpoints/send_share_link_email.py:104
+#: seahub/api2/endpoints/send_share_link_email.py:106
 #: seahub/share/views.py:193
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr "Na %s je s vámi sdílen adresář"
 
-#: seahub/api2/endpoints/send_upload_link_email.py:73
+#: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
 msgstr "Neplatný E-mail."
 
-#: seahub/api2/endpoints/send_upload_link_email.py:95
+#: seahub/api2/endpoints/send_upload_link_email.py:97
 #: seahub/share/views.py:305
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr "Na %s je s vámi sdílen odkaz pro nahrání"
 
-#: seahub/api2/endpoints/share_links.py:268
-#: seahub/api2/endpoints/upload_links.py:162 seahub/api2/views.py:4002
+#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
 #: seahub/api2/views.py:4122
 msgid "Password is required."
 msgstr "Heslo je vyžadováno."
 
-#: seahub/api2/endpoints/share_links.py:274
-#: seahub/api2/endpoints/upload_links.py:168
+#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Heslo je příliš krátké"
 
-#: seahub/api2/endpoints/share_links.py:278
-#: seahub/api2/endpoints/upload_links.py:172
+#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:301
-#: seahub/api2/endpoints/upload_links.py:195 seahub/api2/views.py:3417
+#: seahub/api2/endpoints/share_links.py:302
+#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Počet dní do expirace by měl být větší nebo rovno %s"
 
-#: seahub/api2/endpoints/share_links.py:307
-#: seahub/api2/endpoints/upload_links.py:201 seahub/api2/views.py:3423
+#: seahub/api2/endpoints/share_links.py:308
+#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Počet dní do expirace by měl být menší nebo rovno %s"
 
-#: seahub/api2/endpoints/share_links.py:329
-#: seahub/api2/endpoints/upload_links.py:223
+#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/upload_links.py:224
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "Datum skončení platnosti by mělo být později než %s."
 
-#: seahub/api2/endpoints/share_links.py:338
-#: seahub/api2/endpoints/upload_links.py:232
+#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/upload_links.py:233
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "Datum skončení by mělo být dříve než %s."
 
-#: seahub/api2/endpoints/share_links.py:407
-#: seahub/api2/endpoints/share_links.py:416
+#: seahub/api2/endpoints/share_links.py:408
+#: seahub/api2/endpoints/share_links.py:417
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Sdílecí odkaz%s již existuje."
@@ -711,7 +713,7 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "Již máte %(nb_avatars)d avatarů, maximální povolený počet avatarů je %(nb_max_avatars)d"
 
-#: seahub/api2/endpoints/webdav_secret.py:50
+#: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
 msgstr ""
 
@@ -741,7 +743,7 @@ msgid "Email or Username"
 msgstr "E-mail nebo přezdívka"
 
 #: seahub/auth/forms.py:29 seahub/auth/forms.py:229
-#: seahub/base/accounts.py:773
+#: seahub/base/accounts.py:772
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
 #: seahub/templates/decrypt_repo_form.html:10
@@ -749,7 +751,7 @@ msgstr "E-mail nebo přezdívka"
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
-#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:790
+#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:791
 msgid "Password"
 msgstr "Heslo"
 
@@ -797,7 +799,7 @@ msgid "New password confirmation"
 msgstr "Potvrzení nového hesla"
 
 #: seahub/auth/forms.py:195 seahub/auth/forms.py:241
-#: seahub/base/accounts.py:829 seahub/organizations/forms.py:69
+#: seahub/base/accounts.py:828 seahub/organizations/forms.py:69
 msgid "The two password fields didn't match."
 msgstr "Zadání v kolonkách pro hesla se neshodují."
 
@@ -809,7 +811,7 @@ msgstr "Staré heslo"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Vaše staré heslo bylo chybné. Prosím vložte jej znovu."
 
-#: seahub/auth/forms.py:230 seahub/base/accounts.py:775
+#: seahub/auth/forms.py:230 seahub/base/accounts.py:774
 msgid "Password (again)"
 msgstr "Heslo (znovu)"
 
@@ -819,19 +821,19 @@ msgstr "Heslo (znovu)"
 msgid "A user with this email already exists."
 msgstr "Uživatel s tímto emailem už existuje."
 
-#: seahub/auth/views.py:148
+#: seahub/auth/views.py:150
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Tento účet byl odstaven z důvodu příliš mnoha chybných pokusů o přihlášení."
 
-#: seahub/auth/views.py:288
+#: seahub/auth/views.py:291
 msgid "Logged out"
 msgstr "Odhlášen"
 
-#: seahub/auth/views.py:338
+#: seahub/auth/views.py:342
 msgid "Failed to send email, please contact administrator."
 msgstr "Odeslání emailu se nezdařilo. Prosím kontaktujte administrátora."
 
-#: seahub/auth/views.py:397
+#: seahub/auth/views.py:401
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Heslo nejde změnit, prosím kontaktujte LDAP administrátora."
 
@@ -897,44 +899,44 @@ msgstr "Profilový obrázek byl úspěšně aktualizován."
 msgid "Successfully deleted the requested avatars."
 msgstr "Požadovaný profilový obrázek byl úspěšně smazán."
 
-#: seahub/base/accounts.py:487
+#: seahub/base/accounts.py:486
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "Účet %(account)s zmrazen na %(site)s."
 
-#: seahub/base/accounts.py:763
+#: seahub/base/accounts.py:762
 msgid "Email address"
 msgstr "E-mailová adresa"
 
-#: seahub/base/accounts.py:769
+#: seahub/base/accounts.py:768
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: seahub/base/accounts.py:770
+#: seahub/base/accounts.py:769
 msgid "This value must be of length 40"
 msgstr "Tatao hodnota musí mít délku 40"
 
-#: seahub/base/accounts.py:789
+#: seahub/base/accounts.py:788
 msgid "Enter a valid email address."
 msgstr "Zadejte platou emailovou adresu."
 
-#: seahub/base/accounts.py:799
+#: seahub/base/accounts.py:798
 msgid "Invalid user id."
 msgstr "Nesprávné uživatelské ID."
 
-#: seahub/base/accounts.py:851
+#: seahub/base/accounts.py:850
 msgid "name"
 msgstr "jméno"
 
-#: seahub/base/accounts.py:854
+#: seahub/base/accounts.py:853
 msgid "department"
 msgstr "oddělení"
 
-#: seahub/base/accounts.py:857
+#: seahub/base/accounts.py:856
 msgid "telephone"
 msgstr "telefon"
 
-#: seahub/base/accounts.py:860
+#: seahub/base/accounts.py:859
 msgid "note"
 msgstr "poznámka"
 
@@ -1018,7 +1020,7 @@ msgstr "Stav"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:793
 msgid "Role"
 msgstr "Role"
 
@@ -1067,7 +1069,7 @@ msgstr "Neaktivní"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:84 seahub/views/sysadmin.py:266
+#: seahub/templates/base.html:86 seahub/views/sysadmin.py:266
 #: seahub/views/sysadmin.py:267
 msgid "Yes"
 msgstr "Ano"
@@ -1331,8 +1333,8 @@ msgstr "Upravit kontakt"
 
 #: seahub/contacts/templates/contacts/contact_list.html:101
 #: seahub/contacts/templates/contacts/contact_list.html:146
-#: seahub/templates/view_file_onlyoffice.html:81
-#: seahub/templates/view_file_onlyoffice.html:104
+#: seahub/templates/view_file_onlyoffice.html:89
+#: seahub/templates/view_file_onlyoffice.html:112
 msgid "Failed. Please check the network."
 msgstr "Chyba. Prosím zkontrolujte připojení k síti."
 
@@ -1431,7 +1433,7 @@ msgstr "Jméno %s není platné"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1843
+#: seahub/views/file.py:1852
 msgid "Argument missing"
 msgstr "Chybí argument"
 
@@ -1554,9 +1556,9 @@ msgid "The %(site_name)s team"
 msgstr "Tým %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
-#: seahub/views/__init__.py:570 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1131
-#: seahub/views/file.py:1345 seahub/views/file.py:1852
+#: seahub/views/__init__.py:569 seahub/views/ajax.py:381
+#: seahub/views/ajax.py:427 seahub/views/file.py:1138
+#: seahub/views/file.py:1354 seahub/views/file.py:1861
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -3558,7 +3560,7 @@ msgid "Exit admin panel"
 msgstr "Opustit panel správy"
 
 #: seahub/institutions/templates/institutions/base.html:13
-#: seahub/templates/base.html:30 seahub/templates/home_base.html:9
+#: seahub/templates/base.html:32 seahub/templates/home_base.html:9
 msgid "Close"
 msgstr "Zavřít"
 
@@ -4167,31 +4169,31 @@ msgstr "Nastavit heslo"
 msgid "Update"
 msgstr "Aktualizovat"
 
-#: seahub/profile/views.py:41
+#: seahub/profile/views.py:42
 msgid "Successfully edited profile."
 msgstr "Profil byl úspěšně změněn."
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:46
 msgid "Failed to edit profile"
 msgstr "Chyba při změně profilu"
 
-#: seahub/profile/views.py:205
+#: seahub/profile/views.py:210
 msgid "Has not accepted invitation yet"
 msgstr "Ješte neakceptoval pozvání"
 
-#: seahub/profile/views.py:229
+#: seahub/profile/views.py:235
 msgid "Demo account can not be deleted."
 msgstr "Demo účet není možné smazat."
 
-#: seahub/profile/views.py:255
+#: seahub/profile/views.py:262
 msgid "Failed to set default library."
 msgstr "Chyba při nastavování výchozí knihovny."
 
-#: seahub/profile/views.py:259
+#: seahub/profile/views.py:266
 msgid "Can not set encrypted library as default library."
 msgstr "Nemohu nastavit šifrovanou knihovnu jako výchzí."
 
-#: seahub/profile/views.py:264
+#: seahub/profile/views.py:271
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Úspěšně nastavena \"%s\" jako výchzí knihovna."
@@ -4266,11 +4268,11 @@ msgstr "Email je povinný"
 msgid "Email is not longer than 512 characters"
 msgstr "Email nemůže být delší než 512 znaků"
 
-#: seahub/share/models.py:79
+#: seahub/share/models.py:92
 msgid "Password can't be empty"
 msgstr "Heslo nemůže být prázdné"
 
-#: seahub/share/models.py:86
+#: seahub/share/models.py:99
 msgid "Please enter a correct password."
 msgstr "Prosím zadejte správné heslo"
 
@@ -4402,14 +4404,14 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Požadovaná stránka nebyla nalezena."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "Práce se soubory a týmová organizace"
+msgid "File, Collaboration, Team, Organization"
+msgstr ""
 
-#: seahub/templates/base.html:39
+#: seahub/templates/base.html:41
 msgid "Side Nav Menu"
 msgstr "Postranní navigační nabídka"
 
-#: seahub/templates/base.html:85
+#: seahub/templates/base.html:87
 msgid "No"
 msgstr "Ne"
 
@@ -4912,6 +4914,11 @@ msgid ""
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
 msgstr "%(escaped_nickname)s s Vámi sdílel %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s </span> na %(site_name)s:"
 
+#: seahub/templates/shared_link_email.html:17
+#: seahub/templates/shared_upload_link_email.html:20
+msgid "Password:"
+msgstr "Heslo:"
+
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
@@ -5147,7 +5154,7 @@ msgid "Network error"
 msgstr "Chyba sítě"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:602
+#: seahub/views/__init__.py:601
 msgid "Invalid arguments."
 msgstr "Chybné argumenty."
 
@@ -5263,43 +5270,43 @@ msgstr "Zakázat"
 msgid "permission error"
 msgstr "Chyba oprávnění"
 
-#: seahub/views/__init__.py:403 seahub/views/__init__.py:418
-#: seahub/views/__init__.py:433
+#: seahub/views/__init__.py:402 seahub/views/__init__.py:417
+#: seahub/views/__init__.py:432
 msgid "Unable to view recycle page"
 msgstr "Není možné zobrazit recycle stránku"
 
-#: seahub/views/__init__.py:478
+#: seahub/views/__init__.py:477
 msgid "Unable to view library modification"
 msgstr "Není možné zobrazit úpravy knihovny"
 
-#: seahub/views/__init__.py:561 seahub/views/__init__.py:604
-#: seahub/views/__init__.py:735 seahub/views/__init__.py:880
-#: seahub/views/ajax.py:376 seahub/views/file.py:1838
+#: seahub/views/__init__.py:560 seahub/views/__init__.py:603
+#: seahub/views/__init__.py:734 seahub/views/__init__.py:879
+#: seahub/views/ajax.py:376 seahub/views/file.py:1847
 msgid "Library does not exist"
 msgstr "Knihovna neexistuje"
 
-#: seahub/views/__init__.py:595
+#: seahub/views/__init__.py:594
 msgid "Please specify history ID"
 msgstr "Prosím specifikujte ID historie"
 
-#: seahub/views/__init__.py:599
+#: seahub/views/__init__.py:598
 msgid "Successfully restored the library."
 msgstr "Knihovna úspěšně obnovena."
 
-#: seahub/views/__init__.py:606
+#: seahub/views/__init__.py:605
 msgid "History you specified does not exist"
 msgstr "Historie co jste specifikoval, neexistuje"
 
-#: seahub/views/__init__.py:608
+#: seahub/views/__init__.py:607
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: seahub/views/__init__.py:887 seahub/views/repo.py:295
+#: seahub/views/__init__.py:886 seahub/views/repo.py:295
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" neexistuje."
 
-#: seahub/views/__init__.py:919
+#: seahub/views/__init__.py:918
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Není možné stáhnout \"%s\""
@@ -5321,8 +5328,8 @@ msgid "Bad upload link token."
 msgstr "Chybný token upload odkazu"
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1126 seahub/views/file.py:1340
-#: seahub/views/file.py:1847
+#: seahub/views/file.py:1133 seahub/views/file.py:1349
+#: seahub/views/file.py:1856
 msgid "File does not exist"
 msgstr "Soubor neexistuje"
 
@@ -5350,53 +5357,53 @@ msgstr "Kódování co jste vybrali není správné."
 msgid "Unknown file encoding"
 msgstr "Neznámé kódování souboru"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:660
-#: seahub/views/file.py:751 seahub/views/file.py:872
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:659
+#: seahub/views/file.py:749 seahub/views/file.py:871
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "velikost souboru předčila %s, není možné otevřít online. "
 
-#: seahub/views/file.py:350 seahub/views/file.py:786
+#: seahub/views/file.py:350 seahub/views/file.py:784
 msgid "The library is encrypted, can not open file online."
 msgstr "Knihovna je šifrována, není možné otevřít online."
 
 #: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:741 seahub/views/file.py:994
-#: seahub/views/file.py:1017 seahub/views/file.py:1044
-#: seahub/views/file.py:1169 seahub/views/file.py:1259
-#: seahub/views/file.py:1361 seahub/views/file.py:1460
+#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1001
+#: seahub/views/file.py:1024 seahub/views/file.py:1051
+#: seahub/views/file.py:1179 seahub/views/file.py:1268
+#: seahub/views/file.py:1370 seahub/views/file.py:1469
 msgid "Unable to view file"
 msgstr "Není možné prohlížet soubor"
 
-#: seahub/views/file.py:810 seahub/views/file.py:942 seahub/views/file.py:1220
-#: seahub/views/file.py:1399
+#: seahub/views/file.py:808 seahub/views/file.py:949 seahub/views/file.py:1229
+#: seahub/views/file.py:1408
 msgid "Error when prepare Office Online file preview page."
 msgstr "Chyba při přípravě náhledu souboru v Office Online."
 
-#: seahub/views/file.py:841 seahub/views/file.py:954 seahub/views/file.py:1239
-#: seahub/views/file.py:1414
+#: seahub/views/file.py:840 seahub/views/file.py:961 seahub/views/file.py:1248
+#: seahub/views/file.py:1423
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Chyba při přípravě náhledu souboru v OnlyOffice."
 
-#: seahub/views/file.py:1077
+#: seahub/views/file.py:1084
 msgid "Unable to download file, invalid file path"
 msgstr "Soubor není možné stáhnout, popis umístění není platný"
 
-#: seahub/views/file.py:1086
+#: seahub/views/file.py:1093
 msgid "Unable to download file, wrong file path"
 msgstr "Není možné stáhnout soubor, nesprávný popis umístění"
 
-#: seahub/views/file.py:1093
+#: seahub/views/file.py:1100
 msgid "Unable to download file."
 msgstr "Soubor se nedaří stáhnout."
 
-#: seahub/views/file.py:1275 seahub/views/file.py:1479
+#: seahub/views/file.py:1284 seahub/views/file.py:1488
 #: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "Sdílet odkaz pro %s."
 
-#: seahub/views/file.py:1597 seahub/views/file.py:1602
+#: seahub/views/file.py:1606 seahub/views/file.py:1611
 msgid "Unable to download file"
 msgstr "Nelze stáhnout soubor"
 
@@ -5476,7 +5483,8 @@ msgstr "Uživatel %s byl úspěšně nastaven jako Admin"
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Chyba při nastavení uživatele %s jako Admin: uživatel neexistuje."
 
-#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:793
+#: seahub/views/sysadmin.py:794
 msgid "Optional"
 msgstr "Volitelné"
 

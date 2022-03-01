@@ -25,7 +25,7 @@ jobs:
 
       - name: clone and build
         run: |
-          git clone --depth=1 --branch=8.0 git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+          git clone --depth=1 --branch=8.0 https://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
           cd /tmp/seafile-test-deploy && git fetch origin 8.0:8.0 && git checkout 8.0
           ./bootstrap.sh
 

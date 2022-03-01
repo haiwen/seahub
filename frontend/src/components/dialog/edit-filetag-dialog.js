@@ -22,28 +22,26 @@ class TagItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSelectedTag: false
+      isTagHighlighted: false
     };
   }
 
   onMouseEnter = () => {
     this.setState({
-      showSelectedTag: true
+      isTagHighlighted: true
     });
   }
 
   onMouseLeave = () => {
     this.setState({
-      showSelectedTag: false
+      isTagHighlighted: false
     });
   }
 
   getRepoTagIdList = () => {
     let repoTagIdList = [];
     let fileTagList = this.props.fileTagList;
-    fileTagList.map((fileTag) => {
-      repoTagIdList.push(fileTag.repo_tag_id);
-    });
+    repoTagIdList = fileTagList.map((fileTag) => fileTag.repo_tag_id);
     return repoTagIdList;
   }
 
@@ -79,18 +77,22 @@ class TagItem extends React.Component {
   }
 
   render() {
-    let repoTag = this.props.repoTag;
-    let repoTagIdList = this.getRepoTagIdList();
-    let drakColor = Utils.getDarkColor(repoTag.color);
+    const { isTagHighlighted } = this.state;
+    const { repoTag } = this.props;
+    const repoTagIdList = this.getRepoTagIdList();
+    const isTagSelected = repoTagIdList.indexOf(repoTag.id) != -1;
     return (
-      <li key={repoTag.id} className="tag-list-item" onClick={this.onEditFileTag} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <div className="tag-demo" style={{backgroundColor:repoTag.color}}>
-          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
-          <span className="tag-name">{repoTag.name}</span>
-          {repoTagIdList.indexOf(repoTag.id) > -1 &&
-            <i className="fas fa-check tag-operation"></i>
-          }
+      <li
+        className={`tag-list-item cursor-pointer px-4 d-flex justify-content-between align-items-center ${isTagHighlighted ? 'hl' : ''}`}
+        onClick={this.onEditFileTag}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
+        <div className="d-flex align-items-center">
+          <span className="tag-color w-4 h-4 rounded-circle" style={{backgroundColor: repoTag.color}}></span>
+          <span className="tag-name mx-2">{repoTag.name}</span>
         </div>
+        {isTagSelected && <i className="fas fa-check tag-selected-icon"></i>}
       </li>
     );
   }
@@ -139,7 +141,7 @@ class TagList extends React.Component {
     return (
       <Fragment>
         <ModalHeader toggle={this.props.toggleCancel}>{gettext('Select Tags')}</ModalHeader>
-        <ModalBody>
+        <ModalBody className="px-0">
           <ul className="tag-list tag-list-container">
             {this.state.repotagList.map((repoTag) => {
               return (
@@ -154,7 +156,14 @@ class TagList extends React.Component {
               );
             })}
           </ul>
-          <a href="#" className="add-tag-link" onClick={this.props.createNewTag}>{gettext('Create a new tag')}</a>
+          <a
+            href="#"
+            className="add-tag-link px-4 py-2 d-flex align-items-center"
+            onClick={this.props.createNewTag}
+          >
+            <span className="sf2-icon-plus mr-2"></span>
+            {gettext('Create a new tag')}
+          </a>
         </ModalBody>
         <ModalFooter>
           <Button onClick={this.props.toggleCancel}>{gettext('Close')}</Button>

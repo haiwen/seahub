@@ -548,6 +548,9 @@ if [[ ! -f ${dest_settings_py} ]]; then
     cat > ${dest_settings_py} <<EOF
 # -*- coding: utf-8 -*-
 SECRET_KEY = "$key"
+
+SERVICE_URL = "http://$ip_or_domain/"
+
 EOF
 fi
 

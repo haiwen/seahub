@@ -58,13 +58,13 @@ from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
-from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
 from seahub.constants import HASH_URLS, PERMISSION_READ
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
@@ -1169,7 +1169,6 @@ def react_fake_view(request, **kwargs):
         max_upload_file_size = -1
 
     return render(request, "react_app.html", {
-        "onlyoffice_desktop_editors_portal_login": ONLYOFFICE_DESKTOP_EDITORS_PORTAL_LOGIN,
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'dtable_web_server': DTABLE_WEB_SERVER,
@@ -1205,4 +1204,5 @@ def react_fake_view(request, **kwargs):
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
     })

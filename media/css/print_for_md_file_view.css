@@ -1,9 +1,12 @@
+#root {
+  height: auto;
+}
 .sf-md-viewer-topbar,
 .seafile-rich-editor-topbar {
   display: none;
 }
 .seafile-editor {
-  position: static;
+  position: static!important;
 }
 .editor {
   border: none!important;
@@ -14,6 +17,7 @@
 .seafile-editor-main-panel {
   display: block!important;
   width: 100%!important;
+  background-color: #fff!important;
 }
 .seafile-editor-resize,
 .seafile-editor-side-panel {

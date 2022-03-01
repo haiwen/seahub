@@ -73,15 +73,18 @@ class UploadListItem extends React.Component {
     let progress = Math.round(resumableFile.progress() * 100);
     let error = resumableFile.error;
 
+    const fileName = resumableFile.newFileName;
+    const size = this.formatFileSize(resumableFile.size);
+
     return (
       <tr className="file-upload-item">
         <td className="upload-name">
-          <div className="ellipsis">{resumableFile.newFileName}</div>
+          <div className="ellipsis" title={fileName}>{fileName}</div>
         </td>
-        <td>
-          <span className="file-size">{this.formatFileSize(resumableFile.size)}</span>
+        <td className="ellipsis">
+          <span className="file-size" title={size}>{size}</span>
         </td>
-        <td className="upload-progress">
+        <td className="upload-progress ellipsis">
           {(this.state.uploadState === UPLOAD_UPLOADING || this.state.uploadState === UPLOAD_ISSAVING) &&
             <Fragment>
               {resumableFile.size >= (100 * 1000 * 1000) &&
@@ -118,7 +121,7 @@ class UploadListItem extends React.Component {
             <div className="message err-message ml-0" dangerouslySetInnerHTML={{__html: error}}></div>
           )}
         </td>
-        <td className="upload-operation">
+        <td className="upload-operation ellipsis">
           <Fragment>
             {this.state.uploadState === UPLOAD_UPLOADING && (
               <a href="#" onClick={this.onUploadCancel}>{gettext('Cancel')}</a>

@@ -30,7 +30,7 @@ const propTypes = {
 };
 
 class FileUploader extends React.Component {
-  
+
   static defaultProps = {
     isCustomPermission: false
   }
@@ -404,7 +404,7 @@ class FileUploader extends React.Component {
       'File size is too large.': gettext('File size is too large.'),        // 442
       'Out of quota.': gettext('Out of quota.'),                            // 443
       'Internal error.': gettext('Internal Server Error'),                  // 500
-    }
+    };
     return errorMessage[key] || key;
   }
 

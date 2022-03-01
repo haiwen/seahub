@@ -564,10 +564,8 @@ LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
-FAVICON_PATH = 'favicons/favicon.ico'
-FAVICON_SVG_PATH = 'favicons/favicon.svg'
-APPLE_TOUCH_ICON_PATH = 'favicons/favicon.svg'
-MANIFEST_WEBMANIFEST_PATH = 'favicons/manifest.webmanifest'
+FAVICON_PATH = 'favicons/favicon.png'
+APPLE_TOUCH_ICON_PATH = 'favicons/favicon.png'
 
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
@@ -723,6 +721,9 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
 ENABLE_WEBDAV_SECRET = False
+WEBDAV_SECRET_MIN_LENGTH = 1
+WEBDAV_SECRET_STRENGTH_LEVEL = 1
+
 ENABLE_USER_SET_CONTACT_EMAIL = False
 
 #####################

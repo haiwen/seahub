@@ -39,7 +39,7 @@ from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember,
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
-        ShareLinkUpload, ShareLinkUploadDone
+        ShareLinkUpload, ShareLinkUploadDone, ShareLinkSaveItemsToRepo
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -50,7 +50,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
         ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
         ReposBatchDeleteItemView
-from seahub.api2.endpoints.repos import RepoView, ReposView
+from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
@@ -341,6 +341,7 @@ urlpatterns = [
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-file-to-repo/$', ShareLinkSaveFileToRepo.as_view(), name='api-v2.1-share-link-save-file-to-repo'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-items-to-repo/$', ShareLinkSaveItemsToRepo.as_view(), name='api-v2.1-share-link-save-items-to-repo'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/dirents/$', ShareLinkDirents.as_view(), name='api-v2.1-share-link-dirents'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/online-office-lock/$',
             ShareLinkOnlineOfficeLock.as_view(), name='api-v2.1-share-link-online-office-lock'),
@@ -403,6 +404,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/(?P<token>[a-f0-9]+)/$', RepoShareLink.as_view(), name='api-v2.1-repo-share-link'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/$', RepoUploadLinks.as_view(), name='api-v2.1-repo-upload-links'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
 
     ## user:: repo-api-tokens
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),

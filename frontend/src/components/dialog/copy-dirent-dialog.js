@@ -23,9 +23,9 @@ class CopyDirent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repo: null,
-      selectedPath: '',
-      errMessage: '',
+      repo: { repo_id: this.props.repoID },
+      selectedPath: this.props.path,
+      errMessage: ''
     };
   }
 
@@ -92,7 +92,7 @@ class CopyDirent extends React.Component {
   copyItem = () => {
     let { repo, repoID, selectedPath } = this.state;
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
-    let message = 'Invalid destination path';
+    let message = gettext('Invalid destination path');
 
     if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
       this.setState({errMessage: message});
@@ -101,12 +101,6 @@ class CopyDirent extends React.Component {
 
     // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
-      this.setState({errMessage: message});
-      return;
-    }
-
-    // copy the dirent to current path
-    if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
       this.setState({errMessage: message});
       return;
     }
@@ -132,7 +126,7 @@ class CopyDirent extends React.Component {
     this.setState({
       repo: repo,
       selectedPath: selectedPath,
-      errMessage: '',
+      errMessage: ''
     });
   }
 
@@ -163,7 +157,7 @@ class CopyDirent extends React.Component {
             onRepoItemClick={this.onRepoItemClick}
             mode={mode}
           />
-          {this.state.errMessage && <Alert color="danger" style={{margin: '0.5rem'}}>{this.state.errMessage}</Alert>}
+          {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

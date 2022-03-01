@@ -12,6 +12,8 @@ import ModalPortal from './components/modal-portal';
 import ZipDownloadDialog from './components/dialog/zip-download-dialog';
 import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
+import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
+import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -46,6 +48,14 @@ class SharedDirView extends React.Component {
 
       isZipDialogOpen: false,
       zipFolderPath: '',
+
+      isSaveSharedDirDialogShow: false,
+      itemsForSave: [],
+
+      asyncCopyMoveTaskId: '',
+      asyncOperationProgress: 0,
+      asyncOperatedFilesLength: 0,
+      isCopyMoveProgressDialogShow: false,
 
       isImagePopupOpen: false,
       imageItems: [],
@@ -90,8 +100,8 @@ class SharedDirView extends React.Component {
 
   getThumbnails = () => {
     let items = this.state.items.filter((item) => {
-      return !item.is_dir && 
-        (Utils.imageCheck(item.file_name) || 
+      return !item.is_dir &&
+        (Utils.imageCheck(item.file_name) ||
         (enableVideoThumbnail && Utils.videoCheck(item.file_name))) &&
         !item.encoded_thumbnail_src;
     });
@@ -128,14 +138,14 @@ class SharedDirView extends React.Component {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`}>{item.name}</a>
+                <a href={`?p=${encodeURIComponent(item.path)}&mode=${mode}`} className="mx-1 ellipsis" title={item.name}>{item.name}</a>
                 <span> / </span>
               </React.Fragment>
             );
           }
         })
         }
-        {zipped[zipped.length - 1].name}
+        <span className="ml-1 ellipsis" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
       </React.Fragment>
     );
   }
@@ -183,6 +193,99 @@ class SharedDirView extends React.Component {
         });
       });
     }
+  }
+
+  async getAsyncCopyMoveProgress() {
+    let { asyncCopyMoveTaskId } = this.state;
+    try {
+      let res = await seafileAPI.queryAsyncOperationProgress(asyncCopyMoveTaskId);
+      let data = res.data;
+      if (data.failed) {
+        let message = gettext('Failed to copy files to another library.');
+        toaster.danger(message);
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        return;
+      }
+
+      if (data.successful) {
+        this.setState({
+          asyncOperationProgress: 0,
+          isCopyMoveProgressDialogShow: false,
+        });
+        let message = gettext('Successfully copied files to another library.');
+        toaster.success(message);
+        return;
+      }
+      // init state: total is 0
+      let asyncOperationProgress = !data.total ? 0 : parseInt((data.done/data.total * 100).toFixed(2));
+
+      this.getAsyncCopyMoveProgress();
+      this.setState({asyncOperationProgress: asyncOperationProgress});
+    } catch (error) {
+      this.setState({
+        asyncOperationProgress: 0,
+        isCopyMoveProgressDialogShow: false,
+      });
+    }
+  }
+
+  saveSelectedItems = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: true,
+      itemsForSave: this.state.items.filter(item => item.isSelected)
+        .map(item => item.file_name || item.folder_name)
+    });
+  }
+
+  saveAllItems = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: true,
+      itemsForSave: this.state.items
+        .map(item => item.file_name || item.folder_name)
+    });
+  }
+
+  toggleSaveSharedDirCancel = () => {
+    this.setState({
+      isSaveSharedDirDialogShow: false,
+      itemsForSave: []
+    });
+  }
+
+  handleSaveSharedDir = (destRepoID, dstPath) => {
+
+    const itemsForSave = this.state.itemsForSave;
+
+    seafileAPI.saveSharedDir(destRepoID, dstPath, token, relativePath, itemsForSave).then((res) => {
+      this.setState({
+        isSaveSharedDirDialogShow: false,
+        itemsForSave: [],
+	isCopyMoveProgressDialogShow: true,
+        asyncCopyMoveTaskId: res.data.task_id,
+        asyncOperatedFilesLength: itemsForSave.length,
+      }, () => {
+        this.getAsyncCopyMoveProgress();
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({errMessage: errMessage});
+    });
+  }
+
+  onProgressDialogToggle = () => {
+    let { asyncOperationProgress } = this.state;
+    if (asyncOperationProgress !== 100) {
+      let taskId = this.state.asyncCopyMoveTaskId;
+      seafileAPI.cancelCopyMoveOperation(taskId);
+    }
+
+    this.setState({
+      asyncOperationProgress: 0,
+      isCopyMoveProgressDialogShow: false,
+    });
   }
 
   closeZipDialog = () => {
@@ -314,8 +417,8 @@ class SharedDirView extends React.Component {
               <h2 className="h3">{dirName}</h2>
               <p>{gettext('Shared by: ')}{sharedBy}</p>
               <div className="d-flex justify-content-between align-items-center op-bar">
-                <p className="m-0">{gettext('Current path: ')}{this.renderPath()}</p>
-                <div>
+                <p className="m-0 mr-4 ellipsis d-flex align-items-center"><span className="flex-none">{gettext('Current path: ')}</span>{this.renderPath()}</p>
+                <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
                     <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')} aria-label={gettext('List')}></a>
@@ -330,8 +433,19 @@ class SharedDirView extends React.Component {
                   {showDownloadIcon &&
                   <Fragment>
                     {this.state.items.some(item => item.isSelected) ?
-                      <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button> :
-                      <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
+                      <Fragment>
+                        <Button color="success" onClick={this.zipDownloadSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('ZIP Selected Items')}</Button>
+                        {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.saveSelectedItems} className="ml-2 shared-dir-op-btn">{gettext('Save Selected Items')}</Button>
+                        }
+                      </Fragment>
+                      :
+                      <Fragment>
+                        <Button color="success" onClick={this.zipDownloadFolder.bind(this, relativePath)} className="ml-2 shared-dir-op-btn">{gettext('ZIP')}</Button>
+                        {(canDownload && loginUser && (loginUser !== sharedBy)) &&
+                        <Button color="success" onClick={this.saveAllItems} className="ml-2 shared-dir-op-btn">{gettext('Save')}</Button>
+                        }
+                      </Fragment>
                     }
                   </Fragment>
                   }
@@ -342,8 +456,8 @@ class SharedDirView extends React.Component {
                   ref={uploader => this.uploader = uploader}
                   dragAndDrop={false}
                   token={token}
-                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, "")}
-                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, "")}
+                  path={dirPath === '/' ? dirPath : dirPath.replace(/\/+$/, '')}
+                  relativePath={relativePath === '/' ? relativePath : relativePath.replace(/\/+$/, '')}
                   repoID={repoID}
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
@@ -375,6 +489,23 @@ class SharedDirView extends React.Component {
           />
         </ModalPortal>
         }
+        {this.state.isSaveSharedDirDialogShow &&
+          <SaveSharedDirDialog
+            sharedToken={token}
+            parentDir={relativePath}
+            items={this.state.itemsForSave}
+            toggleCancel={this.toggleSaveSharedDirCancel}
+            handleSaveSharedDir={this.handleSaveSharedDir}
+          />
+        }
+        {this.state.isCopyMoveProgressDialogShow && (
+          <CopyMoveDirentProgressDialog
+            type='copy'
+            asyncOperatedFilesLength={this.state.asyncOperatedFilesLength}
+            asyncOperationProgress={this.state.asyncOperationProgress}
+            toggleDialog={this.onProgressDialogToggle}
+          />
+        )}
         {this.state.isImagePopupOpen &&
         <ModalPortal>
           <ImageDialog

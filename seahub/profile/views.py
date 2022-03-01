@@ -26,6 +26,7 @@ from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
 from seahub.dingtalk.settings import ENABLE_DINGTALK
 
+
 @login_required
 def edit_profile(request):
     """
@@ -122,6 +123,8 @@ def edit_profile(request):
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
+            'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
@@ -148,9 +151,10 @@ def edit_profile(request):
         resp_dict['default_device'] = default_device(request.user)
         resp_dict['backup_tokens'] = backup_tokens
 
-    #template = 'profile/set_profile.html'
+    # template = 'profile/set_profile.html'
     template = 'profile/set_profile_react.html'
     return render(request, template, resp_dict)
+
 
 @login_required
 def user_profile(request, username):
@@ -178,6 +182,7 @@ def user_profile(request, username):
             'contact_email': contact_email,
             'd_profile': d_profile,
             })
+
 
 @login_required
 def get_user_profile(request, user):
@@ -213,6 +218,7 @@ def get_user_profile(request, user):
 
     return HttpResponse(json.dumps(data), content_type=content_type)
 
+
 @login_required
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
@@ -238,6 +244,7 @@ def delete_user_account(request):
         seaserv.ccnet_threaded_rpc.remove_org_user(org_id, username)
 
     return HttpResponseRedirect(settings.LOGIN_URL)
+
 
 @login_required
 def default_repo(request):

@@ -89,7 +89,7 @@
   "local_draft": "Brouillon local",
   "use_draft": "Utiliser le brouillon",
   "delete_draft": "Supprimer le brouillon",
-  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Vous avez un brouillon qui n'est pas sauvé. Voulez-vous l'utiliser ?",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "Vous avez un brouillon qui n'est pas sauvegardé. Voulez-vous l'utiliser ?",
   "local_draft_saved": "Brouillon local sauvegardé",
   "new_draft": "Nouveau brouillon",
   "view_draft": "Voir le brouillon",
@@ -187,7 +187,7 @@
           "Escape_Block_quote": "Sortir du bloc de citation"
         }
       }, {
-        "shortcutType": "Raccourcis table",
+        "shortcutType": "Raccourcis tableau",
         "shortcutData": {
           "Insert_Table_Row": "Insérer une ligne à la table",
           "Escape_table": "Sortir de la table"
@@ -206,9 +206,9 @@
           "Inline_code": "Ligne de code"
         }
       }, {
-        "shortcutType": "Sauvegarder les raccourcis",
+        "shortcutType": "Raccourcis sauvegarde",
         "shortcutData": {
-          "Save_file": "Sauvegarder fichier"
+          "Save_file": "Sauvegarder le fichier"
         }
       }, {
         "shortcutType": "Raccourcis image",

@@ -46,7 +46,7 @@ class UploadProgressDialog extends React.Component {
 
     let uploadBitrate = Utils.formatBitRate(this.props.uploadBitrate);
     let uploadedMessage = gettext('File Upload');
-    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '%' + ' (' + uploadBitrate + ')';
+    let uploadingMessage = gettext('File Uploading...') + ' ' + this.props.totalProgress + '% (' + uploadBitrate + ')';
 
     let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>);
 
@@ -60,7 +60,7 @@ class UploadProgressDialog extends React.Component {
     let { totalProgress, allFilesUploaded, retryFileList } = this.props;
 
     return (
-      <div className="uploader-list-view" style={{height: this.state.isMinimized ? '2.25rem' : '20rem'}}>
+      <div className="uploader-list-view mw-100" style={{height: this.state.isMinimized ? '2.25rem' : '20rem'}}>
         <div className="uploader-list-header">
           <div className="title">
             {totalProgress === 100 ? uploadedMessage : uploadingMessage}
@@ -70,32 +70,28 @@ class UploadProgressDialog extends React.Component {
           </div>
         </div>
         <div className="uploader-list-content">
+          <div className="text-right mt-2">
+            {retryFileList.length > 0 ?
+              <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
+              :
+              <span className="cursor-pointer disabled-link">{gettext('Retry All')}</span>
+            }
+            {!allFilesUploaded ?
+              <span className="cursor-pointer ml-3" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span>
+              :
+              <span className="cursor-pointer ml-3 disabled-link" >{gettext('Cancel All')}</span>
+            }
+          </div>
           <table className="table-thead-hidden">
             <thead>
               <tr>
-                <th width="35%">{gettext('name')}</th>
-                <th width="15%">{gettext('size')}</th>
-                <th width="35%">{gettext('progress')}</th>
-                <th width="15%">{gettext('state')}</th>
+                <th width="30%">{gettext('name')}</th>
+                <th width="20%">{gettext('size')}</th>
+                <th width="30%">{gettext('progress')}</th>
+                <th width="20%">{gettext('state')}</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="text-right" colSpan={3}>
-                  {retryFileList.length > 0 ?
-                    <span className="cursor-pointer" onClick={this.props.onUploadRetryAll}>{gettext('Retry All')}</span>
-                    :
-                    <span className="cursor-pointer disabled-link">{gettext('Retry All')}</span>
-                  }
-                </td>
-                <td className="text-right" colSpan={1}>
-                  {!allFilesUploaded ?
-                    <span className="cursor-pointer" onClick={this.onCancelAllUploading}>{gettext('Cancel All')}</span>
-                    :
-                    <span className="cursor-pointer disabled-link" >{gettext('Cancel All')}</span>
-                  }
-                </td>
-              </tr>
               {
                 this.props.forbidUploadFileList.map((file, index) => {
                   return (<ForbidUploadListItem key={index} file={file} />);
