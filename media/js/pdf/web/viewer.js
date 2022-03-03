@@ -11650,7 +11650,7 @@ class PDFPageView {
     }
 
     this.loadingIconDiv = document.createElement("div");
-    this.loadingIconDiv.className = "loadingIcon";
+    this.loadingIconDiv.className = "loading-icon loading-tip";
     this.loadingIconDiv.setAttribute("role", "img");
     this.l10n.get("loading").then(msg => {
       this.loadingIconDiv?.setAttribute("aria-label", msg);

@@ -38,14 +38,20 @@
 }
 
 .page {
-    position:relative;
-    background:#fff;
-    box-shadow:0 0 6px #ccc;
-    margin:0 auto 20px;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 6px #ccc;
+  margin: 0 auto 20px;
+}
+
+.page .loading-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
 #fileInput {
-    display:none;
+  display: none;
 }
 
 /*
@@ -380,7 +386,9 @@
 /* loadingBar starts */
 #loadingBar {
   position: absolute;
-  height: 4px;
+  /*height: 4px;*/
+  height: 0; /* for seahub */
+
   background-color: #ededf0;
   border-bottom: 1px solid #ccc;
 
@@ -396,6 +404,11 @@ html[dir="rtl"] #loadingBar {
   transition-property: right;
   left: 0;
   right: 0;
+}
+#loadingBar .loading-icon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
 }
 #loadingBar .progress {
   position: absolute;
