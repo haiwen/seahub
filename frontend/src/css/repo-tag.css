@@ -15,7 +15,7 @@
 }
 
 .tag-list-item {
-  height: 2.25rem;
+  height: 2.5rem;
 }
 
 .tag-list-item.hl {
@@ -28,6 +28,7 @@
 
 .tag-delete-icon {
   color: #999;
+  font-size: 17px;
 }
 
 .tag-delete-icon:hover {
