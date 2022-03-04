@@ -274,8 +274,6 @@ class GenerateUploadLink extends React.Component {
 	sharedUploadInfo: sharedUploadInfo,
 	isEditingExpiration: false,
       });
-      let message = gettext('Successfully update expiration.');
-      toaster.success(message);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
