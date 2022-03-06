@@ -130,7 +130,7 @@ def oauth_callback(request):
         token = session.fetch_token(
             TOKEN_URL,
             client_secret=CLIENT_SECRET,
-            authorization_response=request.get_full_path())
+            authorization_response=request.build_absolute_uri())
 
         if 'user_id' in session._client.__dict__['token']:
             # used for sjtu.edu.cn
