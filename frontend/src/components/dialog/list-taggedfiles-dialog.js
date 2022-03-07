@@ -70,15 +70,15 @@ class ListTaggedFilesDialog extends React.Component {
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} style={{maxWidth: '678px'}}>
         <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>
-                <th width='45%' className="ellipsis">{gettext('Name')}</th>
-                <th width='22%'>{gettext('Size')}</th>
-                <th width='25%'>{gettext('Last Update')}</th>
+                <th width='50%' className="ellipsis">{gettext('Name')}</th>
+                <th width='20%'>{gettext('Size')}</th>
+                <th width='22%'>{gettext('Last Update')}</th>
                 <th width='8%'></th>
               </tr>
             </thead>
