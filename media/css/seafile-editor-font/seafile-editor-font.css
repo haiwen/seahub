@@ -1,11 +1,11 @@
 @font-face {
   font-family: "iconfont"; /* Project id 1206766 */
-  src: url('./iconfont.eot?t=1640940881453'); /* IE9 */
-  src: url('./iconfont.eot?t=1640940881453#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('./iconfont.woff2?t=1640940881453') format('woff2'),
-       url('./iconfont.woff?t=1640940881453') format('woff'),
-       url('./iconfont.ttf?t=1640940881453') format('truetype'),
-       url('./iconfont.svg?t=1640940881453#iconfont') format('svg');
+  src: url('./iconfont.eot?t=1645422890587'); /* IE9 */
+  src: url('./iconfont.eot?t=1645422890587#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./iconfont.woff2?t=1645422890587') format('woff2'),
+       url('./iconfont.woff?t=1645422890587') format('woff'),
+       url('./iconfont.ttf?t=1645422890587') format('truetype'),
+       url('./iconfont.svg?t=1645422890587#iconfont') format('svg');
 }
 
 .iconfont {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-clear-format:before {
+  content: "\e760";
 }
 
 .iconenlarge:before {
