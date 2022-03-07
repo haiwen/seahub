@@ -70,16 +70,16 @@ class ListTaggedFilesDialog extends React.Component {
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} style={{maxWidth: '678px'}}>
         <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>
-                <th width='45%' className="ellipsis">{gettext('Name')}</th>
-                <th width='27%'>{gettext('Size')}</th>
-                <th width='18%'>{gettext('Last Update')}</th>
-                <th width='10%'></th>
+                <th width='50%' className="ellipsis">{gettext('Name')}</th>
+                <th width='20%'>{gettext('Size')}</th>
+                <th width='22%'>{gettext('Last Update')}</th>
+                <th width='8%'></th>
               </tr>
             </thead>
             <tbody>
@@ -154,7 +154,7 @@ class TaggedFile extends React.Component {
       </tr>
       :
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
+        <td><a href={href} target='_blank' className="d-inline-block w-100 ellipsis" title={taggedFile.filename}>{taggedFile.filename}</a></td>
         <td>{Utils.bytesToSize(taggedFile.size)}</td>
         <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
         <td><a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a></td>
