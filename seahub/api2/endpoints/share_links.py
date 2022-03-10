@@ -499,7 +499,7 @@ class ShareLink(APIView):
             try:
                 perm = check_permissions_arg(request)
             except Exception:
-                error_msg = 'permissions invalud.'
+                error_msg = 'permissions invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
