@@ -29,12 +29,16 @@ class FileCommentView(APIView):
     def get(self, request, repo_id, comment_id, format=None):
         """Get a comment.
         """
+        # resource check
         try:
             file_comment = FileComment.objects.get(pk=comment_id)
         except FileComment.DoesNotExist:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
 
         # permission check
+        if file_comment.uuid.repo_id != repo_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if check_folder_permission(request, repo_id, '/') is None:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         try:
@@ -53,10 +57,15 @@ class FileCommentView(APIView):
         """Delete a comment, only comment author or repo owner can perform
         this op.
         """
+        # resource check
         try:
             file_comment = FileComment.objects.get(pk=comment_id)
         except FileComment.DoesNotExist:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
+
+        # permission check
+        if file_comment.uuid.repo_id != repo_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         username = request.user.username
         if username != file_comment.author and not is_repo_owner(request, repo_id, username):
@@ -67,7 +76,7 @@ class FileCommentView(APIView):
         return Response(status=204)
 
     def put(self, request, repo_id, comment_id, format=None):
-        """Update a comment, only comment author or repo owner can perform
+        """Update a comment, only comment author can perform
         this op
         1.Change resolved of comment
         2.Add comment_detail
@@ -88,7 +97,12 @@ class FileCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+        if file_comment.uuid.repo_id != repo_id:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        username = request.user.username
+        if username != file_comment.author or \
+                not check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
