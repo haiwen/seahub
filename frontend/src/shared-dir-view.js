@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
+import MD5 from 'MD5';
 import ReactDOM from 'react-dom';
-import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip} from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
 import { isPro, useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
@@ -15,8 +16,13 @@ import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 
+import RepoTag from './models/repo-tag';
+import FileTag from './models/file-tag';
+
+
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
+import './css/repo-info-bar.css';
 
 moment.locale(window.app.config.lang);
 
@@ -48,6 +54,9 @@ class SharedDirView extends React.Component {
 
       isZipDialogOpen: false,
       zipFolderPath: '',
+
+      usedRepoTags: [],
+      isRepoInfoBarShow: false,
 
       isSaveSharedDirDialogShow: false,
       itemsForSave: [],
@@ -88,6 +97,8 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
+
+    this.getShareLinkRepoTags()
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -400,6 +411,25 @@ class SharedDirView extends React.Component {
     seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
   }
 
+  getShareLinkRepoTags = () => {
+    seafileAPI.getShareLinkRepoTags(token).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+      if (usedRepoTags.length != 0 && relativePath == '/') {
+        this.setState({isRepoInfoBarShow: true});
+      }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
@@ -462,6 +492,16 @@ class SharedDirView extends React.Component {
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
               )}
+
+	      {this.state.isRepoInfoBarShow && (
+                <RepoInfoBar
+                  repoID={repoID}
+                  currentPath={'/'}
+                  usedRepoTags={this.state.usedRepoTags}
+                  updateUsedRepoTags={this.getShareLinkRepoTags}
+                />
+              )}
+
               <Content
                 isDesktop={isDesktop}
                 isLoading={this.state.isLoading}
@@ -607,6 +647,7 @@ class Content extends React.Component {
             }
             <th width="5%"></th>
             <th width={showDownloadIcon ? '52%' : '55%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width="10%"></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
             <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
             <th width="10%"></th>
@@ -674,6 +715,13 @@ class Item extends React.Component {
     const { item, isDesktop } = this.props;
     const { isIconShown } = this.state;
 
+    let toolTipID = '';
+    let tagTitle = '';
+    if (item.file_tags && item.file_tags.length > 0) {
+      toolTipID = MD5(item.file_name).slice(0, 7);
+      tagTitle = item.file_tags.map(item => item.tag_name).join(' ');
+    }
+
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -686,6 +734,7 @@ class Item extends React.Component {
           <td>
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
           </td>
+          <td></td>
           <td></td>
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
@@ -742,6 +791,23 @@ class Item extends React.Component {
           </td>
           <td>
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
+          </td>
+          <td className="tag-list-title">
+            {(item.file_tags && item.file_tags.length > 0) && (
+              <Fragment>
+                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
+                  {item.file_tags.map((fileTag, index) => {
+                    let length = item.file_tags.length;
+                    return (
+                      <span className="file-tag" key={fileTag.file_tag_id} style={{zIndex:length - index, backgroundColor:fileTag.tag_color}}></span>
+                    );
+                  })}
+                </div>
+                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+                  {tagTitle}
+                </UncontrolledTooltip>
+              </Fragment>
+            )}
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
@@ -859,6 +925,176 @@ class GridItem extends React.Component {
         </li>
       );
     }
+  }
+}
+
+
+class RepoInfoBar extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTag: null,
+      isListTaggedFileShow: false,
+    };
+  }
+
+  onListTaggedFiles = (currentTag) => {
+    this.setState({
+      currentTag: currentTag,
+      isListTaggedFileShow: !this.state.isListTaggedFileShow,
+    });
+  }
+
+  onCloseDialog = () => {
+    this.setState({
+      isListTaggedFileShow: false
+    });
+  }
+
+  render() {
+    let {repoID, currentPath, usedRepoTags} = this.props;
+    // let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) +  '?mode=edit' : '';
+    // let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
+    return (
+      <div className="repo-info-bar">
+        {usedRepoTags.length > 0 && (
+          <ul className="used-tag-list">
+            {usedRepoTags.map((usedRepoTag) => {
+              return (
+                <li key={usedRepoTag.id} className="used-tag-item">
+                  <span className="used-tag" style={{backgroundColor:usedRepoTag.color}}></span>
+                  <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
+                  <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
+                    {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {this.state.isListTaggedFileShow && (
+          <ModalPortal>
+            <ListTaggedFilesDialog
+              repoID={repoID}
+              currentTag={this.state.currentTag}
+              onClose={this.onCloseDialog}
+              toggleCancel={this.onListTaggedFiles}
+              updateUsedRepoTags={this.props.updateUsedRepoTags}
+            />
+          </ModalPortal>
+        )}
+      </div>
+    );
+  }
+}
+
+
+class ListTaggedFilesDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      taggedFileList: [],
+    };
+  }
+
+  componentDidMount() {
+    this.getTaggedFiles();
+  }
+
+  getTaggedFiles = () => {
+    let { repoID, currentTag } = this.props;
+    seafileAPI.getShareLinkTaggedFiles(token, currentTag.id).then(res => {
+      let taggedFileList = [];
+      res.data.tagged_files !== undefined &&
+      res.data.tagged_files.forEach(file => {
+        let taggedFile = file;
+        taggedFileList.push(taggedFile);
+      });
+      this.setState({
+        taggedFileList: taggedFileList,
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  render() {
+    let taggedFileList = this.state.taggedFileList;
+    return (
+      <Modal isOpen={true}>
+        <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
+        <ModalBody className="dialog-list-container">
+          <table>
+            <thead>
+              <tr>
+                <th width='45%' className="ellipsis">{gettext('Name')}</th>
+                <th width='27%'>{gettext('Size')}</th>
+                <th width='28%'>{gettext('Last Update')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {taggedFileList.map((taggedFile, index) => {
+                return (
+                  <TaggedFile
+                    key={index}
+                    repoID={this.props.repoID}
+                    taggedFile={taggedFile}
+                  />
+                );
+              })}
+            </tbody>
+          </table>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+class TaggedFile extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = ({
+      active: false,
+    });
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      active: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      active: false
+    });
+  }
+
+  render() {
+    const taggedFile = this.props.taggedFile;
+    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
+    let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
+    let href = siteRoot + 'd/' + token + '/files/?p=' + Utils.encodePath(path);
+    return ( taggedFile.file_deleted ?
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        <td colSpan='3' className="name">{taggedFile.filename}{' '}
+          <span style={{color:'red'}}>{gettext('deleted')}</span>
+        </td>
+      </tr>
+      :
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
+        <td>{Utils.bytesToSize(taggedFile.size)}</td>
+        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+      </tr>
+    );
   }
 }
 
