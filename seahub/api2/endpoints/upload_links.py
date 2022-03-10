@@ -294,6 +294,88 @@ class UploadLink(APIView):
         link_info = get_upload_link_info(uls)
         return Response(link_info)
 
+    def put(self, request, token):
+        """ Update upload link's expiration.
+
+        Permission checking:
+        upload link creater
+        """
+
+        try:
+            uls = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        expire_date = None
+        if expire_days:
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < UPLOAD_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            UPLOAD_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > UPLOAD_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            UPLOAD_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+            uls.expire_date = expire_date
+            uls.save()
+
+        elif expiration_time:
+
+            try:
+                expire_date = dateutil.parser.isoparse(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=UPLOAD_LINK_EXPIRE_DAYS_MIN)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
+
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s.') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if UPLOAD_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=UPLOAD_LINK_EXPIRE_DAYS_MAX)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
+
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s.') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            uls.expire_date = expire_date
+            uls.save()
+
+        link_info = get_upload_link_info(uls)
+        return Response(link_info)
+
     def delete(self, request, token):
         """ Delete upload link.
 

@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
 import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -11,8 +11,8 @@ import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import Loading from '../loading';
 import SendLink from '../send-link';
-import DateTimePicker from '../date-and-time-picker';
 import SharedLink from '../shared-link';
+import SetLinkExpiration from '../set-link-expiration';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -31,27 +31,15 @@ class GenerateShareLink extends React.Component {
     this.isExpireDaysNoLimit = (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax === 0 && shareLinkExpireDaysDefault == 0);
     this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : shareLinkExpireDaysDefault;
 
-    let expirationLimitTip = '';
-    if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax !== 0) {
-      expirationLimitTip = gettext('{minDays_placeholder} - {maxDays_placeholder} days')
-        .replace('{minDays_placeholder}', shareLinkExpireDaysMin)
-        .replace('{maxDays_placeholder}', shareLinkExpireDaysMax);
-    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) {
-      expirationLimitTip = gettext('Greater than or equal to {minDays_placeholder} days')
-        .replace('{minDays_placeholder}', shareLinkExpireDaysMin);
-    } else if (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax !== 0) {
-      expirationLimitTip = gettext('Less than or equal to {maxDays_placeholder} days')
-        .replace('{maxDays_placeholder}', shareLinkExpireDaysMax);
-    }
-    this.expirationLimitTip = expirationLimitTip;
-
     this.state = {
       isOpIconShown: false,
       isValidate: false,
       isShowPasswordInput: shareLinkForceUsePassword ? true : false,
       isPasswordVisible: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
-      setExp: 'by-days',
+      isExpirationEditIconShow: false,
+      isEditingExpiration: false,
+      expType: 'by-days',
       expireDays: this.defaultExpireDays,
       expDate: null,
       password: '',
@@ -116,31 +104,10 @@ class GenerateShareLink extends React.Component {
     }
   }
 
-  setExp = (e) => {
+  setExpType = (e) => {
     this.setState({
-      setExp: e.target.value
+      expType: e.target.value
     });
-  }
-
-  disabledDate = (current) => {
-    if (!current) {
-      // allow empty select
-      return false;
-    }
-
-    if (this.isExpireDaysNoLimit) {
-      return current.isBefore(moment(), 'day');
-    }
-
-    const startDay = moment().add(shareLinkExpireDaysMin, 'days');
-    const endDay = moment().add(shareLinkExpireDaysMax, 'days');
-    if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax !== 0) {
-      return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
-    } else if (shareLinkExpireDaysMin !== 0 && shareLinkExpireDaysMax === 0) {
-      return current.isBefore(startDay, 'day');
-    } else if (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax !== 0) {
-      return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
-    }
   }
 
   onExpDateChanged = (value) => {
@@ -197,7 +164,7 @@ class GenerateShareLink extends React.Component {
     if (isValid) {
       this.setState({errorInfo: ''});
       let { itemPath, repoID } = this.props;
-      let { password, isExpireChecked, setExp, expireDays, expDate } = this.state;
+      let { password, isExpireChecked, expType, expireDays, expDate } = this.state;
       let permissions;
       if (isPro) {
         const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
@@ -205,7 +172,7 @@ class GenerateShareLink extends React.Component {
       }
       let expirationTime = '';
       if (isExpireChecked) {
-        if (setExp == 'by-days') {
+        if (expType == 'by-days') {
           expirationTime = moment().add(parseInt(expireDays), 'days').format();
         } else {
           expirationTime = expDate.format();
@@ -243,6 +210,7 @@ class GenerateShareLink extends React.Component {
         passwdnew: '',
         isShowPasswordInput: shareLinkForceUsePassword ? true : false,
         expireDays: this.defaultExpireDays,
+        expDate: null,
         isExpireChecked: !this.isExpireDaysNoLimit,
         errorInfo: '',
         sharedLinkInfo: null,
@@ -264,7 +232,7 @@ class GenerateShareLink extends React.Component {
   }
 
   validateParamsInput = () => {
-    let { isShowPasswordInput, password, passwdnew, isExpireChecked, setExp, expireDays, expDate } = this.state;
+    let { isShowPasswordInput, password, passwdnew, isExpireChecked, expType, expireDays, expDate } = this.state;
 
     // validate password
     if (isShowPasswordInput) {
@@ -287,7 +255,7 @@ class GenerateShareLink extends React.Component {
     }
 
     if (isExpireChecked) {
-      if (setExp == 'by-date') {
+      if (expType == 'by-date') {
         if (!expDate) {
           this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
@@ -337,6 +305,44 @@ class GenerateShareLink extends React.Component {
     return true;
   }
 
+  handleMouseOverExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: true});
+  }
+
+  handleMouseOutExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: false});
+  }
+
+  editingExpirationToggle = () => {
+    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
+  }
+
+  updateExpiration = (e) => {
+
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+
+    let { expType, expireDays, expDate } = this.state;
+
+    let expirationTime = '';
+    if (expType == 'by-days') {
+      expirationTime = moment().add(parseInt(expireDays), 'days').format();
+    } else {
+      expirationTime = expDate.format();
+    }
+
+    seafileAPI.updateShareLink(this.state.sharedLinkInfo.token, '', expirationTime).then((res) => {
+      let sharedLinkInfo = new ShareLink(res.data);
+      this.setState({
+        sharedLinkInfo: sharedLinkInfo,
+        isEditingExpiration: false,
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onNoticeMessageToggle = () => {
     this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
   }
@@ -373,7 +379,7 @@ class GenerateShareLink extends React.Component {
 
     let passwordLengthTip = gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)');
     passwordLengthTip = passwordLengthTip.replace('{passwordMinLength}', shareLinkPasswordMinLength)
-                                         .replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel);
+      .replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel);
 
     const { userPerm } = this.props;
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
@@ -421,7 +427,39 @@ class GenerateShareLink extends React.Component {
             {sharedLinkInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}</dd>
+                {!this.state.isEditingExpiration &&
+                  <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
+                    {moment(sharedLinkInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
+                    {this.state.isExpirationEditIconShow && (
+                      <a href="#"
+                        role="button"
+                        aria-label={gettext('Edit')}
+                        title={gettext('Edit')}
+                        className="fa fa-pencil-alt attr-action-icon"
+                        onClick={this.editingExpirationToggle}>
+                      </a>
+                    )}
+                  </dd>
+                }
+                {this.state.isEditingExpiration &&
+                  <div className="ml-4">
+                    <SetLinkExpiration
+                      minDays={shareLinkExpireDaysMin}
+                      maxDays={shareLinkExpireDaysMax}
+                      defaultDays={shareLinkExpireDaysDefault}
+                      expType={this.state.expType}
+                      setExpType={this.setExpType}
+                      expireDays={this.state.expireDays}
+                      onExpireDaysChanged={this.onExpireDaysChanged}
+                      expDate={this.state.expDate}
+                      onExpDateChanged={this.onExpDateChanged}
+                    />
+                    <div className={this.state.expType == 'by-days' ? 'mt-2' : 'mt-3'}>
+                      <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
+                      <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
+                    </div>
+                  </div>
+                }
               </FormGroup>
             )}
 
@@ -470,15 +508,15 @@ class GenerateShareLink extends React.Component {
         <Form className="generate-share-link">
           <FormGroup check>
             {shareLinkForceUsePassword ? (
-            <Label check>
-              <Input type="checkbox" checked readOnly disabled />
-              <span>{gettext('Add password protection')}</span>
-            </Label>
+              <Label check>
+                <Input type="checkbox" checked readOnly disabled />
+                <span>{gettext('Add password protection')}</span>
+              </Label>
             ) : (
-            <Label check>
-              <Input type="checkbox" onChange={this.onPasswordInputChecked} />
-              <span>{gettext('Add password protection')}</span>
-            </Label>
+              <Label check>
+                <Input type="checkbox" onChange={this.onPasswordInputChecked} />
+                <span>{gettext('Add password protection')}</span>
+              </Label>
             )}
             {this.state.isShowPasswordInput &&
             <div className="ml-4">
@@ -511,39 +549,17 @@ class GenerateShareLink extends React.Component {
             </Label>
             {this.state.isExpireChecked &&
               <div className="ml-4">
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio" name="set-exp" value="by-days" checked={this.state.setExp == 'by-days'} onChange={this.setExp} className="mr-1" />
-                    <span>{gettext('Expiration days')}</span>
-                  </Label>
-                  {this.state.setExp == 'by-days' && (
-                    <Fragment>
-                      <InputGroup style={{width: inputWidth}}>
-                        <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
-                        <InputGroupAddon addonType="append">
-                          <InputGroupText>{gettext('days')}</InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {!this.state.isExpireDaysNoLimit && (
-                        <FormText color="muted">{this.expirationLimitTip}</FormText>
-                      )}
-                    </Fragment>
-                  )}
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input type="radio" name="set-exp" value="by-date" checked={this.state.setExp == 'by-date'} onChange={this.setExp} className="mr-1" />
-                    <span>{gettext('Expiration time')}</span>
-                  </Label>
-                  {this.state.setExp == 'by-date' && (
-                    <DateTimePicker
-                      inputWidth={inputWidth}
-                      disabledDate={this.disabledDate}
-                      value={this.state.expDate}
-                      onChange={this.onExpDateChanged}
-                    />
-                  )}
-                </FormGroup>
+                <SetLinkExpiration
+                  minDays={shareLinkExpireDaysMin}
+                  maxDays={shareLinkExpireDaysMax}
+                  defaultDays={shareLinkExpireDaysDefault}
+                  expType={this.state.expType}
+                  setExpType={this.setExpType}
+                  expireDays={this.state.expireDays}
+                  onExpireDaysChanged={this.onExpireDaysChanged}
+                  expDate={this.state.expDate}
+                  onExpDateChanged={this.onExpDateChanged}
+                />
               </div>
             }
           </FormGroup>
