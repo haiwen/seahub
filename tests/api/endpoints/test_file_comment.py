@@ -10,10 +10,10 @@ class FileCommentTest(BaseTestCase):
         self.tmp_user = self.create_user()
 
         self.tmp_repo_1_id = self.create_repo(
-            name='tmp-repo-1', desc='', username=self.tmp_user, passwd=None)
+            name='tmp-repo-1', desc='', username=self.tmp_user.username, passwd=None)
         self.file1 = self.create_file(repo_id=self.tmp_repo_1_id, parent_dir='/',
                                       filename='test1.txt',
-                                      username=self.tmp_user)
+                                      username=self.tmp_user.username)
 
         self.tmp_repo_2_id = self.create_repo(
             name='tmp-repo-2', desc='', username=self.user.username, passwd=None)
