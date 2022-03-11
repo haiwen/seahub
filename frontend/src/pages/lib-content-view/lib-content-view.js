@@ -47,7 +47,6 @@ class LibContentView extends React.Component {
       isDraft: false,
       hasDraft: false,
       fileTags: [],
-      relatedFiles: [],
       draftID: '',
       draftCounts: 0,
       usedRepoTags: [],
@@ -419,17 +418,6 @@ class LibContentView extends React.Component {
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      });
-
-      seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-        let relatedFiles = res.data.related_files.map((relatedFile) => {
-          return relatedFile;
-        });
-        this.setState({relatedFiles: relatedFiles});
-      }).catch((error) => {
-        if (error.response.status === 500) {
-          this.setState({relatedFiles: []});
-        }
       });
     }
 
@@ -1733,22 +1721,6 @@ class LibContentView extends React.Component {
     });
   }
 
-  onToolbarRelatedFileChange = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.state.path;
-
-    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-      let relatedFiles = res.data.related_files.map((relatedFile) => {
-        return relatedFile;
-      });
-      this.setState({relatedFiles: relatedFiles});
-    }).catch((error) => {
-      if (error.response.status === 500) {
-        this.setState({relatedFiles: []});
-      }
-    });
-  }
-
   unSelectDirent = () => {
     this.setState({
       isDirentSelected: false,
@@ -1818,9 +1790,7 @@ class LibContentView extends React.Component {
               isDraft={this.state.isDraft}
               hasDraft={this.state.hasDraft}
               fileTags={this.state.fileTags}
-              relatedFiles={this.state.relatedFiles}
               onFileTagChanged={this.onToolbarFileTagChanged}
-              onRelatedFileChange={this.onToolbarRelatedFileChange}
               onSideNavMenuClick={this.props.onMenuClick}
               repoID={this.props.repoID}
               path={this.state.path}
@@ -1849,7 +1819,6 @@ class LibContentView extends React.Component {
               updateDirent={this.updateDirent}
               onDirentSelected={this.onDirentSelected}
               showDirentDetail={this.showDirentDetail}
-              listRelatedFiles={this.listRelatedFiles}
               unSelectDirent={this.unSelectDirent}
               onFilesTagChanged={this.onFileTagChanged}
             />
@@ -1872,7 +1841,6 @@ class LibContentView extends React.Component {
               isDraft={this.state.isDraft}
               hasDraft={this.state.hasDraft}
               fileTags={this.state.fileTags}
-              relatedFiles={this.state.relatedFiles}
               goDraftPage={this.goDraftPage}
               isFileLoading={this.state.isFileLoading}
               isFileLoadedErr={this.state.isFileLoadedErr}

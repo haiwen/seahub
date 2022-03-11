@@ -15,7 +15,6 @@ import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
-import RelatedFileDialogs from './components/dialog/related-file-dialogs';
 
 import './css/markdown-viewer/markdown-editor.css';
 
@@ -78,7 +77,7 @@ class EditorApi {
     const url = this.serviceUrl + '/lib/' + repoID + '/file/images/auto-upload/' + fileName + '?raw=1';
     return url;
   }
-  
+
   uploadLocalImage = (imageFile) => {
     return (
       seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
@@ -290,11 +289,8 @@ class MarkdownEditor extends React.Component {
       saving: false,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      relatedFiles: [],
       fileTagList: [],
-      showRelatedFileDialog: false,
       showEditFileTagDialog: false,
-      viewMode: 'list_related_file',
       participants: [],
     };
 
@@ -393,7 +389,6 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showInsertFileDialog: false,
       showInsertRepoImageDialog: false,
-      showRelatedFileDialog: false,
       showEditFileTagDialog: false,
       showFileParticipantDialog: false,
     });
@@ -490,22 +485,6 @@ class MarkdownEditor extends React.Component {
           showInsertRepoImageDialog: true,
         });
         break;
-      case 'related_files':
-        if (this.state.relatedFiles.length > 0) {
-          this.setState({
-            showRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            viewMode: 'list_related_file',
-          });
-        }
-        else {
-          this.setState({
-            showRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            viewMode: 'add_related_file',
-          });
-        }
-        break;
       case 'file_tags':
         this.setState({
           showEditFileTagDialog: true,
@@ -547,7 +526,7 @@ class MarkdownEditor extends React.Component {
     const fileDownloadUrlRes = await seafileAPI.getFileDownloadLink(repoID, filePath);
     const downloadUrl = fileDownloadUrlRes.data;
 
-    // get file content 
+    // get file content
     const fileContentRes = await seafileAPI.getFileContent(downloadUrl);
     const markdownContent = fileContentRes.data;
     const value = deserialize(markdownContent);
@@ -597,7 +576,6 @@ class MarkdownEditor extends React.Component {
       });
     }
     this.checkDraft();
-    this.listRelatedFiles();
     this.listFileTags();
 
     this.listFileParticipants();
@@ -610,12 +588,6 @@ class MarkdownEditor extends React.Component {
     }, 100);
   }
 
-  listRelatedFiles = () => {
-    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-      this.setState({ relatedFiles: res.data.related_files });
-    });
-  }
-
   listFileTags = () => {
     seafileAPI.listFileTags(repoID, filePath).then(res => {
       let fileTagList = res.data.file_tags;
@@ -624,10 +596,6 @@ class MarkdownEditor extends React.Component {
       }
       this.setState({ fileTagList: fileTagList });
     });
-  }
-
-  onRelatedFileChange = () => {
-    this.listRelatedFiles();
   }
 
   onFileTagChanged = () => {
@@ -817,7 +785,6 @@ class MarkdownEditor extends React.Component {
             contentChanged={this.state.contentChanged}
             saving={this.state.saving}
             fileTagList={this.state.fileTagList}
-            relatedFiles={this.state.relatedFiles}
             participants={this.state.participants}
             onParticipantsChange={this.onParticipantsChange}
             markdownLint={fileName.toLowerCase() !== 'index.md'}
@@ -880,19 +847,6 @@ class MarkdownEditor extends React.Component {
                     fileTagList={this.state.fileTagList}
                     toggleCancel={this.toggleCancel}
                     onFileTagChanged={this.onFileTagChanged}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showRelatedFileDialog &&
-                <ModalPortal>
-                  <RelatedFileDialogs
-                    repoID={repoID}
-                    filePath={filePath}
-                    relatedFiles={this.state.relatedFiles}
-                    toggleCancel={this.toggleCancel}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                    dirent={this.state.fileInfo}
-                    viewMode={this.state.viewMode}
                   />
                 </ModalPortal>
               }

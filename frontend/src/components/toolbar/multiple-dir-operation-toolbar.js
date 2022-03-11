@@ -1,15 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
+import { gettext, siteRoot, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import TextTranslation from '../../utils/text-translation';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../dialog/rename-dirent';
@@ -55,8 +53,6 @@ class MultipleDirOperationToolbar extends React.Component {
       showEditFileTagDialog: false,
       fileTagList: [],
       multiFileTagList: [],
-      showRelatedFileDialog: false,
-      viewMode: 'list_related_file',
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false
     };
@@ -178,9 +174,6 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Comment':
         this.onCommentItem();
         break;
-      case 'Related Files':
-        this.openRelatedFilesDialog(dirent);
-        break;
       case 'History':
         this.onHistory(dirent);
         break;
@@ -251,37 +244,11 @@ class MultipleDirOperationToolbar extends React.Component {
     window.open(path);
   }
 
-  openRelatedFilesDialog = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      let relatedFiles = res.data.related_files;
-      if (relatedFiles.length > 0) {
-        this.setState({
-          relatedFiles: relatedFiles,
-          showLibContentViewDialogs: true,
-          showRelatedFileDialog: true,
-          viewMode: 'list_related_file',
-        });
-      } else {
-        this.setState({
-          relatedFiles: relatedFiles,
-          showLibContentViewDialogs: true,
-          showRelatedFileDialog: true,
-          viewMode: 'add_related_file',
-        });
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   toggleCancel = () => {
     this.setState({
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
-      showRelatedFileDialog: false,
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false,
     });
@@ -313,22 +280,6 @@ class MultipleDirOperationToolbar extends React.Component {
       const direntPath = this.getDirentPath(dirent);
       this.props.onFilesTagChanged(dirent, direntPath);
     }
-  }
-
-  listRelatedFiles = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      this.setState({
-        relatedFiles: res.data.related_files
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  onRelatedFileChange = () => {
-    this.listRelatedFiles(this.props.selectedDirentList[0]);
   }
 
   getDirentPath = (dirent) => {
@@ -464,19 +415,6 @@ class MultipleDirOperationToolbar extends React.Component {
                   fileTagList={this.state.fileTagList}
                   toggleCancel={this.toggleCancel}
                   onFileTagChanged={this.onMenuFileTagChanged}
-                />
-              </ModalPortal>
-            }
-            {this.state.showRelatedFileDialog &&
-              <ModalPortal>
-                <RelatedFileDialogs
-                  repoID={repoID}
-                  filePath={direntPath}
-                  relatedFiles={this.state.relatedFiles}
-                  toggleCancel={this.toggleCancel}
-                  onRelatedFileChange={this.onRelatedFileChange}
-                  dirent={this.props.selectedDirentList[0]}
-                  viewMode={this.state.viewMode}
                 />
               </ModalPortal>
             }
