@@ -149,11 +149,9 @@ class ReposBatchView(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             permission = request.data.get('permission', 'rw')
-            if permission not in get_available_repo_perms():
-                permission = normalize_custom_permission_name(permission)
-                if not permission:
-                    error_msg = 'permission invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # share repo to user
             if share_type == 'user':
@@ -211,13 +209,13 @@ class ReposBatchView(APIView):
                                                    to_username,
                                                    permission)
 
-                        # send a signal when sharing repo successful
-                        repo = seafile_api.get_repo(repo_id)
-                        share_repo_to_user_successful.send(sender=None,
-                                                           from_user=username,
-                                                           to_user=to_username,
-                                                           repo=repo, path='/',
-                                                           org_id=org_id)
+                        # # send a signal when sharing repo successful
+                        # repo = seafile_api.get_repo(repo_id)
+                        # share_repo_to_user_successful.send(sender=None,
+                        #                                    from_user=username,
+                        #                                    to_user=to_username,
+                        #                                    repo=repo, path='/',
+                        #                                    org_id=org_id)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -225,8 +223,8 @@ class ReposBatchView(APIView):
                             "permission": permission
                         })
 
-                        send_perm_audit_msg('add-repo-perm', username, to_username,
-                                            repo_id, '/', permission)
+                        # send_perm_audit_msg('add-repo-perm', username, to_username,
+                        #                     repo_id, '/', permission)
                     except Exception as e:
                         logger.error(e)
                         result['failed'].append({
@@ -275,13 +273,13 @@ class ReposBatchView(APIView):
                             seafile_api.set_group_repo(
                                     repo_id, to_group_id, username, permission)
 
-                        # send a signal when sharing repo successful
-                        repo = seafile_api.get_repo(repo_id)
-                        share_repo_to_group_successful.send(sender=None,
-                                                            from_user=username,
-                                                            group_id=to_group_id,
-                                                            repo=repo, path='/',
-                                                            org_id=org_id)
+                        # # send a signal when sharing repo successful
+                        # repo = seafile_api.get_repo(repo_id)
+                        # share_repo_to_group_successful.send(sender=None,
+                        #                                     from_user=username,
+                        #                                     group_id=to_group_id,
+                        #                                     repo=repo, path='/',
+                        #                                     org_id=org_id)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -290,8 +288,8 @@ class ReposBatchView(APIView):
                             "permission": permission
                         })
 
-                        send_perm_audit_msg('add-repo-perm', username, to_group_id,
-                                            repo_id, '/', permission)
+                        # send_perm_audit_msg('add-repo-perm', username, to_group_id,
+                        #                     repo_id, '/', permission)
 
                     except SearpcError as e:
                         logger.error(e)
@@ -348,9 +346,6 @@ class ReposBatchView(APIView):
                         ExtraSharePermission.objects.delete_share_permission(repo_id,
                                                                              to_username)
 
-                        # send message
-                        send_perm_audit_msg('delete-repo-perm', username,
-                                            to_username, repo_id, '/', permission)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -405,10 +400,6 @@ class ReposBatchView(APIView):
                         # Delete share permission at ExtraSharePermission table.
                         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id,
                                                                                    to_group_id)
-
-                        # send message
-                        send_perm_audit_msg('delete-repo-perm', username,
-                                            to_group_id, repo_id, '/', permission)
 
                         result['success'].append({
                             "repo_id": repo_id,
