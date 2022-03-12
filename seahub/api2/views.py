@@ -70,7 +70,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
+    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, \
+    get_file_upload_info
 
 from seahub.utils.file_types import IMAGE
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
@@ -3251,6 +3252,20 @@ class FileDetailView(APIView):
         entry["comment_total"] = comment_total
 
         entry["can_edit"], _ = can_edit_file(file_name, file_size, repo)
+
+        try:
+            file_upload_info = get_file_upload_info(real_repo_id, real_path)
+        except Exception as e:
+            logger.error(e)
+            file_upload_info = None
+
+        uploader = file_upload_info.user if file_upload_info else ''
+        upload_time = file_upload_info.upload_time if file_upload_info else ''
+
+        entry["uploader_email"] = uploader
+        entry["uploader_name"] = email2nickname(uploader)
+        entry["uploader_contact_email"] = email2contact_email(uploader)
+        entry["upload_time"] = datetime_to_isoformat_timestr(upload_time)
 
         return Response(entry)
 

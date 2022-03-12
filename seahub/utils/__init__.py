@@ -860,6 +860,10 @@ if EVENTS_CONFIG_FILE:
         events = seafevents.get_user_activities_by_timestamp(username, start, end)
         return events if events else []
 
+    def get_file_upload_info(repo_id, path):
+        with _get_seafevents_session() as session:
+            return seafevents.get_file_upload_info(session, repo_id, path)
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -911,6 +915,8 @@ else:
     def get_file_scan_record():
         pass
     def get_user_activities_by_timestamp():
+        pass
+    def get_file_upload_info(repo_id, path):
         pass
 
 
