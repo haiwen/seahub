@@ -4447,6 +4447,14 @@ class EventsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+
+        ret = {
+            'events': [],
+            'more': False,
+            'more_offset': 0,
+            }
+        return Response(ret)
+
         if not EVENTS_ENABLED:
             events = None
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
