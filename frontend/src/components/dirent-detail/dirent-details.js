@@ -30,7 +30,6 @@ class DirentDetail extends React.Component {
       direntType: '',
       direntDetail: '',
       fileTagList: [],
-      relatedFiles: [],
       folderDirent: null,
       activeTab: 'info',
       fileParticipantList: [],
@@ -106,21 +105,6 @@ class DirentDetail extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      seafileAPI.listRelatedFiles(repoID, direntPath).then(res => {
-        let relatedFiles = [];
-        res.data.related_files.map((relatedFile) => {
-          relatedFiles.push(relatedFile);
-        });
-        this.setState({
-          relatedFiles: relatedFiles,
-        });
-      }).catch((error) => {
-        if (error.response.status === 500) {
-          this.setState({
-            relatedFiles: []
-          });
-        }
-      });
       this.listParticipants(repoID, direntPath);
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
@@ -143,10 +127,6 @@ class DirentDetail extends React.Component {
 
   onParticipantsChange = (repoID, filePath) => {
     this.listParticipants(repoID, filePath);
-  }
-
-  onRelatedFileChange = (dirent, direntPath) => {
-    this.updateDetailView(dirent, direntPath);
   }
 
   tabItemClick = (tab) => {
@@ -203,9 +183,7 @@ class DirentDetail extends React.Component {
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail}
                 fileTagList={this.state.fileTagList}
-                relatedFiles={this.state.relatedFiles}
                 onFileTagChanged={this.props.onFileTagChanged}
-                onRelatedFileChange={this.onRelatedFileChange}
                 fileParticipantList={this.state.fileParticipantList}
                 onParticipantsChange={this.onParticipantsChange}
               />

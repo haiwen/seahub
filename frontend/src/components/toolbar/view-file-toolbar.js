@@ -8,7 +8,6 @@ import toaster from '../toast';
 import ModalPotal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import RelatedFileDialogs from '../dialog/related-file-dialogs';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -21,9 +20,7 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
-  relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  onRelatedFileChange: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
 };
 
@@ -36,8 +33,6 @@ class ViewFileToolbar extends React.Component {
       isMoreMenuShow: false,
       isShareDialogShow: false,
       isEditTagDialogShow: false,
-      isRelatedFileDialogShow: false,
-      showRelatedFileDialog: false,
     };
   }
 
@@ -75,20 +70,6 @@ class ViewFileToolbar extends React.Component {
     this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
   }
 
-  onListRelatedFileToggle = () => {
-    this.setState({
-      isRelatedFileDialogShow: true,
-      showRelatedFileDialog: true,
-    });
-  }
-
-  toggleCancel = () => {
-    this.setState({
-      isRelatedFileDialogShow: false,
-      showRelatedFileDialog: false,
-    });
-  }
-
   onHistoryClick = () => {
     let historyUrl = siteRoot + 'repo/file_revisions/' + this.props.repoID + '/?p=' + Utils.encodePath(this.props.path);
     location.href = historyUrl;
@@ -122,7 +103,6 @@ class ViewFileToolbar extends React.Component {
                   <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
                 }
                 <DropdownItem onClick={this.onEditFileTagToggle}>{gettext('Tags')}</DropdownItem>
-                <DropdownItem onClick={this.onListRelatedFileToggle}>{gettext('Related Files')}</DropdownItem>
                 <DropdownItem onClick={this.onHistoryClick}>{gettext('History')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -154,19 +134,6 @@ class ViewFileToolbar extends React.Component {
             />
           </ModalPotal>
         )}
-        {this.state.showRelatedFileDialog &&
-          <ModalPotal>
-            <RelatedFileDialogs
-              repoID={this.props.repoID}
-              filePath={this.props.path}
-              relatedFiles={this.props.relatedFiles}
-              toggleCancel={this.toggleCancel}
-              onRelatedFileChange={this.props.onRelatedFileChange}
-              dirent={dirent}
-              viewMode="list_related_file"
-            />
-          </ModalPotal>
-        }
       </Fragment>
     );
   }

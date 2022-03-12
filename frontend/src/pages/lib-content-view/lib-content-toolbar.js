@@ -14,9 +14,7 @@ const propTypes = {
   isDraft: PropTypes.bool.isRequired,
   hasDraft: PropTypes.bool.isRequired,
   fileTags: PropTypes.array.isRequired,
-  relatedFiles: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,  // for file-view-toolbar
-  onRelatedFileChange: PropTypes.func.isRequired,
   // side-panel
   onSideNavMenuClick: PropTypes.func.isRequired,
   // mutiple-dir
@@ -75,9 +73,7 @@ class LibContentToolbar extends React.Component {
               isDraft={this.props.isDraft}
               hasDraft={this.props.hasDraft}
               fileTags={this.props.fileTags}
-              relatedFiles={this.props.relatedFiles}
               onFileTagChanged={this.props.onFileTagChanged}
-              onRelatedFileChange={this.props.onRelatedFileChange}
               showShareBtn={this.props.showShareBtn}
             />
             <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />
@@ -107,7 +103,6 @@ class LibContentToolbar extends React.Component {
               currentRepoInfo={this.props.currentRepoInfo}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               updateDirent={this.props.updateDirent}
-              relatedFiles={this.props.relatedFiles}
               unSelectDirent={this.props.unSelectDirent}
               onFilesTagChanged={this.props.onFilesTagChanged}
               showShareBtn={this.props.showShareBtn}
