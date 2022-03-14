@@ -350,7 +350,7 @@ urlpatterns = [
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/upload/done/$', ShareLinkUploadDone.as_view(), name='api-v2.1-share-link-upload-done'),
 
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/repo-tags/$', ShareLinkRepoTags.as_view(), name='api-v2.1-share-link-repo-tags'),
-    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/repo-tags/(?P<tag_id>\d+)/$', ShareLinkRepoTagsTaggedFiles.as_view(), name='api-v2.1-share-link-repo-tags-tagged-files'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/tagged-files/(?P<tag_id>\d+)/$', ShareLinkRepoTagsTaggedFiles.as_view(), name='api-v2.1-share-link-repo-tags-tagged-files'),
 
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
