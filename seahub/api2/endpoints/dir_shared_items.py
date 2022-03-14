@@ -347,6 +347,13 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
+                if to_user == repo_owner:
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': _(u'Library can not be shared to owner.')
+                        })
+                    continue
+
                 try:
                     org_id = None
                     if is_org_context(request):
@@ -363,12 +370,12 @@ class DirSharedItemsEndpoint(APIView):
                             })
                             continue
 
-                        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
-                        repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                        # can't share to owner
-                        if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
-                            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                        # # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                        # repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                        # # can't share to owner
+                        # if to_user == repo_owner:
+                        #     error_msg = "Library can not be shared to owner"
+                        #     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
                     else:
@@ -380,11 +387,11 @@ class DirSharedItemsEndpoint(APIView):
                             })
                             continue
 
-                        repo_owner = seafile_api.get_repo_owner(repo_id)
-                        # can't share to owner
-                        if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
-                            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                        # repo_owner = seafile_api.get_repo_owner(repo_id)
+                        # # can't share to owner
+                        # if to_user == repo_owner:
+                        #     error_msg = "Library can not be shared to owner"
+                        #     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
 
@@ -401,13 +408,13 @@ class DirSharedItemsEndpoint(APIView):
                         "is_admin": permission == PERMISSION_ADMIN
                     })
 
-                    # send a signal when sharing repo successful
-                    share_repo_to_user_successful.send(sender=None, from_user=username,
-                                                       to_user=to_user, repo=repo,
-                                                       path=path, org_id=org_id)
+                    # # send a signal when sharing repo successful
+                    # share_repo_to_user_successful.send(sender=None, from_user=username,
+                    #                                    to_user=to_user, repo=repo,
+                    #                                    path=path, org_id=org_id)
 
-                    send_perm_audit_msg('add-repo-perm', username, to_user,
-                                        repo_id, path, permission)
+                    # send_perm_audit_msg('add-repo-perm', username, to_user,
+                    #                     repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     result['failed'].append({
@@ -463,13 +470,13 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     org_id = None
                     if is_org_context(request):
-                        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
-                        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                        # # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                        # repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         org_id = request.user.org.org_id
 
                         share_dir_to_group(repo, path, repo_owner, username, gid, permission, org_id)
                     else:
-                        repo_owner = seafile_api.get_repo_owner(repo_id)
+                        # repo_owner = seafile_api.get_repo_owner(repo_id)
 
                         share_dir_to_group(repo, path, repo_owner, username, gid, permission, None)
 
@@ -483,13 +490,13 @@ class DirSharedItemsEndpoint(APIView):
                         "is_admin": permission == PERMISSION_ADMIN
                     })
 
-                    share_repo_to_group_successful.send(sender=None,
-                                                        from_user=username,
-                                                        group_id=gid, repo=repo,
-                                                        path=path, org_id=org_id)
+                    # share_repo_to_group_successful.send(sender=None,
+                    #                                     from_user=username,
+                    #                                     group_id=gid, repo=repo,
+                    #                                     path=path, org_id=org_id)
 
-                    send_perm_audit_msg('add-repo-perm', username, gid,
-                                        repo_id, path, permission)
+                    # send_perm_audit_msg('add-repo-perm', username, gid,
+                    #                     repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     result['failed'].append({
