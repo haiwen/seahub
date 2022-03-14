@@ -22,7 +22,7 @@ from seahub.utils.repo import get_repo_owner, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
 from seahub.settings import MAX_PATH
 
-from seaserv import seafile_api
+from seaserv import seafile_api, send_message
 
 logger = logging.getLogger(__name__)
 
@@ -210,6 +210,16 @@ class CopyMoveTaskView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            dst_dirent_path = posixpath.join(dst_parent_dir, new_dirent_name)
+            msg = '%s\t%s\t%s\t%s\t%s\t%s' % ("file-copy", username,
+                    src_repo_id, src_dirent_path, dst_repo_id, dst_dirent_path)
+            msg_utf8 = msg.encode('utf-8')
+
+            try:
+                send_message('seahub.audit', msg_utf8)
+            except Exception as e:
+                logger.error("Error when sending file-copy message: %s" % str(e))
 
         if not res:
             error_msg = 'Internal Server Error'
