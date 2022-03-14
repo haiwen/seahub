@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import MD5 from 'MD5';
 import ReactDOM from 'react-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip} from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
-import { isPro, useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
+import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -15,14 +15,11 @@ import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
-
+import RepoInfoBar from './components/repo-info-bar';
 import RepoTag from './models/repo-tag';
-import FileTag from './models/file-tag';
-
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
-import './css/repo-info-bar.css';
 
 moment.locale(window.app.config.lang);
 
@@ -98,7 +95,7 @@ class SharedDirView extends React.Component {
       });
     });
 
-    this.getShareLinkRepoTags()
+    this.getShareLinkRepoTags();
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -274,7 +271,7 @@ class SharedDirView extends React.Component {
       this.setState({
         isSaveSharedDirDialogShow: false,
         itemsForSave: [],
-	isCopyMoveProgressDialogShow: true,
+        isCopyMoveProgressDialogShow: true,
         asyncCopyMoveTaskId: res.data.task_id,
         asyncOperatedFilesLength: itemsForSave.length,
       }, () => {
@@ -493,12 +490,13 @@ class SharedDirView extends React.Component {
                 />
               )}
 
-	      {this.state.isRepoInfoBarShow && (
+              {this.state.isRepoInfoBarShow && (
                 <RepoInfoBar
                   repoID={repoID}
                   currentPath={'/'}
                   usedRepoTags={this.state.usedRepoTags}
-                  updateUsedRepoTags={this.getShareLinkRepoTags}
+                  shareLinkToken={token}
+                  className="mx-0"
                 />
               )}
 
@@ -646,11 +644,11 @@ class Content extends React.Component {
             </th>
             }
             <th width="5%"></th>
-            <th width={showDownloadIcon ? '52%' : '55%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
-            <th width="10%"></th>
+            <th width={showDownloadIcon ? '50%' : '53%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width="8%"></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
-            <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
-            <th width="10%"></th>
+            <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
+            <th width="7%"></th>
           </tr>
         </thead>
         {tbody}
@@ -925,176 +923,6 @@ class GridItem extends React.Component {
         </li>
       );
     }
-  }
-}
-
-
-class RepoInfoBar extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentTag: null,
-      isListTaggedFileShow: false,
-    };
-  }
-
-  onListTaggedFiles = (currentTag) => {
-    this.setState({
-      currentTag: currentTag,
-      isListTaggedFileShow: !this.state.isListTaggedFileShow,
-    });
-  }
-
-  onCloseDialog = () => {
-    this.setState({
-      isListTaggedFileShow: false
-    });
-  }
-
-  render() {
-    let {repoID, currentPath, usedRepoTags} = this.props;
-    // let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) +  '?mode=edit' : '';
-    // let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
-    return (
-      <div className="repo-info-bar">
-        {usedRepoTags.length > 0 && (
-          <ul className="used-tag-list">
-            {usedRepoTags.map((usedRepoTag) => {
-              return (
-                <li key={usedRepoTag.id} className="used-tag-item">
-                  <span className="used-tag" style={{backgroundColor:usedRepoTag.color}}></span>
-                  <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
-                  <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
-                    {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {this.state.isListTaggedFileShow && (
-          <ModalPortal>
-            <ListTaggedFilesDialog
-              repoID={repoID}
-              currentTag={this.state.currentTag}
-              onClose={this.onCloseDialog}
-              toggleCancel={this.onListTaggedFiles}
-              updateUsedRepoTags={this.props.updateUsedRepoTags}
-            />
-          </ModalPortal>
-        )}
-      </div>
-    );
-  }
-}
-
-
-class ListTaggedFilesDialog extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      taggedFileList: [],
-    };
-  }
-
-  componentDidMount() {
-    this.getTaggedFiles();
-  }
-
-  getTaggedFiles = () => {
-    let { repoID, currentTag } = this.props;
-    seafileAPI.getShareLinkTaggedFiles(token, currentTag.id).then(res => {
-      let taggedFileList = [];
-      res.data.tagged_files !== undefined &&
-      res.data.tagged_files.forEach(file => {
-        let taggedFile = file;
-        taggedFileList.push(taggedFile);
-      });
-      this.setState({
-        taggedFileList: taggedFileList,
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  render() {
-    let taggedFileList = this.state.taggedFileList;
-    return (
-      <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
-        <ModalBody className="dialog-list-container">
-          <table>
-            <thead>
-              <tr>
-                <th width='45%' className="ellipsis">{gettext('Name')}</th>
-                <th width='27%'>{gettext('Size')}</th>
-                <th width='28%'>{gettext('Last Update')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {taggedFileList.map((taggedFile, index) => {
-                return (
-                  <TaggedFile
-                    key={index}
-                    repoID={this.props.repoID}
-                    taggedFile={taggedFile}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggleCancel}>{gettext('Close')}</Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-}
-
-class TaggedFile extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = ({
-      active: false,
-    });
-  }
-
-  onMouseEnter = () => {
-    this.setState({
-      active: true
-    });
-  }
-
-  onMouseLeave = () => {
-    this.setState({
-      active: false
-    });
-  }
-
-  render() {
-    const taggedFile = this.props.taggedFile;
-    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
-    let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
-    let href = siteRoot + 'd/' + token + '/files/?p=' + Utils.encodePath(path);
-    return ( taggedFile.file_deleted ?
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td colSpan='3' className="name">{taggedFile.filename}{' '}
-          <span style={{color:'red'}}>{gettext('deleted')}</span>
-        </td>
-      </tr>
-      :
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
-        <td>{Utils.bytesToSize(taggedFile.size)}</td>
-        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-      </tr>
-    );
   }
 }
 

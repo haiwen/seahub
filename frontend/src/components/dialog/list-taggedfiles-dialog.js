@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from 'moment';
@@ -12,8 +12,9 @@ const propTypes = {
   currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  updateUsedRepoTags: PropTypes.func.isRequired,
+  updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
+  shareLinkToken: PropTypes.string
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -50,8 +51,11 @@ class ListTaggedFilesDialog extends React.Component {
   }
 
   getTaggedFiles = () => {
-    let { repoID, currentTag } = this.props;
-    seafileAPI.listTaggedFiles(repoID, currentTag.id).then(res => {
+    let { repoID, currentTag, shareLinkToken } = this.props;
+    let request = shareLinkToken ?
+      seafileAPI.getShareLinkTaggedFiles(shareLinkToken, currentTag.id) :
+      seafileAPI.listTaggedFiles(repoID, currentTag.id);
+    request.then(res => {
       let taggedFileList = [];
       res.data.tagged_files !== undefined &&
       res.data.tagged_files.forEach(file => {
@@ -90,6 +94,7 @@ class ListTaggedFilesDialog extends React.Component {
                     repoID={this.props.repoID}
                     taggedFile={taggedFile}
                     onDeleteTaggedFile={this.onDeleteTaggedFile}
+                    shareLinkToken={this.props.shareLinkToken}
                   />
                 );
               })}
@@ -112,6 +117,7 @@ const TaggedFilePropTypes = {
   repoID: PropTypes.string.isRequired,
   taggedFile: PropTypes.object,
   onDeleteTaggedFile: PropTypes.func.isRequired,
+  shareLinkToken: PropTypes.string
 };
 
 class TaggedFile extends React.Component {
@@ -141,23 +147,32 @@ class TaggedFile extends React.Component {
   }
 
   render() {
-    const taggedFile = this.props.taggedFile;
+    const { taggedFile, shareLinkToken } = this.props;
     let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
-    let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
-    return ( taggedFile.file_deleted ?
+    let href = shareLinkToken ?
+      siteRoot + 'd/' + shareLinkToken + '/files/?p=' + Utils.encodePath(path) :
+      siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
+    return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td colSpan='3' className="name">{taggedFile.filename}{' '}
-          <span style={{color:'red'}}>{gettext('deleted')}</span>
+        {taggedFile.file_deleted ?
+          <Fragment>
+            <td colSpan='3' className="name">{taggedFile.filename}{' '}
+              <span style={{color:'red'}}>{gettext('deleted')}</span>
+            </td>
+          </Fragment>
+          :
+          <Fragment>
+            <td><a href={href} target='_blank' className="d-inline-block w-100 ellipsis" title={taggedFile.filename} rel="noreferrer">{taggedFile.filename}</a></td>
+            <td>{Utils.bytesToSize(taggedFile.size)}</td>
+            <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+          </Fragment>
+        }
+        <td>
+          {!shareLinkToken &&
+          <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a>
+          }
         </td>
-        <td><a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a></td>
-      </tr>
-      :
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td><a href={href} target='_blank' className="d-inline-block w-100 ellipsis" title={taggedFile.filename}>{taggedFile.filename}</a></td>
-        <td>{Utils.bytesToSize(taggedFile.size)}</td>
-        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-        <td><a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a></td>
       </tr>
     );
   }
