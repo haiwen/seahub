@@ -29,7 +29,7 @@ def get_my_repo_info(repo):
         "last_modified": timestamp_to_isoformat_timestr(repo.last_modified),
         "permission": 'rw',
         "encrypted": repo.encrypted,
-        "status": repo.status if repo.status else '',
+        "status": repo.alpha_status if repo.alpha_status else '',
     }
 
     return repo_info
@@ -44,7 +44,7 @@ def get_shared_in_repo_info(repo):
         "repo_owner": repo.user,
         "permission": repo.permission,
         "encrypted": repo.encrypted,
-        "status": repo.status if repo.status else '',
+        "status": repo.alpha_status if repo.alpha_status else '',
     }
 
     return repo_info
@@ -59,7 +59,7 @@ def get_public_repo_info(repo):
         "repo_owner": repo.user,
         "permission": repo.permission,
         "encrypted": repo.encrypted,
-        "status": repo.status if repo.status else '',
+        "status": repo.alpha_status if repo.alpha_status else '',
     }
 
     return repo_info

@@ -777,7 +777,7 @@ class Repos(APIView):
                     "version": r.version,
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "starred": r.starred if r.starred else '',
-                    "status": r.status if r.status else '',
+                    "status": r.alpha_status if r.alpha_status else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -847,7 +847,7 @@ class Repos(APIView):
                     "group_name": library_group_name,
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "starred": r.starred if r.starred else '',
-                    "status": r.status if r.status else '',
+                    "status": r.alpha_status if r.alpha_status else '',
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
@@ -948,7 +948,7 @@ class Repos(APIView):
                     "version": r.version,
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "starred": r.starred if r.starred else '',
-                    "status": r.status if r.status else '',
+                    "status": r.alpha_status if r.alpha_status else '',
                 }
                 repos_json.append(repo)
 
@@ -1164,7 +1164,7 @@ class PubRepos(APIView):
                 "encrypted": r.encrypted,
                 "permission": r.permission,
                 "starred": r.starred,
-                "status": r.status if r.status else '',
+                "status": r.alpha_status if r.alpha_status else '',
             }
             repos_json.append(repo)
 
@@ -1428,8 +1428,8 @@ class Repo(APIView):
                         'You do not have permission to rename this library.')
 
             # check repo status
-            repo_status = repo.status
-            if repo_status != 0:
+            repo_status = repo.alpha_status
+            if repo_status == 1:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

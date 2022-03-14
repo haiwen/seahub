@@ -120,7 +120,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "starred": r.repo_id in starred_repo_id_list,
-                    "status": normalize_repo_status_code(r.status),
+                    "status": normalize_repo_status_code(r.alpha_status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
 
@@ -179,7 +179,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
-                    "status": normalize_repo_status_code(r.status),
+                    "status": normalize_repo_status_code(r.alpha_status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
 
@@ -223,7 +223,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
-                    "status": normalize_repo_status_code(r.status),
+                    "status": normalize_repo_status_code(r.alpha_status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
                 repo_info_list.append(repo_info)
@@ -268,7 +268,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
-                    "status": normalize_repo_status_code(r.status),
+                    "status": normalize_repo_status_code(r.alpha_status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
                 repo_info_list.append(repo_info)
@@ -343,7 +343,7 @@ class RepoView(APIView):
 
             "lib_need_decrypt": lib_need_decrypt,
             "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
-            "status": normalize_repo_status_code(repo.status),
+            "status": normalize_repo_status_code(repo.alpha_status),
         }
 
         return Response(result)
