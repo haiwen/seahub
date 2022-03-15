@@ -8,6 +8,7 @@ import posixpath
 from constance import config
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
+from collections import defaultdict
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -35,6 +36,7 @@ from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         check_filename_with_rename, gen_file_upload_url, get_password_strength_level
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
@@ -48,6 +50,7 @@ from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
 from seahub.views import check_folder_permission
 from seahub.signals import upload_file_successful
+from seahub.repo_tags.models import RepoTags
 
 logger = logging.getLogger(__name__)
 
@@ -789,6 +792,12 @@ class ShareLinkDirents(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        try:
+            files_tags_in_dir = get_files_tags_in_dir(repo_id, path)
+        except Exception as e:
+            logger.error(e)
+            files_tags_in_dir = {}
+
         result = []
         for dirent in dirent_list:
 
@@ -817,6 +826,13 @@ class ShareLinkDirents(APIView):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
                         src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                         dirent_info['encoded_thumbnail_src'] = urlquote(src)
+
+                # get tag info
+                file_tags = files_tags_in_dir.get(dirent.obj_name, [])
+                if file_tags:
+                    dirent_info['file_tags'] = []
+                    for file_tag in file_tags:
+                        dirent_info['file_tags'].append(file_tag)
 
             result.append(dirent_info)
 
@@ -1217,3 +1233,93 @@ class ShareLinkSaveItemsToRepo(APIView):
             result['task_id'] = res.task_id
 
         return Response(result)
+
+
+class ShareLinkRepoTags(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token):
+        """get all repo_tags by share link token.
+        """
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = share_link.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # get all tags in repo
+        repo_tags = RepoTags.objects.filter(repo_id=repo_id)
+
+        # get tagged files by tag id
+        tag_id_file_list_dict = defaultdict(list)
+        for repo_tag in repo_tags:
+            tagged_files = get_tagged_files(repo, repo_tag.pk)['tagged_files']
+            tagged_files = [item for item in tagged_files if item.get('parent_path') and item.get('parent_path').startswith(share_link.path.rstrip('/'))]
+            tag_id_file_list_dict[repo_tag.pk] = tagged_files
+
+        # generate response
+        result = {
+            "repo_tags": []
+        }
+
+        for repo_tag in repo_tags:
+
+            repo_tag_info = repo_tag.to_dict()
+            repo_tag_id = repo_tag_info["repo_tag_id"]
+            repo_tag_info["files_count"] = len(tag_id_file_list_dict.get(repo_tag_id, []))
+
+            result['repo_tags'].append(repo_tag_info)
+
+        return Response(result)
+
+
+class ShareLinkRepoTagsTaggedFiles(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token, tag_id):
+        """get tagged files by share link token and tag id.
+        """
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = share_link.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(tag_id)
+        if not repo_tag:
+            error_msg = 'repo_tag %s not found.' % tag_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        share_link_path = share_link.path.rstrip('/') if share_link.path != '/' else '/'
+
+        filtered_tagged_files = []
+        tagged_files = get_tagged_files(repo, tag_id)
+        for tagged_file in tagged_files.get('tagged_files', []):
+
+            if tagged_file.get('file_deleted', False):
+                continue
+
+            tagged_file_parent_path = tagged_file.get('parent_path', '')
+            if share_link_path == '/':
+                filtered_tagged_files.append(tagged_file)
+            elif tagged_file_parent_path.startswith(share_link_path):
+                tagged_file['parent_path'] = '/' + tagged_file_parent_path.lstrip(share_link_path)
+                filtered_tagged_files.append(tagged_file)
+
+        return Response({'tagged_files': filtered_tagged_files})

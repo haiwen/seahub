@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
+import MD5 from 'MD5';
 import ReactDOM from 'react-dom';
-import { Button, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
-import { isPro, useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
+import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, thumbnailSizeForOriginal } from './utils/constants';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
@@ -14,6 +15,8 @@ import ImageDialog from './components/dialog/image-dialog';
 import FileUploader from './components/shared-link-file-uploader/file-uploader';
 import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
+import RepoInfoBar from './components/repo-info-bar';
+import RepoTag from './models/repo-tag';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -48,6 +51,9 @@ class SharedDirView extends React.Component {
 
       isZipDialogOpen: false,
       zipFolderPath: '',
+
+      usedRepoTags: [],
+      isRepoInfoBarShow: false,
 
       isSaveSharedDirDialogShow: false,
       itemsForSave: [],
@@ -88,6 +94,8 @@ class SharedDirView extends React.Component {
         errorMsg: errorMsg
       });
     });
+
+    this.getShareLinkRepoTags();
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -263,7 +271,7 @@ class SharedDirView extends React.Component {
       this.setState({
         isSaveSharedDirDialogShow: false,
         itemsForSave: [],
-	isCopyMoveProgressDialogShow: true,
+        isCopyMoveProgressDialogShow: true,
         asyncCopyMoveTaskId: res.data.task_id,
         asyncOperatedFilesLength: itemsForSave.length,
       }, () => {
@@ -400,6 +408,25 @@ class SharedDirView extends React.Component {
     seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
   }
 
+  getShareLinkRepoTags = () => {
+    seafileAPI.getShareLinkRepoTags(token).then(res => {
+      let usedRepoTags = [];
+      res.data.repo_tags.forEach(item => {
+        let usedRepoTag = new RepoTag(item);
+        if (usedRepoTag.fileCount > 0) {
+          usedRepoTags.push(usedRepoTag);
+        }
+      });
+      this.setState({usedRepoTags: usedRepoTags});
+      if (usedRepoTags.length != 0 && relativePath == '/') {
+        this.setState({isRepoInfoBarShow: true});
+      }
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
@@ -462,6 +489,18 @@ class SharedDirView extends React.Component {
                   onFileUploadSuccess={this.onFileUploadSuccess}
                 />
               )}
+
+              {this.state.isRepoInfoBarShow && (
+                <RepoInfoBar
+                  repoID={repoID}
+                  currentPath={'/'}
+                  usedRepoTags={this.state.usedRepoTags}
+                  shareLinkToken={token}
+                  enableFileDownload={showDownloadIcon}
+                  className="mx-0"
+                />
+              )}
+
               <Content
                 isDesktop={isDesktop}
                 isLoading={this.state.isLoading}
@@ -606,10 +645,11 @@ class Content extends React.Component {
             </th>
             }
             <th width="5%"></th>
-            <th width={showDownloadIcon ? '52%' : '55%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width={showDownloadIcon ? '50%' : '53%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+            <th width="8%"></th>
             <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
-            <th width="16%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
-            <th width="10%"></th>
+            <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
+            <th width="7%"></th>
           </tr>
         </thead>
         {tbody}
@@ -674,6 +714,13 @@ class Item extends React.Component {
     const { item, isDesktop } = this.props;
     const { isIconShown } = this.state;
 
+    let toolTipID = '';
+    let tagTitle = '';
+    if (item.file_tags && item.file_tags.length > 0) {
+      toolTipID = MD5(item.file_name).slice(0, 7);
+      tagTitle = item.file_tags.map(item => item.tag_name).join(' ');
+    }
+
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -686,6 +733,7 @@ class Item extends React.Component {
           <td>
             <a href={`?p=${encodeURIComponent(item.folder_path.substr(0, item.folder_path.length - 1))}&mode=${mode}`}>{item.folder_name}</a>
           </td>
+          <td></td>
           <td></td>
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
           <td>
@@ -742,6 +790,23 @@ class Item extends React.Component {
           </td>
           <td>
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
+          </td>
+          <td className="tag-list-title">
+            {(item.file_tags && item.file_tags.length > 0) && (
+              <Fragment>
+                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
+                  {item.file_tags.map((fileTag, index) => {
+                    let length = item.file_tags.length;
+                    return (
+                      <span className="file-tag" key={fileTag.file_tag_id} style={{zIndex:length - index, backgroundColor:fileTag.tag_color}}></span>
+                    );
+                  })}
+                </div>
+                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+                  {tagTitle}
+                </UncontrolledTooltip>
+              </Fragment>
+            )}
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td title={moment(item.last_modified).format('llll')}>{moment(item.last_modified).fromNow()}</td>
