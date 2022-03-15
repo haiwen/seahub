@@ -496,6 +496,7 @@ class SharedDirView extends React.Component {
                   currentPath={'/'}
                   usedRepoTags={this.state.usedRepoTags}
                   shareLinkToken={token}
+                  enableFileDownload={showDownloadIcon}
                   className="mx-0"
                 />
               )}

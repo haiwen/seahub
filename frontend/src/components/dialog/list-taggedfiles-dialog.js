@@ -14,7 +14,8 @@ const propTypes = {
   onClose: PropTypes.func.isRequired,
   updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
-  shareLinkToken: PropTypes.string
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -95,6 +96,7 @@ class ListTaggedFilesDialog extends React.Component {
                     taggedFile={taggedFile}
                     onDeleteTaggedFile={this.onDeleteTaggedFile}
                     shareLinkToken={this.props.shareLinkToken}
+                    enableFileDownload={this.props.enableFileDownload}
                   />
                 );
               })}
@@ -117,7 +119,8 @@ const TaggedFilePropTypes = {
   repoID: PropTypes.string.isRequired,
   taggedFile: PropTypes.object,
   onDeleteTaggedFile: PropTypes.func.isRequired,
-  shareLinkToken: PropTypes.string
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class TaggedFile extends React.Component {
@@ -147,12 +150,13 @@ class TaggedFile extends React.Component {
   }
 
   render() {
-    const { taggedFile, shareLinkToken } = this.props;
-    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
+    const { taggedFile, shareLinkToken, enableFileDownload } = this.props;
+
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
     let href = shareLinkToken ?
       siteRoot + 'd/' + shareLinkToken + '/files/?p=' + Utils.encodePath(path) :
       siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
+
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         {taggedFile.file_deleted ?
@@ -170,7 +174,10 @@ class TaggedFile extends React.Component {
         }
         <td>
           {!shareLinkToken &&
-          <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={className} onClick={this.deleteFile}></a>
+            <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={`action-icon sf2-icon-x3${this.state.active ? '' : ' invisible'}`} onClick={this.deleteFile}></a>
+          }
+          {(shareLinkToken && enableFileDownload) &&
+            <a className={`action-icon sf2-icon-download${this.state.active ? '' : ' invisible'}`} href={`${href}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
           }
         </td>
       </tr>

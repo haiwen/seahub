@@ -18,7 +18,8 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
   className: PropTypes.string,
-  shareLinkToken: PropTypes.string
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class RepoInfoBar extends React.Component {
@@ -121,6 +122,7 @@ class RepoInfoBar extends React.Component {
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               onFileTagChanged={this.props.onFileTagChanged}
               shareLinkToken={this.props.shareLinkToken}
+              enableFileDownload={this.props.enableFileDownload}
             />
           </ModalPortal>
         )}
