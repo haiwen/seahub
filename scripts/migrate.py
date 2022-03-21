@@ -7,10 +7,9 @@ import sys
 import logging
 import queue
 import threading
-import configparser
+import argparse
 from threading import Thread
 from uuid import UUID
-from Crypto.Cipher import AES
 from seafobj.objstore_factory import SeafObjStoreFactory
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
@@ -59,7 +58,7 @@ class Task(object):
         self.obj_id = obj_id
 
 class ObjMigrateWorker(Thread):
-    def __init__(self, orig_store, dest_store, dtype, repo_id = None, decrypt_key = None):
+    def __init__(self, orig_store, dest_store, dtype, repo_id = None, decrypt = False):
         Thread.__init__(self)
         self.lock = threading.Lock()
         self.dtype = dtype
@@ -74,13 +73,7 @@ class ObjMigrateWorker(Thread):
         self.fd = None
         self.exit_code = 0
         self.exception = None
-        self.decrypt = False
-        self.key = None
-        self.iv = None
-        if decrypt_key:
-            self.decrypt = True
-            self.key = decrypt_key.key
-            self.iv= decrypt_key.iv
+        self.decrypt = decrypt
     
     def run(self):
         try:
@@ -156,14 +149,15 @@ class ObjMigrateWorker(Thread):
 
         if not exists:
             try:
-                data = self.orig_store.read_obj_raw(task.repo_id, task.repo_version, task.obj_id)
+                if self.decrypt:
+                    data = self.orig_store.read_obj(task.repo_id, task.repo_version, task.obj_id)
+                else:
+                    data = self.orig_store.read_obj_raw(task.repo_id, task.repo_version, task.obj_id)
             except Exception as e:
                 logging.warning('[%s] Failed to read object %s from repo %s: %s' % (self.dtype, task.obj_id, task.repo_id, e))
                 raise
 
             try:
-                if self.decrypt:
-                    data = self.decrypt_data (task.repo_id, data)
                 self.dest_store.write_obj(data, task.repo_id, task.obj_id)
                 self.write_count += 1
                 if self.write_count % 100 == 0:
@@ -204,43 +198,12 @@ class ObjMigrateWorker(Thread):
             return True
         return False
 
-    def decrypt_data (self, repo_id, data):
-        cipher = AES.new(self.key, AES.MODE_CBC, self.iv)
-        data =cipher.decrypt(data)
-        length = len(data)
-        padd_len = int(data[length-1])
-        return data[:length-padd_len]
-
-class DecryptKey():
-    def __init__(self, key, iv):
-        self.key = key
-        self.iv = iv
-
-def get_decrypt_key ():
-    env = os.environ
-    seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
-    cp = configparser.ConfigParser()
-    cp.read(seafile_conf)
-    key_path = cp.get('store_crypt', 'key_path')
-    if not key_path:
-        logging.warning('Failed to get key_path from seafile.conf\n')
-        sys.exit()
-    key_cp = configparser.ConfigParser()
-    key_cp.read(key_path)
-    key = key_cp.get('store_crypt', "enc_key")
-    iv = key_cp.get('store_crypt', "enc_iv")
-    if not key or not iv:
-        logging.warning('Failed to get key or iv from key path\n')
-        sys.exit()
-
-    key = bytes.fromhex(key)
-    iv = bytes.fromhex(iv)
-    return DecryptKey(key, iv)
-
 def main(argv):
-    decrypt_key = None
-    if len(argv) == 3:
-        decrypt_key = get_decrypt_key ()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--decrypt', action='store_true', help='decrypt datas of backends')
+    args = parser.parse_args()
+
+    decrypt = args.decrypt
 
     try:
         orig_obj_factory = SeafObjStoreFactory()
@@ -255,7 +218,7 @@ def main(argv):
     for dtype in dtypes:
         orig_store = orig_obj_factory.get_obj_store(dtype)
         dest_store = dest_obj_factory.get_obj_store(dtype)
-        ObjMigrateWorker(orig_store, dest_store, dtype, decrypt_key=decrypt_key).start()
+        ObjMigrateWorker(orig_store, dest_store, dtype, decrypt=decrypt).start()
 
 if __name__ == '__main__':
     main(sys.argv)
