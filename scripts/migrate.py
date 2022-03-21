@@ -150,7 +150,7 @@ class ObjMigrateWorker(Thread):
         if not exists:
             try:
                 if self.decrypt:
-                    data = self.orig_store.read_obj(task.repo_id, task.repo_version, task.obj_id)
+                    data = self.orig_store.read_decrypted(task.repo_id, task.repo_version, task.obj_id)
                 else:
                     data = self.orig_store.read_obj_raw(task.repo_id, task.repo_version, task.obj_id)
             except Exception as e:
