@@ -7,6 +7,7 @@ import sys
 import logging
 import queue
 import threading
+import argparse
 from threading import Thread
 from uuid import UUID
 from seafobj.objstore_factory import SeafObjStoreFactory
@@ -57,7 +58,7 @@ class Task(object):
         self.obj_id = obj_id
 
 class ObjMigrateWorker(Thread):
-    def __init__(self, orig_store, dest_store, dtype, repo_id = None):
+    def __init__(self, orig_store, dest_store, dtype, repo_id = None, decrypt = False):
         Thread.__init__(self)
         self.lock = threading.Lock()
         self.dtype = dtype
@@ -72,6 +73,7 @@ class ObjMigrateWorker(Thread):
         self.fd = None
         self.exit_code = 0
         self.exception = None
+        self.decrypt = decrypt
     
     def run(self):
         try:
@@ -147,7 +149,10 @@ class ObjMigrateWorker(Thread):
 
         if not exists:
             try:
-                data = self.orig_store.read_obj_raw(task.repo_id, task.repo_version, task.obj_id)
+                if self.decrypt:
+                    data = self.orig_store.read_decrypted(task.repo_id, task.repo_version, task.obj_id)
+                else:
+                    data = self.orig_store.read_obj_raw(task.repo_id, task.repo_version, task.obj_id)
             except Exception as e:
                 logging.warning('[%s] Failed to read object %s from repo %s: %s' % (self.dtype, task.obj_id, task.repo_id, e))
                 raise
@@ -193,7 +198,13 @@ class ObjMigrateWorker(Thread):
             return True
         return False
 
-def main():
+def main(argv):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--decrypt', action='store_true', help='decrypt data from source storage and write to destination in plain text')
+    args = parser.parse_args()
+
+    decrypt = args.decrypt
+
     try:
         orig_obj_factory = SeafObjStoreFactory()
         os.environ['SEAFILE_CENTRAL_CONF_DIR'] = os.environ['DEST_SEAFILE_CENTRAL_CONF_DIR']
@@ -207,7 +218,7 @@ def main():
     for dtype in dtypes:
         orig_store = orig_obj_factory.get_obj_store(dtype)
         dest_store = dest_obj_factory.get_obj_store(dtype)
-        ObjMigrateWorker(orig_store, dest_store, dtype).start()
+        ObjMigrateWorker(orig_store, dest_store, dtype, decrypt=decrypt).start()
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
