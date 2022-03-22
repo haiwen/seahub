@@ -200,7 +200,7 @@ class ObjMigrateWorker(Thread):
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--decrypt', action='store_true', help='decrypt datas of backends')
+    parser.add_argument('--decrypt', action='store_true', help='decrypt data from source storage and write to destination in plain text')
     args = parser.parse_args()
 
     decrypt = args.decrypt

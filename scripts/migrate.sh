@@ -14,7 +14,7 @@ migrate=${INSTALLPATH}/migrate.py
 script_name=$0
 function usage () {
     echo "usage : "
-    echo "    ./$(basename ${script_name}) destination_config_file_path <--decrypt>"
+    echo "    ./$(basename ${script_name}) destination_config_file_path [--decrypt]"
     echo ""
 }
 
