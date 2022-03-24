@@ -886,8 +886,10 @@ class GroupOwnedLibraryUserShare(APIView):
         # parameter check
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            permission = normalize_custom_permission_name(permission)
+            if not permission:
+                error_msg = 'permission invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
