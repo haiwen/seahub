@@ -57,14 +57,20 @@ function check_python_executable() {
 
     if which python3 2>/dev/null 1>&2; then
         PYTHON=python3
-    elif !(python --version 2>&1 | grep "3\.[0-9]\.[0-9]") 2>/dev/null 1>&2; then
+    elif !(python --version 2>&1 | grep "3\.[0-9]\+\.[0-9]\+") 2>/dev/null 1>&2; then
         echo
         echo "The current version of python is not 3.x.x, please use Python 3.x.x ."
         echo
         exit 1
     else
+	# Python 3.8.10
         PYTHON="python"$(python --version | cut -b 8-10)
-        if !which $PYTHON 2>/dev/null 1>&2; then
+
+	if !(which $PYTHON) 2>/dev/null 1>&2; then
+            # Python 3.10.4
+            PYTHON="python"$(python --version | cut -b 8-11)
+	fi
+	if !(which $PYTHON) 2>/dev/null 1>&2; then
             echo
             echo "Can't find a python executable of $PYTHON in PATH"
             echo "Install $PYTHON before continue."
