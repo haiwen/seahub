@@ -1880,7 +1880,7 @@ class UploadLinkView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        parent_dir = request.GET.get('p', '/')
+        parent_dir = request.GET.get('p') or request.GET.get('path')
         if not parent_dir:
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
