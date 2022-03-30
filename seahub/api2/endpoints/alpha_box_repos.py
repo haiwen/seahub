@@ -440,9 +440,9 @@ class AlphaBoxReposSearch(APIView):
         result = []
 
         if is_org_context(request):
+            username = request.user.username
             org_id = request.user.org.org_id
-            # TODO: seafile_api.list_org_inner_pub_repos(org_id)
-            repos = seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
+            repos = seafile_api.list_org_inner_pub_repos(org_id, username)
         else:
             # TODO, not used currently
             repos = seafserv_threaded_rpc.list_inner_pub_repos()
