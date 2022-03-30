@@ -6,6 +6,7 @@ import { gettext } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Account from '../../components/common/account';
 import FileUploader from './file-uploader';
+import { mediaUrl } from '../../utils/constants';
 
 import '../../css/upload-link.css';
 
@@ -67,6 +68,7 @@ class SharedUploadLink extends React.Component {
             )}
           </div>
         </div>
+        <div className='pingan-copyright flex-wrap'>Powered By &nbsp;<img width="16" height="16" style={{margin: 'auto'}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
       </div>
     );
   }

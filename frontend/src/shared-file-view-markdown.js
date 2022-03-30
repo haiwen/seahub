@@ -81,6 +81,9 @@ class FileContent extends React.Component {
       return <Loading />;
     }
 
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
+
     return (
       <div className="shared-file-view-body">
         <div className="md-view">
@@ -96,6 +99,9 @@ class FileContent extends React.Component {
             modifyValueBeforeRender={this.modifyValueBeforeRender}
           />
         </div>
+        {!isHidden &&
+          <div className="pingan-copyright">Powered By &nbsp;<img width="16" height="16" style={{"margin-top": "1px"}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
+        }
       </div>
     );
   }

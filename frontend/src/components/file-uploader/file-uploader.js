@@ -402,7 +402,7 @@ class FileUploader extends React.Component {
       'Invalid filename.': gettext('Invalid filename.'),                    // 440
       'File already exists.': gettext('File already exists.'),              // 441
       'File size is too large.': gettext('File size is too large.'),        // 442
-      'Out of quota.': gettext('Out of quota.'),                            // 443
+      'Out of quota.': gettext('超出配额，可用空间不足！'),                     // 443
       'Internal error.': gettext('Internal Server Error'),                  // 500
     };
     return errorMessage[key] || key;

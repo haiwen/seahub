@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import { mediaUrl } from '../../utils/constants';
 
 const { err, trafficOverLimit, zipped, filePath, canDownload } = window.shared.pageOptions;
 
@@ -9,6 +10,11 @@ const propTypes = {
 };
 
 class SharedFileViewTip extends React.Component {
+
+  isDesktop = () => {
+    return window.innerWidth >= 768;
+  }
+
   render() {
     let errorMsg;
     if (err == 'File preview unsupported') {
@@ -17,16 +23,21 @@ class SharedFileViewTip extends React.Component {
       errorMsg = <p className="error">{err || this.props.errorMsg}</p>;
     }
 
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
     let isShowDownloadBtn = canDownload && !trafficOverLimit;
 
     return (
       <div className="shared-file-view-body">
         <div className={`file-view-tip ${!isShowDownloadBtn ? 'pt-7' : ''}`}>
           {errorMsg}
-          {isShowDownloadBtn &&
+          {isShowDownloadBtn && this.isDesktop() &&
             <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-secondary">{gettext('Download')}</a>
           }
         </div>
+        {!isHidden &&
+          <div className="pingan-copyright">Powered By &nbsp;<img width="16" height="16" style={{"margin-top": "1px"}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
+        }
       </div>
     );
   }

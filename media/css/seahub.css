@@ -1020,6 +1020,15 @@ textarea:-moz-placeholder {/* for FF */
     border-radius: 3px;
     margin: 2em auto 0;
 }
+/**** pingan custom ****/
+.logo-company-copyright {
+    position: fixed;
+    text-align: center;
+    bottom: 0px;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+  }
 /**** text-panel ****/ /* e.g. logout */
 .text-panel {
     font-size:16px;

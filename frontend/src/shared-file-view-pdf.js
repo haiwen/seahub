@@ -20,9 +20,12 @@ class FileContent extends React.Component {
       return <SharedFileViewTip />;
     }
 
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
+
     return (
       <div className="shared-file-view-body pdf-file-view">
-        <PDFViewer />
+        <PDFViewer isSharedView={true} isHidden={isHidden} />
       </div>
     );
   }

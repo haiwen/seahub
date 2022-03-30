@@ -7,6 +7,7 @@ import LibDetail from '../../components/dirent-detail/lib-details';
 import DirListView from '../../components/dir-view-mode/dir-list-view';
 import DirGridView from '../../components/dir-view-mode/dir-grid-view';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
+import { mediaUrl } from '../../utils/constants';
 
 import '../../css/lib-content-view.css';
 
@@ -336,6 +337,7 @@ class LibContentContainer extends React.Component {
               </Fragment>
             )}
           </div>
+          <div className='pingan-copyright flex-wrap'>Powered By &nbsp;<img width="16" height="16" style={{margin: 'auto'}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
         </div>
         {this.props.isDirentDetailShow &&
           <Fragment>

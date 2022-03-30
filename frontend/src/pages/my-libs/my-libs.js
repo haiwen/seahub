@@ -14,6 +14,7 @@ import LibDetail from '../../components/dirent-detail/lib-details';
 import MylibRepoListView from './mylib-repo-list-view';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
+import { mediaUrl } from '../../utils/constants';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -173,6 +174,7 @@ class MyLibraries extends Component {
                 />
               }
             </div>
+            <div className='pingan-copyright flex-wrap'>Powered By &nbsp;<img width="16" height="16" style={{margin: 'auto'}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
           </div>
           {!this.state.isLoading && !this.state.errorMsg && this.state.isGuideForNewDialogOpen &&
             <GuideForNewDialog

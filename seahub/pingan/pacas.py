@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import time
 import json
-import urllib
 import hashlib
 import logging
 import requests
+from urllib import parse
 
+from constance import config
+from django.conf import settings as dj_settings
 from django.shortcuts import render
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, HttpResponse
@@ -17,70 +18,47 @@ from seahub import auth
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.auth import REDIRECT_FIELD_NAME
-# from seahub.api2.utils import get_api_token
 from seahub.utils import normalize_cache_key
 from seahub.utils.auth import get_login_bg_image_path
+import seahub.settings as settings
+
 
 logger = logging.getLogger(__name__)
 
-import seahub.settings as settings
-
-## for oauth access token
-
+# for oauth access token
 # client_id：P_ifbss-mobfile
 # client_secret： 测试 cp488XdS  生产 m9R7SAD5
 # grant_type：client_credentials
-
-# 测试
-# PINGAN_PACAS_GET_ACCESS_TOKEN_URL = getattr(settings, 'PINGAN_PACAS_GET_ACCESS_TOKEN_URL', 'http://esg-oauth-stg.paic.com.cn/oauth/oauth2/access_token')
-# 生产
 PINGAN_PACAS_GET_ACCESS_TOKEN_URL = getattr(settings, 'PINGAN_PACAS_GET_ACCESS_TOKEN_URL', 'http://esg-oauth-super.paic.com.cn/oauth/oauth2/access_token')
-
 PINGAN_PACAS_CLIENT_ID = getattr(settings, 'PINGAN_PACAS_CLIENT_ID', 'P_ifbss-mobfile')
 PINGAN_PACAS_CLIENT_SECRET = getattr(settings, 'PINGAN_PACAS_CLIENT_SECRET', 'm9R7SAD5')
 PINGAN_PACAS_GRANT_TYPE = getattr(settings, 'PINGAN_PACAS_GRANT_TYPE', 'client_credentials')
 
-## for pacas api
-
+# for pacas api
 # companyCode：PA011
 # unitCode：IFBSS_MOBFILE
-
-# 测试
-# PINGAN_PACAS_GET_REQUEST_ID_URL = getattr(settings, 'PINGAN_PACAS_GET_REQUEST_ID_URL', 'http://esg-open-stg.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/getRequestId.do')
-# 生产
 PINGAN_PACAS_GET_REQUEST_ID_URL = getattr(settings, 'PINGAN_PACAS_GET_REQUEST_ID_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/getRequestId.do')
-
-# 测试
-# PINGAN_PACAS_APP_ID = getattr(settings, 'PINGAN_PACAS_APP_ID', '9e84d8e16ecff765016f4183e64900e9')
-# 生产
 PINGAN_PACAS_APP_ID = getattr(settings, 'PINGAN_PACAS_APP_ID', '9e90f8486f901e4e016fa37050ee0018')
-
 PINGAN_PACAS_V_USERNAME = getattr(settings, 'PINGAN_PACAS_V_USERNAME', 'V_PA011_IFBSS_MOBFILE')
 
-## get valid code
-# 测试
-# PINGAN_PACAS_GET_VALID_CODE_URL = getattr(settings, 'PINGAN_PACAS_GET_VALID_CODE_URL', 'http://esg-open-stg.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/getValidCode.do')
-# 生产
+# get valid code
 PINGAN_PACAS_GET_VALID_CODE_URL = getattr(settings, 'PINGAN_PACAS_GET_VALID_CODE_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/getValidCode.do')
 
-## auth by username and password
-# 测试
-# PINGAN_PACAS_AUTHENTICATE_URL = getattr(settings, 'PINGAN_PACAS_GET_REQUEST_ID_URL', 'http://esg-open-stg.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticate.do')
-# 生产
-PINGAN_PACAS_AUTHENTICATE_URL = getattr(settings, 'PINGAN_PACAS_GET_REQUEST_ID_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticate.do')
+# auth by username and password
+PINGAN_PACAS_AUTHENTICATE_URL = getattr(settings, 'PINGAN_PACAS_AUTHENTICATE_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticate.do')
 
-## auth by cookie
-# 测试
-PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL = getattr(settings, 'PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL', 'http://esg-open-stg.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticateBySSO2.do')
-# 生产
+# auth by cookie
 PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL = getattr(settings, 'PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticateBySSO2.do')
 
 PINGAN_PACAS_CLIENT_AUTH = getattr(settings, 'PINGAN_PACAS_CLIENT_AUTH', False)
+PINGAN_PACAS_XHEX = getattr(settings, 'PINGAN_PACAS_XHEX', 'CE334A29C0FDF7810D4BBB1C9917E54719E53394F947AC8B525CCDEFDDA44810')
+PINGAN_PACAS_YHEX = getattr(settings, 'PINGAN_PACAS_YHEX', '649E2A9651401CC3251BCEDAD42CE1506841A7A31D3EE3DEADDE65D769BA4458')
+
 
 def send_post_request(url, payload):
     headers = {"Content-Type": "application/json"}
-    return requests.post(url, headers=headers,
-            data=json.dumps(payload)).json()
+    return requests.post(url, headers=headers, data=json.dumps(payload)).json()
+
 
 def get_access_token():
 
@@ -89,8 +67,7 @@ def get_access_token():
         "client_secret": PINGAN_PACAS_CLIENT_SECRET,
         "grant_type": PINGAN_PACAS_GRANT_TYPE
     }
-    resp_json = send_post_request(PINGAN_PACAS_GET_ACCESS_TOKEN_URL,
-            payload)
+    resp_json = send_post_request(PINGAN_PACAS_GET_ACCESS_TOKEN_URL, payload)
 
     # resp_json example:
     #
@@ -112,13 +89,14 @@ def get_access_token():
 
     return resp_json
 
+
 def get_request_id(oauth_access_token):
 
     # prepare url parameters
     parameter_data = {
         'appId': PINGAN_PACAS_APP_ID,
         "access_token": oauth_access_token,
-        "request_id": str(int(time.time())), # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
+        "request_id": str(int(time.time())),  # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
     }
 
     # prepare http post body parameters
@@ -129,7 +107,7 @@ def get_request_id(oauth_access_token):
         "signature": signature,
     }
 
-    url = PINGAN_PACAS_GET_REQUEST_ID_URL + '?' + urllib.urlencode(parameter_data)
+    url = PINGAN_PACAS_GET_REQUEST_ID_URL + '?' + parse.urlencode(parameter_data)
     resp_json = send_post_request(url, payload)
 
     # resp_json example:
@@ -153,13 +131,14 @@ def get_request_id(oauth_access_token):
 
     return resp_json
 
+
 def get_valid_code(access_token, request_id):
 
     # prepare url parameters
     parameter_data = {
         'appId': PINGAN_PACAS_APP_ID,
         "access_token": access_token,
-        "request_id": str(int(time.time())), # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
+        "request_id": str(int(time.time())),  # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
     }
 
     # prepare http post body parameters
@@ -170,7 +149,7 @@ def get_valid_code(access_token, request_id):
         "signature": signature,
     }
 
-    url = PINGAN_PACAS_GET_VALID_CODE_URL + '?' + urllib.urlencode(parameter_data)
+    url = PINGAN_PACAS_GET_VALID_CODE_URL + '?' + parse.urlencode(parameter_data)
     resp_json = send_post_request(url, payload)
 
     # {
@@ -194,19 +173,18 @@ def get_valid_code(access_token, request_id):
 
     return resp_json
 
-def pingan_pacas_authenticate(request, username, password,
-        access_token, request_id, valid_code=''):
+
+def pingan_pacas_authenticate(request, username, password, access_token, request_id, valid_code=''):
 
     # prepare url parameters
     parameter_data = {
         'appId': PINGAN_PACAS_APP_ID,
         "access_token": access_token,
-        "request_id": str(int(time.time())), # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
+        "request_id": str(int(time.time())),  # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
     }
 
     # prepare http post body parameters
-    source_ip = request.META.get('HTTP_X_FORWARDED_FOR') or \
-            request.META.get('REMOTE_ADDR')
+    source_ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
 
     payload = {
         "appId": PINGAN_PACAS_APP_ID,
@@ -218,15 +196,15 @@ def pingan_pacas_authenticate(request, username, password,
 
     if valid_code:
         signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + username +
-                password + valid_code + source_ip).hexdigest()
+                                password + valid_code + source_ip).hexdigest()
         payload["signature"] = signature
         payload["validCode"] = valid_code
     else:
         signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + username +
-                password + source_ip).hexdigest()
+                                password + source_ip).hexdigest()
         payload["signature"] = signature
 
-    url = PINGAN_PACAS_AUTHENTICATE_URL + '?' + urllib.urlencode(parameter_data)
+    url = PINGAN_PACAS_AUTHENTICATE_URL + '?' + parse.urlencode(parameter_data)
     resp_json = send_post_request(url, payload)
 
     # {u'content': {u'username': u'HECHANG364',
@@ -236,9 +214,9 @@ def pingan_pacas_authenticate(request, username, password,
     #               u'companyCode': u'PA011',
     #               u'loginIp': u'10.11.108.30',
     #               u'userType': u'staff',
-    #               u'userSign': u'0B764DE58A3FF898CFB1CE88D589F66AAA3AF58D9F51C639EBBCB02E7395BAC2EA02C6BB85A5A2249FC9407A95D4FB9BED0F1515E627684CB1A16DE5DB9F24B7D3D66BBF4D4D3B6080237E1F554D5BA41526DBDB64E477DE841F000BB8C54FE105E2554E899D52325FD8477CFC2150E275ACE2374516E937BBCB791BD257420E29D8965ABDD92E5DB0FD6F492A7EDCE7789D9DA522607C1335398C271425A5D1185D3096945F84DB6ACDD26DA2284E4BFDACEB34DE27DC67E7A6D3DA90A8034D166067BBB24EC3B44362D08EBA55797BCB0DA4F258246809B48912F7A04B5090F704FF7D1C73D2D0F009887200AD274F13B121206B2359ACFD051D01DAF8BEE7',
+    #               u'userSign': u'0B764DE58A3FF898CFB1CE88D589F66AAA3AF58D9F5',
     #               u'virtualUser': u'V_PA011_IFBSS_MOBFILE',
-    #               u'paSession': u'VrGcn4i9zSltpuUeOTzckvG20Hz2RTuRpkZyuwG7EPcYr84i--OY0HuxOcB!77LsYoX24M6vOkApFY6HtMiMAhSJDv6usGUiGk1ER9mEa5UxhdSp4CxiLj!UaZW-TRc-vVcH2lROX7BsExlDUZM5RA==|ojAyMM0NMiCyNMAxNjowiD0yxw==',
+    #               u'paSession': u'VrGcn4i9zSltpuUeOTzckv==',
     #               u'lastSuccessLoginTime': u'2020-02-26 16:10:27',
     #               u'lastFailedTimes': 0,
     #               u'unitCode': u'IFBSS_MOBFILE',
@@ -249,7 +227,9 @@ def pingan_pacas_authenticate(request, username, password,
     # u'code': u'SUCCESS',
     # u'sign': u'F80DF2B0F5A5DDFFF9C00C2459E60FD1'}
 
-    # {u'content': None, u'tId': u'<T=0e6c27e2eb0c4d6888c1ec9e3d35c1af>', u'message': u'登录认证错误，连续输错5次将锁定帐户，请谨慎操作。', u'code': u'WRONG_PASSWORD_OR_USERNAME', u'sign': None}
+    # {u'content': None, u'tId': u'<T=0e6c27e2eb0c4d6888c1ec9e3d35c1af>',
+    # u'message': u'登录认证错误，连续输错5次将锁定帐户，请谨慎操作。',
+    # u'code': u'WRONG_PASSWORD_OR_USERNAME', u'sign': None}
     if resp_json['code'] != 'SUCCESS':
         logger.error('failed to authenticate')
         logger.error(PINGAN_PACAS_AUTHENTICATE_URL)
@@ -258,31 +238,30 @@ def pingan_pacas_authenticate(request, username, password,
 
     return resp_json
 
-def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type,
-        access_token, request_id):
+
+def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type, access_token, request_id):
 
     # prepare url parameters
     parameter_data = {
         'appId': PINGAN_PACAS_APP_ID,
         "access_token": access_token,
-        "request_id": str(int(time.time())), # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
+        "request_id": str(int(time.time())),  # 只要每个请求传的值不一样就可以，建议传时间戳毫秒数
     }
 
     # prepare http post body parameters
-    source_ip = request.META.get('HTTP_X_FORWARDED_FOR') or \
-            request.META.get('REMOTE_ADDR')
+    source_ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
     signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + sso_type +
-            sso_cookie + source_ip).hexdigest()
+                            sso_cookie + source_ip).hexdigest()
     payload = {
         "appId": PINGAN_PACAS_APP_ID,
         "requestId": request_id,
-	"ssoType": sso_type, # CAS_SSO_COOKIE, PASESSION 二选一，区分大小写
-	"token": sso_cookie,
+        "ssoType": sso_type,  # CAS_SSO_COOKIE, PASESSION 二选一，区分大小写
+        "token": sso_cookie,
         "sourceIP": source_ip,
         "signature": signature,
     }
 
-    url = PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL + '?' + urllib.urlencode(parameter_data)
+    url = PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL + '?' + parse.urlencode(parameter_data)
     resp_json = requests.post(url, data=json.dumps(payload)).json()
 
     # {u'content': {u'username': u'HECHANG364',
@@ -292,9 +271,9 @@ def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type,
     #               u'companyCode': u'PA011',
     #               u'loginIp': u'10.11.108.30',
     #               u'userType': u'staff',
-    #               u'userSign': u'0B764DE58A3FF898CFB1CE88D589F66AAA3AF58D9F51C639EBBCB02E7395BAC2EA02C6BB85A5A2249FC9407A95D4FB9BED0F1515E627684CB1A16DE5DB9F24B7D3D66BBF4D4D3B6080237E1F554D5BA41526DBDB64E477DE841F000BB8C54FE105E2554E899D52325FD8477CFC2150E275ACE2374516E937BBCB791BD257420E29D8965ABDD92E5DB0FD6F492A7EDCE7789D9DA522607C1335398C271425A5D1185D3096945F84DB6ACDD26DA2284E4BFDACEB34DE27DC67E7A6D3DA90A8034D166067BBB24EC3B44362D08EBA55797BCB0DA4F258246809B48912F7A04B5090F704FF7D1C73D2D0F009887200AD274F13B121206B2359ACFD051D01DAF8BEE7',
+    #               u'userSign': u'0B764DE58A3FF898CFB1CE88D589F66AAA3AF58D9',
     #               u'virtualUser': u'V_PA011_IFBSS_MOBFILE',
-    #               u'paSession': u'VrGcn4i9zSltpuUeOTzcktYuentSEzI1YGjOV4biUekNxdYsmKidxfsAwwCekp4wYoX24M6vOkApFY6HtMiMAozhqu6NxwzHUhWKYusWmo-VXvVsn48wcW5-iv2bph5JvO9Gb4Wc-zQ!Lby3dpr1uQ==|ojAyMO0MMiCyNMAxNjowiD0wyw==',
+    #               u'paSession': u'VrGcn4i9zSltpuUeOTzcktYuentSEzI1YGjOV4b==',
     #               u'lastSuccessLoginTime': u'2020-02-26 16:27:21',
     #               u'lastFailedTimes': 0,
     #               u'unitCode': u'IFBSS_MOBFILE',
@@ -314,7 +293,8 @@ def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type,
 
     return resp_json
 
-def api_pingan_pacas_refresh_valid_code(request):
+
+def api_pingan_pacas_refresh_valid_code():
 
     result = {}
     content_type = 'application/json; charset=utf-8'
@@ -326,8 +306,7 @@ def api_pingan_pacas_refresh_valid_code(request):
         resp_json_for_access_token = get_access_token()
         if not resp_json_for_access_token.get('data', '') or \
                 not resp_json_for_access_token['data'].get('access_token', ''):
-            result['error_msg'] = resp_json_for_access_token.get('msg',
-                    '获取验证码失败，请联系管理员解决')
+            result['error_msg'] = resp_json_for_access_token.get('msg', '获取验证码失败，请联系管理员解决')
             return HttpResponse(json.dumps(result), content_type=content_type)
 
         access_token = resp_json_for_access_token['data']['access_token']
@@ -340,8 +319,7 @@ def api_pingan_pacas_refresh_valid_code(request):
             not resp_json_for_new_request_id.get('content', '') or \
             not resp_json_for_new_request_id['content'].get('requestId', ''):
         logger.error(resp_json_for_new_request_id)
-        result['error_msg'] = resp_json_for_new_request_id.get('msg',
-                '获取验证码失败，请联系管理员解决')
+        result['error_msg'] = resp_json_for_new_request_id.get('msg', '获取验证码失败，请联系管理员解决')
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     request_id_for_valid_code = resp_json_for_new_request_id['content']['requestId']
@@ -350,8 +328,7 @@ def api_pingan_pacas_refresh_valid_code(request):
             not resp_json_for_valid_code.get('content', '') or \
             not resp_json_for_valid_code['content'].get('data', ''):
         logger.error(resp_json_for_valid_code)
-        result['error_msg'] = resp_json_for_valid_code.get('msg',
-                '获取验证码失败，请联系管理员解决')
+        result['error_msg'] = resp_json_for_valid_code.get('msg', '获取验证码失败，请联系管理员解决')
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     valid_code = resp_json_for_valid_code['content']['data']
@@ -359,6 +336,7 @@ def api_pingan_pacas_refresh_valid_code(request):
     result['valid_code'] = valid_code
     result['request_id_for_valid_code'] = request_id_for_valid_code
     return HttpResponse(json.dumps(result), content_type=content_type)
+
 
 def pacas_login(request):
 
@@ -370,6 +348,9 @@ def pacas_login(request):
     login_bg_image_path = get_login_bg_image_path()
     render_data = {
         'login_bg_image_path': login_bg_image_path,
+        'remember_days': config.LOGIN_REMEMBER_DAYS,
+        'xHex': PINGAN_PACAS_XHEX,
+        'yHex': PINGAN_PACAS_YHEX,
     }
 
     # get access token
@@ -379,8 +360,7 @@ def pacas_login(request):
         resp_json_for_access_token = get_access_token()
         if not resp_json_for_access_token.get('data', '') or \
                 not resp_json_for_access_token['data'].get('access_token', ''):
-            render_data['error_msg'] = resp_json_for_access_token.get('msg',
-                    '身份验证失败，请联系管理员解决')
+            render_data['error_msg'] = resp_json_for_access_token.get('msg', '身份验证失败，请联系管理员解决')
             return render(request, template_name, render_data)
 
         access_token = resp_json_for_access_token['data']['access_token']
@@ -392,10 +372,14 @@ def pacas_login(request):
     if resp_json_for_request_id['code'] != 'SUCCESS' or \
             not resp_json_for_request_id.get('content', '') or \
             not resp_json_for_request_id['content'].get('requestId', ''):
-        render_data['error_msg'] = resp_json_for_request_id.get('msg',
-                '身份验证失败，请联系管理员解决')
+        render_data['error_msg'] = resp_json_for_request_id.get('msg', '身份验证失败，请联系管理员解决')
         return render(request, template_name, render_data)
     request_id = resp_json_for_request_id['content'].get('requestId', '')
+
+    username = ''
+    pingan_user = ''
+    cas_sso_cookie = ''
+    pasession = ''
 
     # for login page
     if request.method == "POST":
@@ -410,17 +394,17 @@ def pacas_login(request):
                 render_data['error_msg'] = '用户或密码错误'
                 return render(request, template_name, render_data)
             username = pingan_user
-            CAS_SSO_COOKIE = ''
-            PASESSION = ''
+            cas_sso_cookie = ''
+            pasession = ''
         else:
             valid_code = request.POST.get('valid_code', '')
             request_id_for_valid_code = request.POST.get('request_id_for_valid_code', '')
             if valid_code and request_id_for_valid_code:
-                resp_json_for_authenticate = pingan_pacas_authenticate(request, pingan_user, password,
-                        access_token, request_id_for_valid_code, valid_code)
+                resp_json_for_authenticate = pingan_pacas_authenticate(
+                    request, pingan_user, password, access_token, request_id_for_valid_code, valid_code)
             else:
-                resp_json_for_authenticate = pingan_pacas_authenticate(request, pingan_user, password,
-                        access_token, request_id)
+                resp_json_for_authenticate = pingan_pacas_authenticate(
+                    request, pingan_user, password, access_token, request_id)
 
             if resp_json_for_authenticate['code'] == 'NEED_RAND_CODE':
 
@@ -429,8 +413,7 @@ def pacas_login(request):
                 if resp_json_for_new_request_id['code'] != 'SUCCESS' or \
                         not resp_json_for_new_request_id.get('content', '') or \
                         not resp_json_for_new_request_id['content'].get('requestId', ''):
-                    render_data['error_msg'] = resp_json_for_new_request_id.get('msg',
-                            '身份验证失败，请联系管理员解决')
+                    render_data['error_msg'] = resp_json_for_new_request_id.get('msg', '身份验证失败，请联系管理员解决')
                     return render(request, template_name, render_data)
 
                 request_id_for_valid_code = resp_json_for_new_request_id['content']['requestId']
@@ -438,8 +421,7 @@ def pacas_login(request):
                 if resp_json_for_valid_code['code'] != 'SUCCESS' or \
                         not resp_json_for_valid_code.get('content', '') or \
                         not resp_json_for_valid_code['content'].get('data', ''):
-                    render_data['error_msg'] = resp_json_for_valid_code.get('msg',
-                            '身份验证失败，请联系管理员解决')
+                    render_data['error_msg'] = resp_json_for_valid_code.get('msg', '身份验证失败，请联系管理员解决')
                     return render(request, template_name, render_data)
 
                 valid_code = resp_json_for_valid_code['content']['data']
@@ -450,13 +432,12 @@ def pacas_login(request):
                 return render(request, template_name, render_data)
 
             if resp_json_for_authenticate['code'] != 'SUCCESS':
-                render_data['error_msg'] = resp_json_for_authenticate.get('message',
-                        '身份验证失败，请联系管理员解决')
+                render_data['error_msg'] = resp_json_for_authenticate.get('message', '身份验证失败，请联系管理员解决')
                 return render(request, template_name, render_data)
 
             username = Profile.objects.get_username_by_login_id(pingan_user)
-            CAS_SSO_COOKIE = resp_json_for_authenticate['content'].get('casSsoCookie', '')
-            PASESSION = resp_json_for_authenticate['content'].get('paSession', '')
+            cas_sso_cookie = resp_json_for_authenticate['content'].get('casSsoCookie', '')
+            pasession = resp_json_for_authenticate['content'].get('paSession', '')
 
     # for login via pacas sso cookie
     if request.method == "GET":
@@ -468,31 +449,29 @@ def pacas_login(request):
             sso_cookie = request.COOKIES.get('PASESSION')
             sso_type = 'PASESSION'
         else:
-            return HttpResponseRedirect('/accounts/login/')
+            return HttpResponseRedirect(dj_settings.REDIRECT_LOGIN_URL)
 
-        resp_json_for_authenticate_by_sso = pingan_pacas_authenticate_by_sso(request, sso_cookie,
-                sso_type, access_token, request_id)
+        resp_json_for_authenticate_by_sso = pingan_pacas_authenticate_by_sso(
+            request, sso_cookie, sso_type, access_token, request_id)
         if resp_json_for_authenticate_by_sso['code'] != 'SUCCESS' or \
                 not resp_json_for_authenticate_by_sso.get('content', '') or \
                 not resp_json_for_authenticate_by_sso['content'].get('username', ''):
-            return HttpResponseRedirect('/accounts/login/')
+            return HttpResponseRedirect(dj_settings.REDIRECT_LOGIN_URL)
 
-        pingan_user= resp_json_for_authenticate_by_sso['content']['username']
+        pingan_user = resp_json_for_authenticate_by_sso['content']['username']
         username = Profile.objects.get_username_by_login_id(pingan_user)
-        CAS_SSO_COOKIE = resp_json_for_authenticate_by_sso['content'].get('casSsoCookie', '')
-        PASESSION = resp_json_for_authenticate_by_sso['content'].get('paSession', '')
+        cas_sso_cookie = resp_json_for_authenticate_by_sso['content'].get('casSsoCookie', '')
+        pasession = resp_json_for_authenticate_by_sso['content'].get('paSession', '')
 
     if not username:
-        logger.error('failed to get info for %s in seahub profile' %
-                pingan_user)
+        logger.error('failed to get info for %s in seahub profile' % pingan_user)
         render_data['error_msg'] = '未找到用户'
         return render(request, template_name, render_data)
 
     try:
         user = User.objects.get(email=username)
     except User.DoesNotExist:
-        logger.error('failed to get info for %s in ccnet' %
-                pingan_user)
+        logger.error('failed to get info for %s in ccnet' % pingan_user)
         render_data['error_msg'] = '未找到用户'
         return render(request, template_name, render_data)
 
@@ -509,12 +488,9 @@ def pacas_login(request):
     redirect_to = request.GET.get(auth.REDIRECT_FIELD_NAME, '/')
     response = HttpResponseRedirect(redirect_to)
 
-#    api_token = get_api_token(request)
-#    response.set_cookie('seahub_auth', user.username + '@' + api_token.key)
-
-    if CAS_SSO_COOKIE:
-        response.set_cookie('CAS_SSO_COOKIE', CAS_SSO_COOKIE, domain='.paic.com.cn')
-    if PASESSION:
-        response['Set-Cookie'] = 'PASESSION=%s; Path=/; domain=.paic.com.cn' % PASESSION
+    if cas_sso_cookie:
+        response.set_cookie('CAS_SSO_COOKIE', cas_sso_cookie, domain='.paic.com.cn')
+    if pasession:
+        response['Set-Cookie'] = 'PASESSION=%s; Path=/; domain=.paic.com.cn' % pasession
 
     return response

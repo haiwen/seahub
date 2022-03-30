@@ -287,10 +287,11 @@ class ShareLinks(APIView):
                 error_msg = _('Password can only contain number, upper letter, lower letter and other symbols.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        expire_seconds = request.data.get('expire_seconds', '')
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')
-        if expire_days and expiration_time:
-            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
+        if expire_seconds and expire_days and expiration_time:
+            error_msg = 'Can not pass expire_seconds, expire_days and expiration_time at the same time.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_date = None
@@ -347,6 +348,19 @@ class ShareLinks(APIView):
                     error_msg = _('Expiration time should be earlier than %s.') % \
                             expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        elif expire_seconds:
+            try:
+                expire_seconds = int(expire_seconds)
+            except ValueError:
+                error_msg = 'expire_seconds invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_seconds <= 0:
+                error_msg = 'expire_seconds invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(seconds=expire_seconds)
 
         else:
             if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:

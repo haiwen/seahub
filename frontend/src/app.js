@@ -31,6 +31,9 @@ import Groups from './pages/groups/groups-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import MainContentWrapper from './components/main-content-wrapper';
+import { ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
+import toaster from './components/toast';
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -60,6 +63,7 @@ class App extends Component {
       isLoadingDraft: true,
       currentTab: '/',
       pathPrefix: [],
+      isReminderOpen: false,
     };
     this.dirViewPanels = ['my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
@@ -102,6 +106,11 @@ class App extends Component {
       this.getDrafts();
     }
     this.setState({currentTab: href[href.length - 2]});
+
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf('chrome') === -1) {
+      this.setState({isReminderOpen: true});
+    }
   }
 
   getDrafts = () => {
@@ -227,6 +236,18 @@ class App extends Component {
     });
   }
 
+  toggleReminder = () => {
+    this.setState({
+      isReminderOpen: !this.state.isReminderOpen
+    }); 
+  }
+
+  copyToClipboard = () => {
+    copy(window.location.href);
+    this.toggleReminder();
+    toaster.success('当前链接已复制到剪贴板，请在 Chrome 浏览器下粘贴打开系统'), {duration: 2};
+  }
+
   render() {
     let { currentTab, isSidePanelClosed } = this.state;
 
@@ -236,6 +257,16 @@ class App extends Component {
 
     return (
       <React.Fragment>
+        {Utils.isDesktop() && this.state.isReminderOpen &&
+        <Modal isOpen={true} toggle={this.toggleReminder}>
+          <ModalHeader toggle={this.toggleReminder}>{'温馨提示'}</ModalHeader>
+          <ModalBody>
+            {'浏览器使用提示'}<br />{'为了您能更好的体验，建议使用 Chrome 浏览器'}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.copyToClipboard}>{'复制当前连接'}</Button>
+          </ModalFooter>
+        </Modal>}
         <SystemNotification />
         <div id="main">
           <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />

@@ -403,6 +403,9 @@ class FileUploader extends React.Component {
       if (error === 'Internal error.') {
         error = gettext('Internal Server Error');
       }
+      if (error === 'Out of quota.') {
+        error = gettext('超出配额，可用空间不足！');
+      }
     }
 
     let uploadFileList = this.state.uploadFileList.map(item => {

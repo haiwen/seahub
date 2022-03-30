@@ -17,6 +17,8 @@ import SaveSharedDirDialog from './components/dialog/save-shared-dir-dialog';
 import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-progress-dialog';
 import RepoInfoBar from './components/repo-info-bar';
 import RepoTag from './models/repo-tag';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
 
 import './css/shared-dir-view.css';
 import './css/grid-view.css';
@@ -49,6 +51,7 @@ class SharedDirView extends React.Component {
       sortBy: 'name', // 'name' or 'time' or 'size'
       sortOrder: 'asc', // 'asc' or 'desc'
 
+      isReminderOpen: false,
       isZipDialogOpen: false,
       zipFolderPath: '',
 
@@ -96,6 +99,22 @@ class SharedDirView extends React.Component {
     });
 
     this.getShareLinkRepoTags();
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf('chrome') === -1) {
+      this.setState({isReminderOpen: true});
+    }
+  }
+
+  toggleReminder = () => {
+    this.setState({
+      isReminderOpen: !this.state.isReminderOpen
+    }); 
+  }
+
+  copyToClipboard = () => {
+    copy(window.location.href);
+    this.toggleReminder();
+    toaster.success('当前链接已复制到剪贴板，请在 Chrome 浏览器下粘贴打开系统'), {duration: 2};
   }
 
   sortItems = (sortBy, sortOrder) => {
@@ -430,8 +449,20 @@ class SharedDirView extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     const modeBaseClass = 'btn btn-secondary btn-icon sf-view-mode-btn';
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
     return (
       <React.Fragment>
+        {Utils.isDesktop() && this.state.isReminderOpen &&
+        <Modal isOpen={true} toggle={this.toggleReminder}>
+          <ModalHeader toggle={this.toggleReminder}>{'温馨提示'}</ModalHeader>
+          <ModalBody>
+            {'浏览器使用提示'}<br />{'为了您能更好的体验，建议使用 Chrome 浏览器'}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.copyToClipboard}>{'复制当前连接'}</Button>
+          </ModalFooter>
+        </Modal>}
         <div className="h-100 d-flex flex-column">
           <div className="top-header d-flex justify-content-between">
             <a href={siteRoot}>
@@ -515,6 +546,9 @@ class SharedDirView extends React.Component {
                 zipDownloadFolder={this.zipDownloadFolder}
                 showImagePopup={this.showImagePopup}
               />
+              {!isHidden &&
+                <div className="pingan-copyright">Powered By &nbsp;<img width="16" height="16" style={{"margin-top": "1px"}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
+              }
             </div>
           </div>
         </div>

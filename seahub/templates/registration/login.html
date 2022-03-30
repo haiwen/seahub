@@ -26,6 +26,9 @@ html, body, #wrapper { height:100%; }
 #lang-context-selector {
     text-align:left;
 }
+#main.container-fluid {
+    padding: 0;
+}
 .login-panel-footer-container {
     margin-top: 40px;
     text-align: center;
@@ -38,6 +41,15 @@ html, body, #wrapper { height:100%; }
 .login-panel-footer-container a:last-child {
     border-right: none;
 }
+.logo-company-copyright {
+  display: none;
+  padding-top: 40px;
+  width: 100%;
+  justify-content: center;
+  font-size: 15px;
+  background: #aaa;
+}
+
 </style>
 {% endblock %}
 
@@ -45,14 +57,14 @@ html, body, #wrapper { height:100%; }
 <div class="login-panel-outer-container vh">
 <div class="login-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
-    <form name="form1" action="/pingan/pacas-login/" method="post" id="login-form">{% csrf_token %}
+    <form name="form1" action="{{ LOGIN_URL }}" method="post" id="login-form">{% csrf_token %}
         <input type="text" name="login" placeholder="请输入开机账号" aria-label="请输入开机账号" title="请输入开机账号" value="" class="input name-input" /><br />
         <input type="password" name="password" placeholder="请输入开机密码" aria-label="请输入开机密码" title="请输入开机密码" value="" class="input passwd-input" autocomplete="off" />
 
         {% if valid_code %}
         <div class="ovhd">
             <span id="refresh-valid-code" title="{% trans "Refresh" %}" class="icon-refresh op-icon fright" style="margin: 10px 3px 0 5px;"></span>
-            <img src="{{ valid_code|escape }}" alt="captcha" class="captcha"" id="valid-code-img" >
+            <img src="{{ valid_code|escape }}" alt="captcha" class="captcha" id="valid-code-img" >
             <input id="request-id-for-valid-code" name="request_id_for_valid_code" type="hidden" value="{{ request_id_for_valid_code }}">
             <input autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" id="valid-code" name="valid_code" type="text" tabindex="3" style="width: 122.844px; height: 36px; padding: 2px 10px; border-radius: 3px; margin: 0;">
         </div>
@@ -91,28 +103,48 @@ html, body, #wrapper { height:100%; }
     </div>
 </div>
 <div class="login-panel-footer-container">
-    <a href="http://fcloud.paic.com.cn/f/db1a8eed7b/?raw=1" target="_blank" class="normal">使用帮助</a>
-    <a href="http://fcloud.paic.com.cn/f/05c2b68bc4/?raw=1" target="_blank" class="normal">申请权限/注销</a>
+    <a href="http://fcloud.paic.com.cn/f/4ac80898ce754662b7ad/?raw=1" target="_blank" class="normal">使用帮助</a>
+    <a href="http://626888.paic.com.cn/#/main/ereport/eventReport/1098" target="_blank" class="normal">权限开通/扩容</a>
     <a href="mailto:dept_kjjcjgbyfzwpzc@pingan.com.cn" class="normal">联系我们</a>
 </div>
 </div>
 {% include "snippets/policy_service_link.html" %}
+<div class="logo-company-copyright">
+    <span>Powered By &nbsp;<img width="16" height="16" style="vertical-align: text-bottom" src="{{ MEDIA_URL }}img/logo-p.png">平安科技办公技术服务部</div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="/media/assets/scripts/lib/union-sm2-1.0.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}assets/scripts/lib/union-sm2-1.0.js"></script>
 <script type="text/javascript">
 $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'height': 40}).addClass('login-panel-logo'));
 $('.login-panel-bottom-container').append($('#lang').removeClass('fright'));
 
-var $el = $('.login-panel-outer-container');
-var elHeight = $el.outerHeight();
+var $loginContainer = $('.login-panel-outer-container');
+var $copyright = $('.logo-company-copyright');
+
 var wdHeight = $(window).height();
+var elHeight = $loginContainer.outerHeight();
+var copyRightHeight = $copyright.outerHeight();
+
 if (wdHeight > elHeight) {
-    $el.css({'margin-top': (wdHeight - elHeight)/2});
+    $loginContainer.css({'margin-top': (wdHeight - elHeight)/2});
+}
+
+var offset = $loginContainer.offset();
+var offsetHeight = offset.top + elHeight;
+var copyRightHeight = (wdHeight - offsetHeight)/1.2;
+if (wdHeight > (offsetHeight + copyRightHeight)) {
+    var marginTop = wdHeight - offsetHeight - copyRightHeight;
+    $copyright.css({
+        'display': 'flex',
+        'height': copyRightHeight,
+        'margin-top': marginTop,
+        'padding-top': marginTop/0.8,
+    });
 }
 $('#lang').css({'margin-left': $('#sign-up').outerWidth() + 10});
-$el.removeClass('vh');
+$loginContainer.removeClass('vh');
 
 $('#lang-context').on('click', function() {
     var langTop = $('#lang').offset().top;
@@ -161,13 +193,8 @@ function doEncrypt() {
     var msg = f1.password.value;
     var msgData = CryptoJS.enc.Utf8.parse(msg);
 
-    // 测试环境
-    // var xHex = '9D18DCF9A4C04E12FFFF68A5A43AE321D56E2E693B4DBAB6CBE263EA156B81B9';
-    // var yHex = '68864B894038382F7649B088733CB9F4DE322953CC81C58FC76F28BC96D43AE7';
-
-    // 生产环境
-    var xHex = 'CE334A29C0FDF7810D4BBB1C9917E54719E53394F947AC8B525CCDEFDDA44810';
-    var yHex = '649E2A9651401CC3251BCEDAD42CE1506841A7A31D3EE3DEADDE65D769BA4458';
+    var xHex = '{{ xHex }}';
+    var yHex = '{{ yHex }}';
 
     var cipherMode = SM2CipherMode.C1C3C2;
 
@@ -179,7 +206,8 @@ function doEncrypt() {
 }
 
 $('#login-form').on('submit', function(){
-    if (!$('input[name="login"]').val().trim()) {
+    var loginName = $.trim($('input[name="login"]').val());
+    if (!loginName) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
     }
@@ -187,7 +215,9 @@ $('#login-form').on('submit', function(){
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
     }
-    doEncrypt();
+    if (loginName.indexOf('@') === -1) {
+        doEncrypt();
+    }
 });
 // set tabindex
 $(function() {

@@ -192,8 +192,10 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.ocm.settings import OCM_ENDPOINT
 
 from seahub.pingan.pacas import pacas_login, api_pingan_pacas_refresh_valid_code
+from seahub.pingan.cross_users_copy import CrossUsersCopyView
 
 urlpatterns = [
+    url(r'^api/v2.1/cross-users-copy/$', CrossUsersCopyView.as_view(), name='api-v2.1-cross-users-copy'),
     url(r'^pingan/pacas-login/', pacas_login, name='pingan_pacas_login'),
     url(r'^api/pingan/pacas-refresh-valid-code/', api_pingan_pacas_refresh_valid_code, name='api_pingan_pacas_refresh_valid_code'),
 

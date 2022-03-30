@@ -1,5 +1,6 @@
 import React from 'react';
 import { gettext } from '../utils/constants';
+import { mediaUrl } from '../utils/constants';
 
 class PDFViewer extends React.Component {
 
@@ -255,6 +256,7 @@ class PDFViewer extends React.Component {
 
             <div id="viewerContainer" tabIndex="0">
               <div id="viewer" className="pdfViewer"></div>
+              {this.props.isSharedView && !this.props.isHidden && <div className="pingan-copyright">Powered By &nbsp;<img width="16" height="16" style={{"margin-top": "1px"}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>}
             </div>
 
             <div id="errorWrapper" hidden={true}>

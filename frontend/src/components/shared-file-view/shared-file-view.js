@@ -8,6 +8,8 @@ import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import watermark from 'watermark-dom';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import copy from '@seafile/seafile-editor/dist/utils/copy-to-clipboard';
 
 import '../../css/shared-file-view.css';
 
@@ -25,6 +27,7 @@ class SharedFileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isReminderOpen: false,
       showSaveSharedFileDialog: false,
       isAddAbuseReportDialogOpen: false
     };
@@ -75,6 +78,23 @@ class SharedFileView extends React.Component {
         }
       });
     }
+
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf('chrome') === -1) {
+      this.setState({isReminderOpen: true});
+    }
+  }
+
+  toggleReminder = () => {
+    this.setState({
+      isReminderOpen: !this.state.isReminderOpen
+    }); 
+  }
+
+  copyToClipboard = () => {
+    copy(window.location.href);
+    this.toggleReminder();
+    toaster.success('当前链接已复制到剪贴板，请在 Chrome 浏览器下粘贴打开系统'), {duration: 2};
   }
 
   renderPath = () => {
@@ -96,10 +116,28 @@ class SharedFileView extends React.Component {
     );
   }
 
+  isDesktop = () => {
+    return window.innerWidth >= 768;
+  }
+
   render() {
     const { fileType } = this.props;
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
     return (
+      <React.Fragment>
+        {this.isDesktop() && this.state.isReminderOpen &&
+        <Modal isOpen={true} toggle={this.toggleReminder}>
+          <ModalHeader toggle={this.toggleReminder}>{'温馨提示'}</ModalHeader>
+          <ModalBody>
+            {'浏览器使用提示'}<br />{'为了您能更好的体验，建议使用 Chrome 浏览器'}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.copyToClipboard}>{'复制当前连接'}</Button>
+          </ModalFooter>
+        </Modal>}
       <div className="shared-file-view-md">
+        {!isHidden && <React.Fragment>
         <div className="shared-file-view-md-header d-flex">
           <React.Fragment>
             <a href={siteRoot}>
@@ -108,7 +146,9 @@ class SharedFileView extends React.Component {
           </React.Fragment>
           { loginUser && <Account /> }
         </div>
+        </React.Fragment>}
         <div className="shared-file-view-md-main">
+          {!isHidden && <React.Fragment>
           <div className={`shared-file-view-head ${fileType == 'md' ? 'w-100 px-4' : ''}`}>
             <div className="float-left">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
@@ -123,7 +163,7 @@ class SharedFileView extends React.Component {
                   onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
                 </Button>
               }{' '}
-              {(canDownload && !trafficOverLimit) &&
+              {(canDownload && !trafficOverLimit && this.isDesktop()) &&
                 <a href={`?${zipped ? 'p=' + encodeURIComponent(filePath) + '&' : ''}dl=1`} className="btn btn-success">{gettext('Download')}({Utils.bytesToSize(fileSize)})</a>
               }{' '}
               {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
@@ -133,6 +173,7 @@ class SharedFileView extends React.Component {
               }
             </div>
           </div>
+          </React.Fragment>}
           {this.props.content}
         </div>
         {this.state.showSaveSharedFileDialog &&
@@ -153,6 +194,7 @@ class SharedFileView extends React.Component {
           />
         }
       </div>
+      </React.Fragment>
     );
   }
 }

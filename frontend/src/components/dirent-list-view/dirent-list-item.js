@@ -88,6 +88,19 @@ class DirentListItem extends React.Component {
     }
   }
 
+  componentDidMount() {
+    //设置权限，按照朱莎莎的指引
+    if (window.KLPA_WS_APP !== undefined) {
+      const params = {
+        appId: "1e5d00f45ebbbfb800000004"
+      };
+      const promise = window.KLPA_WS_APP.setConfig(params);
+      promise.then(res => {
+        console.log(res);
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isItemFreezed !== this.props.isItemFreezed && !nextProps.isItemFreezed) {
       this.setState({
@@ -176,6 +189,167 @@ class DirentListItem extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
+    }
+  }
+
+  onItemShareToColleague = () => {
+    const _this = this;
+    if (window.KLPA_WS_APP !== undefined) {
+    if (window.KLPA_WS_APP.IS_IOS) {
+      let dirent = this.props.dirent;
+      let repoID = this.props.repoID;
+      let filePath = this.getDirentPath(dirent);
+      const params = {
+        umIds: [], title: "选取用户", max: 5, min: 1,
+      };
+      window.KLPA_WS_APP.call('selectMembers', JSON.stringify(params), function (res) {
+        if (+res.code === 200) {
+          console.log(res.data.members);
+          if (!res.data || !res.data.members) {
+            toaster.danger('获取用户um账号列表失败');
+            return;
+          }
+          const { members } = res.data;
+          let pinganUmIds = Array.isArray(members) && members.map(member => {
+            if (member.umid.toLowerCase) {
+              return member.umid.toLowerCase();
+            }
+            return '';
+          }).filter(Boolean);
+          const params = { umIds: pinganUmIds };
+          window.KLPA_WS_APP.call('queryJidByUmId', JSON.stringify(params), function (res) {
+            if (+res.code === 200) {
+              console.log(res.data);
+              if (!res.data) {
+                toaster.danger('获取用户Jid列表失败');
+                return;
+              }
+              const result = res.data;
+              let pinganJids = Object.values(result);
+              seafileAPI.getShareLink(repoID, filePath).then((res) => {
+                if (res.data.length > 0) {
+                  let link = res.data[0].link;
+                  const params = {
+                    id: pinganJids,
+                    msgType: 8,
+                    content: {
+                      fileName: dirent.name,
+                      previewUrl: link,
+                      fileSize: _this.getSize(dirent.size),
+                      fileType: res.data[0].is_dir ? 1 : 0,
+                      fileToken: res.data[0].token,
+                      expireDate: res.data[0].expire_date,
+                      sourceRepoId: res.data[0].repo_id,
+                      sourcePath: res.data[0].path,
+                    },
+                  };
+                  window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
+                    if (+res.code === 200) {
+                      console.log(res.data);
+                      toaster.success('发送成功');
+                    }
+                  });
+                } else {
+                  seafileAPI.createShareLink(repoID, filePath).then((res) => {
+                    let link = res.data.link;
+                    const params = {
+                      id: pinganJids,
+                      msgType: 8,
+                      content: {
+                        fileName: dirent.name,
+                        previewUrl: link,
+                        fileSize: _this.getSize(dirent.size),
+                        fileType: res.data.is_dir ? 1 : 0,
+                        fileToken: res.data.token,
+                        expireDate: res.data.expire_date,
+                        sourceRepoId: res.data.repo_id,
+                        sourcePath: res.data.path,
+                      },
+                    };
+                    window.KLPA_WS_APP.call('sendMessage', JSON.stringify(params), function (res) {
+                      if (+res.code === 200) {
+                        console.log(res.data);
+                        toaster.success('发送成功');
+                      }
+                    });
+                  }).catch(error => {
+                    let errMessage = Utils.getErrorMsg(error);
+                    toaster.danger(errMessage);
+                  });
+                }
+              }).catch(error => {
+                let errMessage = Utils.getErrorMsg(error);
+                toaster.danger(errMessage);
+              });
+            }
+          });
+        }
+      });
+    } else {
+      let dirent = this.props.dirent;
+      let repoID = this.props.repoID;
+      let filePath = this.getDirentPath(dirent);
+      seafileAPI.getShareLink(repoID, filePath).then((res) => {
+        if (res.data.length > 0) {
+          let link = res.data[0].link;
+          const paramsRelay = {
+            msgType: 8,
+            content: {
+              fileName: dirent.name,
+              previewUrl: link,
+              fileSize: _this.getSize(dirent.size),
+              fileType: res.data[0].is_dir ? 1 : 0,
+              fileToken: res.data[0].token,
+              expireDate: res.data[0].expire_date,
+              sourceRepoId: res.data[0].repo_id,
+              sourcePath: res.data[0].path,
+            }
+          }
+          console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
+          const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
+          promiseRelay.then(res => {
+            console.log("调用relayMessage的结果" + JSON.stringify(res))
+            if (+res.code === 200) {
+              console.log(res.data);
+              toaster.success('发送成功');
+            }
+          });
+
+        } else {
+          seafileAPI.createShareLink(repoID, filePath).then((res) => {
+            let link = res.data.link;
+            const paramsRelay = {
+              msgType: 8,
+              content: {
+                fileName: dirent.name,
+                previewUrl: link,
+                fileSize: _this.getSize(dirent.size),
+                fileType: res.data.is_dir ? 1 : 0,
+                fileToken: res.data.token,
+                expireDate: res.data.expire_date,
+                sourceRepoId: res.data.repo_id,
+                sourcePath: res.data.path,
+              },
+            };
+            console.log("开始调用relayMessage,-->参数是：" + JSON.stringify(paramsRelay))
+            const promiseRelay = window.KLPA_WS_APP.relayMessage(paramsRelay);
+            promiseRelay.then(res => {
+              console.log("调用relayMessage的结果" + JSON.stringify(res))
+              if (+res.code === 200) {
+                console.log(res.data);
+                toaster.success('发送成功');
+              }
+            });
+          }).catch(error => {
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+          });
+        }
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
     }
   }
 
@@ -302,6 +476,27 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
       isRenameing: true,
     });
+  }
+
+  getSize = (size) => {
+    const sizeSplit = size.split(" ");
+    const num = Number(sizeSplit[0]);
+    const danWei = sizeSplit[1];
+    let newSize = 1;
+    if (danWei.indexOf("byte") != -1) {
+      newSize = num;
+    }
+    if (danWei.indexOf("KB") != -1) {
+      newSize = num * 1024;
+    }
+    if (danWei.indexOf("MB") != -1) {
+      newSize = num * 1024 * 1024;
+    }
+    if (danWei.indexOf("GB") != -1) {
+      newSize = num * 1024 * 1024 * 1024;
+    }
+    newSize = Math.ceil(newSize);
+    return newSize;
   }
 
   onRenameConfirm = (newName) => {
@@ -761,6 +956,9 @@ class DirentListItem extends React.Component {
               <div className="mobile-operation-menu">
                 {dirent.starred !== undefined &&
                 <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>{dirent.starred ? gettext('Unstar') : gettext('Star')}</DropdownItem>}
+                {dirent.type !== 'dir' &&
+                  <DropdownItem className="mobile-menu-item"
+                    onClick={this.onItemShareToColleague}>{gettext('发送给同事')}</DropdownItem>}
                 {this.props.getDirentItemMenuList(dirent, true).map((item, index) => {
                   if (item != 'Divider' && item.key != 'Open via Client') {
                     return (

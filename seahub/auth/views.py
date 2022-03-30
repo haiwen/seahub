@@ -44,6 +44,9 @@ from seahub.password_session import update_session_auth_hash
 
 from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
+PINGAN_PACAS_XHEX = getattr(settings, 'PINGAN_PACAS_XHEX', 'CE334A29C0FDF7810D4BBB1C9917E54719E53394F947AC8B525CCDEFDDA44810')
+PINGAN_PACAS_YHEX = getattr(settings, 'PINGAN_PACAS_YHEX', '649E2A9651401CC3251BCEDAD42CE1506841A7A31D3EE3DEADDE65D769BA4458')
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -206,6 +209,8 @@ def login(request, template_name='registration/login.html',
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
+        'xHex': PINGAN_PACAS_XHEX,
+        'yHex': PINGAN_PACAS_YHEX,
     })
 
 def login_simple_check(request):

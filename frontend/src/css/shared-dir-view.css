@@ -56,3 +56,13 @@ body {
   border-radius: 3px;
   margin: 0;
 }
+
+.pingan-copyright {
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  background-color: white;
+}

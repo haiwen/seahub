@@ -1359,3 +1359,10 @@ a.table-sort-op:hover {
   overflow-y: auto;
 }
   
+.pingan-copyright {
+    display:flex;
+    flex-shrink:0;
+    padding:12px 20px;
+    font-size: 15px;
+    margin:0 auto;
+}

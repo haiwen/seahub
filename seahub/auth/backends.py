@@ -141,6 +141,8 @@ class SeafileRemoteUserBackend(AuthBackend):
 
         username = self.clean_username(remote_user)
 
+        username = Profile.objects.get_username_by_login_id(username)
+
         # get user from ccnet
         user = self.get_user(username)
         if not user:

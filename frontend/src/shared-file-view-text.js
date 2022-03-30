@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Utils } from './utils/utils';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
+import { mediaUrl } from './utils/constants';
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -44,6 +45,9 @@ class FileContent extends React.Component {
       return <SharedFileViewTip />;
     }
 
+    const params = window.location.search;
+    let isHidden = params.indexOf('?hidden=true') !== -1;
+
     return (
       <div className="shared-file-view-body text-file-view">
         <CodeMirror
@@ -51,6 +55,9 @@ class FileContent extends React.Component {
           value={fileContent}
           options={options}
         />
+        {!isHidden &&
+          <div className="pingan-copyright">Powered By &nbsp;<img width="16" height="16" style={{"margin-top": "1px"}} src={`${mediaUrl}/img/logo-p.png`}></img>平安科技办公技术服务部</div>
+        }
       </div>
     );
   }

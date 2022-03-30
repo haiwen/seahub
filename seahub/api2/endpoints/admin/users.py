@@ -800,8 +800,9 @@ class AdminSearchUser(APIView):
                     user.institution = user_institution_dict.get(user.email, '')
 
             # search user from profile
-            searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
-                                                       Q(contact_email__icontains=query_str))[:10]
+            searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) |
+                                                      Q(contact_email__icontains=query_str) |
+                                                      Q(login_id__icontains=query_str))[:10]
 
             for profile in searched_profile:
                 email = profile.user
@@ -866,9 +867,9 @@ class AdminSearchUser(APIView):
                 users = ccnet_users
 
             if len(all_ccnet_users) < page * per_page:
-                all_profile_users = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
-                                                           Q(contact_email__icontains=query_str)) \
-                                                          [0:page*per_page-len(all_ccnet_users)]
+                all_profile_users = Profile.objects.filter(
+                    (Q(nickname__icontains=query_str)) | Q(contact_email__icontains=query_str) |
+                    Q(login_id__icontains=query_str))[0: page*per_page-len(all_ccnet_users)]
 
                 if int(len(all_ccnet_users)/per_page) == page-1:
                     # need ccnet users + profile users
