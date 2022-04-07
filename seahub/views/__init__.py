@@ -1139,7 +1139,8 @@ def react_fake_view(request, **kwargs):
                 return render_error(request, error_msg)
 
             converted_path = repo_path_dict['path']
-            if not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+            if converted_path != '/' and not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+
                 error_msg = 'Dirent %s not found.' % converted_path
                 return render_error(request, error_msg)
 
