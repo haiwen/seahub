@@ -1,4 +1,5 @@
 .seafile-comment {
+  background-color: #f5f5f5;
   border-left: 1px solid #e6e6dd;
   display: flex;
   flex-direction: column;
@@ -11,7 +12,7 @@
   line-height: 3em;
   padding: 0 1em;
   display: flex;
-  background-color: #fafaf9;
+  background-color: #fff;
 }
 .seafile-comment-title .seafile-comment-title-text,
 .seafile-history-title .seafile-history-title-text {
@@ -27,26 +28,8 @@
 .seafile-history-title .seafile-history-title-close:hover {
   color: #888;
 }
-.seafile-comment-toggle-resolved {
-  margin-top: 45px;
-  border-bottom: 1px solid #e5e5e5;
-  padding: 5px 10px;
-  display: flex;
-  position: absolute;
-  background-color: #fff;
-  justify-content: space-between;
-  width: 29%;
-}
 .seafile-comment-list {
-  height: calc(100% - 40px);
-  margin-top: 30px;
   overflow-y: auto;
-  margin-bottom: 0;
-}
-.seafile-comment-list .comment-vacant {
-  padding: 1em;
-  text-align: center;
-  list-style: none;
 }
 .seafile-comment-item {
   padding: 15px 10px;
@@ -89,6 +72,13 @@
 }
 .seafile-comment-item .seafile-comment-content {
   margin-left: 42px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: #fff;
+}
+.seafile-comment-item .seafile-comment-content p {
+  word-break: break-all;
+  margin: 0;
 }
 .seafile-comment-item .seafile-comment-content ol,
 .seafile-comment-item .seafile-comment-content ul,
@@ -104,7 +94,6 @@
   background-color: #e6ffed;
 }
 .seafile-comment-footer {
-  background-color: #fafaf9;
   padding: 10px;
   border-top: 1px solid #e5e5e5;
   min-height: 182px;
@@ -117,17 +106,29 @@
   border-radius: 5px;
   background-color: #fff;
 }
+
+.seafile-comment-footer .comment-submit-container {
+  border: 1px solid #e6e6dd;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  padding: 5px;
+  background: #fff;
+  text-align: right;
+  position: relative;
+}
+.seafile-comment-footer .comment-submit-container::before {
+  border-top: 1px solid #e6e6dd;
+  content: '';
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 0;
+}
 .seafile-comment-footer .submit-comment {
-  margin-top: 5px;
-  padding: 0.35rem 0.5rem;
+  height: 28px;
 }
 .seafile-edit-comment .comment-btn {
   height: 28px;
-}
-@media (max-width: 768px) {
-  .seafile-comment-toggle-resolved {
-    width: 100%;
-  }
 }
 .detail-comments {
   border-left: 0;
