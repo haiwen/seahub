@@ -175,15 +175,14 @@ class CommentPanel extends React.Component {
                 let oldTime = (new Date(item.created_at)).getTime();
                 let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
                 return (
-                  <React.Fragment key={item.id}>
-                    <CommentItem
-                      item={item} time={time}
-                      deleteComment={this.deleteComment}
-                      resolveComment={this.resolveComment}
-                      editComment={this.editComment}
-                      showResolvedComment={this.state.showResolvedComment}
-                    />
-                  </React.Fragment>
+                  <CommentItem
+                    key={item.id}
+                    item={item} time={time}
+                    deleteComment={this.deleteComment}
+                    resolveComment={this.resolveComment}
+                    editComment={this.editComment}
+                    showResolvedComment={this.state.showResolvedComment}
+                  />
                 );
               })}
             </ul>) :
@@ -217,8 +216,7 @@ class CommentPanel extends React.Component {
             />
           </MentionsInput>
           <div className="comment-submit-container">
-            <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>
-              {gettext('Submit')}</Button>
+            <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           </div>
         </div>
       </div>

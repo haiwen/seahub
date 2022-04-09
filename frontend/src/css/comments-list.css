@@ -3,7 +3,6 @@
   border-left: 1px solid #e6e6dd;
   display: flex;
   flex-direction: column;
-  width: 29%;
 }
 .seafile-comment-title,
 .seafile-history-title {
@@ -27,9 +26,6 @@
 .seafile-comment-title .seafile-comment-title-close:hover,
 .seafile-history-title .seafile-history-title-close:hover {
   color: #888;
-}
-.seafile-comment-list {
-  overflow-y: auto;
 }
 .seafile-comment-item {
   padding: 15px 10px;
@@ -132,9 +128,6 @@
 }
 .detail-comments {
   border-left: 0;
-}
-.detail-comments .seafile-comment-list {
-  margin-top: 0;
 }
 .detail-comments .seafile-comment-footer {
   min-height: 175px;

@@ -138,27 +138,32 @@ class DetailCommentList extends React.Component {
 
   render() {
     const { repoID, filePath, fileParticipantList } = this.props;
+    const { commentsList } = this.state;
     return (
-      <div className="seafile-comment detail-comments h-100 w-100">
-        <ul className="seafile-comment-list">
-          {this.state.commentsList.length > 0 &&
-            this.state.commentsList.map((item, index = 0, arr) => {
-              let oldTime = (new Date(item.created_at)).getTime();
-              let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
-              return (
-                <React.Fragment key={item.id}>
+      <div className="seafile-comment detail-comments h-100">
+        <div className="flex-fill o-auto">
+          {commentsList.length > 0 ? (
+            <ul className="seafile-comment-list">
+              {commentsList.map((item, index = 0, arr) => {
+                let oldTime = (new Date(item.created_at)).getTime();
+                let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
+                return (
                   <CommentItem
-                    item={item} time={time} deleteComment={this.deleteComment}
-                    resolveComment={this.resolveComment} editComment={this.editComment}
+                    key={item.id}
+                    item={item}
+                    time={time}
+                    deleteComment={this.deleteComment}
+                    resolveComment={this.resolveComment}
+                    editComment={this.editComment}
                   />
-                </React.Fragment>
-              );
-            })
+                );
+              })
+              }
+            </ul>) :
+            <p className="text-center my-4">{gettext('No comment yet.')}</p>
           }
-          {(this.state.commentsList.length == 0 ) &&
-            <li className="comment-vacant">{gettext('No comment yet.')}</li>}
-        </ul>
-        <div className="seafile-comment-footer">
+        </div>
+        <div className="seafile-comment-footer flex-shrink-0">
           {fileParticipantList &&
             <ParticipantsList
               onParticipantsChange={this.props.onParticipantsChange}
@@ -184,7 +189,9 @@ class DetailCommentList extends React.Component {
               appendSpaceOnAdd={true}
             />
           </MentionsInput>
-          <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>{gettext('Submit')}</Button>
+          <div className="comment-submit-container">
+            <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>{gettext('Submit')}</Button>
+          </div>
         </div>
       </div>
     );
