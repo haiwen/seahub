@@ -54,7 +54,7 @@ class Draft extends React.Component {
       showReviewerDialog: false,
       reviewers: [],
       inResizing: false,
-      rightPartWidth: 30,
+      rightPartWidth: 300 / window.innerWidth * 100,
       draftStatus: draftStatus,
     };
     this.quote = '';

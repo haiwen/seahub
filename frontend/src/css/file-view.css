@@ -68,5 +68,6 @@ body {
 @media (min-width: 768px) {
   .file-view-body .seafile-comment {
     width: 300px;
+    border-left: 1px solid #e6e6dd;
   }
 }

@@ -26,13 +26,9 @@
   height: 100%;
 }
 
-.main .cur-view-container .seafile-comment {
-  height: 100%;
-  position: relative;
-}
 .main .cur-view-right-part {
   height: 100%;
-  width: 35%;
+  width: 300px;
   position: relative;
 }
 
@@ -118,7 +114,8 @@
 .review-side-panel-item:last-child {
   border: 0;
 }
-.reviewer-info, .author-info {
+.review-side-panel-item .reviewer-info,
+.review-side-panel-item .author-info {
   display: flex;
   align-items: center;
 }
@@ -144,7 +141,8 @@
   height: 1.5rem;
   width: 1.5rem;
 }
-.reviewer-name, .author-name {
+.review-side-panel-item .reviewer-name,
+.review-side-panel-item .author-name {
   height: 2rem;
   line-height: 2rem;
 }
