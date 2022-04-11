@@ -202,7 +202,7 @@ class CommentPanel extends React.Component {
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}
-            placeholder={gettext('Add a comment.')}
+            placeholder={gettext('Add a comment...')}
             style={defaultStyle}
           >
             <Mention
@@ -315,7 +315,7 @@ class CommentItem extends React.Component {
           </div>
           <div className="seafile-edit-comment">
             <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
-            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
+            <Button className="comment-btn" color="primary" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
             <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>{gettext('Cancel')}</Button>
           </div>
         </li>

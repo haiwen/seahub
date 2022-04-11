@@ -3,8 +3,7 @@
   display: flex;
   flex-direction: column;
 }
-.seafile-comment-title,
-.seafile-history-title {
+.seafile-comment-title {
   border-bottom: 1px solid #e5e5e5;
   min-height: 3em;
   line-height: 3em;
@@ -12,18 +11,15 @@
   display: flex;
   background-color: #fff;
 }
-.seafile-comment-title .seafile-comment-title-text,
-.seafile-history-title .seafile-history-title-text {
+.seafile-comment-title .seafile-comment-title-text {
   width: 100%;
   text-align: center;
   font-weight: 700;
 }
-.seafile-comment-title .seafile-comment-title-close,
-.seafile-history-title .seafile-history-title-close {
+.seafile-comment-title .seafile-comment-title-close {
   color: #b9b9b9;
 }
-.seafile-comment-title .seafile-comment-title-close:hover,
-.seafile-history-title .seafile-history-title-close:hover {
+.seafile-comment-title .seafile-comment-title-close:hover {
   color: #888;
 }
 .seafile-comment-item {

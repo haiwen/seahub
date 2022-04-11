@@ -113,7 +113,7 @@ class ReviewComments extends React.Component {
           <textarea
             className="add-comment-input"
             value={this.state.comment}
-            placeholder={gettext('Add a comment.')}
+            placeholder={gettext('Add a comment...')}
             onChange={this.handleCommentChange}
             clos="100" rows="3" warp="virtual"
           ></textarea>

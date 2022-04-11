@@ -176,7 +176,7 @@ class DetailCommentList extends React.Component {
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}
-            placeholder={gettext('Add a comment.')}
+            placeholder={gettext('Add a comment...')}
             style={defaultStyle}
           >
             <Mention
