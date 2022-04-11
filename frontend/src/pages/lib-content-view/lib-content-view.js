@@ -226,7 +226,7 @@ class LibContentView extends React.Component {
 
     if (this.state.currentMode === 'column') {
       if (this.state.isViewFile) {
-        this.updataColumnMarkdownData(path);
+        this.updateColumnMarkdownData(path);
       } else {
         seafileAPI.dirMetaData(repoID, path).then((res) => {
           if (res.data.id !== dirID) {
@@ -277,7 +277,7 @@ class LibContentView extends React.Component {
     });
   }
 
-  updataColumnMarkdownData = (filePath) => {
+  updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
     this.setState({
@@ -324,7 +324,7 @@ class LibContentView extends React.Component {
     // list used FileTags
     this.updateUsedRepoTags();
 
-    // list draft counts and revierw counts
+    // list draft counts and review counts
     if (isDocs) {
       seafileAPI.getRepoDraftCounts(repoID).then(res => {
         this.setState({
