@@ -366,11 +366,13 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     if (path === '/') {
       seafileAPI.listDir(repoID, '/').then(res => {
+        const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
-        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.addResponseListToNode(dirent_list, tree.root);
         this.setState({
           isTreeDataLoading: false,
-          treeData: tree
+          treeData: tree,
+          userPerm: user_perm,
         });
       }).catch(() => {
         this.setState({isTreeDataLoading: false});
@@ -1454,7 +1456,7 @@ class LibContentView extends React.Component {
       path = Utils.getDirName(path);
     }
     seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
-      let direntList = res.data.dirent_list;
+      const { dirent_list: direntList, user_perm } = res.data;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
@@ -1473,7 +1475,8 @@ class LibContentView extends React.Component {
       }
       this.setState({
         isTreeDataLoading: false,
-        treeData: tree
+        treeData: tree,
+        userPerm: user_perm,
       });
     }).catch(() => {
       this.setState({isLoadFailed: true});
