@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import { gettext } from '../utils/constants';
-import ButtonQR from './btn-qr-code';
 
 const propTypes = {
   link: PropTypes.string.isRequired,
@@ -24,7 +23,6 @@ class SharedLink extends React.Component {
               <Button color="primary" onClick={copyLink} className="border-0">{gettext('Copy')}</Button>
             </InputGroupAddon>
           </InputGroup>
-          <ButtonQR link={link} />
         </div>
         {linkExpired && <p className="err-message mt-1">({gettext('Expired')})</p>}
       </Fragment>

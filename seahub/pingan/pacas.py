@@ -100,7 +100,7 @@ def get_request_id(oauth_access_token):
     }
 
     # prepare http post body parameters
-    signature = hashlib.md5(PINGAN_PACAS_APP_ID + PINGAN_PACAS_V_USERNAME).hexdigest()
+    signature = hashlib.md5((PINGAN_PACAS_APP_ID + PINGAN_PACAS_V_USERNAME).encode('utf8')).hexdigest()
     payload = {
         "appId": PINGAN_PACAS_APP_ID,
         "vUserName": PINGAN_PACAS_V_USERNAME,
@@ -142,7 +142,7 @@ def get_valid_code(access_token, request_id):
     }
 
     # prepare http post body parameters
-    signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID).hexdigest()
+    signature = hashlib.md5((request_id + PINGAN_PACAS_APP_ID).encode('utf8')).hexdigest()
     payload = {
         "appId": PINGAN_PACAS_APP_ID,
         "requestId": request_id,
@@ -195,13 +195,13 @@ def pingan_pacas_authenticate(request, username, password, access_token, request
     }
 
     if valid_code:
-        signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + username +
-                                password + valid_code + source_ip).hexdigest()
+        signature = hashlib.md5((request_id + PINGAN_PACAS_APP_ID + username +
+                                password + valid_code + source_ip).encode('utf8')).hexdigest()
         payload["signature"] = signature
         payload["validCode"] = valid_code
     else:
-        signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + username +
-                                password + source_ip).hexdigest()
+        signature = hashlib.md5((request_id + PINGAN_PACAS_APP_ID + username +
+                                password + source_ip).encode('utf8')).hexdigest()
         payload["signature"] = signature
 
     url = PINGAN_PACAS_AUTHENTICATE_URL + '?' + parse.urlencode(parameter_data)
@@ -250,8 +250,8 @@ def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type, access_token
 
     # prepare http post body parameters
     source_ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
-    signature = hashlib.md5(request_id + PINGAN_PACAS_APP_ID + sso_type +
-                            sso_cookie + source_ip).hexdigest()
+    signature = hashlib.md5((request_id + PINGAN_PACAS_APP_ID + sso_type +
+                            sso_cookie + source_ip).encode('utf8')).hexdigest()
     payload = {
         "appId": PINGAN_PACAS_APP_ID,
         "requestId": request_id,
@@ -341,7 +341,7 @@ def api_pingan_pacas_refresh_valid_code():
 def pacas_login(request):
 
     redirect_to = request.GET.get(REDIRECT_FIELD_NAME, '/')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(redirect_to)
 
     template_name = 'registration/login.html'
