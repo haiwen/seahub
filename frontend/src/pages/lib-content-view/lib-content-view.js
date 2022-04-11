@@ -226,7 +226,7 @@ class LibContentView extends React.Component {
 
     if (this.state.currentMode === 'column') {
       if (this.state.isViewFile) {
-        this.updataColumnMarkdownData(path);
+        this.updateColumnMarkdownData(path);
       } else {
         seafileAPI.dirMetaData(repoID, path).then((res) => {
           if (res.data.id !== dirID) {
@@ -277,7 +277,7 @@ class LibContentView extends React.Component {
     });
   }
 
-  updataColumnMarkdownData = (filePath) => {
+  updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
     this.setState({
@@ -324,7 +324,7 @@ class LibContentView extends React.Component {
     // list used FileTags
     this.updateUsedRepoTags();
 
-    // list draft counts and revierw counts
+    // list draft counts and review counts
     if (isDocs) {
       seafileAPI.getRepoDraftCounts(repoID).then(res => {
         this.setState({
@@ -366,11 +366,13 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     if (path === '/') {
       seafileAPI.listDir(repoID, '/').then(res => {
+        const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
-        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.addResponseListToNode(dirent_list, tree.root);
         this.setState({
           isTreeDataLoading: false,
-          treeData: tree
+          treeData: tree,
+          userPerm: user_perm,
         });
       }).catch(() => {
         this.setState({isTreeDataLoading: false});
@@ -1454,7 +1456,7 @@ class LibContentView extends React.Component {
       path = Utils.getDirName(path);
     }
     seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
-      let direntList = res.data.dirent_list;
+      const { dirent_list: direntList, user_perm } = res.data;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
@@ -1473,7 +1475,8 @@ class LibContentView extends React.Component {
       }
       this.setState({
         isTreeDataLoading: false,
-        treeData: tree
+        treeData: tree,
+        userPerm: user_perm,
       });
     }).catch(() => {
       this.setState({isLoadFailed: true});
