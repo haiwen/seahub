@@ -53,8 +53,6 @@ class Draft extends React.Component {
       historyList: [],
       showReviewerDialog: false,
       reviewers: [],
-      inResizing: false,
-      rightPartWidth: 300 / window.innerWidth * 100,
       draftStatus: draftStatus,
     };
     this.quote = '';
@@ -561,25 +559,6 @@ class Draft extends React.Component {
     this.oldIndex = node.data['old_index'];
   }
 
-  onResizeMouseUp = () => {
-    if (this.state.inResizing) {
-      this.setState({ inResizing: false });
-    }
-  }
-
-  onResizeMouseDown = () => {
-    this.setState({ inResizing: true });
-  };
-
-  onResizeMouseMove = (e) => {
-    let rate = 100 - e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
-    if (rate < 20 || rate > 60) {
-      this.setState({ inResizing: false });
-      return null;
-    }
-    this.setState({ rightPartWidth: rate });
-  };
-
   componentDidMount() {
     this.getOriginRepoInfo();
     this.getDraftInfo();
@@ -660,7 +639,6 @@ class Draft extends React.Component {
 
   render() {
     const { draftInfo, reviewers, originRepoName, draftStatus } = this.state;
-    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftRepoID + '/file' + draftFilePath + '?mode=edit';
     const showPublishedButton = this.state.draftStatus == 'published';
     const showPublishButton = this.state.draftStatus == 'open' && filePermission == 'rw';
@@ -706,8 +684,8 @@ class Draft extends React.Component {
           </div>
         </div>
         <div id="main" className="main" ref="main">
-          <div className="cur-view-container" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} >
-            <div className='cur-view-content' ref="viewContent" style={{width:(100 - this.state.rightPartWidth) + '%'}}>
+          <div className="cur-view-container">
+            <div className='cur-view-content' ref="viewContent">
               {this.state.isLoading ?
                 <div className="markdown-viewer-render-content article">
                   <Loading />
@@ -718,8 +696,7 @@ class Draft extends React.Component {
                 </div>
               }
             </div>
-            <div className="cur-view-right-part" style={{width:(this.state.rightPartWidth) + '%'}}>
-              <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
+            <div className="cur-view-right-part">
               <div className="review-side-panel">
                 {this.renderNavItems()}
                 <TabContent activeTab={this.state.activeTab}>
