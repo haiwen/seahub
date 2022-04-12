@@ -6,6 +6,7 @@ import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
 import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './user-nav';
@@ -20,6 +21,8 @@ class Content extends Component {
       currentKey: '',
       dialogTitle: '',
       isSetQuotaDialogOpen: false,
+      isSetUserUploadRateLimitDialogOpen: false,
+      isSetUserDownloadRateLimitDialogOpen: false,
       isUpdateUserDialogOpen: false
     };
   }
@@ -28,8 +31,25 @@ class Content extends Component {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
   }
 
+  toggleSetUserUploadRateLimitDialog = () => {
+    this.setState({isSetUserUploadRateLimitDialogOpen: !this.state.isSetUserUploadRateLimitDialogOpen});
+  }
+
+  toggleSetUserDownloadRateLimitDialog = () => {
+    this.setState({isSetUserDownloadRateLimitDialogOpen: !this.state.isSetUserDownloadRateLimitDialogOpen});
+  }
+
   updateQuota = (value) => {
     this.props.updateUser('quota_total', value);
+  }
+
+  updateUploadDownloadRateLimit = (uploadOrDownload, value) => {
+    if (uploadOrDownload == 'upload'){
+        this.props.updateUser('upload_rate_limit', value);
+    }
+    if (uploadOrDownload == 'download'){
+        this.props.updateUser('download_rate_limit', value);
+    }
   }
 
   toggleDialog = (key, dialogTitle) => {
@@ -84,7 +104,8 @@ class Content extends Component {
       const user = this.props.userInfo;
       const {
         currentKey, dialogTitle,
-        isSetQuotaDialogOpen, isUpdateUserDialogOpen
+        isSetQuotaDialogOpen, isUpdateUserDialogOpen,
+        isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen
       } = this.state;
       return (
         <Fragment>
@@ -134,6 +155,18 @@ class Content extends Component {
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
 
+            <dt className="info-item-heading">{gettext('Upload Rate Limit')}</dt>
+            <dd className="info-item-content">
+              {user.upload_rate_limit > 0 ? user.upload_rate_limit + ' kB/s' : '--'}
+              {this.showEditIcon(this.toggleSetUserUploadRateLimitDialog)}
+            </dd>
+
+            <dt className="info-item-heading">{gettext('Download Rate Limit')}</dt>
+            <dd className="info-item-content">
+              {user.download_rate_limit > 0 ? user.download_rate_limit + ' kB/s' : '--'}
+              {this.showEditIcon(this.toggleSetUserDownloadRateLimitDialog)}
+            </dd>
+
             {twoFactorAuthEnabled &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
@@ -161,6 +194,20 @@ class Content extends Component {
           <SysAdminSetQuotaDialog
             updateQuota={this.updateQuota}
             toggle={this.toggleSetQuotaDialog}
+          />
+          }
+          {isSetUserUploadRateLimitDialogOpen &&
+          <SysAdminSetUploadDownloadRateLimitDialog
+            uploadOrDownload="upload"
+            updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
+            toggle={this.toggleSetUserUploadRateLimitDialog}
+          />
+          }
+          {isSetUserDownloadRateLimitDialogOpen &&
+          <SysAdminSetUploadDownloadRateLimitDialog
+            uploadOrDownload="download"
+            updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
+            toggle={this.toggleSetUserDownloadRateLimitDialog}
           />
           }
           {isUpdateUserDialogOpen &&
