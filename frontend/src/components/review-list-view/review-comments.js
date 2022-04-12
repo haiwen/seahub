@@ -8,11 +8,10 @@ import { username } from '../../utils/constants.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
-import '../../css/review-comments.css';
+import '../../css/comments-list.css';
 
 const commentPropTypes = {
   listComments: PropTypes.func.isRequired,
-  inResizing: PropTypes.bool.isRequired,
   commentsList: PropTypes.array.isRequired,
   scrollToQuote: PropTypes.func.isRequired
 };
@@ -22,8 +21,6 @@ class ReviewComments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inResizing: false,
-      commentFooterHeight: 25,
       showResolvedComment: true,
       comment: '',
     };
@@ -64,10 +61,6 @@ class ReviewComments extends React.Component {
     });
   }
 
-  toggleResolvedComment = () => {
-    this.setState({ showResolvedComment: !this.state.showResolvedComment });
-  }
-
   deleteComment = (event) => {
     seafileAPI.deleteComment(draftRepoID, event.target.id).then((res) => {
       this.props.listComments();
@@ -76,31 +69,6 @@ class ReviewComments extends React.Component {
       toaster.danger(errMessage);
     });
   }
-
-  onResizeMouseUp = () => {
-    if (this.state.inResizing) {
-      this.setState({ inResizing: false });
-    }
-  }
-
-  onResizeMouseDown = () => {
-    this.setState({ inResizing: true });
-  };
-
-  onResizeMouseMove = (event) => {
-    let rate = 100 - (event.nativeEvent.clientY - 120 ) / this.refs.comment.clientHeight * 100;
-    if (rate < 20 || rate > 70) {
-      if (rate < 20) {
-        this.setState({ commentFooterHeight: 25 });
-      }
-      if (rate > 70) {
-        this.setState({ commentFooterHeight: 65 });
-      }
-      this.setState({ inResizing: false });
-      return null;
-    }
-    this.setState({ commentFooterHeight: rate });
-  };
 
   scrollToQuote = (newIndex, oldIndex, quote) => {
     this.props.scrollToQuote(newIndex, oldIndex, quote);
@@ -117,33 +85,13 @@ class ReviewComments extends React.Component {
   }
 
   render() {
-    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const { commentsList } = this.props;
     return (
-      <div className={(this.state.inResizing || this.props.inResizing)?
-        'seafile-comment seafile-comment-resizing' : 'seafile-comment'}
-      onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
-        <div className="seafile-comment-title">
-          <div className={'seafile-comment-title-text'}>{gettext('Show resolved comments')}</div>
-          <div className={'seafile-comment-title-toggle'}>
-            <label className="custom-switch" id="toggle-resolved-comments">
-              <input type="checkbox" name="option" className="custom-switch-input"
-                onChange={this.toggleResolvedComment}
-                checked={this.state.showResolvedComment && 'checked'}
-              />
-              <span className="custom-switch-indicator"></span>
-            </label>
-          </div>
-        </div>
-        <div style={{height:(100 - this.state.commentFooterHeight)+'%'}}>
-          {commentsList.length === 0 &&
-            <div className="seafile-comment-list">
-              <div className="comment-vacant">{gettext('No comment yet.')}</div>
-            </div>
-          }
-          <ul className="seafile-comment-list" ref='commentsList'>
-            {(commentsList.length > 0) &&
-              commentsList.map((item, index) => {
+      <div className="seafile-comment h-100">
+        <div className="flex-fill o-auto">
+          {commentsList.length > 0 ? (
+            <ul className="seafile-comment-list" ref='commentsList'>
+              {commentsList.map((item, index) => {
                 return (
                   <CommentItem
                     item={item}
@@ -155,21 +103,22 @@ class ReviewComments extends React.Component {
                     deleteComment={this.deleteComment}
                   />
                 );
-              })
-            }
-          </ul>
+              })}
+            </ul>
+          ) :
+            <p className="text-center my-4">{gettext('No comment yet.')}</p>
+          }
         </div>
-        <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
-          <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>
-          <div className="seafile-add-comment">
-            <textarea
-              className="add-comment-input"
-              value={this.state.comment}
-              placeholder={gettext('Add a comment.')}
-              onChange={this.handleCommentChange}
-              clos="100" rows="3" warp="virtual"
-            ></textarea>
-            <Button className="comment-btn" color="primary" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
+        <div className="seafile-comment-footer flex-shrink-0">
+          <textarea
+            className="add-comment-input"
+            value={this.state.comment}
+            placeholder={gettext('Add a comment...')}
+            onChange={this.handleCommentChange}
+            clos="100" rows="3" warp="virtual"
+          ></textarea>
+          <div className="comment-submit-container">
+            <Button className="submit-comment" color="primary" size="sm" onClick={this.submitComment}>{gettext('Submit')}</Button>
           </div>
         </div>
       </div>

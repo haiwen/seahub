@@ -15,9 +15,7 @@
   width: 100%;
   height: 100%;
   display: flex;
-  flex-flow:  row nowrap;
-  justify-content: space-between;
-  box-sizing: border-box;
+  flex-flow: row nowrap;
   background-color: #fafaf9;
 }
 
@@ -26,25 +24,11 @@
   height: 100%;
 }
 
-.main .cur-view-container .seafile-comment {
-  height: 100%;
-  position: relative;
-}
 .main .cur-view-right-part {
   height: 100%;
-  width: 35%;
+  width: 300px;
+  flex-shrink: 0;
   position: relative;
-}
-
-.seafile-comment-resize {
-  width: 5px;
-  height: 100%;
-  background-color: transparent;
-  position: absolute;
-  left: 0;
-  top: 0;
-  cursor: col-resize;
-  z-index: 1;
 }
 
 .cur-file-info .file-info {
@@ -97,7 +81,7 @@
   font-weight: 700;
 }
 .review-side-panel-body {
-  padding: 1rem 2rem 3rem;
+  padding: 1rem 1rem 3rem;
   overflow-y: scroll;
   height: 100%;
 }
@@ -118,7 +102,8 @@
 .review-side-panel-item:last-child {
   border: 0;
 }
-.reviewer-info, .author-info {
+.review-side-panel-item .reviewer-info,
+.review-side-panel-item .author-info {
   display: flex;
   align-items: center;
 }
@@ -144,7 +129,8 @@
   height: 1.5rem;
   width: 1.5rem;
 }
-.reviewer-name, .author-name {
+.review-side-panel-item .reviewer-name,
+.review-side-panel-item .author-name {
   height: 2rem;
   line-height: 2rem;
 }

@@ -214,7 +214,7 @@ class DirentDetail extends React.Component {
         <div className="detail-container">
           {this.renderHeader(smallIconUrl, direntName)}
           <Nav tabs className="mx-0">{this.renderNavItem('info')}{this.renderNavItem('comments')}</Nav>
-          <TabContent activeTab={this.state.activeTab}>
+          <TabContent activeTab={this.state.activeTab} className="flex-fill o-auto">
             <TabPane tabId="info">{this.renderDetailBody(bigIconUrl, folderDirent)}</TabPane>
             <TabPane tabId="comments" className="comments h-100">
               <DetailCommentList

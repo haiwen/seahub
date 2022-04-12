@@ -35,14 +35,18 @@ const defaultStyle = {
       minHeight: 90,
       height: 90,
       border: '1px solid #e6e6dd',
-      borderRadius: '5px',
+      borderBottom: 'none',
+      borderRadius: '5px 5px 0 0',
       overfflowY: 'auto',
+      outline: 'none',
       '&focused': {
+        /*
         backgroundColor: '#cee4e5',
         outlineOffset: '-2px',
         outlineColor: '-webkit-focus-ring-color',
         outlineStyle: 'auto',
         outlineWidth: '5px',
+        */
       },
     },
   },

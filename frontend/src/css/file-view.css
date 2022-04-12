@@ -61,12 +61,13 @@ body {
     opacity: 1;
   }
 }
-/* for mobile */
+ /* for mobile */
 .file-view-body .seafile-comment {
   width: 100%;
 }
 @media (min-width: 768px) {
   .file-view-body .seafile-comment {
-    width: 29%;
+    width: 300px;
+    border-left: 1px solid #e6e6dd;
   }
 }
