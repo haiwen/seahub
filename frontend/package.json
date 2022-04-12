@@ -17,7 +17,7 @@
     "i18next-xhr-backend": "^3.1.2",
     "MD5": "^1.3.0",
     "merge": "^1.2.1",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "object-assign": "4.1.1",
     "prismjs": "1.23.0",
     "prop-types": "^15.6.2",
