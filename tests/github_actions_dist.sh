@@ -16,9 +16,9 @@ echo $GITHUB_BRANCH
 # clone dependent repositories
 mkdir -p /tmp/repositories
 
-git clone --depth=1 git://github.com/haiwen/seafile-server.git /tmp/repositories/seafile-server
-git clone --depth=1 git://github.com/haiwen/ccnet-server.git /tmp/repositories/ccnet-server
-git clone --depth=1 git://github.com/haiwen/libsearpc.git /tmp/repositories/libsearpc
+git clone --depth=1 https://github.com/haiwen/seafile-server.git /tmp/repositories/seafile-server
+git clone --depth=1 https://github.com/haiwen/ccnet-server.git /tmp/repositories/ccnet-server
+git clone --depth=1 https://github.com/haiwen/libsearpc.git /tmp/repositories/libsearpc
 
 # copy dependent files
 mkdir /tmp/site-packages
