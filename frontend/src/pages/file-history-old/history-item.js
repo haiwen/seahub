@@ -52,8 +52,8 @@ class HistoryItem extends React.Component {
       <Fragment>
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
           <td>
-            <time datetime={item.time} is="relative-time" title={moment(item.ctime).format('llll')}>{moment(item.ctime).fromNow()}</time>
-            {this.props.index === 0 && gettext('(current version)')}
+            <span>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
+            {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
           </td>
           <td>
             <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
