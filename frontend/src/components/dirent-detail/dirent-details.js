@@ -9,7 +9,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
-import FileTag from '../../models/file-tag';
+
 import '../../css/dirent-detail.css';
 
 const propTypes = {
@@ -29,7 +29,6 @@ class DirentDetail extends React.Component {
     this.state = {
       direntType: '',
       direntDetail: '',
-      fileTagList: [],
       folderDirent: null,
       activeTab: 'info',
       fileParticipantList: [],
@@ -90,17 +89,6 @@ class DirentDetail extends React.Component {
           direntType: 'file',
           direntDetail: res.data,
         });
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-      seafileAPI.listFileTags(repoID, direntPath).then(res => {
-        let fileTagList = [];
-        res.data.file_tags.forEach(item => {
-          let file_tag = new FileTag(item);
-          fileTagList.push(file_tag);
-        });
-        this.setState({fileTagList: fileTagList});
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
