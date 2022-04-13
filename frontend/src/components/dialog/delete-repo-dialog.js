@@ -52,9 +52,12 @@ class DeleteRepoDialog extends Component {
     let message = gettext('Are you sure you want to delete %s ?');
     message = message.replace('%s', repoName);
 
-    let alert_message = gettext('This library has been shared to {user_amount} user(s) and {group_amount} group(s).');
-    alert_message = alert_message.replace('{user_amount}', this.state.sharedToUserCount);
-    alert_message = alert_message.replace('{group_amount}', this.state.sharedToGroupCount);
+    let alert_message = '';
+    if (this.state.sharedToUserCount > 0 || this.state.sharedToGroupCount > 0) {
+      alert_message = gettext('This library has been shared to {user_amount} user(s) and {group_amount} group(s).');
+      alert_message = alert_message.replace('{user_amount}', this.state.sharedToUserCount);
+      alert_message = alert_message.replace('{group_amount}', this.state.sharedToGroupCount);
+    }
 
     const { toggle: toggleDialog } = this.props;
 
@@ -63,7 +66,7 @@ class DeleteRepoDialog extends Component {
         <ModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</ModalHeader>
         <ModalBody>
           <p dangerouslySetInnerHTML={{__html: message}}></p>
-          <p className="error" dangerouslySetInnerHTML={{__html: alert_message}}></p>
+          { alert_message != '' && <p className="error" dangerouslySetInnerHTML={{__html: alert_message}}></p>}
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>

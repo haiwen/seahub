@@ -429,9 +429,17 @@ class RepoShareInfoView(APIView):
             shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
             shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
 
+        group_id = ''
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+
+        shared_group_ids = [item.group_id for item in shared_groups]
+        if group_id and group_id in shared_group_ids:
+            shared_group_ids.remove(group_id)
+
         result = {
             "shared_user_emails": [item.user for item in shared_users],
-            "shared_group_ids": [item.group_id for item in shared_groups],
+            "shared_group_ids": shared_group_ids,
         }
 
         return Response(result)
