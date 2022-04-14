@@ -67,7 +67,7 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
               <p className="small text-secondary mt-2 mb-2">
                 {gettext('An integer that is greater than or equal to 0.')}
                 <br />
-                {gettext('Tip: 0 means no limit.')}
+                {gettext('Tip: 0 means default limit')}
               </p>
             </FormGroup>
           </Form>
