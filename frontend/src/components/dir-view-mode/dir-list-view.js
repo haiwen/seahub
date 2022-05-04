@@ -39,6 +39,7 @@ const propTypes = {
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirListView extends React.Component {
@@ -76,6 +77,7 @@ class DirListView extends React.Component {
           userPerm={this.props.userPerm}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           direntList={this.props.direntList}
+          fullDirentList={this.props.fullDirentList}
           sortBy={this.props.sortBy}
           sortOrder={this.props.sortOrder}
           sortItems={this.props.sortItems}
@@ -98,6 +100,7 @@ class DirListView extends React.Component {
           onAddFolder={this.props.onAddFolder}
           onFileTagChanged={this.props.onFileTagChanged}
           showDirentDetail={this.props.showDirentDetail}
+          loadDirentList={this.props.loadDirentList}
         />
       </Fragment>
     );

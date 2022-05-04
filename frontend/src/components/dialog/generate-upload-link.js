@@ -1,15 +1,16 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, FormText } from 'reactstrap';
-import { gettext, shareLinkPasswordMinLength, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
+import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
 import toaster from '../toast';
 import SendLink from '../send-link';
-import DateTimePicker from '../date-and-time-picker';
+import SharedLink from '../shared-link';
+import SetLinkExpiration from '../set-link-expiration';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -26,29 +27,18 @@ class GenerateUploadLink extends React.Component {
     this.isExpireDaysNoLimit = (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax === 0 && uploadLinkExpireDaysDefault == 0);
     this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : uploadLinkExpireDaysDefault;
 
-    let expirationLimitTip = '';
-    if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax !== 0) {
-      expirationLimitTip = gettext('{minDays_placeholder} - {maxDays_placeholder} days')
-        .replace('{minDays_placeholder}', uploadLinkExpireDaysMin)
-        .replace('{maxDays_placeholder}', uploadLinkExpireDaysMax);
-    } else if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax === 0) {
-      expirationLimitTip = gettext('Greater than or equal to {minDays_placeholder} days')
-        .replace('{minDays_placeholder}', uploadLinkExpireDaysMin);
-    } else if (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax !== 0) {
-      expirationLimitTip = gettext('Less than or equal to {maxDays_placeholder} days')
-        .replace('{maxDays_placeholder}', uploadLinkExpireDaysMax);
-    }
-    this.expirationLimitTip = expirationLimitTip;
-
     this.state = {
-      showPasswordInput: false,
+      showPasswordInput: shareLinkForceUsePassword ? true : false,
       passwordVisible: false,
       password: '',
-      passwdnew: '',
+      passwordnew: '',
+      storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
-      setExp: 'by-days',
+      isExpirationEditIconShow: false,
+      isEditingExpiration: false,
+      expType: 'by-days',
       expireDays: this.defaultExpireDays,
       expDate: null
     };
@@ -79,7 +69,7 @@ class GenerateUploadLink extends React.Component {
     this.setState({
       showPasswordInput: !this.state.showPasswordInput,
       password: '',
-      passwdnew: '',
+      passwordnew: '',
       errorInfo: ''
     });
   }
@@ -110,17 +100,23 @@ class GenerateUploadLink extends React.Component {
     });
   }
 
+  toggleStoredPasswordVisible = () => {
+    this.setState({
+      storedPasswordVisible: !this.state.storedPasswordVisible
+    });
+  }
+
   generateUploadLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
       this.setState({errorInfo: ''});
 
       let { itemPath, repoID } = this.props;
-      let { password, isExpireChecked, setExp, expireDays, expDate } = this.state;
+      let { password, isExpireChecked, expType, expireDays, expDate } = this.state;
 
       let expirationTime = '';
       if (isExpireChecked) {
-        if (setExp == 'by-days') {
+        if (expType == 'by-days') {
           expirationTime = moment().add(parseInt(expireDays), 'days').format();
         } else {
           expirationTime = expDate.format();
@@ -138,28 +134,32 @@ class GenerateUploadLink extends React.Component {
   }
 
   validateParamsInput = () => {
-    let { showPasswordInput, password, passwordnew, isExpireChecked, setExp, expireDays, expDate } = this.state;
+    let { showPasswordInput, password, passwordnew, isExpireChecked, expType, expireDays, expDate } = this.state;
 
     // check password params
     if (showPasswordInput) {
       if (password.length === 0) {
-        this.setState({errorInfo: gettext('Please enter password')});
+        this.setState({errorInfo: gettext('Please enter a password.')});
         return false;
       }
       if (password.length < shareLinkPasswordMinLength) {
-        this.setState({errorInfo: gettext('Password is too short')});
+        this.setState({errorInfo: gettext('The password is too short.')});
         return false;
       }
       if (password !== passwordnew) {
         this.setState({errorInfo: gettext('Passwords don\'t match')});
         return false;
       }
+      if (Utils.getStrengthLevel(password) < shareLinkPasswordStrengthLevel) {
+        this.setState({errorInfo: gettext('The password is too weak. It should include at least {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols.').replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)});
+        return false;
+      }
     }
 
     if (isExpireChecked) {
-      if (setExp == 'by-date') {
+      if (expType == 'by-date') {
         if (!expDate) {
-          this.setState({errorInfo: 'Please select an expiration time'});
+          this.setState({errorInfo: gettext('Please select an expiration time')});
           return false;
         }
         return true;
@@ -183,31 +183,10 @@ class GenerateUploadLink extends React.Component {
     this.setState({isExpireChecked: e.target.checked});
   }
 
- setExp = (e) => {
-   this.setState({
-     setExp: e.target.value
-   });
- }
-
-  disabledDate = (current) => {
-    if (!current) {
-      // allow empty select
-      return false;
-    }
-
-    if (this.isExpireDaysNoLimit) {
-      return current.isBefore(moment(), 'day');
-    }
-
-    const startDay = moment().add(uploadLinkExpireDaysMin, 'days');
-    const endDay = moment().add(uploadLinkExpireDaysMax, 'days');
-    if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax !== 0) {
-      return current.isBefore(startDay, 'day') || current.isAfter(endDay, 'day');
-    } else if (uploadLinkExpireDaysMin !== 0 && uploadLinkExpireDaysMax === 0) {
-      return current.isBefore(startDay, 'day');
-    } else if (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax !== 0) {
-      return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
-    }
+  setExpType = (e) => {
+    this.setState({
+      expType: e.target.value
+    });
   }
 
   onExpDateChanged = (value) => {
@@ -228,12 +207,51 @@ class GenerateUploadLink extends React.Component {
     this.props.closeShareDialog();
   }
 
+  handleMouseOverExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: true});
+  }
+
+  handleMouseOutExpirationEditIcon = () => {
+    this.setState({isExpirationEditIconShow: false});
+  }
+
+  editExpirationToggle = () => {
+    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
+  }
+
+  updateExpiration = (e) => {
+
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+
+    let { expType, expireDays, expDate } = this.state;
+
+    let expirationTime = '';
+    if (expType == 'by-days') {
+      expirationTime = moment().add(parseInt(expireDays), 'days').format();
+    } else {
+      expirationTime = expDate.format();
+    }
+
+    seafileAPI.updateUploadLink(this.state.sharedUploadInfo.token, expirationTime).then((res) => {
+      let sharedUploadInfo = new UploadLink(res.data);
+      this.setState({
+        sharedUploadInfo: sharedUploadInfo,
+        isEditingExpiration: false,
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   deleteUploadLink = () => {
     let sharedUploadInfo = this.state.sharedUploadInfo;
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
-        showPasswordInput: false,
+        showPasswordInput: shareLinkForceUsePassword ? true : false,
         expireDays: this.defaultExpireDays,
+        expDate: null,
         isExpireChecked: !this.isExpireDaysNoLimit,
         password: '',
         passwordnew: '',
@@ -255,8 +273,10 @@ class GenerateUploadLink extends React.Component {
 
     const { isSendLinkShown } = this.state;
 
-    let passwordLengthTip = gettext('(at least {passwordLength} characters)');
-    passwordLengthTip = passwordLengthTip.replace('{passwordLength}', shareLinkPasswordMinLength);
+    let passwordLengthTip = gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)');
+    passwordLengthTip = passwordLengthTip.replace('{passwordMinLength}', shareLinkPasswordMinLength)
+      .replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel);
+
     if (this.state.sharedUploadInfo) {
       let sharedUploadInfo = this.state.sharedUploadInfo;
       return (
@@ -264,15 +284,63 @@ class GenerateUploadLink extends React.Component {
           <Form className="mb-4">
             <FormGroup>
               <dt className="text-secondary font-weight-normal">{gettext('Upload Link:')}</dt>
-              <dd className="d-flex">
-                <span>{sharedUploadInfo.link}</span>
-                <span className="far fa-copy action-icon" onClick={this.onCopyUploadLink}></span>
+              <dd>
+                <SharedLink
+                  link={sharedUploadInfo.link}
+                  linkExpired={sharedUploadInfo.is_expired}
+                  copyLink={this.onCopyUploadLink}
+                />
               </dd>
             </FormGroup>
+
+            {sharedUploadInfo.password && (
+              <FormGroup className="mb-0">
+                <dt className="text-secondary font-weight-normal">{gettext('Password:')}</dt>
+                <dd className="d-flex">
+                  <div className="d-flex align-items-center">
+                    <input id="stored-password" className="border-0 mr-1" type="text" value={this.state.storedPasswordVisible ? sharedUploadInfo.password : '****************************************'} readOnly={true} size={Math.max(sharedUploadInfo.password.length, 10)} />
+                    <span tabIndex="0" role="button" aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')} onKeyDown={this.onIconKeyDown} onClick={this.toggleStoredPasswordVisible} className={`eye-icon fas ${this.state.storedPasswordVisible ? 'fa-eye': 'fa-eye-slash'}`}></span>
+                  </div>
+                </dd>
+              </FormGroup>
+            )}
+
             {sharedUploadInfo.expire_date && (
               <FormGroup className="mb-0">
                 <dt className="text-secondary font-weight-normal">{gettext('Expiration Date:')}</dt>
-                <dd>{moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}</dd>
+                {!this.state.isEditingExpiration &&
+                  <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOverExpirationEditIcon} onMouseLeave={this.handleMouseOutExpirationEditIcon}>
+                    {moment(sharedUploadInfo.expire_date).format('YYYY-MM-DD HH:mm:ss')}
+                    {this.state.isExpirationEditIconShow && (
+                      <a href="#"
+                        role="button"
+                        aria-label={gettext('Edit')}
+                        title={gettext('Edit')}
+                        className="fa fa-pencil-alt attr-action-icon"
+                        onClick={this.editExpirationToggle}>
+                      </a>
+                    )}
+                  </dd>
+                }
+                {this.state.isEditingExpiration &&
+                  <div className="ml-4">
+                    <SetLinkExpiration
+                      minDays={uploadLinkExpireDaysMin}
+                      maxDays={uploadLinkExpireDaysMax}
+                      defaultDays={uploadLinkExpireDaysDefault}
+                      expType={this.state.expType}
+                      setExpType={this.setExpType}
+                      expireDays={this.state.expireDays}
+                      onExpireDaysChanged={this.onExpireDaysChanged}
+                      expDate={this.state.expDate}
+                      onExpDateChanged={this.onExpDateChanged}
+                    />
+                    <div className={this.state.expType == 'by-days' ? 'mt-2' : 'mt-3'}>
+                      <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
+                      <button className="btn btn-secondary" onClick={this.editExpirationToggle}>{gettext('Cancel')}</button>
+                    </div>
+                  </div>
+                }
               </FormGroup>
             )}
           </Form>
@@ -293,8 +361,17 @@ class GenerateUploadLink extends React.Component {
       <Form className="generate-upload-link">
         <FormGroup check>
           <Label check>
-            <Input type="checkbox" onChange={this.addPassword} />
-            <span>{gettext('Add password protection')}</span>
+            {shareLinkForceUsePassword ? (
+              <Label check>
+                <Input type="checkbox" checked readOnly disabled />
+                <span>{gettext('Add password protection')}</span>
+              </Label>
+            ) : (
+              <Label check>
+                <Input type="checkbox" onChange={this.addPassword} />
+                <span>{gettext('Add password protection')}</span>
+              </Label>
+            )}
           </Label>
           {this.state.showPasswordInput &&
           <div className="ml-4">
@@ -327,39 +404,17 @@ class GenerateUploadLink extends React.Component {
           </Label>
           {this.state.isExpireChecked &&
           <div className="ml-4">
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="set-exp" value="by-days" checked={this.state.setExp == 'by-days'} onChange={this.setExp} className="mr-1" />
-                <span>{gettext('Expiration days')}</span>
-              </Label>
-              {this.state.setExp == 'by-days' && (
-                <Fragment>
-                  <InputGroup style={{width: inputWidth}}>
-                    <Input type="text" value={this.state.expireDays} onChange={this.onExpireDaysChanged} />
-                    <InputGroupAddon addonType="append">
-                      <InputGroupText>{gettext('days')}</InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  {!this.state.isExpireDaysNoLimit && (
-                    <FormText color="muted">{this.expirationLimitTip}</FormText>
-                  )}
-                </Fragment>
-              )}
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="radio" name="set-exp" value="by-date" checked={this.state.setExp == 'by-date'} onChange={this.setExp} className="mr-1" />
-                <span>{gettext('Expiration time')}</span>
-              </Label>
-              {this.state.setExp == 'by-date' && (
-                <DateTimePicker
-                  inputWidth={inputWidth}
-                  disabledDate={this.disabledDate}
-                  value={this.state.expDate}
-                  onChange={this.onExpDateChanged}
-                />
-              )}
-            </FormGroup>
+            <SetLinkExpiration
+              minDays={uploadLinkExpireDaysMin}
+              maxDays={uploadLinkExpireDaysMax}
+              defaultDays={uploadLinkExpireDaysDefault}
+              expType={this.state.expType}
+              setExpType={this.setExpType}
+              expireDays={this.state.expireDays}
+              onExpireDaysChanged={this.onExpireDaysChanged}
+              expDate={this.state.expDate}
+              onExpDateChanged={this.onExpDateChanged}
+            />
           </div>
           }
         </FormGroup>

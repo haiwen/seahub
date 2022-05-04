@@ -1,4 +1,4 @@
-{% load seahub_tags i18n staticfiles %}
+{% load seahub_tags i18n static %}
 {% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
@@ -6,17 +6,20 @@
 <head>
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
+{% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}
 {% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="shortcut icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" />
+<link rel="icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" type="image/x-icon">
+<link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+{% render_bundle 'commons' 'css'%}
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -43,6 +46,7 @@
             isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+            useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
             avatarURL: '{{ avatar_url }}'
@@ -58,6 +62,7 @@
             trashReposExpireDays: {% if trash_repos_expire_days >= 0 %} {{ trash_repos_expire_days }} {% else %} null {% endif %},
             canAddRepo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
             canAddGroup: {% if user.permissions.can_add_group %} true {% else %} false {% endif %},
+            groupImportMembersExtraMsg: "{{group_import_members_extra_msg}}",
             canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
             canGenerateUploadLink: {% if user.permissions.can_generate_upload_link %} true {% else %} false {% endif %},
             canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
@@ -81,9 +86,20 @@
               {% endfor %}
               return storages;
             })(),
+            // library template
+            libraryTemplates: (function () {
+              var libraryTemplates = [];
+              {% for template in library_templates %}
+              libraryTemplates.push("{{template}}");
+              {% endfor %}
+              return libraryTemplates;
+            })(),
             enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
+            shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
             shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+            shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
+            aboutDialogCustomHtml: "{{ about_dialog_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
             canPublishRepo: {% if user.permissions.can_publish_repo %} true {% else %} false {% endif %},
             enableEncryptedLibrary: {% if enable_encrypted_library %} true {% else %} false {% endif %},
@@ -92,7 +108,18 @@
             thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
             repoPasswordMinLength: {{repo_password_min_length}},
             canAddPublicRepo: {% if can_add_public_repo %} true {% else %} false {% endif %},
+            enableOCMViaWebdav: {% if enable_ocm_via_webdav %} true {% else %} false {% endif %},
             enableOCM: {% if enable_ocm %} true {% else %} false {% endif %},
+            ocmRemoteServers: (function () {
+              var servers = [];
+              {% for server in ocm_remote_servers %}
+              servers.push({
+                'label': '{{server.server_name|escapejs}}',
+                'value': '{{server.server_url|escapejs}}',
+              });
+              {% endfor %}
+              return servers;
+            })(),
             canInvitePeople: {% if enable_guest_invitation and user.permissions.can_invite_guest %} true {% else %} false {% endif %},
             customNavItems: {% if custom_nav_items %} JSON.parse('{{ custom_nav_items | escapejs }}') {% else %} {{'[]'}} {% endif %},
             enableShowContactEmailWhenSearchUser: {% if enable_show_contact_email_when_search_user %} true {% else %} false {% endif %},
@@ -107,15 +134,19 @@
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
             enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
+            enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% endif %},
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAppBottomLinks: {% if additional_app_bottom_links %} {{ additional_app_bottom_links|safe }} {% else %} null {% endif %},
-            additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %}
+            additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
+            enableOnlyoffice: {% if enableOnlyoffice %} true {% else %} false {% endif %},
+            onlyofficeConverterExtensions: {% if onlyofficeConverterExtensions %} {{onlyofficeConverterExtensions|safe}} {% else %} null {% endif %}
         }
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-{% render_bundle 'commons' %}
+{% render_bundle 'commons' 'js' %}
+{% render_bundle 'runtime' %}
 {% block extra_script %}{% endblock %}
 </body>
 </html>

@@ -87,10 +87,12 @@ class LibHistorySetting extends React.Component {
     if (type === 'allHistory') {
       this.setState({
         keepDays: -1,
+        disabled: true
       });
     } else if (type === 'noHistory') {
       this.setState({
         keepDays: 0,
+        disabled: true
       });
     } else {
       this.setState({

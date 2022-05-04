@@ -7,9 +7,9 @@
 <p>{% trans "Seafile tracks the modification history of all files. Whenever a file is modified, a new version is created, while the old version is still kept for a configurable period. When you want to access an older version of a file, the file history feature becomes very handy." %}</p>
 <p>{% trans "To list all the versions of a file:" %}</p>
 <ul>
-<li>{% trans "In Seafile Web App, navigate into the folder containing the file. Move the cursor onto the row of that file. An operation menu will appear. You can click the \"History\" button in that menu." %}</li>
+  <li>{% blocktrans %}In Seafile Web App, navigate into the folder containing the file. Move the cursor onto the row of that file. An operation menu will appear. You can click the "History" button in that menu.{% endblocktrans %}</li>
 <li>{% trans "A list of all versions of that file will be displayed in time order, from newer to older. The list also contains the file's rename history." %}</li>
-<li>{% trans "You can download, restore, view any version of the file. For text files, you can also compare the content of two versions." %}</li>
+<li>{% trans "You can download, restore, view any version of the file." %}</li>
 </ul>
 <p>{% blocktrans %}You can configure the retention period of file versions: <a href="{{ SITE_ROOT }}help/setting_library_history/">setting history retention period</a>.{% endblocktrans %}</p>
 

@@ -12,13 +12,15 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.profile.models import Profile
-from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils import get_site_name
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+
 class Command(BaseCommand):
+
     help = 'Send Email notifications to admins if there are virus files detected .'
     label = "notifications_notify_admins_on_virus"
 
@@ -52,11 +54,9 @@ class Command(BaseCommand):
             user_language = self.get_user_language(u.email)
             translation.activate(user_language)
 
-            send_html_email_with_dj_template(
-                u.email, dj_template='notifications/notify_virus.html',
-                subject=_('Virus detected on %s') % get_site_name(),
-                priority=MAIL_PRIORITY.now
-            )
+            send_html_email_with_dj_template(u.email,
+                                             subject=_('Virus detected on %s') % get_site_name(),
+                                             dj_template='notifications/notify_virus.html')
 
             # restore current language
             translation.activate(cur_language)
@@ -68,11 +68,9 @@ class Command(BaseCommand):
             return
 
         for mail in notify_list:
-            send_html_email_with_dj_template(
-                mail, dj_template='notifications/notify_virus.html',
-                subject=_('Virus detected on %s') % get_site_name(),
-                priority=MAIL_PRIORITY.now
-            )
+            send_html_email_with_dj_template(mail,
+                                             subject=_('Virus detected on %s') % get_site_name(),
+                                             dj_template='notifications/notify_virus.html')
 
     def email_repo_owner(self, repo_file):
         repo_id, file_path = repo_file.split(':', 1)
@@ -88,16 +86,12 @@ class Command(BaseCommand):
         translation.activate(user_language)
 
         contact_email = Profile.objects.get_contact_email_by_user(owner)
-        send_html_email_with_dj_template(
-            contact_email, dj_template='notifications/notify_virus.html',
-            context={'owner': owner,
-                     'file_url': reverse('view_lib_file',
-                                         args=[repo_id, file_path]),
-                     'file_name': os.path.basename(file_path),
-                 },
-            subject=_('Virus detected on %s') % get_site_name(),
-            priority=MAIL_PRIORITY.now
-        )
+        send_html_email_with_dj_template(contact_email,
+                                         subject=_('Virus detected on %s') % get_site_name(),
+                                         dj_template='notifications/notify_virus.html',
+                                         context={'owner': owner,
+                                                  'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
+                                                  'file_name': os.path.basename(file_path)})
 
         # restore current language
         translation.activate(cur_language)

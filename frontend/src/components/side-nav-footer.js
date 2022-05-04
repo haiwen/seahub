@@ -12,7 +12,8 @@ class SideNavFooter extends React.Component {
     };
   }
 
-  onAboutDialogToggle = () => {
+  onAboutDialogToggle = (e) => {
+    e.preventDefault();
     this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
   }
 
@@ -35,7 +36,7 @@ class SideNavFooter extends React.Component {
       <Fragment>
         <div className="side-nav-footer flex-wrap">
           <a href={siteRoot + 'help/'} target="_blank" rel="noopener noreferrer" className="item">{gettext('Help')}</a>
-          <a className="item cursor-pointer" onClick={this.onAboutDialogToggle}>{gettext('About')}</a>
+          <a href="#" className="item" onClick={this.onAboutDialogToggle}>{gettext('About')}</a>
           {enableTC && <a href={`${siteRoot}terms/`} className="item">{gettext('Terms')}</a>}
           {this.renderExternalAppLinks()}
           <a href={siteRoot + 'download_client_program/'} className={`item ${additionalAppBottomLinks ? '' : 'last-item'}`}>

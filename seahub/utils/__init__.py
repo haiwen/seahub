@@ -3,21 +3,19 @@
 from functools import partial
 import os
 import re
-import urllib.request, urllib.parse, urllib.error
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.parse
+import urllib.error
 import uuid
 import logging
 import hashlib
 import tempfile
-import locale
 import configparser
 import mimetypes
 import contextlib
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
-import json
 
-import ccnet
 from constance import config
 import seaserv
 from seaserv import seafile_api
@@ -25,17 +23,18 @@ from seaserv import seafile_api
 from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
-from django.template import Context, loader
+from django.template import loader
 from django.utils.translation import ugettext as _
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.utils.html import escape
+from django.utils.timezone import make_naive, is_aware
 from django.views.static import serve as django_static_serve
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
-from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
+from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -54,10 +53,6 @@ try:
     from seahub.settings import ENABLE_INNER_FILESERVER
 except ImportError:
     ENABLE_INNER_FILESERVER = True
-try:
-    from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
-except ImportError:
-    CHECK_SHARE_LINK_TRAFFIC = False
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +128,6 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg'),
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
-    CDOC: ('cdoc',),
 }
 
 def gen_fileext_type_map():
@@ -1089,45 +1083,25 @@ if EVENTS_CONFIG_FILE:
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
 
 # office convert related
-HAS_OFFICE_CONVERTER = False
-if EVENTS_CONFIG_FILE:
-    def check_office_converter_enabled():
-        enabled = False
-        if hasattr(seafevents, 'is_office_converter_enabled'):
-            enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
+def check_office_converter_enabled():
+    if OFFICE_CONVERTOR_ROOT:
+        return True
+    return False
 
-            if enabled:
-                logging.debug('office converter: enabled')
-            else:
-                logging.debug('office converter: not enabled')
-        return enabled
-
-    def get_office_converter_html_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'html')
-
-    def get_office_converter_pdf_dir():
-        return seafevents.get_office_converter_dir(parsed_events_conf, 'pdf')
-
-    def get_office_converter_limit():
-        return seafevents.get_office_converter_limit(parsed_events_conf)
-
-    HAS_OFFICE_CONVERTER = check_office_converter_enabled()
-
+HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
+OFFICE_PREVIEW_MAX_PAGES = 50
+
 if HAS_OFFICE_CONVERTER:
 
     import time
     import requests
     import jwt
 
-    OFFICE_HTML_DIR = get_office_converter_html_dir()
-    OFFICE_PDF_DIR = get_office_converter_pdf_dir()
-    OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
-
     def add_office_convert_task(file_id, doctype, raw_path):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
         requests.get(url, params, headers=headers)
@@ -1136,7 +1110,7 @@ if HAS_OFFICE_CONVERTER:
     def query_office_convert_status(file_id, doctype):
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'file_id': file_id, 'doctype': doctype}
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
         d = requests.get(url, params, headers=headers)
@@ -1150,21 +1124,11 @@ if HAS_OFFICE_CONVERTER:
             ret['status'] = d['status']
         return ret
 
-    def get_office_converted_page(request, static_filename, file_id):
-        office_out_dir = OFFICE_HTML_DIR
-        filepath = os.path.join(file_id, static_filename)
-        if static_filename.endswith('.pdf'):
-            office_out_dir = OFFICE_PDF_DIR
-            filepath = static_filename
-        return django_static_serve(request,
-                                   filepath,
-                                   document_root=office_out_dir)
-
-    def cluster_get_office_converted_page(path, static_filename, file_id):
+    def get_office_converted_page(path, static_filename, file_id):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
         payload = {'exp': int(time.time()) + 300, }
         token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token.decode()}
+        headers = {"Authorization": "Token %s" % token}
         params = {'static_filename': static_filename, 'file_id': file_id}
         try:
             ret = requests.get(url, params, headers=headers)
@@ -1208,32 +1172,6 @@ if EVENTS_CONFIG_FILE:
     HAS_FILE_SEARCH = check_search_enabled()
 
 
-def user_traffic_over_limit(username):
-    """Return ``True`` if user traffic over the limit, otherwise ``False``.
-    """
-    if not CHECK_SHARE_LINK_TRAFFIC:
-        return False
-
-    from seahub_extra.plan.models import UserPlan
-    from seahub_extra.plan.settings import PLAN
-    up = UserPlan.objects.get_valid_plan_by_user(username)
-    plan = 'Free' if up is None else up.plan_type
-    traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
-
-    try:
-        stat = seafevents_api.get_user_traffic_by_month(username, datetime.now())
-    except Exception as e:
-        logger = logging.getLogger(__name__)
-        logger.error('Failed to get user traffic stat: %s' % username,
-                     exc_info=True)
-        return True
-
-    if not stat:            # No traffic record yet
-        return False
-
-    month_traffic = stat['link_file_upload'] + stat['link_file_download']
-    return True if month_traffic >= traffic_limit else False
-
 def is_user_password_strong(password):
     """Return ``True`` if user's password is STRONG, otherwise ``False``.
        STRONG means password has at least USER_PASSWORD_STRENGTH_LEVEL(3) types of the bellow:
@@ -1253,6 +1191,16 @@ def is_user_password_strong(password):
             return False
         else:
             return True
+
+def get_password_strength_level(password):
+
+    num = 0
+    for letter in password:
+        # get ascii dec
+        # bitwise OR
+        num |= get_char_mode(ord(letter))
+
+    return calculate_bitwise(num)
 
 def get_char_mode(n):
     """Return different num according to the type of given letter:
@@ -1333,6 +1281,12 @@ def get_origin_repo_info(repo_id):
 
 def within_time_range(d1, d2, maxdiff_seconds):
     '''Return true if two datetime.datetime object differs less than the given seconds'''
+    if is_aware(d1):
+        d1 = make_naive(d1)
+
+    if is_aware(d2):
+        d2 = make_naive(d2)
+
     delta = d2 - d1 if d2 > d1 else d1 - d2
     # delta.total_seconds() is only available in python 2.7+
     diff = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
@@ -1381,3 +1335,8 @@ def is_valid_org_id(org_id):
         return True
     else:
         return False
+
+
+def encrypt_with_sha1(origin_str):
+
+    return hashlib.sha1(origin_str.encode()).hexdigest()

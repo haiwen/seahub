@@ -20,7 +20,7 @@ const TextTranslation = {
   'HISTORY' : {key : 'History', value : gettext('History')},
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},
   'TAGS': {key: 'Tags', value: gettext('Tags')},
-  'RELATED_FILES': {key: 'Related Files', value: gettext('Related Files')},
+  'ONLYOFFICE_CONVERT': {key: 'Convert with ONLYOFFICE', value: gettext('Convert with ONLYOFFICE')}
 };
 
 export default TextTranslation;

@@ -58,6 +58,12 @@ img[src=""] {
   overflow:hidden;
 }
 
+@media (max-width: 767px) {
+  .wiki-side-panel {
+    z-index: 1051;
+  }
+}
+
 .wiki-main-panel {
   flex: 1 0 80%;
   display:flex;

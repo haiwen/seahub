@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import copy from 'copy-to-clipboard';
 import Loading from '../loading';
+import OpIcon from '../op-icon';
 
 const apiTokenItemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -50,7 +51,7 @@ class APITokenItem extends React.Component {
     let item = this.props.item;
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">{item.app_name}</td>
         <td>
           <RepoAPITokenPermissionEditor
@@ -63,13 +64,17 @@ class APITokenItem extends React.Component {
         <td>
           <span>{item.api_token}</span>
           {this.state.isOperationShow &&
-          <span className="far fa-copy action-icon" onClick={this.onCopyAPIToken} />
+            <OpIcon
+              className="far fa-copy action-icon"
+              op={this.onCopyAPIToken}
+              title={gettext('Copy')}
+            />
           }
         </td>
         <td>
-          <span
+          <OpIcon
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
-            onClick={this.onDeleteAPIToken}
+            op={this.onDeleteAPIToken}
             title={gettext('Delete')}
           />
         </td>

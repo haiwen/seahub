@@ -22,8 +22,7 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, is_repo_owner, \
-    get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
-    seafile_api, ccnet_api
+    get_file_size, seafile_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -50,8 +49,7 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
+from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
     SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
@@ -60,11 +58,13 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     DTABLE_WEB_SERVER
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
-from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
-from seahub.ocm.settings import ENABLE_OCM
+from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
+from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
 from seahub.constants import HASH_URLS, PERMISSION_READ
+from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
@@ -615,8 +615,8 @@ def fpath_to_link(repo_id, path, is_dir=False):
         href = reverse('lib_view', args=[repo_id, repo.name, path.strip('/')])
     else:
         if not path.startswith('/'):
-            p = '/' + path
-        href = reverse("view_lib_file", args=[repo_id, p.encode('utf-8')])
+            path = '/' + path
+        href = reverse("view_lib_file", args=[repo_id, path])
 
     return '<a href="%s">%s</a>' % (href, escape(path))
 
@@ -858,7 +858,7 @@ def i18n(request):
         lang = settings.LANGUAGE_CODE
 
     # set language code to user profile if user is logged in
-    if not request.user.is_anonymous():
+    if not request.user.is_anonymous:
         p = Profile.objects.get_profile_by_user(request.user.username)
         if p is not None:
             # update exist record
@@ -897,15 +897,6 @@ def repo_download_dir(request, repo_id):
 
         dir_id = seafile_api.get_dir_id_by_commit_and_path(repo.id,
             repo.head_cmmt_id, path)
-        try:
-            total_size = seafile_api.get_dir_size(repo.store_id,
-                repo.version, dir_id)
-        except Exception as e:
-            logger.error(str(e))
-            return render_error(request, _('Internal Server Error'))
-
-        if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return render_error(request, _('Unable to download directory "%s": size is too large.') % dirname)
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -1101,7 +1092,7 @@ def client_token_login(request):
                 pass
 
     if user:
-        if request.user.is_authenticated() and request.user.username == user.username:
+        if request.user.is_authenticated and request.user.username == user.username:
             pass
         else:
             request.client_token_login = True
@@ -1148,7 +1139,8 @@ def react_fake_view(request, **kwargs):
                 return render_error(request, error_msg)
 
             converted_path = repo_path_dict['path']
-            if not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+            if converted_path != '/' and not seafile_api.get_dirent_by_path(converted_repo_id, converted_path):
+
                 error_msg = 'Dirent %s not found.' % converted_path
                 return render_error(request, error_msg)
 
@@ -1171,8 +1163,6 @@ def react_fake_view(request, **kwargs):
         logger.error(e)
         expire_days = -1
 
-    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
-
     try:
         max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
     except Exception as e:
@@ -1186,6 +1176,7 @@ def react_fake_view(request, **kwargs):
         'max_upload_file_size': max_upload_file_size,
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
         'storages': get_library_storages(request),
+        'library_templates': list(LIBRARY_TEMPLATES.keys()),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
         'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
@@ -1201,12 +1192,18 @@ def react_fake_view(request, **kwargs):
         'enableFileComment': settings.ENABLE_FILE_COMMENT,
         'is_email_configured': IS_EMAIL_CONFIGURED,
         'can_add_public_repo': request.user.permissions.can_add_public_repo(),
-        'folder_perm_enabled': folder_perm_enabled,
+        'folder_perm_enabled': is_pro_version(),
         'file_audit_enabled': FILE_AUDIT_ENABLED,
         'custom_nav_items': json.dumps(CUSTOM_NAV_ITEMS),
         'enable_show_contact_email_when_search_user': settings.ENABLE_SHOW_CONTACT_EMAIL_WHEN_SEARCH_USER,
         'additional_share_dialog_note': ADDITIONAL_SHARE_DIALOG_NOTE,
         'additional_app_bottom_links': ADDITIONAL_APP_BOTTOM_LINKS,
         'additional_about_dialog_links': ADDITIONAL_ABOUT_DIALOG_LINKS,
+        'enable_ocm_via_webdav': ENABLE_OCM_VIA_WEBDAV,
         'enable_ocm': ENABLE_OCM,
+        'ocm_remote_servers': OCM_REMOTE_SERVERS,
+        'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
+        'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
+        'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
     })

@@ -15,7 +15,6 @@ from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
 
-import seahub.settings as settings
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -218,7 +217,7 @@ class AdminUsersBatch(APIView):
                     "email": email,
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
-                        operation=USER_DELETE, detail=admin_op_detail)
+                                     operation=USER_DELETE, detail=admin_op_detail)
 
         if operation == 'set-institution':
             institution = request.POST.get('institution', None)
@@ -228,7 +227,7 @@ class AdminUsersBatch(APIView):
 
             if institution != '':
                 try:
-                    obj_insti = Institution.objects.get(name=institution)
+                    Institution.objects.get(name=institution)
                 except Institution.DoesNotExist:
                     error_msg = 'Institution %s does not exist' % institution
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -282,16 +281,17 @@ class AdminImportUsers(APIView):
             logger.error(e)
 
         # example file is like:
-        # Email    Password Name(Optional) Role(Optional) Space Quota(MB, Optional)
-        # a@a.com  a        a              default        1024
-        # b@b.com  b        b              default        2048
+        # Email    Password Name(Optional) Role(Optional) Space Quota(MB, Optional) Login ID
+        # a@a.com  a        a              default        1024                      login id a
+        # b@b.com  b        b              default        2048                      login id b
 
         rows = wb.worksheets[0].rows
         records = []
         # skip first row(head field).
         next(rows)
         for row in rows:
-            records.append([col.value for col in row])
+            if not all(col.value is None for col in row):
+                records.append([col.value for col in row])
 
         if user_number_over_limit(new_users=len(records)):
             error_msg = 'The number of users exceeds the limit.'
@@ -354,6 +354,7 @@ class AdminImportUsers(APIView):
                         Profile.objects.add_or_update(email, nickname, '')
                 except Exception as e:
                     logger.error(e)
+
             # update role
             if record[3]:
                 try:
@@ -362,6 +363,7 @@ class AdminImportUsers(APIView):
                         User.objects.update_role(email, role)
                 except Exception as e:
                     logger.error(e)
+
             # update quota
             if record[4]:
                 try:
@@ -372,14 +374,21 @@ class AdminImportUsers(APIView):
                 except Exception as e:
                     logger.error(e)
 
-            send_html_email_with_dj_template(
-                email, dj_template='sysadmin/user_batch_add_email.html',
-                subject=_('You are invited to join %s') % get_site_name(),
-                context={
-                    'user': email2nickname(request.user.username),
-                    'email': email,
-                    'password': password,
-                })
+            # login id
+            if record[5]:
+                try:
+                    Profile.objects.add_or_update(email, login_id=record[5])
+                except Exception as e:
+                    logger.error(e)
+
+            send_html_email_with_dj_template(email,
+                                             subject=_('You are invited to join %s') % get_site_name(),
+                                             dj_template='sysadmin/user_batch_add_email.html',
+                                             context={
+                                                 'user': email2nickname(request.user.username),
+                                                 'email': email,
+                                                 'password': password
+                                             })
 
             user = User.objects.get(email=email)
 
@@ -407,4 +416,3 @@ class AdminImportUsers(APIView):
                                  operation=USER_ADD, detail=admin_op_detail)
 
         return Response(result)
-

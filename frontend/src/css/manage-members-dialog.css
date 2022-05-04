@@ -1,32 +1,13 @@
 .manage-members {
   max-height: 300px;
   overflow-y: scroll;
-  margin: 1rem 0 2rem;
+  padding: 0.5rem 0;
 }
+
 .manage-members-table th,
 .manage-members-table td {
   vertical-align: middle;
   text-align: left;
-}
-.toggle-group-admin-icon,
-.delete-group-member-icon {
-  opacity: 0;
-  cursor: pointer;
-  color: #888;
-  margin-left: 5px;
-}
-.manage-members-table tr:hover .toggle-group-admin-icon,
-.manage-members-table tr:hover .delete-group-member-icon {
-  opacity: 1;
-}
-
-.manage-members-table .editing {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.toggle-group-admin-icon:hover,
-.delete-group-member-icon:hover {
-  color: #333;
 }
 
 .add-members-select .true__indicator-separator {
@@ -41,9 +22,27 @@
 .add-members .add-members-select {
   width: 385px;
 }
+
 .add-members .btn {
   width: 75px;
 }
+
 .group-error {
   margin-top: 10px;
+}
+
+.group-manage-members-dialog .back-icon {
+  color: #999999; 
+  cursor: pointer;
+}
+
+.group-manage-members-dialog .search-group-members-btn {
+  font-size: 14px;
+  font-weight: normal;
+  background: #f1f1f1;
+  margin: 12px 0 0;
+}
+
+.group-manage-members-dialog .search-group-members-btn:hover {
+  background: #dbdbdb;
 }

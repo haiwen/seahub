@@ -13,9 +13,16 @@ const propTypes = {
   translateExplanation: PropTypes.func,
   onOptionChanged: PropTypes.func.isRequired,
   toggleItemFreezed: PropTypes.func,
+  enableAddCustomPermission: PropTypes.bool,
+  onAddCustomPermissionToggle: PropTypes.func,
+
 };
 
 class SelectEditor extends React.Component {
+
+  static defaultProps = {
+    enableAddCustomPermission: false,
+  }
 
   constructor(props) {
     super(props);
@@ -45,6 +52,21 @@ class SelectEditor extends React.Component {
       this.options.push(option);
     }
 
+    const { enableAddCustomPermission } = this.props;
+    if (enableAddCustomPermission) {
+      const option = {
+        value: gettext('Add custom permission'),
+        isDisabled: true,
+        label: (
+          <div className="permission-editor-btn-add-custom-permission" onClick={this.props.onAddCustomPermissionToggle}>
+            <i className="fa fa-plus"></i>
+            <span>{gettext('Add custom permission')}</span>
+          </div>
+        )
+      };
+      this.options.push(option);
+    }
+
     this.setState({
       options: this.options
     });
@@ -59,6 +81,7 @@ class SelectEditor extends React.Component {
   }
 
   onEditPermission = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
@@ -85,6 +108,28 @@ class SelectEditor extends React.Component {
   render() {
     let { currentOption, isTextMode } = this.props;
 
+    const MenuSelectStyle = {
+      option: (provided, state) => {
+        const { isDisabled, isSelected, isFocused } = state;
+        return ({
+          ...provided,
+          cursor: isDisabled ? 'default' : 'pointer',
+          //backgroundColor: isSelected ? '#5A98F8' : (isFocused ? '#f5f5f5' : '#fff'),
+          '.header-icon .dtable-font': {
+            color: isSelected ? '#fff' : '#aaa',
+          },
+        });
+      },
+      control: (provided) => ({
+        ...provided,
+        fontSize: '14px',
+        cursor: 'pointer',
+        lineHeight: '1.5',
+      }),
+      menuPortal:  base => ({ ...base, zIndex: 9999 }),
+      indicatorSeparator: () => {},
+    };
+
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
     return (
@@ -95,19 +140,27 @@ class SelectEditor extends React.Component {
             className="permission-editor-select"
             classNamePrefix="permission-editor"
             placeholder={this.props.translateOption(currentOption)}
+            value={currentOption}
             onChange={this.onOptionChanged}
             captureMenuScroll={false}
+            menuPlacement="auto"
+            menuPosition={'fixed'}
+            menuPortalTarget={document.querySelector('#wrapper')}
+            styles={MenuSelectStyle}
+            menuShouldScrollIntoView
           />
         }
         {(isTextMode && !this.state.isEditing) &&
           <div>
             {this.props.translateOption(currentOption)}
             {this.props.isEditIconShow && (
-              <span
+              <a href="#"
+                role="button"
+                aria-label={gettext('Edit')}
                 title={gettext('Edit')}
                 className="fa fa-pencil-alt attr-action-icon"
                 onClick={this.onEditPermission}>
-              </span>
+              </a>
             )}
           </div>
         }

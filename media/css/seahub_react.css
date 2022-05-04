@@ -117,6 +117,7 @@ a:hover { color:#eb8205; }
 .vam { vertical-align:middle; }
 .flex-auto { flex:auto; }
 .flex-1 { flex:1; }
+.flex-none { flex: none; }
 .hide { display:none; }
 .error { color:red; }
 .no-deco,
@@ -144,6 +145,11 @@ a:hover { color:#eb8205; }
 }
 .cur-view-path .sf-heading {
   margin: 0;
+}
+
+.sf-link {
+    color: #ee8204 !important;
+    cursor: pointer;
 }
 
 .vh {
@@ -1043,12 +1049,11 @@ a.table-sort-op {
     margin-left: 15px;
   }
 }
-a.table-sort-op:hover,
-a.table-sort-op:focus {
+a.table-sort-op:hover {
   outline: none;
   text-decoration: none;
 }
-  
+
 /* dropdown-menu style */
 .dropdown-menu {
     min-width: 8rem;

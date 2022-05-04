@@ -42,6 +42,8 @@ from constance import config
 
 from seahub.password_session import update_session_auth_hash
 
+from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -92,7 +94,7 @@ def login(request, template_name='registration/login.html',
     """Displays the login form and handles the login action."""
 
     redirect_to = request.GET.get(redirect_field_name, '')
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if redirect_to:
             return HttpResponseRedirect(redirect_to)
         else:
@@ -203,6 +205,7 @@ def login(request, template_name='registration/login.html',
         'signup_url': signup_url,
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
+        'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
 
 def login_simple_check(request):
@@ -230,7 +233,15 @@ def login_simple_check(request):
 
         auth_login(request, user)
 
-        return HttpResponseRedirect(settings.SITE_ROOT)
+        # Ensure the user-originating redirection url is safe.
+        if REDIRECT_FIELD_NAME in request.GET:
+            next_page = request.GET[REDIRECT_FIELD_NAME]
+            if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+                next_page = settings.LOGIN_REDIRECT_URL
+        else:
+            next_page = settings.SITE_ROOT
+
+        return HttpResponseRedirect(next_page)
     else:
         raise Http404
 
@@ -239,6 +250,7 @@ def logout(request, next_page=None,
            template_name='registration/logged_out.html',
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
+
     from seahub.auth import logout
     logout(request)
 
@@ -255,6 +267,14 @@ def logout(request, next_page=None,
     # Local logout for cas user.
     if getattr(settings, 'ENABLE_CAS', False):
         response = HttpResponseRedirect(reverse('cas_ng_logout'))
+        response.delete_cookie('seahub_auth')
+        return response
+
+    from seahub.settings import LOGOUT_REDIRECT_URL
+    if LOGOUT_REDIRECT_URL:
+        response = HttpResponseRedirect(LOGOUT_REDIRECT_URL)
+        response.delete_cookie('seahub_auth')
+        return response
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
@@ -268,7 +288,8 @@ def logout(request, next_page=None,
             response = HttpResponseRedirect(redirect_to)
         else:
             response = render(request, template_name, {
-                'title': _('Logged out')
+                'title': _('Logged out'),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
             })
     else:
         # Redirect to this page until the session has been cleared.

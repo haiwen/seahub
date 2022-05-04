@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MD5 from 'MD5';
+import moment from 'moment';
 import { UncontrolledTooltip } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, siteRoot, mediaUrl, username } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -73,6 +74,18 @@ class DirentListItem extends React.Component {
       isPermissionDialogOpen: false,
       isOpMenuOpen: false // for mobile
     };
+
+    const { dirent } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
+    this.isCustomPermission = isCustomPermission;
+    this.customPermission = customPermission;
+    this.canPreview = true;
+    this.canDrag = dirent.permission === 'rw';
+    if (isCustomPermission) {
+      const { preview, modify } = customPermission.permission;
+      this.canPreview = preview || modify;
+      this.canDrag = modify;
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,7 +115,9 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    if (this.canDrag) {
+      this.setState({isDragTipShow: true});
+    }
   }
 
   onMouseOver = () => {
@@ -112,7 +127,9 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    this.setState({isDragTipShow: true});
+    if (this.canDrag) {
+      this.setState({isDragTipShow: true});
+    }
   }
 
   onMouseLeave = () => {
@@ -138,10 +155,12 @@ class DirentListItem extends React.Component {
     this.props.onItemSelected(this.props.dirent);
   }
 
-  onItemStarred = () => {
+  onItemStarred = (e) => {
     let dirent = this.props.dirent;
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
+
+    e.preventDefault();
 
     if (dirent.starred) {
       seafileAPI.unstarItem(repoID, filePath).then(() => {
@@ -171,8 +190,20 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.preventDefault();
-
     const dirent = this.props.dirent;
+    if (this.state.isRenameing) {
+      return;
+    }
+
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    if (!this.canPreview) {
+      return;
+    }
+
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
@@ -181,11 +212,13 @@ class DirentListItem extends React.Component {
   }
 
   onItemDelete = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(this.props.dirent);
   }
 
   onItemShare = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
@@ -243,6 +276,9 @@ class DirentListItem extends React.Component {
         break;
       case 'Open via Client':
         this.onOpenViaClient();
+        break;
+      case 'Convert with ONLYOFFICE':
+        this.onConvertWithONLYOFFICE();
         break;
       default:
         break;
@@ -337,15 +373,42 @@ class DirentListItem extends React.Component {
     location.href = url;
   }
 
+  onConvertWithONLYOFFICE = ()=> {
+
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent)
+
+    seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
+      this.props.loadDirentList(res.data.parent_dir)
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onItemDownload = (e) => {
+    e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
     let dirent = this.props.dirent;
     let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
     if (dirent.type === 'dir') {
-      this.setState({
-        isZipDialogOpen: true
-      });
+      if (!useGoFileserver) {
+        this.setState({
+          isZipDialogOpen: true
+        });
+      } else {
+        seafileAPI.zipDownload(repoID, this.props.path, this.props.dirent.name).then((res) => {
+          const zipToken = res.data['zip_token'];
+          location.href = `${fileServerRoot}zip/${zipToken}`;
+        }).catch((error) => {
+          let errorMsg = Utils.getErrorMsg(error);
+          this.setState({
+            isLoading: false,
+            errorMsg: errorMsg
+          });
+        });
+      }
     } else {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
@@ -373,7 +436,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragStart = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     e.dataTransfer.effectAllowed = 'move';
@@ -403,7 +466,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragEnter = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -413,7 +476,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragOver = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -424,7 +487,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragLeave = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
 
@@ -435,7 +498,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragDrop = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.setState({isDropTipshow: false});
@@ -495,6 +558,14 @@ class DirentListItem extends React.Component {
 
   renderItemOperation = () => {
     let { dirent, currentRepoInfo, selectedDirentList } = this.props;
+    let canDownload = true;
+    let canDelete = true;
+    const { isCustomPermission, customPermission } = this;
+    if (isCustomPermission) {
+      const { permission } = customPermission;
+      canDownload = permission.download;
+      canDelete = permission.delete;
+    }
 
     // https://dev.seafile.com/seahub/lib/d6f300e7-bb2b-4722-b83e-cf45e370bfbc/file/seaf-server%20%E5%8A%9F%E8%83%BD%E8%AE%BE%E8%AE%A1/%E6%9D%83%E9%99%90%E7%9B%B8%E5%85%B3/%E8%B5%84%E6%96%99%E5%BA%93%E6%9D%83%E9%99%90%E8%A7%84%E8%8C%83.md
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
@@ -505,68 +576,48 @@ class DirentListItem extends React.Component {
           <Fragment>
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations">
-                <ul className="operation-group">
-                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {showShareBtn && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                    </li>
-                  )}
-                  {dirent.permission === 'rw' && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  <li className="operation-group-item">
-                    <ItemDropdownMenu
-                      item={this.props.dirent}
-                      toggleClass={'sf2-icon-caret-down'}
-                      isHandleContextMenuEvent={true}
-                      getMenuList={this.props.getDirentItemMenuList}
-                      onMenuItemClick={this.onMenuItemClick}
-                      unfreezeItem={this.unfreezeItem}
-                      freezeItem={this.props.freezeItem}
-                    />
-                  </li>
-                </ul>
+                {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
+                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                )}
+                {showShareBtn && (
+                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                )}
+                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                )}
+                <ItemDropdownMenu
+                  item={this.props.dirent}
+                  toggleClass={'sf2-icon-caret-down'}
+                  isHandleContextMenuEvent={true}
+                  getMenuList={this.props.getDirentItemMenuList}
+                  onMenuItemClick={this.onMenuItemClick}
+                  unfreezeItem={this.unfreezeItem}
+                  freezeItem={this.props.freezeItem}
+                />
               </div>
             }
           </Fragment> :
           <Fragment>
             {this.state.isOperationShow &&
               <div className="operations">
-                <ul className="operation-group">
-                  {(dirent.permission === 'rw' || dirent.permission === 'r') && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                    </li>
-                  )}
-                  {showShareBtn && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                    </li>
-                  )}
-                  {dirent.permission === 'rw' && (
-                    <li className="operation-group-item">
-                      <i className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                    </li>
-                  )}
-                  <li className="operation-group-item">
-                    <ItemDropdownMenu
-                      item={this.props.dirent}
-                      toggleClass={'sf2-icon-caret-down'}
-                      isHandleContextMenuEvent={true}
-                      getMenuList={this.props.getDirentItemMenuList}
-                      onMenuItemClick={this.onMenuItemClick}
-                      unfreezeItem={this.unfreezeItem}
-                      freezeItem={this.props.freezeItem}
-                    />
-                  </li>
-                </ul>
+                {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
+                  <a href="#" className="op-icon sf2-icon-download" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                )}
+                {showShareBtn && (
+                  <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
+                )}
+                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                  <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                )}
+                <ItemDropdownMenu
+                  item={this.props.dirent}
+                  toggleClass={'sf2-icon-caret-down'}
+                  isHandleContextMenuEvent={true}
+                  getMenuList={this.props.getDirentItemMenuList}
+                  onMenuItemClick={this.onMenuItemClick}
+                  unfreezeItem={this.unfreezeItem}
+                  freezeItem={this.props.freezeItem}
+                />
               </div>
             }
           </Fragment>
@@ -604,7 +655,8 @@ class DirentListItem extends React.Component {
     const desktopItem = (
       <tr
         className={trClass}
-        draggable="true"
+        draggable={this.canDrag}
+        onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
@@ -621,8 +673,11 @@ class DirentListItem extends React.Component {
           <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
         </td>
         <td className="pl10">
-          {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onItemStarred}></i>}
-          {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star cursor-pointer" onClick={this.onItemStarred}></i>}
+          {dirent.starred !== undefined &&
+          <a href="#" role="button" aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')} onClick={this.onItemStarred}>
+            <i className={`fa-star ${dirent.starred ? 'fas' : 'far star-empty'}`}></i>
+          </a>
+          }
         </td>
         <td className="pl10">
           <div className="dir-icon">
@@ -635,10 +690,15 @@ class DirentListItem extends React.Component {
           </div>
         </td>
         <td className="name">
-          {this.state.isRenameing ?
-            <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-            <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
-          }
+          {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />}
+          {!this.state.isRenameing && (
+            <Fragment>
+              {(!dirent.isDir() && !this.canPreview) ? 
+                <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+              }
+            </Fragment>
+          )}
         </td>
         <td className="tag-list-title">
           {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
@@ -659,25 +719,30 @@ class DirentListItem extends React.Component {
         </td>
         <td className="operation">{this.renderItemOperation()}</td>
         <td className="file-size">{dirent.size && dirent.size}</td>
-        <td className="last-update">{dirent.mtime_relative}</td>
+        <td className="last-update" title={moment.unix(dirent.mtime).format('llll')}>{dirent.mtime_relative}</td>
       </tr>
     );
     const mobileItem = (
       <tr>
-        <td>
+        <td onClick={this.onItemClick}>
           <div className="dir-icon">
             {dirent.encoded_thumbnail_src ?
-              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
+              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
               <img src={iconUrl} width="24" alt="" />
             }
             {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
         </td>
-        <td>
-          {this.state.isRenameing ?
-            <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-            <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
-          }
+        <td onClick={this.onItemClick}>
+          {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> }
+          {!this.state.isRenameing && (
+            <Fragment>
+              {(!dirent.isDir() && !this.canPreview) ?
+                <a className="sf-link">{dirent.name}</a> :
+                <a href={dirent.type === 'dir' ? dirHref : fileHref}>{dirent.name}</a>
+              }
+            </Fragment>
+          )}
           <br />
           {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
           <span className="item-meta-info">{dirent.mtime_relative}</span>
@@ -701,6 +766,8 @@ class DirentListItem extends React.Component {
                     return (
                       <DropdownItem className="mobile-menu-item" key={index} data-op={item.key} onClick={this.onMobileMenuItemClick}>{item.value}</DropdownItem>
                     );
+                  } else {
+                    return null;
                   }
                 })}
               </div>

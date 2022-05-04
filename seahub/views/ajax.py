@@ -37,7 +37,7 @@ from seahub.views import get_unencry_rw_repos_by_user, \
 from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
-from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
+from seahub.settings import THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL, ENABLE_VIDEO_THUMBNAIL
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, \
@@ -247,7 +247,7 @@ def list_lib_dir(request, repo_id):
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
 
-        if not repo.encrypted and ENABLE_THUMBNAIL:
+        if not repo.encrypted:
             # used for providing a way to determine
             # if send a request to create thumbnail.
 
@@ -263,7 +263,7 @@ def list_lib_dir(request, repo_id):
                 f_['is_xmind'] = True
 
             if file_type in (IMAGE, XMIND) or \
-                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                    (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                 # if thumbnail has already been created, return its src.
                 # Then web browser will use this src to get thumbnail instead of
                 # recreating it.

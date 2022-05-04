@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { MentionsInput, Mention } from 'react-mentions';
 import { defaultStyle, defaultMentionStyle } from '../../css/react-mentions-default-style';
+
 import '../../css/comments-list.css';
 
 const { username, repoID, filePath } = window.app.pageOptions;
@@ -33,10 +34,6 @@ class CommentPanel extends React.Component {
       comment: '',
     };
     this.toBeAddedParticipant = [];
-  }
-
-  toggleResolvedComment = () => {
-    this.setState({ showResolvedComment: !this.state.showResolvedComment });
   }
 
   listComments = () => {
@@ -165,46 +162,34 @@ class CommentPanel extends React.Component {
     const { participants, commentsList } = this.state;
     return (
       <div className="seafile-comment">
-        <div className="seafile-comment-title">
+        <div className="seafile-comment-title flex-shrink-0">
           <div onClick={this.props.toggleCommentPanel} className="seafile-comment-title-close">
-            <i className="fa fa-times-circle"/>
+            <i className="fa fa-times-circle"></i>
           </div>
           <div className="seafile-comment-title-text">{gettext('Comments')}</div>
         </div>
-        <div className="seafile-comment-toggle-resolved">
-          <div className="seafile-comment-title-text">{gettext('Show resolved comments')}</div>
-          <div className="seafile-comment-title-toggle d-flex">
-            <label className="custom-switch" id="toggle-resolved-comments">
-              <input type="checkbox" name="option" className="custom-switch-input"
-                onChange={this.toggleResolvedComment}
-                checked={this.state.showResolvedComment && 'checked'}
-              />
-              <span className="custom-switch-indicator"></span>
-            </label>
-          </div>
-        </div>
-        <ul className="seafile-comment-list">
-          {commentsList.length > 0 &&
-            commentsList.map((item, index = 0, arr) => {
-              let oldTime = (new Date(item.created_at)).getTime();
-              let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
-              return (
-                <React.Fragment key={item.id}>
+        <div className="flex-fill o-auto">
+          {commentsList.length > 0 ? (
+            <ul className="seafile-comment-list">
+              {commentsList.map((item, index = 0, arr) => {
+                let oldTime = (new Date(item.created_at)).getTime();
+                let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
+                return (
                   <CommentItem
+                    key={item.id}
                     item={item} time={time}
                     deleteComment={this.deleteComment}
                     resolveComment={this.resolveComment}
                     editComment={this.editComment}
                     showResolvedComment={this.state.showResolvedComment}
                   />
-                </React.Fragment>
-              );
-            })
+                );
+              })}
+            </ul>) :
+            <p className="text-center my-4">{gettext('No comment yet.')}</p>
           }
-          {commentsList.length == 0 &&
-            <li className="comment-vacant">{gettext('No comment yet.')}</li>}
-        </ul>
-        <div className="seafile-comment-footer">
+        </div>
+        <div className="seafile-comment-footer flex-shrink-0">
           {participants &&
             <ParticipantsList
               onParticipantsChange={this.onParticipantsChange}
@@ -217,7 +202,7 @@ class CommentPanel extends React.Component {
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}
-            placeholder={gettext('Add a comment.')}
+            placeholder={gettext('Add a comment...')}
             style={defaultStyle}
           >
             <Mention
@@ -230,8 +215,9 @@ class CommentPanel extends React.Component {
               appendSpaceOnAdd={true}
             />
           </MentionsInput>
-          <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>
-            {gettext('Submit')}</Button>
+          <div className="comment-submit-container">
+            <Button className="submit-comment" color="primary" size="sm" onClick={this.onSubmit}>{gettext('Submit')}</Button>
+          </div>
         </div>
       </div>
     );
@@ -329,7 +315,7 @@ class CommentItem extends React.Component {
           </div>
           <div className="seafile-edit-comment">
             <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
-            <Button className="comment-btn" color="success" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
+            <Button className="comment-btn" color="primary" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
             <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>{gettext('Cancel')}</Button>
           </div>
         </li>

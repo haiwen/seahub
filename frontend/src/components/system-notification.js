@@ -41,9 +41,9 @@ class SystemNotification extends React.Component {
     }
 
     return (
-      <div id="info-bar">
-        <p id="info-bar-info">{curNoteMsg}</p>
-        <span className="close sf2-icon-x1" title={gettext('Close')} onClick={this.close}></span>
+      <div id="info-bar" className="d-flex justify-content-between">
+        <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{__html: curNoteMsg}}></p>
+        <button className="close sf2-icon-x1" title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close}></button>
       </div>
     );
   }

@@ -1,8 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from seahub.api2.base import APIView
-from seahub.api2.utils import json_response, is_seafile_pro
+from seahub.api2.utils import json_response
 from seahub import settings
-from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH
+from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH, is_pro_version
 
 from constance import config
 
@@ -14,12 +14,12 @@ class ServerInfoView(APIView):
     def get(self, request, format=None):
         info = {
             'version': settings.SEAFILE_VERSION,
-            'encrypted_library_version': 3 if settings.ENCRYPTED_LIBRARY_VERSION == 3 else 2,
+            'encrypted_library_version': settings.ENCRYPTED_LIBRARY_VERSION if settings.ENCRYPTED_LIBRARY_VERSION >= 3 else 2,
         }
 
         features = ['seafile-basic']
 
-        if is_seafile_pro():
+        if is_pro_version():
             features.append('seafile-pro')
 
         if HAS_OFFICE_CONVERTER:

@@ -6,13 +6,15 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import RepoTag from '../../models/repo-tag';
+import TagColor from './tag-color';
+import TagName from './tag-name';
 
 import '../../css/repo-tag.css';
 
 const tagListItemPropTypes = {
   item: PropTypes.object.isRequired,
-  onTagUpdate: PropTypes.func.isRequired,
-  onListTaggedFiles: PropTypes.func.isRequired,
+  repoID: PropTypes.string.isRequired,
+  onDeleteTag : PropTypes.func.isRequired
 };
 
 class TagListItem extends React.Component {
@@ -20,45 +22,43 @@ class TagListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSelectedTag: false
+      isTagHighlighted: false
     };
   }
 
   onMouseOver = () => {
     this.setState({
-      showSelectedTag: true
+      isTagHighlighted: true
     });
   }
 
   onMouseOut = () => {
     this.setState({
-      showSelectedTag: false
+      isTagHighlighted: false
     });
   }
 
-  onTagUpdate = () => {
-    this.props.onTagUpdate(this.props.item);
-  }
-
-  onListTaggedFiles = () => {
-    this.props.onListTaggedFiles(this.props.item);
+  deleteTag = () => {
+    this.props.onDeleteTag(this.props.item);
   }
 
   render() {
-    let color = this.props.item.color;
-    let drakColor = Utils.getDarkColor(color);
-    const fileCount = this.props.item.fileCount;
-    let fileTranslation = (fileCount === 1 || fileCount === 0) ? gettext('file') : gettext('files');
+    const { isTagHighlighted } = this.state;
+    const { item, repoID } = this.props;
     return (
-      <li className="tag-list-item">
-        <div className="tag-demo" style={{backgroundColor:color}} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
-          <span className={`${this.state.showSelectedTag ? 'show-tag-selected': ''}`} style={{backgroundColor: drakColor}}></span>
-          <span className="tag-name">{this.props.item.name}</span>
-          <span className="tag-files" onClick={this.onListTaggedFiles}>
-            {fileCount}{' '}{fileTranslation}
-          </span>
-        </div>
-        <i className="tag-edit fa fa-pencil-alt" onClick={this.onTagUpdate}></i>
+      <li
+        className={`tag-list-item px-4 d-flex justify-content-between align-items-center ${isTagHighlighted ? 'hl' : ''}`}
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.onMouseOut}
+      >
+        <TagColor repoID={repoID} tag={item} />
+        <TagName repoID={repoID} tag={item} />
+        <button
+          className={`tag-delete-icon sf2-icon-delete border-0 px-0 bg-transparent cursor-pointer ${isTagHighlighted ? '' : 'invisible'}`}
+          onClick={this.deleteTag}
+          aria-label={gettext('Delete')}
+          title={gettext('Delete')}
+        ></button>
       </li>
     );
   }
@@ -69,16 +69,14 @@ TagListItem.propTypes = tagListItemPropTypes;
 const listTagPropTypes = {
   repoID: PropTypes.string.isRequired,
   onListTagCancel: PropTypes.func.isRequired,
-  onCreateRepoTag: PropTypes.func.isRequired,
-  onUpdateRepoTag: PropTypes.func.isRequired,
-  onListTaggedFiles: PropTypes.func.isRequired,
+  onCreateRepoTag: PropTypes.func.isRequired
 };
 
 class ListTagDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repotagList: [],
+      repotagList: []
     };
   }
 
@@ -91,7 +89,7 @@ class ListTagDialog extends React.Component {
         repotagList.push(repo_tag);
       });
       this.setState({
-        repotagList: repotagList,
+        repotagList: repotagList
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -108,24 +106,44 @@ class ListTagDialog extends React.Component {
     this.props.onCreateRepoTag();
   }
 
+  onDeleteTag = (tag) => {
+    const { repoID } = this.props;
+    const { id: targetTagID } = tag;
+    seafileAPI.deleteRepoTag(repoID, targetTagID).then((res) => {
+      this.setState({
+        repotagList: this.state.repotagList.filter(tag => tag.id != targetTagID)
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     return (
       <Fragment>
         <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
-        <ModalBody>
+        <ModalBody className="px-0">
           <ul className="tag-list tag-list-container">
             {this.state.repotagList.map((repoTag, index) => {
               return (
                 <TagListItem
                   key={index}
                   item={repoTag}
-                  onTagUpdate={this.props.onUpdateRepoTag}
-                  onListTaggedFiles={this.props.onListTaggedFiles}
+                  repoID={this.props.repoID}
+                  onDeleteTag={this.onDeleteTag}
                 />
               );
             })}
           </ul>
-          <a href="#" className="add-tag-link" onClick={this.createNewTag}>{gettext('Create a new tag')}</a>
+          <a
+            href="#"
+            className="add-tag-link px-4 py-2 d-flex align-items-center"
+            onClick={this.createNewTag}
+          >
+            <span className="sf2-icon-plus mr-2"></span>
+            {gettext('Create a new tag')}
+          </a>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>

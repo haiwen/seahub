@@ -4,6 +4,7 @@ from django.urls import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
+
 class GroupsTest(BaseTestCase):
 
     def setUp(self):

@@ -3,16 +3,18 @@ from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
+from collections import OrderedDict
 
 from seaserv import ccnet_api
 
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_ldap_user, is_user_password_strong, get_site_name
+    is_ldap_user, is_user_password_strong, get_site_name, is_valid_email
 
 from captcha.fields import CaptchaField
 
@@ -51,11 +53,16 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
+
+            if not is_valid_email(username):
+                # convert login id to username if any
+                username = Profile.objects.convert_login_str_to_username(username)
+
             self.user_cache = authenticate(username=username,
                                            password=password)
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
-                # convert login id or contact email to username if any
+                # convert contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(username)
                 # convert username to primary id if any
                 username = self.get_primary_id_by_username(username)
@@ -147,7 +154,8 @@ class PasswordResetForm(forms.Form):
         }
 
         send_html_email(_("Reset Password on %s") % site_name,
-                  email_template_name, c, None, [user.username])
+                        email_template_name, c, None,
+                        [email2contact_email(user.username)])
 
 class SetPasswordForm(forms.Form):
     """
@@ -208,7 +216,11 @@ class PasswordChangeForm(SetPasswordForm):
         if not self.user.check_password(old_password):
             raise forms.ValidationError(_("Your old password was entered incorrectly. Please enter it again."))
         return old_password
-PasswordChangeForm.base_fields.keyOrder = ['old_password', 'new_password1', 'new_password2']
+
+
+field_order = ['old_password', 'new_password1', 'new_password2']
+PasswordChangeForm.base_fields = OrderedDict((k, PasswordChangeForm.base_fields[k]) for k in field_order)
+
 
 class AdminPasswordChangeForm(forms.Form):
     """

@@ -12,9 +12,6 @@ import treeHelper from './components/tree-view/tree-helper';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/side-panel.css';
 import './css/wiki.css';
@@ -77,7 +74,6 @@ class Wiki extends Component {
   }
 
   loadSidePanel = (initialPath) => {
-
     if (hasIndex) {
       this.loadIndexNode();
     } else {
@@ -296,7 +292,7 @@ class Wiki extends Component {
   }
 
   onMenuClick = () => {
-    this.setState({closeSideBar: !this.state.closeSideBar,});
+    this.setState({closeSideBar: !this.state.closeSideBar});
   }
 
   onMainNavBarClick = (nodePath) => {
@@ -366,6 +362,7 @@ class Wiki extends Component {
         if (node.path !== this.state.path) {
           this.showFile(node.path);
         }
+        this.onCloseSide();
       } else {
         const w = window.open('about:blank');
         const url = siteRoot + 'd/' + sharedToken + '/files/?p=' + Utils.encodePath(node.path);

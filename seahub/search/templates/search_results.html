@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% load seahub_tags avatar_tags i18n static %}
+
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
+<style type="text/css">
+.search-results-file-icon-container {
+    width:36px;
+    text-align:center;
+}
+.search-results-file-icon {
+    max-width:36px;
+    max-height:36px;
+}
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="row">
+    <div class="col-sm-12 col-md-8 col-md-offset-2">
+<form method="get" action="{% url 'search' %}" class="search-form" id="search-form">
+    <div class="input_and_submit">
+        <input type="text" class="search-input" name="q" placeholder="{% trans "Search Files" %}" title="{% trans "Search Files" %}" aria-label="{% trans "Search Files" %}" value="{{ keyword }}" />
+        <button type="submit" class="search-submit" aria-label="{% trans "Submit" %}"><span class="icon-search"></span></button>
+    </div>
+    <span class="advanced-search vam icon-double-angle-{% if custom_search %}down{% else %}up{% endif %}" title="{% trans "advanced" %}"></span>
+    <div class="advs hide">
+        <div class="search-time-range">
+            <span>{% trans "Last Update" %}</span><br />
+            <input type="text" name="date_from" value="{{date_from}}" class="input" placeholder="yyyy-mm-dd" />
+            <input type="hidden" name="time_from" value="" />
+            <span> - </span>
+            <input type="text" name="date_to" value="{{date_to}}" class="input" placeholder="yyyy-mm-dd" />
+            <input type="hidden" name="time_to" value="" />
+        </div>
+        <div class="search-size-range">
+            <span>{% trans "Size" %}</span><br />
+            <input type="text" name="size_from_mb" value="{{size_from_mb}}" class="input" />
+            <input type="hidden" name="size_from" />
+            <span> - </span>
+            <input type="text" name="size_to_mb" value="{{size_to_mb}}" class="input" /> MB
+            <input type="hidden" name="size_to" class="input" />
+        </div>
+        <p class="error form-error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </div>
+</form>
+
+<div id="search-results">
+    {% if error %}
+    <p class="error">{{error_msg}}</p>
+    {% else %}
+{% if not results %}
+    <p>{% trans 'No result found' %}</p>
+{% else %}
+    <p class="tip">{% blocktrans count counter=total %}{{ total }} result{% plural %}{{ total }} results{% endblocktrans%}</p>
+    <ul id="search-results-list">
+    {% for file in results %}
+        {% if file.is_dir %}
+        <li class="search-results-item ovhd">
+        <img src="{{ MEDIA_URL }}img/folder-192.png" width="36" height="36" alt="{% trans "Directory icon"%}" class="fleft" />
+        {% else %}
+        <li class="search-results-item search-results-file-item ovhd" data-repoid="{{file.repo.id}}" data-path="{{file.fullpath}}" data-name="{{file.name}}">
+            <div class="fleft search-results-file-icon-container">
+                <img src="{{ MEDIA_URL }}img/file/{{ file.name|file_icon_filter:192 }}" width="36" height="36" alt="{% trans "File"%}" class="search-results-file-icon" />
+            </div>
+        {% endif %}
+        <div class="main-con">
+            {% if file.is_dir %}
+            <a href="{{ SITE_ROOT }}library/{{ file.repo.id }}/{{ file.repo.name|urlencode }}/{{ file.fullpath|strip_slash|urlencode }}" target="_blank" title="{{ file.fullpath|slice:'1:'}}">{{ file.name }}</a>
+            {% else %}
+            <a href="{% url 'view_lib_file' file.repo.id file.fullpath %}" target="_blank" title="{{ file.fullpath|slice:'1:'}}">{{ file.name }}</a>
+            {% endif %}
+            <br />
+            {% if file.parent_dir == '/' %}
+            <a href="{{ SITE_ROOT }}library/{{ file.repo.id }}/{{ file.repo.name|urlencode }}" target="_blank" class="parent-dir-link">{{ file.repo.name }}/</a>
+            {% else %}
+            <a href="{{ SITE_ROOT }}library/{{ file.repo.id }}/{{ file.repo.name|urlencode }}{{ file.parent_dir|urlencode }}" target="_blank" class="parent-dir-link">{{ file.repo.name }}{{ file.parent_dir }}</a>
+            {% endif %}
+            <br />
+            {% if file.is_dir %}
+            <span class="time">{{ file.last_modified|translate_seahub_time }}</span>
+            {% else %}
+            <span class="time">{{ file.size|filesizeformat }} {{ file.last_modified|translate_seahub_time }}</span>
+            {% endif %}
+            {% if file.content_highlight %}
+            <p class="highlight-content">{{ file.content_highlight|safe }}</p>
+            {% endif %}
+        </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% if total > per_page %}
+    <div id="paginator">
+        {% if current_page != 1 %}
+        <a href="#" data-page="{{ prev_page }}" class="prev">{% trans "Previous"%}</a>
+        {% endif %}
+        {% if has_more %}
+        <a href="#" data-page="{{ next_page }}" class="next">{% trans "Next"%}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% endif %}
+{% endif %}
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script>
+<script type="text/javascript">
+(function() {
+    var form = $('#search-form'),
+        advs = $('.advs', form);
+    advs.prepend($('#advanced-search-form .search-scales')
+        .clone(true)
+        .append($('.search-time-range, .search-size-range')));
+
+    {% if custom_search %}
+    advs.removeClass('hide');
+    {% endif %}
+
+    // date picker for date-custom
+    $.datepicker.setDefaults({
+        hideIfNoPrevNext: true,
+        maxDate: 0, // today (The maximum selectable date)
+        dateFormat: 'yy-mm-dd'
+    });
+    $('.search-time-range .input').datepicker();
+
+    form.find('.advanced-search').on('click', function() {
+        advs.toggleClass('hide');
+        var it = $(this),
+            str = 'icon-double-angle-';
+        if (it.hasClass(str + 'down')) {
+            it.removeClass(str + 'down').addClass(str + 'up');
+        } else {
+            it.removeClass(str + 'up').addClass(str + 'down');
+        }
+        return false;
+    });
+    {% if custom_ftypes %}
+    var custom_ftypes = [];
+    {% for f in custom_ftypes %}
+    custom_ftypes.push("{{f}}");
+    {% endfor %}
+    var ftype_options = form.find('[name="ftype"]'); 
+    ftype_options.each(function() {
+        if (custom_ftypes.indexOf($(this).val()) != -1) {
+            $(this).attr('checked', true);
+            $(this).parent().addClass('checkbox-checked');
+        }
+    });
+    {% endif %}
+
+    form.on('submit', function() {
+        var $error = $('.form-error', form);
+
+        // for time range
+        var date_from = $.trim($('[name="date_from"]', form).val());
+        var date_to = $.trim($('[name="date_to"]', form).val());
+        // 'date' can be picked from datepicker, also directly input
+        var date_pattern = /^([012]\d{3})\-(0[1-9]|1[012])\-(0[1-9]|[12]\d|3[01])$/;
+        if (date_from && !date_pattern.test(date_from)) {
+            $error.html("{% trans "Invalid start date, should be yyyy-mm-dd" %}").removeClass('hide');
+            return false;
+        }
+        if (date_to && !date_pattern.test(date_to)) {
+            $error.html("{% trans "Invalid end date, should be yyyy-mm-dd" %}").removeClass('hide');
+            return false;
+        }
+        if (date_from && date_to && date_from > date_to) {
+            $error.html("{% trans "Start date should be earlier than end date." %}").removeClass('hide');
+            return false;
+        }
+        if (date_from) {
+            $('[name="time_from"]', form).val(Date.parse(date_from)/1000); // in second
+        }
+        if (date_to) {
+            $('[name="time_to"]', form).val(Date.parse(date_to)/1000 + (24*60*60 - 1)); // till 23:59:59
+        }
+
+        // for size range
+        var size_from_mb = $.trim($('[name="size_from_mb"]', form).val());
+        var size_to_mb = $.trim($('[name="size_to_mb"]', form).val());
+        var $size_from = $('[name="size_from"]', form);
+        var $size_to = $('[name="size_to"]', form);
+        if (size_from_mb) {
+            $size_from.val(size_from_mb * 1000 * 1000); // turn MB to B
+        }
+        if (size_to_mb) {
+            $size_to.val(size_to_mb * 1000 * 1000); // turn MB to B
+        }
+    });
+
+    // modify pagination link urls
+    var $paginator = $('#paginator');
+    var $prev_next = $('.prev, .next', $paginator);
+    var url_params = location.search.substr(1).split('&');
+    var url_param_names = [];
+    for (var i = 0, len = url_params.length; i < len; i++) {
+        url_param_names.push(url_params[i].split('=')[0]);
+    }
+    if (url_param_names.indexOf('page') != -1) {
+        $prev_next.each(function() {
+            $(this).attr('href', location.search.replace('page={{current_page}}', 'page=' + $(this).attr('data-page')));
+        });
+    } else {
+        $prev_next.each(function() {
+            $(this).attr('href', location.search + '&page=' + $(this).attr('data-page'));
+        });
+    }
+})();
+
+function imageCheck(filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+        return false;
+    }
+    var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'];
+    if (image_exts.indexOf(file_ext) != -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function getThumbnail(i) {
+    var $item = $(img_file_items[i]);
+    $.ajax({
+        url: '{{SITE_ROOT}}thumbnail/' + $item.attr('data-repoid') + '/create/',
+        data: {
+            'path': $item.attr('data-path'),
+            'size': '{{thumbnail_size}}'
+        },
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            $('.search-results-file-icon', $item)
+            .attr('src', '{{SITE_ROOT}}' + data.encoded_thumbnail_src)
+            .removeAttr('width height');
+        },
+        complete: function() {
+            if (i < img_file_items.length - 1) {
+                getThumbnail(++i);
+            }
+        }
+    });
+};
+
+var img_file_items = [];
+$('.search-results-file-item').each(function(index, item) {
+    var file_name = $(item).attr('data-name');
+    var file_is_img = imageCheck(file_name);
+    if (file_is_img) {
+        img_file_items.push(item);
+    }
+});
+if (img_file_items.length) {
+    getThumbnail(0);
+}
+</script>
+{% endblock %}

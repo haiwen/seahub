@@ -52,7 +52,6 @@ def check_folder_permission_by_repo_api(request, repo_id, path):
 
 class ViaRepoDirView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get_dir_info(self, repo_id, dir_path):
@@ -124,7 +123,8 @@ class ViaRepoDirView(APIView):
 
         # get dir/file list recursively
         # username = request.user.username
-        username = seafile_api.get_repo_owner(repo_id)
+        # Get username by repo_id. Can not use is_org_context, because 'AnonymousUser' object has no attribute 'org'.
+        username = seafile_api.get_repo_owner(repo_id) or seafile_api.get_org_repo_owner(repo_id)
         if recursive == '1':
 
             try:
@@ -342,7 +342,6 @@ class ViaRepoDirView(APIView):
 
 class ViaRepoUploadLinkView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
@@ -396,7 +395,6 @@ class ViaRepoUploadLinkView(APIView):
 
 class ViaRepoDownloadLinkView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
@@ -422,7 +420,6 @@ class ViaRepoDownloadLinkView(APIView):
 
 class RepoInfoView(APIView):
     authentication_classes = (RepoAPITokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):

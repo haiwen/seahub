@@ -26,17 +26,19 @@ from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile
 from seahub.avatar.models import Avatar
 from seahub.group.utils import validate_group_name
+from seahub.auth.models import ExternalDepartment
 
 from seahub.dingtalk.utils import dingtalk_get_access_token
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL, \
-        DINGTALK_DEPARTMENT_USER_SIZE
+        DINGTALK_DEPARTMENT_USER_SIZE, DINGTALK_PROVIDER
 
 DEPARTMENT_OWNER = 'system admin'
 
 logger = logging.getLogger(__name__)
+
 
 def update_dingtalk_user_info(email, name, contact_email, avatar_url):
 
@@ -57,17 +59,19 @@ def update_dingtalk_user_info(email, name, contact_email, avatar_url):
         except Exception as e:
             logger.error(e)
 
-    try:
-        image_name = 'dingtalk_avatar'
-        image_file = requests.get(avatar_url).content
-        avatar = Avatar.objects.filter(emailuser=email, primary=True).first()
-        avatar = avatar or Avatar(emailuser=email, primary=True)
-        avatar_file = ContentFile(image_file)
-        avatar_file.name = image_name
-        avatar.avatar = avatar_file
-        avatar.save()
-    except Exception as e:
-        logger.error(e)
+    if avatar_url:
+        try:
+            image_name = 'dingtalk_avatar'
+            image_file = requests.get(avatar_url).content
+            avatar = Avatar.objects.filter(emailuser=email, primary=True).first()
+            avatar = avatar or Avatar(emailuser=email, primary=True)
+            avatar_file = ContentFile(image_file)
+            avatar_file.name = image_name
+            avatar.avatar = avatar_file
+            avatar.save()
+        except Exception as e:
+            logger.error(e)
+
 
 class AdminDingtalkDepartments(APIView):
 
@@ -213,8 +217,10 @@ class AdminDingtalkUsersBatch(APIView):
                 })
 
             try:
-                update_dingtalk_user_info(email, user.get('name'),
-                        user.get('contact_email'), user.get('avatar'))
+                update_dingtalk_user_info(email,
+                                          user.get('name'),
+                                          user.get('contact_email'),
+                                          user.get('avatar'))
             except Exception as e:
                 logger.error(e)
 
@@ -226,15 +232,6 @@ class AdminDingtalkDepartmentsImport(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser, IsProVersion)
-
-    def _admin_check_group_name_conflict(self, new_group_name):
-        checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
-
-        for g in checked_groups:
-            if g.group_name == new_group_name:
-                return True, g
-
-        return False, None
 
     def _api_department_success_msg(self, department_obj_id, department_obj_name, group_id):
         return {
@@ -296,12 +293,14 @@ class AdminDingtalkDepartmentsImport(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # get department list
+        # https://developers.dingtalk.com/document/app/obtain-the-department-list
         data = {'access_token': access_token, 'id': department_id}
         current_department_resp_json = requests.get(DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, params=data).json()
         current_department_list = [current_department_resp_json]
         sub_department_resp_json = requests.get(DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, params=data).json()
         sub_department_list = sub_department_resp_json.get('department', [])
         department_list = current_department_list + sub_department_list
+        department_list = sorted(department_list, key=lambda x:x['id'])
 
         # get department user list
         data = {
@@ -322,6 +321,7 @@ class AdminDingtalkDepartmentsImport(APIView):
             # check department argument
             new_group_name = department_obj.get('name')
             department_obj_id = department_obj.get('id')
+            parent_department_id = department_obj.get('parentid', 0)
             if department_obj_id is None or not new_group_name or not validate_group_name(new_group_name):
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门参数错误')
@@ -332,7 +332,6 @@ class AdminDingtalkDepartmentsImport(APIView):
             if index == 0:
                 parent_group_id = -1
             else:
-                parent_department_id = department_obj.get('parentid')
                 parent_group_id = department_map_to_group_dict.get(parent_department_id)
 
             if parent_group_id is None:
@@ -341,10 +340,11 @@ class AdminDingtalkDepartmentsImport(APIView):
                 failed.append(failed_msg)
                 continue
 
-            # check department exist by group name
-            exist, exist_group = self._admin_check_group_name_conflict(new_group_name)
-            if exist:
-                department_map_to_group_dict[department_obj_id] = exist_group.id
+            # check department exist
+            exist_department = ExternalDepartment.objects.get_by_provider_and_outer_id(
+                DINGTALK_PROVIDER, department_obj_id)
+            if exist_department:
+                department_map_to_group_dict[department_obj_id] = exist_department.group_id
                 failed_msg = self._api_department_failed_msg(
                     department_obj_id, new_group_name, '部门已存在')
                 failed.append(failed_msg)
@@ -356,6 +356,12 @@ class AdminDingtalkDepartmentsImport(APIView):
                     new_group_name, DEPARTMENT_OWNER, parent_group_id=parent_group_id)
 
                 seafile_api.set_group_quota(group_id, -2)
+
+                ExternalDepartment.objects.create(
+                    group_id=group_id,
+                    provider=DINGTALK_PROVIDER,
+                    outer_id=department_obj_id,
+                )
 
                 department_map_to_group_dict[department_obj_id] = group_id
                 success_msg = self._api_department_success_msg(
@@ -373,7 +379,7 @@ class AdminDingtalkDepartmentsImport(APIView):
         # import api_user
         for api_user in api_user_list:
             uid = api_user.get('unionid', '')
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email')
             api_user_name = api_user.get('name')
 
             #  determine the user exists
@@ -418,8 +424,10 @@ class AdminDingtalkDepartmentsImport(APIView):
                     failed.append(failed_msg)
 
                 try:
-                    update_dingtalk_user_info(email, api_user.get('name'),
-                            api_user.get('contact_email'), api_user.get('avatar'))
+                    update_dingtalk_user_info(email,
+                                              api_user.get('name'),
+                                              api_user.get('contact_email'),
+                                              api_user.get('avatar'))
                 except Exception as e:
                     logger.error(e)
 

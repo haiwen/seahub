@@ -1,5 +1,6 @@
 import React from 'react';
 import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import { mediaUrl } from '../../utils/constants';
 
 import '../../css/md-file-view.css';
 
@@ -13,6 +14,7 @@ class FileContent extends React.Component {
           <MarkdownViewer
             markdownContent={fileContent}
             showTOC={false}
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
           />
         </div>
       </div>

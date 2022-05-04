@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { gettext } from '../../utils/constants';
+import OpIcon from '../op-icon';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired,
@@ -60,7 +61,7 @@ class RepoAPITokenPermissionEditor extends React.Component {
           <Fragment>
             <span>{optionTranslation}</span>
             {this.props.isEditIconShow &&
-              <span title={gettext('Edit')} className="fa fa-pencil-alt attr-action-icon" onClick={this.onEditPermission}/>
+              <OpIcon title={gettext('Edit')} className="fa fa-pencil-alt attr-action-icon" op={this.onEditPermission} />
             }
           </Fragment>
           :

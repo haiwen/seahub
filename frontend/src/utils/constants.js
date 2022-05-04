@@ -14,6 +14,7 @@ export const isPro = window.app.config.isPro === 'True';
 export const isDocs = window.app.config.isDocs === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
+export const useGoFileserver = window.app.config.useGoFileserver;
 export const seafileVersion = window.app.config.seafileVersion;
 export const serviceURL = window.app.config.serviceURL;
 export const appAvatarURL = window.app.config.avatarURL;
@@ -29,6 +30,7 @@ export const contactEmail = window.app.pageOptions.contactEmail;
 export const username = window.app.pageOptions.username;
 export const canAddRepo = window.app.pageOptions.canAddRepo;
 export const canAddGroup = window.app.pageOptions.canAddGroup;
+export const groupImportMembersExtraMsg = window.app.pageOptions.groupImportMembersExtraMsg;
 export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink;
 export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLink;
 export const canSendShareLinkEmail = window.app.pageOptions.canSendShareLinkEmail;
@@ -42,15 +44,20 @@ export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 export const resumableUploadFileBlockSize = window.app.pageOptions.resumableUploadFileBlockSize;
 export const storages = window.app.pageOptions.storages; // storage backends
+export const libraryTemplates = window.app.pageOptions.libraryTemplates; // library templates
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
+export const shareLinkForceUsePassword = window.app.pageOptions.shareLinkForceUsePassword;
 export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswordMinLength;
+export const shareLinkPasswordStrengthLevel = window.app.pageOptions.shareLinkPasswordStrengthLevel;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const sideNavFooterCustomHtml = window.app.pageOptions.sideNavFooterCustomHtml;
+export const aboutDialogCustomHtml = window.app.pageOptions.aboutDialogCustomHtml;
 export const shareLinkExpireDaysDefault = window.app.pageOptions.shareLinkExpireDaysDefault;
 export const uploadLinkExpireDaysMin = window.app.pageOptions.uploadLinkExpireDaysMin;
 export const uploadLinkExpireDaysMax = window.app.pageOptions.uploadLinkExpireDaysMax;
 export const uploadLinkExpireDaysDefault = window.app.pageOptions.uploadLinkExpireDaysDefault;
+export const enableShareToDepartment = window.app.pageOptions.enableShareToDepartment;
 export const maxFileName = window.app.pageOptions.maxFileName;
 export const canPublishRepo = window.app.pageOptions.canPublishRepo;
 export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibrary;
@@ -66,11 +73,18 @@ export const enableShowContactEmailWhenSearchUser = window.app.pageOptions.enabl
 export const maxUploadFileSize = window.app.pageOptions.maxUploadFileSize;
 export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfFilesForFileupload;
 export const enableOCM = window.app.pageOptions.enableOCM;
+export const ocmRemoteServers = window.app.pageOptions.ocmRemoteServers;
+export const enableOCMViaWebdav = window.app.pageOptions.enableOCMViaWebdav;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
 
 export const enableTC = window.app.pageOptions.enableTC;
+
+export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
+
+export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
+export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
 // dtable
 export const workspaceID = window.app.pageOptions.workspaceID;

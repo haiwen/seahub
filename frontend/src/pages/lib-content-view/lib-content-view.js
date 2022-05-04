@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
-import { gettext, siteRoot, username, isDocs } from '../../utils/constants';
+import { gettext, siteRoot, username, isDocs, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -39,7 +39,6 @@ class LibContentView extends React.Component {
       hash: '',
       currentRepoInfo: null,
       repoName: '',
-      repoPermission: true,
       repoEncrypted: false,
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
@@ -48,7 +47,6 @@ class LibContentView extends React.Component {
       isDraft: false,
       hasDraft: false,
       fileTags: [],
-      relatedFiles: [],
       draftID: '',
       draftCounts: 0,
       usedRepoTags: [],
@@ -124,35 +122,39 @@ class LibContentView extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // eg: http://127.0.0.1:8000/library/repo_id/repo_name/**/**/\
     let repoID = this.props.repoID;
     let location = window.location.href.split('#')[0];
     location = decodeURIComponent(location);
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      let repoInfo = new RepoInfo(res.data);
-      let isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+    let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
+    path = path.slice(path.indexOf('/')); // get current path
+
+    try {
+      const repoRes = await seafileAPI.getRepoInfo(repoID);
+      const repoInfo = new RepoInfo(repoRes.data);
+      const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
+
+      if (repoInfo.permission.startsWith('custom-')) {
+        const permissionID = repoInfo.permission.split('-')[1];
+        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+        window.custom_permission = permissionRes.data.permission;
+      }
+
+      this.isNeedUpdateHistoryState = false;
       this.setState({
         currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
-        repoPermission: repoInfo.permission === 'rw',
         isGroupOwnedRepo: isGroupOwnedRepo,
+        path: path
       });
-
-      let repoID = repoInfo.repo_id;
-      let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
-      path = path.slice(path.indexOf('/')); // get current path
-
-      this.isNeedUpdateHistoryState = false;
-
-      this.setState({path: path});
-
+      
       if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
-    }).catch(error => {
+    } catch (error) {
       if (error.response) {
         if (error.response.status == 403) {
           this.setState({
@@ -174,7 +176,7 @@ class LibContentView extends React.Component {
           errorMsg: gettext('Please check the network.')
         });
       }
-    });
+    }
   }
 
   componentWillUnmount() {
@@ -224,7 +226,7 @@ class LibContentView extends React.Component {
 
     if (this.state.currentMode === 'column') {
       if (this.state.isViewFile) {
-        this.updataColumnMarkdownData(path);
+        this.updateColumnMarkdownData(path);
       } else {
         seafileAPI.dirMetaData(repoID, path).then((res) => {
           if (res.data.id !== dirID) {
@@ -275,7 +277,7 @@ class LibContentView extends React.Component {
     });
   }
 
-  updataColumnMarkdownData = (filePath) => {
+  updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
     this.setState({
@@ -322,7 +324,7 @@ class LibContentView extends React.Component {
     // list used FileTags
     this.updateUsedRepoTags();
 
-    // list draft counts and revierw counts
+    // list draft counts and review counts
     if (isDocs) {
       seafileAPI.getRepoDraftCounts(repoID).then(res => {
         this.setState({
@@ -364,11 +366,13 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     if (path === '/') {
       seafileAPI.listDir(repoID, '/').then(res => {
+        const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
-        this.addResponseListToNode(res.data.dirent_list, tree.root);
+        this.addResponseListToNode(dirent_list, tree.root);
         this.setState({
           isTreeDataLoading: false,
-          treeData: tree
+          treeData: tree,
+          userPerm: user_perm,
         });
       }).catch(() => {
         this.setState({isTreeDataLoading: false});
@@ -416,17 +420,6 @@ class LibContentView extends React.Component {
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
-      });
-
-      seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-        let relatedFiles = res.data.related_files.map((relatedFile) => {
-          return relatedFile;
-        });
-        this.setState({relatedFiles: relatedFiles});
-      }).catch((error) => {
-        if (error.response.status === 500) {
-          this.setState({relatedFiles: []});
-        }
       });
     }
 
@@ -524,7 +517,7 @@ class LibContentView extends React.Component {
 
   getThumbnails = (repoID, path, direntList) => {
     let items = direntList.filter((item) => {
-      return Utils.imageCheck(item.name) && !item.encoded_thumbnail_src;
+      return (Utils.imageCheck(item.name) || (enableVideoThumbnail && Utils.videoCheck(item.name))) && !item.encoded_thumbnail_src;
     });
     if (items.length == 0) {
       return ;
@@ -1176,8 +1169,7 @@ class LibContentView extends React.Component {
 
         let isWeChat = Utils.isWeChat();
         if (!isWeChat) {
-          let newWindow = window.open('about:blank');
-          newWindow.location.href = url;
+          window.open(url);
         } else {
           location.href = url;
         }
@@ -1277,7 +1269,8 @@ class LibContentView extends React.Component {
         }
       }
     } else {
-      direntObject.permission = 'rw';
+      // use current dirent parent's permission as it's permission
+      direntObject.permission = this.state.userPerm;
       let dirent = new Dirent(direntObject);
       if (this.state.currentMode === 'column') {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
@@ -1463,7 +1456,7 @@ class LibContentView extends React.Component {
       path = Utils.getDirName(path);
     }
     seafileAPI.listDir(repoID, path, {with_parents: true}).then(res => {
-      let direntList = res.data.dirent_list;
+      const { dirent_list: direntList, user_perm } = res.data;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
@@ -1482,7 +1475,8 @@ class LibContentView extends React.Component {
       }
       this.setState({
         isTreeDataLoading: false,
-        treeData: tree
+        treeData: tree,
+        userPerm: user_perm,
       });
     }).catch(() => {
       this.setState({isLoadFailed: true});
@@ -1535,9 +1529,8 @@ class LibContentView extends React.Component {
           this.showColumnMarkdownFile(node.path);
         }
       } else {
-        const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
-        w.location.href = url;
+        window.open(url);
       }
     }
   }
@@ -1546,6 +1539,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       if (res.data.size === 0) {
+        // loading of asynchronously obtained data may be blocked
         const w = window.open('about:blank');
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(filePath);
         w.location.href = url;
@@ -1628,8 +1622,10 @@ class LibContentView extends React.Component {
   }
 
   createDirent(name, type, size) {
+    // use current dirent parent's permission as it's permission
+    const { userPerm: permission } = this.state;
     let mtime = new Date().getTime()/1000;
-    let dirent = new Dirent({name, type, mtime, size});
+    let dirent = new Dirent({name, type, mtime, size, permission});
     return dirent;
   }
 
@@ -1728,22 +1724,6 @@ class LibContentView extends React.Component {
     });
   }
 
-  onToolbarRelatedFileChange = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.state.path;
-
-    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-      let relatedFiles = res.data.related_files.map((relatedFile) => {
-        return relatedFile;
-      });
-      this.setState({relatedFiles: relatedFiles});
-    }).catch((error) => {
-      if (error.response.status === 500) {
-        this.setState({relatedFiles: []});
-      }
-    });
-  }
-
   unSelectDirent = () => {
     this.setState({
       isDirentSelected: false,
@@ -1796,6 +1776,13 @@ class LibContentView extends React.Component {
       return index < this.state.itemsShowLength;
     });
 
+    let canUpload = true;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { upload } = customPermission.permission;
+      canUpload = upload;
+    }
+
     return (
       <Fragment>
         <div className="main-panel o-hidden">
@@ -1806,9 +1793,7 @@ class LibContentView extends React.Component {
               isDraft={this.state.isDraft}
               hasDraft={this.state.hasDraft}
               fileTags={this.state.fileTags}
-              relatedFiles={this.state.relatedFiles}
               onFileTagChanged={this.onToolbarFileTagChanged}
-              onRelatedFileChange={this.onToolbarRelatedFileChange}
               onSideNavMenuClick={this.props.onMenuClick}
               repoID={this.props.repoID}
               path={this.state.path}
@@ -1837,7 +1822,6 @@ class LibContentView extends React.Component {
               updateDirent={this.updateDirent}
               onDirentSelected={this.onDirentSelected}
               showDirentDetail={this.showDirentDetail}
-              listRelatedFiles={this.listRelatedFiles}
               unSelectDirent={this.unSelectDirent}
               onFilesTagChanged={this.onFileTagChanged}
             />
@@ -1850,7 +1834,6 @@ class LibContentView extends React.Component {
               pathExist={this.state.pathExist}
               currentRepoInfo={this.state.currentRepoInfo}
               repoID={this.props.repoID}
-              repoPermission={this.state.repoPermission}
               enableDirPrivateShare={enableDirPrivateShare}
               userPerm={userPerm}
               isGroupOwnedRepo={this.state.isGroupOwnedRepo}
@@ -1861,7 +1844,6 @@ class LibContentView extends React.Component {
               isDraft={this.state.isDraft}
               hasDraft={this.state.hasDraft}
               fileTags={this.state.fileTags}
-              relatedFiles={this.state.relatedFiles}
               goDraftPage={this.goDraftPage}
               isFileLoading={this.state.isFileLoading}
               isFileLoadedErr={this.state.isFileLoadedErr}
@@ -1886,6 +1868,7 @@ class LibContentView extends React.Component {
               updateUsedRepoTags={this.updateUsedRepoTags}
               isDirentListLoading={this.state.isDirentListLoading}
               direntList={direntItemsList}
+              fullDirentList={this.state.direntList}
               sortBy={this.state.sortBy}
               sortOrder={this.state.sortOrder}
               sortItems={this.sortItems}
@@ -1916,8 +1899,9 @@ class LibContentView extends React.Component {
               onToolbarFileTagChanged={this.onToolbarFileTagChanged}
               updateDetail={this.state.updateDetail}
               onListContainerScroll={this.onListContainerScroll}
+              loadDirentList={this.loadDirentList}
             />
-            {this.state.pathExist && !this.state.isViewFile && (
+            {canUpload && this.state.pathExist && !this.state.isViewFile && (
               <FileUploader
                 ref={uploader => this.uploader = uploader}
                 dragAndDrop={true}
@@ -1925,6 +1909,7 @@ class LibContentView extends React.Component {
                 repoID={this.props.repoID}
                 direntList={this.state.direntList}
                 onFileUploadSuccess={this.onFileUploadSuccess}
+                isCustomPermission={isCustomPermission}
               />
             )}
           </div>

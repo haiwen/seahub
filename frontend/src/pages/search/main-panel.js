@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
@@ -52,17 +51,19 @@ class SearchViewPanel extends React.Component {
     });
     const stateHistory = _.cloneDeep(this.state);
     seafileAPI.searchFiles(params, null).then(res => {
+      const { results, has_more, total } = res.data;
       this.setState({
         isLoading: false,
         isResultGot: true,
-        resultItems: res.data.results,
-        hasMore: res.data.has_more,
+        resultItems: results,
+        hasMore: has_more,
+        total: total,
         page: params.page,
         isShowSearchFilter: true,
       });
       this.stateHistory = stateHistory;
-      this.stateHistory.resultItems = res.data.results;
-      this.stateHistory.hasMore = res.data.has_more;
+      this.stateHistory.resultItems = results;
+      this.stateHistory.hasMore = has_more;
       this.stateHistory.page = params.page;
     }).catch((error) => {
       this.setState({ isLoading: false });
@@ -145,7 +146,8 @@ class SearchViewPanel extends React.Component {
     });
   }
 
-  handlePrevious = () => {
+  handlePrevious = (e) => {
+    e.preventDefault();
     if (this.stateHistory && this.state.page > 1) {
       this.setState(this.stateHistory,() => {
         const params = this.handleSearchParams(this.state.page - 1);
@@ -156,7 +158,8 @@ class SearchViewPanel extends React.Component {
     }
   };
 
-  handleNext = () => {
+  handleNext = (e) => {
+    e.preventDefault();
     if (this.stateHistory && this.state.hasMore) {
       this.setState(this.stateHistory,() => {
         const params = this.handleSearchParams(this.state.page + 1);
@@ -321,12 +324,17 @@ class SearchViewPanel extends React.Component {
           />
         </div>
         {this.state.isLoading && <Loading/>}
-        {(!this.state.isLoading && this.state.isResultGot) && <SearchResults resultItems={this.state.resultItems}/>}
+        {(!this.state.isLoading && this.state.isResultGot) &&
+        <SearchResults
+          resultItems={this.state.resultItems}
+          total={this.state.total}
+        />
+        }
         {(!this.state.isLoading && this.state.isResultGot) &&
           <div className="paginator">
-            {this.state.page !== 1 && <a href="#" onClick={() => this.handlePrevious()}>{gettext('Previous')}</a>}
+            {this.state.page !== 1 && <a href="#" onClick={this.handlePrevious}>{gettext('Previous')}</a>}
             {(this.state.page !== 1 && this.state.hasMore) && <span> | </span>}
-            {this.state.hasMore && <a href="#" onClick={() => this.handleNext()}>{gettext('Next')}</a>}
+            {this.state.hasMore && <a href="#" onClick={this.handleNext}>{gettext('Next')}</a>}
           </div>
         }
       </div>

@@ -15,7 +15,7 @@ from seahub.utils.repo import is_valid_repo_id_format
 from seahub.utils import HAS_FILE_SEARCH
 from seahub.wiki.models import Wiki
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.utils import search_files
+    from seahub.search.utils import search_files
 
 
 logger = logging.getLogger('seafes')

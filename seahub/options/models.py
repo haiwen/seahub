@@ -36,6 +36,10 @@ KEY_DEFAULT_REPO = "default_repo"
 KEY_WEBDAV_SECRET = "webdav_secret"
 KEY_FILE_UPDATES_EMAIL_INTERVAL = "file_updates_email_interval"
 KEY_FILE_UPDATES_LAST_EMAILED_TIME = "file_updates_last_emailed_time"
+KEY_COLLABORATE_EMAIL_INTERVAL = 'collaborate_email_interval'
+KEY_COLLABORATE_LAST_EMAILED_TIME = 'collaborate_last_emailed_time'
+
+DEFAULT_COLLABORATE_EMAIL_INTERVAL = 3600
 
 
 class CryptoOptionNotSetError(Exception):
@@ -305,6 +309,42 @@ class UserOptionsManager(models.Manager):
 
     def unset_file_updates_last_emailed_time(self, username):
         return self.unset_user_option(username, KEY_FILE_UPDATES_LAST_EMAILED_TIME)
+
+    def set_collaborate_email_interval(self, username, seconds):
+        return self.set_user_option(username, KEY_COLLABORATE_EMAIL_INTERVAL,
+                                    str(seconds))
+
+    def get_collaborate_email_interval(self, username):
+        val = self.get_user_option(username, KEY_COLLABORATE_EMAIL_INTERVAL)
+        if not val:
+            return None
+        try:
+            return int(val)
+        except ValueError:
+            logger.error('Failed to convert string %s to int' % val)
+            return None
+
+    def unset_collaborate_email_interval(self, username):
+        return self.unset_user_option(username, KEY_COLLABORATE_EMAIL_INTERVAL)
+
+    def set_collaborate_last_emailed_time(self, username, time_dt):
+        return self.set_user_option(
+            username, KEY_COLLABORATE_LAST_EMAILED_TIME,
+            time_dt.strftime("%Y-%m-%d %H:%M:%S"))
+
+    def get_collaborate_last_emailed_time(self, username):
+        val = self.get_user_option(username, KEY_COLLABORATE_LAST_EMAILED_TIME)
+        if not val:
+            return None
+
+        try:
+            return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
+        except Exception:
+            logger.error('Failed to convert string %s to datetime obj' % val)
+            return None
+
+    def unset_collaborate_last_emailed_time(self, username):
+        return self.unset_user_option(username, KEY_COLLABORATE_LAST_EMAILED_TIME)
 
 
 class UserOptions(models.Model):

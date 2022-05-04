@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { serviceURL } from './utils/constants';
+import { serviceURL, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
@@ -55,7 +55,8 @@ class FileContent extends React.Component {
       let index2 = imagePath.indexOf('?');
       imagePath = imagePath.substring(index + 5, index2);
       // change image url
-      innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + Utils.encodePath(imagePath);
+      // the image path has been encoded when inserting the image
+      innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
     }
     return innerNode;
   }
@@ -77,6 +78,7 @@ class FileContent extends React.Component {
       <div className="shared-file-view-body">
         <div className="md-view">
           <MarkdownViewer
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             markdownContent={this.state.markdownContent}
             showTOC={false}
             serviceURL={serviceURL}

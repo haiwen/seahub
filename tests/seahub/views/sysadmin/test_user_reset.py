@@ -32,7 +32,6 @@ class UserResetTest(BaseTestCase):
             reverse('user_reset', args=[self.user.email])
         )
         self.assertEqual(302, resp.status_code)
-        assert 'email has been sent to contact@mail.com' in resp.cookies['messages'].value
 
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] != self.user.username

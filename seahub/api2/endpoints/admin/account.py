@@ -92,6 +92,11 @@ class Account(APIView):
             for r in seafile_api.get_owned_repo_list(from_user):
                 seafile_api.set_repo_owner(r.id, user2.username)
 
+            # transfer shared repos to new user
+            for r in seafile_api.get_share_in_repo_list(from_user, -1, -1):
+                owner = seafile_api.get_repo_owner(r.repo_id)
+                seafile_api.share_repo(r.repo_id, owner, to_user, r.permission)
+
             # transfer joined groups to new user
             for g in ccnet_api.get_groups(from_user):
                 if not is_group_member(g.id, user2.username):
@@ -165,20 +170,6 @@ class Account(APIView):
                 profile = Profile(user=email)
             profile.institution = institution
             profile.save()
-
-        # update is_trial
-        is_trial = request.data.get("is_trial", None)
-        if is_trial is not None:
-            try:
-                from seahub_extra.trialaccount.models import TrialAccount
-            except ImportError:
-                pass
-            else:
-                if is_trial is True:
-                    expire_date = timezone.now() + relativedelta(days=7)
-                    TrialAccount.object.create_or_update(email, expire_date)
-                else:
-                    TrialAccount.objects.filter(user_or_org=email).delete()
 
     def put(self, request, email, format=None):
 

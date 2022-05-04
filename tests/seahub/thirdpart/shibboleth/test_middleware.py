@@ -33,7 +33,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         self.request = self.factory.get('/sso/')
 
         self.request.user = self.user
-        self.request.user.is_authenticated = lambda: False
+        # self.request.user.is_authenticated = lambda: False
         self.request.cloud_mode = False
         self.request.session = self.client.session
 

@@ -14,6 +14,8 @@
   "unordered_list": "Lista Desordenada",
   "check_list_item": "Check List Item",
   "insert_image": "Insertar Imagen",
+  "insert_formula": "Insertar Fórmula",
+  "formula": "Fórmula",
   "insert_file": "Insertar Archivo",
   "code": "Inline Code",
   "code_block": "Bloque de Código",
@@ -147,6 +149,7 @@
       "issue": "Problema con nivel de encabezado"
     }
   },
+  "Shortcut_help": "Ayuda de atajos",
   "userHelp": {
     "title": "Atajos de teclado",
     "userHelpData": [
@@ -188,6 +191,11 @@
         "shortcutData": {
           "Insert_Table_Row": "Insertar fila de tabla",
           "Escape_table": "Escape table"
+        }
+      }, {
+        "shortcutType": "Atajos de fórmula",
+        "shortcutData": {
+          "Insert_Formula": "Insertar Fórmula"
         }
       }, {
         "shortcutType":"Inline shortcuts",

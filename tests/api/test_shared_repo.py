@@ -1,12 +1,13 @@
 import pytest
-pytestmark = pytest.mark.django_db
-
+from mock import patch, MagicMock
 from seahub.test_utils import BaseTestCase
 from seaserv import seafile_api
-from mock import patch, MagicMock
+
+pytestmark = pytest.mark.django_db
 
 
 class SharedRepoTest(BaseTestCase):
+
     def setUp(self):
         from constance import config
         self.config = config
@@ -15,7 +16,6 @@ class SharedRepoTest(BaseTestCase):
                                         username=self.admin.username,
                                         passwd=None)
         self.shared_repo_url = '/api2/shared-repos/%s/?share_type=public&permission=rw'
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
 
     def tearDown(self):
         self.remove_repo(self.repo_id)
@@ -48,9 +48,6 @@ class SharedRepoTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
-        self.config.ENABLE_USER_CREATE_ORG_REPO = False
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.admin)
 
@@ -59,9 +56,6 @@ class SharedRepoTest(BaseTestCase):
         assert b"success" in resp.content
 
     def test_user_can_not_set_pub_repo_when_setting_disalbed(self):
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
-        self.config.ENABLE_USER_CREATE_ORG_REPO = False
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.user)
 

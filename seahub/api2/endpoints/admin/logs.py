@@ -50,7 +50,7 @@ class AdminLogsLoginLogs(APIView):
         start = (current_page - 1) * per_page
         end = start + per_page
 
-        from seahub_extra.sysadmin_extra.models import UserLoginLog
+        from seahub.sysadmin_extra.models import UserLoginLog
         logs = UserLoginLog.objects.all().order_by('-login_date')[start:end]
         count = UserLoginLog.objects.all().count()
 
@@ -118,12 +118,26 @@ class AdminLogsFileAccessLogs(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         start = per_page * (current_page - 1)
-        limit = per_page
+        limit = per_page + 1
+
+        if user_selected:
+            org_id = -1
+            orgs = ccnet_api.get_orgs_by_user(user_selected)
+            if orgs:
+                org_id = orgs[0].org_id
+        elif repo_id_selected:
+            org_id = seafile_api.get_org_id_by_repo_id(repo_id_selected)
+        else:
+            org_id = 0
 
         # org_id = 0, show all file audit
-        events = get_file_audit_events(user_selected, 0, repo_id_selected, start, limit) or []
+        events = get_file_audit_events(user_selected, org_id, repo_id_selected, start, limit) or []
 
-        has_next_page = True if len(events) == per_page else False
+        if len(events) > per_page:
+            events = events[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         nickname_dict = {}
@@ -348,9 +362,10 @@ class AdminLogsSharePermissionLogs(APIView):
         for group_id in to_group_id_set:
             if group_id not in to_group_name_dict:
                 group = ccnet_api.get_group(int(group_id))
-                to_group_name_dict[group_id] = group.group_name
-                if group.parent_group_id != 0:
-                    department_set.add(group_id)
+                if group:
+                    to_group_name_dict[group_id] = group.group_name
+                    if group.parent_group_id != 0:
+                        department_set.add(group_id)
 
         events_info = []
         for ev in events:

@@ -15,12 +15,13 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.invitations.models import Invitation
 from seahub.base.accounts import User
-from post_office.models import STATUS
-from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils import get_site_name
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
 
 def invitation_owner_check(func):
     """Check whether user is the invitation inviter.
@@ -33,6 +34,7 @@ def invitation_owner_check(func):
         return func(view, request, i, *args, **kwargs)
 
     return _decorated
+
 
 class InvitationView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -102,19 +104,18 @@ class InvitationRevokeView(APIView):
         # send email
         site_name = get_site_name()
         subject = _('%(user)s revoked your access to %(site_name)s.') % {
-            'user': inviter, 'site_name': site_name}
+            'user': email2nickname(inviter), 'site_name': site_name}
         context = {
-            'inviter': inviter,
+            'inviter': email2nickname(inviter),
             'site_name': site_name,
         }
 
-        m = send_html_email_with_dj_template(
-            email, dj_template='invitations/invitation_revoke_email.html',
-            subject=subject,
-            context=context,
-            priority=MAIL_PRIORITY.now
-        )
-        if m.status != STATUS.sent:
+        send_success = send_html_email_with_dj_template(email,
+                                                        subject=subject,
+                                                        dj_template='invitations/invitation_revoke_email.html',
+                                                        context=context)
+
+        if not send_success:
             logger.warning('send revoke access email to %s failed')
 
         return Response({'success': True})

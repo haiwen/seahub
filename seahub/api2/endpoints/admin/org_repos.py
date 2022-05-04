@@ -17,7 +17,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
 except ImportError:
-    ORG_MEMBER_QUOTA_ENABLED= False
+    ORG_MEMBER_QUOTA_ENABLED = False
 
 logger = logging.getLogger(__name__)
 
@@ -70,12 +70,18 @@ class AdminOrgRepos(APIView):
         for repo in repos:
             repo_info = {}
             repo_info['repo_name'] = repo.repo_name
-            owner_email = repo_id_2_email_dict.get(repo.id, '')
-            repo_info['owner_email'] = owner_email
-            repo_info['owner_name'] = nickname_dict.get(owner_email, '')
-            repo_info['owner_contact_email'] = contact_email_dict.get(owner_email, '')
             repo_info['repo_id'] = repo.id
             repo_info['encrypted'] = repo.encrypted
+
+            owner_email = repo_id_2_email_dict.get(repo.id, '')
+            repo_info['owner_email'] = owner_email
+            repo_info['owner_contact_email'] = contact_email_dict.get(owner_email, '')
+
+            if '@seafile_group' in owner_email:
+                group = ccnet_api.get_group(int(owner_email.split('@')[0]))
+                repo_info['owner_name'] = group.group_name if group else ''
+            else:
+                repo_info['owner_name'] = nickname_dict.get(owner_email, '')
 
             repos_info.append(repo_info)
 

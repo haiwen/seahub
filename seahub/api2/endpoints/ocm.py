@@ -15,7 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seaserv import seafile_api, ccnet_api
+from seaserv import seafile_api
 
 from seahub.utils.repo import get_available_repo_perms, get_repo_owner
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -25,7 +25,7 @@ from seahub.ocm.settings import ENABLE_OCM, SUPPORTED_OCM_PROTOCOLS, \
     OCM_SEAFILE_PROTOCOL, OCM_RESOURCE_TYPE_LIBRARY, OCM_API_VERSION, \
     OCM_SHARE_TYPES, OCM_ENDPOINT, OCM_PROVIDER_ID, OCM_NOTIFICATION_TYPE_LIST, \
     OCM_NOTIFICATION_SHARE_UNSHARED, OCM_NOTIFICATION_SHARE_DECLINED, OCM_PROTOCOL_URL, \
-    OCM_NOTIFICATION_URL, OCM_CREATE_SHARE_URL
+    OCM_NOTIFICATION_URL, OCM_CREATE_SHARE_URL, OCM_REMOTE_SERVERS
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +34,12 @@ SEAFILE_PERMISSION2OCM_PERMISSION = {
     PERMISSION_READ: ['read'],
     PERMISSION_READ_WRITE: ['read', 'write'],
 }
+
+
+def get_server_name_by_url(url):
+    for name_domain_dict in OCM_REMOTE_SERVERS:
+        if name_domain_dict['server_url'] == url:
+            return name_domain_dict['server_name']
 
 
 def gen_shared_secret(length=23):
@@ -127,7 +133,6 @@ class OCMSharesView(APIView):
         if not provider_id:
             error_msg = 'providerId invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
 
         """
         other ocm protocol fields currently not used
@@ -289,7 +294,10 @@ class OCMSharesPrepareView(APIView):
 
         ocm_share_list = []
         for ocm_share in ocm_shares:
-            ocm_share_list.append(ocm_share.to_dict())
+            ocm_info = ocm_share.to_dict()
+            ocm_info['to_server_name'] = get_server_name_by_url(ocm_share.to_server_url)
+            ocm_share_list.append(ocm_info)
+
         return Response({'ocm_share_list': ocm_share_list})
 
     def post(self, request):
@@ -366,8 +374,8 @@ class OCMSharesPrepareView(APIView):
             'sender': from_user,
             'ownerDisplayName': email2nickname(repo_owner),
             'senderDisplayName': email2nickname(from_user),
-            'shareType': consumer_protocol['resourceTypes']['shareTypes'][0],                # currently only support user type
-            'resourceType': consumer_protocol['resourceTypes']['name'],    # currently only support repo
+            'shareType': consumer_protocol['resourceTypes']['shareTypes'][0],  # currently only support user type
+            'resourceType': consumer_protocol['resourceTypes']['name'],  # currently only support repo
             'protocol': {
                 'name': OCM_SEAFILE_PROTOCOL,
                 'options': {
@@ -396,7 +404,10 @@ class OCMSharesPrepareView(APIView):
             permission=permission,
         )
 
-        return Response(ocm_share.to_dict())
+        ocm_info = ocm_share.to_dict()
+        ocm_info['to_server_name'] = get_server_name_by_url(ocm_share.to_server_url)
+
+        return Response(ocm_info)
 
 
 class OCMSharePrepareView(APIView):

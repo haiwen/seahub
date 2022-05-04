@@ -5,6 +5,7 @@ import timeit
 import tempfile
 import urllib.request, urllib.error, urllib.parse
 import logging
+import subprocess
 from io import BytesIO
 import zipfile
 try: # Py2 and Py3 compatibility
@@ -30,15 +31,6 @@ from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
 logger = logging.getLogger(__name__)
 
 XMIND_IMAGE_SIZE = 1024
-
-if ENABLE_VIDEO_THUMBNAIL:
-    try:
-        from moviepy.editor import VideoFileClip
-        logger.debug('Video thumbnail is enabled.')
-    except ImportError:
-        logger.error("Could not find moviepy installed.")
-else:
-    logger.debug('Video thumbnail is disabled.')
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
@@ -95,7 +87,6 @@ def generate_thumbnail(request, repo_id, size, path):
     before generate thumbnail, you should check:
     1. if repo exist: should exist;
     2. if repo is encrypted: not encrypted;
-    3. if ENABLE_THUMBNAIL: enabled;
     """
 
     try:
@@ -108,6 +99,11 @@ def generate_thumbnail(request, repo_id, size, path):
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
 
+    filetype, fileext = get_file_type_and_ext(os.path.basename(path))
+
+    if filetype == VIDEO and not ENABLE_VIDEO_THUMBNAIL:
+        return (False, 400)
+
     file_id = get_file_id_by_path(repo_id, path)
     if not file_id:
         return (False, 400)
@@ -118,7 +114,6 @@ def generate_thumbnail(request, repo_id, size, path):
 
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
-    filetype, fileext = get_file_type_and_ext(os.path.basename(path))
 
     if filetype == VIDEO:
         # video thumbnails
@@ -151,8 +146,8 @@ def generate_thumbnail(request, repo_id, size, path):
         f = BytesIO(image_file.read())
         return _create_thumbnail_common(f, thumbnail_file, size)
     except Exception as e:
-        logger.error(e)
-        return (False, 500)
+        logger.warning(e)
+        return (False, 400)
 
 def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     try:
@@ -201,10 +196,14 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
         return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
-    clip = VideoFileClip(inner_path)
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
 
-    clip.save_frame(tmp_path, t=THUMBNAIL_VIDEO_FRAME_TIME)
+    try:
+        subprocess.check_output(['ffmpeg', '-ss', str(THUMBNAIL_VIDEO_FRAME_TIME), '-vframes', '1', tmp_path, '-i', inner_path])
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+    
     t2 = timeit.default_timer()
     logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
 

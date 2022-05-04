@@ -18,6 +18,7 @@ class Search extends Component {
 
   constructor(props) {
     super(props);
+    this.baseSearchPageURL = `${siteRoot}search/`;
     this.state = {
       width: 'default',
       value: '',
@@ -28,6 +29,7 @@ class Search extends Component {
       isResultGetted: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
+      searchPageUrl: this.baseSearchPageURL
     };
     this.inputValue = '';
     this.source = null; // used to cancel request;
@@ -120,6 +122,7 @@ class Search extends Component {
         toaster.danger(errMessage);
       });
     } else {
+      this.updateSearchPageURL(queryData);
       seafileAPI.searchFiles(queryData,cancelToken).then(res => {
         if (!res.data.total) {
           _this.setState({
@@ -146,6 +149,14 @@ class Search extends Component {
 
   cancelRequest() {
     this.source.cancel('prev request is cancelled');
+  }
+
+  updateSearchPageURL(queryData) {
+    let params = '';
+    for (let key in queryData) {
+      params += key + '=' + encodeURIComponent(queryData[key]) + '&';
+    }
+    this.setState({searchPageUrl: `${this.baseSearchPageURL}?${params.substring(0, params.length - 1)}`});
   }
 
   getValueLength(str) {
@@ -178,6 +189,7 @@ class Search extends Component {
       items[i]['is_dir'] = data[i].is_dir;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
+      items[i]['thumbnail_url'] = data[i].thumbnail_url;
     }
     return items;
   }
@@ -252,13 +264,10 @@ class Search extends Component {
     });
   }
 
-  onSearchPage = () => {
-    window.location.href = siteRoot + 'search/';
-  }
-
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
+    const { searchPageUrl } = this.state;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -279,10 +288,11 @@ class Search extends Component {
                   autoComplete="off"
                 />
                 {(this.state.isCloseShow && username) &&
-                  <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                    onClick={this.onSearchPage}></i>
+                  <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
                 }
-                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                {this.state.isCloseShow &&
+                  <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                }
               </div>
               <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
@@ -312,10 +322,11 @@ class Search extends Component {
                     autoComplete="off"
                   />
                   {(this.state.isCloseShow && username) &&
-                    <i className='search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow'
-                      onClick={this.onSearchPage}></i>
+                    <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
                   }
-                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon fas fa-times' onClick={this.onCloseHandler}></i>}
+                  {this.state.isCloseShow &&
+                    <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                  }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}

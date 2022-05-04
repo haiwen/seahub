@@ -1,13 +1,11 @@
 import copy
+from mock import patch
+from django.test import override_settings
+
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User, RegistrationForm
-
 from seahub.options.models import UserOptions
 from seahub.role_permissions.settings import ENABLED_ROLE_PERMISSIONS
-from post_office.models import Email
-from django.urls import reverse
-from django.test import override_settings
-from mock import patch
 
 
 TEST_CAN_ADD_PUBLICK_REPO_TRUE = copy.deepcopy(ENABLED_ROLE_PERMISSIONS)
@@ -20,9 +18,10 @@ CLOUD_MODE_TRUE = True
 MULTI_TENANCY_TRUE = True
 MULTI_TENANCY_FALSE = False
 
+
 class UserTest(BaseTestCase):
+
     def test_freeze_user(self):
-        assert len(Email.objects.all()) == 0
 
         u = User.objects.get(self.user.username)
         u.freeze_user(notify_admins=False)
@@ -41,11 +40,13 @@ class UserTest(BaseTestCase):
 
         user = User.objects.get(email=test_email)
         user.delete()
-        
+
         assert len(UserOptions.objects.filter(email=test_email)) == 0
+
 
 @override_settings(ENABLE_WIKI=True)
 class UserPermissionsTest(BaseTestCase):
+
     def setUp(self):
         from constance import config
         self.config = config
@@ -78,30 +79,9 @@ class UserPermissionsTest(BaseTestCase):
 
     def test_user_permissions_can_add_public_repo(self):
         # both have
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
         with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_ADD_PUBLICK_REPO_TRUE):
             assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
             assert self.user.permissions.can_add_public_repo() is True
-
-        # only have can_add_public_repo
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
-        with patch('seahub.role_permissions.utils.ENABLED_ROLE_PERMISSIONS', TEST_CAN_ADD_PUBLICK_REPO_TRUE):
-            assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is True
-            assert self.user.permissions.can_add_public_repo() is False
-
-        # only have ENABLE_USER_CREATE_ORG_REPO
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
-        assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
-        assert self.user.permissions.can_add_public_repo() is False
-
-        # neither have
-        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
-        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
-        assert self.user.permissions._get_perm_by_roles('can_add_public_repo') is False
-        assert self.user.permissions.can_add_public_repo() is False
 
     def test_can_publish_repo_permission(self):
         # enableWIKI = True, and can_publish_repo = True
@@ -150,7 +130,6 @@ class RegistrationFormTest(BaseTestCase):
     def test_clean_email(self):
         form = self.form_class({'email': 'some_random_user@1.com',
                                 'password1': '123',
-                                'password2': '123',
-                            })
+                                'password2': '123'})
         assert form.is_valid() is True
         assert form.clean_email() == 'some_random_user@1.com'

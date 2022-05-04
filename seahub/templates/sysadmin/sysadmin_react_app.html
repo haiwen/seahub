@@ -2,6 +2,10 @@
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
 	window.sysadmin = {

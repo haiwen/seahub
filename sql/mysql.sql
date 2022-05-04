@@ -75,6 +75,8 @@ CREATE TABLE `api2_tokenv2` (
   PRIMARY KEY (`key`),
   UNIQUE KEY `api2_tokenv2_user_platform_device_id_37005c24_uniq` (`user`,`platform`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `api2_tokenv2` CHANGE COLUMN `device_name` `device_name` varchar(40) CHARACTER SET 'utf8mb4' COLLATE utf8mb4_unicode_ci NOT NULL;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `api2_tokenv2` DISABLE KEYS */;
@@ -1235,3 +1237,110 @@ CREATE TABLE `wiki_wiki` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+CREATE TABLE `ocm_share` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shared_secret` varchar(36) NOT NULL,
+  `from_user` varchar(255) NOT NULL,
+  `to_user` varchar(255) NOT NULL,
+  `to_server_url` varchar(200) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `repo_name` varchar(255) NOT NULL,
+  `permission` varchar(50) NOT NULL,
+  `path` longtext NOT NULL,
+  `ctime` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `shared_secret` (`shared_secret`),
+  KEY `ocm_share_from_user_7fbb7bb6` (`from_user`),
+  KEY `ocm_share_to_user_4e255523` (`to_user`),
+  KEY `ocm_share_to_server_url_43f0e89b` (`to_server_url`),
+  KEY `ocm_share_repo_id_51937581` (`repo_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `ocm_share_received` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shared_secret` varchar(36) NOT NULL,
+  `from_user` varchar(255) NOT NULL,
+  `to_user` varchar(255) NOT NULL,
+  `from_server_url` varchar(200) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `repo_name` varchar(255) NOT NULL,
+  `permission` varchar(50) NOT NULL,
+  `path` longtext NOT NULL,
+  `provider_id` varchar(40) NOT NULL,
+  `ctime` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `shared_secret` (`shared_secret`),
+  KEY `ocm_share_received_from_user_8137d8eb` (`from_user`),
+  KEY `ocm_share_received_to_user_0921d09a` (`to_user`),
+  KEY `ocm_share_received_from_server_url_10527b80` (`from_server_url`),
+  KEY `ocm_share_received_repo_id_9e77a1b9` (`repo_id`),
+  KEY `ocm_share_received_provider_id_60c873e0` (`provider_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `repo_auto_delete` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `repo_id` varchar(36) NOT NULL,
+    `days` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `repo_id` (`repo_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `external_department` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `group_id` int(11) NOT NULL,
+    `provider` varchar(32) NOT NULL,
+    `outer_id` bigint(20) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `group_id` (`group_id`),
+    UNIQUE KEY `external_department_provider_outer_id_8dns6vkw_uniq` (`provider`,`outer_id`)
+) ENGINE = InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `custom_share_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(500) NOT NULL,
+  `permission` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `custom_share_permission_repo_id_578fe49f` (`repo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `ocm_via_webdav_received_shares` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `owner_display_name` varchar(255) DEFAULT NULL,
+  `protocol_name` varchar(255) NOT NULL,
+  `shared_secret` varchar(255) NOT NULL,
+  `permissions` varchar(255) NOT NULL,
+  `provider_id` varchar(255) NOT NULL,
+  `resource_type` varchar(255) NOT NULL,
+  `share_type` varchar(255) NOT NULL,
+  `share_with` varchar(255) NOT NULL,
+  `shared_by` varchar(255) NOT NULL,
+  `shared_by_display_name` varchar(255) DEFAULT NULL,
+  `ctime` datetime(6) NOT NULL,
+  `is_dir` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ocm_via_webdav_share_received_owner_261eaa70` (`owner`),
+  KEY `ocm_via_webdav_share_received_shared_secret_fbb6be5a` (`shared_secret`),
+  KEY `ocm_via_webdav_share_received_provider_id_a55680e9` (`provider_id`),
+  KEY `ocm_via_webdav_share_received_resource_type_a3c71b57` (`resource_type`),
+  KEY `ocm_via_webdav_share_received_share_type_7615aaab` (`share_type`),
+  KEY `ocm_via_webdav_share_received_share_with_5a23eb17` (`share_with`),
+  KEY `ocm_via_webdav_share_received_shared_by_1786d580` (`shared_by`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `onlyoffice_onlyofficedockey` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_key` varchar(36) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `file_path` longtext NOT NULL,
+  `repo_id_file_path_md5` varchar(100) NOT NULL,
+  `created_time` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`),
+  KEY `onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073` (`repo_id_file_path_md5`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

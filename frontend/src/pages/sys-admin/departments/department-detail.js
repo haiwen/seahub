@@ -2,12 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@reach/router';
+import Paginator from '../../../components/paginator';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils.js';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
+import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
@@ -31,15 +33,22 @@ class DepartmentDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      orgID: '',
       groupName: '',
       isItemFreezed: false,
       ancestorGroups: [],
       members: [],
+      membersErrorMsg: '',
+      membersPageInfo: {
+      },
+      membersPage: 1,
+      membersPerPage: 25,
       deletedMember: {},
       isShowAddMemberDialog: false,
       showDeleteMemberDialog: false,
       repos: [],
       deletedRepo: {},
+      isShowRenameDepartmentDialog: false,
       isShowAddRepoDialog: false,
       showDeleteRepoDialog: false,
       groups: [],
@@ -54,13 +63,15 @@ class DepartmentDetail extends React.Component {
   componentDidMount() {
     const groupID = this.props.groupID;
     this.listGroupRepo(groupID);
-    this.listMembers(groupID);
+    this.getDepartmentInfo(groupID);
+    this.listMembers(groupID, this.state.membersPage, this.state.membersPerPage);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listGroupRepo(nextProps.groupID);
-      this.listMembers(nextProps.groupID);
+      this.getDepartmentInfo(nextProps.groupID);
+      this.listMembers(nextProps.groupID, this.state.membersPage, this.state.membersPerPage);
     }
   }
 
@@ -73,17 +84,45 @@ class DepartmentDetail extends React.Component {
     });
   }
 
-  listMembers = (groupID) => {
+  getDepartmentInfo = (groupID) => {
     seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
       this.setState({
-        members: res.data.members,
         groups: res.data.groups,
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,
+        orgID: res.data.org_id,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  }
+
+  listMembers = (groupID, page, perPage) => {
+    seafileAPI.sysAdminListGroupMembers(groupID, page, perPage).then((res) => {
+      this.setState({
+        members: res.data.members,
+        membersPageInfo: res.data.page_info
+      });
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      this.setState({membersErrorMsg: errMessage});
+    });
+  }
+
+  getPreviousPageList = () => {
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page - 1, this.state.membersPerPage);
+  }
+
+  getNextPageList = () => {
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page + 1, this.state.membersPerPage);
+  }
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      membersPerPage: perPage
+    }, () => {
+      this.listMembers(this.props.groupID, 1, perPage);
     });
   }
 
@@ -109,16 +148,41 @@ class DepartmentDetail extends React.Component {
     this.listSubDepartGroups(this.props.groupID);
   }
 
+  onDepartmentNameChanged = (dept) => {
+    this.setState({
+      groupName: dept.name
+    });
+  }
+
+  onSubDepartmentNameChanged = (dept) => {
+    this.setState({
+      groups: this.state.groups.map(item => {
+        if (item.id == dept.id) {
+          item.name = dept.name;
+        }
+        return item;
+      })
+    });
+  }
+
   onRepoChanged = () => {
     this.listGroupRepo(this.props.groupID);
   }
 
   onMemberChanged = () => {
-    this.listMembers(this.props.groupID);
+    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page, this.state.membersPerPage);
   }
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   showDeleteMemberDialog = (member) => {
@@ -127,6 +191,10 @@ class DepartmentDetail extends React.Component {
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
+  }
+
+  toggleRenameDepartmentDialog = () => {
+    this.setState({ isShowRenameDepartmentDialog: !this.state.isShowRenameDepartmentDialog });
   }
 
   toggleAddRepoDialog = () => {
@@ -157,18 +225,29 @@ class DepartmentDetail extends React.Component {
   }
 
   render() {
-    const { members, repos, groups } = this.state;
+    const { members, membersErrorMsg, repos, groups, groupName } = this.state;
     const groupID = this.props.groupID;
     const topBtn = 'btn btn-secondary operation-item';
     const topbarChildren = (
       <Fragment>
         {groupID &&
           <Fragment>
+            <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartmentDialog}>{gettext('Rename Department')}</button>
             <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>
             <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>
             <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>
           </Fragment>
         }
+        {this.state.isShowRenameDepartmentDialog && (
+          <ModalPortal>
+            <RenameDepartmentDialog
+              groupID={groupID}
+              name={groupName}
+              toggle={this.toggleRenameDepartmentDialog}
+              onDepartmentNameChanged={this.onDepartmentNameChanged}
+            />
+          </ModalPortal>
+        )}
         {this.state.isShowAddMemberDialog && (
           <ModalPortal>
             <AddMemberDialog
@@ -240,6 +319,11 @@ class DepartmentDetail extends React.Component {
                         return(
                           <Fragment key={group.id}>
                             <GroupItem
+                              orgID={this.state.orgID}
+                              isItemFreezed={this.state.isItemFreezed}
+                              onFreezedItem={this.onFreezedItem}
+                              onUnfreezedItem={this.onUnfreezedItem}
+                              onDepartmentNameChanged={this.onSubDepartmentNameChanged}
                               group={group}
                               showDeleteDepartDialog={this.showDeleteDepartDialog}
                               showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
@@ -259,34 +343,48 @@ class DepartmentDetail extends React.Component {
                 <div className="fleft"><h3 className="sf-heading">{gettext('Members')}</h3></div>
               </div>
               <div className="cur-view-content">
-                {(members && members.length === 1 && members[0].role === 'Owner') ?
-                  <p className="no-member">{gettext('No members')}</p> :
-                  <table>
-                    <thead>
-                      <tr>
-                        <th width="5%"></th>
-                        <th width="50%">{gettext('Name')}</th>
-                        <th width="15%">{gettext('Role')}</th>
-                        <th width="30%"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {members.map((member, index) => {
-                        return (
-                          <Fragment key={index}>
-                            <MemberItem
-                              member={member}
-                              showDeleteMemberDialog={this.showDeleteMemberDialog}
-                              isItemFreezed={this.state.isItemFreezed}
-                              onMemberChanged={this.onMemberChanged}
-                              toggleItemFreezed={this.toggleItemFreezed}
-                              groupID={groupID}
-                            />
-                          </Fragment>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                {membersErrorMsg ? <p className="error text-center">{membersErrorMsg}</p> :
+                  members.length == 0 ?
+                    <p className="no-member">{gettext('No members')}</p> :
+                    <Fragment>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th width="5%"></th>
+                            <th width="50%">{gettext('Name')}</th>
+                            <th width="15%">{gettext('Role')}</th>
+                            <th width="30%"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {members.map((member, index) => {
+                            return (
+                              <Fragment key={index}>
+                                <MemberItem
+                                  orgID={this.state.orgID}
+                                  member={member}
+                                  showDeleteMemberDialog={this.showDeleteMemberDialog}
+                                  isItemFreezed={this.state.isItemFreezed}
+                                  onMemberChanged={this.onMemberChanged}
+                                  toggleItemFreezed={this.toggleItemFreezed}
+                                  groupID={groupID}
+                                />
+                              </Fragment>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {this.state.membersPageInfo &&
+                      <Paginator
+                        gotoPreviousPage={this.getPreviousPageList}
+                        gotoNextPage={this.getNextPageList}
+                        currentPage={this.state.membersPageInfo.current_page}
+                        hasNextPage={this.state.membersPageInfo.has_next_page}
+                        curPerPage={this.state.membersPerPage}
+                        resetPerPage={this.resetPerPage}
+                      />
+                      }
+                    </Fragment>
                 }
               </div>
             </div>
@@ -310,7 +408,7 @@ class DepartmentDetail extends React.Component {
                       {repos.map((repo, index) => {
                         return(
                           <Fragment key={index}>
-                            <RepoItem repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
+                            <RepoItem repo={repo} orgID={this.state.orgID} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
                           </Fragment>
                         );
                       })}

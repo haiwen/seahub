@@ -9,9 +9,11 @@
 
         <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+        {% render_bundle 'commons' 'css' %}
         {% render_bundle 'markdownEditor' 'css' %}
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
@@ -45,7 +47,9 @@
                   hasDraft: '{{ has_draft }}' === 'True',
                   draftFilePath: '{{ draft_file_path }}',
                   draftOriginFilePath: '{{ draft_origin_file_path }}',
+		  shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
                   shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+                  shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
                   shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
                   shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
                   shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
@@ -54,6 +58,7 @@
                   isLocked: {% if file_locked %}true{% else %}false{% endif %},
                   lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
                   canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
+                  canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
               },
              userInfo: {
                username: '{{ user.username }}',
@@ -64,7 +69,8 @@
          </script>
          <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
 
-         {% render_bundle 'commons' %}
+         {% render_bundle 'commons' 'js' %}
+         {% render_bundle 'runtime' 'js' %}
          {% render_bundle 'markdownEditor' 'js' %}
     </body>
 </html>

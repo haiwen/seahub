@@ -18,7 +18,6 @@ const propTypes = {
   // repoinfo
   currentRepoInfo: PropTypes.object.isRequired,
   repoID: PropTypes.string.isRequired,
-  repoPermission: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
@@ -87,6 +86,7 @@ const propTypes = {
   onListContainerScroll: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -184,7 +184,7 @@ class LibContentContainer extends React.Component {
               repoName={this.props.currentRepoInfo.repo_name}
               pathPrefix={this.props.pathPrefix}
               currentPath={this.props.path}
-              permission={this.props.repoPermission}
+              userPerm={this.props.userPerm}
               isViewFile={this.props.isViewFile}
               onTabNavClick={this.props.onTabNavClick}
               onPathClick={this.onPathClick}
@@ -216,6 +216,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    fullDirentList={this.props.fullDirentList}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}
@@ -237,6 +238,7 @@ class LibContentContainer extends React.Component {
                     onItemsDelete={this.props.onItemsDelete}
                     onFileTagChanged={this.props.onFileTagChanged}
                     showDirentDetail={this.props.showDirentDetail}
+                    loadDirentList={this.props.loadDirentList}
                   />
                 )}
                 {this.props.currentMode === 'grid' && (
@@ -244,7 +246,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
@@ -256,6 +257,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    fullDirentList={this.props.fullDirentList}
                     onAddFile={this.props.onAddFile}
                     onItemClick={this.onItemClick}
                     onItemDelete={this.props.onItemDelete}
@@ -275,7 +277,6 @@ class LibContentContainer extends React.Component {
                     path={this.props.path}
                     repoID={repoID}
                     currentRepoInfo={this.props.currentRepoInfo}
-                    repoPermission={this.props.repoPermission}
                     isGroupOwnedRepo={this.props.isGroupOwnedRepo}
                     userPerm={this.props.userPerm}
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
@@ -308,6 +309,7 @@ class LibContentContainer extends React.Component {
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
                     direntList={this.props.direntList}
+                    fullDirentList={this.props.fullDirentList}
                     sortBy={this.props.sortBy}
                     sortOrder={this.props.sortOrder}
                     sortItems={this.props.sortItems}

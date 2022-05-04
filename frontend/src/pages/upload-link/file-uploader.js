@@ -128,9 +128,10 @@ class FileUploader extends React.Component {
     this.resumable.on('fileAdded', this.onFileAdded.bind(this));
     this.resumable.on('fileProgress', this.onFileProgress.bind(this));
     this.resumable.on('fileSuccess', this.onFileUploadSuccess.bind(this));
+    this.resumable.on('fileError', this.onFileError.bind(this));
+    this.resumable.on('uploadStart', this.onUploadStart.bind(this));
     this.resumable.on('progress', this.onProgress.bind(this));
     this.resumable.on('complete', this.onComplete.bind(this));
-    this.resumable.on('fileError', this.onFileError.bind(this));
     this.resumable.on('error', this.onError.bind(this));
     this.resumable.on('dragstart', this.onDragStart.bind(this));
   }
@@ -299,6 +300,12 @@ class FileUploader extends React.Component {
     return uploadBitrate;
   }
 
+  // start uploading
+  onUploadStart = () => {
+    const message = gettext('File upload started');
+    toaster.notify(message);
+  }
+
   onProgress = () => {
     let progress = Math.round(this.resumable.progress() * 100);
     this.setState({totalProgress: progress});
@@ -411,17 +418,30 @@ class FileUploader extends React.Component {
       retryFileList: this.state.retryFileList,
       uploadFileList: uploadFileList
     });
-
   }
 
   onComplete = () => {
+    if (!this.error) {
+      const message = gettext('All files uploaded');
+      toaster.success(message);
+    }
+    this.error = false; // reset it
+
     this.notifiedFolders = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
     this.setState({allFilesUploaded: true});
   }
 
-  onError = (message) => {
+  onError = (message, file) => {
+    let msg = gettext('Error');
+    if (file && file.fileName) {
+      msg = gettext('Failed to upload {file_name}.')
+        .replace('{file_name}', file.fileName);
+    }
+    toaster.danger(msg, {'id': 'file-error-msg'});
+    this.error = true;
+
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
     // After the error, the user can switch windows

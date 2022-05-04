@@ -1,5 +1,5 @@
 <!doctype html>
-{% load i18n staticfiles %}
+{% load i18n static %}
 <html>
 <head>
     <title>{{doc_title}}</title>
@@ -45,6 +45,9 @@
     document.getElementById('office_form').submit();
     document.getElementById('office_frame').className = '';
 </script>
-{% include 'snippets/wopi_onlyoffice_js.html' %}
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 </body>
 </html>

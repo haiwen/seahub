@@ -1,12 +1,62 @@
 import React, { Component, Fragment } from 'react';
+import { navigate } from '@reach/router';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
+
+class Search extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: ''
+    };
+  }
+
+  handleInputChange = (e) => {
+    this.setState({
+      value: e.target.value
+    });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key == 'Enter') {
+      e.preventDefault();
+      this.handleSubmit();
+    }
+  }
+
+  handleSubmit = () => {
+    const value = this.state.value.trim();
+    if (!value) {
+      return false;
+    }
+    this.props.submit(value);
+  }
+
+  render() {
+    return (
+      <div className="input-icon">
+        <i className="d-flex input-icon-addon fas fa-search"></i>
+        <input
+          type="text"
+          className="form-control search-input h-6 mr-1"
+          style={{width: '15rem'}}
+          placeholder={this.props.placeholder}
+          value={this.state.value}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+          autoComplete="off"
+        />
+      </div>
+    );
+  }
+}
 
 class OrgGroups extends Component {
 
@@ -77,11 +127,22 @@ class OrgGroups extends Component {
     });
   }
 
+  searchItems = (keyword) => {
+    navigate(`${siteRoot}org/groupadmin/search-groups/?query=${encodeURIComponent(keyword)}`);
+  }
+
+  getSearch = () => {
+    return <Search
+      placeholder={gettext('Search groups by name')}
+      submit={this.searchItems}
+    />;
+  }
+
   render() {
     let groups = this.state.orgGroups;
     return (
       <Fragment>
-        <MainPanelTopbar/>
+        <MainPanelTopbar search={this.getSearch()}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

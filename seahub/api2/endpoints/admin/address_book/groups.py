@@ -12,8 +12,7 @@ from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
-        get_default_avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils import is_org_context
@@ -25,14 +24,17 @@ from seahub.api2.utils import to_python_boolean, api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
+from seahub.auth.models import ExternalDepartment
 
 logger = logging.getLogger(__name__)
+
 
 def address_book_group_to_dict(group):
     if isinstance(group, int):
         group = ccnet_api.get_group(group)
 
     return {
+        "org_id": ccnet_api.get_org_id_by_group(group.id),
         "id": group.id,
         "name": group.group_name,
         "owner": group.creator_name,
@@ -77,7 +79,7 @@ class AdminAddressBookGroups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
+            error_msg = _('Name can only contain letters, numbers, spaces, hyphen, dot, single quote, brackets or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
@@ -192,8 +194,7 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for m in members:
-            member_info = self._get_address_book_group_memeber_info(request,
-                    m, avatar_size)
+            member_info = self._get_address_book_group_memeber_info(request, m, avatar_size)
             if member_info['role'] == 'Owner':
                 continue
             ret_members.append(member_info)
@@ -255,6 +256,12 @@ class AdminAddressBookGroup(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # del external department
+        try:
+            ExternalDepartment.objects.delete_by_group_id(group_id)
+        except Exception as e:
+            logger.error(e)
+
         # send admin operation log signal
         group_owner = group.creator_name
         group_name = group.group_name
@@ -264,6 +271,6 @@ class AdminAddressBookGroup(APIView):
             "owner": group_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation=GROUP_DELETE, detail=admin_op_detail)
+                             operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})

@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import time
 import logging
 import posixpath
 import requests
@@ -24,11 +25,10 @@ from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
 from seahub.utils.file_types import MARKDOWN, TEXT
 
-from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
-    FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import is_draft_file, get_file_draft
@@ -57,7 +57,7 @@ class FileView(APIView):
             file_name = file_obj.obj_name
             file_size = file_obj.size
             can_preview, error_msg = can_preview_file(file_name, file_size, repo)
-            can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
+            can_edit, error_msg = can_edit_file(file_name, file_size, repo)
         else:
             can_preview = False
             can_edit = False
@@ -176,7 +176,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -278,7 +278,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -295,11 +295,9 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # rename file
-            new_file_name = check_filename_with_rename(repo_id, parent_dir,
-                    new_file_name)
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
             try:
-                seafile_api.rename_file(repo_id, parent_dir, oldname,
-                        new_file_name, username)
+                seafile_api.rename_file(repo_id, parent_dir, oldname, new_file_name, username)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -394,8 +392,8 @@ class FileView(APIView):
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
                 seafile_api.move_file(src_repo_id, src_dir, filename,
-                        dst_repo_id, dst_dir, new_file_name, replace=False,
-                        username=username, need_progress=0, synchronous=1)
+                                      dst_repo_id, dst_dir, new_file_name, replace=False,
+                                      username=username, need_progress=0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -460,7 +458,7 @@ class FileView(APIView):
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
                 seafile_api.copy_file(src_repo_id, src_dir, filename, dst_repo_id,
-                          dst_dir, new_file_name, username, 0, synchronous=1)
+                                      dst_dir, new_file_name, username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -571,10 +569,24 @@ class FileView(APIView):
                 error_msg = _("File is locked")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # lock file
-            expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+            expire = request.data.get('expire', 0)
             try:
-                seafile_api.lock_file(repo_id, path, username, expire)
+                expire = int(expire)
+            except ValueError:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire < 0:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # lock file
+            try:
+                if expire > 0:
+                    seafile_api.lock_file(repo_id, path, username,
+                                          int(time.time()) + expire)
+                else:
+                    seafile_api.lock_file(repo_id, path, username, 0)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -586,7 +598,9 @@ class FileView(APIView):
                 error_msg = _("File is not locked.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if locked_by_me or locked_by_online_office:
+            if locked_by_me or locked_by_online_office or \
+                    is_repo_owner(request, repo_id, username) or \
+                    is_repo_admin(username, repo_id):
                 # unlock file
                 try:
                     seafile_api.unlock_file(repo_id, path)
@@ -604,10 +618,25 @@ class FileView(APIView):
                 error_msg = _("File is not locked.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            expire = request.data.get('expire', 0)
+            try:
+                expire = int(expire)
+            except ValueError:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire < 0:
+                error_msg = 'expire invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             if locked_by_me or locked_by_online_office:
                 # refresh lock file
                 try:
-                    seafile_api.refresh_file_lock(repo_id, path)
+                    if expire > 0:
+                        seafile_api.refresh_file_lock(repo_id, path,
+                                                      int(time.time()) + expire)
+                    else:
+                        seafile_api.refresh_file_lock(repo_id, path)
                 except SearpcError as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -648,7 +677,7 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
 
         username = request.user.username
-        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_delete is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

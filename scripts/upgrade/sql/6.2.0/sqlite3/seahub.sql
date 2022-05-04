@@ -1,0 +1,24 @@
+alter table sysadmin_extra_userloginlog add column login_success bool not null default 1;
+alter table profile_profile add column list_in_address_book bool not null default 0;
+
+CREATE TABLE IF NOT EXISTS "share_extragroupssharepermission" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "group_id" integer NOT NULL, "permission" varchar(30) NOT NULL);
+CREATE TABLE IF NOT EXISTS "share_extrasharepermission" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "share_to" varchar(255) NOT NULL, "permission" varchar(30) NOT NULL);
+CREATE TABLE IF NOT EXISTS "tags_fileuuidmap" ("uuid" char(32) NOT NULL PRIMARY KEY, "repo_id" varchar(36) NOT NULL, "repo_id_parent_path_md5" varchar(100) NOT NULL, "parent_path" text NOT NULL, "filename" varchar(1024) NOT NULL, "is_dir" bool NOT NULL);
+CREATE TABLE IF NOT EXISTS "tags_tags" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(255) NOT NULL UNIQUE);
+CREATE TABLE IF NOT EXISTS "tags_filetag" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "uuid_id" char(32) NOT NULL REFERENCES "tags_fileuuidmap" ("uuid"), "tag_id" integer NOT NULL REFERENCES "tags_tags" ("id"), "username" varchar(255) NOT NULL);
+CREATE TABLE IF NOT EXISTS "revision_tag_tags" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(255) NOT NULL UNIQUE);
+CREATE TABLE IF NOT EXISTS "revision_tag_revisiontags" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "revision_id" varchar(255) NOT NULL, "tag_id" integer NOT NULL REFERENCES "revision_tag_tags" ("id"), "username" varchar(255) NOT NULL);
+CREATE TABLE IF NOT EXISTS "role_permissions_adminrole" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(254) NOT NULL UNIQUE, "role" varchar(255) NOT NULL);
+CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_9a8c79bf" ON "share_extragroupssharepermission" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_0e939a4f" ON "share_extragroupssharepermission" ("group_id");                                
+CREATE INDEX IF NOT EXISTS "share_extrasharepermission_9a8c79bf" ON "share_extrasharepermission" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_extrasharepermission_e4fb1dad" ON "share_extrasharepermission" ("share_to");                                            
+CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_9a8c79bf" ON "tags_fileuuidmap" ("repo_id");
+CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_c5bf47d4" ON "tags_fileuuidmap" ("repo_id_parent_path_md5");                                                 
+CREATE INDEX IF NOT EXISTS "tags_filetag_10634818" ON "tags_filetag" ("uuid_id");                                                                         
+CREATE INDEX IF NOT EXISTS "tags_filetag_76f094bc" ON "tags_filetag" ("tag_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_9a8c79bf" ON "revision_tag_revisiontags" ("repo_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_5de09a8d" ON "revision_tag_revisiontags" ("revision_id");                                           
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_76f094bc" ON "revision_tag_revisiontags" ("tag_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_14c4b06b" ON "revision_tag_revisiontags" ("username");
+CREATE INDEX IF NOT EXISTS "profile_profile_3d5d3631" ON "profile_profile" ("list_in_address_book");

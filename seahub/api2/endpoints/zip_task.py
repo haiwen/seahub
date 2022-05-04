@@ -96,13 +96,6 @@ class ZipTaskView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            dir_size = seafile_api.get_dir_size(
-                    repo.store_id, repo.version, dir_id)
-
-            if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                error_msg = _('Unable to download directory "%s": size is too large.') % dir_name
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             fake_obj_id = {
                 'obj_id': dir_id,
                 'dir_name': dir_name,
@@ -111,7 +104,6 @@ class ZipTaskView(APIView):
 
         if download_type == 'download-multi':
             dirent_list = []
-            total_size = 0
             full_dirent_path_list = []
             for dirent_name in dirent_name_list:
                 dirent_name = dirent_name.strip('/')
@@ -122,22 +114,12 @@ class ZipTaskView(APIView):
                 if not current_dirent:
                     continue
 
-                if stat.S_ISDIR(current_dirent.mode):
-                    total_size += seafile_api.get_dir_size(repo.store_id,
-                        repo.version, current_dirent.obj_id)
-                else:
-                    total_size += current_dirent.size
-
                 full_dirent_path_list.append(full_dirent_path)
 
             if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps(full_dirent_path_list), \
                     request.user.username, repo_folder_permission))['is_downloadable']:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                error_msg = _('Total size exceeds limit.')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             fake_obj_id = {
                 'parent_dir': parent_dir,
@@ -230,13 +212,6 @@ class ZipTaskView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            dir_size = seafile_api.get_dir_size(
-                    repo.store_id, repo.version, dir_id)
-
-            if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                error_msg = 'Unable to download directory "%s": size is too large.' % dir_name
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             fake_obj_id = {
                 'obj_id': dir_id,
                 'dir_name': dir_name,
@@ -245,7 +220,6 @@ class ZipTaskView(APIView):
 
         if download_type == 'download-multi':
             dirent_list = []
-            total_size = 0
             full_dirent_path_list = []
             for dirent_name in dirent_name_list:
                 dirent_name = dirent_name.strip('/')
@@ -256,22 +230,12 @@ class ZipTaskView(APIView):
                 if not current_dirent:
                     continue
 
-                if stat.S_ISDIR(current_dirent.mode):
-                    total_size += seafile_api.get_dir_size(repo.store_id,
-                        repo.version, current_dirent.obj_id)
-                else:
-                    total_size += current_dirent.size
-
                 full_dirent_path_list.append(full_dirent_path)
 
             if not json.loads(seafile_api.is_dir_downloadable(repo_id, json.dumps(full_dirent_path_list), \
                     request.user.username, repo_folder_permission))['is_downloadable']:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-                error_msg = _('Total size exceeds limit.')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             fake_obj_id = {
                 'parent_dir': parent_dir,

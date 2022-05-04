@@ -9,8 +9,57 @@ import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dial
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
-import { gettext, invitationLink, orgID } from '../../utils/constants';
+import { gettext, invitationLink, orgID, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+
+class Search extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: ''
+    };
+  }
+
+  handleInputChange = (e) => {
+    this.setState({
+      value: e.target.value
+    });
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key == 'Enter') {
+      e.preventDefault();
+      this.handleSubmit();
+    }
+  }
+
+  handleSubmit = () => {
+    const value = this.state.value.trim();
+    if (!value) {
+      return false;
+    }
+    this.props.submit(value);
+  }
+
+  render() {
+    return (
+      <div className="input-icon">
+        <i className="d-flex input-icon-addon fas fa-search"></i>
+        <input
+          type="text"
+          className="form-control search-input h-6 mr-1"
+          style={{width: '15rem'}}
+          placeholder={this.props.placeholder}
+          value={this.state.value}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+          autoComplete="off"
+        />
+      </div>
+    );
+  }
+}
 
 class OrgUsers extends Component {
 
@@ -117,6 +166,17 @@ class OrgUsers extends Component {
     });
   }
 
+  searchItems = (keyword) => {
+    navigate(`${siteRoot}org/useradmin/search-users/?query=${encodeURIComponent(keyword)}`);
+  }
+
+  getSearch = () => {
+    return <Search
+      placeholder={gettext('Search users')}
+      submit={this.searchItems}
+    />;
+  }
+
   render() {
     const topBtn = 'btn btn-secondary operation-item';
     let topbarChildren;
@@ -143,7 +203,7 @@ class OrgUsers extends Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar children={topbarChildren}/>
+        <MainPanelTopbar children={topbarChildren} search={this.getSearch()}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="all" />

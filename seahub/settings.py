@@ -6,13 +6,18 @@ import sys
 import os
 import re
 
-from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
+from seaserv import FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
 
+SERVICE_URL = 'http://127.0.0.1:8000'
+FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
 CLOUD_MODE = False
+
+MULTI_TENANCY = False
 
 ADMINS = [
     # ('Your Name', 'your_email@domain.com'),
@@ -22,14 +27,18 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '%s/seahub/seahub.db' % PROJECT_ROOT, # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '%s/seahub/seahub.db' % PROJECT_ROOT,  # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+# New in Django 3.2
+# Default primary key field type to use for models that don’t have a field with primary_key=True.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -124,7 +133,8 @@ MIDDLEWARE = [
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
     'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
-    'seahub.trusted_ip.middleware.LimitIpMiddleware'
+    'seahub.trusted_ip.middleware.LimitIpMiddleware',
+    'seahub.organizations.middleware.RedirectMiddleware',
 ]
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -218,7 +228,6 @@ INSTALLED_APPS = [
     'statici18n',
     'constance',
     'constance.backends.database',
-    'post_office',
     'termsandconditions',
     'webpack_loader',
 
@@ -249,16 +258,23 @@ INSTALLED_APPS = [
     'seahub.file_tags',
     'seahub.related_files',
     'seahub.work_weixin',
+    'seahub.dingtalk',
     'seahub.file_participants',
     'seahub.repo_api_tokens',
     'seahub.abuse_reports',
     'seahub.repo_auto_delete',
     'seahub.ocm',
+    'seahub.ocm_via_webdav',
+    'seahub.search',
+    'seahub.sysadmin_extra',
+    'seahub.organizations',
+    'seahub.krb5_auth',
+    'seahub.django_cas_ng',
 ]
 
 
 # Enable or disable view File Scan
-# ENABLE_FILE_SCAN = True
+ENABLE_FILE_SCAN = False
 
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
@@ -274,6 +290,10 @@ CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
 )
+
+ENABLE_CAS = False
+
+ENABLE_ADFS_LOGIN = False
 
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
@@ -295,15 +315,17 @@ ENABLE_USER_CLEAN_TRASH = True
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 LOGIN_ERROR_DETAILS = False
-LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# allow seafile amdin view user's repo
+# allow seafile admin view user's repo
 ENABLE_SYS_ADMIN_VIEW_REPO = False
 
-#allow search from LDAP directly during auto-completion (not only search imported users)
+# allow seafile admin generate user auth token
+ENABLE_SYS_ADMIN_GENERATE_USER_AUTH_TOKEN = False
+
+# allow search from LDAP directly during auto-completion (not only search imported users)
 ENABLE_SEARCH_FROM_LDAP_DIRECTLY = False
 
 # show traffic on the UI
@@ -354,8 +376,17 @@ UPLOAD_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 # greater than or equal to MIN and less than or equal to MAX
 UPLOAD_LINK_EXPIRE_DAYS_DEFAULT = 0
 
-# mininum length for the password of a share link
-SHARE_LINK_PASSWORD_MIN_LENGTH = 8
+# force use password when generate a share/upload link
+SHARE_LINK_FORCE_USE_PASSWORD = False
+
+# mininum length for the password of a share/upload link
+SHARE_LINK_PASSWORD_MIN_LENGTH = 10
+
+# LEVEL for the password of a share/upload link
+# based on four types of input:
+# num, upper letter, lower letter, other symbols
+# '3' means password must have at least 3 types of the above.
+SHARE_LINK_PASSWORD_STRENGTH_LEVEL = 1
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
@@ -394,14 +425,14 @@ FORCE_PASSWORD_CHANGE = True
 # Enable a user to change password in 'settings' page.
 ENABLE_CHANGE_PASSWORD = True
 
+# Enable a user to get auth token in 'settings' page.
+ENABLE_GET_AUTH_TOKEN_BY_SESSION = False
+
 ENABLE_DELETE_ACCOUNT = True
 ENABLE_UPDATE_USER_INFO = True
 
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
-
-# Enable or disable org repo creation by user
-ENABLE_USER_CREATE_ORG_REPO = True
 
 DISABLE_SYNC_WITH_ANY_FOLDER = False
 
@@ -409,6 +440,9 @@ ENABLE_TERMS_AND_CONDITIONS = False
 
 # Enable or disable sharing to all groups
 ENABLE_SHARE_TO_ALL_GROUPS = False
+
+# Enable or disable sharing to departments
+ENABLE_SHARE_TO_DEPARTMENT = True
 
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
@@ -516,6 +550,9 @@ INIT_PASSWD = genpassword
 # browser tab title
 SITE_TITLE = 'Private Seafile'
 
+# html head meta tag for search engine preview text
+SITE_DESCRIPTION = ''
+
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 
@@ -527,7 +564,8 @@ LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
-FAVICON_PATH = 'img/favicon.ico'
+FAVICON_PATH = 'favicons/favicon.png'
+APPLE_TOUCH_ICON_PATH = 'favicons/favicon.png'
 
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
@@ -600,6 +638,14 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
+        'onlyoffice_handler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'onlyoffice.log'),
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -619,6 +665,11 @@ LOGGING = {
         },
         'py.warnings': {
             'handlers': ['console', ],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'onlyoffice': {
+            'handlers': ['onlyoffice_handler', ],
             'level': 'INFO',
             'propagate': False
         },
@@ -643,9 +694,6 @@ CAPTCHA_IMAGE_SIZE = (90, 42)
 ###################
 # Image Thumbnail #
 ###################
-
-# Enable or disable thumbnail
-ENABLE_THUMBNAIL = True
 
 # Absolute filesystem path to the directory that will hold thumbnail files.
 SEAHUB_DATA_ROOT = os.path.join(PROJECT_ROOT, '../../seahub-data')
@@ -673,6 +721,9 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
 ENABLE_WEBDAV_SECRET = False
+WEBDAV_SECRET_MIN_LENGTH = 1
+WEBDAV_SECRET_STRENGTH_LEVEL = 1
+
 ENABLE_USER_SET_CONTACT_EMAIL = False
 
 #####################
@@ -680,11 +731,6 @@ ENABLE_USER_SET_CONTACT_EMAIL = False
 #####################
 ENABLE_GLOBAL_ADDRESSBOOK = True
 ENABLE_ADDRESSBOOK_OPT_IN = False
-
-#####################
-# Folder Permission #
-#####################
-ENABLE_FOLDER_PERM = False
 
 ####################
 # Guest Invite     #
@@ -816,16 +862,6 @@ def load_local_settings(module):
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
 
-
-# Load seahub_extra_settings.py
-try:
-    from seahub_extra import seahub_extra_settings
-except ImportError:
-    pass
-else:
-    load_local_settings(seahub_extra_settings)
-    del seahub_extra_settings
-
 # Load local_settings.py
 try:
     import seahub.local_settings
@@ -871,8 +907,6 @@ CONSTANCE_CONFIG = {
     'LOGIN_ATTEMPT_LIMIT': (LOGIN_ATTEMPT_LIMIT, ''),
     'FREEZE_USER_ON_LOGIN_FAILED': (FREEZE_USER_ON_LOGIN_FAILED, ''),
 
-    'ENABLE_USER_CREATE_ORG_REPO': (ENABLE_USER_CREATE_ORG_REPO, ''),
-
     'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY, ''),
     'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH, ''),
     'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING, ''),
@@ -883,7 +917,9 @@ CONSTANCE_CONFIG = {
     'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL, ''),
 
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
+    'SHARE_LINK_FORCE_USE_PASSWORD': (SHARE_LINK_FORCE_USE_PASSWORD, ''),
     'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH, ''),
+    'SHARE_LINK_PASSWORD_STRENGTH_LEVEL': (SHARE_LINK_PASSWORD_STRENGTH_LEVEL, ''),
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH, ''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
@@ -908,6 +944,12 @@ if ENABLE_REMOTE_USER_AUTHENTICATION:
 
 if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
     AUTHENTICATION_BACKENDS += ('seahub.oauth.backends.OauthRemoteUserBackend',)
+
+if ENABLE_CAS:
+    AUTHENTICATION_BACKENDS += ('seahub.django_cas_ng.backends.CASBackend',)
+
+if ENABLE_ADFS_LOGIN:
+    AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
 
 #####################
 # Custom Nav Items  #

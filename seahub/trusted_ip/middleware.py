@@ -2,7 +2,7 @@
 import json
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.utils.deprecation import MiddlewareMixin
 
 from seahub.utils.ip import get_remote_ip
@@ -25,5 +25,5 @@ class LimitIpMiddleware(MiddlewareMixin):
                     content_type='application/json; charset=utf-8'
                 )
             else:
-                return render_to_response('trusted_ip/403_trusted_ip.html',
-                                          status=403)
+                return render(request, 'trusted_ip/403_trusted_ip.html',
+                              status=403)

@@ -9,7 +9,6 @@ from django.conf import settings
 from django.http import SimpleCookie
 from django.test import RequestFactory
 from django.test import TestCase
-from django.test import override_settings
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
@@ -283,7 +282,7 @@ class Fixtures(Exam):
         User.objects.create_user(username, password, is_staff=False, is_active=True)
         create_org(org_name, prefix, username)
         new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
-        from seahub_extra.organizations.models import OrgMemberQuota
+        from seahub.organizations.models import OrgMemberQuota
         OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
         quota = quota * get_file_size_unit('MB')
         seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)

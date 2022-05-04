@@ -1,5 +1,3 @@
-from _sha1 import sha1
-
 import hmac
 import uuid
 
@@ -50,7 +48,7 @@ class OCMShare(models.Model):
             'shared_secret': self.shared_secret,
             'from_user': self.from_user,
             'to_user': self.to_user,
-            'to_sever_url': self.to_server_url,
+            'to_server_url': self.to_server_url,
             'repo_id': self.repo_id,
             'repo_name': self.repo_name,
             'path': self.path,

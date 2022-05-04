@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-import seaserv
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
@@ -21,7 +20,7 @@ from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_own
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
-from seahub.utils import is_org_context, is_valid_username
+from seahub.utils import is_org_context, is_valid_username, is_pro_version
 from seahub.utils.repo import get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
@@ -37,8 +36,9 @@ from .utils import api_check_group
 
 logger = logging.getLogger(__name__)
 
+
 def get_group_admins(group_id):
-    members = seaserv.get_group_members(group_id)
+    members = ccnet_api.get_group_members(group_id)
     admin_members = [m for m in members if m.is_staff]
 
     admins = []
@@ -47,8 +47,9 @@ def get_group_admins(group_id):
 
     return admins
 
+
 def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
-    group = seaserv.get_group(group_id)
+    group = ccnet_api.get_group(group_id)
     try:
         avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
     except Exception as e:
@@ -70,7 +71,14 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     # parent_group_id = n(n > 0):  sub department group, n is parent group's id
     if group.parent_group_id != 0:
         group_info['group_quota'] = seafile_api.get_group_quota(group_id)
-        group_info['group_quota_usage'] = seafile_api.get_group_quota_usage(group_id)
+
+    group_info['group_quota_usage'] = ''
+    if is_pro_version():
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            group_info['group_quota_usage'] = seafile_api.org_get_group_quota_usage(org_id, group_id)
+        else:
+            group_info['group_quota_usage'] = seafile_api.get_group_quota_usage(group_id)
 
     return group_info
 
@@ -92,7 +100,7 @@ class Groups(APIView):
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
-            user_groups = seaserv.get_org_groups_by_user(org_id, username, return_ancestors=True)
+            user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
         else:
             user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
@@ -152,7 +160,7 @@ class Groups(APIView):
                     if email not in name_dict:
                         if '@seafile_group' in email:
                             group_id = get_group_id_by_repo_owner(email)
-                            group_name= group_id_to_name(group_id)
+                            group_name = group_id_to_name(group_id)
                             name_dict[email] = group_name
                         else:
                             name_dict[email] = email2nickname(email)
@@ -205,7 +213,7 @@ class Groups(APIView):
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _('Group name can only contain letters, numbers, blank, hyphen, dot, single quote or underscore')
+            error_msg = _('Name can only contain letters, numbers, spaces, hyphen, dot, single quote, brackets or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
@@ -217,12 +225,9 @@ class Groups(APIView):
         try:
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                group_id = seaserv.ccnet_threaded_rpc.create_org_group(org_id,
-                                                                       group_name,
-                                                                       username)
+                group_id = ccnet_api.create_org_group(org_id, group_name, username)
             else:
-                group_id = seaserv.ccnet_threaded_rpc.create_group(group_name,
-                                                                   username)
+                group_id = ccnet_api.create_group(group_name, username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -281,7 +286,7 @@ class Group(APIView):
 
                 # Check whether group name is validate.
                 if not validate_group_name(new_group_name):
-                    error_msg = _('Group name can only contain letters, numbers, blank, hyphen or underscore')
+                    error_msg = _('Name can only contain letters, numbers, spaces, hyphen, dot, single quote, brackets or underscore.')
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 # Check whether group name is duplicated.

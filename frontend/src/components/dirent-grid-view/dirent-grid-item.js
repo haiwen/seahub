@@ -27,6 +27,19 @@ class DirentGridItem extends React.Component {
       isGridSelected: false,
       isGridDropTipShow: false,
     };
+
+    const { dirent } = this.props;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
+    this.isCustomPermission = isCustomPermission;
+    this.customPermission = customPermission;
+    this.canPreview = true;
+    this.canDrag = dirent.permission === 'rw';
+    if (isCustomPermission) {
+      const { preview, modify } = customPermission.permission;
+      this.canPreview = preview || modify;
+      this.canDrag = modify;
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,8 +58,18 @@ class DirentGridItem extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const dirent = this.props.dirent;
-    if (this.props.dirent === this.props.activeDirent) {
+    const { dirent, activeDirent } = this.props;
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    // is have preview permission
+    if (!this.canPreview) {
+      return;
+    }
+
+    if (dirent === activeDirent) {
       this.setState({isGridSelected: false});
       if (Utils.imageCheck(dirent.name)) {
         this.props.showImagePopup(dirent);
@@ -62,6 +85,17 @@ class DirentGridItem extends React.Component {
   onItemLinkClick = (e) => {
     e.preventDefault();
     const dirent = this.props.dirent;
+
+    if (dirent.isDir()) {
+      this.props.onItemClick(dirent);
+      return;
+    }
+
+    // is have preview permission
+    if (!this.canPreview) {
+      return;
+    }
+
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
@@ -70,6 +104,9 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragStart = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     let dragStartItemData = {nodeDirent: this.props.dirent, nodeParentPath: this.props.path};
     dragStartItemData = JSON.stringify(dragStartItemData);
 
@@ -78,21 +115,33 @@ class DirentGridItem extends React.Component {
   }
 
   onGridItemDragEnter = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     if (this.props.dirent.type === 'dir') {
       this.setState({isGridDropTipShow: true});
     }
   }
 
   onGridItemDragOver = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   }
 
   onGridItemDragLeave = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.setState({isGridDropTipShow: false});
   }
 
   onGridItemDragDrop = (e) => {
+    if (Utils.isIEBrower() || !this.canDrag) {
+      return false;
+    }
     this.setState({isGridDropTipShow: false});
     if (e.dataTransfer.files.length) { // uploaded files
       return;
@@ -158,12 +207,12 @@ class DirentGridItem extends React.Component {
     let lockedInfo = gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
-    return(
+    return (
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
           <div
             className={gridClass}
-            draggable="true"
+            draggable={this.canDrag}
             onClick={this.onItemClick}
             onDragStart={this.onGridItemDragStart}
             onDragEnter={this.onGridItemDragEnter}
@@ -177,7 +226,7 @@ class DirentGridItem extends React.Component {
             }
             {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
           </div>
-          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable="true" >
+          <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
             {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
               <Fragment>
                 <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked d-inline-block align-middle">
@@ -193,7 +242,10 @@ class DirentGridItem extends React.Component {
                 </UncontrolledTooltip>
               </Fragment>
             )}
-            <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+            {(!dirent.isDir() && !this.canPreview) ? 
+              <a className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} onClick={this.onItemLinkClick}>{dirent.name}</a> :
+              <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
+            }
           </div>
         </li>
       </Fragment>

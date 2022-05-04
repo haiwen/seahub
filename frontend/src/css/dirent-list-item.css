@@ -1,15 +1,6 @@
 .tr-drop-effect {
   background-color: #f8f8f8;
 }
-.operations {
-  display: flex;
-}
-.operations .operation-group {
-  list-style: none;
-}
-.operation-group .operation-group-item {
-  display: inline-block;
-}
 
 .star-empty {
   color: #d0d0d0;

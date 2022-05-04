@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import Logo from '../../components/logo';
 import Account from '../../components/common/account';
@@ -21,6 +22,11 @@ const {
 
 
 class SharedUploadLink extends React.Component {
+
+  onFileUploadSuccess = (direntObject) => {
+    const { name, size } = direntObject;
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(path, name));
+  }
 
   render() {
     return (
@@ -43,7 +49,7 @@ class SharedUploadLink extends React.Component {
               <Fragment>
                 <ol className="small text-gray">
                   <li className="tip-list-item">{gettext('Folder upload is limited to Chrome, Firefox 50+, and Microsoft Edge.')}</li>
-                  {maxUploadFileSize && <li className="tip-list-item">{gettext('File size should be smaller than {max_size_placeholder}').replace('{max_size_placeholder}', maxUploadFileSize)}</li>}
+                  {maxUploadFileSize && <li className="tip-list-item">{gettext('File size should be smaller than {max_size_placeholder}.').replace('{max_size_placeholder}', maxUploadFileSize)}</li>}
                 </ol>
                 <div id="upload-link-drop-zone" className="text-center mt-2 mb-4">
                   <span className="sf3-font sf3-font-upload upload-icon"></span>
@@ -55,7 +61,7 @@ class SharedUploadLink extends React.Component {
                   token={token}
                   repoID={repoID}
                   path={path}
-                  onFileUploadSuccess={() => {}}
+                  onFileUploadSuccess={this.onFileUploadSuccess}
                 />
               </Fragment>
             )}

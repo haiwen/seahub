@@ -6,12 +6,13 @@ const deDE = require('@seafile/seafile-calendar/lib/locale/de_DE');
 const esES = require('@seafile/seafile-calendar/lib/locale/es_ES');
 const plPL = require('@seafile/seafile-calendar/lib/locale/pl_PL');
 const csCZ = require('@seafile/seafile-calendar/lib/locale/cs_CZ');
+const ruRU = require('@seafile/seafile-calendar/lib/locale/ru_RU');
 
 function translateCalendar() {
-  const locale = window.app.config ?  window.app.config.lang : 'zh-CH';
+  const locale = window.app.config ?  window.app.config.lang : 'en';
   let language;
   switch (locale) {
-    case 'zh-CH':
+    case 'zh-cn':
       language = zhCN;
       break;
     case 'zh-tw':
@@ -41,8 +42,11 @@ function translateCalendar() {
     case 'cs':
       language = csCZ;
       break;
+    case 'ru':
+      language = ruRU;
+      break;
     default:
-      language = zhCN;
+      language = enUS;
   }
   return language;
 }

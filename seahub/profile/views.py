@@ -18,13 +18,14 @@ from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
-from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
 from seahub.utils import is_ldap_user
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
 from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+
 
 @login_required
 def edit_profile(request):
@@ -84,8 +85,10 @@ def edit_profile(request):
     else:
         webdav_passwd = ''
 
-    email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
-    email_inverval = email_inverval if email_inverval is not None else 0
+    file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
+    file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
+    collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
+    collaborate_email_interval = collaborate_email_interval if collaborate_email_interval is not None else DEFAULT_COLLABORATE_EMAIL_INTERVAL
 
     if work_weixin_oauth_check():
         enable_wechat_work = True
@@ -118,11 +121,15 @@ def edit_profile(request):
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': has_two_factor_auth(),
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
+            'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
             'webdav_passwd': webdav_passwd,
-            'email_notification_interval': email_inverval,
+            'file_updates_email_interval': file_updates_email_interval,
+            'collaborate_email_interval': collaborate_email_interval,
             'social_next_page': reverse('edit_profile'),
             'enable_wechat_work': enable_wechat_work,
             'social_connected': social_connected,
@@ -144,9 +151,10 @@ def edit_profile(request):
         resp_dict['default_device'] = default_device(request.user)
         resp_dict['backup_tokens'] = backup_tokens
 
-    #template = 'profile/set_profile.html'
+    # template = 'profile/set_profile.html'
     template = 'profile/set_profile_react.html'
     return render(request, template, resp_dict)
+
 
 @login_required
 def user_profile(request, username):
@@ -174,6 +182,7 @@ def user_profile(request, username):
             'contact_email': contact_email,
             'd_profile': d_profile,
             })
+
 
 @login_required
 def get_user_profile(request, user):
@@ -209,6 +218,7 @@ def get_user_profile(request, user):
 
     return HttpResponse(json.dumps(data), content_type=content_type)
 
+
 @login_required
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
@@ -234,6 +244,7 @@ def delete_user_account(request):
         seaserv.ccnet_threaded_rpc.remove_org_user(org_id, username)
 
     return HttpResponseRedirect(settings.LOGIN_URL)
+
 
 @login_required
 def default_repo(request):

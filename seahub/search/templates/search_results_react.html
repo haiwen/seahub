@@ -1,0 +1,20 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+    {% render_bundle 'search' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+      window.search = {
+        pageOptions: {
+          q: '{{ keyword|escapejs }}',
+          search_repo: '{{ search_repo|escapejs }}',
+          search_ftypes: '{{ search_ftypes|escapejs }}',
+          repo_name:'{{ repo.name|escapejs }}',
+        }
+      }
+    </script>
+    {% render_bundle 'search' 'js' %}
+{% endblock %}

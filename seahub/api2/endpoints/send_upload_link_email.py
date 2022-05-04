@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username, \
+from seahub.utils import IS_EMAIL_CONFIGURED, \
     is_valid_email, string2list, gen_shared_upload_link, send_html_email, \
     get_site_name
 from seahub.share.models import UploadLinkShare
@@ -20,16 +20,17 @@ from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
 
+
 class SendUploadLinkView(APIView):
 
-    authentication_classes = (TokenAuthentication, SessionAuthentication )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request):
 
         if not IS_EMAIL_CONFIGURED:
-            error_msg = _('Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check args
@@ -79,6 +80,7 @@ class SendUploadLinkView(APIView):
                 'email': username,
                 'to_email': to_email,
                 'extra_msg': extra_msg,
+                'password': link.get_password(),
             }
 
             if REPLACE_FROM_EMAIL:
@@ -106,4 +108,3 @@ class SendUploadLinkView(APIView):
                 result['failed'].append(failed_info)
 
         return Response(result)
-

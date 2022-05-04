@@ -1,4 +1,4 @@
-{% load seahub_tags i18n staticfiles %}
+{% load seahub_tags i18n static %}
 
 <!DOCTYPE html>
 <html>
@@ -44,14 +44,96 @@ html, body { padding:0; margin:0; height:100%; }
             "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
             "customization": {
                 "forcesave": {% if onlyoffice_force_save %}true{% else %}false{% endif %},
+                {% if not request.user.is_authenticated %}
+                "anonymous": {
+                    "request": true,
+                    "label": "Guest"
+                },
+                {% endif %}
             },
+            {% if request.user.is_authenticated %}
             "user": {
+                "id": "{{ username|escapejs }}",
                 "name": "{{ username|email2nickname|escapejs }}"
             }
+            {% endif %}
         }
     };
     var docEditor = new DocsAPI.DocEditor("placeholder", config);
 </script>
-{% include 'snippets/wopi_onlyoffice_js.html' %}
+<script type="text/javascript">
+    var SEAFILE_GLOBAL = {
+        csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
+    };
+
+    {% if can_edit %}
+    var interval;
+    {% if not share_link_token %}
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-file-view" repo_id %}' + '?p={{path|urlencode}}',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                'operation': 'refresh-lock',
+                'expire': 2400
+            },
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    {% else %}
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-share-link-online-office-lock" share_link_token %}',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                'expire': 2400
+            },
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    {% endif %}
+    interval = setInterval(refreshLock, 40 * 60 * 1000);
+    {% endif %}
+</script>
+{% if request_from_onlyoffice_desktop_editor %}
+<script type="text/javascript">
+    var params = {
+      "displayName": "{{request.user.username|email2nickname|escapejs}}",
+      "email": "{{request.user.username|escapejs}}",
+      "domain": "{{service_url}}",
+      "provider": "{{site_name}}",
+      "userId": "{{request.user.username|escapejs}}",
+    };
+    window.AscDesktopEditor.execCommand('portal:login', JSON.stringify(params));
+</script>
+{% endif %}
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 </body>
 </html>

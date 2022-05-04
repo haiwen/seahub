@@ -4,11 +4,13 @@ import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
 import OrgUsers from './org-users-users';
+import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
 import OrgUserProfile from './org-user-profile';
 import OrgUserRepos from './org-user-repos';
 import OrgUserSharedRepos from './org-user-shared-repos';
 import OrgGroups from './org-groups';
+import OrgGroupsSearchGroups from './org-groups-search-groups';
 import OrgGroupInfo from './org-group-info';
 import OrgGroupRepos from './org-group-repos';
 import OrgGroupMembers from './org-group-members';
@@ -23,9 +25,6 @@ import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
 
-import '../../assets/css/fa-solid.css';
-import '../../assets/css/fa-regular.css';
-import '../../assets/css/fontawesome.css';
 import '../../css/layout.css';
 import '../../css/toolbar.css';
 
@@ -71,11 +70,13 @@ class Org extends React.Component {
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
             <OrgUsers path={siteRoot + 'org/useradmin'} />
+            <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
             <OrgUserProfile path={siteRoot + 'org/useradmin/info/:email/'} />
             <OrgUserRepos path={siteRoot + 'org/useradmin/info/:email/repos/'} />
             <OrgUserSharedRepos path={siteRoot + 'org/useradmin/info/:email/shared-repos/'} />
             <OrgGroups path={siteRoot + 'org/groupadmin'} />
+            <OrgGroupsSearchGroups path={siteRoot + 'org/groupadmin/search-groups'} />
             <OrgGroupInfo path={siteRoot + 'org/groupadmin/:groupID/'} />
             <OrgGroupRepos path={siteRoot + 'org/groupadmin/:groupID/repos/'} />
             <OrgGroupMembers path={siteRoot + 'org/groupadmin/:groupID/members/'} />

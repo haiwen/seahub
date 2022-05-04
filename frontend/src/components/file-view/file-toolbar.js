@@ -1,11 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ButtonGroup, ButtonDropdown, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
+import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../toast';
 
 const propTypes = {
   isLocked: PropTypes.bool.isRequired,
@@ -14,11 +16,12 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
-  toggleCommentPanel: PropTypes.func.isRequired
+  toggleCommentPanel: PropTypes.func.isRequired,
+  toggleDetailsPanel: PropTypes.func.isRequired
 };
 
 const {
-  canLockUnlockFile, canGenerateShareLink,
+  canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
   fileName,
   canEditFile, err,
@@ -31,13 +34,41 @@ class FileToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       dropdownOpen: false,
-      isShareDialogOpen: false
+      moreDropdownOpen: false,
+      isShareDialogOpen: false,
     };
+  }
+
+  async componentDidMount() {
+    if (filePerm && filePerm.startsWith('custom-')) {
+      this.isCustomPermission = true;
+      const permissionID = filePerm.split('-')[1];
+      try {
+        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+        this.customPermission = permissionRes.data.permission;
+        // share dialog need a global custom_permission
+        window.custom_permission = this.customPermission;
+        this.setState({isLoading: false});
+      } catch(error) {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        this.setState({isLoading: false});
+      }
+    } else {
+      this.setState({isLoading: false});
+    }
   }
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
+  }
+
+  toggleMoreOpMenu = () => {
+    this.setState({
+      moreDropdownOpen: !this.state.moreDropdownOpen
+    });
   }
 
   toggle = () => {
@@ -47,7 +78,12 @@ class FileToolbar extends React.Component {
   }
 
   render() {
+    if (this.state.isLoading) {
+      return null;
+    }
+
     const { isLocked, lockedByMe } = this.props;
+    const { moreDropdownOpen } = this.state;
     let showLockUnlockBtn = false;
     let lockUnlockText, lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -67,6 +103,14 @@ class FileToolbar extends React.Component {
       showShareBtn = true; // for internal link
     } else if (filePerm == 'rw' || filePerm == 'r') {
       showShareBtn = true;
+    }
+
+    let canComment = enableComment;
+    const { isCustomPermission, customPermission } = this;
+    if (isCustomPermission) {
+      const { download_external_link } = customPermission.permission;
+      showShareBtn = download_external_link;
+      canComment = false;
     }
 
     return (
@@ -95,18 +139,10 @@ class FileToolbar extends React.Component {
               onClick={this.toggleShareDialog}
             />
           )}
-          {filePerm == 'rw' && (
-            <IconButton
-              id="history"
-              icon="fa fa-history"
-              text={gettext('History')}
-              tag="a"
-              href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}`}
-            />
-          )}
+
           {(canEditFile && !err) &&
             ( this.props.isSaving ?
-              <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+              <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
               (
                 this.props.needSave ?
@@ -132,21 +168,45 @@ class FileToolbar extends React.Component {
               href="?dl=1"
             />
           )}
-          {enableComment && (
+          <IconButton
+            id="file-details"
+            icon='fas fa-info'
+            text={gettext('Details')}
+            onClick={this.props.toggleDetailsPanel}
+          />
+          {filePerm == 'rw' && (
             <IconButton
-              id="comment"
-              icon="fa fa-comments"
-              text={gettext('Comment')}
-              onClick={this.props.toggleCommentPanel}
+              id="open-via-client"
+              icon="sf3-font sf3-font-desktop"
+              text={gettext('Open via Client')}
+              tag="a"
+              href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}
             />
           )}
+          <ButtonDropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
+            <DropdownToggle aria-label={gettext('More Operations')}>
+              <span className="fas fa-ellipsis-v"></span>
+            </DropdownToggle>
+            <DropdownMenu right={true}>
+              {canComment && (
+                <DropdownItem onClick={this.props.toggleCommentPanel}>
+                  {gettext('Comment')}
+                </DropdownItem>
+              )}
+              {filePerm == 'rw' && (
+                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                    {gettext('History')}
+                  </a>
+              )}
+            </DropdownMenu>
+          </ButtonDropdown>
         </ButtonGroup>
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
           <ButtonGroup >
             {(canEditFile && !err) &&
-                ( this.props.isSaving ?
-                  <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
+                (this.props.isSaving ?
+                  <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button> :
                   (
                     this.props.needSave ?
@@ -165,8 +225,7 @@ class FileToolbar extends React.Component {
                 )}
           </ButtonGroup>
 
-          <DropdownToggle className="sf2-icon-more mx-1">
-          </DropdownToggle>
+          <DropdownToggle className="sf2-icon-more mx-1" aria-label={gettext('More Operations')}></DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
@@ -197,27 +256,28 @@ class FileToolbar extends React.Component {
                 </a>
               </DropdownItem>
             )}
-            {enableComment && (
+            {canComment && (
               <DropdownItem onClick={this.props.toggleCommentPanel}>
                 {gettext('Comment')}
               </DropdownItem>
             )}
+            <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
-        {this.state.isShareDialogOpen &&
-        <ModalPortal>
-          <ShareDialog
-            itemType='file'
-            itemName={fileName}
-            itemPath={filePath}
-            userPerm={filePerm}
-            repoID={repoID}
-            repoEncrypted={repoEncrypted}
-            toggleDialog={this.toggleShareDialog}
-          />
-        </ModalPortal>
-        }
+        {this.state.isShareDialogOpen && (
+          <ModalPortal>
+            <ShareDialog
+              itemType='file'
+              itemName={fileName}
+              itemPath={filePath}
+              userPerm={filePerm}
+              repoID={repoID}
+              repoEncrypted={repoEncrypted}
+              toggleDialog={this.toggleShareDialog}
+            />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import moment from 'moment';
@@ -12,8 +12,10 @@ const propTypes = {
   currentTag: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  updateUsedRepoTags: PropTypes.func.isRequired,
+  updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class ListTaggedFilesDialog extends React.Component {
@@ -50,8 +52,11 @@ class ListTaggedFilesDialog extends React.Component {
   }
 
   getTaggedFiles = () => {
-    let { repoID, currentTag } = this.props;
-    seafileAPI.listTaggedFiles(repoID, currentTag.id).then(res => {
+    let { repoID, currentTag, shareLinkToken } = this.props;
+    let request = shareLinkToken ?
+      seafileAPI.getShareLinkTaggedFiles(shareLinkToken, currentTag.id) :
+      seafileAPI.listTaggedFiles(repoID, currentTag.id);
+    request.then(res => {
       let taggedFileList = [];
       res.data.tagged_files !== undefined &&
       res.data.tagged_files.forEach(file => {
@@ -70,16 +75,16 @@ class ListTaggedFilesDialog extends React.Component {
   render() {
     let taggedFileList = this.state.taggedFileList;
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} style={{maxWidth: '678px'}}>
         <ModalHeader toggle={this.props.onClose}>{gettext('Tagged Files')}</ModalHeader>
         <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>
-                <th width='45%' className="ellipsis">{gettext('Name')}</th>
-                <th width='27%'>{gettext('Size')}</th>
-                <th width='18%'>{gettext('Last Update')}</th>
-                <th width='10%'></th>
+                <th width='50%' className="ellipsis">{gettext('Name')}</th>
+                <th width='20%'>{gettext('Size')}</th>
+                <th width='22%'>{gettext('Last Update')}</th>
+                <th width='8%'></th>
               </tr>
             </thead>
             <tbody>
@@ -90,6 +95,8 @@ class ListTaggedFilesDialog extends React.Component {
                     repoID={this.props.repoID}
                     taggedFile={taggedFile}
                     onDeleteTaggedFile={this.onDeleteTaggedFile}
+                    shareLinkToken={this.props.shareLinkToken}
+                    enableFileDownload={this.props.enableFileDownload}
                   />
                 );
               })}
@@ -112,6 +119,8 @@ const TaggedFilePropTypes = {
   repoID: PropTypes.string.isRequired,
   taggedFile: PropTypes.object,
   onDeleteTaggedFile: PropTypes.func.isRequired,
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class TaggedFile extends React.Component {
@@ -135,24 +144,42 @@ class TaggedFile extends React.Component {
     });
   }
 
+  deleteFile = (e) => {
+    e.preventDefault();
+    this.props.onDeleteTaggedFile(this.props.taggedFile);
+  }
+
   render() {
-    const taggedFile = this.props.taggedFile;
-    let className = this.state.active ? 'action-icon sf2-icon-x3' : 'action-icon vh sf2-icon-x3';
+    const { taggedFile, shareLinkToken, enableFileDownload } = this.props;
+
     let path = taggedFile.parent_path ? Utils.joinPath(taggedFile.parent_path, taggedFile.filename) : '';
-    let href = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
-    return ( taggedFile.file_deleted ?
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td colSpan='3' className="name">{taggedFile.filename}{' '}
-          <span style={{color:'red'}}>{gettext('deleted')}</span>
+    let href = shareLinkToken ?
+      siteRoot + 'd/' + shareLinkToken + '/files/?p=' + Utils.encodePath(path) :
+      siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(path);
+
+    return (
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        {taggedFile.file_deleted ?
+          <Fragment>
+            <td colSpan='3' className="name">{taggedFile.filename}{' '}
+              <span style={{color:'red'}}>{gettext('deleted')}</span>
+            </td>
+          </Fragment>
+          :
+          <Fragment>
+            <td><a href={href} target='_blank' className="d-inline-block w-100 ellipsis" title={taggedFile.filename} rel="noreferrer">{taggedFile.filename}</a></td>
+            <td>{Utils.bytesToSize(taggedFile.size)}</td>
+            <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
+          </Fragment>
+        }
+        <td>
+          {!shareLinkToken &&
+            <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={`action-icon sf2-icon-x3${this.state.active ? '' : ' invisible'}`} onClick={this.deleteFile}></a>
+          }
+          {(shareLinkToken && enableFileDownload) &&
+            <a className={`action-icon sf2-icon-download${this.state.active ? '' : ' invisible'}`} href={`${href}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
+          }
         </td>
-        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
-      </tr>
-      :
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="name"><a href={href} target='_blank'>{taggedFile.filename}</a></td>
-        <td>{Utils.bytesToSize(taggedFile.size)}</td>
-        <td>{moment.unix(taggedFile.mtime).fromNow()}</td>
-        <td><i className={className} onClick={this.props.onDeleteTaggedFile.bind(this, taggedFile)}></i></td>
       </tr>
     );
   }

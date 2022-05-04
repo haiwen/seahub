@@ -1,15 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
-import { gettext, siteRoot, canGenerateShareLink, isPro, fileAuditEnabled, name } from '../../utils/constants';
+import { gettext, siteRoot, name, fileServerRoot, useGoFileserver } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import TextTranslation from '../../utils/text-translation';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import RelatedFileDialogs from '../dialog/related-file-dialogs';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import Rename from '../dialog/rename-dirent';
@@ -55,8 +53,6 @@ class MultipleDirOperationToolbar extends React.Component {
       showEditFileTagDialog: false,
       fileTagList: [],
       multiFileTagList: [],
-      showRelatedFileDialog: false,
-      viewMode: 'list_related_file',
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false
     };
@@ -83,9 +79,23 @@ class MultipleDirOperationToolbar extends React.Component {
         location.href= url;
         return;
       }
-      this.setState({
-        isZipDialogOpen: true
-      });
+      if (!useGoFileserver) {
+        this.setState({
+          isZipDialogOpen: true
+        });
+      } else {
+        const target = this.props.selectedDirentList.map(dirent => dirent.name);
+        seafileAPI.zipDownload(repoID, path, target).then((res) => {
+          const zipToken = res.data['zip_token'];
+          location.href = `${fileServerRoot}zip/${zipToken}`;
+        }).catch((error) => {
+          let errorMsg = Utils.getErrorMsg(error);
+          this.setState({
+            isLoading: false,
+            errorMsg: errorMsg
+          });
+        });
+      }
     }
   }
 
@@ -164,9 +174,6 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Comment':
         this.onCommentItem();
         break;
-      case 'Related Files':
-        this.openRelatedFilesDialog(dirent);
-        break;
       case 'History':
         this.onHistory(dirent);
         break;
@@ -237,37 +244,11 @@ class MultipleDirOperationToolbar extends React.Component {
     window.open(path);
   }
 
-  openRelatedFilesDialog = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      let relatedFiles = res.data.related_files;
-      if (relatedFiles.length > 0) {
-        this.setState({
-          relatedFiles: relatedFiles,
-          showLibContentViewDialogs: true,
-          showRelatedFileDialog: true,
-          viewMode: 'list_related_file',
-        });
-      } else {
-        this.setState({
-          relatedFiles: relatedFiles,
-          showLibContentViewDialogs: true,
-          showRelatedFileDialog: true,
-          viewMode: 'add_related_file',
-        });
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   toggleCancel = () => {
     this.setState({
       showLibContentViewDialogs: false,
       showShareDialog: false,
       showEditFileTagDialog: false,
-      showRelatedFileDialog: false,
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false,
     });
@@ -301,22 +282,6 @@ class MultipleDirOperationToolbar extends React.Component {
     }
   }
 
-  listRelatedFiles = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.listRelatedFiles(this.props.repoID, filePath).then(res => {
-      this.setState({
-        relatedFiles: res.data.related_files
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  onRelatedFileChange = () => {
-    this.listRelatedFiles(this.props.selectedDirentList[0]);
-  }
-
   getDirentPath = (dirent) => {
     if (dirent) return Utils.joinPath(this.props.path, dirent.name);
   }
@@ -325,23 +290,39 @@ class MultipleDirOperationToolbar extends React.Component {
 
     const { repoID, userPerm } = this.props;
     const dirent = this.props.selectedDirentList[0];
+    const direntPath = this.getDirentPath(dirent);
 
-    let direntPath = this.getDirentPath(dirent);
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    let canDelete = true;
+    let canDownload = true;
+    let canCopy = true;
+    let canModify = true;
+    if (isCustomPermission) {
+      const { permission } = customPermission;
+      canDelete = permission.delete;
+      canDownload = permission.download;
+      canCopy = permission.copy;
+      canModify = permission.modify;
+    }
 
     return (
       <Fragment>
         <div className="dir-operation">
           <div className="d-flex">
             <ButtonGroup className="flex-row group-operations">
-              {(userPerm === 'rw' || userPerm === 'admin') && (
+              {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
                 <Fragment>
-                  <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} onClick={this.onMoveToggle}></Button>
-                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onCopyToggle}></Button>
-                  <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemsDelete}></Button>
+                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
+                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
+                  {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>}
                 </Fragment>
               )}
-              {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'r') && (
-                <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></Button>
+              {userPerm === 'r' && (
+                <Fragment>
+                  <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>
+                  <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>
+                </Fragment>
               )}
               {this.props.selectedDirentList.length === 1 &&
                 <ItemDropdownMenu
@@ -355,7 +336,7 @@ class MultipleDirOperationToolbar extends React.Component {
             </ButtonGroup>
           </div>
         </div>
-        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} />}
+        {Utils.isDesktop() && <ViewModeToolbar currentMode={this.props.currentMode} switchViewMode={this.props.switchViewMode} isCustomPermission={isCustomPermission} />}
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             path={this.props.path}
@@ -434,19 +415,6 @@ class MultipleDirOperationToolbar extends React.Component {
                   fileTagList={this.state.fileTagList}
                   toggleCancel={this.toggleCancel}
                   onFileTagChanged={this.onMenuFileTagChanged}
-                />
-              </ModalPortal>
-            }
-            {this.state.showRelatedFileDialog &&
-              <ModalPortal>
-                <RelatedFileDialogs
-                  repoID={repoID}
-                  filePath={direntPath}
-                  relatedFiles={this.state.relatedFiles}
-                  toggleCancel={this.toggleCancel}
-                  onRelatedFileChange={this.onRelatedFileChange}
-                  dirent={this.props.selectedDirentList[0]}
-                  viewMode={this.state.viewMode}
                 />
               </ModalPortal>
             }

@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, username, folderPermEnabled } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
 import { strChineseFirstPY } from './pinyin-by-unicode';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -122,9 +122,16 @@ export const Utils = {
 
   getShareLinkPermissionList: function(itemType, permission, path, canEdit) {
     // itemType: library, dir, file
-    // permission: rw, r, admin, cloud-edit, preview
+    // permission: rw, r, admin, cloud-edit, preview, custom-*
 
     let permissionOptions = [];
+
+    const { isCustomPermission } = Utils.getUserPermission(permission);
+    if (isCustomPermission) {
+      permissionOptions.push('preview_download');
+      permissionOptions.push('preview_only');
+      return permissionOptions;
+    }
 
     if (permission == 'rw' || permission == 'admin' || permission == 'r') {
       permissionOptions.push('preview_download');
@@ -455,9 +462,14 @@ export const Utils = {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (isCustomPermission && customPermission.permission.download) {
         list.push(DOWNLOAD);
       }
 
@@ -468,10 +480,29 @@ export const Utils = {
       if (permission == 'rw') {
         list.push(DELETE, 'Divider');
       }
+
+      if (isCustomPermission && customPermission.permission.delete) {
+        list.push(DELETE, 'Divider');
+      }
     }
 
     if (permission == 'rw') {
-      list.push(RENAME, MOVE, COPY);
+      list.push(RENAME, MOVE);
+    }
+
+    if (isCustomPermission && customPermission.permission.modify) {
+      list.push(RENAME, MOVE);
+    }
+
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+
+    if (isCustomPermission && customPermission.permission.copy) {
+      list.push(COPY);
+    }
+
+    if (permission == 'rw') {
       if (folderPermEnabled  && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
       }
@@ -482,17 +513,27 @@ export const Utils = {
       list.push(COPY);
     }
 
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
+    }
+
     return list;
   },
 
-  getFileOperationList: function(currentRepoInfo, dirent, isContextmenu) {
+  getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT } = TextTranslation;
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
+        list.push(DOWNLOAD);
+      }
+
+      if (isCustomPermission && customPermission.permission.download) {
         list.push(DOWNLOAD);
       }
 
@@ -504,20 +545,44 @@ export const Utils = {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
         }
+        list.push('Divider');
       }
 
-      list.push('Divider');
+      if (isCustomPermission && customPermission.permission.delete) {
+        if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+          list.push(DELETE);
+        }
+        list.push('Divider');
+      }
     }
 
     if (permission == 'rw') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
       }
-      list.push(COPY, TAGS);
+    }
 
+    if (isCustomPermission && customPermission.permission.modify) {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME, MOVE);
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push(COPY);
+    }
+
+    if (isCustomPermission) {
+      if (customPermission.permission.copy) {
+        list.push(COPY);
+      }
+    }
+
+    if (permission == 'rw') {
+      list.push(TAGS);
       if (isPro) {
         if (dirent.is_locked) {
-          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice') {
+          if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
             list.push(UNLOCK);
           }
         } else {
@@ -546,13 +611,28 @@ export const Utils = {
       list.push(HISTORY);
     }
 
+    if (permission == 'rw' && enableOnlyoffice &&
+      onlyofficeConverterExtensions.includes(this.getFileExtension(dirent.name, false))) {
+      list.push(ONLYOFFICE_CONVERT);
+    }
+
+    // if the last item of menuList is ‘Divider’, delete the last item
+    if (list[list.length - 1] === 'Divider') {
+      list.pop();
+    }
     return list;
+  },
+
+  getFileExtension: function (fileName, withoutDot) {
+    let parts = fileName.toLowerCase().split('.');
+
+    return withoutDot ? parts.pop() : '.' + parts.pop();
   },
 
   getDirentOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     return dirent.type == 'dir' ?
       Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu) :
-      Utils.getFileOperationList(currentRepoInfo, dirent, isContextmenu);
+      Utils.getFileOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   },
 
   sharePerms: function(permission) {
@@ -1225,12 +1305,34 @@ export const Utils = {
     }
   },
 
-  generatePassword: function(passwordLength) {
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
-    let password = '';
-    for (let i = 0; i < passwordLength; i++) {
-      password += possible.charAt(Math.floor(Math.random() * possible.length));
+  generatePassword: function(length, hasNum=1, hasChar=1, hasSymbol=1) {
+
+    var password = "";
+
+    // 65~90：A~Z
+    password += String.fromCharCode(Math.floor((Math.random() * (90-65)) + 65));
+
+    // 97~122：a~z
+    password += String.fromCharCode(Math.floor((Math.random() * (122-97)) + 97));
+
+    // 48~57：0~9
+    password += String.fromCharCode(Math.floor((Math.random() * (57-48)) + 48));
+
+    // 33~47：!~/
+    password += String.fromCharCode(Math.floor((Math.random() * (47-33)) + 33));
+
+    // 33~47：!~/
+    // 48~57：0~9
+    // 58~64：:~@
+    // 65~90：A~Z
+    // 91~96：[~`
+    // 97~122：a~z
+    // 123~127：{~
+    for (var i = 0; i < length-4; i++) {
+      var num = Math.floor((Math.random() * (127-33)) + 33);
+      password += String.fromCharCode(num);
     }
+
     return password;
   },
 
@@ -1269,6 +1371,12 @@ export const Utils = {
    * @param {*} dirent
    */
   isHasPermissionToShare: function(repoInfo, userDirPermission, dirent) {
+
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userDirPermission);
+    if (isCustomPermission) {
+      const { download_external_link } = customPermission.permission;
+      return download_external_link;
+    }
 
     let { is_admin: isAdmin, is_virtual: isVirtual, encrypted: repoEncrypted, owner_email: ownerEmail } = repoInfo;
     let isRepoOwner = ownerEmail === username;
@@ -1343,6 +1451,81 @@ export const Utils = {
 
   hasNextPage(curPage, perPage, totalCount) {
     return curPage * perPage < totalCount;
+  },
+
+  getStrengthLevel: function(pwd) {
+    const _this = this;
+    var num = 0;
+
+    if (pwd.length < shareLinkPasswordMinLength) {
+      return 0;
+    } else {
+      for (var i = 0; i < pwd.length; i++) {
+        // return the unicode
+        // bitwise OR
+        num |= _this.getCharMode(pwd.charCodeAt(i));
+      }
+      return _this.calculateBitwise(num);
+    }
+  },
+
+  getCharMode: function(n) {
+    if (n >= 48 && n <= 57) // nums
+      return 1;
+    if (n >= 65 && n <= 90) // uppers
+      return 2;
+    if (n >= 97 && n <= 122) // lowers
+      return 4;
+    else
+      return 8;
+  },
+
+  calculateBitwise: function(num) {
+    var level = 0;
+    for (var i = 0; i < 4; i++){
+      // bitwise AND
+      if (num&1) level++;
+      // Right logical shift
+      num>>>=1;
+    }
+    return level;
+  },
+
+  getSharedPermission: function(item) {
+    let permission = item.permission;
+    if (item.is_admin) {
+      permission = 'admin';
+    }
+    if (item.permission.startsWith('custom-')) {
+      permission = item.permission.slice(7);
+    }
+    return permission;
+  },
+
+  getUserPermission: function(userPerm) {
+    const { custom_permission } = window;
+    const common_permissions = ['rw', 'r', 'admin', 'cloud-edit', 'preview'];
+    // visit the shared repo(virtual repo) by custom permission
+    if (!custom_permission || common_permissions.indexOf(userPerm) > -1) {
+      return { isCustomPermission: false };
+    }
+    // userPerm is startsWith 'custom-'
+    if (custom_permission) {
+      const permissionId = custom_permission.id;
+      const userPermId = parseInt(userPerm.split('-')[1]);
+      if (permissionId === userPermId) {
+        return { isCustomPermission: true, customPermission: custom_permission };
+      }
+      // TODO user set custom permission on folder
+    }
+    return { isCustomPermission: false };
+  },
+
+  // for a11y
+  onKeyDown: function(e) {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      e.target.click();
+    }
   }
 
 };

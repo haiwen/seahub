@@ -20,7 +20,7 @@ class CreateTagDialog extends React.Component {
       tagColor: '',
       newTag: {},
       errorMsg: '',
-      colorList: ['#FFA8A8', '#FFA94D', '#FFD43B', '#A0EC50', '#A9E34B', '#63E6BE', '#4FD2C9', '#72C3FC', '#91A7FF', '#E599F7', '#B197FC', '#F783AC', '#CED4DA'],
+      colorList: ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84', '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'],
     };
     this.newInput = React.createRef();
   }
@@ -92,15 +92,17 @@ class CreateTagDialog extends React.Component {
             </div>
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
-              <div className="row gutters-xs">
+              <div className="d-flex justify-content-between">
                 {colorList.map((item, index)=>{
                   return (
-                    <div key={index} className="col-auto" onChange={this.selectTagcolor}>
+                    <div key={index} className="tag-color-option" onChange={this.selectTagcolor}>
                       <label className="colorinput">
                         {index===0 ?
                           <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
                           <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
-                        <span className="colorinput-color" style={{backgroundColor:item}}></span>
+                        <span className="colorinput-color rounded-circle d-flex align-items-center justify-content-center" style={{backgroundColor:item}}>
+                          <i className="fas fa-check color-selected"></i>
+                        </span>
                       </label>
                     </div>
                   );

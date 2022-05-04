@@ -8,7 +8,7 @@ import DirTool from './dir-tool';
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
-  permission: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func,
@@ -52,7 +52,7 @@ class CurDirPath extends React.Component {
         <DirTool
           repoID={this.props.repoID}
           repoName={this.props.repoName}
-          permission={this.props.permission}
+          userPerm={this.props.userPerm}
           currentPath={this.props.currentPath}
           updateUsedRepoTags={this.props.updateUsedRepoTags}
           onDeleteRepoTag={this.props.onDeleteRepoTag}

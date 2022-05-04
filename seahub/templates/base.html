@@ -1,16 +1,18 @@
-{% load seahub_tags i18n staticfiles %}
+{% load seahub_tags i18n static %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="keywords" content="{% trans "File, Collaboration, Team, Organization" %}" />
+{% if site_description != '' %}<meta name="description" content="{{ site_description }}" />{% endif %}
 {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+<link rel="icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" type="image/x-icon">
+<link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 {% block extra_base_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
 {% endblock %}
@@ -147,6 +149,11 @@ $('#info-bar .close').on('click', function() {
 (function() {
     var lang_context = $('#lang-context'),
         lang_selector = $('#lang-context-selector');
+
+    // for pages without '#lang', such as 'help' pages
+    if ($('#lang').length == 0) {
+        return;
+    }
 
     lang_context.parent().css({'position':'relative'});
 

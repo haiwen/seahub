@@ -6,7 +6,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from post_office.models import STATUS
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
@@ -70,8 +69,9 @@ class InvitationsView(APIView):
 
         i = Invitation.objects.add(inviter=request.user.username,
                                    accepter=accepter)
-        m = i.send_to(email=accepter)
-        if m.status == STATUS.sent:
+        send_success = i.send_to(email=accepter)
+
+        if send_success:
             return Response(i.to_dict(), status=201)
         else:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -119,11 +119,13 @@ class InvitationsBatchView(APIView):
                 continue
 
             if Invitation.objects.filter(inviter=request.user.username,
-                    accepter=accepter).count() > 0:
+                                         accepter=accepter).count() > 0:
+
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('%s is already invited.') % accepter
                     })
+
                 continue
 
             try:
@@ -139,14 +141,16 @@ class InvitationsBatchView(APIView):
                 pass
 
             i = Invitation.objects.add(inviter=request.user.username,
-                    accepter=accepter)
-            result['success'].append(i.to_dict())
+                                       accepter=accepter)
 
-            m = i.send_to(email=accepter)
-            if m.status != STATUS.sent:
+            send_success = i.send_to(email=accepter)
+
+            if not send_success:
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),
                 })
+            else:
+                result['success'].append(i.to_dict())
 
         return Response(result)

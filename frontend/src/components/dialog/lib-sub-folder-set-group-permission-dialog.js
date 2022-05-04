@@ -39,7 +39,7 @@ class GroupItem extends React.Component {
   render() {
     let item = this.props.item;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
           <a href={`${siteRoot}group/${item.group_id}/`} target="_blank">{item.group_name}</a>
         </td>
@@ -59,9 +59,13 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteGroupPermissionItem}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>
@@ -251,7 +255,8 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
     if (this.state.showFileChooser) {
       return (
         <div>
-          <FileChooser repoID={this.props.repoID}
+          <FileChooser
+            repoID={this.props.repoID}
             mode={'only_current_library'}
             onDirentItemClick={this.toggleSubFolder}
             onRepoItemClick={this.onRepoItemClick}

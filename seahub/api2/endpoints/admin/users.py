@@ -13,12 +13,14 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import ugettext as _
+from django.utils.timezone import make_naive, is_aware
 
 from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.models import TokenV2
 
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -34,8 +36,10 @@ from seahub.utils import is_valid_username2, is_org_context, \
         is_pro_version, normalize_cache_key, is_valid_email, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
+
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
+        datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.repo import normalize_repo_status_code
 from seahub.constants import DEFAULT_ADMIN
@@ -55,6 +59,37 @@ from seahub.share.models import FileShare, UploadLinkShare
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+
+def get_user_last_access_time(email, last_login_time):
+
+    device_last_access = ''
+    devices = TokenV2.objects.filter(user=email).order_by('-last_accessed')
+    if devices:
+        device_last_access = devices[0].last_accessed
+
+    # before make_naive
+    # 2021-04-09 05:32:30+00:00
+    # tzinfo: UTC
+
+    # after make_naive
+    # 2021-04-09 13:32:30
+    # tzinfo: None
+    last_access_time_list = []
+    if last_login_time:
+        if is_aware(last_login_time):
+            last_login_time = make_naive(last_login_time)
+        last_access_time_list.append(last_login_time)
+
+    if device_last_access:
+        if is_aware(device_last_access):
+            device_last_access = make_naive(device_last_access)
+        last_access_time_list.append(device_last_access)
+
+    if not last_access_time_list:
+        return ''
+    else:
+        return datetime_to_isoformat_timestr(sorted(last_access_time_list)[-1])
 
 
 def get_user_upload_link_info(uls):
@@ -191,7 +226,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         if institution_name == '':
             InstitutionAdmin.objects.filter(user=email).delete()
 
-    if quota_total_mb:
+    if quota_total_mb is not None:
         quota_total = int(quota_total_mb) * get_file_size_unit('MB')
         orgs = ccnet_api.get_orgs_by_user(email)
         try:
@@ -203,6 +238,7 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         except Exception as e:
             logger.error(e)
             seafile_api.set_user_quota(email, -1)
+
 
 def get_user_info(email):
 
@@ -297,8 +333,15 @@ class AdminAdminUsers(APIView):
                 user_info['quota_total'] = -1
 
             user_info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                user_info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                          last_login_obj.last_login)
+            else:
+                user_info['last_login'] = ''
+                user_info['last_access_time'] = get_user_last_access_time(user.email, '')
 
             try:
                 admin_role = AdminRole.objects.get_admin_role(user.email)
@@ -311,6 +354,7 @@ class AdminAdminUsers(APIView):
             'admin_user_list': admin_users_info,
         }
         return Response(result)
+
 
 class AdminUsers(APIView):
 
@@ -363,7 +407,13 @@ class AdminUsers(APIView):
             info['quota_total'] = seafile_api.get_user_quota(user.email)
 
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
 
             info['role'] = get_user_role(user)
 
@@ -423,8 +473,10 @@ class AdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
-                            page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(source,
+                                                                       direction,
+                                                                       page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -448,8 +500,10 @@ class AdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(source, direction,
-                            page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(source,
+                                                                       direction,
+                                                                       page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -489,10 +543,19 @@ class AdminUsers(APIView):
                 info['quota_usage'] = -1
                 info['quota_total'] = -1
 
-            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
-            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
             info['role'] = get_user_role(user)
+
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
+            last_login_obj = UserLastLogin.objects.get_by_username(user.email)
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             if getattr(settings, 'MULTI_INSTITUTION', False):
                 info['institution'] = profile.institution if profile else ''
 
@@ -569,8 +632,7 @@ class AdminUsers(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                org_quota_mb = seafile_api.get_org_quota(org_id) / \
-                        get_file_size_unit('MB')
+                org_quota_mb = seafile_api.get_org_quota(org_id) / get_file_size_unit('MB')
 
                 if quota_total_mb > org_quota_mb:
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
@@ -607,7 +669,11 @@ class AdminUsers(APIView):
             c = {'user': request.user.username, 'email': email, 'password': password}
             try:
                 send_html_email(_('You are invited to join %s') % get_site_name(),
-                        'sysadmin/user_add_email.html', c, None, [email])
+                                'sysadmin/user_add_email.html',
+                                c,
+                                None,
+                                [email2contact_email(email)])
+
                 add_user_tip = _('Successfully added user %(user)s. An email notification has been sent.') % {'user': email}
             except Exception as e:
                 logger.error(str(e))
@@ -622,6 +688,9 @@ class AdminUsers(APIView):
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
                              operation=USER_ADD, detail=admin_op_detail)
+
+        if config.FORCE_PASSWORD_CHANGE:
+            UserOptions.objects.set_force_passwd_change(email)
 
         return Response(user_info)
 
@@ -666,8 +735,16 @@ class AdminLDAPUsers(APIView):
             info['quota_total'] = seafile_api.get_user_quota(user.email)
             info['quota_usage'] = seafile_api.get_user_self_usage(user.email)
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             data.append(info)
 
         result = {'ldap_user_list': data, 'has_next_page': has_next_page}
@@ -697,46 +774,152 @@ class AdminSearchUser(APIView):
 
         users = []
 
-        # search user from ccnet db
-        users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
+        page = request.GET.get('page', '')
+        per_page = request.GET.get('per_page', '')
 
-        # search user from ccnet ldapimport
-        users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
+        if not page or not per_page:
 
-        ccnet_user_emails = [u.email for u in users]
+            # search user from ccnet db
+            users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
 
-        # get institution for user from ccnet
-        if getattr(settings, 'MULTI_INSTITUTION', False):
-            user_institution_dict = {}
-            profiles = Profile.objects.filter(user__in=ccnet_user_emails)
-            for profile in profiles:
+            # search user from ccnet ldapimport
+            users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
+
+            ccnet_user_emails = [u.email for u in users]
+
+            # get institution for user from ccnet
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                user_institution_dict = {}
+                profiles = Profile.objects.filter(user__in=ccnet_user_emails)
+                for profile in profiles:
+                    email = profile.user
+                    if email not in user_institution_dict:
+                        user_institution_dict[email] = profile.institution
+
+                for user in users:
+                    user.institution = user_institution_dict.get(user.email, '')
+
+            # search user from profile
+            searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
+                                                       Q(contact_email__icontains=query_str))[:10]
+
+            for profile in searched_profile:
                 email = profile.user
-                if email not in user_institution_dict:
-                    user_institution_dict[email] = profile.institution
+                institution = profile.institution
 
-            for user in users:
-                user.institution = user_institution_dict.get(user.email, '')
+                # remove duplicate emails
+                if email not in ccnet_user_emails:
+                    try:
+                        # get is_staff and is_active info
+                        user = User.objects.get(email=email)
+                        user.institution = institution
+                        users.append(user)
+                    except User.DoesNotExist:
+                        continue
 
-        # search user from profile
-        searched_profile = Profile.objects.filter((Q(nickname__icontains=query_str)) |
-                Q(contact_email__icontains=query_str))[:10]
+            page_info = {
+                'has_next_page': '',
+                'current_page': ''
+            }
 
-        for profile in searched_profile:
-            email = profile.user
-            institution = profile.institution
+        else:
 
-            # remove duplicate emails
-            if email not in ccnet_user_emails:
-                try:
-                    # get is_staff and is_active info
-                    user = User.objects.get(email=email)
-                    user.institution = institution
-                    users.append(user)
-                except User.DoesNotExist:
-                    continue
+            try:
+                page = int(page)
+                per_page = int(per_page)
+            except ValueError:
+                page = 1
+                per_page = 25
+
+            ccnet_users = []
+            ccnet_db_users = ccnet_api.search_emailusers('DB', query_str, 0, page * per_page)
+            ccnet_ldap_import_users = []
+
+            if len(ccnet_db_users) == page * per_page:
+
+                # users from ccnet db is enough
+                ccnet_users = ccnet_db_users[-per_page:]
+
+            elif len(ccnet_db_users) < page * per_page:
+
+                ccnet_ldap_import_users = ccnet_api.search_emailusers('LDAP',
+                                                                      query_str,
+                                                                      0,
+                                                                      page*per_page - len(ccnet_db_users))
+
+                if int(len(ccnet_db_users)/per_page) == page-1:
+                    # need ccnet_db_users + ccnet_ldap_import_users
+                    ccnet_users = ccnet_db_users[(page-1)*per_page-len(ccnet_db_users):] + ccnet_ldap_import_users
+
+                if int(len(ccnet_db_users)/per_page) < page-1:
+                    # users only from ccnet_ldap_import_users
+                    ccnet_users = ccnet_ldap_import_users[-per_page:]
+
+            # search user from profile
+            profile_users = []
+            all_ccnet_users = ccnet_db_users + ccnet_ldap_import_users
+            all_profile_users = []
+
+            if len(all_ccnet_users) == page * per_page:
+
+                # users from ccnet is enough
+                users = ccnet_users
+
+            if len(all_ccnet_users) < page * per_page:
+                all_profile_users = Profile.objects.filter((Q(nickname__icontains=query_str)) | \
+                                                           Q(contact_email__icontains=query_str)) \
+                                                          [0:page*per_page-len(all_ccnet_users)]
+
+                if int(len(all_ccnet_users)/per_page) == page-1:
+                    # need ccnet users + profile users
+                    tmp_users = []
+                    for profile_user in all_profile_users:
+                        try:
+                            user = User.objects.get(email=profile_user.user)
+                            tmp_users.append(user)
+                        except User.DoesNotExist:
+                            continue
+
+                    users = ccnet_users + tmp_users
+
+                if int(len(all_ccnet_users)/per_page) < page-1:
+                    # only need profile users
+                    for profile_user in list(all_profile_users)[-per_page:]:
+                        try:
+                            user = User.objects.get(email=profile_user.user)
+                            users.append(user)
+                        except User.DoesNotExist:
+                            continue
+
+            if len(all_ccnet_users) + len(all_profile_users) >= page * per_page:
+                has_next_page = True
+            else:
+                has_next_page = False
+
+            page_info = {
+                'has_next_page': has_next_page,
+                'current_page': page
+            }
+
+            # get institution for user from ccnet
+            if getattr(settings, 'MULTI_INSTITUTION', False):
+                for user in users:
+                    if not hasattr(user, 'institution'):
+                        try:
+                            profile = Profile.objects.get(user=user.email)
+                            user.institution = profile.institution
+                        except Exception as e:
+                            logger.error(e)
 
         data = []
+        has_appended = []
+
         for user in users:
+
+            if user.email in has_appended:
+                continue
+            else:
+                has_appended.append(user.email)
 
             info = {}
             info['email'] = user.email
@@ -760,8 +943,16 @@ class AdminSearchUser(APIView):
                 info['quota_total'] = seafile_api.get_user_quota(user.email)
 
             info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+
             last_login_obj = UserLastLogin.objects.get_by_username(user.email)
-            info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login) if last_login_obj else ''
+            if last_login_obj:
+                info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+                info['last_access_time'] = get_user_last_access_time(user.email,
+                                                                     last_login_obj.last_login)
+            else:
+                info['last_login'] = ''
+                info['last_access_time'] = get_user_last_access_time(user.email, '')
+
             info['role'] = get_user_role(user)
 
             if getattr(settings, 'MULTI_INSTITUTION', False):
@@ -769,7 +960,10 @@ class AdminSearchUser(APIView):
 
             data.append(info)
 
-        result = {'user_list': data}
+        result = {
+            'user_list': data,
+            'page_info': page_info,
+        }
         return Response(result)
 
 
@@ -781,7 +975,8 @@ class AdminUser(APIView):
 
     def get(self, request, email):
 
-        if not request.user.admin_permissions.can_manage_user():
+        if not (request.user.admin_permissions.can_manage_user() or \
+            request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         avatar_size = request.data.get('avatar_size', 64)
@@ -805,7 +1000,8 @@ class AdminUser(APIView):
 
     def put(self, request, email):
 
-        if not request.user.admin_permissions.can_manage_user():
+        if not (request.user.admin_permissions.can_manage_user() or \
+            request.user.admin_permissions.can_update_user()):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # basic user info check
@@ -819,10 +1015,15 @@ class AdminUser(APIView):
 
         is_active = request.data.get("is_active", None)
         if is_active:
+
             try:
                 is_active = to_python_boolean(is_active)
             except ValueError:
                 error_msg = 'is_active invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if is_pro_version() and is_active and user_number_over_limit(new_users=1):
+                error_msg = _("The number of users exceeds the limit.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # additional user info check
@@ -882,8 +1083,7 @@ class AdminUser(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                org_quota_mb = seafile_api.get_org_quota(org_id) / \
-                        get_file_size_unit('MB')
+                org_quota_mb = seafile_api.get_org_quota(org_id) / get_file_size_unit('MB')
 
                 if quota_total_mb > org_quota_mb:
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
@@ -927,7 +1127,10 @@ class AdminUser(APIView):
             if user_obj.is_active and IS_EMAIL_CONFIGURED:
                 try:
                     send_html_email(_(u'Your account on %s is activated') % get_site_name(),
-                                    'sysadmin/user_activation_email.html', {'username': user_obj.email}, None, [user_obj.email])
+                                    'sysadmin/user_activation_email.html',
+                                    {'username': user_obj.email},
+                                    None,
+                                    [email2contact_email(user_obj.email)])
                     update_status_tip = _('Edit succeeded, an email has been sent.')
                 except Exception as e:
                     logger.error(e)
@@ -1010,7 +1213,7 @@ class AdminUserResetPassword(APIView):
                 contact_email = Profile.objects.get_contact_email_by_user(email)
                 try:
                     send_html_email(_(u'Password has been reset on %s') % get_site_name(),
-                                'sysadmin/user_reset_email.html', c, None, [contact_email])
+                                    'sysadmin/user_reset_email.html', c, None, [contact_email])
                     reset_tip = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
                         {'passwd': new_password, 'user': contact_email}
                 except Exception as e:
@@ -1194,7 +1397,7 @@ class AdminUserBeSharedRepos(APIView):
             if email not in nickname_dict:
                 if '@seafile_group' in email:
                     group_id = get_group_id_by_repo_owner(email)
-                    group_name= group_id_to_name(group_id)
+                    group_name = group_id_to_name(group_id)
                     nickname_dict[email] = group_name
                 else:
                     nickname_dict[email] = email2nickname(email)
@@ -1215,3 +1418,347 @@ class AdminUserBeSharedRepos(APIView):
             repos_info.append(repo_info)
 
         return Response({'repo_list': repos_info})
+
+
+class AdminUpdateUserCcnetEmail(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request):
+        """update ccnet email
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        # argument check
+        old_ccnet_email = request.data.get("old_email", None)
+        if not old_ccnet_email:
+            error_msg = 'old_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_ccnet_email = request.data.get("new_email", None)
+        if not new_ccnet_email:
+            error_msg = 'new_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        new_ccnet_email = new_ccnet_email.strip()
+        if not is_valid_email(new_ccnet_email):
+            error_msg = 'new_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        if not ccnet_api.get_emailuser(old_ccnet_email):
+            error_msg = 'User %s not found.' % old_ccnet_email
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if ccnet_api.get_emailuser(new_ccnet_email):
+            error_msg = "User %s already exists." % new_ccnet_email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # update
+        try:
+            ccnet_api.update_emailuser_id(old_ccnet_email, new_ccnet_email)
+            logger.debug('the ccnet database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.api2.models import Token
+            token_list = Token.objects.filter(user=old_ccnet_email)
+            for token in token_list:
+                token.user = new_ccnet_email
+                token.save()
+            logger.debug('the api2_token table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.api2.models import TokenV2
+            tokenv2_list = TokenV2.objects.filter(user=old_ccnet_email)
+            for tokenv2 in tokenv2_list:
+                tokenv2.user = new_ccnet_email
+                tokenv2.save()
+            logger.debug('the api2_tokenv2 table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            from seahub.admin_log.models import AdminLog
+            adminlog_list = AdminLog.objects.filter(email=old_ccnet_email)
+            for adminlog in adminlog_list:
+                adminlog.email = new_ccnet_email
+                adminlog.save()
+            logger.debug('the admin_log_adminlog table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.avatar.models import Avatar
+            avatar_list = Avatar.objects.filter(emailuser=old_ccnet_email)
+            for avatar in avatar_list:
+                avatar.emailuser = new_ccnet_email
+                avatar.save()
+            logger.debug('the avatar_avatar table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import ClientLoginToken
+            clientlogintoken_list = ClientLoginToken.objects.filter(username=old_ccnet_email)
+            for clientlogintoken in clientlogintoken_list:
+                clientlogintoken.username = new_ccnet_email
+                clientlogintoken.save()
+            logger.debug('the base_clientlogintoken table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import DeviceToken
+            devicetoken_list = DeviceToken.objects.filter(user=old_ccnet_email)
+            for devicetoken in devicetoken_list:
+                devicetoken.user = new_ccnet_email
+                devicetoken.save()
+            logger.debug('the base_devicetoken table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import FileComment
+            filecomment_list = FileComment.objects.filter(author=old_ccnet_email)
+            for filecomment in filecomment_list:
+                filecomment.author = new_ccnet_email
+                filecomment.save()
+            logger.debug('the base_filecomment table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import UserLastLogin
+            userlastlogin_list = UserLastLogin.objects.filter(username=old_ccnet_email)
+            for userlastlogin in userlastlogin_list:
+                userlastlogin.username = new_ccnet_email
+                userlastlogin.save()
+            logger.debug('the base_userlastlogin table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.base.models import UserStarredFiles
+            userstarredfiles_list = UserStarredFiles.objects.filter(email=old_ccnet_email)
+            for userstarredfiles in userstarredfiles_list:
+                userstarredfiles.email = new_ccnet_email
+                userstarredfiles.save()
+            logger.debug('the base_userstarredfiles table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.drafts.models import Draft
+            draft_list = Draft.objects.filter(username=old_ccnet_email)
+            for draft in draft_list:
+                draft.username = new_ccnet_email
+                draft.save()
+            logger.debug('the drafts_draft table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.drafts.models import DraftReviewer
+            draftreviewer_list = DraftReviewer.objects.filter(reviewer=old_ccnet_email)
+            for draftreviewer in draftreviewer_list:
+                draftreviewer.reviewer = new_ccnet_email
+                draftreviewer.save()
+            logger.debug('the drafts_draftreviewer table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.file_participants.models import FileParticipant
+            fileparticipant_list = FileParticipant.objects.filter(username=old_ccnet_email)
+            for fileparticipant in fileparticipant_list:
+                fileparticipant.username = new_ccnet_email
+                fileparticipant.save()
+            logger.debug('the file_participants_fileparticipant table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.institutions.models import InstitutionAdmin
+            institutionadmin_list = InstitutionAdmin.objects.filter(user=old_ccnet_email)
+            for institutionadmin in institutionadmin_list:
+                institutionadmin.user = new_ccnet_email
+                institutionadmin.save()
+            logger.debug('the institutions_institutionadmin table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.invitations.models import Invitation
+            invitation_list = Invitation.objects.filter(inviter=old_ccnet_email)
+            for invitation in invitation_list:
+                invitation.inviter = new_ccnet_email
+                invitation.save()
+            logger.debug('the invitations_invitation table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.notifications.models import UserNotification
+            usernotification_list = UserNotification.objects.filter(to_user=old_ccnet_email)
+            for usernotification in usernotification_list:
+                usernotification.to_user = new_ccnet_email
+                usernotification.save()
+            logger.debug('the notifications_usernotification table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.options.models import UserOptions
+            useroptions_list = UserOptions.objects.filter(email=old_ccnet_email)
+            for useroptions in useroptions_list:
+                useroptions.email = new_ccnet_email
+                useroptions.save()
+            logger.debug('the options_useroptions table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.profile.models import DetailedProfile
+            detailedprofile_list = DetailedProfile.objects.filter(user=old_ccnet_email)
+            for detailedprofile in detailedprofile_list:
+                detailedprofile.user = new_ccnet_email
+                detailedprofile.save()
+            logger.debug('the profile_detailedprofile table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.profile.models import Profile
+            profile_list = Profile.objects.filter(user=old_ccnet_email)
+            for profile in profile_list:
+                profile.user = new_ccnet_email
+                profile.save()
+            logger.debug('the profile_profile table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.role_permissions.models import AdminRole
+            adminrole_list = AdminRole.objects.filter(email=old_ccnet_email)
+            for adminrole in adminrole_list:
+                adminrole.email = new_ccnet_email
+                adminrole.save()
+            logger.debug('the role_permissions_adminrole table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import AnonymousShare
+            anonymousshare_list = AnonymousShare.objects.filter(repo_owner=old_ccnet_email)
+            for anonymousshare in anonymousshare_list:
+                anonymousshare.repo_owner = new_ccnet_email
+                anonymousshare.save()
+            logger.debug('the share_anonymousshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import FileShare
+            fileshare_list = FileShare.objects.filter(username=old_ccnet_email)
+            for fileshare in fileshare_list:
+                fileshare.username = new_ccnet_email
+                fileshare.save()
+            logger.debug('the share_fileshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.share.models import UploadLinkShare
+            uploadlinkshare_list = UploadLinkShare.objects.filter(username=old_ccnet_email)
+            for uploadlinkshare in uploadlinkshare_list:
+                uploadlinkshare.username = new_ccnet_email
+                uploadlinkshare.save()
+            logger.debug('the share_uploadlinkshare table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.auth.models import SocialAuthUser
+            socialauthuser_list = SocialAuthUser.objects.filter(username=old_ccnet_email)
+            for socialauthuser in socialauthuser_list:
+                socialauthuser.username = new_ccnet_email
+                socialauthuser.save()
+            logger.debug('the social_auth_usersocialauth table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.sysadmin_extra.models import UserLoginLog
+            userlastlogin_list = UserLoginLog.objects.filter(username=old_ccnet_email)
+            for userlastlogin in userlastlogin_list:
+                userlastlogin.username = new_ccnet_email
+                userlastlogin.save()
+            logger.debug('the sysadmin_extra_userloginlog table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.tags.models import FileTag
+            filetag_list = FileTag.objects.filter(username=old_ccnet_email)
+            for filetag in filetag_list:
+                filetag.username = new_ccnet_email
+                filetag.save()
+            logger.debug('the tags_filetag table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from termsandconditions.models import UserTermsAndConditions
+            usertermsandconditions_list = UserTermsAndConditions.objects.filter(username=old_ccnet_email)
+            for usertermsandconditions in usertermsandconditions_list:
+                usertermsandconditions.username = new_ccnet_email
+                usertermsandconditions.save()
+            logger.debug('the termsandconditions_usertermsandconditions table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.wiki.models import Wiki
+            wiki_list = Wiki.objects.filter(username=old_ccnet_email)
+            for wiki in wiki_list:
+                wiki.username = new_ccnet_email
+                wiki.save()
+            logger.debug('the wiki_wiki table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.ocm.models import OCMShare
+            ocmshare_list = OCMShare.objects.filter(from_user=old_ccnet_email)
+            for ocmshare in ocmshare_list:
+                ocmshare.from_user = new_ccnet_email
+                ocmshare.save()
+            logger.debug('the ocm_share table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        try:
+            from seahub.ocm.models import OCMShareReceived
+            ocmsharereceived_list = OCMShareReceived.objects.filter(to_user=old_ccnet_email)
+            for ocmsharereceived in ocmsharereceived_list:
+                ocmsharereceived.to_user = new_ccnet_email
+                ocmsharereceived.save()
+            logger.debug('the ocm_share_received table in seahub database was successfully updated')
+        except Exception as e:
+            logger.error(e)
+
+        return Response({'success': True})

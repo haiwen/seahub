@@ -8,6 +8,7 @@ import toaster from '../toast';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
 import CommentPanel from './comment-panel';
+import FileDetails from '../dirent-detail/file-details';
 
 import '../../css/file-view.css';
 
@@ -21,7 +22,8 @@ const propTypes = {
 };
 
 const { isStarred, isLocked, lockedByMe,
-  repoID, filePath, enableWatermark, userNickName
+  repoID, filePath, enableWatermark, userNickName,
+  repoName, parentDir, fileName
 } = window.app.pageOptions;
 
 
@@ -34,7 +36,12 @@ class FileView extends React.Component {
       isLocked: isLocked,
       lockedByMe: lockedByMe,
       isCommentPanelOpen: false,
+      isDetailsPanelOpen: false
     };
+  }
+
+  toggleDetailsPanel = () => {
+    this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
   }
 
   toggleCommentPanel = () => {
@@ -90,6 +97,7 @@ class FileView extends React.Component {
   }
 
   render() {
+    const { isDetailsPanelOpen } = this.state;
     return (
       <div className="h-100 d-flex flex-column">
         <div className="file-view-header d-flex justify-content-between align-items-center">
@@ -106,6 +114,7 @@ class FileView extends React.Component {
             needSave={this.props.needSave}
             toggleLockFile={this.toggleLockFile}
             toggleCommentPanel={this.toggleCommentPanel}
+            toggleDetailsPanel={this.toggleDetailsPanel}
           />
         </div>
         <div className="file-view-body flex-auto d-flex o-hidden">
@@ -116,6 +125,15 @@ class FileView extends React.Component {
               participants={this.props.participants}
               onParticipantsChange={this.props.onParticipantsChange}
             />
+          }
+          {isDetailsPanelOpen &&
+          <FileDetails
+            repoID={repoID}
+            repoName={repoName}
+            path={parentDir}
+            dirent={{'name': fileName, type: 'file'}}
+            togglePanel={this.toggleDetailsPanel}
+          />
           }
         </div>
       </div>

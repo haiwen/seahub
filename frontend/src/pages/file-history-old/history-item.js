@@ -46,14 +46,15 @@ class HistoryItem extends React.Component {
     let item = this.props.item;
     let downloadUrl = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id});
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`;
-    let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${filePath}`;
-    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${filePath}`;
+    let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
+    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
+    const snapshotURL = `${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`;
     return (
       <Fragment>
         <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
           <td>
-            <time datetime={item.time} is="relative-time" title={moment(item.ctime).format('llll')}>{moment(item.ctime).fromNow()}</time>
-            {this.props.index === 0 && gettext('(current version)')}
+            <span>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
+            {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
           </td>
           <td>
             <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
@@ -67,6 +68,7 @@ class HistoryItem extends React.Component {
                 downloadUrl={downloadUrl}
                 viewUrl={viewUrl}
                 diffUrl={diffUrl}
+                snapshotURL={snapshotURL}
                 onItemRestore={this.onItemRestore}
                 canDownload={this.props.canDownload}
                 canCompare={this.props.canCompare}
@@ -106,7 +108,7 @@ class MoreMenu extends React.PureComponent {
   }
 
   render() {
-    const { index, downloadUrl, viewUrl, diffUrl, onItemRestore, canCompare, canDownload } = this.props;
+    const { index, downloadUrl, viewUrl, diffUrl, snapshotURL, onItemRestore, canCompare, canDownload } = this.props;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle
@@ -122,6 +124,7 @@ class MoreMenu extends React.PureComponent {
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
           {/*canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>*/}
+          {index != 0 && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>
     );

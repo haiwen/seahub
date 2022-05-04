@@ -6,6 +6,7 @@ from seahub.test_utils import BaseTestCase
 
 
 class AdminWebSettingsTest(BaseTestCase):
+
     def setUp(self):
         self.url = reverse('api-v2.1-web-settings')
         self.login_as(self.admin)
@@ -27,9 +28,9 @@ class AdminWebSettingsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 28
+        assert len(json_resp) == 29
 
-    @override_settings(ENABLE_SETTINGS_VIA_WEB = False)
+    @override_settings(ENABLE_SETTINGS_VIA_WEB=False)
     def test_get_with_enable_settings(self):
         resp = self.client.get(self.url)
         self.assertEqual(404, resp.status_code)
@@ -37,7 +38,6 @@ class AdminWebSettingsTest(BaseTestCase):
     def test_update_web_settings_info(self):
         data = {
             "DISABLE_SYNC_WITH_ANY_FOLDER": False,
-            "ENABLE_USER_CREATE_ORG_REPO": True,
             "SHARE_LINK_TOKEN_LENGTH": 20,
             "REPO_PASSWORD_MIN_LENGTH": 10,
             "REGISTRATION_SEND_MAIL": False,

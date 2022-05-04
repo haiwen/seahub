@@ -3,7 +3,7 @@ import { SeafileEditor } from '@seafile/seafile-editor/dist/editor/editor.js';
 import 'whatwg-fetch';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { gettext, isDocs } from './utils/constants';
+import { gettext, isDocs, mediaUrl } from './utils/constants';
 import io from 'socket.io-client';
 import toaster from './components/toast';
 import ModalPortal from './components/modal-portal';
@@ -15,7 +15,6 @@ import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate
 import LocalDraftDialog from './components/dialog/local-draft-dialog';
 import MarkdownViewerToolbar from './components/toolbar/markdown-viewer-toolbar';
 import EditFileTagDialog from './components/dialog/edit-filetag-dialog';
-import RelatedFileDialogs from './components/dialog/related-file-dialogs';
 
 import './css/markdown-viewer/markdown-editor.css';
 
@@ -25,7 +24,8 @@ const { repoID, repoName, filePath, fileName, mode, draftID, isDraft, hasDraft, 
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const userName = userInfo.username;
-let dirPath = '/';
+let dirPath = Utils.getDirName(filePath);
+const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -78,32 +78,9 @@ class EditorApi {
     return url;
   }
 
-  uploadImage = (imageFile) => {
-    return (
-      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
-        let uploadLinkComponent = res.data;
-        const uploadLink = uploadLinkComponent + '?ret-json=1';
-        const name = getImageFileNameWithTimestamp();
-        const blob = imageFile.slice(0, -1, 'image/png');
-        const newFile = new File([blob], name, {type: 'image/png'});
-        const formData = new FormData();
-        formData.append('parent_dir', '/');
-        formData.append('relative_path', 'images/auto-upload');
-        formData.append('file', newFile);
-        return {uploadLink, formData};
-      }).then(({ uploadLink, formData}) => {
-        return seafileAPI.uploadImage(uploadLink, formData);
-      }).then ((res) => {
-        let resArr = res.data[0];
-        let filename = resArr.name;
-        return this._getImageURL(filename);
-      })
-    );
-  }
-
   uploadLocalImage = (imageFile) => {
     return (
-      seafileAPI.getFileServerUploadLink(repoID, dirPath).then((res) => {
+      seafileAPI.getFileServerUploadLink(repoID, '/').then((res) => {
         const uploadLink = res.data + '?ret-json=1';
         const name = getImageFileNameWithTimestamp();
         const newFile = new File([imageFile], name, {type: imageFile.type});
@@ -143,7 +120,8 @@ class EditorApi {
   }
 
   getFiles() {
-    return seafileAPI.listDir(repoID, dirPath, { recursive: true} ).then((response) => {
+    const rootPath = '/';
+    return seafileAPI.listDir(repoID, rootPath, { recursive: true} ).then((response) => {
       var files = response.data.dirent_list.map((item) => {
         return {
           name: item.name,
@@ -311,11 +289,8 @@ class MarkdownEditor extends React.Component {
       saving: false,
       isLocked: isLocked,
       lockedByMe: lockedByMe,
-      relatedFiles: [],
       fileTagList: [],
-      showRelatedFileDialog: false,
       showEditFileTagDialog: false,
-      viewMode: 'list_related_file',
       participants: [],
     };
 
@@ -388,7 +363,7 @@ class MarkdownEditor extends React.Component {
         return;
       case 'update_users':
         for (var prop in data.users) {
-          if (data.users.hasOwnProperty(prop)) {
+          if (Object.prototype.hasOwnProperty.call(data.users, prop)) {
             if (prop === this.socket_id) {
               data.users[prop]['myself'] = true;
               break;
@@ -414,7 +389,6 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showInsertFileDialog: false,
       showInsertRepoImageDialog: false,
-      showRelatedFileDialog: false,
       showEditFileTagDialog: false,
       showFileParticipantDialog: false,
     });
@@ -511,22 +485,6 @@ class MarkdownEditor extends React.Component {
           showInsertRepoImageDialog: true,
         });
         break;
-      case 'related_files':
-        if (this.state.relatedFiles.length > 0) {
-          this.setState({
-            showRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            viewMode: 'list_related_file',
-          });
-        }
-        else {
-          this.setState({
-            showRelatedFileDialog: true,
-            showMarkdownEditorDialog: true,
-            viewMode: 'add_related_file',
-          });
-        }
-        break;
       case 'file_tags':
         this.setState({
           showEditFileTagDialog: true,
@@ -557,46 +515,48 @@ class MarkdownEditor extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
-    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name, id } = res.data;
-      let lastModifier = last_modifier_name;
+    // get file info
+    const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);
+    const { mtime, size, starred, permission, last_modifier_name, id } = fileInfoRes.data;
+    const lastModifier = last_modifier_name;
 
-      this.setState((prevState, props) => ({
-        fileInfo: {
-          ...prevState.fileInfo,
-          mtime,
-          size,
-          starred,
-          permission,
-          lastModifier,
-          id
-        }
-      }));
+    // get file download url
+    const fileDownloadUrlRes = await seafileAPI.getFileDownloadLink(repoID, filePath);
+    const downloadUrl = fileDownloadUrlRes.data;
 
-      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-        const downLoadUrl = res.data;
-        seafileAPI.getFileContent(downLoadUrl).then((res) => {
-          const contentLength = res.data.length;
-          let isBlankFile =  (contentLength === 0 || contentLength === 1);
-          let permission = this.state.fileInfo.permission;
-          let hasPermission = (permission === 'rw' || permission === 'cloud-edit');
-          let value = deserialize(res.data);
-          this.setState({
-            markdownContent: res.data,
-            loading: false,
-            // Goto rich edit page
-            // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
-            // case1: If file is draft file
-            // case2: If mode == 'edit' and the file has no draft
-            // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
-            readOnly: !hasPermission || hasDraft,
-            value: value,
-          });
-        });
-      });
+    // get file content
+    const fileContentRes = await seafileAPI.getFileContent(downloadUrl);
+    const markdownContent = fileContentRes.data;
+    const value = deserialize(markdownContent);
+
+    // init permission
+    let hasPermission = permission === 'rw' || permission === 'cloud-edit';
+
+    // get custom permission
+    if (permission.startsWith('custom-')) {
+      const permissionID = permission.split('-')[1];
+      const customPermissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
+      const customPermission = customPermissionRes.data.permission;
+      const { modify: canModify } = customPermission.permission;
+      hasPermission = canModify ? true : hasPermission;
+    }
+
+    // Goto rich edit page
+    // First, the user has the relevant permissions, otherwise he can only enter the viewer interface or cannot access
+    // case1: If file is draft file
+    // case2: If mode == 'edit' and the file has no draft
+    // case3: The length of markDownContent is 1 when clear all content in editor and the file has no draft
+    const { fileInfo } = this.state;
+    this.setState({
+      loading: false,
+      fileInfo: {...fileInfo, mtime, size, starred, permission, lastModifier, id},
+      markdownContent,
+      value,
+      readOnly: !hasPermission || hasDraft,
     });
+
     if (userInfo && this.socket) {
       const { repoID, path } = this.state.fileInfo;
       this.socket.emit('presence', {
@@ -616,7 +576,6 @@ class MarkdownEditor extends React.Component {
       });
     }
     this.checkDraft();
-    this.listRelatedFiles();
     this.listFileTags();
 
     this.listFileParticipants();
@@ -624,15 +583,9 @@ class MarkdownEditor extends React.Component {
     setTimeout(() => {
       let url = new URL(window.location.href);
       if (url.hash) {
-        window.location.href = window.location.href;
+        window.location.href = url;
       }
     }, 100);
-  }
-
-  listRelatedFiles = () => {
-    seafileAPI.listRelatedFiles(repoID, filePath).then(res => {
-      this.setState({ relatedFiles: res.data.related_files });
-    });
   }
 
   listFileTags = () => {
@@ -643,10 +596,6 @@ class MarkdownEditor extends React.Component {
       }
       this.setState({ fileTagList: fileTagList });
     });
-  }
-
-  onRelatedFileChange = () => {
-    this.listRelatedFiles();
   }
 
   onFileTagChanged = () => {
@@ -752,8 +701,14 @@ class MarkdownEditor extends React.Component {
   }
 
   getInsertLink = (repoID, filePath) => {
-    const innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     const fileName = Utils.getFileName(filePath);
+    const suffix = fileName.slice(fileName.indexOf('.') + 1);
+    if (IMAGE_SUFFIXES.includes(suffix)) {
+      let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
+      window.richMarkdownEditor.addLink(fileName, innerURL, true);
+      return;
+    }
+    let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     window.richMarkdownEditor.addLink(fileName, innerURL);
   }
 
@@ -802,6 +757,7 @@ class MarkdownEditor extends React.Component {
             toggleLockFile={this.toggleLockFile}
           />
           <SeafileEditor
+            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             fileInfo={this.state.fileInfo}
             markdownContent={this.state.markdownContent}
             editorApi={editorApi}
@@ -829,7 +785,6 @@ class MarkdownEditor extends React.Component {
             contentChanged={this.state.contentChanged}
             saving={this.state.saving}
             fileTagList={this.state.fileTagList}
-            relatedFiles={this.state.relatedFiles}
             participants={this.state.participants}
             onParticipantsChange={this.onParticipantsChange}
             markdownLint={fileName.toLowerCase() !== 'index.md'}
@@ -892,19 +847,6 @@ class MarkdownEditor extends React.Component {
                     fileTagList={this.state.fileTagList}
                     toggleCancel={this.toggleCancel}
                     onFileTagChanged={this.onFileTagChanged}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showRelatedFileDialog &&
-                <ModalPortal>
-                  <RelatedFileDialogs
-                    repoID={repoID}
-                    filePath={filePath}
-                    relatedFiles={this.state.relatedFiles}
-                    toggleCancel={this.toggleCancel}
-                    onRelatedFileChange={this.onRelatedFileChange}
-                    dirent={this.state.fileInfo}
-                    viewMode={this.state.viewMode}
                   />
                 </ModalPortal>
               }

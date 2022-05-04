@@ -1,0 +1,56 @@
+{% extends "registration/login.html" %}
+{% load i18n %}
+{% block sub_title %}{% trans "Signup" %} - {% endblock %}
+
+{% block main_content %}
+<div class="login-panel-outer-container vh">
+    <div class="login-panel">
+        <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
+        {% if request.user.is_authenticated %}
+        <p>{% trans "Welcome back, you are already signed in." %}</p>
+        {% else %}
+        <form action="" method="post" id="signup-form">{% csrf_token %}
+            <label for="org_name">{% trans "Organization Name" %}</label>
+            <input id="org_name" type="text" name="org_name" value="{{ form.org_name.value|default_if_none:"" }}" class="input" />
+            {{ form.org_name.errors }}
+
+            {% if not org_auto_url_prefix %}
+            <label for="org-url-prefix">Organization URL</label>
+            <div id="org-url">
+            {{ service_url_scheme }}:// <input type="text" name="url_prefix" value="{{ form.url_prefix.value|default_if_none:"" }}" class="input" id="org-url-prefix" />.{{ service_url_remaining }}
+            </div>
+            {% endif %}
+
+            {{ form.url_prefix.errors }}
+
+            {% if form.name.field.required %}
+            <label for="id_name">{% trans "Admin Name" %}</label>
+            <input id="name" type="text" name="name" maxlength="255" value="{{ form.name.value|default_if_none:"" }}" class="input" />
+            {{ form.name.errors }}
+            {% endif %}
+
+            <label for="email">{% trans "Admin Email" %}</label>
+            <input id="email" type="text" name="email" maxlength="255" value="{{ form.email.value|default_if_none:"" }}" class="input" />
+            {{ form.email.errors }}
+
+            <label for="password1">{% trans "Password" %}</label>
+            <input id="password1" type="password" name="password1" value="" class="input" />
+            <label for="password2">{% trans "Confirm Password" %}</label>
+            <input id="password2" type="password" name="password2" value="" class="input" />
+
+            {{ form.non_field_errors }}
+            <button type="submit" class="submit btn btn-primary btn-block">{% trans "Submit" %}</button>
+        </form>
+        <div class="login-panel-bottom-container">
+            {# language will be shown here #}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% include "snippets/policy_service_link.html" %}
+{% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript">
+</script>
+{% endblock %}

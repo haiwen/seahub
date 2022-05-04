@@ -1,0 +1,13 @@
+ENABLE_KRB5_LOGIN = True
+KRB5_REALM = 'OFF.COM'
+KRB5_USERNAME_SUFFIX = '@domain.com'
+#KRB5_CREATE_UNKNOWN_USER = False
+EXTRA_INSTALLED_APPS = (
+    'seahub_extra.krb5_auth',
+)
+EXTRA_AUTHENTICATION_BACKENDS = (
+    'seahub_extra.krb5_auth.backend.RemoteKrbBackend',
+)
+EXTRA_MIDDLEWARE_CLASSES = (
+    'seahub_extra.krb5_auth.middleware.RemoteKrbMiddleware',
+)

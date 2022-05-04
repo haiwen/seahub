@@ -1,14 +1,15 @@
 # Copyright (c) 2012-2019 Seafile Ltd.
 
 import logging
+from datetime import timedelta
 
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from post_office.models import STATUS
 
 from seaserv import seafile_api
 
@@ -20,7 +21,7 @@ from seahub.base.accounts import User
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation, RepoShareInvitation
 from seahub.invitations.utils import block_accepter
-from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, GUEST_USER
 from seahub.share.utils import is_repo_admin
 from seahub.utils import is_org_context
@@ -28,6 +29,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 
 json_content_type = 'application/json; charset=utf-8'
 logger = logging.getLogger(__name__)
+
 
 class RepoShareInvitationsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -47,7 +49,7 @@ class RepoShareInvitationsView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
@@ -124,7 +126,7 @@ class RepoShareInvitationsBatchView(APIView):
         if username != repo_owner and not is_repo_admin(username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # main
         result = {}
         result['failed'] = []
@@ -173,20 +175,22 @@ class RepoShareInvitationsBatchView(APIView):
                     continue
             except User.DoesNotExist:
                 pass
-            
+
             if invitation_queryset.filter(accepter=accepter).exists():
                 invitation = invitation_queryset.filter(accepter=accepter)[0]
+                invitation.expire_time = timezone.now() + timedelta(hours=int(INVITATIONS_TOKEN_AGE))
+                invitation.save()
             else:
                 invitation = Invitation.objects.add(
                     inviter=request.user.username, accepter=accepter)
 
             if shared_queryset.filter(invitation=invitation).exists():
-                    result['failed'].append({
-                        'email': accepter,
-                        'error_msg': _('This item has been shared to %s.') % accepter
-                    })
-                    continue
-            
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('This item has been shared to %s.') % accepter
+                })
+                continue
+
             try:
                 RepoShareInvitation.objects.add(
                     invitation=invitation, repo_id=repo_id, path=path, permission=permission)
@@ -203,8 +207,9 @@ class RepoShareInvitationsBatchView(APIView):
 
             result['success'].append(data)
 
-            m = invitation.send_to(email=accepter)
-            if m.status != STATUS.sent:
+            send_sucess = invitation.send_to(email=accepter)
+
+            if not send_sucess:
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('Failed to send email, email service is not properly configured, please contact administrator.'),

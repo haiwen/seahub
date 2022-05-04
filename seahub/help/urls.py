@@ -32,14 +32,9 @@ urlpatterns = [
     url(r'^desktop_proxy/$', TemplateView.as_view(template_name="help/desktop_proxy.html") ),
     url(r'^conflicts/$', TemplateView.as_view(template_name="help/conflicts.html") ),
     url(r'^ignore/$', TemplateView.as_view(template_name="help/ignore.html") ),
-    url(r'^install_linux_client/$', TemplateView.as_view(template_name="help/install_linux_client.html") ),
-    url(r'^linux_cli/$', TemplateView.as_view(template_name="help/linux_cli.html") ),
 
     url(r'^using_drive_client/$', TemplateView.as_view(template_name="help/using_drive_client.html") ),
     url(r'^drive_client_2.0_for_windows_10/$', TemplateView.as_view(template_name="help/drive_client_2.0_for_windows_10.html") ),
-    url(r'^drive_client_for_linux/$', TemplateView.as_view(template_name="help/drive_client_for_linux.html") ),
 
     url(r'^encrypted_libraries/$', TemplateView.as_view(template_name="help/encrypted_libraries.html") ),
-
-    url(r'^faq/$', TemplateView.as_view(template_name="help/faq.html") ),
 ]

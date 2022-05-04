@@ -29,7 +29,7 @@ class IconButton extends React.Component {
     const className = 'btn-icon';
     const btnContent = (
       <React.Fragment>
-        <span className={this.props.icon}></span>
+        <i className={this.props.icon}></i>
         <Tooltip
           toggle={this.toggle}
           delay={{show: 0, hide: 0}}
@@ -47,6 +47,7 @@ class IconButton extends React.Component {
           className={className}
           tag="a"
           href={this.props.href}
+          aria-label={this.props.text}
         >
           {btnContent}
         </Button>
@@ -57,6 +58,7 @@ class IconButton extends React.Component {
           id={this.props.id}
           className={className}
           onClick={this.props.onClick}
+          aria-label={this.props.text}
         >
           {btnContent}
         </Button>

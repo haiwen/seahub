@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
 import logging
 import urllib.request, urllib.error, urllib.parse
 import posixpath
@@ -85,13 +86,17 @@ def slug(request, slug, file_path="home.md"):
         wiki.save()
         is_public_wiki = True
 
+    repo = seafile_api.get_repo(wiki.repo_id)
+
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
+        "repo_name": repo.name if repo else '',
         "page_name": file_path,
         "shared_token": fs.token,
         "shared_type": fs.s_type,
         "user_can_write": user_can_write,
         "file_path": file_path,
+        "filename": os.path.splitext(os.path.basename(file_path))[0],
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,

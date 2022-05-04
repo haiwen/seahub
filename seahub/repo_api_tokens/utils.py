@@ -205,7 +205,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
                 if file_type in (IMAGE, XMIND) or \
-                        file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
 
                     # if thumbnail has already been created, return its src.
                     # Then web browser will use this src to get thumbnail instead of

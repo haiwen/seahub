@@ -6,13 +6,11 @@ import ModalPortal from '../modal-portal';
 import { Modal } from 'reactstrap';
 import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
-import UpdateTagDialog from '../dialog/update-tag-dialog';
 import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  repoName: PropTypes.string.isRequired,
-  permission: PropTypes.bool.isRequired,
+  userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
@@ -26,17 +24,16 @@ class DirTool extends React.Component {
       isRepoTagDialogShow: false,
       currentTag: null,
       isListRepoTagShow: false,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false,
     };
   }
 
-  onShowListRepoTag = () => {
+  onShowListRepoTag = (e) => {
+    e.preventDefault();
     this.setState({
       isRepoTagDialogShow: true,
       isListRepoTagShow: true,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
@@ -46,7 +43,6 @@ class DirTool extends React.Component {
     this.setState({
       isRepoTagDialogShow: false,
       isListRepoTagShow: false,
-      isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
@@ -56,14 +52,6 @@ class DirTool extends React.Component {
     this.setState({
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
       isListRepoTagShow: !this.state.isListRepoTagShow,
-    });
-  }
-
-  onUpdateRepoTagToggle = (currentTag) => {
-    this.setState({
-      currentTag: currentTag,
-      isListRepoTagShow: !this.state.isListRepoTagShow,
-      isUpdateRepoTagShow: !this.state.isUpdateRepoTagShow,
     });
   }
 
@@ -81,12 +69,12 @@ class DirTool extends React.Component {
   }
 
   render() {
-    let { repoID, repoName, permission, currentPath } = this.props;
+    let { repoID, userPerm, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/' + repoID + '/trash/';
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/';
-    if (permission) {
+    if (userPerm === 'rw') {
       if (!isFile) {
         if (name) { // name not '' is not root path
           trashUrl = siteRoot + 'repo/' + repoID + '/trash/?path=' + encodeURIComponent(currentPath);
@@ -99,7 +87,7 @@ class DirTool extends React.Component {
           return (
             <Fragment>
               <ul className="path-toolbar">
-                <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
+                <li className="toolbar-item"><a className="op-link sf2-icon-tag" href="#" role="button" onClick={this.onShowListRepoTag} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-recycle" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
                 <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
               </ul>
@@ -112,8 +100,6 @@ class DirTool extends React.Component {
                         repoID={repoID}
                         onListTagCancel={this.onCloseRepoTagDialog}
                         onCreateRepoTag={this.onCreateRepoTagToggle}
-                        onUpdateRepoTag={this.onUpdateRepoTagToggle}
-                        onListTaggedFiles={this.onListTaggedFileToggle}
                       />
                     )}
                     {this.state.isCreateRepoTagShow && (
@@ -121,16 +107,6 @@ class DirTool extends React.Component {
                         repoID={repoID}
                         onClose={this.onCloseRepoTagDialog}
                         toggleCancel={this.onCreateRepoTagToggle}
-                      />
-                    )}
-                    {this.state.isUpdateRepoTagShow && (
-                      <UpdateTagDialog
-                        repoID={repoID}
-                        currentTag={this.state.currentTag}
-                        onClose={this.onCloseRepoTagDialog}
-                        toggleCancel={this.onUpdateRepoTagToggle}
-                        onDeleteRepoTag={this.props.onDeleteRepoTag}
-                        updateUsedRepoTags={this.props.updateUsedRepoTags}
                       />
                     )}
                     {this.state.isListTaggedFileShow && (

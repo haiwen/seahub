@@ -24,3 +24,4 @@ gettext('No permission logs');
 gettext('No login logs');
 gettext('No file update logs');
 gettext('No file access logs');
+gettext('Save Selected Items');

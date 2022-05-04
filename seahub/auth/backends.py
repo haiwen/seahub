@@ -1,3 +1,6 @@
+import os
+import sys
+
 import logging
 from fnmatch import fnmatch
 from collections import OrderedDict
@@ -14,6 +17,15 @@ from registration.models import notify_admins_on_activate_request, \
         notify_admins_on_register_complete
 
 logger = logging.getLogger(__name__)
+
+try:
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    seafile_conf_dir = os.path.join(current_path, '../../../../conf')
+    sys.path.append(seafile_conf_dir)
+    from seahub_custom_functions import custom_get_user_role
+    CUSTOM_GET_USER_ROLE = True
+except ImportError:
+    CUSTOM_GET_USER_ROLE = False
 
 
 # No longer maintained
@@ -236,11 +248,25 @@ class SeafileRemoteUserBackend(AuthBackend):
 
         profile.save()
 
-    # TODO, need test
     def update_user_role(self, user_info):
-        """ Specific for Shibboleth
-        """
 
+        if CUSTOM_GET_USER_ROLE:
+            remote_role_value = user_info.get('role', '')
+            if remote_role_value:
+                role = custom_get_user_role(remote_role_value)
+
+                # update user role
+                ccnet_api.update_role_emailuser(user_info['email'], role)
+
+                # update user role quota
+                role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
+                if role_quota:
+                    quota = get_quota_from_string(role_quota)
+                    seafile_api.set_role_quota(role, quota)
+
+                return
+
+        # Specific for Shibboleth
         affiliation = user_info.get('affiliation', '')
         if not affiliation:
             return

@@ -3,7 +3,7 @@ import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -169,7 +169,8 @@ class Item extends Component {
     this.setState({isShowSharedDialog: false});
   }
 
-  onStarRepo = () => {
+  onToggleStarRepo = (e) => {
+    e.preventDefault();
     const repoName = this.props.data.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {
@@ -194,6 +195,10 @@ class Item extends Component {
     }
   }
 
+  visitRepo = () => {
+    navigate(this.repoURL);
+  }
+
   render() {
     if (this.state.unshared) {
       return null;
@@ -203,26 +208,26 @@ class Item extends Component {
 
     data.icon_url = Utils.getLibIconUrl(data);
     data.icon_title = Utils.getLibIconTitle(data);
-    data.url = `${siteRoot}#shared-libs/lib/${data.repo_id}/`;
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
-    let shareRepoUrl =`${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
+    let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
     const desktopItem = (
       <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <td className="text-center">
-            {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
-            {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+            <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
+              <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
+            </a>
           </td>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td><Link to={shareRepoUrl}>{data.repo_name}</Link></td>
           <td>
             {(isPro && data.is_admin) &&
-              <a href="#" className={shareIconClassName} title={gettext('Share')} onClick={this.share}></a>
+              <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
             }
-            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} onClick={this.leaveShare}></a>
+            <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
           </td>
           <td>{data.size}</td>
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
@@ -249,8 +254,8 @@ class Item extends Component {
     const mobileItem = (
       <Fragment>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-          <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td>
+          <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
+          <td onClick={this.visitRepo}>
             <Link to={shareRepoUrl}>{data.repo_name}</Link><br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>
@@ -268,7 +273,7 @@ class Item extends Component {
               <div className={this.state.isOpMenuOpen ? '' : 'd-none'} onClick={this.toggleOpMenu}>
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.onStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
+                  <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
                   {(isPro && data.is_admin) &&
                   <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
                   }

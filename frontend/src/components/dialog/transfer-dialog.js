@@ -95,7 +95,7 @@ class TransferDialog extends React.Component {
             />
           }
           {isPro && canTransferToDept &&
-            <span className="action-link" onClick={this.onClick}>{this.state.transferToUser ?
+            <span role="button" tabIndex="0" className="action-link" onClick={this.onClick} onKeyDown={Utils.onKeyDown}>{this.state.transferToUser ?
               gettext('Transfer to department'): gettext('Transfer to user')}
             </span>
           }

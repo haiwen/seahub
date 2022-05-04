@@ -15,7 +15,7 @@
 {% block main_class %}d-flex ovhd{% endblock %}
 {% block main_content %}
 <div class="row flex-1 d-flex">
-    <div class="side-textnav col-md-3 side-nav">
+    <div class="side-textnav col-md-3 side-nav help-side-nav">
         <div class="hidden-md-up logo-container">
             <a href="{{ SITE_ROOT }}">
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
@@ -51,7 +51,7 @@
 
             <h3 class="hd">{% trans "Wiki and knowledge management" %}</h3>
             <ul class="side-textnav-tabs">
-                <li class="tab"><a href="{{ SITE_ROOT }}help/manage_library_as_wiki/">{% trans "Manage library as Wiki" %}</a></li>
+                <li class="tab"><a href="{{ SITE_ROOT }}help/manage_library_as_wiki/">{% trans "Managing a library as Wiki" %}</a></li>
             </ul>
             
             <h3 class="hd">{% trans "Desktop client and syncing" %}</h3>
@@ -65,25 +65,17 @@
                 <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
                 <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
                 <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
-                <li class="tab"><a href="{{ SITE_ROOT }}help/install_linux_client/">{% trans "Install on Linux" %}</a></li>
-                <li class="tab"><a href="{{ SITE_ROOT }}help/linux_cli/">{% trans "Seafile client for a CLI server" %}</a></li>
             </ul>
 
             <h3 class="hd">{% trans "Drive client" %}</h3>
             <ul class="side-textnav-tabs">
                 <li class="tab"><a href="{{ SITE_ROOT }}help/using_drive_client/">{% trans "Using Seafile drive client" %}</a></li>
                 <li class="tab"><a href="{{ SITE_ROOT }}help/drive_client_2.0_for_windows_10/">{% trans "Using drive client 2.0 on Windows" %}</a></li>
-                <li class="tab"><a href="{{ SITE_ROOT }}help/drive_client_for_linux/">{% trans "Drive client for Linux" %}</a></li>
             </ul>
 
             <h3 class="hd">{% trans "Security and encryption" %}</h3>
             <ul class="side-textnav-tabs">
                 <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
-            </ul>
-
-            <h3 class="hd">{% trans "FAQ" %}</h3>
-            <ul class="side-textnav-tabs">
-                <li class="tab"><a href="{{ SITE_ROOT }}help/faq/">{% trans "FAQ" %}</a></li>
             </ul>
         </div>
     </div>
@@ -92,14 +84,37 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('.side-nav li').each(function() {
-    var link_href = $('a', $(this)).attr('href');
-    if (link_href == location.pathname || link_href == location.pathname + 'introduction/') {
-        $(this).addClass('tab-cur');
-        if ($(this).offset().top > $(window).height()) {
-            $('.side-nav').scrollTop($(this).offset().top + $(this).outerHeight(true) - $(window).height());
+$('.side-nav li').each(function(index) {
+    var $link = $('a', $(this));
+    var link_href = $link.attr('href');
+    $link.attr('data-index', index);
+    if (link_href == location.pathname ||
+      link_href == location.pathname + 'introduction/') {
+      $(this).addClass('tab-cur');
+      if ($(this).offset().top > $(window).height()) {
+        var preSavedScrollTop;
+        try {
+          preSavedScrollTop = localStorage.getItem('help-nav-item-' + index);
+        } catch (e) {
+          // do nothing
         }
+        if (preSavedScrollTop) {
+          $('.side-nav').scrollTop(preSavedScrollTop);
+        } else {
+          $('.side-nav').scrollTop($(this).offset().top + $(this).outerHeight(true) - $(window).height() + 50);
+        }
+      }
     }
+});
+$('.help-side-nav .tab a').on('click', function() {
+  var scrollTop = $('.side-nav').scrollTop();
+  if (scrollTop > 0) {
+    try {
+      localStorage.setItem('help-nav-item-' + $(this).attr('data-index'), scrollTop);
+    } catch (e) {
+      // do nothing
+    }
+  }
 });
 </script>
 {% endblock %}

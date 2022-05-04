@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
-import { gettext, enableRepoHistorySetting } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -35,27 +35,30 @@ class LibOldFilesAutoDelDialog extends React.Component {
   }
 
   submit = () => {
-    let daysNeedTobeSet = this.state.autoDelDays;
+    let daysNeedTobeSet;
 
-    let reg = /^-?\d+$/;
-    let isvalid_days = reg.test(daysNeedTobeSet);
-    if (!isvalid_days || daysNeedTobeSet <= 0) {
-      this.setState({
-        errorInfo: gettext('Please enter a positive integer'),
-      });
-      return;
-    }
+    if (this.state.isAutoDel) {
+      daysNeedTobeSet = this.state.autoDelDays;
 
-    if (!this.state.isAutoDel) {
+      let reg = /^-?\d+$/;
+      let isvalid_days = reg.test(daysNeedTobeSet);
+      if (!isvalid_days || daysNeedTobeSet <= 0) {
+        this.setState({
+          errorInfo: gettext('Please enter a positive integer'),
+        });
+        return;
+      }
+
+    } else {
       daysNeedTobeSet = 0;    // if no auto del, give 0 to server
     }
 
+
     let repoID = this.props.repoID;
 
-    let message = gettext('Library old files auto delete days setted.');
     seafileAPI.setRepoOldFilesAutoDelDays(repoID, daysNeedTobeSet).then(res => {
-      toaster.success(message);
       this.props.toggleDialog();
+      toaster.success(gettext('Successfully set it.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -107,6 +110,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
                 type="text"
                 className="expire-input"
                 value={this.state.autoDelDays}
+                disabled={!this.state.isAutoDel}
                 onChange={this.onChange}
                 onKeyDown={this.handleKeyPress}
               />{' '}

@@ -49,6 +49,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -83,6 +84,14 @@ class DirentListView extends React.Component {
     this.currentItemRef = null;
 
     this.zipToken = null;
+
+    const { userPerm } = props;
+    this.canDrop = userPerm === 'rw';
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
+    if (isCustomPermission) {
+      const { modify } = customPermission.permission;
+      this.canDrop = modify;
+    }
   }
 
   freezeItem = () => {
@@ -169,7 +178,7 @@ class DirentListView extends React.Component {
   }
 
   showImagePopup = (curItem) => {
-    let items = this.props.direntList.filter((item) => {
+    let items = this.props.fullDirentList.filter((item) => {
       return Utils.imageCheck(item.name);
     });
 
@@ -315,12 +324,21 @@ class DirentListView extends React.Component {
     event.preventDefault();
     // Display menu items based on the permissions of the current path
     let permission = this.props.userPerm;
-    if (permission !== 'admin' && permission !== 'rw') {
+
+    const { isCustomPermission, customPermission } = Utils.getUserPermission(this.props.userPerm);
+    if (permission !== 'admin' && permission !== 'rw' && !isCustomPermission) {
       return;
     }
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
+      
+      // custom permission judgement
+      if (isCustomPermission) {
+        const { modify } = customPermission.permission;
+        if (!modify) return;
+      }
+
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
       this.handleContextClick(event, id, menuList);
     } else {
@@ -334,6 +352,13 @@ class DirentListView extends React.Component {
           this.onDirentClick(null);
           event.preventDefault();
           event.persist();
+
+          // custom permission judgement
+          if (isCustomPermission) {
+            const { modify } = customPermission.permission;
+            if (!modify) return;
+          }
+
           setTimeout(() => {
             let id = 'dirent-container-menu';
             let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
@@ -342,7 +367,17 @@ class DirentListView extends React.Component {
         }
       } else {
         let id = 'dirents-menu';
-        let menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        let menuList = [];
+        if (isCustomPermission) {
+          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
+          canModify && menuList.push(TextTranslation.MOVE);
+          canCopy && menuList.push(TextTranslation.COPY);
+          canDownload && menuList.push(TextTranslation.DOWNLOAD);
+          canDelete && menuList.push(TextTranslation.DELETE);
+        } else {
+          menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+        }
+
         this.handleContextClick(event, id, menuList);
       }
     }
@@ -448,7 +483,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragEnter = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     this.enteredCounter++;
@@ -461,7 +496,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragOver = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -472,7 +507,7 @@ class DirentListView extends React.Component {
   }
 
   onTableDragLeave = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     this.enteredCounter--;
@@ -482,7 +517,7 @@ class DirentListView extends React.Component {
   }
 
   tableDrop = (e) => {
-    if (Utils.isIEBrower()) {
+    if (Utils.isIEBrower() || !this.canDrop) {
       return false;
     }
     e.persist();
@@ -540,7 +575,7 @@ class DirentListView extends React.Component {
 
     return (
       <div
-        className={`table-container ${this.state.isListDropTipShow ? 'table-drop-active' : ''}`}
+        className={`table-container ${(this.state.isListDropTipShow && this.canDrop) ? 'table-drop-active' : ''}`}
         onMouseDown={this.onContainerMouseDown}
         onContextMenu={this.onContainerContextMenu}
         onClick={this.onContainerClick}
@@ -554,7 +589,7 @@ class DirentListView extends React.Component {
             <thead onMouseDown={this.onThreadMouseDown} onContextMenu={this.onThreadContextMenu}>
               <tr>
                 <th width="3%" className="pl10">
-                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
+                  <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected} />
                 </th>
                 <th width="3%" className="pl10">{/*icon */}</th>
                 <th width="5%" className="pl10">{/*star */}</th>
@@ -611,6 +646,7 @@ class DirentListView extends React.Component {
                   showDirentDetail={this.props.showDirentDetail}
                   onItemsMove={this.props.onItemsMove}
                   onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
+                  loadDirentList={this.props.loadDirentList}
                 />
               );
             })}

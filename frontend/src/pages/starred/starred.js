@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, enableVideoThumbnail } from '../../utils/constants';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
@@ -73,7 +73,7 @@ class TableBody extends Component {
 
   getThumbnails() {
     let items = this.state.items.filter((item) => {
-      return Utils.imageCheck(item.obj_name) && !item.repo_encrypted;
+      return (Utils.imageCheck(item.obj_name) || (enableVideoThumbnail && Utils.videoCheck(item.obj_name))) && !item.repo_encrypted;
     });
     if (items.length == 0) {
       return ;
@@ -170,6 +170,15 @@ class Item extends Component {
     });
   }
 
+  visitItem = () => {
+    const data = this.props.data;
+    if (data.is_dir) {
+      navigate(data.dirent_view_url);
+    } else {
+      window.open(data.dirent_view_url);
+    }
+  }
+
   render() {
 
     if (this.state.unstarred) {
@@ -182,7 +191,7 @@ class Item extends Component {
     opClasses += this.state.showOpIcon ? '' : ' invisible';
 
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center">
           {
             data.thumbnail_url ?
@@ -199,21 +208,21 @@ class Item extends Component {
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
+          <a href="#" role="button" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.unstar}></a>
         </td>
       </tr>
     );
 
     const mobileItem = (
       <tr>
-        <td className="text-center">
+        <td className="text-center" onClick={this.visitItem}>
           {
             data.thumbnail_url ?
               <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
               <img src={data.item_icon_url} alt={gettext('icon')} width="24" />
           }
         </td>
-        <td>
+        <td onClick={this.visitItem}>
           { data.is_dir ?
             <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
             <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>

@@ -9,7 +9,7 @@
 # ilearnit <helloworld.c@outlook.com>, 2018
 # Daniel Pan <daniel.pan@seafile.com>, 2016
 # imwhatiam <imwhatiam123@gmail.com>, 2014-2019
-# llj <lingjun.li1@gmail.com>, 2017-2020
+# llj <lingjun.li1@gmail.com>, 2017-2022
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
 # zheng xie <xiez1989@gmail.com>, 2014-2019
@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 12:02+0800\n"
-"PO-Revision-Date: 2020-07-27 04:20+0000\n"
+"POT-Creation-Date: 2022-02-18 10:13+0800\n"
+"PO-Revision-Date: 2022-01-19 08:28+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -31,84 +31,83 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: seahub/api2/endpoints/admin/account.py:195 seahub/api2/endpoints/user.py:81
-#: seahub/api2/views.py:354
+#: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
+#: seahub/api2/views.py:357
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "名字太长（最多 64 个字）"
 
-#: seahub/api2/endpoints/admin/account.py:199 seahub/api2/endpoints/user.py:85
-#: seahub/api2/views.py:358 seahub/forms.py:44 seahub/profile/forms.py:27
+#: seahub/api2/endpoints/admin/account.py:190 seahub/api2/endpoints/user.py:85
+#: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "名字不能包含 ‘/’。"
 
-#: seahub/api2/endpoints/admin/account.py:214
+#: seahub/api2/endpoints/admin/account.py:205
 msgid "Login id can't be empty"
 msgstr "登录 ID 不能为空"
 
-#: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:853
+#: seahub/api2/endpoints/admin/account.py:209
+#: seahub/api2/endpoints/admin/users.py:1054
 #, python-format
 msgid "Login id %s already exists."
 msgstr "登录 ID %s 已存在。"
 
-#: seahub/api2/endpoints/admin/account.py:225
+#: seahub/api2/endpoints/admin/account.py:216
 msgid "Department is too long (maximum is 512 characters)"
 msgstr "部门太长（最多 512 个字）"
 
-#: seahub/api2/endpoints/admin/account.py:241 seahub/forms.py:155
+#: seahub/api2/endpoints/admin/account.py:232 seahub/forms.py:155
 msgid "Space quota can't be empty"
 msgstr "存储空间配额不能为空"
 
-#: seahub/api2/endpoints/admin/account.py:247
+#: seahub/api2/endpoints/admin/account.py:238
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "必须是大于等于 0 的整数。"
 
-#: seahub/api2/endpoints/admin/account.py:251
-#: seahub/api2/endpoints/admin/users_batch.py:177 seahub/forms.py:156
+#: seahub/api2/endpoints/admin/account.py:242
+#: seahub/api2/endpoints/admin/users_batch.py:176 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "存储空间配额太小（最小为0）"
 
-#: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:432 seahub/views/sysadmin.py:335
+#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:211
+#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "配额设置失败：最大配额是 %d MB"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:80
-#: seahub/api2/endpoints/wikis.py:210
-msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr "名称只能包含字母、数字、空格、中划线或下划线。"
+#: seahub/api2/endpoints/admin/address_book/groups.py:82
+#: seahub/api2/endpoints/admin/groups.py:129
+#: seahub/api2/endpoints/admin/groups.py:268
+#: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
+#: seahub/api2/views.py:4594 seahub/group/forms.py:36
+msgid ""
+"Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
+"brackets or underscore."
+msgstr "名称只能包含字母，数字，空格，点，单引号，括号或下划线。"
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
-#: seahub/api2/endpoints/admin/groups.py:134
-#: seahub/api2/endpoints/groups.py:213 seahub/api2/endpoints/groups.py:289
+#: seahub/api2/endpoints/admin/groups.py:136
+#: seahub/api2/endpoints/admin/groups.py:272
+#: seahub/api2/endpoints/groups.py:221 seahub/api2/endpoints/groups.py:294
 msgid "There is already a group with that name."
 msgstr "已有同名群组"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:240
+#: seahub/api2/endpoints/admin/address_book/groups.py:241
 msgid "There are libraries in this department."
 msgstr "部门中有资料库。"
 
-#: seahub/api2/endpoints/admin/address_book/groups.py:244
+#: seahub/api2/endpoints/admin/address_book/groups.py:245
 msgid "There are sub-departments in this department."
 msgstr "该部门中包含子部门。"
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:663 seahub/views/__init__.py:664
-#: seahub/views/__init__.py:668 seahub/views/__init__.py:669
+#: seahub/views/__init__.py:664 seahub/views/__init__.py:665
+#: seahub/views/__init__.py:669 seahub/views/__init__.py:670
 msgid "My Library"
 msgstr "私人资料库"
 
-#: seahub/api2/endpoints/admin/groups.py:127
-#: seahub/api2/endpoints/groups.py:208
-msgid ""
-"Group name can only contain letters, numbers, blank, hyphen, dot, single "
-"quote or underscore"
-msgstr "群组名称只能包含字母、数字、空格、中划线、单引号、下划线或中文"
-
-#: seahub/api2/endpoints/admin/groups.py:213
-#: seahub/api2/endpoints/groups.py:315
+#: seahub/api2/endpoints/admin/groups.py:216
+#: seahub/api2/endpoints/groups.py:320
 #, python-format
 msgid "User %s is already group owner."
 msgstr "用户 %s 已经是群组拥有者。"
@@ -126,95 +125,98 @@ msgid ""
 "institution"
 msgstr "添加 %s 到机构失败：用户已经属于该机构"
 
-#: seahub/api2/endpoints/admin/libraries.py:253 seahub/views/sysadmin.py:750
+#: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:721
 msgid "System library can not be deleted."
 msgstr "系统资料库无法被删除。"
 
-#: seahub/api2/endpoints/admin/libraries.py:374 seahub/api2/views.py:1609
+#: seahub/api2/endpoints/admin/libraries.py:386 seahub/api2/views.py:1660
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr "转让失败：角色 %s 是 %s，无法添加资料库。"
 
-#: seahub/api2/endpoints/admin/libraries.py:395 seahub/api2/views.py:1614
+#: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1665
 msgid "Library can not be transferred to owner."
 msgstr "资料库无法转让给所有者。"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:513
+#: seahub/api2/endpoints/share_links.py:554
 msgid "There is an associated published library."
 msgstr "有一个相关联的已发布资料库。"
 
-#: seahub/api2/endpoints/admin/shares.py:183
+#: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
 msgstr "用户 %s 已经是资料库拥有者。"
 
-#: seahub/api2/endpoints/admin/shares.py:191
-#: seahub/api2/endpoints/invitations.py:51
+#: seahub/api2/endpoints/admin/shares.py:193
+#: seahub/api2/endpoints/invitations.py:50
 #: seahub/api2/endpoints/invitations.py:110
-#: seahub/api2/endpoints/repo_share_invitations.py:154
+#: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
 msgstr "邮箱 %s 无效。"
 
-#: seahub/api2/endpoints/admin/shares.py:209
-#: seahub/api2/endpoints/admin/shares.py:266
-#: seahub/api2/endpoints/dir_shared_items.py:336
-#: seahub/api2/endpoints/dir_shared_items.py:435
-#: seahub/api2/endpoints/group_owned_libraries.py:933
-#: seahub/api2/endpoints/group_owned_libraries.py:1201
-#: seahub/api2/endpoints/repo_share_invitations.py:186
+#: seahub/api2/endpoints/admin/shares.py:211
+#: seahub/api2/endpoints/admin/shares.py:268
+#: seahub/api2/endpoints/dir_shared_items.py:346
+#: seahub/api2/endpoints/dir_shared_items.py:459
+#: seahub/api2/endpoints/group_owned_libraries.py:942
+#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
 msgstr "已经被共享至 %s 。"
 
-#: seahub/api2/endpoints/admin/statistics.py:371
+#: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/sysadmin_extra/views.py:57
 msgid "Time"
 msgstr "时间"
 
-#: seahub/api2/endpoints/admin/statistics.py:371
+#: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/templates/file_access.html:24
 msgid "User"
 msgstr "用户"
 
-#: seahub/api2/endpoints/admin/statistics.py:371
+#: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 msgid "Web Download"
 msgstr "网页下载"
 
-#: seahub/api2/endpoints/admin/statistics.py:372
+#: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 msgid "Sync Download"
 msgstr "同步下载"
 
-#: seahub/api2/endpoints/admin/statistics.py:372
+#: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 msgid "Link Download"
 msgstr "共享链接下载"
 
-#: seahub/api2/endpoints/admin/statistics.py:373
+#: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 msgid "Web Upload"
 msgstr "网页上传"
 
-#: seahub/api2/endpoints/admin/statistics.py:373
+#: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 msgid "Sync Upload"
 msgstr "同步上传"
 
-#: seahub/api2/endpoints/admin/statistics.py:374
+#: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 msgid "Link Upload"
 msgstr "共享链接上传"
 
-#: seahub/api2/endpoints/admin/statistics.py:419
+#: seahub/api2/endpoints/admin/statistics.py:445
+#: seahub/api2/endpoints/group_members.py:524
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -227,12 +229,12 @@ msgstr "共享链接上传"
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
-#: seahub/views/sysadmin.py:819
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
+#: seahub/views/sysadmin.py:790
 msgid "Email"
 msgstr "邮箱"
 
-#: seahub/api2/endpoints/admin/statistics.py:419
+#: seahub/api2/endpoints/admin/statistics.py:445
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -242,123 +244,125 @@ msgstr "邮箱"
 #: seahub/institutions/templates/institutions/user_info.html:105
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/sysadmin_extra/views.py:57
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
-#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:208
-#: seahub/views/sysadmin.py:212 seahub/views/sysadmin.py:697
-#: seahub/views/sysadmin.py:819
+#: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
+#: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
+#: seahub/views/sysadmin.py:792
 msgid "Name"
 msgstr "名称"
 
-#: seahub/api2/endpoints/admin/statistics.py:419 seahub/auth/forms.py:243
+#: seahub/api2/endpoints/admin/statistics.py:445 seahub/auth/forms.py:255
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/templates/registration/password_set_form.html:16
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
 msgstr "联系人邮箱"
 
-#: seahub/api2/endpoints/admin/statistics.py:420
+#: seahub/api2/endpoints/admin/statistics.py:446
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
 msgstr "已用空间"
 
-#: seahub/api2/endpoints/admin/statistics.py:420
+#: seahub/api2/endpoints/admin/statistics.py:446
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:213
-#: seahub/views/sysadmin.py:820
+#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
+#: seahub/views/sysadmin.py:794
 msgid "Space Quota"
 msgstr "容量"
 
-#: seahub/api2/endpoints/admin/users.py:422
-#: seahub/api2/endpoints/admin/users.py:447
-#: seahub/organizations/api/admin/users.py:147
+#: seahub/api2/endpoints/admin/users.py:472
+#: seahub/api2/endpoints/admin/users.py:499
+#: seahub/organizations/api/admin/users.py:144
 msgid "There are more than 500 users, and sort is not offered."
 msgstr "用户数超过了 500, 不提供排序。"
 
-#: seahub/api2/endpoints/admin/users.py:510 seahub/base/accounts.py:781
+#: seahub/api2/endpoints/admin/users.py:573
+#: seahub/api2/endpoints/admin/users.py:1026 seahub/base/accounts.py:784
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "用户数量超过限制。"
 
-#: seahub/api2/endpoints/admin/users.py:605
+#: seahub/api2/endpoints/admin/users.py:667
 #, python-format
 msgid "Successfully added user %(user)s."
 msgstr "成功添加用户 %(user)s。"
 
-#: seahub/api2/endpoints/admin/users.py:609
-#: seahub/api2/endpoints/admin/users_batch.py:377 seahub/views/sysadmin.py:596
+#: seahub/api2/endpoints/admin/users.py:671
+#: seahub/api2/endpoints/admin/users_batch.py:385 seahub/views/sysadmin.py:567
 #, python-format
 msgid "You are invited to join %s"
 msgstr "你被邀请加入 %s"
 
-#: seahub/api2/endpoints/admin/users.py:611
+#: seahub/api2/endpoints/admin/users.py:677
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
 msgstr "成功添加用户 %(user)s。通知邮件已发送。"
 
-#: seahub/api2/endpoints/admin/users.py:614
+#: seahub/api2/endpoints/admin/users.py:680
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
 msgstr "成功添加用户 %(user)s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: seahub/api2/endpoints/admin/users.py:926
+#: seahub/api2/endpoints/admin/users.py:1126
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "权限修改成功"
 
-#: seahub/api2/endpoints/admin/users.py:929 seahub/views/sysadmin.py:499
+#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "你的 %s 帐户已激活。"
 
-#: seahub/api2/endpoints/admin/users.py:931
+#: seahub/api2/endpoints/admin/users.py:1134
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "编辑成功，一封邮件已发送。"
 
-#: seahub/api2/endpoints/admin/users.py:934
+#: seahub/api2/endpoints/admin/users.py:1137
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1012 seahub/views/sysadmin.py:540
+#: seahub/api2/endpoints/admin/users.py:1215 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "%s 密码已重置"
 
-#: seahub/api2/endpoints/admin/users.py:1014 seahub/views/sysadmin.py:565
+#: seahub/api2/endpoints/admin/users.py:1217 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "密码已重置为 %(passwd)s, 通知邮件已发送给 %(user)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1018 seahub/views/sysadmin.py:570
+#: seahub/api2/endpoints/admin/users.py:1221 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "成功将用户密码重置为 %(passwd)s, 但发送通知邮件到 %(user)s 失败，请检查你的邮件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1021 seahub/views/sysadmin.py:574
+#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: seahub/api2/endpoints/admin/users.py:1024 seahub/views/sysadmin.py:577
+#: seahub/api2/endpoints/admin/users.py:1227 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -366,9 +370,34 @@ msgid ""
 "configured."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知邮件无法发送。"
 
-#: seahub/api2/endpoints/admin/users_batch.py:173
+#: seahub/api2/endpoints/admin/users_batch.py:172
 msgid "must be an integer that is greater than or equal to 0."
 msgstr "必须是大于等于 0 的整数。"
+
+#: seahub/api2/endpoints/admin/virus_scan_records.py:200
+msgid "Virus file is not found."
+msgstr "病毒文件未找到。"
+
+#: seahub/api2/endpoints/admin/virus_scan_records.py:218
+#: seahub/api2/endpoints/admin/virus_scan_records.py:233
+#: seahub/api2/endpoints/admin/virus_scan_records.py:248
+#: seahub/api2/endpoints/file_participants.py:129
+#: seahub/api2/endpoints/file_tag.py:175
+#: seahub/api2/endpoints/invitations.py:78
+#: seahub/api2/endpoints/repo_set_password.py:72
+#: seahub/api2/endpoints/repo_share_invitations.py:201
+#: seahub/api2/endpoints/send_upload_link_email.py:107
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3849
+#: seahub/notifications/models.py:462 seahub/notifications/models.py:503
+#: seahub/notifications/models.py:554 seahub/notifications/models.py:610
+#: seahub/notifications/models.py:640 seahub/notifications/models.py:662
+#: seahub/notifications/models.py:688 seahub/notifications/models.py:705
+#: seahub/notifications/models.py:722 seahub/notifications/models.py:751
+#: seahub/search/views.py:200 seahub/utils/__init__.py:166
+#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:915
+#: seahub/views/ajax.py:401 seahub/views/ajax.py:405
+msgid "Internal Server Error"
+msgstr "服务器内部错误"
 
 #: seahub/api2/endpoints/copy_move_task.py:80
 #: seahub/api2/endpoints/move_folder_merge.py:129
@@ -380,42 +409,42 @@ msgstr "目标路径过长"
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
-#: seahub/api2/endpoints/copy_move_task.py:150
-#: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1752
-#: seahub/api2/views.py:1792 seahub/api2/views.py:1841
-#: seahub/api2/views.py:1885 seahub/api2/views.py:1931
-#: seahub/api2/views.py:1980 seahub/api2/views.py:2391
-#: seahub/api2/views.py:2505
+#: seahub/api2/endpoints/copy_move_task.py:147
+#: seahub/api2/endpoints/move_folder_merge.py:168
+#: seahub/api2/endpoints/repos_batch.py:480 seahub/api2/views.py:1803
+#: seahub/api2/views.py:1843 seahub/api2/views.py:1894
+#: seahub/api2/views.py:1938 seahub/api2/views.py:1984
+#: seahub/api2/views.py:2033 seahub/api2/views.py:2438
+#: seahub/api2/views.py:2546
 msgid "Out of quota."
 msgstr "空间已超"
 
-#: seahub/api2/endpoints/copy_move_task.py:165
+#: seahub/api2/endpoints/copy_move_task.py:163
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
-#: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:294 seahub/api2/endpoints/file.py:385
-#: seahub/api2/endpoints/file.py:494 seahub/api2/endpoints/file.py:571
-#: seahub/api2/endpoints/file.py:664
+#: seahub/api2/endpoints/copy_move_task.py:179
+#: seahub/api2/endpoints/file.py:294 seahub/api2/endpoints/file.py:383
+#: seahub/api2/endpoints/file.py:492 seahub/api2/endpoints/file.py:569
+#: seahub/api2/endpoints/file.py:693
 msgid "File is locked"
 msgstr "文件已锁定"
 
-#: seahub/api2/endpoints/copy_move_task.py:244
+#: seahub/api2/endpoints/copy_move_task.py:243
 msgid "Cancel failed"
 msgstr "取消失败"
 
-#: seahub/api2/endpoints/dir_shared_items.py:320
+#: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:917
+#: seahub/api2/endpoints/group_owned_libraries.py:926
 msgid "username invalid."
 msgstr "用户名不合法。"
 
-#: seahub/api2/endpoints/dir_shared_items.py:329
+#: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:926
-#: seahub/oauth/views.py:177
+#: seahub/api2/endpoints/group_owned_libraries.py:935
+#: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
 msgstr "未找到用户 %s 。"
@@ -425,41 +454,24 @@ msgstr "未找到用户 %s 。"
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:215 seahub/thumbnail/views.py:51
-#: seahub/thumbnail/views.py:166 seahub/views/__init__.py:738
-#: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
+#: seahub/profile/views.py:225 seahub/search/views.py:174
+#: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
+#: seahub/views/__init__.py:739 seahub/views/ajax.py:83
+#: seahub/views/ajax.py:113 seahub/views/ajax.py:119
 msgid "Permission denied."
 msgstr "没有权限"
 
-#: seahub/api2/endpoints/file.py:586 seahub/api2/endpoints/file.py:604
+#: seahub/api2/endpoints/file.py:598 seahub/api2/endpoints/file.py:618
 msgid "File is not locked."
 msgstr "文件没有被锁定。"
 
-#: seahub/api2/endpoints/file.py:616 seahub/api2/endpoints/share_links.py:581
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
 msgid "You can not refresh this file's lock."
 msgstr "不能刷新文件锁。"
 
 #: seahub/api2/endpoints/file_participants.py:120
 msgid "The participant already exists."
 msgstr "该参与者已存在。"
-
-#: seahub/api2/endpoints/file_participants.py:129
-#: seahub/api2/endpoints/file_tag.py:175
-#: seahub/api2/endpoints/invitations.py:78
-#: seahub/api2/endpoints/repo_set_password.py:70
-#: seahub/api2/endpoints/repo_share_invitations.py:197
-#: seahub/api2/endpoints/send_upload_link_email.py:105
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3807
-#: seahub/notifications/models.py:465 seahub/notifications/models.py:506
-#: seahub/notifications/models.py:557 seahub/notifications/models.py:613
-#: seahub/notifications/models.py:643 seahub/notifications/models.py:665
-#: seahub/notifications/models.py:691 seahub/notifications/models.py:708
-#: seahub/notifications/models.py:725 seahub/notifications/models.py:754
-#: seahub/utils/__init__.py:172 seahub/utils/__init__.py:1185
-#: seahub/views/__init__.py:904 seahub/views/__init__.py:923
-#: seahub/views/ajax.py:401 seahub/views/ajax.py:405
-msgid "Internal Server Error"
-msgstr "服务器内部错误"
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
@@ -468,59 +480,76 @@ msgstr "服务器内部错误"
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "标签只能包含字母，数字，点，中划线或下划线。"
 
-#: seahub/api2/endpoints/group_members.py:94
-#: seahub/api2/endpoints/group_members.py:293
+#: seahub/api2/endpoints/group_members.py:109
+#: seahub/api2/endpoints/group_members.py:342
+#: seahub/api2/endpoints/group_members.py:474
 #, python-format
 msgid "User %s is already a group member."
 msgstr "用户 %s 已经是群组成员。"
 
-#: seahub/api2/endpoints/group_members.py:100
-#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1594
+#: seahub/api2/endpoints/group_members.py:115
+#: seahub/api2/endpoints/group_members.py:351
+#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:323
+#: seahub/organizations/api/admin/users.py:322
 #, python-format
 msgid "User %s not found in organization."
 msgstr "机构内无用户 %s 。"
 
-#: seahub/api2/endpoints/group_owned_libraries.py:372
-#: seahub/api2/endpoints/group_owned_libraries.py:644
+#: seahub/api2/endpoints/group_members.py:118
+#: seahub/api2/endpoints/group_members.py:359
+#: seahub/api2/endpoints/group_members.py:491
+#, python-format
+msgid "User %s is an organization user."
+msgstr " %s 是机构用户。"
+
+#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/group/error_msg.py:23 seahub/views/file.py:464
+msgid "Group does not exist"
+msgstr "群组不存在。"
+
+#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
+msgid "Failed to export Excel"
+msgstr "导出 Excel 失败"
+
+#: seahub/api2/endpoints/group_owned_libraries.py:375
+#: seahub/api2/endpoints/group_owned_libraries.py:651
 msgid "Permission already exists."
 msgstr "权限已存在。"
 
-#: seahub/api2/endpoints/groups.py:284 seahub/group/forms.py:36
-msgid ""
-"Group name can only contain letters, numbers, blank, hyphen or underscore"
-msgstr "群组名称只能包含字母、数字、空格、中划线、下划线或中文"
-
-#: seahub/api2/endpoints/invitation.py:104
+#: seahub/api2/endpoints/invitation.py:106
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
 msgstr "%(user)s 取消了你访问 %(site_name)s 的权限。"
 
-#: seahub/api2/endpoints/invitations.py:55
+#: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
-#: seahub/api2/endpoints/repo_share_invitations.py:161
+#: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
 msgstr "此邮箱不能被邀请为访客用户。"
 
-#: seahub/api2/endpoints/invitations.py:60
-#: seahub/api2/endpoints/invitations.py:125
+#: seahub/api2/endpoints/invitations.py:59
+#: seahub/api2/endpoints/invitations.py:126
 #, python-format
 msgid "%s is already invited."
 msgstr "%s 已被邀请。"
 
-#: seahub/api2/endpoints/invitations.py:67
-#: seahub/api2/endpoints/invitations.py:135
-#: seahub/api2/endpoints/repo_share_invitations.py:171
-#: seahub/base/accounts.py:791
+#: seahub/api2/endpoints/invitations.py:66
+#: seahub/api2/endpoints/invitations.py:137
+#: seahub/api2/endpoints/repo_share_invitations.py:173
+#: seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
 msgstr "用户 %s 已存在。"
 
-#: seahub/api2/endpoints/invitations.py:149
-#: seahub/api2/endpoints/repo_share_invitations.py:210
-#: seahub/auth/forms.py:115
+#: seahub/api2/endpoints/invitations.py:151
+#: seahub/api2/endpoints/repo_share_invitations.py:215
+#: seahub/api2/endpoints/send_share_link_email.py:34
+#: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:122
+#: seahub/share/views.py:136 seahub/share/views.py:264
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
@@ -533,144 +562,134 @@ msgstr "邮件发送失败， 邮箱服务没配置好，请联系管理员。"
 msgid "Error"
 msgstr "错误"
 
-#: seahub/api2/endpoints/repo_commit_revert.py:68
+#: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
 msgstr "当前资料库尚未解密。"
 
-#: seahub/api2/endpoints/repo_send_new_password.py:44
+#: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
 msgstr "此功能未开启。"
 
-#: seahub/api2/endpoints/repo_send_new_password.py:65
-#: seahub/api2/endpoints/repo_set_password.py:160
+#: seahub/api2/endpoints/repo_send_new_password.py:75
+#: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
 msgstr "无法重置这个资料库的密码。"
 
-#: seahub/api2/endpoints/repo_send_new_password.py:72
+#: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
 msgstr "资料库 %s的新密码"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3804
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3846
 msgid "Wrong password"
 msgstr "密码错误"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3810
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:3852
 msgid "Decrypt library error"
 msgstr "解密资料库出错"
 
-#: seahub/api2/endpoints/repo_set_password.py:127
+#: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
 msgstr "密码错误"
 
-#: seahub/api2/endpoints/repos_batch.py:1254
-#: seahub/api2/endpoints/repos_batch.py:1473
-#: seahub/api2/endpoints/repos_batch.py:1562
+#: seahub/api2/endpoints/repos_batch.py:1241
+#: seahub/api2/endpoints/repos_batch.py:1458
+#: seahub/api2/endpoints/repos_batch.py:1547
 #, python-format
 msgid "File %s is locked."
 msgstr "文件%s已锁定"
 
-#: seahub/api2/endpoints/repos_batch.py:1263
-#: seahub/api2/endpoints/repos_batch.py:1482
+#: seahub/api2/endpoints/repos_batch.py:1250
+#: seahub/api2/endpoints/repos_batch.py:1467
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "无法移动文件夹%s，请检查其权限。"
 
-#: seahub/api2/endpoints/repos_batch.py:1570
+#: seahub/api2/endpoints/repos_batch.py:1555
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "无法删除文件夹%s，请检查其权限。"
 
-#: seahub/api2/endpoints/send_share_link_email.py:33
-#: seahub/api2/endpoints/send_upload_link_email.py:32
-#: seahub/share/views.py:134
-msgid ""
-"Sending shared link failed. Email service is not properly configured, please"
-" contact administrator."
-msgstr "由于邮箱服务未正确配置，发送共享链接失败，请联系管理员。"
-
-#: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/share/views.py:183
+#: seahub/api2/endpoints/send_share_link_email.py:102
+#: seahub/share/views.py:185
 msgid "file"
 msgstr "文件"
 
-#: seahub/api2/endpoints/send_share_link_email.py:101
-#: seahub/share/views.py:184
+#: seahub/api2/endpoints/send_share_link_email.py:103
+#: seahub/share/views.py:186
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr "有人在 %s 上共享了一个文件给你"
 
-#: seahub/api2/endpoints/send_share_link_email.py:103
-#: seahub/share/views.py:190
+#: seahub/api2/endpoints/send_share_link_email.py:105
+#: seahub/share/views.py:192
 msgid "directory"
 msgstr "目录"
 
-#: seahub/api2/endpoints/send_share_link_email.py:104
-#: seahub/share/views.py:191
+#: seahub/api2/endpoints/send_share_link_email.py:106
+#: seahub/share/views.py:193
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr "在 %s 上，有一文件夹共享给你。"
 
-#: seahub/api2/endpoints/send_upload_link_email.py:73
+#: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
 msgstr "邮箱无效。"
 
-#: seahub/api2/endpoints/send_upload_link_email.py:95
-#: seahub/share/views.py:301
+#: seahub/api2/endpoints/send_upload_link_email.py:97
+#: seahub/share/views.py:305
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一个上传链接给你"
 
-#: seahub/api2/endpoints/share_link_zip_task.py:103
-#: seahub/api2/endpoints/zip_task.py:103 seahub/views/__init__.py:907
-#, python-format
-msgid "Unable to download directory \"%s\": size is too large."
-msgstr "无法下载 \"%s\"：目录大小超过限制。"
+#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
+#: seahub/api2/views.py:4122
+msgid "Password is required."
+msgstr "密码为必填项。"
 
-#: seahub/api2/endpoints/share_link_zip_task.py:243
-#: seahub/api2/endpoints/zip_task.py:139 seahub/api2/endpoints/zip_task.py:273
-msgid "Total size exceeds limit."
-msgstr "总大小已经超过限制。"
-
-#: seahub/api2/endpoints/share_links.py:246
+#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "密码长度太短。"
 
-#: seahub/api2/endpoints/share_links.py:269
-#: seahub/api2/endpoints/upload_links.py:181 seahub/api2/views.py:3375
+#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/webdav_secret.py:61
+msgid "Password is too weak."
+msgstr "密码太弱。"
+
+#: seahub/api2/endpoints/share_links.py:302
+#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "过期天数需要大于等于 %s"
 
-#: seahub/api2/endpoints/share_links.py:275
-#: seahub/api2/endpoints/upload_links.py:187 seahub/api2/views.py:3381
+#: seahub/api2/endpoints/share_links.py:308
+#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "过期天数需要小于等于 %s"
 
-#: seahub/api2/endpoints/share_links.py:297
-#: seahub/api2/endpoints/upload_links.py:209
+#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/upload_links.py:224
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "过期时间应晚于 %s。"
 
-#: seahub/api2/endpoints/share_links.py:306
-#: seahub/api2/endpoints/upload_links.py:218
+#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/upload_links.py:233
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "过期时间应早于 %s。"
 
-#: seahub/api2/endpoints/share_links.py:369
-#: seahub/api2/endpoints/share_links.py:378
+#: seahub/api2/endpoints/share_links.py:408
+#: seahub/api2/endpoints/share_links.py:417
 #, python-format
 msgid "Share link %s already exists."
 msgstr "共享链接 \"%s\" 已存在。"
-
-#: seahub/api2/endpoints/upload_links.py:158
-#: seahub/templates/snippets/repo_create_js.html:50
-msgid "Password is too short"
-msgstr "密码太短"
 
 #: seahub/api2/endpoints/user.py:99
 #, python-format
@@ -702,6 +721,10 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "你已经有 %(nb_avatars)d 个头像, 最多允许拥有 %(nb_max_avatars)d 个."
 
+#: seahub/api2/endpoints/webdav_secret.py:53
+msgid "Length of WebDav password should be less than 30."
+msgstr "WebDAV 密码长度需要少于 30 个字符。"
+
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
 msgid "%s is taken by others, please try another name."
@@ -715,106 +738,110 @@ msgstr "Wiki未找到。"
 msgid "Name is required."
 msgstr "名称为必填项。"
 
-#: seahub/auth/decorators.py:74
+#: seahub/api2/endpoints/wikis.py:210
+msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
+msgstr "名称只能包含字母、数字、空格、中划线或下划线。"
+
+#: seahub/auth/decorators.py:73
 msgid "Please log in."
 msgstr "请登录。"
 
-#: seahub/auth/forms.py:26 seahub/templates/registration/login.html:37
+#: seahub/auth/forms.py:28 seahub/templates/registration/login.html:37
 msgid "Email or Username"
 msgstr "邮箱或用户名"
 
-#: seahub/auth/forms.py:27 seahub/auth/forms.py:217
-#: seahub/base/accounts.py:769
+#: seahub/auth/forms.py:29 seahub/auth/forms.py:229
+#: seahub/base/accounts.py:772
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
 #: seahub/templates/decrypt_repo_form.html:10
 #: seahub/templates/registration/login.html:38
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
-#: seahub/templates/share_access_validation.html:15
-#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:819
+#: seahub/templates/share_access_validation.html:23
+#: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:791
 msgid "Password"
 msgstr "密码"
 
-#: seahub/auth/forms.py:65
+#: seahub/auth/forms.py:72
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
 msgstr "请输入正确的邮箱／用户名和密码。字母请注意区分大小写。"
 
-#: seahub/auth/forms.py:71 seahub/auth/forms.py:123
+#: seahub/auth/forms.py:78 seahub/auth/forms.py:130
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr "该邮箱没有相关联的用户帐号。确定注册了吗？"
 
-#: seahub/auth/forms.py:86 seahub/auth/forms.py:87
+#: seahub/auth/forms.py:93 seahub/auth/forms.py:94
 msgid "This account is inactive."
 msgstr "该帐户未激活。"
 
-#: seahub/auth/forms.py:92
+#: seahub/auth/forms.py:99
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr "你的浏览器似乎没启用 cookie. 登录需要 cookie."
 
-#: seahub/auth/forms.py:108
+#: seahub/auth/forms.py:115
 msgid "E-mail"
 msgstr "邮箱"
 
-#: seahub/auth/forms.py:126
+#: seahub/auth/forms.py:133
 msgid "Can not reset password, please contact LDAP admin."
 msgstr "不能重置密码，请联系 LDAP 管理员。"
 
-#: seahub/auth/forms.py:149
+#: seahub/auth/forms.py:156
 #, python-format
 msgid "Reset Password on %s"
 msgstr "%s 密码重置"
 
-#: seahub/auth/forms.py:157
+#: seahub/auth/forms.py:165
 msgid "New password"
 msgstr "新密码"
 
-#: seahub/auth/forms.py:158
+#: seahub/auth/forms.py:166
 msgid "New password confirmation"
 msgstr "新密码确认"
 
-#: seahub/auth/forms.py:187 seahub/auth/forms.py:229
-#: seahub/base/accounts.py:825 seahub/organizations/forms.py:69
+#: seahub/auth/forms.py:195 seahub/auth/forms.py:241
+#: seahub/base/accounts.py:828 seahub/organizations/forms.py:69
 msgid "The two password fields didn't match."
 msgstr "两次输入的密码不一致"
 
-#: seahub/auth/forms.py:201
+#: seahub/auth/forms.py:209
 msgid "Old password"
 msgstr "旧密码"
 
-#: seahub/auth/forms.py:209
+#: seahub/auth/forms.py:217
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "旧密码输入错误。请重新输入。"
 
-#: seahub/auth/forms.py:218 seahub/base/accounts.py:771
+#: seahub/auth/forms.py:230 seahub/base/accounts.py:774
 msgid "Password (again)"
 msgstr "请再次输入密码"
 
-#: seahub/auth/forms.py:249 seahub/forms.py:35 seahub/invitations/views.py:37
+#: seahub/auth/forms.py:261 seahub/forms.py:35 seahub/invitations/views.py:37
 #: seahub/invitations/views.py:52 seahub/organizations/forms.py:47
 #: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
 msgstr "此用户已存在。"
 
-#: seahub/auth/views.py:148
+#: seahub/auth/views.py:150
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "登录出错次数超过限制，该账号已被冻结。"
 
-#: seahub/auth/views.py:271
+#: seahub/auth/views.py:291
 msgid "Logged out"
 msgstr "退出"
 
-#: seahub/auth/views.py:321
+#: seahub/auth/views.py:342
 msgid "Failed to send email, please contact administrator."
 msgstr "邮件发送失败，请联系管理员。"
 
-#: seahub/auth/views.py:380
+#: seahub/auth/views.py:401
 msgid "Can not update password, please contact LDAP admin."
 msgstr "不能更新密码，请联系 LDAP 管理员。"
 
@@ -868,56 +895,56 @@ msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> 已更新头像 <a href=
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr "你已更新头像 <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
-#: seahub/avatar/views.py:78
+#: seahub/avatar/views.py:77
 msgid "Successfully uploaded a new avatar."
 msgstr "修改成功。"
 
-#: seahub/avatar/views.py:124
+#: seahub/avatar/views.py:111
 msgid "Successfully updated your avatar."
 msgstr "更新成功。"
 
-#: seahub/avatar/views.py:166
+#: seahub/avatar/views.py:151
 msgid "Successfully deleted the requested avatars."
 msgstr "删除成功。"
 
-#: seahub/base/accounts.py:483
+#: seahub/base/accounts.py:486
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "%(site)s 上的账号 %(account)s 已被冻结。"
 
-#: seahub/base/accounts.py:760
+#: seahub/base/accounts.py:762
 msgid "Email address"
 msgstr "邮箱地址"
 
-#: seahub/base/accounts.py:765
+#: seahub/base/accounts.py:768
 msgid "Username"
 msgstr "用户名"
 
-#: seahub/base/accounts.py:766
+#: seahub/base/accounts.py:769
 msgid "This value must be of length 40"
 msgstr "长度为40字符"
 
-#: seahub/base/accounts.py:785
+#: seahub/base/accounts.py:788
 msgid "Enter a valid email address."
 msgstr "请输入有效的邮箱地址。"
 
-#: seahub/base/accounts.py:795
+#: seahub/base/accounts.py:798
 msgid "Invalid user id."
 msgstr "无效user id"
 
-#: seahub/base/accounts.py:846
+#: seahub/base/accounts.py:850
 msgid "name"
 msgstr "名称"
 
-#: seahub/base/accounts.py:849
+#: seahub/base/accounts.py:853
 msgid "department"
 msgstr "部门"
 
-#: seahub/base/accounts.py:852
+#: seahub/base/accounts.py:856
 msgid "telephone"
 msgstr "电话"
 
-#: seahub/base/accounts.py:855
+#: seahub/base/accounts.py:859
 msgid "note"
 msgstr "备注"
 
@@ -935,46 +962,56 @@ msgid "Enter a valid e-mail address."
 msgstr "请输入有效的邮箱地址。"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:25
+#: seahub/sysadmin_extra/views.py:96 seahub/templates/file_access.html:25
 msgid "Type"
 msgstr "类型"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/sysadmin_extra/views.py:57 seahub/sysadmin_extra/views.py:96
 #: seahub/templates/file_access.html:26
 msgid "IP"
 msgstr "IP"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
+#: seahub/sysadmin_extra/views.py:96
 msgid "Device"
 msgstr "设备"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
-#: seahub/templates/file_access.html:27
+#: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
+#: seahub/sysadmin_extra/views.py:209 seahub/templates/file_access.html:27
 msgid "Date"
 msgstr "日期"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library Name"
 msgstr "资料库名称"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library ID"
 msgstr "资料库  ID"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:154
 msgid "Library Owner"
 msgstr "资料库所有者"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
+#: seahub/sysadmin_extra/views.py:97
 msgid "File Path"
 msgstr "文件路径"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/sysadmin_extra/views.py:111 seahub/sysadmin_extra/views.py:167
+#: seahub/sysadmin_extra/views.py:215 seahub/sysadmin_extra/views.py:221
 msgid "Deleted"
 msgstr "删除了"
 
 #: seahub/base/management/commands/export_file_access_log.py:88
+#: seahub/sysadmin_extra/views.py:114 seahub/sysadmin_extra/views.py:170
 #: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
@@ -984,40 +1021,41 @@ msgstr "匿名用户"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:212
+#: seahub/sysadmin_extra/views.py:57 seahub/views/sysadmin.py:198
+#: seahub/views/sysadmin.py:202
 msgid "Status"
 msgstr "状态"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/views/sysadmin.py:208 seahub/views/sysadmin.py:820
+#: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:793
 msgid "Role"
 msgstr "用户角色"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/templates/institutions/user_info.html:107
-#: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:214
-#: seahub/views/sysadmin.py:697
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
+#: seahub/views/sysadmin.py:668
 msgid "Create At"
 msgstr "创建时间"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:214
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "Last Login"
 msgstr "上次登录"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:210
-#: seahub/views/sysadmin.py:214
+#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "管理"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:210 seahub/views/sysadmin.py:214
+#: seahub/views/sysadmin.py:200 seahub/views/sysadmin.py:204
 msgid "LDAP(imported)"
 msgstr "LDAP（已导入）"
 
@@ -1025,7 +1063,7 @@ msgstr "LDAP（已导入）"
 #: seahub/institutions/templates/institutions/useradmin.html:33
 #: seahub/institutions/templates/institutions/useradmin.html:40
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
-#: seahub/views/sysadmin.py:268
+#: seahub/views/sysadmin.py:258
 msgid "Active"
 msgstr "激活"
 
@@ -1033,25 +1071,25 @@ msgstr "激活"
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
-#: seahub/views/sysadmin.py:270
+#: seahub/views/sysadmin.py:260
 msgid "Inactive"
 msgstr "未激活"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
-#: seahub/templates/base.html:84 seahub/views/sysadmin.py:276
-#: seahub/views/sysadmin.py:277
+#: seahub/templates/base.html:86 seahub/views/sysadmin.py:266
+#: seahub/views/sysadmin.py:267
 msgid "Yes"
 msgstr "确定"
 
 #: seahub/base/management/commands/export_users.py:132
-#: seahub/views/sysadmin.py:282
+#: seahub/views/sysadmin.py:272
 msgid "Guest"
 msgstr "访客"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
-#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:288
+#: seahub/views/sysadmin.py:274 seahub/views/sysadmin.py:278
 msgid "Default"
 msgstr "默认"
 
@@ -1158,10 +1196,12 @@ msgstr[0] "%(seconds)d 秒前"
 
 #: seahub/base/templatetags/seahub_tags.py:464
 #: seahub/institutions/templates/institutions/user_info.html:72
+#: seahub/sysadmin_extra/views.py:237
 msgid "Read-Write"
 msgstr "可读写"
 
 #: seahub/base/templatetags/seahub_tags.py:466
+#: seahub/sysadmin_extra/views.py:239
 msgid "Read-Only"
 msgstr "只读"
 
@@ -1239,6 +1279,7 @@ msgstr "编辑"
 #: seahub/contacts/templates/contacts/contact_list.html:30
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
+#: seahub/sysadmin_extra/views.py:232
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "Delete"
 msgstr "删除"
@@ -1265,6 +1306,8 @@ msgstr "备注(可选)"
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/organizations/templates/organizations/org_register.html:42
+#: seahub/search/templates/search_results.html:26
+#: seahub/search/templates/search_results.html:47
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/home_base.html:103
@@ -1273,7 +1316,7 @@ msgstr "备注(可选)"
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/repo_dir_recycle_view.html:74
-#: seahub/templates/share_access_validation.html:21
+#: seahub/templates/share_access_validation.html:29
 msgid "Submit"
 msgstr "提交"
 
@@ -1283,8 +1326,8 @@ msgstr "编辑联系人"
 
 #: seahub/contacts/templates/contacts/contact_list.html:101
 #: seahub/contacts/templates/contacts/contact_list.html:146
-#: seahub/templates/snippets/wopi_onlyoffice_js.html:26
-#: seahub/templates/snippets/wopi_onlyoffice_js.html:46
+#: seahub/templates/view_file_onlyoffice.html:89
+#: seahub/templates/view_file_onlyoffice.html:112
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
@@ -1333,23 +1376,25 @@ msgstr "编辑 %s 成功。"
 msgid "Successfully Deleted %s"
 msgstr "成功删除 %s "
 
-#: seahub/dingtalk/views.py:37 seahub/dingtalk/views.py:56
-#: seahub/dingtalk/views.py:61 seahub/dingtalk/views.py:83
-#: seahub/dingtalk/views.py:129 seahub/dingtalk/views.py:149
-#: seahub/dingtalk/views.py:154 seahub/dingtalk/views.py:176
-#: seahub/dingtalk/views.py:207 seahub/oauth/views.py:70
-#: seahub/oauth/views.py:93 seahub/oauth/views.py:136
-#: seahub/oauth/views.py:164 seahub/templates/remote_user/error.html:8
+#: seahub/dingtalk/views.py:39 seahub/dingtalk/views.py:59
+#: seahub/dingtalk/views.py:64 seahub/dingtalk/views.py:86
+#: seahub/dingtalk/views.py:101 seahub/dingtalk/views.py:142
+#: seahub/dingtalk/views.py:163 seahub/dingtalk/views.py:168
+#: seahub/dingtalk/views.py:190 seahub/dingtalk/views.py:227
+#: seahub/oauth/views.py:85 seahub/oauth/views.py:108
+#: seahub/oauth/views.py:151 seahub/oauth/views.py:179
+#: seahub/oauth/views.py:190 seahub/templates/remote_user/error.html:8
 #: seahub/weixin/views.py:36 seahub/weixin/views.py:55
 #: seahub/weixin/views.py:60 seahub/weixin/views.py:79
-#: seahub/work_weixin/views.py:60 seahub/work_weixin/views.py:65
-#: seahub/work_weixin/views.py:75 seahub/work_weixin/views.py:79
-#: seahub/work_weixin/views.py:166 seahub/work_weixin/views.py:171
-#: seahub/work_weixin/views.py:181 seahub/work_weixin/views.py:185
+#: seahub/weixin/views.py:95 seahub/work_weixin/views.py:68
+#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
+#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
+#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
+#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
 msgid "Error, please contact administrator."
 msgstr "出错了，请联系管理员。"
 
-#: seahub/dingtalk/views.py:98 seahub/weixin/views.py:95
+#: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
 msgstr "用户 %s 不存在或未激活。"
@@ -1381,7 +1426,7 @@ msgstr "名称 %s 含有无效字符"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1863
+#: seahub/views/file.py:1852
 msgid "Argument missing"
 msgstr "参数缺失"
 
@@ -1441,11 +1486,6 @@ msgstr "创建团体群组失败。"
 #: seahub/group/error_msg.py:16
 msgid "Permission error: only group staff can add member"
 msgstr "只有群组管理员可以添加成员。"
-
-#: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:461
-msgid "Group does not exist"
-msgstr "群组不存在。"
 
 #: seahub/group/error_msg.py:18
 msgid "Group is full"
@@ -1508,12 +1548,12 @@ msgstr "感谢使用！"
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s 团队"
 
-#: seahub/group/views.py:105 seahub/share/views.py:228
-#: seahub/views/__init__.py:568 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1135
-#: seahub/views/file.py:1355 seahub/views/file.py:1872
-#: seahub/views/repo.py:115 seahub/views/repo.py:171 seahub/views/repo.py:228
-#: seahub/views/repo.py:281 seahub/views/repo.py:387
+#: seahub/group/views.py:105 seahub/share/views.py:231
+#: seahub/views/__init__.py:569 seahub/views/ajax.py:381
+#: seahub/views/ajax.py:427 seahub/views/file.py:1138
+#: seahub/views/file.py:1354 seahub/views/file.py:1861
+#: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
+#: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
 msgstr "没有权限"
 
@@ -1522,48 +1562,150 @@ msgstr "没有权限"
 msgid "You are invited to join a group on %s"
 msgstr "你被邀请加入 %s 上的一个群组"
 
-#: seahub/help/templates/help/base.html:23
-msgid "Desktop Client and Syncing"
-msgstr "桌面客户端与同步"
-
-#: seahub/help/templates/help/base.html:25
-msgid "Install and sync Files"
-msgstr "安装与同步文件"
-
 #: seahub/help/templates/help/base.html:26
+#: seahub/help/templates/help/base.html:28
+#: seahub/help/templates/help/introduction.html:6
+msgid "Introduction"
+msgstr "介绍"
+
+#: seahub/help/templates/help/base.html:31
+msgid "Managing files and folders"
+msgstr "管理文件和目录"
+
+#: seahub/help/templates/help/base.html:33
+#: seahub/help/templates/help/libraries_managing.html:5
+msgid "Managing files with libraries"
+msgstr "用资料库管理文件"
+
+#: seahub/help/templates/help/base.html:34
+msgid "Restoring deleted files"
+msgstr "恢复删除的文件"
+
+#: seahub/help/templates/help/base.html:35
+msgid "Finding old file versions"
+msgstr "查找文件旧版本"
+
+#: seahub/help/templates/help/base.html:36
+#: seahub/help/templates/help/library_history_and_snapshots.html:6
+msgid "Library history and snapshots"
+msgstr "资料库历史和快照"
+
+#: seahub/help/templates/help/base.html:37
+msgid "Setting history retention period"
+msgstr "设置历史保留期限"
+
+#: seahub/help/templates/help/base.html:38
+#: seahub/help/templates/help/deleting_a_library.html:5
+msgid "Deleting a library"
+msgstr "删除资料库"
+
+#: seahub/help/templates/help/base.html:39
+#: seahub/help/templates/help/viewing_files_within_web_app.html:5
+msgid "Viewing files within Web App"
+msgstr "在 Web App 中查看文件"
+
+#: seahub/help/templates/help/base.html:40
+#: seahub/help/templates/help/full_text_file_search.html:5
+msgid "Full text file search"
+msgstr "文件全文搜索"
+
+#: seahub/help/templates/help/base.html:43
+msgid "Sharing and collaboration"
+msgstr "共享与协作"
+
+#: seahub/help/templates/help/base.html:45
+#: seahub/help/templates/help/sharing_files_and_folders.html:5
+msgid "Sharing files and folders"
+msgstr "共享文件和目录"
+
+#: seahub/help/templates/help/base.html:46
+#: seahub/help/templates/help/groups_managing.html:5
+msgid "Managing groups"
+msgstr "管理群组"
+
+#: seahub/help/templates/help/base.html:47
+msgid "Locking files"
+msgstr "文件锁定"
+
+#: seahub/help/templates/help/base.html:48
+msgid "Folder permission"
+msgstr "目录权限"
+
+#: seahub/help/templates/help/base.html:49
+msgid "Departments sharing"
+msgstr "部门共享"
+
+#: seahub/help/templates/help/base.html:52
+msgid "Wiki and knowledge management"
+msgstr "维基和知识管理"
+
+#: seahub/help/templates/help/base.html:54
+#: seahub/help/templates/help/manage_library_as_wiki.html:5
+msgid "Managing a library as Wiki"
+msgstr "把资料库当做 Wiki 使用"
+
+#: seahub/help/templates/help/base.html:57
+msgid "Desktop client and syncing"
+msgstr "桌面客户端和同步"
+
+#: seahub/help/templates/help/base.html:59
+msgid "Install and sync files"
+msgstr "安装和同步文件"
+
+#: seahub/help/templates/help/base.html:60
 msgid "Syncing existing folders"
 msgstr "同步已存在文件夹"
 
-#: seahub/help/templates/help/base.html:27
-msgid "Selective sync sub-folders"
-msgstr "选择性同步子文件夹"
+#: seahub/help/templates/help/base.html:61
+#: seahub/help/templates/help/selective_sync.html:6
+msgid "Selectively sync sub-folders"
+msgstr "选择性地同步子目录"
 
-#: seahub/help/templates/help/base.html:28
+#: seahub/help/templates/help/base.html:62
+#: seahub/help/templates/help/read-only_syncing.html:5
+msgid "Read-only syncing"
+msgstr "只读同步"
+
+#: seahub/help/templates/help/base.html:63
 msgid "Unsync and resync libraries"
 msgstr "解除同步与重新同步资料库"
 
-#: seahub/help/templates/help/base.html:29
+#: seahub/help/templates/help/base.html:64
+#: seahub/help/templates/help/sync_interval.html:6
 msgid "Setting sync interval"
 msgstr "设置同步间隔"
 
-#: seahub/help/templates/help/base.html:30
+#: seahub/help/templates/help/base.html:65
 msgid "Proxy settings"
 msgstr "代理设置"
 
-#: seahub/help/templates/help/base.html:31
+#: seahub/help/templates/help/base.html:66
 #: seahub/help/templates/help/conflicts.html:5
 msgid "File conflicts"
 msgstr "文件冲突"
 
-#: seahub/help/templates/help/base.html:32
+#: seahub/help/templates/help/base.html:67
 msgid "Excluding files"
 msgstr "忽略文件目录"
 
-#: seahub/help/templates/help/base.html:34
-msgid "Security and Encryption"
-msgstr "安全与加密"
+#: seahub/help/templates/help/base.html:70
+msgid "Drive client"
+msgstr "挂载盘客户端"
 
-#: seahub/help/templates/help/base.html:36
+#: seahub/help/templates/help/base.html:72
+#: seahub/help/templates/help/using_drive_client.html:6
+msgid "Using Seafile drive client"
+msgstr "使用 Seafile 挂载盘客户端"
+
+#: seahub/help/templates/help/base.html:73
+msgid "Using drive client 2.0 on Windows"
+msgstr "在 Windows 上使用挂载盘客户端 2.0"
+
+#: seahub/help/templates/help/base.html:76
+msgid "Security and encryption"
+msgstr "安全和加密"
+
+#: seahub/help/templates/help/base.html:78
 msgid "How to use encrypted libraries"
 msgstr "怎样使用加密资料库"
 
@@ -1582,11 +1724,214 @@ msgid ""
 "version to a \"conflict file\". A conflict file's name ends with it's "
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
-msgstr "有时，你和你的朋友们可能同时编辑了同一个文件。你们的修改可能互相冲突。这种情况下， Seafile 会保留你的版本，并把你朋友们的版本保存为 \"冲突文件\"。一个冲突文件的名字会以该修改的作者的邮箱加上当前时间作为后缀，例如，test.txt (SFConflict name@example.com 2015-03-07-11-30-28)。"
+msgstr "有时，你和你的朋友们可能同时编辑了同一个文件。你们的修改可能互相冲突。这种情况下， Seafile 会保留第一个版本，并把另一个版本重命名为 \"一个冲突文件\"。一个冲突文件的名字会以该修改者的邮箱加上当前时间作为后缀，例如，test.txt (SFConflict name@example.com 2015-03-07-11-30-28)。"
+
+#: seahub/help/templates/help/deleting_a_library.html:6
+msgid ""
+"You can delete a library owned by you. A deleted library can be restored by "
+"you or Seafile server's administrator."
+msgstr "你可以删除你自己拥有的资料库。删除的资料库可由你或者 Seafile 服务器的管理员恢复。"
+
+#: seahub/help/templates/help/deleting_a_library.html:7
+msgid "After a library is deleted, it has following effects:"
+msgstr "一个资料库被删除后，有以下影响："
+
+#: seahub/help/templates/help/deleting_a_library.html:9
+msgid "Share of the files and folders within this library are all canceled."
+msgstr "该资料库中文件和文件夹的共享都被取消。"
+
+#: seahub/help/templates/help/deleting_a_library.html:10
+msgid ""
+"Desktop clients synced with this library cannot sync with it any more. But "
+"the local files on the client won't be deleted."
+msgstr "与该资料库同步的桌面客户端无法再与其同步。 但是客户端上的本地文件不会被删除。"
+
+#: seahub/help/templates/help/departments.html:5
+msgid "Managing and using departments"
+msgstr "管理和使用部门"
+
+#: seahub/help/templates/help/departments.html:6
+msgid ""
+"Some organizations consist of complex department hierarchy. There are "
+"usually two common use cases for file management in these organizations:"
+msgstr "一些机构由复杂的部门层级组成。 这些机构通常有两种常见的文件管理用例："
+
+#: seahub/help/templates/help/departments.html:8
+msgid ""
+"There should be a common file sharing space for the organization. The folder"
+" hierarchy should map the department hierarchy. There will be separate "
+"folder or space assigned to each department."
+msgstr "机构应该有一个公用的文件共享空间。 文件夹层次结构应映射部门层级结构。 每个部门都将分配单独的文件夹或空间。"
+
+#: seahub/help/templates/help/departments.html:9
+msgid ""
+"The sharing space should be owned and managed by the organization, but not "
+"individual employees. So that the ownership of files doesn't have to be "
+"changed when an employee leaves the organization."
+msgstr "共享空间应由机构拥有和管理，而不是单个的员工。 这样，当一个员工离开该机构时，文件的所有权不用被更改。"
+
+#: seahub/help/templates/help/departments.html:11
+msgid ""
+"The \"Departments\" feature is designed to meet the above two use cases. "
+"We'll introduce this feature from 3 different perspectives:"
+msgstr "”部门“功能就是为满足上述两个用例而设计的。我们将从 3 个不同的角度来介绍这个功能："
+
+#: seahub/help/templates/help/departments.html:13
+#: seahub/help/templates/help/departments.html:17
+msgid "System admin"
+msgstr "系统管理"
+
+#: seahub/help/templates/help/departments.html:14
+#: seahub/help/templates/help/departments.html:35
+msgid "Department admin"
+msgstr "部门管理"
+
+#: seahub/help/templates/help/departments.html:15
+#: seahub/help/templates/help/departments.html:52
+msgid "Department members"
+msgstr "部门成员"
+
+#: seahub/help/templates/help/departments.html:18
+msgid "The system admin can:"
+msgstr "系统管理员可以："
+
+#: seahub/help/templates/help/departments.html:20
+#: seahub/help/templates/help/departments.html:24
+msgid "Manage department hierarchy and members"
+msgstr "管理部门层级和成员"
+
+#: seahub/help/templates/help/departments.html:21
+#: seahub/help/templates/help/departments.html:29
+msgid "Assign storage quota for departments"
+msgstr "给各部门分配存储空间"
+
+#: seahub/help/templates/help/departments.html:22
+#: seahub/help/templates/help/departments.html:31
+msgid "Create and manage shared libraries in departments"
+msgstr "创建和管理部门间共享的资料库"
+
+#: seahub/help/templates/help/departments.html:25
+msgid ""
+"The system admin can set up the department hierarchy in two ways: manual "
+"setup or import from Active Directory."
+msgstr "系统管理员可以通过两种方式设置部门层次结构：手动设置或从 Active Directory 导入。"
+
+#: seahub/help/templates/help/departments.html:26
+msgid ""
+"The system admin can create any number of top level departments and create "
+"any levels of sub-departments under each department. And each level of "
+"department can be populated with members. The system admin can set the role "
+"of each member to 'member' or 'admin'. We'll introduce how a department "
+"admin can manage department later."
+msgstr "系统管理员可以创建任意数量的顶级部门，并可以在每个部门下创建任意级别的子部门。 并且每个级别的部门都可以添加成员。 系统管理员可以将每个成员的角色设置为“成员”或“管理员”。 稍后我们将介绍部门管理员可以如何管理部门。"
+
+#: seahub/help/templates/help/departments.html:27
+msgid ""
+"The system admin can also import the hierarchy from OUs (Organizational "
+"Units) in AD. Each OU will be imported as a department. And the sub-OUs "
+"under an OU will be imported as sub-departments. Department libraries can be"
+" automatically created in the import process."
+msgstr "系统管理员也可以从 AD 中的 OU（机构单位）导入层级结构。每个 OU 将作为一个部门导入。一个 OU下的子 OU 则将作为子部门导入。部门资料库可以在导入过程中自动创建。"
+
+#: seahub/help/templates/help/departments.html:28
+msgid ""
+"System admin can also delete a department after all the sub-departments and "
+"libraries are deleted."
+msgstr "在所有子部门和资料库都被删除后，系统管理员也可以删除一个部门。"
+
+#: seahub/help/templates/help/departments.html:30
+msgid ""
+"The libraries created inside a department are owned by the department "
+"itself, not by any individual user. So the system admin can assign storage "
+"quota to a department. The total size of all the libraries in a department "
+"cannot exceed the storage quota. <strong>Please note that the quota of sub-"
+"department doesn't depend on the quota of its parent department.</strong>"
+msgstr "在部门内创建的资料库由部门本身拥有，而非任何个人用户。 所以系统管理员可以将存储配额分配给一个部门。 部门中所有资料库的总大小不能超过该存储配额。 <strong>请注意，子部门的配额不取决于其上级部门的配额。</strong>"
+
+#: seahub/help/templates/help/departments.html:32
+msgid ""
+"Department libraries can be created by the system admin or department admin."
+" There is also an option to control whether individual users can share "
+"libraries to a department."
+msgstr "部门资料库可以由系统管理员或部门管理员创建。 还有一个选项可以控制单个用户是否可以将资料库共享给部门。"
+
+#: seahub/help/templates/help/departments.html:33
+msgid ""
+"All the above operations can be done in the system admin interface. See the "
+"below screenshot for information."
+msgstr "以上所有操作均可在系统管理界面中完成。 有关信息，请参见下面的截图。"
+
+#: seahub/help/templates/help/departments.html:36
+msgid ""
+"As noted above, department admin is a special role assigned by the system "
+"admin to some members of a department. Department admins can perform the "
+"following operations in a department after login to his/her own account."
+msgstr "如上所述，部门管理员是由系统管理员分配给部门中某些成员的特殊角色。 部门管理员登录到自己的帐户后可以在部门中执行以下操作。"
+
+#: seahub/help/templates/help/departments.html:38
+msgid "Access to the libraries of the department"
+msgstr "访问部门中的资料库"
+
+#: seahub/help/templates/help/departments.html:39
+msgid "Manage members in his/her department"
+msgstr "管理部门中的成员"
+
+#: seahub/help/templates/help/departments.html:40
+msgid "Manage libraries in his/her department"
+msgstr "管理部门中的资料库"
+
+#: seahub/help/templates/help/departments.html:42
+msgid ""
+"If a user is the admin of a department, he/she can add or delete members in "
+"the department. Any users registered in the system can be added as member of"
+" the department. But if the departments are imported from AD, the changes to"
+" membership will be overwritten on the next sync with AD."
+msgstr "如果用户是部门的管理员，则他/她可以在部门中添加或删除成员。 在系统中注册的任何用户都可以添加为部门成员。 但是，如果部门是从 AD 导入的，则成员资格的更改将在下一次与 AD 同步时被覆盖。"
+
+#: seahub/help/templates/help/departments.html:44
+msgid ""
+"Department admin can manage the libraries in the department. The supported "
+"operations are:"
+msgstr "部门管理员可以管理部门中的资料库。 支持的操作是："
+
+#: seahub/help/templates/help/departments.html:46
+msgid "Create or delete library"
+msgstr "创建或删除资料库"
+
+#: seahub/help/templates/help/departments.html:47
+msgid "Change library name"
+msgstr "修改资料库的名称"
+
+#: seahub/help/templates/help/departments.html:48
+msgid ""
+"Share a library to users or groups outside of this department. This is very "
+"useful for cross-department collaboration."
+msgstr "将资料库共享给部门外的用户或群组。这点对跨部门协作非常有用。"
+
+#: seahub/help/templates/help/departments.html:49
+#, python-format
+msgid ""
+"Set fine-grained permission to folders in the libraries for users or sub-"
+"departments in this department. This works like <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
+"feature</a>."
+msgstr "为部门中的用户或子部门给资料库中的文件夹设置细粒度的权限。这个类似 <a href=\"%(SITE_ROOT)shelp/folder_permission/\">目录权限功能</a>。"
+
+#: seahub/help/templates/help/departments.html:53
+msgid ""
+"A normal member of the department can use the department just like a group. "
+"Each department is presented to its members as a group. A user can not only "
+"access to the libraries in the department he/she belongs to, but also the "
+"libraries in the parent departments of his/her department. For example, if "
+"John is in the \"EMEA\" sub-department under the \"Sales\" department, and "
+"\"Sales\" is a sub-department under the company \"ACME\", John can then "
+"access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
+"departments are marked with a \"building\" icon next to its name."
+msgstr "部门中的普通成员可以像使用群组一样使用部门。 每个部门都以群组的形式呈现给它的成员。 用户不仅可以访问他/她所属部门中的资料库，还可以访问其所在部门的上级部门中的资料库。 例如，如果 John 在“销售”部门下的“ EMEA”子部门中，而“销售”是公司“ ACME”下的子部门，则 John 可以访问“EMEA”，“销售”和“ACME”。 部门组的名称旁边带有“建筑物”图标。 "
 
 #: seahub/help/templates/help/desktop_proxy.html:6
-msgid "Using Proxy in Seafile Client"
-msgstr "在 Seafile 客户端使用代理"
+msgid "Using proxy in Seafile client"
+msgstr "在 Seafile 客户端中使用代理"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1608,7 +1953,186 @@ msgid ""
 "To change proxy settings, click the Seafile icon in the system notification "
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
-msgstr "如需更改代理设置，点击系统通知区域的 Seafile 图标。在菜单中选择“设置”，在弹出的设置对话框中，您可以在“网络”选项卡中更改代理服务器设置。"
+msgstr "如需更改代理设置，点击系统通知区域的 Seafile 图标。在菜单中选择“设置”。在弹出的设置对话框中，可以在“网络”选项卡中更改代理设置。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
+msgid "SeaDrive 2.0 for Windows 10"
+msgstr " 适用 Windows 10 的 SeaDrive 2.0"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
+msgid ""
+"SeaDrive 2.0 (and future versions) is redesigned with deeper integration to "
+"Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
+"Update for Windows 10) and later versions. We recommend Windows 10 users to "
+"upgrade to SeaDrive 2.0 for more native virtual drive experience."
+msgstr "SeaDrive 2.0（及以后的版本）经过重新设计，与 Windows 10 操作系统的集成度更高。 它支持Windows 10 1709版本（Windows 10的 2017 年秋季更新）和更高版本。 我们建议 Windows 10 用户升级到 SeaDrive 2.0，以获得更自然的虚拟盘体验。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
+msgid "Install and access the Virtual Drive"
+msgstr "安装和访问虚拟盘"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
+msgid ""
+"You can download SeaDrive 2.0 from official Seafile website. After "
+"installation and logging into your Seafile account, SeaDrive will start "
+"downloading library and file lists from the server (just as in SeaDrive "
+"1.0.x). It may take some time, depending on the number of files available in"
+" your seafile account. The download is progressive, so in the mean time you "
+"can already access some files in the virtual drive."
+msgstr "您可以从 Seafile 官方网站下载 SeaDrive 2.0。 安装并登录Seafile帐户后，SeaDrive 将从服务器上下载资料库和文件列表（就像在 SeaDrive 1.0.x 中一样）。 这可能需要一些时间，具体取决于您 seafile 帐户中可用的文件数量。 下载是渐进式的，因此与此同时，您已经可以访问虚拟盘中的一些文件了。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:12
+msgid ""
+"To access the virtual drive, just open Windows file explorer. There is a "
+"\"seadrive\" node in the navigation pane of Windows file explorer."
+msgstr "要访问该虚拟盘，只需打开 Windows 文件管理器。在 Windows 资源管理器的导航面板中有一个 ‘seadrive' 节点。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
+msgid "Accessing files in the Virtual Drive"
+msgstr "在虚拟盘中访问文件"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
+msgid ""
+"Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
+"Shared with me, Shared with groups and Shared with all."
+msgstr "虚拟盘中的资料库被分成 4 类：我的资料库，共享给我的，共享给群组的和公共资料库。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
+msgid ""
+"As you can see, the file status icons is more integrated into Windows file "
+"explorer. The icons are a bit different form version 1.0."
+msgstr "如您所见，文件状态图标与 1.0 版本有些区别，更多集成在Windows文件资源管理器中。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
+msgid ""
+"Files in the virtual drive are created as \"placeholders\" in the local file"
+" system. They may be in 3 states:"
+msgstr "虚拟盘中的文件在本地文件系统中创建为“占位符”。 它们可能处于3种状态："
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
+msgid ""
+"<b>Placeholder file</b>: An empty representation of the file and can only be"
+" opened when there is network connection."
+msgstr "<b>占位符文件</b>:  文件的一个空代表，并且只能在有网络连接时才能打开。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:22
+msgid ""
+"<b>Full file</b>: The file has been downloaded and saved locally. Download "
+"is automatic when a placeholder file is opened for the first time. These "
+"files are available whenever you open SeaDrive regardless to network "
+"connections. The operating system may decide to clear a full file when more "
+"disk space is needed."
+msgstr "<b>完全同步</b>: 该文件已下载并保存在本地。首次打开未同步的文件时，SeaDrive 会自动将文件同步到本地，之后即使未联网也可以在 SeaDrive 中访问该文件。 当需要释放更多磁盘空间时，操作系统可能会自动清理一些此类文件。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:23
+msgid ""
+"<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
+"is guaranteed to be available offline."
+msgstr "<b>完全同步且固定在设备上</b>：该文件已下载并保存在本地。 这样可以确保在未联网的情况下访问到文件。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:26
+msgid ""
+"You can control which files or folder are cached locally. This can be "
+"changed from the context menu when you right click on a file or folder. "
+"Choose \"Always keep on this device\" when you want to pin a file or folder "
+"locally; choose \"Free up space\" when you want to clean the cache for a "
+"file or folder."
+msgstr "您可以控制缓存哪些文件或文件夹。可以在文件或文件夹上点击右键菜单来进行更改。如果要在本地固定保存文件或文件夹，请选择“始终保留在此设备上”；如果要清除文件或文件夹的缓存，请选择“释放空间”。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
+msgid ""
+"In SeaDrive 1.0, cached files are not automatically updated when they're "
+"updated on the server. In SeaDrive 2.0, full and pinned files are "
+"automatically kept in sync with the server."
+msgstr "在 SeaDrive 1.0 中，当文件在服务器上更新时，缓存的文件不会自动更新；在 SeaDrive 2.0 中，完全同步并固定在设备上的文件会和服务器上保持同步。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
+msgid "File Download and Control"
+msgstr "文件下载和控制"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:31
+msgid ""
+"Whenever you open a placeholder file, the operating system will "
+"automatically start to download it. If the file may take some time to "
+"download, there will be a progress bar shown up in file explorer and you may"
+" cancel the download."
+msgstr "当你打开一个占位符文件时，操作系统会自动开始下载。如果文件下载时间比较长，文件资源管理器中将自动显示一个进度条，您可以取消下载。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
+msgid ""
+"Sometimes a background application may try to download a file in the virtual"
+" drive (such as an Anti-Virus software). You will be notified by the "
+"operating system about this and you may choose to cancel the download or "
+"disallow the application from automatically downloading files in the future."
+msgstr "有时后台的应用程序可能会尝试下载虚拟盘中的文件（如杀毒软件），操作系统将会通知您，您可以选择取消下载或禁止应用程序自动下载文件。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
+#: seahub/help/templates/help/using_drive_client.html:79
+msgid "FAQ"
+msgstr "常见问题"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
+msgid "Can I create, delete, rename libraries?"
+msgstr "我可以创建、删除、重命名资料库吗？"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:36
+msgid ""
+"Yes. When you create, delete or rename library folders in the virtual drive,"
+" the operation will be reflected on the server. You can only create, delete,"
+" rename libraries under the \"My Libraries\" category. Creating, deleting or"
+" renaming libraries in other categories will be ignored."
+msgstr "可以。在虚拟盘中创建、删除或重命名资料库目录时，这些操作将同步到服务器端。您只能在“我的资料库”类别下创建、删除、重命名资料库，在其他类别的资料库中这些操作将被忽略。 "
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
+msgid "Can I create files or folders outside of a library folder?"
+msgstr "我可以在资料库目录之外创建文件或文件夹吗？"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
+msgid ""
+"Yes. But files created outside of a library folder will be ignored and NOT "
+"synced to the server. A new folder under the \"My Libraries\" folder will be"
+" handled as a new library."
+msgstr "可以。但是在资料库目录之外创建的文件或者文件夹将被忽略，并且不会同步到服务器。如果是在“我的资料库”类别下创建一个新文件夹，则相当于创建了一个新的资料库。 "
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
+msgid "Can I access encrypted libraries?"
+msgstr "我可以访问加密的资料库吗？"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
+msgid ""
+"Yes. By default, encrypted libraries are not synced and shown in the virtual"
+" drive. You need to manually choose which encrypted libraries to sync and "
+"enter the password. Just right click on the SeaDrive icon in the system tray"
+" area and choose \"Show encrypted libraries\". A window will show up and you"
+" can choose to sync or unsync an encrypted library."
+msgstr "可以。默认情况下，加密资料库不会同步并显示在虚拟盘中。您需要手动选择要同步的加密资料库并输入密码。右键单击系统托盘区域中的 SeaDrive 图标，然后选择“显示加密资料库”。在弹出的窗口中您可以选择同步或者取消同步加密资料库。 "
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
+msgid "Is it compatible to SeaDrive 1.0?"
+msgstr "它和 SeaDrive 1.0 兼容吗？"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
+msgid ""
+"SeaDrive 2.0 will use any existing accounts and their metadata (stored under"
+" C:\\users\\username\\seadrive\\ folder). But it will not use the cached "
+"files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
+" be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
+"the files to server or copy them out."
+msgstr " SeaDrive 2.0将使用任何已有的账号及其元数据（保存在 C:\\users\\username\\seadrive\\ 文件夹下），但不会使用 SeaDrive 1.0 中的缓存文件。因此1.0版本中的缓存文件是无法在2.0版本中访问的。您可以用 Seadrive 1.0 将这些文件上传到服务器或者先将它们拷贝出去。"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
+msgid "How do I clean the cache?"
+msgstr "如何清理缓存？"
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
+msgid ""
+"You can manually choose which folders or files to be cached locally. If you "
+"find a folder consumes too much space, just choose to \"Free up space\" on "
+"that folder and all cached files in that folder will be cleaned. There is no"
+" need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
+"Because placeholders are just normal files created on your local disk, your "
+"cache size is only limited by the available disk space on your computer."
+msgstr "您可以手动选择要在本地缓存的文件夹或文件。如果你发现一个文件夹占用了太多的空间，只需选择“释放空间”，该文件夹中的所有缓存文件都将被清除。不需要像 SeaDrive 1.0 中那样设置缓存清理时间和缓存大小限制。因为占位符文件只是在本地磁盘上创建的普通文件，所以缓存大小仅受可用磁盘空间的限制。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -1638,9 +2162,9 @@ msgstr "如果你是通过 web 来创建加密资料库，密码会被发送到�
 #, python-format
 msgid ""
 "If you create an encrypted library from a local folder with the desktop "
-"client (see <a href=\"%(SITE_ROOT)shelp/install/\">file syncing</a>), the "
-"password is not sent to the server."
-msgstr "如果你在桌面客户端上通过一个本地文件夹来创建加密资料库，(参考 <a href=\"%(SITE_ROOT)shelp/install/\">文件同步</a>)，密码不会被发送到服务器。"
+"client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
+"the password is not sent to the server."
+msgstr " 如果你在桌面客户端上通过一个本地文件夹来创建加密资料库，(参考<a href=\"%(SITE_ROOT)shelp/install_sync/\">文件同步</a>）， 密码不会被发送到服务器。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -1660,24 +2184,398 @@ msgid ""
 "text password is not stored on the client disk too."
 msgstr "如果你通过桌面客户端来同步资料库，密码并不会被发送到服务器。桌面客户端只在本地加密解密文件内容，密码明文也不会存储在本地磁盘上。"
 
-#: seahub/help/templates/help/encrypted_libraries.html:21
-msgid ""
-"iOS client supports client side encryption since version 2.1.6. Android "
-"client support it since version 2.1.0."
-msgstr "ISO 客户端从 2.1.6 版本、Android 客户端从 2.1.0 版本支持客户端加密。"
-
-#: seahub/help/templates/help/encrypted_libraries.html:25
+#: seahub/help/templates/help/encrypted_libraries.html:24
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."
 msgstr "注意加密资料库只加密文件内容，并不会加密目录名和文件名。"
 
-#: seahub/help/templates/help/encrypted_libraries.html:27
+#: seahub/help/templates/help/file_locking.html:5
+msgid "File locking"
+msgstr "文件锁定"
+
+#: seahub/help/templates/help/file_locking.html:6
 msgid ""
-"More technical details of encrypted library can be found at <a "
-"href=\"http://manual.seafile.com/security/security_features.html\">Seafile "
-"Manual</a>."
-msgstr "加密资料库更过技术细节请参看 <a href=\"http://manual.seafile.com/security/security_features.html\">Seafile Manual</a>."
+"When more than one person collaborate on a file, it's likely that more than "
+"one person modify the file at about the same time. Seafile handles this "
+"situation nicely with conflict files. But it's often more convenient to lock"
+" the file when one person wants to exclusively modify the file. Seafile "
+"Professional Edition supports file locking."
+msgstr "当一个文件上有多个人协作时，可能会有多个人在大约同一时间修改文件。 Seafile 通过冲突文件很好地处理了这种情况。 但是，当一个人想要单独修改文件时，锁定文件通常更方便。 Seafile 专业版支持文件锁定。"
+
+#: seahub/help/templates/help/file_locking.html:7
+msgid ""
+"File locking works on both the web app and the desktop syncing client. We'll"
+" introduce them one by one."
+msgstr "文件锁定在 Web app 和桌面同步客户端上均可用。 我们将一一介绍。"
+
+#: seahub/help/templates/help/file_locking.html:8
+msgid "File locking on the Web App"
+msgstr "Web App 上的文件锁定"
+
+#: seahub/help/templates/help/file_locking.html:9
+msgid ""
+"To lock a file, you can navigate into the file's folder on the web app, and "
+"click on the \"operations\" drop-down menu."
+msgstr "要锁定文件，可以在 Web app 上进入该文件所在的目录，然后点击相应的操作菜单。"
+
+#: seahub/help/templates/help/file_locking.html:11
+msgid ""
+"After the file is locked, you can see a red \"stop sign\" at the corner of "
+"the file icon. Moving the mouse on the stop sign, you can see who locks the "
+"file. And you can also unlock a file that's locked by you. But you cannot "
+"unlock files locked by others."
+msgstr "文件被锁定后，可以在文件图标的角落里看到一个红色的“停止符号”。将鼠标移上去，则可以看到是谁锁定了这个文件。你也可以给一个被你锁定的文件解锁。但你不能解锁被其他人锁定的文件。"
+
+#: seahub/help/templates/help/file_locking.html:13
+msgid "File locking on the desktop client"
+msgstr "桌面客户端上的文件锁定"
+
+#: seahub/help/templates/help/file_locking.html:14
+msgid ""
+"After a library is synced to the desktop, you can lock/unlock files in that "
+"library inside File Explorer on Windows or Finder on Mac OS."
+msgstr "资料库同步到桌面端后，可以在 Windows 的 File Explorer 或 Mac 的 Finder 里锁定/解锁资料库中的文件。"
+
+#: seahub/help/templates/help/file_locking.html:15
+msgid ""
+"To lock a file, just right click on a synced file and choose \"lock this "
+"file\" in the \"Seafile\" menu."
+msgstr "要锁定一个文件，只需右键单击一个已同步的文件，然后在 “Seafile\" 菜单中选择“锁定这个文件”。"
+
+#: seahub/help/templates/help/file_locking.html:17
+msgid ""
+"If a file is locked by you, you can see an orange \"stop sign\" on the file "
+"icon. You can choose to unlock it."
+msgstr "如果一个文件是被你锁定的，你可以在文件图标上看见一个橙色的“停止符号”。你可以选择给这个文件解除锁定。"
+
+#: seahub/help/templates/help/file_locking.html:19
+msgid ""
+"If a file is locked by other user, you can see a red \"stop sign\" on the "
+"file icon. The file is automatically set to read-only. You cannot modify it "
+"until it's unlocked."
+msgstr "如果一个文件是被其他人锁定的，你可以在文件图标上看见一个红色的“停止符号”。该文件被自动设置为只读。只有在它被解除锁定后你才能修改它。"
+
+#: seahub/help/templates/help/file_locking.html:21
+msgid ""
+"If a library is not synced, you can still use cloud file browser to lock and"
+" unlock files in it."
+msgstr "如果一个资料库没有被同步，你仍然可以使用云文件浏览器来锁定和解锁其中的文件。"
+
+#: seahub/help/templates/help/file_locking.html:22
+msgid "Auto locking office files"
+msgstr "office 文件自动锁定"
+
+#: seahub/help/templates/help/file_locking.html:23
+msgid ""
+"After a library is synced to the desktop, when you open a Microsoft Office "
+"file inside the library, Seafile automatically locks the file. When you "
+"close the file, Seafile automatically unlocks the file. The locking state is"
+" propagated to other computers syncing this library. It prevents concurrent "
+"editing the same Office file and is convenient for collaboration."
+msgstr "资料库同步到桌面端后，当你打开其中的一个微软 Office 文件时，Seafile 会自动锁定这个文件。当你关闭这个文件时，Seafile 会自动解锁这个文件。资料库同步时，文件的锁定状态会传播到其他计算机上。这将阻止对同一个 Office 文件的并发编辑，便于协作。"
+
+#: seahub/help/templates/help/file_locking.html:24
+msgid "Details about file locking"
+msgstr "文件锁定相关细节"
+
+#: seahub/help/templates/help/file_locking.html:25
+msgid "There are a few useful tips about how file locking works:"
+msgstr "关于文件锁定的工作原理，有些有用的提示："
+
+#: seahub/help/templates/help/file_locking.html:27
+msgid "A locked file can only be unlocked by the user who locked it."
+msgstr "一个被锁定的文件只能由锁定该文件的用户解锁。"
+
+#: seahub/help/templates/help/file_locking.html:28
+msgid ""
+"A locked file cannot be modified, moved, renamed or deleted by other users. "
+"But other users can still move, delete or rename the parent folder of a "
+"locked file. The purpose of file locking is mainly to prevent concurrent "
+"editing."
+msgstr "一个被锁定的文件不能被其他用户修改，移动，重命名或删除。但是其他用户仍然可以移动，删除或重命名该锁定文件的父目录。文件锁定的目的主要是防止并发编辑。"
+
+#: seahub/help/templates/help/file_locking.html:29
+msgid ""
+"When a locked file's parent folder is renamed or moved inside the same "
+"library, it remains locked after the operation."
+msgstr "当一个被锁定的文件的父目录在同一个资料库中被重命名或移动后，该文件依然是被锁定的。"
+
+#: seahub/help/templates/help/finding_older_version_files.html:6
+msgid "Finding older version of files"
+msgstr "查找文件旧版本"
+
+#: seahub/help/templates/help/finding_older_version_files.html:7
+msgid ""
+"Seafile tracks the modification history of all files. Whenever a file is "
+"modified, a new version is created, while the old version is still kept for "
+"a configurable period. When you want to access an older version of a file, "
+"the file history feature becomes very handy."
+msgstr "Seafile 跟踪所有文件的修改历史。当一个文件被修改时，一个新的版本将会被创建，而旧版本则会被保留一段可配置的时期。当你想访问一个文件的旧版本时，文件历史功能将非常方便。"
+
+#: seahub/help/templates/help/finding_older_version_files.html:8
+msgid "To list all the versions of a file:"
+msgstr "列出一个文件的所有版本："
+
+#: seahub/help/templates/help/finding_older_version_files.html:10
+msgid ""
+"In Seafile Web App, navigate into the folder containing the file. Move the "
+"cursor onto the row of that file. An operation menu will appear. You can "
+"click the \"History\" button in that menu."
+msgstr "在 Seafile Web App 中，进入文件所在的目录，将鼠标移动到文件所在的行上，在操作菜单中选择“历史”。"
+
+#: seahub/help/templates/help/finding_older_version_files.html:11
+msgid ""
+"A list of all versions of that file will be displayed in time order, from "
+"newer to older. The list also contains the file's rename history."
+msgstr "文件的所有版本将按时间顺序展示，从最新到最旧。列表中也会包含文件的重命名历史。"
+
+#: seahub/help/templates/help/finding_older_version_files.html:12
+msgid "You can download, restore, view any version of the file."
+msgstr "你可以下载，恢复，查看文件的任意版本。"
+
+#: seahub/help/templates/help/finding_older_version_files.html:14
+#, python-format
+msgid ""
+"You can configure the retention period of file versions: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr "  你可以配置文件版本的保留时间： <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">设置历史保留时间</a>。"
+
+#: seahub/help/templates/help/folder_permission.html:6
+msgid "Use folder permission for fine-grained access control"
+msgstr "使用目录权限做细粒度的访问控制"
+
+#: seahub/help/templates/help/folder_permission.html:8
+#, python-format
+msgid ""
+"For shared libraries or folders, you can set permission to its sub-folders "
+"for a person or a group. Available permissions are the same as the ones "
+"described in <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
+" Here are some use cases:"
+msgstr "对于已共享出去的资料库或目录，你可以为个人或群组设置子目录的权限。可用的权限和 <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">共享资料库</a>中描述的一样。以下是一些用例："
+
+#: seahub/help/templates/help/folder_permission.html:10
+msgid ""
+"You shared a library to a group with \"read only\" permission. You also want"
+" to allow a specific member of the group to modify files in one sub-folder. "
+"You can grant write permission of this sub-folder to this person."
+msgstr "你将一个资料库以“只读”权限共享给一个群组。你也想允许群组中的一个特定成员修改一个子目录中的文件。你可以授予该成员这个子目录的写权限。"
+
+#: seahub/help/templates/help/folder_permission.html:11
+msgid ""
+"You shared a library to 3 groups. There are 3 sub-folders under that "
+"library, one for each group to upload files. However you don't want users to"
+" change files not belong to his/her group. You can grant write permission of"
+" a sub-folder only to its group."
+msgstr "你将一个资料库共享给 3 个群组。资料库中有 3 个子目录，每个群组用一个来上传文件。然而你不想用户修改不属于他/她的群组的文件。你可以将子目录的写权限只授予给它对应的群组。"
+
+#: seahub/help/templates/help/folder_permission.html:13
+msgid ""
+"Folder permissions are only effective for libraries and folders you share to"
+" others. To effectively set folder permissions to its sub-folders, you "
+"should first share the parent library or folder; otherwise the folder "
+"permission won't take effect."
+msgstr "目录权限只对已共享出去的资料库和目录有效。为了有效设置子目录的目录权限，你应该先将父资料库或目录共享出去。"
+
+#: seahub/help/templates/help/folder_permission.html:14
+msgid ""
+"One important design goal of folder permission is to support hierarchical "
+"permissions:"
+msgstr "目录权限的一个重要设计目标是支持层级权限："
+
+#: seahub/help/templates/help/folder_permission.html:16
+msgid ""
+"Sub-folders automatically inherit folder permissions from its parent folder."
+msgstr "子目录自动地继承其父目录的目录权限。"
+
+#: seahub/help/templates/help/folder_permission.html:17
+msgid ""
+"Permissions set on sub-folders overwrites permissions set on its parent "
+"folder. For example, you set \"read write\" permission on folder \"meeting "
+"files\" for user A, and you set \"read only\" permission on sub-folder "
+"\"meeting files/today\" for user A. Then user A's permission to \"meeting "
+"files/today\" is \"read only\"."
+msgstr "设置在子目录上的权限将会覆盖设置在其父目录上的权限。例如，你在目录”会议文件“上给用户 A 设置了“读写”权限，在目录“会议文件/今天”上则给该用户设置了“只读”权限。那么，用户 A 在“会议文件/今天”上的权限就是“只读”。"
+
+#: seahub/help/templates/help/folder_permission.html:19
+msgid "Basic usage"
+msgstr "基本用法"
+
+#: seahub/help/templates/help/folder_permission.html:20
+msgid ""
+"Only library's owner can set folder permissions for its sub-folders. In the "
+"file browsing interface, click \"more operations\" button, choose "
+"\"permission\" in the drop-down menu. In the pop-up window, you can see and "
+"set folder permissions on this folder."
+msgstr "只有资料库的所有者可以设置子目录的目录权限。在文件浏览界面中，点击“更多操作“图标，在下拉菜单中选择“权限”。在弹框中，你可以查看和设置该目录的目录权限。"
+
+#: seahub/help/templates/help/folder_permission.html:21
+msgid ""
+"If you want to see all folder permissions set in a library, hover the mouse "
+"on the library. Click \"more operations\" button, choose \"Folder "
+"Permission\" in the drop-down menu. In the pop-up window, you can see and "
+"set folder permissions in this library."
+msgstr "如果想查看资料库中设置的所有目录权限，可将鼠标移到该资料库上，点击“更多操作”图标，在下拉菜单中选择“目录权限”。在弹框中，你可以查看和设置该资料库中的目录权限。"
+
+#: seahub/help/templates/help/folder_permission.html:22
+msgid ""
+"When other users navigate into a folder, there will be a small \"eye\" icon "
+"next to \"read only\" sub-folders. When the user navigate into that sub-"
+"folder, he/she won't be able to add/modify/delete files."
+msgstr "当其他用户访问一个目录时，“只读”子目录的旁边将会出现一个小的“眼睛”图标。当用户访问该子目录时，他/她将无法添加/修改/删除文件。"
+
+#: seahub/help/templates/help/folder_permission.html:24
+msgid ""
+"If a \"read only\" folder is synced to PC with the Seafile desktop App, "
+"changes under a \"read only\" folder won't be uploaded to the cloud."
+msgstr "如果使用 Seafile桌面 App 将“只读”文件夹同步到 PC，那么“只读”文件夹下的更改将不会上传到云端中。"
+
+#: seahub/help/templates/help/folder_permission.html:25
+msgid "Advanced: priority between different permissions"
+msgstr "高级：不同权限之间的优先级"
+
+#: seahub/help/templates/help/folder_permission.html:27
+msgid ""
+"Folder permissions have higher priority than the permission set in share. "
+"For example, if you share a library to user A with \"read write\" "
+"permission, and also set \"read only\" permission to a sub-folder of that "
+"library. Then user A only has \"read only\" access to the sub-folder, while "
+"he/she has \"read write\" access to all other sub-folders and files."
+msgstr "目录权限的优先级高于共享时设置的权限。例如，你将一个资料库以“读写”权限共享给用户 A, 同时也给资料库中的一个子目录设置“只读”权限。那么用户 A 对该子目录便只有“只读”权限，而对其他所有的子目录和文件有“读写”权限。"
+
+#: seahub/help/templates/help/folder_permission.html:28
+msgid ""
+"Folder permissions set to a specific user have higher priority than "
+"permissions set to a group. That is, when checking permission for a folder, "
+"if the system matches a permission specific to the user, it'll ignore all "
+"permissions set for the groups the user belongs to."
+msgstr "给特定用户设置的目录权限比给一个群组设置的目录权限优先级更高。也就是说，当检查一个目录的权限时，如果系统匹配到一个给用户设置的权限，那么它将忽略给用户所在的群组设置的其他所有权限。"
+
+#: seahub/help/templates/help/folder_permission.html:29
+msgid ""
+"Permissions on sub-folders have higher priority than those on parent "
+"folders."
+msgstr "子目录上的权限比父目录上的优先级更高。"
+
+#: seahub/help/templates/help/folder_permission.html:31
+msgid "Here is a more complex example:"
+msgstr "这里有一个更复杂的例子："
+
+#: seahub/help/templates/help/folder_permission.html:32
+msgid ""
+"Supposed the folder structure looks like \"A/B\", user \"John\" is in group "
+"\"Staff\". If you set \"read only\" permission on folder A for John, and, "
+"you also set \"read write\" permission on folder \"A/B\" for group "
+"\"Staff\". Then John's permission to folder \"A/B\" is still only \"read "
+"only\". That's because, according to rule 2, \"read only\" permission is "
+"first matched for folder \"A/B\" and user \"John\", which is inherited from "
+"its parent \"A\"."
+msgstr "假设目录结构为 \"A/B\", 用户 \"John\" 在群组 \"Staff\" 中。你在目录 A 上给 John 设置了“只读”权限，你也在目录 \"A/B\" 上给群组 \"Staff\" 设置了“读写”权限。那么 John 在目录 \"A/B\" 上的权限依然是“只读”。因为，根据第 2 条规则，对目录 \"A/B\" 和用户 John 来说，“只读”权限是首先被匹配到的，而这个权限继承自它的父目录 “A”。"
+
+#: seahub/help/templates/help/full_text_file_search.html:6
+msgid ""
+"If you're using a Pro Edition Server, you can search file and folder names, "
+"as well as the content of certain files, in the Seafile web app. Currently "
+"Seafile can search the contents of the following types of files:"
+msgstr "如果你用的是专业版， 那么在 Seafile web app 里，你可以搜索文件和目录的名称，也可以搜索一些文件的内容。目前可以搜索以下几类文件的内容："
+
+#: seahub/help/templates/help/full_text_file_search.html:8
+#: seahub/help/templates/help/viewing_files_within_web_app.html:8
+msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
+msgstr "Microsoft Office Doc: .doc, .docx (仅限专业版)"
+
+#: seahub/help/templates/help/full_text_file_search.html:9
+#: seahub/help/templates/help/viewing_files_within_web_app.html:9
+msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (仅限专业版)"
+
+#: seahub/help/templates/help/full_text_file_search.html:10
+#: seahub/help/templates/help/viewing_files_within_web_app.html:10
+msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
+msgstr "Microsoft Office Excel: .xls, .xlsx （仅限专业版）"
+
+#: seahub/help/templates/help/full_text_file_search.html:11
+#: seahub/help/templates/help/viewing_files_within_web_app.html:11
+msgid "LibreOffice files"
+msgstr "LibreOffice 文件"
+
+#: seahub/help/templates/help/full_text_file_search.html:12
+#: seahub/help/templates/help/viewing_files_within_web_app.html:12
+msgid "PDF files"
+msgstr "PDF 文件"
+
+#: seahub/help/templates/help/full_text_file_search.html:13
+#: seahub/help/templates/help/viewing_files_within_web_app.html:14
+msgid "Markdown files: .md"
+msgstr "Markdown 文件: .md"
+
+#: seahub/help/templates/help/full_text_file_search.html:14
+#: seahub/help/templates/help/viewing_files_within_web_app.html:15
+msgid "Various source code files"
+msgstr "各种源代码文件"
+
+#: seahub/help/templates/help/full_text_file_search.html:15
+#: seahub/help/templates/help/viewing_files_within_web_app.html:16
+msgid "Text files: .txt, .log"
+msgstr "文本文件: .txt, .log"
+
+#: seahub/help/templates/help/full_text_file_search.html:17
+msgid ""
+"Note that your Seafile system administrator may not have enabled the full-"
+"text search feature. In that case, you can only search file and folder "
+"names."
+msgstr "请注意，你的 Seafile 系统管理员可能没有开启全文搜索功能。如果是那样的话，你只能搜索文件和目录的名称。"
+
+#: seahub/help/templates/help/groups_managing.html:6
+msgid ""
+"Creating a group is a convenient way to share files to many people. In "
+"Seafile, you can create and manage a group easily."
+msgstr "创建一个群组是将文件共享给许多人的一种便捷的方式。在 Seafile 中，你可以轻松地创建和管理一个群组。"
+
+#: seahub/help/templates/help/groups_managing.html:7
+msgid "Here is how groups work in Seafile:"
+msgstr "Seafile 中的群组的工作原理如下："
+
+#: seahub/help/templates/help/groups_managing.html:9
+msgid ""
+"Each group has a owner. The owner is the creator of the group by default. "
+"He/she can transfer the ownership of the group to another member."
+msgstr "每个群组都有一个所有者。群组创建者默认为所有者。 所有者可以将群组所有权转让给其他成员。"
+
+#: seahub/help/templates/help/groups_managing.html:10
+msgid ""
+"Each group can have multiple admins. The group owner and group admins can "
+"add more group admins."
+msgstr "每个群组都可以有多个管理员。群组所有者和管理员可以添加更多的管理员。"
+
+#: seahub/help/templates/help/groups_managing.html:11
+msgid ""
+"The group admin can add/delete members in the group. And he/she can also "
+"unshare a library in the group."
+msgstr "群组管理员可以添加/删除群组成员，也可以在群组中取消共享一个资料库。"
+
+#: seahub/help/templates/help/groups_managing.html:13
+msgid ""
+"Click on the \"Shared with groups\" tab on the left panel, and you'll see "
+"all the groups you're in. Clicking into any group, you'll see the libraries "
+"shared into this group."
+msgstr "点击展开左侧面板上的“群组共享”，你可以看到你所在的所有群组。点击进入任意一个群组，你可以看到所有共享到该群组的资料库。"
+
+#: seahub/help/templates/help/groups_managing.html:14
+msgid ""
+"To create a new group, click on the \"Shared with groups\" tab on the left "
+"panel. Then click on \"All Groups\". In the page, you can click the \"New "
+"Group\" button to create a group."
+msgstr "要创建一个新群组，可以点击左侧面板上的“群组共享”，再点击“所有群组”，然后在页面上点击“新建群组”按钮创建一个群组。"
+
+#: seahub/help/templates/help/groups_managing.html:15
+#, python-format
+msgid ""
+"See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
+"and folders</a> about how to share libraries or folders to a group."
+msgstr "关于如何共享资料库或目录到一个群组，请参考 <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">共享文件和目录</a>。 "
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1707,14 +2605,14 @@ msgid ""
 "\"foo/hello\". Note that the wildcard character * recursively matches all "
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
-msgstr "支持通配符。比如， \"foo/*\" 匹配 \"foo/1\" and \"foo/hello\"。\"foo/?\" 匹配 \"foo/1\" 但是不匹配 \"foo/hello\"。通配符 * 会递归匹配目录下的所有路径。比如 \"foo/*.html\" 会匹配文件 \"foo/a.html\" 以及 \"foo/templates/b.html\"。"
+msgstr "支持通配符。比如， \"foo/*\" 匹配 \"foo/1\" 和 \"foo/hello\"。\"foo/?\" 匹配 \"foo/1\" 但是不匹配 \"foo/hello\"。通配符 * 会递归匹配目录下的所有路径。比如 \"foo/*.html\" 会匹配文件 \"foo/a.html\" 以及 \"foo/templates/b.html\"。"
 
 #: seahub/help/templates/help/ignore.html:13
 msgid ""
 "If the pattern ends with a slash, it would only match a folder. In other "
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
-msgstr "如果一个模式以斜杠结尾，那么它只会匹配目录。比如，foo/ 匹配目录 \"foo\" 以及它下面的路径， 但是不会匹配一个常规文件或是一个符号链接 foo。"
+msgstr "如果一个模式以斜杠结尾，那么它只会匹配目录。比如，\"foo/\" 匹配目录 \"foo\" 以及它下面的路径， 但是不会匹配一个常规文件或是一个符号链接 \"foo\"。"
 
 #: seahub/help/templates/help/ignore.html:14
 msgid ""
@@ -1722,7 +2620,7 @@ msgid ""
 "folder. For example, \"foo\" can only match regular file \"foo\" or a "
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
-msgstr "如果一个模式不以斜杠或者通配符结尾，那么它只能匹配文件，而不能匹配目录。"
+msgstr "如果一个模式不以斜杠或者通配符结尾，那么它不能匹配目录。比如，\"foo\" 只能匹配常规文件 \"foo\" 或者一个符号链接，而 \"foo/\" 和 \"foo\" 则匹配一个目录和它下面的路径。"
 
 #: seahub/help/templates/help/ignore.html:18
 msgid "Example"
@@ -1759,76 +2657,351 @@ msgid ""
 "existing versions won't be removed."
 msgstr "seafile-ignore.txt 只能忽略还没有被同步的文件。对于已经被同步的文件，如果后来把它添加到 seafile-ignore.txt 中，系统只会忽略后续更改，已经上传的版本不会受影响。"
 
-#: seahub/help/templates/help/install.html:6
-msgid "Installing Seafile Client Program"
+#: seahub/help/templates/help/install_sync.html:6
+msgid "Installing Seafile client program"
 msgstr "安装 Seafile 客户端"
 
-#: seahub/help/templates/help/install.html:8
+#: seahub/help/templates/help/install_sync.html:8
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr "在您下载完 Seafile 客户端后，只需下面的步骤来安装使用："
 
-#: seahub/help/templates/help/install.html:10
+#: seahub/help/templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
 msgstr "1. 指定 Seafile 数据磁盘"
 
-#: seahub/help/templates/help/install.html:11
+#: seahub/help/templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
 msgstr "指定文件夹存储 Seafile 数据"
 
-#: seahub/help/templates/help/install.html:13
+#: seahub/help/templates/help/install_sync.html:13
 msgid "2. Add an account"
 msgstr "2. 添加帐号"
 
-#: seahub/help/templates/help/install.html:14
+#: seahub/help/templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr "在你的私有 Seafile 服务器或者我们的公共服务器上添加一个帐号"
 
-#: seahub/help/templates/help/install.html:18
+#: seahub/help/templates/help/install_sync.html:18
 msgid "3. Sync a library"
 msgstr "3. 同步一个资料库"
 
-#: seahub/help/templates/help/install.html:20
+#: seahub/help/templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr "点击“同步该资料库”按钮将该资料库与本地文件夹同步。"
 
-#: seahub/help/templates/help/install.html:21
+#: seahub/help/templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr "往该资料库中添加文件。它们将会被自动同步到云平台。"
 
-#: seahub/help/templates/help/install.html:26
+#: seahub/help/templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
 msgstr "4. （可选）创建一个资料库"
 
-#: seahub/help/templates/help/install.html:28
+#: seahub/help/templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
 msgstr "你也可以从一个本地目录创建一个资料库。"
 
-#: seahub/help/templates/help/install.html:34
+#: seahub/help/templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
 msgstr "5. 浏览云端文件"
 
-#: seahub/help/templates/help/install.html:35
+#: seahub/help/templates/help/install_sync.html:35
 msgid ""
 "In some occasions, you want to modify files on the cloud directly without "
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
-msgstr "在某些情况下，你只想修改云端文件但并不想将其同步下来。 Seafile 客户端自带的“云端文件浏览器”可以满足这一需求。单击某个未同步的资料库即可打开云端文件浏览器。"
+msgstr "在一些情况下，你想直接在云端修改文件，并且不同步它们。Seafile 自带的“云端文件浏览器”可以满足这个需要。点击一个未同步的资料库就可以打开这个云端文件浏览器。"
 
-#: seahub/help/templates/help/selective_sync.html:6
-msgid "Selective Sync Sub-folders"
-msgstr "选择性同步子目录"
+#: seahub/help/templates/help/introduction.html:8
+msgid ""
+"Seafile is an enterprise file hosting platform with high reliability and "
+"performance."
+msgstr "Seafile 是具有高可靠性和性能的企业文件托管平台。"
+
+#: seahub/help/templates/help/introduction.html:9
+#, python-format
+msgid ""
+"Seafile contains a web interface for you to manage and share files. It has "
+"two kinds of desktop clients, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
+"has mobile clients for Android and iOS."
+msgstr "Seafile 包含一个 Web 界面，可以管理和共享文件。 它有两种桌面客户端, <a href=\"%(SITE_ROOT)shelp/install_sync/\">文件同步客户端</a> 和 <a href=\"%(SITE_ROOT)shelp/using_drive_client\">挂载盘客户端</a>。它还有适用于 Android 和 iOS 的移动客户端。"
+
+#: seahub/help/templates/help/introduction.html:10
+msgid ""
+"You can download the clients in <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
+"site</a>."
+msgstr "你可以在<a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile 网站</a>上下载这些客户端。"
+
+#: seahub/help/templates/help/introduction.html:11
+msgid ""
+"If this manual does not contain the information you needed, you can seek "
+"help in our forum: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
+msgstr "如果这个手册里没有包含你需要的信息，你可以在我们的论坛里寻求帮助： <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a>。"
+
+#: seahub/help/templates/help/libraries_managing.html:6
+msgid ""
+"Seafile uses \"libraries\" to organize your files. A library is a top level "
+"container for a set of files and folders. You can create a library for each "
+"project you work on, or each document type you want to save in Seafile. A "
+"library works mostly like a top level folder. But it also has some special "
+"properties:"
+msgstr "Seafile 使用“资料库”来管理文件。一个资料库是一组文件和目录的顶级容器。你可以为你处理的每个项目，或是你想在 Seafile 保存的每种文档类型，创建一个资料库。一个资料库就像一个顶级的目录。但它也有一些特性："
+
+#: seahub/help/templates/help/libraries_managing.html:8
+msgid ""
+"Each library keeps its own file modification history. There is no global "
+"file modification history across all libraries."
+msgstr "每个资料库保存它自己的文件修改历史。没有跨资料库的全局文件修改历史。"
+
+#: seahub/help/templates/help/libraries_managing.html:9
+msgid ""
+"Each library can be synced to desktop clients separately. You can choose "
+"which libraries to be synced."
+msgstr "每个资料库可以单独地同步到桌面客户端。你可以选择同步哪些资料库。"
+
+#: seahub/help/templates/help/libraries_managing.html:11
+msgid ""
+"When you log into Seafile's web app for the first time, Seafile "
+"automatically creates a default library named \"My Library\" for you. You "
+"can also create more libraries. Here is what it looks like when you've "
+"created a few libraries."
+msgstr "当你第一次登录到 Seafile 的 Web app 时，Seafile 会自动地给你创建一个名为“我的资料库”的默认资料库。你也可以创建更多的资料库。创建了一些资料库后，界面上是这样的。"
+
+#: seahub/help/templates/help/libraries_managing.html:13
+msgid ""
+"You can navigate into a library and manage your files and folders. You can "
+"upload, download, rename, move, copy and delete files."
+msgstr "你可以进入一个资料库管理你的文件和目录。你可以上传，下载，重命名，移动，复制和删除文件。"
+
+#: seahub/help/templates/help/libraries_managing.html:15
+#, python-format
+msgid ""
+"After <a href=\"%(SITE_ROOT)shelp/install_sync/\">syncing a library with "
+"desktop client</a>, you can do any file operations inside the local library "
+"folder. The operations will be uploaded to the server. "
+msgstr "<a href=\"%(SITE_ROOT)shelp/install_sync/\">同步一个资料库到桌面客户端</a>后，你可以在本地的资料库目录中做任何的文件操作。这些操作会被上传到服务器端。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:7
+msgid ""
+"Seafile tracks modification history for the entire library. Whenever a file "
+"operation applies to a library (file update, file deletion etc.), Seafile "
+"creates a \"snapshot\" of the previous state of the library. The snapshot "
+"contains the complete file and folder structure of the library."
+msgstr "Seafile 会跟踪整个资料库的修改历史。当资料库中有文件操作（比如文件更新，文件删除等）时，Seafile  会给资料库的前一个状态创建一个“快照”。这个快照包含这个资料库的全部文件和目录结构。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:8
+msgid ""
+"In some cases, you have changed a lot of files in the library, and find that"
+" you want to revert all these changes. Restoring many files to their old "
+"versions can be tedious. At this time, the snapshot feature becomes very "
+"handy. You can restore the entire library to any point in the past. All the "
+"files in the library will be restored to that point of time, all at once. It"
+" works like a \"time machine\" for the library."
+msgstr "有些情况下，你修改了资料库中的很多文件，然后发现你想去掉所有的修改。把很多文件都恢复到旧版本可能会很乏味。此时，快照功能就变得很方便了。你可以将整个资料库都恢复到某个时间点。资料库中的所有文件都会被立刻恢复到那个时间点。它就像资料库的“时光机”。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:9
+msgid "To view library history and snapshots:"
+msgstr "查看资料库历史和快照："
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:11
+msgid ""
+"In Seafile Web App, navigate into the root folder of a library. Click the "
+"\"History\" icon in the library navigation top bar. All the change record of"
+" the library will be displayed in a list."
+msgstr "在 Seafile Web App 里，进入一个资料库的根目录，点击导航条上的“历史”图标，资料库的所有修改历史都会被列出来。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:12
+msgid ""
+"Click the \"view snapshot\" link on any modification record. You'll see the "
+"library state at the point of time."
+msgstr "点击任意修改记录上的“查看快照”链接，你可以看到那个时间点上的资料库状态。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:13
+msgid ""
+"In the snapshot view, you can download or restore any file or folder. If "
+"you're the library's owner, you can restore the enitre library to this point"
+" of time."
+msgstr "在快照页面，你可以下载或恢复任意的文件或目录。如果你是资料库的所有者，你还可以将整个资料库都恢复到这个时间点。"
+
+#: seahub/help/templates/help/library_history_and_snapshots.html:15
+#, python-format
+msgid ""
+"You can configure the retention period of library history: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr "你可以配置资料库历史的保存时间：<a href=\"%(SITE_ROOT)shelp/setting_library_history/\">设置历史保留时间</a>。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:6
+msgid ""
+"Capturing and storing little structured data in an easy-to-use fashion – "
+"that is what Seafile’s wikis are for. Wiki pages are written in Markdown "
+"(MD), a simple markup language, to ensure cross platform compatibility. MD "
+"files store textual, tabular as well as graphical information; You can also "
+"add links to other documents in a Markdown file."
+msgstr "以一种易于使用的方式捕获和存储非结构化的数据，这就是 Seafile Wiki 的目的。 Wiki 页面以 Markdown（MD），一种简单的标记语言，编写，以确保跨平台兼容性。 MD 文件存储文本，表格和图形信息； 您还可以在 Markdown 文件中添加指向其他文档的链接。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:7
+msgid ""
+"You can manage a standard library in Seafile like a Wiki, with the \"Column "
+"View\" introduced in 7.0 version. Since Seafile implements wikis as standard"
+" Seafile libraries, they can be synced and shared with other users just like"
+" any ordinary library."
+msgstr "应用 7.0 版中介绍的“分栏查看”模式，在 Seafile  中你可以像使用 Wiki 一样管理一个标准的资料库。由于 wiki 被实现为标准的资料库，它们可以像其他普通的资料库一样被同步和被共享给其他用户。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:8
+msgid "Column view"
+msgstr "分栏视图"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:9
+msgid ""
+"Wikis usually have a side bar containing a tree-like folder structure, to "
+"enable quick-and-easy browsing of Wiki pages. Seafile's Column View allows "
+"you to manage the files in a library in the same way as a Wiki space. Users "
+"can browse in it and move files and folders just by dragging and dropping. "
+"File actions such as renaming, moving, and opening via client are available "
+"in a right-click-accessible context menu."
+msgstr "Wiki 通常有一个包含树状文件夹结构的侧边栏，以实现对 Wiki 页面的快速便捷浏览。 Seafile 的分栏视图允许您以与 Wiki 空间相同的方式管理资料库中的文件。 用户可以在其中浏览，并且通过拖放来移动文件和文件夹。 可以在右键单击弹出的菜单中找到诸如重命名，移动，和在客户端中打开等文件操作。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:12
+msgid "WYSIWYG Markdown editor"
+msgstr "WYSIWYG Markdown 编辑器"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:13
+msgid ""
+"Wiki pages in Seafile are saved as ordinary documents in Markdown format. To"
+" create a new Wiki page in a library, just create a new Markdown document. "
+"MD files can be edited straight from Seafile’s web interface with the online"
+" MD editor. The web-based editor offers a smooth user experience and rich "
+"formatting options for text, images, and tables. Images can be imported into"
+" MD files from libraries and local storage as well as by hyperlinks. Basic "
+"image editing functions such as scaling can also be performed in the "
+"editor’s what-you-see-is-what-you-get (WYSIWYG) interface. Tables can be "
+"inserted and modified with just a few clicks. The same thing goes for a "
+"table’s content: A table can be copied in its entirety or in part without "
+"leaving the WYSIWYG view."
+msgstr "在 Seafile 中，Wiki 页面被以 Markdown 格式存储为普通的文档。 要在资料库中创建新的 Wiki 页面，只需创建一个新的 Markdown文档。 MD文件可以使用在线 MD 编辑器直接在 Seafile 的 Web 界面进行编辑。 基于 Web 的编辑器为文本，图片和表格提供了流畅的用户体验和丰富的格式选项。 图片可以从资料库和本地以及通过超链接导入到 MD 文件中。 基本的图片编辑功能，例如缩放，也可以在编辑器的所见即所得（WYSIWYG）界面中执行。 只需单击几下即可插入和修改表格。 表格的内容也一样：可以完全复制或部分复制表格，无需离开所见即所得视图。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:15
+msgid ""
+"The change history of a Markdown file can be easily accessed by clicking the"
+" \"File History\" button in the menu on top of the editor interface."
+msgstr "通过单击编辑器界面顶部菜单中的“文件历史”按钮，可以轻松访问 Markdown 文件的更改历史记录。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:17
+msgid ""
+"You can open a hidden side bar on the right side of the Markdown editor. "
+"Table of contents, file information, formatting suggestions, and "
+"collaborative commenting are provided in this side bar."
+msgstr "您可以在 Markdown 编辑器的右侧打开一个隐藏的侧栏。 此侧栏中提供了目录，文件信息，格式建议和协作评论。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:19
+msgid "File tagging and related documents"
+msgstr "文件标签和相关文档"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:20
+msgid ""
+"File tagging is an important feature for knowledge management. Seafile "
+"allows users to define tags for each library and apply tags to files. Tags "
+"can be managed from the side bar of the Markdown editor, or from the file "
+"browser interface."
+msgstr "文件标签是知识管理的重要功能。Seafile 允许用户给每一个资料库定义标签，并给文件使用标签。可以在 Markdown 编辑器的侧栏中，或是文件浏览页面管理标签。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:23
+msgid ""
+"The file browser interface provides a summary of all file tags in the "
+"current library."
+msgstr "文件浏览页面提供当前资料库的所有文件标签。"
+
+#: seahub/help/templates/help/manage_library_as_wiki.html:25
+msgid ""
+"You can also add related files to a Markdown document from the \"File "
+"Information\" tab in the side bar."
+msgstr "你也可以在侧栏中的“文件信息”中给一个 Markdown 文件添加相关的文件。"
+
+#: seahub/help/templates/help/read-only_syncing.html:6
+#, python-format
+msgid ""
+"For ready-only libraries or folders, Seafile will show a forbidden icon "
+"(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) "
+"to indicate they are read-only. However, users can still modify the synced "
+"local copies. When a local copy is modified, Seafile will ignore the "
+"modified one. When the copy at the server is also modified, the client will "
+"popup a notification, saying that the local modified copy conflicts with the"
+" copy at the server side. To prevent data loss, the local copy is renamed to"
+" a conflict file."
+msgstr "对于只读资料库和目录，Seafile 会显示一个禁止图标(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) 以说明它们是只读的。然而用户仍然可以修改同步后的本地副本。当一个本地副本被修改后， Seafile 会忽略它。当服务器端的副本被修改后， 客户端会弹出通知，说明本地修改后的副本和服务器端的副本有冲突。为了避免数据丢失，本地副本会被重命名为一个冲突文件。"
+
+#: seahub/help/templates/help/read-only_syncing.html:7
+msgid ""
+"If you want the be-shared users not be able to modify local copies, you can "
+"consider using the Seafile Drive client."
+msgstr "如果不希望被共享的用户修改本地副本，你可以考虑使用 Seafile 挂载盘客户端。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:6
+msgid "Restoring deleted files and folders"
+msgstr "恢复删除的文件和目录"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:7
+msgid ""
+"Each library in Seafile tracks your file deletion operations automatically. "
+"Sometimes you find files are deleted mistakenly. You can find back your "
+"deleted files in the trash bin of each library."
+msgstr "在 Seafile 中，每个资料库都会自动跟踪你的文件删除操作。有时你会误删文件。你可以在资料库的回收站中找回被删除的文件。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:8
+msgid "Here is how to use the trash bin feature:"
+msgstr "这是回收站功能的使用方法："
+
+#: seahub/help/templates/help/restoring_deleted_files.html:10
+msgid ""
+"In Seafile Web App, navigate into the parent folder containing the deleted "
+"file or folder."
+msgstr "在 Seafile Web App 中，进入被删除的文件或目录所在的父目录中。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:11
+msgid ""
+"Click the \"trash\" icon in the library operation bar. The deleted files and"
+" folders will be listed in deletion time order. In the bottom of the list, "
+"you can click the \"more\" button to load more deleted files."
+msgstr "点击资料库操作栏上的“回收站”图标。删除的文件和目录将按被删除的时间顺序列出。在列表的底部，可以点击“更多”按钮加载更多的删除的文件。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:12
+msgid ""
+"In the deleted files list, you can restore file and folders. If a file or "
+"folder's parent folder has been deleted, it will be restored to the "
+"library's root folder."
+msgstr "在删除文件的列表中，你可以恢复文件和目录。如果其父目录被删除了，文件或目录会被恢复到该资料库的根目录下。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:13
+msgid ""
+"Note that the trash bin only contains files and sub-folders deleted under "
+"the current folder. Files deleted in the sub-folders of the current folder "
+"are also included in the list."
+msgstr "注意，回收站只包含在当前目录下被删除的文件和目录。在当前目录的子目录中被删除的文件也会被列出来。"
+
+#: seahub/help/templates/help/restoring_deleted_files.html:15
+#, python-format
+msgid ""
+"You can configure the retention period of deleted files: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
+"retention period</a>."
+msgstr "你可以配置被删除的文件的保留时间： <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">设置历史保留时间</a>。"
 
 #: seahub/help/templates/help/selective_sync.html:8
 msgid ""
 "You may have some very large libraries on the Seafile server. And you're "
-"currently only interested in a sub-folder inside one library. If your "
-"Seafile server is Pro edition, you can selectively sync a sub-folder in a "
-"library, instead of syncing the entire library."
-msgstr "你可能在 Seafile 服务器上有一个很大的资料库，但是只对其中某一个子目录感兴趣。如果你使用 Seafile 专业版，可以选择性同步子目录，而不必同步整个资料库。"
+"currently only interested in a sub-folder inside one library. Then you can "
+"selectively sync a sub-folder in a library, instead of syncing the entire "
+"library."
+msgstr "在 Seafile 服务器上你可能有一些非常大的资料库。而你现在只对一个资料库中的一个子目录有兴趣。那么你可以选择性地同步该子目录，而非整个资料库。"
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -1836,19 +3009,328 @@ msgid ""
 "which hasn't been synced. Navigate into the parent folder of that sub-"
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
-msgstr "如果想要只同步一个子目录，双击未同步资料库，打开云端文件浏览器后，进入到子目录所在目录，右击此子目录，在弹框中选择 “同步该目录”即可。"
+msgstr "要同步一个子目录，双击一个未同步的资料库，打开云端文件浏览器。进入该子目录所在的目录，右键单击该子目录，在弹框中选择 “同步该目录”即可。"
 
 #: seahub/help/templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
-msgstr "同步子目录后，你可以在客户端主界面中的 “已同步资料库” 中看到同步状态。"
+msgstr "同步子目录后，你可以在客户端主界面中的 “已同步资料库” 中看到它的同步状态。"
 
-#: seahub/help/templates/help/sync_existing.html:6
-msgid "Syncing With an Existing Folder"
-msgstr "同步已存在文件夹"
+#: seahub/help/templates/help/setting_library_history.html:6
+msgid "Setting library history retention period"
+msgstr "设置资料库历史保留期限"
 
-#: seahub/help/templates/help/sync_existing.html:8
+#: seahub/help/templates/help/setting_library_history.html:7
+msgid ""
+"A library's history retention period length controls how long you can access"
+" your history data in the following features:"
+msgstr "资料库的历史记录保留期限长度控制着您可以通过以下功能访问历史数据的时间："
+
+#: seahub/help/templates/help/setting_library_history.html:9
+msgid ""
+"Restore deleted files: you cannot restore files and folders deleted before "
+"the retention period."
+msgstr "恢复删除的文件：你不能恢复在保留期限之前被删除的文件和目录。"
+
+#: seahub/help/templates/help/setting_library_history.html:10
+msgid ""
+"File versions: you cannot access file versions older than the retention "
+"period."
+msgstr "文件版本：你不能访问早于保留期限的文件版本。"
+
+#: seahub/help/templates/help/setting_library_history.html:11
+msgid ""
+"Library history and snapshots: you cannot access library snapshots older "
+"than the retention period."
+msgstr "资料库历史和快照：你不能访问早于保留期限的资料库快照。"
+
+#: seahub/help/templates/help/setting_library_history.html:13
+msgid ""
+"The retention period of old files versions can be configured for each "
+"library, separately. You must be the library's owner to set the retention "
+"period. To set retention period length:"
+msgstr "每个资料库可以单独设置该期限。只有资料库的所有者才可以设置。如何设置："
+
+#: seahub/help/templates/help/setting_library_history.html:15
+msgid ""
+"In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
+"the below screenshot). All libraries owned by you will be listed."
+msgstr "在 Seafile Web App 中，点击左边导航中的“我的资料库”（如下图所示），你所拥有的全部资料库都会被列出来。"
+
+#: seahub/help/templates/help/setting_library_history.html:16
+msgid ""
+"Move the cursor onto the row of the library. An operation menu will appear. "
+"Click \"History Setting\" in the drop-down menu."
+msgstr "将鼠标移动到资料库所在的行上。在弹出的操作菜单中选择“历史设置”。"
+
+#: seahub/help/templates/help/setting_library_history.html:17
+msgid "In the pop-up dialog, you can set the length of file retention period."
+msgstr "在弹框中，你可以设置保留期限。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:6
+msgid ""
+"In Seafile there are a few ways to share files and folders with others:"
+msgstr "在 Seafile 中，有几种方式可以将文件和目录共享给其他人："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:8
+msgid ""
+"Using links: there are multiple types of links that can be used to share "
+"with various scope of collaborators."
+msgstr "使用链接：有多种链接可用来和各种合作者共享。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:10
+msgid ""
+"Share links: Any user who has access to the links can access the files or "
+"folders pointed by the link. No login is required."
+msgstr "共享外链：任何可以访问该链接的用户都可以访问该链接所指向的文件或目录。无需登录。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:11
+msgid ""
+"Upload links: Any user who has access to the links can upload files to the "
+"folder pointed by the link. No login is required."
+msgstr "上传外链：任何可以访问该链接的用户都可以上传文件到该链接所指向的目录中。无需登录。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:12
+msgid ""
+"Internal links: Only logged in users who have read permission to the file or"
+" folder can access this link. Used for internal file sharing."
+msgstr "内部链接：只有已登录并对该文件或目录有读权限的用户才可以访问该链接。只用于内部文件共享。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:15
+msgid ""
+"Sharing libraries or folders: used for setting access permissions to a "
+"library or folder for specific users or groups. Users have to log in to "
+"access the folders."
+msgstr "共享资料库或目录：用来给特定的用户或群组设置一个资料库或者目录的访问权限。用户需要登录后才能访问目录。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:17
+msgid "Creating share links to files or folders"
+msgstr "给文件或目录创建共享外链"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:18
+msgid ""
+"Share links are public links to files or folders. They can be accessed by "
+"anyone, including those who don't have a Seafile account. You can also use "
+"password and expiration time to protect your links."
+msgstr "共享外链是文件或目录的公共链接。任何人都可以访问，包括那些没有 Seafile 帐号的人。你也可以使用密码和过期时间来保护你的共享外链。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:19
+msgid ""
+"You can also set access permission to share links. There are three types of "
+"permissions:"
+msgstr "你也可以设置共享外链的访问权限。有以下三种："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:21
+msgid ""
+"Preview and Download: the file or files in the folder can be downloaded. If "
+"the type of files can be previewd in web browser, they can also be viewed "
+"online (e.g. Office files)."
+msgstr "预览和下载：文件或者目录中的文件可以下载。如果该文件支持在浏览器中预览，那么它们也可以在线查看（例如 Office 文件）。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:22
+msgid ""
+"Preview only: the file or files in the folder can only be viewed in web "
+"browser, but cannot be downloaded. This is useful for sharing confidential "
+"data."
+msgstr "仅预览：文件或者目录中的文件只能在浏览器中查看，但是不能下载。这对于共享机密数据很有用。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:23
+msgid ""
+"Edit on cloud and download: Similar to \"Preview and Download\", but if the "
+"file can be edited in web browser (e.g. an Office file), any user who has "
+"access to the link is allowed to edit it."
+msgstr "云端可编辑和下载：和“预览与下载”类似，只是，如果文件可以在浏览器中编辑（例如，Office 文件），那么任何可以访问该链接的用户都可以编辑它。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:25
+msgid "To create a share link in Seafile web app:"
+msgstr "在 Seafile web app 中创建一个共享外链："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:27
+msgid ""
+"Navigate into the parent folder containing the file or folder. Hover your "
+"mouse over the file or folder and click on the \"Share\" icon that appears."
+msgstr "进入文件或目录的父目录，将鼠标移动到文件或目录上，点击出现的“共享”图标。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:28
+msgid ""
+"A pop-up window will appear with share options. Click the \"Share Link\" tab"
+" on the left panel. Then click \"Generate\" button to create a link. You can"
+" use password, expiration time and permission to protect your link."
+msgstr "一个包含共享选项的弹框会弹出来。点击左侧面板中的“共享外链”，然后点击“生成链接”按钮来创建一个外链。你可以使用密码，过期时间和共享权限来保护你的外链。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:29
+#: seahub/help/templates/help/sharing_files_and_folders.html:42
+msgid ""
+"Copy the link to email, instant messaging client or any other tool to send "
+"it to others."
+msgstr "将这个链接复制到邮件，即时消息客户端或者其他工具中，然后发送给其他人。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:31
+msgid "You can also create share links from the desktop clients."
+msgstr "你也可以在桌面客户端上创建共享外链。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:33
+msgid ""
+"If the library is synced, double click the library in the main window of "
+"Seafile client. The local folder of that library will be opened. Right click"
+" on the file or folder that you want to create a link to. In the pop-up "
+"menu, choose \"Seafile\" then \"Create share link\"."
+msgstr "如果资料库已同步，在 Seafile 客户端的主窗口中双击该资料库。资料库的本地目录会打开。在想创建外链的文件或目录上右键单击。在弹出的菜单中选择 \"Seafile\", 然后再选择“创建共享外链”。 "
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:34
+msgid ""
+"If the library is not synced, double click the library in the main window of"
+" Seafile client. The cloud file browser window will be opened, and you can "
+"create a link to a file or folder in it."
+msgstr "如果资料库还没同步，在 Seafile 客户端的主窗口中双击该资料库。云端文件浏览器窗口会打开。你可以在里面创建文件或目录的外链。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:36
+msgid "Creating upload links to folders"
+msgstr "创建目录外链"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:37
+msgid ""
+"You can use upload links to collect files from others. You can only create "
+"upload links for folders. Others cannot see the files in the folders. They "
+"can only upload files to them."
+msgstr "你可以使用上传外链来从其他人那里收集文件。只能给目录创建上传外链。其他人不能看见目录中的文件，只能上传文件。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:38
+msgid "To create an upload link in Seafile web app:"
+msgstr "在 Seafile web app 中创建外链："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:40
+msgid ""
+"Navigate into the parent folder containing the folder. Hover your mouse over"
+" the folder and click on the \"Share\" icon that appears."
+msgstr "进入目录所在的父目录。将鼠标移到目录上，然后点击出现的“共享”图标。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:41
+msgid ""
+"A pop-up window will appear with share options. Click the \"Upload Link\" "
+"tab on the left panel. Then click \"Generate\" button to create a link. You "
+"can use password to protect your link."
+msgstr "一个包含共享选项的弹框会弹出来。点击左侧面板中的“上传外链”，然后点击“生成链接”按钮来创建一个外链。你可以使用密码来保护你的外链。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:44
+msgid "Sharing libraries or folders"
+msgstr "共享资料库或目录"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:45
+msgid ""
+"You can share a library or folder to other registered Seafile users. The "
+"shared library or folder can be accessed by others with the web app and "
+"Seafile clients."
+msgstr "你可以将一个资料库或目录共享给 Seafile 的其他注册用户。被共享的资料库或目录可以用 Seafile 的 web app 或客户端访问。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:46
+msgid "You can choose the range of the share:"
+msgstr "你可以选择共享的范围："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:48
+msgid "Share to user: You can share to one or more users."
+msgstr "共享给用户：可以共享给一个或多个用户。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:49
+msgid "Share to group: You can share to a group."
+msgstr "共享给群组：可以共享给一个群组。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:50
+msgid ""
+"Share to organization: If you're using a private server, sometimes it's "
+"useful to share to all members on the server (the entire organization)."
+msgstr "共享给机构：如果使用的是私有服务器，有时共享给服务器（整个机构）上的所有成员很有用。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:52
+msgid "You can also set permission on the share:"
+msgstr "你也可以设置共享的权限："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:54
+msgid "Read-Write: users can read, write, upload, download and sync files."
+msgstr "可读写：用户可以查看、修改、上传、下载和同步文件。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:55
+msgid "Read-only: users can read, download and sync files."
+msgstr "只读：用户可以查看、下载和同步文件。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:56
+msgid "Admin: besides the write permission, users can also share the library."
+msgstr "管理：除了可读写权限，用户还可以共享该资料库。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:57
+msgid ""
+"Online Read-Write: users can view and edit files online via a web browser. "
+"The files cannot be downloaded."
+msgstr "仅云端读写：用户可以通过 web 浏览器在线查看和编辑文件，不能下载文件。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:58
+msgid ""
+"Online Read-only: users can only view files online via a web browser. The "
+"files cannot be downloaded."
+msgstr "仅云端预览：用户只能通过 web 浏览器在线查看文件，不能下载文件。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:60
+msgid "To share a library or folder to a user or group:"
+msgstr "共享一个资料库或目录给用户或群组："
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:62
+msgid ""
+"Hover your mouse over the library or folder and click on the \"Share\" icon "
+"that appears."
+msgstr "将鼠标移动到资料库或目录上，然后点击出现的“共享”图标。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:63
+msgid ""
+"A pop-up window will appear with share options. Click the \"Share to user\" "
+"or \"Share to group\" tab on the left panel. Select the user or group. Then "
+"click \"Submit\"."
+msgstr "一个包含共享选项的弹框会弹出来。点击左侧面板中的“共享给用户”或“共享给群组”，选择目标用户或群组，然后点击“提交”。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:65
+msgid ""
+"After you share a library or folder to a user, the user can see it by "
+"clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
+" you share it to a group, the group members can only see it by navigating "
+"into the group."
+msgstr "将一个资料库或目录共享给一个用户后，该用户可以在 Seafile web app 中点击左侧面板上的“共享给我的”来查看它。如果是共享给一个群组，那么群组中的成员只能进入该群组去查看它。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:66
+msgid ""
+"To share a library to the entire organization: In Seafile web app, click the"
+" \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
+"button. In the drop-down menu, you can choose to share an existing library "
+"or create a new library and share it."
+msgstr "共享一个资料库到整个机构：在 Seafile web app 中，点击左侧面板上的“公共资料库”。然后点击“添加资料库”按钮。在弹出的下拉菜单中，你可以选择共享一个已存在的资料库，或者新建一个资料库并共享它。"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:67
+msgid "Internal links"
+msgstr "内部链接"
+
+#: seahub/help/templates/help/sharing_files_and_folders.html:68
+msgid ""
+"Only logged in users who have read permission to the file or folder can "
+"access this link. It is used for internal file sharing. It's a convenient "
+"way for sharing files among team members who have access to a common "
+"library. You may just copy the link and paste it into an email or IM "
+"software."
+msgstr "只有已登录并对相应的文件或目录有读权限的用户才可以访问这个链接。该功能用于内部文件共享。这是在有权限访问一个公共资料库的团队成员之间共享文件的一种便捷方法。你可以将链接复制粘贴到邮件或 IM 软件中。"
+
+#: seahub/help/templates/help/sync_interval.html:8
+msgid ""
+"Usually Seafile client automatically detects changes on local folder and "
+"upload the changes to server. However, if the local folder is in a Windows "
+"network share drive, Seafile client cannot detect changes reliably. In this "
+"case, you can ask Seafile client to periodically checks for changes in the "
+"local folder. You can set the interval of this periodic sync. The interval "
+"is set in the unit of seconds."
+msgstr "通常 Seafile 客户端会自动检测本地文件夹更改并上传服务器。但是，如果本地文件夹是一个 Windows 网络共享驱动器，Seafile 客户端就无法可靠地检测到更改。在这种情况下，你可以以妙为单位设置 Seafile 客户端定期检查更改并同步。"
+
+#: seahub/help/templates/help/syncing_existing_folders.html:6
+msgid "Syncing with an existing folder"
+msgstr "和一个已存在的文件夹同步"
+
+#: seahub/help/templates/help/syncing_existing_folders.html:8
 #, python-format
 msgid ""
 "Sometimes you already have a library on the Seafile server (shared by "
@@ -1861,36 +3343,22 @@ msgid ""
 "are different in the local folder and the library. "
 msgstr "有时候你已经在 Seafile 服务器上有一个资料库 (别人共享给你的，或者你在另一台电脑上上传的)，你可以在将此资料库同步到已有文件夹下。本地文件夹需要和资料库有一样的名字，本地文件夹里的文件会和资料库中的文件合并，但不论本地文件夹里还是资料库里的文件都不会被覆盖或者删除。但如果文件内容不同可能会产生  <a href=\"%(SITE_ROOT)shelp/conflicts/\">冲突文件</a>。"
 
-#: seahub/help/templates/help/sync_existing.html:10
+#: seahub/help/templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
-msgstr "想要通过已有文件夹同步资料库，在 Seafile 客户端主窗口右击这个资料库并点击“同步资料库”。"
+msgstr "要将资料库和已存在的文件夹同步，请在 Seafile 客户端主窗口中右键单击这个资料库然后点击“同步该资料库”。"
 
-#: seahub/help/templates/help/sync_existing.html:14
+#: seahub/help/templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr "在弹框中，点击“同步已有文件夹”链接。"
+msgstr "在弹框中，点击“和已有文件夹同步”链接。"
 
-#: seahub/help/templates/help/sync_existing.html:18
+#: seahub/help/templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
 msgstr "然后选择一个已有文件夹来同步到这个资料库。"
 
-#: seahub/help/templates/help/sync_interval.html:6
-msgid "Setting Sync Interval"
-msgstr "设置同步间隔"
-
-#: seahub/help/templates/help/sync_interval.html:8
-msgid ""
-"Usually Seafile client automatically detects changes on local folder and "
-"upload the changes to server. However, if the local folder is in a Windows "
-"network share drive, Seafile client cannot detect changes reliably. In this "
-"case, you can ask Seafile client to periodically checks for changes in the "
-"local folder. You can set the interval of this periodic sync. The interval "
-"is set in the unit of seconds."
-msgstr "通常 Seafile 客户端会自动检测本地文件夹更改并上传服务器。但是，如果本地文件夹是一个 Windows 网络共享驱动器，Seafile 客户端就无法可靠地检测到更改。在这种情况下，你可以以妙为单位设置 Seafile 客户端定期检查更改并同步。"
-
 #: seahub/help/templates/help/unsync_resync.html:6
-msgid "Unsync and Resync Library"
+msgid "Unsync and resync library"
 msgstr "解除同步与重新同步资料库"
 
 #: seahub/help/templates/help/unsync_resync.html:8
@@ -1899,10 +3367,10 @@ msgid ""
 "When you no longer want to sync a local folder with a library, you can "
 "unsync it. After you unsync a library, changes to the local folder and files"
 " will not be uploaded, and changes in the library will not be downloaded. If"
-" you want to sync the library with the local folder again, you can use <a "
-"href=\"%(SITE_ROOT)shelp/sync_existing/\">sync with existing folder</a> "
-"feature."
-msgstr "如果你不想再同步本地文件夹到资料库，你可以解除同步。解除同步后，本地文件夹的更改将不被上传，资料库的更改也不会被下载。如果你想再次同步，可以使用 <a href=\"%(SITE_ROOT)shelp/sync_existing/\">同步已有文件夹</a> 功能。"
+" you want to sync the library with the local folder again, you can use the "
+"<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
+"folder</a> feature."
+msgstr "当你不再想将本地文件夹和资料库同步时，你可以解除同步。解除同步后，本地文件夹中的修改不会被上传，资料库中的修改也不会被下载。如果你想再次建立同步，你可以使用 <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">和已有文件夹同步</a> 功能。"
 
 #: seahub/help/templates/help/unsync_resync.html:10
 msgid ""
@@ -1910,14 +3378,182 @@ msgid ""
 "these cases, it's usually helpful to \"resync\" the library. Resync means "
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
-msgstr "有时因为客户端内部错误会阻塞同步，此时你可以在客户端主窗口，右击此资料库，在弹框中点击 “重新同步”。重新同步是指先解除同步，然后立刻再同步此资料库到同一文件夹。"
+msgstr "有时客户端内部错误会阻塞同步。这种情况下，“重新同步”该资料库会有帮助。重新同步是指先解除同步，然后立刻再同步此资料库到同一文件夹。你可以在客户端主窗口的弹出菜单中找到这个操作。"
+
+#: seahub/help/templates/help/using_drive_client.html:7
+msgid ""
+"After installing a drive client with the instructions on the <a "
+"href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
+"start it by double clicking the \"SeaDrive\" app icon on your desktop."
+msgstr "按照 <a href=\"https://www.seafile.com/en/download/\">下载页面</a>上的说明安装了一个挂载盘客户端后, 你可以通过双击桌面上的\"SeaDrive\"图标来启动它。"
+
+#: seahub/help/templates/help/using_drive_client.html:8
+msgid ""
+"You'll be asked to choose a drive letter for the virtual drive. By default, "
+"\"S:\" will be used."
+msgstr "你需要为虚拟盘选择一个盘符。默认情况下会使用“S:”。"
+
+#: seahub/help/templates/help/using_drive_client.html:9
+msgid "Then you'll be asked to log into your Seafile server."
+msgstr "然后你会被要求登录到你的 Seafile 服务器。"
+
+#: seahub/help/templates/help/using_drive_client.html:12
+msgid ""
+"After successfully log into the server, the Drive client starts to fetch "
+"library and file list from the server. The file contents are not downloaded "
+"at this moment. So it'll not take very long. You can let it run in the "
+"background. You'll be noticed when the fetch is done."
+msgstr "登录成功后，挂载盘客户端会开始从服务器上获取资料库和文件列表。此时不会下载文件内容。所以不会持续太久。你可以让它在后台运行。获取完成后你会收到通知。"
+
+#: seahub/help/templates/help/using_drive_client.html:14
+msgid ""
+"The virtual drive folder will be opened. You'll find it works just like an "
+"ordinary hard drive on your computer. The top level folders in the virtual "
+"drive are libraries on the Seafile server. File contents will be downloaded "
+"when you open a file. Recently opened file will be cached in your local "
+"disk. All cached files will be marked with a green tick."
+msgstr "虚拟盘目录会被打开。你会发现它和一个普通的本地磁盘类似。虚拟盘中的顶级目录对应 Seafile 服务器上的资料库。打开一个文件时，文件内容会被下载下来。最近打开的文件会被缓存到本地磁盘中。所有已缓存的文件都会用一个绿勾标记。"
+
+#: seahub/help/templates/help/using_drive_client.html:17
+msgid "Synced State"
+msgstr "同步状态"
+
+#: seahub/help/templates/help/using_drive_client.html:18
+msgid ""
+"Files and folders in the virtual drive are in either cloud-only, synced, or "
+"in partially synced state."
+msgstr "挂载盘里面的文件和目录可能在三种状态：只在云端，完全同步，或者部分同步。"
+
+#: seahub/help/templates/help/using_drive_client.html:22
+#: seahub/help/templates/help/using_drive_client.html:51
+msgid "State"
+msgstr "状态"
+
+#: seahub/help/templates/help/using_drive_client.html:23
+#: seahub/help/templates/help/using_drive_client.html:52
+msgid "Icon"
+msgstr "图标"
+
+#: seahub/help/templates/help/using_drive_client.html:24
+#: seahub/help/templates/help/using_drive_client.html:53
+msgid "Details"
+msgstr "详情"
+
+#: seahub/help/templates/help/using_drive_client.html:29
+msgid "Cloud-only content"
+msgstr "只在云端"
+
+#: seahub/help/templates/help/using_drive_client.html:31
+msgid ""
+"Cloud-only content shows in the virtual drive, but doesn’t use the full "
+"amount of space that the file would. In your file explorer, you can see the "
+"file, but the content isn’t fully downloaded until you need it. What "
+"downloaded is only information about the file, such as its name, its size "
+"and the date it was updated."
+msgstr "只在云端的内容会在虚拟盘中显示，但是不会占用文件本该占用的全部空间。在文件浏览器中，你可以看见文件，但其内容只在你需要时才会被完全下载下来。已下载的只有文件相关的信息，如文件名，文件大小和更新日期。"
+
+#: seahub/help/templates/help/using_drive_client.html:34
+msgid "Synced content"
+msgstr "完全同步"
+
+#: seahub/help/templates/help/using_drive_client.html:36
+msgid ""
+"Synced content is downloaded and saved on the hard drive of your computer. "
+"You can directly edit these files from applications on your computer."
+msgstr "已同步的内容会被下载和保存在本地磁盘上。可以直接在本地编辑。"
+
+#: seahub/help/templates/help/using_drive_client.html:39
+msgid "Partially synced content"
+msgstr "部分同步"
+
+#: seahub/help/templates/help/using_drive_client.html:41
+msgid ""
+"Partially synced folders contain both synced and cloud-only files or "
+"folders."
+msgstr "部分同步的文件夹会包含已同步的和只在云端的文件或目录。"
+
+#: seahub/help/templates/help/using_drive_client.html:46
+msgid "Special States"
+msgstr "特殊状态"
+
+#: seahub/help/templates/help/using_drive_client.html:47
+msgid ""
+"For files that are already synced to local computer, they may be in 3 other "
+"special states, besides the normal \"synced\" state. "
+msgstr "已经同步到本地的文件还可能处于3种其他的特殊状态。"
+
+#: seahub/help/templates/help/using_drive_client.html:58
+msgid "Locked by other user"
+msgstr "被其他人锁定"
+
+#: seahub/help/templates/help/using_drive_client.html:60
+msgid ""
+"The file is locked by other user on the server. You can only open the file "
+"in read-only mode. You cannot modify, delete, rename or move the file."
+msgstr "文件已经被其他用户锁定，你只能以只读模式打开文件，不能修改，删除，重命名或者移动文件。"
+
+#: seahub/help/templates/help/using_drive_client.html:63
+msgid "Locked by me"
+msgstr "被自己锁定"
+
+#: seahub/help/templates/help/using_drive_client.html:65
+msgid ""
+"The file is locked by you. This prevents others from modifying the file."
+msgstr "文件被自己锁定，这样可以阻止其他人修改该文件。"
+
+#: seahub/help/templates/help/using_drive_client.html:68
+msgid "Read-only"
+msgstr "只读"
+
+#: seahub/help/templates/help/using_drive_client.html:70
+msgid ""
+"The folder or library of this file is shared with read-only permission to "
+"you. You cannot modify, delete or move the file."
+msgstr "文件所在的目录或者资料库是以只读权限共享给你的，你不能修改, 删除, 或移动该文件。"
+
+#: seahub/help/templates/help/using_drive_client.html:74
+msgid ""
+"The Drive client regularly cleans up unused cached files in the background. "
+"You can also limit the local cache space."
+msgstr "挂载盘客户端会在后台定期清理不用的缓存文件。你也可以限制本地缓存空间的上限。"
+
+#: seahub/help/templates/help/using_drive_client.html:76
+msgid ""
+"You can log into multiple accounts in the Drive client. However, only files "
+"on the current selected server will be shown in the virtual drive. You can "
+"switch among accounts."
+msgstr "挂载盘客户端支持登录多个服务器帐号。但是挂载盘中只会显示出当前选中的服务器中的文件。你可以切换账号。"
+
+#: seahub/help/templates/help/using_drive_client.html:80
+msgid "1. Why can't I create new files or delete folders in root folder?"
+msgstr "1. 为什么不能在根目录下创建新文件或删除目录？"
+
+#: seahub/help/templates/help/using_drive_client.html:81
+msgid ""
+"The root folder of the virtual drive contains only library folders. Seafile "
+"can only sync files inside libraries. Files in the root folder cannot be "
+"uploaded to Seafile server. So it doesn't make sense to support creating "
+"files in root folder. Since the top level folders in the virtual drive "
+"represents libraries, we don't want users to delete their libraries by "
+"mistake. So the Drive client doesn't support deleting top level folders."
+msgstr "虚拟盘的根目录只包含资料库目录。Seafile 只能同步资料库中的文件。根目录中的文件不能被上传到 Seafile 服务器。所以支持在根目录下创建文件没有意义。由于虚拟盘中的顶级目录代表资料库，我们不想用户误删资料库，因此，挂载盘客户端不支持删除顶级目录。"
+
+#: seahub/help/templates/help/viewing_files_within_web_app.html:6
+msgid ""
+"Some types of files can be directly opened and viewed within the Seafile Web"
+" App. Currently they are:"
+msgstr "有些文件可以在 Seafile Web App 里直接打开和查看。目前它们是："
+
+#: seahub/help/templates/help/viewing_files_within_web_app.html:13
+msgid "Image files"
+msgstr "图片文件"
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"
 msgstr "退出管理员界面"
 
 #: seahub/institutions/templates/institutions/base.html:13
-#: seahub/templates/base.html:30 seahub/templates/home_base.html:9
+#: seahub/templates/base.html:32 seahub/templates/home_base.html:9
 msgid "Close"
 msgstr "关闭"
 
@@ -1997,12 +3633,14 @@ msgid "Available quota:"
 msgstr "可用容量："
 
 #: seahub/institutions/templates/institutions/user_info.html:62
+#: seahub/search/templates/search_results.html:39
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
 msgid "Size"
 msgstr "大小"
 
 #: seahub/institutions/templates/institutions/user_info.html:63
+#: seahub/search/templates/search_results.html:31
 msgid "Last Update"
 msgstr "更新时间"
 
@@ -2066,19 +3704,19 @@ msgstr "拥有者"
 msgid "Member"
 msgstr "群组成员"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:390
+#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s 删除成功。"
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:400
+#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
 msgid "Failed to delete: the user does not exist"
 msgstr "删除失败：该用户不存在"
 
-#: seahub/invitations/models.py:98
+#: seahub/invitations/models.py:95
 #, python-format
-msgid "%(user)s invited you to join %(site_name)s."
-msgstr "%(user)s 邀请你加入 %(site_name)s。"
+msgid "You are invited to join %(site_name)s."
+msgstr "诚邀您加入 %(site_name)s。"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -2103,8 +3741,9 @@ msgstr "你好，"
 #: seahub/invitations/templates/invitations/invitation_email.html:12
 #, python-format
 msgid ""
-"%(inviter)s invited you to join %(site_name)s. Please click the link below:"
-msgstr "%(inviter)s 邀请你加入 %(site_name)s。请点击以下链接："
+"%(inviter_name)s invited you to join %(site_name)s. Please click the link "
+"below:"
+msgstr "%(inviter_name)s 邀请你加入 %(site_name)s。请点击下面的链接："
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -2123,12 +3762,23 @@ msgstr "设置你的密码"
 msgid "It is required."
 msgstr "必填项。"
 
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:57
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:73
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:98
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:58
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:72
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:90
 #, python-format
 msgid "Virus detected on %s"
 msgstr "在 %s 检测到病毒"
+
+#: seahub/notifications/management/commands/send_dingtalk_notifications.py:167
+#: seahub/notifications/templates/notifications/notice_email.html:9
+#, python-format
+msgid ""
+"\n"
+"You've got 1 new notice on %(site_name)s:\n"
+msgid_plural ""
+"\n"
+"You've got %(num)s new notices on %(site_name)s:\n"
+msgstr[0] "\n你在 %(site_name)s 上有 %(num)s 条新消息：\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Renamed library"
@@ -2200,7 +3850,7 @@ msgstr "移动文件夹"
 msgid "New file updates on %s"
 msgstr "%s上有新文件改动"
 
-#: seahub/notifications/management/commands/send_notices.py:312
+#: seahub/notifications/management/commands/send_notices.py:335
 #, python-format
 msgid "New notice on %s"
 msgstr "%s 有新消息"
@@ -2210,21 +3860,21 @@ msgstr "%s 有新消息"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr "您在 %(site_name)s 上有 %(num)s 条新通知：\n"
 
-#: seahub/notifications/models.py:483
+#: seahub/notifications/models.py:480
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "新文件  <a href='%(file_link)s'>%(file_name)s</a> 上传到了 <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:490
+#: seahub/notifications/models.py:487
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "新文件 <strong>%(file_name)s</strong> 上传到<strong>删除的资料库</strong>"
 
-#: seahub/notifications/models.py:624
+#: seahub/notifications/models.py:621
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -2232,35 +3882,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "用户 <a href='%(user_profile)s'>%(username)s</a> 请求加入到群组 <a href='%(href)s'>%(group_name)s</a>，验证信息：%(join_request_msg)s"
 
-#: seahub/notifications/models.py:653
+#: seahub/notifications/models.py:650
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "用户 <a href='%(user_profile)s'>%(group_staff)s</a> 将你加入到群组 <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:679
+#: seahub/notifications/models.py:676
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "用户 %(author)s 评论了文件 <a href='%(file_url)s'>%(file_name)s</a>"
 
-#: seahub/notifications/models.py:696
+#: seahub/notifications/models.py:693
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr "用户 %(author)s 评论了 <a href='%(file_url)s'>草稿 # %(draft_id)s</a>"
 
-#: seahub/notifications/models.py:713
+#: seahub/notifications/models.py:710
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr "%(from_user)s 向你发起评审 <a href='%(file_url)s'>draft #%(draft_id)s</a>请求。"
 
-#: seahub/notifications/models.py:736
+#: seahub/notifications/models.py:733
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
@@ -2268,7 +3918,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr "访客%(user)s在%(time)s接受了您的<a href=\"%(url_base)s%(inv_url)s\">邀请</a>。"
 
-#: seahub/notifications/models.py:760
+#: seahub/notifications/models.py:757
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
@@ -2290,12 +3940,14 @@ msgid "Operation"
 msgstr "操作"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
+#: seahub/search/templates/search_results.html:67
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 msgid "File"
 msgstr "文件"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
+#: seahub/sysadmin_extra/views.py:208
 msgid "Library"
 msgstr "资料库"
 
@@ -2303,16 +3955,6 @@ msgstr "资料库"
 #, python-format
 msgid "Hi, %(name)s"
 msgstr "你好，%(name)s"
-
-#: seahub/notifications/templates/notifications/notice_email.html:9
-#, python-format
-msgid ""
-"\n"
-"You've got 1 new notice on %(site_name)s:\n"
-msgid_plural ""
-"\n"
-"You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] "\n你在 %(site_name)s 上有 %(num)s 条新消息：\n"
 
 #: seahub/notifications/templates/notifications/notice_email.html:19
 msgid "Message"
@@ -2430,7 +4072,7 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "提示：后一种更安全，但并不是被所有浏览器所支持。我们建议使用最新的Chrome或Firefox。"
 
-#: seahub/organizations/forms.py:40 seahub/share/views.py:440
+#: seahub/organizations/forms.py:40 seahub/share/views.py:445
 msgid "Email address is not valid"
 msgstr "邮箱地址不合法"
 
@@ -2438,7 +4080,7 @@ msgstr "邮箱地址不合法"
 #: seahub/organizations/templates/organizations/org_register.html:8
 #: seahub/templates/choose_register.html:3
 #: seahub/templates/choose_register.html:8
-#: seahub/templates/registration/login.html:88
+#: seahub/templates/registration/login.html:90
 #: seahub/templates/registration/registration_form.html:3
 #: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
@@ -2471,12 +4113,14 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
+#: seahub/search/templates/search_results.html:98
 #: seahub/templates/file_access.html:55
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
 msgstr "前一页"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
+#: seahub/search/templates/search_results.html:101
 #: seahub/templates/file_access.html:58
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
@@ -2512,34 +4156,93 @@ msgstr "设置密码"
 msgid "Update"
 msgstr "更新"
 
-#: seahub/profile/views.py:41
+#: seahub/profile/views.py:42
 msgid "Successfully edited profile."
 msgstr "修改成功"
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:46
 msgid "Failed to edit profile"
 msgstr "修改失败"
 
-#: seahub/profile/views.py:201
+#: seahub/profile/views.py:210
 msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
-#: seahub/profile/views.py:225
+#: seahub/profile/views.py:235
 msgid "Demo account can not be deleted."
 msgstr "Demo帐号无法被删除。"
 
-#: seahub/profile/views.py:251
+#: seahub/profile/views.py:262
 msgid "Failed to set default library."
 msgstr "设置默认资料库失败。"
 
-#: seahub/profile/views.py:255
+#: seahub/profile/views.py:266
 msgid "Can not set encrypted library as default library."
 msgstr "无法把加密资料库设为默认资料库。"
 
-#: seahub/profile/views.py:260
+#: seahub/profile/views.py:271
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "成功设置 \"%s\"为你的默认资料库。"
+
+#: seahub/search/templates/search_results.html:25
+msgid "Search Files"
+msgstr "搜索文件"
+
+#: seahub/search/templates/search_results.html:28
+msgid "advanced"
+msgstr "高级"
+
+#: seahub/search/templates/search_results.html:56
+msgid "No result found"
+msgstr "无结果"
+
+#: seahub/search/templates/search_results.html:58
+#, python-format
+msgid "%(total)s result"
+msgid_plural "%(total)s results"
+msgstr[0] "%(total)s 结果"
+
+#: seahub/search/templates/search_results.html:63
+msgid "Directory icon"
+msgstr "目录图标"
+
+#: seahub/search/templates/search_results.html:168
+msgid "Invalid start date, should be yyyy-mm-dd"
+msgstr "初始日期无效，应该为 yyyy-mm-dd"
+
+#: seahub/search/templates/search_results.html:172
+msgid "Invalid end date, should be yyyy-mm-dd"
+msgstr "结束日期无效，应该为 yyyy-mm-dd"
+
+#: seahub/search/templates/search_results.html:176
+msgid "Start date should be earlier than end date."
+msgstr "初始日期应该早于结束日期。"
+
+#: seahub/search/views.py:33
+msgid "Invalid argument."
+msgstr "参数无效。"
+
+#: seahub/search/views.py:81 seahub/search/views.py:89
+msgid "Invalid date."
+msgstr "日期无效。"
+
+#: seahub/search/views.py:97 seahub/search/views.py:105
+msgid "Invalid file size."
+msgstr "文件大小无效。"
+
+#: seahub/search/views.py:112
+msgid "Invalid file size range."
+msgstr "文件大小范围无效。"
+
+#: seahub/search/views.py:117
+msgid "Invalid date range."
+msgstr "日期范围无效。"
+
+#: seahub/search/views.py:166
+#, python-format
+msgid "Library %s not found."
+msgstr "未找到资料库 %s 。"
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -2549,11 +4252,11 @@ msgstr "请输入邮箱"
 msgid "Email is not longer than 512 characters"
 msgstr "邮箱不能超过512个字符"
 
-#: seahub/share/models.py:78
+#: seahub/share/models.py:92
 msgid "Password can't be empty"
 msgstr "密码不能为空"
 
-#: seahub/share/models.py:85
+#: seahub/share/models.py:99
 msgid "Please enter a correct password."
 msgstr "请输入正确的密码。"
 
@@ -2582,67 +4285,117 @@ msgstr "验证码"
 msgid "A verification code has been sent to the email."
 msgstr "验证码已发送到改邮箱。"
 
-#: seahub/share/views.py:204 seahub/share/views.py:314
+#: seahub/share/views.py:206 seahub/share/views.py:318
 msgid "Internal server error, or please check the email(s) you entered"
 msgstr "内部错误，请检查您输入的邮箱"
 
-#: seahub/share/views.py:224
+#: seahub/share/views.py:227
 msgid "Please choose a directory."
 msgstr "请选择目录。"
 
-#: seahub/share/views.py:246
+#: seahub/share/views.py:249
 msgid "Successfully saved."
 msgstr "保存成功。"
 
-#: seahub/share/views.py:260
-msgid ""
-"Sending shared upload link failed. Email service is not properly configured,"
-" please contact administrator."
-msgstr "由于邮箱服务未正确配置，发送上传外链失败，请联系管理员。"
-
-#: seahub/share/views.py:332 seahub/thumbnail/views.py:39
+#: seahub/share/views.py:337 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:161 seahub/views/ajax.py:140
 #: seahub/views/ajax.py:418
 msgid "Library does not exist."
 msgstr "资料库不存在"
 
-#: seahub/share/views.py:336 seahub/views/ajax.py:386
+#: seahub/share/views.py:341 seahub/views/ajax.py:386
 msgid "Directory does not exist."
 msgstr "目录不存在"
 
-#: seahub/share/views.py:385
+#: seahub/share/views.py:389
 msgid "Only the owner of the library has permission to share it."
 msgstr "只有资料库拥有者才有共享权限。"
 
-#: seahub/share/views.py:423
+#: seahub/share/views.py:427
 msgid "Please check the email(s) you entered"
 msgstr "请检查您输入的邮箱"
 
-#: seahub/share/views.py:449
+#: seahub/share/views.py:454
 msgid "Share link is not found"
 msgstr "共享链接不存在"
 
-#: seahub/share/views.py:457
+#: seahub/share/views.py:462
 msgid "Verification code for visiting share links"
 msgstr "查看共享链接的验证码"
 
-#: seahub/share/views.py:472
+#: seahub/share/views.py:473
 msgid "Failed to send a verification code, please try again later."
 msgstr "发送验证码失败，请稍后再试。"
+
+#: seahub/sysadmin_extra/views.py:42 seahub/sysadmin_extra/views.py:53
+#: seahub/sysadmin_extra/views.py:91 seahub/sysadmin_extra/views.py:148
+#: seahub/sysadmin_extra/views.py:203
+msgid "Failed to export excel, invalid start or end date"
+msgstr "excel 导出失败。开始或结束日期无效。"
+
+#: seahub/sysadmin_extra/views.py:61 seahub/views/sysadmin.py:703
+msgid "Success"
+msgstr "成功"
+
+#: seahub/sysadmin_extra/views.py:61
+msgid "Failed"
+msgstr "失败"
+
+#: seahub/sysadmin_extra/views.py:67 seahub/sysadmin_extra/views.py:124
+#: seahub/sysadmin_extra/views.py:179 seahub/sysadmin_extra/views.py:256
+msgid "Failed to export excel"
+msgstr "excel 导出失败"
+
+#: seahub/sysadmin_extra/views.py:85 seahub/sysadmin_extra/views.py:142
+#: seahub/sysadmin_extra/views.py:197
+msgid "Failed to export excel, this feature is only in professional version."
+msgstr "excel 导出失败。该功能只在专业版中提供。"
+
+#: seahub/sysadmin_extra/views.py:154 seahub/sysadmin_extra/views.py:208
+msgid "Action"
+msgstr "操作"
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "From"
+msgstr "来源"
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "To"
+msgstr "共享给"
+
+#: seahub/sysadmin_extra/views.py:208
+msgid "Permission"
+msgstr "权限"
+
+#: seahub/sysadmin_extra/views.py:209
+msgid "Folder Path"
+msgstr "目录路径"
+
+#: seahub/sysadmin_extra/views.py:223
+msgid "Organization"
+msgstr "公共"
+
+#: seahub/sysadmin_extra/views.py:228
+msgid "Add"
+msgstr "添加"
+
+#: seahub/sysadmin_extra/views.py:230
+msgid "Modify"
+msgstr "修改"
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "对不起，你访问的页面不存在。"
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
-msgid "File Collaboration Team Organization"
-msgstr "文件 合作 团队 团体"
+msgid "File, Collaboration, Team, Organization"
+msgstr "文件，合作，团队，机构"
 
-#: seahub/templates/base.html:39
+#: seahub/templates/base.html:41
 msgid "Side Nav Menu"
 msgstr "侧边导航菜单"
 
-#: seahub/templates/base.html:85
+#: seahub/templates/base.html:87
 msgid "No"
 msgstr "取消"
 
@@ -2661,7 +4414,7 @@ msgid ""
 msgstr "该资料库已加密。如需在线查看里面的内容，请输入解密密码。密码只会在服务器上暂存1小时。"
 
 #: seahub/templates/decrypt_repo_form.html:26
-#: seahub/templates/share_access_validation.html:32
+#: seahub/templates/share_access_validation.html:40
 msgid "Please enter the password."
 msgstr "请输入密码。"
 
@@ -2803,7 +4556,7 @@ msgstr "注册"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:35
-#: seahub/templates/registration/login.html:70
+#: seahub/templates/registration/login.html:72
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -2824,27 +4577,27 @@ msgstr "你输入的邮箱或密码不正确"
 msgid "Remember me for %(remember_days)s days "
 msgstr "%(remember_days)s天内保持登录"
 
-#: seahub/templates/registration/login.html:68
+#: seahub/templates/registration/login.html:69
 msgid "Forgot password?"
 msgstr "忘记密码？"
 
-#: seahub/templates/registration/login.html:74
+#: seahub/templates/registration/login.html:76
 msgid "Single Sign-On"
 msgstr "单点登录"
 
-#: seahub/templates/registration/login.html:79
+#: seahub/templates/registration/login.html:81
 msgid "Login with: "
 msgstr "其他登录方式："
 
-#: seahub/templates/registration/login.html:145
+#: seahub/templates/registration/login.html:147
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "刷新验证码失败，请稍后尝试。"
 
-#: seahub/templates/registration/login.html:153
+#: seahub/templates/registration/login.html:155
 msgid "Email or username cannot be blank"
 msgstr "邮箱或用户名不能为空"
 
-#: seahub/templates/registration/login.html:157
+#: seahub/templates/registration/login.html:159
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/password_set_form.html:64
 #: seahub/templates/registration/registration_form.html:91
@@ -3013,13 +4766,13 @@ msgid "Email cannot be blank"
 msgstr "邮箱不能为空"
 
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
-#: seahub/work_weixin/views.py:99
+#: seahub/work_weixin/views.py:110
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
 msgstr "错误，不允许新用户注册，请联系管理员。"
 
 #: seahub/templates/remote_user/not_active.html:6
-#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:120
+#: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:131
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
@@ -3145,6 +4898,11 @@ msgid ""
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
 msgstr "%(escaped_nickname)s 在 %(site_name)s 共享了 %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span> 给你："
 
+#: seahub/templates/shared_link_email.html:17
+#: seahub/templates/shared_upload_link_email.html:20
+msgid "Password:"
+msgstr "密码："
+
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
@@ -3187,6 +4945,10 @@ msgstr "描述为必填项"
 #: seahub/templates/snippets/repo_create_js.html:46
 msgid "Please enter password"
 msgstr "请输入密码"
+
+#: seahub/templates/snippets/repo_create_js.html:50
+msgid "Password is too short"
+msgstr "密码太短"
 
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
@@ -3376,7 +5138,7 @@ msgid "Network error"
 msgstr "网络错误"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:600
+#: seahub/views/__init__.py:601
 msgid "Invalid arguments."
 msgstr "无效参数。"
 
@@ -3488,47 +5250,47 @@ msgstr "您即将禁用两步验证。这将削弱您账户的安全性，您确
 msgid "Disable"
 msgstr "禁用"
 
-#: seahub/utils/__init__.py:158
+#: seahub/utils/__init__.py:152
 msgid "permission error"
 msgstr "权限错误"
 
-#: seahub/views/__init__.py:401 seahub/views/__init__.py:416
-#: seahub/views/__init__.py:431
+#: seahub/views/__init__.py:402 seahub/views/__init__.py:417
+#: seahub/views/__init__.py:432
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: seahub/views/__init__.py:476
+#: seahub/views/__init__.py:477
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: seahub/views/__init__.py:559 seahub/views/__init__.py:602
-#: seahub/views/__init__.py:733 seahub/views/__init__.py:878
-#: seahub/views/ajax.py:376 seahub/views/file.py:1858
+#: seahub/views/__init__.py:560 seahub/views/__init__.py:603
+#: seahub/views/__init__.py:734 seahub/views/__init__.py:879
+#: seahub/views/ajax.py:376 seahub/views/file.py:1847
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
-#: seahub/views/__init__.py:593
+#: seahub/views/__init__.py:594
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: seahub/views/__init__.py:597
+#: seahub/views/__init__.py:598
 msgid "Successfully restored the library."
 msgstr "资料库还原成功。"
 
-#: seahub/views/__init__.py:604
+#: seahub/views/__init__.py:605
 msgid "History you specified does not exist"
 msgstr "指定的历史记录不存在"
 
-#: seahub/views/__init__.py:606
+#: seahub/views/__init__.py:607
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: seahub/views/__init__.py:885 seahub/views/repo.py:285
+#: seahub/views/__init__.py:886 seahub/views/repo.py:295
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
 
-#: seahub/views/__init__.py:926
+#: seahub/views/__init__.py:918
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
@@ -3549,9 +5311,9 @@ msgstr "错误的repo id"
 msgid "Bad upload link token."
 msgstr "无效的上传链接"
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:455 seahub/views/file.py:486
-#: seahub/views/file.py:1130 seahub/views/file.py:1350
-#: seahub/views/file.py:1867
+#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
+#: seahub/views/file.py:1133 seahub/views/file.py:1349
+#: seahub/views/file.py:1856
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -3563,181 +5325,159 @@ msgstr "上传链接中含无效的repo id"
 msgid "No conflict in the merge."
 msgstr "合并没有冲突。"
 
-#: seahub/views/file.py:188
+#: seahub/views/file.py:192
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 无法在线打开该文件"
 
-#: seahub/views/file.py:192
+#: seahub/views/file.py:196
 msgid "URLError: failed to open file online"
 msgstr "URLError: 无法在线打开该文件"
 
-#: seahub/views/file.py:199
+#: seahub/views/file.py:203
 msgid "The encoding you chose is not proper."
 msgstr "文件编码不合适"
 
-#: seahub/views/file.py:216 seahub/views/file.py:219
+#: seahub/views/file.py:220 seahub/views/file.py:223
 msgid "Unknown file encoding"
 msgstr "文件编码无法识别"
 
-#: seahub/views/file.py:340 seahub/views/file.py:375 seahub/views/file.py:622
-#: seahub/views/file.py:713 seahub/views/file.py:873
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:659
+#: seahub/views/file.py:749 seahub/views/file.py:871
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
-#: seahub/views/file.py:347 seahub/views/file.py:748
+#: seahub/views/file.py:350 seahub/views/file.py:784
 msgid "The library is encrypted, can not open file online."
 msgstr "加密资料库不能在线预览文件。"
 
-#: seahub/views/file.py:442 seahub/views/file.py:464 seahub/views/file.py:469
-#: seahub/views/file.py:510 seahub/views/file.py:701 seahub/views/file.py:995
-#: seahub/views/file.py:1018 seahub/views/file.py:1045
-#: seahub/views/file.py:1160 seahub/views/file.py:1268
-#: seahub/views/file.py:1371 seahub/views/file.py:1476
+#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
+#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1001
+#: seahub/views/file.py:1024 seahub/views/file.py:1051
+#: seahub/views/file.py:1179 seahub/views/file.py:1268
+#: seahub/views/file.py:1370 seahub/views/file.py:1469
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: seahub/views/file.py:782 seahub/views/file.py:943 seahub/views/file.py:1229
-#: seahub/views/file.py:1415
+#: seahub/views/file.py:808 seahub/views/file.py:949 seahub/views/file.py:1229
+#: seahub/views/file.py:1408
 msgid "Error when prepare Office Online file preview page."
 msgstr "Office Online 预览文件时出错。"
 
-#: seahub/views/file.py:841 seahub/views/file.py:955 seahub/views/file.py:1248
-#: seahub/views/file.py:1430
+#: seahub/views/file.py:840 seahub/views/file.py:961 seahub/views/file.py:1248
+#: seahub/views/file.py:1423
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "OnlyOffice 预览文件时出错。"
 
-#: seahub/views/file.py:1078
+#: seahub/views/file.py:1084
 msgid "Unable to download file, invalid file path"
 msgstr "无法下载文件，无效的文件路径"
 
-#: seahub/views/file.py:1087
+#: seahub/views/file.py:1093
 msgid "Unable to download file, wrong file path"
 msgstr "无法下载文件，错误的文件路径"
 
-#: seahub/views/file.py:1092
-msgid "Unable to download file, share link traffic is used up."
-msgstr "无法下载文件，共享外链流量已用完。"
-
-#: seahub/views/file.py:1099
+#: seahub/views/file.py:1100
 msgid "Unable to download file."
 msgstr "无法下载文件。"
 
-#: seahub/views/file.py:1171 seahub/views/file.py:1382
-msgid "Unable to view raw file, share link traffic is used up."
-msgstr "无法查看文件，外链流量已用完。"
-
-#: seahub/views/file.py:1285 seahub/views/file.py:1496
-#: seahub/views/repo.py:336
+#: seahub/views/file.py:1284 seahub/views/file.py:1488
+#: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "%s 的共享链接。"
 
-#: seahub/views/file.py:1614 seahub/views/file.py:1619
+#: seahub/views/file.py:1606 seahub/views/file.py:1611
 msgid "Unable to download file"
 msgstr "无法下载文件"
 
-#: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:305
-#: seahub/views/sysadmin.py:694 seahub/views/sysadmin.py:706
-#: seahub/views/sysadmin.py:831
-msgid "Failed to export Excel"
-msgstr "导出 Excel 失败"
-
-#: seahub/views/sysadmin.py:341 seahub/views/sysadmin.py:367
+#: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:357
 msgid "Failed to set quota: internal server error"
 msgstr "设置配额失败：内部错误"
 
-#: seahub/views/sysadmin.py:386
+#: seahub/views/sysadmin.py:376
 msgid "Failed to delete: the user is an organization creator"
 msgstr "删除失败：该用户为机构创建者"
 
 #: seahub/views/sysadmin.py:421
 #, python-format
-msgid "Successfully remove trial for: %s"
-msgstr "成功为%s移除试用"
-
-#: seahub/views/sysadmin.py:450
-#, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "成功取消 %s 的管理权限"
 
-#: seahub/views/sysadmin.py:452
+#: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "取消管理员权限失败：该用户不存在"
 
-#: seahub/views/sysadmin.py:580
+#: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"
 msgstr "密码重置失败：用户不存在"
 
-#: seahub/views/sysadmin.py:629
+#: seahub/views/sysadmin.py:600
 #, python-format
 msgid "Fail to add user %s."
 msgstr "添加用户 %s 失败。"
 
-#: seahub/views/sysadmin.py:654 seahub/views/sysadmin.py:667
+#: seahub/views/sysadmin.py:625 seahub/views/sysadmin.py:638
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "成功添加用户 %s。通知邮件已发送。"
 
-#: seahub/views/sysadmin.py:657 seahub/views/sysadmin.py:670
+#: seahub/views/sysadmin.py:628 seahub/views/sysadmin.py:641
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "成功添加用户 %s。但发送通知邮件出错，请检查邮箱配置。"
 
-#: seahub/views/sysadmin.py:659 seahub/views/sysadmin.py:672
+#: seahub/views/sysadmin.py:630 seahub/views/sysadmin.py:643
 #, python-format
 msgid "Successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: seahub/views/sysadmin.py:674
+#: seahub/views/sysadmin.py:645
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
-#: seahub/views/sysadmin.py:697
+#: seahub/views/sysadmin.py:668
 msgid "Creator"
 msgstr "创建者"
 
-#: seahub/views/sysadmin.py:726
+#: seahub/views/sysadmin.py:697
 msgid "Input should be a number"
 msgstr "输入应该为数值"
 
-#: seahub/views/sysadmin.py:732
-msgid "Success"
-msgstr "成功"
-
-#: seahub/views/sysadmin.py:736
+#: seahub/views/sysadmin.py:707
 msgid "Input number should be greater than 0"
 msgstr "输入数值应该大于0"
 
-#: seahub/views/sysadmin.py:774
+#: seahub/views/sysadmin.py:745
 msgid "Successfully deleted."
 msgstr "删除成功。"
 
-#: seahub/views/sysadmin.py:804
+#: seahub/views/sysadmin.py:775
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "成功设置 %s 为管理员。"
 
-#: seahub/views/sysadmin.py:806
+#: seahub/views/sysadmin.py:777
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "无法设置 %s 为管理员：用户不存在。"
 
-#: seahub/views/sysadmin.py:819 seahub/views/sysadmin.py:820
+#: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:793
+#: seahub/views/sysadmin.py:794
 msgid "Optional"
 msgstr "可选"
 
-#: seahub/wiki/views.py:53
+#: seahub/wiki/views.py:54
 msgid "Unable to view Wiki"
 msgstr "无法查看维基"
 
-#: seahub/work_weixin/views.py:35 seahub/work_weixin/views.py:54
-#: seahub/work_weixin/views.py:140 seahub/work_weixin/views.py:160
-#: seahub/work_weixin/views.py:220
+#: seahub/work_weixin/views.py:37 seahub/work_weixin/views.py:62
+#: seahub/work_weixin/views.py:151 seahub/work_weixin/views.py:171
+#: seahub/work_weixin/views.py:231
 msgid "Feature is not enabled."
 msgstr "功能未启用。"

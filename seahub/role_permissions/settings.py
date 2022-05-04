@@ -3,11 +3,12 @@ from copy import deepcopy
 import logging
 
 from django.conf import settings
-from seahub.constants import DEFAULT_USER, GUEST_USER, DEFAULT_ORG, \
+from seahub.constants import DEFAULT_USER, GUEST_USER, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 def merge_roles(default, custom):
     """Merge custom dict into the copy of default dict, and return the copy."""
@@ -21,6 +22,7 @@ def merge_roles(default, custom):
             copy[key] = default_copy
 
     return copy
+
 
 DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     DEFAULT_USER: {
@@ -87,6 +89,7 @@ DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_config_system': True,
         'can_manage_library': True,
         'can_manage_user': True,
+        'can_update_user': True,
         'can_manage_group': True,
         'can_view_user_log': True,
         'can_view_admin_log': True,
@@ -121,6 +124,7 @@ try:
 except AttributeError:
     pass  # ignore error if ENABLED_ADMIN_ROLE_PERMISSIONS is not set in settings.py
 
+
 def get_enabled_admin_role_permissions():
     permissions = {}
     for role, perms in admin_role_permissions.items():
@@ -138,5 +142,6 @@ def get_enabled_admin_role_permissions():
         permissions[role] = all_false_permission
 
     return permissions
+
 
 ENABLED_ADMIN_ROLE_PERMISSIONS = get_enabled_admin_role_permissions()

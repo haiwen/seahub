@@ -4,7 +4,7 @@
 {% block help_con %}
 <h3 class="hd">{% trans "Managing a library as Wiki" %}</h3>
 <p>{% trans "Capturing and storing little structured data in an easy-to-use fashion – that is what Seafile’s wikis are for. Wiki pages are written in Markdown (MD), a simple markup language, to ensure cross platform compatibility. MD files store textual, tabular as well as graphical information; You can also add links to other documents in a Markdown file." %}</p>
-<p>{% trans "You can manage a standard library in Seafile like a Wiki, with the \"Column View\" introduced in 7.0 version. Since Seafile implements wikis as standard Seafile libraries, they can be synced and shared with other users just like any ordinary library." %}</p>
+<p>{% blocktrans %}You can manage a standard library in Seafile like a Wiki, with the "Column View" introduced in 7.0 version. Since Seafile implements wikis as standard Seafile libraries, they can be synced and shared with other users just like any ordinary library.{% endblocktrans %}</p>
 <h4 id="column-view">{% trans "Column view" %}</h4>
 <p>{% trans "Wikis usually have a side bar containing a tree-like folder structure, to enable quick-and-easy browsing of Wiki pages. Seafile's Column View allows you to manage the files in a library in the same way as a Wiki space. Users can browse in it and move files and folders just by dragging and dropping. File actions such as renaming, moving, and opening via client are available in a right-click-accessible context menu." %}</p>
 <img src="{{ MEDIA_URL }}img/help/column_view.png" alt="Column View" />
@@ -12,7 +12,7 @@
 <h4 id="wysiwyg-markdown-editor">{% trans "WYSIWYG Markdown editor" %}</h4>
 <p>{% trans "Wiki pages in Seafile are saved as ordinary documents in Markdown format. To create a new Wiki page in a library, just create a new Markdown document. MD files can be edited straight from Seafile’s web interface with the online MD editor. The web-based editor offers a smooth user experience and rich formatting options for text, images, and tables. Images can be imported into MD files from libraries and local storage as well as by hyperlinks. Basic image editing functions such as scaling can also be performed in the editor’s what-you-see-is-what-you-get (WYSIWYG) interface. Tables can be inserted and modified with just a few clicks. The same thing goes for a table’s content: A table can be copied in its entirety or in part without leaving the WYSIWYG view." %}</p>
 <img src="{{ MEDIA_URL }}img/help/markdown_editor.png" alt="Markdown Editor" />
-<p>{% trans "The change history of a Markdown file can be easily accessed by clicking the \"File History\" button in the menu on top of the editor interface." %}</p>
+<p>{% blocktrans %}The change history of a Markdown file can be easily accessed by clicking the "File History" button in the menu on top of the editor interface.{% endblocktrans %}</p>
 <img src="{{ MEDIA_URL }}img/help/file_history.png" alt="File history" />
 <p>{% trans "You can open a hidden side bar on the right side of the Markdown editor. Table of contents, file information, formatting suggestions, and collaborative commenting are provided in this side bar." %}</p>
 <img src="{{ MEDIA_URL }}img/help/editor_side_bar.png" alt="Markdown Editor Side Bar" />
@@ -22,6 +22,6 @@
 <img src="{{ MEDIA_URL }}img/help/tags_from_file_browser.png" alt="Tags from file browser" />
 <p>{% trans "The file browser interface provides a summary of all file tags in the current library." %}</p>
 <img src="{{ MEDIA_URL }}img/help/tags_summary.png" alt="Tags summary" />
-<p>{% trans "You can also add related files to a Markdown document from the \"File Information\" tab in the side bar." %}</p>
+<p>{% blocktrans %}You can also add related files to a Markdown document from the "File Information" tab in the side bar.{% endblocktrans %}</p>
 <img src="{{ MEDIA_URL }}img/help/related_files.png" alt="Related files" />
 {% endblock %}

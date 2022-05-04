@@ -65,7 +65,9 @@ html, body, #wrapper { height:100%; }
             <input type="checkbox" name="remember_me" class="vam remember-input" />
             <span class="vam">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
         </label>
+	{% if enable_change_password %}
         <a href="{{ SITE_ROOT }}accounts/password/reset/" class="normal forgot-passwd">{% trans "Forgot password?" %}</a>
+	{% endif %}
 
         <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
     </form>

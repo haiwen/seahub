@@ -30,7 +30,7 @@ class AuthenticationMiddleware(MiddlewareMixin):
             request, 'session'
         ), "The Django authentication middleware requires session middleware to be installed. Edit your MIDDLEWARE setting to insert 'django.contrib.sessions.middleware.SessionMiddleware'."
         request.__class__.user = LazyUser()
-        if request.user.is_authenticated() and not request.user.is_active:
+        if request.user.is_authenticated and not request.user.is_active:
             request.session.clear()
             request.session.delete()
         return None
@@ -92,8 +92,7 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
             # If specified header doesn't exist then remove any existing
             # authenticated remote-user, or return (leaving request.user set to
             # AnonymousUser by the AuthenticationMiddleware).
-            if self.force_logout_if_no_header and request.user.is_authenticated(
-            ):
+            if self.force_logout_if_no_header and request.user.is_authenticated:
                 self._remove_invalid_user(request)
             return
 
@@ -103,7 +102,7 @@ class SeafileRemoteUserMiddleware(MiddlewareMixin):
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if request.user.get_username() == self.clean_username(
                     username, request):
                 if request.user.is_staff:

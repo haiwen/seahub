@@ -205,7 +205,7 @@ class IndexContentViewer extends React.Component {
       const textNode = linkNode.children[0];
       let name = textNode ? textNode.text : '';
       treeNode =  new TreeNode({ name: name, href: linkNode.data.href });
-    } else if (paragraphNode.children[0].object === 'text') {
+    } else if (paragraphNode.children[0]) {
       // paragraph first child node is a text node, then get node name
       const textNode = paragraphNode.children[0];
       let name = textNode.text ? textNode.text : '';

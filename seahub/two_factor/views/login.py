@@ -179,7 +179,7 @@ class TwoFactorVerifyView(SessionWizardView):
             device = StaticDevice.objects.device_for_user(self.user.username)
             context['backup_tokens'] = device.token_set.count() if device else 0
 
-        context['cancel_url'] = settings.LOGOUT_URL
+        context['cancel_url'] = '/accounts/logout/'
         context['form_prefix'] = '%s-' % self.steps.current
         login_bg_image_path = get_login_bg_image_path()
         context['login_bg_image_path'] = login_bg_image_path
@@ -238,7 +238,7 @@ def is_device_remembered(request_header, user):
         return False
 
     # User must be authenticated, otherwise this function is wrong used.
-    assert user.is_authenticated()
+    assert user.is_authenticated
 
     SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
     s = SessionStore(request_header)

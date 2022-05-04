@@ -83,7 +83,7 @@ class Content extends Component {
       const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
 
       const colNameText = `${gettext('Name')} / ${gettext('Contact Email')}`;
-      const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')}`;
+      const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')} / ${gettext('Last Access')}`;
       if (isPro) {
         columns.push(
           {width: '20%', text: colNameText},
@@ -422,6 +422,8 @@ class Item extends Component {
             {`${item.create_time ? moment(item.create_time).format('YYYY-MM-DD HH:mm') : '--'} /`}
             <br />
             {`${item.last_login ? moment(item.last_login).fromNow() : '--'}`}
+            <br />
+            {`${item.last_access_time ? moment(item.last_access_time).fromNow() : '--'}`}
           </td>
           <td>
             {(item.email != username && isOpIconShown) &&

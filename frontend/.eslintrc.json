@@ -1,24 +1,9 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true
-  },
+  "root": true,
+  "plugins": ["react"],
   "extends": [
-    // "plugin:react/recommended",
     "react-app",
     "eslint:recommended"
-  ],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    },
-    "sourceType": "module"
-  },
-  "plugins": [
-    "react",
-    "jsx-a11y"
   ],
   "rules": {
     "indent": [
@@ -39,8 +24,10 @@
       "always"
     ],
 
-
-    // overwride error to warning
+    "eqeqeq": "off",
+    "no-useless-constructor": "off",
+    "no-restricted-globals": "off",
+    "no-unused-expressions": "off",
     "no-case-declarations": "warn",
     "no-cond-assign": "warn",
     "no-redeclare": "warn",
@@ -49,14 +36,15 @@
     "no-unused-vars": "warn",
     "no-irregular-whitespace": "warn",
     "no-console": "warn",
+    "no-self-assign": ["error", {"props": false}],
     "no-useless-escape": "warn",
     "no-trailing-spaces": "warn",
-    
+
     "react/jsx-indent": ["warn", 2],
     "react/prop-types": "warn",
     "react/display-name": "warn",
-    
     "jsx-a11y/anchor-has-content": "off",
-    "jsx-a11y/href-no-hash": "off"
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": "off"
   }
 }

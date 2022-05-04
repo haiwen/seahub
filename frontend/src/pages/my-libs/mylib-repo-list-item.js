@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, storages } from '../../utils/constants';
@@ -56,6 +56,14 @@ class MylibRepoListItem extends React.Component {
     };
   }
 
+  onFocus = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        isOpIconShow: true
+      });
+    }
+  }
+
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
@@ -78,7 +86,7 @@ class MylibRepoListItem extends React.Component {
     switch(item) {
       case 'Star':
       case 'Unstar':
-        this.onStarRepo();
+        this.onToggleStarRepo();
         break;
       case 'Share':
         this.onShareToggle();
@@ -121,11 +129,18 @@ class MylibRepoListItem extends React.Component {
     }
   }
 
+  visitRepo = () => {
+    if (!this.state.isRenaming && this.props.repo.repo_name) {
+      navigate(this.repoURL);
+    }
+  }
+
   onRepoClick = () => {
     this.props.onRepoClick(this.props.repo);
   }
 
-  onStarRepo = () => {
+  onToggleStarRepo = (e) => {
+    e.preventDefault();
     const repoName = this.props.repo.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
@@ -150,11 +165,13 @@ class MylibRepoListItem extends React.Component {
     }
   }
 
-  onShareToggle = () => {
+  onShareToggle = (e) => {
+    e.preventDefault();
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
-  onDeleteToggle = () => {
+  onDeleteToggle = (e) => {
+    e.preventDefault();
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
   }
 
@@ -270,10 +287,11 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick} onFocus={this.onFocus}>
         <td className="text-center">
-          {!this.state.isStarred && <i className="far fa-star star-empty cursor-pointer" onClick={this.onStarRepo}></i>}
-          {this.state.isStarred && <i className="fas fa-star cursor-pointer" onClick={this.onStarRepo}></i>}
+          <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
+            <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
+          </a>
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
@@ -294,8 +312,8 @@ class MylibRepoListItem extends React.Component {
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div>
-              <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} onClick={this.onShareToggle}></a>
-              <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.onDeleteToggle}></a>
+              <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></a>
+              <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></a>
               <MylibRepoMenu
                 isPC={true}
                 repo={this.props.repo}
@@ -317,12 +335,12 @@ class MylibRepoListItem extends React.Component {
     let repo = this.props.repo;
     let iconUrl = Utils.getLibIconUrl(repo);
     let iconTitle = Utils.getLibIconTitle(repo);
-    let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
+    let repoURL = this.repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onClick={this.onRepoClick}>
-        <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
-        <td>
+        <td onClick={this.visitRepo}><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
+        <td onClick={this.visitRepo}>
           {this.state.isRenaming && (
             <Rename
               name={repo.repo_name}

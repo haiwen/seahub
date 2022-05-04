@@ -10,6 +10,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.api2.endpoints.groups import Groups
 from tests.common.utils import randstring
 
+
 class GroupsTest(BaseTestCase):
 
     def setUp(self):
@@ -22,7 +23,7 @@ class GroupsTest(BaseTestCase):
 
         # share repo to group
         seafile_api.set_group_repo(self.repo_id,
-                self.group_id, self.user.email, 'rw')
+                                   self.group_id, self.user.email, 'rw')
 
     def tearDown(self):
         self.remove_group()
@@ -33,7 +34,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 7
+        assert len(json_resp[0]) == 8
 
         group_ids = []
         for group in json_resp:
@@ -46,7 +47,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 8
+        assert len(json_resp[0]) == 9
 
         group_ids = []
         group_repos = []
@@ -69,7 +70,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 7
+        assert len(json_resp) == 8
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
@@ -81,7 +82,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 7
+        assert len(json_resp) == 8
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
@@ -105,7 +106,7 @@ class GroupsTest(BaseTestCase):
         self.remove_group(json_resp['id'])
 
     def test_can_not_create_by_other_punctuation(self):
-        other_punctuation = """!"#$%&()*+,/:;<=>?@[\]^`{|}~"""
+        other_punctuation = """!"#$%&*+,/:;<=>?@[\]^`{|}~"""
         new_group_name = randstring(2) + random.choice(other_punctuation) + randstring(2)
 
         resp = self.client.post(self.url, {'name': new_group_name})

@@ -2,11 +2,13 @@
 import os
 import stat
 import json
+import time
 import logging
 import posixpath
 from constance import config
 from dateutil.relativedelta import relativedelta
 import dateutil.parser
+from collections import defaultdict
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -28,12 +30,13 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
-from seahub.share.models import FileShare, check_share_link_access
+from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
-        check_filename_with_rename, gen_file_upload_url
+        check_filename_with_rename, gen_file_upload_url, get_password_strength_level
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
@@ -42,10 +45,12 @@ from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
         ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
-        THUMBNAIL_ROOT
+        THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
 from seahub.views import check_folder_permission
+from seahub.signals import upload_file_successful
+from seahub.repo_tags.models import RepoTags
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +97,7 @@ def get_share_link_info(fileshare):
     data['expire_date'] = expire_date
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
+    data['password'] = fileshare.get_password()
 
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
@@ -111,6 +117,7 @@ def get_share_link_info(fileshare):
             data['can_edit'] = False
 
     return data
+
 
 def check_permissions_arg(request):
 
@@ -143,6 +150,7 @@ def check_permissions_arg(request):
         perm = FileShare.PERM_VIEW_DL_UPLOAD
 
     return perm
+
 
 class ShareLinks(APIView):
 
@@ -213,7 +221,8 @@ class ShareLinks(APIView):
 
                 try:
                     permission = seafile_api.check_permission_by_path(repo_id,
-                            folder_path, fileshare.username)
+                                                                      folder_path,
+                                                                      fileshare.username)
                 except Exception as e:
                     logger.error(e)
                     permission = ''
@@ -223,8 +232,7 @@ class ShareLinks(APIView):
         links_info = []
         for fs in fileshares:
             link_info = get_share_link_info(fs)
-            link_info['repo_folder_permission'] = \
-                    repo_folder_permission_dict.get(link_info['repo_id'], '')
+            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(link_info['repo_id'], '')
             links_info.append(link_info)
 
         if len(links_info) == 1:
@@ -259,9 +267,20 @@ class ShareLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get('password', None)
-        if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            error_msg = _('Password is too short.')
+
+        if config.SHARE_LINK_FORCE_USE_PASSWORD and not password:
+            error_msg = _('Password is required.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if password:
+
+            if len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+                error_msg = _('Password is too short.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
+                error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')
@@ -401,11 +420,12 @@ class ShareLinks(APIView):
                 error_msg = _('Share link %s already exists.' % fs.token)
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
-                                                    password, expire_date,
-                                                    permission=perm, org_id=org_id)
+                                                   password, expire_date,
+                                                   permission=perm, org_id=org_id)
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
+
 
 class ShareLink(APIView):
 
@@ -430,18 +450,11 @@ class ShareLink(APIView):
         return Response(link_info)
 
     def put(self, request, token):
-        """ Update share link, currently only available for permission.
+        """ Update share link's permission and expiration.
 
         Permission checking:
         share link creater
         """
-
-        # argument check
-        try:
-            perm = check_permissions_arg(request)
-        except Exception:
-            error_msg = 'permissions invalud.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         try:
@@ -477,31 +490,108 @@ class ShareLink(APIView):
 
         username = request.user.username
         repo_folder_permission = seafile_api.check_permission_by_path(repo_id,
-                folder_path, username)
+                                                                      folder_path,
+                                                                      username)
         if not repo_folder_permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
-                and perm != FileShare.PERM_VIEW_ONLY:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # argument check
+        permissions = request.data.get('permissions', '')
+        if permissions:
+            try:
+                perm = check_permissions_arg(request)
+            except Exception:
+                error_msg = 'permissions invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if repo_folder_permission in (PERMISSION_READ) \
-                and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if fs.s_type == 'f':
-            file_name = os.path.basename(fs.path.rstrip('/'))
-            can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
-            if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+            if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
+                    and perm != FileShare.PERM_VIEW_ONLY:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # update share link permission
-        fs.permission = perm
-        fs.save()
+            if repo_folder_permission in (PERMISSION_READ) \
+                    and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if fs.s_type == 'f':
+                file_name = os.path.basename(fs.path.rstrip('/'))
+                can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
+                if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # update share link permission
+            fs.permission = perm
+            fs.save()
+
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if expire_days:
+
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+            fs.expire_date = expire_date
+            fs.save()
+
+        if expiration_time:
+
+            try:
+                expire_date = dateutil.parser.isoparse(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
+
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s.') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
+
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s.') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            fs.expire_date = expire_date
+            fs.save()
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
@@ -561,8 +651,19 @@ class ShareLinkOnlineOfficeLock(APIView):
         3, File must have been locked by OnlineOffice.
         """
 
+        expire = request.data.get('expire', 0)
+        try:
+            expire = int(expire)
+        except ValueError:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if expire < 0:
+            error_msg = 'expire invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -581,7 +682,8 @@ class ShareLinkOnlineOfficeLock(APIView):
         path = normalize_file_path(share_link.path)
         parent_dir = os.path.dirname(path)
         if seafile_api.check_permission_by_path(repo_id,
-                parent_dir, shared_by) != PERMISSION_READ_WRITE:
+                                                parent_dir,
+                                                shared_by) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -593,9 +695,11 @@ class ShareLinkOnlineOfficeLock(APIView):
 
         locked_by_online_office = if_locked_by_online_office(repo_id, path)
         if locked_by_online_office:
+
             # refresh lock file
             try:
-                seafile_api.refresh_file_lock(repo_id, path)
+                seafile_api.refresh_file_lock(repo_id, path,
+                                              int(time.time()) + expire)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -632,13 +736,13 @@ class ShareLinkDirents(APIView):
 
         # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check share link audit
         if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated() and \
+                not request.user.is_authenticated and \
                 not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -681,11 +785,18 @@ class ShareLinkDirents(APIView):
         try:
             current_commit = seafile_api.get_commit_list(repo_id, 0, 1)[0]
             dirent_list = seafile_api.list_dir_by_commit_and_path(repo_id,
-                    current_commit.id, path, -1, -1)
+                                                                  current_commit.id,
+                                                                  path, -1, -1)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            files_tags_in_dir = get_files_tags_in_dir(repo_id, path)
+        except Exception as e:
+            logger.error(e)
+            files_tags_in_dir = {}
 
         result = []
         for dirent in dirent_list:
@@ -709,12 +820,19 @@ class ShareLinkDirents(APIView):
 
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
                 if file_type in (IMAGE, XMIND) or \
-                        file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
 
                     if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
                         src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                         dirent_info['encoded_thumbnail_src'] = urlquote(src)
+
+                # get tag info
+                file_tags = files_tags_in_dir.get(dirent.obj_name, [])
+                if file_tags:
+                    dirent_info['file_tags'] = []
+                    for file_tag in file_tags:
+                        dirent_info['file_tags'].append(file_tag)
 
             result.append(dirent_info)
 
@@ -736,13 +854,13 @@ class ShareLinkUpload(APIView):
 
         # check if login required
         if SHARE_LINK_LOGIN_REQUIRED and \
-                not request.user.is_authenticated():
+                not request.user.is_authenticated:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check share link audit
         if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
-                not request.user.is_authenticated() and \
+                not request.user.is_authenticated and \
                 not request.session.get('anonymous_email'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -754,7 +872,7 @@ class ShareLinkUpload(APIView):
             error_msg = 'Share link %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if share_link.s_type != 'd':
+        if not share_link.is_dir_share_link():
             error_msg = 'Share link %s is not a folder share link.' % token
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -783,11 +901,28 @@ class ShareLinkUpload(APIView):
 
         if not share_link.get_permissions()['can_upload']:
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # generate token
         obj_id = json.dumps({'parent_dir': path})
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'upload-link', share_link.username, use_onetime=False)
+
+        check_virus = False
+        if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
+            check_virus = True
+
+        if check_virus:
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                                                            obj_id,
+                                                            'upload-link',
+                                                            share_link.username,
+                                                            use_onetime=False,
+                                                            check_virus=check_virus)
+        else:
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                                                            obj_id,
+                                                            'upload-link',
+                                                            share_link.username,
+                                                            use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -796,6 +931,137 @@ class ShareLinkUpload(APIView):
         result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
+
+
+class ShareLinkUploadDone(APIView):
+
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, token):
+
+        """ Only used for saving notification after user upload file via folder share link and upload link.
+
+        Permission checking:
+        1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
+        2, If enable ENABLE_SHARE_LINK_AUDIT, user must have been authenticated, or have been audited.
+        3, If share link is encrypted, share link password must have been checked.
+        4, Share link must be a folder share link and has can_upload permission.
+        """
+
+        # resource check
+
+        share_link = None
+        upload_link = None
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            upload_link = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_link:
+
+            # check if login required
+            if SHARE_LINK_LOGIN_REQUIRED and \
+                    not request.user.is_authenticated:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check share link audit
+            if is_pro_version() and ENABLE_SHARE_LINK_AUDIT and \
+                    not request.user.is_authenticated and \
+                    not request.session.get('anonymous_email'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check share link validation
+            if share_link.is_encrypted() and not check_share_link_access(request, token):
+                error_msg = 'Share link is encrypted.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not share_link.get_permissions()['can_upload']:
+                error_msg = 'Share link has no can_upload permission'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if share_link.is_expired():
+                error_msg = 'Share link is expired'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not share_link.is_dir_share_link():
+                error_msg = 'Share link %s is not a folder share link.' % token
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # recourse check
+            repo_id = share_link.repo_id
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            parent_dir = share_link.path
+            if seafile_api.check_permission_by_path(repo_id, parent_dir, share_link.username) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            file_path = request.data.get('file_path')
+            if not file_path:
+                error_msg = 'file_path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            if not file_id:
+                error_msg = 'File %s not found.' % file_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # send singal
+            upload_file_successful.send(sender=None,
+                                        repo_id=repo_id,
+                                        file_path=file_path,
+                                        owner=share_link.username)
+
+            return Response({'success': True})
+
+        if upload_link:
+
+            if upload_link.is_encrypted() and not check_share_link_access(request,
+                                                                          token,
+                                                                          is_upload_link=True):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if upload_link.is_expired():
+                error_msg = 'Upload link is expired'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            repo_id = upload_link.repo_id
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            parent_dir = upload_link.path
+            if seafile_api.check_permission_by_path(repo_id, parent_dir, upload_link.username) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            file_path = request.data.get('file_path')
+            if not file_path:
+                error_msg = 'file_path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            if not file_id:
+                error_msg = 'File %s not found.' % file_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            upload_file_successful.send(sender=None,
+                                        repo_id=repo_id,
+                                        file_path=file_path,
+                                        owner=upload_link.username)
+
+            return Response({'success': True})
 
 
 class ShareLinkSaveFileToRepo(APIView):
@@ -869,3 +1135,191 @@ class ShareLinkSaveFileToRepo(APIView):
                               username, need_progress=0)
 
         return Response({'success': True})
+
+
+class ShareLinkSaveItemsToRepo(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, token):
+
+        # argument check
+        dst_repo_id = request.POST.get('dst_repo_id', '')
+        if not dst_repo_id:
+            error_msg = 'dst_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.POST.get('dst_parent_dir', '')
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Share link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_repo(dst_repo_id):
+            error_msg = 'Library %s not found.' % dst_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(dst_repo_id, dst_parent_dir):
+            error_msg = 'Folder %s not found.' % dst_parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        share_link_permission = share_link.get_permissions()
+        if not share_link_permission.get('can_download', False):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if check_folder_permission(request,
+                                   dst_repo_id,
+                                   dst_parent_dir) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # save items
+        username = request.user.username
+        src_repo_id = share_link.repo_id
+
+        # save file in file share link
+        if share_link.s_type == 'f':
+
+            src_dirent_path = share_link.path
+            src_parent_dir = os.path.dirname(src_dirent_path)
+            src_dirent_name = os.path.basename(src_dirent_path)
+
+            dst_dirent_name = check_filename_with_rename(dst_repo_id,
+                                                         dst_parent_dir,
+                                                         src_dirent_name)
+        else:
+            # save items in folder share link
+            src_parent_dir = request.POST.get('src_parent_dir', '')
+            if not src_parent_dir:
+                error_msg = 'src_parent_dir invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            src_dirents = request.POST.getlist('src_dirents', [])
+            if not src_dirents:
+                error_msg = 'src_dirents invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            src_parent_dir = posixpath.join(share_link.path, src_parent_dir.strip('/'))
+
+            formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
+            src_dirent_name = "\t".join(formated_src_dirents)
+            dst_dirent_name = "\t".join(formated_src_dirents)
+
+        try:
+            res = seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
+                                        dst_repo_id, dst_parent_dir, dst_dirent_name,
+                                        username, need_progress=1, synchronous=0)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not res:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        if res.background:
+            result['task_id'] = res.task_id
+
+        return Response(result)
+
+
+class ShareLinkRepoTags(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token):
+        """get all repo_tags by share link token.
+        """
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = share_link.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # get all tags in repo
+        repo_tags = RepoTags.objects.filter(repo_id=repo_id)
+
+        # get tagged files by tag id
+        tag_id_file_list_dict = defaultdict(list)
+        for repo_tag in repo_tags:
+            tagged_files = get_tagged_files(repo, repo_tag.pk)['tagged_files']
+            tagged_files = [item for item in tagged_files if item.get('parent_path') and item.get('parent_path').startswith(share_link.path.rstrip('/'))]
+            tag_id_file_list_dict[repo_tag.pk] = tagged_files
+
+        # generate response
+        result = {
+            "repo_tags": []
+        }
+
+        for repo_tag in repo_tags:
+
+            repo_tag_info = repo_tag.to_dict()
+            repo_tag_id = repo_tag_info["repo_tag_id"]
+            repo_tag_info["files_count"] = len(tag_id_file_list_dict.get(repo_tag_id, []))
+
+            result['repo_tags'].append(repo_tag_info)
+
+        return Response(result)
+
+
+class ShareLinkRepoTagsTaggedFiles(APIView):
+
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token, tag_id):
+        """get tagged files by share link token and tag id.
+        """
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = share_link.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(tag_id)
+        if not repo_tag:
+            error_msg = 'repo_tag %s not found.' % tag_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        share_link_path = share_link.path.rstrip('/') if share_link.path != '/' else '/'
+
+        filtered_tagged_files = []
+        tagged_files = get_tagged_files(repo, tag_id)
+        for tagged_file in tagged_files.get('tagged_files', []):
+
+            if tagged_file.get('file_deleted', False):
+                continue
+
+            tagged_file_parent_path = tagged_file.get('parent_path', '')
+            if share_link_path == '/':
+                filtered_tagged_files.append(tagged_file)
+            elif tagged_file_parent_path.startswith(share_link_path):
+                tagged_file['parent_path'] = '/' + tagged_file_parent_path.lstrip(share_link_path)
+                filtered_tagged_files.append(tagged_file)
+
+        return Response({'tagged_files': filtered_tagged_files})

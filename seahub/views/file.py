@@ -7,8 +7,12 @@ view_snapshot_file, view_shared_file, etc.
 
 import os
 import json
+import time
+import uuid
 import stat
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import chardet
 import logging
 import posixpath
@@ -43,7 +47,7 @@ from seahub.onlyoffice.utils import get_onlyoffice_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
-from seahub.base.templatetags.seahub_tags import file_icon_filter, email2nickname
+from seahub.base.templatetags.seahub_tags import file_icon_filter
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
@@ -52,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, is_pro_version, is_textual_file, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
-    user_traffic_over_limit, get_file_audit_events_by_path, \
+    get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE, \
@@ -60,7 +64,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND, CDOC)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -77,14 +81,15 @@ from seahub.drafts.utils import get_file_draft, \
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, cluster_get_office_converted_page,
-        prepare_converted_html, get_office_converted_page, CLUSTER_MODE
+        query_office_convert_status, get_office_converted_page,
+        prepare_converted_html, 
     )
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
+    SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
 
 
@@ -130,6 +135,10 @@ from seahub.bisheng_office.utils import get_bisheng_dict, \
         get_bisheng_editor_url, get_bisheng_preivew_url
 from seahub.bisheng_office.settings import ENABLE_BISHENG_OFFICE
 from seahub.bisheng_office.settings import BISHENG_OFFICE_FILE_EXTENSION
+
+from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
+from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
+from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -310,7 +319,6 @@ def convert_md_link(file_content, repo_id, username):
 
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
-            from seahub.base.templatetags.seahub_tags import file_icon_filter
 
             # convert other types of filelinks to clickable links
             path = "/" + link_name
@@ -511,6 +519,37 @@ def view_lib_file(request, repo_id, path):
 
         return HttpResponseRedirect(dl_or_raw_url)
 
+    if ENABLE_THIRDPARTY_EDITOR:
+
+        filename = os.path.basename(path)
+        filetype, fileext = get_file_type_and_ext(filename)
+
+        action_url = THIRDPARTY_EDITOR_ACTION_URL_DICT.get(fileext, '')
+        if action_url:
+
+            user_repo_path_info = {
+                'request_user': request.user.username,
+                'repo_id': repo_id,
+                'file_path': path,
+                'permission': {
+                    # Only can preview file for now
+                    'can_edit': False
+                }
+            }
+
+            uid = uuid.uuid4()
+            access_token = uid.hex
+            cache.set('thirdparty_editor_access_token_' + access_token,
+                      user_repo_path_info,
+                      THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION)
+
+            editor_dict = {}
+            editor_dict['action_url'] = action_url
+            editor_dict['access_token'] = access_token
+            editor_dict['access_token_ttl'] = int(time.time()) + THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
+
+            return render(request, 'view_file_thirdparty_editor.html', editor_dict)
+
     org_id = request.user.org.org_id if is_org_context(request) else -1
     # basic file info
     return_dict = {
@@ -526,7 +565,9 @@ def view_lib_file(request, repo_id, path):
         'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
         'enable_file_comment': settings.ENABLE_FILE_COMMENT,
         'enable_watermark': ENABLE_WATERMARK,
+        'share_link_force_use_password': SHARE_LINK_FORCE_USE_PASSWORD,
         'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
+        'share_link_password_strength_level': SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
@@ -584,6 +625,7 @@ def view_lib_file(request, repo_id, path):
     except Exception as e:
         logger.error(e)
         latest_contributor, last_modified = None, 0
+
     return_dict['latest_contributor'] = latest_contributor
     return_dict['last_modified'] = last_modified
 
@@ -624,8 +666,7 @@ def view_lib_file(request, repo_id, path):
         if file_enc not in FILE_ENCODING_LIST:
             file_enc = 'auto'
 
-        error_msg, file_content, encoding = get_file_content(filetype,
-                inner_path, file_enc)
+        error_msg, file_content, encoding = get_file_content(filetype, inner_path, file_enc)
         if error_msg:
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
@@ -688,6 +729,8 @@ def view_lib_file(request, repo_id, path):
     elif filetype in (VIDEO, AUDIO, PDF, SVG):
         return_dict['raw_path'] = raw_path
         send_file_access_msg(request, repo, path, 'web')
+        if filetype == VIDEO:
+            return_dict['enable_video_thumbnail'] = settings.ENABLE_VIDEO_THUMBNAIL
         return render(request, template, return_dict)
 
     elif filetype == XMIND:
@@ -699,9 +742,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['xmind_image_src'] = urlquote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
 
         return render(request, template, return_dict)
-        
-    elif filetype == CDOC:
-        return render(request, template, return_dict)    
+
     elif filetype == IMAGE:
 
         if file_size > FILE_PREVIEW_MAX_SIZE:
@@ -752,25 +793,15 @@ def view_lib_file(request, repo_id, path):
             # then check if can edit file
             if ENABLE_OFFICE_WEB_APP_EDIT and parse_repo_perm(permission).can_edit_on_web and \
                     fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 action_name = 'edit'
 
             wopi_dict = get_wopi_dict(username, repo_id, path,
-                    action_name=action_name,
-                    language_code=request.LANGUAGE_CODE,
-                    can_download=parse_repo_perm(permission).can_download)
+                                      action_name=action_name,
+                                      language_code=request.LANGUAGE_CODE,
+                                      can_download=parse_repo_perm(permission).can_download)
 
             if wopi_dict:
-                if is_pro_version() and action_name == 'edit':
-                    try:
-                        if not is_locked:
-                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
-                        elif locked_by_online_office:
-                            seafile_api.refresh_file_lock(repo_id, path)
-                    except Exception as e:
-                        logger.error(e)
-
                 send_file_access_msg(request, repo, path, 'web')
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
@@ -781,20 +812,24 @@ def view_lib_file(request, repo_id, path):
             can_edit = False
             if parse_repo_perm(permission).can_edit_on_web and \
                     fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
             onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
-                    can_edit=can_edit, can_download=parse_repo_perm(permission).can_download)
+                                                  can_edit=can_edit,
+                                                  can_download=parse_repo_perm(permission).can_download)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
                     try:
                         if not is_locked:
-                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                            logger.info('{} lock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
+                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                                  int(time.time()) + 40 * 60)
                         elif locked_by_online_office:
-                            seafile_api.refresh_file_lock(repo_id, path)
+                            logger.info('{} relock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
+                            seafile_api.refresh_file_lock(repo_id, path,
+                                                          int(time.time()) + 40 * 60)
                     except Exception as e:
                         logger.error(e)
 
@@ -814,8 +849,7 @@ def view_lib_file(request, repo_id, path):
             # openEditor vs openPreview
             can_edit = False
             if parse_repo_perm(permission).can_edit_on_web and \
-                    ((not is_locked) or (is_locked and locked_by_me) or \
-                    (is_locked and locked_by_online_office)):
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
             if can_edit:
@@ -839,13 +873,21 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
-        error_msg = prepare_converted_html(inner_path, file_id, fileext, return_dict)
+        error_msg = prepare_converted_html(raw_path, file_id, fileext, return_dict)
         if error_msg:
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
+    elif getattr(settings, 'ENABLE_CAD', False) and path.endswith('.dwg'):
+
+        from seahub.cad.utils import get_cad_dict
+        cad_dict = get_cad_dict(request, username, repo_id, path)
+
+        return_dict.update(cad_dict)
+
+        return render(request, 'view_file_cad.html', return_dict)
     else:
         return_dict['err'] = "File preview unsupported"
         return render(request, template, return_dict)
@@ -1051,11 +1093,6 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
 
-    # check whether owner's traffic over the limit
-    if user_traffic_over_limit(fileshare.username):
-        messages.error(request, _('Unable to download file, share link traffic is used up.'))
-        return HttpResponseRedirect(next_page)
-
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
             obj_id, 'download-link', fileshare.username, use_onetime=False)
 
@@ -1078,8 +1115,10 @@ def view_shared_file(request, fileshare):
 
     # check if share link is encrypted
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    direct_download = request.GET.get('dl', '') == '1'
     if not password_check_passed:
-        d = {'token': token, 'view_name': 'view_shared_file', 'err_msg': err_msg}
+        d = {'token': token, 'view_name': 'view_shared_file',
+             'err_msg': err_msg, 'direct_download': direct_download}
         return render(request, 'share_access_validation.html', d)
 
     # recourse check
@@ -1102,9 +1141,25 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
+    if not request.user.is_authenticated:
+        username = ANONYMOUS_EMAIL
+    else:
+        username = request.user.username
+
+    # check file lock info
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked = False
+        locked_by_me = False
+
+    locked_by_online_office = if_locked_by_online_office(repo_id, path)
+
     # get share link permission
     can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit']
+    can_edit = fileshare.get_permissions()['can_edit'] and \
+            (not is_locked or locked_by_online_office)
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1130,12 +1185,6 @@ def view_shared_file(request, fileshare):
         if can_download is False:
             raise Http404
 
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(shared_by):
-            messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next_page)
-
         # send file audit message
         send_file_access_msg(request, repo, path, 'share-link')
 
@@ -1150,25 +1199,14 @@ def view_shared_file(request, fileshare):
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
-        if not request.user.is_authenticated():
-            username = ANONYMOUS_EMAIL
-        else:
-            username = request.user.username
-
         def online_office_lock_or_refresh_lock(repo_id, path, username):
-            # check file lock info
-            try:
-                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-            except Exception as e:
-                logger.error(e)
-                is_locked = False
-
-            locked_by_online_office = if_locked_by_online_office(repo_id, path)
             try:
                 if not is_locked:
-                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                          int(time.time()) + 40 * 60)
                 elif locked_by_online_office:
-                    seafile_api.refresh_file_lock(repo_id, path)
+                    seafile_api.refresh_file_lock(repo_id, path,
+                                                  int(time.time()) + 40 * 60)
             except Exception as e:
                 logger.error(e)
 
@@ -1180,8 +1218,6 @@ def view_shared_file(request, fileshare):
                     language_code=request.LANGUAGE_CODE)
 
             if wopi_dict:
-                if is_pro_version() and can_edit:
-                    online_office_lock_or_refresh_lock(repo_id, path, username)
 
                 wopi_dict['share_link_token'] = token
 
@@ -1238,7 +1274,6 @@ def view_shared_file(request, fileshare):
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
-    traffic_over_limit = user_traffic_over_limit(shared_by)
 
     permissions = fileshare.get_permissions()
 
@@ -1267,7 +1302,7 @@ def view_shared_file(request, fileshare):
             'filetype': ret_dict['filetype'],
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
-            'traffic_over_limit': traffic_over_limit,
+            'traffic_over_limit': False,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
             'file_share_link': file_share_link,
@@ -1341,12 +1376,6 @@ def view_file_via_shared_dir(request, fileshare):
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
 
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(shared_by):
-            messages.error(request, _('Unable to view raw file, share link traffic is used up.'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next_page)
-
         # send file audit message
         send_file_access_msg(request, repo, real_path, 'share-link')
 
@@ -1359,7 +1388,7 @@ def view_file_via_shared_dir(request, fileshare):
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             username = ANONYMOUS_EMAIL
         else:
             username = request.user.username
@@ -1444,7 +1473,6 @@ def view_file_via_shared_dir(request, fileshare):
     else:
         ret_dict['err'] = err_msg
 
-    traffic_over_limit = user_traffic_over_limit(shared_by)
     permissions = fileshare.get_permissions()
 
     # generate dir navigator
@@ -1481,7 +1509,7 @@ def view_file_via_shared_dir(request, fileshare):
             'zipped': zipped,
             'img_prev': img_prev,
             'img_next': img_next,
-            'traffic_over_limit': traffic_over_limit,
+            'traffic_over_limit': False,
             'permissions': permissions,
             'enable_watermark': ENABLE_WATERMARK,
             'file_share_link': file_share_link,
@@ -1721,7 +1749,7 @@ def _check_office_convert_perm(request, repo_id, path, ret):
             return True
         return False
     else:
-        return request.user.is_authenticated() and \
+        return request.user.is_authenticated and \
             check_folder_permission(request, repo_id, '/') is not None
 
 def _check_cluster_internal_token(request, file_id):
@@ -1794,10 +1822,7 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename):
     if filename.endswith('.pdf'):
         filename = "{0}.pdf".format(file_id)
 
-    if CLUSTER_MODE:
-        resp = cluster_get_office_converted_page(path, filename, file_id)
-    else:
-        resp = get_office_converted_page(request, filename, file_id)
+    resp = get_office_converted_page(path, filename, file_id)
 
     if filename.endswith('.page'):
         content_type = 'text/html'
@@ -1932,8 +1957,9 @@ def view_media_file_via_share_link(request):
     # Translation ‘(’ ')'
     image_file_name = image_file_name.replace('(', '\(')
     image_file_name = image_file_name.replace(')', '\)')
+    encoded_image_file_name = urllib.parse.quote(image_file_name)
 
-    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, image_file_name))
+    p = re.compile('(%s)/lib/(%s)/file(.*?)%s\?raw=1' % (serviceURL, repo_id, encoded_image_file_name))
     result = re.search(p, file_content)
     if not result:
         return render_error(request, 'Image does not exist')

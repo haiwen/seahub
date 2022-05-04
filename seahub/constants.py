@@ -16,6 +16,7 @@ PERMISSION_PREVIEW_EDIT = 'cloud-edit'  # preview only with edit on the web
 PERMISSION_READ = 'r'
 PERMISSION_READ_WRITE = 'rw'
 PERMISSION_ADMIN = 'admin'
+CUSTOM_PERMISSION_PREFIX = 'custom'
 
 DEFAULT_ADMIN = 'default_admin'
 SYSTEM_ADMIN = 'system_admin'

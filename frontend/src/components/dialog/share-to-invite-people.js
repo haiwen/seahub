@@ -41,7 +41,7 @@ class UserItem extends React.Component {
     let item = this.props.item;
     let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
         <td className="name">{item.accepter}</td>
         <td>
           <SharePermissionEditor
@@ -56,9 +56,13 @@ class UserItem extends React.Component {
         <td className="name">{item.inviter_name}</td>
         <td>
           <span
+            tabIndex="0"
+            role="button"
             className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteShareItem}
+            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
+            aria-label={gettext('Delete')}
           >
           </span>
         </td>

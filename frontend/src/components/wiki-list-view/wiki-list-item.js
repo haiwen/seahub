@@ -104,7 +104,8 @@ class WikiListItem extends Component {
   //   this.setState({isRenameing: false});
   // }
 
-  onDeleteToggle = () => {
+  onDeleteToggle = (e) => {
+    e.preventDefault();
     this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
@@ -138,7 +139,7 @@ class WikiListItem extends Component {
     let deleteIcon = `action-icon sf2-icon-x3 ${this.state.highlight ? '' : 'invisible'}`;
 
     const desktopItem = (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td className="name">
           <a href={wiki.link}>{wiki.name}</a>
@@ -150,7 +151,7 @@ class WikiListItem extends Component {
         <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
         <td className="text-center cursor-pointer">
-          <span className={deleteIcon} onClick={this.onDeleteToggle}></span>
+          <a href="#" role="button" aria-label={gettext('Unpublish')} title={gettext('Unpublish')} className={deleteIcon} onClick={this.onDeleteToggle}></a>
         </td>
       </tr>
     );

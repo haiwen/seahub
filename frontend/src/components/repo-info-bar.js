@@ -15,8 +15,11 @@ const propTypes = {
   usedRepoTags: PropTypes.array.isRequired,
   readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
-  updateUsedRepoTags: PropTypes.func.isRequired,
-  onFileTagChanged: PropTypes.func.isRequired,
+  updateUsedRepoTags: PropTypes.func,
+  onFileTagChanged: PropTypes.func,
+  className: PropTypes.string,
+  shareLinkToken: PropTypes.string,
+  enableFileDownload: PropTypes.bool
 };
 
 class RepoInfoBar extends React.Component {
@@ -57,11 +60,20 @@ class RepoInfoBar extends React.Component {
   }
 
   render() {
-    let {repoID, currentPath, usedRepoTags, readmeMarkdown} = this.props;
+    let { repoID, currentPath, usedRepoTags, readmeMarkdown, draftCounts, className } = this.props;
+
+    // to be compatible with the existing code
+    if (readmeMarkdown === undefined) {
+      readmeMarkdown = null;
+    }
+    if (draftCounts === undefined) {
+      draftCounts = 0;
+    }
+
     let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) +  '?mode=edit' : '';
     let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
     return (
-      <div className="repo-info-bar">
+      <div className={`repo-info-bar ${className ? className : ''}`}>
         {usedRepoTags.length > 0 && (
           <ul className="used-tag-list">
             {usedRepoTags.map((usedRepoTag) => {
@@ -69,9 +81,9 @@ class RepoInfoBar extends React.Component {
                 <li key={usedRepoTag.id} className="used-tag-item">
                   <span className="used-tag" style={{backgroundColor:usedRepoTag.color}}></span>
                   <span className="used-tag-name" title={usedRepoTag.name}>{usedRepoTag.name}</span>
-                  <span className="used-tag-files" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
+                  <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.onListTaggedFiles.bind(this, usedRepoTag)}>
                     {usedRepoTag.fileCount > 1 ? usedRepoTag.fileCount + ' files' : usedRepoTag.fileCount + ' file'}
-                  </span>
+                  </button>
                 </li>
               );
             })}
@@ -87,16 +99,16 @@ class RepoInfoBar extends React.Component {
           {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) < 2) &&
             <span className="file-info">
               <span className="info-icon sf2-icon-readme"></span>
-              <a className="used-tag-name" href={href} target='_blank'>{readmeMarkdown.name}</a>
+              <a className="used-tag-name" href={href} target='_blank' rel="noreferrer">{readmeMarkdown.name}</a>
             </span>
           }
-          {this.props.draftCounts > 0 &&
+          {draftCounts > 0 &&
             <span className="file-info">
               <span className="info-icon sf2-icon-drafts"></span>
               <span className="used-tag-name">{gettext('draft')}</span>
-              <span className="used-tag-files" onClick={this.toggleDrafts}>
-                {this.props.draftCounts > 1 ? this.props.draftCounts + ' files' : this.props.draftCounts + ' file'}
-              </span>
+              <button type="button" className="used-tag-files border-0 bg-transparent" onClick={this.toggleDrafts}>
+                {draftCounts > 1 ? draftCounts + ' files' : draftCounts + ' file'}
+              </button>
             </span>
           }
         </div>
@@ -109,6 +121,8 @@ class RepoInfoBar extends React.Component {
               toggleCancel={this.onListTaggedFiles}
               updateUsedRepoTags={this.props.updateUsedRepoTags}
               onFileTagChanged={this.props.onFileTagChanged}
+              shareLinkToken={this.props.shareLinkToken}
+              enableFileDownload={this.props.enableFileDownload}
             />
           </ModalPortal>
         )}

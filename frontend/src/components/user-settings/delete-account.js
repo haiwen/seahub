@@ -35,7 +35,7 @@ class DeleteAccount extends React.Component {
         <div className="setting-item" id="del-account">
           <h3 className="setting-item-heading">{gettext('Delete Account')}</h3>
           <p className="mb-2">{gettext('This operation will not be reverted. Please think twice!')}</p>
-          <button className="btn btn-outline-primary" onClick={this.confirmDelete}>{gettext('Delete')}</button>
+          <button type="button" className="btn btn-outline-primary" onClick={this.confirmDelete}>{gettext('Delete')}</button>
         </div>
         {this.state.isConfirmDialogOpen && (
           <ModalPortal>

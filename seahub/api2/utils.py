@@ -23,11 +23,9 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter, email2contact_email
 from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member
-from seahub.notifications.models import UserNotification
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.settings import INSTALLED_APPS
 
 logger = logging.getLogger(__name__)
 
@@ -245,9 +243,6 @@ def to_python_boolean(string):
     if string in ('f', 'false', '0'):
         return False
     raise ValueError("Invalid boolean value: '%s'" % string)
-
-def is_seafile_pro():
-    return any(['seahub_extra' in app for app in INSTALLED_APPS])
 
 def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
     avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)

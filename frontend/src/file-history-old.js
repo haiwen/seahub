@@ -10,9 +10,6 @@ import Logo from './components/logo';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import HistoryItem from './pages/file-history-old/history-item';
 
-import './assets/css/fa-solid.css';
-import './assets/css/fa-regular.css';
-import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';

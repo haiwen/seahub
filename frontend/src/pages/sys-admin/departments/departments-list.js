@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -24,11 +23,20 @@ class DepartmentsList extends React.Component {
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
       isShowAddDepartDialog: false,
+      isItemFreezed: false
     };
   }
 
   componentDidMount() {
     this.listDepartGroups();
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
   }
 
   listDepartGroups = () => {
@@ -46,7 +54,7 @@ class DepartmentsList extends React.Component {
   }
 
   toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
   }
 
   toggleCancel = () => {
@@ -58,6 +66,17 @@ class DepartmentsList extends React.Component {
 
   onDepartChanged = () => {
     this.listDepartGroups();
+  }
+
+  onDepartmentNameChanged = (dept) => {
+    this.setState({
+      groups: this.state.groups.map(item => {
+        if (item.id == dept.id) {
+          item.name = dept.name;
+        }
+        return item;
+      })
+    });
   }
 
   render() {
@@ -104,6 +123,10 @@ class DepartmentsList extends React.Component {
                         <Fragment key={group.id}>
                           <GroupItem
                             group={group}
+                            isItemFreezed={this.state.isItemFreezed}
+                            onFreezedItem={this.onFreezedItem}
+                            onUnfreezedItem={this.onUnfreezedItem}
+                            onDepartmentNameChanged={this.onDepartmentNameChanged}
                             showDeleteDepartDialog={this.showDeleteDepartDialog}
                             showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
                           />

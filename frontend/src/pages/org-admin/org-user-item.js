@@ -77,16 +77,16 @@ class UserItem extends React.Component {
   }
 
   changeStatus = (st) => {
-    let statusCode;
+    let isActive;
     if (st == 'active') {
-      statusCode = 1;
+      isActive = 'true';
     } else {
-      statusCode = 0;
+      isActive = 'false';
     }
 
-    seafileAPI.orgAdminChangeOrgUserStatus(this.props.user.id, statusCode).then(res => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, this.props.user.email, isActive).then(res => {
       this.setState({
-        currentStatus: statusCode == 1 ? 'active' : 'inactive',
+        currentStatus: isActive == 'true' ? 'active' : 'inactive',
         highlight: false,
         showMenu: false,
       });

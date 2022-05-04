@@ -36,7 +36,8 @@ class FileInfo extends React.PureComponent {
           <a className={`file-star ${isStarred ? 'fa' : 'far'} fa-star`}
             href="#"
             title={starredText}
-            aria-label={starredText}
+            role="button"
+            aria-label={isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.toggleStar}>
           </a>
           <InternalLinkDialog repoID={repoID} path={filePath} />

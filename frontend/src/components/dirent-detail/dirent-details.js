@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import DetailCommentList from './detail-comments-list';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Dirent from '../../models/dirent';
 import DetailListView from './detail-list-view';
-import FileTag from '../../models/file-tag';
+
 import '../../css/dirent-detail.css';
 
 const propTypes = {
@@ -29,8 +29,6 @@ class DirentDetail extends React.Component {
     this.state = {
       direntType: '',
       direntDetail: '',
-      fileTagList: [],
-      relatedFiles: [],
       folderDirent: null,
       activeTab: 'info',
       fileParticipantList: [],
@@ -95,32 +93,6 @@ class DirentDetail extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      seafileAPI.listFileTags(repoID, direntPath).then(res => {
-        let fileTagList = [];
-        res.data.file_tags.forEach(item => {
-          let file_tag = new FileTag(item);
-          fileTagList.push(file_tag);
-        });
-        this.setState({fileTagList: fileTagList});
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-      seafileAPI.listRelatedFiles(repoID, direntPath).then(res => {
-        let relatedFiles = [];
-        res.data.related_files.map((relatedFile) => {
-          relatedFiles.push(relatedFile);
-        });
-        this.setState({
-          relatedFiles: relatedFiles,
-        });
-      }).catch((error) => {
-        if (error.response.status === 500) {
-          this.setState({
-            relatedFiles: []
-          });
-        }
-      });
       this.listParticipants(repoID, direntPath);
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
@@ -143,10 +115,6 @@ class DirentDetail extends React.Component {
 
   onParticipantsChange = (repoID, filePath) => {
     this.listParticipants(repoID, filePath);
-  }
-
-  onRelatedFileChange = (dirent, direntPath) => {
-    this.updateDetailView(dirent, direntPath);
   }
 
   tabItemClick = (tab) => {
@@ -189,6 +157,7 @@ class DirentDetail extends React.Component {
   }
 
   renderDetailBody = (bigIconUrl, folderDirent) => {
+    const { dirent } = this.props;
     return (
       <Fragment>
         <div className="detail-body dirent-info">
@@ -202,10 +171,8 @@ class DirentDetail extends React.Component {
                 dirent={this.props.dirent || folderDirent}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail}
-                fileTagList={this.state.fileTagList}
-                relatedFiles={this.state.relatedFiles}
+                fileTagList={dirent ? dirent.file_tags : []}
                 onFileTagChanged={this.props.onFileTagChanged}
-                onRelatedFileChange={this.onRelatedFileChange}
                 fileParticipantList={this.state.fileParticipantList}
                 onParticipantsChange={this.onParticipantsChange}
               />
@@ -225,7 +192,8 @@ class DirentDetail extends React.Component {
     let smallIconUrl = dirent ? Utils.getDirentIcon(dirent) : Utils.getDirentIcon(folderDirent);
     let bigIconUrl = dirent ? Utils.getDirentIcon(dirent, true) : Utils.getDirentIcon(folderDirent, true);
     const isImg = dirent ? Utils.imageCheck(dirent.name) : Utils.imageCheck(folderDirent.name);
-    if (isImg) {
+    const isVideo = dirent ? Utils.videoCheck(dirent.name) : Utils.videoCheck(folderDirent.name);
+    if (isImg || (enableVideoThumbnail && isVideo)) {
       bigIconUrl = `${siteRoot}thumbnail/${repoID}/1024` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
     }
     let direntName = dirent ? dirent.name : folderDirent.name;
@@ -235,7 +203,7 @@ class DirentDetail extends React.Component {
         <div className="detail-container">
           {this.renderHeader(smallIconUrl, direntName)}
           <Nav tabs className="mx-0">{this.renderNavItem('info')}{this.renderNavItem('comments')}</Nav>
-          <TabContent activeTab={this.state.activeTab}>
+          <TabContent activeTab={this.state.activeTab} className="flex-fill o-auto">
             <TabPane tabId="info">{this.renderDetailBody(bigIconUrl, folderDirent)}</TabPane>
             <TabPane tabId="comments" className="comments h-100">
               <DetailCommentList

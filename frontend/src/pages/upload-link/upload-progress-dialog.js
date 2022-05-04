@@ -31,16 +31,28 @@ class UploadProgressDialog extends React.Component {
     });
   }
 
+  onDropdownToggleKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.toggleDropdown();
+    }
+  }
+
+  onMenuItemKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      e.target.click();
+    }
+  }
+
   render() {
     let { allFilesUploaded } = this.props;
     return (
       <Fragment>
         <div className="text-center">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle color="primary" caret>{gettext('Upload')}</DropdownToggle>
+            <DropdownToggle color="primary" caret onKeyDown={this.onDropdownToggleKeyDown}>{gettext('Upload')}</DropdownToggle>
             <DropdownMenu>
-              <DropdownItem onClick={this.props.onFileUpload}>{gettext('Upload Files')}</DropdownItem>
-              <DropdownItem onClick={this.props.onFolderUpload}>{gettext('Upload Folder')}</DropdownItem>
+              <DropdownItem onClick={this.props.onFileUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Files')}</DropdownItem>
+              <DropdownItem onClick={this.props.onFolderUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Folder')}</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
           <Button color="primary" outline={true} className="ml-4"
@@ -72,7 +84,7 @@ class UploadProgressDialog extends React.Component {
                     onUploadRetry={this.props.onUploadRetry}
                   />
                 );
-              })
+              }).reverse()
               }
             </tbody>
           </table>

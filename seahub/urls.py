@@ -1,7 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.conf import settings
 from django.conf.urls import url, include
-# from django.views.generic.simple import direct_to_template
 from django.views.generic import TemplateView
 
 from seahub.views import *
@@ -20,6 +18,8 @@ from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir,
 from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
         dingtalk_connect, dingtalk_connect_callback, dingtalk_disconnect
 
+from seahub.api2.endpoints.search_file import SearchFile
+
 from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
@@ -34,10 +34,13 @@ from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
-from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
+from seahub.api2.endpoints.group_members import GroupMembers, GroupSearchMember, GroupMember, \
+        GroupMembersBulk, GroupMembersImport, GroupMembersImportExample
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
-        ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, ShareLinkUpload
+        ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
+        ShareLinkUpload, ShareLinkUploadDone, ShareLinkSaveItemsToRepo, \
+        ShareLinkRepoTags, ShareLinkRepoTagsTaggedFiles
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -48,7 +51,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
         ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
         ReposBatchDeleteItemView
-from seahub.api2.endpoints.repos import RepoView, ReposView
+from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
@@ -102,6 +105,9 @@ from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotific
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
 from seahub.api2.endpoints.ocm_repos import OCMReposDirView, OCMReposDownloadLinkView, \
     OCMReposUploadLinkView
+from seahub.api2.endpoints.custom_share_permissions import CustomSharePermissionsView, CustomSharePermissionView
+
+from seahub.ocm_via_webdav.ocm_api import OCMProviderView
 
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
@@ -114,6 +120,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.generate_user_auth_token import AdminGenerateUserAuthToken
 from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
@@ -124,7 +131,7 @@ from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
-    AdminLDAPUsers, AdminSearchUser
+    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -188,11 +195,14 @@ urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
     url(r'^sso/$', sso, name='sso'),
+    url(r'^jwt-sso/$', jwt_sso, name='jwt_sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
+    url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
+    url(r'^ocm-via-webdav/', include('seahub.ocm_via_webdav.urls')),
+    url(r'^cad/', include('seahub.cad.urls')),
 
     url(r'^$', react_fake_view, name='libraries'),
-    #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 
     # revert repo
@@ -286,6 +296,9 @@ urlpatterns = [
     url(r'^api/v2.1/smart-link/$', SmartLink.as_view(), name="api-v2.1-smart-link"),
     url(r'^api/v2.1/smart-links/(?P<token>[-0-9a-f]{36})/$', SmartLinkToken.as_view(), name="api-v2.1-smart-links-token"),
 
+    # search file by name
+    url(r'^api/v2.1/search-file/$', SearchFile.as_view(), name='api-v2.1-search-file'),
+
     # departments
     url(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
 
@@ -299,7 +312,10 @@ urlpatterns = [
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/search-member/$', GroupSearchMember.as_view(), name='api-v2.1-group-search-member'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/import/$', GroupMembersImport.as_view(), name='api-v2.1-group-members-import'),
+    url(r'^api/v2.1/group-members-import-example/$', GroupMembersImportExample.as_view(), name='api-v2.1-group-members-import-example'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
     url(r'^api/v2.1/search-group/$', SearchGroup.as_view(), name='api-v2.1-search-group'),
 
@@ -312,6 +328,9 @@ urlpatterns = [
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', GroupOwnedLibraryGroupShare.as_view(), name='api-v2.1-group-owned-library-group-share'),
     url(r'^api/v2.1/group-owned-libraries/user-share-in-libraries/(?P<repo_id>[-0-9-a-f]{36})/$', GroupOwnedLibraryUserShareInLibrary.as_view(), name='api-v2.1-group-owned-library-user-share-in-library'),
 
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/$', CustomSharePermissionsView.as_view(), name='api-v2.1-custom-share-permissions'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/(?P<permission_id>\d+)/$', CustomSharePermissionView.as_view(), name='api-v2.1-custom-share-permission'),
+
     ## user::shared-folders
     url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),
 
@@ -323,10 +342,15 @@ urlpatterns = [
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-file-to-repo/$', ShareLinkSaveFileToRepo.as_view(), name='api-v2.1-share-link-save-file-to-repo'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-items-to-repo/$', ShareLinkSaveItemsToRepo.as_view(), name='api-v2.1-share-link-save-items-to-repo'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/dirents/$', ShareLinkDirents.as_view(), name='api-v2.1-share-link-dirents'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/online-office-lock/$',
             ShareLinkOnlineOfficeLock.as_view(), name='api-v2.1-share-link-online-office-lock'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/upload/$', ShareLinkUpload.as_view(), name='api-v2.1-share-link-upload'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/upload/done/$', ShareLinkUploadDone.as_view(), name='api-v2.1-share-link-upload-done'),
+
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/repo-tags/$', ShareLinkRepoTags.as_view(), name='api-v2.1-share-link-repo-tags'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/tagged-files/(?P<tag_id>\d+)/$', ShareLinkRepoTagsTaggedFiles.as_view(), name='api-v2.1-share-link-repo-tags-tagged-files'),
 
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
@@ -384,6 +408,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/(?P<token>[a-f0-9]+)/$', RepoShareLink.as_view(), name='api-v2.1-repo-share-link'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/$', RepoUploadLinks.as_view(), name='api-v2.1-repo-upload-links'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
 
     ## user:: repo-api-tokens
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
@@ -462,7 +487,7 @@ urlpatterns = [
 
     ## user::ocm
     # ocm inter-server api, interact with other server
-    url(r'ocm-provider/$', OCMProtocolView.as_view(), name='api-v2.1-ocm-protocol'),
+    url(r'ocm-provider/$', OCMProviderView.as_view(), name='api-v2.1-ocm-protocol'),
     url(r'' + OCM_ENDPOINT + 'shares/$', OCMSharesView.as_view(), name='api-v2.1-ocm-shares'),
     url(r'' + OCM_ENDPOINT + 'notifications/$', OCMNotificationsView.as_view(), name='api-v2.1-ocm-notifications'),
 
@@ -489,6 +514,9 @@ urlpatterns = [
     url(r'^api/v2.1/admin/abuse-reports/(?P<pk>\d+)/$', AdminAbuseReportView.as_view(), name='api-v2.1-admin-abuse-report'),
 
 
+    ## admin::generate user auth token
+    url(r'^api/v2.1/admin/generate-user-auth-token/$', AdminGenerateUserAuthToken.as_view(), name='api-v2.1-admin-generate-user-auth-token'),
+
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
 
@@ -511,6 +539,8 @@ urlpatterns = [
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     url(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
     url(r'^api/v2.1/admin/search-user/$', AdminSearchUser.as_view(), name='api-v2.1-admin-search-user'),
+    url(r'^api/v2.1/admin/update-user-ccnet-email/$', AdminUpdateUserCcnetEmail.as_view(), name='api-v2.1-admin-update-user-ccnet-email'),
+
     # [^...] Matches any single character not in brackets
     # + Matches between one and unlimited times, as many times as possible
     url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
@@ -684,7 +714,6 @@ urlpatterns = [
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
-    url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
@@ -784,14 +813,15 @@ urlpatterns += [
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search, pubuser_search
+    from seahub.search.views import search, pubuser_search
     urlpatterns += [
         url(r'^search/$', search, name='search'),
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
     ]
 
-if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import \
+from seahub.utils import is_pro_version
+if is_pro_version():
+    from seahub.sysadmin_extra.views import \
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += [
@@ -810,8 +840,8 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
 
 if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += [
-        url(r'^api/v2.1/org/', include('seahub_extra.organizations.api_urls')),
-        url(r'^org/', include('seahub_extra.organizations.urls')),
+        url(r'^api/v2.1/org/', include('seahub.organizations.api_urls')),
+        url(r'^org/', include('seahub.organizations.urls')),
     ]
 
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
@@ -839,7 +869,7 @@ if HAS_OFFICE_CONVERTER:
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
-    from seahub_extra.adfs_auth.views import assertion_consumer_service, \
+    from seahub.adfs_auth.views import assertion_consumer_service, \
         auth_complete
     urlpatterns += [
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
@@ -849,8 +879,10 @@ if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):
     from seahub.onlyoffice.views import onlyoffice_editor_callback
+    from seahub.onlyoffice.views import OnlyofficeConvert
     urlpatterns += [
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
+        url(r'^onlyoffice-api/convert/$', OnlyofficeConvert.as_view(), name='onlyoffice_api_convert'),
     ]
 
 if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):
@@ -860,9 +892,9 @@ if getattr(settings, 'ENABLE_BISHENG_OFFICE', False):
     ]
 
 if getattr(settings, 'ENABLE_CAS', False):
-    from seahub_extra.django_cas_ng.views import login as cas_login
-    from seahub_extra.django_cas_ng.views import logout as cas_logout
-    from seahub_extra.django_cas_ng.views import callback as cas_callback
+    from seahub.django_cas_ng.views import login as cas_login
+    from seahub.django_cas_ng.views import logout as cas_logout
+    from seahub.django_cas_ng.views import callback as cas_callback
     urlpatterns += [
         url(r'^accounts/cas-login/$', cas_login, name='cas_ng_login'),
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
