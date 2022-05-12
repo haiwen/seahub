@@ -21,9 +21,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 10:13+0800\n"
-"PO-Revision-Date: 2022-01-19 08:28+0000\n"
-"Last-Translator: llj <lingjun.li1@gmail.com>\n"
+"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"PO-Revision-Date: 2013-10-25 07:03+0000\n"
+"Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -140,7 +140,7 @@ msgstr "资料库无法转让给所有者。"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:554
+#: seahub/api2/endpoints/share_links.py:626
 msgid "There is an associated published library."
 msgstr "有一个相关联的已发布资料库。"
 
@@ -161,8 +161,8 @@ msgstr "邮箱 %s 无效。"
 #: seahub/api2/endpoints/admin/shares.py:268
 #: seahub/api2/endpoints/dir_shared_items.py:346
 #: seahub/api2/endpoints/dir_shared_items.py:459
-#: seahub/api2/endpoints/group_owned_libraries.py:942
-#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/group_owned_libraries.py:944
+#: seahub/api2/endpoints/group_owned_libraries.py:1212
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
@@ -437,13 +437,13 @@ msgstr "取消失败"
 
 #: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:928
 msgid "username invalid."
 msgstr "用户名不合法。"
 
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:935
+#: seahub/api2/endpoints/group_owned_libraries.py:937
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -465,7 +465,7 @@ msgstr "没有权限"
 msgid "File is not locked."
 msgstr "文件没有被锁定。"
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:708
 msgid "You can not refresh this file's lock."
 msgstr "不能刷新文件锁。"
 
@@ -643,50 +643,58 @@ msgstr "邮箱无效。"
 msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一个上传链接给你"
 
-#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/share_links.py:272
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
 #: seahub/api2/views.py:4122
 msgid "Password is required."
 msgstr "密码为必填项。"
 
-#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/share_links.py:278
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "密码长度太短。"
 
-#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/share_links.py:282
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr "密码太弱。"
 
-#: seahub/api2/endpoints/share_links.py:302
-#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
+#: seahub/api2/endpoints/share_links.py:305
+#: seahub/api2/endpoints/share_links.py:550
+#: seahub/api2/endpoints/upload_links.py:196
+#: seahub/api2/endpoints/upload_links.py:330 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "过期天数需要大于等于 %s"
 
-#: seahub/api2/endpoints/share_links.py:308
-#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
+#: seahub/api2/endpoints/share_links.py:311
+#: seahub/api2/endpoints/share_links.py:556
+#: seahub/api2/endpoints/upload_links.py:202
+#: seahub/api2/endpoints/upload_links.py:336 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "过期天数需要小于等于 %s"
 
-#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/share_links.py:333
+#: seahub/api2/endpoints/share_links.py:580
 #: seahub/api2/endpoints/upload_links.py:224
+#: seahub/api2/endpoints/upload_links.py:360
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "过期时间应晚于 %s。"
 
-#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/share_links.py:342
+#: seahub/api2/endpoints/share_links.py:589
 #: seahub/api2/endpoints/upload_links.py:233
+#: seahub/api2/endpoints/upload_links.py:369
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "过期时间应早于 %s。"
 
-#: seahub/api2/endpoints/share_links.py:408
-#: seahub/api2/endpoints/share_links.py:417
+#: seahub/api2/endpoints/share_links.py:411
+#: seahub/api2/endpoints/share_links.py:420
 #, python-format
 msgid "Share link %s already exists."
 msgstr "共享链接 \"%s\" 已存在。"

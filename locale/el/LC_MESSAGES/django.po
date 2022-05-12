@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 10:13+0800\n"
-"PO-Revision-Date: 2022-01-19 07:23+0000\n"
-"Last-Translator: nikolaosp <nikolaosp@gmail.com>\n"
+"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"PO-Revision-Date: 2013-10-25 07:03+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>, 2017\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:554
+#: seahub/api2/endpoints/share_links.py:626
 msgid "There is an associated published library."
 msgstr ""
 
@@ -153,8 +153,8 @@ msgstr "Η διεύθυνση ηλεκτρονικού ταχυδρομείου 
 #: seahub/api2/endpoints/admin/shares.py:268
 #: seahub/api2/endpoints/dir_shared_items.py:346
 #: seahub/api2/endpoints/dir_shared_items.py:459
-#: seahub/api2/endpoints/group_owned_libraries.py:942
-#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/group_owned_libraries.py:944
+#: seahub/api2/endpoints/group_owned_libraries.py:1212
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
@@ -429,13 +429,13 @@ msgstr "Αποτυχία ακύρωσης"
 
 #: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:928
 msgid "username invalid."
 msgstr ""
 
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:935
+#: seahub/api2/endpoints/group_owned_libraries.py:937
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -457,7 +457,7 @@ msgstr "Απαγόρευση πρόσβασης."
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:708
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -635,50 +635,58 @@ msgstr ""
 msgid "An upload link is shared to you on %s"
 msgstr "Ένας σύνδεσμος μεταφόρτωσης είναι σε κοινή χρήση μαζί σας στο %s"
 
-#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/share_links.py:272
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
 #: seahub/api2/views.py:4122
 msgid "Password is required."
 msgstr "Απαιτείται συνθηματικό."
 
-#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/share_links.py:278
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Το συνθηματικό είναι πολύ μικρό"
 
-#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/share_links.py:282
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:302
-#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
+#: seahub/api2/endpoints/share_links.py:305
+#: seahub/api2/endpoints/share_links.py:550
+#: seahub/api2/endpoints/upload_links.py:196
+#: seahub/api2/endpoints/upload_links.py:330 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:308
-#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
+#: seahub/api2/endpoints/share_links.py:311
+#: seahub/api2/endpoints/share_links.py:556
+#: seahub/api2/endpoints/upload_links.py:202
+#: seahub/api2/endpoints/upload_links.py:336 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/share_links.py:333
+#: seahub/api2/endpoints/share_links.py:580
 #: seahub/api2/endpoints/upload_links.py:224
+#: seahub/api2/endpoints/upload_links.py:360
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/share_links.py:342
+#: seahub/api2/endpoints/share_links.py:589
 #: seahub/api2/endpoints/upload_links.py:233
+#: seahub/api2/endpoints/upload_links.py:369
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:408
-#: seahub/api2/endpoints/share_links.py:417
+#: seahub/api2/endpoints/share_links.py:411
+#: seahub/api2/endpoints/share_links.py:420
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
