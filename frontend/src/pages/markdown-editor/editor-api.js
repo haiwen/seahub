@@ -1,7 +1,5 @@
-import { seafileAPI } from './utils/seafile-api';
-import { Utils } from './utils/utils';
-
-import './css/markdown-viewer/markdown-editor.css';
+import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 
 const { repoID, repoName, filePath, fileName, draftID } = window.app.pageOptions;
 const { serviceUrl } = window.app.config;
