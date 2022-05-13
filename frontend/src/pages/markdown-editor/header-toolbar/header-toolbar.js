@@ -51,7 +51,6 @@ class HeaderToolbar extends React.Component {
   }
 
   render() {
-    console.log('aaa');
     let { contentChanged, saving, isLocked, lockedByMe } = this.props;
     let canPublishDraft = this.props.fileInfo.permission == 'rw';
     let canCreateDraft = canPublishDraft && (!this.props.hasDraft && !this.props.isDraft && this.props.isDocs);
