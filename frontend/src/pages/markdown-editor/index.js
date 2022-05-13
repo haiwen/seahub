@@ -14,7 +14,7 @@ import LocalDraftDialog from '../../components/dialog/local-draft-dialog';
 import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
 import InsertRepoImageDialog from '../../components/dialog/insert-repo-image-dialog';
 import FileParticipantDialog from '../../components/dialog/file-participant-dialog';
-import MarkdownViewerToolbar from '../../components/toolbar/markdown-viewer-toolbar';
+import HeaderToolbar from './header-toolbar';
 import editorApi from './editor-api';
 
 import '../../css/markdown-viewer/markdown-editor.css';
@@ -509,7 +509,7 @@ class MarkdownEditor extends React.Component {
     } else if (this.state.mode === 'editor') {
       component = (
         <Fragment>
-          <MarkdownViewerToolbar
+          <HeaderToolbar
             isDocs={isDocs}
             hasDraft={hasDraft}
             isDraft={isDraft}
