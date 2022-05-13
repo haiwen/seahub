@@ -172,3 +172,58 @@
 .seafile-editor-side-panel .seafile-comment {
   width: 100%;
 }
+
+/* toolbar */
+.topbar-file-info {
+  display: inline-block;
+  margin-left: 8px;
+  /*
+    only select file info text
+  */
+  user-select: text;
+}
+.topbar-file-info .file-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.topbar-file-info .file-title .iconfont {
+  font-size: 0.875rem;
+}
+
+.topbar-file-info .file-title .file-star,
+.topbar-file-info .file-title .file-internal-link {
+  font-size: 0.875rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  vertical-align: text-bottom;
+  color: #999;
+}
+
+.topbar-file-info .file-title .file-internal-link {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.topbar-file-info .file-title .file-internal-link:hover {
+  color: #333;
+}
+
+.topbar-file-info .file-title .file-star .star {
+  color: #999;
+}
+
+.topbar-file-info .file-state {
+  font-size: 0.8125rem;
+}
+
+.topbar-file-info .file-state .file-modifier-name {
+  margin-right: 0.5rem;
+}
+
+.topbar-file-info .file-state .file-modifier-savedraft {
+  margin-left: 0.5rem;
+  color: #888;
+}
