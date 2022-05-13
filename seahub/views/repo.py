@@ -405,12 +405,18 @@ def view_shared_upload_link(request, uploadlink):
 
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
+    try:
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+    except Exception as e:
+        logger.error(e)
+        max_upload_file_size = -1
+
     return render(request, 'view_shared_upload_link_react.html', {
             'repo': repo,
             'path': path,
             'username': username,
             'dir_name': dir_name,
-            'max_upload_file_size': seaserv.MAX_UPLOAD_FILE_SIZE,
+            'max_upload_file_size': max_upload_file_size,
             'no_quota': no_quota,
             'uploadlink': uploadlink,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
