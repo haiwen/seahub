@@ -294,7 +294,7 @@ def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type, access_token
     return resp_json
 
 
-def api_pingan_pacas_refresh_valid_code():
+def api_pingan_pacas_refresh_valid_code(request):
 
     result = {}
     content_type = 'application/json; charset=utf-8'

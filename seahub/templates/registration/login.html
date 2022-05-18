@@ -73,6 +73,8 @@ html, body, #wrapper { height:100%; }
         <input type="hidden" name="next" value="{% if next %}{{ next|escape }}{% else %}{{ SITE_ROOT }}{% endif %}" />
         {% if error_msg %}
         <p class="error">{{ error_msg }}</p>
+        {% else %}
+        <p class="error hide"></p>
         {% endif %}
 
         <label class="checkbox-label remember">
@@ -167,7 +169,7 @@ $('#lang-context').on('click', function() {
 $('[name="login"]').trigger('focus');
 
 function setCaptchaInputWidth() {
-    $('#id_captcha_1').outerWidth($('.input').outerWidth() - $('.captcha').width() - $('#refresh-captcha').outerWidth(true) - 10);
+    $('#id_captcha_1').outerWidth($('.input').outerWidth() - $('.captcha').width() - $('#refresh-valid-code').outerWidth(true) - 10);
 }
 $(window).on('load', setCaptchaInputWidth);
 $('.captcha').on('load', setCaptchaInputWidth);
