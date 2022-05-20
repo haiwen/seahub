@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import io from 'socket.io-client';
-import { SeafileEditor } from '@seafile/seafile-editor/dist/editor/editor.js';
-import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
-import 'whatwg-fetch';
+import { serialize, deserialize } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isDocs, mediaUrl } from '../../utils/constants';
@@ -10,9 +8,8 @@ import toaster from '../../components/toast';
 import ShareDialog from '../../components/dialog/share-dialog';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
 import LocalDraftDialog from '../../components/dialog/local-draft-dialog';
-import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
-import FileParticipantDialog from '../../components/dialog/file-participant-dialog';
 import HeaderToolbar from './header-toolbar';
+import SeafileEditor from './seafile-editor';
 import editorApi from './editor-api';
 
 import '../../css/markdown-viewer/markdown-editor.css';
@@ -23,7 +20,6 @@ const { repoID, filePath, fileName, draftID, isDraft, hasDraft, isLocked, locked
 const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
-
 
 class MarkdownEditor extends React.Component {
 
@@ -50,8 +46,6 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
-      showEditFileTagDialog: false,
-      showFileParticipantDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
@@ -166,8 +160,6 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
-      showEditFileTagDialog: false,
-      showFileParticipantDialog: false,
     });
   }
 
@@ -247,18 +239,6 @@ class MarkdownEditor extends React.Component {
         this.setState({
           showMarkdownEditorDialog: true,
           showInsertFileDialog: true,
-        });
-        break;
-      case 'file_tags':
-        this.setState({
-          showEditFileTagDialog: true,
-          showMarkdownEditorDialog: true,
-        });
-        break;
-      case 'add-participant':
-        this.setState({
-          showMarkdownEditorDialog: true,
-          showFileParticipantDialog: true,
         });
         break;
       default:
@@ -494,7 +474,6 @@ class MarkdownEditor extends React.Component {
           showFileHistory={this.state.isShowHistory ? false : true }
           toggleHistory={this.toggleHistory}
           readOnly={this.state.readOnly}
-          mode={this.state.mode}
           editorMode={this.state.editorMode}
           contentChanged={this.state.contentChanged}
           saving={this.state.saving}
@@ -510,8 +489,6 @@ class MarkdownEditor extends React.Component {
           editorApi={editorApi}
           collabUsers={this.state.collabUsers}
           setFileInfoMtime={this.setFileInfoMtime}
-          toggleStar={this.toggleStar}
-          showFileHistory={true}
           setEditorMode={this.setEditorMode}
           setContent={this.setContent}
           draftID={draftID}
@@ -530,8 +507,8 @@ class MarkdownEditor extends React.Component {
           onContentChanged={this.onContentChanged}
           onSaving={this.onSaving}
           contentChanged={this.state.contentChanged}
-          saving={this.state.saving}
           fileTagList={this.state.fileTagList}
+          onFileTagChanged={this.onFileTagChanged}
           participants={this.state.participants}
           onParticipantsChange={this.onParticipantsChange}
           markdownLint={fileName.toLowerCase() !== 'index.md'}
@@ -563,24 +540,6 @@ class MarkdownEditor extends React.Component {
                 toggleDialog={this.toggleCancel}
                 isGroupOwnedRepo={false}
                 repoEncrypted={false}
-              />
-            }
-            {this.state.showEditFileTagDialog &&
-              <EditFileTagDialog
-                repoID={repoID}
-                filePath={filePath}
-                fileTagList={this.state.fileTagList}
-                toggleCancel={this.toggleCancel}
-                onFileTagChanged={this.onFileTagChanged}
-              />
-            }
-            {this.state.showFileParticipantDialog &&
-              <FileParticipantDialog
-                repoID={repoID}
-                filePath={filePath}
-                toggleFileParticipantDialog={this.toggleCancel}
-                fileParticipantList={this.state.participants}
-                onParticipantsChange={this.onParticipantsChange}
               />
             }
           </React.Fragment>

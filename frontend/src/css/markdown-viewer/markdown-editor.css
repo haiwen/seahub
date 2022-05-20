@@ -1,3 +1,10 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
 .seafile-md-viewer {
   height: 100%;
   flex-direction: row;
