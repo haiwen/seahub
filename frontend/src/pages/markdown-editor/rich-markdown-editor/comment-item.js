@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
+import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 

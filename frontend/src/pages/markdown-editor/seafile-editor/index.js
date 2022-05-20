@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { deserialize, serialize, PlainMarkdownEditor } from '@seafile/seafile-editor';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
-import RichEditor from '../rich-editor';
+import RichMarkdownEditor from '../rich-markdown-editor';
 
 const propTypes = {
   mode: PropTypes.string,
@@ -222,7 +222,7 @@ class SeafileEditor extends React.Component {
 
     if (this.props.editorMode === 'rich') {
       return (
-        <RichEditor
+        <RichMarkdownEditor
           scriptSource={this.props.scriptSource}
           readOnly={this.props.readOnly}
           value={this.state.richValue}

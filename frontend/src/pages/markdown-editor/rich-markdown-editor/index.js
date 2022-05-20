@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Toolbar, MarkdownEditor, UserHelp } from '@seafile/seafile-editor';
-import EditorBuilder from '@seafile/seafile-editor/dist/editor/editor-builder';
+import { EditorBuilder, Toolbar, MarkdownEditor, UserHelp } from '@seafile/seafile-editor';
 import SidePanel from './side-panel';
 
 import '../css/rich-editor.css';
@@ -14,7 +13,6 @@ const propTypes = {
   fileInfo: PropTypes.object,
   readOnly: PropTypes.bool,
   editorApi: PropTypes.object,
-  collabUsers: PropTypes.array,
   onSave: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   resetRichValue: PropTypes.func,
@@ -22,9 +20,10 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   participants: PropTypes.array,
   onParticipantsChange: PropTypes.func,
+  openDialogs: PropTypes.func,
 };
 
-class RichEditor extends React.Component {
+class RichMarkdownEditor extends React.Component {
 
   constructor(props) {
     super(props);
@@ -121,7 +120,7 @@ class RichEditor extends React.Component {
   }
 }
 
-RichEditor.propTypes = propTypes;
+RichMarkdownEditor.propTypes = propTypes;
 
 
-export default RichEditor;
+export default RichMarkdownEditor;
