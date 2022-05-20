@@ -6,7 +6,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
@@ -102,7 +101,7 @@ class FileCommentView(APIView):
         # permission check
         username = request.user.username
         if username != file_comment.author or \
-                not check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+                check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
