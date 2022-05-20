@@ -133,7 +133,7 @@ def access_token_check(func):
 
         info_dict = get_file_info_by_token(token)
         if not info_dict:
-            logger.error('Get wopi cache value failed: wopi_access_token_%s.' % token)
+            logger.info('Get wopi cache value failed: wopi_access_token_%s.' % token)
             return HttpResponse(json.dumps({}), status=404, content_type=json_content_type)
 
         request_user = info_dict['request_user']
