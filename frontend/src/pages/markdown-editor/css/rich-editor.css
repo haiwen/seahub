@@ -1,0 +1,125 @@
+.seafile-markdown-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.seafile-markdown-editor .markdown-editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fff;
+  user-select: none;
+  box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
+  z-index: 3;
+}
+
+.seafile-markdown-editor .markdown-editor-toolbar .editor-btn-group {
+  height: 100%;
+  padding: 5px 0 5px 5px;
+  font-size: 0.75rem;
+  border-right: 1px solid #e5e5e5;
+  color: #555555;
+}
+
+.seafile-markdown-editor .markdown-editor-content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.seafile-markdown-editor .markdown-editor-content .markdown-editor-wrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 0;
+  min-width: 0;
+  background-color: #fafaf9;
+}
+
+.seafile-markdown-editor .markdown-editor-content .markdown-help-wrapper {
+  width: 0;
+  display: flex;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+}
+
+.seafile-markdown-editor .markdown-editor-content .markdown-help-wrapper.show {
+  width: 300px;
+  background-color: #fff;
+  border-left: 1px solid #e6e6dd;
+  position: relative;
+}
+
+
+.seafile-markdown-editor .markdown-editor-content .markdown-help-wrapper .file-info {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.seafile-markdown-editor .markdown-editor-content .markdown-help-wrapper .help-info {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.seafile-markdown-editor ::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+
+.seafile-markdown-editor ::-webkit-scrollbar-button {
+  display: none;
+}
+
+.seafile-markdown-editor ::-webkit-scrollbar-thumb {
+  background-color: rgb(206, 206, 212);
+  border-radius: 10px;
+}
+
+@media (max-width: 991.8px) {
+  .seafile-editor {
+    min-width: calc(100% - 40px);
+  }
+
+  .seafile-editor-main-panel {
+    width: calc(100% - 200px);
+  }
+
+  .seafile-editor-side-panel {
+    min-width: 200px;
+  }
+
+  .editor-container {
+    width: 100%;
+  }
+
+  .editor-container .editor {
+    margin: 20px !important;
+    padding: 20px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .editor-container .editor {
+    margin: 0 !important;
+    padding: 10px 15px;
+    border: 0;
+  }
+}
+
+.full-screen .editor-container .article {
+  margin: 20px auto;
+  max-width: 950px;
+}

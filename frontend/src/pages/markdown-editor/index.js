@@ -1,20 +1,15 @@
 import React, { Fragment } from 'react';
 import io from 'socket.io-client';
-import { SeafileEditor } from '@seafile/seafile-editor/dist/editor/editor.js';
-import { serialize, deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
-import 'whatwg-fetch';
+import { serialize, deserialize } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isDocs, mediaUrl } from '../../utils/constants';
 import toaster from '../../components/toast';
-import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import InsertFileDialog from '../../components/dialog/insert-file-dialog';
 import LocalDraftDialog from '../../components/dialog/local-draft-dialog';
-import EditFileTagDialog from '../../components/dialog/edit-filetag-dialog';
-import InsertRepoImageDialog from '../../components/dialog/insert-repo-image-dialog';
-import FileParticipantDialog from '../../components/dialog/file-participant-dialog';
 import HeaderToolbar from './header-toolbar';
+import SeafileEditor from './seafile-editor';
 import editorApi from './editor-api';
 
 import '../../css/markdown-viewer/markdown-editor.css';
@@ -26,15 +21,10 @@ const { siteRoot, serviceUrl, seafileCollabServer } = window.app.config;
 const userInfo = window.app.userInfo;
 const IMAGE_SUFFIXES = ['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG', 'gif', 'GIF'];
 
-
 class MarkdownEditor extends React.Component {
+
   constructor(props) {
     super(props);
-    this.timer = null;
-    this.localDraft = '';
-    this.autoSave = false;
-    this.draftRichValue = '';
-    this.draftPlainValue = '';
     this.state = {
       markdownContent: '',
       loading: true,
@@ -56,8 +46,6 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
-      showInsertRepoImageDialog: false,
-      showFileParticipantDialog: false,
       showDraftSaved: false,
       collabUsers: userInfo ?
         [{user: userInfo, is_editing: false}] : [],
@@ -69,9 +57,14 @@ class MarkdownEditor extends React.Component {
       isLocked: isLocked,
       lockedByMe: lockedByMe,
       fileTagList: [],
-      showEditFileTagDialog: false,
       participants: [],
     };
+
+    this.timer = null;
+    this.localDraft = '';
+    this.autoSave = false;
+    this.draftRichValue = '';
+    this.draftPlainValue = '';
 
     if (this.state.collabServer) {
       const socket = io(this.state.collabServer);
@@ -167,16 +160,11 @@ class MarkdownEditor extends React.Component {
       showMarkdownEditorDialog: false,
       showShareLinkDialog: false,
       showInsertFileDialog: false,
-      showInsertRepoImageDialog: false,
-      showEditFileTagDialog: false,
-      showFileParticipantDialog: false,
     });
   }
 
-  setEditorMode = (type) => {
-    this.setState({
-      editorMode: type
-    });
+  setEditorMode = (editorMode) => { // rich | plain
+    this.setState({editorMode: editorMode});
   }
 
   setDraftValue = (type, value) => {
@@ -200,9 +188,7 @@ class MarkdownEditor extends React.Component {
     let draft = localStorage.getItem(draftKey);
     let that = this;
     if (draft) {
-      that.setState({
-        localDraftDialog: true,
-      });
+      that.setState({localDraftDialog: true});
       that.localDraft = draft;
       localStorage.removeItem(draftKey);
     }
@@ -230,9 +216,7 @@ class MarkdownEditor extends React.Component {
   }
 
   closeDraftDialog = () => {
-    this.setState({
-      localDraftDialog: false
-    });
+    this.setState({localDraftDialog: false});
   }
 
   clearTimer = () => {
@@ -241,8 +225,7 @@ class MarkdownEditor extends React.Component {
   }
 
   openDialogs = (option) => {
-    switch(option)
-    {
+    switch (option) {
       case 'help':
         window.richMarkdownEditor.showHelpDialog();
         break;
@@ -256,24 +239,6 @@ class MarkdownEditor extends React.Component {
         this.setState({
           showMarkdownEditorDialog: true,
           showInsertFileDialog: true,
-        });
-        break;
-      case 'insert_repo_image':
-        this.setState({
-          showMarkdownEditorDialog: true,
-          showInsertRepoImageDialog: true,
-        });
-        break;
-      case 'file_tags':
-        this.setState({
-          showEditFileTagDialog: true,
-          showMarkdownEditorDialog: true,
-        });
-        break;
-      case 'add-participant':
-        this.setState({
-          showMarkdownEditorDialog: true,
-          showFileParticipantDialog: true,
         });
         break;
       default:
@@ -391,26 +356,25 @@ class MarkdownEditor extends React.Component {
   }
 
   setFileInfoMtime = (fileInfo) => {
-    this.setState({
-      fileInfo: Object.assign({}, this.state.fileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name })
-    });
+    const { fileInfo: oldFileInfo } = this.state;
+    const newFileInfo = Object.assign({}, oldFileInfo, { mtime: fileInfo.mtime, id: fileInfo.id, lastModifier: fileInfo.last_modifier_name });
+    this.setState({fileInfo: newFileInfo});
   };
 
   toggleStar = () => {
-    let starrd = this.state.fileInfo.starred;
-    if (starrd) {
+    const { fileInfo } = this.state;
+    const { starred } = fileInfo;
+    const newFileInfo = Object.assign({}, fileInfo, {starred: !starred});
+    if (starred) {
       editorApi.unstarItem().then((response) => {
-        this.setState({
-          fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
-        });
+        this.setState({fileInfo: newFileInfo});
       });
-    } else if (!starrd) {
-      editorApi.starItem().then((response) => {
-        this.setState({
-          fileInfo: Object.assign({}, this.state.fileInfo, {starred: !starrd})
-        });
-      });
+      return;
     }
+
+    editorApi.starItem().then((response) => {
+      this.setState({fileInfo: newFileInfo});
+    });
   }
 
   autoSaveDraft = () => {
@@ -418,60 +382,45 @@ class MarkdownEditor extends React.Component {
     if (that.timer) {
       return;
     }
-    else {
-      that.timer = setTimeout(() => {
-        let str = '';
-        if (this.state.editorMode == 'rich') {
-          let value = this.draftRichValue;
-          str = serialize(value);
-        }
-        else if (this.state.editorMode == 'plain') {
-          str = this.draftPlainValue;
-        }
-        let draftKey = editorApi.getDraftKey();
-        localStorage.setItem(draftKey, str);
+    that.timer = setTimeout(() => {
+      let str = '';
+      if (this.state.editorMode == 'rich') {
+        let value = this.draftRichValue;
+        str = serialize(value);
+      }
+      else if (this.state.editorMode == 'plain') {
+        str = this.draftPlainValue;
+      }
+      let draftKey = editorApi.getDraftKey();
+      localStorage.setItem(draftKey, str);
+      that.setState({
+        showDraftSaved: true
+      });
+      setTimeout(() => {
         that.setState({
-          showDraftSaved: true
+          showDraftSaved: false
         });
-        setTimeout(() => {
-          that.setState({
-            showDraftSaved: false
-          });
-        }, 3000);
-        that.timer = null;
-      }, 60000);
-    }
+      }, 3000);
+      that.timer = null;
+    }, 60000);
   }
 
   openParentDirectory = () => {
     window.location.href = editorApi.getParentDectionaryUrl();
   }
 
-  onEdit = (mode) => {
-    if (mode === 'rich') {
+  onEdit = (editorMode) => {
+    if (editorMode === 'rich') {
       window.seafileEditor.switchToRichTextEditor();
-    } else if (mode === 'plain') {
+      return
+    }
+    if (editorMode === 'plain') {
       window.seafileEditor.switchToPlainTextEditor();
     }
   }
 
   toggleShareLinkDialog = () => {
     this.openDialogs('share_link');
-  }
-
-  onCommentAdded = () => {
-    this.toggleCancel();
-  }
-
-  addComment = (e) => {
-    e.stopPropagation();
-    this.openDialogs('comment');
-  }
-
-  scrollToNode = (node) => {
-    let url = new URL(window.location.href);
-    url.set('hash', 'user-content-' + node.text);
-    window.location.href = url.toString();
   }
 
   toggleHistory = () => {
@@ -499,151 +448,104 @@ class MarkdownEditor extends React.Component {
   }
 
   render() {
-    let component;
     if (this.state.loading) {
       return (
         <div className="empty-loading-page">
           <div className="lds-ripple page-centered"><div></div><div></div></div>
         </div>
       );
-    } else if (this.state.mode === 'editor') {
-      component = (
-        <Fragment>
-          <HeaderToolbar
-            isDocs={isDocs}
-            hasDraft={hasDraft}
-            isDraft={isDraft}
-            editorApi={editorApi}
-            collabUsers={this.state.collabUsers}
-            fileInfo={this.state.fileInfo}
-            toggleStar={this.toggleStar}
-            openParentDirectory={this.openParentDirectory}
-            openDialogs={this.openDialogs}
-            toggleShareLinkDialog={this.toggleShareLinkDialog}
-            onEdit={this.onEdit}
-            toggleNewDraft={editorApi.createDraftFile}
-            showFileHistory={this.state.isShowHistory ? false : true }
-            toggleHistory={this.toggleHistory}
-            readOnly={this.state.readOnly}
-            mode={this.state.mode}
-            editorMode={this.state.editorMode}
-            contentChanged={this.state.contentChanged}
-            saving={this.state.saving}
-            showDraftSaved={this.state.showDraftSaved}
-            isLocked={this.state.isLocked}
-            lockedByMe={this.state.lockedByMe}
-            toggleLockFile={this.toggleLockFile}
-          />
-          <SeafileEditor
-            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-            fileInfo={this.state.fileInfo}
-            markdownContent={this.state.markdownContent}
-            editorApi={editorApi}
-            collabUsers={this.state.collabUsers}
-            setFileInfoMtime={this.setFileInfoMtime}
-            toggleStar={this.toggleStar}
-            showFileHistory={true}
-            setEditorMode={this.setEditorMode}
-            setContent={this.setContent}
-            draftID={draftID}
-            isDraft={isDraft}
-            mode={this.state.mode}
-            emitSwitchEditor={this.emitSwitchEditor}
-            hasDraft={hasDraft}
-            editorMode={this.state.editorMode}
-            siteRoot={siteRoot}
-            autoSaveDraft={this.autoSaveDraft}
-            setDraftValue={this.setDraftValue}
-            clearTimer={this.clearTimer}
-            openDialogs={this.openDialogs}
-            deleteDraft={this.deleteDraft}
-            readOnly={this.state.readOnly}
-            onContentChanged={this.onContentChanged}
-            onSaving={this.onSaving}
-            contentChanged={this.state.contentChanged}
-            saving={this.state.saving}
-            fileTagList={this.state.fileTagList}
-            participants={this.state.participants}
-            onParticipantsChange={this.onParticipantsChange}
-            markdownLint={fileName.toLowerCase() !== 'index.md'}
-          />
-        </Fragment>
-      );
-
-      return (
-        <React.Fragment>
-          {this.state.localDraftDialog ?
-            <ModalPortal>
-              <LocalDraftDialog
-                localDraftDialog={this.state.localDraftDialog}
-                deleteDraft={this.deleteDraft}
-                closeDraftDialog={this.closeDraftDialog}
-                useDraft={this.useDraft}
-              />
-            </ModalPortal>
-            : null}
-          {component}
-          {this.state.showMarkdownEditorDialog && (
-            <React.Fragment>
-              {this.state.showInsertFileDialog &&
-                <ModalPortal>
-                  <InsertFileDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    toggleCancel={this.toggleCancel}
-                    getInsertLink={this.getInsertLink}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showInsertRepoImageDialog &&
-                <ModalPortal>
-                  <InsertRepoImageDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    toggleCancel={this.toggleCancel}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showShareLinkDialog &&
-                <ModalPortal>
-                  <ShareDialog
-                    itemType="file"
-                    itemName={this.state.fileInfo.name}
-                    itemPath={filePath}
-                    repoID={repoID}
-                    toggleDialog={this.toggleCancel}
-                    isGroupOwnedRepo={false}
-                    repoEncrypted={false}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showEditFileTagDialog &&
-                <ModalPortal>
-                  <EditFileTagDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    fileTagList={this.state.fileTagList}
-                    toggleCancel={this.toggleCancel}
-                    onFileTagChanged={this.onFileTagChanged}
-                  />
-                </ModalPortal>
-              }
-              {this.state.showFileParticipantDialog &&
-                <ModalPortal>
-                  <FileParticipantDialog
-                    repoID={repoID}
-                    filePath={filePath}
-                    toggleFileParticipantDialog={this.toggleCancel}
-                    fileParticipantList={this.state.participants}
-                    onParticipantsChange={this.onParticipantsChange}
-                  />
-                </ModalPortal>
-              }
-            </React.Fragment>
-          )}
-        </React.Fragment>
-      );
     }
+
+    return (
+      <Fragment>
+        <HeaderToolbar
+          isDocs={isDocs}
+          hasDraft={hasDraft}
+          isDraft={isDraft}
+          editorApi={editorApi}
+          collabUsers={this.state.collabUsers}
+          fileInfo={this.state.fileInfo}
+          toggleStar={this.toggleStar}
+          openParentDirectory={this.openParentDirectory}
+          openDialogs={this.openDialogs}
+          toggleShareLinkDialog={this.toggleShareLinkDialog}
+          onEdit={this.onEdit}
+          toggleNewDraft={editorApi.createDraftFile}
+          showFileHistory={this.state.isShowHistory ? false : true }
+          toggleHistory={this.toggleHistory}
+          readOnly={this.state.readOnly}
+          editorMode={this.state.editorMode}
+          contentChanged={this.state.contentChanged}
+          saving={this.state.saving}
+          showDraftSaved={this.state.showDraftSaved}
+          isLocked={this.state.isLocked}
+          lockedByMe={this.state.lockedByMe}
+          toggleLockFile={this.toggleLockFile}
+        />
+        <SeafileEditor
+          scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          fileInfo={this.state.fileInfo}
+          markdownContent={this.state.markdownContent}
+          editorApi={editorApi}
+          collabUsers={this.state.collabUsers}
+          setFileInfoMtime={this.setFileInfoMtime}
+          setEditorMode={this.setEditorMode}
+          setContent={this.setContent}
+          draftID={draftID}
+          isDraft={isDraft}
+          mode={this.state.mode}
+          emitSwitchEditor={this.emitSwitchEditor}
+          hasDraft={hasDraft}
+          editorMode={this.state.editorMode}
+          siteRoot={siteRoot}
+          autoSaveDraft={this.autoSaveDraft}
+          setDraftValue={this.setDraftValue}
+          clearTimer={this.clearTimer}
+          openDialogs={this.openDialogs}
+          deleteDraft={this.deleteDraft}
+          readOnly={this.state.readOnly}
+          onContentChanged={this.onContentChanged}
+          onSaving={this.onSaving}
+          contentChanged={this.state.contentChanged}
+          fileTagList={this.state.fileTagList}
+          onFileTagChanged={this.onFileTagChanged}
+          participants={this.state.participants}
+          onParticipantsChange={this.onParticipantsChange}
+          markdownLint={fileName.toLowerCase() !== 'index.md'}
+        />
+        {this.state.localDraftDialog &&
+          <LocalDraftDialog
+            localDraftDialog={this.state.localDraftDialog}
+            deleteDraft={this.deleteDraft}
+            closeDraftDialog={this.closeDraftDialog}
+            useDraft={this.useDraft}
+          />
+        }
+        {this.state.showMarkdownEditorDialog && (
+          <React.Fragment>
+            {this.state.showInsertFileDialog &&
+              <InsertFileDialog
+                repoID={repoID}
+                filePath={filePath}
+                toggleCancel={this.toggleCancel}
+                getInsertLink={this.getInsertLink}
+              />
+            }
+            {this.state.showShareLinkDialog &&
+              <ShareDialog
+                itemType="file"
+                itemName={this.state.fileInfo.name}
+                itemPath={filePath}
+                repoID={repoID}
+                toggleDialog={this.toggleCancel}
+                isGroupOwnedRepo={false}
+                repoEncrypted={false}
+              />
+            }
+          </React.Fragment>
+        )}
+      </Fragment>
+    );
   }
 }
 

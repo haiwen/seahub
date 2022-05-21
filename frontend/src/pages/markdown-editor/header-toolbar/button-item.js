@@ -21,11 +21,15 @@ class ButtonItem extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       tooltipOpen: false,
       isFreezed: false,
     };
+    this.timer = null;
+  }
+
+  componentWillUnmount() {
+    this.timer && clearTimeout(this.timer);
   }
 
   toggle = () => {
