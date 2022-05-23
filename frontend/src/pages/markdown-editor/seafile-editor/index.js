@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Text } from 'slate';
 import { deserialize, serialize, PlainMarkdownEditor } from '@seafile/seafile-editor';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
@@ -39,6 +40,7 @@ class SeafileEditor extends React.Component {
     const { mode, markdownContent, isDraft } = this.props;
     const isEditMode = mode === 'editor' || isDraft;
     const richValue = isEditMode ? deserialize(markdownContent) : deserialize('');
+    console.log(richValue);
     this.state = {
       initialPlainValue: '',
       currentContent: markdownContent,
@@ -54,6 +56,7 @@ class SeafileEditor extends React.Component {
   componentWillMount() {
     if (this.props.editorMode === 'rich') {
       const document = this.state.richValue;
+      console.log(document, 'dadad');
       const firstNode = document[0];
       /**
        *  if the markdown content is empty, the rich value contains
