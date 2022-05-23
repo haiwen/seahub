@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Text } from 'slate';
 import { deserialize, serialize, PlainMarkdownEditor } from '@seafile/seafile-editor';
 import toaster from '../../../components/toast';
 import { gettext } from '../../../utils/constants';
