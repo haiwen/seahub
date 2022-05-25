@@ -5,11 +5,10 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
+import { DiffViewer, serialize } from '@seafile/seafile-editor';
 import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL, mediaUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
-import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
-import { serialize } from '@seafile/seafile-editor/dist/utils/slate2markdown/serialize';
 import Loading from './components/loading';
 import ReviewComments from './components/review-list-view/review-comments';
 import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
@@ -28,7 +27,6 @@ import './css/toolbar.css';
 import './css/dirent-detail.css';
 import './css/draft.css';
 
-require('@seafile/seafile-editor/dist/editor/code-highlight-package');
 const URL = require('url-parse');
 var moment = require('moment');
 

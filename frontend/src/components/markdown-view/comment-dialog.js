@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
+import { processor } from '@seafile/seafile-editor';
 import { gettext } from '../../utils/constants';
 import '../../css/markdown-viewer/comment-dialog.css';
 

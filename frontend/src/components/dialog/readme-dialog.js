@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import Loading from '../../components/loading';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, mediaUrl } from '../../utils/constants';

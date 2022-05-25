@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
+import { DiffViewer } from '@seafile/seafile-editor';
 import Loading from '../../components/loading';
 import { mediaUrl } from '../../utils/constants';
-import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
-
-require('@seafile/seafile-editor/dist/editor/code-highlight-package');
 
 const contentClass = 'markdown-viewer-render-content';
 const propTypes = {
