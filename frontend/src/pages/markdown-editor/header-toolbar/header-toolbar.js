@@ -7,6 +7,8 @@ import CollabUsersButton from './collab-users-button';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 
+import '../css/header-toolbar.css';
+
 const { seafileCollabServer } = window.app.config;
 const { canDownloadFile } = window.app.pageOptions;
 
