@@ -92,7 +92,8 @@ class RichMarkdownEditor extends React.Component {
             <MarkdownEditor
               scriptSource={this.props.scriptSource}
               value={value}
-              editor={this.editor}
+              onSave={this.props.onSave}
+              editorApi={this.props.editorApi}
               onChange={this.props.onChange}
               resetRichValue={this.props.resetRichValue}
               isSupportComment={this.state.isSupportComment}

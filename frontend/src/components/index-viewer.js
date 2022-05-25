@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { repoID, slug, serviceURL, isPublicWiki } from '../utils/constants';
 import { Utils } from '../utils/utils';
-import { deserialize } from '@seafile/seafile-editor/dist/utils/slate2markdown';
+import { deserialize } from '@seafile/seafile-editor';
 import'../css/index-viewer.css';
 
 const viewerPropTypes = {

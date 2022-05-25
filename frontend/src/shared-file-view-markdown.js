@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import { serviceURL, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import toaster from './components/toast';
 
 const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;
