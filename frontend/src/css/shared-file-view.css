@@ -47,31 +47,20 @@
   overflow: auto;
 }
 
-/*
-.shared-file-view-body .md-view {
-  min-height: 400px;
-  padding: 70px 75px;
-  border: 1px solid #ccc;
-  margin: 0 auto;
-  box-shadow: 0 0 6px #ccc;
-  width: 950px;
-  background: #fff;
-  overflow: auto;
-}
-*/
 .shared-file-view-body .article {
-    min-height: calc(100% - 40px);
-    background: #fff;
-    padding: 40px 60px;
-    margin: 20px 40px;
-    border: 1px solid #e6e6dd;
+  min-height: calc(100% - 40px);
+  background: #fff;
+  padding: 40px 60px;
+  margin: 0 340px 15px 40px;
+  border: 1px solid #e6e6dd;
 }
 
 .shared-file-view-body .seafile-markdown-outline {
-  position: static;
   width: 300px;
   border-left: 1px solid #e6e6dd;
-  flex-shrink: 0;
+  top: 145px;
+  bottom: 30px;
+  height: auto;
 }
 
 @media (max-width: 991.98px) {

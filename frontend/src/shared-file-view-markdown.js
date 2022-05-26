@@ -76,7 +76,7 @@ class FileContent extends React.Component {
 
     return (
       <div className="shared-file-view-body">
-        <div className="md-view d-flex">
+        <div className="md-view">
           <MarkdownViewer
             scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             markdownContent={this.state.markdownContent}
