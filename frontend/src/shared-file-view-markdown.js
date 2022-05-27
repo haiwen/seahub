@@ -13,7 +13,7 @@ const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
   render() {
-    return <SharedFileView content={<FileContent />} />;
+    return <SharedFileView content={<FileContent />} fileType="md" />;
   }
 }
 
@@ -81,6 +81,7 @@ class FileContent extends React.Component {
             scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             markdownContent={this.state.markdownContent}
             showTOC={true}
+            activeTitleIndex={''}
             serviceURL={serviceURL}
             sharedToken={sharedToken}
             repoID={repoID}
