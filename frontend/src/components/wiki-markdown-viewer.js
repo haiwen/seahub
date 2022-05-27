@@ -39,6 +39,8 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
+
+    this.getTitlesInfo();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,6 +59,9 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
+    if (this.titlesInfo.length === 0) {
+      this.getTitlesInfo();
+    }
   }
 
   componentWillUnmount() {
@@ -64,10 +69,6 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
     });
-  }
-
-  onContentRendered = (markdownViewer) => {
-    this.titlesInfo = markdownViewer.titlesInfo;
   }
 
   getTitlesInfo = () => {
@@ -98,10 +99,6 @@ class WikiMarkdownViewer extends React.Component {
   onScrollHandler = () => {
     const contentScrollTop = this.markdownContainer.current.scrollTop + 180;
     let titlesLength = this.titlesInfo.length;
-    if (titlesLength === 0) {
-      this.getTitlesInfo();
-      titlesLength = this.titlesInfo.length;
-    }
     let activeTitleIndex;
     if (contentScrollTop <= this.titlesInfo[0]) {
       activeTitleIndex = 0;
@@ -183,7 +180,6 @@ class WikiMarkdownViewer extends React.Component {
           scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
           markdownContent={this.props.markdownContent}
           activeTitleIndex={this.state.activeTitleIndex}
-          onContentRendered={this.onContentRendered}
           modifyValueBeforeRender={this.modifyValueBeforeRender}
         />
       );
@@ -195,7 +191,6 @@ class WikiMarkdownViewer extends React.Component {
         scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
         markdownContent={this.props.markdownContent}
         activeTitleIndex={this.state.activeTitleIndex}
-        onContentRendered={this.onContentRendered}
       />
     );
   }
