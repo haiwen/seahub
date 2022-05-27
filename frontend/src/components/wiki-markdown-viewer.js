@@ -70,6 +70,15 @@ class WikiMarkdownViewer extends React.Component {
     this.titlesInfo = markdownViewer.titlesInfo;
   }
 
+  getTitlesInfo = () => {
+    let titlesInfo = [];
+    let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
+    for (let i = 0; i < headingList.length; i++) {
+      titlesInfo.push(headingList[i].offsetTop);
+    }
+    this.titlesInfo = titlesInfo;
+  }
+
   onLinkClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -89,6 +98,10 @@ class WikiMarkdownViewer extends React.Component {
   onScrollHandler = () => {
     const contentScrollTop = this.markdownContainer.current.scrollTop + 180;
     let titlesLength = this.titlesInfo.length;
+    if (titlesLength === 0) {
+      this.getTitlesInfo();
+      titlesLength = this.titlesInfo.length;
+    }
     let activeTitleIndex;
     if (contentScrollTop <= this.titlesInfo[0]) {
       activeTitleIndex = 0;
