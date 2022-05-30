@@ -48,16 +48,20 @@
 }
 
 .shared-file-view-body .article {
-  min-height: calc(100% - 40px);
+  min-height: calc(100% - 15px);
   background: #fff;
   padding: 40px 60px;
   margin: 0 340px 15px 40px;
   border: 1px solid #e6e6dd;
 }
 
+.shared-file-view-body .article-no-outline {
+  max-width: 950px;
+  margin: 0 auto 15px;
+}
+
 .shared-file-view-body .seafile-markdown-outline {
   width: 300px;
-  border-left: 1px solid #e6e6dd;
   top: 145px;
   bottom: 30px;
   height: auto;
