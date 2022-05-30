@@ -30,7 +30,7 @@ html, body { padding:0; margin:0; height:100%; }
             "permissions": {
                 "download": {% if can_download %}true{% else %}false{% endif %},
                 "edit": {% if can_edit %}true{% else %}false{% endif %},
-                "print": {% if can_download %}true{% else %}false{% endif %},
+                "print": {% if can_print %}true{% else %}false{% endif %},
                 "review": true
             }
         },
