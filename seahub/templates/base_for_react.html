@@ -130,7 +130,7 @@
             maxNumberOfFilesForFileupload: {{ max_number_of_files_for_fileupload }},
             {% endif %}
             {% if request.user.is_authenticated and request.cur_note %}
-            curNoteMsg: '{{ request.cur_note.message|urlize|escapejs }}',
+            curNoteMsg: '{{ request.cur_note.message|escapejs }}',
             curNoteID: '{{ request.cur_note.id }}',
             {% endif %}
             enableTC: {% if enable_terms_and_conditions %} true {% else %} false {% endif %},
