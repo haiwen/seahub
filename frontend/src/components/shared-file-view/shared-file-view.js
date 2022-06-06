@@ -12,7 +12,8 @@ import watermark from 'watermark-dom';
 import '../../css/shared-file-view.css';
 
 const propTypes = {
-  content: PropTypes.object.isRequired
+  content: PropTypes.object.isRequired,
+  fileType: PropTypes.string
 };
 
 let loginUser = window.app.pageOptions.name;
@@ -96,6 +97,7 @@ class SharedFileView extends React.Component {
   }
 
   render() {
+    const { fileType } = this.props;
     return (
       <div className="shared-file-view-md">
         <div className="shared-file-view-md-header d-flex">
@@ -107,7 +109,7 @@ class SharedFileView extends React.Component {
           { loginUser && <Account /> }
         </div>
         <div className="shared-file-view-md-main">
-          <div className="shared-file-view-head">
+          <div className={`shared-file-view-head ${fileType == 'md' ? 'w-100 px-4' : ''}`}>
             <div className="float-left">
               <h2 className="ellipsis" title={fileName}>{fileName}</h2>
               {zipped ?
