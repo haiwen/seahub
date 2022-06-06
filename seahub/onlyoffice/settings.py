@@ -16,6 +16,8 @@ ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT = getattr(settings,
                                                     'ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT',
                                                     'AscDesktopEditor')
 
+ONLYOFFICE_SHOW_DOWNLOAD_ICON = getattr(settings, 'ONLYOFFICE_SHOW_DOWNLOAD_ICON', True)
+
 ONLYOFFICE_CONVERTER_EXTENSIONS = [
     ".docm", ".doc", ".dotx", ".dotm", ".dot", ".odt",
     ".fodt", ".ott", ".xlsm", ".xls", ".xltx", ".xltm",
