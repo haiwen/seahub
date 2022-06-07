@@ -17,9 +17,7 @@ from seahub.onlyoffice.models import OnlyOfficeDocKey
 
 from seahub.settings import ENABLE_WATERMARK
 from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
-        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET, \
-        ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT, \
-        ONLYOFFICE_SHOW_DOWNLOAD_ICON
+        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET, ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
@@ -143,9 +141,8 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'doc_url': doc_url,
         'document_type': document_type,
         'callback_url': callback_url,
-        'can_download': can_download and ONLYOFFICE_SHOW_DOWNLOAD_ICON,
         'can_edit': can_edit,
-        'can_print': can_download,
+        'can_download': can_download,
         'username': username,
         'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK,
@@ -161,7 +158,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "title": file_name,
                 "url": doc_url,
                 "permissions": {
-                    "download": can_download and ONLYOFFICE_SHOW_DOWNLOAD_ICON,
+                    "download": can_download,
                     "edit": can_edit,
                     "print": can_download,
                     "review": True
