@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS "drafts_draft"
     "publish_file_version" varchar(100) DEFAULT NULL,
     "status"               varchar(20)   NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "drafts_draft_origin_file_uuid_uniq" ON "drafts_draft" ("origin_file_uuid");
-CREATE INDEX IF NOT EXISTS "drafts_draft_created_at" ON "drafts_draft" ("created_at");
-CREATE INDEX IF NOT EXISTS "drafts_draft_updated_at" ON "drafts_draft" ("updated_at");
-CREATE INDEX IF NOT EXISTS "drafts_draft_username" ON "drafts_draft" ("username");
-CREATE INDEX IF NOT EXISTS "drafts_draft_origin_repo_id" ON "drafts_draft" ("origin_repo_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "drafts_draft_origin_file_uuid_7c003c98_uniq" ON "drafts_draft" ("origin_file_uuid");
+CREATE INDEX IF NOT EXISTS "drafts_draft_created_at_e9f4523f" ON "drafts_draft" ("created_at");
+CREATE INDEX IF NOT EXISTS "drafts_draft_updated_at_0a144b05" ON "drafts_draft" ("updated_at");
+CREATE INDEX IF NOT EXISTS "drafts_draft_username_73e6738b" ON "drafts_draft" ("username");
+CREATE INDEX IF NOT EXISTS "drafts_draft_origin_repo_id_8978ca2c" ON "drafts_draft" ("origin_repo_id");
 
 CREATE TABLE IF NOT EXISTS "drafts_draftreviewer"
 (
@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS "drafts_draftreviewer"
     "draft_id" int          NOT NULL,
     CONSTRAINT "drafts_draftreviewer_draft_id_fk_drafts_draft_id" FOREIGN KEY ("draft_id") REFERENCES "drafts_draft" ("id")
 );
-CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_reviewer" ON "drafts_draftreviewer" ("reviewer");
-CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_draft_id_fk_drafts_draft_id" ON "drafts_draftreviewer" ("draft_id");
+CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_reviewer_e4c777ac" ON "drafts_draftreviewer" ("reviewer");
+CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id" ON "drafts_draftreviewer" ("draft_id");
 
-CREATE INDEX IF NOT EXISTS "options_useroptions_option_key" ON "options_useroptions" ("option_key");
+CREATE INDEX IF NOT EXISTS "options_useroptions_option_key_7bf7ae4b" ON "options_useroptions" ("option_key");
 
 DROP INDEX TotalStorageStat_pkey;
 ALTER TABLE TotalStorageStat ADD COLUMN "id" BIGSERIAL PRIMARY KEY;
@@ -52,10 +52,10 @@ CREATE TABLE IF NOT EXISTS "repo_tags_repotags"
     "repo_id" varchar(36)  NOT NULL,
     "name"    varchar(255) NOT NULL,
     "color"   varchar(255) NOT NULL
-);
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_repo_id" ON "repo_tags_repotags" ("repo_id");
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_name" ON "repo_tags_repotags" ("name");
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_color" ON "repo_tags_repotags" ("color");
+    );
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_repo_id_1163a48f" ON "repo_tags_repotags" ("repo_id");
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_name_3f4c9027" ON "repo_tags_repotags" ("name");
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_color_1292b6c1" ON "repo_tags_repotags" ("color");
 
 
 
@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS "file_tags_filetags"
     CONSTRAINT "file_tags_filetags_file_uuid_id_fk_tags_file" FOREIGN KEY ("file_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid"),
     CONSTRAINT "file_tags_filetags_repo_tag_id_fk_repo_tags_repotags_id" FOREIGN KEY ("repo_tag_id") REFERENCES "repo_tags_repotags" ("id")
 );
-CREATE INDEX IF NOT EXISTS "file_tags_filetags_file_uuid_id_fk_tags_file" ON "file_tags_filetags" ("file_uuid_id");
-CREATE INDEX IF NOT EXISTS "file_tags_filetags_repo_tag_id_fk_repo_tags_repotags_id" ON "file_tags_filetags" ("repo_tag_id");
+CREATE INDEX IF NOT EXISTS "file_tags_filetags_file_uuid_id_e30f0ec8_fk_tags_file" ON "file_tags_filetags" ("file_uuid_id");
+CREATE INDEX IF NOT EXISTS "file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id" ON "file_tags_filetags" ("repo_tag_id");
 
 
 
@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS "related_files_relatedfiles"
     CONSTRAINT "related_files_relate_r_uuid_id_fk_tags_file" FOREIGN KEY ("r_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid"),
     CONSTRAINT "related_files_relate_o_uuid_id_fk_tags_file" FOREIGN KEY ("o_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
 );
-CREATE INDEX IF NOT EXISTS "related_files_relate_o_uuid_id_fk_tags_file" ON "related_files_relatedfiles" ("o_uuid_id");
-CREATE INDEX IF NOT EXISTS "related_files_relate_r_uuid_id_fk_tags_file" ON "related_files_relatedfiles" ("r_uuid_id");
+CREATE INDEX IF NOT EXISTS "related_files_relate_o_uuid_id_aaa8e613_fk_tags_file" ON "related_files_relatedfiles" ("o_uuid_id");
+CREATE INDEX IF NOT EXISTS "related_files_relate_r_uuid_id_031751df_fk_tags_file" ON "related_files_relatedfiles" ("r_uuid_id");
 
 
 
@@ -91,10 +91,10 @@ CREATE TABLE IF NOT EXISTS "organizations_orgsettings"
     "org_id" int NOT NULL,
     "role"   varchar(100) DEFAULT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "organizations_orgsettings_org_id_uniq" ON "organizations_orgsettings" ("org_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "organizations_orgsettings_org_id_630f6843_uniq" ON "organizations_orgsettings" ("org_id");
 
-DROP INDEX "profile_profile_contact_email_uniq";
-CREATE UNIQUE INDEX IF NOT EXISTS "profile_profile_contact_email_uniq" ON "profile_profile" ("contact_email");
+DROP INDEX "profile_profile_contact_email_0975e4bf_uniq";
+CREATE UNIQUE INDEX IF NOT EXISTS "profile_profile_contact_email_0975e4bf_uniq" ON "profile_profile" ("contact_email");
 
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth"
 (
@@ -104,8 +104,8 @@ CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth"
     "uid"        varchar(255) NOT NULL,
     "extra_data" text         NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "social_auth_usersocialauth_provider_uid_uniq" ON "social_auth_usersocialauth" ("provider", "uid");
-CREATE INDEX IF NOT EXISTS "social_auth_usersocialauth_username" ON "social_auth_usersocialauth" ("username");
+CREATE UNIQUE INDEX IF NOT EXISTS "social_auth_usersocialauth_provider_uid_e6b5e668_uniq" ON "social_auth_usersocialauth" ("provider", "uid");
+CREATE INDEX IF NOT EXISTS "social_auth_usersocialauth_username_3f06b5cf" ON "social_auth_usersocialauth" ("username");
 
 
 

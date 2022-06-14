@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS "abuse_reports_abusereport"
     "handled"     boolean      NOT NULL,
     "time"        timestamptz  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "abuse_reports_abusereport_abuse_type" ON abuse_reports_abusereport ("abuse_type");
-CREATE INDEX IF NOT EXISTS "abuse_reports_abusereport_handled" ON abuse_reports_abusereport ("handled");
+CREATE INDEX IF NOT EXISTS "abuse_reports_abusereport_abuse_type_703d5335" ON abuse_reports_abusereport ("abuse_type");
+CREATE INDEX IF NOT EXISTS "abuse_reports_abusereport_handled_94b8304c" ON abuse_reports_abusereport ("handled");
 
 CREATE TABLE IF NOT EXISTS "admin_log_adminlog"
 (
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS "admin_log_adminlog"
     "detail"    TEXT         NOT NULL,
     "datetime"  timestamptz  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "admin_log_adminlog_email" ON "admin_log_adminlog" ("email");
-CREATE INDEX IF NOT EXISTS "admin_log_adminlog_operation" ON "admin_log_adminlog" ("operation");
+CREATE INDEX IF NOT EXISTS "admin_log_adminlog_email_7213c993" ON "admin_log_adminlog" ("email");
+CREATE INDEX IF NOT EXISTS "admin_log_adminlog_operation_4bad7bd1" ON "admin_log_adminlog" ("operation");
 
 CREATE TABLE IF NOT EXISTS "api2_token"
 (
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS "api2_tokenv2"
     "created_at"       timestamptz  NOT NULL,
     "wiped_at"         timestamptz DEFAULT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "api2_tokenv2_user_platform_device_id_uniq" ON "api2_tokenv2" ("user", "platform", "device_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "api2_tokenv2_user_platform_device_id_37005c24_uniq" ON "api2_tokenv2" ("user", "platform", "device_id");
 
 CREATE TABLE IF NOT EXISTS "auth_group"
 (
@@ -57,15 +57,14 @@ CREATE UNIQUE INDEX IF NOT EXISTS "name" ON "auth_group" ("name");
 
 CREATE TABLE IF NOT EXISTS "auth_group_permissions"
 (
-    "id"            serial,
+    "id"            serial PRIMARY KEY,
     "group_id"      int NOT NULL,
     "permission_id" int NOT NULL,
-    PRIMARY KEY ("id"),
     CONSTRAINT "auth_group_permissio_permission_id_fk_auth_perm" FOREIGN KEY ("permission_id") REFERENCES "auth_permission" ("id"),
     CONSTRAINT "auth_group_permissions_group_id_fk_auth_group_id" FOREIGN KEY ("group_id") REFERENCES "auth_group" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "auth_group_permissions_group_id_permission_id_uniq" ON "auth_group_permissions" ("group_id", "permission_id");
-CREATE INDEX IF NOT EXISTS "auth_group_permissio_permission_id_fk_auth_perm" ON "auth_group_permissions" ("permission_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_group_permissions_group_id_permission_id_0cd325b0_uniq" ON "auth_group_permissions" ("group_id", "permission_id");
+CREATE INDEX IF NOT EXISTS "auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" ON "auth_group_permissions" ("permission_id");
 
 CREATE TABLE IF NOT EXISTS "auth_permission"
 (
@@ -75,7 +74,7 @@ CREATE TABLE IF NOT EXISTS "auth_permission"
     "codename"        varchar(100) NOT NULL,
     CONSTRAINT "auth_permission_content_type_id_fk_django_co" FOREIGN KEY ("content_type_id") REFERENCES "django_content_type" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "auth_permission_content_type_id_codename_uniq" ON "auth_permission" ("content_type_id", "codename");
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_permission_content_type_id_codename_01ab375a_uniq" ON "auth_permission" ("content_type_id", "codename");
 INSERT INTO "auth_permission"
 VALUES (1, 'Can add content type', 1, 'add_contenttype'),
        (2, 'Can change content type', 1, 'change_contenttype'),
@@ -341,8 +340,8 @@ CREATE TABLE IF NOT EXISTS "auth_user_groups"
     CONSTRAINT "auth_user_groups_user_id_fk_auth_user_id" FOREIGN KEY ("user_id") REFERENCES "auth_user" ("id")
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_groups_user_id_group_id_uniq" ON "auth_user_groups" ("user_id", "group_id");
-CREATE INDEX IF NOT EXISTS "auth_user_groups_group_id_fk_auth_group_id" ON "auth_user_groups" ("group_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_groups_user_id_group_id_94350c0c_uniq" ON "auth_user_groups" ("user_id", "group_id");
+CREATE INDEX IF NOT EXISTS "auth_user_groups_group_id_97559544_fk_auth_group_id" ON "auth_user_groups" ("group_id");
 
 CREATE TABLE IF NOT EXISTS "auth_user_user_permissions"
 (
@@ -352,26 +351,24 @@ CREATE TABLE IF NOT EXISTS "auth_user_user_permissions"
     CONSTRAINT "auth_user_user_permi_permission_id_fk_auth_perm" FOREIGN KEY ("permission_id") REFERENCES "auth_permission" ("id"),
     CONSTRAINT "auth_user_user_permissions_user_id_fk_auth_user_id" FOREIGN KEY ("user_id") REFERENCES "auth_user" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_user_permissions_user_id_permission_id_uniq" ON "auth_user_user_permissions" ("user_id", "permission_id");
-CREATE INDEX IF NOT EXISTS "auth_user_user_permi_permission_id_fk_auth_perm" ON "auth_user_user_permissions" ("permission_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "auth_user_user_permissions_user_id_permission_id_14a6b632_uniq" ON "auth_user_user_permissions" ("user_id", "permission_id");
+CREATE INDEX IF NOT EXISTS "auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm" ON "auth_user_user_permissions" ("permission_id");
 
 CREATE TABLE IF NOT EXISTS "avatar_avatar"
 (
-    "id"            serial,
+    "id"            serial PRIMARY KEY,
     "emailuser"     varchar(255)  NOT NULL,
     "primary"       boolean       NOT NULL,
     "avatar"        varchar(1024) NOT NULL,
-    "date_uploaded" timestamptz   NOT NULL,
-    PRIMARY KEY ("id")
+    "date_uploaded" timestamptz   NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "avatar_groupavatar"
 (
-    "id"            serial,
+    "id"            serial PRIMARY KEY,
     "group_id"      varchar(255)  NOT NULL,
     "avatar"        varchar(1024) NOT NULL,
-    "date_uploaded" timestamptz   NOT NULL,
-    PRIMARY KEY ("id")
+    "date_uploaded" timestamptz   NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "base_clientlogintoken"
@@ -380,7 +377,7 @@ CREATE TABLE IF NOT EXISTS "base_clientlogintoken"
     "username"  varchar(255) NOT NULL,
     "timestamp" timestamptz  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "base_clientlogintoken_username" ON "base_clientlogintoken" ("username");
+CREATE INDEX IF NOT EXISTS "base_clientlogintoken_username_4ad5d42c" ON "base_clientlogintoken" ("username");
 
 CREATE TABLE IF NOT EXISTS "base_commandslastcheck"
 (
@@ -398,7 +395,7 @@ CREATE TABLE IF NOT EXISTS "base_devicetoken"
     "version"  varchar(16)  NOT NULL,
     "pversion" varchar(16)  NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "base_devicetoken_token_user_uniq" ON "base_devicetoken" ("token", "user");
+CREATE UNIQUE INDEX IF NOT EXISTS "base_devicetoken_token_user_38535636_uniq" ON "base_devicetoken" ("token", "user");
 
 CREATE TABLE IF NOT EXISTS "base_filecomment"
 (
@@ -412,9 +409,9 @@ CREATE TABLE IF NOT EXISTS "base_filecomment"
     "resolved"   boolean      NOT NULL,
     CONSTRAINT "base_filecomment_uuid_id_fk_tags_fileuuidmap_uuid" FOREIGN KEY ("uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
 );
-CREATE INDEX IF NOT EXISTS "base_filecomment_uuid_id_fk_tags_fileuuidmap_uuid" ON "base_filecomment" ("uuid_id");
-CREATE INDEX IF NOT EXISTS "base_filecomment_author" ON "base_filecomment" ("author");
-CREATE INDEX IF NOT EXISTS "base_filecomment_resolved" ON "base_filecomment" ("resolved");
+CREATE INDEX IF NOT EXISTS "base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid" ON "base_filecomment" ("uuid_id");
+CREATE INDEX IF NOT EXISTS "base_filecomment_author_8a4d7e91" ON "base_filecomment" ("author");
+CREATE INDEX IF NOT EXISTS "base_filecomment_resolved_e0717eca" ON "base_filecomment" ("resolved");
 
 CREATE TABLE IF NOT EXISTS "base_reposecretkey"
 (
@@ -430,7 +427,7 @@ CREATE TABLE IF NOT EXISTS "base_userlastlogin"
     "username"   varchar(255) NOT NULL,
     "last_login" timestamptz  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "base_userlastlogin_username" ON "base_userlastlogin" ("username");
+CREATE INDEX IF NOT EXISTS "base_userlastlogin_username_270de06f" ON "base_userlastlogin" ("username");
 
 CREATE TABLE IF NOT EXISTS "base_userstarredfiles"
 (
@@ -441,8 +438,8 @@ CREATE TABLE IF NOT EXISTS "base_userstarredfiles"
     "path"    text         NOT NULL,
     "is_dir"  boolean      NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "base_userstarredfiles_email" ON "base_userstarredfiles" ("email");
-CREATE INDEX IF NOT EXISTS "base_userstarredfiles_repo_id" ON "base_userstarredfiles" ("repo_id");
+CREATE INDEX IF NOT EXISTS "base_userstarredfiles_email_29e69053" ON "base_userstarredfiles" ("email");
+CREATE INDEX IF NOT EXISTS "base_userstarredfiles_repo_id_f5ecc00a" ON "base_userstarredfiles" ("repo_id");
 
 CREATE TABLE IF NOT EXISTS "captcha_captchastore"
 (
@@ -470,7 +467,7 @@ CREATE TABLE IF NOT EXISTS "contacts_contact"
     "contact_name"  varchar(255) DEFAULT NULL,
     "note"          varchar(255) DEFAULT NULL
 );
-CREATE INDEX IF NOT EXISTS "contacts_contact_user_email" ON "contacts_contact" ("user_email");
+CREATE INDEX IF NOT EXISTS "contacts_contact_user_email_149035d4" ON "contacts_contact" ("user_email");
 
 CREATE TABLE IF NOT EXISTS "django_cas_ng_proxygrantingticket"
 (
@@ -481,8 +478,8 @@ CREATE TABLE IF NOT EXISTS "django_cas_ng_proxygrantingticket"
     "date"        timestamptz  NOT NULL,
     "user"        varchar(255) NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "django_cas_ng_proxygrant_session_key_user_id_uniq" ON "django_cas_ng_proxygrantingticket" ("session_key", "user");
-CREATE INDEX IF NOT EXISTS "django_cas_ng_proxyg_user_id_fk_auth_user" ON "django_cas_ng_proxygrantingticket" ("user");
+CREATE UNIQUE INDEX IF NOT EXISTS "django_cas_ng_proxygrant_session_key_user_id_4cd2ea19_uniq" ON "django_cas_ng_proxygrantingticket" ("session_key", "user");
+CREATE INDEX IF NOT EXISTS "django_cas_ng_proxyg_user_id_f833edd2_fk_auth_user" ON "django_cas_ng_proxygrantingticket" ("user");
 
 CREATE TABLE IF NOT EXISTS "django_cas_ng_sessionticket"
 (
@@ -497,7 +494,7 @@ CREATE TABLE IF NOT EXISTS "django_content_type"
     "app_label" varchar(100) NOT NULL,
     "model"     varchar(100) NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "django_content_type_app_label_model_uniq" ON "django_content_type" ("app_label", "model");
+CREATE UNIQUE INDEX IF NOT EXISTS "django_content_type_app_label_model_76bd3d3b_uniq" ON "django_content_type" ("app_label", "model");
 
 INSERT INTO "django_content_type"
 VALUES (71, 'abuse_reports', 'abusereport'),
@@ -680,7 +677,7 @@ CREATE TABLE IF NOT EXISTS "django_session"
     "session_data" text        NOT NULL,
     "expire_date"  timestamptz NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "django_session_expire_date" ON "django_session" ("expire_date");
+CREATE INDEX IF NOT EXISTS "django_session_expire_date_a5c62663" ON "django_session" ("expire_date");
 
 CREATE TABLE IF NOT EXISTS "drafts_draft"
 (
@@ -695,11 +692,11 @@ CREATE TABLE IF NOT EXISTS "drafts_draft"
     "publish_file_version" varchar(100) DEFAULT NULL,
     "status"               varchar(20)   NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "drafts_draft_origin_file_uuid_uniq" ON "drafts_draft" ("origin_file_uuid");
-CREATE INDEX IF NOT EXISTS "drafts_draft_created_at" ON "drafts_draft" ("created_at");
-CREATE INDEX IF NOT EXISTS "drafts_draft_updated_at" ON "drafts_draft" ("updated_at");
-CREATE INDEX IF NOT EXISTS "drafts_draft_username" ON "drafts_draft" ("username");
-CREATE INDEX IF NOT EXISTS "drafts_draft_origin_repo_id" ON "drafts_draft" ("origin_repo_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "drafts_draft_origin_file_uuid_7c003c98_uniq" ON "drafts_draft" ("origin_file_uuid");
+CREATE INDEX IF NOT EXISTS "drafts_draft_created_at_e9f4523f" ON "drafts_draft" ("created_at");
+CREATE INDEX IF NOT EXISTS "drafts_draft_updated_at_0a144b05" ON "drafts_draft" ("updated_at");
+CREATE INDEX IF NOT EXISTS "drafts_draft_username_73e6738b" ON "drafts_draft" ("username");
+CREATE INDEX IF NOT EXISTS "drafts_draft_origin_repo_id_8978ca2c" ON "drafts_draft" ("origin_repo_id");
 
 CREATE TABLE IF NOT EXISTS "drafts_draftreviewer"
 (
@@ -708,8 +705,8 @@ CREATE TABLE IF NOT EXISTS "drafts_draftreviewer"
     "draft_id" int          NOT NULL,
     CONSTRAINT "drafts_draftreviewer_draft_id_fk_drafts_draft_id" FOREIGN KEY ("draft_id") REFERENCES "drafts_draft" ("id")
 );
-CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_reviewer" ON "drafts_draftreviewer" ("reviewer");
-CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_draft_id_fk_drafts_draft_id" ON "drafts_draftreviewer" ("draft_id");
+CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_reviewer_e4c777ac" ON "drafts_draftreviewer" ("reviewer");
+CREATE INDEX IF NOT EXISTS "drafts_draftreviewer_draft_id_4ea59775_fk_drafts_draft_id" ON "drafts_draftreviewer" ("draft_id");
 
 CREATE TABLE IF NOT EXISTS "file_participants_fileparticipant"
 (
@@ -718,7 +715,7 @@ CREATE TABLE IF NOT EXISTS "file_participants_fileparticipant"
     "uuid_id"  char(32)     NOT NULL,
     CONSTRAINT "file_participants_fi_uuid_id_fk_tags_file" FOREIGN KEY ("uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "file_participants_fileparticipant_uuid_id_username" ON "file_participants_fileparticipant" ("uuid_id", "username");
+CREATE UNIQUE INDEX IF NOT EXISTS "file_participants_fileparticipant_uuid_id_username_c747dd36_uniq" ON "file_participants_fileparticipant" ("uuid_id", "username");
 
 CREATE TABLE IF NOT EXISTS "file_tags_filetags"
 (
@@ -728,8 +725,8 @@ CREATE TABLE IF NOT EXISTS "file_tags_filetags"
     CONSTRAINT "file_tags_filetags_file_uuid_id_fk_tags_file" FOREIGN KEY ("file_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid"),
     CONSTRAINT "file_tags_filetags_repo_tag_id_fk_repo_tags_repotags_id" FOREIGN KEY ("repo_tag_id") REFERENCES "repo_tags_repotags" ("id")
 );
-CREATE INDEX IF NOT EXISTS "file_tags_filetags_file_uuid_id_fk_tags_file" ON "file_tags_filetags" ("file_uuid_id");
-CREATE INDEX IF NOT EXISTS "file_tags_filetags_repo_tag_id_fk_repo_tags_repotags_id" ON "file_tags_filetags" ("repo_tag_id");
+CREATE INDEX IF NOT EXISTS "file_tags_filetags_file_uuid_id_e30f0ec8_fk_tags_file" ON "file_tags_filetags" ("file_uuid_id");
+CREATE INDEX IF NOT EXISTS "file_tags_filetags_repo_tag_id_c39660cb_fk_repo_tags_repotags_id" ON "file_tags_filetags" ("repo_tag_id");
 
 CREATE TABLE IF NOT EXISTS "institutions_institution"
 (
@@ -745,8 +742,8 @@ CREATE TABLE IF NOT EXISTS "institutions_institutionadmin"
     "institution_id" int          NOT NULL,
     CONSTRAINT "institutions_institu_institution_id_fk_instituti" FOREIGN KEY ("institution_id") REFERENCES "institutions_institution" ("id")
 );
-CREATE INDEX IF NOT EXISTS "institutions_institu_institution_id_fk_instituti" ON "institutions_institutionadmin" ("institution_id");
-CREATE INDEX IF NOT EXISTS "institutions_institutionadmin_user" ON "institutions_institutionadmin" ("user");
+CREATE INDEX IF NOT EXISTS "institutions_institu_institution_id_1e9bb58b_fk_instituti" ON "institutions_institutionadmin" ("institution_id");
+CREATE INDEX IF NOT EXISTS "institutions_institutionadmin_user_c71d766d" ON "institutions_institutionadmin" ("user");
 
 CREATE TABLE IF NOT EXISTS "institutions_institutionquota"
 (
@@ -755,7 +752,7 @@ CREATE TABLE IF NOT EXISTS "institutions_institutionquota"
     "institution_id" int    NOT NULL,
     CONSTRAINT "institutions_institu_institution_id_fk_instituti" FOREIGN KEY ("institution_id") REFERENCES "institutions_institution" ("id")
 );
-CREATE INDEX IF NOT EXISTS "institutions_institu_institution_id_fk_instituti" ON "institutions_institutionquota" ("institution_id");
+CREATE INDEX IF NOT EXISTS "institutions_institu_institution_id_d23201d9_fk_instituti" ON "institutions_institutionquota" ("institution_id");
 
 CREATE TABLE IF NOT EXISTS "invitations_invitation"
 (
@@ -768,8 +765,8 @@ CREATE TABLE IF NOT EXISTS "invitations_invitation"
     "invite_type" varchar(20)  NOT NULL,
     "expire_time" timestamptz  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "invitations_invitation_inviter" ON "invitations_invitation" ("inviter");
-CREATE INDEX IF NOT EXISTS "invitations_invitation_token" ON "invitations_invitation" ("token");
+CREATE INDEX IF NOT EXISTS "invitations_invitation_inviter_b0a7b855" ON "invitations_invitation" ("inviter");
+CREATE INDEX IF NOT EXISTS "invitations_invitation_token_25a92a38" ON "invitations_invitation" ("token");
 
 CREATE TABLE IF NOT EXISTS "notifications_notification"
 (
@@ -777,7 +774,7 @@ CREATE TABLE IF NOT EXISTS "notifications_notification"
     "message" varchar(512) NOT NULL,
     "primary" boolean      NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "notifications_notification_primary" ON "notifications_notification" ("primary");
+CREATE INDEX IF NOT EXISTS "notifications_notification_primary_4f95ec21" ON "notifications_notification" ("primary");
 
 CREATE TABLE IF NOT EXISTS "notifications_usernotification"
 (
@@ -788,9 +785,9 @@ CREATE TABLE IF NOT EXISTS "notifications_usernotification"
     "timestamp" timestamptz  NOT NULL,
     "seen"      boolean      NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "notifications_usernotification_to_user" ON "notifications_usernotification" ("to_user");
-CREATE INDEX IF NOT EXISTS "notifications_usernotification_msg_type" ON "notifications_usernotification" ("msg_type");
-CREATE INDEX IF NOT EXISTS "notifications_usernotification_timestamp" ON "notifications_usernotification" ("timestamp");
+CREATE INDEX IF NOT EXISTS "notifications_usernotification_to_user_6cadafa1" ON "notifications_usernotification" ("to_user");
+CREATE INDEX IF NOT EXISTS "notifications_usernotification_msg_type_985afd02" ON "notifications_usernotification" ("msg_type");
+CREATE INDEX IF NOT EXISTS "notifications_usernotification_timestamp_125067e8" ON "notifications_usernotification" ("timestamp");
 
 CREATE TABLE IF NOT EXISTS "options_useroptions"
 (
@@ -799,8 +796,8 @@ CREATE TABLE IF NOT EXISTS "options_useroptions"
     "option_key" varchar(50)  NOT NULL,
     "option_val" varchar(50)  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "options_useroptions_email" ON "options_useroptions" ("email");
-CREATE INDEX IF NOT EXISTS "options_useroptions_option_key" ON "options_useroptions" ("option_key");
+CREATE INDEX IF NOT EXISTS "options_useroptions_email_77d5726a" ON "options_useroptions" ("email");
+CREATE INDEX IF NOT EXISTS "options_useroptions_option_key_7bf7ae4b" ON "options_useroptions" ("option_key");
 
 CREATE TABLE IF NOT EXISTS "organizations_orgmemberquota"
 (
@@ -808,7 +805,7 @@ CREATE TABLE IF NOT EXISTS "organizations_orgmemberquota"
     "org_id" int NOT NULL,
     "quota"  int NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "organizations_orgmemberquota_org_id" ON "organizations_orgmemberquota" ("org_id");
+CREATE INDEX IF NOT EXISTS "organizations_orgmemberquota_org_id_93dde51d" ON "organizations_orgmemberquota" ("org_id");
 
 CREATE TABLE IF NOT EXISTS "organizations_orgsettings"
 (
@@ -816,7 +813,7 @@ CREATE TABLE IF NOT EXISTS "organizations_orgsettings"
     "org_id" int NOT NULL,
     "role"   varchar(100) DEFAULT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "organizations_orgsettings_org_id_uniq" ON "organizations_orgsettings" ("org_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "organizations_orgsettings_org_id_630f6843_uniq" ON "organizations_orgsettings" ("org_id");
 
 CREATE TABLE IF NOT EXISTS "post_office_attachment"
 (
@@ -835,8 +832,8 @@ CREATE TABLE IF NOT EXISTS "post_office_attachment_emails"
     CONSTRAINT "post_office_attachme_attachment_id_fk_post_offi" FOREIGN KEY ("attachment_id") REFERENCES "post_office_attachment" ("id"),
     CONSTRAINT "post_office_attachme_email_id_fk_post_offi" FOREIGN KEY ("email_id") REFERENCES "post_office_email" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "post_office_attachment_e_attachment_id_email_id_uniq" ON "post_office_attachment_emails" ("attachment_id", "email_id");
-CREATE INDEX IF NOT EXISTS "post_office_attachme_email_id_fk_post_offi" ON "post_office_attachment_emails" ("email_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "post_office_attachment_e_attachment_id_email_id_8e046917_uniq" ON "post_office_attachment_emails" ("attachment_id", "email_id");
+CREATE INDEX IF NOT EXISTS "post_office_attachme_email_id_96875fd9_fk_post_offi" ON "post_office_attachment_emails" ("email_id");
 
 CREATE TABLE IF NOT EXISTS "post_office_email"
 (
@@ -859,11 +856,11 @@ CREATE TABLE IF NOT EXISTS "post_office_email"
     "backend_alias"  varchar(64)  NOT NULL,
     CONSTRAINT "post_office_email_template_id_fk_post_offi" FOREIGN KEY ("template_id") REFERENCES "post_office_emailtemplate" ("id")
 );
-CREATE INDEX IF NOT EXISTS "post_office_email_status" ON "post_office_email" ("status");
-CREATE INDEX IF NOT EXISTS "post_office_email_created" ON "post_office_email" ("created");
-CREATE INDEX IF NOT EXISTS "post_office_email_last_updated" ON "post_office_email" ("last_updated");
-CREATE INDEX IF NOT EXISTS "post_office_email_scheduled_time" ON "post_office_email" ("scheduled_time");
-CREATE INDEX IF NOT EXISTS "post_office_email_template_id_fk_post_offi" ON "post_office_email" ("template_id");
+CREATE INDEX IF NOT EXISTS "post_office_email_status_013a896c" ON "post_office_email" ("status");
+CREATE INDEX IF NOT EXISTS "post_office_email_created_1306952f" ON "post_office_email" ("created");
+CREATE INDEX IF NOT EXISTS "post_office_email_last_updated_0ffcec35" ON "post_office_email" ("last_updated");
+CREATE INDEX IF NOT EXISTS "post_office_email_scheduled_time_3869ebec" ON "post_office_email" ("scheduled_time");
+CREATE INDEX IF NOT EXISTS "post_office_email_template_id_417da7da_fk_post_offi" ON "post_office_email" ("template_id");
 
 CREATE TABLE IF NOT EXISTS "post_office_emailtemplate"
 (
@@ -879,8 +876,8 @@ CREATE TABLE IF NOT EXISTS "post_office_emailtemplate"
     "language"            varchar(12)  NOT NULL,
     CONSTRAINT "post_office_emailtem_default_template_id_fk_post_offi" FOREIGN KEY ("default_template_id") REFERENCES "post_office_emailtemplate" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "post_office_emailtemplat_name_language_default_te_uniq" ON "post_office_emailtemplate" ("name", "language", "default_template_id");
-CREATE INDEX IF NOT EXISTS "post_office_emailtem_default_template_id_fk_post_offi" ON "post_office_emailtemplate" ("default_template_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "post_office_emailtemplat_name_language_default_te_4023e3e4_uniq" ON "post_office_emailtemplate" ("name", "language", "default_template_id");
+CREATE INDEX IF NOT EXISTS "post_office_emailtem_default_template_id_2ac2f889_fk_post_offi" ON "post_office_emailtemplate" ("default_template_id");
 
 CREATE TABLE IF NOT EXISTS "post_office_log"
 (
@@ -892,7 +889,7 @@ CREATE TABLE IF NOT EXISTS "post_office_log"
     "email_id"       int          NOT NULL,
     CONSTRAINT "post_office_log_email_id_fk_post_office_email_id" FOREIGN KEY ("email_id") REFERENCES "post_office_email" ("id")
 );
-CREATE INDEX IF NOT EXISTS "post_office_log_email_id_fk_post_office_email_id" ON "post_office_log" ("email_id");
+CREATE INDEX IF NOT EXISTS "post_office_log_email_id_d42c8808_fk_post_office_email_id" ON "post_office_log" ("email_id");
 
 CREATE TABLE IF NOT EXISTS "profile_detailedprofile"
 (
@@ -901,7 +898,7 @@ CREATE TABLE IF NOT EXISTS "profile_detailedprofile"
     "department" varchar(512) NOT NULL,
     "telephone"  varchar(100) NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "profile_detailedprofile_user" ON "profile_detailedprofile" ("user");
+CREATE INDEX IF NOT EXISTS "profile_detailedprofile_user_612c11ba" ON "profile_detailedprofile" ("user");
 
 CREATE TABLE IF NOT EXISTS "profile_profile"
 (
@@ -917,9 +914,9 @@ CREATE TABLE IF NOT EXISTS "profile_profile"
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "user" ON "profile_profile" ("user");
 CREATE UNIQUE INDEX IF NOT EXISTS "login_id" ON "profile_profile" ("login_id");
-CREATE UNIQUE INDEX IF NOT EXISTS "profile_profile_contact_email_uniq" ON "profile_profile" ("contact_email");
-CREATE INDEX IF NOT EXISTS "profile_profile_institution" ON "profile_profile" ("institution");
-CREATE INDEX IF NOT EXISTS "profile_profile_list_in_address_book" ON "profile_profile" ("list_in_address_book");
+CREATE UNIQUE INDEX IF NOT EXISTS "profile_profile_contact_email_0975e4bf_uniq" ON "profile_profile" ("contact_email");
+CREATE INDEX IF NOT EXISTS "profile_profile_institution_c0286bd1" ON "profile_profile" ("institution");
+CREATE INDEX IF NOT EXISTS "profile_profile_list_in_address_book_b1009a78" ON "profile_profile" ("list_in_address_book");
 
 CREATE TABLE IF NOT EXISTS "registration_registrationprofile"
 (
@@ -936,8 +933,8 @@ CREATE TABLE IF NOT EXISTS "related_files_relatedfiles"
     CONSTRAINT "related_files_relate_r_uuid_id_fk_tags_file" FOREIGN KEY ("r_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid"),
     CONSTRAINT "related_files_relate_o_uuid_id_fk_tags_file" FOREIGN KEY ("o_uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
 );
-CREATE INDEX IF NOT EXISTS "related_files_relate_o_uuid_id_fk_tags_file" ON "related_files_relatedfiles" ("o_uuid_id");
-CREATE INDEX IF NOT EXISTS "related_files_relate_r_uuid_id_fk_tags_file" ON "related_files_relatedfiles" ("r_uuid_id");
+CREATE INDEX IF NOT EXISTS "related_files_relate_o_uuid_id_aaa8e613_fk_tags_file" ON "related_files_relatedfiles" ("o_uuid_id");
+CREATE INDEX IF NOT EXISTS "related_files_relate_r_uuid_id_031751df_fk_tags_file" ON "related_files_relatedfiles" ("r_uuid_id");
 
 CREATE TABLE IF NOT EXISTS "repo_api_tokens"
 (
@@ -951,8 +948,8 @@ CREATE TABLE IF NOT EXISTS "repo_api_tokens"
     "permission"   varchar(15)  NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "token" ON "repo_api_tokens" ("token");
-CREATE INDEX IF NOT EXISTS "repo_api_tokens_repo_id" ON "repo_api_tokens" ("repo_id");
-CREATE INDEX IF NOT EXISTS "repo_api_tokens_app_name" ON "repo_api_tokens" ("app_name");
+CREATE INDEX IF NOT EXISTS "repo_api_tokens_repo_id_47a50fef" ON "repo_api_tokens" ("repo_id");
+CREATE INDEX IF NOT EXISTS "repo_api_tokens_app_name_7c395c31" ON "repo_api_tokens" ("app_name");
 
 CREATE TABLE IF NOT EXISTS "repo_share_invitation"
 (
@@ -963,8 +960,8 @@ CREATE TABLE IF NOT EXISTS "repo_share_invitation"
     "invitation_id" int         NOT NULL,
     CONSTRAINT "repo_share_invitatio_invitation_id_fk_invitatio" FOREIGN KEY ("invitation_id") REFERENCES "invitations_invitation" ("id")
 );
-CREATE INDEX IF NOT EXISTS "repo_share_invitatio_invitation_id_fk_invitatio" ON "repo_share_invitation" ("invitation_id");
-CREATE INDEX IF NOT EXISTS "repo_share_invitation_repo_id" ON "repo_share_invitation" ("repo_id");
+CREATE INDEX IF NOT EXISTS "repo_share_invitatio_invitation_id_b71effd2_fk_invitatio" ON "repo_share_invitation" ("invitation_id");
+CREATE INDEX IF NOT EXISTS "repo_share_invitation_repo_id_7bcf84fa" ON "repo_share_invitation" ("repo_id");
 
 CREATE TABLE IF NOT EXISTS "repo_tags_repotags"
 (
@@ -973,9 +970,9 @@ CREATE TABLE IF NOT EXISTS "repo_tags_repotags"
     "name"    varchar(255) NOT NULL,
     "color"   varchar(255) NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_repo_id" ON "repo_tags_repotags" ("repo_id");
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_name" ON "repo_tags_repotags" ("name");
-CREATE INDEX IF NOT EXISTS "repo_tags_repotags_color" ON "repo_tags_repotags" ("color");
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_repo_id_1163a48f" ON "repo_tags_repotags" ("repo_id");
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_name_3f4c9027" ON "repo_tags_repotags" ("name");
+CREATE INDEX IF NOT EXISTS "repo_tags_repotags_color_1292b6c1" ON "repo_tags_repotags" ("color");
 
 CREATE TABLE IF NOT EXISTS "revision_tag_revisiontags"
 (
@@ -987,10 +984,10 @@ CREATE TABLE IF NOT EXISTS "revision_tag_revisiontags"
     "tag_id"      int          NOT NULL,
     CONSTRAINT "revision_tag_revisio_tag_id_fk_revision_" FOREIGN KEY ("tag_id") REFERENCES "revision_tag_tags" ("id")
 );
-CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_repo_id" ON "revision_tag_revisiontags" ("repo_id");
-CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_revision_id" ON "revision_tag_revisiontags" ("revision_id");
-CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_username" ON "revision_tag_revisiontags" ("username");
-CREATE INDEX IF NOT EXISTS "revision_tag_revisio_tag_id_fk_revision_" ON "revision_tag_revisiontags" ("tag_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_repo_id_212c0c69" ON "revision_tag_revisiontags" ("repo_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_revision_id_fd9fe0f9" ON "revision_tag_revisiontags" ("revision_id");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisiontags_username_3007d29e" ON "revision_tag_revisiontags" ("username");
+CREATE INDEX IF NOT EXISTS "revision_tag_revisio_tag_id_ee4e9b00_fk_revision_" ON "revision_tag_revisiontags" ("tag_id");
 
 CREATE TABLE IF NOT EXISTS "revision_tag_tags"
 (
@@ -1024,8 +1021,8 @@ CREATE TABLE IF NOT EXISTS "share_extragroupssharepermission"
     "group_id"   int         NOT NULL,
     "permission" varchar(30) NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_repo_id" ON "share_extragroupssharepermission" ("repo_id");
-CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_group_id" ON "share_extragroupssharepermission" ("group_id");
+CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_repo_id_38dbaea1" ON "share_extragroupssharepermission" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_extragroupssharepermission_group_id_6ca34bb2" ON "share_extragroupssharepermission" ("group_id");
 
 CREATE TABLE IF NOT EXISTS "share_extrasharepermission"
 (
@@ -1034,8 +1031,8 @@ CREATE TABLE IF NOT EXISTS "share_extrasharepermission"
     "share_to"   varchar(255) NOT NULL,
     "permission" varchar(30)  NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "share_extrasharepermission_repo_id" ON "share_extrasharepermission" ("repo_id");
-CREATE INDEX IF NOT EXISTS "share_extrasharepermission_share_to" ON "share_extrasharepermission" ("share_to");
+CREATE INDEX IF NOT EXISTS "share_extrasharepermission_repo_id_23cc10fc" ON "share_extrasharepermission" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_extrasharepermission_share_to_823c16cb" ON "share_extrasharepermission" ("share_to");
 
 CREATE TABLE IF NOT EXISTS "share_fileshare"
 (
@@ -1052,10 +1049,10 @@ CREATE TABLE IF NOT EXISTS "share_fileshare"
     "permission"  varchar(50)  NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "token" ON "share_fileshare" ("token");
-CREATE INDEX IF NOT EXISTS "share_fileshare_username" ON "share_fileshare" ("username");
-CREATE INDEX IF NOT EXISTS "share_fileshare_repo_id" ON "share_fileshare" ("repo_id");
-CREATE INDEX IF NOT EXISTS "share_fileshare_s_type" ON "share_fileshare" ("s_type");
-CREATE INDEX IF NOT EXISTS "share_fileshare_permission" ON "share_fileshare" ("permission");
+CREATE INDEX IF NOT EXISTS "share_fileshare_username_5cb6de75" ON "share_fileshare" ("username");
+CREATE INDEX IF NOT EXISTS "share_fileshare_repo_id_9b5ae27a" ON "share_fileshare" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_fileshare_s_type_724eb6c1" ON "share_fileshare" ("s_type");
+CREATE INDEX IF NOT EXISTS "share_fileshare_permission_d12c353f" ON "share_fileshare" ("permission");
 
 CREATE TABLE IF NOT EXISTS "share_orgfileshare"
 (
@@ -1065,7 +1062,7 @@ CREATE TABLE IF NOT EXISTS "share_orgfileshare"
     CONSTRAINT "share_orgfileshare_file_share_id_fk_share_fileshare_id" FOREIGN KEY ("file_share_id") REFERENCES "share_fileshare" ("id")
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "file_share_id" ON "share_orgfileshare" ("file_share_id");
-CREATE INDEX IF NOT EXISTS "share_orgfileshare_org_id" ON "share_orgfileshare" ("org_id");
+CREATE INDEX IF NOT EXISTS "share_orgfileshare_org_id_8d17998c" ON "share_orgfileshare" ("org_id");
 
 CREATE TABLE IF NOT EXISTS "share_privatefiledirshare"
 (
@@ -1079,9 +1076,9 @@ CREATE TABLE IF NOT EXISTS "share_privatefiledirshare"
     "s_type"     varchar(5)   NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "token" ON "share_privatefiledirshare" ("token");
-CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_from_user" ON "share_privatefiledirshare" ("from_user");
-CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_to_user" ON "share_privatefiledirshare" ("to_user");
-CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_repo_id" ON "share_privatefiledirshare" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_from_user_d568d535" ON "share_privatefiledirshare" ("from_user");
+CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_to_user_2a92a044" ON "share_privatefiledirshare" ("to_user");
+CREATE INDEX IF NOT EXISTS "share_privatefiledirshare_repo_id_97c5cb6f" ON "share_privatefiledirshare" ("repo_id");
 
 CREATE TABLE IF NOT EXISTS "share_uploadlinkshare"
 (
@@ -1096,8 +1093,8 @@ CREATE TABLE IF NOT EXISTS "share_uploadlinkshare"
     "expire_date" timestamptz  DEFAULT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "token" ON "share_uploadlinkshare" ("token");
-CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_username" ON "share_uploadlinkshare" ("username");
-CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_repo_id" ON "share_uploadlinkshare" ("repo_id");
+CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_username_3203c243" ON "share_uploadlinkshare" ("username");
+CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_repo_id_c519f857" ON "share_uploadlinkshare" ("repo_id");
 
 CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth"
 (
@@ -1107,8 +1104,8 @@ CREATE TABLE IF NOT EXISTS "social_auth_usersocialauth"
     "uid"        varchar(255) NOT NULL,
     "extra_data" text         NOT NULL
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "social_auth_usersocialauth_provider_uid_uniq" ON "social_auth_usersocialauth" ("provider", "uid");
-CREATE INDEX IF NOT EXISTS "social_auth_usersocialauth_username" ON "social_auth_usersocialauth" ("username");
+CREATE UNIQUE INDEX IF NOT EXISTS "social_auth_usersocialauth_provider_uid_e6b5e668_uniq" ON "social_auth_usersocialauth" ("provider", "uid");
+CREATE INDEX IF NOT EXISTS "social_auth_usersocialauth_username_3f06b5cf" ON "social_auth_usersocialauth" ("username");
 
 CREATE TABLE IF NOT EXISTS "sysadmin_extra_userloginlog"
 (
@@ -1118,8 +1115,8 @@ CREATE TABLE IF NOT EXISTS "sysadmin_extra_userloginlog"
     "login_ip"      varchar(128) NOT NULL,
     "login_success" boolean      NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "sysadmin_extra_userloginlog_username" ON "sysadmin_extra_userloginlog" ("username");
-CREATE INDEX IF NOT EXISTS "sysadmin_extra_userloginlog_login_date" ON "sysadmin_extra_userloginlog" ("login_date");
+CREATE INDEX IF NOT EXISTS "sysadmin_extra_userloginlog_username_5748b9e3" ON "sysadmin_extra_userloginlog" ("username");
+CREATE INDEX IF NOT EXISTS "sysadmin_extra_userloginlog_login_date_c171d790" ON "sysadmin_extra_userloginlog" ("login_date");
 
 CREATE TABLE IF NOT EXISTS "tags_filetag"
 (
@@ -1130,8 +1127,8 @@ CREATE TABLE IF NOT EXISTS "tags_filetag"
     CONSTRAINT "tags_filetag_uuid_id_fk_tags_fileuuidmap_uuid" FOREIGN KEY ("uuid_id") REFERENCES "tags_fileuuidmap" ("uuid"),
     CONSTRAINT "tags_filetag_tag_id_fk_tags_tags_id" FOREIGN KEY ("tag_id") REFERENCES "tags_tags" ("id")
 );
-CREATE INDEX IF NOT EXISTS "tags_filetag_tag_id_fk_tags_tags_id" ON "tags_filetag" ("tag_id");
-CREATE INDEX IF NOT EXISTS "tags_filetag_uuid_id_fk_tags_fileuuidmap_uuid" ON "tags_filetag" ("uuid_id");
+CREATE INDEX IF NOT EXISTS "tags_filetag_tag_id_0f264fc9_fk_tags_tags_id" ON "tags_filetag" ("tag_id");
+CREATE INDEX IF NOT EXISTS "tags_filetag_uuid_id_2aa2266c_fk_tags_fileuuidmap_uuid" ON "tags_filetag" ("uuid_id");
 
 CREATE TABLE IF NOT EXISTS "tags_fileuuidmap"
 (
@@ -1142,8 +1139,8 @@ CREATE TABLE IF NOT EXISTS "tags_fileuuidmap"
     "filename"                varchar(1024) NOT NULL,
     "is_dir"                  boolean       NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_repo_id" ON "tags_fileuuidmap" ("repo_id");
-CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_repo_id_parent_path_md5" ON "tags_fileuuidmap" ("repo_id_parent_path_md5");
+CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_repo_id_ac67aa33" ON "tags_fileuuidmap" ("repo_id");
+CREATE INDEX IF NOT EXISTS "tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860" ON "tags_fileuuidmap" ("repo_id_parent_path_md5");
 
 CREATE TABLE IF NOT EXISTS "tags_tags"
 (
@@ -1163,7 +1160,7 @@ CREATE TABLE IF NOT EXISTS "termsandconditions_termsandconditions"
     "date_active"    timestamptz DEFAULT NULL,
     "date_created"   timestamptz   NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "termsandconditions_termsandconditions_slug" ON "termsandconditions_termsandconditions" ("slug");
+CREATE INDEX IF NOT EXISTS "termsandconditions_termsandconditions_slug_489d1e9d" ON "termsandconditions_termsandconditions" ("slug");
 
 CREATE TABLE IF NOT EXISTS "termsandconditions_usertermsandconditions"
 (
@@ -1174,15 +1171,15 @@ CREATE TABLE IF NOT EXISTS "termsandconditions_usertermsandconditions"
     "terms_id"      int          NOT NULL,
     CONSTRAINT "termsandconditions_u_terms_id_fk_termsandc" FOREIGN KEY ("terms_id") REFERENCES "termsandconditions_termsandconditions" ("id")
 );
-CREATE UNIQUE INDEX IF NOT EXISTS "termsandconditions_usert_username_terms_id_uniq" ON "termsandconditions_usertermsandconditions" ("username", "terms_id");
-CREATE INDEX IF NOT EXISTS "termsandconditions_u_terms_id_fk_termsandc" ON "termsandconditions_usertermsandconditions" ("terms_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "termsandconditions_usert_username_terms_id_a7dabb70_uniq" ON "termsandconditions_usertermsandconditions" ("username", "terms_id");
+CREATE INDEX IF NOT EXISTS "termsandconditions_u_terms_id_eacdbcc7_fk_termsandc" ON "termsandconditions_usertermsandconditions" ("terms_id");
 
 CREATE TABLE IF NOT EXISTS "trusted_ip_trustedip"
 (
     "id" serial primary key,
     "ip" varchar(255) NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "trusted_ip_trustedip_ip" ON "trusted_ip_trustedip" ("ip");
+CREATE INDEX IF NOT EXISTS "trusted_ip_trustedip_ip_e898970c" ON "trusted_ip_trustedip" ("ip");
 
 CREATE TABLE IF NOT EXISTS "two_factor_phonedevice"
 (
@@ -1212,8 +1209,8 @@ CREATE TABLE IF NOT EXISTS "two_factor_statictoken"
     "device_id" int         NOT NULL,
     CONSTRAINT "two_factor_statictok_device_id_fk_two_facto" FOREIGN KEY ("device_id") REFERENCES "two_factor_staticdevice" ("id")
 );
-CREATE INDEX IF NOT EXISTS "two_factor_statictok_device_id_fk_two_facto" ON "two_factor_statictoken" ("device_id");
-CREATE INDEX IF NOT EXISTS "two_factor_statictoken_token" ON "two_factor_statictoken" ("token");
+CREATE INDEX IF NOT EXISTS "two_factor_statictok_device_id_93095b45_fk_two_facto" ON "two_factor_statictoken" ("device_id");
+CREATE INDEX IF NOT EXISTS "two_factor_statictoken_token_2ade1084" ON "two_factor_statictoken" ("token");
 
 CREATE TABLE IF NOT EXISTS "two_factor_totpdevice"
 (
@@ -1242,9 +1239,9 @@ CREATE TABLE IF NOT EXISTS "wiki_wiki"
     "created_at" timestamptz  NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "slug" ON "wiki_wiki" ("slug");
-CREATE UNIQUE INDEX IF NOT EXISTS "wiki_wiki_username_repo_id_uniq" ON "wiki_wiki" ("username", "repo_id");
-CREATE INDEX IF NOT EXISTS "wiki_wiki_created_at" ON "wiki_wiki" ("created_at");
-CREATE INDEX IF NOT EXISTS "wiki_wiki_repo_id" ON "wiki_wiki" ("repo_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "wiki_wiki_username_repo_id_4c8925af_uniq" ON "wiki_wiki" ("username", "repo_id");
+CREATE INDEX IF NOT EXISTS "wiki_wiki_created_at_54930e39" ON "wiki_wiki" ("created_at");
+CREATE INDEX IF NOT EXISTS "wiki_wiki_repo_id_2ee93c37" ON "wiki_wiki" ("repo_id");
 
 
 CREATE TABLE "ocm_share"

@@ -73,9 +73,9 @@ CREATE TABLE IF NOT EXISTS "base_filecomment"
     "resolved"   boolean      NOT NULL,
     CONSTRAINT "base_filecomment_uuid_id_fk_tags_fileuuidmap_uuid" FOREIGN KEY ("uuid_id") REFERENCES "tags_fileuuidmap" ("uuid")
 );
-CREATE INDEX IF NOT EXISTS "base_filecomment_uuid_id_fk_tags_fileuuidmap_uuid" ON "base_filecomment" ("uuid_id");
-CREATE INDEX IF NOT EXISTS "base_filecomment_author" ON "base_filecomment" ("author");
-CREATE INDEX IF NOT EXISTS "base_filecomment_resolved" ON "base_filecomment" ("resolved");
+CREATE INDEX IF NOT EXISTS "base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid" ON "base_filecomment" ("uuid_id");
+CREATE INDEX IF NOT EXISTS "base_filecomment_author_8a4d7e91" ON "base_filecomment" ("author");
+CREATE INDEX IF NOT EXISTS "base_filecomment_resolved_e0717eca" ON "base_filecomment" ("resolved");
             '''
 
                 cursor.execute(sql)
