@@ -48,6 +48,13 @@ export const Utils = {
     return isEnterpriseWeChat || isWeChat;
   },
 
+  isWebView: function() {
+    const ua = navigator.userAgent;
+    const chrome = ua.match(/Chrome\/([\d.]+)/) || ua.match(/CriOS\/([\d.]+)/);
+    const webview = !chrome && ua.match(/(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/);
+    return webview;
+  },
+
   FILEEXT_ICON_MAP: {
 
     // text file

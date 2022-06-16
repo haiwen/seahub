@@ -1168,7 +1168,8 @@ class LibContentView extends React.Component {
         const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
 
         let isWeChat = Utils.isWeChat();
-        if (!isWeChat) {
+        let isWebView = Utils.isWebView();
+        if (!isWeChat && !isWebView) {
           window.open(url);
         } else {
           location.href = url;
