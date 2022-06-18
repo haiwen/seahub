@@ -163,9 +163,9 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     tmp_file = os.path.join(tempfile.gettempdir(), file_id)
     urlretrieve(inner_path, tmp_file)
-    psd = PSDImage.load(tmp_file)
+    psd = PSDImage.open(tmp_file)
 
-    merged_image = psd.as_PIL()
+    merged_image = psd.compose()
     merged_image.save(tmp_img_path)
     os.unlink(tmp_file)     # remove origin psd file
 
