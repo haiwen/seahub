@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import time
+import json
 import logging
 import posixpath
 import requests
@@ -697,7 +698,8 @@ class FileView(APIView):
         file_name = os.path.basename(path)
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, request.user.username)
+                                 json.dumps([file_name]),
+                                 request.user.username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

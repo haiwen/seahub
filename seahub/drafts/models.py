@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-import posixpath
 import uuid
+import json
+import posixpath
 
 from django.db import models
 from seaserv import seafile_api
@@ -193,7 +194,7 @@ class Draft(TimestampedModel):
         draft_file_name = os.path.basename(self.draft_file_path)
         draft_file_path = os.path.dirname(self.draft_file_path)
         seafile_api.del_file(self.origin_repo_id, draft_file_path,
-                             draft_file_name, operator)
+                             json.dumps([draft_file_name]), operator)
 
         super(Draft, self).delete()
 

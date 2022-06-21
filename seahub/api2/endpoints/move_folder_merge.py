@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2018 Seafile Ltd.
 
+import json
 import stat
 import logging
 import posixpath
@@ -24,6 +25,7 @@ from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
 
+
 def get_dirent_name_list(username, repo_id, parent_path):
 
     file_name_list = []
@@ -31,7 +33,7 @@ def get_dirent_name_list(username, repo_id, parent_path):
 
     path_id = seafile_api.get_dir_id_by_path(repo_id, parent_path)
     dirs = seafile_api.list_dir_with_perm(repo_id, parent_path,
-            path_id, username, -1, -1)
+                                          path_id, username, -1, -1)
 
     for dirent in dirs:
         if stat.S_ISDIR(dirent.mode):
@@ -41,27 +43,31 @@ def get_dirent_name_list(username, repo_id, parent_path):
 
     return folder_name_list, file_name_list
 
+
 def folder_name_duplicate(username, src_folder_name, dst_repo_id, dst_parent_dir):
 
     dst_folder_name_list, dst_file_name_list = get_dirent_name_list(username,
-            dst_repo_id, dst_parent_dir)
+                                                                    dst_repo_id,
+                                                                    dst_parent_dir)
 
     if src_folder_name in dst_folder_name_list:
         return True
     else:
         return False
 
+
 def move_folder_with_merge(username,
-        src_repo_id, src_parent_dir, src_dirent_name,
-        dst_repo_id, dst_parent_dir, dst_dirent_name):
+                           src_repo_id, src_parent_dir, src_dirent_name,
+                           dst_repo_id, dst_parent_dir, dst_dirent_name):
 
     if folder_name_duplicate(username, src_dirent_name,
-            dst_repo_id, dst_parent_dir):
+                             dst_repo_id, dst_parent_dir):
 
         src_folder_path = posixpath.join(src_parent_dir, src_dirent_name)
         dst_folder_path = posixpath.join(dst_parent_dir, dst_dirent_name)
         src_sub_folder_name_list, src_sub_file_name_list = get_dirent_name_list(username,
-                src_repo_id, src_folder_path)
+                                                                                src_repo_id,
+                                                                                src_folder_path)
 
         # for sub file, copy it directly
         for src_sub_file_name in src_sub_file_name_list:
@@ -72,8 +78,8 @@ def move_folder_with_merge(username,
 
         for src_sub_folder_name in src_sub_folder_name_list:
             move_folder_with_merge(username,
-                    src_repo_id, src_folder_path, src_sub_folder_name,
-                    dst_repo_id, dst_folder_path, src_sub_folder_name)
+                                   src_repo_id, src_folder_path, src_sub_folder_name,
+                                   dst_repo_id, dst_folder_path, src_sub_folder_name)
     else:
         seafile_api.move_file(
                 src_repo_id, src_parent_dir, src_dirent_name,
@@ -161,7 +167,7 @@ class MoveFolderMergeView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        ## check if above quota for dst repo
+        # check if above quota for dst repo
         if get_repo_owner(request, src_repo_id) != get_repo_owner(request, dst_repo_id):
 
             if seafile_api.check_quota(dst_repo_id, 0) < 0:
@@ -169,9 +175,11 @@ class MoveFolderMergeView(APIView):
 
         username = request.user.username
         move_folder_with_merge(username,
-                src_repo_id, src_parent_dir, src_folder_name,
-                dst_repo_id, dst_parent_dir, src_folder_name)
+                               src_repo_id, src_parent_dir, src_folder_name,
+                               dst_repo_id, dst_parent_dir, src_folder_name)
 
-        seafile_api.del_file(src_repo_id, src_parent_dir, src_folder_name, username)
+        seafile_api.del_file(src_repo_id, src_parent_dir,
+                             json.dumps([src_folder_name]),
+                             username)
 
         return Response({'success': True})

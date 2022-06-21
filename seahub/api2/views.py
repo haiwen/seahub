@@ -2336,9 +2336,9 @@ class OpDeleteView(APIView):
                 allowed_file_names.append(file_name)
 
         try:
-            multi_files = "\t".join(allowed_file_names)
             seafile_api.del_file(repo_id, parent_dir,
-                                 multi_files, username)
+                                 json.dumps(allowed_file_names),
+                                 username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -3134,7 +3134,8 @@ class FileView(APIView):
 
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, request.user.username)
+                                 json.dumps([file_name]),
+                                 request.user.username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -3745,7 +3746,8 @@ class DirView(APIView):
         username = request.user.username
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, username)
+                                 json.dumps([file_name]),
+                                 username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,

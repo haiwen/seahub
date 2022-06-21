@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 
 from pysearpc import SearpcError
@@ -1557,11 +1558,10 @@ class ReposBatchDeleteItemView(APIView):
 
         # delete file
         result = {}
-        formated_dirents = [dirent.strip('/') for dirent in dirents]
-        multi_dirents_str = "\t".join(formated_dirents)
-
         try:
-            seafile_api.del_file(repo_id, parent_dir, multi_dirents_str, username)
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps(dirents),
+                                 username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

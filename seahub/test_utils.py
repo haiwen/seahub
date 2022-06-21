@@ -248,8 +248,9 @@ class Fixtures(Exam):
         return kwargs['parent_dir'] + kwargs['dirname']
 
     def remove_folder(self):
+        import json
         seafile_api.del_file(self.repo.id, os.path.dirname(self.folder),
-                             os.path.basename(self.folder), self.user.username)
+                             json.dumps([os.path.basename(self.folder)]), self.user.username)
 
     def create_group(self, **kwargs):
         group_name = kwargs['group_name']
