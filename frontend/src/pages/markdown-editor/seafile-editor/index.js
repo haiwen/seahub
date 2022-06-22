@@ -98,7 +98,7 @@ class SeafileEditor extends React.Component {
 
   onUnload = (event) => {
     if (!this.props.contentChanged) return;
-    const confirmationMessage = 'Leave this page? The system may not save your changes.';
+    const confirmationMessage = gettext('Leave this page? The system may not save your changes.');
     this.props.clearTimer();
     this.props.deleteDraft && this.props.deleteDraft();
     event.returnValue = confirmationMessage;
@@ -146,7 +146,7 @@ class SeafileEditor extends React.Component {
       //   });
       // }
       this.lastModifyTime = new Date();
-      const message = gettext('File Saved');
+      const message = gettext('Successfully saved');
       toaster.success(message, {duration: 2,});
 
       this.props.editorApi.getFileInfo().then((res) => {
@@ -156,7 +156,7 @@ class SeafileEditor extends React.Component {
       this.addParticipants();
     }, () => {
       this.props.onSaving(false);
-      const message = gettext('File failed to save');
+      const message = gettext('Failed to save');
       toaster.danger(message, {duration: 2});
     });
   };

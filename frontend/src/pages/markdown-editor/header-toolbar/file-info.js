@@ -9,7 +9,7 @@ class FileInfo extends React.PureComponent {
 
   render() {
     const { fileInfo, isPro, isLocked, mediaUrl } = this.props;
-    const starTitle = fileInfo.starred ? gettext('unstar') : gettext('star');
+    const starTitle = fileInfo.starred ? gettext('starred') : gettext('unstarred');
     const starIconClass = `iconfont ${fileInfo.starred ? 'icon-star1 star' : 'icon-star2'}`;
     const modifyTime = moment(fileInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
 
