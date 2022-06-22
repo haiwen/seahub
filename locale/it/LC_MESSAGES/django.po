@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Roberto Di Lorenzo <dilorenzo.roberto80@gmail.com>, 2020\n"
 "Language-Team: Italian (http://www.transifex.com/haiwen/seahub/language/it/)\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:357
@@ -208,7 +208,7 @@ msgid "Link Upload"
 msgstr "Sincronizzare il Caricamento"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -472,16 +472,16 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Il Tag può contenere solo lettere, numeri, punti, trattini o trattini di sottolineatura."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "L'utente %s è già membro del gruppo."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -489,19 +489,19 @@ msgstr "L'utente %s è già membro del gruppo."
 msgid "User %s not found in organization."
 msgstr "Utente %s non trovato nell'origanizzazione."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Il gruppo non essiste"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"
@@ -1176,6 +1176,7 @@ msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d giorno fa"
 msgstr[1] "%(days)d giorni fa"
+msgstr[2] "%(days)d giorni fa"
 
 #: seahub/base/templatetags/seahub_tags.py:327
 #, python-format
@@ -1183,6 +1184,7 @@ msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d ora fa"
 msgstr[1] "%(hours)d ore fa"
+msgstr[2] "%(hours)d ore fa"
 
 #: seahub/base/templatetags/seahub_tags.py:334
 #, python-format
@@ -1190,6 +1192,7 @@ msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "%(minutes)d minuto fa"
 msgstr[1] "%(minutes)d minuti fa"
+msgstr[2] "%(minutes)d minuti fa"
 
 #: seahub/base/templatetags/seahub_tags.py:340
 #, python-format
@@ -1197,6 +1200,7 @@ msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d secondo fa"
 msgstr[1] "%(seconds)d secondi fa"
+msgstr[2] "%(seconds)d secondi fa"
 
 #: seahub/base/templatetags/seahub_tags.py:464
 #: seahub/institutions/templates/institutions/user_info.html:72
@@ -1216,6 +1220,7 @@ msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] "%(size)d byte"
 msgstr[1] "%(size)d bytes"
+msgstr[2] "%(size)d bytes"
 
 #: seahub/base/templatetags/seahub_tags.py:504
 #, python-format
@@ -3785,6 +3790,7 @@ msgid_plural ""
 "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr[0] "\nHai 1 nuova notifica su %(site_name)s:\n"
 msgstr[1] "\nHai %(num)s nuove notifiche su %(site_name)s:\n\n"
+msgstr[2] "\nHai %(num)s nuove notifiche su %(site_name)s:\n\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Renamed library"
@@ -3941,6 +3947,7 @@ msgid_plural ""
 "You've got %(num)s file updates on %(site_name)s:\n"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
@@ -4210,6 +4217,7 @@ msgid "%(total)s result"
 msgid_plural "%(total)s results"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: seahub/search/templates/search_results.html:63
 msgid "Directory icon"
