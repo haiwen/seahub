@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Teppo Sarjonen <teppo.sarjonen@gmail.com>, 2017-2018\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
@@ -207,7 +207,7 @@ msgid "Link Upload"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -471,16 +471,16 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Tagi voi sisältää vain, kirjaimia, numeroita, pilkku, tavuviiva tai alaviiva."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "Käyttäjä %s on jo ryhmän jäsen."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -488,19 +488,19 @@ msgstr "Käyttäjä %s on jo ryhmän jäsen."
 msgid "User %s not found in organization."
 msgstr "Käyttäjää %s ei löydy organisaatiosta."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Ryhmää ei ole olemassa"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"

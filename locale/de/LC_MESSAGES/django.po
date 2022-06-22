@@ -17,7 +17,7 @@
 # Marcus Müller <info@yoursecurecloud.de>, 2015-2016
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # dbeuchler, 2014
-# dbeuchler, 2014
+# 6e06821c22592dce14a601e4724b482d_c1359da, 2014
 # Enno Gröper <enno+github@groeper-berlin.de>, 2016-2017
 # flexo3001 <mrckndt@gmail.com>, 2014
 # flexo3001 <mrckndt@gmail.com>, 2014
@@ -77,7 +77,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Ralf Dyllick <rdb@datamate.org>, 2021\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
@@ -272,7 +272,7 @@ msgid "Link Upload"
 msgstr "Hochladen per Link"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -536,16 +536,16 @@ msgstr "Benutzer/in ist schon vorhanden."
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Tag darf nur Buchstaben, Ziffern, Punkt, Bindestrich oder Unterstriche enthalten."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "%s ist bereits Mitglied der Gruppe."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -553,19 +553,19 @@ msgstr "%s ist bereits Mitglied der Gruppe."
 msgid "User %s not found in organization."
 msgstr "Benutzer %s konnte in Organisation nicht gefunden werden."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
 msgstr "%s gehört einer Organisation an."
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Die Gruppe ist nicht vorhanden"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"

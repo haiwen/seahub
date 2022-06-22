@@ -5,14 +5,14 @@
 # Translators:
 # 9325254679b58572483e76a836735ed8_cb93a58 <3519b07acca9e77cf8a0d6585a92c7bf_147769>, 2014
 # 9325254679b58572483e76a836735ed8_cb93a58 <3519b07acca9e77cf8a0d6585a92c7bf_147769>, 2014
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 16:05+0800\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +71,7 @@ msgstr "제한 용량 설정 실패: 최대 제한 용량은 %d MB 입니다"
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "이름에는 문자, 숫자, 공백, 하이픈, 구두점, 작은 따옴표, 괄호, 밑줄 문자만 들어갑니다."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:136
@@ -112,7 +112,7 @@ msgstr "단체로의 %s 사용자 추가에 실패했습니다: 이미 해당 �
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "단체로의 %s 사용자 추가에 실패했습니다: 이미 해당 사용자가 이 단체에 있습니다"
 
 #: seahub/api2/endpoints/admin/libraries.py:265 seahub/views/sysadmin.py:721
 msgid "System library can not be deleted."
@@ -131,7 +131,7 @@ msgstr "라이브러리를 소유자에게 전송할 수 없습니다."
 #: seahub/api2/endpoints/repo_share_links.py:140
 #: seahub/api2/endpoints/share_links.py:626
 msgid "There is an associated published library."
-msgstr ""
+msgstr "관련 공개 라이브러리가 있습니다."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
@@ -205,7 +205,7 @@ msgid "Link Upload"
 msgstr "링크 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -274,7 +274,7 @@ msgstr "제한 용량 공간"
 #: seahub/api2/endpoints/admin/users.py:499
 #: seahub/organizations/api/admin/users.py:144
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "500명 이상의 사용자가 있어, 정렬 기능을 지원하지 않습니다."
 
 #: seahub/api2/endpoints/admin/users.py:573
 #: seahub/api2/endpoints/admin/users.py:1026 seahub/base/accounts.py:784
@@ -285,7 +285,7 @@ msgstr "한계 사용자 수를 넘었습니다."
 #: seahub/api2/endpoints/admin/users.py:667
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "%(user)s 사용자 추가에 성공했습니다."
 
 #: seahub/api2/endpoints/admin/users.py:671
 #: seahub/api2/endpoints/admin/users_batch.py:385 seahub/views/sysadmin.py:567
@@ -296,14 +296,14 @@ msgstr "%s 참여를 초대받았습니다"
 #: seahub/api2/endpoints/admin/users.py:677
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "%(user)s 사용자 추가에 성공했습니다. 전자메일 알림을 보냈습니다."
 
 #: seahub/api2/endpoints/admin/users.py:680
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr " %(user)s 사용자 추가에 성공했습니다만, 전자메일 서비스를 제대로 설정하지 않아 전자메일 알림을 보내지 못했습니다."
 
 #: seahub/api2/endpoints/admin/users.py:1126
 #: seahub/institutions/templates/institutions/useradmin.html:120
@@ -365,7 +365,7 @@ msgstr "정수값은 0보다 크거나 같아야 합니다."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:200
 msgid "Virus file is not found."
-msgstr ""
+msgstr "바이러스 파일이 없습니다."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:218
 #: seahub/api2/endpoints/admin/virus_scan_records.py:233
@@ -460,7 +460,7 @@ msgstr "잠근 파일을 새로 고칠 수 없습니다."
 
 #: seahub/api2/endpoints/file_participants.py:120
 msgid "The participant already exists."
-msgstr ""
+msgstr "이미 참여자가 있습니다"
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
@@ -469,16 +469,16 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "태그에는 문자, 숫자, 점, 음수 기호 또는 밑줄 문자만 넣을 수 있습니다."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "%s 사용자는 이미 그룹 구성원입니다."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -486,19 +486,19 @@ msgstr "%s 사용자는 이미 그룹 구성원입니다."
 msgid "User %s not found in organization."
 msgstr "%s 사용자는 조직에 없습니다."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "%s 사용자는 조직 사용자입니다."
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "그룹이 없습니다"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"
@@ -512,7 +512,7 @@ msgstr "권한을 이미 설정했습니다."
 #: seahub/api2/endpoints/invitation.py:106
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s 사용자가 %(site_name)s 사이트로의 접근을 막았습니다."
 
 #: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
@@ -648,7 +648,7 @@ msgstr "암호가 너무 짧습니다."
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
-msgstr ""
+msgstr "암호가 너무 단순합니다."
 
 #: seahub/api2/endpoints/share_links.py:305
 #: seahub/api2/endpoints/share_links.py:550
@@ -720,7 +720,7 @@ msgstr "이미 아바타 %(nb_avatars)d개를 보유하고 있으며, 최대 허
 
 #: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
-msgstr ""
+msgstr "WebDav 암호 길이는 30문자보다 짧아야합니다."
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
@@ -1394,7 +1394,7 @@ msgstr "오류 발생. 관리자에게 문의하십시오."
 #: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "%s 사용자가 없거나 비활동 상태입니다."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1567,29 +1567,29 @@ msgstr "소개"
 
 #: seahub/help/templates/help/base.html:31
 msgid "Managing files and folders"
-msgstr ""
+msgstr "파일 및 폴더 관리"
 
 #: seahub/help/templates/help/base.html:33
 #: seahub/help/templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "파일 및 라이브러리 관리"
 
 #: seahub/help/templates/help/base.html:34
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "삭제한 파일 복원중"
 
 #: seahub/help/templates/help/base.html:35
 msgid "Finding old file versions"
-msgstr ""
+msgstr "이전 파일 버전 찾는 중"
 
 #: seahub/help/templates/help/base.html:36
 #: seahub/help/templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "라이브러리 기록 및 스냅샷"
 
 #: seahub/help/templates/help/base.html:37
 msgid "Setting history retention period"
-msgstr ""
+msgstr "설정 기록 유지 기간"
 
 #: seahub/help/templates/help/base.html:38
 #: seahub/help/templates/help/deleting_a_library.html:5
@@ -1599,55 +1599,55 @@ msgstr "라이브러리 삭제"
 #: seahub/help/templates/help/base.html:39
 #: seahub/help/templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "웹앱에서 파일 보기"
 
 #: seahub/help/templates/help/base.html:40
 #: seahub/help/templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "전체 문장 파일 검색"
 
 #: seahub/help/templates/help/base.html:43
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "공유 및 협업"
 
 #: seahub/help/templates/help/base.html:45
 #: seahub/help/templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "파일 및 폴더 공유"
 
 #: seahub/help/templates/help/base.html:46
 #: seahub/help/templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "그룹 관리"
 
 #: seahub/help/templates/help/base.html:47
 msgid "Locking files"
-msgstr ""
+msgstr "파일 잠금"
 
 #: seahub/help/templates/help/base.html:48
 msgid "Folder permission"
-msgstr ""
+msgstr "폴더 권한"
 
 #: seahub/help/templates/help/base.html:49
 msgid "Departments sharing"
-msgstr ""
+msgstr "부서 공유"
 
 #: seahub/help/templates/help/base.html:52
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "위키 및 지식 관리"
 
 #: seahub/help/templates/help/base.html:54
 #: seahub/help/templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "라이브러리를 위키처럼 관리"
 
 #: seahub/help/templates/help/base.html:57
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "데스크톱 클라이언트 및 동기화"
 
 #: seahub/help/templates/help/base.html:59
 msgid "Install and sync files"
-msgstr ""
+msgstr "파일 설치 및 동기화"
 
 #: seahub/help/templates/help/base.html:60
 msgid "Syncing existing folders"
@@ -1656,12 +1656,12 @@ msgstr "기존 폴더 동기화"
 #: seahub/help/templates/help/base.html:61
 #: seahub/help/templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "하위 폴더 선택 동기화"
 
 #: seahub/help/templates/help/base.html:62
 #: seahub/help/templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "읽기 전용 동기화"
 
 #: seahub/help/templates/help/base.html:63
 msgid "Unsync and resync libraries"
@@ -1687,20 +1687,20 @@ msgstr "파일 제외"
 
 #: seahub/help/templates/help/base.html:70
 msgid "Drive client"
-msgstr ""
+msgstr "드라이브 클라이언트"
 
 #: seahub/help/templates/help/base.html:72
 #: seahub/help/templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Seafile 드라이브 클라이언트 사용"
 
 #: seahub/help/templates/help/base.html:73
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "드라이브 클라이언트 2.0 윈도우용 사용"
 
 #: seahub/help/templates/help/base.html:76
 msgid "Security and encryption"
-msgstr ""
+msgstr "보안 및 암호화"
 
 #: seahub/help/templates/help/base.html:78
 msgid "How to use encrypted libraries"
@@ -1727,91 +1727,91 @@ msgstr "가끔 친구와 동시에 파일을 편집할 수도 있습니다. 이�
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
-msgstr ""
+msgstr "사용자가 소유한 라이브러리를 삭제할 수 있습니다. 삭제한 라이브러리는 사용자 자신 또는Seafile 서버 관리자가 복원할 수 있습니다."
 
 #: seahub/help/templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "라이브러리를 삭제하고 나면 다음과 같이 바뀝니다:"
 
 #: seahub/help/templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "이 라이브러리의 파일 및 폴더의 공유는 모두 취소됩니다."
 
 #: seahub/help/templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
-msgstr ""
+msgstr "이 라이브러리를 공유한 데스크톱 클라이언트에서는 더이상 동기화할 수 없습니다. 그러나 클라이언트의 지역 파일은 삭제하지 않습니다."
 
 #: seahub/help/templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "부서 관리 및 활용"
 
 #: seahub/help/templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr ""
+msgstr "일부 조직은 복잡한 부서 조직을 구성하고 있습니다. 보통 이런 조직에서는 파일을 관리할 때 두가지 일반 사용 예시가 있습니다:"
 
 #: seahub/help/templates/help/departments.html:8
 msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr ""
+msgstr "조직 공통 파일 공유 영역이 있어야 합니다. 폴더 계층은 조직 계층과 일치합니다. 개별 폴더가 있거나 각부처 별 할당 영역이 있습니다."
 
 #: seahub/help/templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr ""
+msgstr "공유 영역은 개개인 조직 구성원이 아닌 조직에서 소유하고 관리합니다. 따라서 조직에서 조직 구성원이 나간다 하더라도 파일의 소유권은 바뀌지 않습니다."
 
 #: seahub/help/templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "\"부서\" 기능은 위 두가지 경우를 만족하도록 설계했습니다. 관점 3개로부터 이 기능을 설명해드리도록 하겠습니다:"
 
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "시스템 관리자"
 
 #: seahub/help/templates/help/departments.html:14
 #: seahub/help/templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "부서 관리자"
 
 #: seahub/help/templates/help/departments.html:15
 #: seahub/help/templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "부서 구성원"
 
 #: seahub/help/templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "시스템 관리자는 다음 행위를 할 수 있습니다:"
 
 #: seahub/help/templates/help/departments.html:20
 #: seahub/help/templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "부서 계층 및 구성원 관리"
 
 #: seahub/help/templates/help/departments.html:21
 #: seahub/help/templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "부서 저장소 용량 할당"
 
 #: seahub/help/templates/help/departments.html:22
 #: seahub/help/templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "부서 공유 라이브러리 생성 및 관리"
 
 #: seahub/help/templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
-msgstr ""
+msgstr "시스템 관리자는 두가지 방법으로 부서 조직을 구성할 수 있습니다: 직접 구성 또는 액티브 디렉터리 가져오기."
 
 #: seahub/help/templates/help/departments.html:26
 msgid ""
@@ -1820,7 +1820,7 @@ msgid ""
 "department can be populated with members. The system admin can set the role "
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
-msgstr ""
+msgstr "시스템 관리자는 상위 부서 와 하위 부서를 원하는 만큼 만들 수 있습니다. 또한 각 부서별로 구성원을 배치할 수 있습니다. 시스템 관리자는 또한 '구성원' 또는 '관리자'의 역할을 설정할 수 있습니다. 부서 관리자가 어떻게 부서를 관리할 수 있는지 차근차근 알려드리도록 하겠습니다."
 
 #: seahub/help/templates/help/departments.html:27
 msgid ""
@@ -1828,13 +1828,13 @@ msgid ""
 "Units) in AD. Each OU will be imported as a department. And the sub-OUs "
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
-msgstr ""
+msgstr "시스템 관리자는 또한 액티브 디렉터리에서 OU(조직 단위)의 계층을 가져올 수도 있습니다. 각 조직 단위는 부서로 가져옵니다. 그리고 각 조직 단위의 하위 조직단위는 하위 조직으로 가져옵니다. 조직 라이브러리는 가져오기 절차를 수행하는 동안 자동으로 만듭니다."
 
 #: seahub/help/templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
-msgstr ""
+msgstr "시스템 관리자는 하위 부서와 라이브러리를 삭제한 후 부서도 삭제할 수 있습니다."
 
 #: seahub/help/templates/help/departments.html:30
 msgid ""
@@ -1843,39 +1843,39 @@ msgid ""
 "quota to a department. The total size of all the libraries in a department "
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
-msgstr ""
+msgstr "부서 내에 만든 라이브러리는 부서 자체에서 소유하지만 개별 사용자가 소유하는 것은 아닙니다. 따라서시스템 관리자가 부서에 저장소 용량 제한을 할당할 수 있습니다. 부서 내 모든 라이브러리의 총 용량은 저장소 제한 용량을 넘어설 수 없습니다. <strong>하위 부서의 경우 상위 부서의 용량에 따르지 않음을 참고하세요.</strong>"
 
 #: seahub/help/templates/help/departments.html:32
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
 "libraries to a department."
-msgstr ""
+msgstr "부서 라이브러리는 시스템 관리자 또는 부서 관리자가 만들 수 있습니다. 개별 사용자가 부서 라이브러리를 공유할 수 있을지 여부를 관리하는 옵션이 있습니다."
 
 #: seahub/help/templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "위의 모든 동작은 시스템 관리자 인터페이스에서 수행할 수 있습니다. 자세한 내용은 아래 스크린샷을 확인하세요."
 
 #: seahub/help/templates/help/departments.html:36
 msgid ""
 "As noted above, department admin is a special role assigned by the system "
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
-msgstr ""
+msgstr "상술한대로, 부서 관리자는 부서 일부 구성원에 대해 시스템 관리자가 특별하게 부여한 역할입니다. 부서 관리자는 계정에 로그인하면 다음 동작을 수행할 수 있습니다."
 
 #: seahub/help/templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "부서 라이브러리 접근"
 
 #: seahub/help/templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "부서 구성원 관리"
 
 #: seahub/help/templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "부서 라이브러리 관리"
 
 #: seahub/help/templates/help/departments.html:42
 msgid ""
@@ -1883,27 +1883,27 @@ msgid ""
 "the department. Any users registered in the system can be added as member of"
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
-msgstr ""
+msgstr "사용자가 조직의 관리자라면, 조직의 구성원을 추가하거나 삭제할 수 있습니다. 시스템에 등록한 어떤 어떤 사용자든 조직의 구성원으로 추가할 수 있습니다. 그러나 액티브 디렉터리로 부서를 가져왔다면, 구성원 조직은 나중에 액티브 디렉터리를 동기화할 때 직접 추가한 내용은 사라지며, 최신의 액티브 디렉터리의 내용으로 바뀝니다."
 
 #: seahub/help/templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "조직 관리자는 조직의 라이브러리를 관리할 수 있습니다. 지원하는 동작은 다음과 같습니다:"
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "라이브러리 만들기 또는 삭제"
 
 #: seahub/help/templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "라이브러리 이름 바꾸기"
 
 #: seahub/help/templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "부서 외부의 사용자 또는그룹으로의 라이브러리 공유. 이는 부서간 협업이 이루어질 때 상당히 쓸만해집니다."
 
 #: seahub/help/templates/help/departments.html:49
 #, python-format
@@ -1912,7 +1912,7 @@ msgid ""
 "departments in this department. This works like <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
-msgstr ""
+msgstr "해당 부서의 하위부서 또는사용자 라이브러리의 폴더 권한 세부 조정. <a href=\"%(SITE_ROOT)shelp/folder_permission/\">폴더 권한 기능</a>과 유사하게 동작합니다."
 
 #: seahub/help/templates/help/departments.html:53
 msgid ""
@@ -1924,11 +1924,11 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "일반 부서 구성원은 부서를 그룹처럼 취급할 수 있습니다. 각 부서는 그룹의 구성원으로 나타납니다. 사용자는 자신이 속한 부서의 라이브러리만 접근하는 것이 아닌 상위 부서의 라이브러리에도 접근할 수 있습니다. 예를 들면 철수가 \"ACME\" 업체의 \"Sales\" 부서에 있는 \"EMEA\" 하위 부서에 있을 경우, \"EMEA\", \"Sales\", \"ACME\" 그룹에 접근할 수 있습니다. 조직의 그룹은 이름 옆에 \"건물\" 아이콘으로 나타납니다."
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Seafile 클라이언트에서 프록시 활용"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1954,7 +1954,7 @@ msgstr "프록시 설정을 바꾸려면, 시스템 알림 영역의 Seafile 아
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "윈도우 10용 SeaDrive 2.0"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1966,7 +1966,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "가상 드라이브 설치 및 접근"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -1986,7 +1986,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "가상 드라이브 파일 접근"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
@@ -2041,11 +2041,11 @@ msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "SeaDrive 1.0에서는 서버에서 업데이트한 캐싱 파일을 자동으로 업데이트하지 못했습니다. 2.0에서는 파일 전부와 중요 표시한 파일을 자동으로 서버에서 동기화유지합니다."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "파일 다운로드 및 제어"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -2066,11 +2066,11 @@ msgstr ""
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "자주 묻는 질문"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "라이브러리를 만들고, 삭제하고, 이름을 바꿀 수 있나요?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -2078,11 +2078,11 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "예. 가상 드라이브에서 라이브러리 폴더를 만들거나, 삭제하거나, 이름을 바꿀 때, 해당 동작을 서버에 반영합니다. \"내 라이브러리\" 카테고리에서만 라이브러리를 만들고, 삭제하고, 이름을 바꿀 수 있습니다. 다른 카테고리에서의 라이브러리 만들기, 삭제, 이름 바꾸기 동작은 무시합니다."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "라이브러리 폴더 밖에 파일 또는폴더를 만들 수 있나요?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -2093,7 +2093,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "암호화 라이브러리에 접근할 수 있나요?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -2106,7 +2106,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "SeaDrive 1.0과 호환성이 있나요?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -2119,7 +2119,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "캐시를 어떻게 비우나요?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -2189,7 +2189,7 @@ msgstr "참고로 암호화 한 라이브러리는 파일의 내용만 암호화
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "파일 잠그기"
 
 #: seahub/help/templates/help/file_locking.html:6
 msgid ""
@@ -2208,7 +2208,7 @@ msgstr ""
 
 #: seahub/help/templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "웹 앱에서 파일 잠그기"
 
 #: seahub/help/templates/help/file_locking.html:9
 msgid ""
@@ -2226,42 +2226,42 @@ msgstr ""
 
 #: seahub/help/templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "데스크톱 클라이언트에서 파일 잠그기"
 
 #: seahub/help/templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
-msgstr ""
+msgstr "라이브러리를 데스크톱에 동기화하고 나면, 윈도우의 파일 탐색기나 맥 OS 의 파인더에서 라이브러리 내의 파일을 잠금/해제할 수 있습니다."
 
 #: seahub/help/templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "파일을 잠그려면, 동기화한 파일에 커서를 올려둔 후 마우스 오른쪽 단추를 눌러 \"Seafile\" 메뉴에서 \"이 파일 잠금\"을 선택합니다."
 
 #: seahub/help/templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "파일을 잠근 당사자가 독자 여러분이라면 파일 아이콘에 주황색 \"멈춤 표시\"가 나타납니다. 이 표시를 눌러 파일 잠금을 풀 수 있습니다."
 
 #: seahub/help/templates/help/file_locking.html:19
 msgid ""
 "If a file is locked by other user, you can see a red \"stop sign\" on the "
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
-msgstr ""
+msgstr "다른 사용자가 파일을 잠궜다면, 파일 아이콘에 붉은색 \"멈춤 표시\"가 나타납니다. 이 파일은 자동으로 읽기 전용으로 설정합니다. 파일 잠금이 풀리기 전까지는 파일을 수정할 수 없습니다."
 
 #: seahub/help/templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "라이브러리를 동기화하지 않았다면 클라우드 파일 브라우저에서 파일을 잠금 및 해제할 수 있습니다."
 
 #: seahub/help/templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "오피스 파일 자동 잠금"
 
 #: seahub/help/templates/help/file_locking.html:23
 msgid ""
@@ -2270,19 +2270,19 @@ msgid ""
 "close the file, Seafile automatically unlocks the file. The locking state is"
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
-msgstr ""
+msgstr "라이브러리를 데스크톱에 동기화하고 나면 라이브러리에 있는 마이크로소프트 오피스 파일을 열었을 때, Seafile에서 파일을 자동으로 잠급니다. 파일을 닫으면 Seafile에서 파일 잠금을 자동으로 풀어줍니다. 잠금 상태는 이 라이브러리를 동기화하는 다른 컴퓨터에 전달해줍니다. 동시 작업을 하는데 있어 동일한 오피스 파일의 동시 편집을 막아주어 보다 편리하게 작업할 수 있습니다."
 
 #: seahub/help/templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "파일 잠금 살펴보기"
 
 #: seahub/help/templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "파일 잠금 동작에 대해 몇가지 알아두면 좋은 참고 사항이 있습니다:"
 
 #: seahub/help/templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "잠긴 파일은 잠근 사용자만 풀 수 있습니다."
 
 #: seahub/help/templates/help/file_locking.html:28
 msgid ""
@@ -2290,17 +2290,17 @@ msgid ""
 "But other users can still move, delete or rename the parent folder of a "
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
-msgstr ""
+msgstr "잠긴 파일은 다른 사용자가 수정, 이동, 이름 바꾸기를 할 수 없습니다. 다만,잠근 파일의 상위 폴더를 이동, 삭제, 이름 바꾸기할 수 있습니다. 파일 잠금의 목적은 동시 편집을 막기 위한게 주 목적입니다."
 
 #: seahub/help/templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "잠긴 파일의 상위 폴더 이름을 바꾸거나 동일한 라이브러리 내에 이동했다면 동작을 수행하더라도 잠긴 상태 그대로 남습니다."
 
 #: seahub/help/templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "파일 이전 버전 찾기"
 
 #: seahub/help/templates/help/finding_older_version_files.html:7
 msgid ""
@@ -2312,7 +2312,7 @@ msgstr ""
 
 #: seahub/help/templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "파일의 모든 버전을 살펴보려면:"
 
 #: seahub/help/templates/help/finding_older_version_files.html:10
 msgid ""
@@ -2398,7 +2398,7 @@ msgstr ""
 
 #: seahub/help/templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "기본 사용법"
 
 #: seahub/help/templates/help/folder_permission.html:20
 msgid ""
@@ -2406,7 +2406,7 @@ msgid ""
 "file browsing interface, click \"more operations\" button, choose "
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
-msgstr ""
+msgstr "라이브러리 소유자만 하위 폴더에 대한 폴더 권한을 설정할 수 있습니다. 파일 탐색 인터페이스에서 \"추가 옵션\" 단추를 눌러 드롭다운 메뉴에서 \"권한\"을 선택합니다. 팝업 창이 뜨면 이 폴더의 권한을 보고 설정할 수 있습니다."
 
 #: seahub/help/templates/help/folder_permission.html:21
 msgid ""
@@ -2431,7 +2431,7 @@ msgstr ""
 
 #: seahub/help/templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "고급: 각 권한의 우선순위"
 
 #: seahub/help/templates/help/folder_permission.html:27
 msgid ""
@@ -2458,7 +2458,7 @@ msgstr ""
 
 #: seahub/help/templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "더 복잡한 예를 들어보도록 하겠습니다:"
 
 #: seahub/help/templates/help/folder_permission.html:32
 msgid ""
@@ -2481,98 +2481,98 @@ msgstr ""
 #: seahub/help/templates/help/full_text_file_search.html:8
 #: seahub/help/templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "마이크로 소프트 오피스 문서: .doc, .docx (전문가판 서버 전용)"
 
 #: seahub/help/templates/help/full_text_file_search.html:9
 #: seahub/help/templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "마이크로소프트 오피스 파워포인트: .ppt, .pptx (전문가판 서버 전용)"
 
 #: seahub/help/templates/help/full_text_file_search.html:10
 #: seahub/help/templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "마이크로소프트 오피스 액셀: .xls, .xlsx (전문가판 서버 전용)"
 
 #: seahub/help/templates/help/full_text_file_search.html:11
 #: seahub/help/templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "리버오피스 파일"
 
 #: seahub/help/templates/help/full_text_file_search.html:12
 #: seahub/help/templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF 파일"
 
 #: seahub/help/templates/help/full_text_file_search.html:13
 #: seahub/help/templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "마크다운 파일: .md"
 
 #: seahub/help/templates/help/full_text_file_search.html:14
 #: seahub/help/templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "다양한 소스코드 파일"
 
 #: seahub/help/templates/help/full_text_file_search.html:15
 #: seahub/help/templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "텍스트 파일: .txt, .log"
 
 #: seahub/help/templates/help/full_text_file_search.html:17
 msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "Seafile 시스템 관리자는 전문 검색 기능을 사용할 수 없음을 참고바랍니다. 파일 및 폴더 이름으로만 검색할 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "그룹을 만들면 여러 사용자에게 파일 공유를 편리하게 할 수 있습니다. Seafile에서는 그룹을 쉽게 만들어 관리할 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Seafile에서 그룹이 동작하는 방식은 다음과 같습니다:"
 
 #: seahub/help/templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "각 그룹에는 소유자가 있습니다. 소유자는 기본적으로 그룹 생성자입니다. 그룹 소유권을 다른 구성원에게 넘길 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "각 그룹에는 여러 관리자를 둘 수 있습니다. 그룹 소유자와 그룹 관리자는 그룹 관리자를 더 추가할 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "그룹 관리자는 그룹 구성원을 추가/삭제할 수 있습니다. 그리고 그룹의 라이브러리 공유를 해제할 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "좌측 창에 있는 \"그룹과 공유함\" 을 누르면, 여러분이 속한 모든 그룹을 살펴볼 수 있습니다. 임의의 그룹을 누르면 그룹에 공유한 라이브러리를 볼 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "새 그룹을 만들려면 좌측 창에 \"그룹과 공유함\"을 누릅니다. 이후 \"모든 그룹\"을 누릅니다. \"새 그룹\" 단추를 눌러 새 그룹을 만들 수 있습니다."
 
 #: seahub/help/templates/help/groups_managing.html:15
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
-msgstr ""
+msgstr "그룹에 라이브러리 또는폴더를 공유하는 방법을 알아보려면 <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">파일 및 폴더 공유</a>를 살펴봅니다."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -2656,7 +2656,7 @@ msgstr "seafile-ignore.txt는 아직 동기화하지 않은 파일만 무시합�
 
 #: seahub/help/templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Seafile 클라이언트 프로그램 설치"
 
 #: seahub/help/templates/help/install_sync.html:8
 msgid ""
@@ -2717,7 +2717,7 @@ msgstr "어떤 경우에는 파일을 동기화하지 않고 클라우드상의 
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafile은 고신뢰 고성능 기업용 파일 호스팅 기반 프로그램입니다."
 
 #: seahub/help/templates/help/introduction.html:9
 #, python-format
@@ -2727,21 +2727,21 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
-msgstr ""
+msgstr "Seafile 에는 파일을 관리하고 공유할 수 있는 웹 인터페이스가 들어있습니다. <a href=\"%(SITE_ROOT)shelp/install_sync/\">파일 동기화 클라이언트</a>와 <a href=\"%(SITE_ROOT)shelp/using_drive_client\">드라이브 클라이언트</a> 두 종류 데스크톱 클라이언트가 있습니다. 안드로이드와 iOS용 모바일 클라이언트도 있습니다."
 
 #: seahub/help/templates/help/introduction.html:10
 msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr ""
+msgstr "<a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile 웹 사이트</a>에서 클라이언트를 다운로드할 수 있습니다."
 
 #: seahub/help/templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr ""
+msgstr "이 설명서에 필요한 내용이 없다면, <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a> 포럼에 도움을 요청할 수 있습니다."
 
 #: seahub/help/templates/help/libraries_managing.html:6
 msgid ""
@@ -2802,18 +2802,18 @@ msgid ""
 "handy. You can restore the entire library to any point in the past. All the "
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
-msgstr ""
+msgstr "어떤 경우에는 라이브러리의 많은 파일을 바꿀 수도 있으며, 바꾼 파일을 되돌려놓고 싶을 때가있습니다. 여러 파일을 이전 버전으로 되돌려놓는 과정은 따분한 일이 될 수 있습니다. 이때, 스냅샷 기능이 이 과정을 간단하게 처리해줍니다. 라이브러리 전체를 과거의 어떤 시점으로 되돌려줄 수 있습니다. 라이브러리의 모든 파일을 한번에 어떤 시점으로 되돌려놓습니다. 마치 라이브러리의 \"타임 머신\" 처럼 동작하죠."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "라이브러리 기록과 스냅샷을 보려면:"
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:11
 msgid ""
 "In Seafile Web App, navigate into the root folder of a library. Click the "
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
-msgstr ""
+msgstr "Seafile 웹 앱에서 라이브러리의 최상위 폴더를 찾아봅니다. 라이브러리 탐색 상위 표시줄에서 \"기록\"를 누릅니다. 이 목록에 라이브러리의 바뀐 모든 기록이 나타납니다."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:12
 msgid ""
@@ -2855,7 +2855,7 @@ msgstr ""
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "열 보기"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -2865,11 +2865,11 @@ msgid ""
 "can browse in it and move files and folders just by dragging and dropping. "
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
-msgstr ""
+msgstr "위키는 위키 페이지의 간편 탐색이 가능하게끔 트리 형태 폴더 구조식의 가장자리 표시줄이 있습니다. Seafile의 열 보기 기능은 위키 영역을 라이브러리 파일 관리 방식처럼 관리할 수 있게 해줍니다. 사용자는 라이브러리의 파일을 관리하듯 탐색할 수 있으며, 끌어다 놓기 방식으로 파일과 폴더를 이동할 수 있습니다. 이름 바꾸기, 이동, 클라이언트로 열기 등의 파일 동작 역시 오른쪽 단추 단축 메뉴로 사용할 수 있습니다."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "위지윅 마크다운 편집기"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -2884,13 +2884,13 @@ msgid ""
 "inserted and modified with just a few clicks. The same thing goes for a "
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
-msgstr ""
+msgstr "Seafile의 위키 페이지는 마크다운 형식의 보통 문서로 저장합니다. 라이브러리에 새 위키 페이지를 만들려면 새 마크다운 문서를 만들면 됩니다. 마크다운 파일은 온라인 마크다운 편집기를 붙인 Seafile 웹 인터페이스에서 바로 편집할 수 있습니다. 웹 기반 편집기에서는 유연한 사용자 경험, 다양한 텍스트, 그림, 표의 모양새 옵션을 제공합니다. 라이브러리 및 로컬 저장소의 그림을 하이퍼링크로 마크다운 파일에 가져다 놓을 수 있습니다. 크기 조절과 같은 기본 그림 편집 기능은 편집기의 위지윅(WYSIWYG) 인터페이스에서 처리할 수 있습니다. 표는 몇번의 선택으로 넣고 수정할 수 있습니다. 마찬가지로 테이블의 내용도 그렇게 넣을 수 있습니다. 테이블을 통째로 또는 일부만 복사하는 동작 역시 위지윅 보기를 벗어나지 않고도 처리할 수 있습니다."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
-msgstr ""
+msgstr "마크다운 파일에 대한 바뀜 기록은 편집기 인터페이스 상단 메뉴 표시줄에 있는 \"파일 기록\" 단추를 누르면 쉽게 찾아볼 수 있습니다. "
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -2934,7 +2934,7 @@ msgid ""
 "popup a notification, saying that the local modified copy conflicts with the"
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
-msgstr ""
+msgstr "Seafile에서는 읽기 전용 라이브러리 또는 폴더에 금지 아이콘(<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />)을 표시하여 읽기 전용 대상임을 나타냅니다. 그러나 동기화한 로컬 사본을 사용자가 수정할 수는 있습니다. Seafile에서는 수정한 로컬 사본을 무시합니다. 서버의 사본을 수정하면 클라이언트에 알림을 띄워 서버측에 동일 시점에 수정한 다른 내용이 있음을 알립니다. 데이터를 잃지 않게 하기 위해 로컬 사본을 다른 이름으로 바꿉니다."
 
 #: seahub/help/templates/help/read-only_syncing.html:7
 msgid ""
@@ -2944,7 +2944,7 @@ msgstr ""
 
 #: seahub/help/templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "삭제한 파일 및 폴더 복원"
 
 #: seahub/help/templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -2955,7 +2955,7 @@ msgstr ""
 
 #: seahub/help/templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "휴지통 기능을 활용하는 방법은 다음과 같습니다:"
 
 #: seahub/help/templates/help/restoring_deleted_files.html:10
 msgid ""
@@ -3184,92 +3184,92 @@ msgstr ""
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "폴더로의 업로드 링크 만들기"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:37
 msgid ""
 "You can use upload links to collect files from others. You can only create "
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
-msgstr ""
+msgstr "다른 사용자에게 파일을 수집할 목적으로 업로드 링크를 만들 수 있습니다. 폴더의 업로드만 가능한 링크를 만들 수 있습니다. 다른 사람은 폴더의 파일을 볼 수는 없습니다. 단지 파일을 업로드만 할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Seafile 웹 앱에서 업로드 링크를 만들려면:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "폴더가 들어있는 상위 폴더로 들어갑니다. 해당 폴더 항목 위로 마우스 커서를 가져다둔 후 나타나는 \"공유\" 아이콘을 누릅니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:41
 msgid ""
 "A pop-up window will appear with share options. Click the \"Upload Link\" "
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
-msgstr ""
+msgstr "공유 옵션이 들어간 팝업 창이 뜹니다. 좌측 창의 \"업로드 링크\" 탭을 누릅니다. \"만들기\" 단추를 누르면 링크를 만듭니다. 링크를 암호로 보호할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "라이브러리 또는 폴더 공유"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:45
 msgid ""
 "You can share a library or folder to other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
-msgstr ""
+msgstr "라이브러리 또는 폴더를 Seafile에 등록한 다른 사용자에게 공유할 수 있습니다. 공유한 라이브러리 또는 폴더는 웹 앱 또는 Seafile 클라이언트에서 다른 사용자가 접근할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "공유 범위를 선택할 수 있습니다:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "사용자에게 공유: 하나 이상의 사용자에게 공유할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "그룹에 공유: 그룹에 공유할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "조직에 공유: 개인 서버를 활용한다면 서버의 모든 구성원 (조직 전체)에 공유할 때 안성맞춤일 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "공유물에 권한을 설정할 수도 있습니다:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "읽기-쓰기: 사용자는 파일을 읽고, 쓰고, 업로드, 다운로드, 동기화할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "읽기 전용: 사용자는 파일을 읽고, 다운로드하고, 동기화할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "관리자: 권한 설정과 더불어 라이브러리 공유를 할 수 있습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
-msgstr ""
+msgstr "온라인 읽기-쓰기: 사용자는 웹 브라우저를 통해 온라인에서 파일을 보고 편집할 수 있습니다. 파일 다운로드는 할 수 없습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
-msgstr ""
+msgstr "온라인 읽기 전용: 사용자는 웹 브라우저를 통해 온라인에서 파일을 보기만 할 수 있습니다. 파일 다운로드는 할 수 없습니다."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "라이브러리 또는 폴더를 사용자 또는 그룹에 공유하려면:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:62
 msgid ""
@@ -3302,7 +3302,7 @@ msgstr ""
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "내부 링크"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -3311,7 +3311,7 @@ msgid ""
 "way for sharing files among team members who have access to a common "
 "library. You may just copy the link and paste it into an email or IM "
 "software."
-msgstr ""
+msgstr "파일 또는 폴더에 읽기 권한을 가진 로그인한 사용자만 이 링크에 접근할 수 있습니다. 내부 파일 공유에 활용합니다. 일반 라이브러리에 접근하는 팀 구성원 끼리 파일을 공유하는 간편한 방식입니다. 링크를 복사하여 전자메일 또는 메신저 프로그램에 붙여넣기만 하면 됩니다."
 
 #: seahub/help/templates/help/sync_interval.html:8
 msgid ""
@@ -3325,7 +3325,7 @@ msgstr "보통 Seafile 클라이언트에서는 로컬 폴더의 바뀐 상태�
 
 #: seahub/help/templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "기존 폴더 동기화"
 
 #: seahub/help/templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -3356,7 +3356,7 @@ msgstr "그 다음 라이브러리와 동기화 할 기존 폴더를 선택하�
 
 #: seahub/help/templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "라이브러리 동기화 해제 및 재 동기화"
 
 #: seahub/help/templates/help/unsync_resync.html:8
 #, python-format
@@ -3367,7 +3367,7 @@ msgid ""
 " you want to sync the library with the local folder again, you can use the "
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
-msgstr ""
+msgstr "라이브러리의 로컬 폴더 동기화를 더이상 진행하고 싶지 않다면, 동기화 상태를 해제할 수 있습니다. 라이브러리 동기화 상태를 해제하고 나면, 로컬 폴더 및 파일의 바뀐 내용을 업로드하지 않으며, 라이브러리에서 바뀐 내용을 다운로드하지 않습니다. 로컬 폴더를 라이브러리와 다시 동기화하려면, <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">기존 폴더와 동기화</a>기능을 활용할 수 있습니다."
 
 #: seahub/help/templates/help/unsync_resync.html:10
 msgid ""
@@ -3382,17 +3382,17 @@ msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr ""
+msgstr "<a href=\"https://www.seafile.com/en/download/\">다운로드 페이지</a>의 절차에 따라 드라이브 클라이언트를 다운로드하고 나면, 데스크톱의 \"SeaDrive\" 앱 아이콘을 두번 눌러 시작할 수 있습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
-msgstr ""
+msgstr "가상 드라이브의 드라이브 문자를 선택합니다. 기본적으로 \"S:\"를 사용합니다."
 
 #: seahub/help/templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "그 다음 Seafile 서버에 로그인할 지를 물어봅니다."
 
 #: seahub/help/templates/help/using_drive_client.html:12
 msgid ""
@@ -3400,7 +3400,7 @@ msgid ""
 "library and file list from the server. The file contents are not downloaded "
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
-msgstr ""
+msgstr "서버에 로그인하고 나면, 드라이브 클라이언트에서는 서버에서 라이브러리 및 파일 목록을 가져오기 시작합니다. 이 때, 파일 내용은 가져오지 않습니다. 따라서 그다지 오래걸리지 않습니다. 백그라운드에서 이 과정을 실행하게끔 할 수 있습니다. 가져오는 과정이 끝나면 알림을 받습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:14
 msgid ""
@@ -3409,27 +3409,27 @@ msgid ""
 "drive are libraries on the Seafile server. File contents will be downloaded "
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
-msgstr ""
+msgstr "가상 드라이브 폴더를 엽니다. 컴퓨터의 일반 하드 드라이브처럼 동작하는걸 보실 수 있습니다. 가상 드라이브의 최상위 폴더는 Seafile 서버의 라이브러리입니다. 파일 내용은 파일을 열 때 다운로드합니다. 최근에 연 파일은 로컬 디스크에 캐싱합니다. 캐싱한 모든 파일은 녹색 표시로 나타냅니다."
 
 #: seahub/help/templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "동기화한 상태"
 
 #: seahub/help/templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
-msgstr ""
+msgstr "가상 드라이브의 파일 및 폴더는 경우에 따라 클라우드 전용, 동기화 상태, 일부 동기화 상태로 나뉩니다."
 
 #: seahub/help/templates/help/using_drive_client.html:22
 #: seahub/help/templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "상태"
 
 #: seahub/help/templates/help/using_drive_client.html:23
 #: seahub/help/templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "아이콘"
 
 #: seahub/help/templates/help/using_drive_client.html:24
 #: seahub/help/templates/help/using_drive_client.html:53
@@ -3438,7 +3438,7 @@ msgstr "상세"
 
 #: seahub/help/templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "클라우드 전용 컨텐트"
 
 #: seahub/help/templates/help/using_drive_client.html:31
 msgid ""
@@ -3447,11 +3447,11 @@ msgid ""
 "file, but the content isn’t fully downloaded until you need it. What "
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
-msgstr ""
+msgstr "클라우드 전용 컨텐트는 가상 드라이브에 나타나지만 파일이 점유하는 전체 공간을 차지하지는 않습니다. 파일 탐색기에서는 파일을 볼 수 있지만, 필요 하기 전에는 완전히 다운로드하지 않습니다. 다운로드한 부분은 파일 정보, 특히, 이름, 크기, 갱신일자와 같은 정보 뿐입니다."
 
 #: seahub/help/templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "동기화한 컨텐트"
 
 #: seahub/help/templates/help/using_drive_client.html:36
 msgid ""
@@ -3471,7 +3471,7 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "특수 상태"
 
 #: seahub/help/templates/help/using_drive_client.html:47
 msgid ""
@@ -3481,45 +3481,45 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "다른 사람이 잠금"
 
 #: seahub/help/templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
-msgstr ""
+msgstr "이 파일은 서버의 다른 사용자가 잠궜습니다. 읽기 전용 상태로만 파일을 열 수 있습니다. 파일을 수정, 삭제, 이름 바꾸기 또는 이동할 수 없습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "내가 잠금"
 
 #: seahub/help/templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "이 파일은 현재 사용자께서 잠궜습니다. 다른 사용자의 파일 수정을 막고 있습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "읽기 전용"
 
 #: seahub/help/templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr ""
+msgstr "이 파일의 폴더 또는라이브러리는 읽기 전용으로 공유했습니다. 파일을 수정, 삭제, 이동할 수 없습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
-msgstr ""
+msgstr "드라이브 클라이언트는 백그라운드 작업으로 사용하지 않는 캐시 파일을 주기적으로 삭제합니다. 로컬 캐시 공간을 제한할 수 있습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:76
 msgid ""
 "You can log into multiple accounts in the Drive client. However, only files "
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
-msgstr ""
+msgstr "드라이브 클라이언트에서 여러 계정에 로그인할 수 있습니다. 그러나 현재 선택한 서버의 파일만 가상 드라이브에 나타납니다. 로그인한 계정을 서로 전환할 수 있습니다."
 
 #: seahub/help/templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
@@ -3543,7 +3543,7 @@ msgstr ""
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "그림 파일"
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"
@@ -3713,7 +3713,7 @@ msgstr "삭제 실패: 사용자가 없습니다"
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "%(site_name)s사이트에 초대받았습니다."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -3740,12 +3740,12 @@ msgstr "안녕하세요,"
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s님께서 %(site_name)s 사이트에 초대하셨습니다. 하단 링크를 누르세요:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s님께서 %(site_name)s 사이트 접근을 막았습니다."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -3855,7 +3855,7 @@ msgstr "%s에 새 공지가 있습니다"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:223
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "%(site_name)s사이트에 새 알림 %(num)s건이 있습니다:\n"
 
 #: seahub/notifications/models.py:480
 #, python-format
@@ -4192,13 +4192,13 @@ msgstr "고급"
 
 #: seahub/search/templates/search_results.html:56
 msgid "No result found"
-msgstr ""
+msgstr "결과가 없습니다"
 
 #: seahub/search/templates/search_results.html:58
 #, python-format
 msgid "%(total)s result"
 msgid_plural "%(total)s results"
-msgstr[0] ""
+msgstr[0] "결과 %(total)s건"
 
 #: seahub/search/templates/search_results.html:63
 msgid "Directory icon"
@@ -4218,7 +4218,7 @@ msgstr "시작일자는 마감일자보다 앞서야 합니다."
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr ""
+msgstr "부적절한 인자."
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
