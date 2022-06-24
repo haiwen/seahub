@@ -259,9 +259,11 @@ class AdminLibraryDirent(APIView):
         username = request.user.username
         dst_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, src_obj_name)
         try:
-            seafile_api.copy_file(src_repo_id, src_dir, src_obj_name, dst_repo_id,
-                                  dst_dir, dst_obj_name, username,
-                                  need_progress=0, synchronous=1)
+            seafile_api.copy_file(src_repo_id, src_dir,
+                                  json.dumps([src_obj_name]),
+                                  dst_repo_id, dst_dir,
+                                  json.dumps([dst_obj_name]),
+                                  username, need_progress=0, synchronous=1)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import uuid
 import json
 import posixpath
 
@@ -119,8 +118,10 @@ class DraftManager(models.Manager):
                 pass
 
             # copy file to draft dir
-            seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
-                                  repo.id, '/Drafts', draft_file_name,
+            seafile_api.copy_file(repo.id, file_uuid.parent_path,
+                                  json.dumps([file_uuid.filename]),
+                                  repo.id, '/Drafts',
+                                  json.dumps([draft_file_name]),
                                   username=username, need_progress=0, synchronous=1)
 
             return draft_file_path
@@ -137,14 +138,16 @@ class DraftManager(models.Manager):
                 d.delete(operator=username)
 
                 # copy file to draft dir
-                seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
-                                      repo.id, '/Drafts', draft_file_name,
+                seafile_api.copy_file(repo.id, file_uuid.parent_path,
+                                      json.dumps([file_uuid.filename]),
+                                      repo.id, '/Drafts',
+                                      json.dumps([draft_file_name]),
                                       username=username, need_progress=0, synchronous=1)
 
                 return draft_file_path
 
-
-    def add(self, username, repo, file_path, file_exist=True, file_id=None, org_id=-1, status='open'):
+    def add(self, username, repo, file_path,
+            file_exist=True, file_id=None, org_id=-1, status='open'):
         file_path = normalize_file_path(file_path)
         parent_path = os.path.dirname(file_path)
         filename = os.path.basename(file_path)
@@ -185,7 +188,7 @@ class Draft(TimestampedModel):
     # class Meta:
     #     unique_together = (('username', 'draft_repo_id'), )
 
-    def update(self, publish_file_version, status = 'published'):
+    def update(self, publish_file_version, status='published'):
         self.publish_file_version = publish_file_version
         self.status = status
         self.save()

@@ -2449,9 +2449,9 @@ class OpMoveView(APIView):
         # move file
         try:
             seafile_api.move_file(repo_id, parent_dir,
-                                  json.dumps([obj_names]),
+                                  json.dumps(obj_names),
                                   dst_repo, dst_dir,
-                                  json.dumps([new_obj_names]),
+                                  json.dumps(new_obj_names),
                                   replace=False, username=username,
                                   need_progress=0, synchronous=1)
         except SearpcError as e:
@@ -2556,11 +2556,11 @@ class OpCopyView(APIView):
 
         # copy file
         try:
-            src_multi_objs = "\t".join(obj_names)
-            dst_multi_objs = "\t".join(new_obj_names)
-
-            seafile_api.copy_file(repo_id, parent_dir, src_multi_objs,
-                    dst_repo, dst_dir, dst_multi_objs, username, 0, synchronous=1)
+            seafile_api.copy_file(repo_id, parent_dir,
+                                  json.dumps(obj_names),
+                                  dst_repo, dst_dir,
+                                  json.dumps(new_obj_names),
+                                  username, 0, synchronous=1)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2995,8 +2995,9 @@ class FileView(APIView):
             new_filename = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
                 seafile_api.copy_file(src_repo_id, src_dir,
-                                      filename, dst_repo_id,
-                                      dst_dir, new_filename,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_filename]),
                                       username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)

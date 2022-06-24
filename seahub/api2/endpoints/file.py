@@ -461,8 +461,11 @@ class FileView(APIView):
             filename = os.path.basename(path)
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
-                seafile_api.copy_file(src_repo_id, src_dir, filename, dst_repo_id,
-                                      dst_dir, new_file_name, username, 0, synchronous=1)
+                seafile_api.copy_file(src_repo_id, src_dir,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_file_name]),
+                                      username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

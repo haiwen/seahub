@@ -579,8 +579,10 @@ class ReposBatchCopyDirView(APIView):
 
             try:
                 # need_progress=0, synchronous=1
-                seafile_api.copy_file(src_repo_id, src_parent_dir, src_obj_name,
-                                      dst_repo_id, dst_parent_dir, dst_obj_name,
+                seafile_api.copy_file(src_repo_id, src_parent_dir,
+                                      json.dumps([src_obj_name]),
+                                      dst_repo_id, dst_parent_dir,
+                                      json.dumps([dst_obj_name]),
                                       username, 0, 1)
             except Exception as e:
                 logger.error(e)
@@ -877,8 +879,10 @@ class ReposBatchCopyItemView(APIView):
                                                           dst_parent_dir,
                                                           dst_obj_name)
                 # need_progress=0, synchronous=1
-                seafile_api.copy_file(src_repo_id, src_parent_dir, src_obj_name,
-                                      dst_repo_id, dst_parent_dir, dst_obj_name,
+                seafile_api.copy_file(src_repo_id, src_parent_dir,
+                                      json.dumps([src_obj_name]),
+                                      dst_repo_id, dst_parent_dir,
+                                      json.dumps([dst_obj_name]),
                                       username, 0, 1)
             except Exception as e:
                 logger.error(e)
@@ -1150,14 +1154,11 @@ class ReposAsyncBatchCopyItemView(APIView):
 
         result = {}
         username = request.user.username
-
-        formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-        src_multi = "\t".join(formated_src_dirents)
-        dst_multi = "\t".join(formated_src_dirents)
-
         try:
-            res = seafile_api.copy_file(src_repo_id, src_parent_dir, src_multi,
-                                        dst_repo_id, dst_parent_dir, dst_multi,
+            res = seafile_api.copy_file(src_repo_id, src_parent_dir,
+                                        json.dumps(src_dirents),
+                                        dst_repo_id, dst_parent_dir,
+                                        json.dumps(src_dirents),
                                         username=username, need_progress=1,
                                         synchronous=0)
         except Exception as e:
@@ -1366,14 +1367,11 @@ class ReposSyncBatchCopyItemView(APIView):
 
         result = {}
         username = request.user.username
-
-        formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-        src_multi = "\t".join(formated_src_dirents)
-        dst_multi = "\t".join(formated_src_dirents)
-
         try:
-            seafile_api.copy_file(src_repo_id, src_parent_dir, src_multi,
-                                  dst_repo_id, dst_parent_dir, dst_multi,
+            seafile_api.copy_file(src_repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  dst_repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
                                   username=username, need_progress=0,
                                   synchronous=1)
         except Exception as e:
