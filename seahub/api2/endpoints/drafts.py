@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 import posixpath
 
@@ -127,7 +128,7 @@ class DraftView(APIView):
         # permission check
         origin_file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(draft.origin_file_uuid)
         if origin_file_uuid and seafile_api.get_dir_id_by_path(repo_id,
-                origin_file_uuid.parent_path):
+                                                               origin_file_uuid.parent_path):
             permission = check_folder_permission(request, repo_id, origin_file_uuid.parent_path)
         else:
             permission = check_folder_permission(request, repo_id, '/')
@@ -158,11 +159,12 @@ class DraftView(APIView):
 
         # move draft file
         username = request.user.username
-        seafile_api.move_file(
-            repo_id, draft_file_parent_path, draft_file_name,
-            repo_id, dst_parent_path, dst_file_name,
-            replace=1, username=username, need_progress=0, synchronous=1
-        )
+        seafile_api.move_file(repo_id, draft_file_parent_path,
+                              json.dumps([draft_file_name]),
+                              repo_id, dst_parent_path,
+                              json.dumps([dst_file_name]),
+                              replace=1, username=username,
+                              need_progress=0, synchronous=1)
 
         try:
             # 2. Update draft database info.

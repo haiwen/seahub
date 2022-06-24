@@ -35,7 +35,6 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ
 
 logger = logging.getLogger(__name__)
 
@@ -74,10 +73,11 @@ class ReposBatchView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
             share_items = seafile_api.list_org_repo_shared_group(org_id,
-                    username, repo_id)
+                                                                 username,
+                                                                 repo_id)
         else:
-            share_items = seafile_api.list_repo_shared_group_by_user(
-                    username, repo_id)
+            share_items = seafile_api.list_repo_shared_group_by_user(username,
+                                                                     repo_id)
 
         ret = []
         for item in share_items:
@@ -201,10 +201,15 @@ class ReposBatchView(APIView):
                         if is_org_context(request):
                             org_id = request.user.org.org_id
                             seaserv.seafserv_threaded_rpc.org_add_share(org_id,
-                                    repo_id, username, to_username, permission)
+                                                                        repo_id,
+                                                                        username,
+                                                                        to_username,
+                                                                        permission)
                         else:
-                            seafile_api.share_repo(
-                                    repo_id, username, to_username, permission)
+                            seafile_api.share_repo(repo_id,
+                                                   username,
+                                                   to_username,
+                                                   permission)
 
                         # send a signal when sharing repo successful
                         repo = seafile_api.get_repo(repo_id)
@@ -327,10 +332,13 @@ class ReposBatchView(APIView):
                     try:
                         # get share permission before unshare operation
                         permission = check_user_share_out_permission(repo_id,
-                                '/', to_username, is_org_context(request))
+                                                                     '/',
+                                                                     to_username,
+                                                                     is_org_context(request))
 
                         if is_org_context(request):
-                            # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                            # when calling seafile API to share authority related functions,
+                            # change the uesrname to repo owner.
                             org_id = request.user.org.org_id
                             seafile_api.org_remove_share(org_id, repo_id, repo_owner, to_username)
                         else:
@@ -338,11 +346,11 @@ class ReposBatchView(APIView):
 
                         # Delete share permission at ExtraSharePermission table.
                         ExtraSharePermission.objects.delete_share_permission(repo_id,
-                                to_username)
+                                                                             to_username)
 
                         # send message
                         send_perm_audit_msg('delete-repo-perm', username,
-                                to_username, repo_id, '/', permission)
+                                            to_username, repo_id, '/', permission)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -382,7 +390,9 @@ class ReposBatchView(APIView):
                     try:
                         # get share permission before unshare operation
                         permission = check_group_share_out_permission(repo_id,
-                                '/', to_group_id, is_org_context(request))
+                                                                      '/',
+                                                                      to_group_id,
+                                                                      is_org_context(request))
 
                         org_id = None
                         if is_org_context(request):
@@ -394,11 +404,11 @@ class ReposBatchView(APIView):
 
                         # Delete share permission at ExtraSharePermission table.
                         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id,
-                                to_group_id)
+                                                                                   to_group_id)
 
                         # send message
                         send_perm_audit_msg('delete-repo-perm', username,
-                                to_group_id, repo_id, '/', permission)
+                                            to_group_id, repo_id, '/', permission)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -570,7 +580,8 @@ class ReposBatchCopyDirView(APIView):
             try:
                 # need_progress=0, synchronous=1
                 seafile_api.copy_file(src_repo_id, src_parent_dir, src_obj_name,
-                        dst_repo_id, dst_parent_dir, dst_obj_name, username, 0, 1)
+                                      dst_repo_id, dst_parent_dir, dst_obj_name,
+                                      username, 0, 1)
             except Exception as e:
                 logger.error(e)
                 error_dict = {
@@ -820,11 +831,11 @@ class ReposBatchCopyItemView(APIView):
                 continue
 
             # src resource check
-            ## as we don't know if `src_path` stands for a file or a folder,
-            ## so we check both
+            # as we don't know if `src_path` stands for a file or a folder,
+            # so we check both
             src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_path)
             src_file_id = seafile_api.get_file_id_by_path(src_repo_id,
-                    normalize_file_path(src_path))
+                                                          normalize_file_path(src_path))
 
             if not src_dir_id and not src_file_id:
                 error_dict = {
@@ -863,10 +874,12 @@ class ReposBatchCopyItemView(APIView):
 
             try:
                 dst_obj_name = check_filename_with_rename(dst_repo_id,
-                        dst_parent_dir, dst_obj_name)
+                                                          dst_parent_dir,
+                                                          dst_obj_name)
                 # need_progress=0, synchronous=1
                 seafile_api.copy_file(src_repo_id, src_parent_dir, src_obj_name,
-                        dst_repo_id, dst_parent_dir, dst_obj_name, username, 0, 1)
+                                      dst_repo_id, dst_parent_dir, dst_obj_name,
+                                      username, 0, 1)
             except Exception as e:
                 logger.error(e)
                 error_dict = {
@@ -992,11 +1005,11 @@ class ReposBatchMoveItemView(APIView):
                 continue
 
             # src resource check
-            ## as we don't know if `src_path` stands for a file or a folder,
-            ## so we check both
+            # as we don't know if `src_path` stands for a file or a folder,
+            # so we check both
             src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_path)
             src_file_id = seafile_api.get_file_id_by_path(src_repo_id,
-                    normalize_file_path(src_path))
+                                                          normalize_file_path(src_path))
 
             if not src_dir_id and not src_file_id:
                 error_dict = {
@@ -1035,11 +1048,13 @@ class ReposBatchMoveItemView(APIView):
 
             try:
                 dst_obj_name = check_filename_with_rename(dst_repo_id,
-                        dst_parent_dir, dst_obj_name)
-                # replace=False, username=username, need_progress=0, synchronous=1
-                seafile_api.move_file(src_repo_id, src_parent_dir, src_obj_name,
-                        dst_repo_id, dst_parent_dir, dst_obj_name,
-                        False, username, 0, 1)
+                                                          dst_parent_dir,
+                                                          dst_obj_name)
+                seafile_api.move_file(src_repo_id, src_parent_dir,
+                                      json.dumps([src_obj_name]),
+                                      dst_repo_id, dst_parent_dir,
+                                      json.dumps([dst_obj_name]),
+                                      False, username, 0, 1)
             except Exception as e:
                 logger.error(e)
                 error_dict = {
@@ -1244,7 +1259,8 @@ class ReposAsyncBatchMoveItemView(APIView):
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
-                src_repo_id, src_parent_dir)
+                                                                  src_repo_id,
+                                                                  src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
                     parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
@@ -1253,13 +1269,11 @@ class ReposAsyncBatchMoveItemView(APIView):
 
         # move file
         result = {}
-        formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-        src_multi = "\t".join(formated_src_dirents)
-        dst_multi = "\t".join(formated_src_dirents)
-
         try:
-            res = seafile_api.move_file(src_repo_id, src_parent_dir, src_multi,
-                                        dst_repo_id, dst_parent_dir, dst_multi,
+            res = seafile_api.move_file(src_repo_id, src_parent_dir,
+                                        json.dumps(src_dirents),
+                                        dst_repo_id, dst_parent_dir,
+                                        json.dumps(src_dirents),
                                         replace=False, username=username,
                                         need_progress=1, synchronous=0)
         except Exception as e:
@@ -1461,7 +1475,8 @@ class ReposSyncBatchMoveItemView(APIView):
 
         # check sub folder permission
         folder_permission_dict = get_sub_folder_permission_by_dir(request,
-                src_repo_id, src_parent_dir)
+                                                                  src_repo_id,
+                                                                  src_parent_dir)
         for dirent in src_dirents:
             if dirent in list(folder_permission_dict.keys()) and \
                     parse_repo_perm(folder_permission_dict[dirent]).can_edit_on_web is False:
@@ -1470,13 +1485,11 @@ class ReposSyncBatchMoveItemView(APIView):
 
         # move file
         result = {}
-        formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-        src_multi = "\t".join(formated_src_dirents)
-        dst_multi = "\t".join(formated_src_dirents)
-
         try:
-            seafile_api.move_file(src_repo_id, src_parent_dir, src_multi,
-                                  dst_repo_id, dst_parent_dir, dst_multi,
+            seafile_api.move_file(src_repo_id, src_parent_dir,
+                                  json.dumps(src_dirents),
+                                  dst_repo_id, dst_parent_dir,
+                                  json.dumps(src_dirents),
                                   replace=False, username=username,
                                   need_progress=0, synchronous=1)
         except Exception as e:

@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import posixpath
+import json
 import logging
+import posixpath
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -181,8 +182,10 @@ class CopyMoveTaskView(APIView):
 
             try:
                 res = seafile_api.move_file(src_repo_id, src_parent_dir,
-                                            src_dirent_name, dst_repo_id, dst_parent_dir,
-                                            new_dirent_name, replace=False, username=username,
+                                            json.dumps([src_dirent_name]),
+                                            dst_repo_id, dst_parent_dir,
+                                            json.dumps([new_dirent_name]),
+                                            replace=False, username=username,
                                             need_progress=1)
 
             except Exception as e:

@@ -71,20 +71,22 @@ def move_folder_with_merge(username,
 
         # for sub file, copy it directly
         for src_sub_file_name in src_sub_file_name_list:
-            seafile_api.move_file(
-                    src_repo_id, src_folder_path, src_sub_file_name,
-                    dst_repo_id, dst_folder_path, src_sub_file_name,
-                    replace=False, username=username, need_progress=0)
+            seafile_api.move_file(src_repo_id, src_folder_path,
+                                  json.dumps([src_sub_file_name]),
+                                  dst_repo_id, dst_folder_path,
+                                  json.dumps([src_sub_file_name]),
+                                  replace=False, username=username, need_progress=0)
 
         for src_sub_folder_name in src_sub_folder_name_list:
             move_folder_with_merge(username,
                                    src_repo_id, src_folder_path, src_sub_folder_name,
                                    dst_repo_id, dst_folder_path, src_sub_folder_name)
     else:
-        seafile_api.move_file(
-                src_repo_id, src_parent_dir, src_dirent_name,
-                dst_repo_id, dst_parent_dir, dst_dirent_name,
-                replace=False, username=username, need_progress=0)
+        seafile_api.move_file(src_repo_id, src_parent_dir,
+                              json.dumps([src_dirent_name]),
+                              dst_repo_id, dst_parent_dir,
+                              json.dumps([dst_dirent_name]),
+                              replace=False, username=username, need_progress=0)
 
 
 class MoveFolderMergeView(APIView):
