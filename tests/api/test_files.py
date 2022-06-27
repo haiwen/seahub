@@ -174,7 +174,7 @@ class FilesApiTest(ApiTestBase):
             try:
                 url = urllib.request.urlopen(res.text.strip('"'))
             except Exception as e:
-                assert 'HTTP Error 400: Bad Request' in str(e)
+                assert 'Access token not found' in str(e)
 
             # url = urllib.request.urlopen(res.text.strip('"'))
             # code = url.getcode()
