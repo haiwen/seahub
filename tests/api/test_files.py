@@ -174,7 +174,7 @@ class FilesApiTest(ApiTestBase):
             try:
                 url = urllib.request.urlopen(res.text.strip('"'))
             except Exception as e:
-                assert 'Access token not found' in str(e)
+                assert 'HTTP Error 403: Forbidden' in str(e)
 
             # url = urllib.request.urlopen(res.text.strip('"'))
             # code = url.getcode()
