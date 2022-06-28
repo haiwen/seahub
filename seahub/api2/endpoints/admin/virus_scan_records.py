@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -109,9 +110,9 @@ class AdminVirusFileView(APIView):
         parent_dir = os.path.dirname(virus_file.file_path)
         filename = os.path.basename(virus_file.file_path)
         try:
-            seafile_api.del_file(
-                virus_file.repo_id, parent_dir, filename, request.user.username
-            )
+            seafile_api.del_file(virus_file.repo_id, parent_dir,
+                                 json.dumps([filename]),
+                                 request.user.username)
             delete_virus_file(virus_id)
         except Exception as e:
             logger.error(e)
@@ -207,9 +208,9 @@ class AdminVirusFilesBatchView(APIView):
                 filename = os.path.basename(virus_file.file_path)
                 virus_id = int(virus_file.vid)
                 try:
-                    seafile_api.del_file(
-                        virus_file.repo_id, parent_dir, filename, request.user.username
-                    )
+                    seafile_api.del_file(virus_file.repo_id, parent_dir,
+                                         json.dumps([filename]),
+                                         request.user.username)
                     delete_virus_file(virus_id)
                 except Exception as e:
                     logger.error(e)

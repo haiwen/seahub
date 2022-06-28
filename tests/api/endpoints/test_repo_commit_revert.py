@@ -31,7 +31,9 @@ class RepoCommitRevertTest(BaseTestCase):
 
     def test_post(self):
         # delete a file first
-        seafile_api.del_file(self.repo_id, '/', self.file_name, self.user_name)
+        seafile_api.del_file(self.repo_id, '/',
+                             json.dumps([self.file_name]),
+                             self.user_name)
 
         self.login_as(self.user)
 
@@ -71,7 +73,9 @@ class RepoCommitRevertTest(BaseTestCase):
 
     def test_enc_repo_post(self):
         # delete a file first
-        seafile_api.del_file(self.enc_repo_id, '/', self.file_name, self.user_name)
+        seafile_api.del_file(self.enc_repo_id, '/',
+                             json.dumps([self.file_name]),
+                             self.user_name)
 
         self.login_as(self.user)
 

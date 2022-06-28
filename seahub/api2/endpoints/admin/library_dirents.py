@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import stat
+import json
 import logging
 import posixpath
 
@@ -30,6 +31,7 @@ from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
 
+
 def common_check(func):
     """ Decorator for check if repo exists and admin can view user's repo
     """
@@ -46,6 +48,7 @@ def common_check(func):
         return func(view, request, repo_id, *args, **kwargs)
 
     return _decorated
+
 
 def get_dirent_info(dirent):
     if not dirent:
@@ -91,8 +94,8 @@ class AdminLibraryDirents(APIView):
         repo_owner = get_repo_owner(request, repo_id)
 
         try:
-            dirs = seafile_api.list_dir_with_perm(repo_id,
-                parent_dir, dir_id, repo_owner, -1, -1)
+            dirs = seafile_api.list_dir_with_perm(repo_id, parent_dir,
+                                                  dir_id, repo_owner, -1, -1)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -153,6 +156,7 @@ class AdminLibraryDirents(APIView):
         dirent_info = get_dirent_info(dirent)
 
         return Response(dirent_info)
+
 
 class AdminLibraryDirent(APIView):
 
@@ -253,11 +257,13 @@ class AdminLibraryDirent(APIView):
 
         # copy file
         username = request.user.username
-        dst_obj_name = check_filename_with_rename(dst_repo_id, dst_dir,
-                src_obj_name)
+        dst_obj_name = check_filename_with_rename(dst_repo_id, dst_dir, src_obj_name)
         try:
-            seafile_api.copy_file(src_repo_id, src_dir, src_obj_name, dst_repo_id,
-                      dst_dir, dst_obj_name, username, need_progress=0, synchronous=1)
+            seafile_api.copy_file(src_repo_id, src_dir,
+                                  json.dumps([src_obj_name]),
+                                  dst_repo_id, dst_dir,
+                                  json.dumps([dst_obj_name]),
+                                  username, need_progress=0, synchronous=1)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -296,8 +302,9 @@ class AdminLibraryDirent(APIView):
         parent_dir = os.path.dirname(path)
         file_name = os.path.basename(path)
         try:
-            seafile_api.del_file(repo_id,
-                    parent_dir, file_name, request.user.username)
+            seafile_api.del_file(repo_id, parent_dir,
+                                 json.dumps([file_name]),
+                                 request.user.username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

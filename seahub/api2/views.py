@@ -2336,9 +2336,9 @@ class OpDeleteView(APIView):
                 allowed_file_names.append(file_name)
 
         try:
-            multi_files = "\t".join(allowed_file_names)
             seafile_api.del_file(repo_id, parent_dir,
-                                 multi_files, username)
+                                 json.dumps(allowed_file_names),
+                                 username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2448,12 +2448,12 @@ class OpMoveView(APIView):
 
         # move file
         try:
-            src_multi_objs = "\t".join(obj_names)
-            dst_multi_objs = "\t".join(new_obj_names)
-
-            seafile_api.move_file(repo_id, parent_dir, src_multi_objs,
-                    dst_repo, dst_dir, dst_multi_objs, replace=False,
-                    username=username, need_progress=0, synchronous=1)
+            seafile_api.move_file(repo_id, parent_dir,
+                                  json.dumps(obj_names),
+                                  dst_repo, dst_dir,
+                                  json.dumps(new_obj_names),
+                                  replace=False, username=username,
+                                  need_progress=0, synchronous=1)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2556,11 +2556,11 @@ class OpCopyView(APIView):
 
         # copy file
         try:
-            src_multi_objs = "\t".join(obj_names)
-            dst_multi_objs = "\t".join(new_obj_names)
-
-            seafile_api.copy_file(repo_id, parent_dir, src_multi_objs,
-                    dst_repo, dst_dir, dst_multi_objs, username, 0, synchronous=1)
+            seafile_api.copy_file(repo_id, parent_dir,
+                                  json.dumps(obj_names),
+                                  dst_repo, dst_dir,
+                                  json.dumps(new_obj_names),
+                                  username, 0, synchronous=1)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2944,8 +2944,9 @@ class FileView(APIView):
             new_filename = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
                 seafile_api.move_file(src_repo_id, src_dir,
-                                      filename, dst_repo_id,
-                                      dst_dir, new_filename,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_filename]),
                                       replace=False, username=username,
                                       need_progress=0, synchronous=1)
             except SearpcError as e:
@@ -2994,8 +2995,9 @@ class FileView(APIView):
             new_filename = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
                 seafile_api.copy_file(src_repo_id, src_dir,
-                                      filename, dst_repo_id,
-                                      dst_dir, new_filename,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_filename]),
                                       username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
@@ -3134,7 +3136,8 @@ class FileView(APIView):
 
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, request.user.username)
+                                 json.dumps([file_name]),
+                                 request.user.username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -3745,7 +3748,8 @@ class DirView(APIView):
         username = request.user.username
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, username)
+                                 json.dumps([file_name]),
+                                 username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,

@@ -1130,8 +1130,10 @@ class ShareLinkSaveFileToRepo(APIView):
                                                      src_dirent_name)
 
         username = request.user.username
-        seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
-                              dst_repo_id, dst_parent_dir, dst_dirent_name,
+        seafile_api.copy_file(src_repo_id, src_parent_dir,
+                              json.dumps([src_dirent_name]),
+                              dst_repo_id, dst_parent_dir,
+                              json.dumps([dst_dirent_name]),
                               username, need_progress=0)
 
         return Response({'success': True})
@@ -1210,14 +1212,11 @@ class ShareLinkSaveItemsToRepo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             src_parent_dir = posixpath.join(share_link.path, src_parent_dir.strip('/'))
-
-            formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-            src_dirent_name = "\t".join(formated_src_dirents)
-            dst_dirent_name = "\t".join(formated_src_dirents)
-
         try:
-            res = seafile_api.copy_file(src_repo_id, src_parent_dir, src_dirent_name,
-                                        dst_repo_id, dst_parent_dir, dst_dirent_name,
+            res = seafile_api.copy_file(src_repo_id, src_parent_dir,
+                                        json.dumps(src_dirents),
+                                        dst_repo_id, dst_parent_dir,
+                                        json.dumps(src_dirents),
                                         username, need_progress=1, synchronous=0)
         except Exception as e:
             logger.error(e)

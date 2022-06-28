@@ -677,8 +677,11 @@ def create_default_library(request):
         dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
         for e in dirents:
             obj_name = e.obj_name
-            seafile_api.copy_file(sys_repo_id, '/', obj_name,
-                                  default_repo, '/', obj_name, username, 0)
+            seafile_api.copy_file(sys_repo_id, '/',
+                                  json.dumps([obj_name]),
+                                  default_repo, '/',
+                                  json.dumps([obj_name]),
+                                  username, 0)
     except SearpcError as e:
         logger.error(e)
         return

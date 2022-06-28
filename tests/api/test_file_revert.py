@@ -20,7 +20,8 @@ class FileRevertTest(BaseTestCase):
 
     def delete_file(self):
         seafile_api.del_file(self.repo_id, self.parent_dir,
-            self.file_name, self.username)
+                            json.dumps([self.file_name]),
+                            self.username)
 
     def get_trash_file_commit_id(self):
         deleted_file = seafile_api.get_deleted(self.repo_id, 0, '/', None)
