@@ -168,7 +168,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             "editorConfig": {
                 "callbackUrl": callback_url,
                 "lang": request.LANGUAGE_CODE,
-                "mode": can_edit,
+                "mode": 'edit' if can_edit else 'view',
                 "customization": {
                     "forcesave": ONLYOFFICE_FORCE_SAVE,
                 },
