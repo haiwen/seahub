@@ -119,7 +119,7 @@ MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'psd'),
-    DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
+    DOCUMENT: ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
     PDF: ('pdf', 'ai'),
