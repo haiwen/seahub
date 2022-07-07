@@ -56,16 +56,17 @@ from seahub.repo_tags.models import RepoTags
 logger = logging.getLogger(__name__)
 
 
-def get_share_link_info(fileshare):
+def get_share_link_info(fileshare, repo=None):
     data = {}
     token = fileshare.token
 
     repo_id = fileshare.repo_id
-    try:
-        repo = seafile_api.get_repo(repo_id)
-    except Exception as e:
-        logger.error(e)
-        repo = None
+    if not repo:
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            repo = None
 
     path = fileshare.path
     if path:
@@ -101,21 +102,21 @@ def get_share_link_info(fileshare):
     data['password'] = fileshare.get_password()
 
     data['can_edit'] = False
-    if repo and path != '/' and not data['is_dir']:
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        except Exception as e:
-            logger.error(e)
-            dirent = None
+    #if repo and path != '/' and not data['is_dir']:
+    #    try:
+    #        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+    #    except Exception as e:
+    #        logger.error(e)
+    #        dirent = None
 
-        if dirent:
-            try:
-                can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
-                data['can_edit'] = can_edit
-            except Exception as e:
-                logger.error(e)
-        else:
-            data['can_edit'] = False
+    #    if dirent:
+    #        try:
+    #            can_edit, error_msg = can_edit_file(obj_name, dirent.size, repo)
+    #            data['can_edit'] = can_edit
+    #        except Exception as e:
+    #            logger.error(e)
+    #    else:
+    #        data['can_edit'] = False
 
     return data
 
@@ -230,9 +231,17 @@ class ShareLinks(APIView):
 
                 repo_folder_permission_dict[repo_id] = permission
 
+        repo_dict = {}
+        for fileshare in fileshares:
+            repo_id = fileshare.repo_id
+            if repo_id not in repo_dict:
+                repo = seafile_api.get_repo(repo_id)
+                repo_dict[repo_id] = repo
+
         links_info = []
         for fs in fileshares:
-            link_info = get_share_link_info(fs)
+            repo = repo_dict.get(fileshare.repo_id, None)
+            link_info = get_share_link_info(fs, repo)
             link_info['repo_folder_permission'] = repo_folder_permission_dict.get(link_info['repo_id'], '')
             links_info.append(link_info)
 
