@@ -40,8 +40,8 @@ class FileContent extends React.Component {
     let isHidden = params.indexOf('?hidden=true') !== -1;
 
     return (
-      <div className="shared-file-view-body d-flex text-center">
-        <div className="image-file-view flex-1">
+      <div className="shared-file-view-body">
+        <div className="image-file-view">
           {prevImgPath && (
             <a href={prevImgURL} id="img-prev" title={gettext('you can also press ← ')}><span className="fas fa-chevron-left"></span></a>
           )}
