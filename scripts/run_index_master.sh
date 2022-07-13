@@ -47,15 +47,6 @@ function check_python_executable() {
     fi
 }
 
-function validate_seafile_data_dir () {
-    if [[ ! -d ${default_seafile_data_dir} ]]; then
-        echo "Error: there is no seafile server data directory."
-        echo "Have you run setup-seafile.sh before this?"
-        echo ""
-        exit 1;
-    fi
-}
-
 function prepare_log_dir() {
     logdir=${TOPDIR}/logs
     if ! [[ -d ${logsdir} ]]; then
@@ -70,7 +61,6 @@ function prepare_log_dir() {
 function before_start() {
     check_python_executable;
     prepare_log_dir;
-    validate_seafile_data_dir;
 
     export SEAFILE_CONF_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
