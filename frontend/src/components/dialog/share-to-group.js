@@ -124,8 +124,11 @@ class ShareToGroup extends React.Component {
     } else if (itemType === 'dir') {
       this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     }
-    if (this.props.isGroupOwnedRepo || !isPro) {
+    if (!isPro) {
       this.permissions = ['rw', 'r'];
+    }
+    if (this.props.isGroupOwnedRepo) {
+      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
     }
   }
 
