@@ -50,25 +50,29 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
 
 @cache_result
 def api_avatar_url(user, size=AVATAR_DEFAULT_SIZE):
+
     service_url = get_service_url()
     service_url = service_url.rstrip('/')
 
-    # when store avatars in the media directory
-    if not AVATAR_FILE_STORAGE:
-        # urlparse('https://192.157.12.3:89/demo')
-        # ParseResult(scheme='https', netloc='192.157.12.3:89', path='/demo', params='', query='', fragment='')
-        parse_result = urlparse(service_url)
-        service_url = '%s://%s' % (parse_result[0], parse_result[1])
+    # urlparse('https://192.157.12.3:89/demo')
+    # ParseResult(scheme='https', netloc='192.157.12.3:89', path='/demo', params='', query='', fragment='')
+    parse_result = urlparse(service_url)
+    service_url_without_sub_path = '%s://%s' % (parse_result[0], parse_result[1])
 
     avatar = get_primary_avatar(user, size=size)
-    if avatar:
-        url = avatar.avatar_url(size)
-        date_uploaded = avatar.date_uploaded
-        # /media/avatars/6/9/5011f01afac2a506b9544c5ce21a0a/resized/32/109af9901c0fd38ab39d018f5cd4baf6.png
-        return service_url + url, False, date_uploaded
-    else:
+
+    if not avatar:
         # /media/avatars/default.png
-        return service_url + get_default_avatar_url(), True, None
+        return service_url_without_sub_path + get_default_avatar_url(), True, None
+
+    url = avatar.avatar_url(size)
+    date_uploaded = avatar.date_uploaded
+
+    if not AVATAR_FILE_STORAGE:
+        # /media/avatars/6/9/5011f01afac2a506b9544c5ce21a0a/resized/32/109af9901c0fd38ab39d018f5cd4baf6.png
+        return service_url_without_sub_path + url, False, date_uploaded
+    else:
+        return service_url + url, False, date_uploaded
 
 @cache_result
 @register.simple_tag
