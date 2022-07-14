@@ -13,6 +13,7 @@
 
 {% block extra_style %}
 {% if filetype == 'Markdown' %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
     {% render_bundle 'sharedFileViewMarkdown' 'css' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' 'css' %}
