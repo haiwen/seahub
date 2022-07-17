@@ -151,7 +151,8 @@ class OCMProviderView(APIView):
                     'shareTypes': ['user'],
                 }
             }
-            return Response(result)
+
+        return Response(result)
 
 
 class SharesView(APIView):
