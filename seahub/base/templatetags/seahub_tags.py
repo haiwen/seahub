@@ -3,8 +3,8 @@
 import datetime as dt
 from datetime import datetime
 import re
-import time
 
+import pytz
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
@@ -21,7 +21,7 @@ from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFI
     EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT, \
     CONTACT_CACHE_PREFIX
 from seahub.cconvert import CConvert
-from seahub.po import TRANSLATION_MAP
+from seahub.settings import TIME_ZONE
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import normalize_cache_key, CMMT_DESC_PATT
 from seahub.utils.html import avoid_wrapping
@@ -282,7 +282,7 @@ def translate_commit_desc_escape(value):
 def translate_seahub_time(value, autoescape=None):
     if isinstance(value, int) or isinstance(value, int): # check whether value is int
         try:
-            val = datetime.fromtimestamp(value, tz=current_timezone) # convert timestamp to datetime
+            val = datetime.fromtimestamp(value) # convert timestamp to datetime
         except ValueError as e:
             return ""
     elif isinstance(value, datetime):
@@ -295,6 +295,9 @@ def translate_seahub_time(value, autoescape=None):
         translated_time = escape(translated_time)
 
     timestring = val.isoformat()
+    if val.tzinfo is None:
+        tzinfo = pytz.timezone(TIME_ZONE)
+        val = tzinfo.localize(val)
     titletime = DateFormat(val).format('r')
 
     time_with_tag = '<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'
