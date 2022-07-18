@@ -12,7 +12,7 @@ from django.utils import translation, formats
 from django.utils.dateformat import DateFormat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext, ungettext
-from django.utils.translation import pgettext
+from django.utils.timezone import get_current_timezone
 from django.utils.html import escape
 
 from seahub.base.accounts import User
@@ -28,6 +28,8 @@ from seahub.utils.html import avoid_wrapping
 from seahub.utils.file_size import get_file_size_unit
 
 register = template.Library()
+current_timezone = get_current_timezone()
+
 
 @register.filter(name='tsstr_sec')
 def tsstr_sec(value):
@@ -280,7 +282,7 @@ def translate_commit_desc_escape(value):
 def translate_seahub_time(value, autoescape=None):
     if isinstance(value, int) or isinstance(value, int): # check whether value is int
         try:
-            val = datetime.fromtimestamp(value) # convert timestamp to datetime
+            val = datetime.fromtimestamp(value, tz=current_timezone) # convert timestamp to datetime
         except ValueError as e:
             return ""
     elif isinstance(value, datetime):
