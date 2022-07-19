@@ -27,7 +27,7 @@ class Wiki extends Component {
       pathExist: true,
       closeSideBar: false,
       isViewFile: true,
-      isDataLoading: true,
+      isDataLoading: false,
       direntList: [],
       content: '',
       permission: '',
@@ -52,39 +52,43 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.loadWikiData(initialPath);
-  }
-
-  loadWikiData = (initialPath) => {
     this.loadSidePanel(initialPath);
-
-    if (isDir === 'None') {
-      if (initialPath === '/home.md') {
-        this.showDir('/');
-      } else {
-        this.setState({pathExist: false});
-        let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
-        window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
-      }
-    } else if (isDir === 'True') {
-      this.showDir(initialPath);
-    } else if (isDir === 'False') {
-      this.showFile(initialPath);
-    }
+    this.loadWikiData(initialPath);
   }
 
   loadSidePanel = (initialPath) => {
     if (hasIndex) {
       this.loadIndexNode();
-    } else {
-      if (isDir === 'None') {
-        initialPath = '/';
-        this.loadNodeAndParentsByPath('/');
-      } else  {
-        this.loadNodeAndParentsByPath(initialPath);
-      }
+      return;
     }
 
+    // load dir list
+    initialPath = isDir === 'None' ? '/' : initialPath;
+    this.loadNodeAndParentsByPath(initialPath);
+  }
+
+  loadWikiData = (initialPath) => {
+
+    if (isDir === 'False') {
+      this.showFile(initialPath);
+      return;
+    }
+
+    if (isDir === 'True') {
+      this.showDir(initialPath);
+      return;
+    }
+    
+    if (isDir === 'None' && initialPath === '/home.md') {
+      this.showDir('/');
+      return;
+    }
+
+    if (isDir === 'None') {
+      this.setState({pathExist: false});
+      let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
+      window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
+    }
   }
 
   loadIndexNode = () => {
