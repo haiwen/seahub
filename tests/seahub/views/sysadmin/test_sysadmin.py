@@ -5,7 +5,6 @@ from mock import patch
 from django.urls import reverse
 
 from seahub.base.accounts import User
-from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE)
 from seahub.test_utils import BaseTestCase
 from seahub.utils.ms_excel import write_xls as real_write_xls
 
@@ -25,12 +24,12 @@ class BatchUserMakeAdminTest(BaseTestCase):
             }, HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
 
-        old_passwd = self.user.enc_password
+        old_passwd = self.user.enc_encrypt
         self.assertContains(resp, '"success": true')
 
         u = User.objects.get(email=self.user.username)
         assert u.is_staff is True
-        assert u.enc_password == old_passwd
+        assert u.enc_encrypt == old_passwd
 
 
 # class UserMakeAdminTest(TestCase, Fixtures):
@@ -44,12 +43,12 @@ class BatchUserMakeAdminTest(BaseTestCase):
 #             reverse('user_make_admin', args=[self.user.id])
 #         )
 
-#         old_passwd = self.user.enc_password
+#         old_passwd = self.user.enc_encrypt
 #         self.assertEqual(302, resp.status_code)
 
 #         u = User.objects.get(email=self.user.username)
 #         assert u.is_staff is True
-#         assert u.enc_password == old_passwd
+#         assert u.enc_encrypt == old_passwd
 
 
 class UserRemoveTest(BaseTestCase):

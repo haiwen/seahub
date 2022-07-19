@@ -65,7 +65,7 @@ class PasswordResetTokenGenerator(object):
             login_dt = user_last_login.last_login
         login_timestamp = login_dt.replace(microsecond=0, tzinfo=None)
 
-        value = (six.text_type(user.id) + user.enc_password +
+        value = (six.text_type(user.id) + user.enc_encrypt +
                  six.text_type(login_timestamp) + six.text_type(timestamp))
         hash = salted_hmac(key_salt, value).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash)

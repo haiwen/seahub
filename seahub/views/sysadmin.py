@@ -795,12 +795,12 @@ def batch_add_user_example(request):
                 'Login ID']
         for i in range(5):
             username = "test" + str(i) + "@example.com"
-            password = "123456"
+            pd = "123456"
             name = "test" + str(i)
             role = "default"
             quota = "1000"
             login_id = "login id " + str(i)
-            data_list.append([username, password, name, role, quota, login_id])
+            data_list.append([username, pd, name, role, quota, login_id])
     else:
         head = [_('Email'),
                 _('Password'),
@@ -808,10 +808,10 @@ def batch_add_user_example(request):
                 _('Space Quota') + '(MB, ' + _('Optional') + ')']
         for i in range(5):
             username = "test" + str(i) + "@example.com"
-            password = "123456"
+            pd = "123456"
             name = "test" + str(i)
             quota = "1000"
-            data_list.append([username, password, name, quota])
+            data_list.append([username, pd, name, quota])
 
     wb = write_xls('sample', head, data_list)
     if not wb:

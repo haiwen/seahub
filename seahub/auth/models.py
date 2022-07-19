@@ -14,7 +14,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
-UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
 
 def get_hexdigest(algorithm, salt, raw_password):

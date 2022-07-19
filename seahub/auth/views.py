@@ -27,7 +27,7 @@ from seahub.auth.tokens import default_token_generator
 from seahub.auth.utils import (
     get_login_failed_attempts, incr_login_failed_attempts,
     clear_login_failed_attempts)
-from seahub.base.accounts import User, UNUSABLE_PASSWORD
+from seahub.base.accounts import User, UNUSABLE_ENCRYPT
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
@@ -414,7 +414,7 @@ def password_change(request, template_name='registration/password_change_form.ht
             password_change_form = SetContactEmailPasswordForm
             template_name = 'registration/password_set_form.html'
 
-        elif request.user.enc_password == UNUSABLE_PASSWORD:
+        elif request.user.enc_encrypt == UNUSABLE_ENCRYPT:
             # set password only
             password_change_form = SetPasswordForm
             template_name = 'registration/password_set_form.html'

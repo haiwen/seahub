@@ -142,8 +142,8 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
-HTTP_440_REPO_PASSWD_REQUIRED = 440
-HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
+HTTP_440_REPO_ENCRYPT_REQUIRED = 440
+HTTP_441_REPO_ENCRYPT_MAGIC_REQUIRED = 441
 HTTP_443_ABOVE_QUOTA = 443
 HTTP_520_OPERATION_FAILED = 520
 
@@ -1266,7 +1266,7 @@ def check_set_repo_password(request, repo):
     if repo.encrypted:
         password = request.POST.get('password', default=None)
         if not password:
-            return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
+            return api_error(HTTP_440_REPO_ENCRYPT_REQUIRED,
                              'Library password is needed.')
 
         return set_repo_password(request, repo, password)
@@ -1334,7 +1334,7 @@ class Repo(APIView):
         if op == 'checkpassword':
             magic = request.GET.get('magic', default=None)
             if not magic:
-                return api_error(HTTP_441_REPO_PASSWD_MAGIC_REQUIRED,
+                return api_error(HTTP_441_REPO_ENCRYPT_MAGIC_REQUIRED,
                                  'Library password magic is needed.')
 
             if not check_folder_permission(request, repo_id, '/'):

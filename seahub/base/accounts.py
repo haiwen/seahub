@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 ANONYMOUS_EMAIL = 'Anonymous'
 
-UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
+UNUSABLE_ENCRYPT = '!'  # This will never be a valid hash
 
 
 class UserManager(object):
@@ -100,7 +100,7 @@ class UserManager(object):
 
         user = User(emailuser.email)
         user.id = emailuser.id
-        user.enc_password = emailuser.password
+        user.enc_encrypt = emailuser.password
         user.is_staff = emailuser.is_staff
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime
@@ -348,12 +348,12 @@ class User(object):
 
             result_code = ccnet_threaded_rpc.update_emailuser(source,
                                                               emailuser.id,
-                                                              self.password,
+                                                              self.encrypt,
                                                               int(self.is_staff),
                                                               int(self.is_active))
         else:
             result_code = ccnet_threaded_rpc.add_emailuser(self.username,
-                                                           self.password,
+                                                           self.encrypt,
                                                            int(self.is_staff),
                                                            int(self.is_active))
         # -1 stands for failed; 0 stands for success
@@ -433,11 +433,11 @@ class User(object):
         messages = []
         return messages
 
-    def set_password(self, raw_password):
-        if raw_password is None:
+    def set_password(self, raw_encrypt):
+        if raw_encrypt is None:
             self.set_unusable_password()
         else:
-            self.password = '%s' % raw_password
+            self.encrypt = '%s' % raw_encrypt
 
         # clear web api and repo sync token
         # when user password change
@@ -446,9 +446,9 @@ class User(object):
         except Exception as e:
             logger.error(e)
 
-    def check_password(self, raw_password):
+    def check_password(self, raw_encrypt):
         """
-        Returns a boolean of whether the raw_password was correct. Handles
+        Returns a boolean of whether the raw_encrypt was correct. Handles
         encryption formats behind the scenes.
         """
         # Backwards-compatibility check. Older passwords won't include the
@@ -456,13 +456,13 @@ class User(object):
 
         # if '$' not in self.password:
         #     is_correct = (self.password == \
-        #                       get_hexdigest('sha1', '', raw_password))
+        #                       get_hexdigest('sha1', '', raw_encrypt))
         #     return is_correct
-        return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_password) == 0)
+        return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_encrypt) == 0)
 
     def set_unusable_password(self):
         # Sets a value that will never be a valid hash
-        self.password = UNUSABLE_PASSWORD
+        self.encrypt = UNUSABLE_ENCRYPT
 
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
@@ -546,7 +546,7 @@ class AuthBackend(object):
 
         user = User(emailuser.email)
         user.id = emailuser.id
-        user.enc_password = emailuser.password
+        user.enc_encrypt = emailuser.password
         user.is_staff = emailuser.is_staff
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime

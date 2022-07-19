@@ -10,7 +10,7 @@ PASSWORD_HASH_KEY = getattr(settings, 'PASSWORD_SESSION_PASSWORD_HASH_KEY', 'pas
 
 def get_password_hash(user):
     """Returns a string of crypted password hash"""
-    password = user.enc_password or ''
+    password = user.enc_encrypt or ''
     return md5(
         md5(password.encode()).hexdigest().encode() + settings.SECRET_KEY.encode()
     ).hexdigest()

@@ -23,8 +23,8 @@ KEY_SUB_LIB = "sub_lib"
 VAL_SUB_LIB_ENABLED = "1"
 VAL_SUB_LIB_DISABLED = "0"
 
-KEY_FORCE_PASSWD_CHANGE = "force_passwd_change"
-VAL_FORCE_PASSWD_CHANGE = "1"
+KEY_FORCE_PD_CHANGE = "force_passwd_change"
+VAL_FORCE_PD_CHANGE = "1"
 
 KEY_FORCE_2FA = "force_2fa"
 VAL_FORCE_2FA = "1"
@@ -210,17 +210,17 @@ class UserOptionsManager(models.Manager):
         """
         try:
             r = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_FORCE_PASSWD_CHANGE)
-            return r.option_val == VAL_FORCE_PASSWD_CHANGE
+                email=username, option_key=KEY_FORCE_PD_CHANGE)
+            return r.option_val == VAL_FORCE_PD_CHANGE
         except UserOptions.DoesNotExist:
             return False
 
     def set_force_passwd_change(self, username):
-        return self.set_user_option(username, KEY_FORCE_PASSWD_CHANGE,
-                                    VAL_FORCE_PASSWD_CHANGE)
+        return self.set_user_option(username, KEY_FORCE_PD_CHANGE,
+                                    VAL_FORCE_PD_CHANGE)
 
     def unset_force_passwd_change(self, username):
-        return self.unset_user_option(username, KEY_FORCE_PASSWD_CHANGE)
+        return self.unset_user_option(username, KEY_FORCE_PD_CHANGE)
 
     def set_force_2fa(self, username):
         return self.set_user_option(username, KEY_FORCE_2FA, VAL_FORCE_2FA)

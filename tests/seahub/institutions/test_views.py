@@ -80,7 +80,7 @@ class UserToggleStatusTest(InstTestBase):
         self.login_as(self.user)
         self.assertEqual(len(mail.outbox), 0)
 
-        old_passwd = self.admin.enc_password
+        old_passwd = self.admin.enc_encrypt
         resp = self.client.post(
             reverse('institutions:user_toggle_status', args=[self.admin.username]),
             {'s': 1},
@@ -91,7 +91,7 @@ class UserToggleStatusTest(InstTestBase):
 
         u = User.objects.get(email=self.admin.username)
         assert u.is_active is True
-        assert u.enc_password == old_passwd
+        assert u.enc_encrypt == old_passwd
         self.assertEqual(len(mail.outbox), 1)
 
     @override_settings(
@@ -101,7 +101,7 @@ class UserToggleStatusTest(InstTestBase):
     def test_can_deactivate(self):
         self.login_as(self.user)
 
-        old_passwd = self.admin.enc_password
+        old_passwd = self.admin.enc_encrypt
         resp = self.client.post(
             reverse('institutions:user_toggle_status', args=[self.admin.username]),
             {'s': 0},
@@ -112,7 +112,7 @@ class UserToggleStatusTest(InstTestBase):
 
         u = User.objects.get(email=self.admin.username)
         assert u.is_active is False
-        assert u.enc_password == old_passwd
+        assert u.enc_encrypt == old_passwd
 
 
 class UserIsAdminTest(InstTestBase):
