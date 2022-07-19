@@ -1353,6 +1353,26 @@ def view_file_via_shared_dir(request, fileshare):
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
         return render_error(request, _('Permission denied'))
 
+    if not request.user.is_authenticated:
+        username = ANONYMOUS_EMAIL
+    else:
+        username = request.user.username
+
+    # check file lock info
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, real_path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked = False
+        locked_by_me = False
+
+    locked_by_online_office = if_locked_by_online_office(repo_id, real_path)
+
+    # get share link permission
+    can_download = fileshare.get_permissions()['can_download']
+    can_edit = fileshare.get_permissions()['can_edit'] and \
+            (not is_locked or locked_by_online_office)
+
     # download shared file
     if request.GET.get('dl', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
@@ -1410,7 +1430,8 @@ def view_file_via_shared_dir(request, fileshare):
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
             onlyoffice_dict = get_onlyoffice_dict(request, username,
-                    repo_id, real_path)
+                    repo_id, real_path,
+                    can_edit=can_edit, can_download=can_download)
 
             if onlyoffice_dict:
 
