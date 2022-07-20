@@ -1220,3 +1220,25 @@ a.table-sort-op:hover {
     box-shadow: 0 0 6px #ccc;
     text-align: center;
 }
+
+#wiki-file-content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 20%;
+    top: 90px;
+    z-index: 2;
+    background: #fff;
+}
+
+@media (max-width: 767px) {
+    #wiki-file-content {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        top: 90px;
+        z-index: 2;
+        background: #fff;
+    }
+}

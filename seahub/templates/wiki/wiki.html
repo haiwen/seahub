@@ -16,6 +16,10 @@
 
 {% block sub_title %} {{filename}} - {% endblock %}
 
+{% block extra_content %}
+<div id="wiki-file-content" class="{{ LANGUAGE_CODE }}"></div>
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
     window.wiki = {
