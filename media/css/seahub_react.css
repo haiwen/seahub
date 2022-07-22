@@ -1229,6 +1229,8 @@ a.table-sort-op:hover {
     top: 90px;
     z-index: 2;
     background: #fff;
+    padding: 10px 30px 20px;
+    overflow: auto;
 }
 
 @media (max-width: 767px) {
