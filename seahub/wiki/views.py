@@ -1,22 +1,27 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import re
 import logging
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
 import posixpath
 
-import seaserv
+import markdown
+import lxml.html
 from seaserv import seafile_api
 from django.urls import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.utils.safestring import mark_safe
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
-from seahub.auth.decorators import login_required
 from seahub.share.models import FileShare
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
-from seahub.utils import get_service_url, get_file_type_and_ext, render_permission_error
+from seahub.utils import get_file_type_and_ext, render_permission_error, \
+     gen_inner_file_get_url, render_error
+from seahub.views.file import send_file_access_msg
 from seahub.utils.file_types import *
+from seahub.settings import SERVICE_URL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -88,6 +93,52 @@ def slug(request, slug, file_path="home.md"):
 
     repo = seafile_api.get_repo(wiki.repo_id)
 
+    file_content, latest_contributor, last_modified = '', '', 0
+    if is_dir is False:
+        send_file_access_msg(request, repo, file_path, 'web')
+
+        file_name = os.path.basename(file_path)
+        token = seafile_api.get_fileserver_access_token(
+            repo.repo_id, file_id, 'download', request.user.username, 'False')
+        if not token:
+            return render_error(request, _('Internal Server Error'))
+
+        url = gen_inner_file_get_url(token, file_name)
+        try:
+            file_response = urllib.request.urlopen(url).read().decode()
+        except Exception as e:
+            logger.error(e)
+            return render_error(request, _('Internal Server Error'))
+
+        # Convert a markdown string to HTML
+        try:
+            html_content = markdown.markdown(file_response)
+        except Exception as e:
+            logger.error(e)
+            return render_error(request, _('Internal Server Error'))
+
+        # Parse the html and replace image url to wiki mode
+        html_doc = lxml.html.fromstring(html_content)
+        img_elements = html_doc.xpath('//img')   # Get the <img> elements
+        img_url_re = re.compile(r'^%s/lib/%s/file.*raw=1$' % (SERVICE_URL, repo.id))
+        for img in img_elements:
+            img_url = img.attrib.get('src', '')
+            if img_url_re.match(img_url) is not None:
+                img_path = img_url[img_url.find('/file')+5:img_url.find('?')]
+                img_new_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL, slug, img_path)
+                html_content = html_content.replace(img_url, img_new_url)
+
+        file_content = mark_safe(html_content)
+
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo.repo_id, file_path)
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = '', 0
+        except Exception as e:
+            logger.warning(e)
+
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',
@@ -97,6 +148,9 @@ def slug(request, slug, file_path="home.md"):
         "user_can_write": user_can_write,
         "file_path": file_path,
         "filename": os.path.splitext(os.path.basename(file_path))[0],
+        "file_content": file_content,
+        "latest_contributor": latest_contributor,
+        "last_modified": last_modified,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,

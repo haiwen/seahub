@@ -17,7 +17,9 @@
 {% block sub_title %} {{filename}} - {% endblock %}
 
 {% block extra_content %}
-<div id="wiki-file-content" class="{{ LANGUAGE_CODE }}"></div>
+{% if not is_dir %}
+<div id="wiki-file-content" class="{{ LANGUAGE_CODE }}">{{ file_content }}</div>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
