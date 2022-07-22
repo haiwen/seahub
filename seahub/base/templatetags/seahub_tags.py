@@ -3,8 +3,8 @@
 import datetime as dt
 from datetime import datetime
 import re
-import time
 
+import pytz
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
@@ -12,7 +12,7 @@ from django.utils import translation, formats
 from django.utils.dateformat import DateFormat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ugettext, ungettext
-from django.utils.translation import pgettext
+from django.utils.timezone import get_current_timezone
 from django.utils.html import escape
 
 from seahub.base.accounts import User
@@ -21,13 +21,15 @@ from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFI
     EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT, \
     CONTACT_CACHE_PREFIX
 from seahub.cconvert import CConvert
-from seahub.po import TRANSLATION_MAP
+from seahub.settings import TIME_ZONE
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import normalize_cache_key, CMMT_DESC_PATT
 from seahub.utils.html import avoid_wrapping
 from seahub.utils.file_size import get_file_size_unit
 
 register = template.Library()
+current_timezone = get_current_timezone()
+
 
 @register.filter(name='tsstr_sec')
 def tsstr_sec(value):
@@ -293,6 +295,9 @@ def translate_seahub_time(value, autoescape=None):
         translated_time = escape(translated_time)
 
     timestring = val.isoformat()
+    if val.tzinfo is None:
+        tzinfo = pytz.timezone(TIME_ZONE)
+        val = tzinfo.localize(val)
     titletime = DateFormat(val).format('r')
 
     time_with_tag = '<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'

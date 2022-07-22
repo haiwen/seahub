@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../utils/constants';
-import { IconButton, ButtonGroup, CollabUsersButton } from '@seafile/seafile-editor/dist/components/topbar-component/editor-toolbar';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
-import FileInfo from '@seafile/seafile-editor/dist/components/topbar-component/file-info';
+import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
+import ButtonGroup from './button-group';
+import ButtonItem from './button-item';
+import CollabUsersButton from './collab-users-button';
+import MoreMenu from './more-menu';
+import FileInfo from './file-info';
+
+import '../css/header-toolbar.css';
 
 const { seafileCollabServer } = window.app.config;
 const { canDownloadFile } = window.app.pageOptions;
@@ -33,78 +37,7 @@ const propTypes = {
   toggleLockFile: PropTypes.func.isRequired,
 };
 
-const MoreMenuPropTypes = {
-  readOnly: PropTypes.bool.isRequired,
-  openDialogs: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  editorMode: PropTypes.string.isRequired,
-  isSmallScreen: PropTypes.bool,
-  toggleShareLinkDialog: PropTypes.func,
-  openParentDirectory: PropTypes.func,
-  showFileHistory: PropTypes.bool,
-  toggleHistory: PropTypes.func,
-};
-
-class MoreMenu extends React.PureComponent {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      tooltipOpen: false,
-      dropdownOpen:false
-    };
-  }
-
-  tooltipToggle = () => {
-    this.setState({ tooltipOpen: !this.state.tooltipOpen });
-  }
-
-  dropdownToggle = () => {
-    this.setState({ dropdownOpen:!this.state.dropdownOpen });
-  }
-
-  downloadFile = () => {
-    location.href = '?dl=1';
-  }
-
-  render() {
-    const editorMode = this.props.editorMode;
-    const isSmall = this.props.isSmallScreen;
-    return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1">
-        <DropdownToggle id="moreButton" aria-label={gettext('More Operations')}>
-          <i className="fa fa-ellipsis-v"/>
-          <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target="moreButton" placement='bottom' isOpen={this.state.tooltipOpen}>{gettext('More')}
-          </Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className="drop-list" right={true}>
-          {(!this.props.readOnly && editorMode === 'rich') &&
-            <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'plain')}>{gettext('Switch to plain text editor')}</DropdownItem>}
-          {(!this.props.readOnly && editorMode === 'plain') &&
-            <DropdownItem onMouseDown={this.props.onEdit.bind(this, 'rich')}>{gettext('Switch to rich text editor')}</DropdownItem>}
-          {!isSmall && this.props.showFileHistory &&
-            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>}
-          {(this.props.openDialogs && editorMode === 'rich') &&
-            <DropdownItem onMouseDown={this.props.openDialogs.bind(this, 'help')}>{gettext('Help')}</DropdownItem>
-          }
-          {isSmall && <DropdownItem onMouseDown={this.props.openParentDirectory}>{gettext('Open parent directory')}</DropdownItem>}
-          {isSmall && canGenerateShareLink && <DropdownItem onMouseDown={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
-          {(isSmall && this.props.showFileHistory) &&
-            <DropdownItem onMouseDown={this.props.toggleHistory}>{gettext('History')}</DropdownItem>
-          }
-          {isSmall && canDownloadFile &&
-            <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>
-          }
-        </DropdownMenu>
-      </Dropdown>
-    );
-  }
-}
-
-MoreMenu.propTypes = MoreMenuPropTypes;
-
-
-class MarkdownViewerToolbar extends React.Component {
+class HeaderToolbar extends React.Component {
 
   constructor(props) {
     super(props);
@@ -167,27 +100,27 @@ class MarkdownViewerToolbar extends React.Component {
                 />
               }
               <ButtonGroup>
-                <IconButton text={gettext('Open parent directory')} id={'parentDirectory'}
+                <ButtonItem text={gettext('Open parent directory')} id={'parentDirectory'}
                   icon={'fa fa-folder-open'} onMouseDown={this.props.openParentDirectory}/>
                 {(canLockUnlockFile && !isLocked) &&
-                  <IconButton id="lock-unlock-file" icon='fa fa-lock' text={gettext('Lock')} onMouseDown={this.props.toggleLockFile}/>
+                  <ButtonItem id="lock-unlock-file" icon='fa fa-lock' text={gettext('Lock')} onMouseDown={this.props.toggleLockFile}/>
                 }
                 {(canLockUnlockFile && lockedByMe) &&
-                  <IconButton id="lock-unlock-file" icon='fa fa-unlock' text={gettext('Unlock')} onMouseDown={this.props.toggleLockFile}/>
+                  <ButtonItem id="lock-unlock-file" icon='fa fa-unlock' text={gettext('Unlock')} onMouseDown={this.props.toggleLockFile}/>
                 }
                 {canGenerateShareLink &&
-                  <IconButton id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
+                  <ButtonItem id={'shareBtn'} text={gettext('Share')} icon={'fa fa-share-alt'}
                     onMouseDown={this.props.toggleShareLinkDialog}/>
                 }
                 {saving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'} disabled={!contentChanged}
+                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'} disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
                 {canDownloadFile && (
-                  <IconButton
+                  <ButtonItem
                     id="download-file"
                     icon="fa fa-download"
                     text={gettext('Download')}
@@ -195,7 +128,7 @@ class MarkdownViewerToolbar extends React.Component {
                   />
                 )}
                 {this.props.fileInfo.permission == 'rw' &&
-                <IconButton
+                <ButtonItem
                   id="open-via-client"
                   icon="sf3-font sf3-font-desktop"
                   text={gettext('Open via Client')}
@@ -227,7 +160,7 @@ class MarkdownViewerToolbar extends React.Component {
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
+                  <ButtonItem text={gettext('Save')} id={'saveButton'} icon={'fa fa-save'}  disabled={!contentChanged}
                     onMouseDown={window.seafileEditor && window.seafileEditor.onRichEditorSave} isActive={contentChanged}/>
                 }
               </ButtonGroup>
@@ -265,7 +198,7 @@ class MarkdownViewerToolbar extends React.Component {
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} disabled={!contentChanged} isActive={contentChanged} />
+                  <ButtonItem id={'saveButton'} text={gettext('Save')} icon={'fa fa-save'} onMouseDown={window.seafileEditor && window.seafileEditor.onPlainEditorSave} disabled={!contentChanged} isActive={contentChanged} />
                 }
               </ButtonGroup>
               <MoreMenu
@@ -286,7 +219,7 @@ class MarkdownViewerToolbar extends React.Component {
                   <button type={'button'} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button>
                   :
-                  <IconButton
+                  <ButtonItem
                     id={'saveButton'}
                     text={gettext('Save')}
                     icon={'fa fa-save'}
@@ -312,6 +245,6 @@ class MarkdownViewerToolbar extends React.Component {
   }
 }
 
-MarkdownViewerToolbar.propTypes = propTypes;
+HeaderToolbar.propTypes = propTypes;
 
-export default MarkdownViewerToolbar;
+export default HeaderToolbar;

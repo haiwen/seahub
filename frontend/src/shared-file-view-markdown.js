@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import { serviceURL, mediaUrl } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import toaster from './components/toast';
 
 const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;
 
 class SharedFileViewMarkdown extends React.Component {
   render() {
-    return <SharedFileView content={<FileContent />} />;
+    return <SharedFileView content={<FileContent />} fileType="md" />;
   }
 }
 
@@ -65,6 +65,13 @@ class FileContent extends React.Component {
     return Utils.changeMarkdownNodes(value, this.changeImageURL);
   }
 
+  updateForNoOutline = () => {
+    const $outline = document.querySelector('.md-view .seafile-markdown-outline');
+    const $main = document.querySelector('.md-view .article');
+    $outline.className += ' d-none';
+    $main.className += ' article-no-outline';
+  }
+
   render() {
     if (err) {
       return <SharedFileViewTip />;
@@ -76,11 +83,13 @@ class FileContent extends React.Component {
 
     return (
       <div className="shared-file-view-body">
-        <div className="md-view">
+        <div className="md-view h-100">
           <MarkdownViewer
             scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
             markdownContent={this.state.markdownContent}
-            showTOC={false}
+            showTOC={true}
+            updateForNoOutline={this.updateForNoOutline}
+            activeTitleIndex={''}
             serviceURL={serviceURL}
             sharedToken={sharedToken}
             repoID={repoID}

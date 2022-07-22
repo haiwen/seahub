@@ -1,8 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 import os
-import logging
 import json
+import logging
 
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
@@ -242,9 +242,11 @@ def save_shared_link(request):
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
-    seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username,
-                          need_progress=0)
+    seafile_api.copy_file(src_repo_id, src_path,
+                          json.dumps([obj_name]),
+                          dst_repo_id, dst_path,
+                          json.dumps([new_obj_name]),
+                          username, need_progress=0)
 
     messages.success(request, _('Successfully saved.'))
     return HttpResponseRedirect(next_page)

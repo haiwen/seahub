@@ -1,5 +1,5 @@
 import React from 'react';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { mediaUrl } from '../../utils/constants';
 
 import '../../css/md-file-view.css';

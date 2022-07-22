@@ -138,7 +138,7 @@ class ViewLibFileTest(BaseTestCase):
         r = requests.get(raw_path)
         self.assertEqual(200, r.status_code)
         r = requests.get(raw_path)
-        self.assertEqual(400, r.status_code)
+        self.assertEqual(403, r.status_code)
 
     def test_img_file(self):
         self.login_as(self.user)
@@ -162,7 +162,7 @@ class ViewLibFileTest(BaseTestCase):
         r = requests.get(raw_path)
         self.assertEqual(200, r.status_code)
         r = requests.get(raw_path)
-        self.assertEqual(400, r.status_code)
+        self.assertEqual(403, r.status_code)
 
     def test_video_file(self):
         self.login_as(self.user)

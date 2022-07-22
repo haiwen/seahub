@@ -45,7 +45,7 @@ def get_file_info_by_token(token):
     key = generate_access_token_cache_key(token)
     value = cache.get(key)
     if not value:
-        logger.error('No wopi cache value when first get %s' % key)
+        logger.info('No wopi cache value when first get %s' % key)
         value = cache.get(key)
 
     return value if value else None

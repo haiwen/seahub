@@ -15,8 +15,8 @@
       avatar: '{% avatar username 16 %}'
     },
     noQuota: {% if no_quota %} true {% else %} false {% endif %},
-    {% if max_upload_file_size %}
-    maxUploadFileSize: "{{max_upload_file_size|filesizeformat}}",
+    {% if max_upload_file_size > 0 %}
+    maxUploadFileSize: {{max_upload_file_size}},
     {% endif %}
     token: "{{uploadlink.token}}",
     repoID: "{{uploadlink.repo_id}}",

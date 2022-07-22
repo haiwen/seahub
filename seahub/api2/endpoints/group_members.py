@@ -28,6 +28,7 @@ from seahub.base.accounts import User
 from seahub.group.signals import add_user_to_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
+from seahub.profile.models import Profile
 
 from .utils import api_check_group
 
@@ -456,10 +457,24 @@ class GroupMembersImport(APIView):
             org_id = request.user.org.org_id
 
         for email in emails_list:
-            email_name = email2nickname(email)
+
+            user_not_found = False
+
             try:
                 User.objects.get(email=email)
             except User.DoesNotExist:
+                user_not_found = True
+
+            if user_not_found:
+                email = Profile.objects.get_username_by_contact_email(email)
+                try:
+                    User.objects.get(email=email)
+                    user_not_found = False
+                except User.DoesNotExist:
+                    user_not_found = True
+
+            email_name = email2nickname(email)
+            if user_not_found:
                 result['failed'].append({
                     'email': email,
                     'email_name': email_name,

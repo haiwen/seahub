@@ -47,15 +47,24 @@
   overflow: auto;
 }
 
-.shared-file-view-body .md-view {
-  min-height: 400px;
-  padding: 70px 75px;
-  border: 1px solid #ccc;
-  margin: 0 auto;
-  box-shadow: 0 0 6px #ccc;
-  width: 950px;
+.shared-file-view-body .article {
+  min-height: calc(100% - 15px);
   background: #fff;
-  overflow: auto;
+  padding: 40px 60px;
+  margin: 0 340px 15px 40px;
+  border: 1px solid #e6e6dd;
+}
+
+.shared-file-view-body .article-no-outline {
+  max-width: 950px;
+  margin: 0 auto 15px;
+}
+
+.shared-file-view-body .seafile-markdown-outline {
+  width: 300px;
+  top: 145px;
+  bottom: 30px;
+  height: auto;
 }
 
 @media (max-width: 991.98px) {

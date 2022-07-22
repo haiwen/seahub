@@ -1,0 +1,105 @@
+.dirent-table-container tr {
+  border: none;
+}
+
+.dirent-table-container th,
+.dirent-table-container td {
+  padding: 5px 3px;
+  border: none;
+}
+
+.dirent-table-container th {
+  font-size: 13px;
+  text-align: left;
+  font-weight: normal;
+  color: #9c9c9c;
+}
+
+.dirent-table-container td {
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}
+
+.dirent-table-container .file-tag-container th {
+  vertical-align: top;
+  list-style: none;
+}
+
+.dirent-table-container .file-tag-container .tag-list {
+  list-style: none;
+}
+
+.file-tag-list li {
+  display: flex;
+  align-items: center;
+  max-width: 180px;
+}
+
+.file-tag-list .file-tag-item {
+  margin: .25rem 0;
+  padding: 0 .5rem;
+  width: max-content;
+  cursor: pointer;
+  background-color: #eee;
+  border-radius: 1rem;
+}
+
+.file-tag-list .file-tag-item .file-tag {
+  width: 12px;
+  height: 12px;
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+}
+
+.file-tag-list .tag-name {
+  display: inline-block;
+  margin-left: 5px;
+  width: 80px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.file-related-files th {
+  vertical-align: top;
+}
+
+.file-related-files td i {
+  padding: 0;
+}
+
+.file-related-files td ul {
+  list-style: none;
+  max-height: 100px;
+  overflow-y: scroll;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-related-files td ul li {
+  margin-bottom: 5px;
+}
+
+.file-related-files ul li a,
+.list-related-file-table tr td a {
+  color: #333;
+}
+
+.list-related-file-body {
+  min-height: 200px;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+.detail-container .tab-content {
+  height: calc(100% - 73px);
+}
+
+.detail-container .nav-item .nav-link, .detail-container .nav-item .nav-link i {
+  margin: 0 auto;
+}

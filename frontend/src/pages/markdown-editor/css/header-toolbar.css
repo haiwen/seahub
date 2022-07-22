@@ -1,0 +1,25 @@
+.seafile-btn-view-review {
+  display: flex;
+  align-items: center;
+}
+
+.seafile-btn-view-review .tag:hover {
+  cursor: pointer;
+}
+
+.topbar-btn-container {
+  display: flex;
+  align-items: center;
+}
+
+.seafile-btn-add-review {
+  margin-right: 10px;
+}
+
+.btn-new-draft {
+  margin-right: 10px;
+}
+
+.collab-users-dropdown.dropdown {
+  margin-right: 6px;
+}

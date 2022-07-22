@@ -45,7 +45,8 @@ class RepoTrashTest(BaseTestCase):
 
         # delete a file first
         seafile_api.del_file(self.repo_id, '/',
-                self.file_name, self.user_name)
+                             json.dumps([self.file_name]),
+                             self.user_name)
 
         self.login_as(self.user)
 
@@ -76,7 +77,8 @@ class RepoTrashTest(BaseTestCase):
 
         # delete a file first
         seafile_api.del_file(self.repo_id, '/',
-                self.file_name, self.user_name)
+                             json.dumps([self.file_name]),
+                             self.user_name)
 
         self.login_as(self.user)
 
@@ -121,7 +123,9 @@ class RepoTrashTest(BaseTestCase):
             repo_id=repo_id, parent_dir='/', filename=file_name, username=self.user_name)
 
         # delete a file first
-        seafile_api.del_file(repo_id, '/', file_name, self.user_name)
+        seafile_api.del_file(repo_id, '/',
+                             json.dumps([file_name]),
+                             self.user_name)
 
         # get trash item count
         self.login_as(self.user)

@@ -7,7 +7,7 @@
 # gergely fodor <fodi666@gmail.com>, 2016
 # Gergely Kiss <mail.gery@gmail.com>, 2013
 # imwhatiam <imwhatiam123@gmail.com>, 2018
-# Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018
+# Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022
 # Gergely Kiss <mail.gery@gmail.com>, 2013
 # Mate Ory <orymate@ubuntu.com>, 2013
 # Mátyás Demeter <mathias.demeter@gmail.com>, 2014
@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 10:13+0800\n"
-"PO-Revision-Date: 2022-01-19 07:23+0000\n"
-"Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
+"PO-Revision-Date: 2013-10-25 07:03+0000\n"
+"Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:554
+#: seahub/api2/endpoints/share_links.py:626
 msgid "There is an associated published library."
 msgstr ""
 
@@ -157,8 +157,8 @@ msgstr "%s érvénytelen e-mail cím."
 #: seahub/api2/endpoints/admin/shares.py:268
 #: seahub/api2/endpoints/dir_shared_items.py:346
 #: seahub/api2/endpoints/dir_shared_items.py:459
-#: seahub/api2/endpoints/group_owned_libraries.py:942
-#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/group_owned_libraries.py:944
+#: seahub/api2/endpoints/group_owned_libraries.py:1212
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
@@ -212,7 +212,7 @@ msgid "Link Upload"
 msgstr "Link feltöltés"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -433,13 +433,13 @@ msgstr "Nem sikerült megszakítani"
 
 #: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:928
 msgid "username invalid."
 msgstr "Érvénytelen felhasználónév."
 
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:935
+#: seahub/api2/endpoints/group_owned_libraries.py:937
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -461,7 +461,7 @@ msgstr "Jogosultság megtagadva"
 msgid "File is not locked."
 msgstr "A fájl nincs zárolva."
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:708
 msgid "You can not refresh this file's lock."
 msgstr "Nem újíthatja meg a fájl zárolását."
 
@@ -476,16 +476,16 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "A Tag csak betűket, számokat, szóközt, pontot, kötőjelet vagy aláhúzást tartalmazhat"
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "%s felhasználó már a csoport tagja."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -493,19 +493,19 @@ msgstr "%s felhasználó már a csoport tagja."
 msgid "User %s not found in organization."
 msgstr "%s felhasználó nem található a jelenlegi szervezetben."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Nem létezik a csoport"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"
@@ -565,17 +565,17 @@ msgstr ""
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
-msgstr ""
+msgstr "Funkció letiltva."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Kötet jelszavának visszaállítása sikertelen."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Új kötet jelszó %s"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3846
 msgid "Wrong password"
@@ -639,50 +639,58 @@ msgstr ""
 msgid "An upload link is shared to you on %s"
 msgstr "Feltöltési linket osztottak meg Önnel itt: %s"
 
-#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/share_links.py:272
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
 #: seahub/api2/views.py:4122
 msgid "Password is required."
 msgstr "Jelszó szükséges."
 
-#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/share_links.py:278
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "A jelszó túl rövid"
 
-#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/share_links.py:282
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
-msgstr ""
+msgstr "A jelszó túl gyenge"
 
-#: seahub/api2/endpoints/share_links.py:302
-#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
+#: seahub/api2/endpoints/share_links.py:305
+#: seahub/api2/endpoints/share_links.py:550
+#: seahub/api2/endpoints/upload_links.py:196
+#: seahub/api2/endpoints/upload_links.py:330 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "A lejárati napok száma legalább %s"
 
-#: seahub/api2/endpoints/share_links.py:308
-#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
+#: seahub/api2/endpoints/share_links.py:311
+#: seahub/api2/endpoints/share_links.py:556
+#: seahub/api2/endpoints/upload_links.py:202
+#: seahub/api2/endpoints/upload_links.py:336 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "A lejárati napok száma legfeljebb %s"
 
-#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/share_links.py:333
+#: seahub/api2/endpoints/share_links.py:580
 #: seahub/api2/endpoints/upload_links.py:224
+#: seahub/api2/endpoints/upload_links.py:360
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/share_links.py:342
+#: seahub/api2/endpoints/share_links.py:589
 #: seahub/api2/endpoints/upload_links.py:233
+#: seahub/api2/endpoints/upload_links.py:369
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:408
-#: seahub/api2/endpoints/share_links.py:417
+#: seahub/api2/endpoints/share_links.py:411
+#: seahub/api2/endpoints/share_links.py:420
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
@@ -3784,7 +3792,7 @@ msgstr[1] "\nÖnnek %(num)s új üzenete van itt: %(site_name)s.\n"
 
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Renamed library"
-msgstr ""
+msgstr "Átnevezett kötet"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Deleted library"
@@ -3792,7 +3800,7 @@ msgstr "Törölt kötet"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Restored library"
-msgstr ""
+msgstr "Visszaállított kötet"
 
 #: seahub/notifications/management/commands/send_file_updates.py:122
 msgid "Removed all items from trash."
@@ -3805,52 +3813,52 @@ msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:132
 msgid "Created file"
-msgstr ""
+msgstr "Létrehozott fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Deleted file"
-msgstr ""
+msgstr "Törölt fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Restored file"
-msgstr ""
+msgstr "Visszaállított fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Renamed file"
-msgstr ""
+msgstr "Átnevezett fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:147
 msgid "Moved file"
-msgstr ""
+msgstr "Áthelyezett fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:153
 msgid "Updated file"
-msgstr ""
+msgstr "Frissített fájl"
 
 #: seahub/notifications/management/commands/send_file_updates.py:160
 msgid "Created folder"
-msgstr ""
+msgstr "Létrehozott mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Deleted folder"
-msgstr ""
+msgstr "Törölt mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Restored folder"
-msgstr ""
+msgstr "Visszaállított mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Renamed folder"
-msgstr ""
+msgstr "Átnevezett mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:174
 msgid "Moved folder"
-msgstr ""
+msgstr "Áthelyezett mappa"
 
 #: seahub/notifications/management/commands/send_file_updates.py:268
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Új fájl módosítások: %s"
 
 #: seahub/notifications/management/commands/send_notices.py:335
 #, python-format
@@ -4153,7 +4161,7 @@ msgstr "Név: "
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
-msgstr ""
+msgstr "Jelszó beállítása"
 
 #: seahub/profile/templates/profile/set_profile_react.html:24
 msgid "Update"
@@ -4492,7 +4500,7 @@ msgstr "Emberek meghívása"
 
 #: seahub/templates/home_base.html:56
 msgid "Drafts"
-msgstr ""
+msgstr "Piszkozatok"
 
 #: seahub/templates/home_base.html:59
 msgid "Share Admin"
@@ -5478,7 +5486,7 @@ msgstr "Opcionálos"
 
 #: seahub/wiki/views.py:54
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Wiki megtekintése sikertelen"
 
 #: seahub/work_weixin/views.py:37 seahub/work_weixin/views.py:62
 #: seahub/work_weixin/views.py:151 seahub/work_weixin/views.py:171

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { processor } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
+import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, username, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';

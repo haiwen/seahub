@@ -25,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 10:13+0800\n"
-"PO-Revision-Date: 2022-01-20 05:36+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
+"PO-Revision-Date: 2013-10-25 07:03+0000\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2022\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -144,7 +144,7 @@ msgstr "Библиотека не может быть передана влад�
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:554
+#: seahub/api2/endpoints/share_links.py:626
 msgid "There is an associated published library."
 msgstr "Есть связанная опубликованная библиотека."
 
@@ -165,8 +165,8 @@ msgstr "Email %s недействителен."
 #: seahub/api2/endpoints/admin/shares.py:268
 #: seahub/api2/endpoints/dir_shared_items.py:346
 #: seahub/api2/endpoints/dir_shared_items.py:459
-#: seahub/api2/endpoints/group_owned_libraries.py:942
-#: seahub/api2/endpoints/group_owned_libraries.py:1210
+#: seahub/api2/endpoints/group_owned_libraries.py:944
+#: seahub/api2/endpoints/group_owned_libraries.py:1212
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
@@ -220,7 +220,7 @@ msgid "Link Upload"
 msgstr "Загружено по ссылке"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
-#: seahub/api2/endpoints/group_members.py:524
+#: seahub/api2/endpoints/group_members.py:539
 #: seahub/base/management/commands/export_user_storage_report.py:41
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -441,13 +441,13 @@ msgstr "Не удалось отменить"
 
 #: seahub/api2/endpoints/dir_shared_items.py:330
 #: seahub/api2/endpoints/draft_reviewer.py:70
-#: seahub/api2/endpoints/group_owned_libraries.py:926
+#: seahub/api2/endpoints/group_owned_libraries.py:928
 msgid "username invalid."
 msgstr "имя пользователя недействительно."
 
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
-#: seahub/api2/endpoints/group_owned_libraries.py:935
+#: seahub/api2/endpoints/group_owned_libraries.py:937
 #: seahub/oauth/views.py:195
 #, python-format
 msgid "User %s not found."
@@ -469,7 +469,7 @@ msgstr "Доступ запрещен"
 msgid "File is not locked."
 msgstr "Файл не заблокирован."
 
-#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:636
+#: seahub/api2/endpoints/file.py:645 seahub/api2/endpoints/share_links.py:708
 msgid "You can not refresh this file's lock."
 msgstr "Вы не можете обновить блокировку этого файла."
 
@@ -484,16 +484,16 @@ msgstr "Участник уже существует."
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr "Тег может содержать только буквы, цифры, точки, дефисы или подчеркивания."
 
-#: seahub/api2/endpoints/group_members.py:109
-#: seahub/api2/endpoints/group_members.py:342
-#: seahub/api2/endpoints/group_members.py:474
+#: seahub/api2/endpoints/group_members.py:110
+#: seahub/api2/endpoints/group_members.py:343
+#: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
 msgstr "Пользователь %s уже участник группы."
 
-#: seahub/api2/endpoints/group_members.py:115
-#: seahub/api2/endpoints/group_members.py:351
-#: seahub/api2/endpoints/group_members.py:483 seahub/api2/views.py:1646
+#: seahub/api2/endpoints/group_members.py:116
+#: seahub/api2/endpoints/group_members.py:352
+#: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:322
@@ -501,19 +501,19 @@ msgstr "Пользователь %s уже участник группы."
 msgid "User %s not found in organization."
 msgstr "Пользователь %s не найден в сообществе."
 
-#: seahub/api2/endpoints/group_members.py:118
-#: seahub/api2/endpoints/group_members.py:359
-#: seahub/api2/endpoints/group_members.py:491
+#: seahub/api2/endpoints/group_members.py:119
+#: seahub/api2/endpoints/group_members.py:360
+#: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
 msgstr "Пользователь %s является участником сообщества."
 
-#: seahub/api2/endpoints/group_members.py:413 seahub/group/error_msg.py:17
+#: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
 msgid "Group does not exist"
 msgstr "Группа не существует"
 
-#: seahub/api2/endpoints/group_members.py:531 seahub/views/sysadmin.py:189
+#: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
 #: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
 msgid "Failed to export Excel"
@@ -647,50 +647,58 @@ msgstr "email недействителен."
 msgid "An upload link is shared to you on %s"
 msgstr "Вам доступна ссылка для загрузки на %s"
 
-#: seahub/api2/endpoints/share_links.py:269
+#: seahub/api2/endpoints/share_links.py:272
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4002
 #: seahub/api2/views.py:4122
 msgid "Password is required."
 msgstr "Требуется пароль."
 
-#: seahub/api2/endpoints/share_links.py:275
+#: seahub/api2/endpoints/share_links.py:278
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Пароль слишком короткий."
 
-#: seahub/api2/endpoints/share_links.py:279
+#: seahub/api2/endpoints/share_links.py:282
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr "Пароль слишком слабый."
 
-#: seahub/api2/endpoints/share_links.py:302
-#: seahub/api2/endpoints/upload_links.py:196 seahub/api2/views.py:3417
+#: seahub/api2/endpoints/share_links.py:305
+#: seahub/api2/endpoints/share_links.py:550
+#: seahub/api2/endpoints/upload_links.py:196
+#: seahub/api2/endpoints/upload_links.py:330 seahub/api2/views.py:3417
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Срок действия должен быть больше или равен  %s"
 
-#: seahub/api2/endpoints/share_links.py:308
-#: seahub/api2/endpoints/upload_links.py:202 seahub/api2/views.py:3423
+#: seahub/api2/endpoints/share_links.py:311
+#: seahub/api2/endpoints/share_links.py:556
+#: seahub/api2/endpoints/upload_links.py:202
+#: seahub/api2/endpoints/upload_links.py:336 seahub/api2/views.py:3423
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Срок действия должен быть меньше или равен %s"
 
-#: seahub/api2/endpoints/share_links.py:330
+#: seahub/api2/endpoints/share_links.py:333
+#: seahub/api2/endpoints/share_links.py:580
 #: seahub/api2/endpoints/upload_links.py:224
+#: seahub/api2/endpoints/upload_links.py:360
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "Время истечения должно быть позже, чем %s."
 
-#: seahub/api2/endpoints/share_links.py:339
+#: seahub/api2/endpoints/share_links.py:342
+#: seahub/api2/endpoints/share_links.py:589
 #: seahub/api2/endpoints/upload_links.py:233
+#: seahub/api2/endpoints/upload_links.py:369
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "Время истечения должно быть раньше, чем %s."
 
-#: seahub/api2/endpoints/share_links.py:408
-#: seahub/api2/endpoints/share_links.py:417
+#: seahub/api2/endpoints/share_links.py:411
+#: seahub/api2/endpoints/share_links.py:420
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Общедоступная ссылка %s уже существует."

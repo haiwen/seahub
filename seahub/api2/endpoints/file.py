@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import time
+import json
 import logging
 import posixpath
 import requests
@@ -391,8 +392,11 @@ class FileView(APIView):
             filename = os.path.basename(path)
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
-                seafile_api.move_file(src_repo_id, src_dir, filename,
-                                      dst_repo_id, dst_dir, new_file_name, replace=False,
+                seafile_api.move_file(src_repo_id, src_dir,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_file_name]),
+                                      replace=False,
                                       username=username, need_progress=0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
@@ -457,8 +461,11 @@ class FileView(APIView):
             filename = os.path.basename(path)
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
-                seafile_api.copy_file(src_repo_id, src_dir, filename, dst_repo_id,
-                                      dst_dir, new_file_name, username, 0, synchronous=1)
+                seafile_api.copy_file(src_repo_id, src_dir,
+                                      json.dumps([filename]),
+                                      dst_repo_id, dst_dir,
+                                      json.dumps([new_file_name]),
+                                      username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -697,7 +704,8 @@ class FileView(APIView):
         file_name = os.path.basename(path)
         try:
             seafile_api.del_file(repo_id, parent_dir,
-                                 file_name, request.user.username)
+                                 json.dumps([file_name]),
+                                 request.user.username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

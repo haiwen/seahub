@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 10:13+0800\n"
-"PO-Revision-Date: 2022-02-18 02:15+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2022-06-22 13:35+0800\n"
+"PO-Revision-Date: 2015-05-09 05:28+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovenian (Slovenia) (http://www.transifex.com/haiwen/seahub/language/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -117,13 +117,12 @@ msgstr "Obvestila"
 
 #: frontend/src/components/common/notification.js:73
 #: frontend/src/components/dialog/add-reviewer-dialog.js:137
-#: frontend/src/components/dialog/edit-filetag-dialog.js:160
+#: frontend/src/components/dialog/edit-filetag-dialog.js:169
 #: frontend/src/components/dialog/file-participant-dialog.js:136
 #: frontend/src/components/dialog/list-created-files-dialog.js:55
-#: frontend/src/components/dialog/list-related-file-dialog.js:106
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:86
-#: frontend/src/components/dialog/list-tag-dialog.js:131
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:100
+#: frontend/src/components/dialog/list-tag-dialog.js:149
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:107
 #: frontend/src/components/dialog/manage-members-dialog.js:63
 #: frontend/src/components/dialog/org-add-admin-dialog.js:65
 #: frontend/src/components/dialog/readme-dialog.js:60
@@ -167,28 +166,29 @@ msgstr ""
 msgid "Libraries"
 msgstr "Knjižnice"
 
-#: frontend/src/components/cur-dir-path/dir-tool.js:96
-#: frontend/src/components/cur-dir-path/dir-tool.js:104
+#: frontend/src/components/cur-dir-path/dir-tool.js:83
+#: frontend/src/components/cur-dir-path/dir-tool.js:91
 #: frontend/src/components/history-trash-file-view/file-view.js:33
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:17
 msgid "Trash"
 msgstr "Koš"
 
-#: frontend/src/components/cur-dir-path/dir-tool.js:103
-#: frontend/src/components/dialog/list-tag-dialog.js:114
-#: frontend/src/components/dirent-detail/detail-list-view.js:112
+#: frontend/src/components/cur-dir-path/dir-tool.js:90
+#: frontend/src/components/dialog/list-tag-dialog.js:125
+#: frontend/src/components/dirent-detail/detail-list-view.js:91
 #: frontend/src/components/dirent-detail/file-details.js:85
-#: frontend/src/components/toolbar/view-file-toolbar.js:124
+#: frontend/src/components/toolbar/view-file-toolbar.js:105
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:49
 #: frontend/src/utils/text-translation.js:22
 msgid "Tags"
 msgstr ""
 
-#: frontend/src/components/cur-dir-path/dir-tool.js:105
+#: frontend/src/components/cur-dir-path/dir-tool.js:92
 #: frontend/src/components/file-view/file-toolbar.js:198
 #: frontend/src/components/file-view/file-toolbar.js:248
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:86
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:93
-#: frontend/src/components/toolbar/view-file-toolbar.js:126
+#: frontend/src/components/toolbar/view-file-toolbar.js:106
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:58
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:65
 #: frontend/src/utils/text-translation.js:20
 msgid "History"
 msgstr "Zgodovina"
@@ -227,7 +227,7 @@ msgid "Success"
 msgstr "Uspeh"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:68
-#: frontend/src/components/shared-file-view/shared-file-view.js:129
+#: frontend/src/components/shared-file-view/shared-file-view.js:131
 msgid "Report Abuse"
 msgstr ""
 
@@ -265,7 +265,6 @@ msgid "Description"
 msgstr "Opis"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:92
-#: frontend/src/components/dialog/add-related-file-dialog.js:104
 #: frontend/src/components/dialog/common-operation-confirmation-dialog.js:34
 #: frontend/src/components/dialog/confirm-delete-account.js:35
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:35
@@ -277,11 +276,13 @@ msgstr "Opis"
 #: frontend/src/components/dialog/create-folder-dialog.js:102
 #: frontend/src/components/dialog/create-group-dialog.js:87
 #: frontend/src/components/dialog/create-repo-dialog.js:267
-#: frontend/src/components/dialog/create-tag-dialog.js:114
+#: frontend/src/components/dialog/create-tag-dialog.js:116
 #: frontend/src/components/dialog/delete-dialog.js:32
-#: frontend/src/components/dialog/delete-repo-dialog.js:69
+#: frontend/src/components/dialog/delete-repo-dialog.js:72
 #: frontend/src/components/dialog/dismiss-group-dialog.js:33
-#: frontend/src/components/dialog/generate-share-link.js:463
+#: frontend/src/components/dialog/generate-share-link.js:459
+#: frontend/src/components/dialog/generate-share-link.js:501
+#: frontend/src/components/dialog/generate-upload-link.js:340
 #: frontend/src/components/dialog/import-members-dialog.js:60
 #: frontend/src/components/dialog/insert-file-dialog.js:66
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:79
@@ -336,14 +337,15 @@ msgstr "Opis"
 #: frontend/src/components/dialog/view-link-dialog.js:37
 #: frontend/src/components/dialog/wiki-delete-dialog.js:25
 #: frontend/src/components/dialog/wiki-select-dialog.js:97
-#: frontend/src/components/dirent-detail/detail-comments-list.js:285
+#: frontend/src/components/dirent-detail/detail-comments-list.js:292
 #: frontend/src/components/file-uploader/upload-list-item.js:127
-#: frontend/src/components/file-view/comment-panel.js:333
+#: frontend/src/components/file-view/comment-panel.js:319
 #: frontend/src/components/markdown-view/comment-dialog.js:78
 #: frontend/src/components/review-list-view/review-comment-dialog.js:91
-#: frontend/src/components/review-list-view/review-comments.js:271
+#: frontend/src/components/review-list-view/review-comments.js:220
 #: frontend/src/components/send-link.js:111
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:127
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:104
 #: frontend/src/pages/sys-admin/web-settings/input-item.js:66
 #: frontend/src/pages/upload-link/upload-list-item.js:124
 #: frontend/src/tc-accept.js:42
@@ -351,8 +353,6 @@ msgid "Cancel"
 msgstr "Prekliči"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:93
-#: frontend/src/components/dialog/add-related-file-dialog.js:106
-#: frontend/src/components/dialog/add-related-file-dialog.js:108
 #: frontend/src/components/dialog/add-reviewer-dialog.js:110
 #: frontend/src/components/dialog/add-reviewer-dialog.js:111
 #: frontend/src/components/dialog/change-repo-password-dialog.js:115
@@ -434,16 +434,17 @@ msgstr "Prekliči"
 #: frontend/src/components/dialog/update-webdav-password.js:88
 #: frontend/src/components/dialog/wiki-select-dialog.js:99
 #: frontend/src/components/dialog/wiki-select-dialog.js:100
-#: frontend/src/components/dirent-detail/detail-comments-list.js:187
-#: frontend/src/components/file-view/comment-panel.js:234
+#: frontend/src/components/dirent-detail/detail-comments-list.js:193
+#: frontend/src/components/file-view/comment-panel.js:219
 #: frontend/src/components/list-and-add-group-members.js:147
 #: frontend/src/components/list-and-add-group-members.js:148
 #: frontend/src/components/markdown-view/comment-dialog.js:77
 #: frontend/src/components/review-list-view/review-comment-dialog.js:90
-#: frontend/src/components/review-list-view/review-comments.js:172
+#: frontend/src/components/review-list-view/review-comments.js:121
 #: frontend/src/components/search-group-members.js:105
 #: frontend/src/components/user-settings/email-notice.js:96
 #: frontend/src/components/user-settings/user-basic-info-form.js:86
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:233
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:259
 #: frontend/src/pages/org-admin/org-users-search-users.js:166
 #: frontend/src/pages/search/advanced-search.js:241
@@ -456,29 +457,6 @@ msgstr "Prekliči"
 #: frontend/src/pages/sys-admin/web-settings/input-item.js:65
 msgid "Submit"
 msgstr "Potrdi"
-
-#: frontend/src/components/dialog/add-related-file-dialog.js:43
-msgid "Can not select self as a related file."
-msgstr ""
-
-#: frontend/src/components/dialog/add-related-file-dialog.js:84
-msgid "Select related file for {placeholder}"
-msgstr ""
-
-#: frontend/src/components/dialog/add-related-file-dialog.js:89
-#: frontend/src/components/dialog/create-tag-dialog.js:83
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
-#: frontend/src/components/dialog/manage-members-dialog.js:46
-#: frontend/src/components/dialog/update-tag-dialog.js:95
-#: frontend/src/repo-folder-trash.js:196 frontend/src/repo-history.js:108
-#: frontend/src/repo-snapshot.js:143
-msgid "Back"
-msgstr ""
-
-#: frontend/src/components/dialog/add-related-file-dialog.js:90
-#: frontend/src/components/dialog/insert-file-dialog.js:55
-msgid "Select File"
-msgstr ""
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:98
 msgid "Request a review"
@@ -632,18 +610,19 @@ msgstr "Ali res želite odstraniti svoj račun?"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:60
 #: frontend/src/components/dialog/delete-dialog.js:33
-#: frontend/src/components/dialog/delete-repo-dialog.js:70
+#: frontend/src/components/dialog/delete-repo-dialog.js:73
 #: frontend/src/components/dialog/dismiss-group-dialog.js:34
 #: frontend/src/components/dialog/file-participant-dialog.js:43
-#: frontend/src/components/dialog/generate-share-link.js:456
-#: frontend/src/components/dialog/generate-share-link.js:462
-#: frontend/src/components/dialog/generate-upload-link.js:310
+#: frontend/src/components/dialog/generate-share-link.js:494
+#: frontend/src/components/dialog/generate-share-link.js:500
+#: frontend/src/components/dialog/generate-upload-link.js:348
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:67
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:68
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:67
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:68
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:153
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:160
+#: frontend/src/components/dialog/list-tag-dialog.js:59
+#: frontend/src/components/dialog/list-tag-dialog.js:60
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:177
 #: frontend/src/components/dialog/org-delete-department-dialog.js:43
 #: frontend/src/components/dialog/org-delete-member-dialog.js:45
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:37
@@ -662,20 +641,21 @@ msgstr "Ali res želite odstraniti svoj račun?"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:59
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:58
-#: frontend/src/components/dialog/update-tag-dialog.js:124
-#: frontend/src/components/dirent-detail/detail-comments-list.js:298
+#: frontend/src/components/dirent-detail/detail-comments-list.js:305
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:586
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:610
 #: frontend/src/components/draft-list-view/draft-list-item.js:110
+#: frontend/src/components/file-view/comment-panel.js:341
 #: frontend/src/components/group-members.js:152
-#: frontend/src/components/review-list-view/review-comments.js:294
+#: frontend/src/components/review-list-view/review-comments.js:243
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:409
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:366
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:317
 #: frontend/src/components/user-settings/delete-account.js:38
 #: frontend/src/components/user-settings/web-api-auth-token.js:84
 #: frontend/src/pages/invitations/invitations-view.js:104
 #: frontend/src/pages/invitations/invitations-view.js:105
 #: frontend/src/pages/invitations/invitations-view.js:135
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:126
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:316
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:102
 #: frontend/src/pages/org-admin/org-department-item.js:549
@@ -744,7 +724,7 @@ msgstr "Ali ste prepričani da želite obnoviti to knjižnico?"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:37
 #: frontend/src/components/history-list-view/history-list-item.js:100
-#: frontend/src/pages/file-history-old/history-item.js:121
+#: frontend/src/pages/file-history-old/history-item.js:123
 #: frontend/src/pages/my-libs/my-libs-deleted.js:174
 #: frontend/src/pages/my-libs/my-libs-deleted.js:175
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:183
@@ -844,9 +824,8 @@ msgstr ""
 #: frontend/src/components/dialog/create-repo-dialog.js:185
 #: frontend/src/components/dialog/create-tag-dialog.js:89
 #: frontend/src/components/dialog/list-created-files-dialog.js:28
-#: frontend/src/components/dialog/list-related-file-dialog.js:83
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:66
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:79
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:84
 #: frontend/src/components/dialog/new-wiki-dialog.js:62
 #: frontend/src/components/dialog/org-add-department-dialog.js:79
 #: frontend/src/components/dialog/org-add-repo-dialog.js:74
@@ -863,7 +842,6 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-group-dialog.js:70
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog.js:68
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:81
-#: frontend/src/components/dialog/update-tag-dialog.js:101
 #: frontend/src/components/dialog/wiki-select-dialog.js:78
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:596
 #: frontend/src/components/draft-list-view/draft-list-view.js:36
@@ -917,7 +895,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:53
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:39
 #: frontend/src/repo-folder-trash.js:234 frontend/src/repo-snapshot.js:193
-#: frontend/src/shared-dir-view.js:609
+#: frontend/src/shared-dir-view.js:648
 msgid "Name"
 msgstr "Ime"
 
@@ -974,8 +952,8 @@ msgid "Password is too short"
 msgstr "Geslo je prekratko"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:108
-#: frontend/src/components/dialog/generate-share-link.js:280
-#: frontend/src/components/dialog/generate-upload-link.js:162
+#: frontend/src/components/dialog/generate-share-link.js:248
+#: frontend/src/components/dialog/generate-upload-link.js:150
 #: frontend/src/components/dialog/org-add-user-dialog.js:130
 msgid "Passwords don't match"
 msgstr "Gesli se ne ujemata"
@@ -1056,8 +1034,8 @@ msgid "Encrypt"
 msgstr "Zakriptiraj"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:237
-#: frontend/src/components/dialog/generate-share-link.js:486
-#: frontend/src/components/dialog/generate-upload-link.js:341
+#: frontend/src/components/dialog/generate-share-link.js:524
+#: frontend/src/components/dialog/generate-upload-link.js:379
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:106
@@ -1068,8 +1046,8 @@ msgid "Password"
 msgstr "Geslo"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:250
-#: frontend/src/components/dialog/generate-share-link.js:497
-#: frontend/src/components/dialog/generate-upload-link.js:352
+#: frontend/src/components/dialog/generate-share-link.js:535
+#: frontend/src/components/dialog/generate-upload-link.js:390
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:110
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:160
 msgid "Password again"
@@ -1086,25 +1064,31 @@ msgstr "Notranja napaka strežnika"
 msgid "Tag \"{name}\" already exists."
 msgstr ""
 
+#: frontend/src/components/dialog/create-tag-dialog.js:83
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
+#: frontend/src/components/dialog/manage-members-dialog.js:46
+#: frontend/src/repo-folder-trash.js:196 frontend/src/repo-history.js:108
+#: frontend/src/repo-snapshot.js:143
+msgid "Back"
+msgstr ""
+
 #: frontend/src/components/dialog/create-tag-dialog.js:84
 msgid "New Tag"
 msgstr ""
 
 #: frontend/src/components/dialog/create-tag-dialog.js:94
-#: frontend/src/components/dialog/update-tag-dialog.js:105
 msgid "Select a color"
 msgstr ""
 
-#: frontend/src/components/dialog/create-tag-dialog.js:116
-#: frontend/src/components/dialog/create-tag-dialog.js:117
-#: frontend/src/components/dialog/update-tag-dialog.js:125
+#: frontend/src/components/dialog/create-tag-dialog.js:118
+#: frontend/src/components/dialog/create-tag-dialog.js:119
 #: frontend/src/components/file-view/file-toolbar.js:150
 #: frontend/src/components/file-view/file-toolbar.js:214
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:186
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:230
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:268
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:291
-#: frontend/src/shared-dir-view.js:446
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:119
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:163
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:201
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:224
+#: frontend/src/shared-dir-view.js:473
 msgid "Save"
 msgstr ""
 
@@ -1137,11 +1121,12 @@ msgstr ""
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:79
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:89
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:52
-#: frontend/src/shared-dir-view.js:431
+#: frontend/src/shared-dir-view.js:458
 msgid "Upload"
 msgstr "Naloži"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:157
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:180
 #: frontend/src/components/dialog/zip-download-dialog.js:111
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:580
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:604
@@ -1151,12 +1136,12 @@ msgstr "Naloži"
 #: frontend/src/components/history-list-view/history-list-item.js:101
 #: frontend/src/components/history-trash-file-view/download.js:10
 #: frontend/src/components/shared-file-view/shared-file-view-tip.js:27
-#: frontend/src/components/shared-file-view/shared-file-view.js:125
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:96
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:193
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:367
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:373
-#: frontend/src/pages/file-history-old/history-item.js:122
+#: frontend/src/components/shared-file-view/shared-file-view.js:127
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:318
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:324
+#: frontend/src/pages/file-history-old/history-item.js:124
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:126
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:245
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:56
 #: frontend/src/pages/sys-admin/repos/dir-content.js:64
@@ -1165,10 +1150,10 @@ msgstr "Naloži"
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:84
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:94
 #: frontend/src/pages/sys-admin/users/user-links.js:193
-#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:693
-#: frontend/src/shared-dir-view.js:719 frontend/src/shared-dir-view.js:750
-#: frontend/src/shared-dir-view.js:781 frontend/src/shared-dir-view.js:838
-#: frontend/src/shared-dir-view.js:856
+#: frontend/src/repo-snapshot.js:297 frontend/src/shared-dir-view.js:741
+#: frontend/src/shared-dir-view.js:767 frontend/src/shared-dir-view.js:815
+#: frontend/src/shared-dir-view.js:846 frontend/src/shared-dir-view.js:903
+#: frontend/src/shared-dir-view.js:921
 #: frontend/src/utils/text-translation.js:9
 msgid "Download"
 msgstr "Prenos"
@@ -1192,8 +1177,8 @@ msgstr ""
 #: frontend/src/components/dialog/share-admin-link.js:34
 #: frontend/src/components/dialog/view-link-dialog.js:38
 #: frontend/src/components/shared-link.js:24
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:365
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:372
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:316
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:323
 #: frontend/src/utils/text-translation.js:13
 msgid "Copy"
 msgstr "Kopiraj"
@@ -1207,15 +1192,19 @@ msgid "Generate share link"
 msgstr ""
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:55
-#: frontend/src/components/dialog/list-tag-dialog.js:61
-#: frontend/src/components/dirent-detail/detail-comments-list.js:301
-#: frontend/src/components/file-view/comment-panel.js:358
-#: frontend/src/components/review-list-view/review-comments.js:297
+#: frontend/src/components/dialog/generate-share-link.js:436
+#: frontend/src/components/dialog/generate-share-link.js:437
+#: frontend/src/components/dialog/generate-upload-link.js:317
+#: frontend/src/components/dialog/generate-upload-link.js:318
+#: frontend/src/components/dirent-detail/detail-comments-list.js:308
+#: frontend/src/components/file-view/comment-panel.js:344
+#: frontend/src/components/review-list-view/review-comments.js:246
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:64
 #: frontend/src/components/select-editor/select-editor.js:159
 #: frontend/src/components/select-editor/select-editor.js:160
-#: frontend/src/components/toolbar/view-file-toolbar.js:106
+#: frontend/src/components/toolbar/view-file-toolbar.js:87
 #: frontend/src/components/user-settings/user-avatar-form.js:97
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:129
 #: frontend/src/pages/org-admin/org-user-profile.js:137
 #: frontend/src/pages/org-admin/org-user-profile.js:143
 #: frontend/src/pages/org-admin/org-user-profile.js:152
@@ -1245,13 +1234,13 @@ msgstr ""
 msgid "Are you sure you want to delete %s ?"
 msgstr "Ali si prepričan/a, da želiš odstraniti %s ?"
 
-#: frontend/src/components/dialog/delete-repo-dialog.js:55
+#: frontend/src/components/dialog/delete-repo-dialog.js:57
 msgid ""
 "This library has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
 msgstr ""
 
-#: frontend/src/components/dialog/delete-repo-dialog.js:63
+#: frontend/src/components/dialog/delete-repo-dialog.js:66
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:32
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog.js:32
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:88
@@ -1272,12 +1261,12 @@ msgstr "Odstranitev skupine"
 msgid "Really want to delete this group?"
 msgstr ""
 
-#: frontend/src/components/dialog/edit-filetag-dialog.js:141
+#: frontend/src/components/dialog/edit-filetag-dialog.js:143
 msgid "Select Tags"
 msgstr ""
 
-#: frontend/src/components/dialog/edit-filetag-dialog.js:157
-#: frontend/src/components/dialog/list-tag-dialog.js:128
+#: frontend/src/components/dialog/edit-filetag-dialog.js:165
+#: frontend/src/components/dialog/list-tag-dialog.js:145
 msgid "Create a new tag"
 msgstr ""
 
@@ -1295,7 +1284,8 @@ msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
 msgstr ""
 
 #: frontend/src/components/dialog/file-participant-dialog.js:121
-#: frontend/src/components/dirent-detail/detail-list-view.js:144
+#: frontend/src/components/dirent-detail/detail-list-view.js:107
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:65
 msgid "Participants"
 msgstr ""
 
@@ -1304,75 +1294,60 @@ msgstr ""
 msgid "Add"
 msgstr "Dodaj"
 
-#: frontend/src/components/dialog/generate-share-link.js:36
-#: frontend/src/components/dialog/generate-upload-link.js:32
-msgid "{minDays_placeholder} - {maxDays_placeholder} days"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:40
-#: frontend/src/components/dialog/generate-upload-link.js:36
-msgid "Greater than or equal to {minDays_placeholder} days"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:43
-#: frontend/src/components/dialog/generate-upload-link.js:39
-msgid "Less than or equal to {maxDays_placeholder} days"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:227
+#: frontend/src/components/dialog/generate-share-link.js:194
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:234
+#: frontend/src/components/dialog/generate-share-link.js:201
 msgid "Direct download link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:272
-#: frontend/src/components/dialog/generate-upload-link.js:154
+#: frontend/src/components/dialog/generate-share-link.js:240
+#: frontend/src/components/dialog/generate-upload-link.js:142
 #: frontend/src/components/dialog/update-webdav-password.js:30
 msgid "Please enter a password."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:276
-#: frontend/src/components/dialog/generate-upload-link.js:158
+#: frontend/src/components/dialog/generate-share-link.js:244
+#: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/update-webdav-password.js:34
 msgid "The password is too short."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:284
-#: frontend/src/components/dialog/generate-upload-link.js:166
+#: frontend/src/components/dialog/generate-share-link.js:252
+#: frontend/src/components/dialog/generate-upload-link.js:154
 #: frontend/src/components/dialog/update-webdav-password.js:39
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:292
-#: frontend/src/components/dialog/generate-upload-link.js:174
+#: frontend/src/components/dialog/generate-share-link.js:260
+#: frontend/src/components/dialog/generate-upload-link.js:162
 msgid "Please select an expiration time"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:301
-#: frontend/src/components/dialog/generate-upload-link.js:182
+#: frontend/src/components/dialog/generate-share-link.js:269
+#: frontend/src/components/dialog/generate-upload-link.js:170
 msgid "Please enter days"
 msgstr "Prosimo, vnesite število dni"
 
-#: frontend/src/components/dialog/generate-share-link.js:305
-#: frontend/src/components/dialog/generate-upload-link.js:186
+#: frontend/src/components/dialog/generate-share-link.js:273
+#: frontend/src/components/dialog/generate-upload-link.js:174
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:66
 msgid "Please enter a non-negative integer"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:361
+#: frontend/src/components/dialog/generate-share-link.js:367
 #: frontend/src/pages/share-admin/folders.js:166
 #: frontend/src/pages/share-admin/libraries.js:141
 #: frontend/src/pages/share-admin/share-links.js:175
 msgid "Successfully modified permission."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:374
-#: frontend/src/components/dialog/generate-upload-link.js:270
+#: frontend/src/components/dialog/generate-share-link.js:380
+#: frontend/src/components/dialog/generate-upload-link.js:276
 #: frontend/src/components/dialog/update-webdav-password.js:70
 msgid ""
 "(at least {passwordMinLength} characters and includes "
@@ -1380,103 +1355,96 @@ msgid ""
 " and other symbols)"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:389
+#: frontend/src/components/dialog/generate-share-link.js:395
 msgid "Link:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:400
+#: frontend/src/components/dialog/generate-share-link.js:406
 msgid "Direct Download Link:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:412
-#: frontend/src/components/dialog/generate-upload-link.js:292
+#: frontend/src/components/dialog/generate-share-link.js:418
+#: frontend/src/components/dialog/generate-upload-link.js:298
 #: frontend/src/components/user-settings/webdav-password.js:63
 msgid "Password:"
 msgstr "Geslo:"
 
-#: frontend/src/components/dialog/generate-share-link.js:416
-#: frontend/src/components/dialog/generate-upload-link.js:296
+#: frontend/src/components/dialog/generate-share-link.js:422
+#: frontend/src/components/dialog/generate-upload-link.js:302
 #: frontend/src/components/user-settings/web-api-auth-token.js:82
 #: frontend/src/components/user-settings/webdav-password.js:65
 msgid "Hide"
 msgstr "Skrij"
 
-#: frontend/src/components/dialog/generate-share-link.js:416
-#: frontend/src/components/dialog/generate-upload-link.js:296
+#: frontend/src/components/dialog/generate-share-link.js:422
+#: frontend/src/components/dialog/generate-upload-link.js:302
 #: frontend/src/components/user-settings/web-api-auth-token.js:82
 #: frontend/src/components/user-settings/webdav-password.js:65
 msgid "Show"
 msgstr "Prikaži"
 
-#: frontend/src/components/dialog/generate-share-link.js:423
-#: frontend/src/components/dialog/generate-upload-link.js:304
+#: frontend/src/components/dialog/generate-share-link.js:429
+#: frontend/src/components/dialog/generate-upload-link.js:310
 msgid "Expiration Date:"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:430
+#: frontend/src/components/dialog/generate-share-link.js:458
+#: frontend/src/components/dialog/generate-upload-link.js:339
+#: frontend/src/components/dirent-detail/detail-comments-list.js:291
+#: frontend/src/components/file-view/comment-panel.js:318
+#: frontend/src/components/review-list-view/review-comments.js:218
+#: frontend/src/components/user-settings/webdav-password.js:67
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:103
+#: frontend/src/pages/sys-admin/terms-and-conditions/item.js:117
+msgid "Update"
+msgstr "Posodobi"
+
+#: frontend/src/components/dialog/generate-share-link.js:468
 msgid "Permission:"
 msgstr "Pravice:"
 
-#: frontend/src/components/dialog/generate-share-link.js:445
-#: frontend/src/components/dialog/generate-upload-link.js:309
+#: frontend/src/components/dialog/generate-share-link.js:483
+#: frontend/src/components/dialog/generate-upload-link.js:347
 #: frontend/src/components/send-link.js:110
 msgid "Send"
 msgstr "Pošlji"
 
-#: frontend/src/components/dialog/generate-share-link.js:460
+#: frontend/src/components/dialog/generate-share-link.js:498
 msgid "Are you sure you want to delete the share link?"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:461
+#: frontend/src/components/dialog/generate-share-link.js:499
 msgid ""
 "If the share link is deleted, no one will be able to access it any more."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:475
-#: frontend/src/components/dialog/generate-share-link.js:480
-#: frontend/src/components/dialog/generate-upload-link.js:329
-#: frontend/src/components/dialog/generate-upload-link.js:334
+#: frontend/src/components/dialog/generate-share-link.js:513
+#: frontend/src/components/dialog/generate-share-link.js:518
+#: frontend/src/components/dialog/generate-upload-link.js:367
+#: frontend/src/components/dialog/generate-upload-link.js:372
 msgid "Add password protection"
 msgstr "Dodaj zaščito z geslom"
 
-#: frontend/src/components/dialog/generate-share-link.js:510
-#: frontend/src/components/dialog/generate-upload-link.js:365
+#: frontend/src/components/dialog/generate-share-link.js:548
+#: frontend/src/components/dialog/generate-upload-link.js:403
 msgid "Add auto expiration"
 msgstr "Dodaj avtomatski čas veljavnosti"
 
-#: frontend/src/components/dialog/generate-share-link.js:517
-#: frontend/src/components/dialog/generate-upload-link.js:372
-msgid "Expiration days"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:524
-#: frontend/src/components/dialog/generate-upload-link.js:379
-#: frontend/src/components/dialog/lib-history-setting-dialog.js:144
-#: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:117
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
-msgid "days"
-msgstr "dni"
-
-#: frontend/src/components/dialog/generate-share-link.js:536
-#: frontend/src/components/dialog/generate-upload-link.js:391
-msgid "Expiration time"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:553
+#: frontend/src/components/dialog/generate-share-link.js:569
 msgid "Set permission"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:568
-#: frontend/src/components/dialog/generate-upload-link.js:406
+#: frontend/src/components/dialog/generate-share-link.js:584
+#: frontend/src/components/dialog/generate-upload-link.js:422
 #: frontend/src/components/user-settings/web-api-auth-token.js:87
 msgid "Generate"
 msgstr "Ustvari"
 
-#: frontend/src/components/dialog/generate-upload-link.js:239
+#: frontend/src/components/dialog/generate-upload-link.js:206
 msgid "Upload link is copied to the clipboard."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-upload-link.js:280
+#: frontend/src/components/dialog/generate-upload-link.js:286
 msgid "Upload Link:"
 msgstr ""
 
@@ -1548,6 +1516,10 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
 msgstr "Naloži datoteko"
+
+#: frontend/src/components/dialog/insert-file-dialog.js:55
+msgid "Select File"
+msgstr ""
 
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:57
 msgid "Select Image"
@@ -1703,6 +1675,13 @@ msgstr "Ne obdrži zgodovine"
 msgid "Only keep a period of history:"
 msgstr "Obdrži zgodovino samo določeno obdobje:"
 
+#: frontend/src/components/dialog/lib-history-setting-dialog.js:144
+#: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:117
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:137
+#: frontend/src/components/set-link-expiration.js:89
+msgid "days"
+msgstr "dni"
+
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:47
 msgid "Please enter a positive integer"
 msgstr ""
@@ -1750,16 +1729,16 @@ msgstr ""
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:156
 #: frontend/src/components/dialog/repo-api-token-dialog.js:197
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:237
-#: frontend/src/pages/lib-content-view/lib-content-view.js:171
-#: frontend/src/pages/lib-content-view/lib-content-view.js:706
-#: frontend/src/pages/lib-content-view/lib-content-view.js:755
-#: frontend/src/pages/lib-content-view/lib-content-view.js:787
-#: frontend/src/pages/lib-content-view/lib-content-view.js:971
-#: frontend/src/pages/lib-content-view/lib-content-view.js:982
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1008
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1022
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1086
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1136
+#: frontend/src/pages/lib-content-view/lib-content-view.js:170
+#: frontend/src/pages/lib-content-view/lib-content-view.js:696
+#: frontend/src/pages/lib-content-view/lib-content-view.js:745
+#: frontend/src/pages/lib-content-view/lib-content-view.js:777
+#: frontend/src/pages/lib-content-view/lib-content-view.js:961
+#: frontend/src/pages/lib-content-view/lib-content-view.js:972
+#: frontend/src/pages/lib-content-view/lib-content-view.js:998
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1012
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1076
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1126
 #: frontend/src/pages/my-libs/my-libs-deleted.js:150
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:252
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:274
@@ -1778,7 +1757,7 @@ msgstr "Napaka"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:181
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:159
 #: frontend/src/components/dialog/repo-api-token-dialog.js:199
-#: frontend/src/pages/lib-content-view/lib-content-view.js:177
+#: frontend/src/pages/lib-content-view/lib-content-view.js:176
 #: frontend/src/pages/search/main-panel.js:73
 #: frontend/src/pages/sys-admin/abuse-reports.js:48
 #: frontend/src/repo-folder-trash.js:141 frontend/src/repo-folder-trash.js:322
@@ -1838,80 +1817,6 @@ msgstr ""
 msgid "Time"
 msgstr "Čas"
 
-#: frontend/src/components/dialog/list-related-file-dialog.js:78
-#: frontend/src/components/dirent-detail/detail-list-view.js:128
-#: frontend/src/components/toolbar/view-file-toolbar.js:125
-#: frontend/src/utils/text-translation.js:23
-msgid "Related Files"
-msgstr ""
-
-#: frontend/src/components/dialog/list-related-file-dialog.js:84
-msgid "Library Name"
-msgstr ""
-
-#: frontend/src/components/dialog/list-related-file-dialog.js:85
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:80
-#: frontend/src/components/dialog/search-file-dialog.js:99
-#: frontend/src/components/dirent-detail/detail-list-view.js:108
-#: frontend/src/components/dirent-detail/file-details.js:81
-#: frontend/src/components/dirent-detail/lib-details.js:69
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:599
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:122
-#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
-#: frontend/src/file-history-old.js:244
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:90
-#: frontend/src/pages/org-admin/org-department-item.js:327
-#: frontend/src/pages/org-admin/org-group-repos.js:83
-#: frontend/src/pages/org-admin/org-libraries.js:150
-#: frontend/src/pages/org-admin/org-user-repos.js:83
-#: frontend/src/pages/org-admin/org-user-shared-repos.js:81
-#: frontend/src/pages/search/advanced-search.js:78
-#: frontend/src/pages/search/advanced-search.js:226
-#: frontend/src/pages/share-with-ocm/remote-dir-content.js:97
-#: frontend/src/pages/shared-libs/shared-libs.js:70
-#: frontend/src/pages/sys-admin/departments/department-detail.js:403
-#: frontend/src/pages/sys-admin/repos/dir-content.js:105
-#: frontend/src/pages/sys-admin/repos/repos.js:81
-#: frontend/src/pages/sys-admin/repos/repos.js:83
-#: frontend/src/pages/sys-admin/users/user-shared-repos.js:41
-#: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:194
-#: frontend/src/shared-dir-view.js:610
-msgid "Size"
-msgstr "Velikost"
-
-#: frontend/src/components/dialog/list-related-file-dialog.js:86
-#: frontend/src/components/dialog/list-repo-drafts-dialog.js:68
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:81
-#: frontend/src/components/dialog/search-file-dialog.js:100
-#: frontend/src/components/dialog/share-repo-dialog.js:129
-#: frontend/src/components/dialog/wiki-select-dialog.js:79
-#: frontend/src/components/dirent-detail/detail-list-view.js:96
-#: frontend/src/components/dirent-detail/detail-list-view.js:110
-#: frontend/src/components/dirent-detail/file-details.js:83
-#: frontend/src/components/dirent-detail/lib-details.js:70
-#: frontend/src/components/dirent-list-view/dirent-list-view.js:600
-#: frontend/src/components/draft-list-view/draft-list-view.js:38
-#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:123
-#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
-#: frontend/src/components/wiki-list-view/wiki-list-view.js:46
-#: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
-#: frontend/src/pages/org-admin/org-user-repos.js:84
-#: frontend/src/pages/org-admin/org-user-shared-repos.js:82
-#: frontend/src/pages/search/advanced-search.js:75
-#: frontend/src/pages/search/advanced-search.js:198
-#: frontend/src/pages/share-with-ocm/remote-dir-content.js:98
-#: frontend/src/pages/shared-libs/shared-libs.js:71
-#: frontend/src/pages/starred/starred.js:35
-#: frontend/src/pages/sys-admin/repos/dir-content.js:106
-#: frontend/src/pages/sys-admin/users/user-repos.js:55
-#: frontend/src/shared-dir-view.js:611
-msgid "Last Update"
-msgstr "Posodobljeno"
-
-#: frontend/src/components/dialog/list-related-file-dialog.js:103
-msgid "Add File"
-msgstr ""
-
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:44
 #: frontend/src/pages/drafts/draft-content.js:29
 msgid "Successfully deleted draft %(draft)s."
@@ -1954,19 +1859,70 @@ msgstr ""
 msgid "Owner"
 msgstr "Lastnik"
 
-#: frontend/src/components/dialog/list-tag-dialog.js:51
-msgid "file"
-msgstr "datoteka"
+#: frontend/src/components/dialog/list-repo-drafts-dialog.js:68
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:86
+#: frontend/src/components/dialog/search-file-dialog.js:100
+#: frontend/src/components/dialog/share-repo-dialog.js:129
+#: frontend/src/components/dialog/wiki-select-dialog.js:79
+#: frontend/src/components/dirent-detail/detail-list-view.js:75
+#: frontend/src/components/dirent-detail/detail-list-view.js:89
+#: frontend/src/components/dirent-detail/file-details.js:83
+#: frontend/src/components/dirent-detail/lib-details.js:70
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:600
+#: frontend/src/components/draft-list-view/draft-list-view.js:38
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:123
+#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:25
+#: frontend/src/components/wiki-list-view/wiki-list-view.js:46
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:47
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:92
+#: frontend/src/pages/org-admin/org-user-repos.js:84
+#: frontend/src/pages/org-admin/org-user-shared-repos.js:82
+#: frontend/src/pages/search/advanced-search.js:75
+#: frontend/src/pages/search/advanced-search.js:198
+#: frontend/src/pages/share-with-ocm/remote-dir-content.js:98
+#: frontend/src/pages/shared-libs/shared-libs.js:71
+#: frontend/src/pages/starred/starred.js:35
+#: frontend/src/pages/sys-admin/repos/dir-content.js:106
+#: frontend/src/pages/sys-admin/users/user-repos.js:55
+#: frontend/src/shared-dir-view.js:651
+msgid "Last Update"
+msgstr "Posodobljeno"
 
-#: frontend/src/components/dialog/list-tag-dialog.js:51
-msgid "files"
-msgstr ""
-
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:74
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:79
 msgid "Tagged Files"
 msgstr ""
 
-#: frontend/src/components/dialog/list-taggedfiles-dialog.js:151
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
+#: frontend/src/components/dialog/search-file-dialog.js:99
+#: frontend/src/components/dirent-detail/detail-list-view.js:87
+#: frontend/src/components/dirent-detail/file-details.js:81
+#: frontend/src/components/dirent-detail/lib-details.js:69
+#: frontend/src/components/dirent-list-view/dirent-list-view.js:599
+#: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:122
+#: frontend/src/components/wiki-dir-list-view/wiki-dir-list-view.js:24
+#: frontend/src/file-history-old.js:244
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:45
+#: frontend/src/pages/my-libs/mylib-repo-list-view.js:90
+#: frontend/src/pages/org-admin/org-department-item.js:327
+#: frontend/src/pages/org-admin/org-group-repos.js:83
+#: frontend/src/pages/org-admin/org-libraries.js:150
+#: frontend/src/pages/org-admin/org-user-repos.js:83
+#: frontend/src/pages/org-admin/org-user-shared-repos.js:81
+#: frontend/src/pages/search/advanced-search.js:78
+#: frontend/src/pages/search/advanced-search.js:226
+#: frontend/src/pages/share-with-ocm/remote-dir-content.js:97
+#: frontend/src/pages/shared-libs/shared-libs.js:70
+#: frontend/src/pages/sys-admin/departments/department-detail.js:403
+#: frontend/src/pages/sys-admin/repos/dir-content.js:105
+#: frontend/src/pages/sys-admin/repos/repos.js:81
+#: frontend/src/pages/sys-admin/repos/repos.js:83
+#: frontend/src/pages/sys-admin/users/user-shared-repos.js:41
+#: frontend/src/repo-folder-trash.js:236 frontend/src/repo-snapshot.js:194
+#: frontend/src/shared-dir-view.js:650
+msgid "Size"
+msgstr "Velikost"
+
+#: frontend/src/components/dialog/list-taggedfiles-dialog.js:165
 msgid "deleted"
 msgstr ""
 
@@ -2018,9 +1974,10 @@ msgstr ""
 #: frontend/src/components/history-list-view/history-list-item.js:97
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:376
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:419
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:75
+#: frontend/src/pages/file-history-old/history-item.js:117
 #: frontend/src/pages/invitations/invitations-view.js:126
 #: frontend/src/pages/linked-devices/linked-devices.js:161
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:47
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:153
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:154
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:182
@@ -2039,7 +1996,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/dingtalk/dingtalk-departments-tree-node.js:120
 #: frontend/src/pages/sys-admin/logs-page/file-access-item-menu.js:34
 #: frontend/src/pages/sys-admin/work-weixin/work-weixin-departments-tree-node.js:120
-#: frontend/src/shared-dir-view.js:712 frontend/src/shared-dir-view.js:774
+#: frontend/src/shared-dir-view.js:760 frontend/src/shared-dir-view.js:839
 msgid "More Operations"
 msgstr "Več operacij"
 
@@ -2212,8 +2169,8 @@ msgid "API token is copied to the clipboard."
 msgstr ""
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:116
-#: frontend/src/pages/lib-content-view/lib-content-view.js:163
-#: frontend/src/pages/lib-content-view/lib-content-view.js:166
+#: frontend/src/pages/lib-content-view/lib-content-view.js:162
+#: frontend/src/pages/lib-content-view/lib-content-view.js:165
 #: frontend/src/repo-folder-trash.js:130 frontend/src/utils/utils.js:1143
 msgid "Permission denied"
 msgstr "Dostop zavrnjen"
@@ -2296,8 +2253,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/search-file-dialog.js:85
 #: frontend/src/components/search/search-by-name.js:35
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:85
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:138
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:81
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:133
 #: frontend/src/pages/wiki/main-panel.js:81
 msgid "Search files in this library"
 msgstr "Iskanje datotek v tej knjižnici"
@@ -2364,9 +2321,9 @@ msgstr ""
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:283
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:407
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:215
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:91
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:179
-#: frontend/src/components/toolbar/view-file-toolbar.js:122
+#: frontend/src/components/toolbar/view-file-toolbar.js:103
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:112
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:63
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:315
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:99
 #: frontend/src/pages/shared-libs/shared-libs.js:228
@@ -2667,10 +2624,6 @@ msgstr ""
 msgid "Please enter 1 or more character"
 msgstr "Prosimo, vpiši 1 ali več znakov"
 
-#: frontend/src/components/dialog/update-tag-dialog.js:96
-msgid "Edit Tag"
-msgstr ""
-
 #: frontend/src/components/dialog/update-webdav-password.js:74
 #: frontend/src/components/user-settings/webdav-password.js:59
 #: frontend/src/settings.js:46
@@ -2728,37 +2681,34 @@ msgid "File does not exist."
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:90
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:143
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:76
 msgid "This file is in draft stage."
 msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:91
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:144
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:77
 msgid "View Draft"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/detail-comments-list.js:174
-#: frontend/src/components/file-view/comment-panel.js:220
-#: frontend/src/components/review-list-view/review-comments.js:168
-msgid "Add a comment."
+#: frontend/src/components/dirent-detail/detail-comments-list.js:179
+#: frontend/src/components/file-view/comment-panel.js:205
+#: frontend/src/components/review-list-view/review-comments.js:116
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:219
+msgid "Add a comment..."
 msgstr ""
 
-#: frontend/src/components/dirent-detail/detail-comments-list.js:284
-#: frontend/src/components/review-list-view/review-comments.js:269
-#: frontend/src/components/user-settings/webdav-password.js:67
-#: frontend/src/pages/sys-admin/terms-and-conditions/item.js:117
-msgid "Update"
-msgstr "Posodobi"
-
-#: frontend/src/components/dirent-detail/detail-comments-list.js:305
-#: frontend/src/components/review-list-view/review-comments.js:299
+#: frontend/src/components/dirent-detail/detail-comments-list.js:312
+#: frontend/src/components/file-view/comment-panel.js:348
+#: frontend/src/components/review-list-view/review-comments.js:248
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:133
 msgid "Mark as resolved"
 msgstr ""
 
-#: frontend/src/components/dirent-detail/detail-list-view.js:95
-#: frontend/src/components/dirent-detail/detail-list-view.js:109
+#: frontend/src/components/dirent-detail/detail-list-view.js:74
+#: frontend/src/components/dirent-detail/detail-list-view.js:88
 #: frontend/src/components/dirent-detail/file-details.js:82
-#: frontend/src/draft.js:858
+#: frontend/src/draft.js:833
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:46
 msgid "Location"
 msgstr ""
 
@@ -2781,6 +2731,7 @@ msgstr ""
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:688
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:733
 #: frontend/src/components/file-view/file-info.js:31
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:16
 msgid "locked"
 msgstr "zaklenjeno"
 
@@ -2817,8 +2768,8 @@ msgid "You can create files quickly"
 msgstr ""
 
 #: frontend/src/components/draft-list-view/draft-list-item.js:112
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:158
-#: frontend/src/draft.js:698
+#: frontend/src/draft.js:674
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:91
 msgid "Publish"
 msgstr ""
 
@@ -2895,7 +2846,6 @@ msgstr ""
 
 #: frontend/src/components/file-uploader/forbid-upload-list-item.js:13
 #: frontend/src/components/shared-link-file-uploader/forbid-upload-list-item.js:13
-#: frontend/src/pages/upload-link/forbid-upload-list-item.js:13
 msgid "Please upload files less than {placeholder}M"
 msgstr ""
 
@@ -2927,8 +2877,8 @@ msgstr ""
 #: frontend/src/components/file-view/file-toolbar.js:145
 #: frontend/src/components/file-view/file-toolbar.js:209
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:133
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:183
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:227
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:116
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:160
 #: frontend/src/pages/upload-link/upload-list-item.js:130
 msgid "Saving..."
 msgstr "Shranjujem…."
@@ -2989,21 +2939,23 @@ msgid "state"
 msgstr ""
 
 #: frontend/src/components/file-view/file-info.js:30
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:12
 msgid "starred"
 msgstr "pomembno"
 
 #: frontend/src/components/file-view/file-info.js:30
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:12
 msgid "unstarred"
 msgstr "odstrani pomembno"
 
 #: frontend/src/components/file-view/file-toolbar.js:92
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:173
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:106
 #: frontend/src/utils/text-translation.js:17
 msgid "Lock"
 msgstr "Zakleni"
 
 #: frontend/src/components/file-view/file-toolbar.js:96
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:176
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:109
 #: frontend/src/utils/text-translation.js:18
 msgid "Unlock"
 msgstr "Odkleni"
@@ -3023,7 +2975,7 @@ msgid "Details"
 msgstr "Podrobnosti"
 
 #: frontend/src/components/file-view/file-toolbar.js:181
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:201
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:134
 #: frontend/src/utils/text-translation.js:16
 msgid "Open via Client"
 msgstr "Odpri s klientom"
@@ -3046,7 +2998,7 @@ msgstr ""
 
 #: frontend/src/components/group-members.js:93
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:233
-#: frontend/src/pages/lib-content-view/lib-content-view.js:781
+#: frontend/src/pages/lib-content-view/lib-content-view.js:771
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:270
 #: frontend/src/pages/org-admin/org-group-repos.js:141
 #: frontend/src/pages/org-admin/org-user-repos.js:141
@@ -3221,15 +3173,15 @@ msgstr ""
 msgid "{number_placeholder} / Page"
 msgstr ""
 
-#: frontend/src/components/pdf-viewer.js:250
+#: frontend/src/components/pdf-viewer.js:251
 msgid "Default Size"
 msgstr ""
 
-#: frontend/src/components/pdf-viewer.js:251
+#: frontend/src/components/pdf-viewer.js:252
 msgid "Zoom In"
 msgstr ""
 
-#: frontend/src/components/pdf-viewer.js:252
+#: frontend/src/components/pdf-viewer.js:253
 msgid "Zoom Out"
 msgstr ""
 
@@ -3239,15 +3191,11 @@ msgid ""
 "right}"
 msgstr ""
 
-#: frontend/src/components/repo-info-bar.js:96
+#: frontend/src/components/repo-info-bar.js:108
 msgid "draft"
 msgstr ""
 
-#: frontend/src/components/review-list-view/review-comments.js:127
-msgid "Show resolved comments"
-msgstr ""
-
-#: frontend/src/components/review-list-view/review-comments.js:141
+#: frontend/src/components/review-list-view/review-comments.js:109
 msgid "No comment yet."
 msgstr ""
 
@@ -3316,30 +3264,52 @@ msgstr "Sporočilo (opcijsko):"
 msgid "Sending..."
 msgstr "Pošiljam..."
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:45
+#: frontend/src/components/set-link-expiration.js:36
+msgid "{minDays_placeholder} - {maxDays_placeholder} days"
+msgstr ""
+
+#: frontend/src/components/set-link-expiration.js:40
+msgid "Greater than or equal to {minDays_placeholder} days"
+msgstr ""
+
+#: frontend/src/components/set-link-expiration.js:43
+msgid "Less than or equal to {maxDays_placeholder} days"
+msgstr ""
+
+#: frontend/src/components/set-link-expiration.js:82
+msgid "Expiration days"
+msgstr ""
+
+#: frontend/src/components/set-link-expiration.js:101
+msgid "Expiration time"
+msgstr ""
+
+#: frontend/src/components/shared-file-view/shared-file-view.js:46
+#: frontend/src/pages/markdown-editor/seafile-editor/index.js:149
 #: frontend/src/view-file-text.js:79
 msgid "Successfully saved"
 msgstr ""
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:58
-#: frontend/src/shared-dir-view.js:68
+#: frontend/src/components/shared-file-view/shared-file-view.js:59
+#: frontend/src/shared-dir-view.js:74
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Prenos datotek je onemogočeno: dovoljena količina prenosa datotek uporabnika je presežena"
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:114
+#: frontend/src/components/shared-file-view/shared-file-view.js:116
 #: frontend/src/repo-folder-trash.js:200 frontend/src/repo-snapshot.js:161
+#: frontend/src/shared-dir-view.js:447
 msgid "Current path: "
 msgstr "Trenutna pot:"
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:115
+#: frontend/src/components/shared-file-view/shared-file-view.js:117
 msgid "Shared by:"
 msgstr ""
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:121
+#: frontend/src/components/shared-file-view/shared-file-view.js:123
 msgid "Save as ..."
 msgstr ""
 
-#: frontend/src/components/shared-file-view/shared-file-view.js:165
+#: frontend/src/components/shared-file-view/shared-file-view.js:167
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:179
 #: frontend/src/pages/org-admin/org-logs-file-update.js:204
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:153
@@ -3412,7 +3382,7 @@ msgid "Successfully starred {library_name_placeholder}."
 msgstr ""
 
 #: frontend/src/components/side-nav-footer.js:38
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:88
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:60
 msgid "Help"
 msgstr "Pomoč"
 
@@ -3459,59 +3429,44 @@ msgstr ""
 msgid "New Word File"
 msgstr ""
 
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:77
-#: frontend/src/components/toolbar/repo-view-toobar.js:63
-#: frontend/src/components/toolbar/view-file-toolbar.js:118
-#: frontend/src/file-history-old.js:267 frontend/src/repo-folder-trash.js:278
-msgid "More"
-msgstr "Več"
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:82
-msgid "Switch to plain text editor"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:84
-msgid "Switch to rich text editor"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:90
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:170
-msgid "Open parent directory"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:150
-#: frontend/src/components/toolbar/view-file-toolbar.js:111
-msgid "New Draft"
-msgstr ""
-
-#: frontend/src/components/toolbar/markdown-viewer-toolbar.js:155
-msgid "Start review"
-msgstr ""
-
-#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:364
+#: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:315
 #: frontend/src/utils/text-translation.js:12
 msgid "Move"
 msgstr "Premakni"
+
+#: frontend/src/components/toolbar/repo-view-toobar.js:63
+#: frontend/src/components/toolbar/view-file-toolbar.js:99
+#: frontend/src/file-history-old.js:267
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:49
+#: frontend/src/repo-folder-trash.js:278
+msgid "More"
+msgstr "Več"
 
 #: frontend/src/components/toolbar/repo-view-toobar.js:67
 #: frontend/src/pages/my-libs/my-libs-deleted.js:55
 msgid "Deleted Libraries"
 msgstr ""
 
-#: frontend/src/components/toolbar/view-file-toolbar.js:106
+#: frontend/src/components/toolbar/view-file-toolbar.js:87
 msgid "Edit File"
 msgstr ""
 
-#: frontend/src/components/toolbar/view-file-toolbar.js:112
+#: frontend/src/components/toolbar/view-file-toolbar.js:92
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:83
+msgid "New Draft"
+msgstr ""
+
+#: frontend/src/components/toolbar/view-file-toolbar.js:93
 msgid "Create a draft from this file, instead of editing it directly."
 msgstr ""
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:31
+#: frontend/src/shared-dir-view.js:451
 msgid "List"
 msgstr "Seznam"
 
 #: frontend/src/components/toolbar/view-mode-toolbar.js:32
-#: frontend/src/shared-dir-view.js:425
+#: frontend/src/shared-dir-view.js:452
 msgid "Grid"
 msgstr "Mreža"
 
@@ -3702,68 +3657,64 @@ msgstr ""
 msgid "Set Password"
 msgstr ""
 
-#: frontend/src/components/wiki-markdown-viewer.js:217
-msgid "related files"
-msgstr ""
-
-#: frontend/src/components/wiki-markdown-viewer.js:254
+#: frontend/src/components/wiki-markdown-viewer.js:209
 msgid "Last modified by"
 msgstr ""
 
-#: frontend/src/draft.js:398
+#: frontend/src/draft.js:394
 msgid "View diff"
 msgstr ""
 
-#: frontend/src/draft.js:650
+#: frontend/src/draft.js:627
 msgid "Draft has been deleted."
 msgstr ""
 
-#: frontend/src/draft.js:655
+#: frontend/src/draft.js:632
 msgid "Original file has been deleted."
 msgstr ""
 
-#: frontend/src/draft.js:680
+#: frontend/src/draft.js:656
 msgid "Review"
 msgstr ""
 
-#: frontend/src/draft.js:693
+#: frontend/src/draft.js:669
 msgid "Edit Draft"
 msgstr ""
 
-#: frontend/src/draft.js:697
+#: frontend/src/draft.js:673
 #: frontend/src/pages/dashboard/files-activities.js:137
 msgid "Publish draft"
 msgstr ""
 
-#: frontend/src/draft.js:702 frontend/src/draft.js:703
+#: frontend/src/draft.js:678 frontend/src/draft.js:679
 msgid "Published"
 msgstr ""
 
-#: frontend/src/draft.js:800
+#: frontend/src/draft.js:775
 msgid "Reviewers"
 msgstr ""
 
-#: frontend/src/draft.js:813
+#: frontend/src/draft.js:788
 msgid "No reviewer yet."
 msgstr ""
 
-#: frontend/src/draft.js:831
+#: frontend/src/draft.js:806
 msgid "Author"
 msgstr ""
 
-#: frontend/src/draft.js:899
+#: frontend/src/draft.js:874
 msgid "Comments"
 msgstr ""
 
-#: frontend/src/draft.js:901
+#: frontend/src/draft.js:876
 msgid "Unresolved comments:"
 msgstr ""
 
-#: frontend/src/draft.js:924
+#: frontend/src/draft.js:899
 msgid "Changes"
 msgstr ""
 
-#: frontend/src/draft.js:926
+#: frontend/src/draft.js:901
 msgid "Number of changes:"
 msgstr ""
 
@@ -3771,14 +3722,6 @@ msgstr ""
 #: frontend/src/repo-history.js:145
 msgid "Modifier"
 msgstr "Urejal"
-
-#: frontend/src/markdown-editor.js:346
-msgid "This file has been updated."
-msgstr ""
-
-#: frontend/src/markdown-editor.js:347
-msgid "Refresh"
-msgstr ""
 
 #: frontend/src/pages/dashboard/files-activities.js:32
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:45
@@ -3909,17 +3852,21 @@ msgid ""
 "file will be updated only after the draft has been reviewed."
 msgstr ""
 
-#: frontend/src/pages/file-history-old/history-item.js:56
+#: frontend/src/pages/file-history-old/history-item.js:57
 msgid "(current version)"
 msgstr "(trenutna različica)"
 
-#: frontend/src/pages/file-history-old/history-item.js:123
+#: frontend/src/pages/file-history-old/history-item.js:125
 #: frontend/src/pages/share-admin/share-links.js:221
 #: frontend/src/pages/share-admin/share-links.js:255
 #: frontend/src/pages/share-admin/upload-links.js:133
 #: frontend/src/pages/share-admin/upload-links.js:161
 msgid "View"
 msgstr "Ogled"
+
+#: frontend/src/pages/file-history-old/history-item.js:127
+msgid "View Related Snapshot"
+msgstr ""
 
 #: frontend/src/pages/file-history/side-panel.js:92
 msgid "Successfully restored."
@@ -4037,69 +3984,69 @@ msgstr ""
 msgid "This library has been set to read-only by admin and cannot be updated."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:66
-#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:93
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:64
+#: frontend/src/pages/lib-content-view/lib-content-toolbar.js:89
 msgid "Side Nav Menu"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:588
+#: frontend/src/pages/lib-content-view/lib-content-view.js:578
 msgid "Failed to move files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:590
-#: frontend/src/shared-dir-view.js:204
+#: frontend/src/pages/lib-content-view/lib-content-view.js:580
+#: frontend/src/shared-dir-view.js:212
 msgid "Failed to copy files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:620
+#: frontend/src/pages/lib-content-view/lib-content-view.js:610
 msgid "Successfully moved files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:622
-#: frontend/src/shared-dir-view.js:218
+#: frontend/src/pages/lib-content-view/lib-content-view.js:612
+#: frontend/src/shared-dir-view.js:226
 msgid "Successfully copied files to another library."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:777
+#: frontend/src/pages/lib-content-view/lib-content-view.js:767
 msgid "Successfully deleted {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:788
+#: frontend/src/pages/lib-content-view/lib-content-view.js:778
 msgid "Failed to delete {name} and other {n} items."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:973
-#: frontend/src/pages/lib-content-view/lib-content-view.js:984
+#: frontend/src/pages/lib-content-view/lib-content-view.js:963
+#: frontend/src/pages/lib-content-view/lib-content-view.js:974
 msgid "Renaming {name} failed"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1004
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1018
+#: frontend/src/pages/lib-content-view/lib-content-view.js:994
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1008
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:216
 #: frontend/src/pages/org-admin/org-groups.js:121
 #: frontend/src/pages/org-admin/org-libraries.js:83
 msgid "Successfully deleted {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1010
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1024
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1000
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1014
 msgid "Failed to delete {name}"
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1080
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1070
 msgid "Successfully moved {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1087
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1077
 msgid "Failed to move {name}."
 msgstr ""
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1130
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1120
 #: frontend/src/utils/utils.js:1242
 msgid "Successfully copied %(name)s."
 msgstr "Uspešno kopirano %(name)s."
 
-#: frontend/src/pages/lib-content-view/lib-content-view.js:1137
+#: frontend/src/pages/lib-content-view/lib-content-view.js:1127
 msgid "Failed to copy %(name)s"
 msgstr ""
 
@@ -4138,6 +4085,47 @@ msgstr "Zadnjič dostopano"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:117
 msgid "Successfully unlinked %(name)s."
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:41
+msgid "Local draft saved"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:88
+msgid "Start review"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:103
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:62
+msgid "Open parent directory"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:54
+msgid "Switch to plain text editor"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:56
+msgid "Switch to rich text editor"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/index.js:114
+msgid "This file has been updated."
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/index.js:115
+msgid "Refresh"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/seafile-editor/index.js:89
+msgid "Another user is editing this file!"
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/seafile-editor/index.js:101
+msgid "Leave this page? The system may not save your changes."
+msgstr ""
+
+#: frontend/src/pages/markdown-editor/seafile-editor/index.js:159
+msgid "Failed to save"
 msgstr ""
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:62
@@ -5671,6 +5659,10 @@ msgstr ""
 msgid "Failed to upload {file_name}."
 msgstr ""
 
+#: frontend/src/pages/upload-link/forbid-upload-list-item.js:14
+msgid "Please upload files less than {placeholder}"
+msgstr ""
+
 #: frontend/src/pages/upload-link/index.js:40
 msgid "Upload files to {folder_name_placeholder}"
 msgstr ""
@@ -5680,7 +5672,7 @@ msgid "shared by:"
 msgstr "deljeno z:"
 
 #: frontend/src/pages/upload-link/index.js:46
-#: frontend/src/shared-dir-view.js:430
+#: frontend/src/shared-dir-view.js:457
 msgid "The owner of this library has run out of space."
 msgstr "Lastnik te knjižnice nima več prostora."
 
@@ -5779,13 +5771,21 @@ msgstr "Jezik"
 msgid "Profile Setting"
 msgstr "Nastavitve profila"
 
-#: frontend/src/shared-dir-view.js:418
+#: frontend/src/shared-dir-view.js:445
 msgid "Shared by: "
 msgstr "Deljil:"
 
-#: frontend/src/shared-dir-view.js:437
+#: frontend/src/shared-dir-view.js:464
 msgid "ZIP Selected Items"
 msgstr ""
+
+#: frontend/src/shared-dir-view.js:466 frontend/src/translate.js:27
+msgid "Save Selected Items"
+msgstr ""
+
+#: frontend/src/shared-dir-view.js:471
+msgid "ZIP"
+msgstr "ZIP"
 
 #: frontend/src/shared-file-view-document.js:69
 #: frontend/src/shared-file-view-spreadsheet.js:53
@@ -5890,10 +5890,6 @@ msgstr ""
 msgid "No file access logs"
 msgstr ""
 
-#: frontend/src/translate.js:27
-msgid "Save Selected Items"
-msgstr ""
-
 #: frontend/src/user-notifications.js:125
 msgid "Mark all read"
 msgstr "Označi kot prebrano"
@@ -5907,7 +5903,7 @@ msgstr "Sporočilo"
 msgid "Access Log"
 msgstr "Dnevnik dostopov"
 
-#: frontend/src/utils/text-translation.js:24
+#: frontend/src/utils/text-translation.js:23
 msgid "Convert with ONLYOFFICE"
 msgstr ""
 

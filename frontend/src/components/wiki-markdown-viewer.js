@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
+import { MarkdownViewer } from '@seafile/seafile-editor';
 import { gettext, repoID, slug, serviceURL, isPublicWiki, sharedToken, mediaUrl } from '../utils/constants';
 import Loading from './loading';
 import { Utils } from '../utils/utils';
@@ -39,6 +39,8 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
+
+    this.getTitlesInfo();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,6 +59,9 @@ class WikiMarkdownViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
+    if (this.titlesInfo.length === 0) {
+      this.getTitlesInfo();
+    }
   }
 
   componentWillUnmount() {
@@ -66,8 +71,13 @@ class WikiMarkdownViewer extends React.Component {
     });
   }
 
-  onContentRendered = (markdownViewer) => {
-    this.titlesInfo = markdownViewer.titlesInfo;
+  getTitlesInfo = () => {
+    let titlesInfo = [];
+    let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
+    for (let i = 0; i < headingList.length; i++) {
+      titlesInfo.push(headingList[i].offsetTop);
+    }
+    this.titlesInfo = titlesInfo;
   }
 
   onLinkClick = (event) => {
@@ -170,7 +180,6 @@ class WikiMarkdownViewer extends React.Component {
           scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
           markdownContent={this.props.markdownContent}
           activeTitleIndex={this.state.activeTitleIndex}
-          onContentRendered={this.onContentRendered}
           modifyValueBeforeRender={this.modifyValueBeforeRender}
         />
       );
@@ -182,7 +191,6 @@ class WikiMarkdownViewer extends React.Component {
         scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
         markdownContent={this.props.markdownContent}
         activeTitleIndex={this.state.activeTitleIndex}
-        onContentRendered={this.onContentRendered}
       />
     );
   }

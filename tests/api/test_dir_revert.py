@@ -20,7 +20,8 @@ class DirRevertTest(BaseTestCase):
 
     def delete_dir(self):
         seafile_api.del_file(self.repo_id, self.parent_dir,
-            self.folder_name, self.username)
+                             json.dumps([self.folder_name]),
+                             self.username)
 
     def get_trash_dir_commit_id(self):
         deleted_file = seafile_api.get_deleted(self.repo_id, 0, '/', None)

@@ -37,7 +37,9 @@ class RepoCommitDirTest(BaseTestCase):
 
     def test_get(self):
         # delete a folder first
-        seafile_api.del_file(self.repo_id, '/', self.folder_name, self.user_name)
+        seafile_api.del_file(self.repo_id, '/',
+                             json.dumps([self.folder_name]),
+                             self.user_name)
 
         self.login_as(self.user)
 
