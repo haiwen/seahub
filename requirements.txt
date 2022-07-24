@@ -17,6 +17,7 @@ pillow
 pyjwt==2.1.*
 pycryptodome==3.12.0
 requests_oauthlib
+pyheif-pillow-opener==0.1.0
 chardet
 python-cas
 djangosaml2==0.20.0
