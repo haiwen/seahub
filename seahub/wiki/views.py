@@ -159,7 +159,11 @@ def slug(request, slug, file_path="home.md"):
 
             # Get markdown outlines
             for p in html_content.split('\n'):
-                if p.startswith('<h2>') or p.startswith('<h3>'):
+                if p.startswith('<h2>'):
+                    p = '<div class="outline-h2">' + p.strip('<h2>').strip('</h2>') + '</div>'
+                    outlines.append(mark_safe(p))
+                elif p.startswith('<h3>'):
+                    p = '<div class="outline-h3">' + p.strip('<h3>').strip('</h3>') + '</div>'
                     outlines.append(mark_safe(p))
 
             file_content = mark_safe(html_content)
