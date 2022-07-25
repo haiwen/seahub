@@ -93,7 +93,7 @@ def slug(request, slug, file_path="home.md"):
 
     repo = seafile_api.get_repo(wiki.repo_id)
 
-    file_content, latest_contributor, last_modified = '', '', 0
+    file_content, outlines, latest_contributor, last_modified = '', [], '', 0
     if is_dir is False:
         send_file_access_msg(request, repo, file_path, 'web')
 
@@ -110,28 +110,63 @@ def slug(request, slug, file_path="home.md"):
             logger.error(e)
             return render_error(request, _('Internal Server Error'))
 
-        # Convert a markdown string to HTML
+        if file_type == MARKDOWN:
+            # Convert a markdown string to HTML
+            try:
+                html_content = markdown.markdown(file_response)
+            except Exception as e:
+                logger.error(e)
+                return render_error(request, _('Internal Server Error'))
+
+            # Parse the html and replace image url to wiki mode
+            html_doc = lxml.html.fromstring(html_content)
+            img_elements = html_doc.xpath('//img')   # Get the <img> elements
+            img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (SERVICE_URL.strip('/'), repo.id))
+            for img in img_elements:
+                img_url = img.attrib.get('src', '')
+                if img_url_re.match(img_url) is not None:
+                    img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL.strip('/'), slug, img_path)
+                    html_content = html_content.replace(img_url, new_img_url)
+                elif re.compile(r'^\.\./*|^\./').match(img_url):
+                    if img_url.startswith('../'):
+                        img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
+                    else:
+                        img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL.strip('/'), slug, img_path)
+                    html_content = html_content.replace(img_url, new_img_url)
+
+            # Replace link url to wiki mode
+            link_elements = html_doc.xpath('//a')  # Get the <a> elements
+            file_link_re = re.compile(r'^%s/lib/%s/file/.*' % (SERVICE_URL.strip('/'), repo.id))
+            md_link_re = re.compile(r'^%s/lib/%s/file/.*\.md$' % (SERVICE_URL.strip('/'), repo.id))
+            dir_link_re = re.compile(r'^%s/library/%s/(.*)' % (SERVICE_URL.strip('/'), repo.id))
+            for link in link_elements:
+                link_url = link.attrib.get('href', '')
+                if file_link_re.match(link_url) is not None:
+                    link_path = link_url[link_url.find('/file/') + 5:].strip('/')
+                    if md_link_re.match(link_url) is not None:
+                        new_md_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, link_path)
+                        html_content = html_content.replace(link_url, new_md_url)
+                    else:
+                        new_file_url = '%s/d/%s/files/?p=%s&dl=1' % (SERVICE_URL.strip('/'), fs.token, link_path)
+                        html_content = html_content.replace(link_url, new_file_url)
+                elif dir_link_re.match(link_url) is not None:
+                    link_path = dir_link_re.match(link_url).groups()[0].strip('/')
+                    dir_path = link_path[link_path.find('/'):].strip('/')
+                    new_dir_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, dir_path)
+                    html_content = html_content.replace(link_url, new_dir_url)
+
+            file_content = mark_safe(html_content)
+
+            # get markdown outlines
+            for p in html_content.split('\n'):
+                if p.startswith('<h2>') or p.startswith('<h3>'):
+                    outlines.append(mark_safe(p))
+            print(outlines)
+
         try:
-            html_content = markdown.markdown(file_response)
-        except Exception as e:
-            logger.error(e)
-            return render_error(request, _('Internal Server Error'))
-
-        # Parse the html and replace image url to wiki mode
-        html_doc = lxml.html.fromstring(html_content)
-        img_elements = html_doc.xpath('//img')   # Get the <img> elements
-        img_url_re = re.compile(r'^%s/lib/%s/file.*raw=1$' % (SERVICE_URL, repo.id))
-        for img in img_elements:
-            img_url = img.attrib.get('src', '')
-            if img_url_re.match(img_url) is not None:
-                img_path = img_url[img_url.find('/file')+5:img_url.find('?')]
-                img_new_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL, slug, img_path)
-                html_content = html_content.replace(img_url, img_new_url)
-
-        file_content = mark_safe(html_content)
-
-        try:
-            dirent = seafile_api.get_dirent_by_path(repo.repo_id, file_path)
+            dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
             if dirent:
                 latest_contributor, last_modified = dirent.modifier, dirent.mtime
             else:
@@ -149,6 +184,7 @@ def slug(request, slug, file_path="home.md"):
         "file_path": file_path,
         "filename": os.path.splitext(os.path.basename(file_path))[0],
         "file_content": file_content,
+        "outlines": outlines,
         "latest_contributor": latest_contributor,
         "last_modified": last_modified,
         "repo_id": wiki.repo_id,

@@ -18,7 +18,14 @@
 
 {% block extra_content %}
 {% if not is_dir %}
-<div id="wiki-file-content" class="{{ LANGUAGE_CODE }} article">{{ file_content }}</div>
+<div id="wiki-file-content" class="{{ LANGUAGE_CODE }} article">
+    {{ file_content }}
+    <div class="seafile-markdown-outline">
+        {% for outline in outlines %}
+            {{ outline }}
+        {% endfor %}
+    </div>
+</div>
 {% endif %}
 {% endblock %}
 
