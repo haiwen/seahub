@@ -157,13 +157,12 @@ def slug(request, slug, file_path="home.md"):
                     new_dir_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, dir_path)
                     html_content = html_content.replace(link_url, new_dir_url)
 
-            file_content = mark_safe(html_content)
-
-            # get markdown outlines
+            # Get markdown outlines
             for p in html_content.split('\n'):
                 if p.startswith('<h2>') or p.startswith('<h3>'):
                     outlines.append(mark_safe(p))
-            print(outlines)
+
+            file_content = mark_safe(html_content)
 
         try:
             dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
