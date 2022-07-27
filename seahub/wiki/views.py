@@ -1,22 +1,28 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import re
 import logging
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
 import posixpath
+from datetime import datetime
 
-import seaserv
+import markdown
+import lxml.html
 from seaserv import seafile_api
 from django.urls import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.utils.safestring import mark_safe
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
-from seahub.auth.decorators import login_required
 from seahub.share.models import FileShare
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
-from seahub.utils import get_service_url, get_file_type_and_ext, render_permission_error
+from seahub.utils import get_file_type_and_ext, render_permission_error, \
+     gen_inner_file_get_url, render_error
+from seahub.views.file import send_file_access_msg
 from seahub.utils.file_types import *
+from seahub.settings import SERVICE_URL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -88,6 +94,98 @@ def slug(request, slug, file_path="home.md"):
 
     repo = seafile_api.get_repo(wiki.repo_id)
 
+    file_content, outlines, latest_contributor, last_modified = '', [], '', 0
+    if is_dir is False:
+        send_file_access_msg(request, repo, file_path, 'web')
+
+        file_name = os.path.basename(file_path)
+        token = seafile_api.get_fileserver_access_token(
+            repo.repo_id, file_id, 'download', request.user.username, 'False')
+        if not token:
+            return render_error(request, _('Internal Server Error'))
+
+        url = gen_inner_file_get_url(token, file_name)
+        try:
+            file_response = urllib.request.urlopen(url).read().decode()
+        except Exception as e:
+            logger.error(e)
+            return render_error(request, _('Internal Server Error'))
+
+        if file_type == MARKDOWN:
+            # Convert a markdown string to HTML
+            try:
+                html_content = markdown.markdown(file_response)
+            except Exception as e:
+                logger.error(e)
+                return render_error(request, _('Internal Server Error'))
+
+            # Parse the html and replace image url to wiki mode
+            html_doc = lxml.html.fromstring(html_content)
+            img_elements = html_doc.xpath('//img')   # Get the <img> elements
+            img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (SERVICE_URL.strip('/'), repo.id))
+            for img in img_elements:
+                img_url = img.attrib.get('src', '')
+                if img_url_re.match(img_url) is not None:
+                    img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                  % (SERVICE_URL.strip('/'), slug, img_path)
+                    html_content = html_content.replace(img_url, new_img_url)
+                elif re.compile(r'^\.\./*|^\./').match(img_url):
+                    if img_url.startswith('../'):
+                        img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
+                    else:
+                        img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                  % (SERVICE_URL.strip('/'), slug, img_path)
+                    html_content = html_content.replace(img_url, new_img_url)
+
+            # Replace link url to wiki mode
+            link_elements = html_doc.xpath('//a')  # Get the <a> elements
+            file_link_re = re.compile(r'^%s/lib/%s/file/.*' % (SERVICE_URL.strip('/'), repo.id))
+            md_link_re = re.compile(r'^%s/lib/%s/file/.*\.md$' % (SERVICE_URL.strip('/'), repo.id))
+            dir_link_re = re.compile(r'^%s/library/%s/(.*)' % (SERVICE_URL.strip('/'), repo.id))
+            for link in link_elements:
+                link_url = link.attrib.get('href', '')
+                if file_link_re.match(link_url) is not None:
+                    link_path = link_url[link_url.find('/file/') + 5:].strip('/')
+                    if md_link_re.match(link_url) is not None:
+                        new_md_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, link_path)
+                        html_content = html_content.replace(link_url, new_md_url)
+                    else:
+                        new_file_url = '%s/d/%s/files/?p=%s&dl=1' % (SERVICE_URL.strip('/'), fs.token, link_path)
+                        html_content = html_content.replace(link_url, new_file_url)
+                elif dir_link_re.match(link_url) is not None:
+                    link_path = dir_link_re.match(link_url).groups()[0].strip('/')
+                    dir_path = link_path[link_path.find('/'):].strip('/')
+                    new_dir_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, dir_path)
+                    html_content = html_content.replace(link_url, new_dir_url)
+
+            # Get markdown outlines and format <h> label
+            for p in html_content.split('\n'):
+                if p.startswith('<h1>') and p.endswith('</h1>'):
+                    head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.strip('<h1></h1>'), 1)
+                    html_content = html_content.replace(p, head)
+                elif p.startswith('<h2>') and p.endswith('</h2>'):
+                    head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.strip('<h2></h2>'), 1)
+                    html_content = html_content.replace(p, head)
+                    outline = '<div class="outline-h2">' + p.strip('<h2></h2>') + '</div>'
+                    outlines.append(mark_safe(outline))
+                elif p.startswith('<h3>') and p.endswith('</h3>'):
+                    head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.strip('<h3></h3>'), 1)
+                    html_content = html_content.replace(p, head)
+                    outline = '<div class="outline-h3">' + p.strip('<h3></h3>') + '</div>'
+                    outlines.append(mark_safe(outline))
+
+            file_content = mark_safe(html_content)
+
+        try:
+            dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except Exception as e:
+            logger.warning(e)
+        last_modified = datetime.fromtimestamp(last_modified)
+
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
         "repo_name": repo.name if repo else '',
@@ -97,6 +195,10 @@ def slug(request, slug, file_path="home.md"):
         "user_can_write": user_can_write,
         "file_path": file_path,
         "filename": os.path.splitext(os.path.basename(file_path))[0],
+        "file_content": file_content,
+        "outlines": outlines,
+        "modifier": latest_contributor,
+        "modify_time": last_modified,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,

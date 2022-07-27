@@ -304,6 +304,8 @@ def translate_seahub_time(value, autoescape=None):
 
     return mark_safe(time_with_tag)
 
+
+@register.filter(name='translate_seahub_time_str')
 def translate_seahub_time_str(val):
     """Convert python datetime to human friendly format."""
 

@@ -27,7 +27,7 @@ class Wiki extends Component {
       pathExist: true,
       closeSideBar: false,
       isViewFile: true,
-      isDataLoading: true,
+      isDataLoading: false,
       direntList: [],
       content: '',
       permission: '',
@@ -43,6 +43,7 @@ class Wiki extends Component {
     window.onpopstate = this.onpopstate;
     this.indexPath = '/index.md';
     this.homePath = '/home.md';
+    this.pythonWrapper = null;
   }
 
   componentWillMount() {
@@ -52,39 +53,54 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
+    this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
+
+    this.links = document.querySelectorAll(`#wiki-file-content a`);
+    this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
   }
 
-  loadWikiData = (initialPath) => {
-    this.loadSidePanel(initialPath);
-
-    if (isDir === 'None') {
-      if (initialPath === '/home.md') {
-        this.showDir('/');
-      } else {
-        this.setState({pathExist: false});
-        let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
-        window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
-      }
-    } else if (isDir === 'True') {
-      this.showDir(initialPath);
-    } else if (isDir === 'False') {
-      this.showFile(initialPath);
-    }
+  componentWillUnmount() {
+    this.links.forEach(link => link.removeEventListener('click', this.onConentLinkClick));
   }
 
   loadSidePanel = (initialPath) => {
     if (hasIndex) {
       this.loadIndexNode();
-    } else {
-      if (isDir === 'None') {
-        initialPath = '/';
-        this.loadNodeAndParentsByPath('/');
-      } else  {
-        this.loadNodeAndParentsByPath(initialPath);
-      }
+      return;
     }
 
+    // load dir list
+    initialPath = isDir === 'None' ? '/' : initialPath;
+    this.loadNodeAndParentsByPath(initialPath);
+  }
+
+  loadWikiData = (initialPath) => {
+    this.pythonWrapper = document.getElementById('wiki-file-content');
+    if (isDir === 'False') {
+      // this.showFile(initialPath);
+      this.setState({path: initialPath});
+      return;
+    }
+
+    // if it is a file list, remove the template content provided by python
+    this.removePythonWrapper();
+
+    if (isDir === 'True') {
+      this.showDir(initialPath);
+      return;
+    }
+    
+    if (isDir === 'None' && initialPath === '/home.md') {
+      this.showDir('/');
+      return;
+    }
+
+    if (isDir === 'None') {
+      this.setState({pathExist: false});
+      let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
+      window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
+    }
   }
 
   loadIndexNode = () => {
@@ -119,7 +135,8 @@ class Wiki extends Component {
       isViewFile: true,
       path: filePath,
     });
-
+    
+    this.removePythonWrapper();
     seafileAPI.getWikiFileContent(slug, filePath).then(res => {
       let data = res.data;
       this.setState({
@@ -219,6 +236,29 @@ class Wiki extends Component {
     }).catch(() => {
       this.setState({isLoadFailed: true});
     });
+  }
+
+  removePythonWrapper = () => {
+    if (this.pythonWrapper)  {
+      document.body.removeChild(this.pythonWrapper);
+      this.pythonWrapper = null;
+    }
+  }
+
+  onConentLinkClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    let link = '';
+    if (event.target.tagName !== 'A') {
+      let target = event.target.parentNode;
+      while (target.tagName !== 'A') {
+        target = target.parentNode;
+      }
+      link = target.href;
+    } else {
+      link = event.target.href;
+    }
+    this.onLinkClick(link);
   }
 
   onLinkClick = (link) => {

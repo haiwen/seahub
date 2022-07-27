@@ -1,4 +1,5 @@
 {% extends "base_for_react.html" %}
+{% load i18n %}
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
 {% block extra_ogp_tags %}
@@ -16,6 +17,24 @@
 
 {% block sub_title %} {{filename}} - {% endblock %}
 
+{% block extra_content %}
+{% if not is_dir %}
+<div id="wiki-file-content" class="{{ LANGUAGE_CODE }}">
+    <div class="article">
+        {{ file_content }}
+        <p id="wiki-page-last-modified">{% translate "Last modified by" %} {{modifier|email2nickname}}, <span>{{modify_time|translate_seahub_time_str}}</span></p>
+    </div>
+    <div class="seafile-markdown-outline">
+        <div id="seafile-editor-outline" class="seafile-editor-outline">
+            {% for outline in outlines %}
+                {{ outline }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block extra_script %}
 <script type="text/javascript">
     window.wiki = {
@@ -31,6 +50,71 @@
             hasIndex: {% if has_index %} true {% else %} false {% endif %},
         }
     };
+</script>
+<script type="text/javascript">
+    // titles info 
+    let titlesInfo = [];
+    let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
+    for (let i = 0; i < headingList.length; i++) {
+      titlesInfo.push(headingList[i].offsetTop);
+    }
+
+    // outline infos
+    const outlineInfos = document.querySelectorAll('.outline-h2, .outline-h3');
+    const addActiveClass = (item) => {
+        const className = item.className;
+        if (className.indexOf('active') > -1) return;
+        item.className += ' active';
+    };
+    const removeActiveClass = (item) => {
+        const className = item.className;
+        if (className.indexOf('active') === -1) return; 
+        item.className = className.replace(/(?:^|\s)active(?!\S)/g, '');
+    };
+    const updateOutline = (activeIndex) => {
+        for (let i = 0; i < outlineInfos.length; i++) {
+            const item = outlineInfos[i];
+            if (activeIndex !== i) {
+                removeActiveClass(item);
+                continue;
+            }
+            addActiveClass(item);
+        }
+    };
+    const outlineContainer = document.getElementById('seafile-editor-outline');
+    outlineContainer && outlineContainer.addEventListener('click', (event) => {
+        const text = event.target.innerText;
+        let url = new URL(window.location.href);
+        url.hash = '#user-content-' + text;
+        window.location.href = url.toString();
+    });
+
+    // scroll event handle
+    const container = document.getElementById('wiki-file-content');
+    container && container.addEventListener('scroll', () => {
+        const titlesLength = titlesInfo.length;
+        const contentScrollTop = container.scrollTop + 180;
+        let activeTitleIndex;
+        if (contentScrollTop <= titlesInfo[0]) {
+          activeTitleIndex = 0;
+        } else if (contentScrollTop > titlesInfo[titlesLength - 1]) {
+          activeTitleIndex = titlesInfo.length - 1;
+        } else {
+            for (let i = 0; i < titlesLength; i++) {
+              if (contentScrollTop > titlesInfo[i]) {
+                continue;
+              } else {
+                activeTitleIndex = i - 1;
+                break;
+              }
+            }
+        }
+
+        updateOutline(activeTitleIndex);
+    });
+
+    // set first outline to active
+    updateOutline(0);
 </script>
 
 {% render_bundle 'wiki' 'js' %}

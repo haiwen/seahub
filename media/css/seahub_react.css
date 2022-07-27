@@ -1220,3 +1220,124 @@ a.table-sort-op:hover {
     box-shadow: 0 0 6px #ccc;
     text-align: center;
 }
+
+#wiki-file-content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 20%;
+    top: 90px;
+    z-index: 2;
+    background: #fff;
+    overflow: auto;
+    display: flex;
+}
+
+#wiki-file-content .article {
+    margin-right: 200px;
+    padding: 10px 30px 20px;
+}
+
+#wiki-file-content .seafile-markdown-outline {
+    position: fixed;
+    top: 97px;
+    right: 0;
+    width: 200px;
+    overflow: auto;
+    height: 80%;
+}
+
+@media (max-width: 767px) {
+    #wiki-file-content {
+        left: 0;
+    }
+
+    #wiki-file-content .article {
+        margin-right: 0;
+        width: 100%;
+    }
+
+    #wiki-file-content .seafile-markdown-outline {
+        display: none;
+    }
+}
+
+.seafile-md-viewer-content .article {
+    padding: 0;
+}
+.seafile-md-viewer-content {
+    background: #fff;
+    padding: 70px 75px;
+    border:1px solid #e6e6dd;
+    min-height: calc(100% - 60px);
+}
+.seafile-md-viewer-outline-heading2,
+.seafile-md-viewer-outline-heading3 {
+    margin-left: .75rem;
+    line-height: 2.5;
+    color:#666;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+}
+.seafile-md-viewer-outline-heading3 {
+    margin-left: 2rem;
+}
+.seafile-md-viewer-outline-heading2:hover,
+.seafile-md-viewer-outline-heading3:hover {
+    color: #eb8205;
+}
+.seafile-markdown-outline {
+    position: fixed;
+    padding-right: 1rem;
+    top: 97px;
+    right: 0;
+    width: 200px;
+    overflow: auto;
+    height: 80%;
+}
+.seafile-editor-outline {
+    border-left: 1px solid #ddd;
+}
+.seafile-markdown-outline .active {
+    color: #eb8205;
+    border-left: 1px solid #eb8205;
+}
+.seafile-markdown-outline .outline-h2, 
+.seafile-markdown-outline .outline-h3 {
+    height: 30px;
+    margin-left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+.seafile-markdown-outline .outline-h2 {
+    padding-left: 20px;
+}
+.seafile-markdown-outline .outline-h3 {
+    padding-left: 40px;
+}
+
+#wiki-file-content .seafile-markdown-outline .outline-h2,
+#wiki-file-content .seafile-markdown-outline .outline-h3 {
+  height: 24px;
+  font-size: 12px;
+  color: #4d5156;
+}
+
+#wiki-file-content .seafile-markdown-outline .outline-h2.active,
+#wiki-file-content .seafile-markdown-outline .outline-h3.active { 
+  color: #eb8205;
+}
+
+#wiki-file-content .seafile-markdown-outline .seafile-markdown-outline {
+  overflow-y: hidden;
+  margin-right: 10px;
+}
+
+#wiki-file-content .seafile-markdown-outline .seafile-markdown-outline:hover {
+  overflow-y: auto;
+}
+  
