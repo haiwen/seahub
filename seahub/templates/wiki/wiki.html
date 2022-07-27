@@ -1,4 +1,5 @@
 {% extends "base_for_react.html" %}
+{% load i18n %}
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags %}
 {% block extra_ogp_tags %}
@@ -21,6 +22,7 @@
 <div id="wiki-file-content" class="{{ LANGUAGE_CODE }}">
     <div class="article">
         {{ file_content }}
+        <p id="wiki-page-last-modified">{% translate "Last modified by" %} {{modifier|email2nickname}}, <span>{{modify_time|translate_seahub_time_str}}</span></p>
     </div>
     <div class="seafile-markdown-outline">
         <div id="seafile-editor-outline" class="seafile-editor-outline">

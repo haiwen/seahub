@@ -4,6 +4,7 @@ import re
 import logging
 import urllib.request
 import posixpath
+from datetime import datetime
 
 import markdown
 import lxml.html
@@ -126,14 +127,16 @@ def slug(request, slug, file_path="home.md"):
                 img_url = img.attrib.get('src', '')
                 if img_url_re.match(img_url) is not None:
                     img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
-                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL.strip('/'), slug, img_path)
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                  % (SERVICE_URL.strip('/'), slug, img_path)
                     html_content = html_content.replace(img_url, new_img_url)
                 elif re.compile(r'^\.\./*|^\./').match(img_url):
                     if img_url.startswith('../'):
                         img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
                     else:
                         img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
-                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' % (SERVICE_URL.strip('/'), slug, img_path)
+                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                  % (SERVICE_URL.strip('/'), slug, img_path)
                     html_content = html_content.replace(img_url, new_img_url)
 
             # Replace link url to wiki mode
@@ -179,10 +182,9 @@ def slug(request, slug, file_path="home.md"):
             dirent = seafile_api.get_dirent_by_path(wiki.repo_id, file_path)
             if dirent:
                 latest_contributor, last_modified = dirent.modifier, dirent.mtime
-            else:
-                latest_contributor, last_modified = '', 0
         except Exception as e:
             logger.warning(e)
+        last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
@@ -195,8 +197,8 @@ def slug(request, slug, file_path="home.md"):
         "filename": os.path.splitext(os.path.basename(file_path))[0],
         "file_content": file_content,
         "outlines": outlines,
-        "latest_contributor": latest_contributor,
-        "last_modified": last_modified,
+        "modifier": latest_contributor,
+        "modify_time": last_modified,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
