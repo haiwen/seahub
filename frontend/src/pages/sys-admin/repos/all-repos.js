@@ -114,13 +114,13 @@ class AllRepos extends Component {
 
   getSearch = () => {
     return <Search
-      placeholder={gettext('Search libraries by name')}
+      placeholder={gettext('Search libraries by name or id')}
       submit={this.searchRepos}
     />;
   }
 
-  searchRepos = (repoName) => {
-    navigate(`${siteRoot}sys/search-libraries/?name=${encodeURIComponent(repoName)}`);
+  searchRepos = (repoNameOrID) => {
+    navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
   }
 
   render() {

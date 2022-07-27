@@ -482,7 +482,7 @@ class AdminSearchLibrary(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
-        """ Search library by name.
+        """ Search library by name or id.
 
         Permission checking:
         1. only admin can perform this action.
@@ -497,6 +497,7 @@ class AdminSearchLibrary(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repos = seafile_api.search_repos_by_name(query_str)
+        repos += seafile_api.get_repos_by_id_prefix(query_str)
 
         default_repo_id = get_system_default_repo_id()
         repos = [r for r in repos if not r.is_virtual]
