@@ -119,62 +119,64 @@ def slug(request, slug, file_path="home.md"):
                 logger.error(e)
                 return render_error(request, _('Internal Server Error'))
 
-            # Parse the html and replace image url to wiki mode
-            html_doc = lxml.html.fromstring(html_content)
-            img_elements = html_doc.xpath('//img')   # Get the <img> elements
-            img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (SERVICE_URL.strip('/'), repo.id))
-            for img in img_elements:
-                img_url = img.attrib.get('src', '')
-                if img_url_re.match(img_url) is not None:
-                    img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
-                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
-                                  % (SERVICE_URL.strip('/'), slug, img_path)
-                    html_content = html_content.replace(img_url, new_img_url)
-                elif re.compile(r'^\.\./*|^\./').match(img_url):
-                    if img_url.startswith('../'):
-                        img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
-                    else:
-                        img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
-                    new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
-                                  % (SERVICE_URL.strip('/'), slug, img_path)
-                    html_content = html_content.replace(img_url, new_img_url)
+            if html_content:
+                html_doc = lxml.html.fromstring(html_content)
 
-            # Replace link url to wiki mode
-            link_elements = html_doc.xpath('//a')  # Get the <a> elements
-            file_link_re = re.compile(r'^%s/lib/%s/file/.*' % (SERVICE_URL.strip('/'), repo.id))
-            md_link_re = re.compile(r'^%s/lib/%s/file/.*\.md$' % (SERVICE_URL.strip('/'), repo.id))
-            dir_link_re = re.compile(r'^%s/library/%s/(.*)' % (SERVICE_URL.strip('/'), repo.id))
-            for link in link_elements:
-                link_url = link.attrib.get('href', '')
-                if file_link_re.match(link_url) is not None:
-                    link_path = link_url[link_url.find('/file/') + 5:].strip('/')
-                    if md_link_re.match(link_url) is not None:
-                        new_md_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, link_path)
-                        html_content = html_content.replace(link_url, new_md_url)
-                    else:
-                        new_file_url = '%s/d/%s/files/?p=%s&dl=1' % (SERVICE_URL.strip('/'), fs.token, link_path)
-                        html_content = html_content.replace(link_url, new_file_url)
-                elif dir_link_re.match(link_url) is not None:
-                    link_path = dir_link_re.match(link_url).groups()[0].strip('/')
-                    dir_path = link_path[link_path.find('/'):].strip('/')
-                    new_dir_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, dir_path)
-                    html_content = html_content.replace(link_url, new_dir_url)
+                # Parse the html and replace image url to wiki mode
+                img_elements = html_doc.xpath('//img')   # Get the <img> elements
+                img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (SERVICE_URL.strip('/'), repo.id))
+                for img in img_elements:
+                    img_url = img.attrib.get('src', '')
+                    if img_url_re.match(img_url) is not None:
+                        img_path = img_url[img_url.find('/file/')+5:img_url.find('?')]
+                        new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                      % (SERVICE_URL.strip('/'), slug, img_path)
+                        html_content = html_content.replace(img_url, new_img_url)
+                    elif re.compile(r'^\.\./*|^\./').match(img_url):
+                        if img_url.startswith('../'):
+                            img_path = os.path.join(os.path.dirname(os.path.dirname(file_path)), img_url[3:])
+                        else:
+                            img_path = os.path.join(os.path.dirname(file_path), img_url[2:])
+                        new_img_url = '%s/view-image-via-public-wiki/?slug=%s&path=%s' \
+                                      % (SERVICE_URL.strip('/'), slug, img_path)
+                        html_content = html_content.replace(img_url, new_img_url)
 
-            # Get markdown outlines and format <h> label
-            for p in html_content.split('\n'):
-                if p.startswith('<h1>') and p.endswith('</h1>'):
-                    head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.strip('<h1></h1>'), 1)
-                    html_content = html_content.replace(p, head)
-                elif p.startswith('<h2>') and p.endswith('</h2>'):
-                    head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.strip('<h2></h2>'), 1)
-                    html_content = html_content.replace(p, head)
-                    outline = '<div class="outline-h2">' + p.strip('<h2></h2>') + '</div>'
-                    outlines.append(mark_safe(outline))
-                elif p.startswith('<h3>') and p.endswith('</h3>'):
-                    head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.strip('<h3></h3>'), 1)
-                    html_content = html_content.replace(p, head)
-                    outline = '<div class="outline-h3">' + p.strip('<h3></h3>') + '</div>'
-                    outlines.append(mark_safe(outline))
+                # Replace link url to wiki mode
+                link_elements = html_doc.xpath('//a')  # Get the <a> elements
+                file_link_re = re.compile(r'^%s/lib/%s/file/.*' % (SERVICE_URL.strip('/'), repo.id))
+                md_link_re = re.compile(r'^%s/lib/%s/file/.*\.md$' % (SERVICE_URL.strip('/'), repo.id))
+                dir_link_re = re.compile(r'^%s/library/%s/(.*)' % (SERVICE_URL.strip('/'), repo.id))
+                for link in link_elements:
+                    link_url = link.attrib.get('href', '')
+                    if file_link_re.match(link_url) is not None:
+                        link_path = link_url[link_url.find('/file/') + 5:].strip('/')
+                        if md_link_re.match(link_url) is not None:
+                            new_md_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, link_path)
+                            html_content = html_content.replace(link_url, new_md_url)
+                        else:
+                            new_file_url = '%s/d/%s/files/?p=%s&dl=1' % (SERVICE_URL.strip('/'), fs.token, link_path)
+                            html_content = html_content.replace(link_url, new_file_url)
+                    elif dir_link_re.match(link_url) is not None:
+                        link_path = dir_link_re.match(link_url).groups()[0].strip('/')
+                        dir_path = link_path[link_path.find('/'):].strip('/')
+                        new_dir_url = '%s/published/%s/%s' % (SERVICE_URL.strip('/'), slug, dir_path)
+                        html_content = html_content.replace(link_url, new_dir_url)
+
+                # Get markdown outlines and format <h> label
+                for p in html_content.split('\n'):
+                    if p.startswith('<h1>') and p.endswith('</h1>'):
+                        head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.strip('<h1></h1>'), 1)
+                        html_content = html_content.replace(p, head)
+                    elif p.startswith('<h2>') and p.endswith('</h2>'):
+                        head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.strip('<h2></h2>'), 1)
+                        html_content = html_content.replace(p, head)
+                        outline = '<div class="outline-h2">' + p.strip('<h2></h2>') + '</div>'
+                        outlines.append(mark_safe(outline))
+                    elif p.startswith('<h3>') and p.endswith('</h3>'):
+                        head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.strip('<h3></h3>'), 1)
+                        html_content = html_content.replace(p, head)
+                        outline = '<div class="outline-h3">' + p.strip('<h3></h3>') + '</div>'
+                        outlines.append(mark_safe(outline))
 
             file_content = mark_safe(html_content)
 
