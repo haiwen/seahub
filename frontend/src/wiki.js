@@ -122,6 +122,7 @@ class Wiki extends Component {
   }
 
   showDir = (dirPath) => {
+    this.removePythonWrapper();
     this.loadDirentList(dirPath);
 
     // update location url
