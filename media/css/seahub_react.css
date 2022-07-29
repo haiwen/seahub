@@ -1226,7 +1226,8 @@ a.table-sort-op:hover {
     right: 0;
     bottom: 0;
     left: 20%;
-    top: 90px;
+    top: 49px;
+    padding: 30px 16px 20px 30px;
     z-index: 2;
     background: #fff;
     overflow: auto;
@@ -1234,17 +1235,23 @@ a.table-sort-op:hover {
 }
 
 #wiki-file-content .article {
+    margin-top: -2rem;
     margin-right: 200px;
-    padding: 10px 30px 20px;
+    padding-left: 10px;
+    padding-right: 40px;
 }
 
 #wiki-file-content .seafile-markdown-outline {
     position: fixed;
-    top: 97px;
+    top: 79px;
     right: 0;
     width: 200px;
     overflow: auto;
     height: 80%;
+}
+
+#wiki-file-content .seafile-markdown-outline .seafile-editor-outline {
+    padding-right: 16px;
 }
 
 @media (max-width: 767px) {

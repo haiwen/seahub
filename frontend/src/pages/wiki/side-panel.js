@@ -30,10 +30,8 @@ class SidePanel extends Component {
   renderIndexView = () => {
     return (
       <Fragment>
-        <h3 className="wiki-pages-heading">
-          {gettext('Contents')}
-        </h3>
         <div className="wiki-pages-container">
+          <div className='wiki-index-page'>{gettext('Index')}</div>
           <IndexContentViewer
             indexContent={this.props.indexContent}
             onLinkClick={this.props.onLinkClick}
@@ -46,7 +44,6 @@ class SidePanel extends Component {
   renderTreeView = () => {
     return (
       <Fragment>
-        <h3 className="wiki-pages-heading">{gettext('Contents')}</h3>
         <div className="wiki-pages-container">
           {this.props.treeData && (
             <TreeView
