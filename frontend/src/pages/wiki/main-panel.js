@@ -119,12 +119,6 @@ class MainPanel extends Component {
           )}
         </div>
         <div className="main-panel-center">
-          <div className="cur-view-path">
-            <div className="path-container">
-              <a href={siteRoot + 'published/' + slug} className="normal">{slug}</a>
-              {this.renderNavPath()}
-            </div>
-          </div>
           <div className={`cur-view-content ${isViewingFile ? 'o-hidden' : ''}`}>
             {!this.props.pathExist && errMessage}
             {this.props.pathExist && this.props.isDataLoading && <Loading />}
