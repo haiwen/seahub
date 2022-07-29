@@ -19,10 +19,9 @@ from seahub.share.models import FileShare
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
 from seahub.utils import get_file_type_and_ext, render_permission_error, \
-     gen_inner_file_get_url, render_error
+     gen_inner_file_get_url, render_error, get_service_url
 from seahub.views.file import send_file_access_msg
 from seahub.utils.file_types import *
-from seahub.settings import SERVICE_URL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -36,8 +35,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
     except Exception as err_msg:
         return '', [], err_msg
 
-    service_url = SERVICE_URL.strip('/')
-
+    service_url = get_service_url().strip('/')
     # Replace <img> src to wiki mode
     img_labels = html_doc.xpath('//img')   # Get all <img> labels
     img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (service_url, repo_id))
