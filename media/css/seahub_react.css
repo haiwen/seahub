@@ -1235,10 +1235,13 @@ a.table-sort-op:hover {
 }
 
 #wiki-file-content .article {
-    margin-top: -2rem;
     margin-right: 200px;
     padding-left: 10px;
     padding-right: 40px;
+}
+
+#wiki-file-content .article h1 {
+    margin-top: 0;
 }
 
 #wiki-file-content .seafile-markdown-outline {

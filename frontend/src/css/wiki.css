@@ -88,7 +88,10 @@ img[src=""] {
 
 .wiki-main-panel .cur-view-content .article {
   padding: 0 10px;
-  margin-top: -2em;
+}
+
+.wiki-main-panel .cur-view-content .article h1 {
+  margin-top: 0;
 }
 
 .cur-view-content .wiki-page-container .outline-h2,
