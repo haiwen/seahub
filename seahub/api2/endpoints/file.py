@@ -60,6 +60,8 @@ class FileView(APIView):
             can_preview, error_msg = can_preview_file(file_name, file_size, repo)
             can_edit, error_msg = can_edit_file(file_name, file_size, repo)
         else:
+            file_name = os.path.basename(file_path.rstrip('/'))
+            file_size = ''
             can_preview = False
             can_edit = False
 
