@@ -7,7 +7,10 @@ import posixpath
 from datetime import datetime
 
 import markdown
-import lxml.html
+try:
+    from lxml import html
+except ImportError:
+    html = None
 from seaserv import seafile_api
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -31,7 +34,10 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
     # Convert a markdown string to HTML and parse the html
     try:
         html_content = markdown.markdown(file_response)
-        html_doc = lxml.html.fromstring(html_content)
+        if html is None:
+            logger.warning('Failed to import lxml module.')
+            return '', [], ''
+        html_doc = html.fromstring(html_content)
     except Exception as err_msg:
         return '', [], err_msg
 
