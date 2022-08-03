@@ -43,12 +43,6 @@
   margin-top: 14px;
 }
 
-.wiki-pages-container .wiki-index-page {
-  margin-top: 20px;
-  margin-left: 2rem;
-  color: #eb8205;
-}
-
 .wiki-md-viewer-rendered-content {
   padding: 30px 0 0;
 }
@@ -136,6 +130,7 @@ img[src=""] {
 @media (max-width: 991.98px) {
   .cur-view-content .wiki-page-container {
     padding: 0 14px;
+    padding-top: 30px;
   }
   .cur-view-content .wiki-page-content {
     width: 100%;
