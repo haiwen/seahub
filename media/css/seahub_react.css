@@ -1235,7 +1235,7 @@ a.table-sort-op:hover {
 }
 
 #wiki-file-content .article {
-    margin-right: 200px;
+    width: calc(100% - 200px);
     padding-left: 10px;
     padding-right: 40px;
 }
@@ -1247,7 +1247,7 @@ a.table-sort-op:hover {
 #wiki-file-content .seafile-markdown-outline {
     position: fixed;
     top: 79px;
-    right: 0;
+    right: 10px;
     width: 200px;
     overflow: auto;
     height: 80%;
@@ -1260,10 +1260,12 @@ a.table-sort-op:hover {
 @media (max-width: 767px) {
     #wiki-file-content {
         left: 0;
+        padding: 30px 14px 0;
     }
 
     #wiki-file-content .article {
-        margin-right: 0;
+        margin: 0;
+        padding: 0 10px;
         width: 100%;
     }
 

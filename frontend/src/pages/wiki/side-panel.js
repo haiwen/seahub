@@ -31,7 +31,7 @@ class SidePanel extends Component {
     return (
       <Fragment>
         <div className="wiki-pages-container">
-          <div className='wiki-index-page'>{gettext('Index')}</div>
+          <div style={{marginTop: '2px'}}></div>
           <IndexContentViewer
             indexContent={this.props.indexContent}
             onLinkClick={this.props.onLinkClick}
