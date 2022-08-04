@@ -114,7 +114,7 @@ class AllRepos extends Component {
 
   getSearch = () => {
     return <Search
-      placeholder={gettext('Search libraries by name or id')}
+      placeholder={gettext('Search libraries by name or ID')}
       submit={this.searchRepos}
     />;
   }
