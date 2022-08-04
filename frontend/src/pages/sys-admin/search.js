@@ -43,7 +43,7 @@ class Search extends React.Component {
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
-          style={{width: '15rem'}}
+          style={{width: '17rem'}}
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.handleInputChange}

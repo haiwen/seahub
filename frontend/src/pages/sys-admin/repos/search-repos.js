@@ -23,7 +23,7 @@ class SearchRepos extends Component {
   componentDidMount() {
     let params = (new URL(document.location)).searchParams;
     this.setState({
-      name: params.get('name') || ''
+      name: params.get('name_or_id') || ''
     }, this.getRepos);
   }
 
@@ -90,10 +90,10 @@ class SearchRepos extends Component {
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Libraries')}</h4>
-                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
+                <p className="text-secondary small">{gettext('Tip: you can search by keyword in name or ID.')}</p>
                 <Form>
                   <FormGroup row>
-                    <Label for="name" sm={1}>{gettext('Name')}</Label>
+                    <Label for="name" sm={1}>{gettext('Name or ID')}</Label>
                     <Col sm={5}>
                       <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
                     </Col>
