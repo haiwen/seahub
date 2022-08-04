@@ -95,7 +95,7 @@ def login(request, template_name='registration/login.html',
 
     redirect_to = request.GET.get(redirect_field_name, '')
     if request.user.is_authenticated:
-        if redirect_to:
+        if redirect_to and is_safe_url(redirect_to, allowed_hosts=request.get_host()):
             return HttpResponseRedirect(redirect_to)
         else:
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
