@@ -11,6 +11,7 @@ import { Link } from '@reach/router';
 import DevicesNav from './devices-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+import Paginator from '../../../components/paginator';
 
 class Content extends Component {
 
@@ -18,8 +19,16 @@ class Content extends Component {
     super(props);
   }
 
+  getPreviousPageDeviceErrorsList = () => {
+    this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page - 1);
+  }
+
+  getNextPageDeviceErrorsList = () => {
+    this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page + 1);
+  }
+
   render() {
-    const { loading, errorMsg, items } = this.props;
+    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -49,6 +58,14 @@ class Content extends Component {
               })}
             </tbody>
           </table>
+          <Paginator
+            gotoPreviousPage={this.getPreviousPageDeviceErrorsList}
+            gotoNextPage={this.getNextPageDeviceErrorsList}
+            currentPage={pageInfo.current_page}
+            hasNextPage={pageInfo.has_next_page}
+            curPerPage={curPerPage}
+            resetPerPage={this.props.resetPerPage}
+          />
         </Fragment>
       );
       return items.length ? table : emptyTip;
@@ -98,15 +115,30 @@ class DeviceErrors extends Component {
       loading: true,
       errorMsg: '',
       devicesErrors: [],
-      isCleanBtnShown: false
+      isCleanBtnShown: false,
+      pageInfo: {},
+      perPage: 25
     };
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminListDeviceErrors().then((res) => {
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage = 1, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      this.getDeviceErrorsListByPage(this.state.currentPage);
+    });
+  }
+
+  getDeviceErrorsListByPage = (page) => {
+    let per_page = this.state.perPage;
+    seafileAPI.sysAdminListDeviceErrors(page, per_page).then((res) => {
       this.setState({
         loading: false,
-        devicesErrors: res.data,
+        devicesErrors: res.data.device_errors,
+        pageInfo: res.data.page_info,
         isCleanBtnShown: res.data.length > 0
       });
     }).catch((error) => {
@@ -131,6 +163,13 @@ class DeviceErrors extends Component {
     });
   }
 
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage
+    }, () => {
+      this.getDeviceErrorsListByPage(1);
+    });
+  }
   render() {
     return (
       <Fragment>
@@ -149,6 +188,10 @@ class DeviceErrors extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.devicesErrors}
+                getDeviceErrorsListByPage={this.getDeviceErrorsListByPage}
+                curPerPage={this.state.perPage}
+                resetPerPage={this.resetPerPage}
+                pageInfo={this.state.pageInfo}
               />
             </div>
           </div>
