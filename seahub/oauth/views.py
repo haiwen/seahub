@@ -11,7 +11,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
-from seahub.utils import is_valid_email, render_error
+from seahub.utils import is_valid_email, render_error, get_service_url
 from seahub.utils.file_size import get_quota_from_string
 from seahub.base.accounts import User
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -126,11 +126,13 @@ def oauth_callback(request):
                             state=request.session.get('oauth_state', None),
                             redirect_uri=REDIRECT_URL)
 
+    service_url = get_service_url().strip('/')
+
     try:
         token = session.fetch_token(
             TOKEN_URL,
             client_secret=CLIENT_SECRET,
-            authorization_response=request.get_full_path())
+            authorization_response=service_url + request.get_full_path())
 
         if 'user_id' in session._client.__dict__['token']:
             # used for sjtu.edu.cn
