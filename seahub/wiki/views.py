@@ -36,10 +36,10 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         html_content = markdown.markdown(file_response, extensions=['markdown.extensions.extra'], tab_length=2)
         if html is None:
             logger.warning('Failed to import lxml module.')
-            return '', [], ''
+            return '', '', [], ''
         html_doc = html.fromstring(html_content)
     except Exception as err_msg:
-        return '', [], err_msg
+        return '', '', [], err_msg
 
     service_url = get_service_url().strip('/')
 
