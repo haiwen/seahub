@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 def format_markdown_file_content(slug, repo_id, file_path, token, file_response):
     # Convert a markdown string to HTML and parse the html
     try:
-        html_content = markdown.markdown(file_response)
+        html_content = markdown.markdown(file_response, extensions=['markdown.extensions.extra'], tab_length=2)
         if html is None:
             logger.warning('Failed to import lxml module.')
             return '', [], ''
