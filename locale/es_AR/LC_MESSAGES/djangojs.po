@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-05 13:37+0800\n"
+"POT-Creation-Date: 2022-08-05 14:27+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2021\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
@@ -550,7 +550,7 @@ msgid "Clean succeeded."
 msgstr "Limpieza exitosa."
 
 #: frontend/src/components/dialog/clean-trash.js:62
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:139
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:377
 #: frontend/src/repo-folder-trash.js:202
 msgid "Clean"
@@ -893,7 +893,6 @@ msgstr "Nueva Biblioteca Departamental"
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:105
 #: frontend/src/pages/sys-admin/repos/dir-content.js:103
 #: frontend/src/pages/sys-admin/repos/repos.js:76
-#: frontend/src/pages/sys-admin/repos/search-repos.js:96
 #: frontend/src/pages/sys-admin/users/user-links.js:48
 #: frontend/src/pages/sys-admin/users/user-repos.js:53
 #: frontend/src/pages/sys-admin/users/user-shared-repos.js:39
@@ -1812,7 +1811,7 @@ msgstr "Archivos Creados"
 #: frontend/src/pages/sys-admin/abuse-reports.js:102
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:48
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:43
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:52
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:51
 #: frontend/src/repo-history.js:137 frontend/src/repo-history.js:144
 #: frontend/src/user-notifications.js:180
@@ -2785,7 +2784,7 @@ msgstr "Publicar"
 #: frontend/src/pages/share-admin/upload-links.js:41
 #: frontend/src/pages/starred/starred.js:34
 #: frontend/src/pages/sys-admin/abuse-reports.js:97
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:41
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:50
 #: frontend/src/pages/sys-admin/file-scan-records.js:29
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:90
 #: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:162
@@ -4841,7 +4840,7 @@ msgid "Deleted user {user}"
 msgstr "Usuario {user} eliminado"
 
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:39
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
 #: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
 msgid "Version"
@@ -4851,13 +4850,13 @@ msgstr "Versión"
 msgid "Successfully unlinked the device."
 msgstr "Dispositivo desvinculado con éxito."
 
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:39
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
 #: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
 #: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
 msgid "Device"
 msgstr "Dispositivo"
 
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:126
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
 msgid "Successfully cleaned all errors."
 msgstr "Errores eliminados con éxito."
 
@@ -4933,7 +4932,6 @@ msgstr "Exportar Excel"
 
 #: frontend/src/pages/sys-admin/groups/search-groups.js:106
 #: frontend/src/pages/sys-admin/orgs/search-orgs.js:102
-#: frontend/src/pages/sys-admin/repos/search-repos.js:93
 msgid "Tip: you can search by keyword in name."
 msgstr "Consejo: puede buscar por palabra clave en el nombre."
 
@@ -5146,8 +5144,8 @@ msgid "Search Organizations"
 msgstr "Buscar Organizaciones"
 
 #: frontend/src/pages/sys-admin/repos/all-repos.js:117
-msgid "Search libraries by name"
-msgstr "Buscar bibliotecas por nombre"
+msgid "Search libraries by name or ID"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:16
@@ -5159,6 +5157,14 @@ msgstr "Sistema"
 #: frontend/src/pages/sys-admin/repos/search-repos.js:92
 msgid "Search Libraries"
 msgstr "Buscar Bibliotecas"
+
+#: frontend/src/pages/sys-admin/repos/search-repos.js:93
+msgid "Tip: you can search by keyword in name or ID."
+msgstr ""
+
+#: frontend/src/pages/sys-admin/repos/search-repos.js:96
+msgid "Name or ID"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:242
 msgid "Are you sure you want to delete {placeholder} completely?"

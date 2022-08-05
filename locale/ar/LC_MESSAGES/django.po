@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-05 13:36+0800\n"
+"POT-Creation-Date: 2022-08-05 14:27+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021\n"
 "Language-Team: Arabic (http://www.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -433,7 +433,7 @@ msgstr "اسم المستخدم غير صحيح"
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:946
-#: seahub/oauth/views.py:195
+#: seahub/oauth/views.py:197
 #, python-format
 msgid "User %s not found."
 msgstr " لم يتم العثور على المستخدم %s ."
@@ -1404,8 +1404,8 @@ msgstr "تم حذف %s بنجاح"
 #: seahub/dingtalk/views.py:163 seahub/dingtalk/views.py:168
 #: seahub/dingtalk/views.py:190 seahub/dingtalk/views.py:227
 #: seahub/oauth/views.py:85 seahub/oauth/views.py:108
-#: seahub/oauth/views.py:151 seahub/oauth/views.py:179
-#: seahub/oauth/views.py:190 seahub/templates/remote_user/error.html:8
+#: seahub/oauth/views.py:153 seahub/oauth/views.py:181
+#: seahub/oauth/views.py:192 seahub/templates/remote_user/error.html:8
 #: seahub/weixin/views.py:36 seahub/weixin/views.py:55
 #: seahub/weixin/views.py:60 seahub/weixin/views.py:79
 #: seahub/weixin/views.py:95 seahub/work_weixin/views.py:68
