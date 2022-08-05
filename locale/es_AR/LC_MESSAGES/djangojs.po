@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 13:35+0800\n"
+"POT-Creation-Date: 2022-08-05 13:37+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2021\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
@@ -403,10 +403,10 @@ msgstr "Cancelar"
 #: frontend/src/components/dialog/set-org-user-name.js:68
 #: frontend/src/components/dialog/set-org-user-quota.js:80
 #: frontend/src/components/dialog/share-repo-dialog.js:150
-#: frontend/src/components/dialog/share-to-group.js:343
+#: frontend/src/components/dialog/share-to-group.js:346
 #: frontend/src/components/dialog/share-to-invite-people.js:286
 #: frontend/src/components/dialog/share-to-other-server.js:248
-#: frontend/src/components/dialog/share-to-user.js:354
+#: frontend/src/components/dialog/share-to-user.js:357
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:76
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:92
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:54
@@ -473,7 +473,7 @@ msgstr "Agregar un revisor"
 #: frontend/src/components/dialog/file-participant-dialog.js:128
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:270
 #: frontend/src/components/dialog/org-add-member-dialog.js:58
-#: frontend/src/components/dialog/share-to-user.js:337
+#: frontend/src/components/dialog/share-to-user.js:340
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-member-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog.js:52
@@ -993,12 +993,12 @@ msgstr "Backend de Almacenamiento"
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:254
 #: frontend/src/components/dialog/repo-api-token-dialog.js:223
 #: frontend/src/components/dialog/share-repo-dialog.js:130
-#: frontend/src/components/dialog/share-to-group.js:307
+#: frontend/src/components/dialog/share-to-group.js:310
 #: frontend/src/components/dialog/share-to-invite-people.js:259
 #: frontend/src/components/dialog/share-to-invite-people.js:301
 #: frontend/src/components/dialog/share-to-other-server.js:81
 #: frontend/src/components/dialog/share-to-other-server.js:214
-#: frontend/src/components/dialog/share-to-user.js:321
+#: frontend/src/components/dialog/share-to-user.js:324
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:235
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:285
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:214
@@ -1772,7 +1772,7 @@ msgid "Please check the network."
 msgstr "Por favor verifique la red."
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:275
-#: frontend/src/components/dialog/share-to-group.js:306
+#: frontend/src/components/dialog/share-to-group.js:309
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:234
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:284
 msgid "Group"
@@ -1790,7 +1790,7 @@ msgid "Select a group"
 msgstr "Seleccione un grupo"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:250
-#: frontend/src/components/dialog/share-to-user.js:320
+#: frontend/src/components/dialog/share-to-user.js:323
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:213
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:264
 #: frontend/src/pages/dashboard/files-activities.js:31
@@ -2352,7 +2352,7 @@ msgstr "Por favor seleccione una biblioteca para compartir."
 msgid "Select libraries to share"
 msgstr "Seleccionar bibliotecas para compartir"
 
-#: frontend/src/components/dialog/share-to-group.js:323
+#: frontend/src/components/dialog/share-to-group.js:326
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:246
 msgid "Select groups..."
 msgstr "Seleccionar grupos..."
@@ -2422,8 +2422,8 @@ msgstr "1 ítem eliminado con éxito"
 msgid "Select a server..."
 msgstr "Seleccione un servidor..."
 
-#: frontend/src/components/dialog/share-to-user.js:219
-#: frontend/src/components/dialog/share-to-user.js:245
+#: frontend/src/components/dialog/share-to-user.js:222
+#: frontend/src/components/dialog/share-to-user.js:248
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:159
 msgid "Library can not be shared to owner."
 msgstr "La biblioteca no puede ser compartida con su propietario."
@@ -3660,7 +3660,7 @@ msgstr "Identificador:"
 msgid "Set Password"
 msgstr "Establecer Contraseña"
 
-#: frontend/src/components/wiki-markdown-viewer.js:209
+#: frontend/src/components/wiki-markdown-viewer.js:214
 msgid "Last modified by"
 msgstr "Última modificación por"
 
@@ -5691,12 +5691,7 @@ msgstr "El tamaño debe ser menor que {max_size_placeholder}."
 msgid "Drag and drop files or folders here."
 msgstr "Arrastrar y soltar archivos aquí."
 
-#: frontend/src/pages/wiki/side-panel.js:34
-#: frontend/src/pages/wiki/side-panel.js:49
-msgid "Contents"
-msgstr "Contenido"
-
-#: frontend/src/pages/wiki/side-panel.js:76
+#: frontend/src/pages/wiki/side-panel.js:73
 msgid "Go to Library"
 msgstr "Ir a la Biblioteca"
 

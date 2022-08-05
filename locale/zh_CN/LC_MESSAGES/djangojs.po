@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 13:35+0800\n"
+"POT-Creation-Date: 2022-08-05 13:37+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -414,10 +414,10 @@ msgstr "取消"
 #: frontend/src/components/dialog/set-org-user-name.js:68
 #: frontend/src/components/dialog/set-org-user-quota.js:80
 #: frontend/src/components/dialog/share-repo-dialog.js:150
-#: frontend/src/components/dialog/share-to-group.js:343
+#: frontend/src/components/dialog/share-to-group.js:346
 #: frontend/src/components/dialog/share-to-invite-people.js:286
 #: frontend/src/components/dialog/share-to-other-server.js:248
-#: frontend/src/components/dialog/share-to-user.js:354
+#: frontend/src/components/dialog/share-to-user.js:357
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:76
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:92
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:54
@@ -484,7 +484,7 @@ msgstr "添加评审人"
 #: frontend/src/components/dialog/file-participant-dialog.js:128
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:270
 #: frontend/src/components/dialog/org-add-member-dialog.js:58
-#: frontend/src/components/dialog/share-to-user.js:337
+#: frontend/src/components/dialog/share-to-user.js:340
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-member-dialog.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-batch-add-admin-dialog.js:52
@@ -1004,12 +1004,12 @@ msgstr "存储后端"
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:254
 #: frontend/src/components/dialog/repo-api-token-dialog.js:223
 #: frontend/src/components/dialog/share-repo-dialog.js:130
-#: frontend/src/components/dialog/share-to-group.js:307
+#: frontend/src/components/dialog/share-to-group.js:310
 #: frontend/src/components/dialog/share-to-invite-people.js:259
 #: frontend/src/components/dialog/share-to-invite-people.js:301
 #: frontend/src/components/dialog/share-to-other-server.js:81
 #: frontend/src/components/dialog/share-to-other-server.js:214
-#: frontend/src/components/dialog/share-to-user.js:321
+#: frontend/src/components/dialog/share-to-user.js:324
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:235
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:285
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:214
@@ -1783,7 +1783,7 @@ msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:275
-#: frontend/src/components/dialog/share-to-group.js:306
+#: frontend/src/components/dialog/share-to-group.js:309
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:234
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:284
 msgid "Group"
@@ -1801,7 +1801,7 @@ msgid "Select a group"
 msgstr "选择一个群组"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:250
-#: frontend/src/components/dialog/share-to-user.js:320
+#: frontend/src/components/dialog/share-to-user.js:323
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:213
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:264
 #: frontend/src/pages/dashboard/files-activities.js:31
@@ -2363,7 +2363,7 @@ msgstr "请选择一个资料库来共享。"
 msgid "Select libraries to share"
 msgstr "选择要共享的资料库"
 
-#: frontend/src/components/dialog/share-to-group.js:323
+#: frontend/src/components/dialog/share-to-group.js:326
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:246
 msgid "Select groups..."
 msgstr "选择群组..."
@@ -2433,8 +2433,8 @@ msgstr "成功删除 1 个条目。"
 msgid "Select a server..."
 msgstr "选择一个服务器…"
 
-#: frontend/src/components/dialog/share-to-user.js:219
-#: frontend/src/components/dialog/share-to-user.js:245
+#: frontend/src/components/dialog/share-to-user.js:222
+#: frontend/src/components/dialog/share-to-user.js:248
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:159
 msgid "Library can not be shared to owner."
 msgstr "资料库无法与其所有者共享。"
@@ -3671,7 +3671,7 @@ msgstr "Token:"
 msgid "Set Password"
 msgstr "设置密码"
 
-#: frontend/src/components/wiki-markdown-viewer.js:209
+#: frontend/src/components/wiki-markdown-viewer.js:214
 msgid "Last modified by"
 msgstr "最近修改"
 
@@ -5702,12 +5702,7 @@ msgstr "文件大小应小于 {max_size_placeholder}。"
 msgid "Drag and drop files or folders here."
 msgstr "拖放文件或目录到这里。"
 
-#: frontend/src/pages/wiki/side-panel.js:34
-#: frontend/src/pages/wiki/side-panel.js:49
-msgid "Contents"
-msgstr "内容"
-
-#: frontend/src/pages/wiki/side-panel.js:76
+#: frontend/src/pages/wiki/side-panel.js:73
 msgid "Go to Library"
 msgstr "前往资料库"
 
