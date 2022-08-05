@@ -11,6 +11,7 @@ import TreeNode from './components/tree-view/tree-node';
 import treeHelper from './components/tree-view/tree-helper';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
+import { lang } from './utils/constants';
 
 import './css/layout.css';
 import './css/side-panel.css';
@@ -18,6 +19,7 @@ import './css/wiki.css';
 import './css/toolbar.css';
 import './css/search.css';
 
+moment.locale(lang);
 
 class Wiki extends Component {
   constructor(props) {
