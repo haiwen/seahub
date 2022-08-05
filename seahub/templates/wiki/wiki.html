@@ -15,7 +15,7 @@
 {% render_bundle 'wiki' 'css' %}
 {% endblock %}
 
-{% block sub_title %} {{filename}} - {% endblock %}
+{% block wiki_title %} {{h1_head_content}} - {{repo_name}}{% endblock %}
 
 {% block extra_content %}
 {% if not is_dir %}

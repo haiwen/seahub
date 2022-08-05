@@ -1525,6 +1525,11 @@ export const Utils = {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
+  },
+
+  updateTabTitle: function(content) {
+    const title = document.getElementsByTagName('title')[0];
+    title.innerText = content;
   }
 
 };

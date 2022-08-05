@@ -24,7 +24,7 @@ from seahub.views import check_folder_permission
 from seahub.utils import get_file_type_and_ext, render_permission_error, \
      gen_inner_file_get_url, render_error, get_service_url
 from seahub.views.file import send_file_access_msg
-from seahub.utils.file_types import *
+from seahub.utils.file_types import IMAGE, MARKDOWN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 def format_markdown_file_content(slug, repo_id, file_path, token, file_response):
     # Convert a markdown string to HTML and parse the html
     try:
-        html_content = markdown.markdown(file_response)
+        html_content = markdown.markdown(file_response, extensions=['markdown.extensions.extra'], tab_length=2)
         if html is None:
             logger.warning('Failed to import lxml module.')
             return '', [], ''
@@ -42,6 +42,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         return '', [], err_msg
 
     service_url = get_service_url().strip('/')
+
     # Replace <img> src to wiki mode
     img_labels = html_doc.xpath('//img')   # Get all <img> labels
     img_url_re = re.compile(r'^%s/lib/%s/file/.*raw=1$' % (service_url, repo_id))
@@ -82,8 +83,10 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
 
     # Get markdown outlines and format <h> labels
     outlines = list()
+    h1_head_content = ''
     for p in html_content.split('\n'):
         if p.startswith('<h1>') and p.endswith('</h1>'):
+            h1_head_content = p.strip('<h1></h1>')
             head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.strip('<h1></h1>'), 1)
             html_content = html_content.replace(p, head)
         elif p.startswith('<h2>') and p.endswith('</h2>'):
@@ -99,7 +102,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
 
     file_content = mark_safe(html_content)
 
-    return file_content, outlines, None
+    return file_content, h1_head_content, outlines, None
 
 
 def slug(request, slug, file_path="home.md"):
@@ -168,7 +171,12 @@ def slug(request, slug, file_path="home.md"):
 
     repo = seafile_api.get_repo(wiki.repo_id)
 
-    file_content, outlines, latest_contributor, last_modified = '', [], '', 0
+    file_content = ''
+    h1_head_content = ''
+    outlines = []
+    latest_contributor = ''
+    last_modified = 0
+
     if is_dir is False and file_type == MARKDOWN:
         send_file_access_msg(request, repo, file_path, 'web')
 
@@ -187,7 +195,7 @@ def slug(request, slug, file_path="home.md"):
 
         err_msg = None
         if file_response:
-            file_content, outlines, err_msg = format_markdown_file_content(
+            file_content, h1_head_content, outlines, err_msg = format_markdown_file_content(
                 slug, wiki.repo_id, file_path, fs.token, file_response)
 
         if err_msg:
@@ -200,6 +208,7 @@ def slug(request, slug, file_path="home.md"):
                 latest_contributor, last_modified = dirent.modifier, dirent.mtime
         except Exception as e:
             logger.warning(e)
+
         last_modified = datetime.fromtimestamp(last_modified)
 
     return render(request, "wiki/wiki.html", {
@@ -211,6 +220,7 @@ def slug(request, slug, file_path="home.md"):
         "user_can_write": user_can_write,
         "file_path": file_path,
         "filename": os.path.splitext(os.path.basename(file_path))[0],
+        "h1_head_content": h1_head_content,
         "file_content": file_content,
         "outlines": outlines,
         "modifier": latest_contributor,

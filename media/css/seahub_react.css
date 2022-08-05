@@ -1244,6 +1244,12 @@ a.table-sort-op:hover {
     margin-top: 0;
 }
 
+#wiki-file-content #wiki-page-last-modified {
+    padding: 40px 0;
+    font-size: 12px;
+    color: #666;
+}
+
 #wiki-file-content .seafile-markdown-outline {
     position: fixed;
     top: 79px;
