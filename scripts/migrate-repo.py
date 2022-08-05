@@ -50,7 +50,7 @@ def is_default_storage(cp, orig_storage_id):
     f = open(json_file)
     json_cfg = json.load(f)
 
-    is_default = false
+    is_default = False
 
     for bend in json_cfg:
         storage_id = bend['storage_id']
@@ -61,14 +61,11 @@ def is_default_storage(cp, orig_storage_id):
 
     return is_default
 
-def get_repo_ids(storage_id):
-    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
-    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
-    print(url)
-    if is_default:
-        sql = 'SELECT repo_id FROM Repo WHERE repo_id IN (SELECT repo_id FROM RepoStorageId WHERE storage_id=\"%s\") OR repo_id NOT IN (SELECT repo_id FROM RepoStorageId)'%(storage_id)
+def get_repo_ids_by_storage_id (url, storage_id = None):
+    if storage_id:
+        sql = 'SELECT repo_id FROM RepoStorageId WHERE storage_id=\"%s\"'%(storage_id)
     else:
-        sql = 'SELECT repo_id FROM Repo WHERE repo_id IN (SELECT repo_id FROM RepoStorageId WHERE storage_id=\"%s\")'%(storage_id)
+        sql = 'SELECT repo_id FROM RepoStorageId'
 
     try:
         engine = create_engine(url, echo=False)
@@ -78,7 +75,50 @@ def get_repo_ids(storage_id):
         return None
     else:
         result = result_proxy.fetchall()
-    return result
+
+    repo_ids = {}
+    for repo_id in result:
+        try:
+            repo_id = repo_id[0]
+        except:
+            continue
+        repo_ids[repo_id] = repo_id
+    return repo_ids
+
+def get_repo_ids(storage_id):
+    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
+    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+    print(url)
+
+    if is_default:
+        all_repo_ids = get_repo_ids_by_storage_id (url)
+    filter_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+
+    sql = 'SELECT repo_id FROM Repo'
+
+    try:
+        engine = create_engine(url, echo=False)
+        session = sessionmaker(engine)()
+        result_proxy = session.execute(text(sql))
+    except:
+        return None
+    else:
+        result = result_proxy.fetchall()
+
+    new_result = []
+    for repo_id in result:
+        try:
+            repo_id = repo_id[0]
+        except:
+            continue
+        if is_default:
+            if repo_id in filter_repo_ids or not repo_id in all_repo_ids:
+                new_result.append(repo_id)
+        else:
+            if repo_id in filter_repo_ids:
+                new_result.append(repo_id)
+
+    return new_result
 
 def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
     api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
@@ -123,30 +163,10 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
     api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
-def is_default_storage(cp, orig_storage_id):
-    json_file = cp.get('storage', 'storage_classes_file')
-    f = open(json_file)
-    json_cfg = json.load(f)
-
-    is_default = False
-
-    for bend in json_cfg:
-        storage_id = bend['storage_id']
-        if storage_id == orig_storage_id:
-            if 'is_default' in bend:
-                is_default = bend['is_default']
-                break
-
-    return is_default
-
 def migrate_repos(orig_storage_id, dest_storage_id):
     repo_ids = get_repo_ids(orig_storage_id)
 
     for repo_id in repo_ids:
-        try:
-            repo_id = repo_id[0]
-        except:
-            continue
         api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
         dtypes = ['commits', 'fs', 'blocks']
         workers = []
