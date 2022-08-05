@@ -1,3 +1,6 @@
+.wiki-side-panel .panel-top {
+  background: #fff;
+}
 .wiki-side-nav {
   flex:auto;
   display:flex;
@@ -69,6 +72,10 @@ img[src=""] {
   display:flex;
   flex-direction:column;
   min-height: 0;
+}
+
+.wiki-main-panel .main-panel-north {
+  background-color: #fff;
 }
 
 .cur-view-content .wiki-page-container {
