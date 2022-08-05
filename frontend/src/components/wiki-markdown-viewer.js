@@ -75,7 +75,8 @@ class WikiMarkdownViewer extends React.Component {
     let titlesInfo = [];
     const titleDom = document.querySelectorAll('h1[id^="user-content"]')[0];
     if (titleDom) {
-      const content = titleDom.innerText;
+      let content = titleDom.innerText;
+      content = `${content}${content ? '-' : ''} ${slug}`
       Utils.updateTabTitle(content);
     }
     let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
