@@ -74,12 +74,12 @@ def get_repo_ids_by_storage_id (url, storage_id = None):
     except:
         return None
     else:
-        result = result_proxy.fetchall()
+        results = result_proxy.fetchall()
 
     repo_ids = {}
-    for repo_id in result:
+    for r in results:
         try:
-            repo_id = repo_id[0]
+            repo_id = r[0]
         except:
             continue
         repo_ids[repo_id] = repo_id
@@ -88,11 +88,10 @@ def get_repo_ids_by_storage_id (url, storage_id = None):
 def get_repo_ids(storage_id):
     host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
     url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
-    print(url)
 
     if is_default:
         all_repo_ids = get_repo_ids_by_storage_id (url)
-    filter_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+    storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
 
     sql = 'SELECT repo_id FROM Repo'
 
@@ -103,22 +102,24 @@ def get_repo_ids(storage_id):
     except:
         return None
     else:
-        result = result_proxy.fetchall()
+        results = result_proxy.fetchall()
 
-    new_result = []
-    for repo_id in result:
+    ret_repo_ids = []
+    for r in results:
         try:
-            repo_id = repo_id[0]
+            repo_id = r[0]
         except:
             continue
+        #If it's default storage, we should also return the repos which are not in the RepoStorageID table.
+        #Repo table is checked to preventing returning deleted repos.
         if is_default:
-            if repo_id in filter_repo_ids or not repo_id in all_repo_ids:
-                new_result.append(repo_id)
+            if repo_id in storage_repo_ids or not repo_id in all_repo_ids:
+                ret_repo_ids.append(repo_id)
         else:
-            if repo_id in filter_repo_ids:
-                new_result.append(repo_id)
+            if repo_id in storage_repo_ids:
+                ret_repo_ids.append(repo_id)
 
-    return new_result
+    return ret_repo_ids
 
 def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
     api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
