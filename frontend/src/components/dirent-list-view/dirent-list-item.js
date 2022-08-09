@@ -681,7 +681,7 @@ class DirentListItem extends React.Component {
         </td>
         <td className="pl10">
           <div className="dir-icon">
-            {dirent.encoded_thumbnail_src ?
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
               <img ref='drag_icon' src={iconUrl} width="24" alt='' />
             }
@@ -726,7 +726,7 @@ class DirentListItem extends React.Component {
       <tr>
         <td onClick={this.onItemClick}>
           <div className="dir-icon">
-            {dirent.encoded_thumbnail_src ?
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
               <img src={iconUrl} width="24" alt="" />
             }
