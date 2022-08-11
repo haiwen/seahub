@@ -220,7 +220,7 @@ class DirentGridItem extends React.Component {
             onDragLeave={this.onGridItemDragLeave}
             onDrop={this.onGridItemDragDrop}
           >
-            {dirent.encoded_thumbnail_src ?
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt=""/> :
               <img src={iconUrl} ref={this.gridIcon} width="96" alt='' />
             }
