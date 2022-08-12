@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
+import { navigate } from '@reach/router';
 import { gettext, siteRoot, username, isDocs, enableVideoThumbnail } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -135,6 +136,10 @@ class LibContentView extends React.Component {
       const repoInfo = new RepoInfo(repoRes.data);
       const isGroupOwnedRepo = repoInfo.owner_email.indexOf('@seafile_group') > -1;
 
+      this.setState({
+        currentRepoInfo: repoInfo,
+      });
+
       if (repoInfo.permission.startsWith('custom-')) {
         const permissionID = repoInfo.permission.split('-')[1];
         const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
@@ -143,14 +148,13 @@ class LibContentView extends React.Component {
 
       this.isNeedUpdateHistoryState = false;
       this.setState({
-        currentRepoInfo: repoInfo,
         repoName: repoInfo.repo_name,
         libNeedDecrypt: repoInfo.lib_need_decrypt,
         repoEncrypted: repoInfo.encrypted,
         isGroupOwnedRepo: isGroupOwnedRepo,
         path: path
       });
-      
+
       if (!repoInfo.lib_need_decrypt) {
         this.loadDirData(path);
       }
@@ -164,6 +168,11 @@ class LibContentView extends React.Component {
 
           let errorMsg = gettext('Permission denied');
           toaster.danger(errorMsg);
+        } else if (error.response.status == 404) {
+          this.setState({
+            isDirentListLoading: false,
+            errorMsg: gettext('Library share permission not found.')
+          });
         } else {
           this.setState({
             isDirentListLoading: false,
@@ -1747,6 +1756,22 @@ class LibContentView extends React.Component {
     this.updateUsedRepoTags();
   }
 
+
+  handleSubmit = (e) => {
+    let options = {
+      'share_type': 'personal',
+      'from': this.state.currentRepoInfo.owner_email
+    };
+    seafileAPI.leaveShareRepo(this.props.repoID, options).then(res => {
+      navigate(siteRoot + 'shared-libs/');
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error, true);
+      toaster.danger(errorMsg);
+    });
+
+    e.preventDefault();
+  }
+
   render() {
     if (this.state.libNeedDecrypt) {
       return (
@@ -1757,6 +1782,15 @@ class LibContentView extends React.Component {
           />
         </ModalPortal>
       );
+    }
+
+    if (this.state.errorMsg) {
+      return (
+        <Fragment>
+          <p className="error mt-6 text-center">{this.state.errorMsg}</p>
+          <button type="submit" className="btn btn-primary submit" onClick={this.handleSubmit}>{gettext('Leave Share')}</button>
+        </Fragment>
+      )
     }
 
     if (!this.state.currentRepoInfo) {
