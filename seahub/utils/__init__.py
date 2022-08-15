@@ -1171,6 +1171,21 @@ if EVENTS_CONFIG_FILE:
 
     HAS_FILE_SEARCH = check_search_enabled()
 
+# repo auto delete related
+ENABLE_REPO_AUTO_DEL = False
+if EVENTS_CONFIG_FILE:
+    def check_repo_auto_del_enabled():
+        enabled = False
+        if hasattr(seafevents, 'is_repo_auto_del_enabled'):
+            enabled = seafevents.is_repo_auto_del_enabled(EVENTS_CONFIG_FILE)
+            if enabled:
+                logging.debug('search: enabled')
+            else:
+                logging.debug('search: not enabled')
+        return enabled
+
+    ENABLE_REPO_AUTO_DEL = check_repo_auto_del_enabled()
+
 
 def is_user_password_strong(password):
     """Return ``True`` if user's password is STRONG, otherwise ``False``.

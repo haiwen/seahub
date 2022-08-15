@@ -47,6 +47,7 @@
             isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',
+            enableRepoAutoDel: {% if enable_repo_auto_del %} true {% else %} false {% endif %},
             useGoFileserver: {% if USE_GO_FILESERVER %} true {% else %} false {% endif %},
             serviceURL: '{{ service_url }}',
             seafileVersion: '{{ seafile_version }}',
