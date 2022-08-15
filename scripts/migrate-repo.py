@@ -99,14 +99,7 @@ def get_repo_ids_from_trash (url):
 
     return results
 
-def get_repo_ids(storage_id):
-    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
-    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
-
-    if is_default:
-        all_repo_ids = get_repo_ids_by_storage_id (url)
-    storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
-
+def get_existing_repo_ids (url):
     sql = 'SELECT repo_id FROM Repo'
 
     try:
@@ -118,8 +111,20 @@ def get_repo_ids(storage_id):
     else:
         results = result_proxy.fetchall()
 
+    return results
+
+def get_repo_ids(storage_id):
+    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
+    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+
+    if is_default:
+        all_repo_ids = get_repo_ids_by_storage_id (url)
+    storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+
+    existing_repo_ids = get_existing_repo_ids (url)
+
     ret_repo_ids = []
-    for r in results:
+    for r in existing_repo_ids:
         try:
             repo_id = r[0]
         except:
