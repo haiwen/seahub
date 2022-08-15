@@ -18,6 +18,7 @@ from seahub.base.accounts import User
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -224,8 +225,9 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
                 return role
 
     def update_user_quota(self, user, user_role):
-        if user.permissions.role_quota():
-            quota = get_quota_from_string(user.permissions.role_quota())
+        role_quota = get_enabled_role_permissions_by_role(user_role)['role_quota']
+        if role_quota:
+            quota = get_quota_from_string(role_quota)
             logger.info('Set quota[%d] for user: %s, role[%s]' % (quota, user.username, user_role))
             seafile_api.set_role_quota(user_role, quota)
         else:
