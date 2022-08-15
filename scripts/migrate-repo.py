@@ -85,14 +85,21 @@ def get_repo_ids_by_storage_id (url, storage_id = None):
         repo_ids[repo_id] = repo_id
     return repo_ids
 
-def get_repo_ids(storage_id):
-    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
-    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+def get_repo_ids_from_trash (url):
+    sql = 'SELECT repo_id FROM RepoTrash'
 
-    if is_default:
-        all_repo_ids = get_repo_ids_by_storage_id (url)
-    storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+    try:
+        engine = create_engine(url, echo=False)
+        session = sessionmaker(engine)()
+        result_proxy = session.execute(text(sql))
+    except:
+        return None
+    else:
+        results = result_proxy.fetchall()
 
+    return results
+
+def get_existing_repo_ids (url):
     sql = 'SELECT repo_id FROM Repo'
 
     try:
@@ -104,8 +111,35 @@ def get_repo_ids(storage_id):
     else:
         results = result_proxy.fetchall()
 
+    return results
+
+def get_repo_ids(storage_id):
+    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
+    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+
+    if is_default:
+        all_repo_ids = get_repo_ids_by_storage_id (url)
+    storage_repo_ids =  get_repo_ids_by_storage_id (url, storage_id)
+
+    existing_repo_ids = get_existing_repo_ids (url)
+
     ret_repo_ids = []
-    for r in results:
+    for r in existing_repo_ids:
+        try:
+            repo_id = r[0]
+        except:
+            continue
+        #If it's default storage, we should also return the repos which are not in the RepoStorageID table.
+        #Repo table is checked to preventing returning deleted repos.
+        if is_default:
+            if repo_id in storage_repo_ids or not repo_id in all_repo_ids:
+                ret_repo_ids.append(repo_id)
+        else:
+            if repo_id in storage_repo_ids:
+                ret_repo_ids.append(repo_id)
+
+    repo_list_in_trash = get_repo_ids_from_trash (url)
+    for r in repo_list_in_trash:
         try:
             repo_id = r[0]
         except:
