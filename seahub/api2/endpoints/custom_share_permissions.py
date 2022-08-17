@@ -12,7 +12,8 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.share.utils import is_repo_admin
+from seahub.share.utils import is_repo_admin, normalize_custom_permission_name
+from seahub.utils.repo import get_repo_owner
 from seahub.share.models import CustomSharePermissions
 from seahub.views import check_folder_permission
 
@@ -107,14 +108,11 @@ class CustomSharePermissionView(APIView):
         # main
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id)
-            if not permission_obj:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Permission %s not found.' % permission_id)
-            res = permission_obj.to_dict()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        except CustomSharePermissions.DoesNotExist:
+            error_msg = 'Permission %s not found.' % permission_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        res = permission_obj.to_dict()
         return Response({'permission': res})
 
     def put(self, request, repo_id, permission_id):
@@ -169,6 +167,7 @@ class CustomSharePermissionView(APIView):
         """Delete a custom share permission
         """
         username = request.user.username
+
         # permission check
         if not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -181,22 +180,19 @@ class CustomSharePermissionView(APIView):
 
         try:
             permission_obj = CustomSharePermissions.objects.get(id=permission_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        if not permission_obj:
-            return api_error(status.HTTP_404_NOT_FOUND, 'custom permission %s not found.' % permission_id)
+        except CustomSharePermissions.DoesNotExist:
+            error_msg = 'Permission %s not found.' % permission_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # main
-        try:
-            permission_obj = CustomSharePermissions.objects.get(id=permission_id)
-            if not permission_obj:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Permission %s not found.' % permission_id)
-            permission_obj.delete()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        # delete related repo share
+        permission = normalize_custom_permission_name(permission_id)
+        repo_owner = get_repo_owner(request, repo_id)
+        share_items = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+        for share in share_items:
+            if share.perm == permission:
+                seafile_api.remove_share(repo_id, repo_owner, share.user)
+
+        # delete custom permission
+        permission_obj.delete()
 
         return Response({'success': True})
