@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -80,7 +80,7 @@ class MylibRepoMenu extends React.Component {
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
-    if (isPro) {
+    if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
     }
     return operations;

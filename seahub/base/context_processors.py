@@ -32,7 +32,7 @@ from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -154,6 +154,7 @@ def base(request):
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
+        'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
     }
 
     if request.user.is_staff:

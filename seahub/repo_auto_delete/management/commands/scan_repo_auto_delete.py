@@ -20,23 +20,22 @@ def iterate_and_del_files_recursively(repo_id, path, days):
 
     dirents = seafile_api.list_dir_by_path(repo_id, path)
 
+    del_dirents = list()
     for dirent in dirents:
 
         if stat.S_ISDIR(dirent.mode):
-            iterate_and_del_files_recursively(repo_id,
-                                              os.path.join(path, dirent.obj_name),
-                                              days)
-            continue
-
-        mtime = dirent.mtime
-        cur_time = int(time.time())
-        time_delta = days * 24 * 60 * 60
-        if cur_time - time_delta > mtime:
-            file_full_path = os.path.join(path, dirent.obj_name)
-            seafile_api.del_file(repo_id, path,
-                                 json.dumps([dirent.obj_name]),
-                                 'seafevents')
-            logger.info('{} of {} deleted at {}.'.format(file_full_path, repo_id, cur_time))
+            iterate_and_del_files_recursively(repo_id, os.path.join(path, dirent.obj_name), days)
+        else:
+            mtime = dirent.mtime
+            cur_time = int(time.time())
+            time_delta = days * 24 * 60 * 60
+            if cur_time - time_delta > mtime:
+                del_dirents.append(dirent.obj_name)
+    if del_dirents:
+        try:
+            seafile_api.del_file(repo_id, path, json.dumps(del_dirents), 'seafevents')
+        except Exception as e:
+            logger.error('Failed to delete files in repo: %s, path: %s, error: %s' % (repo_id, path, e))
 
 
 class Command(BaseCommand):
