@@ -166,7 +166,11 @@ class MylibRepoListItem extends React.Component {
   }
 
   onShareToggle = (e) => {
-    e.preventDefault();
+    // when close share dialog after send share link email,
+    // there is no event
+    if (e != undefined) {
+      e.preventDefault();
+    }
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
