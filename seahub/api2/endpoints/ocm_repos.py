@@ -76,21 +76,19 @@ class OCMReposDownloadLinkView(APIView):
         """
 
         path = request.GET.get('path', '/')
-
-        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
+        username = request.user.username
+        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id,
+                                                             repo_id=repo_id,
+                                                             to_user=username)
         if not ocm_share_received:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if ocm_share_received.to_user != request.user.username:
-            error_msg = 'permission denied.'
+            error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
+        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['DOWNLOAD_LINK']
         params = {
             'path': path,
         }
-        headers = {'Authorization': 'token ' + ocm_share_received.shared_secret}
+        headers = {'Authorization': 'token ' + ocm_share_received[0].shared_secret}
         try:
             resp = send_get_request(url, params=params, headers=headers)
         except Exception as e:
@@ -112,25 +110,25 @@ class OCMReposUploadLinkView(APIView):
 
         path = request.GET.get('path', '/')
 
-        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id, repo_id=repo_id).first()
+        username = request.user.username
+        ocm_share_received = OCMShareReceived.objects.filter(provider_id=provider_id,
+                                                             repo_id=repo_id,
+                                                             to_user=username)
+
         if not ocm_share_received:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if ocm_share_received.to_user != request.user.username:
             error_msg = 'permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if ocm_share_received.permission != PERMISSION_READ_WRITE:
+        if ocm_share_received[0].permission != PERMISSION_READ_WRITE:
             error_msg = 'permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        url = ocm_share_received.from_server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']
+        url = ocm_share_received[0].from_server_url + VIA_REPO_TOKEN_URL['UPLOAD_LINK']
         params = {
             'path': path,
             'from': 'web',
         }
-        headers = {'Authorization': 'token ' + ocm_share_received.shared_secret}
+        headers = {'Authorization': 'token ' + ocm_share_received[0].shared_secret}
         try:
             resp = send_get_request(url, params=params, headers=headers)
         except Exception as e:
