@@ -104,10 +104,13 @@ def onlyoffice_editor_callback(request):
         doc_info = cache.get(doc_key)
         if not doc_info:
             logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
+            logger.info(post_data)
+            return HttpResponse('{"error": 1}')
+        else:
+            logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
 
-        logger.info(post_data)
-
-        return HttpResponse('{"error": 1}')
+    else:
+        logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     if status == 1:
 
@@ -129,8 +132,6 @@ def onlyoffice_editor_callback(request):
     repo_id = doc_info['repo_id']
     file_path = doc_info['file_path']
     username = doc_info['username']
-
-    logger.info('status {}: get doc_info {} from database by doc_key {}'.format(status, doc_info, doc_key))
 
     # save file
     if status in (2, 6):
@@ -162,9 +163,8 @@ def onlyoffice_editor_callback(request):
         resp = requests.post(update_url, files=files, data=data)
         if resp.status_code != 200:
             logger.error('update_url: {}'.format(update_url))
-            logger.error('parameter file: {}'.format(files['file'][:100]))
-            logger.error('parameter file_name: {}'.format(files['file_name']))
-            logger.error('parameter target_file: {}'.format(files['target_file']))
+            logger.error('parameter file: {}'.format(files['file'][:10]))
+            logger.error('parameter target_file: {}'.format(data['target_file']))
             logger.error('response: {}'.format(resp.__dict__))
 
         # 2 - document is ready for saving,
