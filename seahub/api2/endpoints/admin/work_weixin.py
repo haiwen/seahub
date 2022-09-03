@@ -130,7 +130,7 @@ class AdminWorkWeixinDepartmentMembers(APIView):
             provider=WORK_WEIXIN_PROVIDER, uid__contains=WORK_WEIXIN_UID_PREFIX)
         for api_user in api_user_list:
             uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid', '')
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             # #  determine the user exists
             if social_auth_queryset.filter(uid=uid).exists():
                 api_user['email'] = social_auth_queryset.get(uid=uid).username
@@ -410,7 +410,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
         # import api_user
         for api_user in api_user_list:
             uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid', '')
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             api_user_name = api_user.get('name')
 
             #  determine the user exists

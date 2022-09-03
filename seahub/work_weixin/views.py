@@ -123,7 +123,7 @@ def work_weixin_oauth_callback(request):
         if user_info_api_response_dic:
             api_user = user_info_api_response_dic
             api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             update_work_weixin_user_info(api_user)
 
     if not user.is_active:
@@ -217,7 +217,7 @@ def work_weixin_oauth_connect_callback(request):
         if user_info_api_response_dic:
             api_user = user_info_api_response_dic
             api_user['username'] = email
-            api_user['contact_email'] = api_user['email']
+            api_user['contact_email'] = api_user.get('email', '')
             update_work_weixin_user_info(api_user)
 
     # redirect user to page

@@ -379,7 +379,7 @@ class AdminDingtalkDepartmentsImport(APIView):
         # import api_user
         for api_user in api_user_list:
             uid = api_user.get('unionid', '')
-            api_user['contact_email'] = api_user.get('email')
+            api_user['contact_email'] = api_user.get('email', '')
             api_user_name = api_user.get('name')
 
             #  determine the user exists
