@@ -7,6 +7,7 @@ import posixpath
 from datetime import datetime
 
 import markdown
+import bleach
 try:
     from lxml import html
 except ImportError:
@@ -29,6 +30,24 @@ from seahub.utils.file_types import IMAGE, MARKDOWN
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+# https://github.com/yourcelf/bleach-whitelist/blob/master/bleach_whitelist/bleach_whitelist.py#L61
+markdown_tags = [
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "b", "i", "strong", "em", "tt",
+    "p", "pre", "br",
+    "span", "div", "blockquote", "code", "hr",
+    "ul", "ol", "li", "dd", "dt",
+    "img",
+    "a",
+    "sub", "sup",
+]
+
+markdown_attrs = {
+    "*": ["id", "class", "width", "height"],
+    "img": ["src", "alt", "title"],
+    "a": ["href", "alt", "title"],
+}
+
 
 def format_markdown_file_content(slug, repo_id, file_path, token, file_response):
     # Convert a markdown string to HTML and parse the html
@@ -37,6 +56,7 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
         if html is None:
             logger.warning('Failed to import lxml module.')
             return '', '', [], ''
+        html_content = bleach.clean(html_content, markdown_tags, markdown_attrs)
         html_doc = html.fromstring(html_content)
     except Exception as err_msg:
         return '', '', [], err_msg
