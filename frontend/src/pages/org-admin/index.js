@@ -66,7 +66,7 @@ class Org extends React.Component {
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
-        <div className="main-panel o-hidden">
+        <div className="main-panel">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
             <OrgUsers path={siteRoot + 'org/useradmin'} />

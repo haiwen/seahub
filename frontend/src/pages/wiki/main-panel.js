@@ -83,7 +83,7 @@ class MainPanel extends Component {
 
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
     return (
-      <div className="main-panel wiki-main-panel o-hidden">
+      <div className="main-panel wiki-main-panel">
         <div className="main-panel-hide hide">{this.props.content}</div>
         <div className={`main-panel-north panel-top ${this.props.permission === 'rw' ? 'border-left-show' : ''}`}>
           {!username &&

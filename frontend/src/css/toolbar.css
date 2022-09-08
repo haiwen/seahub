@@ -11,7 +11,7 @@
 .border-left-show:before {
   position: absolute;
   top: 10px;
-  left: 0;
+  left: -1px;
   width: 1px;
   height: 30px;
   content: '';
