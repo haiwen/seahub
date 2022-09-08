@@ -11,6 +11,7 @@ import ModalPortal from './components/modal-portal';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CommitDetails from './components/dialog/commit-details';
 import UpdateRepoCommitLabels from './components/dialog/edit-repo-commit-labels';
+import StyledTitle from './components/styled-title';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -104,7 +105,9 @@ class RepoHistory extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2 dangerouslySetInnerHTML={{__html: Utils.generateDialogTitle(gettext('{placeholder} Modification History'), repoName)}}></h2>
+                <h2>
+                  <StyledTitle title={repoName} />{gettext('Modification History')}
+                </h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
