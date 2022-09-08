@@ -16,7 +16,7 @@ class StyledTitle extends React.Component {
     const { title } = this.props;
     const className = `op-target ellipsis ellipsis-op-target ${className}`
     return (
-      <span className={className} title={title}>{title}{' '}</span>
+      <span className={className}>{title}{' '}</span>
     );
   }
 }
