@@ -28,6 +28,7 @@ accesslog=${TOPDIR}/logs/gunicorn_access.log
 gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
+seahubdir=${INSTALLPATH}/seahub
 
 script_name=$0
 function usage () {
@@ -167,6 +168,7 @@ function before_start() {
         export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
         export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
         export SEAFES_DIR=$seafesdir
+        export SEAHUB_DIR=$seahubdir
     fi
 }
 
@@ -279,6 +281,7 @@ function run_python_env() {
         export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
         export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
         export SEAFES_DIR=$seafesdir
+        export SEAHUB_DIR=$seahubdir
     fi
 
     if which ipython 2>/dev/null; then
