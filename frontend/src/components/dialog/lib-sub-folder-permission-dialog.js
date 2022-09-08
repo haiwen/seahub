@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import StyledTitle from '../styled-title';
 import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
 import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-permission-dialog';
 import '../../css/share-link-dialog.css';
@@ -32,7 +33,7 @@ class LibSubFolderPermissionDialog extends React.Component {
   }
 
   renderContent = () => {
-    let activeTab = this.state.activeTab;
+    const activeTab = this.state.activeTab;
 
     return (
       <Fragment>
@@ -64,14 +65,28 @@ class LibSubFolderPermissionDialog extends React.Component {
     );
   }
 
-  render() {
+  renderHeader = () => {
     const { repoName, folderName } = this.props;
+    if (repoName) {
+      return (
+        <Fragment>
+          <StyledTitle title={repoName} />{gettext('Folder Permission')}
+        </Fragment>
+      );
+    }
+    return (
+      <Fragment>
+        {gettext('Set')}{' '}<StyledTitle title={folderName} />{gettext('permission')}
+      </Fragment>
+    );
+  }
 
+  render() {
     return (
       <div>
         <Modal isOpen={true} style={{maxWidth: '980px'}} className="share-dialog" toggle={this.props.toggleDialog}>
           <ModalHeader toggle={this.props.toggleDialog}>
-            <span dangerouslySetInnerHTML={{__html: repoName ? Utils.generateDialogTitle(gettext('{placeholder} Folder Permission'), repoName) : Utils.generateDialogTitle(gettext('Set {placeholder}\'s permission'), folderName)}}></span>
+            {this.renderHeader()}
           </ModalHeader>
           <ModalBody className="dialog-list-container share-dialog-content" role="tablist">
             {this.renderContent()}

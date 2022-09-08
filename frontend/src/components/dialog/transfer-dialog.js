@@ -8,6 +8,7 @@ import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
+import StyledTitle from '../styled-title/index.js';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -61,10 +62,6 @@ class TransferDialog extends React.Component {
 
   render() {
     const itemName = this.props.itemName;
-    const innerSpan = '<span class="op-target" title=' + itemName + '>' + itemName +'</span>';
-    let msg = gettext('Transfer Library {library_name}');
-    let message = msg.replace('{library_name}', innerSpan);
-
     let canTransferToDept = true;
     if (this.props.canTransferToDept != undefined) {
       canTransferToDept = this.props.canTransferToDept;
@@ -72,7 +69,7 @@ class TransferDialog extends React.Component {
     return (
       <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          <div dangerouslySetInnerHTML={{__html:message}} />
+          {gettext('Transfer Library')}{' '}<StyledTitle title={itemName} />
         </ModalHeader>
         <ModalBody>
           {this.state.transferToUser ?
