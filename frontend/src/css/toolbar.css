@@ -79,6 +79,7 @@
 .common-toolbar {
   display: flex;
   margin-left: auto;
+  align-items: center;
 }
 
 .common-toolbar > div{

@@ -33,6 +33,7 @@
 .search-input {
   height: 1.875rem;
   width: 15rem;
+  font-size: .875rem;
 }
 
 .search-result-container {
