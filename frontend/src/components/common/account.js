@@ -144,7 +144,7 @@ class Account extends Component {
     return (
       <div id="account">
         <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext("View profile and more")}>
-          <span>{this.renderAvatar()}</span>
+          {this.renderAvatar()}
           <span className="fas fa-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext("View profile and more")} onClick={this.onClickAccount}></span>
