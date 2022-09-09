@@ -1000,6 +1000,9 @@ def view_history_file(request, repo_id):
     if not request.user_perm:
         return render_permission_error(request, _('Unable to view file'))
 
+    if ret_dict['err']:
+        return render(request, 'history_file_view_react.html', ret_dict)
+
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
         return render(request, 'view_file_wopi.html', wopi_dict)
@@ -1022,6 +1025,9 @@ def view_trash_file(request, repo_id):
     view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _('Unable to view file'))
+
+    if ret_dict['err']:
+        return render(request, 'history_file_view_react.html', ret_dict)
 
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
@@ -1049,6 +1055,9 @@ def view_snapshot_file(request, repo_id):
     view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _('Unable to view file'))
+
+    if ret_dict['err']:
+        return render(request, 'history_file_view_react.html', ret_dict)
 
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
