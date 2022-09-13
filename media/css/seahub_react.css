@@ -112,8 +112,7 @@ ul,ol,li {
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; font-weight:normal; }
 dd { margin-bottom:.8em; color:#222; }
-a { color:#eb8205; }
-a:hover { color:#eb8205; }
+a, a:hover { color: #ec8000; }
 .vam { vertical-align:middle; }
 .flex-auto { flex:auto; }
 .flex-1 { flex:1; }
@@ -340,14 +339,13 @@ a:hover { color:#eb8205; }
 }
 
 .op-icon {
-    color: #f19645;
+    color: #ff9800;
 }
 
 .op-icon:focus,
 .op-icon:hover {
-    padding-bottom: 0.125rem;
-    border-bottom: 0.125rem solid #e0873b;
-    color: #e0873b;
+    color: #d98100;
+    text-decoration: none;
 }
 
 .action-icon,
