@@ -118,7 +118,7 @@ function start_seafile_background_tasks () {
     before_start;
     echo "Starting seafile background tasks ..."
     $PYTHON -m seafevents.background_tasks --config-file "${seafevents_conf}" \
-        --loglevel debug --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>/dev/null 1>&2 &
+        --logfile "${seafile_background_tasks_log}" -P "${pidfile}" 2>/dev/null 1>&2 &
 
     # Ensure started successfully
     sleep 5
