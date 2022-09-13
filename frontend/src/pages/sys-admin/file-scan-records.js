@@ -104,7 +104,7 @@ class FileScanRecords extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="main-panel-north border-left-show">
+        <div className="main-panel-north">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
           </div>

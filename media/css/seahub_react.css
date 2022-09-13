@@ -540,11 +540,11 @@ a:hover { color:#eb8205; }
 }
 
 .nav-pills .nav-item .nav-link:hover {
-    background-color: #feefb8;
+    background-color: #ffecd1;
 }
 
 .nav-pills .nav-item .nav-link.active {
-    background-color: #feac74;
+    background-color: #ff9800;
     color: #fff;
     border: none;
 }
@@ -589,11 +589,11 @@ a:hover { color:#eb8205; }
     margin: 24px 12px;
     color: #FFFFFF;
     border-radius: 0.25rem;
-    background-color: #FEAC74;
+    background-color: #ff9800;
 }
 
 .side-nav-link:hover {
-    background-color: #F3985A;
+    background-color: #d98100;
     cursor: pointer;
 }
 
@@ -644,10 +644,15 @@ a:hover { color:#eb8205; }
 
 .side-nav-con .nav .nav-item,
 .side-nav-con .nav .nav-item .nav-link {
-    display: block;
     padding-left: 0;
     margin-right: 0;
+    width: 100%;
 }
+
+.side-nav-con .nav .nav-item .nav-link {
+    height: 36px;
+}
+
 .side-nav-con .active .sharp,
 .side-nav-con .active .nav-text {
     font-weight: bold;
@@ -680,44 +685,35 @@ a:hover { color:#eb8205; }
 }
 
 .side-nav-con .toggle-icon {
-    margin-right: 0.25rem;
-    height: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:#999;
+    color: #999;
+    margin-left: auto;
 }
 
-.side-nav-con .draft-info {
-    position: relative;
-    line-height: 1.5rem;
-}
-
-.side-nav-con .draft-info .badge {
-    position: relative;
-    float:right;
-    margin-top: 0.2rem;
-    background-color: #EDEDEE;
+#draft-num {
+    font-size: 75%;
     color: #5B5F65;
+    background-color: #EDEDEE;
     display: flex;
     align-items: center;
-    border-radius:50%;
     justify-content: center;
+    border-radius:50%;
     min-width: 1.3rem;
     min-height: 1.3rem;
-    padding: 0 .3rem;
+    padding: 0 2px;
+    margin-left: auto;
 }
 
 .side-nav-con .sub-nav {
-    display: block;
     overflow: hidden;
+    width: 100%;
 }
 
-.side-nav-con .sub-nav .nav-link {
+.side-nav-con .sub-nav .nav-item .nav-link {
     padding: 0;
     display: block;
     font-size: 0.875rem;
     line-height: 1.5rem;
+    height: auto;
 }
 
 .side-panel-slide {
@@ -767,7 +763,8 @@ a:hover { color:#eb8205; }
     position: absolute;
     top: -3px;
     left: 12px;
-    width: 16px;
+    padding: 0 2px;
+    min-width: 16px;
     height: 16px;
     color: #fff;
     font-size: 9px;

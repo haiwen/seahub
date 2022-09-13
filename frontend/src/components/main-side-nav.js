@@ -210,9 +210,9 @@ class MainSideNav extends React.Component {
             }
             <li className="nav-item flex-column" id="group-nav">
               <a className="nav-link ellipsis" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
-                <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-group" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Shared with groups')}</span>
+                <span className={`toggle-icon fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
               </a>
               {this.renderSharedGroups()}
             </li>
@@ -263,10 +263,8 @@ class MainSideNav extends React.Component {
               <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'drafts')}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                   <span className="sf2-icon-edit" aria-hidden="true"></span>
-                  <span className="draft-info nav-text">
-                    {gettext('Drafts')}
-                    {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
-                  </span>
+                  <span className="nav-text">{gettext('Drafts')}</span>
+                  {this.props.draftCounts > 0 && <span id="draft-num">{this.props.draftCounts}</span>}
                 </Link>
               </li>
             }
@@ -286,9 +284,9 @@ class MainSideNav extends React.Component {
             }
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
-                <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-wrench" aria-hidden="true"></span>
                 <span className="nav-text">{gettext('Share Admin')}</span>
+                <span className={`toggle-icon fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
               </a>
               {this.renderSharedAdmin()}
             </li>
