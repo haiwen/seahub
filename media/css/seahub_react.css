@@ -112,6 +112,10 @@ ul,ol,li {
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; font-weight:normal; }
 dd { margin-bottom:.8em; color:#222; }
+input::placeholder,
+textarea::placeholder {
+    color: #999;
+}
 a, a:hover { color: #ec8000; }
 .vam { vertical-align:middle; }
 .flex-auto { flex:auto; }

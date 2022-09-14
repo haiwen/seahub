@@ -69,7 +69,6 @@ class CommentPanel extends React.Component {
 
   addComment = () => {
     if (!this.state.comment.trim()) return;
-    console.log(filePath, repoID);
     seafileAPI.postComment(repoID, filePath, this.state.comment.trim()).then(() => {
       this.listComments(true);
     }).catch(err => {
@@ -80,7 +79,6 @@ class CommentPanel extends React.Component {
 
   onSubmit = () => {
     this.addParticipant(username);
-    console.log(username);
     if (this.toBeAddedParticipant.length === 0) {
       this.addComment();
     } else {
