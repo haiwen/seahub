@@ -130,7 +130,7 @@ a, a:hover { color: #ec8000; }
     text-overflow:ellipsis;
 }
 .op-target {
-    color: #ee8204;
+    color: #ec8000;
     word-wrap: break-word;
 }
 .left-zero {
@@ -1049,6 +1049,9 @@ a.table-sort-op:hover {
 }
 
 /* dropdown-menu style */
+.dropdown {
+  vertical-align: middle;
+}
 .dropdown-menu {
     min-width: 8rem;
 }
