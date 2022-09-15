@@ -29,8 +29,8 @@ body {
   list-style: decimal inside none;
 }
 #upload-link-drop-zone {
-  background: rgba(240, 159, 63, 0.1);
-  border: 2px dashed #f09f3f;
+  background: rgba(255, 152, 0, 0.1);
+  border: 2px dashed #ff9800;
   border-radius: 4px;
   padding: 28px 0;
 }
