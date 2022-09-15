@@ -15,6 +15,7 @@ from seahub.utils.two_factor_auth import has_two_factor_auth, \
 
 logger = logging.getLogger(__name__)
 
+
 def all_none(values):
     for value in values:
         if value is not None:
@@ -22,12 +23,14 @@ def all_none(values):
 
     return True
 
+
 def all_not_none(values):
     for value in values:
         if value is None:
             return False
 
     return True
+
 
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -83,6 +86,8 @@ class AuthTokenSerializer(serializers.Serializer):
                 user = authenticate(username=username, password=password)
                 if user is None:
                     raise serializers.ValidationError('Unable to login with provided credentials.')
+                elif not user.is_active:
+                    raise serializers.ValidationError('User account is disabled.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
@@ -103,7 +108,7 @@ class AuthTokenSerializer(serializers.Serializer):
                 logger.info('%s: unrecognized device' % login_id)
 
             token = get_token_v2(self.context['request'], user.username, platform,
-                    device_id, device_name, client_version, platform_version)
+                                 device_id, device_name, client_version, platform_version)
         else:
             token = get_token_v1(user.username)
 
