@@ -40,6 +40,7 @@ markdown_tags = [
     "img",
     "a",
     "sub", "sup",
+    "table", "thead", "tbody", "tr", "th", "td",
 ]
 
 markdown_attrs = {
