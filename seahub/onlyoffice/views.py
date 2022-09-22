@@ -99,7 +99,7 @@ def onlyoffice_editor_callback(request):
     doc_info = get_file_info_by_doc_key(doc_key)
     if not doc_info:
 
-        logger.error('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+        logger.warning('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
 
         doc_info = cache.get(doc_key)
         if not doc_info:
