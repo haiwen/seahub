@@ -8,6 +8,7 @@ default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
+seahubdir=${INSTALLPATH}/seahub
 
 function check_python_executable() {
     if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
@@ -63,6 +64,7 @@ export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
 export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
+export SEAHUB_DIR=$seahubdir
 
 if [[ -d ${INSTALLPATH}/pro ]]; then
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
