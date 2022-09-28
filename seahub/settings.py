@@ -270,8 +270,8 @@ INSTALLED_APPS = [
     'seahub.organizations',
     'seahub.krb5_auth',
     'seahub.django_cas_ng',
+    'seahub.alibaba',
 ]
-
 
 # Enable or disable view File Scan
 ENABLE_FILE_SCAN = False
