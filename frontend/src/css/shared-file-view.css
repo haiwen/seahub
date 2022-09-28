@@ -82,6 +82,17 @@
 
 @media (max-width: 768px) {
   .shared-file-view-body .md-view {
-    padding: 40px;
+    padding: 0 10px;
+    width: 100%;
+  }
+
+  .shared-file-view-body .md-view .article {
+    display: flex;
+    padding: 20px;
+    margin: 0;
+  }
+
+  .shared-file-view-body .seafile-markdown-outline {
+    display: none;
   }
 }
