@@ -996,6 +996,15 @@ class AdminUser(APIView):
         user_info = get_user_info(email)
         user_info['avatar_url'], _, _ = api_avatar_url(email, avatar_size)
 
+        last_login_obj = UserLastLogin.objects.get_by_username(email)
+        if last_login_obj:
+            user_info['last_login'] = datetime_to_isoformat_timestr(last_login_obj.last_login)
+            user_info['last_access_time'] = get_user_last_access_time(email,
+                                                                      last_login_obj.last_login)
+        else:
+            user_info['last_login'] = ''
+            user_info['last_access_time'] = get_user_last_access_time(email, '')
+
         return Response(user_info)
 
     def put(self, request, email):
