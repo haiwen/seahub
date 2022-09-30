@@ -893,6 +893,9 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
+
+    ret_dict['err'] = ''
+
     # check arguments
     repo = get_repo(repo_id)
     if not repo:
