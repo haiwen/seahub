@@ -31,13 +31,27 @@ class Command(BaseCommand):
         return Profile.objects.get_user_language(username)
 
     def handle(self, *args, **options):
-        self.email_admins()
-        self.email_mail_list()
+        repo_id_file_map = dict()
+        repo_name_file_list = list()
+        for repo_file in options['repo_file']:
+            repo_id, file_path = repo_file.split(':', 1)
+            if repo_id not in repo_id_file_map:
+                repo_id_file_map[repo_id] = [repo_file]
+            else:
+                repo_id_file_map[repo_id].append(repo_file)
+
+        for repo_id, file_path_list in repo_id_file_map.items():
+            repo = seafile_api.get_repo(repo_id)
+            repo_name = repo.name
+            repo_name_file_list.append({'repo_name': repo_name, 'file_path_list': file_path_list})
+
+        self.email_admins(repo_name_file_list)
+        self.email_mail_list(repo_name_file_list)
 
         for repo_file in options['repo_file']:
             self.email_repo_owner(repo_file)
 
-    def email_admins(self):
+    def email_admins(self, repo_name_file_list):
         db_users = seaserv.get_emailusers('DB', -1, -1)
         ldpa_imported_users = seaserv.get_emailusers('LDAPImport', -1, -1)
 
@@ -56,12 +70,13 @@ class Command(BaseCommand):
 
             send_html_email_with_dj_template(u.email,
                                              subject=_('Virus detected on %s') % get_site_name(),
-                                             dj_template='notifications/notify_virus.html')
+                                             dj_template='notifications/notify_virus.html',
+                                             context={'repo_name_file_list': repo_name_file_list})
 
             # restore current language
             translation.activate(cur_language)
 
-    def email_mail_list(self):
+    def email_mail_list(self, repo_name_file_list):
         try:
             notify_list = dj_settings.VIRUS_SCAN_NOTIFY_LIST
         except AttributeError:
@@ -70,11 +85,14 @@ class Command(BaseCommand):
         for mail in notify_list:
             send_html_email_with_dj_template(mail,
                                              subject=_('Virus detected on %s') % get_site_name(),
-                                             dj_template='notifications/notify_virus.html')
+                                             dj_template='notifications/notify_virus.html',
+                                             context={'repo_id_file_map': repo_name_file_list})
 
     def email_repo_owner(self, repo_file):
         repo_id, file_path = repo_file.split(':', 1)
         owner = seafile_api.get_repo_owner(repo_id)
+        repo = seafile_api.get_repo(repo_id)
+        repo_name = repo.name
         if not owner:
             return
 
@@ -90,8 +108,8 @@ class Command(BaseCommand):
                                          subject=_('Virus detected on %s') % get_site_name(),
                                          dj_template='notifications/notify_virus.html',
                                          context={'owner': owner,
-                                                  'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
-                                                  'file_name': os.path.basename(file_path)})
+                                                  'repo_name': repo_name,
+                                                  'file_path': file_path})
 
         # restore current language
         translation.activate(cur_language)
