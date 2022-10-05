@@ -67,6 +67,9 @@ for line in fileinput.input():
         # replace " and ' with ` because mysql doesn't like quotes in CREATE commands
         line = line.replace('"', '`').replace("'", '`')
 
+    # fix default values parantheses
+    line = re.sub(r"default `([^`]*)`", "default '\1'", line, 0, re.IGNORECASE)
+
     # And now we convert it back (see above)
     if re.match(r".*, ``\);", line):
         line = re.sub(r'``\);', r"'');", line)
