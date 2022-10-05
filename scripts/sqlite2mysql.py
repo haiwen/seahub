@@ -41,7 +41,7 @@ for line in fileinput.input():
     if re.match(r'^CREATE TABLE.*', line):
         searching_for_end = True
 
-    m = re.search('CREATE TABLE [`"]?(\w*)[`"]?(.*)', line)
+    m = re.search('CREATE TABLE(?: IF NOT EXISTS)? [`"]?(\w+)[`"]?(\s*\(.*)', line)
     if m:
         name, sub = m.groups()
         sub = sub.replace('"','`')
