@@ -13,11 +13,11 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api, ccnet_api
-from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.utils import send_html_email, get_site_scheme_and_netloc
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url
+from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
@@ -176,7 +176,7 @@ class Command(BaseCommand):
         notice.notice_from = escape(email2nickname(group_staff))
         notice.avatar_src = self.get_avatar_src(group_staff)
         notice.group_staff_profile_url = reverse('user_profile',
-                                                  args=[group_staff])
+                                                 args=[group_staff])
         notice.group_url = reverse('group', args=[group.id])
         notice.group_name = group.group_name
         return notice
@@ -243,15 +243,34 @@ class Command(BaseCommand):
 
         return [(key, value['interval'], value['notices']) for key, value in results.items()]
 
-
     def do_action(self):
+
         user_interval_notices = self.get_user_intervals_and_notices()
         last_emailed_list = UserOptions.objects.filter(option_key=KEY_COLLABORATE_LAST_EMAILED_TIME).values_list('email', 'option_val')
         user_last_emailed_time_dict = {le[0]: datetime.datetime.strptime(le[1], "%Y-%m-%d %H:%M:%S") for le in last_emailed_list}
 
+        # check if to_user active
+        user_active_dict = {}
+        for (to_user, interval_val, notices) in user_interval_notices:
+
+            if to_user in user_active_dict:
+                continue
+            else:
+                try:
+                    to_user_obj = User.objects.get(email=to_user)
+                except User.DoesNotExist:
+                    user_active_dict[to_user] = False
+                    continue
+
+                user_active_dict[to_user] = to_user_obj.is_active
+
         # save current language
         cur_language = translation.get_language()
         for (to_user, interval_val, notices) in user_interval_notices:
+
+            if not user_active_dict[to_user]:
+                continue
+
             # get last_emailed_time if any, defaults to today 00:00:00.0
             last_emailed_time = user_last_emailed_time_dict.get(to_user, None)
             now = datetime.datetime.now().replace(microsecond=0)
