@@ -33,7 +33,8 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
-        check_filename_with_rename, gen_file_upload_url, get_password_strength_level
+        check_filename_with_rename, gen_file_upload_url, \
+        get_password_strength_level, is_valid_password
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
@@ -280,6 +281,10 @@ class ShareLinks(APIView):
 
             if get_password_strength_level(password) < config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL:
                 error_msg = _('Password is too weak.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_password(password):
+                error_msg = _('Password can only contain number, upper letter, lower letter and other symbols.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         expire_days = request.data.get('expire_days', '')

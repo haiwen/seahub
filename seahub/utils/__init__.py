@@ -1355,3 +1355,11 @@ def is_valid_org_id(org_id):
 def encrypt_with_sha1(origin_str):
 
     return hashlib.sha1(origin_str.encode()).hexdigest()
+
+
+ASCII_RE = re.compile(r'[^\x00-\x7f]')
+
+
+def is_valid_password(password):
+
+    return False if ASCII_RE.search(password) else True
