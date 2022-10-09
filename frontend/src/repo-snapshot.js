@@ -9,7 +9,6 @@ import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import ConfirmRestoreRepo from './components/dialog/confirm-restore-repo';
-import StyledTitle from './components/styled-title';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -141,8 +140,8 @@ class RepoSnapshot extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2>
-                  <StyledTitle title={repoName} />{gettext('Snapshot')}{' '}
-                  <span class="heading-commit-time">(${commitTime})</span>
+                  <span>{Utils.generateDialogTitle(gettext('{placeholder} Snapshot'), repoName)}</span>
+                  <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
                   <span className="fas fa-chevron-left"></span>

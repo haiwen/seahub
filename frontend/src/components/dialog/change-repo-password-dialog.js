@@ -5,7 +5,6 @@ import { gettext, repoPasswordMinLength } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
-import StyledTitle from '../styled-title';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -100,7 +99,7 @@ class ChangeRepoPasswordDialog extends React.Component {
       <Modal isOpen={true} centered={true} style={{height: 'auto'}}>
         <ModalHeader toggle={toggleDialog}>
           <span>
-            {gettext("Change Password of Library")}{' '}<StyledTitle title={repoName} />
+            {Utils.generateDialogTitle(gettext('Change Password of Library {placeholder}'), repoName)}
           </span>
         </ModalHeader>
         <ModalBody>

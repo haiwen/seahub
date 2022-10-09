@@ -231,6 +231,18 @@ export const Utils = {
       .innerHTML;
   },
 
+  generateDialogTitle: function(title, operationTarget) {
+    /*
+     * @param title: gettext('...{placeholder}...')
+     */
+    /*
+    const targetStr = this.HTMLescape(operationTarget);
+    const str = `<span class="op-target ellipsis ellipsis-op-target" title=${targetStr}>${targetStr}</span>`;
+    return title.replace('{placeholder}', str);
+    */
+    return title.replace('{placeholder}', operationTarget);
+  },
+
   getFileName: function(filePath) {
     let lastIndex = filePath.lastIndexOf('/');
     return filePath.slice(lastIndex+1);
