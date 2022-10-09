@@ -10,7 +10,6 @@ import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CleanTrash from './components/dialog/clean-trash';
-import StyledTitle from './components/styled-title';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -193,9 +192,7 @@ class RepoFolderTrash extends React.Component {
           <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
             <div className="row">
               <div className="col-md-10 offset-md-1">
-                <h2>
-                  <StyledTitle title={repoFolderName} />{gettext('Trash')}
-                </h2>
+                <h2>{Utils.generateDialogTitle(gettext('{placeholder} Trash'), repoFolderName)}</h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" role={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>

@@ -8,7 +8,6 @@ import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
-import StyledTitle from '../styled-title/index.js';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -69,7 +68,7 @@ class TransferDialog extends React.Component {
     return (
       <Modal isOpen={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-          {gettext('Transfer Library')}{' '}<StyledTitle title={itemName} />
+          <span>{gettext('Transfer Library {library_name}').replace('{library_name}', itemName)}</span>
         </ModalHeader>
         <ModalBody>
           {this.state.transferToUser ?
