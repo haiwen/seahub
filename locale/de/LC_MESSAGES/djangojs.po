@@ -3320,7 +3320,7 @@ msgstr "Aktueller Pfad: "
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:117
 msgid "Shared by:"
-msgstr "Freigegeben von:"
+msgstr "Freigegeben von: "
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:123
 msgid "Save as ..."
@@ -5698,7 +5698,7 @@ msgstr "Dateien zu {folder_name_placeholder} hochladen"
 
 #: frontend/src/pages/upload-link/index.js:42
 msgid "shared by:"
-msgstr "freigegeben von:"
+msgstr "freigegeben von: "
 
 #: frontend/src/pages/upload-link/index.js:46
 #: frontend/src/shared-dir-view.js:457
@@ -5797,7 +5797,7 @@ msgstr "Profil"
 
 #: frontend/src/shared-dir-view.js:445
 msgid "Shared by: "
-msgstr "Freigegeben von:"
+msgstr "Freigegeben von: "
 
 #: frontend/src/shared-dir-view.js:464
 msgid "ZIP Selected Items"

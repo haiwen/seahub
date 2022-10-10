@@ -5139,7 +5139,7 @@ msgstr "Dateien hochladen zu <span class=\"op-target\">%(dir_name)s</span>"
 
 #: seahub/templates/view_shared_upload_link.html:9
 msgid "shared by:"
-msgstr "freigegeben von:"
+msgstr "freigegeben von: "
 
 #: seahub/templates/view_shared_upload_link.html:11
 msgid "The owner of this library has run out of space."
