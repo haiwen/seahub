@@ -17,7 +17,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}Virus is detected on regular scanning. Please check the report at:{% endblocktrans%}
+{% blocktrans %}Virus is detected on regular scanning:{% endblocktrans%}
 </p>
 {% for item in repo_name_file_list %}
 <p style="font-size:14px;color:#434144;">{{ item.repo_name }}: {{ item.file_path }}</p>
