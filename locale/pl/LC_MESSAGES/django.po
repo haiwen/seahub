@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-05 14:27+0800\n"
+"POT-Creation-Date: 2022-10-09 18:44+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Ryszard Trojnacki <ryszard.trojnacki@gmail.com>, 2020\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
@@ -38,7 +38,7 @@ msgid "Login id can't be empty"
 msgstr "Login ID nie może być pusty"
 
 #: seahub/api2/endpoints/admin/account.py:209
-#: seahub/api2/endpoints/admin/users.py:1054
+#: seahub/api2/endpoints/admin/users.py:1063
 #, python-format
 msgid "Login id %s already exists."
 msgstr "Login id %s już istnieje."
@@ -132,7 +132,7 @@ msgstr "Biblioteka nie może być przeniesiona do właściciela."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:626
+#: seahub/api2/endpoints/share_links.py:631
 msgid "There is an associated published library."
 msgstr ""
 
@@ -280,7 +280,7 @@ msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:573
-#: seahub/api2/endpoints/admin/users.py:1026 seahub/base/accounts.py:784
+#: seahub/api2/endpoints/admin/users.py:1035 seahub/base/accounts.py:784
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "Osiągnięto maksymalną liczbę użytkowników."
@@ -308,53 +308,53 @@ msgid ""
 "because Email service is not properly configured."
 msgstr "Poprawnie dodano użytkownika %(user)s. E-mail z powiadomieniem nie został wysłany, ponieważ usługa mailingu nie jest poprawnie skonfigurowana."
 
-#: seahub/api2/endpoints/admin/users.py:1126
+#: seahub/api2/endpoints/admin/users.py:1135
 #: seahub/institutions/templates/institutions/useradmin.html:120
 msgid "Edit succeeded"
 msgstr "Edycja pomyślna."
 
-#: seahub/api2/endpoints/admin/users.py:1129 seahub/views/sysadmin.py:470
+#: seahub/api2/endpoints/admin/users.py:1138 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Twoje konto w %s jest aktywowane"
 
-#: seahub/api2/endpoints/admin/users.py:1134
+#: seahub/api2/endpoints/admin/users.py:1143
 #: seahub/institutions/templates/institutions/useradmin.html:116
 msgid "Edit succeeded, an email has been sent."
 msgstr "Edycja zakończona pomyślnie, wiadomość e-mail została wysłana."
 
-#: seahub/api2/endpoints/admin/users.py:1137
+#: seahub/api2/endpoints/admin/users.py:1146
 #: seahub/institutions/templates/institutions/useradmin.html:118
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Edycja zakończona pomyślnie, ale nie udało się wysłać wiadomości e-mail. Proszę sprawdzić konfigurację."
 
-#: seahub/api2/endpoints/admin/users.py:1215 seahub/views/sysadmin.py:511
+#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Hasło w %s zostało zresetowane"
 
-#: seahub/api2/endpoints/admin/users.py:1217 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1226 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Pomyślnie zresetowano hasło na %(passwd)s, wiadomość e-mail została wysłana do %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1221 seahub/views/sysadmin.py:541
+#: seahub/api2/endpoints/admin/users.py:1230 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Pomyślnie zresetowano hasło na %(passwd)s, ale nie udało się wysłać wiadomości do %(user)s, proszę sprawdzić konfigurację e-mail."
 
-#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:545
+#: seahub/api2/endpoints/admin/users.py:1233 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Pomyślnie zresetowano użytkownikowi %(user)s hasło na %(passwd)s."
 
-#: seahub/api2/endpoints/admin/users.py:1227 seahub/views/sysadmin.py:548
+#: seahub/api2/endpoints/admin/users.py:1236 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -387,8 +387,8 @@ msgstr ""
 #: seahub/notifications/models.py:722 seahub/notifications/models.py:751
 #: seahub/search/views.py:200 seahub/utils/__init__.py:166
 #: seahub/utils/__init__.py:1155 seahub/views/__init__.py:918
-#: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:187
-#: seahub/wiki/views.py:194 seahub/wiki/views.py:203
+#: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
+#: seahub/wiki/views.py:215 seahub/wiki/views.py:224
 msgid "Internal Server Error"
 msgstr "Wewnętrzny błąd serwera"
 
@@ -458,7 +458,7 @@ msgstr "Odmowa dostępu."
 msgid "File is not locked."
 msgstr "Plik nie jest zablokowany."
 
-#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:708
+#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:713
 msgid "You can not refresh this file's lock."
 msgstr "Nie możesz odświeżyć tego pliku. Jest zablokowany."
 
@@ -636,58 +636,65 @@ msgstr "błędy email."
 msgid "An upload link is shared to you on %s"
 msgstr "Udostępniono Ci łącze przesyłania w %s"
 
-#: seahub/api2/endpoints/share_links.py:272
+#: seahub/api2/endpoints/share_links.py:273
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4006
 #: seahub/api2/views.py:4126
 msgid "Password is required."
 msgstr "Hasło jest wymagane."
 
-#: seahub/api2/endpoints/share_links.py:278
+#: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
 msgstr "Hasło jest zbyt krótkie."
 
-#: seahub/api2/endpoints/share_links.py:282
+#: seahub/api2/endpoints/share_links.py:283
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:305
-#: seahub/api2/endpoints/share_links.py:550
-#: seahub/api2/endpoints/upload_links.py:196
-#: seahub/api2/endpoints/upload_links.py:330 seahub/api2/views.py:3420
+#: seahub/api2/endpoints/share_links.py:287
+#: seahub/api2/endpoints/upload_links.py:177
+msgid ""
+"Password can only contain number, upper letter, lower letter and other "
+"symbols."
+msgstr ""
+
+#: seahub/api2/endpoints/share_links.py:310
+#: seahub/api2/endpoints/share_links.py:555
+#: seahub/api2/endpoints/upload_links.py:200
+#: seahub/api2/endpoints/upload_links.py:334 seahub/api2/views.py:3420
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Czas przedawnienia w dniach powinien być większy lub równy %s"
 
-#: seahub/api2/endpoints/share_links.py:311
-#: seahub/api2/endpoints/share_links.py:556
-#: seahub/api2/endpoints/upload_links.py:202
-#: seahub/api2/endpoints/upload_links.py:336 seahub/api2/views.py:3426
+#: seahub/api2/endpoints/share_links.py:316
+#: seahub/api2/endpoints/share_links.py:561
+#: seahub/api2/endpoints/upload_links.py:206
+#: seahub/api2/endpoints/upload_links.py:340 seahub/api2/views.py:3426
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Czas przedawnienia w dniach powinien być mniejszy lub równy %s"
 
-#: seahub/api2/endpoints/share_links.py:333
-#: seahub/api2/endpoints/share_links.py:580
-#: seahub/api2/endpoints/upload_links.py:224
-#: seahub/api2/endpoints/upload_links.py:360
+#: seahub/api2/endpoints/share_links.py:338
+#: seahub/api2/endpoints/share_links.py:585
+#: seahub/api2/endpoints/upload_links.py:228
+#: seahub/api2/endpoints/upload_links.py:364
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:342
-#: seahub/api2/endpoints/share_links.py:589
-#: seahub/api2/endpoints/upload_links.py:233
-#: seahub/api2/endpoints/upload_links.py:369
+#: seahub/api2/endpoints/share_links.py:347
+#: seahub/api2/endpoints/share_links.py:594
+#: seahub/api2/endpoints/upload_links.py:237
+#: seahub/api2/endpoints/upload_links.py:373
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:411
-#: seahub/api2/endpoints/share_links.py:420
+#: seahub/api2/endpoints/share_links.py:416
+#: seahub/api2/endpoints/share_links.py:425
 #, python-format
 msgid "Share link %s already exists."
 msgstr "Link udostępnienia %s już istnieje."
@@ -1442,7 +1449,7 @@ msgstr "Nazwa %s nie jest prawidłowa"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1873
+#: seahub/views/file.py:1885
 msgid "Argument missing"
 msgstr "Brakujący parametr"
 
@@ -1566,8 +1573,8 @@ msgstr "Załoga %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1138
-#: seahub/views/file.py:1354 seahub/views/file.py:1882
+#: seahub/views/ajax.py:427 seahub/views/file.py:1150
+#: seahub/views/file.py:1366 seahub/views/file.py:1894
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -3869,7 +3876,7 @@ msgstr "Folder przeniesiono"
 msgid "New file updates on %s"
 msgstr ""
 
-#: seahub/notifications/management/commands/send_notices.py:334
+#: seahub/notifications/management/commands/send_notices.py:353
 #, python-format
 msgid "New notice on %s"
 msgstr "%s nowych powiadomień"
@@ -5294,7 +5301,7 @@ msgstr "Nie można wyświetlić modyfikacji biblioteki"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1868
+#: seahub/views/ajax.py:376 seahub/views/file.py:1880
 msgid "Library does not exist"
 msgstr "Biblioteka nie istnieje"
 
@@ -5341,8 +5348,8 @@ msgid "Bad upload link token."
 msgstr "Nieprawidłowy token łącza przesyłania."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1133 seahub/views/file.py:1349
-#: seahub/views/file.py:1877
+#: seahub/views/file.py:1145 seahub/views/file.py:1361
+#: seahub/views/file.py:1889
 msgid "File does not exist"
 msgstr "Plik nie istnieje"
 
@@ -5381,42 +5388,42 @@ msgid "The library is encrypted, can not open file online."
 msgstr "Biblioteka jest zaszyfrowana, nie można otworzyć pliku online."
 
 #: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1001
-#: seahub/views/file.py:1024 seahub/views/file.py:1051
-#: seahub/views/file.py:1179 seahub/views/file.py:1268
-#: seahub/views/file.py:1390 seahub/views/file.py:1490
+#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1004
+#: seahub/views/file.py:1030 seahub/views/file.py:1060
+#: seahub/views/file.py:1191 seahub/views/file.py:1280
+#: seahub/views/file.py:1402 seahub/views/file.py:1502
 msgid "Unable to view file"
 msgstr "Nie można wyświetlić pliku"
 
-#: seahub/views/file.py:808 seahub/views/file.py:949 seahub/views/file.py:1229
-#: seahub/views/file.py:1428
+#: seahub/views/file.py:808 seahub/views/file.py:952 seahub/views/file.py:1241
+#: seahub/views/file.py:1440
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:840 seahub/views/file.py:961 seahub/views/file.py:1248
-#: seahub/views/file.py:1444
+#: seahub/views/file.py:840 seahub/views/file.py:964 seahub/views/file.py:1260
+#: seahub/views/file.py:1456
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1084
+#: seahub/views/file.py:1096
 msgid "Unable to download file, invalid file path"
 msgstr "Nie można pobrać pliku, nieprawidłowa ścieżka"
 
-#: seahub/views/file.py:1093
+#: seahub/views/file.py:1105
 msgid "Unable to download file, wrong file path"
 msgstr "Nie można pobrać pliku, zła ścieżka"
 
-#: seahub/views/file.py:1100
+#: seahub/views/file.py:1112
 msgid "Unable to download file."
 msgstr "Nie można pobrać pliku."
 
-#: seahub/views/file.py:1284 seahub/views/file.py:1509
+#: seahub/views/file.py:1296 seahub/views/file.py:1521
 #: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "Link udostępnienia dla %s."
 
-#: seahub/views/file.py:1627 seahub/views/file.py:1632
+#: seahub/views/file.py:1639 seahub/views/file.py:1644
 msgid "Unable to download file"
 msgstr "Nie udało się pobrać pliku"
 
@@ -5501,7 +5508,7 @@ msgstr "Niepowodzenie przyznawania %s uprawnień administracyjnych: użytkownik 
 msgid "Optional"
 msgstr "Opcjonalny"
 
-#: seahub/wiki/views.py:137
+#: seahub/wiki/views.py:158
 msgid "Unable to view Wiki"
 msgstr "Nie można wyświetlić Wiki"
 
