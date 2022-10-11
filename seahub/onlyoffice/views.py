@@ -280,7 +280,7 @@ class OnlyofficeConvert(APIView):
 
         if resp.status_code != 200:
             logger.error('upload_url: {}'.format(upload_url))
-            logger.error('parameter file: {}'.format(files['file'][:100]))
+            logger.error('content size: {}'.format(len(onlyoffice_resp.content)))
             logger.error('parameter parent_dir: {}'.format(files['parent_dir']))
             logger.error('response: {}'.format(resp.__dict__))
 
