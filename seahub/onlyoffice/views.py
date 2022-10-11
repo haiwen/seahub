@@ -163,7 +163,7 @@ def onlyoffice_editor_callback(request):
         resp = requests.post(update_url, files=files, data=data)
         if resp.status_code != 200:
             logger.error('update_url: {}'.format(update_url))
-            logger.error('parameter file: {}'.format(files['file'][:10]))
+            logger.error('content size: {}'.format(len(onlyoffice_resp.content)))
             logger.error('parameter target_file: {}'.format(data['target_file']))
             logger.error('response: {}'.format(resp.__dict__))
 
