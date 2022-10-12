@@ -143,7 +143,7 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
+      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"

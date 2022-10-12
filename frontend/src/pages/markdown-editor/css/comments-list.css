@@ -3,9 +3,6 @@
   flex-direction: column;
   height: 100%;
 }
-.seafile-comment-list {
-  overflow-y: auto;
-}
 .seafile-comment-list .comment-vacant {
   padding: 1em;
   text-align: center;

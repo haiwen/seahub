@@ -13,7 +13,7 @@ body {
 
 .side-panel {
   flex: 0 0 22%;
-  padding: 20px;
+  padding: 1rem;
   border-right: 1px solid #eee;
 }
 .main-panel {
@@ -21,26 +21,36 @@ body {
 }
 .heading {
   padding: 8px 16px;
-    background: #f9f9f9;
-    font-size: 1rem;
-    color: #322;
-    font-weight: normal;
-    line-height: 1.5;
-    margin:0;
+  background: #f9f9f9;
+  font-size: 1rem;
+  color: #322;
+  font-weight: normal;
+  line-height: 1.5;
+  margin:0;
+  position: relative;
+}
+.heading:after {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+  content: '';
+  border-bottom: 1px solid #e8e8e8;
 }
 .content {
   padding: 0rem 1rem 8rem;
   overflow: auto;
 }
 .setting-item {
+  font-size: 0.875rem;
   margin: 1em 0 3em;
 }
 .setting-item-heading {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: normal;
-  padding-bottom: 0.2em;
+  padding-bottom: 0.3rem;
   border-bottom: 1px solid #ddd;
-  margin-bottom: 0.7em;
+  margin-bottom: 0.7rem;
 }
 .user-avatar {
   border-radius: 3px;
@@ -67,8 +77,8 @@ body {
   color: #333;
 }
 .user-setting-nav .nav-item.active .nav-link {
-  color: #eb8205;
-  border-color: #eb8205;
+  color: #ff9800;
+  border-color: #ff9800;
 }
 .user-setting-nav .nav-item .nav-link:hover {
   color: #eb8205;

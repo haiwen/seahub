@@ -1819,7 +1819,6 @@ class LibContentView extends React.Component {
 
     return (
       <Fragment>
-        <div className="main-panel o-hidden">
           <div className="main-panel-north border-left-show">
             <LibContentToolbar
               isViewFile={this.state.isViewFile}
@@ -1947,7 +1946,6 @@ class LibContentView extends React.Component {
               />
             )}
           </div>
-        </div>
         {isCopyMoveProgressDialogShow && (
           <CopyMoveDirentProgressDialog
             type={this.state.asyncOperationType}
