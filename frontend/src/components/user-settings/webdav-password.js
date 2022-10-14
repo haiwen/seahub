@@ -6,6 +6,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UpdateWebdavPassword from '../dialog/update-webdav-password';
 
+const { username, webdavUrl } = window.app.pageOptions;
+
 class WebdavPassword extends React.Component {
 
   constructor(props) {
@@ -51,6 +53,8 @@ class WebdavPassword extends React.Component {
       <React.Fragment>
         <div id="update-webdav-passwd" className="setting-item">
         <h3 className="setting-item-heading">{gettext('WebDav Password')}</h3>
+        <p>{gettext('WebDav url:')}<a href={webdavUrl}> {webdavUrl}</a></p>
+        <p>{gettext('WebDav username:')} {username}</p>
         <button className="btn btn-outline-primary" onClick={this.toggleDialog}>{gettext('Set Password')}</button>
         </div>
         {this.state.isDialogOpen && (

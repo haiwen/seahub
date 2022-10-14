@@ -958,6 +958,33 @@ def get_service_url():
     """
     return config.SERVICE_URL
 
+def get_webdav_url():
+    """Get webdav url.
+    """
+
+    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
+        conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    else:
+        conf_dir = os.environ['SEAFILE_CONF_DIR']
+
+    conf_file = os.path.join(conf_dir, 'seafdav.conf')
+    if not os.path.exists(conf_file):
+        return ""
+
+    config = configparser.ConfigParser()
+    config.read(conf_file)
+    if not config.has_option("WEBDAV", "share_name"):
+        return ""
+
+    share_name = config.get("WEBDAV", "share_name")
+    share_name = share_name.lstrip('/')
+
+    service_url = get_service_url()
+    service_url = service_url.rstrip('/')
+
+    return "{}/{}".format(service_url, share_name)
+
+
 def get_server_id():
     """Get server id from seaserv.
     """
