@@ -28,7 +28,6 @@ window.app.pageOptions = {
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
   {% if ENABLE_WEBDAV_SECRET %}
-  webdavPasswd: '{{ webdav_passwd|escapejs }}',
   webdavSecretMinLength: {{ WEBDAV_SECRET_MIN_LENGTH }},
   webdavSecretStrengthLevel: {{ WEBDAV_SECRET_STRENGTH_LEVEL }},
   {% endif %}

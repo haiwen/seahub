@@ -79,12 +79,6 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = [r for r in owned_repos if not r.is_virtual]
 
-    if settings.ENABLE_WEBDAV_SECRET:
-        decoded = UserOptions.objects.get_webdav_decoded_secret(username)
-        webdav_passwd = decoded if decoded else ''
-    else:
-        webdav_passwd = ''
-
     file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
@@ -127,7 +121,6 @@ def edit_profile(request):
             'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
-            'webdav_passwd': webdav_passwd,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
             'social_next_page': reverse('edit_profile'),
