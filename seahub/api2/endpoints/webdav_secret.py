@@ -13,8 +13,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.options.models import UserOptions
-from seahub.utils.hasher import AESPasswordHasher
-from seahub.utils import get_password_strength_level
+from seahub.utils import get_password_strength_level, \
+        is_valid_password, hash_password
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -43,12 +43,15 @@ class WebdavSecretView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Feature is not enabled.')
 
-        aes = AESPasswordHasher()
-
         username = request.user.username
         secret = request.data.get("secret", None)
 
         if secret:
+
+            if not is_valid_password(secret):
+                error_msg = _('Password can only contain number, upper letter, lower letter and other symbols.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             if len(secret) >= 30:
                 error_msg = _('Length of WebDav password should be less than 30.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -61,9 +64,9 @@ class WebdavSecretView(APIView):
                 error_msg = _('Password is too weak.')
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            encoded = aes.encode(secret)
-            UserOptions.objects.set_webdav_secret(username, encoded)
+            hashed_password = hash_password(secret)
+            UserOptions.objects.set_webdav_secret(username, hashed_password)
         else:
             UserOptions.objects.unset_webdav_secret(username)
 
-        return self.get(request, format)
+        return Response({'success': True})

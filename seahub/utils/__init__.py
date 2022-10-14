@@ -29,7 +29,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
-from django.views.static import serve as django_static_serve
+from django.utils.crypto import get_random_string
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
@@ -1409,9 +1409,23 @@ def is_valid_org_id(org_id):
         return False
 
 
-def encrypt_with_sha1(origin_str):
+def hash_password(password, algorithm='sha1', salt=get_random_string(4)):
 
-    return hashlib.sha1(origin_str.encode()).hexdigest()
+    digest = hashlib.pbkdf2_hmac(algorithm,
+                                 password.encode(),
+                                 salt.encode(),
+                                 10000)
+    hex_hash = digest.hex()
+
+    # sha1$QRle$5511a4e2efb7d12e1f64647f64c0c6e105d150ff
+    return "{}${}${}".format(algorithm, salt, hex_hash)
+
+
+def check_hashed_password(password, hashed_password):
+
+    algorithm, salt, hex_hash = hashed_password.split('$')
+
+    return hashed_password == hash_password(password, algorithm, salt)
 
 
 ASCII_RE = re.compile(r'[^\x00-\x7f]')
