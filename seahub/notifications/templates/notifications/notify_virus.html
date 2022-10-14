@@ -10,17 +10,18 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %} {{owner|email2nickname}}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}Virus detected in file <a href="{{url_base}}{{file_url}}" target="_blank">{{ file_name }}</a> during regular scanning.{% endblocktrans %}
+{% blocktrans %}Virus detected in library {{ repo_name }} during regular scanning: {{ file_path }}.{% endblocktrans %}
 </p>
 
 {% else %}
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}Virus is detected on regular scanning. Please check the report at:{% endblocktrans%}
+{% blocktrans %}Virus is detected on regular scanning:{% endblocktrans%}
 </p>
-
-<a href="{{ url_base }}{% url 'sys_virus_scan_records' %}" target="_blank">{{ url_base }}{% url 'sys_virus_scan_records' %}</a>
+{% for item in repo_name_file_list %}
+<p style="font-size:14px;color:#434144;">{{ item.repo_name }}: {{ item.file_path }}</p>
+{% endfor %}
 
 {% endif %}
 {% endautoescape %}
