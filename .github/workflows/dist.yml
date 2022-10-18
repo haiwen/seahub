@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - "8.0"
+      - "9.0"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
