@@ -23,6 +23,12 @@
   pointer-events: all;
   font-style: normal;
   min-width: 25px;
+  color: #999;
+}
+
+.search-icon-right:hover {
+  color: #333;
+  text-decoration: none;
 }
 
 .search-icon-arrow {
