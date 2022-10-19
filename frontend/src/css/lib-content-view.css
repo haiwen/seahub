@@ -66,7 +66,7 @@
 }
 
 .tree-node-inner-hover {
-  background-color: rgb(255,239,178);
+  background-color: #f5f5f5;
   border-radius: 0.25rem;
 }
 
@@ -134,7 +134,7 @@
 .tree-node-hight-light {
   color: #fff;
   border-radius: 4px;
-  background-color: #feac74 !important;
+  background-color: #ff9800 !important;
 }
 
 .tree-node-hight-light i {
