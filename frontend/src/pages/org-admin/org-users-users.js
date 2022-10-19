@@ -166,6 +166,22 @@ class OrgUsers extends Component {
     });
   }
 
+  changeStatus= (email, isActive) => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+      let users = this.state.orgUsers.map(item => {
+        if (item.email == email) {
+          item['is_active']= res.data['is_active'];
+        }
+        return item;
+      });
+      this.setState({orgUsers: users});
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   searchItems = (keyword) => {
     navigate(`${siteRoot}org/useradmin/search-users/?query=${encodeURIComponent(keyword)}`);
   }
@@ -210,6 +226,7 @@ class OrgUsers extends Component {
             <OrgUsersList
               initOrgUsersData={this.initOrgUsersData}
               toggleDelete={this.toggleOrgUsersDelete}
+              changeStatus={this.changeStatus}
               orgUsers={this.state.orgUsers}
               page={this.state.page}
               pageNext={this.state.pageNext}

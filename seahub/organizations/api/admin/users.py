@@ -289,6 +289,9 @@ class OrgAdminUsers(APIView):
             logger.error(e)
             user_info['quota'] = -1
 
+        user_info['quota_usage'] = user_info['self_usage']
+        user_info['quota_total'] = user_info['quota']
+
         return Response(user_info)
 
 
