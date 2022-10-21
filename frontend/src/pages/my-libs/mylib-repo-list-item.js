@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import moment from 'moment';
 import { Link, navigate } from '@gatsbyjs/reach-router';
+import { UncontrolledTooltip } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, storages } from '../../utils/constants';
@@ -21,6 +22,7 @@ import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareUploadLinksDialog from '../../components/dialog/repo-share-upload-links-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
+import Icon from '../../components/icon';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -110,6 +112,12 @@ class MylibRepoListItem extends React.Component {
       case 'Reset Password':
         this.onResetPasswordToggle();
         break;
+      case 'Watch File Changes':
+        this.watchFileChanges();
+        break;
+      case 'Unwatch File Changes':
+        this.unwatchFileChanges();
+        break;
       case 'Folder Permission':
         this.onFolderPermissionToggle();
         break;
@@ -166,30 +174,24 @@ class MylibRepoListItem extends React.Component {
     }
   }
 
-  onToggleMonitorRepo = (e) => {
-    e.preventDefault();
-    const repoName = this.props.repo.repo_name;
-    if (this.state.isMonitored) {
-      seafileAPI.unMonitorRepo(this.props.repo.repo_id).then(() => {
-        this.setState({isMonitored: !this.state.isMonitored});
-        const msg = gettext('Successfully unmonitored {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      seafileAPI.monitorRepo(this.props.repo.repo_id).then(() => {
-        this.setState({isMonitored: !this.state.isMonitored});
-        const msg = gettext('Successfully monitored {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+  watchFileChanges = () => {
+    const { repo_id } = this.props.repo;
+    seafileAPI.monitorRepo(repo_id).then(() => {
+      this.setState({isMonitored: !this.state.isMonitored});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  unwatchFileChanges = () => {
+    const { repo_id } = this.props.repo;
+    seafileAPI.unMonitorRepo(repo_id).then(() => {
+      this.setState({isMonitored: !this.state.isMonitored});
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   onShareToggle = (e) => {
@@ -324,13 +326,6 @@ class MylibRepoListItem extends React.Component {
             <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
           </a>
         </td>
-
-        <td className="text-center">
-          <a href="#" role="button" aria-label={this.state.isMonitored ? gettext('unMonitor') : gettext('Monitor')} onClick={this.onToggleMonitorRepo}>
-            <i className={`fa-star ${this.state.isMonitored ? 'fas' : 'far star-empty'}`}></i>
-          </a>
-        </td>
-
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
           {this.state.isRenaming && (
@@ -341,7 +336,22 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <Link to={repoURL}>{repo.repo_name}</Link>
+            <Fragment>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              {this.state.isMonitored && (
+                <Fragment>
+                  <span id={`watching-${repo.repo_id}`} className="ml-1">
+                    <Icon symbol='monitor' />
+                  </span>
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target={`#watching-${repo.repo_id}`}
+                  >
+                    {gettext('You are watching file changes of this library.')}
+                  </UncontrolledTooltip>
+                </Fragment>
+              )}
+            </Fragment>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             (gettext('Broken (please contact your administrator to fix this library)'))
@@ -387,7 +397,22 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <div><Link to={repoURL}>{repo.repo_name}</Link></div>
+            <div>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              {this.state.isMonitored && (
+                <Fragment>
+                  <span id={`watching-${repo.repo_id}`} className="ml-1">
+                    <Icon symbol='monitor' />
+                  </span>
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target={`#watching-${repo.repo_id}`}
+                  >
+                    {gettext('You are watching file changes of this library.')}
+                  </UncontrolledTooltip>
+                </Fragment>
+              )}
+            </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>

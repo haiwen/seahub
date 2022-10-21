@@ -182,12 +182,12 @@ module.exports = function (webpackEnv) {
       // this defaults to 'window', but by setting it to 'this' then
       // module chunks which are built will work in web workers as well.
       globalObject: 'this',
-    }
+    };
     if (isEnvDevelopment) {
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
-      output = Object.assign({}, output, {publicPath: "http://127.0.0.1:3000/assets/bundles/"});
+      output = Object.assign({}, output, {publicPath: 'http://127.0.0.1:3000/assets/bundles/'});
     }
     return output;
   };
@@ -396,7 +396,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -442,7 +442,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -523,6 +523,24 @@ module.exports = function (webpackEnv) {
                 },
                 'sass-loader'
               ),
+            },
+            {
+              test: /\.svg$/,
+              use: [
+                {
+                  loader: 'svg-sprite-loader', options: {}
+                },
+                { loader: 'svgo-loader', options: {
+                  plugins:[
+                    'removeTitle',
+                    'removeStyleElement',
+                    'cleanupIDs',
+                    'inlineStyles',
+                    'removeXMLProcInst',
+                  ]
+                }
+                }
+              ]
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
@@ -715,11 +733,11 @@ module.exports = function (webpackEnv) {
       contentBase: '../assets',
       historyApiFallback: true,
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-        "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
       }
     },
-  
+
   };
 };
