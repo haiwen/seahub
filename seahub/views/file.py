@@ -975,9 +975,9 @@ def view_history_file_common(request, repo_id, ret_dict):
             if is_textual_file(file_type=filetype):
                 handle_textual_file(request, filetype, inner_path, ret_dict)
             elif filetype == DOCUMENT:
-                handle_document(inner_path, obj_id, fileext, ret_dict)
+                handle_document(raw_path, obj_id, fileext, ret_dict)
             elif filetype == SPREADSHEET:
-                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+                handle_spreadsheet(raw_path, obj_id, fileext, ret_dict)
             else:
                 pass
         else:
@@ -1271,9 +1271,9 @@ def view_shared_file(request, fileshare):
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
+            handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            handle_spreadsheet(raw_path, obj_id, fileext, ret_dict)
         elif filetype == XMIND:
             xmind_image_path = get_thumbnail_image_path(obj_id, XMIND_IMAGE_SIZE)
             if not os.path.exists(xmind_image_path) and not extract_xmind_image(repo_id, path)[0]:
@@ -1470,9 +1470,9 @@ def view_file_via_shared_dir(request, fileshare):
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
+            handle_document(raw_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            handle_spreadsheet(raw_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
             real_parent_dir = os.path.dirname(real_path)

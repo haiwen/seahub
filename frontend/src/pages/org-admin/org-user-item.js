@@ -76,28 +76,12 @@ class UserItem extends React.Component {
     this.props.toggleRevokeAdmin(email);
   }
 
-  changeStatus = (st) => {
-    let isActive;
-    if (st == 'active') {
-      isActive = 'true';
-    } else {
-      isActive = 'false';
+  changeStatus = (value) => {
+    const isActive = value == 'active';
+    if (isActive) {
+      toaster.notify(gettext('It may take some time, please wait.'));
     }
-
-    seafileAPI.orgAdminChangeOrgUserStatus(orgID, this.props.user.email, isActive).then(res => {
-      this.setState({
-        currentStatus: isActive == 'true' ? 'active' : 'inactive',
-        highlight: false,
-        showMenu: false,
-      });
-      toaster.success(gettext('Edit succeeded.'));
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Edit failed.');
-      }
-      toaster.danger(errMessage);
-    });
+    this.props.changeStatus(this.props.user.email, isActive);
   }
 
   onDropdownToggleClick = (e) => {
@@ -147,7 +131,7 @@ class UserItem extends React.Component {
           <UserStatusEditor
             isTextMode={true}
             isEditIconShow={isEditIconShow}
-            currentStatus={this.state.currentStatus}
+            currentStatus={user.is_active ? 'active' : 'inactive'}
             statusArray={this.statusArray}
             onStatusChanged={this.changeStatus}
           />
