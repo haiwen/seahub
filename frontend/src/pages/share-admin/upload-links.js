@@ -143,8 +143,8 @@ class Item extends Component {
           <Link to={objUrl}>{item.obj_name}</Link>
           <br />
           <span>{item.repo_name}</span><br />
-          <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
-          <span className="item-meta-info">{this.renderExpiration()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+          <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+          <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
         </td>
         <td>
           <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>

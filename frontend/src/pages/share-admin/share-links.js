@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
@@ -12,6 +13,7 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
+import SortOptionsDialog from '../../components/dialog/sort-options';
 
 class Content extends Component {
 
@@ -85,6 +87,12 @@ class Content extends Component {
     }
   }
 }
+
+const itemPropTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
 
 class Item extends Component {
 
@@ -200,7 +208,7 @@ class Item extends Component {
         <td>
           {item.is_dir ?
             <Link to={objUrl}>{item.obj_name}</Link> :
-            <a href={objUrl} target="_blank">{item.obj_name}</a>
+            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
@@ -231,13 +239,13 @@ class Item extends Component {
           <td>
             {item.is_dir ?
               <Link to={objUrl}>{item.obj_name}</Link> :
-              <a href={objUrl} target="_blank">{item.obj_name}</a>
+              <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
             }
             {isPro && <span className="item-meta-info-highlighted">{Utils.getShareLinkPermissionObject(currentPermission).text}</span>}
             <br />
             <span>{item.repo_name}</span><br />
-            <span className="item-meta-info">{item.view_cnt}<span className="small text-secondary">({gettext('Visits')})</span></span>
-            <span className="item-meta-info">{this.renderExpiration()}<span className="small text-secondary">({gettext('Expiration')})</span></span>
+            <span className="item-meta-info">{gettext('Visits')}: {item.view_cnt}</span>
+            <span className="item-meta-info">{gettext('Expiration')}: {this.renderExpiration()}</span>
           </td>
           <td>
             <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
@@ -284,6 +292,8 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = itemPropTypes;
+
 class ShareAdminShareLinks extends Component {
 
   constructor(props) {
@@ -295,6 +305,14 @@ class ShareAdminShareLinks extends Component {
       sortBy: 'name', // 'name' or 'time'
       sortOrder: 'asc' // 'asc' or 'desc'
     };
+
+    // for mobile
+    this.sortOptions = [
+      {value: 'name-asc', text: gettext('By name ascending')},
+      {value: 'name-desc', text: gettext('By name descending')},
+      {value: 'time-asc', text: gettext('By expiration ascending')},
+      {value: 'time-desc', text: gettext('By expiration descending')}
+    ];
   }
 
   _sortItems = (items, sortBy, sortOrder) => {
@@ -323,6 +341,8 @@ class ShareAdminShareLinks extends Component {
           return a.expire_date < b.expire_date ? 1 : -1;
         };
         break;
+
+      // no default
     }
 
     items.sort((a, b) => {
@@ -376,33 +396,51 @@ class ShareAdminShareLinks extends Component {
     });
   }
 
+  toggleSortOptionsDialog = () => {
+    this.setState({
+      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
+    });
+  }
+
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path share-upload-nav">
-            <ul className="nav">
-              <li className="nav-item">
-                <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
-              </li>
-              {canGenerateUploadLink && (
-                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
-              )}
-            </ul>
-          </div>
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={this.state.items}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortItems}
-              onRemoveLink={this.onRemoveLink}
-            />
+      <Fragment>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path share-upload-nav">
+              <ul className="nav">
+                <li className="nav-item">
+                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
+                </li>
+                {canGenerateUploadLink && (
+                  <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                )}
+              </ul>
+              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+            </div>
+            <div className="cur-view-content">
+              <Content
+                loading={this.state.loading}
+                errorMsg={this.state.errorMsg}
+                items={this.state.items}
+                sortBy={this.state.sortBy}
+                sortOrder={this.state.sortOrder}
+                sortItems={this.sortItems}
+                onRemoveLink={this.onRemoveLink}
+              />
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isSortOptionsDialogOpen &&
+        <SortOptionsDialog
+          toggleDialog={this.toggleSortOptionsDialog}
+          sortBy={this.state.sortBy}
+          sortOrder={this.state.sortOrder}
+          sortOptions={this.sortOptions}
+          sortItems={this.sortItems}
+        />
+        }
+      </Fragment>
     );
   }
 }
