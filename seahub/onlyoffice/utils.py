@@ -39,33 +39,43 @@ def get_doc_key_by_repo_id_file_path(repo_id, file_path):
 
     md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
     try:
-        doc_key_obj = OnlyOfficeDocKey.objects.get(repo_id_file_path_md5=md5)
-        return doc_key_obj.doc_key
-    except OnlyOfficeDocKey.DoesNotExist:
+        doc_key_obj = OnlyOfficeDocKey.objects.filter(repo_id_file_path_md5=md5).first()
+        if doc_key_obj:
+            return doc_key_obj.doc_key
+        return ''
+    except Exception as e:
+        logger.error(e)
         return ''
 
 
 def get_file_info_by_doc_key(doc_key):
 
     try:
-        doc_key_obj = OnlyOfficeDocKey.objects.get(doc_key=doc_key)
-        return {
-            'username': doc_key_obj.username,
-            'repo_id': doc_key_obj.repo_id,
-            'file_path': doc_key_obj.file_path,
-        }
-    except OnlyOfficeDocKey.DoesNotExist:
+        doc_key_obj = OnlyOfficeDocKey.objects.filter(doc_key=doc_key).first()
+        if doc_key_obj:
+            return {
+                'username': doc_key_obj.username,
+                'repo_id': doc_key_obj.repo_id,
+                'file_path': doc_key_obj.file_path,
+            }
+        return {}
+    except Exception as e:
+        logger.error(e)
         return {}
 
 
 def save_doc_key(doc_key, username, repo_id, file_path):
 
     md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
-    doc_key_obj = OnlyOfficeDocKey.objects.create(doc_key=doc_key,
-                                                  username=username,
-                                                  repo_id=repo_id,
-                                                  file_path=file_path,
-                                                  repo_id_file_path_md5=md5)
+    try:
+        doc_key_obj = OnlyOfficeDocKey.objects.create(doc_key=doc_key,
+                                                      username=username,
+                                                      repo_id=repo_id,
+                                                      file_path=file_path,
+                                                      repo_id_file_path_md5=md5)
+    except Exception as e:
+        logger.error(e)
+        return
 
     return doc_key_obj.doc_key
 
