@@ -39,12 +39,12 @@ def get_doc_key_by_repo_id_file_path(repo_id, file_path):
 
     md5 = hashlib.md5(force_bytes(repo_id + file_path)).hexdigest()
     try:
-        doc_key_query = OnlyOfficeDocKey.objects.filter(repo_id_file_path_md5=md5)
-    except OnlyOfficeDocKey.DoesNotExist:
+        doc_key_obj = OnlyOfficeDocKey.objects.filter(repo_id_file_path_md5=md5).first()
+        if doc_key_obj:
+            return doc_key_obj.doc_key
         return ''
-    if len(doc_key_query) > 0:
-        return doc_key_query[0].doc_key
-    else:
+    except Exception as e:
+        logger.error(e)
         return ''
 
 

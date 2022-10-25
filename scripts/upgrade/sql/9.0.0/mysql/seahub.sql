@@ -49,3 +49,7 @@ CREATE TABLE `onlyoffice_onlyofficedockey` (
   KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`),
   KEY `onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073` (`repo_id_file_path_md5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `onlyoffice_onlyofficedockey` DROP INDEX `onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073`;
+
+ALTER TABLE `onlyoffice_onlyofficedockey` ADD UNIQUE (repo_id_file_path_md5);
