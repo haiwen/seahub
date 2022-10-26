@@ -592,8 +592,8 @@ class Search(APIView):
             results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            results, total = [], 0
+            return Response({"total": total, "results": results, "has_more": False})
 
         for e in results:
             e.pop('repo', None)
