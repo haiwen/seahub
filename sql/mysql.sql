@@ -1342,5 +1342,5 @@ CREATE TABLE `onlyoffice_onlyofficedockey` (
   `created_time` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id_file_path_md5` (`repo_id_file_path_md5`),
-  KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`),
+  KEY `onlyoffice_onlyofficedockey_doc_key_edba1352` (`doc_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
