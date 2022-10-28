@@ -94,6 +94,7 @@ from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileView
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 from seahub.api2.endpoints.starred_items import StarredItems
+from seahub.api2.endpoints.monitored_repos import MonitoredRepos, MonitoredRepo
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
 from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
@@ -466,6 +467,10 @@ urlpatterns = [
 
     ## user::starred-item
     url(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
+
+    ## user::monitored-repos
+    url(r'^api/v2.1/monitored-repos/$', MonitoredRepos.as_view(), name='api-v2.1-monitored-repos'),
+    url(r'^api/v2.1/monitored-repos/(?P<repo_id>[-0-9a-f]{36})/$', MonitoredRepo.as_view(), name='api-v2.1-monitored-repo'),
 
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),

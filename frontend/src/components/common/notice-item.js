@@ -19,6 +19,7 @@ const MSG_TYPE_FILE_COMMENT = 'file_comment';
 const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
+const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 
 class NoticeItem extends React.Component {
 
@@ -70,7 +71,7 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
       notice = Utils.HTMLescape(notice);
-      
+
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
       notice = notice.replace('{/tagA}', '</a>');
@@ -98,13 +99,13 @@ class NoticeItem extends React.Component {
       } else {
         notice =  gettext('{share_from} has shared a folder named {repo_link} to group {group_link}.');
       }
-      
+
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{share_from}', shareFrom);
       notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
       notice = notice.replace('{group_link}', `{tagB}${groupName}{/tagB}`);
       notice = Utils.HTMLescape(notice);
-      
+
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href='${Utils.encodePath(repoUrl)}'>`);
       notice = notice.replace('{/tagA}', '</a>');
@@ -128,7 +129,7 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{user}', repoOwner);
       notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);
       notice = Utils.HTMLescape(notice);
-      
+
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(repoUrl)}>`);
       notice = notice.replace('{/tagA}', '</a>');
@@ -151,7 +152,7 @@ class NoticeItem extends React.Component {
         notice = notice.replace('{upload_file_link}', `{tagA}${fileName}{/tagA}`);
         notice = notice.replace('{uploaded_link}', `{tagB}${folderName}{/tagB}`);
         notice = Utils.HTMLescape(notice);
-        
+
         // 3. add jump link
         notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileLink)}>`);
         notice = notice.replace('{/tagA}', '</a>');
@@ -180,12 +181,12 @@ class NoticeItem extends React.Component {
 
       // 1. handle translate
       let notice = gettext('File {file_link} has a new comment form user {author}.');
-      
+
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
       notice = notice.replace('{author}', author);
       notice = Utils.HTMLescape(notice);
-      
+
       // 3. add jump link
       notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
       notice = notice.replace('{/tagA}', '</a>');
@@ -221,6 +222,72 @@ class NoticeItem extends React.Component {
       let draftLink = '<a href=' + draftUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
       notice = notice.replace('{from_user}', fromUser);
       notice = notice.replace('{draft_link}', draftLink);
+      return {avatar_url, notice};
+    }
+
+    if (noticeType === MSG_TYPE_REPO_MONITOR) {
+      let avatar_url = detail.op_user_avatar_url;
+      let repoLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + '/';
+      let notice = '';
+
+      let op = '';
+      if (detail.obj_type == 'file') {
+        switch (detail.op_type) {
+          case 'create':
+            op = gettext('created file');
+            break;
+          case 'delete':
+            op = gettext('deleted file');
+            break;
+          case 'recover':
+            op = gettext('restored file');
+            break;
+          case 'rename':
+            op = gettext('renamed file');
+            break;
+          case 'move':
+            op = gettext('moved file');
+            break;
+          case 'edit':
+            op = gettext('updated file');
+            break;
+        }
+      } else { // dir
+        switch (detail.op_type) {
+          case 'create':
+            op = gettext('created folder');
+            break;
+          case 'delete':
+            op = gettext('deleted folder');
+            break;
+          case 'recover':
+            op = gettext('restored folder');
+            break;
+          case 'rename':
+            op = gettext('renamed folder');
+            break;
+          case 'move':
+            op = gettext('moved folder');
+            break;
+        }
+      }
+
+      // 1. handle translate
+      notice = gettext('{op_user} {op_type} {obj_name} in {repo_link}.');
+
+      let obj_name = Utils.getFileName(detail.obj_path_list[0]);
+
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{op_user}', `${detail.op_user_name}`);
+      notice = notice.replace('{op_type}', `${op}`);
+      notice = notice.replace('{obj_name}', `${obj_name}`);
+      notice = notice.replace('{repo_link}', `{tagA}${detail.repo_name}{/tagA}`);
+      notice = Utils.HTMLescape(notice);
+
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(repoLink)}>`);
+      notice = notice.replace('{/tagA}', '</a>');
+
       return {avatar_url, notice};
     }
 

@@ -40,6 +40,7 @@ class MylibRepoListItem extends React.Component {
     this.state = {
       isOpIconShow: false,
       isStarred: this.props.repo.starred,
+      isMonitored: this.props.repo.monitored,
       isRenaming: false,
       isShareDialogShow: false,
       isDeleteDialogShow: false,
@@ -156,6 +157,32 @@ class MylibRepoListItem extends React.Component {
       seafileAPI.starItem(this.props.repo.repo_id, '/').then(() => {
         this.setState({isStarred: !this.state.isStarred});
         const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
+  }
+
+  onToggleMonitorRepo = (e) => {
+    e.preventDefault();
+    const repoName = this.props.repo.repo_name;
+    if (this.state.isMonitored) {
+      seafileAPI.unMonitorRepo(this.props.repo.repo_id).then(() => {
+        this.setState({isMonitored: !this.state.isMonitored});
+        const msg = gettext('Successfully unmonitored {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.monitorRepo(this.props.repo.repo_id).then(() => {
+        this.setState({isMonitored: !this.state.isMonitored});
+        const msg = gettext('Successfully monitored {library_name_placeholder}.')
           .replace('{library_name_placeholder}', repoName);
         toaster.success(msg);
       }).catch(error => {
@@ -297,6 +324,13 @@ class MylibRepoListItem extends React.Component {
             <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
           </a>
         </td>
+
+        <td className="text-center">
+          <a href="#" role="button" aria-label={this.state.isMonitored ? gettext('unMonitor') : gettext('Monitor')} onClick={this.onToggleMonitorRepo}>
+            <i className={`fa-star ${this.state.isMonitored ? 'fas' : 'far star-empty'}`}></i>
+          </a>
+        </td>
+
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
           {this.state.isRenaming && (
