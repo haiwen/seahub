@@ -7,6 +7,10 @@ urlpatterns = [
     url(r'^add/$', org_add, name='org_add'),
     url(r'^register/$', org_register, name='org_register'),
 
+    url(r'^deviceadmin/$', react_fake_view, name='org_device_admin'),
+    url(r'^deviceadmin/mobile-devices/$', react_fake_view, name='org_device_admin_mobile_devices'),
+    url(r'^deviceadmin/devices-errors/$', react_fake_view, name='org_device_admin_devices_errors'),
+
     url(r'^useradmin/$', react_fake_view, name='org_user_admin'),
     url(r'^useradmin/search-users/$', react_fake_view, name='org_user_admin_search_users'),
     url(r'^useradmin/admins/$', react_fake_view, name='org_useradmin_admins'),

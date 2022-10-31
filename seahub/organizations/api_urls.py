@@ -20,7 +20,13 @@ from .api.admin.links import OrgAdminLinks, OrgAdminLink
 from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgAdminLogsPermAudit
 from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
+from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
+
 urlpatterns = [
+
+    url(r'^(?P<org_id>\d+)/admin/devices/$', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
+    url(r'^(?P<org_id>\d+)/admin/devices-errors/$', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),
+
     url(r'^(?P<org_id>\d+)/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-admin-address-book-groups'),
     url(r'^(?P<org_id>\d+)/admin/address-book/groups/(?P<group_id>\d+)/$', AdminAddressBookGroup.as_view(), name='api-admin-address-book-group'),
 

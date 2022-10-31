@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
+import OrgDesktopDevices from './devices/desktop-devices.js';
+import OrgMobileDevices from './devices/mobile-devices.js';
+import OrgDevicesErrors from './devices/devices-errors.js';
 import OrgUsers from './org-users-users';
 import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
@@ -69,6 +72,9 @@ class Org extends React.Component {
         <div className="main-panel o-hidden">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
+            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin'}/>
+            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'}/>
+            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'}/>
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
