@@ -86,6 +86,14 @@ def jwt_sso(request):
 
 def shib_login(request):
     # client platform args used to create api v2 token
+    keys = ('platform', 'device_id', 'device_name', 'client_version', 'platform_version')
+    if all(['shib_' + key in request.GET for key in keys]):
+        request.session['shib_platform'] = request.GET['shib_platform']
+        request.session['shib_device_id'] = request.GET['shib_device_id']
+        request.session['shib_device_name'] = request.GET['shib_device_name']
+        request.session['shib_client_version'] = request.GET['shib_client_version']
+        request.session['shib_platform_version'] = request.GET['shib_platform_version']
+
     next_page = request.GET.get(REDIRECT_FIELD_NAME, '')
     query_string = request.META.get('QUERY_STRING', '')
     params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, urlquote(next_page), query_string)
