@@ -22,7 +22,32 @@ from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
 from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
 
+from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
+        OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
+        OrgUserTrafficExcelView, OrgUserStorageExcelView
+
 urlpatterns = [
+    url(r'^(?P<org_id>\d+)/admin/statistics/file-operations/$',
+        OrgFileOperationsView.as_view(),
+        name='api-v2.1-org-admin-statistics-file-operations'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/total-storage/$',
+        OrgTotalStorageView.as_view(),
+        name='api-v2.1-org-admin-statistics-total-storage'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/active-users/$',
+        OrgActiveUsersView.as_view(),
+        name='api-v2.1-org-admin-statistics-active-users'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/system-traffic/$',
+        OrgSystemTrafficView.as_view(),
+        name='api-v2.1-org-admin-statistics-system-traffic'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-traffic/$',
+        OrgUserTrafficView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-traffic'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-traffic/excel/$',
+        OrgUserTrafficExcelView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-traffic-excel'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-storage/excel/$',
+        OrgUserStorageExcelView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-storage-excel'),
 
     url(r'^(?P<org_id>\d+)/admin/devices/$', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
     url(r'^(?P<org_id>\d+)/admin/devices-errors/$', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),

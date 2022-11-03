@@ -703,6 +703,12 @@ if EVENTS_CONFIG_FILE:
             res = seafevents.get_user_activity_stats_by_day(session, start, end, offset)
         return res
 
+    def get_org_user_activity_stats_by_day(org_id, start, end):
+        """
+        """
+        res = seafevents_api.get_org_user_activity_stats_by_day(org_id, start, end)
+        return res
+
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
@@ -773,11 +779,23 @@ if EVENTS_CONFIG_FILE:
             res = seafevents.get_file_ops_stats_by_day(session, start, end, offset)
         return res
 
+    def get_org_file_ops_stats_by_day(org_id, start, end, offset):
+        """ return file audit record of sepcifiy time group by day.
+        """
+        res = seafevents_api.get_org_file_ops_stats_by_day(org_id, start, end, offset)
+        return res
+
     def get_total_storage_stats_by_day(start, end, offset):
         """
         """
         with _get_seafevents_session() as session:
             res = seafevents.get_total_storage_stats_by_day(session, start, end, offset)
+        return res
+
+    def get_org_total_storage_stats_by_day(org_id, start, end, offset):
+        """
+        """
+        res = seafevents_api.get_org_storage_stats_by_day(org_id, start, end, offset)
         return res
 
     def get_system_traffic_by_day(start, end, offset, op_type='all'):
@@ -848,6 +866,8 @@ else:
         pass
     def get_user_activity_stats_by_day():
         pass
+    def get_org_user_activity_stats_by_day():
+        pass
     def get_log_events_by_time():
         pass
     def get_org_user_events():
@@ -864,9 +884,15 @@ else:
         pass
     def get_file_ops_stats_by_day():
         pass
+    def get_org_file_ops_stats_by_day():
+        pass
     def get_total_storage_stats_by_day():
         pass
+    def get_org_total_storage_stats_by_day():
+        pass
     def get_system_traffic_by_day():
+        pass
+    def get_org_system_traffic_by_day():
         pass
     def get_org_traffic_by_day():
         pass

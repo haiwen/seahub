@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
+
+import OrgStatisticFile from './statistic/statistic-file';
+import OrgStatisticStorage from './statistic/statistic-storage';
+import OrgStatisticTraffic from './statistic/statistic-traffic';
+import OrgStatisticUsers from './statistic/statistic-users';
+import OrgStatisticReport from './statistic/statistic-reports';
 import OrgDesktopDevices from './devices/desktop-devices.js';
 import OrgMobileDevices from './devices/mobile-devices.js';
 import OrgDevicesErrors from './devices/devices-errors.js';
@@ -47,6 +53,9 @@ class Org extends React.Component {
     if (location.href.indexOf(`${siteRoot}org/useradmin`) != -1) {
       currentTab = 'users';
     }
+    if (location.href.indexOf(`${siteRoot}org/statistics-admin/`) != -1) {
+      currentTab = 'statistics-admin';
+    }
     if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
       currentTab = 'groupadmin';
     }
@@ -72,6 +81,11 @@ class Org extends React.Component {
         <div className="main-panel o-hidden">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/orgmanage'}/>
+            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/'}/>
+            <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
+            <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
+            <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
+            <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
             <OrgDesktopDevices path={siteRoot + 'org/deviceadmin'}/>
             <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'}/>
             <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'}/>
