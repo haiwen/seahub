@@ -159,7 +159,7 @@ class OrgAdminDevicesErrors(APIView):
 
         return_results = []
         try:
-            device_errors = seafile_api.list_repo_sync_errors(start, limit)
+            device_errors = seafile_api.list_org_repo_sync_errors(org_id, start, limit)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
