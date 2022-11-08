@@ -168,11 +168,11 @@ class DirOperationToolbar extends React.Component {
 
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canUpload = true;
-    let canNew = true;
+    let canCreate = true;
     if (isCustomPermission) {
       const { permission } = customPermission;
       canUpload = permission.upload;
-      canNew = permission.new;
+      canCreate = permission.create;
     }
 
     let content = null;
@@ -196,7 +196,7 @@ class DirOperationToolbar extends React.Component {
                 <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadFile}>{gettext('Upload')}</button>}
             </Fragment>
           )}
-          {canNew &&
+          {canCreate &&
           <Fragment>
             <button className="btn btn-secondary operation-item" onClick={this.onCreateClick} aria-haspopup="true" aria-expanded={this.state.isUploadMenuShow} aria-controls="new-menu">{gettext('New')}</button>
             {this.state.isCreateMenuShow && (
@@ -223,7 +223,7 @@ class DirOperationToolbar extends React.Component {
             {canUpload && (
               <DropdownItem onClick={this.onUploadFile}>{gettext('Upload')}</DropdownItem>
             )}
-            {canNew && (
+            {canCreate && (
               <Fragment>
                 <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
                 <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>

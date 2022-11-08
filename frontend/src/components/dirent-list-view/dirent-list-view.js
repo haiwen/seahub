@@ -335,8 +335,8 @@ class DirentListView extends React.Component {
 
       // custom permission judgement
       if (isCustomPermission) {
-        const { new: canNew } = customPermission.permission;
-        if (!canNew) return;
+        const { create: canCreate } = customPermission.permission;
+        if (!canCreate) return;
       }
 
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
