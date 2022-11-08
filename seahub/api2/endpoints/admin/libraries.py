@@ -191,7 +191,7 @@ class AdminLibraries(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         repo_name = request.data.get('name', None)
-        if not repo_name:
+        if not repo_name or not is_valid_dirent_name(repo_name):
             error_msg = 'name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
