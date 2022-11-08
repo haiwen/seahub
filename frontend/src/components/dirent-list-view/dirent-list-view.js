@@ -332,11 +332,11 @@ class DirentListView extends React.Component {
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
-      
+
       // custom permission judgement
       if (isCustomPermission) {
-        const { modify } = customPermission.permission;
-        if (!modify) return;
+        const { create: canCreate } = customPermission.permission;
+        if (!canCreate) return;
       }
 
       let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
