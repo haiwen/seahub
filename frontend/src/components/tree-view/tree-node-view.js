@@ -207,7 +207,7 @@ class TreeNodeView extends React.Component {
 
     let menuList = [RENAME, DELETE, COPY, MOVE, OPEN_VIA_CLIENT];
     if (node.object.type === 'dir') {
-       menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
+      menuList = [NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE];
     }
 
     const { userPerm } = this.props;
@@ -217,11 +217,11 @@ class TreeNodeView extends React.Component {
     }
 
     menuList = [];
-    const { modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
-    if (node.object.type === 'dir') { 
-      canModify && menuList.push(NEW_FOLDER, NEW_FILE);
+    const { new: canNew, modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
+    if (node.object.type === 'dir') {
+      canNew && menuList.push(NEW_FOLDER, NEW_FILE);
     }
-    
+
     canCopy && menuList.push(COPY);
     canModify && menuList.push(MOVE, RENAME);
     canDelete && menuList.push(DELETE);

@@ -159,6 +159,12 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
+                    <Input type="checkbox" onChange={this.onChangePermission('new')} checked={permission.new}/>
+                    <span>{gettext('New')}</span>
+                  </Label>
+                </FormGroup>
+                <FormGroup check>
+                  <Label check>
                     <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="fa fa-question-circle ml-2" style={{color: '#999'}}></span>
@@ -168,7 +174,7 @@ class CustomPermissionEditor extends React.Component {
                       target={'modify-tip'}
                       placement='bottom'
                       isOpen={this.state.tooltipOpen}>
-                      ({gettext('Modify includes modify file, create file and folder, move/rename file and folder')})
+                      ({gettext('Modify includes modify file, move/rename file and folder')})
                     </Tooltip>
                   </Label>
                 </FormGroup>

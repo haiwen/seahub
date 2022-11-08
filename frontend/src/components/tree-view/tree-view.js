@@ -270,16 +270,16 @@ class TreeView extends React.Component {
 
     menuList = [];
 
-    const { modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
+    const { new: canNew, modify: canModify, delete: canDelete, copy: canCopy } = customPermission.permission;
     if (!node) {
-      canModify && menuList.push(NEW_FOLDER, NEW_FILE);
+      canNew && menuList.push(NEW_FOLDER, NEW_FILE);
       return menuList;
     }
 
-    if (node.object.type === 'dir') { 
-      canModify && menuList.push(NEW_FOLDER, NEW_FILE);
+    if (node.object.type === 'dir') {
+      canNew && menuList.push(NEW_FOLDER, NEW_FILE);
     }
-    
+
     canCopy && menuList.push(COPY);
     canModify && menuList.push(MOVE, RENAME);
     canDelete && menuList.push(DELETE);
