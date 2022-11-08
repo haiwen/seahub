@@ -126,7 +126,7 @@ def onlyoffice_editor_callback(request):
         return HttpResponse('{"error": 0}')
 
     if status not in (2, 4, 6):
-        logger.error('status {}: invalid status'.format(status))
+        logger.error('status {}: invalid status; doc_key {}.'.format(status, doc_key))
         return HttpResponse('{"error": 1}')
 
     repo_id = doc_info['repo_id']
@@ -163,8 +163,8 @@ def onlyoffice_editor_callback(request):
         resp = requests.post(update_url, files=files, data=data)
         if resp.status_code != 200:
             logger.error('update_url: {}'.format(update_url))
-            logger.error('content size: {}'.format(len(onlyoffice_resp.content)))
-            logger.error('parameter target_file: {}'.format(data['target_file']))
+            logger.error('repo_id: {}, file_path: {}, content size: {}'.format(
+                repo_id, file_path, len(onlyoffice_resp.content)))
             logger.error('response: {}'.format(resp.__dict__))
 
         # 2 - document is ready for saving,
