@@ -51,7 +51,7 @@
             {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
-          {% if not user.is_self %}
+          {% if not user.is_self and not user.is_staff and not user.is_institution_admin %}
           <a href="#" class="remove-user-btn op vh" data-url="{% url 'institutions:user_remove' user.email %}" data-target="{{ user.email }}">{% trans "Delete" %}</a>
           {% endif %}
         </td>
