@@ -7,12 +7,12 @@ urlpatterns = [
     url(r'^add/$', org_add, name='org_add'),
     url(r'^register/$', org_register, name='org_register'),
 
-    url(r'^statistics-admin/$', react_fake_view, name='org_statistics_admin'),
+    url(r'^statistics-admin/file/$', react_fake_view, name='org_statistics_admin_file'),
     url(r'^statistics-admin/total-storage/$', react_fake_view, name='org_statistics_admin_total_storage'),
     url(r'^statistics-admin/active-users/$', react_fake_view, name='org_statistics_admin_active_users'),
     url(r'^statistics-admin/traffic/$', react_fake_view, name='org_statistics_admin_traffic'),
 
-    url(r'^deviceadmin/$', react_fake_view, name='org_device_admin'),
+    url(r'^deviceadmin/desktop-devices/$', react_fake_view, name='org_device_admin'),
     url(r'^deviceadmin/mobile-devices/$', react_fake_view, name='org_device_admin_mobile_devices'),
     url(r'^deviceadmin/devices-errors/$', react_fake_view, name='org_device_admin_devices_errors'),
 
@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^logadmin/file-update/$', react_fake_view, name='org_log_file_update'),
     url(r'^logadmin/perm-audit/$', react_fake_view, name='org_log_perm_audit'),
 
-    url(r'^orgmanage/$', react_fake_view, name='org_manage'),
+    url(r'^info/$', react_fake_view, name='org_info'),
     url(r'^departmentadmin/$', react_fake_view, name='org_department_admin'),
     url(r'^departmentadmin/groups/(?P<group_id>\d+)/', react_fake_view, name='org_department_admin'),
     url(r'^associate/(?P<token>.+)/$', org_associate, name='org_associate'),

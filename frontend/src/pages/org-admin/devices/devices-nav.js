@@ -12,7 +12,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      {name: 'desktop', urlPart:'', text: gettext('Desktop')},
+      {name: 'desktop', urlPart:'desktop-devices', text: gettext('Desktop')},
       {name: 'mobile', urlPart:'mobile-devices', text: gettext('Mobile')},
       {name: 'errors', urlPart:'devices-errors', text: gettext('Errors')}
     ];

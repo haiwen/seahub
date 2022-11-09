@@ -56,6 +56,9 @@ class Org extends React.Component {
     if (location.href.indexOf(`${siteRoot}org/statistics-admin/`) != -1) {
       currentTab = 'statistics-admin';
     }
+    if (location.href.indexOf(`${siteRoot}org/deviceadmin/`) != -1) {
+      currentTab = 'deviceadmin';
+    }
     if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
       currentTab = 'groupadmin';
     }
@@ -80,15 +83,15 @@ class Org extends React.Component {
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
         <div className="main-panel o-hidden">
           <Router className="reach-router">
-            <OrgInfo path={siteRoot + 'org/orgmanage'}/>
-            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/'}/>
+            <OrgInfo path={siteRoot + 'org/info/'} />
+            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} />
             <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
             <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
             <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
             <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
-            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin'}/>
-            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'}/>
-            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'}/>
+            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
+            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
+            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />

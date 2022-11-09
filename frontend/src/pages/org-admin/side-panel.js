@@ -33,19 +33,19 @@ class SidePanel extends React.Component {
               <h3 className="sf-heading" style={{ 'color': '#f7941d' }}>{gettext('Admin')}</h3>
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('orgmanage')}`} to={siteRoot + 'org/orgmanage/'} onClick={() => this.tabItemClick('orgmanage')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('info')}`} to={siteRoot + 'org/info/'} onClick={() => this.tabItemClick('info')} >
                     <span className="sf2-icon-info"></span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('statistics-admin')}`} to={siteRoot + 'org/statistics-admin/'} onClick={() => this.tabItemClick('statistics-admin')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('statistics-admin')}`} to={siteRoot + 'org/statistics-admin/file/'} onClick={() => this.tabItemClick('statistics-admin')} >
                     <span className="sf2-icon-histogram"></span>
                     <span className="nav-text">{gettext('Statistic')}</span>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('deviceadmin')}`} to={siteRoot + 'org/deviceadmin/'} onClick={() => this.tabItemClick('deviceadmin')} >
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('deviceadmin')}`} to={siteRoot + 'org/deviceadmin/desktop-devices/'} onClick={() => this.tabItemClick('deviceadmin')} >
                     <span className="sf2-icon-monitor"></span>
                     <span className="nav-text">{gettext('Devices')}</span>
                   </Link>
