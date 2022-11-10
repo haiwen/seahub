@@ -23,7 +23,8 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.file_size import get_file_size_unit
-from seahub.views.sysadmin import email_user_on_activation, populate_user_info
+from seahub.views.sysadmin import email_user_on_activation
+from seahub.institutions.models import InstitutionAdmin
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ def _populate_user_quota_usage(user):
         user.space_usage = -1
         user.space_quota = -1
 
+
 @inst_admin_required
 def info(request):
     """List instituion info.
@@ -51,6 +53,7 @@ def info(request):
     return render(request, 'institutions/info.html', {
         'inst': inst,
     })
+
 
 @inst_admin_required
 def useradmin(request):
@@ -71,10 +74,15 @@ def useradmin(request):
         page_next = True
     else:
         page_next = False
-    users = [User.objects.get(x) for x in usernames[:per_page]]
 
+    users = [User.objects.get(x) for x in usernames[:per_page]]
+    admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=inst)]
     last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
+
     for u in users:
+
+        u.is_institution_admin = u.email in admin_emails
+
         if u.username == request.user.username:
             u.is_self = True
 
@@ -94,6 +102,7 @@ def useradmin(request):
         'page_next': page_next,
     })
 
+
 @inst_admin_required
 def useradmin_search(request):
     """Search users in the institution.
@@ -107,9 +116,13 @@ def useradmin_search(request):
     profiles = Profile.objects.filter(institution=inst.name)
     usernames = [x.user for x in profiles if q in x.user]
     users = [User.objects.get(x) for x in usernames]
-
+    admin_emails = [user.user for user in InstitutionAdmin.objects.filter(institution=inst)]
     last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
+
     for u in users:
+
+        u.is_institution_admin = u.email in admin_emails
+
         if u.username == request.user.username:
             u.is_self = True
 
@@ -124,6 +137,7 @@ def useradmin_search(request):
         'users': users,
         'q': q,
     })
+
 
 @inst_admin_required
 @inst_admin_can_manage_user
@@ -165,18 +179,20 @@ def user_info(request, email):
 
     available_quota = get_institution_available_quota(request.user.institution)
 
-    return render(request, 
-        'institutions/user_info.html', {
-            'owned_repos': owned_repos,
-            'space_quota': space_quota,
-            'space_usage': space_usage,
-            'in_repos': in_repos,
-            'email': email,
-            'profile': profile,
-            'd_profile': d_profile,
-            'personal_groups': personal_groups,
-            'available_quota': available_quota,
-        })
+    return render(request,
+                  'institutions/user_info.html',
+                  {
+                      'owned_repos': owned_repos,
+                      'space_quota': space_quota,
+                      'space_usage': space_usage,
+                      'in_repos': in_repos,
+                      'email': email,
+                      'profile': profile,
+                      'd_profile': d_profile,
+                      'personal_groups': personal_groups,
+                      'available_quota': available_quota,
+                  })
+
 
 @require_POST
 @inst_admin_required
@@ -189,12 +205,18 @@ def user_remove(request, email):
 
     try:
         user = User.objects.get(email=email)
-        user.delete()
-        messages.success(request, _('Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _('Failed to delete: the user does not exist'))
+        return HttpResponseRedirect(next_page)
 
+    if user.is_staff:
+        messages.error(request, _('Failed to delete: the user is system administrator'))
+        return HttpResponseRedirect(next_page)
+
+    user.delete()
+    messages.success(request, _('Successfully deleted %s') % user.username)
     return HttpResponseRedirect(next_page)
+
 
 @login_required_ajax
 @require_POST
@@ -208,13 +230,13 @@ def user_set_quota(request, email):
     available_quota = get_institution_available_quota(request.user.institution)
     if available_quota < quota:
         result = {}
-        result['error'] = _('Failed to set quota: maximum quota is %d MB' % \
-                            (available_quota / 10 ** 6))
+        result['error'] = _('Failed to set quota: maximum quota is %d MB' % (available_quota / 10 ** 6))
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     seafile_api.set_user_quota(email, quota)
 
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
 
 @login_required_ajax
 @require_POST
@@ -257,4 +279,3 @@ def user_toggle_status(request, email):
     except User.DoesNotExist:
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
-

@@ -10,7 +10,8 @@ from .api.group_owned_libraries import (
     AdminGroupOwnedLibraries, AdminGroupOwnedLibrary
 )
 from .api.group_members import AdminGroupMembers, AdminGroupMember
-from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser
+from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
+        OrgAdminImportUsers
 from .api.admin.user_set_password import OrgAdminUserSetPassword
 from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
@@ -19,7 +20,38 @@ from .api.admin.links import OrgAdminLinks, OrgAdminLink
 from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgAdminLogsPermAudit
 from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
+from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
+
+from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
+        OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
+        OrgUserTrafficExcelView, OrgUserStorageExcelView
+
 urlpatterns = [
+    url(r'^(?P<org_id>\d+)/admin/statistics/file-operations/$',
+        OrgFileOperationsView.as_view(),
+        name='api-v2.1-org-admin-statistics-file-operations'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/total-storage/$',
+        OrgTotalStorageView.as_view(),
+        name='api-v2.1-org-admin-statistics-total-storage'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/active-users/$',
+        OrgActiveUsersView.as_view(),
+        name='api-v2.1-org-admin-statistics-active-users'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/system-traffic/$',
+        OrgSystemTrafficView.as_view(),
+        name='api-v2.1-org-admin-statistics-system-traffic'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-traffic/$',
+        OrgUserTrafficView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-traffic'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-traffic/excel/$',
+        OrgUserTrafficExcelView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-traffic-excel'),
+    url(r'^(?P<org_id>\d+)/admin/statistics/user-storage/excel/$',
+        OrgUserStorageExcelView.as_view(),
+        name='api-v2.1-org-admin-statistics-user-storage-excel'),
+
+    url(r'^(?P<org_id>\d+)/admin/devices/$', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
+    url(r'^(?P<org_id>\d+)/admin/devices-errors/$', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),
+
     url(r'^(?P<org_id>\d+)/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-admin-address-book-groups'),
     url(r'^(?P<org_id>\d+)/admin/address-book/groups/(?P<group_id>\d+)/$', AdminAddressBookGroup.as_view(), name='api-admin-address-book-group'),
 
@@ -35,6 +67,7 @@ urlpatterns = [
     url(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/members/$', AdminGroupMembers.as_view(), name='api-admin-group-members'),
     url(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-admin-group-member'),
     url(r'^(?P<org_id>\d+)/admin/users/$', OrgAdminUsers.as_view(), name='api-v2.1-org-admin-users'),
+    url(r'^(?P<org_id>\d+)/admin/import-users/$', OrgAdminImportUsers.as_view(), name='api-v2.1-org-admin-import-users'),
     url(r'^(?P<org_id>\d+)/admin/search-user/$', OrgAdminSearchUser.as_view(), name='api-v2.1-org-admin-search-user'),
     url(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/$', OrgAdminUser.as_view(), name='api-v2.1-org-admin-user'),
     url(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/set-password/', OrgAdminUserSetPassword.as_view(), name='api-v2.1-org-admin-user-reset-password'),

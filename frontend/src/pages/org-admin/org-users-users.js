@@ -4,6 +4,7 @@ import Nav from './org-users-nav';
 import OrgUsersList from './org-users-list';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
+import ImportOrgUsersDialog from '../../components/dialog/org-import-users-dialog';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
 import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
 import toaster from '../../components/toast';
@@ -72,6 +73,7 @@ class OrgUsers extends Component {
       sortBy: '',
       sortOrder: 'asc',
       isShowAddOrgUserDialog: false,
+      isImportOrgUsersDialogOpen: false,
       isInviteUserDialogOpen: false
     };
   }
@@ -110,6 +112,10 @@ class OrgUsers extends Component {
     });
   }
 
+  toggleImportOrgUsersDialog = () => {
+    this.setState({isImportOrgUsersDialogOpen: !this.state.isImportOrgUsersDialogOpen});
+  }
+
   toggleAddOrgUser = () => {
     this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
   }
@@ -132,6 +138,30 @@ class OrgUsers extends Component {
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  }
+
+  importOrgUsers = (file) => {
+    toaster.notify(gettext('It may take some time, please wait.'));
+    seafileAPI.orgAdminImportUsersViaFile(orgID, file).then((res) => {
+      if (res.data.success.length) {
+        const users = res.data.success.map(item => {
+          if (item.institution == undefined) {
+            item.institution = '';
+          }
+          return new OrgUserInfo(item);
+        });
+        this.setState({
+          orgUsers: users.concat(this.state.orgUsers)
+        });
+      }
+      res.data.failed.map(item => {
+        const msg = `${item.email}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
+    }).catch((error) => {
+      let errMsg = Utils.getErrorMsg(error);
+      toaster.danger(errMsg);
     });
   }
 
@@ -198,11 +228,17 @@ class OrgUsers extends Component {
     let topbarChildren;
     topbarChildren = (
       <Fragment>
-        <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add user')}</button>
+        <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import Users')}</button>
+        <button className={topBtn} title={gettext('Add User')} onClick={this.toggleAddOrgUser}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add User')}</button>
         {invitationLink &&
         <button className={topBtn} title={gettext('Invite user')} onClick={this.toggleInviteUserDialog}>
           <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite user')}</button>
+        }
+        {this.state.isImportOrgUsersDialogOpen &&
+        <ModalPortal>
+          <ImportOrgUsersDialog importUsersInBatch={this.importOrgUsers} toggle={this.toggleImportOrgUsersDialog}/>
+        </ModalPortal>
         }
         {this.state.isShowAddOrgUserDialog &&
         <ModalPortal>

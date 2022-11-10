@@ -122,7 +122,7 @@ class Account extends Component {
         };
       } else if (isOrgStaff) {
         data = {
-          url: `${siteRoot}org/useradmin/`,
+          url: `${siteRoot}org/info/`,
           text: gettext('Organization Admin')
         };
       } else if (isInstAdmin) {

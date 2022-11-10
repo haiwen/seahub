@@ -1,5 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+from io import BytesIO
+from openpyxl import load_workbook
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -19,8 +21,10 @@ from seahub.base.models import UserLastLogin
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.profile.models import Profile
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER
-from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED
+from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, \
+        get_file_type_and_ext
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.views.sysadmin import send_user_add_mail
@@ -44,8 +48,8 @@ class OrgAdminUsers(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsProVersion, IsOrgAdminUser)
 
-    def get_info_of_users_order_by_quota_usage(self, org, all_users, direction,
-            page, per_page):
+    def get_info_of_users_order_by_quota_usage(self, org, all_users,
+                                               direction, page, per_page):
 
         # get user's quota usage info
         user_usage_dict = {}
@@ -145,8 +149,11 @@ class OrgAdminUsers(APIView):
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                 try:
-                    data = self.get_info_of_users_order_by_quota_usage(org, all_users, direction,
-                            current_page, per_page)
+                    data = self.get_info_of_users_order_by_quota_usage(org,
+                                                                       all_users,
+                                                                       direction,
+                                                                       current_page,
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -200,7 +207,6 @@ class OrgAdminUsers(APIView):
                 'per_page': per_page,
                 'page_next': page_next
             })
-
 
     def post(self, request, org_id):
         """Added an organization user, check member quota before adding.
@@ -282,7 +288,7 @@ class OrgAdminUsers(APIView):
         user_info['email'] = user.email
         user_info['contact_email'] = email2contact_email(user.email)
         user_info['last_login'] = None
-        user_info['self_usage'] = 0 # get_org_user_self_usage(org.org_id, user.email)
+        user_info['self_usage'] = 0  # get_org_user_self_usage(org.org_id, user.email)
         try:
             user_info['quota'] = get_org_user_quota(org_id, user.email)
         except SearpcError as e:
@@ -291,6 +297,7 @@ class OrgAdminUsers(APIView):
 
         user_info['quota_usage'] = user_info['self_usage']
         user_info['quota_total'] = user_info['quota']
+        user_info['create_time'] = user_info['ctime']
 
         return Response(user_info)
 
@@ -589,3 +596,161 @@ class OrgAdminSearchUser(APIView):
             user_list.append(user_info)
 
         return Response({'user_list': user_list})
+
+
+class OrgAdminImportUsers(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def post(self, request, org_id):
+        """ Import users from xlsx file
+
+        Permission checking:
+        1. admin user.
+        """
+
+        # resource check
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check plan
+        url_prefix = request.user.org.url_prefix
+        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+
+        if ORG_MEMBER_QUOTA_ENABLED:
+            from seahub.organizations.models import OrgMemberQuota
+            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+            if org_members_quota is not None and org_members >= org_members_quota:
+                err_msg = 'Failed. You can only invite %d members.' % org_members_quota
+                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+
+        xlsx_file = request.FILES.get('file', None)
+        if not xlsx_file:
+            error_msg = 'file can not be found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_type, ext = get_file_type_and_ext(xlsx_file.name)
+        if ext != 'xlsx':
+            error_msg = file_type_error_msg(ext, 'xlsx')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        content = xlsx_file.read()
+
+        try:
+            fs = BytesIO(content)
+            wb = load_workbook(filename=fs, read_only=True)
+        except Exception as e:
+            logger.error(e)
+
+        # example file is like:
+        # Email    Password Name(Optional) Space Quota(MB, Optional)
+        # a@a.com  a        a              1024
+        # b@b.com  b        b              2048
+
+        rows = wb.worksheets[0].rows
+        records = []
+
+        # skip first row(head field).
+        next(rows)
+        for row in rows:
+            if not all(col.value is None for col in row):
+                records.append([col.value for col in row])
+
+        if user_number_over_limit(new_users=len(records)):
+            error_msg = 'The number of users exceeds the limit.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        for record in records:
+            if record[0]:
+                email = record[0].strip()
+                if not is_valid_email(email):
+                    result['failed'].append({
+                        'email': email,
+                        'error_msg': 'email %s invalid.' % email
+                    })
+                    continue
+            else:
+                result['failed'].append({
+                    'email': '',
+                    'error_msg': 'email invalid.'
+                })
+                continue
+
+            if not record[1] or not record[1].strip():
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'password invalid.'
+                })
+                continue
+            else:
+                password = record[1].strip()
+
+            try:
+                User.objects.get(email=email)
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'user %s exists.' % email
+                })
+                continue
+            except User.DoesNotExist:
+                pass
+
+            User.objects.create_user(email, password, is_staff=False, is_active=True)
+            set_org_user(org_id, email)
+
+            if IS_EMAIL_CONFIGURED:
+                if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
+                    try:
+                        send_user_add_mail(request, email, password)
+                    except Exception as e:
+                        logger.error(str(e))
+
+            # update the user's optional info
+            # update nikename
+            if record[2]:
+                try:
+                    nickname = record[2].strip()
+                    if len(nickname) <= 64 and '/' not in nickname:
+                        Profile.objects.add_or_update(email, nickname, '')
+                except Exception as e:
+                    logger.error(e)
+
+            # update quota
+            if record[3]:
+                try:
+                    space_quota_mb = int(record[3])
+                    if space_quota_mb >= 0:
+                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
+                        seafile_api.set_org_user_quota(org_id, email, space_quota)
+                except Exception as e:
+                    logger.error(e)
+
+            user = User.objects.get(email=email)
+
+            info = {}
+            info['email'] = email
+            info['name'] = email2nickname(email)
+            info['contact_email'] = email2contact_email(email)
+
+            info['is_staff'] = user.is_staff
+            info['is_active'] = user.is_active
+
+            info['quota_usage'] = 0
+            try:
+                info['quota_total'] = get_org_user_quota(org_id, email)
+            except SearpcError as e:
+                logger.error(e)
+                info['quota_total'] = -1
+
+            info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
+            info['last_login'] = None
+
+            result['success'].append(info)
+
+        return Response(result)
