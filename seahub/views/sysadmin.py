@@ -50,7 +50,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, \
     get_server_id, delete_virus_file, get_virus_file_by_vid, \
     get_virus_files, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
-    get_site_name, seafevents_api
+    get_site_name, seafevents_api, is_org_context
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -779,7 +779,6 @@ def batch_user_make_admin(request):
     return HttpResponse(json.dumps({'success': True,}), content_type=content_type)
 
 @login_required
-@sys_staff_required
 def batch_add_user_example(request):
     """ get example file.
     """
@@ -787,20 +786,32 @@ def batch_add_user_example(request):
     if not next_page:
         next_page = SITE_ROOT
     data_list = []
-    head = [_('Email'),
-            _('Password'),
-            _('Name') + '(' + _('Optional') + ')',
-            _('Role') + '(' + _('Optional') + ')',
-            _('Space Quota') + '(MB, ' + _('Optional') + ')',
-            'Login ID']
-    for i in range(5):
-        username = "test" + str(i) + "@example.com"
-        password = "123456"
-        name = "test" + str(i)
-        role = "default"
-        quota = "1000"
-        login_id = "login id " + str(i)
-        data_list.append([username, password, name, role, quota, login_id])
+    if not is_org_context(request):
+        head = [_('Email'),
+                _('Password'),
+                _('Name') + '(' + _('Optional') + ')',
+                _('Role') + '(' + _('Optional') + ')',
+                _('Space Quota') + '(MB, ' + _('Optional') + ')',
+                'Login ID']
+        for i in range(5):
+            username = "test" + str(i) + "@example.com"
+            password = "123456"
+            name = "test" + str(i)
+            role = "default"
+            quota = "1000"
+            login_id = "login id " + str(i)
+            data_list.append([username, password, name, role, quota, login_id])
+    else:
+        head = [_('Email'),
+                _('Password'),
+                _('Name') + '(' + _('Optional') + ')',
+                _('Space Quota') + '(MB, ' + _('Optional') + ')']
+        for i in range(5):
+            username = "test" + str(i) + "@example.com"
+            password = "123456"
+            name = "test" + str(i)
+            quota = "1000"
+            data_list.append([username, password, name, quota])
 
     wb = write_xls('sample', head, data_list)
     if not wb:

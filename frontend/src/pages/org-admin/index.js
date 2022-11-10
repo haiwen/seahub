@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
+
+import OrgStatisticFile from './statistic/statistic-file';
+import OrgStatisticStorage from './statistic/statistic-storage';
+import OrgStatisticTraffic from './statistic/statistic-traffic';
+import OrgStatisticUsers from './statistic/statistic-users';
+import OrgStatisticReport from './statistic/statistic-reports';
+import OrgDesktopDevices from './devices/desktop-devices.js';
+import OrgMobileDevices from './devices/mobile-devices.js';
+import OrgDevicesErrors from './devices/devices-errors.js';
 import OrgUsers from './org-users-users';
 import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
@@ -44,6 +53,12 @@ class Org extends React.Component {
     if (location.href.indexOf(`${siteRoot}org/useradmin`) != -1) {
       currentTab = 'users';
     }
+    if (location.href.indexOf(`${siteRoot}org/statistics-admin/`) != -1) {
+      currentTab = 'statistics-admin';
+    }
+    if (location.href.indexOf(`${siteRoot}org/deviceadmin/`) != -1) {
+      currentTab = 'deviceadmin';
+    }
     if (location.href.indexOf(`${siteRoot}org/groupadmin`) != -1) {
       currentTab = 'groupadmin';
     }
@@ -68,7 +83,15 @@ class Org extends React.Component {
         <SidePanel isSidePanelClosed={isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick}/>
         <div className="main-panel o-hidden">
           <Router className="reach-router">
-            <OrgInfo path={siteRoot + 'org/orgmanage'}/>
+            <OrgInfo path={siteRoot + 'org/info/'} />
+            <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} />
+            <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
+            <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
+            <OrgStatisticTraffic path={siteRoot + 'org/statistics-admin/traffic/'} />
+            <OrgStatisticReport path={siteRoot + 'org/statistics-admin/reports/'} />
+            <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
+            <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
+            <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />
