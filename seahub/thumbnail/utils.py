@@ -224,7 +224,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     width, height = image.size
     image_memory_cost = width * height * 4 / 1024 / 1024
     if image_memory_cost > THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT:
-        return (False, 403)
+        return (False, 400)
 
     if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
         image = image.convert("RGB")
