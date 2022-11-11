@@ -179,7 +179,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_create is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

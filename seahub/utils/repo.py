@@ -53,6 +53,7 @@ def parse_repo_perm(perm):
     RP = namedtuple('RepoPerm', [
         'can_download', 'can_upload',  # download/upload files/folders
         'can_edit_on_web',             # edit files on web
+        'can_create',                  # create files/folders
         'can_delete',                  # delete files/folders
         'can_copy',                    # copy files/folders on web
         'can_preview',                 # preview files on web
@@ -67,6 +68,7 @@ def parse_repo_perm(perm):
             RP.can_download = to_python_boolean(str(custom_perm_obj['permission'].get('download', False)))
             RP.can_upload = to_python_boolean(str(custom_perm_obj['permission'].get('upload', False)))
             RP.can_edit_on_web = to_python_boolean(str(custom_perm_obj['permission'].get('modify', False)))
+            RP.can_create = to_python_boolean(str(custom_perm_obj['permission'].get('create', False)))
             RP.can_copy = to_python_boolean(str(custom_perm_obj['permission'].get('copy', False)))
             RP.can_delete = to_python_boolean(str(custom_perm_obj['permission'].get('delete', False)))
             RP.can_preview = to_python_boolean(str(custom_perm_obj['permission'].get('preview', False)))
@@ -82,6 +84,9 @@ def parse_repo_perm(perm):
         PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
     RP.can_edit_on_web = True if perm in [
         PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
+    ] else False
+    RP.can_create = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN
     ] else False
     RP.can_copy = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
