@@ -68,7 +68,7 @@ for line in fileinput.input():
         line = line.replace('"', '`').replace("'", '`')
 
     # fix default values parantheses
-    line = re.sub(r"default `([^`]*)`", "default '\1'", line, 0, re.IGNORECASE)
+    line = re.sub(r"default `([^`]*)`", r"default '\1'", line, 0, re.IGNORECASE)
 
     # And now we convert it back (see above)
     if re.match(r".*, ``\);", line):
