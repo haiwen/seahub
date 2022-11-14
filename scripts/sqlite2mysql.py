@@ -41,7 +41,7 @@ for line in fileinput.input():
     if re.match(r'^CREATE TABLE.*', line):
         searching_for_end = True
 
-    m = re.search('CREATE TABLE [`"]?(\w*)[`"]?(.*)', line)
+    m = re.search('CREATE TABLE(?: IF NOT EXISTS)? [`"]?(\w+)[`"]?(\s*\(.*)', line)
     if m:
         name, sub = m.groups()
         sub = sub.replace('"','`')
@@ -66,6 +66,9 @@ for line in fileinput.input():
             line = line.replace("PRIMARY KEY", "PRIMARY KEY AUTO_INCREMENT")
         # replace " and ' with ` because mysql doesn't like quotes in CREATE commands
         line = line.replace('"', '`').replace("'", '`')
+
+    # fix default values parantheses
+    line = re.sub(r"default `([^`]*)`", r"default '\1'", line, 0, re.IGNORECASE)
 
     # And now we convert it back (see above)
     if re.match(r".*, ``\);", line):
