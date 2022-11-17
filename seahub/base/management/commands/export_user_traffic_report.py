@@ -7,7 +7,7 @@ import posixpath
 from django.core.management.base import BaseCommand
 from django.utils.translation import ugettext as _
 
-from seahub.utils import seafevents_api
+from seahub.utils import get_all_users_traffic_by_month
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.file_size import byte_to_mb
 
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             return
 
         month_obj = datetime.datetime.strptime(month, "%Y%m")
-        res_data = seafevents_api.get_all_users_traffic_by_month(month_obj, -1, -1)
+        res_data = get_all_users_traffic_by_month(month_obj, -1, -1)
 
         data_list = []
         head = [_("Time"), _("User"), _("Web Download") + ('(MB)'), \

@@ -60,7 +60,6 @@ logger = logging.getLogger(__name__)
 if EVENTS_CONFIG_FILE:
     try:
         from seafevents import seafevents_api
-        seafevents_api.init(EVENTS_CONFIG_FILE)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents_api = None
@@ -552,7 +551,7 @@ if EVENTS_CONFIG_FILE:
     try:
         import seafevents
         EVENTS_ENABLED = True
-        SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
+        SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
@@ -626,7 +625,7 @@ if EVENTS_CONFIG_FILE:
 
         events, total_count = [], 0
         try:
-            events = seafevents.get_user_activities(ev_session,
+            events = seafevents_api.get_user_activities(ev_session,
                     username, start, count)
         finally:
             ev_session.close()
@@ -643,11 +642,11 @@ if EVENTS_CONFIG_FILE:
         next_start = start
         while True:
             if org_id and org_id > 0:
-                events = seafevents.get_org_user_events(ev_session, org_id,
+                events = seafevents_api.get_org_user_events(ev_session, org_id,
                                                         username, next_start,
                                                         limit)
             else:
-                events = seafevents.get_user_events(ev_session, username,
+                events = seafevents_api.get_user_events(ev_session, username,
                                                     next_start, limit)
             if not events:
                 break
@@ -657,7 +656,7 @@ if EVENTS_CONFIG_FILE:
                     repo = seafile_api.get_repo(ev.repo_id)
                     if not repo:
                         # delete the update event for repo which has been deleted
-                        seafevents.delete_event(ev_session, ev.uuid)
+                        seafevents_api.delete_event(ev_session, ev.uuid)
                         continue
                     if repo.encrypted:
                         repo.password_set = seafile_api.is_password_set(
@@ -700,13 +699,14 @@ if EVENTS_CONFIG_FILE:
         """
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_user_activity_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_user_activity_stats_by_day(session, start, end, offset)
         return res
 
     def get_org_user_activity_stats_by_day(org_id, start, end):
         """
         """
-        res = seafevents_api.get_org_user_activity_stats_by_day(org_id, start, end)
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_user_activity_stats_by_day(session, org_id, start, end)
         return res
 
     def get_org_user_events(org_id, username, start, count):
@@ -716,14 +716,14 @@ if EVENTS_CONFIG_FILE:
         """Return file histories
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_history(session, repo_id, path, start, count, history_limit)
+            res = seafevents_api.get_file_history(session, repo_id, path, start, count, history_limit)
         return res
 
     def get_log_events_by_time(log_type, tstart, tend):
         """Return log events list by start/end timestamp. (If no logs, return 'None')
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_event_log_by_time(session, log_type, tstart, tend)
+            events = seafevents_api.get_event_log_by_time(session, log_type, tstart, tend)
 
         return events if events else None
 
@@ -753,7 +753,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_audit_events_by_path(session,
+            events = seafevents_api.get_file_audit_events_by_path(session,
                 email, org_id, repo_id, file_path, start, limit)
 
         return events if events else None
@@ -768,7 +768,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_audit_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_file_audit_events(session, email, org_id, repo_id, start, limit)
 
         return events if events else None
 
@@ -776,36 +776,38 @@ if EVENTS_CONFIG_FILE:
         """ return file audit record of sepcifiy time group by day.
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_file_ops_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_file_ops_stats_by_day(session, start, end, offset)
         return res
 
     def get_org_file_ops_stats_by_day(org_id, start, end, offset):
         """ return file audit record of sepcifiy time group by day.
         """
-        res = seafevents_api.get_org_file_ops_stats_by_day(org_id, start, end, offset)
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_file_ops_stats_by_day(session, org_id, start, end, offset)
         return res
 
     def get_total_storage_stats_by_day(start, end, offset):
         """
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_total_storage_stats_by_day(session, start, end, offset)
+            res = seafevents_api.get_total_storage_stats_by_day(session, start, end, offset)
         return res
 
     def get_org_total_storage_stats_by_day(org_id, start, end, offset):
         """
         """
-        res = seafevents_api.get_org_storage_stats_by_day(org_id, start, end, offset)
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_org_storage_stats_by_day(session, org_id, start, end, offset)
         return res
 
     def get_system_traffic_by_day(start, end, offset, op_type='all'):
         with _get_seafevents_session() as session:
-            res = seafevents.get_system_traffic_by_day(session, start, end, offset, op_type)
+            res = seafevents_api.get_system_traffic_by_day(session, start, end, offset, op_type)
         return res
 
     def get_org_traffic_by_day(org_id, start, end, offset, op_type='all'):
         with _get_seafevents_session() as session:
-            res = seafevents.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
+            res = seafevents_api.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
         return res
 
     def get_file_update_events(email, org_id, repo_id, start, limit):
@@ -818,7 +820,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_file_update_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_file_update_events(session, email, org_id, repo_id, start, limit)
         return events if events else None
 
     def get_perm_audit_events(email, org_id, repo_id, start, limit):
@@ -831,37 +833,66 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         with _get_seafevents_session() as session:
-            events = seafevents.get_perm_audit_events(session, email, org_id, repo_id, start, limit)
+            events = seafevents_api.get_perm_audit_events(session, email, org_id, repo_id, start, limit)
 
         return events if events else None
 
     def get_virus_files(repo_id=None, has_handled=None, start=-1, limit=-1):
         with _get_seafevents_session() as session:
-            r = seafevents.get_virus_files(session, repo_id, has_handled, start, limit)
+            r = seafevents_api.get_virus_files(session, repo_id, has_handled, start, limit)
         return r if r else []
 
     def delete_virus_file(vid):
         with _get_seafevents_session() as session:
-            return True if seafevents.delete_virus_file(session, vid) == 0 else False
+            return True if seafevents_api.delete_virus_file(session, vid) == 0 else False
 
     def operate_virus_file(vid, ignore):
         with _get_seafevents_session() as session:
-            return True if seafevents.operate_virus_file(session, vid, ignore) == 0 else False
+            return True if seafevents_api.operate_virus_file(session, vid, ignore) == 0 else False
 
     def get_virus_file_by_vid(vid):
         with _get_seafevents_session() as session:
-            return seafevents.get_virus_file_by_vid(session, vid)
+            return seafevents_api.get_virus_file_by_vid(session, vid)
 
     def get_file_scan_record(start=-1, limit=-1):
-        records = seafevents_api.get_content_scan_results(start, limit)
+        with _get_seafevents_session() as session:
+            records = seafevents_api.get_content_scan_results(session, start, limit)
         return records if records else []
 
     def get_user_activities_by_timestamp(username, start, end):
-        events = seafevents.get_user_activities_by_timestamp(username, start, end)
+        with _get_seafevents_session() as session:
+            events = seafevents_api.get_user_activities_by_timestamp(session, username, start, end)
         return events if events else []
 
+    def get_all_users_traffic_by_month(month, start=-1, limit=-1, order_by='user', org_id=-1):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_all_users_traffic_by_month(session, month, start, limit, order_by, org_id)
+        return res
+
+    def get_all_orgs_traffic_by_month(month, start=-1, limit=-1, order_by='user'):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_all_orgs_traffic_by_month(session, month, start, limit, order_by)
+        return res
+
+    def get_user_traffic_by_month(username, month):
+        with _get_seafevents_session() as session:
+            res = seafevents_api.get_user_traffic_by_month(session, username, month)
+        return res
+
+    def get_file_history_suffix():
+        return seafevents_api.get_file_history_suffix(parsed_events_conf)
+
 else:
+    parsed_events_conf = None
     EVENTS_ENABLED = False
+    def get_file_history_suffix():
+        pass
+    def get_all_users_traffic_by_month():
+        pass
+    def get_all_orgs_traffic_by_month():
+        pass
+    def get_user_traffic_by_month():
+        pass
     def get_user_events():
         pass
     def get_user_activity_stats_by_day():
@@ -1097,8 +1128,8 @@ FILE_AUDIT_ENABLED = False
 if EVENTS_CONFIG_FILE:
     def check_file_audit_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_audit_enabled'):
-            enabled = seafevents.is_audit_enabled(parsed_events_conf)
+        if hasattr(seafevents_api, 'is_audit_enabled'):
+            enabled = seafevents_api.is_audit_enabled(parsed_events_conf)
 
             if enabled:
                 logging.debug('file audit: enabled')
@@ -1186,8 +1217,8 @@ HAS_FILE_SEARCH = False
 if EVENTS_CONFIG_FILE:
     def check_search_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_search_enabled'):
-            enabled = seafevents.is_search_enabled(parsed_events_conf)
+        if hasattr(seafevents_api, 'is_search_enabled'):
+            enabled = seafevents_api.is_search_enabled(parsed_events_conf)
 
             if enabled:
                 logging.debug('search: enabled')
@@ -1202,8 +1233,8 @@ ENABLE_REPO_AUTO_DEL = False
 if EVENTS_CONFIG_FILE:
     def check_repo_auto_del_enabled():
         enabled = False
-        if hasattr(seafevents, 'is_repo_auto_del_enabled'):
-            enabled = seafevents.is_repo_auto_del_enabled(EVENTS_CONFIG_FILE)
+        if hasattr(seafevents_api, 'is_repo_auto_del_enabled'):
+            enabled = seafevents_api.is_repo_auto_del_enabled(parsed_events_conf)
             if enabled:
                 logging.debug('search: enabled')
             else:

@@ -62,16 +62,16 @@ class CommandTest(BaseTestCase):
 
         return [Record(**x) for x in l]
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_dir_evs(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._dir_evs()
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_dir_evs(self, mock_get_user_activities_by_timestamp):
+        mock_get_user_activities_by_timestamp.return_value = self._dir_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
             self.user.email, 30)
         self.assertEqual(len(mail.outbox), 0)
 
         call_command('send_file_updates')
-        mock_seafevents_api.get_user_activities_by_timestamp.assert_called_once()
+        mock_get_user_activities_by_timestamp.assert_called_once()
 
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == self.user.username
@@ -80,7 +80,7 @@ class CommandTest(BaseTestCase):
 
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_file_evs(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._file_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._file_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
             self.user.email, 30)
@@ -88,7 +88,7 @@ class CommandTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         call_command('send_file_updates')
-        mock_seafevents_api.get_user_activities_by_timestamp.assert_called_once()
+        mock_get_user_activities_by_timestamp.assert_called_once()
 
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == self.user.username
@@ -99,7 +99,7 @@ class CommandTest(BaseTestCase):
 
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_repo_evs(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._repo_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
             self.user.email, 30)
@@ -107,7 +107,7 @@ class CommandTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         call_command('send_file_updates')
-        mock_seafevents_api.get_user_activities_by_timestamp.assert_called_once()
+        mock_get_user_activities_by_timestamp.assert_called_once()
 
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == self.user.username
@@ -117,7 +117,7 @@ class CommandTest(BaseTestCase):
 
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_seafevents_api(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._repo_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         username = self.user.username
         UserOptions.objects.set_file_updates_email_interval(username, 30)
@@ -130,8 +130,8 @@ class CommandTest(BaseTestCase):
         call_command('send_file_updates')
         after_dt = datetime.datetime.utcnow().replace(microsecond=0)
 
-        mock_seafevents_api.get_user_activities_by_timestamp.assert_called_once()
-        args = mock_seafevents_api.get_user_activities_by_timestamp.call_args[0]
+        mock_get_user_activities_by_timestamp.assert_called_once()
+        args = mock_get_user_activities_by_timestamp.call_args[0]
         assert args[0] == username
         assert args[1] == today
 
@@ -142,35 +142,35 @@ class CommandTest(BaseTestCase):
 
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_email_interval(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._repo_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         username = self.user.username
         assert UserOptions.objects.get_file_updates_last_emailed_time(username) is None
 
         # assume this command will be finished in 5 seconds
         UserOptions.objects.set_file_updates_email_interval(username, 5)
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is False
+        assert mock_get_user_activities_by_timestamp.called is False
         call_command('send_file_updates')
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is True
+        assert mock_get_user_activities_by_timestamp.called is True
 
         # still within 5 seconds ...
-        mock_seafevents_api.get_user_activities_by_timestamp.reset_mock()
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is False
+        mock_get_user_activities_by_timestamp.reset_mock()
+        assert mock_get_user_activities_by_timestamp.called is False
         call_command('send_file_updates')
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is False
+        assert mock_get_user_activities_by_timestamp.called is False
 
         time.sleep(5)  # 5 seconds passed
 
-        mock_seafevents_api.get_user_activities_by_timestamp.reset_mock()
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is False
+        mock_get_user_activities_by_timestamp.reset_mock()
+        assert mock_get_user_activities_by_timestamp.called is False
         call_command('send_file_updates')
-        assert mock_seafevents_api.get_user_activities_by_timestamp.called is True
+        assert mock_get_user_activities_by_timestamp.called is True
 
     @override_settings(TIME_ZONE='Asia/Shanghai')
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_timezone_in_email_body(self, mock_seafevents_api):
         assert timezone.get_default_timezone_name() == 'Asia/Shanghai'
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._repo_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
             self.user.email, 30)
@@ -182,7 +182,7 @@ class CommandTest(BaseTestCase):
 
     @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
     def test_invalid_option_vals(self, mock_seafevents_api):
-        mock_seafevents_api.get_user_activities_by_timestamp.return_value = self._repo_evs()
+        mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
             self.user.email, 'a')

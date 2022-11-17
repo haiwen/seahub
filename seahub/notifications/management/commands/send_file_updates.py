@@ -20,7 +20,7 @@ from seahub.options.models import (
     KEY_FILE_UPDATES_LAST_EMAILED_TIME
 )
 from seahub.profile.models import Profile
-from seahub.utils import (get_site_name, seafevents_api,
+from seahub.utils import (get_site_name, get_user_activities_by_timestamp,
                           send_html_email, get_site_scheme_and_netloc)
 from seahub.utils.timeutils import utc_to_local
 
@@ -228,7 +228,7 @@ class Command(BaseCommand):
 
             # get file updates(from: last_emailed_time, to: now) for repos
             # user can access
-            res = seafevents_api.get_user_activities_by_timestamp(
+            res = get_user_activities_by_timestamp(
                 username, last_emailed_time, now)
             if not res:
                 continue

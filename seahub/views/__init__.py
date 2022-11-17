@@ -42,7 +42,7 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_windows_operating_system, seafevents_api, IS_EMAIL_CONFIGURED
+    is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -779,7 +779,7 @@ def file_revisions(request, repo_id):
         can_revert_file = False
 
     # Whether use new file history API which read file history from db.
-    suffix_list = seafevents_api.get_file_history_suffix()
+    suffix_list = get_file_history_suffix()
     if suffix_list and isinstance(suffix_list, list):
         suffix_list = [x.lower() for x in suffix_list]
     else:

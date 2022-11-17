@@ -17,7 +17,7 @@ from seaserv import ccnet_api
 from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
-        seafevents_api
+        get_all_users_traffic_by_month, get_all_orgs_traffic_by_month
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.file_size import byte_to_mb
@@ -253,7 +253,7 @@ class SystemUserTrafficView(APIView):
 
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_users_traffic_by_month(month_obj,
+            traffics = get_all_users_traffic_by_month(month_obj,
                                                                      start,
                                                                      start + per_page + 1,
                                                                      order_by)
@@ -330,7 +330,7 @@ class SystemOrgTrafficView(APIView):
 
         # get one more item than per_page, to judge has_next_page
         try:
-            traffics = seafevents_api.get_all_orgs_traffic_by_month(month_obj,
+            traffics = get_all_orgs_traffic_by_month(month_obj,
                                                                     start,
                                                                     start + per_page + 1,
                                                                     order_by)
@@ -387,7 +387,7 @@ class SystemUserTrafficExcelView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            res_data = seafevents_api.get_all_users_traffic_by_month(month_obj, -1, -1)
+            res_data = get_all_users_traffic_by_month(month_obj, -1, -1)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
