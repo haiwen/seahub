@@ -78,8 +78,8 @@ class CommandTest(BaseTestCase):
         for op in ['Created', 'Deleted', 'Moved', 'Restored', 'Renamed', ]:
             assert op in mail.outbox[0].body
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_file_evs(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_file_evs(self, mock_get_user_activities_by_timestamp):
         mock_get_user_activities_by_timestamp.return_value = self._file_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
@@ -97,8 +97,8 @@ class CommandTest(BaseTestCase):
                    'Renamed', ]:
             assert op in mail.outbox[0].body
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_repo_evs(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_repo_evs(self, mock_get_user_activities_by_timestamp):
         mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
@@ -115,8 +115,8 @@ class CommandTest(BaseTestCase):
         for op in ['Created', 'Deleted', 'Renamed', 'Removed']:
             assert op in mail.outbox[0].body
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_seafevents_api(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_seafevents_api(self, mock_get_user_activities_by_timestamp):
         mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         username = self.user.username
@@ -140,8 +140,8 @@ class CommandTest(BaseTestCase):
         assert last_emailed_dt <= after_dt
         assert last_emailed_dt == args[2]
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_email_interval(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_email_interval(self, mock_get_user_activities_by_timestamp):
         mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         username = self.user.username
@@ -167,8 +167,8 @@ class CommandTest(BaseTestCase):
         assert mock_get_user_activities_by_timestamp.called is True
 
     @override_settings(TIME_ZONE='Asia/Shanghai')
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_timezone_in_email_body(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_timezone_in_email_body(self, mock_get_user_activities_by_timestamp):
         assert timezone.get_default_timezone_name() == 'Asia/Shanghai'
         mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
@@ -180,8 +180,8 @@ class CommandTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
         assert '2018-11-05 14:46:02' in mail.outbox[0].body
 
-    @patch('seahub.notifications.management.commands.send_file_updates.seafevents_api')
-    def test_invalid_option_vals(self, mock_seafevents_api):
+    @patch('seahub.notifications.management.commands.send_file_updates.get_user_activities_by_timestamp')
+    def test_invalid_option_vals(self, mock_get_user_activities_by_timestamp):
         mock_get_user_activities_by_timestamp.return_value = self._repo_evs()
 
         UserOptions.objects.set_file_updates_email_interval(
