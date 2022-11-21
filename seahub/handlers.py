@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 try:
 
-    import seafevents
+    import seafevents_api
 
     def repo_created_cb(sender, **kwargs):
         org_id = kwargs['org_id']
@@ -43,7 +43,7 @@ try:
 
         from .utils import SeafEventsSession
         session = SeafEventsSession()
-        seafevents.save_user_activity(session, record)
+        seafevents_api.save_user_activity(session, record)
         session.close()
 
         LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
@@ -92,7 +92,7 @@ try:
 
         from .utils import SeafEventsSession
         session = SeafEventsSession()
-        seafevents.save_user_activity(session, record)
+        seafevents_api.save_user_activity(session, record)
         session.close()
 
     def clean_up_repo_trash_cb(sender, **kwargs):
@@ -129,7 +129,7 @@ try:
 
         from .utils import SeafEventsSession
         session = SeafEventsSession()
-        seafevents.save_user_activity(session, record)
+        seafevents_api.save_user_activity(session, record)
         session.close()
 
     def repo_restored_cb(sender, **kwargs):
@@ -161,7 +161,7 @@ try:
 
         from .utils import SeafEventsSession
         session = SeafEventsSession()
-        seafevents.save_user_activity(session, record)
+        seafevents_api.save_user_activity(session, record)
         session.close()
 except ImportError:
 
