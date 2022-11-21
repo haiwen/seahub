@@ -31,8 +31,15 @@ class Command(BaseCommand):
         return Profile.objects.get_user_language(username)
 
     def handle(self, *args, **options):
-        self.email_admins()
-        self.email_mail_list()
+        try:
+            notify_list = dj_settings.VIRUS_SCAN_NOTIFY_LIST
+        except AttributeError:
+            notify_list = []
+
+        if notify_list:
+            self.email_mail_list(notify_list)
+        else:
+            self.email_admins()
 
         for repo_file in options['repo_file']:
             self.email_repo_owner(repo_file)
@@ -61,12 +68,7 @@ class Command(BaseCommand):
             # restore current language
             translation.activate(cur_language)
 
-    def email_mail_list(self):
-        try:
-            notify_list = dj_settings.VIRUS_SCAN_NOTIFY_LIST
-        except AttributeError:
-            return
-
+    def email_mail_list(self, notify_list):
         for mail in notify_list:
             send_html_email_with_dj_template(mail,
                                              subject=_('Virus detected on %s') % get_site_name(),
