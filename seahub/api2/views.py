@@ -642,7 +642,16 @@ class Search(APIView):
                 e['thumbnail_url'] = thumbnail_url + params
 
         has_more = True if total > current_page * per_page else False
-        return Response({"total":total, "results":results, "has_more":has_more})
+
+        if is_valid_repo_id_format(search_repo):
+            return Response({"total":total, "results":results, "has_more":has_more})
+
+        filtered_result = []
+        for r in results:
+            if "*文件保险箱*" not in r.get('repo_name', ''):
+                filtered_result.append(r)
+
+        return Response({"total":total, "results":filtered_result, "has_more":has_more})
 
 ########## Repo related
 def repo_download_info(request, repo_id, gen_sync_token=True):
@@ -792,6 +801,8 @@ class Repos(APIView):
                 org_id = request.user.org.org_id
                 shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
                         email, -1, -1)
+                shared_repos = [repo for repo in shared_repos if "*文件保险箱*" not in repo.repo_name]
+
             else:
                 shared_repos = seafile_api.get_share_in_repo_list(
                         email, -1, -1)

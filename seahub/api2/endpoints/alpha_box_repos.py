@@ -176,9 +176,21 @@ class AlphaBoxRepos(APIView):
                 if is_org_context(request):
                     org_id = request.user.org.org_id
                     if shared_from:
-                        repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
-                                username, shared_from, negate=False,
-                                start=start, limit=limit, order_by=order_by)
+                        device = request.META.get('HTTP_DEVICE', '').lower()
+                        version = request.META.get('HTTP_VERSION', '').lower()
+                        if not device or device == 'android' and version != 'new':
+                            if per_page < 100:
+                                per_page = 100
+                            start = (page - 1) * per_page
+                            limit = per_page
+                            repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
+                                    username, shared_from, negate=False,
+                                    start=start, limit=limit, order_by=order_by)
+                            repos = [repo for repo in repos if "*文件保险箱*" not in repo.repo_name]
+                        else:
+                            repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
+                                    username, shared_from, negate=False,
+                                    start=start, limit=limit, order_by=order_by)
                     elif not_shared_from:
                         repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
                                 username, not_shared_from, negate=True,
@@ -238,6 +250,14 @@ class AlphaBoxRepos(APIView):
             # filter by value of 'encrypted' parameter
             result = [item for item in result if item['encrypted'] ==
                     to_python_boolean(encrypted_parameter)]
+
+        include_str = request.GET.get("nameContains")
+        if include_str:
+            result = [item for item in result if include_str.lower() in item["name"].lower()]
+
+        exclude_str = request.GET.get("nameNotContains")
+        if exclude_str:
+            result = [item for item in result if exclude_str.lower() not in item["name"].lower()]
 
         return Response(result)
 
@@ -390,10 +410,7 @@ class AlphaBoxReposSearch(APIView):
             repos = seafile_api.get_owned_repo_list(
                     username, ret_corrupted=False, start=-1, limit=-1)
 
-        searched_name = request.GET.get('nameContains', '')
         for repo in repos:
-            if searched_name.lower() not in repo.repo_name.lower():
-                continue
 
             repo_info = get_my_repo_info(repo)
             repo_info['type'] = 'mine'
@@ -414,6 +431,12 @@ class AlphaBoxReposSearch(APIView):
             if shared_from:
                 repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
                         username, shared_from, negate=False, start=-1, limit=-1)
+
+                device = request.META.get('HTTP_DEVICE', '').lower()
+                version = request.META.get('HTTP_VERSION', '').lower()
+                if not device or device == 'android' and version != 'new':
+                    repos = [repo for repo in repos if "*文件保险箱*" not in repo.repo_name]
+
             elif not_shared_from:
                 repos = seafile_api.org_get_share_in_repo_list_with_sharer(org_id,
                         username, not_shared_from, negate=True, start=-1, limit=-1)
@@ -424,10 +447,7 @@ class AlphaBoxReposSearch(APIView):
             # TODO, not used currently
             repos = []
 
-        searched_name = request.GET.get('nameContains', '')
         for repo in repos:
-            if searched_name.lower() not in repo.repo_name.lower():
-                continue
 
             repo_info = get_shared_in_repo_info(repo)
             repo_info['type'] = 'shared'
@@ -447,10 +467,7 @@ class AlphaBoxReposSearch(APIView):
             # TODO, not used currently
             repos = seafserv_threaded_rpc.list_inner_pub_repos()
 
-        searched_name = request.GET.get('nameContains', '')
         for repo in repos:
-            if searched_name.lower() not in repo.repo_name.lower():
-                continue
 
             repo_info = get_public_repo_info(repo)
             repo_info['type'] = 'public'
@@ -468,11 +485,6 @@ class AlphaBoxReposSearch(APIView):
         r_type = request.GET.get('type', '')
         if r_type and r_type not in ('mine', 'shared', 'public'):
             error_msg = "type should be 'mine', 'shared' or 'public'."
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        searched_name = request.GET.get('nameContains', '')
-        if not searched_name:
-            error_msg = 'nameContains invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         owned_repos_info = []
@@ -494,8 +506,17 @@ class AlphaBoxReposSearch(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(owned_repos_info + shared_in_repos_info +
-                public_repos_info)
+        result = owned_repos_info + shared_in_repos_info + public_repos_info
+
+        include_str = request.GET.get("nameContains")
+        if include_str:
+            result = [item for item in result if include_str.lower() in item["name"].lower()]
+
+        exclude_str = request.GET.get("nameNotContains")
+        if exclude_str:
+            result = [item for item in result if exclude_str.lower() not in item["name"].lower()]
+
+        return Response(result)
 
 
 class AlphaBoxFileOperationRecord(APIView):
