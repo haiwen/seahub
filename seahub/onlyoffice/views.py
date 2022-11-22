@@ -103,9 +103,12 @@ def onlyoffice_editor_callback(request):
 
         doc_info = cache.get(doc_key)
         if not doc_info:
-            logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
-            logger.info(post_data)
-            return HttpResponse('{"error": 1}')
+            if status not in (1, 4):
+                logger.error('status {}: can not get doc_info from cache by doc_key {}, post_data: {}'
+                             .format(status, doc_key, post_data))
+                return HttpResponse('{"error": 1}')
+            else:
+                logger.warning('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
         else:
             logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
 
@@ -129,9 +132,9 @@ def onlyoffice_editor_callback(request):
         logger.error('status {}: invalid status; doc_key {}.'.format(status, doc_key))
         return HttpResponse('{"error": 1}')
 
-    repo_id = doc_info['repo_id']
-    file_path = doc_info['file_path']
-    username = doc_info['username']
+    repo_id = doc_info.get('repo_id', '')
+    file_path = doc_info.get('file_path', '')
+    username = doc_info.get('username', '')
 
     # save file
     if status in (2, 6):
