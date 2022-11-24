@@ -1,9 +1,9 @@
 #!/bin/bash
 : ${PYTHON=python3}
 
-: ${SEAHUB_TEST_USERNAME="test@seafiletest.com"}
+: ${SEAHUB_TEST_USERNAME="test@example.com"}
 : ${SEAHUB_TEST_PASSWORD="testtest"}
-: ${SEAHUB_TEST_ADMIN_USERNAME="admin@seafiletest.com"}
+: ${SEAHUB_TEST_ADMIN_USERNAME="admin@example.com"}
 : ${SEAHUB_TEST_ADMIN_PASSWORD="adminadmin"}
 
 export SEAHUB_TEST_USERNAME
