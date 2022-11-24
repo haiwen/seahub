@@ -419,15 +419,40 @@ class RepoShareInfoView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        folder_path = request.GET.get('path', '/')
+        if folder_path != '/':
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % folder_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
-            shared_users = seafile_api.list_org_repo_shared_to(repo_owner, repo_id)
-            shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
+            if folder_path == '/':
+                shared_users = seafile_api.list_org_repo_shared_to(repo_owner, repo_id)
+                shared_groups = seafile_api.list_org_repo_shared_group(org_id, repo_owner, repo_id)
+            else:
+                shared_users = seafile_api.get_org_shared_users_for_subdir(org_id,
+                                                                           repo_id,
+                                                                           folder_path,
+                                                                           repo_owner)
+                shared_groups = seafile_api.get_org_shared_groups_for_subdir(org_id,
+                                                                             repo_id,
+                                                                             folder_path,
+                                                                             repo_owner)
         else:
             repo_owner = seafile_api.get_repo_owner(repo_id)
-            shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
-            shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+            if folder_path == '/':
+                shared_users = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+                shared_groups = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+            else:
+                shared_users = seafile_api.get_shared_users_for_subdir(repo_id,
+                                                                       folder_path,
+                                                                       repo_owner)
+                shared_groups = seafile_api.get_shared_groups_for_subdir(repo_id,
+                                                                         folder_path,
+                                                                         repo_owner)
 
         group_id = ''
         if '@seafile_group' in repo_owner:
