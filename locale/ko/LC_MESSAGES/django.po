@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:44+0800\n"
+"POT-Creation-Date: 2022-11-30 10:28+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -57,8 +57,8 @@ msgstr "0보다 크거나 같은 정수값이어야합니다."
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "공간 제한 용량이 너무 적습니다(최소 값은 0)"
 
-#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
+#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:233
+#: seahub/organizations/api/admin/users.py:454 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "제한 용량 설정 실패: 최대 제한 용량은 %d MB 입니다"
@@ -161,6 +161,7 @@ msgstr "이 항목은 %s에 공유했습니다."
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:57
 msgid "Time"
 msgstr "시간"
@@ -169,6 +170,7 @@ msgstr "시간"
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/templates/file_access.html:24
 msgid "User"
@@ -176,31 +178,37 @@ msgstr "사용자"
 
 #: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
+#: seahub/organizations/api/admin/statistics.py:334
 msgid "Web Download"
 msgstr "웹 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Sync Download"
 msgstr "동기화 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Link Download"
 msgstr "링크 다운로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Upload"
 msgstr "웹 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Sync Upload"
 msgstr "동기화 업로드"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:48
+#: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Upload"
 msgstr "링크 업로드"
 
@@ -216,10 +224,11 @@ msgstr "링크 업로드"
 #: seahub/institutions/templates/institutions/useradmin_search.html:10
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/invitations/templates/invitations/token_view.html:10
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
-#: seahub/views/sysadmin.py:790
+#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:805
 msgid "Email"
 msgstr "전자메일"
 
@@ -233,12 +242,13 @@ msgstr "전자메일"
 #: seahub/institutions/templates/institutions/user_info.html:105
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/sysadmin_extra/views.py:57
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
 #: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
-#: seahub/views/sysadmin.py:792
+#: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:807
 msgid "Name"
 msgstr "이름"
 
@@ -248,6 +258,7 @@ msgstr "이름"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/templates/registration/password_set_form.html:16
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
@@ -257,6 +268,7 @@ msgstr "연락 전자메일"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
 msgstr "사용 용량"
@@ -265,14 +277,15 @@ msgstr "사용 용량"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:808
 msgid "Space Quota"
 msgstr "제한 용량 공간"
 
 #: seahub/api2/endpoints/admin/users.py:472
 #: seahub/api2/endpoints/admin/users.py:499
-#: seahub/organizations/api/admin/users.py:144
+#: seahub/organizations/api/admin/users.py:148
 msgid "There are more than 500 users, and sort is not offered."
 msgstr "500명 이상의 사용자가 있어, 정렬 기능을 지원하지 않습니다."
 
@@ -306,7 +319,7 @@ msgid ""
 msgstr " %(user)s 사용자 추가에 성공했습니다만, 전자메일 서비스를 제대로 설정하지 않아 전자메일 알림을 보내지 못했습니다."
 
 #: seahub/api2/endpoints/admin/users.py:1135
-#: seahub/institutions/templates/institutions/useradmin.html:120
+#: seahub/institutions/templates/institutions/useradmin.html:122
 msgid "Edit succeeded"
 msgstr "편집에 성공했습니다"
 
@@ -316,12 +329,12 @@ msgid "Your account on %s is activated"
 msgstr "%s의 계정을 활성화했습니다"
 
 #: seahub/api2/endpoints/admin/users.py:1143
-#: seahub/institutions/templates/institutions/useradmin.html:116
+#: seahub/institutions/templates/institutions/useradmin.html:118
 msgid "Edit succeeded, an email has been sent."
 msgstr "편집에 성공했습니다. 전자메일을 보냈습니다."
 
 #: seahub/api2/endpoints/admin/users.py:1146
-#: seahub/institutions/templates/institutions/useradmin.html:118
+#: seahub/institutions/templates/institutions/useradmin.html:120
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
@@ -383,7 +396,7 @@ msgstr "바이러스 파일이 없습니다."
 #: seahub/notifications/models.py:688 seahub/notifications/models.py:705
 #: seahub/notifications/models.py:722 seahub/notifications/models.py:751
 #: seahub/search/views.py:200 seahub/utils/__init__.py:166
-#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:918
+#: seahub/utils/__init__.py:1181 seahub/views/__init__.py:918
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
 #: seahub/wiki/views.py:215 seahub/wiki/views.py:224
 msgid "Internal Server Error"
@@ -482,7 +495,7 @@ msgstr "%s 사용자는 이미 그룹 구성원입니다."
 #: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:322
+#: seahub/organizations/api/admin/users.py:332
 #, python-format
 msgid "User %s not found in organization."
 msgstr "%s 사용자는 조직에 없습니다."
@@ -501,7 +514,7 @@ msgstr "그룹이 없습니다"
 
 #: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
-#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:818
 msgid "Failed to export Excel"
 msgstr "엑셀 내보내기에 실패했습니다"
 
@@ -765,6 +778,7 @@ msgstr "전자메일  또는 사용자 이름 "
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
 #: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:806
 msgid "Password"
 msgstr "암호"
 
@@ -1053,7 +1067,7 @@ msgstr "최근 로그인"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/institutions/views.py:176 seahub/views/sysadmin.py:200
 #: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "관리자"
@@ -1066,7 +1080,7 @@ msgstr "LDAP(가져옴)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/institutions/templates/institutions/useradmin.html:33
-#: seahub/institutions/templates/institutions/useradmin.html:40
+#: seahub/institutions/templates/institutions/useradmin.html:42
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
 #: seahub/views/sysadmin.py:258
 msgid "Active"
@@ -1074,7 +1088,7 @@ msgstr "활성"
 
 #: seahub/base/management/commands/export_users.py:120
 #: seahub/institutions/templates/institutions/useradmin.html:35
-#: seahub/institutions/templates/institutions/useradmin.html:41
+#: seahub/institutions/templates/institutions/useradmin.html:43
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
 #: seahub/views/sysadmin.py:260
 msgid "Inactive"
@@ -1277,12 +1291,12 @@ msgid "Operations"
 msgstr "작업"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
-#: seahub/institutions/templates/institutions/useradmin.html:37
+#: seahub/institutions/templates/institutions/useradmin.html:38
 msgid "Edit"
 msgstr "편집"
 
 #: seahub/contacts/templates/contacts/contact_list.html:30
-#: seahub/institutions/templates/institutions/useradmin.html:57
+#: seahub/institutions/templates/institutions/useradmin.html:59
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
 #: seahub/sysadmin_extra/views.py:232
 #: seahub/templates/view_shared_upload_link.html:87
@@ -1341,7 +1355,7 @@ msgid "Delete Contact"
 msgstr "연락처 삭제"
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
-#: seahub/institutions/templates/institutions/useradmin.html:79
+#: seahub/institutions/templates/institutions/useradmin.html:81
 #: seahub/institutions/templates/institutions/useradmin_search.html:72
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1431,7 +1445,7 @@ msgstr "%s 이름이 잘못되었습니다"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1885
+#: seahub/views/file.py:1867
 msgid "Argument missing"
 msgstr "인자가 빠졌습니다"
 
@@ -1556,7 +1570,7 @@ msgstr "%(site_name)s 팀"
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
 #: seahub/views/ajax.py:427 seahub/views/file.py:1150
-#: seahub/views/file.py:1366 seahub/views/file.py:1894
+#: seahub/views/file.py:1366 seahub/views/file.py:1876
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -3675,21 +3689,21 @@ msgstr "할당 공간 값은 비워둘 수 없습니다"
 msgid "Create At / Last Login"
 msgstr "만든 날짜 / 마지막 로그인"
 
-#: seahub/institutions/templates/institutions/useradmin.html:66
+#: seahub/institutions/templates/institutions/useradmin.html:68
 #: seahub/institutions/templates/institutions/useradmin_search.html:63
 msgid "Empty"
 msgstr "비어 있음"
 
-#: seahub/institutions/templates/institutions/useradmin.html:70
+#: seahub/institutions/templates/institutions/useradmin.html:72
 msgid "Activating..., please wait"
 msgstr "활성화 중..., 기다려주세요"
 
-#: seahub/institutions/templates/institutions/useradmin.html:78
+#: seahub/institutions/templates/institutions/useradmin.html:80
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
 msgid "Delete User"
 msgstr "사용자 삭제"
 
-#: seahub/institutions/templates/institutions/useradmin.html:128
+#: seahub/institutions/templates/institutions/useradmin.html:130
 msgid "Edit failed."
 msgstr "편집에 실패했습니다."
 
@@ -3701,22 +3715,26 @@ msgstr "사용자 검색 "
 msgid "Result"
 msgstr "결과"
 
-#: seahub/institutions/views.py:160
+#: seahub/institutions/views.py:174
 msgid "Owner"
 msgstr "소유자"
 
-#: seahub/institutions/views.py:164
+#: seahub/institutions/views.py:178
 msgid "Member"
 msgstr "구성원"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
+#: seahub/institutions/views.py:209 seahub/views/sysadmin.py:390
+msgid "Failed to delete: the user does not exist"
+msgstr "삭제 실패: 사용자가 없습니다"
+
+#: seahub/institutions/views.py:213
+msgid "Failed to delete: the user is system administrator"
+msgstr ""
+
+#: seahub/institutions/views.py:217 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s 삭제에 성공했습니다"
-
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
-msgid "Failed to delete: the user does not exist"
-msgstr "삭제 실패: 사용자가 없습니다"
 
 #: seahub/invitations/models.py:95
 #, python-format
@@ -3767,9 +3785,9 @@ msgstr "암호 설정"
 msgid "It is required."
 msgstr "필요합니다."
 
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:58
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:72
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:90
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:65
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:74
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:92
 #, python-format
 msgid "Virus detected on %s"
 msgstr "%s에 바이러스가 있습니다"
@@ -5274,7 +5292,7 @@ msgstr "라이브러리 수정 상태를 볼 수 없습니다"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1880
+#: seahub/views/ajax.py:376 seahub/views/file.py:1862
 msgid "Library does not exist"
 msgstr "라이브러리가 없습니다"
 
@@ -5322,7 +5340,7 @@ msgstr "잘못된 업로드 링크 토큰입니다."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
 #: seahub/views/file.py:1145 seahub/views/file.py:1361
-#: seahub/views/file.py:1889
+#: seahub/views/file.py:1871
 msgid "File does not exist"
 msgstr "파일이 없습니다"
 
@@ -5477,7 +5495,8 @@ msgid "Failed to set %s as admin: user does not exist."
 msgstr "%s님 관리자 설정 실패: 사용자가 없습니다."
 
 #: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:793
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:808
 msgid "Optional"
 msgstr "선택"
 

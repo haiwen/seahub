@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:45+0800\n"
+"POT-Creation-Date: 2022-11-30 10:28+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -167,7 +167,7 @@ msgstr "正在上传一个文件。你确定要离开这当前网页吗?"
 #: frontend/src/components/main-side-nav.js:152
 #: frontend/src/components/org-admin-group-nav.js:23
 #: frontend/src/pages/org-admin/org-department-item.js:318
-#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/org-admin/side-panel.js:56
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/search/advanced-search.js:91
 #: frontend/src/pages/share-admin/libraries.js:320
@@ -315,6 +315,7 @@ msgstr "描述"
 #: frontend/src/components/dialog/org-delete-department-dialog.js:42
 #: frontend/src/components/dialog/org-delete-member-dialog.js:46
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
+#: frontend/src/components/dialog/org-import-users-dialog.js:58
 #: frontend/src/components/dialog/rename-dialog.js:122
 #: frontend/src/components/dialog/rename-dirent.js:124
 #: frontend/src/components/dialog/rename-group-dialog.js:66
@@ -461,6 +462,7 @@ msgstr "取消"
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:233
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:259
 #: frontend/src/pages/org-admin/org-users-search-users.js:166
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:128
 #: frontend/src/pages/search/advanced-search.js:241
 #: frontend/src/pages/search/advanced-search.js:263
 #: frontend/src/pages/sys-admin/groups/search-groups.js:116
@@ -561,6 +563,7 @@ msgid "Clean succeeded."
 msgstr "清除成功。"
 
 #: frontend/src/components/dialog/clean-trash.js:62
+#: frontend/src/pages/org-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:377
 #: frontend/src/repo-folder-trash.js:202
@@ -621,7 +624,7 @@ msgid "Really want to delete your account?"
 msgstr "确定要注销该帐号吗？"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:36
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:60
 #: frontend/src/components/dialog/delete-dialog.js:33
 #: frontend/src/components/dialog/delete-repo-dialog.js:73
@@ -679,7 +682,7 @@ msgstr "确定要注销该帐号吗？"
 #: frontend/src/pages/org-admin/org-groups.js:300
 #: frontend/src/pages/org-admin/org-libraries.js:319
 #: frontend/src/pages/org-admin/org-links.js:215
-#: frontend/src/pages/org-admin/org-user-item.js:173
+#: frontend/src/pages/org-admin/org-user-item.js:157
 #: frontend/src/pages/org-admin/org-user-repos.js:169
 #: frontend/src/pages/sys-admin/departments/group-item.js:64
 #: frontend/src/pages/sys-admin/groups/groups-content.js:170
@@ -768,6 +771,7 @@ msgstr "在此设备下次上线时删除此设备上的文件。"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:48
 #: frontend/src/pages/linked-devices/linked-devices.js:143
 #: frontend/src/pages/linked-devices/linked-devices.js:168
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:136
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:136
 msgid "Unlink"
 msgstr "断开连接"
@@ -881,7 +885,7 @@ msgstr "新建部门资料库"
 #: frontend/src/pages/org-admin/org-user-profile.js:134
 #: frontend/src/pages/org-admin/org-user-repos.js:82
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
-#: frontend/src/pages/org-admin/org-users-list.js:64
+#: frontend/src/pages/org-admin/org-users-list.js:65
 #: frontend/src/pages/org-admin/org-users-search-users.js:34
 #: frontend/src/pages/share-admin/folders.js:49
 #: frontend/src/pages/share-admin/libraries.js:48
@@ -1127,6 +1131,10 @@ msgstr "权限名称"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:187
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:196
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:224
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:58
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:68
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:78
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:88
 #: frontend/src/pages/share-with-ocm/remote-dir-view.js:141
 #: frontend/src/pages/sys-admin/repos/dir-view.js:174
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:59
@@ -1156,6 +1164,10 @@ msgstr "上传"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:126
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:245
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:63
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:83
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:93
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:56
 #: frontend/src/pages/sys-admin/repos/dir-content.js:64
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:64
@@ -1172,17 +1184,19 @@ msgid "Download"
 msgstr "下载"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:163
+msgid "Create"
+msgstr "创建"
+
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:169
 #: frontend/src/translate.js:7
 msgid "Modify"
 msgstr "修改"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:171
-msgid ""
-"Modify includes modify file, create file and folder, move/rename file and "
-"folder"
-msgstr "修改包括修改文件，创建文件和目录，移动/重命名文件和目录"
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:177
+msgid "Modify includes modify file, move/rename file and folder"
+msgstr "修改包括修改文件，移动/重命名文件和目录"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:178
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
 #: frontend/src/components/dialog/internal-link-dialog.js:77
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
@@ -1196,11 +1210,11 @@ msgstr "修改包括修改文件，创建文件和目录，移动/重命名文�
 msgid "Copy"
 msgstr "复制"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:196
 msgid "Preview online"
 msgstr "在线预览"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:196
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:202
 msgid "Generate share link"
 msgstr "生成共享链接"
 
@@ -1512,6 +1526,7 @@ msgid "Zoom out"
 msgstr "放大"
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
+#: frontend/src/components/dialog/org-import-users-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:38
 msgid "Please choose a .xlsx file."
 msgstr "请选择.xlsx后缀文件"
@@ -1521,11 +1536,13 @@ msgid "Import members from a .xlsx file"
 msgstr "通过 .xlsx 文件导入成员"
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
+#: frontend/src/components/dialog/org-import-users-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:53
 msgid "Download an example file"
 msgstr "下载示例文件"
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
+#: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
 msgstr "上传文件"
@@ -1581,6 +1598,7 @@ msgstr "撤消访问权限"
 #: frontend/src/components/dialog/label-repo-state-dialog.js:55
 #: frontend/src/components/dialog/set-org-user-quota.js:40
 #: frontend/src/components/dialog/share-to-invite-people.js:161
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:29
 #: frontend/src/pages/search/main-panel.js:101
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:29
 msgid "It is required."
@@ -1755,7 +1773,6 @@ msgstr "未找到群组"
 #: frontend/src/pages/my-libs/my-libs-deleted.js:150
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:256
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:278
-#: frontend/src/pages/org-admin/org-user-item.js:96
 #: frontend/src/pages/search/main-panel.js:71
 #: frontend/src/pages/search/main-panel.js:157
 #: frontend/src/pages/search/main-panel.js:169
@@ -1806,6 +1823,7 @@ msgstr "选择一个群组"
 #: frontend/src/pages/dashboard/files-activities.js:31
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:182
 msgid "User"
@@ -1819,6 +1837,7 @@ msgstr "创建的文件"
 #: frontend/src/file-history-old.js:242
 #: frontend/src/pages/dashboard/files-activities.js:34
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:163
+#: frontend/src/pages/org-admin/devices/devices-errors.js:52
 #: frontend/src/pages/sys-admin/abuse-reports.js:102
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:48
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
@@ -1998,7 +2017,7 @@ msgstr "新建维基"
 #: frontend/src/pages/org-admin/org-groups.js:294
 #: frontend/src/pages/org-admin/org-libraries.js:313
 #: frontend/src/pages/org-admin/org-links.js:209
-#: frontend/src/pages/org-admin/org-user-item.js:167
+#: frontend/src/pages/org-admin/org-user-item.js:151
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:173
 #: frontend/src/pages/share-admin/folders.js:232
 #: frontend/src/pages/share-admin/libraries.js:246
@@ -2053,6 +2072,8 @@ msgid "email is required"
 msgstr "请输入邮箱"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:140
+#: frontend/src/pages/org-admin/org-users-users.js:232
+#: frontend/src/pages/org-admin/org-users-users.js:233
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:93
 #: frontend/src/pages/sys-admin/users/users.js:378
 #: frontend/src/pages/sys-admin/users/users.js:490
@@ -2073,8 +2094,8 @@ msgid "Confirm Password"
 msgstr "确认密码"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:31
-#: frontend/src/pages/org-admin/org-users-users.js:188
-#: frontend/src/pages/org-admin/org-users-users.js:189
+#: frontend/src/pages/org-admin/org-users-users.js:235
+#: frontend/src/pages/org-admin/org-users-users.js:236
 msgid "Invite user"
 msgstr "邀请用户"
 
@@ -2112,6 +2133,11 @@ msgstr "删除部门"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:232
 msgid "Delete Member"
 msgstr "删除成员"
+
+#: frontend/src/components/dialog/org-import-users-dialog.js:50
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
+msgid "Import users from a .xlsx file"
+msgstr "从.xlsx后缀文件导入用户"
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:79
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:74
@@ -2395,6 +2421,8 @@ msgstr "用户邮箱"
 
 #: frontend/src/components/dialog/share-to-other-server.js:184
 #: frontend/src/pages/groups/group-view.js:293
+#: frontend/src/pages/org-admin/org-user-item.js:82
+#: frontend/src/pages/org-admin/org-users-users.js:145
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:132
 #: frontend/src/pages/sys-admin/users/users-content.js:227
 #: frontend/src/pages/sys-admin/users/users-content.js:268
@@ -2570,10 +2598,6 @@ msgstr "选择一个用户"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:40
 msgid "Transfer Group {placeholder} to"
 msgstr "将群组 {placeholder} 转让给"
-
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
-msgid "Import users from a .xlsx file"
-msgstr "从.xlsx后缀文件导入用户"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:58
 msgid "Date Invalid."
@@ -2788,6 +2812,7 @@ msgstr "发布"
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:37
 #: frontend/src/pages/dashboard/files-activities.js:33
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:103
 #: frontend/src/pages/org-admin/org-logs-file-update.js:117
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
@@ -3076,7 +3101,7 @@ msgstr "所有群组"
 #: frontend/src/components/main-side-nav.js:132
 #: frontend/src/components/main-side-nav.js:139
 #: frontend/src/components/main-side-nav.js:141
-#: frontend/src/pages/org-admin/side-panel.js:68
+#: frontend/src/pages/org-admin/side-panel.js:80
 #: frontend/src/pages/sys-admin/side-panel.js:174
 msgid "Links"
 msgstr "链接"
@@ -3743,6 +3768,7 @@ msgstr "操作"
 
 #: frontend/src/pages/dashboard/files-activities.js:33
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:98
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
 #: frontend/src/repo-folder-trash.js:354 frontend/src/repo-folder-trash.js:406
@@ -3912,7 +3938,7 @@ msgstr "你可以点击上面的“新建资料库”按扭创建资料库。"
 
 #: frontend/src/pages/groups/group-view.js:439
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:246
-#: frontend/src/pages/org-admin/side-panel.js:56
+#: frontend/src/pages/org-admin/side-panel.js:68
 #: frontend/src/pages/sys-admin/groups/group-nav.js:26
 #: frontend/src/pages/sys-admin/groups/groups.js:137
 #: frontend/src/pages/sys-admin/groups/search-groups.js:101
@@ -4086,6 +4112,7 @@ msgid ""
 msgstr "你还没有通过任何（桌面或移动）客户端访问文件。可以配置下客户端，这样可以更方便地访问数据。"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:31
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
 msgid "Platform"
 msgstr "平台"
@@ -4095,6 +4122,7 @@ msgid "Device Name"
 msgstr "设备名称"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:33
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:101
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:46
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:46
@@ -4237,8 +4265,49 @@ msgstr "共享来源"
 msgid "All"
 msgstr "全部"
 
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Version"
+msgstr "版本"
+
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:109
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
+msgid "Successfully unlinked the device."
+msgstr "成功断开连接该设备 。"
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Device"
+msgstr "设备"
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:158
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
+msgid "Successfully cleaned all errors."
+msgstr "成功清除所有错误。"
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:15
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
+msgid "Desktop"
+msgstr "桌面客户端"
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:16
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
+msgid "Mobile"
+msgstr "移动客户端"
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:17
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
+msgid "Errors"
+msgstr "错误"
+
 #: frontend/src/pages/org-admin/org-admin-list.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:65
+#: frontend/src/pages/org-admin/org-users-list.js:66
 #: frontend/src/pages/org-admin/org-users-search-users.js:35
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:50
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:61
@@ -4252,7 +4321,7 @@ msgstr "状态"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-info.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #: frontend/src/pages/sys-admin/orgs/org-users.js:56
@@ -4265,7 +4334,7 @@ msgstr "已用空间"
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-department-item.js:252
 #: frontend/src/pages/org-admin/org-departments-list.js:120
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/departments/department-detail.js:313
 #: frontend/src/pages/sys-admin/departments/departments-list.js:116
@@ -4280,7 +4349,7 @@ msgstr "配额"
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:150
 #: frontend/src/pages/org-admin/org-groups.js:157
 #: frontend/src/pages/org-admin/org-links.js:102
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/departments/department-detail.js:312
 #: frontend/src/pages/sys-admin/departments/departments-list.js:115
@@ -4294,7 +4363,7 @@ msgid "Created At"
 msgstr "创建时间"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:48
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:63
@@ -4304,7 +4373,7 @@ msgstr "上次登录"
 #: frontend/src/pages/org-admin/org-department-item.js:229
 #: frontend/src/pages/org-admin/org-department-item.js:230
 #: frontend/src/pages/org-admin/org-departments-list.js:110
-#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/side-panel.js:74
 #: frontend/src/pages/sys-admin/departments/department-detail.js:290
 #: frontend/src/pages/sys-admin/departments/department-detail.js:291
 #: frontend/src/pages/sys-admin/departments/departments-list.js:106
@@ -4361,7 +4430,7 @@ msgstr "根据名称搜索群组"
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:124
 #: frontend/src/pages/org-admin/org-logs-file-update.js:139
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:104
-#: frontend/src/pages/org-admin/org-users-list.js:89
+#: frontend/src/pages/org-admin/org-users-list.js:91
 #: frontend/src/pages/search/main-panel.js:335
 msgid "Previous"
 msgstr "前一页"
@@ -4372,7 +4441,7 @@ msgstr "前一页"
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:126
 #: frontend/src/pages/org-admin/org-logs-file-update.js:141
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:106
-#: frontend/src/pages/org-admin/org-users-list.js:91
+#: frontend/src/pages/org-admin/org-users-list.js:93
 #: frontend/src/pages/search/main-panel.js:337
 msgid "Next"
 msgstr "下一页"
@@ -4388,6 +4457,8 @@ msgid "Info"
 msgstr "信息"
 
 #: frontend/src/pages/org-admin/org-info.js:50
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:36
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:69
 msgid "Active Users"
@@ -4469,6 +4540,7 @@ msgstr "共享给"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:178
 #: frontend/src/pages/org-admin/org-user-profile.js:146
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/users/user-info.js:102
 msgid "Organization"
@@ -4492,25 +4564,17 @@ msgstr "重置用户密码，请稍等。"
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 
-#: frontend/src/pages/org-admin/org-user-item.js:93
-msgid "Edit succeeded."
-msgstr "权限修改成功。"
-
-#: frontend/src/pages/org-admin/org-user-item.js:97
-msgid "Edit failed."
-msgstr "权限修改失败。"
-
-#: frontend/src/pages/org-admin/org-user-item.js:128
+#: frontend/src/pages/org-admin/org-user-item.js:112
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:89
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:107
 msgid "Failed"
 msgstr "失败"
 
-#: frontend/src/pages/org-admin/org-user-item.js:174
+#: frontend/src/pages/org-admin/org-user-item.js:158
 msgid "ResetPwd"
 msgstr "重置密码"
 
-#: frontend/src/pages/org-admin/org-user-item.js:175
+#: frontend/src/pages/org-admin/org-user-item.js:159
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:137
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:177
 #: frontend/src/pages/sys-admin/users/users-content.js:313
@@ -4532,7 +4596,7 @@ msgid "Space Used / Quota"
 msgstr "已用空间 / 容量 "
 
 #: frontend/src/pages/org-admin/org-users-admins.js:44
-#: frontend/src/pages/org-admin/org-users-users.js:160
+#: frontend/src/pages/org-admin/org-users-users.js:190
 #, javascript-format
 msgid "Successfully deleted %s"
 msgstr "%s 删除成功。"
@@ -4564,7 +4628,10 @@ msgid "Edit succeeded"
 msgstr "权限修改成功"
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:153
-#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:17
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:131
 #: frontend/src/pages/sys-admin/side-panel.js:102
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
@@ -4580,26 +4647,198 @@ msgid "Search Users"
 msgstr "搜索用户"
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:161
-#: frontend/src/pages/org-admin/org-users-users.js:175
+#: frontend/src/pages/org-admin/org-users-users.js:221
 #: frontend/src/pages/sys-admin/users/search-users.js:302
 #: frontend/src/pages/sys-admin/users/users.js:423
 msgid "Search users"
 msgstr "搜索用户"
 
-#: frontend/src/pages/org-admin/org-users-users.js:146
+#: frontend/src/pages/org-admin/org-users-users.js:176
 #, javascript-format
 msgid "successfully added user %s."
 msgstr "成功添加用户 %s。"
 
-#: frontend/src/pages/org-admin/org-users-users.js:185
-#: frontend/src/pages/org-admin/org-users-users.js:186
-msgid "Add user"
-msgstr "添加用户"
+#: frontend/src/pages/org-admin/org-users-users.js:208
+msgid "Edit succeeded."
+msgstr "权限修改成功。"
 
-#: frontend/src/pages/org-admin/side-panel.js:74
+#: frontend/src/pages/org-admin/org-users-users.js:231
+#: frontend/src/translate.js:8
+msgid "Import Users"
+msgstr "导入用户"
+
+#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/sys-admin/side-panel.js:54
+msgid "Statistic"
+msgstr "统计"
+
+#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/sys-admin/side-panel.js:66
+msgid "Devices"
+msgstr "设备"
+
+#: frontend/src/pages/org-admin/side-panel.js:86
 #: frontend/src/pages/sys-admin/side-panel.js:186
 msgid "Logs"
 msgstr "日志"
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:112
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
+msgid "7 Days"
+msgstr "7天"
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:113
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
+msgid "30 Days"
+msgstr "30天"
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:114
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
+msgid "1 Year"
+msgstr "1年"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:45
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
+msgid "Added"
+msgstr "添加的"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:50
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
+msgid "Visited"
+msgstr "访问的"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:55
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
+msgid "Modified"
+msgstr "修改了"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:60
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
+#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
+#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
+msgid "Deleted"
+msgstr "删除的"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:94
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
+msgid "File Operations"
+msgstr "文件操作"
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
+msgid "Storage"
+msgstr "已用空间"
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:18
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
+msgid "Traffic"
+msgstr "流量"
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:19
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
+msgid "Reports"
+msgstr "统计报表"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
+msgid "Invalid month, should be yyyymm."
+msgstr "格式不正确，正确格式为：yyyymm。"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:69
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
+msgid "Monthly User Traffic"
+msgstr "用户月流量"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:122
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
+msgid "Month:"
+msgstr "月份:"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:79
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
+msgid "Create Report"
+msgstr "生成统计报表"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:78
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
+msgid "User Storage"
+msgstr "用户存储空间"
+
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
+msgid "Total Storage"
+msgstr "总存储空间"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:122
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:130
+#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
+#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
+msgid "System"
+msgstr "系统"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:154
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
+msgid "Total Traffic"
+msgstr "总流量"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:167
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
+msgid "Web Traffic"
+msgstr "网页端流量"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:180
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
+msgid "Share Link Traffic"
+msgstr "外链流量"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:193
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
+msgid "Sync Traffic"
+msgstr "同步端流量"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:28
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
+msgid "Sync Upload"
+msgstr "同步上传"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:29
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
+msgid "Sync Download"
+msgstr "同步下载"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:30
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
+msgid "Web Upload"
+msgstr "网页上传"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:31
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
+msgid "Web Download"
+msgstr "网页下载"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:32
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
+msgid "Share link upload"
+msgstr "共享链接上传"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:33
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
+msgid "Share link download"
+msgstr "共享链接下载"
 
 #: frontend/src/pages/search/advanced-search.js:18
 msgid "Document"
@@ -4855,39 +5094,6 @@ msgstr "已添加用户 {user}"
 msgid "Deleted user {user}"
 msgstr "已删除用户 {user}"
 
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Version"
-msgstr "版本"
-
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
-msgid "Successfully unlinked the device."
-msgstr "成功断开连接该设备 。"
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Device"
-msgstr "设备"
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
-msgid "Successfully cleaned all errors."
-msgstr "成功清除所有错误。"
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
-msgid "Desktop"
-msgstr "桌面客户端"
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
-msgid "Mobile"
-msgstr "移动客户端"
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
-msgid "Errors"
-msgstr "错误"
-
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
 msgstr "文件路径"
@@ -5088,14 +5294,6 @@ msgstr "验证码"
 msgid "only show {placeholder}"
 msgstr "只显示 {placeholder}"
 
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
-#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
-#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
-msgid "Deleted"
-msgstr "删除的"
-
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:15
 msgid "Login"
 msgstr "登录"
@@ -5163,13 +5361,6 @@ msgstr "搜索机构"
 msgid "Search libraries by name or ID"
 msgstr "根据名称或 ID 搜索资料库"
 
-#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
-#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
-msgid "System"
-msgstr "系统"
-
 #: frontend/src/pages/sys-admin/repos/search-repos.js:92
 msgid "Search Libraries"
 msgstr "搜索资料库"
@@ -5211,14 +5402,6 @@ msgstr "确定要清空回收站吗？"
 msgid "Clear"
 msgstr "清空"
 
-#: frontend/src/pages/sys-admin/side-panel.js:54
-msgid "Statistic"
-msgstr "统计"
-
-#: frontend/src/pages/sys-admin/side-panel.js:66
-msgid "Devices"
-msgstr "设备"
-
 #: frontend/src/pages/sys-admin/side-panel.js:198
 msgid "File Scan"
 msgstr "文件扫描"
@@ -5235,116 +5418,6 @@ msgstr "软件使用条款"
 #: frontend/src/pages/sys-admin/side-panel.js:246
 msgid "Admin Logs"
 msgstr "管理员日志"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
-msgid "7 Days"
-msgstr "7天"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
-msgid "30 Days"
-msgstr "30天"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
-msgid "1 Year"
-msgstr "1年"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
-msgid "Added"
-msgstr "添加的"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
-msgid "Visited"
-msgstr "访问的"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
-msgid "Modified"
-msgstr "修改了"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
-msgid "File Operations"
-msgstr "文件操作"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
-msgid "Storage"
-msgstr "已用空间"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
-msgid "Traffic"
-msgstr "流量"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
-msgid "Reports"
-msgstr "统计报表"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
-msgid "Invalid month, should be yyyymm."
-msgstr "格式不正确，正确格式为：yyyymm。"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
-msgid "Monthly User Traffic"
-msgstr "用户月流量"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
-msgid "Month:"
-msgstr "月份:"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
-msgid "Create Report"
-msgstr "生成统计报表"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
-msgid "User Storage"
-msgstr "用户存储空间"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
-msgid "Total Storage"
-msgstr "总存储空间"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
-msgid "Total Traffic"
-msgstr "总流量"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
-msgid "Web Traffic"
-msgstr "网页端流量"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
-msgid "Share Link Traffic"
-msgstr "外链流量"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
-msgid "Sync Traffic"
-msgstr "同步端流量"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
-msgid "Sync Upload"
-msgstr "同步上传"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
-msgid "Sync Download"
-msgstr "同步下载"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
-msgid "Web Upload"
-msgstr "网页上传"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
-msgid "Web Download"
-msgstr "网页下载"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
-msgid "Share link upload"
-msgstr "共享链接上传"
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
-msgid "Share link download"
-msgstr "共享链接下载"
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:53
 msgid "Created"
@@ -5843,10 +5916,6 @@ msgstr "你还没有任何上传外链"
 #: frontend/src/translate.js:6
 msgid "You don't have any favorite items yet"
 msgstr "你还没有任何星标项目"
-
-#: frontend/src/translate.js:8
-msgid "Import Users"
-msgstr "导入用户"
 
 #: frontend/src/translate.js:9
 msgid "No connected devices"
