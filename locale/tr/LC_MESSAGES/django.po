@@ -3,16 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Burhan Kaymaz, 2022
 # Cevdet Kaymaz <ck@vr.net.tr>, 2014,2021
 # Evrim Güner <evrim.guner@veriyum.net.tr>, 2014-2015
+# Muhammed Şamil Kıvanç, 2022
+# Şevval ANLI, 2022
 # zheng xie <xiez1989@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:44+0800\n"
+"POT-Creation-Date: 2022-11-30 10:28+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Cevdet Kaymaz <ck@vr.net.tr>, 2014,2021\n"
+"Last-Translator: Muhammed Şamil Kıvanç, 2022\n"
 "Language-Team: Turkish (http://www.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,21 +31,21 @@ msgstr "İsim çok uzun (maksimum 64 karakter)"
 #: seahub/api2/endpoints/admin/account.py:190 seahub/api2/endpoints/user.py:85
 #: seahub/api2/views.py:361 seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "İsim '/' içermemelidir."
 
 #: seahub/api2/endpoints/admin/account.py:205
 msgid "Login id can't be empty"
-msgstr ""
+msgstr "Giriş ID bölümü boş bırakılamaz"
 
 #: seahub/api2/endpoints/admin/account.py:209
 #: seahub/api2/endpoints/admin/users.py:1063
 #, python-format
 msgid "Login id %s already exists."
-msgstr ""
+msgstr "%s zaten kullanımda"
 
 #: seahub/api2/endpoints/admin/account.py:216
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "Departman çok uzun (maksimum 512 karakter)"
 
 #: seahub/api2/endpoints/admin/account.py:232 seahub/forms.py:155
 msgid "Space quota can't be empty"
@@ -50,15 +53,15 @@ msgstr "Alan kotası boş bırakılamaz"
 
 #: seahub/api2/endpoints/admin/account.py:238
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "0'dan büyük veya 0'a eşit bir tam sayı olmalıdır."
 
 #: seahub/api2/endpoints/admin/account.py:242
 #: seahub/api2/endpoints/admin/users_batch.py:176 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "Alan kotası çok düşük (minimum değer 0' dır)"
 
-#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
+#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:233
+#: seahub/organizations/api/admin/users.py:454 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Kota oluşturulamadı: maksimum kota %d MB"
@@ -71,7 +74,7 @@ msgstr "Kota oluşturulamadı: maksimum kota %d MB"
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "İsim sadece harf, rakam, boşluk, tire, nokta, tek tırnak, parantez ve alt çizgi içerebilir."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:136
@@ -82,11 +85,11 @@ msgstr "Bu isimde zaten bir grup var."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:241
 msgid "There are libraries in this department."
-msgstr ""
+msgstr "Bu bölümde kütüphaneler bulunmaktadır."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:245
 msgid "There are sub-departments in this department."
-msgstr ""
+msgstr "Bu bölümde alt bölümler bulunmaktadır."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
@@ -99,7 +102,7 @@ msgstr "Kütüphanem"
 #: seahub/api2/endpoints/groups.py:320
 #, python-format
 msgid "User %s is already group owner."
-msgstr ""
+msgstr "%s kullanıcısı zaten grup sahibi."
 
 #: seahub/api2/endpoints/admin/institution_users.py:170
 #, python-format
@@ -125,18 +128,18 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/libraries.py:407 seahub/api2/views.py:1665
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Kütüphane sahibine devredilemez."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
 #: seahub/api2/endpoints/share_links.py:631
 msgid "There is an associated published library."
-msgstr ""
+msgstr "İlişkili yayınlanmış bir kütüphane var."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
-msgstr ""
+msgstr "%s kullanıcı zaten kütüphane sahibi."
 
 #: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:50
@@ -144,7 +147,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
-msgstr ""
+msgstr "E-posta %s geçersiz."
 
 #: seahub/api2/endpoints/admin/shares.py:211
 #: seahub/api2/endpoints/admin/shares.py:268
@@ -155,12 +158,13 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
-msgstr ""
+msgstr "Bu öğe %s ile paylaşıldı."
 
 #: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:57
 msgid "Time"
 msgstr "Zaman"
@@ -169,6 +173,7 @@ msgstr "Zaman"
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/templates/file_access.html:24
 msgid "User"
@@ -176,33 +181,39 @@ msgstr "Kullanıcı"
 
 #: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
+#: seahub/organizations/api/admin/statistics.py:334
 msgid "Web Download"
-msgstr ""
+msgstr "Web İndirme"
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Sync Download"
-msgstr ""
+msgstr "Senkronize İndirme"
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Link Download"
-msgstr ""
+msgstr "Bağlantı İndirme"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Upload"
-msgstr ""
+msgstr "Web Yükleme"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Sync Upload"
-msgstr ""
+msgstr "Senkronize Yükleme"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:48
+#: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Upload"
-msgstr ""
+msgstr "Bağlantı yükleme"
 
 #: seahub/api2/endpoints/admin/statistics.py:445
 #: seahub/api2/endpoints/group_members.py:539
@@ -216,10 +227,11 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin_search.html:10
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/invitations/templates/invitations/token_view.html:10
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
-#: seahub/views/sysadmin.py:790
+#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:805
 msgid "Email"
 msgstr "Eposta"
 
@@ -233,12 +245,13 @@ msgstr "Eposta"
 #: seahub/institutions/templates/institutions/user_info.html:105
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/sysadmin_extra/views.py:57
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
 #: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
-#: seahub/views/sysadmin.py:792
+#: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:807
 msgid "Name"
 msgstr "İsim"
 
@@ -248,31 +261,34 @@ msgstr "İsim"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/templates/registration/password_set_form.html:16
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
-msgstr ""
+msgstr "İletişim E-postası"
 
 #: seahub/api2/endpoints/admin/statistics.py:446
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
-msgstr ""
+msgstr "Alan Kullanımı"
 
 #: seahub/api2/endpoints/admin/statistics.py:446
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:808
 msgid "Space Quota"
-msgstr ""
+msgstr "Alan Kotası"
 
 #: seahub/api2/endpoints/admin/users.py:472
 #: seahub/api2/endpoints/admin/users.py:499
-#: seahub/organizations/api/admin/users.py:144
+#: seahub/organizations/api/admin/users.py:148
 msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
@@ -280,12 +296,12 @@ msgstr ""
 #: seahub/api2/endpoints/admin/users.py:1035 seahub/base/accounts.py:784
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "Kullanıcı sayısı sınırı aşıyor."
 
 #: seahub/api2/endpoints/admin/users.py:667
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "%(user)s kullanıcısı başarıyla eklendi."
 
 #: seahub/api2/endpoints/admin/users.py:671
 #: seahub/api2/endpoints/admin/users_batch.py:385 seahub/views/sysadmin.py:567
@@ -296,17 +312,17 @@ msgstr "%s'e katılmaya davet edildiniz."
 #: seahub/api2/endpoints/admin/users.py:677
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "%(user)s kullanıcısı başarıyla eklendi. Bir e-postası bildirimi gönderildi."
 
 #: seahub/api2/endpoints/admin/users.py:680
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "%(user)s kullanıcısı başarıyla eklendi. Ancak e-posta hizmeti düzgün yapılandırılmadığı için e-posta bildirimi gönderilemiyor."
 
 #: seahub/api2/endpoints/admin/users.py:1135
-#: seahub/institutions/templates/institutions/useradmin.html:120
+#: seahub/institutions/templates/institutions/useradmin.html:122
 msgid "Edit succeeded"
 msgstr "Düzenleme başarılı"
 
@@ -316,12 +332,12 @@ msgid "Your account on %s is activated"
 msgstr "%s deki hesabınız etkinleştirildi."
 
 #: seahub/api2/endpoints/admin/users.py:1143
-#: seahub/institutions/templates/institutions/useradmin.html:116
+#: seahub/institutions/templates/institutions/useradmin.html:118
 msgid "Edit succeeded, an email has been sent."
 msgstr "Düzenleme başarılı, bir eposta gönderildi."
 
 #: seahub/api2/endpoints/admin/users.py:1146
-#: seahub/institutions/templates/institutions/useradmin.html:118
+#: seahub/institutions/templates/institutions/useradmin.html:120
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
@@ -361,11 +377,11 @@ msgstr "Kullanıcı %(user)s için parola %(passwd)s'ya sıfırlandı. Ama epost
 
 #: seahub/api2/endpoints/admin/users_batch.py:172
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "0'dan büyük veya 0'a eşit bir tam sayı olmalıdır."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "Virüs dosyası bulunamadı."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -383,7 +399,7 @@ msgstr ""
 #: seahub/notifications/models.py:688 seahub/notifications/models.py:705
 #: seahub/notifications/models.py:722 seahub/notifications/models.py:751
 #: seahub/search/views.py:200 seahub/utils/__init__.py:166
-#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:918
+#: seahub/utils/__init__.py:1181 seahub/views/__init__.py:918
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
 #: seahub/wiki/views.py:215 seahub/wiki/views.py:224
 msgid "Internal Server Error"
@@ -407,7 +423,7 @@ msgstr "Geçersiz hedef yolu"
 #: seahub/api2/views.py:2033 seahub/api2/views.py:2438
 #: seahub/api2/views.py:2546
 msgid "Out of quota."
-msgstr ""
+msgstr "Kota dışında."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
@@ -429,7 +445,7 @@ msgstr "İptal edilemedi."
 #: seahub/api2/endpoints/draft_reviewer.py:70
 #: seahub/api2/endpoints/group_owned_libraries.py:937
 msgid "username invalid."
-msgstr ""
+msgstr "Kullanıcı adı geçersiz."
 
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
@@ -437,7 +453,7 @@ msgstr ""
 #: seahub/oauth/views.py:197
 #, python-format
 msgid "User %s not found."
-msgstr ""
+msgstr "%s kullanıcı bulunamadı."
 
 #: seahub/api2/endpoints/draft_reviewer.py:96
 #: seahub/api2/endpoints/file_participants.py:113
@@ -453,46 +469,46 @@ msgstr "İzin reddedildi."
 
 #: seahub/api2/endpoints/file.py:607 seahub/api2/endpoints/file.py:627
 msgid "File is not locked."
-msgstr ""
+msgstr "Dosya kilitli değil."
 
 #: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:713
 msgid "You can not refresh this file's lock."
-msgstr ""
+msgstr "Bu dosyanın kilidini yenileyemezsiniz."
 
 #: seahub/api2/endpoints/file_participants.py:120
 msgid "The participant already exists."
-msgstr ""
+msgstr "Katılımcı zaten var."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr ""
+msgstr "Etiket yalnızca harf, sayı, nokta, kısa çizgi veya alt çizgi içerebilir."
 
 #: seahub/api2/endpoints/group_members.py:110
 #: seahub/api2/endpoints/group_members.py:343
 #: seahub/api2/endpoints/group_members.py:489
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "%s kullanıcısı zaten bir grup üyesidir."
 
 #: seahub/api2/endpoints/group_members.py:116
 #: seahub/api2/endpoints/group_members.py:352
 #: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:322
+#: seahub/organizations/api/admin/users.py:332
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "%s kullanıcısı bir organizasyonda bulunmuyor."
 
 #: seahub/api2/endpoints/group_members.py:119
 #: seahub/api2/endpoints/group_members.py:360
 #: seahub/api2/endpoints/group_members.py:506
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "%s kullanıcısı bir organizasyon kullanıcısıdır."
 
 #: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:464
@@ -501,31 +517,31 @@ msgstr "Grup yok"
 
 #: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
-#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:818
 msgid "Failed to export Excel"
-msgstr ""
+msgstr "Excel dışarı aktarılamadı."
 
 #: seahub/api2/endpoints/group_owned_libraries.py:383
 #: seahub/api2/endpoints/group_owned_libraries.py:659
 msgid "Permission already exists."
-msgstr ""
+msgstr "İzin zaten var."
 
 #: seahub/api2/endpoints/invitation.py:106
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s kullanıcısı %(site_name)s'e erişiminizi iptal etti."
 
 #: seahub/api2/endpoints/invitations.py:54
 #: seahub/api2/endpoints/invitations.py:117
 #: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "E-posta adresinin misafir olarak davet edilmesine izin verilmiyor."
 
 #: seahub/api2/endpoints/invitations.py:59
 #: seahub/api2/endpoints/invitations.py:126
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s zaten davet edildi."
 
 #: seahub/api2/endpoints/invitations.py:66
 #: seahub/api2/endpoints/invitations.py:137
@@ -533,7 +549,7 @@ msgstr ""
 #: seahub/base/accounts.py:794
 #, python-format
 msgid "User %s already exists."
-msgstr ""
+msgstr "%s kullanıcı zaten var."
 
 #: seahub/api2/endpoints/invitations.py:151
 #: seahub/api2/endpoints/repo_share_invitations.py:215
@@ -554,22 +570,22 @@ msgstr "Hata"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Bu kütüphanenin şifresi çözülemedi."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:73 seahub/api2/endpoints/user.py:93
 msgid "Feature disabled."
-msgstr ""
+msgstr "Özellik devre dışı bırakıldı."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Bu kütüphanenin parolası sıfırlanamıyor."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "%s kütüphanesinin yeni parolası"
 
 #: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:3850
 msgid "Wrong password"
@@ -581,25 +597,25 @@ msgstr "Kütüphane şifresi açma hatası"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
-msgstr ""
+msgstr "Hatalı eski parola"
 
 #: seahub/api2/endpoints/repos_batch.py:1258
 #: seahub/api2/endpoints/repos_batch.py:1471
 #: seahub/api2/endpoints/repos_batch.py:1559
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "%s dosyası kilitli."
 
 #: seahub/api2/endpoints/repos_batch.py:1268
 #: seahub/api2/endpoints/repos_batch.py:1481
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "%s klasörü taşınamıyor, lütfen izinlerini kontrol edin."
 
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "%s klasörü silinemiyor, lütfen izinlerini kontrol edin."
 
 #: seahub/api2/endpoints/send_share_link_email.py:102
 #: seahub/share/views.py:185
@@ -625,7 +641,7 @@ msgstr "%s 'de sizinle bir dizin paylaşıldı "
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr ""
+msgstr "Geçersiz e-posta"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:97
 #: seahub/share/views.py:307
@@ -637,19 +653,19 @@ msgstr "%s'de sizinle bir bağlantı yüklemesi paylaşıldı"
 #: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4006
 #: seahub/api2/views.py:4126
 msgid "Password is required."
-msgstr "Şifre gerekli."
+msgstr "Parola gerekli."
 
 #: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:169
 #: seahub/api2/endpoints/webdav_secret.py:57
 msgid "Password is too short."
-msgstr ""
+msgstr "Parola çok kısa"
 
 #: seahub/api2/endpoints/share_links.py:283
 #: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:61
 msgid "Password is too weak."
-msgstr ""
+msgstr "Parola çok zayıf"
 
 #: seahub/api2/endpoints/share_links.py:287
 #: seahub/api2/endpoints/upload_links.py:177
@@ -664,7 +680,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:334 seahub/api2/views.py:3420
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Son kullanma günleri %s'den büyük veya eşit olmalıdır."
 
 #: seahub/api2/endpoints/share_links.py:316
 #: seahub/api2/endpoints/share_links.py:561
@@ -672,7 +688,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:340 seahub/api2/views.py:3426
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Son kullanma günleri %s'den küçük veya eşit olmalıdır."
 
 #: seahub/api2/endpoints/share_links.py:338
 #: seahub/api2/endpoints/share_links.py:585
@@ -680,7 +696,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:364
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "Sona erme süresi %s'den sonra olmalıdır."
 
 #: seahub/api2/endpoints/share_links.py:347
 #: seahub/api2/endpoints/share_links.py:594
@@ -688,22 +704,22 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:373
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "Son kullanma süresi %s'den önce olmalıdır."
 
 #: seahub/api2/endpoints/share_links.py:416
 #: seahub/api2/endpoints/share_links.py:425
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Paylaşım bağlantısı %s zaten var."
 
 #: seahub/api2/endpoints/user.py:99
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "İletişim e-posta adresi %s zaten var."
 
 #: seahub/api2/endpoints/user.py:113
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "Telefon çok uzun (maksimum 100 karakter)"
 
 #: seahub/api2/endpoints/user_avatar.py:49 seahub/utils/error_msg.py:8
 #, python-format
@@ -728,16 +744,16 @@ msgstr "%(nb_avatars)d avatarınız var,  izin verilen maksimum sayı %(nb_max_a
 
 #: seahub/api2/endpoints/webdav_secret.py:53
 msgid "Length of WebDav password should be less than 30."
-msgstr ""
+msgstr "WebDav parolasının uzunluğu 30'dan az olmalıdır."
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr ""
+msgstr "%s başkaları tarafından alındı, lütfen başka bir ad deneyin."
 
 #: seahub/api2/endpoints/wikis.py:197
 msgid "Wiki not found."
-msgstr ""
+msgstr "Wiki bulunamadı."
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Name is required."
@@ -745,7 +761,7 @@ msgstr "İsim gerekli."
 
 #: seahub/api2/endpoints/wikis.py:210
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr ""
+msgstr "İsim yalnızca harf, sayı, boşluk, kısa çizgi veya alt çizgi içerebilir."
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -753,7 +769,7 @@ msgstr "Lütfen giriş yapın."
 
 #: seahub/auth/forms.py:28 seahub/templates/registration/login.html:37
 msgid "Email or Username"
-msgstr ""
+msgstr "E-posta ya da kullanıcı adı"
 
 #: seahub/auth/forms.py:29 seahub/auth/forms.py:229
 #: seahub/base/accounts.py:772
@@ -765,6 +781,7 @@ msgstr ""
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
 #: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:806
 msgid "Password"
 msgstr "Şifre"
 
@@ -772,7 +789,7 @@ msgstr "Şifre"
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
-msgstr ""
+msgstr "Lütfen doğru bir e-posta/kullanıcı adı giriniz. Her iki alanın da büyük/küçük harfe duyarlı olduğunu unutmayın."
 
 #: seahub/auth/forms.py:78 seahub/auth/forms.py:130
 msgid ""
@@ -836,7 +853,7 @@ msgstr "Bu eposta adresiyle zaten bir kullanıcı var."
 
 #: seahub/auth/views.py:150
 msgid "This account has been frozen due to too many failed login attempts."
-msgstr ""
+msgstr "Bu hesap çok fazla başarısız oturum açma girişimi nedeniyle durduruldu."
 
 #: seahub/auth/views.py:291
 msgid "Logged out"
@@ -915,7 +932,7 @@ msgstr "İstenen avatarlar başarıyla silindi."
 #: seahub/base/accounts.py:486
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr ""
+msgstr "%(account)s hesabı %(site)süzerinde dondu."
 
 #: seahub/base/accounts.py:762
 msgid "Email address"
@@ -960,7 +977,7 @@ msgstr "Bu kütüphanedeki dosyalar çevrimiçi görüntülenemez."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "%s üzerinde kotanız dolmak üzere"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -980,33 +997,33 @@ msgstr "IP"
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/sysadmin_extra/views.py:96
 msgid "Device"
-msgstr ""
+msgstr "Cihaz"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/sysadmin_extra/views.py:209 seahub/templates/file_access.html:27
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 #: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library Name"
-msgstr ""
+msgstr "Kütüphane Adı"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 #: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:153
 msgid "Library ID"
-msgstr ""
+msgstr "Kütüphane Kimliği"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 #: seahub/sysadmin_extra/views.py:97 seahub/sysadmin_extra/views.py:154
 msgid "Library Owner"
-msgstr ""
+msgstr "Kütüphane Sahibi"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 #: seahub/sysadmin_extra/views.py:97
 msgid "File Path"
-msgstr ""
+msgstr "Dosya Yolu"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:128
@@ -1020,7 +1037,7 @@ msgstr "Silindi"
 #: seahub/templates/file_access.html:37
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr ""
+msgstr "Anonim Kullanıcı"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
@@ -1053,7 +1070,7 @@ msgstr "En son giriş"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/institutions/views.py:176 seahub/views/sysadmin.py:200
 #: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "Yönetici"
@@ -1066,7 +1083,7 @@ msgstr "LDAP(alınan)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/institutions/templates/institutions/useradmin.html:33
-#: seahub/institutions/templates/institutions/useradmin.html:40
+#: seahub/institutions/templates/institutions/useradmin.html:42
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
 #: seahub/views/sysadmin.py:258
 msgid "Active"
@@ -1074,7 +1091,7 @@ msgstr "Aktif"
 
 #: seahub/base/management/commands/export_users.py:120
 #: seahub/institutions/templates/institutions/useradmin.html:35
-#: seahub/institutions/templates/institutions/useradmin.html:41
+#: seahub/institutions/templates/institutions/useradmin.html:43
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
 #: seahub/views/sysadmin.py:260
 msgid "Inactive"
@@ -1225,27 +1242,27 @@ msgstr[1] ""
 #: seahub/base/templatetags/seahub_tags.py:511
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:513
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:515
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:517
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:519
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:78
 #: seahub/contacts/templates/contacts/contact_list.html:119
@@ -1282,12 +1299,12 @@ msgid "Operations"
 msgstr "İşlemler"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
-#: seahub/institutions/templates/institutions/useradmin.html:37
+#: seahub/institutions/templates/institutions/useradmin.html:38
 msgid "Edit"
 msgstr "Düzenle"
 
 #: seahub/contacts/templates/contacts/contact_list.html:30
-#: seahub/institutions/templates/institutions/useradmin.html:57
+#: seahub/institutions/templates/institutions/useradmin.html:59
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
 #: seahub/sysadmin_extra/views.py:232
 #: seahub/templates/view_shared_upload_link.html:87
@@ -1346,7 +1363,7 @@ msgid "Delete Contact"
 msgstr "Kişiyi sil"
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
-#: seahub/institutions/templates/institutions/useradmin.html:79
+#: seahub/institutions/templates/institutions/useradmin.html:81
 #: seahub/institutions/templates/institutions/useradmin_search.html:72
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1402,12 +1419,12 @@ msgstr "%s başarıyla silindi."
 #: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
 #: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "Hata, lütfen yönetici ile iletişime geçin."
 
 #: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "%s kullanıcısı bulunamadı veya etkin değil."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
@@ -1436,7 +1453,7 @@ msgstr "%s ismi geçerli değil."
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1885
+#: seahub/views/file.py:1867
 msgid "Argument missing"
 msgstr "Bağımsız değişken eksik"
 
@@ -1471,11 +1488,11 @@ msgstr "İsim gerekli"
 
 #: seahub/forms.py:185
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Lütfen geçerli bir numara girin."
 
 #: seahub/forms.py:186
 msgid "Text is required"
-msgstr ""
+msgstr "Metin gereklidir."
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
@@ -1538,7 +1555,7 @@ msgstr "Selam,"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s sizi %(site_name)s üzerinde, %(grp_name)s grubuna katılmaya davet etti:"
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
@@ -1561,7 +1578,7 @@ msgstr "%(site_name)s takımı"
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
 #: seahub/views/ajax.py:427 seahub/views/file.py:1150
-#: seahub/views/file.py:1366 seahub/views/file.py:1894
+#: seahub/views/file.py:1366 seahub/views/file.py:1876
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -1580,29 +1597,29 @@ msgstr "Giriş"
 
 #: seahub/help/templates/help/base.html:31
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Dosya ve klasörleri yönetme"
 
 #: seahub/help/templates/help/base.html:33
 #: seahub/help/templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Dosyalar ile kütüphaneleri yönetme"
 
 #: seahub/help/templates/help/base.html:34
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Silinen dosyaları geri yükleme"
 
 #: seahub/help/templates/help/base.html:35
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Eski dosya sürümlerini bulma"
 
 #: seahub/help/templates/help/base.html:36
 #: seahub/help/templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Kütüphane geçmişi ve anlık görüntüleri"
 
 #: seahub/help/templates/help/base.html:37
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Geçmiş saklama sürelerini ayarlama"
 
 #: seahub/help/templates/help/base.html:38
 #: seahub/help/templates/help/deleting_a_library.html:5
@@ -1612,12 +1629,12 @@ msgstr "Kütüphane Silmek"
 #: seahub/help/templates/help/base.html:39
 #: seahub/help/templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Web App' de dosyaları görüntüleme"
 
 #: seahub/help/templates/help/base.html:40
 #: seahub/help/templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Tam metin dosyası arama"
 
 #: seahub/help/templates/help/base.html:43
 msgid "Sharing and collaboration"
@@ -1626,50 +1643,50 @@ msgstr ""
 #: seahub/help/templates/help/base.html:45
 #: seahub/help/templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Dosya ve klasörleri paylaşma"
 
 #: seahub/help/templates/help/base.html:46
 #: seahub/help/templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Grupları yönetme"
 
 #: seahub/help/templates/help/base.html:47
 msgid "Locking files"
-msgstr ""
+msgstr "Dosyaları kilitleme"
 
 #: seahub/help/templates/help/base.html:48
 msgid "Folder permission"
-msgstr ""
+msgstr "Klasör izni"
 
 #: seahub/help/templates/help/base.html:49
 msgid "Departments sharing"
-msgstr ""
+msgstr "Departman paylaşımı"
 
 #: seahub/help/templates/help/base.html:52
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki ve bilgi yönetimi"
 
 #: seahub/help/templates/help/base.html:54
 #: seahub/help/templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Bir kütüphaneyi Wiki olarak yönetme"
 
 #: seahub/help/templates/help/base.html:57
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Masaüstü istemci ve senkronizasyon"
 
 #: seahub/help/templates/help/base.html:59
 msgid "Install and sync files"
-msgstr ""
+msgstr "Dosyaları yükleyin ve senkronize edin"
 
 #: seahub/help/templates/help/base.html:60
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Mevcut klasörleri senkronize etme"
 
 #: seahub/help/templates/help/base.html:61
 #: seahub/help/templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Alt klasörleri seçerek senkronize edin"
 
 #: seahub/help/templates/help/base.html:62
 #: seahub/help/templates/help/read-only_syncing.html:5
@@ -1678,12 +1695,12 @@ msgstr ""
 
 #: seahub/help/templates/help/base.html:63
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Kütüphanelerin senkronizasyonunu kaldır ve yeniden eşitle"
 
 #: seahub/help/templates/help/base.html:64
 #: seahub/help/templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Senkronizasyon aralığını ayarlama"
 
 #: seahub/help/templates/help/base.html:65
 msgid "Proxy settings"
@@ -1700,31 +1717,31 @@ msgstr "Dosyaları Dışta Tutmak"
 
 #: seahub/help/templates/help/base.html:70
 msgid "Drive client"
-msgstr ""
+msgstr "Drive istemcisi"
 
 #: seahub/help/templates/help/base.html:72
 #: seahub/help/templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Seafile drive istemcisini kullanma"
 
 #: seahub/help/templates/help/base.html:73
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Windows'ta drive istemcisi 2.0 kullanma"
 
 #: seahub/help/templates/help/base.html:76
 msgid "Security and encryption"
-msgstr ""
+msgstr "Güvenlik ve şifreleme"
 
 #: seahub/help/templates/help/base.html:78
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Şifreleri kütüphaneler nasıl kullanılır?"
 
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
 "Once you and your friends sync a shared file library onto your computers, "
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
-msgstr ""
+msgstr "Siz ve arkadaşlarınız paylaşılan bir dosya kütüphanenin bilgisayarlarınızla eşitledikten sonra, kütüphaneye birlikte dosya ekleyebilir, silebilir veya düzenleyebilirsiniz. Kütüphanede yaptığınız her değişiklik, otomatik olarak başkalarının bilgisayarlarıyla eşitlenir."
 
 #: seahub/help/templates/help/conflicts.html:9
 msgid ""
@@ -1740,85 +1757,85 @@ msgstr ""
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
-msgstr ""
+msgstr "Size ait olan bir kütüphaneyi silebilirsiniz. Silinen kütüphane, siz ve Seafile sunucusunun yöneticisi tarafından geri yüklenebilir."
 
 #: seahub/help/templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Bir kütüphane silindikten sonra aşağıdaki etkilere sahiptir:"
 
 #: seahub/help/templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Bu kütüphane içindeki dosya ve klasörlerin paylaşımı tamamen iptal edildi."
 
 #: seahub/help/templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
-msgstr ""
+msgstr "Bu kütüphane ile eşitlenen masaüstü istemcileri artık kütüphane ile eşitlenemez. Ama istemcideki yerel dosyalar silinmez."
 
 #: seahub/help/templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Departmanları yönet ve kullan"
 
 #: seahub/help/templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr ""
+msgstr "Bazı organizasyonlar karmaşık departman hiyerarşisinden oluşur. Bu organizasyonlarda dosya yönetimi için genellikle iki yaygın kullanım durumu vardır:"
 
 #: seahub/help/templates/help/departments.html:8
 msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr ""
+msgstr "Organizasyon için ortak bir dosya paylaşım alanı olmalıdır. Klasör hiyerarşisi departman hiyerarşisini eşlemelidir. Her departmana atanmış ayrı bir klasör veya alan olacaktır."
 
 #: seahub/help/templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr ""
+msgstr "Paylaşım alanının sahipliği ve yönetimi bireysel çalışanlar tarafından değil, organizasyon tarafından olmalıdır. Böylece, çalışan organizasyondan ayrıldığında dosyaların sahipliği değişmez."
 
 #: seahub/help/templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "Departmanlar özelliği, yukarıdaki iki kullanım durumu için tasarlanmıştır. Bu özelliği 3 farklı açıdan tanıtacağız:"
 
 #: seahub/help/templates/help/departments.html:13
 #: seahub/help/templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Sistem yöneticisi"
 
 #: seahub/help/templates/help/departments.html:14
 #: seahub/help/templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Departman yöneticisi"
 
 #: seahub/help/templates/help/departments.html:15
 #: seahub/help/templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Departman üyeleri"
 
 #: seahub/help/templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Sistem yönetici şunları yapabilir: "
 
 #: seahub/help/templates/help/departments.html:20
 #: seahub/help/templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Departman hiyerarşisini ve üyeleri yönetin"
 
 #: seahub/help/templates/help/departments.html:21
 #: seahub/help/templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Departmanlar için depolama kotası atama"
 
 #: seahub/help/templates/help/departments.html:22
 #: seahub/help/templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Departmanlarda paylaşılan kütüphaneler oluşturun ve yönetin"
 
 #: seahub/help/templates/help/departments.html:25
 msgid ""
@@ -1880,15 +1897,15 @@ msgstr ""
 
 #: seahub/help/templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Bölüm kütüphanelerine erişim"
 
 #: seahub/help/templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Kendi bölümündeki üyeleri yönetin"
 
 #: seahub/help/templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Kendi bölümündeki kütüphaneleri yönetin"
 
 #: seahub/help/templates/help/departments.html:42
 msgid ""
@@ -1906,11 +1923,11 @@ msgstr ""
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Kütüphane oluştur veya sil"
 
 #: seahub/help/templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Kütüphane adını değiştir"
 
 #: seahub/help/templates/help/departments.html:48
 msgid ""
@@ -1967,7 +1984,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "Windows 10 için SeaDrive 2.0"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1979,7 +1996,7 @@ msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Sanal sürücüyü indirin ve erişin"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -1995,29 +2012,29 @@ msgstr ""
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "Sanal sürücüye erişmek için Windows dosya gezginini açmanız yeterlidir. Windows dosya gezgininin gezinme bölmesinde bir \"seadrive\" düğümü vardır."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Sanal sürücüdeki dosyalara erişim"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "Kütüphaneler sanal sürücüde 4 kategoriye ayrılır: Kütüphanem, Benimle Paylaşılanlar, Gruplarla Paylaşılanlar ve Herkesle Paylaşılanlar."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "Gördüğünüz gibi, dosya durumu simgeleri Windows dosya gezginine daha çok entegre edilmiştir. Simgeler sürüm 1.0'dan biraz farklıdır."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "Sanal sürücüdeki dosyalar, yerel dosya sisteminde \"yer tutucular\" olarak oluşturulur. 3 sınıf olabilirler:"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
@@ -2047,18 +2064,18 @@ msgid ""
 "Choose \"Always keep on this device\" when you want to pin a file or folder "
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
-msgstr ""
+msgstr "Hangi dosya veya klasörün yerel olarak önbelleğe alınacağını kontrol edebilirsiniz. Bu, bir dosya veya klasöre sağ tıkladığınızda içerik menüsünden değiştirilebilir. Bir dosyayı veya klasörü yerel olarak sabitlemek istediğinizde \"Her zaman bu cihazda tut\"u seçin; bir dosya veya klasör için önbelleği temizlemek istediğinizde \"Yer aç\"ı seçiniz."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "SeaDrive 1.0'da, önbelleğe alınmış dosyalar sunucuda güncellendiklerinde otomatik olarak güncellenmezler. SeaDrive 2.0'da, tam ve sabitlenmiş dosyalar otomatik olarak sunucuyla senkronize halde tutulur."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Dosya İndirme ve Kontrol"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -2066,7 +2083,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "Bir yer tutucu dosyayı her açtığınızda, işletim sistemi otomatik olarak onu indirmeye başlayacaktır. Dosyanın indirilmesi biraz zaman alırsa, dosya gezgininde bir ilerleme çubuğu görüntüleyebilir ve indirmeyi iptal edebilirsiniz."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -2074,16 +2091,16 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr ""
+msgstr "Bazen bir arka plan uygulaması sanal sürücüdeki bir dosyayı indirmeye çalışabilir (Anti-Virüs yazılımı gibi). Bu konuda işletim sistemi tarafından bilgilendirileceksiniz ve indirmeyi iptal etmeyi veya gelecekte uygulamanın otomatik olarak dosya indirmesine izin vermemeyi seçebilirsiniz."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "SSS"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Kütüphaneleri oluşturabilir, silebilir, yeniden adlandırabilir miyim?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -2091,22 +2108,22 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "Evet. Sanal sürücüde kitaplık klasörleri oluşturduğunuzda, sildiğinizde veya yeniden adlandırdığınızda, işlem sunucuya yansıtılacaktır. Kütüphaneleri yalnızca \"Kütüphanelerim\" kategorisi altında oluşturabilir, silebilir, yeniden adlandırabilirsiniz. Diğer kategorilerdeki kütüphanleri oluşturma, silme veya yeniden adlandırma yok sayılır."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Bir kütüphane klasörünün dışında dosya veya klasör oluşturabilir miyim?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "Evet. Ancak bir kütüphane klasörünün dışında oluşturulan dosyalar yok sayılır ve sunucuyla eşitlenmez. \"Kütüphanelerim\" klasörü altındaki yeni bir klasör, yeni bir kütüphane olarak işlenecektir."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Şifrelenmiş kütüphanelere erişebilir miyim?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -2115,11 +2132,11 @@ msgid ""
 "enter the password. Just right click on the SeaDrive icon in the system tray"
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
-msgstr ""
+msgstr "Evet. Varsayılan olarak, şifrelenmiş kütüphaneler eşitlenmez ve sanal sürücüde gösterilmez. Hangi şifreli kütüphanelerin eşitleneceğini manuel olarak seçmeniz ve parolayı girmeniz gerekir. Sistem alanındaki SeaDrive simgesine sağ tıklayın ve \"Şifreli kitaplıkları göster\" seçeneğini seçin. Bir pencere görünecektir ve buradan şifreli bir kütüphaneyi senkronize etmeyi veya senkronizasyonu kaldırmayı seçebilirsiniz."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "SeaDrive 1.0 ile uyumlu mu?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -2128,11 +2145,11 @@ msgid ""
 "files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
-msgstr ""
+msgstr "SeaDrive 2.0, mevcut hesapları ve meta verilerini (C:\\users\\username\\seadrive\\ klasöründe depolanır) kullanır. Ancak SeaDrive 1.0'dan önbelleğe alınmış dosyaları kullanmaz. Bu nedenle, 1.0 sürümündeki yerel olarak önbelleğe alınmış dosyalara 2.0 sürümünde erişilemez. Dosyaları sunucuya yüklemek veya kopyalamak için SeaDrive 1.0'ı yeniden başlatabilirsiniz."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Önbelleği nasıl temizlerim?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -2142,11 +2159,11 @@ msgid ""
 " need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
-msgstr ""
+msgstr "Hangi klasörlerin veya dosyaların yerel olarak önbelleğe alınacağını manuel olarak seçebilirsiniz. Bir klasörün çok fazla yer kapladığını fark ederseniz, o klasörde \"Yer aç\"ı seçin ve o klasördeki tüm önbelleğe alınmış dosyalar temizlenecektir. SeaDrive 1.0'daki gibi önbellek temizleme süresini ve önbellek boyutu sınırını ayarlamanıza gerek yoktur. Yer tutucular yerel diskinizde oluşturulan normal dosyalar olduğundan, önbellek boyutunuz yalnızca bilgisayarınızdaki kullanılabilir disk alanıyla sınırlıdır."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Şifreli kütüphaneler nasıl kullanılır?"
 
 #: seahub/help/templates/help/encrypted_libraries.html:8
 msgid ""
@@ -2155,18 +2172,18 @@ msgid ""
 "libraries are encrypted on client side. The encryption password is not "
 "stored on the server. So even the server administrator can't access your "
 "file contents."
-msgstr ""
+msgstr "Seafile, istemci tarafında uçtan uca veri şifrelemesi sağlar. Bu özelliği kullanmak için şifreli kütüphaneler  oluşturabilirsiniz. Şifrelenmiş kütüphanelerdeki dosya içerikleri, istemci tarafından şifrelenir. Şifreleme parolası sunucuda saklanmaz. Böylece sunucu yöneticisi bile dosya içeriğinize erişemez."
 
 #: seahub/help/templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "Şifreli bir kütüphane oluştururken: "
 
 #: seahub/help/templates/help/encrypted_libraries.html:12
 msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server use this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr ""
+msgstr "Web uygulamasında şifreli bir kütüphane oluşturursanız, parola sunucuya gönderilir. Sunucu, kütüphaneyi oluşturmak için bu parolayı kullanır. Ancak düz metin şifresini saklamaz."
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -2178,31 +2195,31 @@ msgstr ""
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Şifreli kütüphaneye eriştiğinizde: "
 
 #: seahub/help/templates/help/encrypted_libraries.html:19
 msgid ""
 "If you use web app, you have to input the password to the server. The server"
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
-msgstr ""
+msgstr "Web uygulamasını kullanıyorsanız, sunucuya parolayı girmeniz gerekir. Sunucu, parolayı 1 saat boyunca şifreli biçimde önbelleğe alacaktır. Parola diskte saklanmaz."
 
 #: seahub/help/templates/help/encrypted_libraries.html:20
 msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypt and encrypt file contents locally. The plain "
 "text password is not stored on the client disk too."
-msgstr ""
+msgstr "Kütüphaneyi eşitlemek için masaüstü istemcisi kullanırsanız, parola sunucuya gönderilmez. İstemci, dosya içeriğinin yerel olarak şifresini çözer ve şifreler. Düz metin parolası da istemci diskinde saklanmaz."
 
 #: seahub/help/templates/help/encrypted_libraries.html:24
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."
-msgstr ""
+msgstr "Şifreli kütüphanenin yalnızca dosyaların içeriğini şifrelediğini, klasör ve dosya adlarını şifrelemediğini unutmayın."
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Dosya Kilitleme"
 
 #: seahub/help/templates/help/file_locking.html:6
 msgid ""
@@ -2211,23 +2228,23 @@ msgid ""
 "situation nicely with conflict files. But it's often more convenient to lock"
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
-msgstr ""
+msgstr "Bir dosya üzerinde birden fazla kişi işlem yaptığında, muhtemelen aynı anda birden fazla kişi dosyayı değiştirir. Seafile, bu durumu çakışma dosyalarıyla güzel bir şekilde ele alır. Ancak, bir kişi dosyayı özel olarak değiştirmek istediğinde dosyayı kilitlemek genellikle daha uygundur. Seafile Professional Edition, dosya kilitlemeyi destekler."
 
 #: seahub/help/templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "Dosya kilitleme, hem web uygulamasında hem de masaüstü eşitleme istemcisinde çalışır. Onları tek tek tanıtacağız."
 
 #: seahub/help/templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Web uygulamasında dosya kilitleme"
 
 #: seahub/help/templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "Bir dosyayı kilitlemek için web uygulamasında dosyanın klasörüne gidebilir ve \"işlemler\" açılır menüsünü tıklayabilirsiniz."
 
 #: seahub/help/templates/help/file_locking.html:11
 msgid ""
@@ -2235,11 +2252,11 @@ msgid ""
 "the file icon. Moving the mouse on the stop sign, you can see who locks the "
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
-msgstr ""
+msgstr "Dosya kilitlendikten sonra dosya simgesinin köşesinde kırmızı bir \"dur işareti\" görebilirsiniz. Fareyi dur işareti üzerinde hareket ettirerek dosyayı kimin kilitlediğini görebilirsiniz. Ayrıca, sizin tarafınızdan kilitlenmiş bir dosyanın kilidini de açabilirsiniz. Ancak başkaları tarafından kilitlenen dosyaların kilidini açamazsınız."
 
 #: seahub/help/templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Masaüstü istemcisinde dosya kilitleme"
 
 #: seahub/help/templates/help/file_locking.html:14
 msgid ""
@@ -3011,7 +3028,7 @@ msgid ""
 "currently only interested in a sub-folder inside one library. Then you can "
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
-msgstr ""
+msgstr "Seafile sunucusunda çok büyük kütüphaneleriniz olabilir. Ve şu anda yalnızca bir kütüphane içindeki bir alt klasörle ilgileniyorsunuz. Ardından, tüm kütüphaneyi eşitlemek yerine kütüphanedeki bir alt klasörü seçerek eşitleyebilirsiniz."
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -3019,166 +3036,166 @@ msgid ""
 "which hasn't been synced. Navigate into the parent folder of that sub-"
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
-msgstr ""
+msgstr "Bir alt klasörü senkronize etmek için, senkronize edilmemiş bir kütüphaneye çift tıklayarak bulut dosya tarayıcısını açın. Bu alt klasörün ana klasörüne gidin. Alt klasöre sağ tıklayın. Açılır menüden \"Bu klasörü senkronize et\"i seçin."
 
 #: seahub/help/templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
-msgstr ""
+msgstr "Alt klasörü senkronize ettikten sonra, senkronizasyon durumun istemcinin ana penceresindeki \"Senkronize Edilmiş Kütüphaneler\" grubunda görebilirsiniz."
 
 #: seahub/help/templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Kütüphane geçmişi saklama süresini ayarlama"
 
 #: seahub/help/templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "Bir kütüphanenin geçmiş saklama süresi uzunluğu, aşağıdaki özelliklerde geçmiş verilerinize ne kadar süreyle erişebileceğinizi kontrol eder:"
 
 #: seahub/help/templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "Silinen dosyaları geri yükle: saklama süresinden önce silinen dosya ve klasörleri geri yükleyemezsiniz."
 
 #: seahub/help/templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "Dosya sürümleri: saklama süresinden daha eski dosya sürümlerine erişemezsiniz."
 
 #: seahub/help/templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "Kütüphane geçmişi ve anlık görüntüleri: saklama süresinden daha eski kütüphane anlık görüntülerine erişemezsiniz."
 
 #: seahub/help/templates/help/setting_library_history.html:13
 msgid ""
 "The retention period of old files versions can be configured for each "
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
-msgstr ""
+msgstr "Eski dosya sürümlerinin saklama süresi her kitaplık için ayrı ayrı yapılandırılabilir. Tutma süresini ayarlamak için kütüphanenin sahibi olmanız gerekir. Tutma süresi uzunluğunu ayarlamak için:"
 
 #: seahub/help/templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
-msgstr ""
+msgstr "Seafile Web Uygulamasında gezinme panelindeki \"Mine\" sekmesine tıklayın (aşağıdaki ekran görüntüsünde olduğu gibi). Size ait olan tüm kütüphaneler listelenecektir."
 
 #: seahub/help/templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "İmleci kütüphanenin satırına getirin. Bir işlem menüsü görünecektir. Açılır menüden \"Geçmiş Ayarı\"na tıklayın."
 
 #: seahub/help/templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "Açılır iletişim kutusunda, dosya saklama süresinin uzunluğunu ayarlayabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "Seafile' da dosya ve klasörleri başkalarıyla paylaşmanın birkaç yolu vardır:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "Bağlantıları kullanma: Çeşitli ortak çalışanlarla paylaşmak için kullanılabilecek birden çok bağlantı türü vardır."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "Bağlantıları paylaş: Bağlantılara erişimi olan herhangi bir kullanıcı, bağlantının gösterdiği dosya veya klasörlere erişebilir. Giriş yapmanız gerekmez."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "Bağlantıları yükle: Bağlantılara erişimi olan herhangi bir kullanıcı, bağlantının gösterdiği klasöre dosya yükleyebilir. Giriş yapmanız gerekmez."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
-msgstr ""
+msgstr "Dahili bağlantılar: Bu bağlantıya yalnızca dosya veya klasör için okuma iznine sahip oturum açmış kullanıcılar erişebilir. Dahili dosya paylaşımı için kullanılır."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:15
 msgid ""
 "Sharing libraries or folders: used for setting access permissions to a "
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
-msgstr ""
+msgstr "Kütüphaneleri veya klasörleri paylaşma: belirli kullanıcılar veya gruplar için bir kütüphaneye veya klasöre erişim izinlerini ayarlamak için kullanılır. Kullanıcıların klasörlere erişmek için oturum açmaları gerekir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Dosya veya klasörlere paylaşım bağlantıları oluşturma"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:18
 msgid ""
 "Share links are public links to files or folders. They can be accessed by "
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
-msgstr ""
+msgstr "Paylaşım bağlantıları, dosya veya klasörlere yönelik genel bağlantılardır. Seafile hesabı olmayanlar da dahil olmak üzere herkes bunlara erişebilir. Bağlantılarınızı korumak için şifre ve son kullanma süresini de kullanabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "Bağlantıları paylaşmak için erişim izni de ayarlayabilirsiniz. Üç tür izin vardır:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:21
 msgid ""
 "Preview and Download: the file or files in the folder can be downloaded. If "
 "the type of files can be previewd in web browser, they can also be viewed "
 "online (e.g. Office files)."
-msgstr ""
+msgstr "Önizleme ve İndirme: kalsördeki dosya veya dosyalar indirilebilir. Dosya türleri web tarayıcısnda önizlenebilirse, çevrimiçi olarak da görüntülenebilirler (ör. Office dosyaları)."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
-msgstr ""
+msgstr "Yalnızca önizleme: klasördeki dosya veya dosyalar yalnızca web tarayıcısında görüntülenebilir, ancak indirilemez. Bu, gizli verileri paylaşmak için kullanışlıdır."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:23
 msgid ""
 "Edit on cloud and download: Similar to \"Preview and Download\", but if the "
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
-msgstr ""
+msgstr "Bulutta düzenleme ve indirme: \"Önizleme ve İndirme\" ye benzer, ancak dosya web tarayıcısında (ör. bir Office dosyası) düzenlenebiliyorsa, bağlantı erişimi olan herhangi bir kullanıcının dosyayı düzenlemesine izin verilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Seafile web uygulamasında bir paylaşım bağlantısı oluşturmak için:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "Dosya veya klasörü içeren ana klasöre gidin. Farenizi dosya veya klasörün üzerine getirin ve beliren \"Paylaş\" simgesine tıklayın."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:28
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share Link\" tab"
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
-msgstr ""
+msgstr "Paylaşım seçeneklerini içeren bir açılır pencere belirecektir. Sol paneldeki \"Bağlantıyı Paylaş\" sekmesine tıklayın. Ardından bir bağlantı oluşturmak için \"Oluştur\" butonuna tıklayın. Bağlantınızı korumak için şifre, son kullanma süresi ve izin kullanabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:29
 #: seahub/help/templates/help/sharing_files_and_folders.html:42
 msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
-msgstr ""
+msgstr "Başkalarına göndermek için bağlantıyı e-postaya, anlık mesajlaşma istemcisine veya başka bir araca kopyalayın."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Masaüstü istemcilerinden de paylaşım bağlantıları oluşturabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -3186,116 +3203,116 @@ msgid ""
 "Seafile client. The local folder of that library will be opened. Right click"
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
-msgstr ""
+msgstr "Kütüphane eşitlenmişse, Seafile istemcisinin ana pencersinde kütüphaneye çift tıklayın. Bu kütüphanenin yerel klasörü açılacaktır. Bağlantı oluşturmak istediğiniz dosya veya klasöre sağ tıklayın. Açılır menüde \"Seafile\" ve ardından \"Paylaşım bağlantısı oluştur\" u seçin."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:34
 msgid ""
 "If the library is not synced, double click the library in the main window of"
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
-msgstr ""
+msgstr "Kütüphane eşitlenmemişse, Seafile istemcisinin ana penceresinde kütüphaneye çift tıklayın. Bulut dosyası tarayıcı penceresi açılacak ve içinde bir dosya veya klasöre bağlantı oluşturabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Klasörlere yükleme bağlantıları oluşturma"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:37
 msgid ""
 "You can use upload links to collect files from others. You can only create "
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
-msgstr ""
+msgstr "Başkalarından dosya toplamak için yükleme bağlantılarını kullanabilirsiniz. Yalnızca klasörler için yükleme bağlantıları oluşturabilirsiniz. Diğerleri klasörlerdeki dosyaları göremez. Sadece kendilerine dosya yükleyebilirler."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Seafile web uygulamasında bir yükleme bağlantısı oluşturmak için:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "Klasörü içeren ana klasöre gidin. Farenizi klasörün üzerine getirin ve beliren \"Paylaş\" simgesine tıklayın."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:41
 msgid ""
 "A pop-up window will appear with share options. Click the \"Upload Link\" "
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
-msgstr ""
+msgstr "Paylaşım seçeneklerini içeren bir açılır pencere belirecektir. Sol paneldeki \"Bağlantıyı Yükle\" sekmesine tıklayın. Ardından bir bağlantı oluşturmak için \"Oluştur\" butonuna tıklayın. Bağlantınızı koruma için şifre kullanabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Kütüphaneleri ve klasörleri paylaşma"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:45
 msgid ""
 "You can share a library or folder to other registered Seafile users. The "
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
-msgstr ""
+msgstr "Bir kütüphaneyi veya klasörü diğer kayıtlı Seafile kullanıcılarıyla paylaşabilirsiniz. Paylaşılan kütüphaneye veya klasöre, web uygulaması ve Seafile istemcileri ile başkaları tarafından erişilebilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Paylaşım aralığını seçebilirsiniz:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Kullanıcıyla paylaş: Bir veya daha fazla kullanıcıyla paylaşabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Grupla paylaş: Bir grupla paylaşabilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "Kuruluşla paylaş: Özel bir sunucu kullanıyorsanız, bazen sunucudaki tüm üyelerle (kuruluşun tamamı) paylaşmak yararlıdır."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Ayrıca paylaşım için izin de ayarlayabilirsiniz:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "Okuma-Yazma: kullanıcılar dosyaları okuyabilir, yazabilir, yükleyebilir, indirebilir ve senkronize edebilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Salt okunur: kullanıcılar dosyaları okuyabilir, indirebilir ve eşitleyebilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "Yönetici: Yazma izninin yanı sıra kullanıcılar kütüphaneyi de paylaşabilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
-msgstr ""
+msgstr "Çevrimiçi Okuma-Yazma: kullanıcılar dosyaları bir web tarayıcısı aracılığıyla çevrimiçi olarak görüntüleyebilir ve düzenleyebilir. Dosyalar indirilemez. "
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
-msgstr ""
+msgstr "Çevrimiçi Salt Okunur: kullanıcılar dosyaları yalnızca bir web tarayıcısı aracılığıyla çevrimiçi olarak görüntüleyebilir. Dosyalar indirilemez."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Bir kütüphaneyi veya klasörü bir kullanıcı veya bir grupla paylaşmak için:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
-msgstr ""
+msgstr "Farenizi kütüphanenin veya klasörün üzerine getirin ve beliren \"Paylaş\" simgesine tıklayın."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:63
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share to user\" "
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
-msgstr ""
+msgstr "Paylaşım seçeneklerini içeren bir açılır pencere belirecektir. Sol paneldeki \"Kullanıcıyla paylaş\" veya \"Grupla paylaş\" sekmesine tıklayın. Kullanıcıyı veya grubu seçin. Ardından \"Gönder\" e tıklayın."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -3303,7 +3320,7 @@ msgid ""
 "clicking the \"Shared with me\" tab on the left panel in Seafile web app. If"
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
-msgstr ""
+msgstr "Bir kullanıcıyla bir kütüphane veya klasör paylaştıktan sonra, kullanıcı Seafile web uygulamasında sol paneldeki \"Benimle paylaşılanlar\" sekmesine tıklayarak bunu görebilir. Bir grupla paylaşırsanız, grup üyeleri bunu yalnızca gruba giderek görebilir."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -3311,11 +3328,11 @@ msgid ""
 " \"Shared with all\" tab on the left panel. Then click the \"Add Library\" "
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
-msgstr ""
+msgstr "Bir kütüphaneyi tüm kuruluşla paylaşmak için: Seafile web uygulamasında, sol paneldeki \"Herkesle paylaşılan\" sekmesine tıklayın. Ardından \"Kütüphane Ekle\" düğmesine tıklayın. Açılır menüde mevcut bir kütüphaneyi paylaşmayı veya yeni bir kütüphane oluşturup paylaşmayı seçebilirsiniz."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Dahili bağlantılar"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -3324,7 +3341,7 @@ msgid ""
 "way for sharing files among team members who have access to a common "
 "library. You may just copy the link and paste it into an email or IM "
 "software."
-msgstr ""
+msgstr "Bu bağlantıya sadece dosya veya klasör için okuma izni olan oturum açmış kullanıcılar erişebilir. Dahili dosya paylaşımı için kullanılır. Ortak bir kütüphaneye erişimi olan ekip üyeleri arasında dosya paylaşmanın uygun bir yoludur. Bağlantıyı kopyalayıp bir e-postaya veya IM yazılımına yapıştırabilirsiniz."
 
 #: seahub/help/templates/help/sync_interval.html:8
 msgid ""
@@ -3334,11 +3351,11 @@ msgid ""
 "case, you can ask Seafile client to periodically checks for changes in the "
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
-msgstr ""
+msgstr "Genellikle Seafile istemcisi yerel klasördeki değişiklikleri otomatik olarak algılar ve değişiklikleri sunucuya yükler. Ancak, yerel klasör bir Windows ağ paylaşım sürücüsündeyse, Seafile istemcisi değişiklikleri güvenilir bir şekilde algılayamaz. Bu durumda, Seafile istemcisinden yerel klasördeki değişiklikleri periyodik olarak kontrol etmesini isteyebilirsiniz. Bu periyodik senkronizasyonun aralığını ayarlayabilirsiniz. Aralık, saniye biriminde ayarlanır."
 
 #: seahub/help/templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Mevcut bir klasörle senkronizasyon"
 
 #: seahub/help/templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -3357,19 +3374,19 @@ msgstr ""
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
-msgstr ""
+msgstr "Bir kütüphaneyi mevcut bir klasörle senkronize etmek için Seafile istemcisinin ana penceresindeki kütüphaneye sağ tıklayın ve \"Bu kütüphaneyi senkronize et\" seçeneğine tıklayın."
 
 #: seahub/help/templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr ""
+msgstr "Açılır iletişim kutusunda \"Mevcut bir klasörle senkronize et\" bağlantısını tıklayın."
 
 #: seahub/help/templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "Ardından, bu kütüphaneyle senkronize edilecek mevcut bir klasör seçin."
 
 #: seahub/help/templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Senkronizasyonu kaldır ve kütüphaneyi yeniden senkronize et"
 
 #: seahub/help/templates/help/unsync_resync.html:8
 #, python-format
@@ -3388,24 +3405,24 @@ msgid ""
 "these cases, it's usually helpful to \"resync\" the library. Resync means "
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
-msgstr ""
+msgstr "Bazen istemcide senkronizasyonu engelleyen dahili hatalar olabilir. Bu durumlarda, kütüphaneyi \"yeniden eşitlemek\" genellikle faydalıdır. Yeniden eşitleme, eşitlemeyi kaldırmak ve ardından kütüphaneyi hemen aynı klasörle eşitlemek anlamına gelir. Bu eylemi, istemcinin ana penceresinin açılır menüsünde bulabilirsiniz. "
 
 #: seahub/help/templates/help/using_drive_client.html:7
 msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr ""
+msgstr "<a href=\"https://www.seafile.com/en/download/\">İndirme sayfası</a>ndaki talimatlarla bir sürücü istemcisi kurduktan sonra, masaüstünüzdeki \"SeaDrive\" uygulama simgesine çift tıklayarak başlatabilirsiniz."
 
 #: seahub/help/templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
-msgstr ""
+msgstr "Sanal sürücü için bir sürücü harfi seçmeniz istenecektir. Varsayılan olarak \"S:\" kullanılacaktır."
 
 #: seahub/help/templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Ardından Seafile sunucunuzda oturum açmanız istenecektir."
 
 #: seahub/help/templates/help/using_drive_client.html:12
 msgid ""
@@ -3413,7 +3430,7 @@ msgid ""
 "library and file list from the server. The file contents are not downloaded "
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
-msgstr ""
+msgstr "Sunucuda başarılı bir şekilde oturum açıldıktan sonra, Drive istemcisi sunucudan kütüphaneyi ve dosya listesini çekmeye başlar. Dosya içeriği şu anda indirilmiyor. Bu yüzden çok uzun sürmeyecek. Arka planda çalışmasına izin verebilirsiniz. Çekme işlemi tamamlandığında bilgilendirileceksiniz."
 
 #: seahub/help/templates/help/using_drive_client.html:14
 msgid ""
@@ -3422,11 +3439,11 @@ msgid ""
 "drive are libraries on the Seafile server. File contents will be downloaded "
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
-msgstr ""
+msgstr "Sanal sürücü klasörü açılacaktır. Bilgisayarınızdaki sıradan bir sabit disk gibi çalıştığını göreceksiniz. Sanal sürücüdeki en üst düzey klasörler, Seafile sunucusundaki kütüphanelerdir. Bir dosyayı açtığınızda dosya içeriği indirilecektir. Son açılan dosya yerel diskinizde önbelleğe alınacaktır. Tüm önbelleğe alınmış dosyalar yeşil bir onay işaretiyle işaretlenecektir."
 
 #: seahub/help/templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Senkronize durum"
 
 #: seahub/help/templates/help/using_drive_client.html:18
 msgid ""
@@ -3437,12 +3454,12 @@ msgstr ""
 #: seahub/help/templates/help/using_drive_client.html:22
 #: seahub/help/templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Durum"
 
 #: seahub/help/templates/help/using_drive_client.html:23
 #: seahub/help/templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Simge"
 
 #: seahub/help/templates/help/using_drive_client.html:24
 #: seahub/help/templates/help/using_drive_client.html:53
@@ -3451,7 +3468,7 @@ msgstr "Ayrıntılar"
 
 #: seahub/help/templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Sadece bulut içeriği"
 
 #: seahub/help/templates/help/using_drive_client.html:31
 msgid ""
@@ -3464,79 +3481,79 @@ msgstr ""
 
 #: seahub/help/templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Senkronize edilmiş içerik"
 
 #: seahub/help/templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
-msgstr ""
+msgstr "Senkronize edilen içerik indirilir ve bilgisayarınızın sabit sürücüsüne kaydedilir. Bu dosyaları doğrudan bilgisayarınızdaki uygulamalardan düzenleyebilirsiniz."
 
 #: seahub/help/templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Kısmen senkronize edilmiş içerik"
 
 #: seahub/help/templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
-msgstr ""
+msgstr "Kısmen eşitlenmiş klasörler, hem eşitlenmiş hem de yalnızca bulutta bulunan dosya veya klasörleri içerir."
 
 #: seahub/help/templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Özel Durumlar"
 
 #: seahub/help/templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
-msgstr ""
+msgstr "Halihazırda yerel bilgisayarla senkronize edilmiş dosyalar için, normal \"senkronize edilmiş\" durumun yanı sıra diğer 3 özel durumda olabilirler."
 
 #: seahub/help/templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Diğer kullanıcı tarafından kilitlendi"
 
 #: seahub/help/templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
-msgstr ""
+msgstr "Dosya, sunucudaki başka bir kullanıcı tarafından kilitlendi. Dosyayı yalnızca salt okunur modda açabilirsiniz. Dosyayı değiştiremez, silemez, yeniden adlandıramaz veya taşıyamazsınız."
 
 #: seahub/help/templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Benim tarafımdan kilitlendi"
 
 #: seahub/help/templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Dosya sizin tarafınızdan kilitlendi. Bu, başkalarının dosyayı değiştirmesini önler."
 
 #: seahub/help/templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Salt okunur"
 
 #: seahub/help/templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr ""
+msgstr "Bu dosyanın klasörü veya kütüphanesi, sizinle salt okunur izniyle paylaşılmaktadır. Dosyayı değiştiremez, silemez veya taşıyamazsınız."
 
 #: seahub/help/templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
-msgstr ""
+msgstr "Drive istemcisi, arka planda kullanılmayan önbelleğe alınmış dosyaları düzenli olarak temizler. Yerel önbellek alanını da sınırlayabilirsiniz."
 
 #: seahub/help/templates/help/using_drive_client.html:76
 msgid ""
 "You can log into multiple accounts in the Drive client. However, only files "
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
-msgstr ""
+msgstr "Drive istemcisinden birden fazla hesapta oturum açabilirsiniz. Ancak sanal sürücüde yalnızca geçerli seçili sunucudaki dosyalar gösterilecektir. Hesaplar arasında geçiş yapabilirsiniz."
 
 #: seahub/help/templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. Neden kök klasörde yeni dosyalar oluşturamıyorum veya klasörleri silemiyorum?"
 
 #: seahub/help/templates/help/using_drive_client.html:81
 msgid ""
@@ -3546,21 +3563,21 @@ msgid ""
 "files in root folder. Since the top level folders in the virtual drive "
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
-msgstr ""
+msgstr "Sanal sürücünün kök klasörü yalnızca kütüphane klasörlerini içerir. Seafile, yalnızca kütüphanelerin içindeki dosyaları eşitleyebilir. Kök klasördeki dosyalar Seafile sunucusuna yüklenemez.Bu yüzden kök klasörde dosya oluşturmayı desteklemek mantıklı değildir. Sanal sürücüdeki en üst düzay klasörler kütüphaneleri temsil ettiğinden, kullanıcıların yanlışlıkla kütüphanelerini silmelerini istemeyiz. Bu nedenle Drive istemcisi, üst düzey klasörlerin silinmesini desteklemez."
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
-msgstr ""
+msgstr "Bazı dosya türleri, Seafile Web Uygulaması içinde doğrudan açılabilir ve görüntülenebilir. Şu anda bunlar:"
 
 #: seahub/help/templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Görüntü dosyaları"
 
 #: seahub/institutions/templates/institutions/base.html:7
 msgid "Exit admin panel"
-msgstr ""
+msgstr "Yönetici panelinden çık"
 
 #: seahub/institutions/templates/institutions/base.html:13
 #: seahub/templates/base.html:32 seahub/templates/home_base.html:9
@@ -3587,11 +3604,11 @@ msgstr "Kütüphaneler"
 
 #: seahub/institutions/templates/institutions/info.html:16
 msgid "Activated Users"
-msgstr ""
+msgstr "Aktif Kullanıcılar"
 
 #: seahub/institutions/templates/institutions/info.html:16
 msgid "Total Users"
-msgstr ""
+msgstr "Toplam Kullanıcı"
 
 #: seahub/institutions/templates/institutions/info.html:23
 #: seahub/institutions/templates/institutions/user_info.html:17
@@ -3640,7 +3657,7 @@ msgstr "Kota Oluştur"
 
 #: seahub/institutions/templates/institutions/user_info.html:50
 msgid "Available quota:"
-msgstr ""
+msgstr "Kullanılabilir kota:"
 
 #: seahub/institutions/templates/institutions/user_info.html:62
 #: seahub/search/templates/search_results.html:39
@@ -3665,11 +3682,11 @@ msgstr "kütüphane simgesi"
 
 #: seahub/institutions/templates/institutions/user_info.html:96
 msgid "This user has not created any libraries"
-msgstr ""
+msgstr "Bu kullanıcı herhangi bir kütüphane oluşturmadı"
 
 #: seahub/institutions/templates/institutions/user_info.html:121
 msgid "This user has not created or joined any groups"
-msgstr ""
+msgstr "Bu kullanıcı herhangi bir grup oluşturmadı veya katılmadı"
 
 #: seahub/institutions/templates/institutions/user_info.html:146
 msgid "Space Quota can't be empty"
@@ -3680,21 +3697,21 @@ msgstr "Kota Alanı boş bırakılamaz"
 msgid "Create At / Last Login"
 msgstr "Oluştur / Son Giriş"
 
-#: seahub/institutions/templates/institutions/useradmin.html:66
+#: seahub/institutions/templates/institutions/useradmin.html:68
 #: seahub/institutions/templates/institutions/useradmin_search.html:63
 msgid "Empty"
 msgstr "Boş"
 
-#: seahub/institutions/templates/institutions/useradmin.html:70
+#: seahub/institutions/templates/institutions/useradmin.html:72
 msgid "Activating..., please wait"
 msgstr "Aktive ediyor...,lütfen bekleyin"
 
-#: seahub/institutions/templates/institutions/useradmin.html:78
+#: seahub/institutions/templates/institutions/useradmin.html:80
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
 msgid "Delete User"
 msgstr "Kullanıcıyı sil"
 
-#: seahub/institutions/templates/institutions/useradmin.html:128
+#: seahub/institutions/templates/institutions/useradmin.html:130
 msgid "Edit failed."
 msgstr "Düzenleme başarısız."
 
@@ -3706,27 +3723,31 @@ msgstr "Kullanıcı Ara"
 msgid "Result"
 msgstr "Sonuç"
 
-#: seahub/institutions/views.py:160
+#: seahub/institutions/views.py:174
 msgid "Owner"
 msgstr "Sahip"
 
-#: seahub/institutions/views.py:164
+#: seahub/institutions/views.py:178
 msgid "Member"
+msgstr "Üye"
+
+#: seahub/institutions/views.py:209 seahub/views/sysadmin.py:390
+msgid "Failed to delete: the user does not exist"
+msgstr "Silinemedi: kullanıcı yok"
+
+#: seahub/institutions/views.py:213
+msgid "Failed to delete: the user is system administrator"
 msgstr ""
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
+#: seahub/institutions/views.py:217 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s silindi"
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
-msgid "Failed to delete: the user does not exist"
-msgstr "Silinemedi: kullanıcı yok"
-
 #: seahub/invitations/models.py:95
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "%(site_name)s'a katılmaya davetlisiniz."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -3753,7 +3774,7 @@ msgstr "Selam,"
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s sizi %(site_name)s'a katılmanız için davet etti. Lütfen aşağıdaki bağlantıya tıklayın:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
@@ -3762,22 +3783,22 @@ msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
-msgstr ""
+msgstr "Hesap Oluştur"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr ""
+msgstr "Parolanızı oluşturun"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 msgid "It is required."
 msgstr "Gerekli."
 
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:58
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:72
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:90
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:65
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:74
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:92
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "%s'de virüs tespit edildi"
 
 #: seahub/notifications/management/commands/send_dingtalk_notifications.py:167
 #: seahub/notifications/templates/notifications/notice_email.html:9
@@ -3793,73 +3814,73 @@ msgstr[1] ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Renamed library"
-msgstr ""
+msgstr "Yeniden adlandırılan kütüphane"
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Deleted library"
-msgstr ""
+msgstr "Silinen kütüphane"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Restored library"
-msgstr ""
+msgstr "Geri yüklenen kütüphane"
 
 #: seahub/notifications/management/commands/send_file_updates.py:122
 msgid "Removed all items from trash."
-msgstr ""
+msgstr "Bütün öğeler çöp kutusundan kaldırıldı."
 
 #: seahub/notifications/management/commands/send_file_updates.py:124
 #, python-format
 msgid "Removed items older than %s days from trash."
-msgstr ""
+msgstr "%s günden eski öğeler çöp kutusundan kaldırıldı."
 
 #: seahub/notifications/management/commands/send_file_updates.py:132
 msgid "Created file"
-msgstr ""
+msgstr "Oluşturulan dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Deleted file"
-msgstr ""
+msgstr "Silinen dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Restored file"
-msgstr ""
+msgstr "Geri yüklenen dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Renamed file"
-msgstr ""
+msgstr "Yeniden adlandırılan dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:147
 msgid "Moved file"
-msgstr ""
+msgstr "Taşınan dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:153
 msgid "Updated file"
-msgstr ""
+msgstr "Güncellenen dosya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:160
 msgid "Created folder"
-msgstr ""
+msgstr "Oluşturulan klasör"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Deleted folder"
-msgstr ""
+msgstr "Silinen klasör"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Restored folder"
-msgstr ""
+msgstr "Geri yüklenen klasör"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Renamed folder"
-msgstr ""
+msgstr "Yeniden adlandırılan klasör"
 
 #: seahub/notifications/management/commands/send_file_updates.py:174
 msgid "Moved folder"
-msgstr ""
+msgstr "Taşınan klasör"
 
 #: seahub/notifications/management/commands/send_file_updates.py:268
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "%s'de yeni dosya güncellemeleri"
 
 #: seahub/notifications/management/commands/send_notices.py:353
 #, python-format
@@ -3869,7 +3890,7 @@ msgstr "%s -'de yeni bildirim"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:223
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "%(site_name)s'da %(num)s yeni bildiriminiz var:\n"
 
 #: seahub/notifications/models.py:480
 #, python-format
@@ -3898,28 +3919,28 @@ msgstr "Kullanıcı <a href='%(user_profile)s'>%(username)s</a> şu gruba <a hre
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
-msgstr ""
+msgstr "<a href='%(user_profile)s'>%(group_staff)s</a> kullanıcısı sizi <a href='%(href)s'>%(group_name)s</a> grubuna ekledi"
 
 #: seahub/notifications/models.py:676
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>%(file_name)s</a> dosyasına %(author)s kullanıcısından yeni bir yorum var"
 
 #: seahub/notifications/models.py:693
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Taslak#%(draft_id)s</a> için %(author)s kullanıcısından yeni bir yorum var"
 
 #: seahub/notifications/models.py:710
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s kullanıcısı <a href='%(file_url)s'>taslak#%(draft_id)s</a> için size bir istek gönderdi"
 
 #: seahub/notifications/models.py:733
 #: seahub/notifications/templates/notifications/notice_email.html:63
@@ -3927,14 +3948,14 @@ msgstr ""
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr ""
+msgstr "Misafir %(user)s <a href=\"%(url_base)s%(inv_url)s\">davetinizi</a> %(time)s 'de kabul etti."
 
 #: seahub/notifications/models.py:757
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s<a href=\"%(repo_url)s\">%(repo_name)s</a> isimli bir kütüphaneyi size aktardı."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -4000,14 +4021,14 @@ msgstr "Kullanıcı <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> <a href=\"
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr ""
+msgstr "<a href=\"%(url_base)s%(user_url)s\">%(user)s</a> kullanıcısı sizi <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a> grubuna ekledi."
 
 #: seahub/notifications/templates/notifications/notice_email.html:60
 #, python-format
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr ""
+msgstr "<a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> dosyasında %(author)s kullanıcısından yeni bir yorum var"
 
 #: seahub/notifications/templates/notifications/notice_email.html:73
 msgid "Go check out at the following page:"
@@ -4018,7 +4039,7 @@ msgstr "Aşağıdaki sayfayı inceleyin:"
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s sizinle <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> adında bir kütüphane paylaştı."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -4026,7 +4047,7 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a> grubuyla <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> adında bir kütüphane paylaştı."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
@@ -4041,18 +4062,18 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a> grubuyla <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> adında bir kütüphane paylaştı. "
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in file <a href=\"%(url_base)s%(file_url)s\" "
 "target=\"_blank\">%(file_name)s</a> during regular scanning."
-msgstr ""
+msgstr "Normal tarama sırasında <a href=\"%(url_base)s%(file_url)s\" target=\"_blank\">%(file_name)s</a> dosyasında virüs tespit edildi."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning. Please check the report at:"
-msgstr ""
+msgstr "Normal taramada virüs tespit edildi. Lütfen şuradan raporu kontrol edin:"
 
 #: seahub/notifications/templates/notifications/user_notification_list_react.html:5
 msgid "Notifications"
@@ -4086,7 +4107,7 @@ msgstr "Tüyo: İkincisi daha güvenli, ama tüm tarayıcılar tarafından iyi d
 
 #: seahub/organizations/forms.py:40 seahub/share/views.py:447
 msgid "Email address is not valid"
-msgstr ""
+msgstr "E-posta adresi geçerli değil"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:8
@@ -4105,15 +4126,15 @@ msgstr "Tekrar hoşgeldiniz, zaten kaydoldunuz."
 
 #: seahub/organizations/templates/organizations/org_register.html:13
 msgid "Organization Name"
-msgstr ""
+msgstr "Organizasyon Adı"
 
 #: seahub/organizations/templates/organizations/org_register.html:27
 msgid "Admin Name"
-msgstr ""
+msgstr "Admin Adı"
 
 #: seahub/organizations/templates/organizations/org_register.html:32
 msgid "Admin Email"
-msgstr ""
+msgstr "Admin E-postası"
 
 #: seahub/organizations/templates/organizations/org_register.html:38
 #: seahub/templates/registration/password_change_form.html:21
@@ -4162,7 +4183,7 @@ msgstr "İsim:"
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
-msgstr ""
+msgstr "Parola Oluştur"
 
 #: seahub/profile/templates/profile/set_profile_react.html:24
 msgid "Update"
@@ -4207,7 +4228,7 @@ msgstr "gelişmiş"
 
 #: seahub/search/templates/search_results.html:56
 msgid "No result found"
-msgstr ""
+msgstr "Sonuç bulunamadı"
 
 #: seahub/search/templates/search_results.html:58
 #, python-format
@@ -4222,40 +4243,40 @@ msgstr "Dizin simgesi"
 
 #: seahub/search/templates/search_results.html:168
 msgid "Invalid start date, should be yyyy-mm-dd"
-msgstr ""
+msgstr "Geçersiz başlangıç tarihi, yyyy-mm-dd şeklinde olmalıdır"
 
 #: seahub/search/templates/search_results.html:172
 msgid "Invalid end date, should be yyyy-mm-dd"
-msgstr ""
+msgstr "Geçersiz bitiş tarihi, yyyy-mm-dd şeklinde olmalıdır"
 
 #: seahub/search/templates/search_results.html:176
 msgid "Start date should be earlier than end date."
-msgstr ""
+msgstr "Başlangıc tarihi, bitiş tarihinden önce olmalıdır."
 
 #: seahub/search/views.py:33
 msgid "Invalid argument."
-msgstr ""
+msgstr "Geçersiz argüman."
 
 #: seahub/search/views.py:81 seahub/search/views.py:89
 msgid "Invalid date."
-msgstr ""
+msgstr "Geçersiz tarih."
 
 #: seahub/search/views.py:97 seahub/search/views.py:105
 msgid "Invalid file size."
-msgstr ""
+msgstr "Geçersiz dosya boyutu."
 
 #: seahub/search/views.py:112
 msgid "Invalid file size range."
-msgstr ""
+msgstr "Geçersiz dosya boyutu aralığı."
 
 #: seahub/search/views.py:117
 msgid "Invalid date range."
-msgstr ""
+msgstr "Geçersiz tarih aralığı."
 
 #: seahub/search/views.py:166
 #, python-format
 msgid "Library %s not found."
-msgstr ""
+msgstr "%s kütüphanesi bulunamadı."
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
@@ -4276,27 +4297,27 @@ msgstr "Lüfen doğru bir şifre giriniz."
 #: seahub/share/templates/share/audit_code_email.html:11
 #, python-format
 msgid "Your code is %(code)s, this code will be valid for one hour."
-msgstr ""
+msgstr "Kodunuz %(code)s, bu kod bir saat boyunca geçerli olacaktır."
 
 #: seahub/share/templates/share/share_link_audit.html:6
 msgid "Email Verification"
-msgstr ""
+msgstr "E-posta Doğrulama"
 
 #: seahub/share/templates/share/share_link_audit.html:8
 msgid "Please provide your email address to continue."
-msgstr ""
+msgstr "Devam etmek için lütfen e-posta adresinizi girin"
 
 #: seahub/share/templates/share/share_link_audit.html:11
 msgid "Get code"
-msgstr ""
+msgstr "Kod al"
 
 #: seahub/share/templates/share/share_link_audit.html:13
 msgid "Verification code"
-msgstr ""
+msgstr "Doğrulama kodu"
 
 #: seahub/share/templates/share/share_link_audit.html:63
 msgid "A verification code has been sent to the email."
-msgstr ""
+msgstr "E-postaya bir doğrulama kodu gönderildi."
 
 #: seahub/share/views.py:206 seahub/share/views.py:320
 msgid "Internal server error, or please check the email(s) you entered"
@@ -4330,21 +4351,21 @@ msgstr "Lüten girdiğiniz epostaları kontrol edin."
 
 #: seahub/share/views.py:456
 msgid "Share link is not found"
-msgstr ""
+msgstr "Paylaşım linki bulunamadı"
 
 #: seahub/share/views.py:464
 msgid "Verification code for visiting share links"
-msgstr ""
+msgstr "Paylaşım bağlantılarını ziyaret etmek için doğrulama kodu"
 
 #: seahub/share/views.py:475
 msgid "Failed to send a verification code, please try again later."
-msgstr ""
+msgstr "Doğrulama kodu gönderilemedi, lütfen daha sonra tekrar deneyiniz."
 
 #: seahub/sysadmin_extra/views.py:42 seahub/sysadmin_extra/views.py:53
 #: seahub/sysadmin_extra/views.py:91 seahub/sysadmin_extra/views.py:148
 #: seahub/sysadmin_extra/views.py:203
 msgid "Failed to export excel, invalid start or end date"
-msgstr ""
+msgstr "Excel dışa aktarılamadı, geçersiz başlangıç ve bitiş tarihi"
 
 #: seahub/sysadmin_extra/views.py:61 seahub/views/sysadmin.py:703
 msgid "Success"
@@ -4357,16 +4378,16 @@ msgstr "Başarısız"
 #: seahub/sysadmin_extra/views.py:67 seahub/sysadmin_extra/views.py:124
 #: seahub/sysadmin_extra/views.py:179 seahub/sysadmin_extra/views.py:256
 msgid "Failed to export excel"
-msgstr ""
+msgstr "Excel dışa aktarılamadı"
 
 #: seahub/sysadmin_extra/views.py:85 seahub/sysadmin_extra/views.py:142
 #: seahub/sysadmin_extra/views.py:197
 msgid "Failed to export excel, this feature is only in professional version."
-msgstr ""
+msgstr "Excel dışa aktarılamadı, bu özellikle yalnızca profesyonel sürümdedir."
 
 #: seahub/sysadmin_extra/views.py:154 seahub/sysadmin_extra/views.py:208
 msgid "Action"
-msgstr ""
+msgstr "Aksiyon"
 
 #: seahub/sysadmin_extra/views.py:208
 msgid "From"
@@ -4382,7 +4403,7 @@ msgstr "İzin"
 
 #: seahub/sysadmin_extra/views.py:209
 msgid "Folder Path"
-msgstr ""
+msgstr "Dosya Yolu"
 
 #: seahub/sysadmin_extra/views.py:223
 msgid "Organization"
@@ -4394,7 +4415,7 @@ msgstr "Ekle"
 
 #: seahub/sysadmin_extra/views.py:230
 msgid "Modify"
-msgstr ""
+msgstr "Değiştir"
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
@@ -4402,11 +4423,11 @@ msgstr "Üzgünüm, ama istediğiniz sayfa bulunamadı."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "Dosya, İşbirliği, Takım, Organizasyon"
 
 #: seahub/templates/base.html:41
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Yan Gezinme Menüsü"
 
 #: seahub/templates/base.html:87
 msgid "No"
@@ -4449,7 +4470,7 @@ msgstr "Cihaz Adı"
 
 #: seahub/templates/file_access.html:82
 msgid "This file has (apparently) not been accessed yet"
-msgstr ""
+msgstr "Bu dosyaya (görünüşe göre) henüz erişilmedi"
 
 #: seahub/templates/home_base.html:11
 msgid "Files"
@@ -4461,15 +4482,15 @@ msgstr "Kütüphanelerim"
 
 #: seahub/templates/home_base.html:16
 msgid "Shared with me"
-msgstr ""
+msgstr "Benimle paylaşılanlar"
 
 #: seahub/templates/home_base.html:18
 msgid "Shared with all"
-msgstr ""
+msgstr "Herkesle paylaşılanlar"
 
 #: seahub/templates/home_base.html:23
 msgid "Shared with groups"
-msgstr ""
+msgstr "Gruplarla paylaşılanlar"
 
 #: seahub/templates/home_base.html:26
 msgid "All Groups"
@@ -4477,11 +4498,11 @@ msgstr "Tüm Gruplar"
 
 #: seahub/templates/home_base.html:38
 msgid "Tools"
-msgstr ""
+msgstr "Araçlar"
 
 #: seahub/templates/home_base.html:41
 msgid "Favorites"
-msgstr ""
+msgstr "Favoriler"
 
 #: seahub/templates/home_base.html:43
 msgid "Activities"
@@ -4493,15 +4514,15 @@ msgstr ""
 
 #: seahub/templates/home_base.html:50
 msgid "Linked Devices"
-msgstr ""
+msgstr "Bağlı Cihazlar"
 
 #: seahub/templates/home_base.html:53
 msgid "Invite People"
-msgstr ""
+msgstr "İnsanları Davet Et"
 
 #: seahub/templates/home_base.html:56
 msgid "Drafts"
-msgstr ""
+msgstr "Taslaklar"
 
 #: seahub/templates/home_base.html:59
 msgid "Share Admin"
@@ -4579,7 +4600,7 @@ msgstr "Giriş yap"
 
 #: seahub/templates/registration/login.html:42
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
 #: seahub/templates/registration/login.html:58
 msgid "Incorrect email or password"
@@ -4592,7 +4613,7 @@ msgstr "%(remember_days)s gün için beni hatırla"
 
 #: seahub/templates/registration/login.html:69
 msgid "Forgot password?"
-msgstr ""
+msgstr "Parolanızı mı unuttunuz?"
 
 #: seahub/templates/registration/login.html:76
 msgid "Single Sign-On"
@@ -4608,7 +4629,7 @@ msgstr "Güvenlik kodu yenileme başarısız, lütfen daha sonra tekrar deneyin.
 
 #: seahub/templates/registration/login.html:155
 msgid "Email or username cannot be blank"
-msgstr ""
+msgstr "E-posta veya kullanıcı adı boş bırakılamaz"
 
 #: seahub/templates/registration/login.html:159
 #: seahub/templates/registration/password_change_form.html:66
@@ -4646,7 +4667,7 @@ msgstr "Şifre Değiştirme"
 
 #: seahub/templates/registration/password_change_form.html:14
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Devam etmeden önce lütfen parolanızı güncelleyin."
 
 #: seahub/templates/registration/password_change_form.html:16
 msgid "Current Password"
@@ -4742,16 +4763,16 @@ msgstr "Yeni şifre oluşturmanız için size bir eposta gönderdik."
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr ""
+msgstr "Bu e-postayı %(site_name)s'un yöneticisi olduğunuz ve yeni kullanıcı %(reg_email)s katıldığı için alıyorsunuz. "
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr ""
+msgstr "Yeni hesabı görüntülemek için lütfen aşağıdaki bağlantıya tıklayın:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
 msgid "New account created on %(site_name)s"
-msgstr ""
+msgstr "Yeni hesap %(site_name)s'da oluşturuldu."
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
@@ -4772,7 +4793,7 @@ msgstr "Kayıt tamamlandı, lütfen yöneticinin hesabınızı etkinleştirmesi 
 
 #: seahub/templates/registration/registration_complete.html:15
 msgid "Signup function is not enabled."
-msgstr ""
+msgstr "Kayıt işlevi etkin değil."
 
 #: seahub/templates/registration/registration_form.html:87
 msgid "Email cannot be blank"
@@ -4782,26 +4803,26 @@ msgstr "Eposta boş bırakılamaz"
 #: seahub/work_weixin/views.py:110
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Hata, yeni kullanıcı kaydına izin verilmiyor, lütfen yönetici ile iletişime geçin."
 
 #: seahub/templates/remote_user/not_active.html:6
 #: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:131
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr ""
+msgstr "Hesabınız başarıyla oluşturuldu, lütfen yöneticinin hesabınızı etkinleştirmesini bekleyin."
 
 #: seahub/templates/repo_dir_recycle_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_dir_name)s</span> Trash"
-msgstr ""
+msgstr "<span class=\"op-target\">%(repo_dir_name)s</span> Çöp"
 
 #: seahub/templates/repo_dir_recycle_view.html:15
 #: seahub/templates/repo_history_view.html:16
 #: seahub/templates/text_diff.html:15
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: seahub/templates/repo_dir_recycle_view.html:21
 #: seahub/templates/repo_history_view.html:40
@@ -4850,7 +4871,7 @@ msgstr "İptal"
 
 #: seahub/templates/repo_dir_recycle_view.html:192
 msgid "Successfully restored 1 item."
-msgstr ""
+msgstr "1 öğe başarıyla geri yüklendi."
 
 #: seahub/templates/repo_folder_trash_react.html:5
 msgid "Trash"
@@ -4863,7 +4884,7 @@ msgstr "Geçmiş"
 #: seahub/templates/repo_history_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_name)s</span> Snapshot"
-msgstr ""
+msgstr "<span class=\"op-target\">%(repo_name)s</span> Anlık Görüntü"
 
 #: seahub/templates/repo_history_view.html:30
 msgid "Unknown"
@@ -4897,12 +4918,12 @@ msgstr ""
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Anlık görüntü"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/directory."
-msgstr ""
+msgstr "Paylaşılan dosyaya/klasöre göz atmak istiyorsanız lütfen parolayı girin."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -4914,7 +4935,7 @@ msgstr ""
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
 msgid "Password:"
-msgstr "Şifre:"
+msgstr "Parola:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
@@ -4944,12 +4965,12 @@ msgstr "güçlü"
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Gizlilik Politikası"
 
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr ""
+msgstr "Kullanım Şartları"
 
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
@@ -4968,7 +4989,7 @@ msgstr "Şifre çok kısa"
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "%(repo_name)s kütüphanesinin yeni parolası %(password)s 'dir. Lütfen en kısa sürede değiştirin. "
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -5027,7 +5048,7 @@ msgstr "Şifre: %(password)s"
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr ""
+msgstr "%(user)s hesabı, fazla sayıda hatalı giriş denemelerinden dolayı dondu. Lütfen şuradan kontrol edin:"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
@@ -5124,7 +5145,7 @@ msgstr "Dosya tipine izin verilmiyor."
 
 #: seahub/templates/view_shared_upload_link.html:78
 msgid "Maximum number of files exceeded"
-msgstr ""
+msgstr "Maksimum dosya sayısı aşıldı"
 
 #: seahub/templates/view_shared_upload_link.html:79
 msgid "Uploaded bytes exceed file size"
@@ -5148,7 +5169,7 @@ msgstr "Başla"
 
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
-msgstr ""
+msgstr "Ağ hatası"
 
 #: seahub/templates/wiki/wiki.html:25
 msgid "Last modified by"
@@ -5188,7 +5209,7 @@ msgstr ""
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
 msgid "You don't have any backup codes yet."
-msgstr ""
+msgstr "Henüz kurtarma kodunuz yok"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
 msgid "Generate Tokens"
@@ -5196,7 +5217,7 @@ msgstr ""
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Çift Faktörlü Kimlik Doğrulama"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:19
 msgid ""
@@ -5211,39 +5232,39 @@ msgstr ""
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
-msgstr ""
+msgstr "Bu bilgisayarı %(remember_days)s gün boyunca hatırla"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:31
 #: seahub/two_factor/templates/two_factor/core/login.html:50
 msgid "Incorrect code"
-msgstr ""
+msgstr "Hatalı kod"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:35
 #: seahub/two_factor/templates/two_factor/core/login.html:55
 msgid "Verify"
-msgstr ""
+msgstr "Doğrula"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:40
 msgid "Don't have your phone?"
-msgstr ""
+msgstr "Telefonunuz yok mu?"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:41
 msgid "Enter a two-factor backup code"
-msgstr ""
+msgstr "Çift faktörlü kurtarma kodunu girin"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:47
 msgid "Backup code"
-msgstr ""
+msgstr "Kurtarma kodu"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:54
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
-msgstr ""
+msgstr "Mobil cihazınıza erişiminizi kaybetmeniz durumunda kurtarma kodlarınızdan birini girebilirsiniz."
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Çift Faktörlü Kimlik Doğrulamayı Etkinleştir"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:16
 msgid ""
@@ -5255,17 +5276,17 @@ msgstr ""
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Çift Faktörlü Kimlik Doğrulamayı Devre Dışı Bırak"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:8
 msgid ""
 "You are about to disable two-factor authentication. This\n"
 "    compromises your account security, are you sure?"
-msgstr ""
+msgstr "Çift faktörlü kimlik doğrulamayı devre dışı bırakmak üzeresiniz. Bu, hesap güvenliğinizi tehlikeye atar, emin misiniz?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
 msgid "Disable"
-msgstr ""
+msgstr "Devre dışı"
 
 #: seahub/utils/__init__.py:152
 msgid "permission error"
@@ -5282,7 +5303,7 @@ msgstr "Kütüphane değiştirimini görüntüleyemiyor."
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1880
+#: seahub/views/ajax.py:376 seahub/views/file.py:1862
 msgid "Library does not exist"
 msgstr "Kütüphane yok"
 
@@ -5292,7 +5313,7 @@ msgstr "Lütfen geçmiş kimliği belirtin"
 
 #: seahub/views/__init__.py:598
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Kütüphane başarıyla geri yüklendi."
 
 #: seahub/views/__init__.py:605
 msgid "History you specified does not exist"
@@ -5330,7 +5351,7 @@ msgstr "Kötü bağlantı yükleme jetonu."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
 #: seahub/views/file.py:1145 seahub/views/file.py:1361
-#: seahub/views/file.py:1889
+#: seahub/views/file.py:1871
 msgid "File does not exist"
 msgstr "Dosya yok."
 
@@ -5366,7 +5387,7 @@ msgstr "Dosya boyutu %s i aşıyor, online açılamaz."
 
 #: seahub/views/file.py:350 seahub/views/file.py:784
 msgid "The library is encrypted, can not open file online."
-msgstr ""
+msgstr "Kütüphane şifreli, dosyayı çevrimiçi açamıyor."
 
 #: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
 #: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1004
@@ -5379,12 +5400,12 @@ msgstr "Dosya görüntülenemiyor."
 #: seahub/views/file.py:808 seahub/views/file.py:952 seahub/views/file.py:1241
 #: seahub/views/file.py:1440
 msgid "Error when prepare Office Online file preview page."
-msgstr ""
+msgstr "Office Online dosyası önizleme sayfası hazırlanırken hata oluştu."
 
 #: seahub/views/file.py:840 seahub/views/file.py:964 seahub/views/file.py:1260
 #: seahub/views/file.py:1456
 msgid "Error when prepare OnlyOffice file preview page."
-msgstr ""
+msgstr "OnlyOffice dosyası önizleme sayfası hazırlanırken hata oluştu."
 
 #: seahub/views/file.py:1096
 msgid "Unable to download file, invalid file path"
@@ -5396,13 +5417,13 @@ msgstr "Dosya indirilemedi, hatalı dosya yolu"
 
 #: seahub/views/file.py:1112
 msgid "Unable to download file."
-msgstr ""
+msgstr "Dosya indirilemedi."
 
 #: seahub/views/file.py:1296 seahub/views/file.py:1521
 #: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "%s için link paylaş."
 
 #: seahub/views/file.py:1639 seahub/views/file.py:1644
 msgid "Unable to download file"
@@ -5472,7 +5493,7 @@ msgstr "Girdi numarası 0'dan büyük olmalı"
 
 #: seahub/views/sysadmin.py:745
 msgid "Successfully deleted."
-msgstr ""
+msgstr "Başarıyla silindi."
 
 #: seahub/views/sysadmin.py:775
 #, python-format
@@ -5485,16 +5506,17 @@ msgid "Failed to set %s as admin: user does not exist."
 msgstr "%s yönetici olarak oluşturulamadı: kullanıcı yok"
 
 #: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:793
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:808
 msgid "Optional"
-msgstr ""
+msgstr "Opsiyonel"
 
 #: seahub/wiki/views.py:158
 msgid "Unable to view Wiki"
-msgstr ""
+msgstr "Wiki görüntülenemiyor"
 
 #: seahub/work_weixin/views.py:37 seahub/work_weixin/views.py:62
 #: seahub/work_weixin/views.py:151 seahub/work_weixin/views.py:171
 #: seahub/work_weixin/views.py:231
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Özellik etkinleştirilmedi"

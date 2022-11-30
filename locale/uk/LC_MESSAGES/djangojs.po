@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:45+0800\n"
+"POT-Creation-Date: 2022-11-30 10:28+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/haiwen/seahub/language/uk/)\n"
@@ -153,7 +153,7 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:152
 #: frontend/src/components/org-admin-group-nav.js:23
 #: frontend/src/pages/org-admin/org-department-item.js:318
-#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/org-admin/side-panel.js:56
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/search/advanced-search.js:91
 #: frontend/src/pages/share-admin/libraries.js:320
@@ -301,6 +301,7 @@ msgstr "Опис"
 #: frontend/src/components/dialog/org-delete-department-dialog.js:42
 #: frontend/src/components/dialog/org-delete-member-dialog.js:46
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
+#: frontend/src/components/dialog/org-import-users-dialog.js:58
 #: frontend/src/components/dialog/rename-dialog.js:122
 #: frontend/src/components/dialog/rename-dirent.js:124
 #: frontend/src/components/dialog/rename-group-dialog.js:66
@@ -447,6 +448,7 @@ msgstr "Скасувати"
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:233
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:259
 #: frontend/src/pages/org-admin/org-users-search-users.js:166
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:128
 #: frontend/src/pages/search/advanced-search.js:241
 #: frontend/src/pages/search/advanced-search.js:263
 #: frontend/src/pages/sys-admin/groups/search-groups.js:116
@@ -547,6 +549,7 @@ msgid "Clean succeeded."
 msgstr ""
 
 #: frontend/src/components/dialog/clean-trash.js:62
+#: frontend/src/pages/org-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:377
 #: frontend/src/repo-folder-trash.js:202
@@ -607,7 +610,7 @@ msgid "Really want to delete your account?"
 msgstr "Дійсно хочете видалити %s ?"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:36
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:60
 #: frontend/src/components/dialog/delete-dialog.js:33
 #: frontend/src/components/dialog/delete-repo-dialog.js:73
@@ -665,7 +668,7 @@ msgstr "Дійсно хочете видалити %s ?"
 #: frontend/src/pages/org-admin/org-groups.js:300
 #: frontend/src/pages/org-admin/org-libraries.js:319
 #: frontend/src/pages/org-admin/org-links.js:215
-#: frontend/src/pages/org-admin/org-user-item.js:173
+#: frontend/src/pages/org-admin/org-user-item.js:157
 #: frontend/src/pages/org-admin/org-user-repos.js:169
 #: frontend/src/pages/sys-admin/departments/group-item.js:64
 #: frontend/src/pages/sys-admin/groups/groups-content.js:170
@@ -754,6 +757,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:48
 #: frontend/src/pages/linked-devices/linked-devices.js:143
 #: frontend/src/pages/linked-devices/linked-devices.js:168
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:136
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:136
 msgid "Unlink"
 msgstr "Посилання видалено "
@@ -867,7 +871,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-user-profile.js:134
 #: frontend/src/pages/org-admin/org-user-repos.js:82
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
-#: frontend/src/pages/org-admin/org-users-list.js:64
+#: frontend/src/pages/org-admin/org-users-list.js:65
 #: frontend/src/pages/org-admin/org-users-search-users.js:34
 #: frontend/src/pages/share-admin/folders.js:49
 #: frontend/src/pages/share-admin/libraries.js:48
@@ -1113,6 +1117,10 @@ msgstr ""
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:187
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:196
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:224
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:58
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:68
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:78
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:88
 #: frontend/src/pages/share-with-ocm/remote-dir-view.js:141
 #: frontend/src/pages/sys-admin/repos/dir-view.js:174
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:59
@@ -1142,6 +1150,10 @@ msgstr "Завантажити"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:126
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:245
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:63
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:83
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:93
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:56
 #: frontend/src/pages/sys-admin/repos/dir-content.js:64
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:64
@@ -1158,17 +1170,19 @@ msgid "Download"
 msgstr "Завантажити"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:163
+msgid "Create"
+msgstr "Створити"
+
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:169
 #: frontend/src/translate.js:7
 msgid "Modify"
 msgstr ""
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:171
-msgid ""
-"Modify includes modify file, create file and folder, move/rename file and "
-"folder"
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:177
+msgid "Modify includes modify file, move/rename file and folder"
 msgstr ""
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:178
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
 #: frontend/src/components/dialog/internal-link-dialog.js:77
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
@@ -1182,11 +1196,11 @@ msgstr ""
 msgid "Copy"
 msgstr "Копіювати"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:196
 msgid "Preview online"
 msgstr ""
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:196
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:202
 msgid "Generate share link"
 msgstr ""
 
@@ -1498,6 +1512,7 @@ msgid "Zoom out"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
+#: frontend/src/components/dialog/org-import-users-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:38
 msgid "Please choose a .xlsx file."
 msgstr ""
@@ -1507,11 +1522,13 @@ msgid "Import members from a .xlsx file"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
+#: frontend/src/components/dialog/org-import-users-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:53
 msgid "Download an example file"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
+#: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
 msgstr "Завантажити файл"
@@ -1567,6 +1584,7 @@ msgstr ""
 #: frontend/src/components/dialog/label-repo-state-dialog.js:55
 #: frontend/src/components/dialog/set-org-user-quota.js:40
 #: frontend/src/components/dialog/share-to-invite-people.js:161
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:29
 #: frontend/src/pages/search/main-panel.js:101
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:29
 msgid "It is required."
@@ -1741,7 +1759,6 @@ msgstr ""
 #: frontend/src/pages/my-libs/my-libs-deleted.js:150
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:256
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:278
-#: frontend/src/pages/org-admin/org-user-item.js:96
 #: frontend/src/pages/search/main-panel.js:71
 #: frontend/src/pages/search/main-panel.js:157
 #: frontend/src/pages/search/main-panel.js:169
@@ -1792,6 +1809,7 @@ msgstr ""
 #: frontend/src/pages/dashboard/files-activities.js:31
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:182
 msgid "User"
@@ -1805,6 +1823,7 @@ msgstr ""
 #: frontend/src/file-history-old.js:242
 #: frontend/src/pages/dashboard/files-activities.js:34
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:163
+#: frontend/src/pages/org-admin/devices/devices-errors.js:52
 #: frontend/src/pages/sys-admin/abuse-reports.js:102
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:48
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
@@ -1984,7 +2003,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups.js:294
 #: frontend/src/pages/org-admin/org-libraries.js:313
 #: frontend/src/pages/org-admin/org-links.js:209
-#: frontend/src/pages/org-admin/org-user-item.js:167
+#: frontend/src/pages/org-admin/org-user-item.js:151
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:173
 #: frontend/src/pages/share-admin/folders.js:232
 #: frontend/src/pages/share-admin/libraries.js:246
@@ -2039,6 +2058,8 @@ msgid "email is required"
 msgstr ""
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:140
+#: frontend/src/pages/org-admin/org-users-users.js:232
+#: frontend/src/pages/org-admin/org-users-users.js:233
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:93
 #: frontend/src/pages/sys-admin/users/users.js:378
 #: frontend/src/pages/sys-admin/users/users.js:490
@@ -2059,8 +2080,8 @@ msgid "Confirm Password"
 msgstr "Підтвердіть пароль"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:31
-#: frontend/src/pages/org-admin/org-users-users.js:188
-#: frontend/src/pages/org-admin/org-users-users.js:189
+#: frontend/src/pages/org-admin/org-users-users.js:235
+#: frontend/src/pages/org-admin/org-users-users.js:236
 msgid "Invite user"
 msgstr ""
 
@@ -2098,6 +2119,11 @@ msgstr ""
 #: frontend/src/pages/sys-admin/orgs/org-users.js:232
 msgid "Delete Member"
 msgstr "Видалити учасника"
+
+#: frontend/src/components/dialog/org-import-users-dialog.js:50
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
+msgid "Import users from a .xlsx file"
+msgstr ""
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:79
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:74
@@ -2381,6 +2407,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/share-to-other-server.js:184
 #: frontend/src/pages/groups/group-view.js:293
+#: frontend/src/pages/org-admin/org-user-item.js:82
+#: frontend/src/pages/org-admin/org-users-users.js:145
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:132
 #: frontend/src/pages/sys-admin/users/users-content.js:227
 #: frontend/src/pages/sys-admin/users/users-content.js:268
@@ -2555,10 +2583,6 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:40
 msgid "Transfer Group {placeholder} to"
-msgstr ""
-
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
-msgid "Import users from a .xlsx file"
 msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:58
@@ -2774,6 +2798,7 @@ msgstr ""
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:37
 #: frontend/src/pages/dashboard/files-activities.js:33
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:103
 #: frontend/src/pages/org-admin/org-logs-file-update.js:117
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
@@ -3062,7 +3087,7 @@ msgstr "Всі групи"
 #: frontend/src/components/main-side-nav.js:132
 #: frontend/src/components/main-side-nav.js:139
 #: frontend/src/components/main-side-nav.js:141
-#: frontend/src/pages/org-admin/side-panel.js:68
+#: frontend/src/pages/org-admin/side-panel.js:80
 #: frontend/src/pages/sys-admin/side-panel.js:174
 msgid "Links"
 msgstr "Посилання"
@@ -3729,6 +3754,7 @@ msgstr "Операція"
 
 #: frontend/src/pages/dashboard/files-activities.js:33
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:98
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
 #: frontend/src/repo-folder-trash.js:354 frontend/src/repo-folder-trash.js:406
@@ -3898,7 +3924,7 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:439
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:246
-#: frontend/src/pages/org-admin/side-panel.js:56
+#: frontend/src/pages/org-admin/side-panel.js:68
 #: frontend/src/pages/sys-admin/groups/group-nav.js:26
 #: frontend/src/pages/sys-admin/groups/groups.js:137
 #: frontend/src/pages/sys-admin/groups/search-groups.js:101
@@ -4072,6 +4098,7 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/linked-devices/linked-devices.js:31
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
 msgid "Platform"
 msgstr "Платформа"
@@ -4081,6 +4108,7 @@ msgid "Device Name"
 msgstr "Назва приладу"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:33
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:101
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:46
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:46
@@ -4223,8 +4251,49 @@ msgstr "Надано в загальний доступ "
 msgid "All"
 msgstr "Всі"
 
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Version"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:109
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
+msgid "Successfully unlinked the device."
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Device"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:158
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
+msgid "Successfully cleaned all errors."
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:15
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
+msgid "Desktop"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:16
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
+msgid "Mobile"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:17
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
+msgid "Errors"
+msgstr ""
+
 #: frontend/src/pages/org-admin/org-admin-list.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:65
+#: frontend/src/pages/org-admin/org-users-list.js:66
 #: frontend/src/pages/org-admin/org-users-search-users.js:35
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:50
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:61
@@ -4238,7 +4307,7 @@ msgstr "Статус"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-info.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #: frontend/src/pages/sys-admin/orgs/org-users.js:56
@@ -4251,7 +4320,7 @@ msgstr "Дисковий простір, що використовується"
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-department-item.js:252
 #: frontend/src/pages/org-admin/org-departments-list.js:120
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/departments/department-detail.js:313
 #: frontend/src/pages/sys-admin/departments/departments-list.js:116
@@ -4266,7 +4335,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:150
 #: frontend/src/pages/org-admin/org-groups.js:157
 #: frontend/src/pages/org-admin/org-links.js:102
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/departments/department-detail.js:312
 #: frontend/src/pages/sys-admin/departments/departments-list.js:115
@@ -4280,7 +4349,7 @@ msgid "Created At"
 msgstr "Створено на"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:48
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:63
@@ -4290,7 +4359,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-department-item.js:229
 #: frontend/src/pages/org-admin/org-department-item.js:230
 #: frontend/src/pages/org-admin/org-departments-list.js:110
-#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/side-panel.js:74
 #: frontend/src/pages/sys-admin/departments/department-detail.js:290
 #: frontend/src/pages/sys-admin/departments/department-detail.js:291
 #: frontend/src/pages/sys-admin/departments/departments-list.js:106
@@ -4347,7 +4416,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:124
 #: frontend/src/pages/org-admin/org-logs-file-update.js:139
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:104
-#: frontend/src/pages/org-admin/org-users-list.js:89
+#: frontend/src/pages/org-admin/org-users-list.js:91
 #: frontend/src/pages/search/main-panel.js:335
 msgid "Previous"
 msgstr "Назад"
@@ -4358,7 +4427,7 @@ msgstr "Назад"
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:126
 #: frontend/src/pages/org-admin/org-logs-file-update.js:141
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:106
-#: frontend/src/pages/org-admin/org-users-list.js:91
+#: frontend/src/pages/org-admin/org-users-list.js:93
 #: frontend/src/pages/search/main-panel.js:337
 msgid "Next"
 msgstr "Вперед"
@@ -4374,6 +4443,8 @@ msgid "Info"
 msgstr "Інформація"
 
 #: frontend/src/pages/org-admin/org-info.js:50
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:36
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:69
 msgid "Active Users"
@@ -4455,6 +4526,7 @@ msgstr "Спільний доступ для"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:178
 #: frontend/src/pages/org-admin/org-user-profile.js:146
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/users/user-info.js:102
 msgid "Organization"
@@ -4478,25 +4550,17 @@ msgstr ""
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Пароль успішно змінено на %(passwd)s для користувача %(user)s."
 
-#: frontend/src/pages/org-admin/org-user-item.js:93
-msgid "Edit succeeded."
-msgstr ""
-
-#: frontend/src/pages/org-admin/org-user-item.js:97
-msgid "Edit failed."
-msgstr "Редагування не успішне."
-
-#: frontend/src/pages/org-admin/org-user-item.js:128
+#: frontend/src/pages/org-admin/org-user-item.js:112
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:89
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:107
 msgid "Failed"
 msgstr "Невдало"
 
-#: frontend/src/pages/org-admin/org-user-item.js:174
+#: frontend/src/pages/org-admin/org-user-item.js:158
 msgid "ResetPwd"
 msgstr "Змінити пароль"
 
-#: frontend/src/pages/org-admin/org-user-item.js:175
+#: frontend/src/pages/org-admin/org-user-item.js:159
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:137
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:177
 #: frontend/src/pages/sys-admin/users/users-content.js:313
@@ -4518,7 +4582,7 @@ msgid "Space Used / Quota"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-users-admins.js:44
-#: frontend/src/pages/org-admin/org-users-users.js:160
+#: frontend/src/pages/org-admin/org-users-users.js:190
 #, javascript-format
 msgid "Successfully deleted %s"
 msgstr "Успішно видалено %s"
@@ -4550,7 +4614,10 @@ msgid "Edit succeeded"
 msgstr "Редагування успішне."
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:153
-#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:17
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:131
 #: frontend/src/pages/sys-admin/side-panel.js:102
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
@@ -4566,26 +4633,198 @@ msgid "Search Users"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:161
-#: frontend/src/pages/org-admin/org-users-users.js:175
+#: frontend/src/pages/org-admin/org-users-users.js:221
 #: frontend/src/pages/sys-admin/users/search-users.js:302
 #: frontend/src/pages/sys-admin/users/users.js:423
 msgid "Search users"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-users-users.js:146
+#: frontend/src/pages/org-admin/org-users-users.js:176
 #, javascript-format
 msgid "successfully added user %s."
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-users-users.js:185
-#: frontend/src/pages/org-admin/org-users-users.js:186
-msgid "Add user"
-msgstr "Додати користувача"
+#: frontend/src/pages/org-admin/org-users-users.js:208
+msgid "Edit succeeded."
+msgstr ""
 
-#: frontend/src/pages/org-admin/side-panel.js:74
+#: frontend/src/pages/org-admin/org-users-users.js:231
+#: frontend/src/translate.js:8
+msgid "Import Users"
+msgstr ""
+
+#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/sys-admin/side-panel.js:54
+msgid "Statistic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/sys-admin/side-panel.js:66
+msgid "Devices"
+msgstr "Пристрої"
+
+#: frontend/src/pages/org-admin/side-panel.js:86
 #: frontend/src/pages/sys-admin/side-panel.js:186
 msgid "Logs"
 msgstr "Logs"
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:112
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
+msgid "7 Days"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:113
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
+msgid "30 Days"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:114
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
+msgid "1 Year"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:45
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
+msgid "Added"
+msgstr "Додано"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:50
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
+msgid "Visited"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:55
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
+msgid "Modified"
+msgstr "Модифіковано"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:60
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
+#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
+#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
+msgid "Deleted"
+msgstr "Видалено"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:94
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
+msgid "File Operations"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
+msgid "Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:18
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
+msgid "Traffic"
+msgstr "Трафік"
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:19
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
+msgid "Reports"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
+msgid "Invalid month, should be yyyymm."
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:69
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
+msgid "Monthly User Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:122
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
+msgid "Month:"
+msgstr "Місяць:"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:79
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
+msgid "Create Report"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:78
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
+msgid "User Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
+msgid "Total Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:122
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:130
+#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
+#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
+msgid "System"
+msgstr "Система"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:154
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
+msgid "Total Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:167
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
+msgid "Web Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:180
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
+msgid "Share Link Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:193
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
+msgid "Sync Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:28
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
+msgid "Sync Upload"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:29
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
+msgid "Sync Download"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:30
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
+msgid "Web Upload"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:31
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
+msgid "Web Download"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:32
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
+msgid "Share link upload"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:33
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
+msgid "Share link download"
+msgstr ""
 
 #: frontend/src/pages/search/advanced-search.js:18
 msgid "Document"
@@ -4841,39 +5080,6 @@ msgstr ""
 msgid "Deleted user {user}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Version"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
-msgid "Successfully unlinked the device."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Device"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
-msgid "Successfully cleaned all errors."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
-msgid "Desktop"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
-msgid "Mobile"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
-msgid "Errors"
-msgstr ""
-
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
 msgstr ""
@@ -5074,14 +5280,6 @@ msgstr ""
 msgid "only show {placeholder}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
-#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
-#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
-msgid "Deleted"
-msgstr "Видалено"
-
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:15
 msgid "Login"
 msgstr ""
@@ -5149,13 +5347,6 @@ msgstr ""
 msgid "Search libraries by name or ID"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
-#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
-msgid "System"
-msgstr "Система"
-
 #: frontend/src/pages/sys-admin/repos/search-repos.js:92
 msgid "Search Libraries"
 msgstr ""
@@ -5197,14 +5388,6 @@ msgstr ""
 msgid "Clear"
 msgstr "Очистити"
 
-#: frontend/src/pages/sys-admin/side-panel.js:54
-msgid "Statistic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/side-panel.js:66
-msgid "Devices"
-msgstr "Пристрої"
-
 #: frontend/src/pages/sys-admin/side-panel.js:198
 msgid "File Scan"
 msgstr ""
@@ -5220,116 +5403,6 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/side-panel.js:246
 msgid "Admin Logs"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
-msgid "7 Days"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
-msgid "30 Days"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
-msgid "1 Year"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
-msgid "Added"
-msgstr "Додано"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
-msgid "Visited"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
-msgid "Modified"
-msgstr "Модифіковано"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
-msgid "File Operations"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
-msgid "Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
-msgid "Traffic"
-msgstr "Трафік"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
-msgid "Reports"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
-msgid "Invalid month, should be yyyymm."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
-msgid "Monthly User Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
-msgid "Month:"
-msgstr "Місяць:"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
-msgid "Create Report"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
-msgid "User Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
-msgid "Total Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
-msgid "Total Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
-msgid "Web Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
-msgid "Share Link Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
-msgid "Sync Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
-msgid "Sync Upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
-msgid "Sync Download"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
-msgid "Web Upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
-msgid "Web Download"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
-msgid "Share link upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
-msgid "Share link download"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:53
@@ -5828,10 +5901,6 @@ msgstr ""
 
 #: frontend/src/translate.js:6
 msgid "You don't have any favorite items yet"
-msgstr ""
-
-#: frontend/src/translate.js:8
-msgid "Import Users"
 msgstr ""
 
 #: frontend/src/translate.js:9

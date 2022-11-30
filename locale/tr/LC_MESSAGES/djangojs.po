@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Ahmet, 2022
 # Burhan Kaymaz, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:45+0800\n"
+"POT-Creation-Date: 2022-11-30 10:28+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Burhan Kaymaz, 2021\n"
+"Last-Translator: Ahmet, 2022\n"
 "Language-Team: Turkish (http://www.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,11 +29,11 @@ msgstr "Sistem Yöneticisinden Çık"
 
 #: frontend/src/components/common/account.js:108
 msgid "Exit Organization Admin"
-msgstr ""
+msgstr "Organizasyon Yöneticisinden Çık"
 
 #: frontend/src/components/common/account.js:113
 msgid "Exit Institution Admin"
-msgstr ""
+msgstr "Kurum Yöneticisinden çık"
 
 #: frontend/src/components/common/account.js:121
 #: frontend/src/pages/sys-admin/side-panel.js:33
@@ -42,16 +43,16 @@ msgstr "Sistem Yöneticisi"
 
 #: frontend/src/components/common/account.js:126
 msgid "Organization Admin"
-msgstr ""
+msgstr "Organizasyon Yöneticisi"
 
 #: frontend/src/components/common/account.js:131
 msgid "Institution Admin"
-msgstr ""
+msgstr "Kurum Yöneticisi"
 
 #: frontend/src/components/common/account.js:146
 #: frontend/src/components/common/account.js:150
 msgid "View profile and more"
-msgstr ""
+msgstr "Profili ve daha fazlasını görüntüle"
 
 #: frontend/src/components/common/account.js:162
 msgid "Used:"
@@ -73,29 +74,29 @@ msgstr "Çıkış yap"
 
 #: frontend/src/components/common/notice-item.js:41
 msgid "User {user_link} has added you to {group_link}"
-msgstr ""
+msgstr "{user_link} Kullanıcısı Sizi {group_link} ekledi"
 
 #: frontend/src/components/common/notice-item.js:64
 msgid "{share_from} has shared a library named {repo_link} to you."
-msgstr ""
+msgstr "{share_from} sizinle {repo_link} adlı bir kütüphane paylaştı."
 
 #: frontend/src/components/common/notice-item.js:66
 msgid "{share_from} has shared a folder named {repo_link} to you."
-msgstr ""
+msgstr "{share_from} sizinle {repo_link} adlı bir klasör paylaştı"
 
 #: frontend/src/components/common/notice-item.js:97
 msgid ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
-msgstr ""
+msgstr "{share_from}, {group_link} grubuna {repo_link} adlı bir kütüphane paylaştı."
 
 #: frontend/src/components/common/notice-item.js:99
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
-msgstr ""
+msgstr "{share_from}, {group_link} grubuna {repo_link} adlı bir klasör paylaştı."
 
 #: frontend/src/components/common/notice-item.js:125
 msgid "{user} has transfered a library named {repo_link} to you."
-msgstr ""
+msgstr "{user}, {repo_link} adlı bir kütüphaneye sizi ekledi."
 
 #: frontend/src/components/common/notice-item.js:182
 msgid "File {file_link} has a new comment form user {author}."
@@ -103,7 +104,7 @@ msgstr ""
 
 #: frontend/src/components/common/notice-item.js:220
 msgid "{from_user} has sent you a request for {draft_link}."
-msgstr ""
+msgstr "{from_user}, {draft_link} için sana bir istek gönderdi."
 
 #: frontend/src/components/common/notice-item.js:221
 msgid "Draft"
@@ -145,7 +146,7 @@ msgstr "Tüm Bildirimleri Gör"
 #: frontend/src/components/cur-dir-path/dir-path.js:31
 #: frontend/src/components/main-side-nav.js:71
 msgid "A file is being uploaded. Are you sure you want to leave this page?"
-msgstr ""
+msgstr "Bir dosya yükleniyor. Bu sayfadan ayrılmak istediğinize emin misiniz?"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:91
 #: frontend/src/components/cur-dir-path/dir-path.js:97
@@ -154,7 +155,7 @@ msgstr ""
 #: frontend/src/components/main-side-nav.js:152
 #: frontend/src/components/org-admin-group-nav.js:23
 #: frontend/src/pages/org-admin/org-department-item.js:318
-#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/org-admin/side-panel.js:56
 #: frontend/src/pages/search/advanced-search.js:66
 #: frontend/src/pages/search/advanced-search.js:91
 #: frontend/src/pages/share-admin/libraries.js:320
@@ -182,7 +183,7 @@ msgstr "Çöp Kutusu"
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:49
 #: frontend/src/utils/text-translation.js:22
 msgid "Tags"
-msgstr ""
+msgstr "Etiketler"
 
 #: frontend/src/components/cur-dir-path/dir-tool.js:92
 #: frontend/src/components/file-view/file-toolbar.js:198
@@ -208,7 +209,7 @@ msgstr "Hakkımızda"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:31
 msgid "Contact information is required."
-msgstr ""
+msgstr "İletişim bilgileri gereklidir."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:37
 #: frontend/src/components/dialog/org-rename-department-dialog.js:46
@@ -230,32 +231,32 @@ msgstr "Başarılı"
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:68
 #: frontend/src/components/shared-file-view/shared-file-view.js:131
 msgid "Report Abuse"
-msgstr ""
+msgstr "Kötüye kullanımı bildir"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:72
 #: frontend/src/pages/sys-admin/abuse-reports.js:100
 msgid "Abuse Type"
-msgstr ""
+msgstr "Kötüye kullanım türü"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:74
 msgid "Copyright Infringement"
-msgstr ""
+msgstr "Telif Hakkı ihlali"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:75
 msgid "Virus"
-msgstr ""
+msgstr "Virus"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:76
 msgid "Abuse Content"
-msgstr ""
+msgstr "Kötüye kullanım içeriği"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:77
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:81
 msgid "Contact Information"
-msgstr ""
+msgstr "İletişim Bilgileri"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:85
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:142
@@ -302,6 +303,7 @@ msgstr "Açıklama"
 #: frontend/src/components/dialog/org-delete-department-dialog.js:42
 #: frontend/src/components/dialog/org-delete-member-dialog.js:46
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
+#: frontend/src/components/dialog/org-import-users-dialog.js:58
 #: frontend/src/components/dialog/rename-dialog.js:122
 #: frontend/src/components/dialog/rename-dirent.js:124
 #: frontend/src/components/dialog/rename-group-dialog.js:66
@@ -448,6 +450,7 @@ msgstr "İptal"
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:233
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:259
 #: frontend/src/pages/org-admin/org-users-search-users.js:166
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:128
 #: frontend/src/pages/search/advanced-search.js:241
 #: frontend/src/pages/search/advanced-search.js:263
 #: frontend/src/pages/sys-admin/groups/search-groups.js:116
@@ -461,11 +464,11 @@ msgstr "Gönder"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:98
 msgid "Request a review"
-msgstr ""
+msgstr "İnceleme talep et"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:100
 msgid "Add new reviewer"
-msgstr ""
+msgstr "Yeni görüntüleyici ekle"
 
 #: frontend/src/components/dialog/add-reviewer-dialog.js:103
 #: frontend/src/components/dialog/file-participant-dialog.js:128
@@ -488,7 +491,7 @@ msgstr "Lütfen eski şifreyi giriniz"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:55
 msgid "Please enter a new password"
-msgstr ""
+msgstr "Lütfen yeni bir şifre girin"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:61
 msgid "New password is too short"
@@ -504,11 +507,11 @@ msgstr "Yeni şifreler eşleşmiyor"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:84
 msgid "Successfully changed library password."
-msgstr ""
+msgstr "Kütüphane şifresi başarıyla değiştirildi."
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:102
 msgid "Change Password of Library {placeholder}"
-msgstr ""
+msgstr "{placeholder} Kütüphane şifresini değiştir"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:107
 msgid "Old Password"
@@ -545,9 +548,10 @@ msgstr "hepsi"
 
 #: frontend/src/components/dialog/clean-trash.js:46
 msgid "Clean succeeded."
-msgstr ""
+msgstr "Temizleme Başarılı"
 
 #: frontend/src/components/dialog/clean-trash.js:62
+#: frontend/src/pages/org-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/devices/devices-errors.js:178
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:377
 #: frontend/src/repo-folder-trash.js:202
@@ -595,7 +599,7 @@ msgstr "Silinmiş dizinler"
 
 #: frontend/src/components/dialog/common-operation-confirmation-dialog.js:35
 msgid "Confirm"
-msgstr ""
+msgstr "Onayla"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:27
 #: frontend/src/components/user-settings/delete-account.js:36
@@ -608,7 +612,7 @@ msgid "Really want to delete your account?"
 msgstr "Hesabınızı silmeyi gerçekten istiyor musunuz?"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:36
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:60
 #: frontend/src/components/dialog/delete-dialog.js:33
 #: frontend/src/components/dialog/delete-repo-dialog.js:73
@@ -666,7 +670,7 @@ msgstr "Hesabınızı silmeyi gerçekten istiyor musunuz?"
 #: frontend/src/pages/org-admin/org-groups.js:300
 #: frontend/src/pages/org-admin/org-libraries.js:319
 #: frontend/src/pages/org-admin/org-links.js:215
-#: frontend/src/pages/org-admin/org-user-item.js:173
+#: frontend/src/pages/org-admin/org-user-item.js:157
 #: frontend/src/pages/org-admin/org-user-repos.js:169
 #: frontend/src/pages/sys-admin/departments/group-item.js:64
 #: frontend/src/pages/sys-admin/groups/groups-content.js:170
@@ -707,12 +711,12 @@ msgstr "Sil"
 #: frontend/src/components/user-settings/social-login-dingtalk.js:41
 #: frontend/src/components/user-settings/social-login.js:41
 msgid "Disconnect"
-msgstr ""
+msgstr "Bağlantıyı Kes"
 
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:29
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:29
 msgid "Are you sure you want to disconnect?"
-msgstr ""
+msgstr "Bağlantıyı kesmek istediğinizden emin misiniz?"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:31
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:252
@@ -739,22 +743,23 @@ msgstr "Eski durumuna getir"
 #: frontend/src/components/dialog/confirm-unlink-device.js:38
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:36
 msgid "Unlink device"
-msgstr ""
+msgstr "Cihaz bağlantısını kaldır"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:38
 msgid "Are you sure you want to unlink this device?"
-msgstr ""
+msgstr "Bu cihazın bağlantısını kaldırmak istediğinizden emin misiniz?"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:44
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:42
 msgid "Delete files from this device the next time it comes online."
-msgstr ""
+msgstr "Cihazın bir sonraki çevrimiçi oluşunda, dosyaları bu cihazdan sil."
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:50
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:48
 #: frontend/src/pages/linked-devices/linked-devices.js:143
 #: frontend/src/pages/linked-devices/linked-devices.js:168
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:136
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:136
 msgid "Unlink"
 msgstr "Bağlantıyı kaldır"
@@ -812,11 +817,11 @@ msgstr "İsim gerekli"
 #: frontend/src/components/dialog/rename-dirent.js:101
 #: frontend/src/components/rename.js:79
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "İsim '/.' içermemelidir."
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:82
 msgid "New Department Library"
-msgstr ""
+msgstr "Yeni Bölüm Kütüphanesi"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:86
 #: frontend/src/components/dialog/create-file-dialog.js:142
@@ -868,7 +873,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-user-profile.js:134
 #: frontend/src/pages/org-admin/org-user-repos.js:82
 #: frontend/src/pages/org-admin/org-user-shared-repos.js:79
-#: frontend/src/pages/org-admin/org-users-list.js:64
+#: frontend/src/pages/org-admin/org-users-list.js:65
 #: frontend/src/pages/org-admin/org-users-search-users.js:34
 #: frontend/src/pages/share-admin/folders.js:49
 #: frontend/src/pages/share-admin/libraries.js:48
@@ -906,7 +911,7 @@ msgstr "İsim"
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:110
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-view.js:77
 msgid "The name \"{name}\" is already taken. Please choose a different name."
-msgstr ""
+msgstr "\"{name}\" ismi zaten alınmış. Lütfen, farklı bir isim seçiniz."
 
 #: frontend/src/components/dialog/create-file-dialog.js:138
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:205
@@ -918,7 +923,7 @@ msgstr "Yeni Dosya"
 
 #: frontend/src/components/dialog/create-file-dialog.js:154
 msgid "This is a draft"
-msgstr ""
+msgstr "Bu bir taslak"
 
 #: frontend/src/components/dialog/create-folder-dialog.js:85
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:204
@@ -977,12 +982,12 @@ msgstr "Yeni Kütüphane"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:197
 msgid "Template"
-msgstr ""
+msgstr "Şablon"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:209
 #: frontend/src/pages/my-libs/mylib-repo-list-view.js:91
 msgid "Storage Backend"
-msgstr ""
+msgstr "Backend Depolama"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:221
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:21
@@ -1062,7 +1067,7 @@ msgstr "İç Sunucu Hatası"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:56
 msgid "Tag \"{name}\" already exists."
-msgstr ""
+msgstr "\"{name}\" etiket zaten mevcut."
 
 #: frontend/src/components/dialog/create-tag-dialog.js:83
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
@@ -1070,15 +1075,15 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:196 frontend/src/repo-history.js:108
 #: frontend/src/repo-snapshot.js:146
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:84
 msgid "New Tag"
-msgstr ""
+msgstr "Yeni Etiket"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:94
 msgid "Select a color"
-msgstr ""
+msgstr "Bir renk seç"
 
 #: frontend/src/components/dialog/create-tag-dialog.js:118
 #: frontend/src/components/dialog/create-tag-dialog.js:119
@@ -1099,21 +1104,25 @@ msgstr "Açıklama gerekli"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:113
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:23
 msgid "Add permission"
-msgstr ""
+msgstr "İzin ekle"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:113
 msgid "Edit permission"
-msgstr ""
+msgstr "İzinleri Düzenle"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:138
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:30
 msgid "Permission name"
-msgstr ""
+msgstr "İzin Adı"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:151
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:187
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:196
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:224
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:58
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:68
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:78
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:88
 #: frontend/src/pages/share-with-ocm/remote-dir-view.js:141
 #: frontend/src/pages/sys-admin/repos/dir-view.js:174
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:59
@@ -1143,6 +1152,10 @@ msgstr "Yükle"
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:126
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:245
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:63
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:83
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:93
 #: frontend/src/pages/share-with-ocm/remote-dir-content.js:56
 #: frontend/src/pages/sys-admin/repos/dir-content.js:64
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:64
@@ -1159,17 +1172,19 @@ msgid "Download"
 msgstr "İndir"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:163
+msgid "Create"
+msgstr "Oluştur"
+
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:169
 #: frontend/src/translate.js:7
 msgid "Modify"
+msgstr "Değiştir"
+
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:177
+msgid "Modify includes modify file, move/rename file and folder"
 msgstr ""
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:171
-msgid ""
-"Modify includes modify file, create file and folder, move/rename file and "
-"folder"
-msgstr ""
-
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:178
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:184
 #: frontend/src/components/dialog/internal-link-dialog.js:77
 #: frontend/src/components/dialog/internal-link.js:59
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:37
@@ -1183,13 +1198,13 @@ msgstr ""
 msgid "Copy"
 msgstr "Kopyala"
 
-#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
-msgid "Preview online"
-msgstr ""
-
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:196
+msgid "Preview online"
+msgstr "Çevrimiçi Önizleme"
+
+#: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:202
 msgid "Generate share link"
-msgstr ""
+msgstr "Paylaşım bağlantısı oluştur"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:55
 #: frontend/src/components/dialog/generate-share-link.js:436
@@ -1219,15 +1234,15 @@ msgstr "Düzenle"
 
 #: frontend/src/components/dialog/delete-dialog.js:21
 msgid "Delete File"
-msgstr ""
+msgstr "Dosyayı Sil"
 
 #: frontend/src/components/dialog/delete-dialog.js:23
 msgid "Delete Folder"
-msgstr ""
+msgstr "Klasörü Sil"
 
 #: frontend/src/components/dialog/delete-dialog.js:29
 msgid "Are you sure to delete"
-msgstr ""
+msgstr "Silmek istediğinize emin misiniz?"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:52
 #, javascript-format
@@ -1259,35 +1274,35 @@ msgstr "Grubu Sil"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:30
 msgid "Really want to delete this group?"
-msgstr ""
+msgstr "Bu grubu gerçekten silmek istiyor musunuz?"
 
 #: frontend/src/components/dialog/edit-filetag-dialog.js:143
 msgid "Select Tags"
-msgstr ""
+msgstr "Etiketleri Seç"
 
 #: frontend/src/components/dialog/edit-filetag-dialog.js:165
 #: frontend/src/components/dialog/list-tag-dialog.js:145
 msgid "Create a new tag"
-msgstr ""
+msgstr "Yeni bir etiket oluştur"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:47
 msgid "Successfully edited labels."
-msgstr ""
+msgstr "Etiketler başarıyla düzenlendi."
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:61
 msgid "Edit labels"
-msgstr ""
+msgstr "Etiketleri Düzenle"
 
 #: frontend/src/components/dialog/file-participant-dialog.js:96
 #: frontend/src/pages/sys-admin/groups/group-members.js:232
 msgid "Failed to add {email_placeholder}: {error_msg_placeholder}"
-msgstr ""
+msgstr "{email_placeholder}: {error_msg_placeholder} eklenemedi"
 
 #: frontend/src/components/dialog/file-participant-dialog.js:121
 #: frontend/src/components/dirent-detail/detail-list-view.js:107
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:65
 msgid "Participants"
-msgstr ""
+msgstr "Katılımcılar"
 
 #: frontend/src/components/dialog/file-participant-dialog.js:131
 #: frontend/src/pages/sys-admin/terms-and-conditions/terms-and-conditions.js:85
@@ -1296,7 +1311,7 @@ msgstr "Ekle"
 
 #: frontend/src/components/dialog/generate-share-link.js:194
 msgid "Share link is copied to the clipboard."
-msgstr ""
+msgstr "Paylaşım bağlantısı panoya kopyalandı."
 
 #: frontend/src/components/dialog/generate-share-link.js:201
 msgid "Direct download link is copied to the clipboard."
@@ -1306,13 +1321,13 @@ msgstr ""
 #: frontend/src/components/dialog/generate-upload-link.js:142
 #: frontend/src/components/dialog/update-webdav-password.js:30
 msgid "Please enter a password."
-msgstr ""
+msgstr "Lütfen, bir şifre giriniz."
 
 #: frontend/src/components/dialog/generate-share-link.js:244
 #: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/update-webdav-password.js:34
 msgid "The password is too short."
-msgstr ""
+msgstr "Şifre çok kısa."
 
 #: frontend/src/components/dialog/generate-share-link.js:252
 #: frontend/src/components/dialog/generate-upload-link.js:154
@@ -1320,12 +1335,12 @@ msgstr ""
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
-msgstr ""
+msgstr "Şifre çok zayıf. Şifreniz en az {passwordStrengthLevel} birer adet sayı, büyük harf, küçük harf ve diğer simgelerden içermelidir."
 
 #: frontend/src/components/dialog/generate-share-link.js:260
 #: frontend/src/components/dialog/generate-upload-link.js:162
 msgid "Please select an expiration time"
-msgstr ""
+msgstr "Lütfen, bir sona erme süresi seçiniz"
 
 #: frontend/src/components/dialog/generate-share-link.js:269
 #: frontend/src/components/dialog/generate-upload-link.js:170
@@ -1337,14 +1352,14 @@ msgstr "Lütfen günleri girin"
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:66
 msgid "Please enter a non-negative integer"
-msgstr ""
+msgstr "Lütfen, negatif olmayan bir tam sayı giriniz"
 
 #: frontend/src/components/dialog/generate-share-link.js:367
 #: frontend/src/pages/share-admin/folders.js:166
 #: frontend/src/pages/share-admin/libraries.js:141
 #: frontend/src/pages/share-admin/share-links.js:175
 msgid "Successfully modified permission."
-msgstr ""
+msgstr "İzin başarıyla değiştirildi."
 
 #: frontend/src/components/dialog/generate-share-link.js:380
 #: frontend/src/components/dialog/generate-upload-link.js:276
@@ -1357,11 +1372,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:395
 msgid "Link:"
-msgstr ""
+msgstr "Bağlantı:"
 
 #: frontend/src/components/dialog/generate-share-link.js:406
 msgid "Direct Download Link:"
-msgstr ""
+msgstr "Doğrudan indirme bağlantısı:"
 
 #: frontend/src/components/dialog/generate-share-link.js:418
 #: frontend/src/components/dialog/generate-upload-link.js:298
@@ -1374,7 +1389,7 @@ msgstr "Şifre:"
 #: frontend/src/components/user-settings/web-api-auth-token.js:82
 #: frontend/src/components/user-settings/webdav-password.js:65
 msgid "Hide"
-msgstr ""
+msgstr "Gizle"
 
 #: frontend/src/components/dialog/generate-share-link.js:422
 #: frontend/src/components/dialog/generate-upload-link.js:302
@@ -1386,7 +1401,7 @@ msgstr "Göster"
 #: frontend/src/components/dialog/generate-share-link.js:429
 #: frontend/src/components/dialog/generate-upload-link.js:310
 msgid "Expiration Date:"
-msgstr ""
+msgstr "Bitiş Tarihi:"
 
 #: frontend/src/components/dialog/generate-share-link.js:458
 #: frontend/src/components/dialog/generate-upload-link.js:339
@@ -1411,12 +1426,12 @@ msgstr "Gönder"
 
 #: frontend/src/components/dialog/generate-share-link.js:498
 msgid "Are you sure you want to delete the share link?"
-msgstr ""
+msgstr "Paylaşım Link'ini silmek istediğinize emin misiniz?"
 
 #: frontend/src/components/dialog/generate-share-link.js:499
 msgid ""
 "If the share link is deleted, no one will be able to access it any more."
-msgstr ""
+msgstr "Paylaşım Link'i silindiyse, artık kimse bu Link'e erişemez"
 
 #: frontend/src/components/dialog/generate-share-link.js:513
 #: frontend/src/components/dialog/generate-share-link.js:518
@@ -1432,7 +1447,7 @@ msgstr "Otomatik sona erme ekle"
 
 #: frontend/src/components/dialog/generate-share-link.js:569
 msgid "Set permission"
-msgstr ""
+msgstr "İzin belirle"
 
 #: frontend/src/components/dialog/generate-share-link.js:584
 #: frontend/src/components/dialog/generate-upload-link.js:422
@@ -1499,6 +1514,7 @@ msgid "Zoom out"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:37
+#: frontend/src/components/dialog/org-import-users-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:38
 msgid "Please choose a .xlsx file."
 msgstr ""
@@ -1508,26 +1524,28 @@ msgid "Import members from a .xlsx file"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
+#: frontend/src/components/dialog/org-import-users-dialog.js:52
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:53
 msgid "Download an example file"
 msgstr ""
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
+#: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 msgid "Upload file"
 msgstr "Dosya yükle"
 
 #: frontend/src/components/dialog/insert-file-dialog.js:55
 msgid "Select File"
-msgstr ""
+msgstr "Dosya Seç"
 
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:57
 msgid "Select Image"
-msgstr ""
+msgstr "Görüntü Seç"
 
 #: frontend/src/components/dialog/insert-repo-image-dialog.js:73
 msgid "No preview"
-msgstr ""
+msgstr "Önizleme yok"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:55
 #: frontend/src/components/dialog/internal-link.js:41
@@ -1540,7 +1558,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:128
 #: frontend/src/components/dialog/share-dialog.js:273
 msgid "Internal Link"
-msgstr ""
+msgstr "İç bağlantı"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:69
 #: frontend/src/components/dialog/internal-link.js:54
@@ -1562,12 +1580,13 @@ msgstr ""
 #: frontend/src/pages/invitations/invitations-view.js:98
 #: frontend/src/pages/invitations/invitations-view.js:134
 msgid "Revoke Access"
-msgstr ""
+msgstr "Erişimi iptal et"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:49
 #: frontend/src/components/dialog/label-repo-state-dialog.js:55
 #: frontend/src/components/dialog/set-org-user-quota.js:40
 #: frontend/src/components/dialog/share-to-invite-people.js:161
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:29
 #: frontend/src/pages/search/main-panel.js:101
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:29
 msgid "It is required."
@@ -1576,12 +1595,12 @@ msgstr "Gerekli."
 #: frontend/src/components/dialog/invite-people-dialog.js:65
 #: frontend/src/components/dialog/share-to-invite-people.js:175
 msgid "Email is invalid."
-msgstr ""
+msgstr "Email geçersiz."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:79
 #: frontend/src/components/dialog/share-to-invite-people.js:190
 msgid "Successfully invited %(email)."
-msgstr ""
+msgstr "Başarıyla davet edildi %(email)."
 
 #: frontend/src/components/dialog/invite-people-dialog.js:82
 #: frontend/src/components/dialog/share-to-invite-people.js:193
@@ -1601,13 +1620,13 @@ msgstr ""
 
 #: frontend/src/components/dialog/invite-people-dialog.js:109
 msgid "Emails"
-msgstr ""
+msgstr "Emailler"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:113
 #: frontend/src/components/dialog/share-to-invite-people.js:269
 #: frontend/src/components/send-link.js:97
 msgid "Emails, separated by ','"
-msgstr ""
+msgstr "Emailler ',' ile birbirinden ayrılır"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:67
 msgid "Successfully added label(s) for library {placeholder}"
@@ -1621,15 +1640,15 @@ msgstr ""
 #: frontend/src/components/dialog/leave-group-dialog.js:27
 #: frontend/src/pages/groups/group-view.js:498
 msgid "Leave Group"
-msgstr ""
+msgstr "Gruptan Ayrıl"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:29
 msgid "Really want to leave this group?"
-msgstr ""
+msgstr "Bu gruptan ayrılmak istediğinize emin misiniz?"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:33
 msgid "Leave"
-msgstr ""
+msgstr "Ayrıl"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:62
 msgid "This library is password protected"
@@ -1646,7 +1665,7 @@ msgstr "Şifre sadece 1 saat sunucuda tutulacaktır."
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:55
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:55
 msgid "Successfully set library history."
-msgstr ""
+msgstr "Kütüphane geçmişi başarıyla ayarlandı."
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:116
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:114
@@ -1654,11 +1673,11 @@ msgstr ""
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:111
 #: frontend/src/pages/sys-admin/repos/repos.js:254
 msgid "History Setting"
-msgstr ""
+msgstr "Geçmiş Ayarı"
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:122
 msgid "Setting library history is disabled by Admin."
-msgstr ""
+msgstr "Kütüphane geçmiş ayarı, Admin tarafından devre dışı bırakıldı."
 
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:127
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:120
@@ -1684,24 +1703,24 @@ msgstr "gün"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:47
 msgid "Please enter a positive integer"
-msgstr ""
+msgstr "Lütfen, pozitif bir tam sayı giriniz"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:61
 msgid "Successfully set it."
-msgstr ""
+msgstr "Başarıyla Ayarlandı."
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:98
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:132
 msgid "Auto deletion"
-msgstr ""
+msgstr "Otomatik Silme"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:104
 msgid "Do not automatically delete files"
-msgstr ""
+msgstr "Dosyaları otomatik olarak silme"
 
 #: frontend/src/components/dialog/lib-old-files-auto-del-dialog.js:108
 msgid "Automatically delete files that are not modified within certain days:"
-msgstr ""
+msgstr "Belirli günler içinde değiştirilmeyen dosyaları otomatik olarak sil:"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:43
 msgid "User Permission"
@@ -1713,11 +1732,11 @@ msgstr "Gruop İzni"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
 msgid "{placeholder} Folder Permission"
-msgstr ""
+msgstr "{placeholder} Klasör İzni"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:73
 msgid "Set {placeholder}'s permission"
-msgstr ""
+msgstr "{placeholder} için izin belirle"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:84
 #: frontend/src/components/dialog/share-to-group.js:105
@@ -1742,7 +1761,6 @@ msgstr ""
 #: frontend/src/pages/my-libs/my-libs-deleted.js:150
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:256
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:278
-#: frontend/src/pages/org-admin/org-user-item.js:96
 #: frontend/src/pages/search/main-panel.js:71
 #: frontend/src/pages/search/main-panel.js:157
 #: frontend/src/pages/search/main-panel.js:169
@@ -1784,7 +1802,7 @@ msgstr "Klasör"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:294
 msgid "Select a group"
-msgstr ""
+msgstr "Bir grup seçiniz"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:250
 #: frontend/src/components/dialog/share-to-user.js:323
@@ -1793,6 +1811,7 @@ msgstr ""
 #: frontend/src/pages/dashboard/files-activities.js:31
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:99
 #: frontend/src/pages/org-admin/org-logs-file-update.js:115
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:182
 msgid "User"
@@ -1800,12 +1819,13 @@ msgstr "Kullanıcı"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:23
 msgid "Created Files"
-msgstr ""
+msgstr "Oluşturulmuş Dosyalar"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:29
 #: frontend/src/file-history-old.js:242
 #: frontend/src/pages/dashboard/files-activities.js:34
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:163
+#: frontend/src/pages/org-admin/devices/devices-errors.js:52
 #: frontend/src/pages/sys-admin/abuse-reports.js:102
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:48
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:47
@@ -1820,19 +1840,19 @@ msgstr "Zaman"
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:44
 #: frontend/src/pages/drafts/draft-content.js:29
 msgid "Successfully deleted draft %(draft)s."
-msgstr ""
+msgstr "Taslak %(draft)s başarıyla silindi."
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:48
 #: frontend/src/pages/drafts/draft-content.js:33
 msgid "Failed to delete draft %(draft)s."
-msgstr ""
+msgstr "Taslak %(draft)s silinemedi."
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:61
 #: frontend/src/components/main-side-nav.js:264
 #: frontend/src/components/main-side-nav.js:267
 #: frontend/src/pages/drafts/drafts-view.js:19
 msgid "Drafts"
-msgstr ""
+msgstr "Taslaklar"
 
 #: frontend/src/components/dialog/list-repo-drafts-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:100
@@ -1890,7 +1910,7 @@ msgstr "En son Güncelleme"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:79
 msgid "Tagged Files"
-msgstr ""
+msgstr "Etiketli Dosyalar"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:85
 #: frontend/src/components/dialog/search-file-dialog.js:99
@@ -1924,32 +1944,32 @@ msgstr "Boyut"
 
 #: frontend/src/components/dialog/list-taggedfiles-dialog.js:165
 msgid "deleted"
-msgstr ""
+msgstr "Silindi"
 
 #: frontend/src/components/dialog/local-draft-dialog.js:17
 msgid "Local draft"
-msgstr ""
+msgstr "Yerel Taslak"
 
 #: frontend/src/components/dialog/local-draft-dialog.js:19
 msgid "You have an unsaved draft. Do you like to use it?"
-msgstr ""
+msgstr "Kaydedilmemiş bir taslağınız var. Kullanmak ister misiniz?"
 
 #: frontend/src/components/dialog/local-draft-dialog.js:22
 msgid "Use draft"
-msgstr ""
+msgstr "Taslağı kullan"
 
 #: frontend/src/components/dialog/local-draft-dialog.js:23
 msgid "Delete draft"
-msgstr ""
+msgstr "Taslağı sil"
 
 #: frontend/src/components/dialog/manage-members-dialog.js:44
 msgid "Manage group members"
-msgstr ""
+msgstr "Grup üyelerini yönet"
 
 #: frontend/src/components/dialog/manage-members-dialog.js:47
 #: frontend/src/components/list-and-add-group-members.js:162
 msgid "Search group members"
-msgstr ""
+msgstr "Grup üyelerini ara"
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:155
 msgid "Move {placeholder} to"
@@ -1957,11 +1977,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/move-dirent-dialog.js:159
 msgid "Move selected item(s) to:"
-msgstr ""
+msgstr "Seçilen öğe(leri) şuraya taşı:"
 
 #: frontend/src/components/dialog/new-wiki-dialog.js:60
 msgid "New Wiki"
-msgstr ""
+msgstr "Yeni Wiki"
 
 #: frontend/src/components/dialog/op-menu.js:53
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:755
@@ -1985,7 +2005,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups.js:294
 #: frontend/src/pages/org-admin/org-libraries.js:313
 #: frontend/src/pages/org-admin/org-links.js:209
-#: frontend/src/pages/org-admin/org-user-item.js:167
+#: frontend/src/pages/org-admin/org-user-item.js:151
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:173
 #: frontend/src/pages/share-admin/folders.js:232
 #: frontend/src/pages/share-admin/libraries.js:246
@@ -2006,7 +2026,7 @@ msgstr "Yönetici Ekle"
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:59
 msgid "Select a user as admin..."
-msgstr ""
+msgstr "Admin olarak bir kullanıcı seçiniz..."
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:72
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:72
@@ -2033,18 +2053,20 @@ msgstr ""
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:337
 #: frontend/src/pages/sys-admin/orgs/org-users.js:351
 msgid "Add Member"
-msgstr ""
+msgstr "Üye Ekle"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:106
 msgid "email is required"
-msgstr ""
+msgstr "Email gereklidir"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:140
+#: frontend/src/pages/org-admin/org-users-users.js:232
+#: frontend/src/pages/org-admin/org-users-users.js:233
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:93
 #: frontend/src/pages/sys-admin/users/users.js:378
 #: frontend/src/pages/sys-admin/users/users.js:490
 msgid "Add User"
-msgstr ""
+msgstr "Kullanıcı Ekle"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:144
 #: frontend/src/components/dialog/share-to-invite-people.js:300
@@ -2060,10 +2082,10 @@ msgid "Confirm Password"
 msgstr "Şifreyi Onayla"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:31
-#: frontend/src/pages/org-admin/org-users-users.js:188
-#: frontend/src/pages/org-admin/org-users-users.js:189
+#: frontend/src/pages/org-admin/org-users-users.js:235
+#: frontend/src/pages/org-admin/org-users-users.js:236
 msgid "Invite user"
-msgstr ""
+msgstr "Kullanıcıyı davet et"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:33
 msgid ""
@@ -2087,7 +2109,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:183
 #: frontend/src/pages/sys-admin/users/users-content.js:347
 msgid "Are you sure you want to delete {placeholder} ?"
-msgstr ""
+msgstr "{placeholder} silmek istediğinize emin misiniz?"
 
 #: frontend/src/components/dialog/org-delete-department-dialog.js:37
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog.js:37
@@ -2100,6 +2122,11 @@ msgstr ""
 msgid "Delete Member"
 msgstr "Üyeyi Sil"
 
+#: frontend/src/components/dialog/org-import-users-dialog.js:50
+#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
+msgid "Import users from a .xlsx file"
+msgstr ""
+
 #: frontend/src/components/dialog/org-rename-department-dialog.js:79
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog.js:74
 #: frontend/src/pages/sys-admin/departments/department-detail.js:235
@@ -2109,7 +2136,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:45
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:45
 msgid "Quota is invalid."
-msgstr ""
+msgstr "Kota geçersiz."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:65
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:50
@@ -2122,12 +2149,12 @@ msgstr "Kota Oluştur"
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:77
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:77
 msgid "An integer that is greater than 0 or equal to -2."
-msgstr ""
+msgstr "0'dan büyük ya da -2'ye eşit bir tam sayı."
 
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:78
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog.js:78
 msgid "Tip: -2 means no limit."
-msgstr ""
+msgstr "İpucu: -2 limit yok anlamına gelir."
 
 #: frontend/src/components/dialog/rename-dialog.js:93
 #: frontend/src/components/dialog/rename-dirent.js:95
@@ -2144,21 +2171,21 @@ msgstr "Dosyayı yeniden adlandır"
 #: frontend/src/components/dialog/rename-dialog.js:115
 #: frontend/src/components/dialog/rename-dirent.js:117
 msgid "Rename Folder"
-msgstr ""
+msgstr "Klasörü yeniden adlandır"
 
 #: frontend/src/components/dialog/rename-dialog.js:117
 #: frontend/src/components/dialog/rename-dirent.js:119
 msgid "New file name"
-msgstr ""
+msgstr "Yeni dosya adı"
 
 #: frontend/src/components/dialog/rename-dialog.js:117
 #: frontend/src/components/dialog/rename-dirent.js:119
 msgid "New folder name"
-msgstr ""
+msgstr "Yeni klasör adı"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:59
 msgid "Rename Group"
-msgstr ""
+msgstr "Grubu yeniden adlandır"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:61
 msgid "Rename group to"
@@ -2177,7 +2204,7 @@ msgstr "İzin reddedildi"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:222
 msgid "App Name"
-msgstr ""
+msgstr "Uygulama Adı"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:285
 msgid "{placeholder} API Token"
@@ -2192,7 +2219,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:232
 #: frontend/src/pages/sys-admin/links/links-nav.js:15
 msgid "Share Links"
-msgstr ""
+msgstr "Bağlantıları paylaş"
 
 #: frontend/src/components/dialog/repo-share-upload-links-dialog.js:173
 #: frontend/src/pages/share-admin/share-links.js:389
@@ -2224,7 +2251,7 @@ msgstr "Oluşturan"
 #: frontend/src/components/dialog/share-admin-link.js:29
 #: frontend/src/components/dialog/view-link-dialog.js:32
 msgid "Link"
-msgstr ""
+msgstr "Bağlantı"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:44
 msgid ""
@@ -2235,11 +2262,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:49
 msgid "Reset library password"
-msgstr ""
+msgstr "Kütüphane şifresini sıfırla"
 
 #: frontend/src/components/dialog/reset-encrypted-repo-password-dialog.js:53
 msgid "Sending new password..."
-msgstr ""
+msgstr "Yeni şifre gönderiliyor..."
 
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:57
 #: frontend/src/components/dialog/save-shared-file-dialog.js:63
@@ -2249,7 +2276,7 @@ msgstr ""
 #: frontend/src/components/dialog/search-file-dialog.js:82
 #: frontend/src/components/dialog/search-file-dialog.js:86
 msgid "Search"
-msgstr ""
+msgstr "Ara"
 
 #: frontend/src/components/dialog/search-file-dialog.js:85
 #: frontend/src/components/search/search-by-name.js:35
@@ -2270,11 +2297,11 @@ msgstr ""
 
 #: frontend/src/components/dialog/set-org-user-name.js:59
 msgid "Set user name"
-msgstr ""
+msgstr "Kullanıcı adı belirle"
 
 #: frontend/src/components/dialog/set-org-user-quota.js:65
 msgid "Set user quota"
-msgstr ""
+msgstr "Kullanıcı kotasını belirle"
 
 #: frontend/src/components/dialog/set-org-user-quota.js:74
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:69
@@ -2288,7 +2315,7 @@ msgstr ""
 #: frontend/src/components/dialog/share-dialog.js:114
 #: frontend/src/components/dialog/share-dialog.js:267
 msgid "Share Link"
-msgstr ""
+msgstr "Bağlantıyı Paylaş"
 
 #: frontend/src/components/dialog/share-dialog.js:121
 msgid "Upload Link"
@@ -2310,7 +2337,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:163
 msgid "Share to other server"
-msgstr ""
+msgstr "Başka sunucuyla paylaş"
 
 #: frontend/src/components/dialog/share-dialog.js:323
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:84
@@ -2343,7 +2370,7 @@ msgstr "simge"
 
 #: frontend/src/components/dialog/share-repo-dialog.js:105
 msgid "Please select a library to share."
-msgstr ""
+msgstr "Lütfen, paylaşmak için bir kütüphane seçiniz."
 
 #: frontend/src/components/dialog/share-repo-dialog.js:121
 msgid "Select libraries to share"
@@ -2352,7 +2379,7 @@ msgstr "Paylaşmak için kütüphane seçin"
 #: frontend/src/components/dialog/share-to-group.js:326
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:246
 msgid "Select groups..."
-msgstr ""
+msgstr "Grupları seç..."
 
 #: frontend/src/components/dialog/share-to-invite-people.js:302
 #: frontend/src/pages/invitations/invitations-view.js:118
@@ -2368,20 +2395,22 @@ msgstr "Zaman aşımı"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:303
 msgid "Inviter"
-msgstr ""
+msgstr "Davet eden"
 
 #: frontend/src/components/dialog/share-to-other-server.js:79
 #: frontend/src/components/dialog/share-to-other-server.js:212
 msgid "Server"
-msgstr ""
+msgstr "Sunucu"
 
 #: frontend/src/components/dialog/share-to-other-server.js:80
 #: frontend/src/components/dialog/share-to-other-server.js:213
 msgid "User Email"
-msgstr ""
+msgstr "Kullanıcı E-postası"
 
 #: frontend/src/components/dialog/share-to-other-server.js:184
 #: frontend/src/pages/groups/group-view.js:293
+#: frontend/src/pages/org-admin/org-user-item.js:82
+#: frontend/src/pages/org-admin/org-users-users.js:145
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:132
 #: frontend/src/pages/sys-admin/users/users-content.js:227
 #: frontend/src/pages/sys-admin/users/users-content.js:268
@@ -2389,7 +2418,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/users.js:267
 #: frontend/src/pages/sys-admin/users/users.js:291
 msgid "It may take some time, please wait."
-msgstr ""
+msgstr "Biraz zaman alabilir, lütfen bekleyiniz."
 
 #: frontend/src/components/dialog/share-to-other-server.js:190
 #: frontend/src/pages/invitations/invitations-view.js:55
@@ -2413,17 +2442,17 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-repos.js:263
 #: frontend/src/pages/sys-admin/users/users.js:206
 msgid "Successfully deleted 1 item."
-msgstr ""
+msgstr "1 öğe başarıyla silindi."
 
 #: frontend/src/components/dialog/share-to-other-server.js:222
 msgid "Select a server..."
-msgstr ""
+msgstr "Bir sunucu seç..."
 
 #: frontend/src/components/dialog/share-to-user.js:222
 #: frontend/src/components/dialog/share-to-user.js:248
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:159
 msgid "Library can not be shared to owner."
-msgstr ""
+msgstr "Kütüphane, sahibiyle paylaşılamaz."
 
 #: frontend/src/components/dialog/sort-options.js:18
 msgid "By name ascending"
@@ -2451,7 +2480,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:67
 msgid "An integer that is greater than or equal to 0."
-msgstr ""
+msgstr "0'a eşit ya da 0'dan büyük bir tam sayı."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:41
 msgid "Add institution"
@@ -2459,54 +2488,54 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:71
 msgid "Version Number is required."
-msgstr ""
+msgstr "Verisyon numarası gerekli."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:75
 msgid "Version Number must be a number."
-msgstr ""
+msgstr "Versiyon numarası, bir numara olmalıdır."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:79
 msgid "Text is required."
-msgstr ""
+msgstr "Metin gerekli"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:102
 msgid "Update Terms and Conditions"
-msgstr ""
+msgstr "Şartları ve Koşulları Güncelle"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:102
 msgid "Add Terms and Conditions"
-msgstr ""
+msgstr "Şartlar ve Koşullar Ekle"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:113
 msgid "Version Number"
-msgstr ""
+msgstr "Versiyon numarası"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:117
 #: frontend/src/pages/search/advanced-search.js:18
 msgid "Text"
-msgstr ""
+msgstr "Metin"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:121
 msgid "Activated"
-msgstr ""
+msgstr "Aktifleştirildi"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:125
 msgid "On"
-msgstr ""
+msgstr "Açık"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:131
 msgid "Off"
-msgstr ""
+msgstr "Kapalı"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:75
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:99
 msgid "Passwords do not match."
-msgstr ""
+msgstr "Parolalar uyuşmuyor."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:91
 #: frontend/src/pages/sys-admin/orgs/orgs.js:128
 msgid "Add Organization"
-msgstr ""
+msgstr "Organizasyon Ekle"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:101
 msgid "Owner can use admin panel in an organization, must be a new account."
@@ -2558,25 +2587,21 @@ msgstr ""
 msgid "Transfer Group {placeholder} to"
 msgstr ""
 
-#: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:51
-msgid "Import users from a .xlsx file"
-msgstr ""
-
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:58
 msgid "Date Invalid."
-msgstr ""
+msgstr "Tarih geçersiz."
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:83
 msgid "Choose date"
-msgstr ""
+msgstr "Tarih seç"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:86
 msgid "Start date"
-msgstr ""
+msgstr "Başlangıç tarihi"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog.js:95
 msgid "End date"
-msgstr ""
+msgstr "Bitiş tarihi"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-repo-transfer-dialog.js:34
 #: frontend/src/components/dialog/transfer-dialog.js:71
@@ -2585,19 +2610,19 @@ msgstr ""
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:50
 msgid "Set max number of members"
-msgstr ""
+msgstr "Maksimum üye sayısını belirle"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:50
 #: frontend/src/pages/sys-admin/users/user-info.js:44
 msgid "Set Name"
-msgstr ""
+msgstr "Ad belirle"
 
 #: frontend/src/components/dialog/terms-editor-dialog.js:17
 #: frontend/src/components/dialog/terms-preview-dialog.js:16
 #: frontend/src/components/side-nav-footer.js:40
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:354
 msgid "Terms"
-msgstr ""
+msgstr "Şartlar"
 
 #: frontend/src/components/dialog/transfer-dialog.js:88
 msgid "Select a department"
@@ -2622,7 +2647,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:62
 msgid "Please enter 1 or more character"
-msgstr ""
+msgstr "Lütfen, 1 veya daha fazla karakter giriniz"
 
 #: frontend/src/components/dialog/update-webdav-password.js:74
 #: frontend/src/components/user-settings/webdav-password.js:59
@@ -2656,16 +2681,16 @@ msgstr ""
 
 #: frontend/src/components/dialog/wiki-delete-dialog.js:20
 msgid "Unpublish Library"
-msgstr ""
+msgstr "Kütüphaneyi yayından kaldır"
 
 #: frontend/src/components/dialog/wiki-delete-dialog.js:22
 msgid "Are you sure you want to unpublish this library?"
-msgstr ""
+msgstr "Bu kütüphaneyi yayından kaldırmak istediğinize emin misiniz?"
 
 #: frontend/src/components/dialog/wiki-delete-dialog.js:26
 #: frontend/src/components/wiki-list-view/wiki-list-item.js:154
 msgid "Unpublish"
-msgstr ""
+msgstr "Yayından kaldır"
 
 #: frontend/src/components/dialog/wiki-select-dialog.js:71
 #: frontend/src/pages/wikis/wikis.js:121 frontend/src/pages/wikis/wikis.js:124
@@ -2678,7 +2703,7 @@ msgstr ""
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:69
 msgid "File does not exist."
-msgstr ""
+msgstr "Dosya bulunmuyor."
 
 #: frontend/src/components/dir-view-mode/dir-column-file.js:90
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:76
@@ -2688,21 +2713,21 @@ msgstr ""
 #: frontend/src/components/dir-view-mode/dir-column-file.js:91
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:77
 msgid "View Draft"
-msgstr ""
+msgstr "Taslağı Görüntüle"
 
 #: frontend/src/components/dirent-detail/detail-comments-list.js:179
 #: frontend/src/components/file-view/comment-panel.js:205
 #: frontend/src/components/review-list-view/review-comments.js:116
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-panel.js:219
 msgid "Add a comment..."
-msgstr ""
+msgstr "Bir yorum ekle..."
 
 #: frontend/src/components/dirent-detail/detail-comments-list.js:312
 #: frontend/src/components/file-view/comment-panel.js:348
 #: frontend/src/components/review-list-view/review-comments.js:248
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:133
 msgid "Mark as resolved"
-msgstr ""
+msgstr "Çözüldü olarak işaretle"
 
 #: frontend/src/components/dirent-detail/detail-list-view.js:74
 #: frontend/src/components/dirent-detail/detail-list-view.js:88
@@ -2710,7 +2735,7 @@ msgstr ""
 #: frontend/src/draft.js:833
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/detail-list-view.js:46
 msgid "Location"
-msgstr ""
+msgstr "Konum"
 
 #: frontend/src/components/dirent-detail/lib-details.js:68
 #: frontend/src/components/main-side-nav.js:187
@@ -2725,7 +2750,7 @@ msgstr "Dosyalar"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:207
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:652
 msgid "locked by {name}"
-msgstr ""
+msgstr "{name} tarafından kilitlendi"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:227
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:688
@@ -2757,24 +2782,25 @@ msgstr "Yıldızı kaldır"
 #: frontend/src/pages/shared-libs/shared-libs.js:220
 #: frontend/src/pages/shared-libs/shared-libs.js:276
 msgid "Star"
-msgstr ""
+msgstr "Yıldız"
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:57
 msgid "This folder has no content at this time."
-msgstr ""
+msgstr "Bu klasörde şu an içerik yok."
 
 #: frontend/src/components/dirent-list-view/dirent-none-view.js:58
 msgid "You can create files quickly"
-msgstr ""
+msgstr "Dosyaları hızlı bir şekilde oluşturabilirsiniz"
 
 #: frontend/src/components/draft-list-view/draft-list-item.js:112
 #: frontend/src/draft.js:674
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:91
 msgid "Publish"
-msgstr ""
+msgstr "Yayınla"
 
 #: frontend/src/components/draft-list-view/draft-list-view.js:37
 #: frontend/src/pages/dashboard/files-activities.js:33
+#: frontend/src/pages/org-admin/devices/devices-errors.js:50
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:103
 #: frontend/src/pages/org-admin/org-logs-file-update.js:117
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:84
@@ -2795,7 +2821,7 @@ msgstr "Kütüphane"
 #: frontend/src/components/search/search.js:239
 #: frontend/src/components/search/wiki-search.js:209
 msgid "No results matching."
-msgstr ""
+msgstr "Eşleşen sonuç yok."
 
 #: frontend/src/components/file-chooser/file-chooser.js:381
 #: frontend/src/components/file-chooser/file-chooser.js:425
@@ -2808,41 +2834,41 @@ msgstr "Diğer Kütüphaneler"
 
 #: frontend/src/components/file-chooser/file-chooser.js:478
 msgid "Search..."
-msgstr ""
+msgstr "Ara..."
 
 #: frontend/src/components/file-uploader/file-uploader.js:149
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:147
 #: frontend/src/pages/upload-link/file-uploader.js:141
 msgid "Please upload no more than {maxFiles} files at a time."
-msgstr ""
+msgstr "Lütfen, tek seferde {maxFiles} sayısından fazla dosya yüklemeyiniz."
 
 #: frontend/src/components/file-uploader/file-uploader.js:401
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:412
 #: frontend/src/pages/upload-link/file-uploader.js:401
 msgid "File is locked by others."
-msgstr ""
+msgstr "Dosya başkaları tarafından kilitlendi."
 
 #: frontend/src/components/file-uploader/file-uploader.js:402
 msgid "Invalid filename."
-msgstr ""
+msgstr "Geçersiz Dosya adı."
 
 #: frontend/src/components/file-uploader/file-uploader.js:403
 msgid "File already exists."
-msgstr ""
+msgstr "Dosya zaten mevcut."
 
 #: frontend/src/components/file-uploader/file-uploader.js:404
 msgid "File size is too large."
-msgstr ""
+msgstr "Dosya boyutu çok büyük."
 
 #: frontend/src/components/file-uploader/file-uploader.js:405
 msgid "Out of quota."
-msgstr ""
+msgstr "Kota dışında."
 
 #: frontend/src/components/file-uploader/file-uploader.js:414
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:405
 #: frontend/src/pages/upload-link/file-uploader.js:394
 msgid "Network error"
-msgstr ""
+msgstr "Ağ hatası"
 
 #: frontend/src/components/file-uploader/forbid-upload-list-item.js:13
 #: frontend/src/components/shared-link-file-uploader/forbid-upload-list-item.js:13
@@ -2853,25 +2879,25 @@ msgstr ""
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:97
 #: frontend/src/pages/upload-link/upload-list-item.js:94
 msgid "Preparing to upload..."
-msgstr ""
+msgstr "Yüklemeye hazırlanıyor..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:98
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:98
 #: frontend/src/pages/upload-link/upload-list-item.js:95
 msgid "Remaining"
-msgstr ""
+msgstr "Geriye kalan"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:99
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:99
 #: frontend/src/pages/upload-link/upload-list-item.js:96
 msgid "Indexing..."
-msgstr ""
+msgstr "Dizin oluşturuluyor..."
 
 #: frontend/src/components/file-uploader/upload-list-item.js:130
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:130
 #: frontend/src/pages/upload-link/upload-list-item.js:127
 msgid "Retry"
-msgstr ""
+msgstr "Tekrar dene"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:133
 #: frontend/src/components/file-view/file-toolbar.js:145
@@ -2887,7 +2913,7 @@ msgstr "Kaydediliyor..."
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:136
 #: frontend/src/pages/upload-link/upload-list-item.js:133
 msgid "Uploaded"
-msgstr ""
+msgstr "Yüklendi"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:48
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:48
@@ -2904,7 +2930,7 @@ msgstr "Dosyayı Yüklüyor..."
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:75
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:77
 msgid "Retry All"
-msgstr ""
+msgstr "Hepsini tekrar dene"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:80
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:82
@@ -2924,19 +2950,19 @@ msgstr "isim"
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:89
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:69
 msgid "size"
-msgstr ""
+msgstr "boyut"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:90
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:90
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:70
 msgid "progress"
-msgstr ""
+msgstr "yürütülüyor"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:91
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:91
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:71
 msgid "state"
-msgstr ""
+msgstr "durum"
 
 #: frontend/src/components/file-view/file-info.js:30
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:12
@@ -2963,7 +2989,7 @@ msgstr "Kilidi Aç"
 #: frontend/src/components/file-view/file-toolbar.js:122
 #: frontend/src/components/file-view/file-toolbar.js:232
 msgid "Open parent folder"
-msgstr ""
+msgstr "Ana klasör aç"
 
 #: frontend/src/components/file-view/file-toolbar.js:174
 #: frontend/src/components/file-view/file-toolbar.js:264
@@ -2984,7 +3010,7 @@ msgstr "Client üzerinden aç"
 #: frontend/src/components/file-view/file-toolbar.js:261
 #: frontend/src/utils/text-translation.js:19
 msgid "Comment"
-msgstr ""
+msgstr "Yorum"
 
 #: frontend/src/components/file-view/file-view-tip.js:16
 #: frontend/src/components/history-trash-file-view/file-view-tip.js:17
@@ -2994,7 +3020,7 @@ msgstr ""
 
 #: frontend/src/components/file-view/participants-list.js:52
 msgid "Add participants"
-msgstr ""
+msgstr "Katılımcı ekle"
 
 #: frontend/src/components/group-members.js:93
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:233
@@ -3029,7 +3055,7 @@ msgstr "Yönetici"
 #: frontend/src/pages/org-admin/org-group-members.js:108
 #: frontend/src/pages/sys-admin/users/user-groups.js:118
 msgid "Member"
-msgstr ""
+msgstr "Üye"
 
 #: frontend/src/components/history-trash-file-view/file-view.js:33
 msgid "Current Path: "
@@ -3063,7 +3089,7 @@ msgstr "Tüm Gruplar"
 #: frontend/src/components/main-side-nav.js:132
 #: frontend/src/components/main-side-nav.js:139
 #: frontend/src/components/main-side-nav.js:141
-#: frontend/src/pages/org-admin/side-panel.js:68
+#: frontend/src/pages/org-admin/side-panel.js:80
 #: frontend/src/pages/sys-admin/side-panel.js:174
 msgid "Links"
 msgstr "Bağlantılar"
@@ -3085,18 +3111,18 @@ msgstr "Kütüphanelerim"
 #: frontend/src/components/main-side-nav.js:200
 #: frontend/src/pages/shared-libs/shared-libs.js:365
 msgid "Shared with me"
-msgstr ""
+msgstr "Benimle paylaşılanlar"
 
 #: frontend/src/components/main-side-nav.js:205
 #: frontend/src/components/main-side-nav.js:207
 #: frontend/src/pages/shared-with-all/public-shared-view.js:206
 msgid "Shared with all"
-msgstr ""
+msgstr "Herkesle paylaşılanlar"
 
 #: frontend/src/components/main-side-nav.js:212
 #: frontend/src/components/main-side-nav.js:215
 msgid "Shared with groups"
-msgstr ""
+msgstr "Gruplarla paylaşılanlar"
 
 #: frontend/src/components/main-side-nav.js:221
 #: frontend/src/components/main-side-nav.js:223
@@ -3107,13 +3133,13 @@ msgstr ""
 
 #: frontend/src/components/main-side-nav.js:238
 msgid "Tools"
-msgstr ""
+msgstr "Araçlar"
 
 #: frontend/src/components/main-side-nav.js:241
 #: frontend/src/components/main-side-nav.js:243
 #: frontend/src/pages/starred/starred.js:287
 msgid "Favorites"
-msgstr ""
+msgstr "Favoriler"
 
 #: frontend/src/components/main-side-nav.js:248
 #: frontend/src/components/main-side-nav.js:250
@@ -3125,13 +3151,13 @@ msgstr "Etkinlikler"
 #: frontend/src/components/main-side-nav.js:258
 #: frontend/src/pages/wikis/wikis.js:135
 msgid "Published Libraries"
-msgstr ""
+msgstr "Yayınlanmış Kütüphaneler"
 
 #: frontend/src/components/main-side-nav.js:274
 #: frontend/src/components/main-side-nav.js:276
 #: frontend/src/pages/linked-devices/linked-devices.js:219
 msgid "Linked Devices"
-msgstr ""
+msgstr "Bağlı Cihazlar"
 
 #: frontend/src/components/main-side-nav.js:288
 #: frontend/src/components/main-side-nav.js:291
@@ -3142,11 +3168,11 @@ msgstr "Paylaşma Yöneticisi"
 #: frontend/src/file-history-old.js:236
 #: frontend/src/pages/file-history/side-panel.js:105
 msgid "History Versions"
-msgstr ""
+msgstr "Geçmiş Versiyonları"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
-msgstr ""
+msgstr "Daha fazla göster"
 
 #: frontend/src/components/org-admin-group-nav.js:26
 #: frontend/src/pages/groups/group-view.js:507
@@ -3167,7 +3193,7 @@ msgstr ""
 #: frontend/src/components/org-admin-user-nav.js:26
 #: frontend/src/pages/sys-admin/users/user-nav.js:17
 msgid "Shared Libraries"
-msgstr ""
+msgstr "Paylaşılmış Kütüphaneler"
 
 #: frontend/src/components/paginator.js:47
 msgid "{number_placeholder} / Page"
@@ -3175,15 +3201,15 @@ msgstr ""
 
 #: frontend/src/components/pdf-viewer.js:251
 msgid "Default Size"
-msgstr ""
+msgstr "Varsayılan Boyut"
 
 #: frontend/src/components/pdf-viewer.js:252
 msgid "Zoom In"
-msgstr ""
+msgstr "Yakınlaştır"
 
 #: frontend/src/components/pdf-viewer.js:253
 msgid "Zoom Out"
-msgstr ""
+msgstr "Uzaklaştır"
 
 #: frontend/src/components/permission-denied-tip.js:6
 msgid ""
@@ -3197,13 +3223,13 @@ msgstr ""
 
 #: frontend/src/components/review-list-view/review-comments.js:109
 msgid "No comment yet."
-msgstr ""
+msgstr "Henüz yorum yok."
 
 #: frontend/src/components/search-group-members.js:111
 #: frontend/src/pages/org-admin/org-department-item.js:285
 #: frontend/src/pages/sys-admin/departments/department-detail.js:348
 msgid "No members"
-msgstr ""
+msgstr "Üye yok"
 
 #: frontend/src/components/select-editor/select-editor.js:58
 #: frontend/src/components/select-editor/select-editor.js:63
@@ -3234,11 +3260,11 @@ msgstr "İnaktif"
 
 #: frontend/src/components/select-editor/wiki-permission-editor.js:18
 msgid "Private"
-msgstr ""
+msgstr "Gizli"
 
 #: frontend/src/components/select-editor/wiki-permission-editor.js:22
 msgid "Public"
-msgstr ""
+msgstr "Genel"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -3288,7 +3314,7 @@ msgstr ""
 #: frontend/src/pages/markdown-editor/seafile-editor/index.js:149
 #: frontend/src/view-file-text.js:79
 msgid "Successfully saved"
-msgstr ""
+msgstr "Başarıyla Kaydedildi"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:59
 #: frontend/src/shared-dir-view.js:74
@@ -3303,27 +3329,27 @@ msgstr "Geçerli yol:"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:117
 msgid "Shared by:"
-msgstr ""
+msgstr "Tarafından paylaşıldı:"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:123
 msgid "Save as ..."
-msgstr ""
+msgstr "... olarak kaydet"
 
 #: frontend/src/components/shared-file-view/shared-file-view.js:167
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:179
 #: frontend/src/pages/org-admin/org-logs-file-update.js:204
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:153
 msgid "Anonymous User"
-msgstr ""
+msgstr "Anonim Kullanıcı"
 
 #: frontend/src/components/shared-link.js:29
 msgid "Expired"
-msgstr ""
+msgstr "Süresi doldu"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:239
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:280
 msgid "Failed to delete {name}."
-msgstr ""
+msgstr "{name} silinemedi."
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:271
 #: frontend/src/pages/groups/group-view.js:476
@@ -3576,7 +3602,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/users/user-info.js:144
 #: frontend/src/pages/sys-admin/users/user-info.js:147
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "İki Faktörlü Kimlik Doğrulamayı Devre Dışı Bırak"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:22
 msgid ""
@@ -3604,13 +3630,13 @@ msgstr ""
 
 #: frontend/src/components/user-settings/two-factor-auth.js:37
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "İki Faktörülü Kimlik Doğrulamayı Etkinleştir"
 
 #: frontend/src/components/user-settings/two-factor-auth.js:45
 #: frontend/src/pages/sys-admin/users/user-info.js:139
 #: frontend/src/settings.js:50
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Çift Faktörlü Kimlik Doğrulama"
 
 #: frontend/src/components/user-settings/user-avatar-form.js:33
 msgid "Please choose an image file."
@@ -3655,7 +3681,7 @@ msgstr ""
 
 #: frontend/src/components/user-settings/webdav-password.js:70
 msgid "Set Password"
-msgstr ""
+msgstr "Parola Oluştur"
 
 #: frontend/src/components/wiki-markdown-viewer.js:216
 msgid "Last modified by"
@@ -3730,6 +3756,7 @@ msgstr "İşlem"
 
 #: frontend/src/pages/dashboard/files-activities.js:33
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:104
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:15
 #: frontend/src/pages/sys-admin/abuse-reports.js:98
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:15
 #: frontend/src/repo-folder-trash.js:354 frontend/src/repo-folder-trash.js:406
@@ -3743,15 +3770,15 @@ msgstr "Oluşturulmuş kütüphane"
 
 #: frontend/src/pages/dashboard/files-activities.js:113
 msgid "Renamed library"
-msgstr ""
+msgstr "Yeniden adlandırılan kütüphane"
 
 #: frontend/src/pages/dashboard/files-activities.js:117
 msgid "Deleted library"
-msgstr ""
+msgstr "Silinen kütüphane"
 
 #: frontend/src/pages/dashboard/files-activities.js:121
 msgid "Restored library"
-msgstr ""
+msgstr "Geri yüklenen kütüphane"
 
 #: frontend/src/pages/dashboard/files-activities.js:125
 msgid "Cleaned trash"
@@ -3759,7 +3786,7 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/files-activities.js:127
 msgid "Removed all items from trash."
-msgstr ""
+msgstr "Bütün öğeler çöp kutusundan kaldırıldı."
 
 #: frontend/src/pages/dashboard/files-activities.js:129
 msgid "Removed items older than {n} days from trash."
@@ -3783,7 +3810,7 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/files-activities.js:171
 msgid "Created file"
-msgstr ""
+msgstr "Oluşturulan dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:176
 msgid "Deleted draft"
@@ -3791,19 +3818,19 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/files-activities.js:176
 msgid "Deleted file"
-msgstr ""
+msgstr "Silinen dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:181
 msgid "Restored file"
-msgstr ""
+msgstr "Geri yüklenen dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:186
 msgid "Renamed file"
-msgstr ""
+msgstr "Yeniden adlandırılan dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:192
 msgid "Moved file"
-msgstr ""
+msgstr "Taşınan dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:197
 msgid "Updated draft"
@@ -3811,27 +3838,27 @@ msgstr ""
 
 #: frontend/src/pages/dashboard/files-activities.js:197
 msgid "Updated file"
-msgstr ""
+msgstr "Güncellenen dosya"
 
 #: frontend/src/pages/dashboard/files-activities.js:207
 msgid "Created folder"
-msgstr ""
+msgstr "Oluşturulan klasör"
 
 #: frontend/src/pages/dashboard/files-activities.js:212
 msgid "Deleted folder"
-msgstr ""
+msgstr "Silinen klasör"
 
 #: frontend/src/pages/dashboard/files-activities.js:217
 msgid "Restored folder"
-msgstr ""
+msgstr "Geri yüklenen klasör"
 
 #: frontend/src/pages/dashboard/files-activities.js:222
 msgid "Renamed folder"
-msgstr ""
+msgstr "Yeniden adlandırılan klasör"
 
 #: frontend/src/pages/dashboard/files-activities.js:228
 msgid "Moved folder"
-msgstr ""
+msgstr "Taşınan klasör"
 
 #: frontend/src/pages/drafts/draft-content.js:44
 msgid "Successfully published draft %(draft)s."
@@ -3899,7 +3926,7 @@ msgstr ""
 
 #: frontend/src/pages/groups/group-view.js:439
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:246
-#: frontend/src/pages/org-admin/side-panel.js:56
+#: frontend/src/pages/org-admin/side-panel.js:68
 #: frontend/src/pages/sys-admin/groups/group-nav.js:26
 #: frontend/src/pages/sys-admin/groups/groups.js:137
 #: frontend/src/pages/sys-admin/groups/search-groups.js:101
@@ -3987,7 +4014,7 @@ msgstr ""
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:64
 #: frontend/src/pages/lib-content-view/lib-content-toolbar.js:89
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Yan Gezinme Menüsü"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:174
 msgid "Library share permission not found."
@@ -4073,6 +4100,7 @@ msgid ""
 msgstr ""
 
 #: frontend/src/pages/linked-devices/linked-devices.js:31
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
 msgid "Platform"
 msgstr "Platform"
@@ -4082,6 +4110,7 @@ msgid "Device Name"
 msgstr "Cihaz Adı"
 
 #: frontend/src/pages/linked-devices/linked-devices.js:33
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:46
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:101
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:46
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:46
@@ -4126,7 +4155,7 @@ msgstr ""
 
 #: frontend/src/pages/markdown-editor/index.js:115
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
 #: frontend/src/pages/markdown-editor/seafile-editor/index.js:89
 msgid "Another user is editing this file!"
@@ -4163,7 +4192,7 @@ msgstr "Silinme Zamanı"
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:157
 #: frontend/src/repo-snapshot.js:119
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Kütüphane başarıyla geri yüklendi."
 
 #: frontend/src/pages/my-libs/my-libs-deleted.js:151
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:258
@@ -4224,8 +4253,49 @@ msgstr "Paylaşan"
 msgid "All"
 msgstr "Hepsi"
 
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Version"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-by-platform.js:109
+#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
+msgid "Successfully unlinked the device."
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
+#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
+#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
+msgid "Device"
+msgstr "Cihaz"
+
+#: frontend/src/pages/org-admin/devices/devices-errors.js:158
+#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
+msgid "Successfully cleaned all errors."
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:15
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
+msgid "Desktop"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:16
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
+msgid "Mobile"
+msgstr ""
+
+#: frontend/src/pages/org-admin/devices/devices-nav.js:17
+#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
+msgid "Errors"
+msgstr ""
+
 #: frontend/src/pages/org-admin/org-admin-list.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:65
+#: frontend/src/pages/org-admin/org-users-list.js:66
 #: frontend/src/pages/org-admin/org-users-search-users.js:35
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:50
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:61
@@ -4239,7 +4309,7 @@ msgstr "Durum"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-info.js:46
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #: frontend/src/pages/sys-admin/orgs/org-users.js:56
@@ -4252,7 +4322,7 @@ msgstr "Kullanılmış Alan"
 #: frontend/src/pages/org-admin/org-admin-list.js:47
 #: frontend/src/pages/org-admin/org-department-item.js:252
 #: frontend/src/pages/org-admin/org-departments-list.js:120
-#: frontend/src/pages/org-admin/org-users-list.js:67
+#: frontend/src/pages/org-admin/org-users-list.js:68
 #: frontend/src/pages/org-admin/org-users-search-users.js:37
 #: frontend/src/pages/sys-admin/departments/department-detail.js:313
 #: frontend/src/pages/sys-admin/departments/departments-list.js:116
@@ -4267,7 +4337,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-groups-search-groups.js:150
 #: frontend/src/pages/org-admin/org-groups.js:157
 #: frontend/src/pages/org-admin/org-links.js:102
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/departments/department-detail.js:312
 #: frontend/src/pages/sys-admin/departments/departments-list.js:115
@@ -4281,7 +4351,7 @@ msgid "Created At"
 msgstr "Oluşturuldu"
 
 #: frontend/src/pages/org-admin/org-admin-list.js:48
-#: frontend/src/pages/org-admin/org-users-list.js:69
+#: frontend/src/pages/org-admin/org-users-list.js:70
 #: frontend/src/pages/org-admin/org-users-search-users.js:39
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:52
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:63
@@ -4291,7 +4361,7 @@ msgstr "En son giriş"
 #: frontend/src/pages/org-admin/org-department-item.js:229
 #: frontend/src/pages/org-admin/org-department-item.js:230
 #: frontend/src/pages/org-admin/org-departments-list.js:110
-#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/side-panel.js:74
 #: frontend/src/pages/sys-admin/departments/department-detail.js:290
 #: frontend/src/pages/sys-admin/departments/department-detail.js:291
 #: frontend/src/pages/sys-admin/departments/departments-list.js:106
@@ -4348,7 +4418,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:124
 #: frontend/src/pages/org-admin/org-logs-file-update.js:139
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:104
-#: frontend/src/pages/org-admin/org-users-list.js:89
+#: frontend/src/pages/org-admin/org-users-list.js:91
 #: frontend/src/pages/search/main-panel.js:335
 msgid "Previous"
 msgstr "Önceki"
@@ -4359,7 +4429,7 @@ msgstr "Önceki"
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:126
 #: frontend/src/pages/org-admin/org-logs-file-update.js:141
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:106
-#: frontend/src/pages/org-admin/org-users-list.js:91
+#: frontend/src/pages/org-admin/org-users-list.js:93
 #: frontend/src/pages/search/main-panel.js:337
 msgid "Next"
 msgstr "Sonraki"
@@ -4375,6 +4445,8 @@ msgid "Info"
 msgstr "Bilgi"
 
 #: frontend/src/pages/org-admin/org-info.js:50
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-users.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:36
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:69
 msgid "Active Users"
@@ -4384,7 +4456,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
 msgid "Total Users"
-msgstr ""
+msgstr "Toplam Kullanıcı"
 
 #: frontend/src/pages/org-admin/org-info.js:50
 #: frontend/src/pages/sys-admin/info.js:123
@@ -4428,7 +4500,7 @@ msgstr "Tip"
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:86
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:49
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:190
 #: frontend/src/pages/org-admin/org-logs-file-audit.js:231
@@ -4441,7 +4513,7 @@ msgstr ""
 #: frontend/src/pages/org-admin/org-logs-file-update.js:118
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:51
 msgid "Action"
-msgstr ""
+msgstr "Aksiyon"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:80
 msgid "Share From"
@@ -4456,6 +4528,7 @@ msgstr "Şununla paylaş"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:178
 #: frontend/src/pages/org-admin/org-user-profile.js:146
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/users/user-info.js:102
 msgid "Organization"
@@ -4479,25 +4552,17 @@ msgstr ""
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Kullanıcı %(user)s için şifre %(passwd)s'e sıfırlandı."
 
-#: frontend/src/pages/org-admin/org-user-item.js:93
-msgid "Edit succeeded."
-msgstr ""
-
-#: frontend/src/pages/org-admin/org-user-item.js:97
-msgid "Edit failed."
-msgstr "Düzenleme başarısız."
-
-#: frontend/src/pages/org-admin/org-user-item.js:128
+#: frontend/src/pages/org-admin/org-user-item.js:112
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:89
 #: frontend/src/pages/sys-admin/logs-page/login-logs.js:107
 msgid "Failed"
 msgstr "Başarısız"
 
-#: frontend/src/pages/org-admin/org-user-item.js:174
+#: frontend/src/pages/org-admin/org-user-item.js:158
 msgid "ResetPwd"
 msgstr "Şifreyi Sıfırla"
 
-#: frontend/src/pages/org-admin/org-user-item.js:175
+#: frontend/src/pages/org-admin/org-user-item.js:159
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:137
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:177
 #: frontend/src/pages/sys-admin/users/users-content.js:313
@@ -4512,14 +4577,14 @@ msgstr "Avatar"
 #: frontend/src/pages/org-admin/org-user-profile.js:140
 #: frontend/src/pages/sys-admin/users/users-content.js:85
 msgid "Contact Email"
-msgstr ""
+msgstr "İletişim E-postası"
 
 #: frontend/src/pages/org-admin/org-user-profile.js:149
 msgid "Space Used / Quota"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-users-admins.js:44
-#: frontend/src/pages/org-admin/org-users-users.js:160
+#: frontend/src/pages/org-admin/org-users-users.js:190
 #, javascript-format
 msgid "Successfully deleted %s"
 msgstr "%s silindi"
@@ -4551,7 +4616,10 @@ msgid "Edit succeeded"
 msgstr "Düzenleme başarılı"
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:153
-#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/org-admin/side-panel.js:62
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:17
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:131
 #: frontend/src/pages/sys-admin/side-panel.js:102
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:124
@@ -4567,26 +4635,198 @@ msgid "Search Users"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-users-search-users.js:161
-#: frontend/src/pages/org-admin/org-users-users.js:175
+#: frontend/src/pages/org-admin/org-users-users.js:221
 #: frontend/src/pages/sys-admin/users/search-users.js:302
 #: frontend/src/pages/sys-admin/users/users.js:423
 msgid "Search users"
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-users-users.js:146
+#: frontend/src/pages/org-admin/org-users-users.js:176
 #, javascript-format
 msgid "successfully added user %s."
 msgstr ""
 
-#: frontend/src/pages/org-admin/org-users-users.js:185
-#: frontend/src/pages/org-admin/org-users-users.js:186
-msgid "Add user"
-msgstr "Kullanıcı ekle"
+#: frontend/src/pages/org-admin/org-users-users.js:208
+msgid "Edit succeeded."
+msgstr ""
 
-#: frontend/src/pages/org-admin/side-panel.js:74
+#: frontend/src/pages/org-admin/org-users-users.js:231
+#: frontend/src/translate.js:8
+msgid "Import Users"
+msgstr ""
+
+#: frontend/src/pages/org-admin/side-panel.js:44
+#: frontend/src/pages/sys-admin/side-panel.js:54
+msgid "Statistic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/side-panel.js:50
+#: frontend/src/pages/sys-admin/side-panel.js:66
+msgid "Devices"
+msgstr "Cihazlar"
+
+#: frontend/src/pages/org-admin/side-panel.js:86
 #: frontend/src/pages/sys-admin/side-panel.js:186
 msgid "Logs"
 msgstr "Loglar"
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:112
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
+msgid "7 Days"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:113
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
+msgid "30 Days"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-common-tool.js:114
+#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
+msgid "1 Year"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:45
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
+msgid "Added"
+msgstr "Eklendi"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:50
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
+msgid "Visited"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:55
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
+msgid "Modified"
+msgstr "Değiştirildi"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:60
+#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
+#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
+#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
+#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
+msgid "Deleted"
+msgstr "Silindi"
+
+#: frontend/src/pages/org-admin/statistic/statistic-file.js:94
+#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
+msgid "File Operations"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
+msgid "Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:18
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
+msgid "Traffic"
+msgstr "Trafik"
+
+#: frontend/src/pages/org-admin/statistic/statistic-nav.js:19
+#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
+msgid "Reports"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
+msgid "Invalid month, should be yyyymm."
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:69
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
+msgid "Monthly User Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:122
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
+msgid "Month:"
+msgstr "Ay:"
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:79
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
+msgid "Create Report"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-reports.js:78
+#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
+msgid "User Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/org-admin/statistic/statistic-storage.js:71
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
+#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
+msgid "Total Storage"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:122
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:130
+#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
+#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
+msgid "System"
+msgstr "Sistem"
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:154
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
+msgid "Total Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:167
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
+msgid "Web Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:180
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
+msgid "Share Link Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/statistic-traffic.js:193
+#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
+msgid "Sync Traffic"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:28
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
+msgid "Sync Upload"
+msgstr "Senkronize Yükleme"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:29
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
+msgid "Sync Download"
+msgstr "Senkronize İndirme"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:30
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
+msgid "Web Upload"
+msgstr "Web yükleme"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:31
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
+msgid "Web Download"
+msgstr "Web İndirme"
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:32
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
+msgid "Share link upload"
+msgstr ""
+
+#: frontend/src/pages/org-admin/statistic/traffic-table.js:33
+#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
+msgid "Share link download"
+msgstr ""
 
 #: frontend/src/pages/search/advanced-search.js:18
 msgid "Document"
@@ -4652,7 +4892,7 @@ msgstr ""
 
 #: frontend/src/pages/search/main-panel.js:96
 msgid "Invalid file size range."
-msgstr ""
+msgstr "Geçersiz dosya boyutu aralığı."
 
 #: frontend/src/pages/search/main-panel.js:103
 msgid "Required at least three letters."
@@ -4842,39 +5082,6 @@ msgstr ""
 msgid "Deleted user {user}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:44
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/terms-and-conditions/content.js:51
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Version"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-by-platform.js:109
-msgid "Successfully unlinked the device."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:48
-#: frontend/src/pages/sys-admin/logs-page/file-access-logs.js:88
-#: frontend/src/repo-history.js:139 frontend/src/repo-history.js:146
-msgid "Device"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-errors.js:158
-msgid "Successfully cleaned all errors."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:15
-msgid "Desktop"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:16
-msgid "Mobile"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/devices/devices-nav.js:19
-msgid "Errors"
-msgstr ""
-
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
 msgstr ""
@@ -4985,7 +5192,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/info.js:123
 #: frontend/src/pages/sys-admin/info.js:127
 msgid "Activated Users"
-msgstr ""
+msgstr "Aktif Kullanıcılar"
 
 #: frontend/src/pages/sys-admin/info.js:137
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:29
@@ -5075,14 +5282,6 @@ msgstr ""
 msgid "only show {placeholder}"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:123
-#: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:139
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:59
-#: frontend/src/pages/sys-admin/virus-scan/all-virus-files.js:81
-#: frontend/src/pages/sys-admin/virus-scan/unhandled-virus-files.js:86
-msgid "Deleted"
-msgstr "Silindi"
-
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:15
 msgid "Login"
 msgstr ""
@@ -5150,13 +5349,6 @@ msgstr ""
 msgid "Search libraries by name or ID"
 msgstr ""
 
-#: frontend/src/pages/sys-admin/repos/dir-path-bar.js:55
-#: frontend/src/pages/sys-admin/repos/repos-nav.js:16
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:123
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:132
-msgid "System"
-msgstr "Sistem"
-
 #: frontend/src/pages/sys-admin/repos/search-repos.js:92
 msgid "Search Libraries"
 msgstr ""
@@ -5198,14 +5390,6 @@ msgstr "Çöp tenekesini boşaltmak istediğinize emin misiniz?"
 msgid "Clear"
 msgstr "Temizle"
 
-#: frontend/src/pages/sys-admin/side-panel.js:54
-msgid "Statistic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/side-panel.js:66
-msgid "Devices"
-msgstr "Cihazlar"
-
 #: frontend/src/pages/sys-admin/side-panel.js:198
 msgid "File Scan"
 msgstr ""
@@ -5221,116 +5405,6 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/side-panel.js:246
 msgid "Admin Logs"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:112
-msgid "7 Days"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:113
-msgid "30 Days"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-common-tool.js:114
-msgid "1 Year"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:44
-msgid "Added"
-msgstr "Eklendi"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:49
-msgid "Visited"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:54
-msgid "Modified"
-msgstr "Değiştirildi"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-file.js:93
-msgid "File Operations"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:16
-msgid "Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:18
-msgid "Traffic"
-msgstr "Trafik"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-nav.js:19
-msgid "Reports"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:38
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:63
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:63
-msgid "Invalid month, should be yyyymm."
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:69
-msgid "Monthly User Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:71
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-orgs.js:119
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic-users.js:122
-msgid "Month:"
-msgstr "Ay:"
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:79
-msgid "Create Report"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-reports.js:78
-msgid "User Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:36
-#: frontend/src/pages/sys-admin/statistic/statistic-storage.js:71
-msgid "Total Storage"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:157
-msgid "Total Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:170
-msgid "Web Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:183
-msgid "Share Link Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/statistic-traffic.js:196
-msgid "Sync Traffic"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
-msgid "Sync Upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:29
-msgid "Sync Download"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:30
-msgid "Web Upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:31
-msgid "Web Download"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:32
-msgid "Share link upload"
-msgstr ""
-
-#: frontend/src/pages/sys-admin/statistic/traffic-table.js:33
-msgid "Share link download"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:53
@@ -5725,7 +5799,7 @@ msgstr "Zamanı sil"
 
 #: frontend/src/repo-folder-trash.js:316 frontend/src/repo-snapshot.js:264
 msgid "Successfully restored 1 item."
-msgstr ""
+msgstr "1 öğe başarıyla geri yüklendi."
 
 #: frontend/src/repo-folder-trash.js:344 frontend/src/repo-folder-trash.js:398
 #: frontend/src/repo-snapshot.js:286
@@ -5829,10 +5903,6 @@ msgstr ""
 
 #: frontend/src/translate.js:6
 msgid "You don't have any favorite items yet"
-msgstr ""
-
-#: frontend/src/translate.js:8
-msgid "Import Users"
 msgstr ""
 
 #: frontend/src/translate.js:9
@@ -5978,23 +6048,23 @@ msgstr ""
 
 #: frontend/src/utils/utils.js:689
 msgid "Preview and download"
-msgstr ""
+msgstr "Önizleme ve indirme"
 
 #: frontend/src/utils/utils.js:699
 msgid "Preview only"
-msgstr ""
+msgstr "Sadece önizleme"
 
 #: frontend/src/utils/utils.js:709
 msgid "Download and upload"
-msgstr ""
+msgstr "İndir ve yükle"
 
 #: frontend/src/utils/utils.js:719
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Bulut üzerinde düzenle ve indir"
 
 #: frontend/src/utils/utils.js:729
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Sadece bulut üzerinde düzenle"
 
 #: frontend/src/utils/utils.js:1247
 msgid "Successfully copied %(name)s and 1 other item."
