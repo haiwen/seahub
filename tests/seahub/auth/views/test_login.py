@@ -73,7 +73,7 @@ class LoginTest(BaseTestCase):
     def test_redirect_to_other_host_after_success_login(self):
         from django.utils.http import urlquote
         resp = self.client.post(
-            reverse('auth_login') + '?next=' + urlquote('http://foo.com'),
+            reverse('auth_login') + '?next=' + urlquote('http://example.org'),
             {'login': self.user.username,
              'password': self.user_password}
         )
