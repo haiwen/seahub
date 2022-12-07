@@ -26,7 +26,8 @@ class ResultsItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let linkContent = decodeURI(item.fullpath).substring(1);
+    let formatPath = item.fullpath.replace(/%/g, '%25');
+    let linkContent = decodeURI(formatPath).substring(1);
     let folderIconUrl = linkContent ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl(true);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name, 192);
 

@@ -180,6 +180,7 @@ class Search extends Component {
     let items = [];
     let length = data.length > 5 ? 5 : data.length;
     for (let i = 0; i < length; i++) {
+      let formatPath = data[i].fullpath ? data[i].fullpath.replace(/%/g, '%25') : '';
       items[i] = {};
       items[i]['index'] = [i];
       items[i]['name'] = data[i].name;
@@ -187,7 +188,7 @@ class Search extends Component {
       items[i]['repo_id'] = data[i].repo_id;
       items[i]['repo_name'] = data[i].repo_name;
       items[i]['is_dir'] = data[i].is_dir;
-      items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
+      items[i]['link_content'] = decodeURI(formatPath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
     }
