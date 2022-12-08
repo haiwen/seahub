@@ -25,6 +25,9 @@ from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
 from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
         OrgUserTrafficExcelView, OrgUserStorageExcelView
+from .api.admin.saml_config import OrgGenerateSPCertificate, OrgUploadIdPCertificate, \
+    OrgUploadIdPMetadataXMLView, OrgSAMLConfigView
+
 
 urlpatterns = [
     url(r'^(?P<org_id>\d+)/admin/statistics/file-operations/$',
@@ -48,6 +51,19 @@ urlpatterns = [
     url(r'^(?P<org_id>\d+)/admin/statistics/user-storage/excel/$',
         OrgUserStorageExcelView.as_view(),
         name='api-v2.1-org-admin-statistics-user-storage-excel'),
+
+    url(r'^(?P<org_id>\d+)/admin/saml-config/sp-certificate/$',
+        OrgGenerateSPCertificate.as_view(),
+        name='api-v2.1-org-admin-saml-config-sp-certificate'),
+    url(r'^(?P<org_id>\d+)/admin/saml-config/idp-certificate/$',
+        OrgUploadIdPCertificate.as_view(),
+        name='api-v2.1-org-admin-saml-config-idp-certificate'),
+    url(r'^(?P<org_id>\d+)/admin/saml-config/idp-metadata-xml/$',
+        OrgUploadIdPMetadataXMLView.as_view(),
+        name='api-v2.1-org-admin-saml-config-idp-metadata-xml'),
+    url(r'^(?P<org_id>\d+)/admin/saml-config/$',
+        OrgSAMLConfigView.as_view(),
+        name='api-v2.1-org-admin-saml-config'),
 
     url(r'^(?P<org_id>\d+)/admin/devices/$', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
     url(r'^(?P<org_id>\d+)/admin/devices-errors/$', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),

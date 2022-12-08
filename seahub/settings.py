@@ -295,6 +295,9 @@ ENABLE_CAS = False
 
 ENABLE_ADFS_LOGIN = False
 
+ENABLE_MULTI_ADFS = False
+SAML_CONFIG_LOADER = 'seahub.adfs_auth.utils.config_settings_loader'
+
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
@@ -948,7 +951,7 @@ if ENABLE_OAUTH or ENABLE_WORK_WEIXIN or ENABLE_WEIXIN or ENABLE_DINGTALK:
 if ENABLE_CAS:
     AUTHENTICATION_BACKENDS += ('seahub.django_cas_ng.backends.CASBackend',)
 
-if ENABLE_ADFS_LOGIN:
+if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
     AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
 
 #####################

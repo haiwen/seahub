@@ -868,6 +868,11 @@ if HAS_OFFICE_CONVERTER:
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
     ]
 
+if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+    urlpatterns += [
+        url(r'^(?P<url_prefix>org_[0-9a-z]+)/', include(('seahub.adfs_auth.urls', 'adfs_auth'), namespace='adfs_auth')),
+    ]
+
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
     from seahub.adfs_auth.views import assertion_consumer_service, \
         auth_complete

@@ -38,4 +38,6 @@ urlpatterns = [
     url(r'^departmentadmin/$', react_fake_view, name='org_department_admin'),
     url(r'^departmentadmin/groups/(?P<group_id>\d+)/', react_fake_view, name='org_department_admin'),
     url(r'^associate/(?P<token>.+)/$', org_associate, name='org_associate'),
+
+    url(r'^samlconfig/$', react_fake_view, name='saml_config'),
 ]
