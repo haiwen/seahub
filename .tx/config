@@ -1,20 +1,20 @@
 [main]
 host = https://www.transifex.com
 
-[seahub.djangopo]
+[o:haiwen:p:seahub:r:djangopo]
 file_filter = locale/<lang>/LC_MESSAGES/django.po
 source_file = locale/en/LC_MESSAGES/django.po
 source_lang = en
-type = PO
+type        = PO
 
-[seahub.djangojspo]
+[o:haiwen:p:seahub:r:djangojspo]
 file_filter = locale/<lang>/LC_MESSAGES/djangojs.po
 source_file = locale/en/LC_MESSAGES/djangojs.po
 source_lang = en
-type = PO
+type        = PO
 
-[seahub.seafile-editor]
+[o:haiwen:p:seahub:r:seafile-editor]
 file_filter = media/locales/<lang>/seafile-editor.json
 source_file = media/locales/en/seafile-editor.json
 source_lang = en
-type = KEYVALUEJSON
+type        = KEYVALUEJSON
