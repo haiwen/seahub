@@ -1,7 +1,7 @@
 import React from 'react';
 import { Utils } from '../../utils/utils';
 
-import CodeMirror from 'react-codemirror';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';
