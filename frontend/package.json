@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.12.3",
-    "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
     "@svgr/webpack": "5.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -158,7 +158,7 @@
     "web-vitals": "^0.2.4",
     "webpack": "4.44.2",
     "webpack-bundle-tracker": "1.7.0",
-    "webpack-dev-server": "3.11.0",
+    "webpack-dev-server": "3.11.3",
     "webpack-manifest-plugin": "2.2.0"
   }
 }
