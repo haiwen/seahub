@@ -8,7 +8,7 @@ import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import { seafileAPI } from './utils/seafile-api';
 
-import CodeMirror from 'react-codemirror';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/clike/clike';

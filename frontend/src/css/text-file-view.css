@@ -1,7 +1,7 @@
 .text-file-view {
     overflow: auto;
 }
-.text-file-view .ReactCodeMirror {
+.text-file-view .react-codemirror2 {
     box-shadow: 0 0 6px #ccc;
     border: 1px solid #ccc;
     width: calc(100% - 40px);

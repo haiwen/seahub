@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import { post } from 'axios';
+import axios from 'axios';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { loginUrl, siteRoot, gettext } from '../../utils/constants';
@@ -106,7 +106,7 @@ class DirView extends Component {
       let formData = new FormData();
       formData.append('parent_dir', path);
       formData.append('file', file);
-      post(res.data, formData).then(res => {
+      axios.post(res.data, formData).then(res => {
         const fileObj = res.data[0];
         let newDirent = new Dirent({
           'type': 'file',
