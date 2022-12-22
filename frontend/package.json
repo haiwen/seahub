@@ -31,7 +31,7 @@
     "react-mentions": "^3.0.2",
     "react-moment": "^0.7.9",
     "react-qr-code": "^1.0.5",
-    "react-responsive": "^6.1.2",
+    "react-responsive": "9.0.2",
     "react-select": "5.7.0",
     "reactstrap": "^6.4.0",
     "seafile-js": "0.2.190",
