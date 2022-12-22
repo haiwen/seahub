@@ -52,10 +52,10 @@ class ViewFileText extends React.Component {
   }
 
 
-  updateContent = (newContent) => {
+  updateContent = (editor, data, value) => {
     this.setState({
       needSave: true,
-      content: newContent,
+      content: value,
     });
   }
 
