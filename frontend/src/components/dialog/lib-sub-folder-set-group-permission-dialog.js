@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils.js';

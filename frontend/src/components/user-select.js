@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async';
 import { seafileAPI } from '../utils/seafile-api.js';
 import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
 import { Utils } from '../utils/utils.js';
