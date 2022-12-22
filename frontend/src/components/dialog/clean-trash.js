@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Select from 'react-select/lib/Creatable';
+import CreatableSelect from 'react-select/creatable';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -63,7 +63,7 @@ class CleanTrash extends React.Component {
         <ModalBody>
           <React.Fragment>
             <p>{gettext('Clear files in trash and history：')}</p>
-            <Select
+            <CreatableSelect
               defaultValue={this.options[0]}
               options={this.options}
               autoFocus={false}
