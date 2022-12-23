@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reach/router": "1.2.0",
+    "@reach/router": "1.3.4",
     "@seafile/react-image-lightbox": "0.0.1",
     "@seafile/resumablejs": "1.1.16",
     "@seafile/seafile-calendar": "0.0.12",
