@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import Image from './components/file-content-view/image';
@@ -41,6 +41,8 @@ class InnerFileView extends React.Component {
       case 'Audio':
         content = <Audio />;
         break;
+      default:
+        break;
     }
 
     return (
@@ -49,7 +51,6 @@ class InnerFileView extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <InnerFileView />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<InnerFileView />);
+

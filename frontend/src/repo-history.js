@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { navigate } from '@reach/router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -326,7 +326,5 @@ class Item extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RepoHistory />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<RepoHistory />);

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ToastManager from './toastManager';
 
 const isBrowser =
@@ -17,13 +17,13 @@ export default class Toaster {
     container.setAttribute('data-evergreen-toaster-container', '');
     document.body.appendChild(container);
 
-    ReactDOM.render(
+    const root = createRoot(container);
+    root.render(
       <ToastManager
         bindNotify={this._bindNotify}
         bindGetToasts={this._bindGetToasts}
         bindCloseAll={this._bindCloseAll}
-      />,
-      container
+      />
     );
   }
 

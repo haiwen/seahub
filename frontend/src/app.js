@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Router, navigate } from '@reach/router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
@@ -290,7 +290,5 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<App />);

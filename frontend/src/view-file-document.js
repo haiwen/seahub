@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { seafileAPI } from './utils/seafile-api';
-import { gettext, mediaUrl} from './utils/constants';
+import { gettext, mediaUrl } from './utils/constants';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 import Loading from './components/loading';
@@ -106,7 +106,5 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <ViewFileDocument />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<ViewFileDocument />);

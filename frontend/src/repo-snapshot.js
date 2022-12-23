@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { navigate } from '@reach/router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -304,7 +304,5 @@ class FolderItem extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RepoSnapshot />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<RepoSnapshot />);
