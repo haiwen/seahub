@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Logo from './components/logo';
 import Account from './components/common/account';
 import TermsPreviewWidget from './components/terms-preview-widget';
@@ -33,7 +33,5 @@ class TCView extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <TCView />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<TCView />);
