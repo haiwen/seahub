@@ -19,12 +19,6 @@ class AddRepoDialog extends React.Component {
       repoName: '',
       errMessage: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   handleSubmit = () => {
@@ -66,7 +60,7 @@ class AddRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -77,7 +71,7 @@ class AddRepoDialog extends React.Component {
                 onKeyPress={this.handleKeyPress}
                 value={this.state.repoName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>

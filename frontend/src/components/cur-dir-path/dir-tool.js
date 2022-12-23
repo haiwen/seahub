@@ -94,7 +94,7 @@ class DirTool extends React.Component {
 
               {this.state.isRepoTagDialogShow && (
                 <ModalPortal>
-                  <Modal isOpen={true}>
+                  <Modal isOpen={true} autoFocus={false}>
                     {this.state.isListRepoTagShow && (
                       <ListTagDialog
                         repoID={repoID}

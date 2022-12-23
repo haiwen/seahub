@@ -27,11 +27,6 @@ class RenameDepartmentDialog extends React.Component {
     this.newInput = React.createRef();
   }
 
-  componentDidMount() {
-    this.newInput.select();
-    this.newInput.focus();
-  }
-
   handleSubmit = () => {
     let isValid = this.validateName();
     if (isValid) {
@@ -70,10 +65,16 @@ class RenameDepartmentDialog extends React.Component {
     }
   }
 
+  onAfterModelOpened = () => {
+    if (!this.newInput.current) return;
+    this.newInput.current.focus();
+    this.newInput.current.select();
+  }
+
   render() {
     let header = gettext('Rename Department');
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} onOpened={this.onAfterModelOpened}>
         <ModalHeader toggle={this.props.toggle}>{header}</ModalHeader>
         <ModalBody>
           <Form>
@@ -84,7 +85,7 @@ class RenameDepartmentDialog extends React.Component {
                 onKeyPress={this.handleKeyPress}
                 value={this.state.departmentName}
                 onChange={this.handleChange}
-                innerRef={input => {this.newInput = input;}}
+                innerRef={this.newInput}
               />
             </FormGroup>
           </Form>

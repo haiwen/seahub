@@ -32,8 +32,6 @@ class CreateFile extends React.Component {
     } else {
       this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0,0);
   }
 
   handleChange = (e) => {
@@ -132,9 +130,15 @@ class CreateFile extends React.Component {
     return isDuplicated;
   }
 
+  onAfterModelOpened = () => {
+    if (!this.newInput.current) return;
+    this.newInput.current.focus();
+    this.newInput.current.setSelectionRange(0,0);
+  }
+
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
         <ModalHeader toggle={this.toggle}>{gettext('New File')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -143,7 +147,7 @@ class CreateFile extends React.Component {
               <Input
                 id="fileName"
                 onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
+                innerRef={this.newInput}
                 value={this.state.childName}
                 onChange={this.handleChange}
               />

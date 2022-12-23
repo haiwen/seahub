@@ -16,7 +16,6 @@ class CreateDepartmentRepoDialog extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
   }
 
   handleChange = (e) => {
@@ -50,10 +49,6 @@ class CreateDepartmentRepoDialog extends React.Component {
     this.props.onCreateToggle();
   }
 
-  componentDidMount = () => {
-    this.newInput.focus();
-  }
-
   validateRepoName = () => {
     let errMessage = '';
     let repoName = this.state.repoName.trim();
@@ -78,7 +73,7 @@ class CreateDepartmentRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Department Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -87,10 +82,10 @@ class CreateDepartmentRepoDialog extends React.Component {
               <Input
                 id="repo-name"
                 onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
                 value={this.state.repoName}
                 onChange={this.handleChange}
                 maxLength={maxFileName}
+                autoFocus={true}
               />
             </FormGroup>
           </Form>

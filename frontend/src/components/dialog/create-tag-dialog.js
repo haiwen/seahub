@@ -22,7 +22,6 @@ class CreateTagDialog extends React.Component {
       errorMsg: '',
       colorList: ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84', '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'],
     };
-    this.newInput = React.createRef();
   }
 
   inputNewName = (e) => {
@@ -70,8 +69,6 @@ class CreateTagDialog extends React.Component {
     this.setState({
       tagColor: this.state.colorList[0]
     });
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, 0);
   }
 
   render() {
@@ -87,7 +84,7 @@ class CreateTagDialog extends React.Component {
           <div role="form" className="tag-create">
             <div className="form-group">
               <label className="form-label">{gettext('Name')}</label>
-              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} value={this.state.tagName} onChange={this.inputNewName}/>
+              <Input onKeyPress={this.handleKeyPress} autoFocus={true} value={this.state.tagName} onChange={this.inputNewName}/>
               <div className="mt-2"><span className="error">{this.state.errorMsg}</span></div>
             </div>
             <div className="form-group">
