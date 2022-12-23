@@ -11,10 +11,10 @@ const propTypes = {
 class ImportMembersDialog extends React.Component {
   constructor(props) {
     super(props);
-    this.fileInputRef = React.createRef();
     this.state = {
       errorMsg: ''
     };
+    this.fileInputRef = React.createRef();
   }
 
   toggle = () => {

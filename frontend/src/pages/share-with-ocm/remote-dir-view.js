@@ -26,7 +26,6 @@ class DirView extends Component {
 
   constructor(props) {
     super(props);
-    this.fileInput = React.createRef();
     this.state = {
       loading: true,
       errorMsg: '',
@@ -36,6 +35,7 @@ class DirView extends Component {
       isNewFolderDialogOpen: false,
       userPerm: '',
     };
+    this.fileInput = React.createRef();
   }
 
   componentDidMount () {
