@@ -11,6 +11,7 @@
     "@seafile/slate-react": "0.54.13",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
+    "deep-copy": "1.4.2",
     "glamor": "^2.20.40",
     "i18next": "22.4.6",
     "i18next-browser-languagedetector": "7.0.1",
