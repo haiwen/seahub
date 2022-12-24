@@ -44,9 +44,9 @@ def settings_check(func):
 def config_settings_loader(request):
     # get url_prefix
     url_prefix = None
-    r = re.search(r'org_[0-9a-z]+', request.path)
-    if r:
-        url_prefix = r.group()
+    reg = re.search(r'^org/custom/([a-z_0-9]+)$', request.path.strip('/'))
+    if reg:
+        url_prefix = reg.group(1)
 
     # get org_id
     org = ccnet_api.get_org_by_url_prefix(url_prefix)
@@ -67,7 +67,7 @@ def config_settings_loader(request):
     org_sp_service_url = SP_SERVICE_URL + '/' + url_prefix
 
     # generate org certs dir
-    org_certs_dir = os.path.join(CERTS_DIR, org_id)
+    org_certs_dir = os.path.join(CERTS_DIR, str(org_id))
 
     # generate org saml_config
     saml_config = {
@@ -110,7 +110,7 @@ def config_settings_loader(request):
             'key_file': os.path.join(org_certs_dir, 'sp.key'),
             'cert_file': os.path.join(org_certs_dir, 'sp.crt'),
         }],
-        'valid_days': valid_days * 24,
+        'valid_for': valid_days * 24,  # how long is our metadata valid, unit is hour
     }
 
     conf = SPConfig()

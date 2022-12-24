@@ -296,7 +296,6 @@ ENABLE_CAS = False
 ENABLE_ADFS_LOGIN = False
 
 ENABLE_MULTI_ADFS = False
-SAML_CONFIG_LOADER = 'seahub.adfs_auth.utils.config_settings_loader'
 
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False

@@ -108,9 +108,9 @@ def assertion_consumer_service(request,
 
     # get url_prefix
     url_prefix = None
-    r = re.search(r'org_[0-9a-z]+', request.path)
-    if r:
-        url_prefix = r.group()
+    reg = re.search(r'^org/custom/([a-z_0-9]+)$', request.path.strip('/'))
+    if reg:
+        url_prefix = reg.group(1)
 
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(session_info=session_info,
@@ -187,4 +187,4 @@ def auth_complete(request):
 
 def org_multi_adfs(request):
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        return HttpResponseRedirect(reverse('adfs_auth:saml2_login'))
+        return HttpResponseRedirect(request.path.rstrip('/') + '/saml2/login/')
