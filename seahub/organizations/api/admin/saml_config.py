@@ -226,9 +226,9 @@ class OrgUrlPrefixView(APIView):
             error_msg = 'org_url_prefix invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        reg = re.match(r'^[a-z_0-9]{6,20}$', org_url_prefix)
+        reg = re.match(r'^[a-z0-9-]{6,20}$', org_url_prefix)
         if not reg:
-            error_msg = 'url_prefix consists of 6-20 characters and can only contain lowercase letters, numbers and underscores.'
+            error_msg = 'url_prefix consists of 6-20 characters and can only contain alphanumeric characters and hyphens.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if ccnet_api.get_org_by_url_prefix(org_url_prefix) is not None:

@@ -44,7 +44,7 @@ def settings_check(func):
 def config_settings_loader(request):
     # get url_prefix
     url_prefix = None
-    reg = re.search(r'^org/custom/([a-z_0-9]+)$', request.path.strip('/'))
+    reg = re.search(r'^org/custom/([a-z_0-9-]+)$', request.path.strip('/'))
     if reg:
         url_prefix = reg.group(1)
 
@@ -64,7 +64,7 @@ def config_settings_loader(request):
     valid_days = int(org_saml_config.valid_days)
 
     # get org_sp_service_url
-    org_sp_service_url = SP_SERVICE_URL + '/' + url_prefix
+    org_sp_service_url = SP_SERVICE_URL.rstrip('/') + '/' + url_prefix
 
     # generate org certs dir
     org_certs_dir = os.path.join(CERTS_DIR, str(org_id))
