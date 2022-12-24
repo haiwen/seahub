@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
+from django.utils.translation import gettext as _
 
 from seaserv import ccnet_api
 
@@ -228,7 +229,7 @@ class OrgUrlPrefixView(APIView):
 
         reg = re.match(r'^[a-z0-9-]{6,20}$', org_url_prefix)
         if not reg:
-            error_msg = 'url_prefix consists of 6-20 characters and can only contain alphanumeric characters and hyphens.'
+            error_msg = _('org_url_prefix should be 6 to 20 characters, and can only contain alphanumeric characters and hyphens.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if ccnet_api.get_org_by_url_prefix(org_url_prefix) is not None:
@@ -250,7 +251,6 @@ class OrgUrlPrefixView(APIView):
             update_org_url_prefix(db_name, org_id, org_url_prefix)
         except Exception as e:
             logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'org_url_prefix': org_url_prefix})

@@ -205,7 +205,7 @@ class OrgSAMLConfig extends Component {
                         <Col md="5">
                           {`${serviceURL}/org/custom/`}<input innerRef={input => {this.newInput = input;}} value={newUrlPrefix} onChange={this.inputOrgUrlPrefix} onFocus={this.toggleBtns} onBlur={this.hideBtns}></input>
                           <p className="small text-secondary mt-1">
-                            {gettext('You can custom your login URL by modify the url_prefix. The url_prefix consists of 6-20 characters and can only contain alphanumeric characters and hyphens.')}
+                            {gettext('The custom part of the URL should be 6 to 20 characters, and can only contain alphanumeric characters and hyphens.')}
                           </p>
                         </Col>
                         {isBtnsShown &&
