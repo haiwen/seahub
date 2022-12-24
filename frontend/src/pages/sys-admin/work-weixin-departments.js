@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
-import _ from 'lodash';
+import deepCopy from 'deep-copy';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -49,7 +49,7 @@ class WorkWeixinDepartments extends Component {
     let rootIds = parentIds.concat(intersection).filter((v) => {
       return parentIds.indexOf(v) === -1 || intersection.indexOf(v) === -1;
     });
-    let cloneData = _.cloneDeep(list);
+    let cloneData = deepCopy(list);
     return cloneData.filter(father => {
       let branchArr = cloneData.filter(child => father.id === child.parentid);
       branchArr.length > 0 ? father.children = branchArr : '';

@@ -18,12 +18,6 @@ class NewWikiDialog extends React.Component {
       repoID: '',
       isSubmitBtnActive: false,
     };
-    this.newName = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newName.focus();
-    this.newName.setSelectionRange(0, -1);
   }
 
   inputNewName = (e) => {
@@ -56,11 +50,11 @@ class NewWikiDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
         <ModalBody>
           <label className="form-label">{gettext('Name')}</label>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newName = input;}} value={this.state.name} onChange={this.inputNewName}/>
+          <Input onKeyPress={this.handleKeyPress} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Router } from '@reach/router';
 import { siteRoot } from '../../utils/constants';
 import SidePanel from './side-panel';
@@ -273,7 +273,5 @@ class SysAdmin extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <SysAdmin />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SysAdmin />);

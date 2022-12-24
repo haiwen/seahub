@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { MarkdownViewer } from '@seafile/seafile-editor';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -101,7 +101,5 @@ class FileContent extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <SharedFileViewMarkdown />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<SharedFileViewMarkdown />);

@@ -181,7 +181,7 @@
 }
 
 /* for reach/router */
-.reach-router[role=group],
+.reach-router,
 div[tabindex="-1"][role="group"] {
   display: flex;
   flex: 1;

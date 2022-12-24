@@ -211,7 +211,7 @@ class EditFileTagDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggleCancel}>
+      <Modal isOpen={true} toggle={this.props.toggleCancel} autoFocus={false}>
         {this.state.isListRepoTagShow &&
           <TagList
             repoID={this.props.repoID}

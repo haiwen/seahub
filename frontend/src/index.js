@@ -1,15 +1,15 @@
 // Import React!
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n-seafile-editor';
 import MarkdownEditor from './pages/markdown-editor';
 
 import './index.css';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <I18nextProvider i18n={ i18n } >
     <MarkdownEditor />
-  </I18nextProvider>,
-  document.getElementById('root')
+  </I18nextProvider>
 );

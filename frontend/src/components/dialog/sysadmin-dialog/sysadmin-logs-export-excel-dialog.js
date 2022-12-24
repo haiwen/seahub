@@ -14,11 +14,6 @@ class LogsExportExcelDialog extends React.Component {
       endDateStr: '',
       errMsg: '',
     };
-    this.newInput = React.createRef();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
   }
 
   downloadExcel = () => {
@@ -79,7 +74,7 @@ class LogsExportExcelDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.props.toggle}>
+      <Modal isOpen={true} toggle={this.props.toggle} autoFocus={false}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Choose date')}</ModalHeader>
         <ModalBody>
           <FormGroup>
@@ -88,7 +83,7 @@ class LogsExportExcelDialog extends React.Component {
               value={this.state.startDateStr}
               onChange={this.handleStartChange}
               placeholder='yyyy-mm-dd'
-              innerRef={input => {this.newInput = input;}}
+              autoFocus={true}
             />
           </FormGroup>
           <FormGroup>

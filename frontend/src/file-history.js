@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import { fileName, historyRepoID } from './utils/constants';
 import { Utils } from './utils/utils';
@@ -62,12 +62,17 @@ class FileHistory extends React.Component {
     }
   }
 
+  onBackClick = (event) => {
+    event.preventDefault();
+    window.history.back();
+  }
+
   render() {
     return(
       <Fragment>
         <div id="header" className="history-header">
           <div className="title">
-            <a href="javascript:window.history.back()" className="go-back" title="Back">
+            <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
               <span className="fas fa-chevron-left"></span>
             </a>
             <span className="name">{fileName}</span>
@@ -89,7 +94,5 @@ class FileHistory extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <FileHistory />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<FileHistory />);

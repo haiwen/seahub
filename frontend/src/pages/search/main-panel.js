@@ -1,4 +1,5 @@
 import React from 'react';
+import deepCopy from 'deep-copy';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import SearchResults from './search-results';
@@ -8,7 +9,6 @@ import Loading from '../../components/loading';
 
 import '../../css/search.css';
 
-const _ = require('lodash');
 const { q, search_repo, search_ftypes } = window.search.pageOptions;
 
 class SearchViewPanel extends React.Component {
@@ -49,7 +49,7 @@ class SearchViewPanel extends React.Component {
       isLoading: true,
       isResultGot: false,
     });
-    const stateHistory = _.cloneDeep(this.state);
+    const stateHistory = deepCopy(this.state);
     seafileAPI.searchFiles(params, null).then(res => {
       const { results, has_more, total } = res.data;
       this.setState({

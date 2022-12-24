@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import FileView from './components/history-trash-file-view/file-view';
 import FileViewTip from './components/history-trash-file-view/file-view-tip';
 import Image from './components/file-content-view/image';
@@ -56,7 +56,6 @@ class HistoryTrashFileView extends React.Component {
   }
 }
 
-ReactDOM.render (
-  <HistoryTrashFileView />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<HistoryTrashFileView />);
+

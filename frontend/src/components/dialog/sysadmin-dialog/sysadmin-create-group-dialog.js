@@ -20,7 +20,6 @@ class SysAdminCreateGroupDialog extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false
     };
-    this.newInput = React.createRef();
   }
 
   handleRepoNameChange = (e) => {
@@ -56,13 +55,9 @@ class SysAdminCreateGroupDialog extends React.Component {
     this.props.toggleDialog();
   }
 
-  componentDidMount() {
-    this.newInput.focus();
-  }
-
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Group')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -71,9 +66,9 @@ class SysAdminCreateGroupDialog extends React.Component {
               <Input
                 id="groupName"
                 onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
                 value={this.state.groupName}
                 onChange={this.handleRepoNameChange}
+                autoFocus={true}
               />
               <Label className="mt-2">
                 {gettext('Owner')}

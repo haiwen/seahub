@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { navigate } from '@reach/router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -193,7 +193,7 @@ class RepoFolderTrash extends React.Component {
             <div className="row">
               <div className="col-md-10 offset-md-1">
                 <h2>{Utils.generateDialogTitle(gettext('{placeholder} Trash'), repoFolderName)}</h2>
-                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" role={gettext('Back')}>
+                <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role={gettext('Back')}>
                   <span className="fas fa-chevron-left"></span>
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
@@ -413,7 +413,5 @@ class FolderItem extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <RepoFolderTrash />,
-  document.getElementById('wrapper')
-);
+const root = createRoot(document.getElementById('wrapper'));
+root.render(<RepoFolderTrash />);

@@ -25,7 +25,6 @@ class CreateRepoDialog extends React.Component {
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
   }
 
   handleRepoNameChange = (e) => {
@@ -67,10 +66,6 @@ class CreateRepoDialog extends React.Component {
 
   toggle = () => {
     this.props.onCreateToggle();
-  }
-
-  componentDidMount() {
-    this.newInput.focus();
   }
 
   validateInputParams() {
@@ -177,7 +172,7 @@ class CreateRepoDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <ModalHeader toggle={this.toggle}>{gettext('New Library')}</ModalHeader>
         <ModalBody>
           <Form>
@@ -186,9 +181,9 @@ class CreateRepoDialog extends React.Component {
               <Input
                 id="repoName"
                 onKeyPress={this.handleKeyPress}
-                innerRef={input => {this.newInput = input;}}
                 value={this.state.repoName}
                 onChange={this.handleRepoNameChange}
+                autoFocus={true}
               />
             </FormGroup>
 
