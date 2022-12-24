@@ -108,7 +108,7 @@ def assertion_consumer_service(request,
 
     # get url_prefix
     url_prefix = None
-    reg = re.search(r'^org/custom/([a-z_0-9-]+)$', request.path.strip('/'))
+    reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
     if reg:
         url_prefix = reg.group(1)
 
