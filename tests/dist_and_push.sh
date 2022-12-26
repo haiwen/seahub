@@ -36,7 +36,7 @@ function make_dist() {
 
 function build_frontend() {
     echo "Building frontend/src files ..."
-    cd ./frontend && npm install && CI=false npm run build && cd ..
+    cd ./frontend && npm ci && CI=false npm run build && cd ..
 
 }
 
