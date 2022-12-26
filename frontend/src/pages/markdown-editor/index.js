@@ -65,7 +65,8 @@ class MarkdownEditor extends React.Component {
     this.autoSave = false;
     this.draftRichValue = '';
     this.draftPlainValue = '';
-
+    // support insert formula
+    window.canInsertFormula = true;
     if (this.state.collabServer) {
       const socket = io(this.state.collabServer);
       this.socket = socket;
