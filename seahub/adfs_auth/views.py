@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
 import logging
 
 from django.conf import settings
@@ -105,10 +106,17 @@ def assertion_consumer_service(request,
     if callable(create_unknown_user):
         create_unknown_user = create_unknown_user()
 
+    # get url_prefix
+    url_prefix = None
+    reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
+    if reg:
+        url_prefix = reg.group(1)
+
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(session_info=session_info,
                              attribute_mapping=attribute_mapping,
-                             create_unknown_user=create_unknown_user)
+                             create_unknown_user=create_unknown_user,
+                             url_prefix=url_prefix)
     if user is None:
         logger.error('The user is None')
         return HttpResponseForbidden("Permission denied")
@@ -175,3 +183,8 @@ def auth_complete(request):
             update_sudo_mode_ts(request)
 
     return resp
+
+
+def org_multi_adfs(request):
+    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        return HttpResponseRedirect(request.path.rstrip('/') + '/saml2/login/')

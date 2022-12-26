@@ -33,6 +33,7 @@ import OrgLogs from './org-logs';
 import OrgLogsFileAudit from './org-logs-file-audit';
 import OrgLogsFileUpdate from './org-logs-file-update';
 import OrgLogsPermAudit from './org-logs-perm-audit';
+import OrgSAMLConfig from './org-saml-config';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
@@ -114,6 +115,7 @@ class Org extends React.Component {
               <OrgLogsFileUpdate path='file-update' />
               <OrgLogsPermAudit path='perm-audit' />
             </OrgLogs>
+            <OrgSAMLConfig path={siteRoot + 'org/samlconfig/'}/>
           </Router>
         </div>
       </div>

@@ -147,6 +147,14 @@ class Saml2Backend(ModelBackend):
             if create_unknown_user:
                 activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
                 user = User.objects.create_user(email=username, is_active=activate_after_creation)
+                # create org user
+                url_prefix = kwargs.get('url_prefix', None)
+                if url_prefix:
+                    org = ccnet_api.get_org_by_url_prefix(url_prefix)
+                    if org:
+                        org_id = org.org_id
+                        ccnet_api.add_org_user(org_id, username, 0)
+
                 if not activate_after_creation:
                     notify_admins_on_activate_request(username)
                 elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:

@@ -1,8 +1,36 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
+import configparser
+
+from django.db import connection
 from django.core.cache import cache
 from django.urls import reverse
 
 from seahub.utils import gen_token, get_service_url
+
+
+def get_ccnet_db_name():
+    if 'CCNET_CONF_DIR' not in os.environ:
+        error_msg = 'Environment variable CCNET_CONF_DIR is not define.'
+        return None, error_msg
+
+    ccnet_conf_path = os.path.join(os.environ['CCNET_CONF_DIR'], 'ccnet.conf')
+    config = configparser.ConfigParser()
+    config.read(ccnet_conf_path)
+
+    if config.has_section('Database'):
+        db_name = config.get('Database', 'DB', fallback='ccnet')
+    else:
+        db_name = 'ccnet'
+
+    return db_name, None
+
+
+def update_org_url_prefix(db_name, org_id, url_prefix):
+    sql = """UPDATE %s.Organization SET url_prefix=%%s WHERE org_id=%%s""" % db_name
+    with connection.cursor() as cursor:
+        cursor.execute(sql, (url_prefix, org_id))
+
 
 def get_or_create_invitation_link(org_id):
     """Invitation link for an org. Users will be redirected to WeChat QR page.

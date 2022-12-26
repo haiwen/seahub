@@ -868,6 +868,13 @@ if HAS_OFFICE_CONVERTER:
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
     ]
 
+if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+    from seahub.adfs_auth.views import auth_complete
+    urlpatterns += [
+        url(r'^org/custom/[a-z_0-9-]+/', include(('seahub.adfs_auth.urls', 'adfs_auth'), namespace='adfs_auth')),
+        url(r'^saml2/complete/$', auth_complete, name='org_saml2_complete'),
+    ]
+
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
     from seahub.adfs_auth.views import assertion_consumer_service, \
         auth_complete
