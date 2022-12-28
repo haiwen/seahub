@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import toaster from './components/toast';
-import { Utils } from './utils/utils';
 import { gettext } from './utils/constants';
 import FileView from './components/file-view/file-view';
 import SeafileCodeMirror from './components/seafile-codemirror';
@@ -25,11 +24,10 @@ class FileContent extends React.Component {
       return <FileViewTip />;
     }
 
-    const mode = Utils.chooseLanguage(fileExt);
     return (
       <div className="file-view-content flex-1 text-file-view">
         <SeafileCodeMirror
-          mode={mode}
+          fileExt={fileExt}
           value={this.props.content}
           readOnly={!canEditFile}
           onChange={this.props.updateContent}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { Utils } from '../../utils/utils';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/css/css';
@@ -26,7 +27,7 @@ const DEFAULT_OPTIONS = {
 };
 
 const propTypes = {
-  mode: PropTypes.string,
+  fileExt: PropTypes.string,
   value: PropTypes.string,
   readOnly: PropTypes.bool,
   onChange: PropTypes.func,
@@ -46,7 +47,8 @@ class SeafileCodeMirror extends React.Component {
   getOptions = () => {
     if (this.options) return this.options;
 
-    const { mode, readOnly } = this.props;
+    const { fileExt, readOnly } = this.props;
+    const mode = Utils.chooseLanguage(fileExt);
     const cursorBlinkRate = readOnly ? -1 : 530;
     return { ...DEFAULT_OPTIONS, ...{ mode, cursorBlinkRate } };
   }

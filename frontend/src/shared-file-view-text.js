@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { Utils } from './utils/utils';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import SeafileCodeMirror from './components/seafile-codemirror';
@@ -14,10 +13,9 @@ class FileContent extends React.Component {
       return <SharedFileViewTip />;
     }
 
-    const mode = Utils.chooseLanguage(fileExt);
     return (
       <div className="shared-file-view-body text-file-view">
-        <SeafileCodeMirror mode={mode} value={fileContent} />
+        <SeafileCodeMirror fileExt={fileExt} value={fileContent} />
       </div>
     );
   }
