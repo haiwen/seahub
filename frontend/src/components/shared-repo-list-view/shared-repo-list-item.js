@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link, navigate } from '@reach/router';
+import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';

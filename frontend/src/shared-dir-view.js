@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import MD5 from 'MD5';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
 import moment from 'moment';
 import Account from './components/common/account';
@@ -927,5 +927,4 @@ class GridItem extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<SharedDirView />);
+ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));

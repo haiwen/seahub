@@ -1,6 +1,6 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { isPro, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
@@ -152,5 +152,4 @@ class Settings extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<Settings />);
+ReactDom.render(<Settings />, document.getElementById('wrapper'));

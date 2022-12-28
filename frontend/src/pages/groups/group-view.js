@@ -2,7 +2,7 @@ import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, siteRoot, username, canAddRepo } from '../../utils/constants';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';

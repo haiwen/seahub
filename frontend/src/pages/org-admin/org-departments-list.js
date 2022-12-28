@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils.js';
 import { seafileAPI } from '../../utils/seafile-api';
 import MainPanelTopbar from './main-panel-topbar';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import { gettext } from '../utils/constants';
 
 import '../css/pagination.css';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { createRoot } from 'react-dom/client';
-import { Router, navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import { Router, navigate } from '@gatsbyjs/reach-router';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { siteRoot, canAddRepo, isDocs } from './utils/constants';
@@ -290,5 +290,4 @@ class App extends Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<App />);
+ReactDom.render(<App />, document.getElementById('wrapper'));

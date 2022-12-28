@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link, navigate } from '@reach/router';
+import { Link, navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';

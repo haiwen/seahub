@@ -4,7 +4,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import { Button } from 'reactstrap';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';

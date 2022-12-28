@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';

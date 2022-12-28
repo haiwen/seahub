@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils.js';
 import { siteRoot, gettext } from '../../../utils/constants';
 import OpMenu from '../../../components/dialog/op-menu';
