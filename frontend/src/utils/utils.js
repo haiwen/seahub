@@ -1177,22 +1177,25 @@ export const Utils = {
         mode = 'javascript';
         break;
       case 'c':
-        mode = 'text/x-csrc';
+        mode = 'c';
         break;
       case 'cpp':
-        mode = 'text/x-c++src';
-        break;
-      case 'java':
-        mode = 'text/x-java';
+        mode = 'cpp';
         break;
       case 'cs':
-        mode = 'text/x-csharp';
+        mode = 'csharp';
+        break;
+      case 'java':
+        mode = 'java';
         break;
       case 'mdf':
         mode = 'text/x-sql';
         break;
       case 'html':
-        mode = 'htmlmixed';
+        mode = 'html';
+        break;
+      case 'sh':
+        mode = 'shell';
         break;
       default:
         mode = suffix;

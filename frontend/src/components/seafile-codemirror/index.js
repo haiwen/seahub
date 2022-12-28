@@ -1,29 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
+import CodeMirror from '@uiw/react-codemirror';
+import { loadLanguage } from '@uiw/codemirror-extensions-langs';
 import { Utils } from '../../utils/utils';
-
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/php/php';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/mode/vue/vue';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/lib/codemirror.css';
 
 import './style.css';
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_CODEMIRROR_OPTIONS = {
   lineNumbers: true,
-  extraKeys: {'Ctrl': 'autocomplete'},
-  theme: 'default',
-  textWrapping: true,
-  lineWrapping: true,
-  cursorBlinkRate: -1 // hide the cursor
+  highlightActiveLineGutter: false,
+  highlightActiveLine: false,
 };
 
 const propTypes = {
@@ -49,11 +35,21 @@ class SeafileCodeMirror extends React.Component {
 
     const { fileExt, readOnly } = this.props;
     const mode = Utils.chooseLanguage(fileExt);
-    const cursorBlinkRate = readOnly ? -1 : 530;
-    return { ...DEFAULT_OPTIONS, ...{ mode, cursorBlinkRate } };
+    const extensions = loadLanguage(mode);
+    if (extensions) {
+      return {
+        theme: 'light',
+        readOnly: readOnly,
+        extensions: extensions,
+      };
+    }
+    return {
+      theme: 'light',
+      readOnly: readOnly,
+    };
   }
 
-  onChange = (editor, data, value) => {
+  onChange = (value) => {
     this.props.onChange && this.props.onChange(value);
   }
 
@@ -65,8 +61,9 @@ class SeafileCodeMirror extends React.Component {
         <CodeMirror
           ref="code-mirror-editor"
           value={value}
-          options={options}
+          {...options}
           onChange={this.onChange}
+          basicSetup={DEFAULT_CODEMIRROR_OPTIONS}
         />
       </div>
     );

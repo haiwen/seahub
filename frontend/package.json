@@ -9,6 +9,8 @@
     "@seafile/seafile-calendar": "0.0.12",
     "@seafile/seafile-editor": "^0.3.123",
     "@seafile/slate-react": "0.54.13",
+    "@uiw/codemirror-extensions-langs": "^4.19.4",
+    "@uiw/react-codemirror": "^4.19.4",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
     "crypto-js": "4.1.1",
