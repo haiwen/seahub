@@ -23,7 +23,7 @@ export default class Toaster {
         bindGetToasts={this._bindGetToasts}
         bindCloseAll={this._bindCloseAll}
       />,
-      document.getElementById('wrapper')
+      container
     );
   }
 

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import axios from 'axios';
 import { fileName, historyRepoID } from './utils/constants';
 import { Utils } from './utils/utils';
@@ -94,5 +94,4 @@ class FileHistory extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<FileHistory />);
+ReactDom.render(<FileHistory />, document.getElementById('wrapper'));
