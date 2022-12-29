@@ -1,6 +1,6 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { navigate } from '@reach/router';
+import ReactDom from 'react-dom';
+import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -413,5 +413,4 @@ class FolderItem extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<RepoFolderTrash />);
+ReactDom.render(<RepoFolderTrash />, document.getElementById('wrapper'));

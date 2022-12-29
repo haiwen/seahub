@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { isPro, username, gettext, multiInstitution, siteRoot } from '../../../utils/constants';

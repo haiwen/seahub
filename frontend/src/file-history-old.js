@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
@@ -274,5 +274,4 @@ class FileHistory extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<FileHistory />);
+ReactDom.render(<FileHistory />, document.getElementById('wrapper'));

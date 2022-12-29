@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import Nav from './org-users-nav';
 import OrgUsersList from './org-users-list';
 import MainPanelTopbar from './main-panel-topbar';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Logo from '../../components/logo';
 import SearchViewPanel from './main-panel';
@@ -39,5 +39,4 @@ class SearchView extends React.Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<SearchView />);
+ReactDom.render(<SearchView />, document.getElementById('wrapper'));

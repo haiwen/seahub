@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';

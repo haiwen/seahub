@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import MainPanelTopbar from './main-panel-topbar';

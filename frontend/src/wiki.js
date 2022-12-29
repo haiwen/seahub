@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
@@ -508,5 +508,4 @@ class Wiki extends Component {
   }
 }
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<Wiki />);
+ReactDom.render(<Wiki />, document.getElementById('wrapper'));

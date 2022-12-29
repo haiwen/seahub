@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';

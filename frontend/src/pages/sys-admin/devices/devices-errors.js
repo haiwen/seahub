@@ -7,7 +7,7 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import moment from 'moment';
 import Loading from '../../../components/loading';
-import { Link } from '@reach/router';
+import { Link } from '@gatsbyjs/reach-router';
 import DevicesNav from './devices-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';

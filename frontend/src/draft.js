@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 /* eslint-disable */
@@ -919,5 +919,4 @@ const sidePanelChangesPropTypes = {
 SidePanelChanges.propTypes = sidePanelChangesPropTypes;
 
 
-const root = createRoot(document.getElementById('wrapper'));
-root.render(<Draft />);
+ReactDom.render(<Draft />, document.getElementById('wrapper'));
