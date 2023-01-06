@@ -17,6 +17,7 @@ from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
 from .api.admin.info import OrgAdminInfo
 from .api.admin.links import OrgAdminLinks, OrgAdminLink
+from .api.admin.web_settings import OrgAdminWebSettings
 from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgAdminLogsPermAudit
 from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
@@ -91,6 +92,7 @@ urlpatterns = [
     url(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/beshared-repos/$', OrgAdminUserBesharedRepos.as_view(), name='api-v2.1-org-admin-user-beshared-repos'),
     url(r'^(?P<org_id>\d+)/admin/repos/$', OrgAdminRepos.as_view(), name='api-v2.1-org-admin-repos'),
     url(r'^(?P<org_id>\d+)/admin/repos/(?P<repo_id>[-0-9a-f]{36})/$', OrgAdminRepo.as_view(), name='api-v2.1-org-admin-repo'),
+    url(r'^(?P<org_id>\d+)/admin/web-settings/$', OrgAdminWebSettings.as_view(), name='api-v2.1-org-admin-web-settings'),
     url(r'^admin/info/$', OrgAdminInfo.as_view(), name='api-v2.1-org-admin-info'),
     url(r'^admin/links/$', OrgAdminLinks.as_view(), name='api-v2.1-org-admin-links'),
     url(r'^admin/links/(?P<token>[a-f0-9]+)/$', OrgAdminLink.as_view(), name='api-v2.1-org-admin-link'),

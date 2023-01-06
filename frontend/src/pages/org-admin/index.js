@@ -25,6 +25,7 @@ import OrgGroupRepos from './org-group-repos';
 import OrgGroupMembers from './org-group-members';
 import OrgLibraries from './org-libraries';
 import OrgInfo from './org-info';
+import OrgSettings from './org-web-settings';
 import OrgLinks from './org-links';
 import OrgDepartments from './org-departments';
 import OrgDepartmentsList from './org-departments-list';
@@ -85,6 +86,7 @@ class Org extends React.Component {
         <div className="main-panel">
           <Router className="reach-router">
             <OrgInfo path={siteRoot + 'org/info/'} />
+            <OrgSettings path={siteRoot + 'org/settings/'} />
             <OrgStatisticFile path={siteRoot + 'org/statistics-admin/file/'} />
             <OrgStatisticStorage path={siteRoot + 'org/statistics-admin/total-storage/'} />
             <OrgStatisticUsers path={siteRoot + 'org/statistics-admin/active-users/'} />
