@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditorBuilder, Toolbar, MarkdownEditor, UserHelp } from '@seafile/seafile-editor';
+import { EditorContext, Toolbar, MarkdownEditor, UserHelp } from '@seafile/seafile-editor';
 import SidePanel from './side-panel';
 
 import '../css/rich-editor.css';
@@ -65,7 +65,7 @@ class RichMarkdownEditor extends React.Component {
   }
 
   addLink = (fileName, url, isImage) => {
-    const editorRef = EditorBuilder.getEditorRef();
+    const editorRef = EditorContext.getEditorRef();
     editorRef.addLink(fileName, url, isImage);
   }
 
