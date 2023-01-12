@@ -37,7 +37,7 @@ from seahub.utils import is_valid_username2, is_org_context, \
         IS_EMAIL_CONFIGURED, send_html_email, get_site_name, \
         gen_shared_link, gen_shared_upload_link
 
-from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.file_size import get_file_size_unit, byte_to_kb
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.user_permissions import get_user_role
@@ -180,7 +180,9 @@ def create_user_info(request, email, role, nickname, contact_email, quota_total_
 
 
 def update_user_info(request, user, password, is_active, is_staff, role,
-                     nickname, login_id, contact_email, reference_id, quota_total_mb, institution_name):
+                     nickname, login_id, contact_email, reference_id,
+                     quota_total_mb, institution_name,
+                     upload_rate_limit, download_rate_limit):
 
     # update basic user info
     if is_active is not None:
@@ -238,6 +240,12 @@ def update_user_info(request, user, password, is_active, is_staff, role,
         except Exception as e:
             logger.error(e)
             seafile_api.set_user_quota(email, -1)
+
+    if upload_rate_limit is not None:
+        seafile_api.set_user_upload_rate_limit(email, upload_rate_limit * 1000)
+
+    if download_rate_limit is not None:
+        seafile_api.set_user_download_rate_limit(email, download_rate_limit * 1000)
 
 
 def get_user_info(email):
@@ -995,6 +1003,9 @@ class AdminUser(APIView):
 
         user_info = get_user_info(email)
         user_info['avatar_url'], _, _ = api_avatar_url(email, avatar_size)
+        if is_pro_version():
+            user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
+            user_info['download_rate_limit'] = byte_to_kb(seafile_api.get_user_download_rate_limit(email))
 
         last_login_obj = UserLastLogin.objects.get_by_username(email)
         if last_login_obj:
@@ -1106,6 +1117,30 @@ class AdminUser(APIView):
                 error_msg = 'Institution %s does not exist' % institution
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        upload_rate_limit = request.data.get("upload_rate_limit", None)
+        if upload_rate_limit:
+            try:
+                upload_rate_limit = int(upload_rate_limit)
+            except ValueError:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if upload_rate_limit < 0:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        download_rate_limit = request.data.get("download_rate_limit", None)
+        if download_rate_limit:
+            try:
+                download_rate_limit = int(download_rate_limit)
+            except ValueError:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if download_rate_limit < 0:
+                error_msg = _('Must be an integer that is greater than or equal to 0.')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # query user info
         try:
             user_obj = User.objects.get(email=email)
@@ -1114,9 +1149,20 @@ class AdminUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_user_info(request, user=user_obj, password=password, is_active=is_active, is_staff=is_staff,
-                             role=role, nickname=name, login_id=login_id, contact_email=contact_email,
-                             reference_id=reference_id, quota_total_mb=quota_total_mb, institution_name=institution)
+            update_user_info(request,
+                             user=user_obj,
+                             password=password,
+                             is_active=is_active,
+                             is_staff=is_staff,
+                             role=role,
+                             nickname=name,
+                             login_id=login_id,
+                             contact_email=contact_email,
+                             reference_id=reference_id,
+                             quota_total_mb=quota_total_mb,
+                             institution_name=institution,
+                             upload_rate_limit=upload_rate_limit,
+                             download_rate_limit=download_rate_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -1147,6 +1193,9 @@ class AdminUser(APIView):
 
         user_info = get_user_info(email)
         user_info['update_status_tip'] = update_status_tip
+        if is_pro_version():
+            user_info['upload_rate_limit'] = byte_to_kb(seafile_api.get_user_upload_rate_limit(email))
+            user_info['download_rate_limit'] = byte_to_kb(seafile_api.get_user_download_rate_limit(email))
 
         return Response(user_info)
 
