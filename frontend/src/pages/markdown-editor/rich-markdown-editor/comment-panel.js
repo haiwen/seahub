@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Button } from 'reactstrap';
 import { MentionsInput, Mention } from 'react-mentions';
-import { EditorBuilder } from '@seafile/seafile-editor';
+import { EditorContext } from '@seafile/seafile-editor';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -166,7 +166,7 @@ class CommentPanel extends React.Component {
   }
 
   scrollToQuote = (path) => {
-    const editorRef = EditorBuilder.getEditorRef();
+    const editorRef = EditorContext.getEditorRef();
     editorRef.scrollToQuote(path);
   }
 
