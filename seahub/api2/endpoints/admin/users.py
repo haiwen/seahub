@@ -241,10 +241,10 @@ def update_user_info(request, user, password, is_active, is_staff, role,
             logger.error(e)
             seafile_api.set_user_quota(email, -1)
 
-    if upload_rate_limit is not None:
+    if is_pro_version() and upload_rate_limit is not None:
         seafile_api.set_user_upload_rate_limit(email, upload_rate_limit * 1000)
 
-    if download_rate_limit is not None:
+    if is_pro_version() and download_rate_limit is not None:
         seafile_api.set_user_download_rate_limit(email, download_rate_limit * 1000)
 
 
@@ -1119,6 +1119,11 @@ class AdminUser(APIView):
 
         upload_rate_limit = request.data.get("upload_rate_limit", None)
         if upload_rate_limit:
+
+            if not is_pro_version():
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             try:
                 upload_rate_limit = int(upload_rate_limit)
             except ValueError:
@@ -1131,6 +1136,11 @@ class AdminUser(APIView):
 
         download_rate_limit = request.data.get("download_rate_limit", None)
         if download_rate_limit:
+
+            if not is_pro_version():
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             try:
                 download_rate_limit = int(download_rate_limit)
             except ValueError:

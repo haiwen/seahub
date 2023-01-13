@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { gettext, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -154,19 +154,20 @@ class Content extends Component {
               {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
-
-            <dt className="info-item-heading">{gettext('Upload Rate Limit')}</dt>
-            <dd className="info-item-content">
-              {user.upload_rate_limit > 0 ? user.upload_rate_limit + ' kB/s' : '--'}
-              {this.showEditIcon(this.toggleSetUserUploadRateLimitDialog)}
-            </dd>
-
-            <dt className="info-item-heading">{gettext('Download Rate Limit')}</dt>
-            <dd className="info-item-content">
-              {user.download_rate_limit > 0 ? user.download_rate_limit + ' kB/s' : '--'}
-              {this.showEditIcon(this.toggleSetUserDownloadRateLimitDialog)}
-            </dd>
-
+            {isPro &&
+              <Fragment>
+                <dt className="info-item-heading">{gettext('Upload Rate Limit')}</dt>
+                <dd className="info-item-content">
+                  {user.upload_rate_limit > 0 ? user.upload_rate_limit + ' kB/s' : '--'}
+                  {this.showEditIcon(this.toggleSetUserUploadRateLimitDialog)}
+                </dd>
+                <dt className="info-item-heading">{gettext('Download Rate Limit')}</dt>
+                <dd className="info-item-content">
+                  {user.download_rate_limit > 0 ? user.download_rate_limit + ' kB/s' : '--'}
+                  {this.showEditIcon(this.toggleSetUserDownloadRateLimitDialog)}
+                </dd>
+              </Fragment>
+            }
             {twoFactorAuthEnabled &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
@@ -196,14 +197,14 @@ class Content extends Component {
             toggle={this.toggleSetQuotaDialog}
           />
           }
-          {isSetUserUploadRateLimitDialogOpen &&
+          {(isPro && isSetUserUploadRateLimitDialogOpen) &&
           <SysAdminSetUploadDownloadRateLimitDialog
             uploadOrDownload="upload"
             updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
             toggle={this.toggleSetUserUploadRateLimitDialog}
           />
           }
-          {isSetUserDownloadRateLimitDialogOpen &&
+          {(isPro && isSetUserDownloadRateLimitDialogOpen) &&
           <SysAdminSetUploadDownloadRateLimitDialog
             uploadOrDownload="download"
             updateUploadDownloadRateLimit={this.updateUploadDownloadRateLimit}
