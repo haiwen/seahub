@@ -212,7 +212,7 @@ a, a:hover { color: #ec8000; }
 }
 
 .link-dropdown-item:hover {
-    color: #16181b;
+    color: #fff;
     text-decoration: none;
 }
 
