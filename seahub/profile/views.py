@@ -104,6 +104,11 @@ def edit_profile(request):
         enable_dingtalk = False
         social_connected_dingtalk = False
 
+    WEBDAV_SECRET_SETTED = False
+    if settings.ENABLE_WEBDAV_SECRET and \
+            UserOptions.objects.get_webdav_secret(username):
+        WEBDAV_SECRET_SETTED = True
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -117,6 +122,7 @@ def edit_profile(request):
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
             'WEBDAV_URL': get_webdav_url(),
             'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
             'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,

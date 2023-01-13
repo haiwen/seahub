@@ -977,12 +977,12 @@ def get_webdav_url():
         return ""
 
     share_name = config.get("WEBDAV", "share_name")
-    share_name = share_name.lstrip('/')
+    share_name = share_name.strip('/')
 
     service_url = get_service_url()
     service_url = service_url.rstrip('/')
 
-    return "{}/{}".format(service_url, share_name)
+    return "{}/{}/".format(service_url, share_name)
 
 
 def get_server_id():
