@@ -189,6 +189,7 @@ class Item extends Component {
 
     let opClasses = 'sf2-icon-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
+    const linkUrl = data.dirent_view_url.replace(/\/+$/, '');
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -201,7 +202,7 @@ class Item extends Component {
         </td>
         <td>
           { data.is_dir ?
-            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+            <Link to={linkUrl}>{data.obj_name}</Link> :
             <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           }
         </td>
@@ -224,7 +225,7 @@ class Item extends Component {
         </td>
         <td onClick={this.visitItem}>
           { data.is_dir ?
-            <Link to={data.dirent_view_url}>{data.obj_name}</Link> :
+            <Link to={linkUrl}>{data.obj_name}</Link> :
             <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
           }
           <br />
