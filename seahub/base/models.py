@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
-import datetime
 import logging
 from django.db import models
 from django.db.models import Q
@@ -10,7 +9,7 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
-from seahub.utils import calc_file_path_hash, within_time_range, \
+from seahub.utils import within_time_range, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
@@ -36,6 +35,7 @@ class TimestampedModel(models.Model):
         # per-model basis as needed, but reverse-chronological is a good
         # default ordering for most models.
         ordering = ['-created_at', '-updated_at']
+
 
 class FileCommentManager(models.Manager):
     def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
@@ -67,7 +67,7 @@ class FileCommentManager(models.Manager):
 
     def get_by_parent_path(self, repo_id, parent_path):
         uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id,
-                                                                   parent_path)
+                                                                    parent_path)
         objs = super(FileCommentManager, self).filter(uuid__in=uuids)
         return objs
 
@@ -104,7 +104,7 @@ class FileComment(models.Model):
         }
 
 
-########## starred files
+# starred files
 class StarredFile(object):
     def format_path(self):
         if self.path == "/":
@@ -129,6 +129,7 @@ class StarredFile(object):
         if not is_dir:
             self.name = path.split('/')[-1]
 
+
 class UserStarredFilesManager(models.Manager):
 
     def get_starred_repos_by_user(self, email):
@@ -139,23 +140,26 @@ class UserStarredFilesManager(models.Manager):
     def get_starred_item(self, email, repo_id, path):
 
         path_list = [normalize_file_path(path), normalize_dir_path(path)]
-        starred_items = UserStarredFiles.objects.filter(email=email,
-                repo_id=repo_id).filter(Q(path__in=path_list))
+        starred_items = UserStarredFiles.objects.filter(email=email, repo_id=repo_id) \
+                                                .filter(Q(path__in=path_list))
 
         return starred_items[0] if len(starred_items) > 0 else None
 
     def add_starred_item(self, email, repo_id, path, is_dir, org_id=-1):
 
         starred_item = UserStarredFiles.objects.create(email=email,
-                repo_id=repo_id, path=path, is_dir=is_dir, org_id=org_id)
+                                                       repo_id=repo_id,
+                                                       path=path,
+                                                       is_dir=is_dir,
+                                                       org_id=org_id)
 
         return starred_item
 
     def delete_starred_item(self, email, repo_id, path):
 
         path_list = [normalize_file_path(path), normalize_dir_path(path)]
-        starred_items = UserStarredFiles.objects.filter(email=email,
-                repo_id=repo_id).filter(Q(path__in=path_list))
+        starred_items = UserStarredFiles.objects.filter(email=email, repo_id=repo_id) \
+                                                .filter(Q(path__in=path_list))
 
         for item in starred_items:
             item.delete()
@@ -201,8 +205,9 @@ class UserStarredFilesManager(models.Manager):
                     sfile.delete()
                     continue
 
+            # TODO: remove ``size`` from StarredFile
             f = StarredFile(sfile.org_id, repo, file_id, sfile.path,
-                            sfile.is_dir, 0) # TODO: remove ``size`` from StarredFile
+                            sfile.is_dir, 0)
             ret.append(f)
 
         '''Calculate files last modification time'''
@@ -227,6 +232,7 @@ class UserStarredFilesManager(models.Manager):
 
         return ret
 
+
 class UserStarredFiles(models.Model):
     """Starred files are marked by users to get quick access to it on user
     home page.
@@ -240,7 +246,8 @@ class UserStarredFiles(models.Model):
 
     objects = UserStarredFilesManager()
 
-########## misc
+
+# misc
 class UserLastLoginManager(models.Manager):
     def get_by_username(self, username):
         """Return last login record for a user, delete duplicates if there are
@@ -258,10 +265,12 @@ class UserLastLoginManager(models.Manager):
                 logger.warn('Delete duplicate user last login record: %s' % username)
             return ret
 
+
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)
     objects = UserLastLoginManager()
+
 
 def update_last_login(sender, user, **kwargs):
     """
@@ -273,13 +282,17 @@ def update_last_login(sender, user, **kwargs):
         user_last_login = UserLastLogin(username=user.username)
     user_last_login.last_login = timezone.now()
     user_last_login.save()
+
+
 user_logged_in.connect(update_last_login)
+
 
 class CommandsLastCheck(models.Model):
     """Record last check time for Django/custom commands.
     """
     command_type = models.CharField(max_length=100)
     last_check = models.DateTimeField()
+
 
 class DeviceToken(models.Model):
     """
@@ -297,7 +310,9 @@ class DeviceToken(models.Model):
     def __unicode__(self):
         return "/".join(self.user, self.token)
 
+
 _CLIENT_LOGIN_TOKEN_EXPIRATION_SECONDS = 30
+
 
 class ClientLoginTokenManager(models.Manager):
     def get_username(self, tokenstr):
@@ -311,6 +326,7 @@ class ClientLoginTokenManager(models.Manager):
                                  _CLIENT_LOGIN_TOKEN_EXPIRATION_SECONDS):
             return None
         return username
+
 
 class ClientLoginToken(models.Model):
     # TODO: update sql/mysql.sql and sql/sqlite3.sql
@@ -349,3 +365,11 @@ class RepoSecretKey(models.Model):
     secret_key = models.CharField(max_length=44)
 
     objects = RepoSecretKeyManager()
+
+
+class UserMonitoredRepos(models.Model):
+    """
+    """
+    email = models.EmailField(db_index=True)
+    repo_id = models.CharField(max_length=36, db_index=True)
+    timestamp = models.DateTimeField(default=timezone.now)

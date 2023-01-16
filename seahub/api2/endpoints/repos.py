@@ -14,7 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
-from seahub.base.models import UserStarredFiles
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -79,6 +79,13 @@ class ReposView(APIView):
             logger.error(e)
             starred_repo_id_list = []
 
+        try:
+            monitored_repos = UserMonitoredRepos.objects.filter(email=email)
+            monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+        except Exception as e:
+            logger.error(e)
+            monitored_repo_id_list = []
+
         repo_info_list = []
         if filter_by['mine']:
 
@@ -120,6 +127,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }

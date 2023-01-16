@@ -3,7 +3,6 @@ import os
 import json
 import logging
 from django.core.cache import cache
-from django.urls import reverse
 
 from seaserv import ccnet_api, seafile_api
 from seahub.notifications.models import Notification
@@ -224,6 +223,27 @@ def update_notice_detail(request, notices):
                     d['author_contact_email'] = email2contact_email(author_email)
                     d['file_name'] = file_name
                     notice.detail = d
+            except Exception as e:
+                logger.error(e)
+
+        elif notice.is_repo_monitor_msg():
+            try:
+                d = json.loads(notice.detail)
+
+                repo_id = d['repo_id']
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
+                op_user_email = d.pop('op_user')
+                url, is_default, date_uploaded = api_avatar_url(op_user_email, 32)
+                d['op_user_avatar_url'] = url
+                d['op_user_email'] = op_user_email
+                d['op_user_name'] = email2nickname(op_user_email)
+                d['op_user_contact_email'] = email2contact_email(op_user_email)
+                notice.detail = d
             except Exception as e:
                 logger.error(e)
 
