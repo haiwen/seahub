@@ -100,6 +100,7 @@ class WebdavPassword extends React.Component {
           </React.Fragment>
           :
           <React.Fragment>
+            <p>{gettext('WebDAV password:')} ***</p>
             <button className="btn btn-outline-primary mr-2" onClick={this.toggleResetPasswordDialog}>{gettext('Reset Password')}</button>
             <button className="btn btn-outline-primary" onClick={this.toggleRemovePasswordDialog}>{gettext('Remove Password')}</button>
           </React.Fragment>

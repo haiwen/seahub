@@ -70,7 +70,7 @@ class ResetWebdavPassword extends Component {
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Reset WebDav Password')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{gettext('Reset WebDAV Password')}</ModalHeader>
         <ModalBody>
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>

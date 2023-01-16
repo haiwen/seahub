@@ -30,10 +30,14 @@ class RemoveWebdavPassword extends Component {
 
   render() {
     const { toggle } = this.props;
+    let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?').replace('{placeholder}', 'WebDAV password');
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Remove WebDav Password')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{gettext('Remove WebDAV Password')}</ModalHeader>
+        <ModalBody>
+          <p>{dialogMsg}</p>
+        </ModalBody>
         {this.state.errMsg && <Alert color="danger" className="m-0 mt-2">{gettext(this.state.errMsg)}</Alert>}
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>{gettext('Cancel')}</Button>
