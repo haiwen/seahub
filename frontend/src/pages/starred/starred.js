@@ -115,7 +115,11 @@ class TableBody extends Component {
       item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
-      item.dirent_view_url = item.is_dir ? `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}` : `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;
+      item.dirent_view_url = `${siteRoot}library/${item.repo_id}/${item.repo_name}${item.encoded_path}`;
+      // item is folder or file
+      if (item.encoded_path !== '/') {
+        item.dirent_view_url = item.dirent_view_url.replace(/\/+$/, '');
+      }
 
       item.mtime_relative = moment(item.mtime).fromNow();
 
@@ -189,7 +193,7 @@ class Item extends Component {
 
     let opClasses = 'sf2-icon-x3 unstar action-icon';
     opClasses += this.state.showOpIcon ? '' : ' invisible';
-    const linkUrl = data.dirent_view_url.replace(/\/+$/, '');
+    const linkUrl = data.dirent_view_url;
 
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
