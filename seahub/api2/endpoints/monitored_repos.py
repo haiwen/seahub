@@ -13,6 +13,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.utils.repo import is_repo_owner
+from seahub.utils import is_pro_version
 
 from seahub.base.models import UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
@@ -32,6 +33,10 @@ class MonitoredRepos(APIView):
         Permission checking:
         1. Only repo owner can perform this action.
         """
+
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # argument check
         repo_id = request.data.get('repo_id', None)
@@ -87,6 +92,10 @@ class MonitoredRepo(APIView):
         Permission checking:
         1. Only repo owner can perform this action.
         """
+
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
