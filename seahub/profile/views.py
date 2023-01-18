@@ -19,7 +19,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
-from seahub.utils import is_ldap_user
+from seahub.utils import is_ldap_user, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
@@ -79,12 +79,6 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = [r for r in owned_repos if not r.is_virtual]
 
-    if settings.ENABLE_WEBDAV_SECRET:
-        decoded = UserOptions.objects.get_webdav_decoded_secret(username)
-        webdav_passwd = decoded if decoded else ''
-    else:
-        webdav_passwd = ''
-
     file_updates_email_interval = UserOptions.objects.get_file_updates_email_interval(username)
     file_updates_email_interval = file_updates_email_interval if file_updates_email_interval is not None else 0
     collaborate_email_interval = UserOptions.objects.get_collaborate_email_interval(username)
@@ -110,6 +104,11 @@ def edit_profile(request):
         enable_dingtalk = False
         social_connected_dingtalk = False
 
+    WEBDAV_SECRET_SETTED = False
+    if settings.ENABLE_WEBDAV_SECRET and \
+            UserOptions.objects.get_webdav_secret(username):
+        WEBDAV_SECRET_SETTED = True
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -123,11 +122,12 @@ def edit_profile(request):
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
+            'WEBDAV_URL': get_webdav_url(),
             'WEBDAV_SECRET_MIN_LENGTH': settings.WEBDAV_SECRET_MIN_LENGTH,
             'WEBDAV_SECRET_STRENGTH_LEVEL': settings.WEBDAV_SECRET_STRENGTH_LEVEL,
             'ENABLE_DELETE_ACCOUNT': ENABLE_DELETE_ACCOUNT,
             'ENABLE_UPDATE_USER_INFO': ENABLE_UPDATE_USER_INFO,
-            'webdav_passwd': webdav_passwd,
             'file_updates_email_interval': file_updates_email_interval,
             'collaborate_email_interval': collaborate_email_interval,
             'social_next_page': reverse('edit_profile'),

@@ -5,19 +5,18 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  password: PropTypes.string.isRequired,
-  updatePassword: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired
 };
 
 const { webdavSecretMinLength, webdavSecretStrengthLevel } = window.app.pageOptions;
 
-class UpdateWebdavPassword extends Component {
+class SetWebdavPassword extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      password: this.props.password,
+      password: '',
       isPasswordVisible: false,
       btnDisabled: false,
       errMsg: ''
@@ -44,7 +43,7 @@ class UpdateWebdavPassword extends Component {
       btnDisabled: true
     });
 
-    this.props.updatePassword(this.state.password.trim());
+    this.props.setPassword(this.state.password.trim());
   }
 
   handleInputChange = (e) => {
@@ -71,7 +70,7 @@ class UpdateWebdavPassword extends Component {
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('WebDav Password')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{gettext('Set WebDAV Password')}</ModalHeader>
         <ModalBody>
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
@@ -92,6 +91,6 @@ class UpdateWebdavPassword extends Component {
   }
 }
 
-UpdateWebdavPassword.propTypes = propTypes;
+SetWebdavPassword.propTypes = propTypes;
 
-export default UpdateWebdavPassword;
+export default SetWebdavPassword;

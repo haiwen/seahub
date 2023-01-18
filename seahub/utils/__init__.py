@@ -29,7 +29,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
-from django.views.static import serve as django_static_serve
+from django.utils.crypto import get_random_string
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
@@ -958,6 +958,33 @@ def get_service_url():
     """
     return config.SERVICE_URL
 
+def get_webdav_url():
+    """Get webdav url.
+    """
+
+    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
+        conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    else:
+        conf_dir = os.environ['SEAFILE_CONF_DIR']
+
+    conf_file = os.path.join(conf_dir, 'seafdav.conf')
+    if not os.path.exists(conf_file):
+        return ""
+
+    config = configparser.ConfigParser()
+    config.read(conf_file)
+    if not config.has_option("WEBDAV", "share_name"):
+        return ""
+
+    share_name = config.get("WEBDAV", "share_name")
+    share_name = share_name.strip('/')
+
+    service_url = get_service_url()
+    service_url = service_url.rstrip('/')
+
+    return "{}/{}/".format(service_url, share_name)
+
+
 def get_server_id():
     """Get server id from seaserv.
     """
@@ -1409,9 +1436,23 @@ def is_valid_org_id(org_id):
         return False
 
 
-def encrypt_with_sha1(origin_str):
+def hash_password(password, algorithm='sha1', salt=get_random_string(4)):
 
-    return hashlib.sha1(origin_str.encode()).hexdigest()
+    digest = hashlib.pbkdf2_hmac(algorithm,
+                                 password.encode(),
+                                 salt.encode(),
+                                 10000)
+    hex_hash = digest.hex()
+
+    # sha1$QRle$5511a4e2efb7d12e1f64647f64c0c6e105d150ff
+    return "{}${}${}".format(algorithm, salt, hex_hash)
+
+
+def check_hashed_password(password, hashed_password):
+
+    algorithm, salt, hex_hash = hashed_password.split('$')
+
+    return hashed_password == hash_password(password, algorithm, salt)
 
 
 ASCII_RE = re.compile(r'[^\x00-\x7f]')

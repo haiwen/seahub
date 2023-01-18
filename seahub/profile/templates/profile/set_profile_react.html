@@ -12,6 +12,7 @@
 <script type="text/javascript">
 // overwrite the one in base_for_react.html
 window.app.pageOptions = {
+  username: "{{request.user.username|escapejs}}",
   avatarURL: '{% avatar_url request.user 160 %}',
   csrfToken: '{{ csrf_token }}',
 
@@ -28,7 +29,8 @@ window.app.pageOptions = {
 
   enableWebdavSecret: {% if ENABLE_WEBDAV_SECRET %} true {% else %} false {% endif %},
   {% if ENABLE_WEBDAV_SECRET %}
-  webdavPasswd: '{{ webdav_passwd|escapejs }}',
+  webdavUrl: "{{ WEBDAV_URL }}",
+  webdavPasswordSetted: {% if WEBDAV_SECRET_SETTED %} true {% else %} false {% endif %},
   webdavSecretMinLength: {{ WEBDAV_SECRET_MIN_LENGTH }},
   webdavSecretStrengthLevel: {{ WEBDAV_SECRET_STRENGTH_LEVEL }},
   {% endif %}
