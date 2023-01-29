@@ -90,7 +90,7 @@ class SearchOrgs extends Component {
     const { query, isSubmitBtnActive } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

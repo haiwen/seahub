@@ -124,7 +124,7 @@ class Orgs extends Component {
     const { isAddOrgDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
+        <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddOrgDialog}>{gettext('Add Organization')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

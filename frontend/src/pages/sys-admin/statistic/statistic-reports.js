@@ -61,7 +61,7 @@ class StatisticReports extends React.Component {
     let { errorMessage } = this.state;
     return(
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="reportsStatistic" />
           <div className="cur-view-content">

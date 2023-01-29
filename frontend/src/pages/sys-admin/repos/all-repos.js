@@ -127,7 +127,7 @@ class AllRepos extends Component {
     let { isCreateRepoDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
+        <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
             <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('New Library')}
           </Button>

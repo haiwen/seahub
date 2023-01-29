@@ -333,7 +333,7 @@ class InstitutionUsers extends Component {
     const { isAddUserDialogOpen, institutionName, hasNextPage, currentPage, perPage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

@@ -5,7 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
-import Account from '../../components/common/account';
+import MainPanelTopbar from './main-panel-topbar';
 import { WorkWeixinDepartmentMembersList, WorkWeixinDepartmentsTreePanel } from './work-weixin';
 import ImportWorkWeixinDepartmentDialog from '../../components/dialog/import-work-weixin-department-dialog';
 
@@ -289,28 +289,14 @@ class WorkWeixinDepartments extends Component {
     this.getWorkWeixinDepartmentsList(null);
   }
 
-  renderNav() {
-    const btnClass = 'btn btn-secondary operation-item ';
-    return (
-      <div className="main-panel-north border-left-show">
-        <div className="cur-view-toolbar">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          <Button className={btnClass + 'my-1 d-md-none'} onClick={this.onSubmit}>{'导入用户'}</Button>
-          <Button className={btnClass + 'hidden-md-up'} onClick={this.onSubmit}>{'导入用户'}</Button>
-        </div>
-        <div className="common-toolbar">
-          <Account isAdminPanel={true}/>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     const { isImportDepartmentDialogShow, isTreeLoading, importDepartment, importDepartmentChildrenCount, importDepartmentMembersCount } = this.state;
     let canImportDepartment = !!(isPro && isImportDepartmentDialogShow && !isTreeLoading && importDepartment);
     return (
       <Fragment>
-        {this.renderNav()}
+        <MainPanelTopbar {...this.props}>
+          <Button className="operation-item" onClick={this.onSubmit}>{'导入用户'}</Button>
+        </MainPanelTopbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">

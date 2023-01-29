@@ -98,7 +98,9 @@ class DepartmentsList extends React.Component {
     );
     return (
       <Fragment>
-        <MainPanelTopbar children={topbarChildren}/>
+        <MainPanelTopbar {...this.props}>
+          {topbarChildren}
+        </MainPanelTopbar>
         <div className="main-panel-center flex-row h-100">
           <div className="cur-view-container o-auto">
             <div className="cur-view-path">

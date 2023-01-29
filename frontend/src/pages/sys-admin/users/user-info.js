@@ -299,7 +299,7 @@ class User extends Component {
     const { userInfo } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="info" email={this.props.email} userName={userInfo.name} />

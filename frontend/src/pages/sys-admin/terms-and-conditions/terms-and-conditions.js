@@ -81,7 +81,7 @@ class TermsAndConditions extends Component {
     let { termList, isAddTermDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddTermDialog}>{gettext('Add')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

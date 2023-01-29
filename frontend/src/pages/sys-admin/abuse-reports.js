@@ -5,6 +5,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import moment from 'moment';
+import MainPanelTopbar from './main-panel-topbar';
 
 class AbuseReports extends Component {
 
@@ -76,23 +77,15 @@ class AbuseReports extends Component {
 
     return (
       <Fragment>
-        <div className="main-panel-north">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          </div>
-          <div className="common-toolbar">
-            <Account isAdminPanel={true}/>
-          </div>
-        </div>
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Abuse Reports')}</h3>
             </div>
             <div className="cur-view-content">
-              <table className={`table-hover${isDesktop ? '' : ' table-thead-hidden'}`}>
+              <table className={`table-hover`}>
                 <thead>
-                  {isDesktop ?
                     <tr>
                       <th width="20%">{gettext('Library')}</th>
                       <th width="20%">{gettext('File')}</th>
@@ -102,12 +95,6 @@ class AbuseReports extends Component {
                       <th width="10%">{gettext('Time')}</th>
                       <th width="5%">{gettext('Handled')}</th>
                     </tr>
-                    :
-                    <tr>
-                      <th width="92%"></th>
-                      <th width="8%"></th>
-                    </tr>
-                  }
                 </thead>
                 <tbody>
                   {AbuseReportList}

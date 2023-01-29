@@ -81,7 +81,7 @@ class Info extends Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container system-admin-info">
             <h2 className="heading">{gettext('Info')}</h2>

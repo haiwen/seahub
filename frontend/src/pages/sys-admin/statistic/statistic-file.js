@@ -78,7 +78,7 @@ class StatisticFile extends React.Component {
 
     return(
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="fileStatistic" />
           <div className="cur-view-content">
