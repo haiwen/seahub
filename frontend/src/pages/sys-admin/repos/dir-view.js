@@ -168,13 +168,13 @@ class DirView extends Component {
     return (
       <Fragment>
         {isSystemRepo ?
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Fragment>
               <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
               <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>
               <Button className="operation-item" onClick={this.toggleNewFolderDialog}>{gettext('New Folder')}</Button>
             </Fragment>
-          </MainPanelTopbar> : <MainPanelTopbar />
+          </MainPanelTopbar> : <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">

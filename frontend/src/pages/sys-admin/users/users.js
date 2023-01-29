@@ -441,7 +441,7 @@ class Users extends Component {
     } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
+        <MainPanelTopbar search={this.getSearch()} {...this.props}>
           {hasUserSelected ?
             <Fragment>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchSetQuotaDialog}>{gettext('Set Quota')}</Button>

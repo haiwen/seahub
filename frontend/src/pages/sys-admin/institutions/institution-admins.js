@@ -250,7 +250,7 @@ class InstitutionAdmins extends Component {
     const { institutionName } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <InstitutionNav

@@ -303,7 +303,7 @@ class Links extends Component {
     const { shareLinkItems, uploadLinkItems } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <Nav currentItem="links" email={this.props.email} userName={this.state.userInfo.name} />

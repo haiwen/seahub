@@ -384,13 +384,13 @@ class UnhandledVirusFiles extends Component {
     return (
       <Fragment>
         {this.state.virusFiles.some(item => item.isSelected) ? (
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Fragment>
               <Button onClick={this.deleteSelectedItems} className="operation-item">{gettext('Delete')}</Button>
               <Button onClick={this.ignoreSelectedItems} className="operation-item">{gettext('Ignore')}</Button>
             </Fragment>
           </MainPanelTopbar>
-        ) : <MainPanelTopbar />
+        ) : <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center">
           <div className="cur-view-container">

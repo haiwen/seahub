@@ -125,7 +125,7 @@ class Groups extends Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar search={this.getSearch()}>
+        <MainPanelTopbar search={this.getSearch()} {...this.props}>
           <Fragment>
             <Button className="operation-item" onClick={this.toggleCreateGroupDialog}>{gettext('New Group')}</Button>
             <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/groupadmin/export-excel/`}>{gettext('Export Excel')}</a>

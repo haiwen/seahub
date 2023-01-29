@@ -299,7 +299,7 @@ class Invitations extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.deleteItemInBatch}>{gettext('Delete Expired Invitations')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

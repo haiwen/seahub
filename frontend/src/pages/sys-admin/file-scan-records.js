@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import Account from '../../components/common/account';
+import MainPanelTopbar from './main-panel-topbar';
 
 
 const tablePropTypes = {
@@ -104,14 +104,7 @@ class FileScanRecords extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="main-panel-north">
-          <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          </div>
-          <div className="common-toolbar">
-            <Account isAdminPanel={true} />
-          </div>
-        </div>
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center">
           <div className="cur-view-container" id="content-scan-records">
             <div className="cur-view-path">

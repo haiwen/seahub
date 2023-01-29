@@ -280,13 +280,13 @@ class SearchUsers extends Component {
     return (
       <Fragment>
         {hasUserSelected ?
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Fragment>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchSetQuotaDialog}>{gettext('Set Quota')}</Button>
               <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchDeleteUserDialog}>{gettext('Delete Users')}</Button>
             </Fragment>
           </MainPanelTopbar> :
-          <MainPanelTopbar />
+          <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">

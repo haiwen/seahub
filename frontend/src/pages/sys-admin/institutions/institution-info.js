@@ -112,7 +112,7 @@ class InstitutionInfo extends Component {
     const { institutionInfo } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <InstitutionNav currentItem="info" institutionID={this.props.institutionID} institutionName={institutionInfo.name} />

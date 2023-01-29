@@ -271,7 +271,7 @@ class Notifications extends Component {
     const { isAddNotificationDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddNotificationDialog}>{gettext('Add new notification')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

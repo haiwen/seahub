@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import MediaQuery from 'react-responsive';
+import { Modal } from 'reactstrap';
 import { Router } from '@gatsbyjs/reach-router';
 import { siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+
 import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 
@@ -16,7 +20,6 @@ import StatisticReport from './statistic/statistic-reports';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
-import AbuseReports from './abuse-reports';
 
 import Users from './users/users';
 import AdminUsers from './users/admin-users';
@@ -77,6 +80,8 @@ import UnhandledVirusFiles from './virus-scan/unhandled-virus-files';
 
 import AdminOperationLogs from './admin-logs/operation-logs';
 import AdminLoginLogs from './admin-logs/login-logs';
+
+import AbuseReports from './abuse-reports';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
@@ -154,6 +159,14 @@ class SysAdmin extends React.Component {
     this.setState({currentTab: currentTab});
   }
 
+  componentWillMount() {
+    if (!Utils.isDesktop()) {
+      this.setState({
+        isSidePanelClosed: true
+      });
+    }
+  }
+
   getCurrentTabForPageList = (pageList) => {
     let urlPartList, tab;
     const urlBase = `${siteRoot}sys/`;
@@ -174,10 +187,22 @@ class SysAdmin extends React.Component {
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});
+    if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
+      this.setState({ isSidePanelClosed: true });
+    }
+  }
+
+  toggleSidePanel = () => {
+    this.setState({
+      isSidePanelClosed: !this.state.isSidePanelClosed
+    });
   }
 
   render() {
-    let { currentTab, isSidePanelClosed } = this.state;
+    const { currentTab, isSidePanelClosed } = this.state;
+    const commonProps = {
+      toggleSidePanel: this.toggleSidePanel
+    };
 
     return (
       <div id="main">
@@ -189,85 +214,75 @@ class SysAdmin extends React.Component {
         />
         <MainPanel>
           <Router className="reach-router">
-            <Info path={siteRoot + 'sys/info'} />
-            <StatisticFile path={siteRoot + 'sys/statistics/file'} />
-            <StatisticStorage path={siteRoot + 'sys/statistics/storage'} />
-            <StatisticUsers path={siteRoot + 'sys/statistics/user'} />
-            <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} />
-            <StatisticReport path={siteRoot + 'sys/statistics/reports'} />
-            <DesktopDevices path={siteRoot + 'sys/desktop-devices'} />
-            <MobileDevices path={siteRoot + 'sys/mobile-devices'} />
-            <DeviceErrors path={siteRoot + 'sys/device-errors'} />
-            <AllRepos path={siteRoot + 'sys/all-libraries'} />
-            <SystemRepo path={siteRoot + 'sys/system-library'} />
-            <TrashRepos path={siteRoot + 'sys/trash-libraries'} />
-            <SearchRepos path={siteRoot + 'sys/search-libraries'} />
-            <DirView path={siteRoot + 'sys/libraries/:repoID/*'} />
-            <WebSettings path={siteRoot + 'sys/web-settings'} />
-            <Notifications path={siteRoot + 'sys/notifications'} />
-            <Groups path={siteRoot + 'sys/groups'} />
-            <SearchGroups path={siteRoot + 'sys/search-groups'} />
-            <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} />
-            <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} />
+            <Info path={siteRoot + 'sys/info'} {...commonProps} />
+            <StatisticFile path={siteRoot + 'sys/statistics/file'} {...commonProps} />
+            <StatisticStorage path={siteRoot + 'sys/statistics/storage'} {...commonProps} />
+            <StatisticUsers path={siteRoot + 'sys/statistics/user'} {...commonProps} />
+            <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} {...commonProps} />
+            <StatisticReport path={siteRoot + 'sys/statistics/reports'} {...commonProps} />
+            <DesktopDevices path={siteRoot + 'sys/desktop-devices'} {...commonProps} />
+            <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
+            <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />
+            <AllRepos path={siteRoot + 'sys/all-libraries'} {...commonProps} />
+            <SystemRepo path={siteRoot + 'sys/system-library'} {...commonProps} />
+            <TrashRepos path={siteRoot + 'sys/trash-libraries'} {...commonProps} />
+            <SearchRepos path={siteRoot + 'sys/search-libraries'} {...commonProps} />
+            <DirView path={siteRoot + 'sys/libraries/:repoID/*'} {...commonProps} />
+            <WebSettings path={siteRoot + 'sys/web-settings'} {...commonProps} />
+            <Notifications path={siteRoot + 'sys/notifications'} {...commonProps} />
+            <Groups path={siteRoot + 'sys/groups'} {...commonProps} />
+            <SearchGroups path={siteRoot + 'sys/search-groups'} {...commonProps} />
+            <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
+            <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
             <Departments path={siteRoot + 'sys/departments'}>
-              <DepartmentsList path='/'/>
-              <DepartmentDetail path='/:groupID'/>
+              <DepartmentsList path='/' {...commonProps} />
+              <DepartmentDetail path='/:groupID' {...commonProps} />
             </Departments>
-            <ShareLinks path={siteRoot + 'sys/share-links'} />
-            <UploadLinks path={siteRoot + 'sys/upload-links'} />
-            <Orgs path={siteRoot + 'sys/organizations'} />
-            <SearchOrgs path={siteRoot + 'sys/search-organizations'} />
-            <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} />
-            <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} />
-            <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} />
-            <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} />
-            <Institutions path={siteRoot + 'sys/institutions'} />
-            <InstitutionInfo path={siteRoot + 'sys/institutions/:institutionID/info'} />
-            <InstitutionUsers path={siteRoot + 'sys/institutions/:institutionID/members'} />
-            <InstitutionAdmins path={siteRoot + 'sys/institutions/:institutionID/admins'} />
-            <LoginLogs path={siteRoot + 'sys/logs/login'} />
-            <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} />
-            <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} />
-            <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} />
-            <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} />
-            <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} />
+            <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
+            <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
+            <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />
+            <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
+            <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />
+            <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} {...commonProps} />
+            <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} {...commonProps} />
+            <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} {...commonProps} />
+            <Institutions path={siteRoot + 'sys/institutions'} {...commonProps} />
+            <InstitutionInfo path={siteRoot + 'sys/institutions/:institutionID/info'} {...commonProps} />
+            <InstitutionUsers path={siteRoot + 'sys/institutions/:institutionID/members'} {...commonProps} />
+            <InstitutionAdmins path={siteRoot + 'sys/institutions/:institutionID/admins'} {...commonProps} />
+            <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
+            <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
+            <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
+            <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
+            <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />
+            <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} {...commonProps} />
 
-            <Users path={siteRoot + 'sys/users'} />
-            <AdminUsers path={siteRoot + 'sys/users/admins'} />
-            <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} />
-            <LDAPUsers path={siteRoot + 'sys/users/ldap'} />
-            <SearchUsers path={siteRoot + 'sys/search-users'} />
-            <User path={siteRoot + 'sys/users/:email'} />
-            <UserOwnedRepos path={siteRoot + 'sys/users/:email/owned-libraries'} />
-            <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} />
-            <UserLinks path={siteRoot + 'sys/users/:email/shared-links'} />
-            <UserGroups path={siteRoot + 'sys/users/:email/groups'} />
+            <Users path={siteRoot + 'sys/users'} {...commonProps} />
+            <AdminUsers path={siteRoot + 'sys/users/admins'} {...commonProps} />
+            <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} {...commonProps} />
+            <LDAPUsers path={siteRoot + 'sys/users/ldap'} {...commonProps} />
+            <SearchUsers path={siteRoot + 'sys/search-users'} {...commonProps} />
+            <User path={siteRoot + 'sys/users/:email'} {...commonProps} />
+            <UserOwnedRepos path={siteRoot + 'sys/users/:email/owned-libraries'} {...commonProps} />
+            <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} {...commonProps} />
+            <UserLinks path={siteRoot + 'sys/users/:email/shared-links'} {...commonProps} />
+            <UserGroups path={siteRoot + 'sys/users/:email/groups'} {...commonProps} />
 
-            <Invitations path={siteRoot + 'sys/invitations'} />
-            <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} />
+            <Invitations path={siteRoot + 'sys/invitations'} {...commonProps} />
+            <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} {...commonProps} />
 
-            <AllVirusFiles path={siteRoot + 'sys/virus-files/all'} />
-            <UnhandledVirusFiles path={siteRoot + 'sys/virus-files/unhandled'} />
+            <AllVirusFiles path={siteRoot + 'sys/virus-files/all'} {...commonProps} />
+            <UnhandledVirusFiles path={siteRoot + 'sys/virus-files/unhandled'} {...commonProps} />
 
-            <FileScanRecords
-              path={siteRoot + 'sys/file-scan-records'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
-
-            <WorkWeixinDepartments
-              path={siteRoot + 'sys/work-weixin'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
-            <DingtalkDepartments
-              path={siteRoot + 'sys/dingtalk'}
-              currentTab={currentTab}
-              tabItemClick={this.tabItemClick}
-            />
-            <AbuseReports path={siteRoot + 'sys/abuse-reports'} />
+            <FileScanRecords path={siteRoot + 'sys/file-scan-records'} {...commonProps} />
+            <WorkWeixinDepartments path={siteRoot + 'sys/work-weixin'} {...commonProps} />
+            <DingtalkDepartments path={siteRoot + 'sys/dingtalk'} {...commonProps} />
+            <AbuseReports path={siteRoot + 'sys/abuse-reports'} {...commonProps} />
           </Router>
         </MainPanel>
+          <MediaQuery query="(max-width: 767.8px)">
+            <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+          </MediaQuery>
       </div>
     );
   }

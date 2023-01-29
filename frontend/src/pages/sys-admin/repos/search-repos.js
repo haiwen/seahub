@@ -81,7 +81,7 @@ class SearchRepos extends Component {
     const { name, isSubmitBtnActive } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path">

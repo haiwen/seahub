@@ -373,10 +373,10 @@ class TrashRepos extends Component {
     return (
       <Fragment>
         {this.state.repos.length ? (
-          <MainPanelTopbar>
+          <MainPanelTopbar {...this.props}>
             <Button className="operation-item" onClick={this.toggleCleanTrashDialog}>{gettext('Clean')}</Button>
           </MainPanelTopbar>
-        ) : <MainPanelTopbar />
+        ) : <MainPanelTopbar {...this.props} />
         }
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">

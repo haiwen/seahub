@@ -180,7 +180,7 @@ class OrgInfo extends Component {
     const { orgInfo } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgNav currentItem="info" orgID={this.props.orgID} orgName={orgInfo.org_name} />

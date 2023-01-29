@@ -54,7 +54,7 @@ class StatisticUsers extends React.Component {
     let { labels, filesData, isLoading } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar />
+        <MainPanelTopbar {...this.props} />
         <div className="cur-view-container">
           <StatisticNav currentItem="usersStatistic" />
           <div className="cur-view-content">

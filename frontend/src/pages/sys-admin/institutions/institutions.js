@@ -215,7 +215,7 @@ class Institutions extends Component {
     const { isAddInstitutionDialogOpen, hasNextPage, currentPage, perPage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddInstitutionDialog}>{gettext('Add Institution')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

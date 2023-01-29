@@ -277,7 +277,7 @@ class GroupMembers extends Component {
     let { isAddMemberDialogOpen } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar>
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddMemgerDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
