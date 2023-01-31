@@ -42,7 +42,6 @@ class MylibRepoListItem extends React.Component {
     this.state = {
       isOpIconShow: false,
       isStarred: this.props.repo.starred,
-      isMonitored: this.props.repo.monitored,
       isRenaming: false,
       isShareDialogShow: false,
       isDeleteDialogShow: false,
@@ -175,9 +174,9 @@ class MylibRepoListItem extends React.Component {
   }
 
   watchFileChanges = () => {
-    const { repo_id } = this.props.repo;
-    seafileAPI.monitorRepo(repo_id).then(() => {
-      this.setState({isMonitored: !this.state.isMonitored});
+    const { repo } = this.props;
+    seafileAPI.monitorRepo(repo.repo_id).then(() => {
+      this.props.onMonitorRepo(repo, true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -185,9 +184,9 @@ class MylibRepoListItem extends React.Component {
   }
 
   unwatchFileChanges = () => {
-    const { repo_id } = this.props.repo;
-    seafileAPI.unMonitorRepo(repo_id).then(() => {
-      this.setState({isMonitored: !this.state.isMonitored});
+    const { repo } = this.props;
+    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
+      this.props.onMonitorRepo(repo, false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -338,7 +337,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {this.state.isMonitored && (
+              {repo.monitored && (
                 <Fragment>
                   <span id={`watching-${repo.repo_id}`} className="ml-1">
                     <Icon symbol='monitor' />
@@ -399,7 +398,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {this.state.isMonitored && (
+              {repo.monitored && (
                 <Fragment>
                   <span id={`watching-${repo.repo_id}`} className="ml-1">
                     <Icon symbol='monitor' />

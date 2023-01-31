@@ -78,10 +78,9 @@ class MylibRepoMenu extends React.Component {
       operations.push('Reset Password');
     }
 
-    if (repo.monitored) {
-      operations.push('Unwatch File Changes');
-    } else {
-      operations.push('Watch File Changes');
+    if (isPro) {
+      const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
+      operations.push(monitorOp);
     }
 
     operations.push('History Setting', 'API Token');

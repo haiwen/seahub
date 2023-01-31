@@ -68,6 +68,7 @@ class MylibRepoListView extends React.Component {
               onRenameRepo={this.props.onRenameRepo}
               onDeleteRepo={this.props.onDeleteRepo}
               onTransferRepo={this.props.onTransferRepo}
+              onMonitorRepo={this.props.onMonitorRepo}
               onRepoClick={this.props.onRepoClick}
             />
           );

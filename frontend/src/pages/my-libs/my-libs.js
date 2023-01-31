@@ -112,6 +112,16 @@ class MyLibraries extends Component {
     this.setState({repoList: repoList});
   }
 
+  onMonitorRepo = (repo, monitored) => {
+    let repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.monitored = monitored;
+      }
+      return item;
+    });
+    this.setState({repoList: repoList});
+  }
+
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
@@ -168,6 +178,7 @@ class MyLibraries extends Component {
                   onRenameRepo={this.onRenameRepo}
                   onDeleteRepo={this.onDeleteRepo}
                   onTransferRepo={this.onTransferRepo}
+                  onMonitorRepo={this.onMonitorRepo}
                   onRepoClick={this.onRepoClick}
                   sortRepoList={this.sortRepoList}
                 />
