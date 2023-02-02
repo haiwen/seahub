@@ -36,17 +36,13 @@ function usage () {
     echo
     echo "  $(basename ${script_name}) { start <port> | stop | restart <port> }"
     echo
-    echo "To run seahub in fastcgi:"
-    echo
-    echo "  $(basename ${script_name}) { start-fastcgi <port> | stop | restart-fastcgi <port> }"
-    echo
     echo "<port> is optional, and defaults to 8000"
     echo ""
 }
 
 # Check args
 if [[ $1 != "start" && $1 != "stop" && $1 != "restart" \
-    && $1 != "start-fastcgi" && $1 != "restart-fastcgi" && $1 != "clearsessions" && $1 != "python-env" ]]; then
+    && $1 != "clearsessions" && $1 != "python-env" ]]; then
     usage;
     exit 1;
 fi
@@ -109,7 +105,7 @@ function validate_port () {
     fi
 }
 
-if [[ ($1 == "start" || $1 == "restart" || $1 == "start-fastcgi" || $1 == "restart-fastcgi") \
+if [[ ($1 == "start" || $1 == "restart") \
     && ($# == 2 || $# == 1) ]]; then
     if [[ $# == 2 ]]; then
         port=$2
@@ -192,29 +188,6 @@ function start_seahub () {
     echo
 }
 
-function start_seahub_fastcgi () {
-    before_start;
-
-    # Returns 127.0.0.1 if SEAFILE_FASTCGI_HOST is unset or hasn't got any value,
-    # otherwise returns value of SEAFILE_FASTCGI_HOST environment variable
-    address=`(test -z "$SEAFILE_FASTCGI_HOST" && echo "127.0.0.1") || echo $SEAFILE_FASTCGI_HOST`
-
-    echo "Starting seahub (fastcgi) at ${address}:${port} ..."
-    check_init_admin;
-    $PYTHON "${manage_py}" runfcgi maxchildren=8 host=$address port=$port pidfile=$pidfile \
-        outlog=${accesslog} errlog=${errorlog}
-
-    # Ensure seahub is started successfully
-    sleep 5
-    if ! pgrep -f "${manage_py}" >/dev/null; then
-        printf "\033[33mError:Seahub failed to start.\033[m\n"
-        exit 1;
-    fi
-    echo
-    echo "Seahub is started"
-    echo
-}
-
 function prepare_env() {
     check_python_executable;
     validate_seafile_data_dir;
@@ -251,7 +224,7 @@ function clear_sessions () {
 function stop_seahub () {
     if [[ -f ${pidfile} ]]; then
         echo "Stopping seahub ..."
-        pkill -9 -f "thirdpart/bin/gunicorn"
+        pkill -f "thirdpart/bin/gunicorn"
         sleep 1
         if pgrep -f "thirdpart/bin/gunicorn" 2>/dev/null 1>&2 ; then
             echo 'Failed to stop seahub.'
@@ -301,9 +274,6 @@ case $1 in
     "start" )
         start_seahub;
         ;;
-    "start-fastcgi" )
-        start_seahub_fastcgi;
-        ;;
     "stop" )
         stop_seahub;
         ;;
@@ -311,11 +281,6 @@ case $1 in
         stop_seahub
         sleep 2
         start_seahub
-        ;;
-    "restart-fastcgi" )
-        stop_seahub
-        sleep 2
-        start_seahub_fastcgi
         ;;
     "python-env")
         shift
