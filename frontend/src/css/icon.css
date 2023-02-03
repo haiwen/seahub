@@ -1,0 +1,12 @@
+.seafile-multicolor-icon {
+  width: 1em; 
+  height: 1em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+.seafile-multicolor-icon-monitor {
+  font-size: 14px;
+  fill: #444;
+  color: #bdbdbd;
+}

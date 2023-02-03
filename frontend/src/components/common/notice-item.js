@@ -165,7 +165,7 @@ class NoticeItem extends React.Component {
         // 2. handle xss(cross-site scripting)
         notice = notice.replace('{upload_file_link}', `${fileName}`);
         notice = Utils.HTMLescape(notice);
-        notice = notice.replace('{uploaded_link}', `<strong>Deleted Library</strong>`);
+        notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
       return {avatar_url, notice};
     }
@@ -226,69 +226,85 @@ class NoticeItem extends React.Component {
     }
 
     if (noticeType === MSG_TYPE_REPO_MONITOR) {
-      let avatar_url = detail.op_user_avatar_url;
-      let repoLink = siteRoot + 'library/' + detail.repo_id + '/' + detail.repo_name + '/';
-      let notice = '';
+      const {
+        op_user_avatar_url: avatar_url,
+        op_user_email,
+        op_user_name,
+        op_type,
+        repo_id, repo_name,
+        obj_type,
+        obj_path_list,
+        old_obj_path_list
+      } = detail;
 
-      let op = '';
-      if (detail.obj_type == 'file') {
-        switch (detail.op_type) {
+      const userProfileURL = `${siteRoot}profile/${encodeURIComponent(op_user_email)}`;
+      const userLink = `<a href=${userProfileURL} target="_blank">${Utils.HTMLescape(op_user_name)}</a>`;
+
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+
+      let notice = '';
+      if (obj_type == 'file') {
+        const fileName = Utils.getFileName(obj_path_list[0]);
+        const fileURL = `${siteRoot}lib/${repo_id}/file${Utils.encodePath(obj_path_list[0])}`;
+        const fileLink = `<a href=${fileURL} target="_blank">${Utils.HTMLescape(fileName)}</a>`;
+        switch (op_type) {
           case 'create':
-            op = gettext('created file');
+            notice = obj_path_list.length == 1 ? gettext('{user} created file {fileName} in library {libraryName}.') : gettext('{user} created file {fileName} and {fileCount} other file(s) in library {libraryName}.');
             break;
           case 'delete':
-            op = gettext('deleted file');
+            notice = obj_path_list.length == 1 ? gettext('{user} deleted file {fileName} in library {libraryName}.') : gettext('{user} deleted file {fileName} and {fileCount} other file(s) in library {libraryName}.');
+            notice = notice.replace('{fileName}', fileName);
             break;
           case 'recover':
-            op = gettext('restored file');
+            notice = gettext('{user} restored file {fileName} in library {libraryName}.');
             break;
           case 'rename':
-            op = gettext('renamed file');
+            notice = gettext('{user} renamed file {oldFileName} {fileName} in library {libraryName}.');
+            notice = notice.replace('{oldFileName}', Utils.getFileName(old_obj_path_list[0]));
             break;
           case 'move':
-            op = gettext('moved file');
+            notice = obj_path_list.length == 1 ? gettext('{user} moved file {fileName} in library {libraryName}.') : gettext('{user} moved file {fileName} and {fileCount} other file(s) in library {libraryName}.');
             break;
           case 'edit':
-            op = gettext('updated file');
+            notice = gettext('{user} updated file {fileName} in library {libraryName}.');
             break;
+          // no default
         }
+        notice = notice.replace('{fileName}', fileLink);
+        notice = notice.replace('{fileCount}', obj_path_list.length - 1);
       } else { // dir
+        const folderName = Utils.getFolderName(obj_path_list[0]);
+        const folderURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}${Utils.encodePath(obj_path_list[0])}`;
+        const folderLink = `<a href=${folderURL} target="_blank">${Utils.HTMLescape(folderName)}</a>`;
         switch (detail.op_type) {
           case 'create':
-            op = gettext('created folder');
+            notice = obj_path_list.length == 1 ? gettext('{user} created folder {folderName} in library {libraryName}.') : gettext('{user} created folder {folderName} and {folderCount} other folder(s) in library {libraryName}.');
             break;
           case 'delete':
-            op = gettext('deleted folder');
+            notice = obj_path_list.length == 1 ? gettext('{user} deleted folder {folderName} in library {libraryName}.') : gettext('{user} deleted folder {folderName} and {folderCount} other folder(s) in library {libraryName}.');
+            notice = notice.replace('{folderName}', folderName);
             break;
           case 'recover':
-            op = gettext('restored folder');
+            notice = gettext('{user} restored folder {folderName} in library {libraryName}.');
             break;
           case 'rename':
-            op = gettext('renamed folder');
+            notice = gettext('{user} renamed folder {oldFolderName} {folderName} in library {libraryName}.');
+            notice = notice.replace('{oldFolderName}', Utils.getFolderName(old_obj_path_list[0]));
             break;
           case 'move':
-            op = gettext('moved folder');
+            notice = obj_path_list.length == 1 ? gettext('{user} moved folder {folderName} in library {libraryName}.') : gettext('{user} moved folder {folderName} and {folderCount} other folder(s) in library {libraryName}.');
             break;
+          // no default
         }
+        notice = notice.replace('{folderName}', folderLink);
+        notice = notice.replace('{folderCount}', obj_path_list.length - 1);
       }
 
-      // 1. handle translate
-      notice = gettext('{op_user} {op_type} {obj_name} in {repo_link}.');
+      notice = notice.replace('{user}', userLink);
+      notice = notice.replace('{libraryName}', repoLink);
 
-      let obj_name = Utils.getFileName(detail.obj_path_list[0]);
-
-      // 2. handle xss(cross-site scripting)
-      notice = notice.replace('{op_user}', `${detail.op_user_name}`);
-      notice = notice.replace('{op_type}', `${op}`);
-      notice = notice.replace('{obj_name}', `${obj_name}`);
-      notice = notice.replace('{repo_link}', `{tagA}${detail.repo_name}{/tagA}`);
-      notice = Utils.HTMLescape(notice);
-
-      // 3. add jump link
-      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(repoLink)}>`);
-      notice = notice.replace('{/tagA}', '</a>');
-
-      return {avatar_url, notice};
+      return { avatar_url, notice };
     }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
