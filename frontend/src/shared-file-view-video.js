@@ -24,6 +24,7 @@ class FileContent extends React.Component {
       autoplay: false,
       controls: true,
       preload: 'auto',
+      playbackRates: [0.5, 1, 1.5, 2],
       sources: [{
         src: rawPath
       }]
