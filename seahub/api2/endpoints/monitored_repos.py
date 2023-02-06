@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2018 Seafile Ltd.
 import logging
 
+from django.core.cache import cache
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,7 +14,6 @@ from seaserv import seafile_api
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.utils.repo import is_repo_owner
 from seahub.utils import is_pro_version
 
 from seahub.base.models import UserMonitoredRepos
@@ -52,7 +53,8 @@ class MonitoredRepos(APIView):
 
         # permission check
         email = request.user.username
-        if not is_repo_owner(request, repo_id, email):
+        permission = seafile_api.check_permission_by_path(repo_id, '/', email)
+        if permission not in ('r', 'rw'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -76,6 +78,8 @@ class MonitoredRepos(APIView):
         item_info['user_name'] = email2nickname(email)
         item_info['user_contact_email'] = email2contact_email(email)
         item_info['repo_id'] = monitored_repo.repo_id
+
+        cache.delete('{}_monitor_users'.format(repo_id))
 
         return Response(item_info)
 
@@ -105,7 +109,8 @@ class MonitoredRepo(APIView):
 
         # permission check
         email = request.user.username
-        if not is_repo_owner(request, repo_id, email):
+        permission = seafile_api.check_permission_by_path(repo_id, '/', email)
+        if permission not in ('r', 'rw'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -116,5 +121,7 @@ class MonitoredRepo(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        cache.delete('{}_monitor_users'.format(repo_id))
 
         return Response({'success': True})

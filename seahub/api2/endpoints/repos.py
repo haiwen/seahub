@@ -79,13 +79,6 @@ class ReposView(APIView):
             logger.error(e)
             starred_repo_id_list = []
 
-        try:
-            monitored_repos = UserMonitoredRepos.objects.filter(email=email)
-            monitored_repo_id_list = [item.repo_id for item in monitored_repos]
-        except Exception as e:
-            logger.error(e)
-            monitored_repo_id_list = []
-
         repo_info_list = []
         if filter_by['mine']:
 
@@ -104,6 +97,14 @@ class ReposView(APIView):
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
+
+            owned_repo_ids = [item.repo_id for item in owned_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=owned_repo_ids)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
 
             owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in owned_repos:
@@ -157,6 +158,14 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
+            shared_repo_ids = [item.repo_id for item in shared_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=shared_repo_ids)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
+
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
 
@@ -187,6 +196,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
@@ -216,6 +226,14 @@ class ReposView(APIView):
                 if e not in nickname_dict:
                     nickname_dict[e] = email2nickname(e)
 
+            group_repo_ids = [item.repo_id for item in group_repos]
+            try:
+                monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=group_repo_ids)
+                monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+            except Exception as e:
+                logger.error(e)
+                monitored_repo_id_list = []
+
             for r in group_repos:
                 repo_info = {
                     "type": "group",
@@ -231,6 +249,7 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "starred": r.repo_id in starred_repo_id_list,
+                    "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                 }
