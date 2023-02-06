@@ -124,7 +124,7 @@ PREVIEW_FILEEXT = {
     PDF: ('pdf', 'ai'),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
-    AUDIO: ('mp3', 'oga', 'ogg'),
+    AUDIO: ('mp3', 'oga', 'ogg', 'wav'),
     #'3D': ('stl', 'obj'),
     XMIND: ('xmind',),
 }
