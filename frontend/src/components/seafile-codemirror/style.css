@@ -11,6 +11,10 @@
   max-width: 950px;
 }
 
+.text-file-view .cm-editor.cm-focused {
+  outline: none;
+}
+
 .text-file-view .cm-scroll {
   min-height: 300px;
 }
