@@ -99,6 +99,7 @@ class SharedRepoListView extends React.Component {
               onItemDelete={this.props.onItemDelete}
               onItemDetails={this.props.onItemDetails}
               onItemRename={this.props.onItemRename}
+              onMonitorRepo={this.props.onMonitorRepo}
             />
           );
         })}

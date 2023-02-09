@@ -75,6 +75,16 @@ class RepoListViewPanel extends React.Component {
     });
   }
 
+  onMonitorRepo = (repo, monitored) => {
+    let repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.monitored = monitored;
+      }
+      return item;
+    });
+    this.setState({repoList: repoList});
+  }
+
   render() {
     let group = this.props.group;
     const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
@@ -94,6 +104,7 @@ class RepoListViewPanel extends React.Component {
             onItemDelete={this.onItemDelete}
             onItemDetails={this.props.onItemDetails}
             onItemRename={this.onItemRename}
+            onMonitorRepo={this.onMonitorRepo}
           />
         }
       </div>
