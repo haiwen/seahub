@@ -46,6 +46,7 @@ if ENABLE_OAUTH:
     USER_INFO_URL = getattr(settings, 'OAUTH_USER_INFO_URL', '')
     SCOPE = getattr(settings, 'OAUTH_SCOPE', '')
     ACCESS_TOKEN_IN_URI = getattr(settings, 'OAUTH_ACCESS_TOKEN_IN_URI', False)
+    INCLUDE_CLIENT_ID = getattr(settings, 'OAUTH_INCLUDE_CLIENT_ID', None)
 
     # Used for init an user for Seahub.
     PROVIDER_DOMAIN = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
@@ -132,6 +133,7 @@ def oauth_callback(request):
         token = session.fetch_token(
             TOKEN_URL,
             client_secret=CLIENT_SECRET,
+            include_client_id=INCLUDE_CLIENT_ID,
             authorization_response=service_url + request.get_full_path())
 
         if 'user_id' in session._client.__dict__['token']:
