@@ -210,7 +210,6 @@ function update_nginx_conf () {
     fi
 
     cp ${nginx_conf} ${nginx_conf}.bak
-    sed -i '/server {/i\map $http_upgrade $connection_upgrade {\ndefault upgrade;\n'' close;\n}\n' ${nginx_conf}
     sed -i '/media {/i\    location /notification {\n        proxy_pass http://127.0.0.1:8083/;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection "upgrade";\n        access_log      /var/log/nginx/notification.access.log seafileformat;\n        error_log       /var/log/nginx/notification.error.log;\n    }' ${nginx_conf}
 
     nginx -s reload

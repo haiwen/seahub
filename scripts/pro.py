@@ -355,8 +355,6 @@ class EnvManager(object):
 
             os.path.join(self.top_dir, 'conf'), # LDAP sync has to access seahub_settings.py
             os.path.join(self.install_path, 'seahub', 'thirdpart'),
-            os.path.join(self.install_path, 'seahub-extra'),
-            os.path.join(self.install_path, 'seahub-extra', 'thirdparts'),
 
             os.path.join(self.install_path, 'seafile/lib/python3/site-packages'),
             os.path.join(self.install_path, 'seafile/lib64/python3/site-packages'),

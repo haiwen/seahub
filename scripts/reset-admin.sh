@@ -68,8 +68,6 @@ export SEAHUB_DIR=$seahubdir
 
 if [[ -d ${INSTALLPATH}/pro ]]; then
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
     export SEAFES_DIR=$seafesdir
     export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
 fi
