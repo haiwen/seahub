@@ -141,6 +141,7 @@ class GroupLibraries(APIView):
         group_repo_ids = [item.repo_id for item in group_repos]
         try:
             monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=group_repo_ids)
+            monitored_repos = monitored_repos.filter(email=username)
             monitored_repo_id_list = [item.repo_id for item in monitored_repos]
         except Exception as e:
             logger.error(e)
