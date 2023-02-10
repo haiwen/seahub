@@ -372,8 +372,10 @@ class SharedRepoListItem extends React.Component {
           operations.push('Unshare');
         }
       }
-      const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
-      operations.push(monitorOp);
+      if (repo.permission == 'r' || repo.permission == 'rw') {
+        const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
+        operations.push(monitorOp);
+      }
     } else {
       if (isRepoOwner) {
         operations.push('Share');
@@ -435,8 +437,6 @@ class SharedRepoListItem extends React.Component {
         operations.push('Unshare');
       }
     } else {
-      // scene one: (Share, Delete, itemToggle and other operations);
-      // scene two: (Share, Unshare), (Share), (Unshare)
       operations = this.generatorOperations();
     }
     const shareOperation   = <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>;
@@ -504,23 +504,6 @@ class SharedRepoListItem extends React.Component {
           })}
         </Fragment>
       );
-      /*
-      if (operations.length == 2) {
-        return (
-          <Fragment>
-            {shareOperation}
-            {unshareOperation}
-          </Fragment>
-        );
-      }
-      if (operations.length == 1 && operations[0] === 'Share') {
-        return shareOperation;
-      }
-
-      if (operations.length == 1 && operations[0] === 'Unshare') {
-        return unshareOperation;
-      }
-      */
     }
     return null;
   }
