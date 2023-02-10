@@ -154,6 +154,13 @@ function start_seafile_server () {
         exit 1;
     fi
 
+    # notification-sever
+    ENABLE_NOTIFICATION_SERVER=`awk -F '=' '/\[notification\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${central_config_dir}/seafile.conf`
+    if [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
+        notification-server -c ${central_config_dir} -l ${TOPDIR}/logs/notification-server.log &
+        ${TOPDIR}/conf/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+    fi
+
     echo "Seafile server started"
     echo
 }
@@ -165,6 +172,8 @@ function kill_all () {
     pkill -f "convert_server.py"
     pkill -f "soffice.*--invisible --nocrashreport"
     pkill -f  "wsgidav.server.server_cli"
+    pkill -f  "notification-server -c ${central_config_dir}"
+    pkill -f  "seafile-monitor.sh"
 }
 
 function stop_seafile_server () {

@@ -1362,6 +1362,7 @@ CREATE TABLE `base_usermonitoredrepos` (
   `repo_id` varchar(36) NOT NULL,
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `base_usermonitoredrepos_email_repo_id_b4ab00e4_uniq` (`email`,`repo_id`),
   KEY `base_usermonitoredrepos_email_55ead1b9` (`email`),
   KEY `base_usermonitoredrepos_repo_id_00e624c3` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
