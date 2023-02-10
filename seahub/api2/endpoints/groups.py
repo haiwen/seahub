@@ -27,7 +27,7 @@ from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
     group_id_to_name, set_group_name_cache
 from seahub.group.views import remove_group_common
-from seahub.base.models import UserStarredFiles
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, email2contact_email
 from seahub.share.models import ExtraGroupsSharePermission
@@ -139,8 +139,6 @@ class Groups(APIView):
                 else:
                     group_repos = seafile_api.get_repos_by_group(g.id)
 
-                repos = []
-
                 # get repo id owner dict
                 all_repo_owner = []
                 repo_id_owner_dict = {}
@@ -171,6 +169,17 @@ class Groups(APIView):
                         else:
                             contact_email_dict[email] = email2contact_email(email)
 
+                # get monitored repo dict
+                group_repo_ids = [item.repo_id for item in group_repos]
+                try:
+                    monitored_repos = UserMonitoredRepos.objects.filter(repo_id__in=group_repo_ids)
+                    monitored_repos = monitored_repos.filter(email=username)
+                    monitored_repo_id_list = [item.repo_id for item in monitored_repos]
+                except Exception as e:
+                    logger.error(e)
+                    monitored_repo_id_list = []
+
+                repos = []
                 for r in group_repos:
                     repo_owner = repo_id_owner_dict.get(r.id, r.user)
                     repo = {
@@ -191,6 +200,7 @@ class Groups(APIView):
                         "owner_contact_email": contact_email_dict.get(repo_owner, ''),
                         "is_admin": (r.id, g.id) in admin_info,
                         "starred": r.repo_id in starred_repo_id_list,
+                        "monitored": r.repo_id in monitored_repo_id_list,
                     }
                     repos.append(repo)
 
