@@ -473,15 +473,13 @@ class SharedRepoListItem extends React.Component {
           {operations.map(item => {
             switch (item) {
               case 'Share':
-                //return shareOperation;
                 return <Fragment key={item}>{shareOperation}</Fragment>;
               case 'Unshare':
-                //return unshareOperation;
                 return <Fragment key={item}>{unshareOperation}</Fragment>;
               case 'Watch File Changes':
               case 'Unwatch File Changes':
                 return (
-                  <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+                  <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
                     <DropdownToggle
                       className="sf-dropdown-toggle sf2-icon-caret-down border-0 p-0"
                       title={gettext('More Operations')}
@@ -505,7 +503,6 @@ class SharedRepoListItem extends React.Component {
         </Fragment>
       );
     }
-    return null;
   }
 
   onToggleStarRepo = (e) => {
