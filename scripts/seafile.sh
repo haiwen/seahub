@@ -154,9 +154,9 @@ function start_seafile_server () {
 
     # notification-sever
     ENABLE_NOTIFICATION_SERVER=`awk -F '=' '/\[notification\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${central_config_dir}/seafile.conf`
-    if [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
+    if [ $ENABLE_NOTIFICATION_SERVER == "true" ]; then
         notification-server -c ${central_config_dir} -l ${TOPDIR}/logs/notification-server.log &
-        ${TOPDIR}/conf/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
+        ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
     fi
 
     echo "Seafile server started"

@@ -191,7 +191,6 @@ function move_old_customdir_outside() {
 function add_notification_conf () {
     seahub_secret_keygen=${INSTALLPATH}/seahub/tools/secret_key_generator.py
     jwt_private_key=$($PYTHON "${seahub_secret_keygen}")
-    seafile_auth_token=$($PYTHON "${seahub_secret_keygen}")
     cat >> ${default_conf_dir}/seafile.conf <<EOF
 [notification]
 enabled = false
@@ -199,7 +198,6 @@ host = 127.0.0.1
 port = 8083
 log_level = info
 jwt_private_key = $jwt_private_key
-seafile_auth_token = $seafile_auth_token
 EOF
 }
 
