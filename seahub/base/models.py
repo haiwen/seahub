@@ -373,3 +373,6 @@ class UserMonitoredRepos(models.Model):
     email = models.EmailField(db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     timestamp = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        unique_together = [["email", "repo_id"]]
