@@ -19,6 +19,19 @@ import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 class Content extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  freezeItem = (freezed) => {
+    this.setState({
+      isItemFreezed: freezed
+    });
+  }
+
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
@@ -81,7 +94,14 @@ class Content extends Component {
           {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
             {items.map((item, index) => {
-              return <Item key={index} data={item} isDesktop={isDesktop} onMonitorRepo={this.props.onMonitorRepo} />;
+              return <Item
+                key={index}
+                data={item}
+                isDesktop={isDesktop}
+                isItemFreezed={this.state.isItemFreezed}
+                freezeItem={this.freezeItem}
+                onMonitorRepo={this.props.onMonitorRepo}
+              />;
             })}
           </tbody>
         </table>
@@ -107,6 +127,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      highlight: false,
       showOpIcon: false,
       unshared: false,
       isShowSharedDialog: false,
@@ -118,19 +139,27 @@ class Item extends Component {
   toggleOpMenu = () => {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
+    }, () => {
+      this.props.freezeItem(this.state.isOpMenuOpen);
     });
   }
 
   handleMouseOver = () => {
-    this.setState({
-      showOpIcon: true
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        showOpIcon: true
+      });
+    }
   }
 
   handleMouseOut = () => {
-    this.setState({
-      showOpIcon: false
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: false,
+        showOpIcon: false
+      });
+    }
   }
 
   share = (e) => {
@@ -241,7 +270,7 @@ class Item extends Component {
 
     const desktopItem = (
       <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <td className="text-center">
             <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
               <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
@@ -357,6 +386,8 @@ class Item extends Component {
 Item.propTypes = {
   isDesktop: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  freezeItem: PropTypes.func.isRequired,
   onMonitorRepo: PropTypes.func.isRequired
 };
 
