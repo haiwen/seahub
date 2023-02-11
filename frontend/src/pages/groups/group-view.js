@@ -252,6 +252,16 @@ class GroupView extends React.Component {
     });
   }
 
+  onMonitorRepo = (repo, monitored) => {
+    let repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.monitored = monitored;
+      }
+      return item;
+    });
+    this.setState({repoList: repoList});
+  }
+
   onTabNavClick = (tabName) => {
     this.props.onTabNavClick(tabName);
   }
@@ -561,6 +571,7 @@ class GroupView extends React.Component {
                   onItemDelete={this.onItemDelete}
                   onItemDetails={this.onItemDetails}
                   onItemRename={this.onItemRename}
+                  onMonitorRepo={this.onMonitorRepo}
                 />
               }
             </div>

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import moment from 'moment';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { UncontrolledTooltip } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, storages } from '../../utils/constants';
@@ -22,7 +21,7 @@ import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareUploadLinksDialog from '../../components/dialog/repo-share-upload-links-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
-import Icon from '../../components/icon';
+import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -337,19 +336,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && (
-                <Fragment>
-                  <span id={`watching-${repo.repo_id}`} className="ml-1">
-                    <Icon symbol='monitor' />
-                  </span>
-                  <UncontrolledTooltip
-                    placement="bottom"
-                    target={`#watching-${repo.repo_id}`}
-                  >
-                    {gettext('You are watching file changes of this library.')}
-                  </UncontrolledTooltip>
-                </Fragment>
-              )}
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
             </Fragment>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -398,19 +385,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && (
-                <Fragment>
-                  <span id={`watching-${repo.repo_id}`} className="ml-1">
-                    <Icon symbol='monitor' />
-                  </span>
-                  <UncontrolledTooltip
-                    placement="bottom"
-                    target={`#watching-${repo.repo_id}`}
-                  >
-                    {gettext('You are watching file changes of this library.')}
-                  </UncontrolledTooltip>
-                </Fragment>
-              )}
+              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} />}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import cookie from 'react-cookies';
@@ -15,8 +15,22 @@ import LibsMobileThead from '../../components/libs-mobile-thead';
 import ModalPotal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  freezeItem = (freezed) => {
+    this.setState({
+      isItemFreezed: freezed
+    });
+  }
 
   sortByName = (e) => {
     e.preventDefault();
@@ -80,7 +94,14 @@ class Content extends Component {
           {isDesktop ? desktopThead : <LibsMobileThead />}
           <tbody>
             {items.map((item, index) => {
-              return <Item key={index} data={item} isDesktop={isDesktop} />;
+              return <Item
+                key={index}
+                data={item}
+                isDesktop={isDesktop}
+                isItemFreezed={this.state.isItemFreezed}
+                freezeItem={this.freezeItem}
+                onMonitorRepo={this.props.onMonitorRepo}
+              />;
             })}
           </tbody>
         </table>
@@ -97,7 +118,8 @@ Content.propTypes = {
   items: PropTypes.array.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
-  sortItems: PropTypes.func.isRequired
+  sortItems: PropTypes.func.isRequired,
+  onMonitorRepo: PropTypes.func.isRequired
 };
 
 class Item extends Component {
@@ -105,30 +127,39 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      highlight: false,
       showOpIcon: false,
       unshared: false,
       isShowSharedDialog: false,
       isStarred: this.props.data.starred,
-      isOpMenuOpen: false // for mobile
+      isOpMenuOpen: false
     };
   }
 
   toggleOpMenu = () => {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
+    }, () => {
+      this.props.freezeItem(this.state.isOpMenuOpen);
     });
   }
 
   handleMouseOver = () => {
-    this.setState({
-      showOpIcon: true
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        showOpIcon: true
+      });
+    }
   }
 
   handleMouseOut = () => {
-    this.setState({
-      showOpIcon: false
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: false,
+        showOpIcon: false
+      });
+    }
   }
 
   share = (e) => {
@@ -199,6 +230,26 @@ class Item extends Component {
     navigate(this.repoURL);
   }
 
+  watchFileChanges = () => {
+    const { data: repo } = this.props;
+    seafileAPI.monitorRepo(repo.repo_id).then(() => {
+      this.props.onMonitorRepo(repo, true);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  unwatchFileChanges = () => {
+    const { data: repo } = this.props;
+    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
+      this.props.onMonitorRepo(repo, false);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     if (this.state.unshared) {
       return null;
@@ -213,21 +264,47 @@ class Item extends Component {
     let shareIconClassName = 'op-icon sf2-icon-share repo-share-btn' + iconVisibility;
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
     let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
+
+    // at present, only repo shared with 'r', 'rw' can be monitored.(Fri Feb 10 16:24:49 CST 2023)
+    const enableMonitorRepo = isPro && (data.permission == 'r' || data.permission == 'rw');
+
     const desktopItem = (
       <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
           <td className="text-center">
             <a href="#" role="button" aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')} onClick={this.onToggleStarRepo}>
               <i className={`fa-star ${this.state.isStarred ? 'fas' : 'far star-empty'}`}></i>
             </a>
           </td>
           <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-          <td><Link to={shareRepoUrl}>{data.repo_name}</Link></td>
+          <td>
+            <Fragment>
+              <Link to={shareRepoUrl}>{data.repo_name}</Link>
+              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} />}
+            </Fragment>
+          </td>
           <td>
             {(isPro && data.is_admin) &&
               <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
             }
             <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+            {enableMonitorRepo &&
+            <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+              <DropdownToggle
+                tag="i"
+                role="button"
+                tabIndex="0"
+                className={`sf-dropdown-toggle sf2-icon-caret-down${iconVisibility}`}
+                title={gettext('More Operations')}
+                aria-label={gettext('More Operations')}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isOpMenuOpen}
+              />
+              <DropdownMenu>
+                <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            }
           </td>
           <td>{data.size}</td>
           <td title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</td>
@@ -256,7 +333,9 @@ class Item extends Component {
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
           <td onClick={this.visitRepo}>
-            <Link to={shareRepoUrl}>{data.repo_name}</Link><br />
+            <Link to={shareRepoUrl}>{data.repo_name}</Link>
+            {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} />}
+            <br />
             <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
             <span className="item-meta-info">{data.size}</span>
             <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>
@@ -274,10 +353,9 @@ class Item extends Component {
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
                   <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>{this.state.isStarred ? gettext('Unstar') : gettext('Star')}</DropdownItem>
-                  {(isPro && data.is_admin) &&
-                  <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
-                  }
+                  {(isPro && data.is_admin) && <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>}
                   <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+                  {enableMonitorRepo && <DropdownItem className="mobile-menu-item" onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>}
                 </div>
               </div>
             </Dropdown>
@@ -307,7 +385,10 @@ class Item extends Component {
 
 Item.propTypes = {
   isDesktop: PropTypes.bool.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  freezeItem: PropTypes.func.isRequired,
+  onMonitorRepo: PropTypes.func.isRequired
 };
 
 class SharedLibraries extends Component {
@@ -356,6 +437,16 @@ class SharedLibraries extends Component {
     });
   }
 
+  onMonitorRepo = (repo, monitored) => {
+    let items = this.state.items.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.monitored = monitored;
+      }
+      return item;
+    });
+    this.setState({items: items});
+  }
+
   render() {
     return (
       <Fragment>
@@ -373,6 +464,7 @@ class SharedLibraries extends Component {
                 sortBy={this.state.sortBy}
                 sortOrder={this.state.sortOrder}
                 sortItems={this.sortItems}
+                onMonitorRepo={this.onMonitorRepo}
               />
             </div>
           </div>
