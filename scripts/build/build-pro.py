@@ -411,7 +411,6 @@ def validate_args(usage, options):
 
     check_targz_src_no_version('seafes', srcdir)
     check_targz_src_no_version('seafevents', srcdir)
-    check_targz_src_no_version('seahub-extra', srcdir)
     check_targz_src_no_version('libevent', srcdir)
     check_targz_src_no_version('elasticsearch', srcdir)
     check_targz_src_no_version('seafdav', srcdir)
@@ -702,13 +701,6 @@ def copy_pro_libs():
     pro_py = os.path.join(Seafile().projdir, 'scripts', 'pro.py')
     must_copy(pro_py, pro_program_dir)
 
-    seahub_extra_sql_sqlite3 = os.path.join(Seafile().projdir, 'scripts',
-                                            'seahub_extra.sqlite3.sql')
-    seahub_extra_sql_mysql = os.path.join(Seafile().projdir, 'scripts',
-                                          'seahub_extra.mysql.sql')
-    must_copy(seahub_extra_sql_sqlite3, pro_misc_dir)
-    must_copy(seahub_extra_sql_mysql, pro_misc_dir)
-
     uncompress_seafes_seafevents()
 
 
@@ -859,7 +851,6 @@ def copy_scripts_and_libs():
     seahub_thirdpart = os.path.join(dst_seahubdir, 'thirdpart')
     copy_seahub_thirdpart_libs(seahub_thirdpart)
     copy_seafdav()
-    copy_seahub_extra()
 
     # copy pro libs & elasticsearch
     copy_pro_libs()
@@ -956,16 +947,6 @@ def copy_seahub_thirdpart_libs(seahub_thirdpart):
     dst = seahub_thirdpart
 
     must_copytree(src, dst)
-
-
-def copy_seahub_extra():
-    '''uncompress seahub-extra.tar.gz to seafile-server/seahub-extra'''
-    tarball = os.path.join(conf[CONF_SRCDIR], 'seahub-extra.tar.gz')
-    builddir = conf[CONF_BUILDDIR]
-    seahub_dir = os.path.join(builddir, 'seafile-server')
-
-    if run('tar xf %s -C %s' % (tarball, seahub_dir)) != 0:
-        error('failed to uncompress elasticsearch')
 
 
 def strip_symbols():

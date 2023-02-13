@@ -161,8 +161,6 @@ function before_start() {
         fi
 
         export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
         export SEAFES_DIR=$seafesdir
         export SEAHUB_DIR=$seahubdir
     fi
@@ -251,8 +249,6 @@ function run_python_env() {
 
     if [[ -d ${INSTALLPATH}/pro ]]; then
         export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-        export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
         export SEAFES_DIR=$seafesdir
         export SEAHUB_DIR=$seahubdir
     fi

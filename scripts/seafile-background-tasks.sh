@@ -107,8 +107,6 @@ function before_start() {
     export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
     export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/
-    export PYTHONPATH=$PYTHONPATH:${INSTALLPATH}/seahub-extra/thirdparts
     # Allow LDAP user sync to import seahub_settings.py
     export PYTHONPATH=$PYTHONPATH:${central_config_dir}
     export SEAFES_DIR=$pro_pylibs_dir/seafes
