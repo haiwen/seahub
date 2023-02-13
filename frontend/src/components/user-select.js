@@ -70,7 +70,7 @@ class UserSelect extends React.Component {
   }
 
   clearSelect = () => {
-    this.refs.userSelect.select.onChange([], { action: 'clear' });
+    this.refs.userSelect.onChange([], { action: 'clear' });
   }
 
   render() {
