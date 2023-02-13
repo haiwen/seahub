@@ -4,20 +4,39 @@
 # 
 # Translators:
 # Amr Mothana <amrusud@gmail.com>, 2017
-# malnaim <malnaim@safedecision.com.sa>, 2021
+# malnaim <malnaim@safedecision.com.sa>, 2021,2023
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 18:44+0800\n"
+"POT-Creation-Date: 2023-02-13 15:27+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021\n"
+"Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023\n"
 "Language-Team: Arabic (http://www.transifex.com/haiwen/seahub/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: seahub/adfs_auth/utils.py:38 seahub/dingtalk/views.py:39
+#: seahub/dingtalk/views.py:59 seahub/dingtalk/views.py:64
+#: seahub/dingtalk/views.py:86 seahub/dingtalk/views.py:101
+#: seahub/dingtalk/views.py:142 seahub/dingtalk/views.py:163
+#: seahub/dingtalk/views.py:168 seahub/dingtalk/views.py:190
+#: seahub/dingtalk/views.py:227 seahub/oauth/views.py:86
+#: seahub/oauth/views.py:109 seahub/oauth/views.py:155
+#: seahub/oauth/views.py:183 seahub/oauth/views.py:194
+#: seahub/templates/remote_user/error.html:8 seahub/weixin/views.py:36
+#: seahub/weixin/views.py:55 seahub/weixin/views.py:60
+#: seahub/weixin/views.py:79 seahub/weixin/views.py:95
+#: seahub/work_weixin/views.py:68 seahub/work_weixin/views.py:73
+#: seahub/work_weixin/views.py:83 seahub/work_weixin/views.py:87
+#: seahub/work_weixin/views.py:106 seahub/work_weixin/views.py:177
+#: seahub/work_weixin/views.py:182 seahub/work_weixin/views.py:192
+#: seahub/work_weixin/views.py:196
+msgid "Error, please contact administrator."
+msgstr "خطأ يرجى التواصل مع مسؤول النظام ."
 
 #: seahub/api2/endpoints/admin/account.py:186 seahub/api2/endpoints/user.py:81
 #: seahub/api2/views.py:357
@@ -34,7 +53,7 @@ msgid "Login id can't be empty"
 msgstr "لا يمكن أن يكون معرّف تسجيل الدخول فارغا"
 
 #: seahub/api2/endpoints/admin/account.py:209
-#: seahub/api2/endpoints/admin/users.py:1063
+#: seahub/api2/endpoints/admin/users.py:1074
 #, python-format
 msgid "Login id %s already exists."
 msgstr " معرف تسجيل الدخول %s موجود بالفعل."
@@ -48,6 +67,10 @@ msgid "Space quota can't be empty"
 msgstr "المساحة المخصصة لا يمكن أن تكون فارغة"
 
 #: seahub/api2/endpoints/admin/account.py:238
+#: seahub/api2/endpoints/admin/users.py:1130
+#: seahub/api2/endpoints/admin/users.py:1134
+#: seahub/api2/endpoints/admin/users.py:1147
+#: seahub/api2/endpoints/admin/users.py:1151
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr "يجب أن يكون عدد صحيح أكبر من أو يساوي 0."
 
@@ -56,8 +79,8 @@ msgstr "يجب أن يكون عدد صحيح أكبر من أو يساوي 0."
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "المساحة المخصصة صغيرة جدا (على الأقل 0)"
 
-#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:211
-#: seahub/organizations/api/admin/users.py:444 seahub/views/sysadmin.py:325
+#: seahub/api2/endpoints/admin/account.py:250 seahub/institutions/views.py:233
+#: seahub/organizations/api/admin/users.py:454 seahub/views/sysadmin.py:325
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "فشل تحديد المخصص: المخصص الأقصى %d MB"
@@ -65,7 +88,7 @@ msgstr "فشل تحديد المخصص: المخصص الأقصى %d MB"
 #: seahub/api2/endpoints/admin/address_book/groups.py:82
 #: seahub/api2/endpoints/admin/groups.py:129
 #: seahub/api2/endpoints/admin/groups.py:268
-#: seahub/api2/endpoints/groups.py:216 seahub/api2/endpoints/groups.py:289
+#: seahub/api2/endpoints/groups.py:226 seahub/api2/endpoints/groups.py:299
 #: seahub/api2/views.py:4598 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
@@ -75,7 +98,7 @@ msgstr "خانة الاسم ممكن انت تكون فقط أحرف أو أرق
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:136
 #: seahub/api2/endpoints/admin/groups.py:272
-#: seahub/api2/endpoints/groups.py:221 seahub/api2/endpoints/groups.py:294
+#: seahub/api2/endpoints/groups.py:231 seahub/api2/endpoints/groups.py:304
 msgid "There is already a group with that name."
 msgstr "توجد مجموعة بنفس الاسم."
 
@@ -95,7 +118,7 @@ msgid "My Library"
 msgstr "مكتبتي"
 
 #: seahub/api2/endpoints/admin/groups.py:216
-#: seahub/api2/endpoints/groups.py:320
+#: seahub/api2/endpoints/groups.py:330
 #, python-format
 msgid "User %s is already group owner."
 msgstr "المستخدم %s هو مالك المجموعة بالفعل."
@@ -160,6 +183,7 @@ msgstr " تمت مشاركة هذا العنصر مع %s ."
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:22
 #: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:57
 msgid "Time"
 msgstr "الوقت"
@@ -168,6 +192,7 @@ msgstr "الوقت"
 #: seahub/base/management/commands/export_file_access_log.py:58
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
+#: seahub/organizations/api/admin/statistics.py:334
 #: seahub/sysadmin_extra/views.py:96 seahub/sysadmin_extra/views.py:153
 #: seahub/templates/file_access.html:24
 msgid "User"
@@ -175,31 +200,37 @@ msgstr "مستخدم"
 
 #: seahub/api2/endpoints/admin/statistics.py:397
 #: seahub/base/management/commands/export_user_traffic_report.py:45
+#: seahub/organizations/api/admin/statistics.py:334
 msgid "Web Download"
 msgstr "تنزيل الويب"
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Sync Download"
 msgstr "تحميل المزامنة "
 
 #: seahub/api2/endpoints/admin/statistics.py:398
 #: seahub/base/management/commands/export_user_traffic_report.py:46
+#: seahub/organizations/api/admin/statistics.py:335
 msgid "Link Download"
 msgstr "رابط التحميل "
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Upload"
 msgstr "تحميل الويب "
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:47
+#: seahub/organizations/api/admin/statistics.py:336
 msgid "Sync Upload"
 msgstr "تحميل المزامنة "
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:48
+#: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Upload"
 msgstr "تحميل الرابط "
 
@@ -215,10 +246,11 @@ msgstr "تحميل الرابط "
 #: seahub/institutions/templates/institutions/useradmin_search.html:10
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
 #: seahub/invitations/templates/invitations/token_view.html:10
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/share/templates/share/share_link_audit.html:9
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
-#: seahub/views/sysadmin.py:790
+#: seahub/views/sysadmin.py:790 seahub/views/sysadmin.py:805
 msgid "Email"
 msgstr "البريد"
 
@@ -232,12 +264,13 @@ msgstr "البريد"
 #: seahub/institutions/templates/institutions/user_info.html:105
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/sysadmin_extra/views.py:57
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58 seahub/views/sysadmin.py:198
 #: seahub/views/sysadmin.py:202 seahub/views/sysadmin.py:668
-#: seahub/views/sysadmin.py:792
+#: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:807
 msgid "Name"
 msgstr "الاسم"
 
@@ -247,6 +280,7 @@ msgstr "الاسم"
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/api/admin/statistics.py:380
 #: seahub/templates/registration/password_set_form.html:16
 #: seahub/views/sysadmin.py:198 seahub/views/sysadmin.py:202
 msgid "Contact Email"
@@ -256,6 +290,7 @@ msgstr "بريد الاتصال"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
 msgid "Space Usage"
 msgstr "المساحة المستخدمة"
@@ -264,93 +299,94 @@ msgstr "المساحة المستخدمة"
 #: seahub/base/management/commands/export_user_storage_report.py:42
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
+#: seahub/organizations/api/admin/statistics.py:381
 #: seahub/views/sysadmin.py:199 seahub/views/sysadmin.py:203
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:808
 msgid "Space Quota"
 msgstr "المساحة المخصصة"
 
-#: seahub/api2/endpoints/admin/users.py:472
-#: seahub/api2/endpoints/admin/users.py:499
-#: seahub/organizations/api/admin/users.py:144
+#: seahub/api2/endpoints/admin/users.py:480
+#: seahub/api2/endpoints/admin/users.py:507
+#: seahub/organizations/api/admin/users.py:148
 msgid "There are more than 500 users, and sort is not offered."
 msgstr " هناك أكثر من 500 مستخدم ، ولا يتم عرض الفرز."
 
-#: seahub/api2/endpoints/admin/users.py:573
-#: seahub/api2/endpoints/admin/users.py:1035 seahub/base/accounts.py:784
+#: seahub/api2/endpoints/admin/users.py:581
+#: seahub/api2/endpoints/admin/users.py:1046 seahub/base/accounts.py:784
 #: seahub/forms.py:30
 msgid "The number of users exceeds the limit."
 msgstr "عدد المستخدمين تجاوز الحد المسموح."
 
-#: seahub/api2/endpoints/admin/users.py:667
+#: seahub/api2/endpoints/admin/users.py:675
 #, python-format
 msgid "Successfully added user %(user)s."
 msgstr "تمت إضافة المستخدم %(user)s بنجاح."
 
-#: seahub/api2/endpoints/admin/users.py:671
+#: seahub/api2/endpoints/admin/users.py:679
 #: seahub/api2/endpoints/admin/users_batch.py:385 seahub/views/sysadmin.py:567
 #, python-format
 msgid "You are invited to join %s"
 msgstr "أنت مدعو للإنضمام الى %s"
 
-#: seahub/api2/endpoints/admin/users.py:677
+#: seahub/api2/endpoints/admin/users.py:685
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
 msgstr "تمت إضافة المستخدم %(user)s بنجاح. تم إرسال إشعار بالبريد الإلكتروني ."
 
-#: seahub/api2/endpoints/admin/users.py:680
+#: seahub/api2/endpoints/admin/users.py:688
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
 msgstr " تمت إضافة المستخدم %(user)s بنجاح. ولكن لا يمكن إرسال إشعار بالبريد الإلكتروني ،لأنه لم يتم تكوين خدمة البريد الإلكتروني بشكل صحيح."
 
-#: seahub/api2/endpoints/admin/users.py:1135
-#: seahub/institutions/templates/institutions/useradmin.html:120
+#: seahub/api2/endpoints/admin/users.py:1191
+#: seahub/institutions/templates/institutions/useradmin.html:122
 msgid "Edit succeeded"
 msgstr "نجح التحرير"
 
-#: seahub/api2/endpoints/admin/users.py:1138 seahub/views/sysadmin.py:470
+#: seahub/api2/endpoints/admin/users.py:1194 seahub/views/sysadmin.py:470
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "تم تنشيط الحساب الخاص بك على %s"
 
-#: seahub/api2/endpoints/admin/users.py:1143
-#: seahub/institutions/templates/institutions/useradmin.html:116
+#: seahub/api2/endpoints/admin/users.py:1199
+#: seahub/institutions/templates/institutions/useradmin.html:118
 msgid "Edit succeeded, an email has been sent."
 msgstr "نجح التحرير، تم ارسال بريد الكتروني."
 
-#: seahub/api2/endpoints/admin/users.py:1146
-#: seahub/institutions/templates/institutions/useradmin.html:118
+#: seahub/api2/endpoints/admin/users.py:1202
+#: seahub/institutions/templates/institutions/useradmin.html:120
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "نجح التحرير، و لكن فشل ارسال بريد الكتروني، الرجاء التأكد من اعدادات البريد."
 
-#: seahub/api2/endpoints/admin/users.py:1224 seahub/views/sysadmin.py:511
+#: seahub/api2/endpoints/admin/users.py:1283 seahub/views/sysadmin.py:511
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "تم إعادة تعيين كلمة المرور على %s"
 
-#: seahub/api2/endpoints/admin/users.py:1226 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1285 seahub/views/sysadmin.py:536
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، تم إرسال بريد إلكتروني إلى %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1230 seahub/views/sysadmin.py:541
+#: seahub/api2/endpoints/admin/users.py:1289 seahub/views/sysadmin.py:541
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، ولكن فشل في إرسال البريد الإلكتروني إلى %(user)s، الرجاء التحقق من تكوين البريد الإلكتروني الخاص بك."
 
-#: seahub/api2/endpoints/admin/users.py:1233 seahub/views/sysadmin.py:545
+#: seahub/api2/endpoints/admin/users.py:1292 seahub/views/sysadmin.py:545
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى%(passwd)s للمستخدم %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1236 seahub/views/sysadmin.py:548
+#: seahub/api2/endpoints/admin/users.py:1295 seahub/views/sysadmin.py:548
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -376,13 +412,13 @@ msgstr "ملف الفيروس لم يعثر عليه."
 #: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:107
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:3853
-#: seahub/notifications/models.py:462 seahub/notifications/models.py:503
-#: seahub/notifications/models.py:554 seahub/notifications/models.py:610
-#: seahub/notifications/models.py:640 seahub/notifications/models.py:662
-#: seahub/notifications/models.py:688 seahub/notifications/models.py:705
-#: seahub/notifications/models.py:722 seahub/notifications/models.py:751
-#: seahub/search/views.py:200 seahub/utils/__init__.py:166
-#: seahub/utils/__init__.py:1155 seahub/views/__init__.py:918
+#: seahub/notifications/models.py:466 seahub/notifications/models.py:507
+#: seahub/notifications/models.py:558 seahub/notifications/models.py:614
+#: seahub/notifications/models.py:644 seahub/notifications/models.py:666
+#: seahub/notifications/models.py:692 seahub/notifications/models.py:709
+#: seahub/notifications/models.py:726 seahub/notifications/models.py:755
+#: seahub/search/views.py:200 seahub/utils/__init__.py:165
+#: seahub/utils/__init__.py:1239 seahub/views/__init__.py:918
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
 #: seahub/wiki/views.py:215 seahub/wiki/views.py:224
 msgid "Internal Server Error"
@@ -433,7 +469,7 @@ msgstr "اسم المستخدم غير صحيح"
 #: seahub/api2/endpoints/dir_shared_items.py:339
 #: seahub/api2/endpoints/draft_reviewer.py:79
 #: seahub/api2/endpoints/group_owned_libraries.py:946
-#: seahub/oauth/views.py:197
+#: seahub/oauth/views.py:199
 #, python-format
 msgid "User %s not found."
 msgstr " لم يتم العثور على المستخدم %s ."
@@ -481,7 +517,7 @@ msgstr "المستخدم %s عضو في المجموعة بالفعل."
 #: seahub/api2/endpoints/group_members.py:498 seahub/api2/views.py:1646
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
-#: seahub/organizations/api/admin/users.py:322
+#: seahub/organizations/api/admin/users.py:332
 #, python-format
 msgid "User %s not found in organization."
 msgstr "المستخدم %s غير موجود في النظام."
@@ -500,7 +536,7 @@ msgstr "المجموعة غير موجودة"
 
 #: seahub/api2/endpoints/group_members.py:546 seahub/views/sysadmin.py:189
 #: seahub/views/sysadmin.py:295 seahub/views/sysadmin.py:665
-#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:677 seahub/views/sysadmin.py:818
 msgid "Failed to export Excel"
 msgstr "فشل التصدير الى أكسل"
 
@@ -640,22 +676,23 @@ msgstr "كلمة المرور مطلوبة."
 
 #: seahub/api2/endpoints/share_links.py:279
 #: seahub/api2/endpoints/upload_links.py:169
-#: seahub/api2/endpoints/webdav_secret.py:57
+#: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "كلمة المرور قصيرة جدا."
 
 #: seahub/api2/endpoints/share_links.py:283
 #: seahub/api2/endpoints/upload_links.py:173
-#: seahub/api2/endpoints/webdav_secret.py:61
+#: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr ""
+msgstr "كلمة المرور ضعيفة جداً"
 
 #: seahub/api2/endpoints/share_links.py:287
 #: seahub/api2/endpoints/upload_links.py:177
+#: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "كلمة المرور يجب أن تحتوي على رقم و حرف كبير وحرف صغير و علامة ."
 
 #: seahub/api2/endpoints/share_links.py:310
 #: seahub/api2/endpoints/share_links.py:555
@@ -725,9 +762,9 @@ msgid ""
 "%(nb_max_avatars)d."
 msgstr "أنت تمتلك %(nb_avatars)d شعارات, و الحد المسموح %(nb_max_avatars)d."
 
-#: seahub/api2/endpoints/webdav_secret.py:53
+#: seahub/api2/endpoints/webdav_secret.py:56
 msgid "Length of WebDav password should be less than 30."
-msgstr ""
+msgstr "طول كلمة مرور WebDav يجب أن تكون أقل من 30 ."
 
 #: seahub/api2/endpoints/wikis.py:119 seahub/api2/endpoints/wikis.py:217
 #, python-format
@@ -764,6 +801,7 @@ msgstr "البريد أو اسم المستخدم"
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/share_access_validation.html:23
 #: seahub/templates/sysadmin/sudo_mode.html:10 seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:806
 msgid "Password"
 msgstr "كلمة المرور"
 
@@ -1052,7 +1090,7 @@ msgstr "آخر دخول"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/institutions/views.py:162 seahub/views/sysadmin.py:200
+#: seahub/institutions/views.py:176 seahub/views/sysadmin.py:200
 #: seahub/views/sysadmin.py:204
 msgid "Admin"
 msgstr "مدير"
@@ -1065,7 +1103,7 @@ msgstr "LDAP(imported)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/institutions/templates/institutions/useradmin.html:33
-#: seahub/institutions/templates/institutions/useradmin.html:40
+#: seahub/institutions/templates/institutions/useradmin.html:42
 #: seahub/institutions/templates/institutions/useradmin_search.html:36
 #: seahub/views/sysadmin.py:258
 msgid "Active"
@@ -1073,7 +1111,7 @@ msgstr "فعال"
 
 #: seahub/base/management/commands/export_users.py:120
 #: seahub/institutions/templates/institutions/useradmin.html:35
-#: seahub/institutions/templates/institutions/useradmin.html:41
+#: seahub/institutions/templates/institutions/useradmin.html:43
 #: seahub/institutions/templates/institutions/useradmin_search.html:38
 #: seahub/views/sysadmin.py:260
 msgid "Inactive"
@@ -1301,12 +1339,12 @@ msgid "Operations"
 msgstr "العمليات"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
-#: seahub/institutions/templates/institutions/useradmin.html:37
+#: seahub/institutions/templates/institutions/useradmin.html:38
 msgid "Edit"
 msgstr "تحرير"
 
 #: seahub/contacts/templates/contacts/contact_list.html:30
-#: seahub/institutions/templates/institutions/useradmin.html:57
+#: seahub/institutions/templates/institutions/useradmin.html:59
 #: seahub/institutions/templates/institutions/useradmin_search.html:55
 #: seahub/sysadmin_extra/views.py:232
 #: seahub/templates/view_shared_upload_link.html:87
@@ -1365,7 +1403,7 @@ msgid "Delete Contact"
 msgstr "حذف جهة اتصال"
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
-#: seahub/institutions/templates/institutions/useradmin.html:79
+#: seahub/institutions/templates/institutions/useradmin.html:81
 #: seahub/institutions/templates/institutions/useradmin_search.html:72
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1405,24 +1443,6 @@ msgstr "تم تحرير %s بنجاح."
 msgid "Successfully Deleted %s"
 msgstr "تم حذف %s بنجاح"
 
-#: seahub/dingtalk/views.py:39 seahub/dingtalk/views.py:59
-#: seahub/dingtalk/views.py:64 seahub/dingtalk/views.py:86
-#: seahub/dingtalk/views.py:101 seahub/dingtalk/views.py:142
-#: seahub/dingtalk/views.py:163 seahub/dingtalk/views.py:168
-#: seahub/dingtalk/views.py:190 seahub/dingtalk/views.py:227
-#: seahub/oauth/views.py:85 seahub/oauth/views.py:108
-#: seahub/oauth/views.py:153 seahub/oauth/views.py:181
-#: seahub/oauth/views.py:192 seahub/templates/remote_user/error.html:8
-#: seahub/weixin/views.py:36 seahub/weixin/views.py:55
-#: seahub/weixin/views.py:60 seahub/weixin/views.py:79
-#: seahub/weixin/views.py:95 seahub/work_weixin/views.py:68
-#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
-#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
-#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
-#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
-msgid "Error, please contact administrator."
-msgstr "خطأ يرجى التواصل مع مسؤول النظام ."
-
 #: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
@@ -1455,7 +1475,7 @@ msgstr "الاسم %s غير صحيح"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1885
+#: seahub/views/file.py:1867
 msgid "Argument missing"
 msgstr "متغير مفقود"
 
@@ -1580,7 +1600,7 @@ msgstr "فريق %(site_name)s"
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
 #: seahub/views/ajax.py:427 seahub/views/file.py:1150
-#: seahub/views/file.py:1366 seahub/views/file.py:1894
+#: seahub/views/file.py:1366 seahub/views/file.py:1876
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -1915,13 +1935,13 @@ msgid ""
 "the department. Any users registered in the system can be added as member of"
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
-msgstr ""
+msgstr "إذا كان المستخدم هو المسؤول عن قسم، فيمكنه إضافة أعضاء في القسم أو حذفهم. يمكن إضافة أي مستخدمين مسجلين في النظام كعضو في القسم. ولكن إذا تم استيراد الأقسام من AD ، الكتابة فوق التغييرات التي تطرأ على العضوية في المزامنة التالية مع AD."
 
 #: seahub/help/templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "يمكن لمسؤول القسم إدارة المكتبات في القسم. العمليات المدعومة هي:"
 
 #: seahub/help/templates/help/departments.html:46
 msgid "Create or delete library"
@@ -1935,7 +1955,7 @@ msgstr "تغيير إسم المكتبة"
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "مشاركة مكتبة مع مستخدمين أو مجموعات خارج هذا القسم. هذا مفيد جدا للتعاون بين الأقسام."
 
 #: seahub/help/templates/help/departments.html:49
 #, python-format
@@ -1944,7 +1964,7 @@ msgid ""
 "departments in this department. This works like <a "
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
-msgstr ""
+msgstr "قم بتعيين إذن دقيق للمجلدات الموجودة في المكتبات للمستخدمين أو الأقسام الفرعية في هذا القسم. هذا يعمل مثل <a href=\"%(SITE_ROOT)shelp/folder_permission/\">ميزة إذن المجلد</a>."
 
 #: seahub/help/templates/help/departments.html:53
 msgid ""
@@ -1956,7 +1976,7 @@ msgid ""
 "\"Sales\" is a sub-department under the company \"ACME\", John can then "
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
-msgstr ""
+msgstr "يمكن للعضو العادي في القسم استخدام القسم تماما مثل المجموعة. يتم تقديم كل قسم لأعضائه كمجموعة. لا يمكن للمستخدم الوصول إلى المكتبات في القسم الذي ينتمي إليه فحسب ، بل يمكنه أيضا الوصول إلى المكتبات الموجودة في الأقسام الأم في قسمه. على سبيل المثال ، إذا كان محمد في القسم الفرعي \"EMEA\" ضمن قسم \"المبيعات\" ، وكان \"المبيعات\" قسما فرعيا تابعا لشركة \"ACME\" ، فيمكن لمحمد بعد ذلك الوصول إلى المجموعات \"EMEA\" و \"Sales\" و \"ACME\". يتم تمييز مجموعات الأقسام برمز \"مبنى\" بجوار اسمها."
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
@@ -1994,7 +2014,7 @@ msgid ""
 "Windows 10 operating system. It supports Windows 10 1709 version (2017 Fall "
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
-msgstr ""
+msgstr "تمت إعادة تصميم SeaDrive 2.0 (والإصدارات المستقبلية) مع تكامل أعمق مع نظام التشغيل Windows 10. وهو يدعم إصدار Windows 10 1709 (تحديث خريف 2017 لنظام التشغيل Windows 10) والإصدارات الأحدث. نوصي مستخدمي Windows 10 بالترقية إلى SeaDrive 2.0 للحصول على تجربة محرك أقراص افتراضية ."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
@@ -2008,13 +2028,13 @@ msgid ""
 "1.0.x). It may take some time, depending on the number of files available in"
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
-msgstr ""
+msgstr "يمكنك تنزيل SeaDrive 2.0 من موقع Seafile الرسمي. بعد التثبيت وتسجيل الدخول إلى حساب Seafile الخاص بك ، سيبدأ SeaDrive في تنزيل قوائم المكتبة والملفات من الخادم (تماما كما هو الحال في SeaDrive 1.0.x). قد يستغرق الأمر بعض الوقت ، اعتمادا على عدد الملفات المتاحة في حساب seafile الخاص بك. التنزيل تقدمي ، لذلك في الوقت نفسه يمكنك بالفعل الوصول إلى بعض الملفات في محرك الأقراص الظاهري."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "للوصول إلى محرك الأقراص الظاهري ، ما عليك سوى فتح مستكشف ملفات Windows. توجد عقدة \"seadrive\" في جزء التنقل في مستكشف ملفات Windows."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
@@ -2024,25 +2044,25 @@ msgstr "الوصول لمحرك الأقراص الإفتراضي"
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "يتم تجميع المكتبات في 4 فئات في محرك الأقراص الظاهري: مكتباتي والمشتركة معي والمشتركة مع المجموعات والمشتركة مع الجميع."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "كما ترى ، فإن أيقونات حالة الملف أكثر دمجا في مستكشف ملفات Windows. الرموز مختلفة قليلا شكل الإصدار 1.0."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "يتم إنشاء الملفات الموجودة في محرك الأقراص الظاهري ك \"عناصر نائبة\" في نظام الملفات المحلي. قد تكون في 3 حالات:"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>ملف العنصر النائب</b>: تمثيل فارغ للملف ولا يمكن فتحه إلا عند وجود اتصال بالشبكة."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -2051,13 +2071,13 @@ msgid ""
 "files are available whenever you open SeaDrive regardless to network "
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
-msgstr ""
+msgstr "<b>الملف الكامل</b>: تم تنزيل الملف وحفظه محليا. يكون التنزيل تلقائيا عند فتح ملف عنصر نائب لأول مرة. تتوفر هذه الملفات كلما فتحت SeaDrive بغض النظر عن اتصالات الشبكة. قد يقرر نظام التشغيل مسح ملف كامل عند الحاجة إلى مساحة أكبر على القرص."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
-msgstr ""
+msgstr "<b>الملف الكامل المثبت</b>: تم تنزيل الملف وحفظه محليا. إنه مضمون أن يكون متاحا في وضع عدم الاتصال."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -2066,14 +2086,14 @@ msgid ""
 "Choose \"Always keep on this device\" when you want to pin a file or folder "
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
-msgstr ""
+msgstr "يمكنك التحكم في الملفات أو المجلدات التي يتم تخزينها مؤقتا محليا. يمكن تغيير هذا من قائمة السياق عند النقر بزر الماوس الأيمن فوق ملف أو مجلد. اختر \"الاحتفاظ دائما بهذا الجهاز\" عندما تريد تثبيت ملف أو مجلد محليا ؛ اختر \"تحرير مساحة\" عندما تريد تنظيف ذاكرة التخزين المؤقت لملف أو مجلد."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "في SeaDrive 1.0، لا يتم تحديث الملفات المخزنة مؤقتا تلقائيا عند تحديثها على الخادم. في SeaDrive 2.0 ، يتم الاحتفاظ تلقائيا بمزامنة الملفات الكاملة والمثبتة مع الخادم."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
@@ -2085,7 +2105,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "عندما تفتح ملف عنصر نائب ، سيبدأ نظام التشغيل تلقائيا في تنزيله. إذا كان الملف قد يستغرق بعض الوقت للتنزيل ، فسيكون هناك شريط تقدم يظهر في مستكشف الملفات ويمكنك إلغاء التنزيل."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -2093,7 +2113,7 @@ msgid ""
 " drive (such as an Anti-Virus software). You will be notified by the "
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
-msgstr ""
+msgstr "في بعض الأحيان قد يحاول تطبيق الخلفية تنزيل ملف في محرك الأقراص الظاهري (مثل برنامج مكافحة الفيروسات). سيتم إخطارك من قبل نظام التشغيل بهذا الأمر ويمكنك اختيار إلغاء التنزيل أو عدم السماح للتطبيق بتنزيل الملفات تلقائيا في المستقبل."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:34
 #: seahub/help/templates/help/using_drive_client.html:79
@@ -2110,7 +2130,7 @@ msgid ""
 " the operation will be reflected on the server. You can only create, delete,"
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
-msgstr ""
+msgstr "نعم. عند إنشاء مجلدات المكتبة أو حذفها أو إعادة تسميتها في محرك الأقراص الظاهري ، ستنعكس العملية على الخادم. يمكنك فقط إنشاء مكتبات أو حذفها أو إعادة تسميتها ضمن فئة \"مكتباتي\". سيتم تجاهل إنشاء أو حذف أو إعادة تسمية المكتبات في فئات أخرى."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
@@ -2121,7 +2141,7 @@ msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "نعم. ولكن سيتم تجاهل الملفات التي تم إنشاؤها خارج مجلد المكتبة ولن تتم مزامنتها مع الخادم. سيتم التعامل مع مجلد جديد ضمن مجلد \"مكتباتي\" كمكتبة جديدة."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
@@ -2134,7 +2154,7 @@ msgid ""
 "enter the password. Just right click on the SeaDrive icon in the system tray"
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
-msgstr ""
+msgstr "نعم. بشكل افتراضي ، لا تتم مزامنة المكتبات المشفرة وعرضها في محرك الأقراص الظاهري. تحتاج إلى اختيار المكتبات المشفرة يدويا لمزامنتها وإدخال كلمة المرور. فقط انقر بزر الماوس الأيمن على أيقونة SeaDrive في منطقة علبة النظام واختر \"إظهار المكتبات المشفرة\". ستظهر نافذة ويمكنك اختيار مزامنة مكتبة مشفرة أو إلغاء مزامنتها."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
@@ -2147,7 +2167,7 @@ msgid ""
 "files from SeaDrive 1.0. So any locally cached files in 1.0 version will not"
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
-msgstr ""
+msgstr "سيستخدم SeaDrive 2.0 أي حسابات موجودة وبياناتها الوصفية (المخزنة ضمن C:\\users\\username\\seadrive\\  folder). لكنه لن يستخدم الملفات المخزنة مؤقتا من SeaDrive 1.0. لذلك لن يمكن الوصول إلى أي ملفات مخزنة مؤقتا محليا في الإصدار 1.0 في الإصدار 2.0. يمكنك بدء تشغيل SeaDrive 1.0 مرة أخرى لتحميل الملفات إلى الخادم أو نسخها."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
@@ -2161,6 +2181,40 @@ msgid ""
 " need to set cache cleaning time and cache size limit as in SeaDrive 1.0. "
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
+msgstr "يمكنك اختيار المجلدات أو الملفات التي سيتم تخزينها مؤقتا محليا يدويا. إذا وجدت مجلدا يستهلك مساحة كبيرة جدا ، فما عليك سوى اختيار \"تحرير مساحة\" في هذا المجلد وسيتم تنظيف جميع الملفات المخزنة مؤقتا في هذا المجلد. ليست هناك حاجة لتعيين وقت تنظيف ذاكرة التخزين المؤقت والحد الأقصى لحجم ذاكرة التخزين المؤقت كما هو الحال في SeaDrive 1.0. نظرا لأن العناصر النائبة هي مجرد ملفات عادية تم إنشاؤها على القرص المحلي، فإن حجم ذاكرة التخزين المؤقت محدود فقط بمساحة القرص المتوفرة على الكمبيوتر."
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:50
+msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
+msgstr ""
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
+msgid ""
+"The \"SeaDrive\" shortcut in Windows Explorer won't disappear after you exit"
+" SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
+"intended behavior. You don't need to remove them if you still need to access"
+" the account later."
+msgstr ""
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
+msgid ""
+"In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
+" Explorer and you want to remove it."
+msgstr ""
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
+msgid ""
+"You can usually remove those shortcuts by uninstalling SeaDrive program and "
+"choose \"Remove account information\" in the promt dialog."
+msgstr ""
+
+#: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
+msgid ""
+"If uninstallation doesn't remove the shortcuts successfully, you can remove "
+"the SeaDrive shortcut in Windows Explorer by editing the registry. Open the "
+"path "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" in registry editor. Remove the sub-keys correspond to the shortcut you want"
+" to remove."
 msgstr ""
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
@@ -2183,9 +2237,9 @@ msgstr "عند انشاء مكتبة مشفرة:"
 #: seahub/help/templates/help/encrypted_libraries.html:12
 msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
-"the server. The server use this password to create the library. But it "
+"the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr "إذا قمت بإنشاء مكتبة مشفرة في تطبيق الويب، يتم إرسال كلمة المرور الى الملقم. يقوم الملقم باستخدام كلمة المرور هذه لإنشاء المكتبة. ولكنه لا يخزن كلمة المرور كنص عادي."
+msgstr ""
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -2193,7 +2247,7 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
-msgstr ""
+msgstr "إذا قمت بإنشاء مكتبة مشفرة من مجلد محلي باستخدام عميل سطح المكتب (راجع <a href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة الملفات</a>)، فلن يتم إرسال كلمة المرور إلى الخادم."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -2209,15 +2263,21 @@ msgstr "إذا كنت تستخدم تطبيق الويب، يتعين عليك �
 #: seahub/help/templates/help/encrypted_libraries.html:20
 msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
-"the server. The client decrypt and encrypt file contents locally. The plain "
-"text password is not stored on the client disk too."
-msgstr "إذا كنت تستخدم عميل سطح المكتب لمزامنة المكتبة، لا يتم إرسال كلمة المرور على الملقم. يقوم البرنامج بفك تشفير و تشفير محتويات الملف محلياً. لا يتم تخزين كلمة المرور كنص عادي على قرص العميل أيضا."
+"the server. The client decrypts and encrypts file contents locally. The "
+"plain text password is not stored on the client disk either."
+msgstr ""
 
-#: seahub/help/templates/help/encrypted_libraries.html:24
+#: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
-"Note that encrypted library only encrypt the contents of the files, but not "
-"the folder and file names."
-msgstr "لاحظ بأن المكتبة المشفرة فقط تشفر محتويات الملفات، و ليس المجلدات و اسماء الملفات."
+"iOS client supports client side encryption since version 2.1.6. Android "
+"client supports it since version 2.1.0."
+msgstr ""
+
+#: seahub/help/templates/help/encrypted_libraries.html:25
+msgid ""
+"Note that encrypted library only encrypts the contents of the files, but not"
+" the folder and file names."
+msgstr ""
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
@@ -2230,13 +2290,13 @@ msgid ""
 "situation nicely with conflict files. But it's often more convenient to lock"
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
-msgstr ""
+msgstr "عندما يتعاون أكثر من شخص في ملف، فمن المحتمل أن يقوم أكثر من شخص واحد بتعديل الملف في نفس الوقت تقريبا. يتعامل Seafile مع هذا الموقف بشكل جيد مع ملفات التعارض. ولكن غالبا ما يكون قفل الملف أكثر ملاءمة عندما يريد شخص واحد تعديل الملف حصريا. يدعم Seafile Professional Edition قفل الملفات."
 
 #: seahub/help/templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "يعمل قفل الملفات على كل من تطبيق الويب وعميل مزامنة سطح المكتب. سنقدمهم واحدا تلو الآخر."
 
 #: seahub/help/templates/help/file_locking.html:8
 msgid "File locking on the Web App"
@@ -2246,7 +2306,7 @@ msgstr "قفل الملف عن طريق الويب"
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "لقفل ملف ، يمكنك الانتقال إلى مجلد الملف على تطبيق الويب ، والنقر فوق القائمة المنسدلة \"العمليات\"."
 
 #: seahub/help/templates/help/file_locking.html:11
 msgid ""
@@ -2254,7 +2314,7 @@ msgid ""
 "the file icon. Moving the mouse on the stop sign, you can see who locks the "
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
-msgstr ""
+msgstr "بعد قفل الملف ، يمكنك رؤية \"علامة توقف\" حمراء في زاوية رمز الملف. تحريك الماوس على علامة التوقف ، يمكنك معرفة من يقوم بقفل الملف. ويمكنك أيضا إلغاء قفل ملف مقفلة بواسطتك. لكن لا يمكنك فتح الملفات المقفلة من قبل الآخرين."
 
 #: seahub/help/templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
@@ -2264,32 +2324,32 @@ msgstr "قفل الملف عن طريق عميل سطح المكتب"
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
-msgstr ""
+msgstr "بعد مزامنة المكتبة مع سطح المكتب، يمكنك قفل/إلغاء تأمين الملفات في تلك المكتبة داخل مستكشف الملفات على Windows أو Finder على نظام التشغيل Mac OS."
 
 #: seahub/help/templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "لقفل ملف ، ما عليك سوى النقر بزر الماوس الأيمن على ملف تمت مزامنته واختيار \"قفل هذا الملف\" في قائمة \"Seafile\"."
 
 #: seahub/help/templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "إذا تم قفل ملف بواسطتك ، يمكنك رؤية \"علامة قف\" برتقالية على أيقونة الملف. يمكنك اختيار إلغاء قفله."
 
 #: seahub/help/templates/help/file_locking.html:19
 msgid ""
 "If a file is locked by other user, you can see a red \"stop sign\" on the "
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
-msgstr ""
+msgstr "إذا تم قفل ملف من قبل مستخدم آخر ، يمكنك رؤية \"علامة قف\" حمراء على أيقونة الملف. يتم تعيين الملف تلقائيا للقراءة فقط. لا يمكنك تعديله حتى يتم إلغاء قفله."
 
 #: seahub/help/templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "إذا لم تتم مزامنة مكتبة ، فلا يزال بإمكانك استخدام متصفح الملفات السحابية لقفل الملفات الموجودة فيها وإلغاء قفلها."
 
 #: seahub/help/templates/help/file_locking.html:22
 msgid "Auto locking office files"
@@ -2302,7 +2362,7 @@ msgid ""
 "close the file, Seafile automatically unlocks the file. The locking state is"
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
-msgstr ""
+msgstr "بعد مزامنة مكتبة مع سطح المكتب، عند فتح ملف Microsoft Office داخل المكتبة، يقوم Seafile تلقائيا بتأمين الملف. عند إغلاق الملف ، يقوم Seafile بإلغاء قفل الملف تلقائيا. يتم نشر حالة التأمين إلى أجهزة الكمبيوتر الأخرى التي تقوم بمزامنة هذه المكتبة. يمنع التحرير المتزامن لملف Office نفسه وهو مناسب للتعاون."
 
 #: seahub/help/templates/help/file_locking.html:24
 msgid "Details about file locking"
@@ -2310,11 +2370,11 @@ msgstr "تفاصيل حول قفل الملفات"
 
 #: seahub/help/templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "هناك بعض النصائح المفيدة حول كيفية عمل قفل الملف:"
 
 #: seahub/help/templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "لا يمكن إلغاء قفل الملف المقفل إلا من قبل المستخدم الذي قام بتأمينه."
 
 #: seahub/help/templates/help/file_locking.html:28
 msgid ""
@@ -2322,13 +2382,13 @@ msgid ""
 "But other users can still move, delete or rename the parent folder of a "
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
-msgstr ""
+msgstr "لا يمكن تعديل الملف المقفل أو نقله أو إعادة تسميته أو حذفه من قبل مستخدمين آخرين. ولكن لا يزال بإمكان المستخدمين الآخرين نقل المجلد الأصل لملف مؤمن أو حذفه أو إعادة تسميته. الغرض من قفل الملف هو بشكل أساسي منع التحرير المتزامن."
 
 #: seahub/help/templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "عند إعادة تسمية المجلد الأصل لملف مؤمن أو نقله داخل نفس المكتبة، يظل مؤمنا بعد العملية."
 
 #: seahub/help/templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
@@ -2340,7 +2400,7 @@ msgid ""
 "modified, a new version is created, while the old version is still kept for "
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
-msgstr ""
+msgstr "يتتبع Seafile تاريخ التعديل لجميع الملفات. كلما تم تعديل ملف ، يتم إنشاء إصدار جديد ، بينما لا يزال الإصدار القديم محتفظا به لفترة قابلة للتكوين. عندما تريد الوصول إلى إصدار أقدم من ملف ، تصبح ميزة محفوظات الملفات مفيدة للغاية."
 
 #: seahub/help/templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
@@ -2351,13 +2411,13 @@ msgid ""
 "In Seafile Web App, navigate into the folder containing the file. Move the "
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
-msgstr ""
+msgstr "في Seafile Web App، انتقل إلى المجلد الذي يحتوي على الملف. حرك المؤشر إلى صف هذا الملف. ستظهر قائمة التشغيل. يمكنك النقر فوق الزر \"المحفوظات\" في تلك القائمة."
 
 #: seahub/help/templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
-msgstr ""
+msgstr "سيتم عرض قائمة بجميع إصدارات هذا الملف بترتيب زمني ، من الأحدث إلى الأقدم. تحتوي القائمة أيضا على محفوظات إعادة تسمية الملف."
 
 #: seahub/help/templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
@@ -2369,7 +2429,7 @@ msgid ""
 "You can configure the retention period of file versions: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "يمكنك تكوين فترة الاحتفاظ بإصدارات الملفات:<a href=\"%(SITE_ROOT)shelp/setting_library_history/\"> تعيين فترة الاحتفاظ بالمحفوظات</a>."
 
 #: seahub/help/templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
@@ -2383,7 +2443,7 @@ msgid ""
 "described in <a "
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
-msgstr ""
+msgstr "بالنسبة للمكتبات أو المجلدات المشتركة، يمكنك تعيين إذن لمجلداتها الفرعية لشخص أو مجموعة. الأذونات المتاحة هي نفسها الموضحة في <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">مكتبات المشاركة</a>. فيما يلي بعض حالات الاستخدام:"
 
 #: seahub/help/templates/help/folder_permission.html:10
 msgid ""
@@ -2927,8 +2987,8 @@ msgstr ""
 #: seahub/help/templates/help/manage_library_as_wiki.html:17
 msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
-"Table of contents, file information, formatting suggestions, and "
-"collaborative commenting are provided in this side bar."
+"Table of contents, file information, and collaborative commenting are "
+"provided in this side bar."
 msgstr ""
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
@@ -2947,12 +3007,6 @@ msgstr ""
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
-
-#: seahub/help/templates/help/manage_library_as_wiki.html:25
-msgid ""
-"You can also add related files to a Markdown document from the \"File "
-"Information\" tab in the side bar."
 msgstr ""
 
 #: seahub/help/templates/help/read-only_syncing.html:6
@@ -3699,21 +3753,21 @@ msgstr "المساحة المخصصة لا يمكن أن تكون فارغة"
 msgid "Create At / Last Login"
 msgstr "انشاء على / آخر دخول"
 
-#: seahub/institutions/templates/institutions/useradmin.html:66
+#: seahub/institutions/templates/institutions/useradmin.html:68
 #: seahub/institutions/templates/institutions/useradmin_search.html:63
 msgid "Empty"
 msgstr "فارغ"
 
-#: seahub/institutions/templates/institutions/useradmin.html:70
+#: seahub/institutions/templates/institutions/useradmin.html:72
 msgid "Activating..., please wait"
 msgstr "تفعيل...، الرجاء الانتظار"
 
-#: seahub/institutions/templates/institutions/useradmin.html:78
+#: seahub/institutions/templates/institutions/useradmin.html:80
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
 msgid "Delete User"
 msgstr "حذف مستخدم"
 
-#: seahub/institutions/templates/institutions/useradmin.html:128
+#: seahub/institutions/templates/institutions/useradmin.html:130
 msgid "Edit failed."
 msgstr "فشل التحرير."
 
@@ -3725,22 +3779,26 @@ msgstr "بحث عن مستخدم"
 msgid "Result"
 msgstr "النتيجة"
 
-#: seahub/institutions/views.py:160
+#: seahub/institutions/views.py:174
 msgid "Owner"
 msgstr "مالك"
 
-#: seahub/institutions/views.py:164
+#: seahub/institutions/views.py:178
 msgid "Member"
 msgstr "عضو"
 
-#: seahub/institutions/views.py:193 seahub/views/sysadmin.py:380
+#: seahub/institutions/views.py:209 seahub/views/sysadmin.py:390
+msgid "Failed to delete: the user does not exist"
+msgstr "فشل في الحذف: المستخدم غير موجود"
+
+#: seahub/institutions/views.py:213
+msgid "Failed to delete: the user is system administrator"
+msgstr ""
+
+#: seahub/institutions/views.py:217 seahub/views/sysadmin.py:380
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "تم حذف %s بنجاح"
-
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:390
-msgid "Failed to delete: the user does not exist"
-msgstr "فشل في الحذف: المستخدم غير موجود"
 
 #: seahub/invitations/models.py:95
 #, python-format
@@ -3791,9 +3849,9 @@ msgstr "حدد كلمة مرور"
 msgid "It is required."
 msgstr "مطلوب."
 
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:58
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:72
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:90
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:67
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:82
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:103
 #, python-format
 msgid "Virus detected on %s"
 msgstr "تم اكتشاف فيروس على %s"
@@ -3894,21 +3952,21 @@ msgstr "ملاحظة جديدة على %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr ""
 
-#: seahub/notifications/models.py:480
+#: seahub/notifications/models.py:484
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "الملف <a href='%(file_link)s'>%(file_name)s</a> تم تحميله إلى <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:487
+#: seahub/notifications/models.py:491
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "الملف <strong>%(file_name)s</strong> تم تحميله إلى <strong>مكتبة محذوفة</strong>"
 
-#: seahub/notifications/models.py:621
+#: seahub/notifications/models.py:625
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -3916,35 +3974,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "المستخدم <a href='%(user_profile)s'>%(username)s</a> قد طلب الانضمام الى مجموعة <a href='%(href)s'>%(group_name)s</a>, رسالة التحقق: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:650
+#: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "لقد قام المستخدم <a href='%(user_profile)s'>%(group_staff)s</a> بإضافتك الى مجموعة <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:676
+#: seahub/notifications/models.py:680
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr "الملف <a href='%(file_url)s'>%(file_name)s</a> لديه تعليق جديد من المستخدم %(author)s"
 
-#: seahub/notifications/models.py:693
+#: seahub/notifications/models.py:697
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr ""
 
-#: seahub/notifications/models.py:710
+#: seahub/notifications/models.py:714
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:733
+#: seahub/notifications/models.py:737
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
@@ -3952,7 +4010,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr ""
 
-#: seahub/notifications/models.py:757
+#: seahub/notifications/models.py:761
 #, python-format
 msgid ""
 "%(user)s has transfered a library named <a "
@@ -4073,13 +4131,13 @@ msgstr "لقد قام %(user)s بمشاركة مكتبة <a href=\"%(url_base)s%
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
-"Virus detected in file <a href=\"%(url_base)s%(file_url)s\" "
-"target=\"_blank\">%(file_name)s</a> during regular scanning."
-msgstr "تم اكتشاف فيروس في الملف <a href=\"%(url_base)s%(file_url)s\" target=\"_blank\">%(file_name)s</a> خلال الفحص المعتاد."
+"Virus detected in library %(repo_name)s during regular scanning: "
+"%(file_path)s."
+msgstr ""
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
-msgid "Virus is detected on regular scanning. Please check the report at:"
-msgstr "تم اكتشاف فيروس خلال الفحص المعتاد. الرجاء مراجعة التقرير في:"
+msgid "Virus is detected on regular scanning:"
+msgstr ""
 
 #: seahub/notifications/templates/notifications/user_notification_list_react.html:5
 msgid "Notifications"
@@ -4110,6 +4168,12 @@ msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "تلميح: الطريقة الأخيرة أكثر أمنا، ولكنها ليست مدعومة جيدا من قبل جميع المتصفحات. نحن ننصحك باستخدام أحدث نسخة من كروم أو فايرفوكس."
+
+#: seahub/organizations/api/admin/saml_config.py:232
+msgid ""
+"org_url_prefix should be 6 to 20 characters, and can only contain "
+"alphanumeric characters and hyphens."
+msgstr ""
 
 #: seahub/organizations/forms.py:40 seahub/share/views.py:447
 msgid "Email address is not valid"
@@ -4180,18 +4244,18 @@ msgstr "رمز غير صحيح."
 msgid "Settings"
 msgstr "إعدادات"
 
-#: seahub/profile/templates/profile/set_profile_react.html:19
+#: seahub/profile/templates/profile/set_profile_react.html:20
 msgctxt "true name"
 msgid "Name:"
 msgstr "الاسم:"
 
-#: seahub/profile/templates/profile/set_profile_react.html:24
+#: seahub/profile/templates/profile/set_profile_react.html:25
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:12
 msgid "Set Password"
 msgstr "قم بتعيين كلمة المرور"
 
-#: seahub/profile/templates/profile/set_profile_react.html:24
+#: seahub/profile/templates/profile/set_profile_react.html:25
 msgid "Update"
 msgstr "تحديث"
 
@@ -5196,7 +5260,7 @@ msgstr "فشل انشاء المصغر."
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
 #: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
-#: seahub/two_factor/forms.py:294
+#: seahub/two_factor/forms.py:297
 msgid "Token"
 msgstr ""
 
@@ -5298,7 +5362,7 @@ msgstr ""
 msgid "Disable"
 msgstr ""
 
-#: seahub/utils/__init__.py:152
+#: seahub/utils/__init__.py:151
 msgid "permission error"
 msgstr "خطأ في الإذن"
 
@@ -5313,7 +5377,7 @@ msgstr "عاجز عن عرض تعديلات المكتبة"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1880
+#: seahub/views/ajax.py:376 seahub/views/file.py:1862
 msgid "Library does not exist"
 msgstr "المكتبة غير موجودة"
 
@@ -5361,7 +5425,7 @@ msgstr "رمز رابط تحميل غير صالح."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
 #: seahub/views/file.py:1145 seahub/views/file.py:1361
-#: seahub/views/file.py:1889
+#: seahub/views/file.py:1871
 msgid "File does not exist"
 msgstr "الملف غير موجود"
 
@@ -5516,7 +5580,8 @@ msgid "Failed to set %s as admin: user does not exist."
 msgstr "فشل تعيين %s كمشرف: المستخدم غير موجود."
 
 #: seahub/views/sysadmin.py:792 seahub/views/sysadmin.py:793
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:807
+#: seahub/views/sysadmin.py:808
 msgid "Optional"
 msgstr ""
 
