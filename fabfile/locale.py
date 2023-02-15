@@ -33,7 +33,7 @@ def push():
 def pull():
     """Update local po files with Transifex.
     """
-    local('tx -f pull')
+    local('tx pull -f')
 
 @task()
 def compile():

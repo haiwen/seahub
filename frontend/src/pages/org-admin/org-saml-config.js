@@ -237,7 +237,7 @@ class OrgSAMLConfig extends Component {
                       <InputItem
                         value={validDays}
                         changeValue={this.inputValidDays}
-                        displayName={gettext('Valid Days (how long is our metadata valid)')}
+                        displayName={gettext('Valid Days (how long our metadata is valid)')}
                       />
                       <Row className="my-4">
                         {samlConfigID ?
@@ -255,7 +255,7 @@ class OrgSAMLConfig extends Component {
                       </Row>
                     </Fragment>
                   </Section>
-                  <Section headingText={gettext('Upload Idp Files')}>
+                  <Section headingText={gettext('Upload IdP Files')}>
                     <Fragment>
                       <FileItem
                         postFile={this.postIdpCertificate}

@@ -90,21 +90,21 @@ class WebdavPassword extends React.Component {
     return (
       <React.Fragment>
         <div id="update-webdav-passwd" className="setting-item">
-        <h3 className="setting-item-heading">{gettext('WebDAV Password')}</h3>
-        <p>{gettext('WebDAV URL:')}<a href={webdavUrl}> {webdavUrl}</a></p>
-        <p>{gettext('WebDAV username:')} {username}</p>
-	{!isWebdavPasswordSetted ?
-          <React.Fragment>
-            <p>{gettext('WebDAV password:')} {gettext('not set')}</p>
-            <button className="btn btn-outline-primary" onClick={this.toggleSetPasswordDialog}>{gettext('Set Password')}</button>
-          </React.Fragment>
-          :
-          <React.Fragment>
-            <p>{gettext('WebDAV password:')} ***</p>
-            <button className="btn btn-outline-primary mr-2" onClick={this.toggleResetPasswordDialog}>{gettext('Reset Password')}</button>
-            <button className="btn btn-outline-primary" onClick={this.toggleRemovePasswordDialog}>{gettext('Remove Password')}</button>
-          </React.Fragment>
-	}
+          <h3 className="setting-item-heading">{gettext('WebDAV Password')}</h3>
+          <p>WebDAV URL: <a href={webdavUrl}>{webdavUrl}</a></p>
+          <p>{gettext('WebDAV username:')} {username}</p>
+          {!isWebdavPasswordSetted ?
+            <React.Fragment>
+              <p>{gettext('WebDAV password:')} {gettext('not set')}</p>
+              <button className="btn btn-outline-primary" onClick={this.toggleSetPasswordDialog}>{gettext('Set Password')}</button>
+            </React.Fragment>
+            :
+            <React.Fragment>
+              <p>{gettext('WebDAV password:')} ***</p>
+              <button className="btn btn-outline-primary mr-2" onClick={this.toggleResetPasswordDialog}>{gettext('Reset Password')}</button>
+              <button className="btn btn-outline-primary" onClick={this.toggleRemovePasswordDialog}>{gettext('Delete Password')}</button>
+            </React.Fragment>
+          }
         </div>
         {this.state.isSetPasserdDialogOpen && (
           <ModalPortal>

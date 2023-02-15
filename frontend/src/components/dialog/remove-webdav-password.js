@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Alert, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   removePassword: PropTypes.func.isRequired,
@@ -14,13 +13,11 @@ class RemoveWebdavPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      btnDisabled: false,
-      errMsg: ''
+      btnDisabled: false
     };
   }
 
   submit = () => {
-
     this.setState({
       btnDisabled: true
     });
@@ -30,18 +27,16 @@ class RemoveWebdavPassword extends Component {
 
   render() {
     const { toggle } = this.props;
-    let dialogMsg = gettext('Are you sure you want to remove {placeholder} ?').replace('{placeholder}', 'WebDAV password');
 
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{gettext('Remove WebDAV Password')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{gettext('Delete WebDAV Password')}</ModalHeader>
         <ModalBody>
-          <p>{dialogMsg}</p>
+          <p>{gettext('Are you sure you want to delete WebDAV password?')}</p>
         </ModalBody>
-        {this.state.errMsg && <Alert color="danger" className="m-0 mt-2">{gettext(this.state.errMsg)}</Alert>}
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>{gettext('Cancel')}</Button>
-          <Button color="primary" onClick={this.submit} disabled={this.state.btnDisabled}>{gettext('Submit')}</Button>
+          <Button color="primary" onClick={this.submit} disabled={this.state.btnDisabled}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );

@@ -59,8 +59,7 @@ class SetWebdavPassword extends Component {
   generatePassword = () => {
     let randomPassword = Utils.generatePassword(webdavSecretMinLength);
     this.setState({
-      password: randomPassword,
-      isPasswordVisible: true
+      password: randomPassword
     });
   }
 
