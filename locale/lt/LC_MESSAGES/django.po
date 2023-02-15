@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 17:52+0800\n"
+"POT-Creation-Date: 2023-02-15 18:18+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Vytautas Stanaitis <vytautas@basas.lt>, 2018\n"
 "Language-Team: Lithuanian (http://www.transifex.com/haiwen/seahub/language/lt/)\n"
@@ -2181,7 +2181,7 @@ msgstr ""
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
 "The \"SeaDrive\" shortcut in Windows Explorer won't disappear after you exit"
-" SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
+" SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
@@ -2195,7 +2195,7 @@ msgstr ""
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
-"choose \"Remove account information\" in the promt dialog."
+"choose \"Remove account information\" in the prompt dialog."
 msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
@@ -5228,10 +5228,6 @@ msgstr ""
 
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
-msgstr ""
-
-#: seahub/templates/wiki/wiki.html:25
-msgid "Last modified by"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172

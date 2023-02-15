@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 17:52+0800\n"
+"POT-Creation-Date: 2023-02-15 18:18+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>, 2019\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -2180,10 +2180,10 @@ msgstr "如何在 Windows 资源管理器中删除遗留的 SeaDrive 快捷方�
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
 "The \"SeaDrive\" shortcut in Windows Explorer won't disappear after you exit"
-" SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
+" SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr "当你退出 SeaDrive 应用程序或者切换 Seafile 帐号后，Windows 资源管理器中的 “SeaDrive” 快捷方式不会消失。这是特意设计的行为。如果以后还需要访问帐号，就不需要删除它们。 "
+msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
@@ -2194,8 +2194,8 @@ msgstr "在某些情况下，您可能需要删除 Windows 资源管理器中的
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
-"choose \"Remove account information\" in the promt dialog."
-msgstr "您可以通过卸载 SeaDrive 程序来删除这些快捷方式，卸载的时候需要选择“删除账号信息”。"
+"choose \"Remove account information\" in the prompt dialog."
+msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -5219,10 +5219,6 @@ msgstr "上传"
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
 msgstr "网络错误"
-
-#: seahub/templates/wiki/wiki.html:25
-msgid "Last modified by"
-msgstr "最近修改"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
 #: seahub/views/__init__.py:601

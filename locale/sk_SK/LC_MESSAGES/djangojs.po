@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 17:52+0800\n"
+"POT-Creation-Date: 2023-02-15 18:18+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/haiwen/seahub/language/sk_SK/)\n"
@@ -392,17 +392,17 @@ msgstr "Popis"
 #: frontend/src/components/dialog/org-delete-member-dialog.js:46
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:38
 #: frontend/src/components/dialog/org-import-users-dialog.js:58
-#: frontend/src/components/dialog/remove-webdav-password.js:43
+#: frontend/src/components/dialog/remove-webdav-password.js:38
 #: frontend/src/components/dialog/rename-dialog.js:128
 #: frontend/src/components/dialog/rename-dirent.js:130
 #: frontend/src/components/dialog/rename-group-dialog.js:66
-#: frontend/src/components/dialog/reset-webdav-password.js:86
+#: frontend/src/components/dialog/reset-webdav-password.js:85
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:68
 #: frontend/src/components/dialog/save-shared-file-dialog.js:74
 #: frontend/src/components/dialog/set-org-user-contact-email.js:65
 #: frontend/src/components/dialog/set-org-user-name.js:67
 #: frontend/src/components/dialog/set-org-user-quota.js:79
-#: frontend/src/components/dialog/set-webdav-password.js:86
+#: frontend/src/components/dialog/set-webdav-password.js:85
 #: frontend/src/components/dialog/sysadmin-dialog/set-quota.js:75
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:76
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-member-dialog.js:45
@@ -483,12 +483,11 @@ msgstr "Zrušiť"
 #: frontend/src/components/dialog/org-add-user-dialog.js:169
 #: frontend/src/components/dialog/org-rename-department-dialog.js:100
 #: frontend/src/components/dialog/org-set-group-quota-dialog.js:77
-#: frontend/src/components/dialog/remove-webdav-password.js:44
 #: frontend/src/components/dialog/rename-dialog.js:129
 #: frontend/src/components/dialog/rename-dirent.js:131
 #: frontend/src/components/dialog/rename-group-dialog.js:67
 #: frontend/src/components/dialog/repo-api-token-dialog.js:259
-#: frontend/src/components/dialog/reset-webdav-password.js:87
+#: frontend/src/components/dialog/reset-webdav-password.js:86
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:70
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:72
 #: frontend/src/components/dialog/save-shared-file-dialog.js:76
@@ -496,7 +495,7 @@ msgstr "Zrušiť"
 #: frontend/src/components/dialog/set-org-user-contact-email.js:66
 #: frontend/src/components/dialog/set-org-user-name.js:68
 #: frontend/src/components/dialog/set-org-user-quota.js:80
-#: frontend/src/components/dialog/set-webdav-password.js:87
+#: frontend/src/components/dialog/set-webdav-password.js:86
 #: frontend/src/components/dialog/share-repo-dialog.js:150
 #: frontend/src/components/dialog/share-to-group.js:346
 #: frontend/src/components/dialog/share-to-invite-people.js:286
@@ -728,6 +727,7 @@ msgstr ""
 #: frontend/src/components/dialog/org-delete-department-dialog.js:43
 #: frontend/src/components/dialog/org-delete-member-dialog.js:45
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:37
+#: frontend/src/components/dialog/remove-webdav-password.js:39
 #: frontend/src/components/dialog/repo-api-token-dialog.js:78
 #: frontend/src/components/dialog/repo-share-upload-links-dialog.js:73
 #: frontend/src/components/dialog/repo-share-upload-links-dialog.js:74
@@ -1474,8 +1474,8 @@ msgstr ""
 
 #: frontend/src/components/dialog/generate-share-link.js:380
 #: frontend/src/components/dialog/generate-upload-link.js:276
-#: frontend/src/components/dialog/reset-webdav-password.js:69
-#: frontend/src/components/dialog/set-webdav-password.js:69
+#: frontend/src/components/dialog/reset-webdav-password.js:68
+#: frontend/src/components/dialog/set-webdav-password.js:68
 msgid ""
 "(at least {passwordMinLength} characters and includes "
 "{passwordStrengthLevel} of the following: number, upper letter, lower letter"
@@ -2237,12 +2237,11 @@ msgid "Tip: -2 means no limit."
 msgstr ""
 
 #: frontend/src/components/dialog/remove-webdav-password.js:33
-#: frontend/src/pages/sys-admin/groups/group-members.js:122
-msgid "Are you sure you want to remove {placeholder} ?"
+msgid "Delete WebDAV Password"
 msgstr ""
 
-#: frontend/src/components/dialog/remove-webdav-password.js:37
-msgid "Remove WebDAV Password"
+#: frontend/src/components/dialog/remove-webdav-password.js:35
+msgid "Are you sure you want to delete WebDAV password?"
 msgstr ""
 
 #: frontend/src/components/dialog/rename-dialog.js:86
@@ -2357,7 +2356,7 @@ msgstr ""
 msgid "Sending new password..."
 msgstr ""
 
-#: frontend/src/components/dialog/reset-webdav-password.js:73
+#: frontend/src/components/dialog/reset-webdav-password.js:72
 msgid "Reset WebDAV Password"
 msgstr ""
 
@@ -2402,7 +2401,7 @@ msgstr ""
 msgid "Tip: 0 means default limit"
 msgstr ""
 
-#: frontend/src/components/dialog/set-webdav-password.js:73
+#: frontend/src/components/dialog/set-webdav-password.js:72
 msgid "Set WebDAV Password"
 msgstr ""
 
@@ -3805,10 +3804,6 @@ msgstr ""
 msgid "WebDAV Password"
 msgstr ""
 
-#: frontend/src/components/user-settings/webdav-password.js:94
-msgid "WebDAV URL:"
-msgstr ""
-
 #: frontend/src/components/user-settings/webdav-password.js:95
 msgid "WebDAV username:"
 msgstr ""
@@ -3827,7 +3822,7 @@ msgid "Set Password"
 msgstr ""
 
 #: frontend/src/components/user-settings/webdav-password.js:105
-msgid "Remove Password"
+msgid "Delete Password"
 msgstr ""
 
 #: frontend/src/components/wiki-markdown-viewer.js:216
@@ -4728,11 +4723,11 @@ msgid "Logout URL"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:240
-msgid "Valid Days (how long is our metadata valid)"
+msgid "Valid Days (how long our metadata is valid)"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:258
-msgid "Upload Idp Files"
+msgid "Upload IdP Files"
 msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:262
@@ -5303,6 +5298,10 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:111
 msgid "Content Scan Records"
+msgstr ""
+
+#: frontend/src/pages/sys-admin/groups/group-members.js:122
+msgid "Are you sure you want to remove {placeholder} ?"
 msgstr ""
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:149

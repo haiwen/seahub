@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 17:52+0800\n"
+"POT-Creation-Date: 2023-02-15 18:18+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2023\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
@@ -2196,10 +2196,10 @@ msgstr "Как удалить оставшиеся ярлыки SeaDrive в пр
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
 "The \"SeaDrive\" shortcut in Windows Explorer won't disappear after you exit"
-" SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
+" SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr "Ярлык \"SeaDrive\" в проводнике Windows не исчезнет после выхода из программы SeaDrive или переключения учетных записей Seafile в SeaDrive. Это намеренное поведение. Вам не нужно удалять их, если вам потребуется получить доступ к учетной записи позже."
+msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
@@ -2210,8 +2210,8 @@ msgstr "В некоторых крайних случаях ярлык \"SeaDrvi
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
-"choose \"Remove account information\" in the promt dialog."
-msgstr "Обычно вы можете удалить эти ярлыки, удалив программу SeaDrive и выбрав \"Удалить информацию об учетной записи\" в диалоговом окне."
+"choose \"Remove account information\" in the prompt dialog."
+msgstr ""
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -5244,10 +5244,6 @@ msgstr "Начать"
 #: seahub/templates/view_shared_upload_link.html:227
 msgid "Network error"
 msgstr "Ошибка сети"
-
-#: seahub/templates/wiki/wiki.html:25
-msgid "Last modified by"
-msgstr "Последнее изменение:"
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
 #: seahub/views/__init__.py:601
