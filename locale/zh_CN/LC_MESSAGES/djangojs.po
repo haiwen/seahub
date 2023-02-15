@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 18:18+0800\n"
+"POT-Creation-Date: 2023-02-15 18:51+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: 杨顺强 <ysq9207@126.com>, 2019\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -2253,11 +2253,11 @@ msgstr "提示：-2 表示没有限制。"
 
 #: frontend/src/components/dialog/remove-webdav-password.js:33
 msgid "Delete WebDAV Password"
-msgstr ""
+msgstr "删除 WebDAV 密码"
 
 #: frontend/src/components/dialog/remove-webdav-password.js:35
 msgid "Are you sure you want to delete WebDAV password?"
-msgstr ""
+msgstr "确定要删除 WebDAV 密码吗？"
 
 #: frontend/src/components/dialog/rename-dialog.js:86
 #: frontend/src/components/dialog/rename-dirent.js:87
@@ -2373,7 +2373,7 @@ msgstr "正在发送新密码..."
 
 #: frontend/src/components/dialog/reset-webdav-password.js:72
 msgid "Reset WebDAV Password"
-msgstr ""
+msgstr "重置 WebDAV 密码"
 
 #: frontend/src/components/dialog/save-shared-dir-dialog.js:57
 #: frontend/src/components/dialog/save-shared-file-dialog.js:63
@@ -3838,7 +3838,7 @@ msgstr "设置密码"
 
 #: frontend/src/components/user-settings/webdav-password.js:105
 msgid "Delete Password"
-msgstr ""
+msgstr "删除密码"
 
 #: frontend/src/components/wiki-markdown-viewer.js:216
 msgid "Last modified by"
@@ -4739,11 +4739,11 @@ msgstr "退出登录 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:240
 msgid "Valid Days (how long our metadata is valid)"
-msgstr ""
+msgstr "有效天数(元数据多久有效)"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:258
 msgid "Upload IdP Files"
-msgstr ""
+msgstr "上传 IdP 文件"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:262
 msgid "IdP Certificate"
