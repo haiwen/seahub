@@ -19,15 +19,15 @@
 # Oleg  Sergeev <djvnsk@ya.ru>, 2017
 # Rekby <timofey.koolin@gmail.com>, 2014
 # Rekby <timofey.koolin@gmail.com>, 2014
-# Vladimir <pash.vld@gmail.com>, 2015-2022
+# Vladimir <pash.vld@gmail.com>, 2015-2023
 # Vladimir <pash.vld@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:27+0800\n"
+"POT-Creation-Date: 2023-02-15 17:52+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2022\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>, 2015-2023\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2191,7 +2191,7 @@ msgstr "Вы можете вручную выбрать, какие папки �
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Как удалить оставшиеся ярлыки SeaDrive в проводнике Windows?"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -2199,19 +2199,19 @@ msgid ""
 " SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr ""
+msgstr "Ярлык \"SeaDrive\" в проводнике Windows не исчезнет после выхода из программы SeaDrive или переключения учетных записей Seafile в SeaDrive. Это намеренное поведение. Вам не нужно удалять их, если вам потребуется получить доступ к учетной записи позже."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
 "In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
-msgstr ""
+msgstr "В некоторых крайних случаях ярлык \"SeaDrvie\" может остаться в проводнике Windows, и вы можете удалить его позднее."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the promt dialog."
-msgstr ""
+msgstr "Обычно вы можете удалить эти ярлыки, удалив программу SeaDrive и выбрав \"Удалить информацию об учетной записи\" в диалоговом окне."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -2221,7 +2221,7 @@ msgid ""
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
-msgstr ""
+msgstr "Если при удалении ярлыки не удаляются, вы можете удалить ярлык SeaDrive в проводнике Windows, отредактировав реестр. Откройте путь \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\" в редакторе реестра. Удалите подразделы, соответствующие ярлыку, который вы хотите удалить."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2245,7 +2245,7 @@ msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr ""
+msgstr "Если вы создадите зашифрованную библиотеку в веб-приложении, пароль отправляется на сервер. Сервер использует этот пароль, чтобы создать библиотеку. Но не хранит пароль в открытом виде."
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -2271,19 +2271,19 @@ msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
-msgstr ""
+msgstr "Если вы используете настольный клиент для синхронизации библиотеки, пароль не отправляется на сервер. Клиент расшифровывает и зашифровывает содержимое файла локально. Пароль не хранится в открытом виде на клиентском диске."
 
 #: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
-msgstr ""
+msgstr "iOS клиент поддерживает шифрование на стороне клиента начиная с версии 2.1.6. Android клиент поддерживает это начиная с версии 2.1.0."
 
 #: seahub/help/templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
-msgstr ""
+msgstr "Обратите внимание, что в зашифрованной библиотеке шифруется только содержимое файлов, но не имена папок и файлов."
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
@@ -2995,7 +2995,7 @@ msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
-msgstr ""
+msgstr "Вы можете открыть скрытую боковую панель в правой части редактора Markdown. На этой боковой панели представлены оглавление, информация о файле и возможность совместного комментирования."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
@@ -4135,11 +4135,11 @@ msgstr "%(user)s поделился библиотекой <a href=\"%(url_base)
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Вирус обнаружен в библиотеке %(repo_name)s во время регулярного: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Вирус обнаружен при регулярном сканировании:"
 
 #: seahub/notifications/templates/notifications/user_notification_list_react.html:5
 msgid "Notifications"
@@ -4175,7 +4175,7 @@ msgstr "Совет: этот способ является более безоп
 msgid ""
 "org_url_prefix should be 6 to 20 characters, and can only contain "
 "alphanumeric characters and hyphens."
-msgstr ""
+msgstr "org_url_prefix должен содержать от 6 до 20 символов и может содержать только буквенно-цифровые символы и дефисы."
 
 #: seahub/organizations/forms.py:40 seahub/share/views.py:447
 msgid "Email address is not valid"

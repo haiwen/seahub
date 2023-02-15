@@ -8,11 +8,14 @@
 # ilearnit <helloworld.c@outlook.com>, 2018
 # ilearnit <helloworld.c@outlook.com>, 2018
 # Daniel Pan <daniel.pan@seafile.com>, 2016
+# ilearnit <helloworld.c@outlook.com>, 2018-2019
 # imwhatiam <imwhatiam123@gmail.com>, 2014-2019
 # llj <lingjun.li1@gmail.com>, 2017-2022
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
+# llj <lingjun.li1@gmail.com>, 2014
 # zheng xie <xiez1989@gmail.com>, 2014-2019
+# zMingGit <517046497@qq.com>, 2017
 # zMingGit <517046497@qq.com>, 2017
 # 杨顺强 <ysq9207@126.com>, 2019
 # ilearnit <helloworld.c@outlook.com>, 2019
@@ -21,9 +24,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 12:05+0800\n"
+"POT-Creation-Date: 2023-02-15 17:52+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
+"Last-Translator: 杨顺强 <ysq9207@126.com>, 2019\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2202,7 +2205,7 @@ msgid ""
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
-msgstr "如果卸载之后没能成功删除快捷方式，还可以通过编辑注册表在Windows资源管理器中删除SeaDrive快捷方式。在注册表编辑器中打开路径“HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\”，删除该快捷方式相对应的子键。"
+msgstr "如果卸载之后没能成功删除快捷方式，还可以通过编辑注册表在Windows资源管理器中删除SeaDrive快捷方式。在注册表编辑器中打开路径“HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\”，删除该快捷方式相对应的子键。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
