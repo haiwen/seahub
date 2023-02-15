@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:27+0800\n"
+"POT-Creation-Date: 2023-02-15 12:05+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -2172,7 +2172,7 @@ msgstr "您可以手动选择要在本地缓存的文件夹或文件。如果你
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "如何在 Windows 资源管理器中删除遗留的 SeaDrive 快捷方式？"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -2180,19 +2180,19 @@ msgid ""
 " SeaDrive progrme or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr ""
+msgstr "当你退出 SeaDrive 应用程序或者切换 Seafile 帐号后，Windows 资源管理器中的 “SeaDrive” 快捷方式不会消失。这是特意设计的行为。如果以后还需要访问帐号，就不需要删除它们。 "
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
 "In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
-msgstr ""
+msgstr "在某些情况下，您可能需要删除 Windows 资源管理器中的 “SeaDrive” 快捷方式。"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the promt dialog."
-msgstr ""
+msgstr "您可以通过卸载 SeaDrive 程序来删除这些快捷方式，卸载的时候需要选择“删除账号信息”。"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -2202,7 +2202,7 @@ msgid ""
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
-msgstr ""
+msgstr "如果卸载之后没能成功删除快捷方式，还可以通过编辑注册表在Windows资源管理器中删除SeaDrive快捷方式。在注册表编辑器中打开路径“HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\”，删除该快捷方式相对应的子键。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2226,7 +2226,7 @@ msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr ""
+msgstr "如果在 web app 中创建一个加密资料库，密码会被发送到服务器。服务器会用这个密码创建资料库，但不会保存该密码。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -2252,19 +2252,19 @@ msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
-msgstr ""
+msgstr "如果使用桌面客户端同步资料库，密码不会被发送到服务器。客户端会在本地解密和加密文件内容。密码也不会在客户端保存。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
-msgstr ""
+msgstr "iOS 客户端从 2.1.6 开始支持客户端加密。安卓客户端从 2.1.0 开始支持。"
 
 #: seahub/help/templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
-msgstr ""
+msgstr "注意加密资料库只加密文件内容，不加密目录和文件名。"
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
@@ -2963,7 +2963,7 @@ msgid ""
 "inserted and modified with just a few clicks. The same thing goes for a "
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
-msgstr "在 Seafile 中，Wiki 页面被以 Markdown 格式存储为普通的文档。 要在资料库中创建新的 Wiki 页面，只需创建一个新的 Markdown文档。 MD文件可以使用在线 MD 编辑器直接在 Seafile 的 Web 界面进行编辑。 基于 Web 的编辑器为文本，图片和表格提供了流畅的用户体验和丰富的格式选项。 图片可以从资料库和本地以及通过超链接导入到 MD 文件中。 基本的图片编辑功能，例如缩放，也可以在编辑器的所见即所得（WYSIWYG）界面中执行。 只需单击几下即可插入和修改表格。 表格的内容也一样：可以完全复制或部分复制表格，无需离开所见即所得视图。"
+msgstr "在 Seafile 中，Wiki 页面被以 Markdown 格式存储为普通的文档。 要在资料库中创建新的 Wiki 页面，只需创建一个新的 Markdown 文档。 MD 文件可以使用在线 MD 编辑器直接在 Seafile 的 Web 界面进行编辑。 基于 Web 的编辑器为文本，图片和表格提供了流畅的用户体验和丰富的格式选项。 图片可以从资料库和本地以及通过超链接导入到 MD 文件中。 基本的图片编辑功能，例如缩放，也可以在编辑器的所见即所得（WYSIWYG）界面中执行。 只需单击几下即可插入和修改表格。 表格的内容也一样：可以完全复制或部分复制表格，无需离开所见即所得视图。"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:15
 msgid ""
@@ -2976,7 +2976,7 @@ msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
-msgstr ""
+msgstr "你可以在 Markdown 编辑器的右边打开一个隐藏的侧边栏。该侧边栏提供文件目录，文件信息，协同评论。"
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
@@ -4110,11 +4110,11 @@ msgstr "%(user)s 共享了资料库 <a href=\"%(url_base)s%(lib_url)s\">%(lib_na
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "定期扫描时在资料库 %(repo_name)s 中发现病毒：%(file_path)s"
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "定期扫描时发现的病毒："
 
 #: seahub/notifications/templates/notifications/user_notification_list_react.html:5
 msgid "Notifications"
@@ -4150,7 +4150,7 @@ msgstr "提示：后一种更安全，但并不是被所有浏览器所支持。
 msgid ""
 "org_url_prefix should be 6 to 20 characters, and can only contain "
 "alphanumeric characters and hyphens."
-msgstr ""
+msgstr "org_url_prefix 应该包含 6 到 20 个字符，且只能包含字母数字和连字符。"
 
 #: seahub/organizations/forms.py:40 seahub/share/views.py:447
 msgid "Email address is not valid"

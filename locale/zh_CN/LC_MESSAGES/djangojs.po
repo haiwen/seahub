@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:27+0800\n"
+"POT-Creation-Date: 2023-02-15 12:05+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>, 2017-2022\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -124,84 +124,84 @@ msgstr "草稿"
 
 #: frontend/src/components/common/notice-item.js:253
 msgid "{user} created file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中创建了文件 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:253
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中创建了文件 {fileName} 和 {fileCount} 个其他文件。"
 
 #: frontend/src/components/common/notice-item.js:256
 msgid "{user} deleted file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中删除了文件 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:256
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中删除了文件 {fileName} 和 {fileCount} 个其他文件。"
 
 #: frontend/src/components/common/notice-item.js:260
 msgid "{user} restored file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中恢复了文件 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:263
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中将文件 {oldFileName} 重命名为 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:267
 msgid "{user} moved file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 移动了资料库 {libraryName} 中的文件 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:267
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中移动了文件 {fileName} 和 {fileCount} 个其他文件。"
 
 #: frontend/src/components/common/notice-item.js:270
 msgid "{user} updated file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中更新了文件 {fileName}。"
 
 #: frontend/src/components/common/notice-item.js:282
 msgid "{user} created folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中创建了文件夹 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:282
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中创建了文件夹 {folderName} 和 {folderCount} 个其他文件夹。"
 
 #: frontend/src/components/common/notice-item.js:285
 msgid "{user} deleted folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中删除了文件夹 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:285
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中删除了文件夹 {folderName} 和 {folderCount} 个其他文件夹。"
 
 #: frontend/src/components/common/notice-item.js:289
 msgid "{user} restored folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中恢复了文件夹 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:292
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 在资料库 {libraryName} 中将文件夹 {oldFolderName} 重命名为 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:296
 msgid "{user} moved folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} 移动了资料库 {libraryName} 中的文件夹 {folderName}。"
 
 #: frontend/src/components/common/notice-item.js:296
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} 移动了资料库 {libraryName} 中的文件夹 {folderName} 和 {folderCount} 个其他文件夹。"
 
 #: frontend/src/components/common/notification.js:65
 #: frontend/src/components/common/notification.js:72
@@ -1369,7 +1369,7 @@ msgstr "确定要删除 %s 吗？"
 msgid ""
 "This folder has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "该文件夹已被共享给 {user_amount} 个用户和 {group_amount} 个群组。"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:57
 msgid ""
@@ -2418,7 +2418,7 @@ msgstr "Tip: 设置为0表示重置为默认上限"
 
 #: frontend/src/components/dialog/set-webdav-password.js:73
 msgid "Set WebDAV Password"
-msgstr ""
+msgstr "设置 WebDAV 密码"
 
 #: frontend/src/components/dialog/share-admin-link.js:22
 msgid "The link is copied to the clipboard."
@@ -2599,11 +2599,11 @@ msgstr "大于等于 0 的整数。"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:51
 msgid "Set Upload Rate Limit"
-msgstr ""
+msgstr "设置上传速率最大值"
 
 #: frontend/src/components/dialog/sysadmin-dialog/set-upload-download-rate-limit.js:51
 msgid "Set Download Rate Limit"
-msgstr ""
+msgstr "设置下载速率最大值"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:41
 msgid "Add institution"
@@ -3340,7 +3340,7 @@ msgstr "草稿"
 
 #: frontend/src/components/repo-monitored-icon.js:24
 msgid "You are watching file changes of this library."
-msgstr ""
+msgstr "你正在关注该资料库中的文件改动。"
 
 #: frontend/src/components/review-list-view/review-comments.js:109
 msgid "No comment yet."
@@ -3522,14 +3522,14 @@ msgstr "重置密码"
 #: frontend/src/pages/shared-libs/shared-libs.js:304
 #: frontend/src/pages/shared-libs/shared-libs.js:358
 msgid "Watch File Changes"
-msgstr ""
+msgstr "关注文件改动"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:328
 #: frontend/src/pages/my-libs/mylib-repo-menu.js:130
 #: frontend/src/pages/shared-libs/shared-libs.js:304
 #: frontend/src/pages/shared-libs/shared-libs.js:358
 msgid "Unwatch File Changes"
-msgstr ""
+msgstr "取消文件改动关注"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:514
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:155
@@ -3817,7 +3817,7 @@ msgstr "Token:"
 
 #: frontend/src/components/user-settings/webdav-password.js:93
 msgid "WebDAV Password"
-msgstr ""
+msgstr "WebDAV 密码"
 
 #: frontend/src/components/user-settings/webdav-password.js:94
 msgid "WebDAV URL:"
@@ -3825,16 +3825,16 @@ msgstr ""
 
 #: frontend/src/components/user-settings/webdav-password.js:95
 msgid "WebDAV username:"
-msgstr ""
+msgstr "WebDAV 用户："
 
 #: frontend/src/components/user-settings/webdav-password.js:98
 #: frontend/src/components/user-settings/webdav-password.js:103
 msgid "WebDAV password:"
-msgstr ""
+msgstr "WebDAV 密码："
 
 #: frontend/src/components/user-settings/webdav-password.js:98
 msgid "not set"
-msgstr ""
+msgstr "未设置"
 
 #: frontend/src/components/user-settings/webdav-password.js:99
 msgid "Set Password"
@@ -4709,41 +4709,41 @@ msgstr "文件更新"
 #: frontend/src/pages/org-admin/org-saml-config.js:192
 #: frontend/src/pages/org-admin/side-panel.js:92
 msgid "SAML config"
-msgstr ""
+msgstr "SAML 配置"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:199
 msgid "Custom Login URL"
-msgstr ""
+msgstr "定制登录 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:203
 msgid "Your custom login URL"
-msgstr ""
+msgstr "定制登录 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:208
 msgid ""
 "The custom part of the URL should be 6 to 20 characters, and can only "
 "contain alphanumeric characters and hyphens."
-msgstr ""
+msgstr "URL 的定制部分应该包含 6 到 20 个字符，且只能包含字母数字和连字符。"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:220
 msgid "Manage SAML Config"
-msgstr ""
+msgstr "管理 SAML 配置"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:225
 msgid "App Federation Metadata URL"
-msgstr ""
+msgstr "应用联合元数据 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:230
 msgid "Login URL"
-msgstr ""
+msgstr "登录 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:235
 msgid "Logout URL"
-msgstr ""
+msgstr "退出登录 URL"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:240
 msgid "Valid Days (how long is our metadata valid)"
-msgstr ""
+msgstr "有效天数(元数据多久有效)"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:258
 msgid "Upload Idp Files"
@@ -4751,11 +4751,11 @@ msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:262
 msgid "IdP Certificate"
-msgstr ""
+msgstr "IdP 证书"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:266
 msgid "Federation Metadata XML"
-msgstr ""
+msgstr "联合元数据 XML"
 
 #: frontend/src/pages/org-admin/org-user-item.js:59
 msgid "Resetting user's password, please wait for a moment."
@@ -5173,11 +5173,11 @@ msgstr "删除"
 
 #: frontend/src/pages/share-admin/share-links.js:313
 msgid "By expiration ascending"
-msgstr ""
+msgstr "按过期时间升序"
 
 #: frontend/src/pages/share-admin/share-links.js:314
 msgid "By expiration descending"
-msgstr ""
+msgstr "按过期时间降序"
 
 #: frontend/src/pages/share-admin/upload-links.js:29
 msgid ""
@@ -5672,7 +5672,7 @@ msgstr "设置 Reference ID"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:159
 msgid "Upload Rate Limit"
-msgstr ""
+msgstr "上传速率限制"
 
 #: frontend/src/pages/sys-admin/users/user-nav.js:18
 msgid "Shared Links"
