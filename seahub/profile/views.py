@@ -109,6 +109,8 @@ def edit_profile(request):
             UserOptions.objects.get_webdav_secret(username):
         WEBDAV_SECRET_SETTED = True
 
+    show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -118,7 +120,7 @@ def edit_profile(request):
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
-            'two_factor_auth_enabled': has_two_factor_auth(),
+            'two_factor_auth_enabled': show_two_factor_auth,
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
@@ -139,7 +141,7 @@ def edit_profile(request):
             'user_unusable_password': request.user.enc_password == UNUSABLE_PASSWORD,
     }
 
-    if has_two_factor_auth():
+    if show_two_factor_auth:
         from seahub.two_factor.models import StaticDevice, default_device
 
         try:

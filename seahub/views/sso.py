@@ -14,6 +14,9 @@ from seahub.utils import render_error
 
 
 def sso(request):
+
+    request.session['is_sso_user'] = True
+
     # Ensure the user-originating redirection url is safe.
     if REDIRECT_FIELD_NAME in request.GET:
         next_page = request.GET[REDIRECT_FIELD_NAME]
