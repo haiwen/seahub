@@ -951,6 +951,7 @@ if ENABLE_CAS:
     AUTHENTICATION_BACKENDS += ('seahub.django_cas_ng.backends.CASBackend',)
 
 if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
+    MIDDLEWARE.append('djangosaml2.middleware.SamlSessionMiddleware')
     AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
 
 #####################
