@@ -78,7 +78,10 @@ def config_settings_loader(request):
         'service': {
             'sp': {
                 'allow_unsolicited': True,
+                # https://github.com/IdentityPython/pysaml2/blob/master/docs/howto/config.rst#want-assertions-or-response-signed
                 'want_response_signed': False,
+                'want_assertions_signed': False,
+                'want_assertions_or_response_signed': True,
                 'name_id_format': saml.NAMEID_FORMAT_EMAILADDRESS,
                 'endpoints': {
                     'assertion_consumer_service': [(org_sp_service_url + '/saml2/acs/', saml2.BINDING_HTTP_POST)],
