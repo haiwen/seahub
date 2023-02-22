@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
 import { gettext, siteRoot, canGenerateShareLink } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -10,6 +10,7 @@ import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import UploadLink from '../../models/upload-link';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 class Content extends Component {
 
@@ -122,10 +123,17 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
+    let obj_name;
+    if (item.obj_id==="") {
+      obj_name = item.obj_name + " " + gettext("(deleted)");
+    } else {
+      obj_name = item.obj_name;
+    }
+
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
-        <td><Link to={objUrl}>{item.obj_name}</Link></td>
+        <td><Link to={objUrl}>{obj_name}</Link></td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
@@ -185,6 +193,7 @@ class ShareAdminUploadLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isCleanOrphanUploadLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: []
@@ -192,6 +201,10 @@ class ShareAdminUploadLinks extends Component {
   }
 
   componentDidMount() {
+    this.listUserUploadLinks();
+  }
+
+  listUserUploadLinks() {
     seafileAPI.listUserUploadLinks().then((res) => {
       let items = res.data.map(item => {
         return new UploadLink(item);
@@ -222,8 +235,22 @@ class ShareAdminUploadLinks extends Component {
     });
   }
 
+  toggleCleanOrphanUploadLinksDialog = () => {
+    this.setState({isCleanOrphanUploadLinksDialogOpen: !this.state.isCleanOrphanUploadLinksDialogOpen});
+  }
+
+  cleanOrphanUploadLinks = () => {
+    seafileAPI.cleanOrphanUploadLinks().then(res => {
+      toaster.success(gettext('Successfully cleaned orphan upload links.'));
+      this.listUserUploadLinks();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
   render() {
     return (
+      <Fragment>
       <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path share-upload-nav">
@@ -232,6 +259,7 @@ class ShareAdminUploadLinks extends Component {
                 <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
               )}
               <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
+              <Button className="operation-item" onClick={this.toggleCleanOrphanUploadLinksDialog}>{gettext('Clean Orphan Upload Links')}</Button>
             </ul>
           </div>
           <div className="cur-view-content">
@@ -244,6 +272,16 @@ class ShareAdminUploadLinks extends Component {
           </div>
         </div>
       </div>
+      {this.state.isCleanOrphanUploadLinksDialogOpen &&
+        <CommonOperationConfirmationDialog
+          title={gettext('Clean Orphan upload Links')}
+          message={gettext('Are you sure you want to clean orphan upload links?')}
+          executeOperation={this.cleanOrphanUploadLinks}
+          confirmBtnText={gettext('Clean')}
+          toggleDialog={this.toggleCleanOrphanUploadLinksDialog}
+        />
+      }
+      </Fragment>
     );
   }
 }

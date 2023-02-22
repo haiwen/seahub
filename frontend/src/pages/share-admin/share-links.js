@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -14,6 +14,7 @@ import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 class Content extends Component {
 
@@ -202,13 +203,20 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
+    let obj_name;
+    if (item.obj_id==="") {
+      obj_name = item.obj_name + " " + gettext("(deleted)");
+    } else {
+      obj_name = item.obj_name;
+    }
+
     const desktopItem = (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
-            <Link to={objUrl}>{item.obj_name}</Link> :
-            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
+            <Link to={objUrl}>{obj_name}</Link> :
+            <a href={objUrl} target="_blank" rel="noreferrer">{obj_name}</a>
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
@@ -299,6 +307,7 @@ class ShareAdminShareLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isCleanOrphanShareLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: [],
@@ -366,6 +375,10 @@ class ShareAdminShareLinks extends Component {
   }
 
   componentDidMount() {
+    this.listUserShareLinks();
+  }
+
+  listUserShareLinks() {
     seafileAPI.listUserShareLinks().then((res) => {
       let items = res.data.map(item => {
         return new ShareLink(item);
@@ -402,6 +415,20 @@ class ShareAdminShareLinks extends Component {
     });
   }
 
+  toggleCleanOrphanShareLinksDialog = () => {
+    this.setState({isCleanOrphanShareLinksDialogOpen: !this.state.isCleanOrphanShareLinksDialogOpen});
+  }
+
+  cleanOrphanShareLinks = () => {
+    seafileAPI.cleanOrphanShareLinks().then(res => {
+      toaster.success(gettext('Successfully cleaned orphan share links.'));
+      this.listUserShareLinks();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -415,6 +442,7 @@ class ShareAdminShareLinks extends Component {
                 {canGenerateUploadLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
                 )}
+                <Button className="operation-item" onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean Orphan Share Links')}</Button>
               </ul>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
@@ -439,6 +467,15 @@ class ShareAdminShareLinks extends Component {
           sortOptions={this.sortOptions}
           sortItems={this.sortItems}
         />
+        }
+        {this.state.isCleanOrphanShareLinksDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Clean Orphan Share Links')}
+            message={gettext('Are you sure you want to clean orphan share links?')}
+            executeOperation={this.cleanOrphanShareLinks}
+            confirmBtnText={gettext('Clean')}
+            toggleDialog={this.toggleCleanOrphanShareLinksDialog}
+          />
         }
       </Fragment>
     );

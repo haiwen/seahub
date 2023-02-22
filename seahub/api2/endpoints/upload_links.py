@@ -27,6 +27,7 @@ from seahub.api2.permissions import CanGenerateUploadLink
 from seahub.share.models import UploadLinkShare, check_share_link_common
 from seahub.utils import gen_shared_upload_link, gen_file_upload_url, \
         is_pro_version, get_password_strength_level, is_valid_password
+
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -54,6 +55,8 @@ def get_upload_link_info(uls):
     else:
         obj_name = ''
 
+    obj_id = seafile_api.get_dir_id_by_path(repo_id, path)
+
     if uls.ctime:
         ctime = datetime_to_isoformat_timestr(uls.ctime)
     else:
@@ -68,6 +71,7 @@ def get_upload_link_info(uls):
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
     data['obj_name'] = obj_name
+    data['obj_id'] = obj_id or ""
     data['view_cnt'] = uls.view_cnt
     data['ctime'] = ctime
     data['link'] = gen_shared_upload_link(token)
@@ -475,3 +479,30 @@ class UploadLinkUpload(APIView):
         result = {}
         result['upload_link'] = gen_file_upload_url(token, 'upload-api')
         return Response(result)
+
+
+class UploadLinksCleanOrphan(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanGenerateUploadLink)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request):
+        """ Clean orphan upload links.
+        """
+
+        username = request.user.username
+        upload_links = UploadLinkShare.objects.filter(username=username)
+
+        for upload_link in upload_links:
+
+            repo_id = upload_link.repo_id
+            if not seafile_api.get_repo(repo_id):
+                upload_link.delete()
+                continue
+
+            obj_id = seafile_api.get_dir_id_by_path(repo_id, upload_link.path)
+            if not obj_id:
+                upload_link.delete()
+                continue
+
+        return Response({'success': True})
