@@ -123,17 +123,10 @@ class Item extends Component {
     const repoUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}`;
     const objUrl = `${repoUrl}${Utils.encodePath(item.path)}`;
 
-    let obj_name;
-    if (item.obj_id==="") {
-      obj_name = item.obj_name + " " + gettext("(deleted)");
-    } else {
-      obj_name = item.obj_name;
-    }
-
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} alt="" width="24" /></td>
-        <td><Link to={objUrl}>{obj_name}</Link></td>
+        <td><Link to={objUrl}>{item.obj_name}{item.obj_id==="" ? <span style={{color:'red'}}> {gettext('(deleted)')}</span> : ""}</Link></td>
         <td><Link to={repoUrl}>{item.repo_name}</Link></td>
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
@@ -259,7 +252,7 @@ class ShareAdminUploadLinks extends Component {
                 <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
               )}
               <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
-              <Button className="operation-item" onClick={this.toggleCleanOrphanUploadLinksDialog}>{gettext('Clean Orphan Upload Links')}</Button>
+              <Button className="operation-item" style={{ position: "absolute", right: "3%", top: "11%" }} onClick={this.toggleCleanOrphanUploadLinksDialog}>{gettext('Clean Orphan Upload Links')}</Button>
             </ul>
           </div>
           <div className="cur-view-content">

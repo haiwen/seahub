@@ -203,20 +203,13 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
-    let obj_name;
-    if (item.obj_id==="") {
-      obj_name = item.obj_name + " " + gettext("(deleted)");
-    } else {
-      obj_name = item.obj_name;
-    }
-
     const desktopItem = (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
-            <Link to={objUrl}>{obj_name}</Link> :
-            <a href={objUrl} target="_blank" rel="noreferrer">{obj_name}</a>
+            <Link to={objUrl}>{item.obj_name}{item.obj_id==="" ? <span style={{color:'red'}}> {gettext('(deleted)')}</span> : ""}</Link> :
+            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}{item.obj_id==="" ? <span style={{color:'red'}}> {gettext('(deleted)')}</span> : ""}</a>
           }
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
@@ -442,7 +435,7 @@ class ShareAdminShareLinks extends Component {
                 {canGenerateUploadLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
                 )}
-                <Button className="operation-item" onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean Orphan Share Links')}</Button>
+                <Button className="operation-item" style={{ position: "absolute", right: "3%", top: "11%" }} onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean Orphan Share Links')}</Button>
               </ul>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
