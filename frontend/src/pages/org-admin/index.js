@@ -12,6 +12,7 @@ import OrgStatisticReport from './statistic/statistic-reports';
 import OrgDesktopDevices from './devices/desktop-devices.js';
 import OrgMobileDevices from './devices/mobile-devices.js';
 import OrgDevicesErrors from './devices/devices-errors.js';
+import WebSettings from './web-settings/web-settings';
 import OrgUsers from './org-users-users';
 import OrgUsersSearchUsers from './org-users-search-users';
 import OrgAdmins from './org-users-admins';
@@ -93,6 +94,7 @@ class Org extends React.Component {
             <OrgDesktopDevices path={siteRoot + 'org/deviceadmin/desktop-devices/'} />
             <OrgMobileDevices path={siteRoot + 'org/deviceadmin/mobile-devices/'} />
             <OrgDevicesErrors path={siteRoot + 'org/deviceadmin/devices-errors/'} />
+            <WebSettings path={siteRoot + 'org/web-settings'} />
             <OrgUsers path={siteRoot + 'org/useradmin'} />
             <OrgUsersSearchUsers path={siteRoot + 'org/useradmin/search-users'} />
             <OrgAdmins path={siteRoot + 'org/useradmin/admins/'} />

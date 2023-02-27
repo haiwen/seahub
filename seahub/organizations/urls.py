@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^deviceadmin/mobile-devices/$', react_fake_view, name='org_device_admin_mobile_devices'),
     url(r'^deviceadmin/devices-errors/$', react_fake_view, name='org_device_admin_devices_errors'),
 
+    url(r'^web-settings/$', react_fake_view, name='org_web_settings'),
     url(r'^useradmin/$', react_fake_view, name='org_user_admin'),
     url(r'^useradmin/search-users/$', react_fake_view, name='org_user_admin_search_users'),
     url(r'^useradmin/admins/$', react_fake_view, name='org_useradmin_admins'),

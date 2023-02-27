@@ -133,8 +133,11 @@ export const filePermission = window.draft ? window.draft.config.perm : '';
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
+export const orgName = window.org ? window.org.pageOptions.orgName : '';
 export const invitationLink = window.org ? window.org.pageOptions.invitationLink : '';
 export const orgMemberQuotaEnabled = window.org ? window.org.pageOptions.orgMemberQuotaEnabled : '';
+export const orgEnableAdminCustomLogo = window.org ? window.org.pageOptions.orgEnableAdminCustomLogo === 'True' : false;
+export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgEnableAdminCustomName === 'True' : false;
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';

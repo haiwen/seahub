@@ -1,10 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
+import uuid
 import logging
 from django.db import models
 
 from .settings import ORG_MEMBER_QUOTA_DEFAULT
+
 from seahub.constants import DEFAULT_ORG
 from seahub.role_permissions.utils import get_available_roles
+from seahub.avatar.util import get_avatar_file_storage
+from seahub.avatar.settings import AVATAR_STORAGE_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -130,3 +135,63 @@ class OrgSAMLConfig(models.Model):
             'single_logout_service': self.single_logout_service,
             'valid_days': self.valid_days,
         }
+
+
+def _gen_org_logo_path(org_id, image_file):
+
+    (root, ext) = os.path.splitext(image_file.name.lower())
+    return '%s/org-logo/%s/%s%s' % (AVATAR_STORAGE_DIR, org_id, uuid.uuid4(), ext)
+
+
+def _save_org_logo_file(org_id, image_file):
+
+    org_logo_path = _gen_org_logo_path(org_id, image_file)
+    storage = get_avatar_file_storage()
+    storage.save(org_logo_path, image_file)
+
+    return org_logo_path
+
+
+def _delete_org_logo_file(org_logo_path):
+
+    storage = get_avatar_file_storage()
+    storage.delete(org_logo_path)
+
+
+class OrgAdminSettingsManager(models.Manager):
+
+    def save_org_logo(self, org_id, image_file):
+
+        obj = self.filter(org_id=org_id, key='org_logo_path').first()
+        if obj and obj.value:  # delete old file
+            _delete_org_logo_file(obj.value)
+        if not obj:
+            obj = self.model(org_id=org_id, key='org_logo_path')
+
+        obj.value = _save_org_logo_file(org_id, image_file)
+        obj.save()
+
+        return obj
+
+    def get_org_logo_url(self, org_id):
+
+        obj = self.filter(org_id=org_id, key='org_logo_path').first()
+        if not obj:
+            return ''
+
+        return obj.value
+
+
+class OrgAdminSettings(models.Model):
+
+    # boolean settings / str settings / int settings, etc
+    # key: default-value
+
+    org_id = models.IntegerField(db_index=True, null=False)
+    key = models.CharField(max_length=255, null=False)
+    value = models.TextField()
+
+    objects = OrgAdminSettingsManager()
+
+    class Meta:
+        unique_together = [('org_id', 'key')]

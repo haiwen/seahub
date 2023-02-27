@@ -21,6 +21,7 @@ from .api.admin.logs import OrgAdminLogsFileAccess, OrgAdminLogsFileUpdate, OrgA
 from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
 from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
+from .api.admin.logo import OrgAdminLogo
 
 from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
@@ -65,6 +66,7 @@ urlpatterns = [
         OrgUrlPrefixView.as_view(),
         name='api-v2.1-org-admin-url-prefix'),
 
+    url(r'^(?P<org_id>\d+)/admin/logo/$', OrgAdminLogo.as_view(), name='api-v2.1-org-admin-logo'),
     url(r'^(?P<org_id>\d+)/admin/devices/$', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
     url(r'^(?P<org_id>\d+)/admin/devices-errors/$', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),
 
