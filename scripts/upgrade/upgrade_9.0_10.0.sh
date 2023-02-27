@@ -204,13 +204,15 @@ EOF
 function update_nginx_conf () {
     nginx_conf=/etc/nginx/sites-available/seafile.conf
     if [[ ! -e /etc/nginx/sites-available/seafile.conf ]]; then
-        nginx_conf=/shared/nginx/conf/seafile.nginx.conf
+        nginx_conf=/shared/nginx/conf/seafile.nginx.conf  # in seafile docker
     fi
 
-    cp ${nginx_conf} ${nginx_conf}.bak
-    sed -i '/media {/i\    location /notification/ping {\n        proxy_pass http://127.0.0.1:8083/ping;\n        access_log      /var/log/nginx/notification.access.log seafileformat;\n        error_log       /var/log/nginx/notification.error.log;\n    }\n    location /notification {\n        proxy_pass http://127.0.0.1:8083/;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection "upgrade";\n        access_log      /var/log/nginx/notification.access.log seafileformat;\n        error_log       /var/log/nginx/notification.error.log;\n    }' ${nginx_conf}
+    if [[ -e ${nginx_conf} ]]; then
+        cp ${nginx_conf} ${nginx_conf}.bak
+        sed -i '/media {/i\    location /notification/ping {\n        proxy_pass http://127.0.0.1:8083/ping;\n        access_log      /var/log/nginx/notification.access.log seafileformat;\n        error_log       /var/log/nginx/notification.error.log;\n    }\n    location /notification {\n        proxy_pass http://127.0.0.1:8083/;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection "upgrade";\n        access_log      /var/log/nginx/notification.access.log seafileformat;\n        error_log       /var/log/nginx/notification.error.log;\n    }' ${nginx_conf}
 
-    nginx -s reload
+        nginx -s reload
+    fi
 }
 
 #################
@@ -224,9 +226,9 @@ ensure_server_not_running;
 update_database;
 migrate_avatars;
 
-add_notification_conf;
-
-update_nginx_conf;
+# do not auto update notification_conf
+# add_notification_conf;
+# update_nginx_conf;
 
 move_old_customdir_outside;
 make_media_custom_symlink;
