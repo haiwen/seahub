@@ -42,9 +42,11 @@ from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
-from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
-        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
+from seahub.settings import SHARE_LINK_LOGIN_REQUIRED, \
+        SHARE_LINK_FORCE_EXPIRATION, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+        SHARE_LINK_EXPIRE_DAYS_MAX, \
+        SHARE_LINK_EXPIRE_DAYS_MIN, \
         ENABLE_SHARE_LINK_AUDIT, ENABLE_VIDEO_THUMBNAIL, \
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
@@ -289,6 +291,11 @@ class ShareLinks(APIView):
 
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')
+
+        if SHARE_LINK_FORCE_EXPIRATION and not expire_days and not expiration_time:
+            error_msg = _('Expiration info is required.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if expire_days and expiration_time:
             error_msg = 'Can not pass expire_days and expiration_time at the same time.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

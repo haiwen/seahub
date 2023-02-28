@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail } from '../../utils/constants';
+import { isPro, gettext, shareLinkForceExpiration, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -28,19 +28,16 @@ class GenerateShareLink extends React.Component {
   constructor(props) {
     super(props);
 
-    this.isExpireDaysNoLimit = (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax === 0 && shareLinkExpireDaysDefault == 0);
-    this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : shareLinkExpireDaysDefault;
-
     this.state = {
       isOpIconShown: false,
       isValidate: false,
       isShowPasswordInput: shareLinkForceUsePassword ? true : false,
       isPasswordVisible: false,
-      isExpireChecked: !this.isExpireDaysNoLimit,
+      isExpireChecked: shareLinkForceExpiration,
       isExpirationEditIconShow: false,
       isEditingExpiration: false,
       expType: 'by-days',
-      expireDays: this.defaultExpireDays,
+      expireDays: shareLinkExpireDaysDefault,
       expDate: null,
       password: '',
       passwdnew: '',
@@ -209,9 +206,9 @@ class GenerateShareLink extends React.Component {
         password: '',
         passwdnew: '',
         isShowPasswordInput: shareLinkForceUsePassword ? true : false,
-        expireDays: this.defaultExpireDays,
+        expireDays: shareLinkExpireDaysDefault,
         expDate: null,
-        isExpireChecked: !this.isExpireDaysNoLimit,
+        isExpireChecked: shareLinkForceExpiration,
         errorInfo: '',
         sharedLinkInfo: null,
         isNoticeMessageShow: false,
@@ -540,7 +537,7 @@ class GenerateShareLink extends React.Component {
           </FormGroup>
           <FormGroup check>
             <Label check>
-              {this.isExpireDaysNoLimit ? (
+              {!shareLinkForceExpiration ? (
                 <Input type="checkbox" onChange={this.onExpireChecked} />
               ) : (
                 <Input type="checkbox" checked readOnly disabled />

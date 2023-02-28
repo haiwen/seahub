@@ -88,9 +88,14 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
-    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
-    SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
+    SHARE_LINK_FORCE_EXPIRATION, \
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, \
+    SHARE_LINK_EXPIRE_DAYS_MAX, \
+    SHARE_LINK_FORCE_USE_PASSWORD, \
+    SHARE_LINK_PASSWORD_MIN_LENGTH, \
+    SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
+    ENABLE_SHARE_LINK_REPORT_ABUSE
 
 
 # wopi
@@ -568,6 +573,7 @@ def view_lib_file(request, repo_id, path):
         'share_link_force_use_password': SHARE_LINK_FORCE_USE_PASSWORD,
         'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
         'share_link_password_strength_level': SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
+        'share_link_force_expiration': SHARE_LINK_FORCE_EXPIRATION,
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
@@ -713,6 +719,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['draft_id'] = draft['draft_id']
         return_dict['draft_file_path'] = draft['draft_file_path']
         return_dict['draft_origin_file_path'] = draft['draft_origin_file_path']
+        return_dict['share_link_force_expiration'] = SHARE_LINK_FORCE_EXPIRATION
         return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX

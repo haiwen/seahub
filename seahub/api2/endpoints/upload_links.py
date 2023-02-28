@@ -32,7 +32,7 @@ from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seahub.settings import UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
         UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, \
-        ENABLE_UPLOAD_LINK_VIRUS_CHECK
+        UPLOAD_LINK_FORCE_EXPIRATION, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 
 logger = logging.getLogger(__name__)
 
@@ -179,6 +179,11 @@ class UploadLinks(APIView):
 
         expire_days = request.data.get('expire_days', '')
         expiration_time = request.data.get('expiration_time', '')
+
+        if UPLOAD_LINK_FORCE_EXPIRATION and not expire_days and not expiration_time:
+            error_msg = _('Expiration info is required.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if expire_days and expiration_time:
             error_msg = 'Can not pass expire_days and expiration_time at the same time.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

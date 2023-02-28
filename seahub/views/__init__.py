@@ -7,6 +7,7 @@ import json
 import mimetypes
 import logging
 import posixpath
+from constance import config
 
 from django.core.cache import cache
 from django.urls import reverse, resolve
@@ -40,7 +41,7 @@ from seahub.utils import render_permission_error, render_error, \
     gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
-    new_merge_with_no_conflict, get_max_upload_file_size, \
+    new_merge_with_no_conflict, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED
 from seahub.utils.star import get_dir_starred_files
@@ -50,17 +51,21 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
-    UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
+    SHARE_LINK_FORCE_EXPIRATION, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, \
+    SHARE_LINK_EXPIRE_DAYS_MAX, \
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    UPLOAD_LINK_FORCE_EXPIRATION, \
+    UPLOAD_LINK_EXPIRE_DAYS_MIN, \
+    UPLOAD_LINK_EXPIRE_DAYS_MAX, \
+    UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     SEAFILE_COLLAB_SERVER, ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
-    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, ADDITIONAL_ABOUT_DIALOG_LINKS, \
-    DTABLE_WEB_SERVER
+    ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_APP_BOTTOM_LINKS, \
+    ADDITIONAL_ABOUT_DIALOG_LINKS, DTABLE_WEB_SERVER
 
-from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.ocm.settings import ENABLE_OCM, OCM_REMOTE_SERVERS
 from seahub.ocm_via_webdav.settings import ENABLE_OCM_VIA_WEBDAV
-from seahub.constants import HASH_URLS, PERMISSION_READ
+from seahub.constants import PERMISSION_READ
 from seahub.group.settings import GROUP_IMPORT_MEMBERS_EXTRA_MSG
 
 from seahub.weixin.settings import ENABLE_WEIXIN
@@ -69,7 +74,6 @@ from seahub.onlyoffice.settings import ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 CUSTOM_NAV_ITEMS = getattr(settings, 'CUSTOM_NAV_ITEMS', '')
 
-from constance import config
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -95,6 +99,7 @@ def is_registered_user(email):
 
     return True if user else False
 
+
 _default_repo_id = None
 def get_system_default_repo_id():
     global _default_repo_id
@@ -104,6 +109,7 @@ def get_system_default_repo_id():
         except SearpcError as e:
             logger.error(e)
     return _default_repo_id
+
 
 def check_folder_permission(request, repo_id, path):
     """Check repo/folder/file access permission of a user.
@@ -361,7 +367,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     if not repo:
         raise Http404
 
-    try :
+    try:
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
@@ -417,7 +423,7 @@ def dir_recycle_view(request, repo_id):
         return render_permission_error(request, _('Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
-    referer = request.GET.get('referer', '') # for back to 'dir view' page
+    referer = request.GET.get('referer', '')  # for back to 'dir view' page
     if not commit_id:
         return render_dir_recycle_root(request, repo_id, dir_path, referer)
     else:
@@ -507,7 +513,7 @@ def repo_history(request, repo_id):
         current_page = 1
 
     per_page = 100
-    commits_all = get_commits(repo_id, per_page * (current_page -1),
+    commits_all = get_commits(repo_id, per_page * (current_page - 1),
                               per_page + 1)
     commits = commits_all[:per_page]
     for c in commits:
@@ -710,8 +716,8 @@ def repo_set_access_property(request, repo_id):
 
 @login_required
 def validate_filename(request):
-    repo_id     = request.GET.get('repo_id')
-    filename    = request.GET.get('filename')
+    repo_id = request.GET.get('repo_id')
+    filename = request.GET.get('filename')
 
     if not (repo_id and filename):
         return render_error(request)
@@ -1183,9 +1189,11 @@ def react_fake_view(request, **kwargs):
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
         'resumable_upload_file_block_size': settings.RESUMABLE_UPLOAD_FILE_BLOCK_SIZE,
         'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+        'share_link_force_expiration': SHARE_LINK_FORCE_EXPIRATION,
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+        'upload_link_force_expiration': UPLOAD_LINK_FORCE_EXPIRATION,
         'upload_link_expire_days_default': UPLOAD_LINK_EXPIRE_DAYS_DEFAULT,
         'upload_link_expire_days_min': UPLOAD_LINK_EXPIRE_DAYS_MIN,
         'upload_link_expire_days_max': UPLOAD_LINK_EXPIRE_DAYS_MAX,

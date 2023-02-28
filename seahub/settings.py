@@ -362,17 +362,23 @@ SHARE_LINK_TOKEN_LENGTH = 20
 # if limit only authenticated user can view preview share link
 SHARE_LINK_LOGIN_REQUIRED = False
 
+# if force user set expire days when generate share link
+SHARE_LINK_FORCE_EXPIRATION = False
+
 # min/max expire days for a share link
-SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
-SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+SHARE_LINK_EXPIRE_DAYS_MIN = 0  # 0 means no limit
+SHARE_LINK_EXPIRE_DAYS_MAX = 0  # 0 means no limit
 
 # default expire days should be
 # greater than or equal to MIN and less than or equal to MAX
 SHARE_LINK_EXPIRE_DAYS_DEFAULT = 0
 
+# if force user set expire days when generate upload link
+UPLOAD_LINK_FORCE_EXPIRATION = False
+
 # min/max expire days for an upload link
-UPLOAD_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
-UPLOAD_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+UPLOAD_LINK_EXPIRE_DAYS_MIN = 0  # 0 means no limit
+UPLOAD_LINK_EXPIRE_DAYS_MAX = 0  # 0 means no limit
 
 # default expire days should be
 # greater than or equal to MIN and less than or equal to MAX

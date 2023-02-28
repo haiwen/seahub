@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import moment from 'moment';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
+import { gettext, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail, uploadLinkForceExpiration, uploadLinkExpireDaysMin, uploadLinkExpireDaysMax, uploadLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import UploadLink from '../../models/upload-link';
@@ -24,9 +24,6 @@ class GenerateUploadLink extends React.Component {
   constructor(props) {
     super(props);
 
-    this.isExpireDaysNoLimit = (uploadLinkExpireDaysMin === 0 && uploadLinkExpireDaysMax === 0 && uploadLinkExpireDaysDefault == 0);
-    this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : uploadLinkExpireDaysDefault;
-
     this.state = {
       showPasswordInput: shareLinkForceUsePassword ? true : false,
       passwordVisible: false,
@@ -35,11 +32,11 @@ class GenerateUploadLink extends React.Component {
       storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
-      isExpireChecked: !this.isExpireDaysNoLimit,
+      isExpireChecked: uploadLinkForceExpiration,
       isExpirationEditIconShow: false,
       isEditingExpiration: false,
       expType: 'by-days',
-      expireDays: this.defaultExpireDays,
+      expireDays: uploadLinkExpireDaysDefault,
       expDate: null
     };
   }
@@ -250,9 +247,9 @@ class GenerateUploadLink extends React.Component {
     seafileAPI.deleteUploadLink(sharedUploadInfo.token).then(() => {
       this.setState({
         showPasswordInput: shareLinkForceUsePassword ? true : false,
-        expireDays: this.defaultExpireDays,
+        expireDays: uploadLinkExpireDaysDefault,
         expDate: null,
-        isExpireChecked: !this.isExpireDaysNoLimit,
+        isExpireChecked: uploadLinkForceExpiration,
         password: '',
         passwordnew: '',
         sharedUploadInfo: null,
@@ -395,7 +392,7 @@ class GenerateUploadLink extends React.Component {
         </FormGroup>
         <FormGroup check>
           <Label check>
-            {this.isExpireDaysNoLimit ? (
+            {!uploadLinkForceExpiration ? (
               <Input type="checkbox" onChange={this.onExpireChecked} />
             ) : (
               <Input type="checkbox" checked readOnly disabled />
