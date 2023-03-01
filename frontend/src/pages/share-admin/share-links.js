@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -14,6 +14,18 @@ import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+
+const contentPropTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
 
 class Content extends Component {
 
@@ -87,6 +99,8 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = contentPropTypes;
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -202,6 +216,7 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
+    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} width="24" alt="" /></td>
@@ -210,6 +225,7 @@ class Item extends Component {
             <Link to={objUrl}>{item.obj_name}</Link> :
             <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
           }
+          {deletedTip}
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
         {isPro &&
@@ -294,11 +310,17 @@ class Item extends Component {
 
 Item.propTypes = itemPropTypes;
 
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired
+};
+
 class ShareAdminShareLinks extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isCleanOrphanShareLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: [],
@@ -366,6 +388,10 @@ class ShareAdminShareLinks extends Component {
   }
 
   componentDidMount() {
+    this.listUserShareLinks();
+  }
+
+  listUserShareLinks() {
     seafileAPI.listUserShareLinks().then((res) => {
       let items = res.data.map(item => {
         return new ShareLink(item);
@@ -402,9 +428,31 @@ class ShareAdminShareLinks extends Component {
     });
   }
 
+  toggleCleanOrphanShareLinksDialog = () => {
+    this.setState({isCleanOrphanShareLinksDialogOpen: !this.state.isCleanOrphanShareLinksDialogOpen});
+  }
+
+  cleanOrphanShareLinks = () => {
+    seafileAPI.cleanOrphanShareLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '');
+      this.setState({items: newItems});
+      toaster.success(gettext('Successfully cleaned orphan share links.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
     return (
       <Fragment>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean orphan share links')}</Button>
+        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -440,9 +488,20 @@ class ShareAdminShareLinks extends Component {
           sortItems={this.sortItems}
         />
         }
+        {this.state.isCleanOrphanShareLinksDialogOpen &&
+          <CommonOperationConfirmationDialog
+            title={gettext('Clean orphan share links')}
+            message={gettext('Are you sure you want to clean orphan share links?')}
+            executeOperation={this.cleanOrphanShareLinks}
+            confirmBtnText={gettext('Clean')}
+            toggleDialog={this.toggleCleanOrphanShareLinksDialog}
+          />
+        }
       </Fragment>
     );
   }
 }
+
+ShareAdminShareLinks.propTypes = propTypes;
 
 export default ShareAdminShareLinks;

@@ -73,6 +73,13 @@ def get_share_link_info(fileshare):
     else:
         obj_name = ''
 
+    if fileshare.s_type == 'd':
+        folder_path = normalize_dir_path(fileshare.path)
+        obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+    else:
+        file_path = normalize_file_path(fileshare.path)
+        obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
     if fileshare.expire_date:
         expire_date = datetime_to_isoformat_timestr(fileshare.expire_date)
     else:
@@ -89,6 +96,7 @@ def get_share_link_info(fileshare):
 
     data['path'] = path
     data['obj_name'] = obj_name
+    data['obj_id'] = obj_id or ""
     data['is_dir'] = True if fileshare.s_type == 'd' else False
 
     data['token'] = token
@@ -1327,3 +1335,37 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
                 filtered_tagged_files.append(tagged_file)
 
         return Response({'tagged_files': filtered_tagged_files})
+
+
+class ShareLinksCleanOrphan(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanGenerateShareLink)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request):
+        """ Clean orphan share links.
+        """
+
+        username = request.user.username
+        share_links = FileShare.objects.filter(username=username)
+
+        for share_link in share_links:
+
+            repo_id = share_link.repo_id
+            if not seafile_api.get_repo(repo_id):
+                share_link.delete()
+                continue
+
+            if share_link.s_type == 'd':
+                folder_path = normalize_dir_path(share_link.path)
+                obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+            else:
+                file_path = normalize_file_path(share_link.path)
+                obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
+            if not obj_id:
+                share_link.delete()
+                continue
+
+        return Response({'success': True})

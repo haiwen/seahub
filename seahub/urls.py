@@ -40,11 +40,11 @@ from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
         ShareLinkUpload, ShareLinkUploadDone, ShareLinkSaveItemsToRepo, \
-        ShareLinkRepoTags, ShareLinkRepoTagsTaggedFiles
+        ShareLinkRepoTags, ShareLinkRepoTagsTaggedFiles, ShareLinksCleanOrphan
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
-        UploadLinkUpload
+        UploadLinkUpload, UploadLinksCleanOrphan
 from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView, \
@@ -341,6 +341,7 @@ urlpatterns = [
 
     ## user::shared-download-links
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
+    url(r'^api/v2.1/share-links/clean-orphan/$', ShareLinksCleanOrphan.as_view(), name='api-v2.1-share-links-clean-orphan'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-file-to-repo/$', ShareLinkSaveFileToRepo.as_view(), name='api-v2.1-share-link-save-file-to-repo'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-items-to-repo/$', ShareLinkSaveItemsToRepo.as_view(), name='api-v2.1-share-link-save-items-to-repo'),
@@ -355,6 +356,7 @@ urlpatterns = [
 
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
+    url(r'^api/v2.1/upload-links/clean-orphan/$', UploadLinksCleanOrphan.as_view(), name='api-v2.1-upload-links-clean-orphan'),
     url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
     url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/upload/$', UploadLinkUpload.as_view(), name='api-v2.1-upload-link-upload'),
 
