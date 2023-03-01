@@ -45,8 +45,6 @@ const SharedWithOCMWrapper = MainContentWrapper(ShareWithOCM);
 const OCMViaWebdavWrapper = MainContentWrapper(OCMViaWebdav);
 const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
-const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
-const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
 
 class App extends Component {
 
@@ -259,8 +257,8 @@ class App extends Component {
               <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-              <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <SharedWithOCMWrapper path={siteRoot + 'shared-with-ocm'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <OCMViaWebdavWrapper path={siteRoot + 'ocm-via-webdav'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />

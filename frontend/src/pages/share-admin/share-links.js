@@ -15,6 +15,17 @@ import ShareLinkPermissionSelect from '../../components/dialog/share-link-permis
 import ShareAdminLink from '../../components/dialog/share-admin-link';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import TopToolbar from '../../components/toolbar/top-toolbar';
+
+const contentPropTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  onRemoveLink: PropTypes.func.isRequired
+};
 
 class Content extends Component {
 
@@ -88,6 +99,8 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = contentPropTypes;
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -203,14 +216,16 @@ class Item extends Component {
       objUrl = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
     }
 
+    const deletedTip = item.obj_id === '' ? <span style={{color:'red'}}>{gettext('(deleted)')}</span> : null;
     const desktopItem = (
       <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td><img src={iconUrl} width="24" alt="" /></td>
         <td>
           {item.is_dir ?
-            <Link to={objUrl}>{item.obj_name}{item.obj_id==="" ? <span style={{color:'red'}}> {gettext('(deleted)')}</span> : ""}</Link> :
-            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}{item.obj_id==="" ? <span style={{color:'red'}}> {gettext('(deleted)')}</span> : ""}</a>
+            <Link to={objUrl}>{item.obj_name}</Link> :
+            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
           }
+          {deletedTip}
         </td>
         <td><Link to={`${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}/`}>{item.repo_name}</Link></td>
         {isPro &&
@@ -294,6 +309,11 @@ class Item extends Component {
 }
 
 Item.propTypes = itemPropTypes;
+
+const propTypes = {
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired
+};
 
 class ShareAdminShareLinks extends Component {
 
@@ -414,8 +434,9 @@ class ShareAdminShareLinks extends Component {
 
   cleanOrphanShareLinks = () => {
     seafileAPI.cleanOrphanShareLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '');
+      this.setState({items: newItems});
       toaster.success(gettext('Successfully cleaned orphan share links.'));
-      this.listUserShareLinks();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -425,6 +446,13 @@ class ShareAdminShareLinks extends Component {
   render() {
     return (
       <Fragment>
+        <TopToolbar
+          onShowSidePanel={this.props.onShowSidePanel}
+          onSearchedClick={this.props.onSearchedClick}
+        >
+
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean orphan share links')}</Button>
+        </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path share-upload-nav">
@@ -435,7 +463,6 @@ class ShareAdminShareLinks extends Component {
                 {canGenerateUploadLink && (
                   <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
                 )}
-                <Button className="operation-item" style={{ position: "absolute", right: "3%", top: "11%" }} onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean Orphan Share Links')}</Button>
               </ul>
               {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
             </div>
@@ -463,7 +490,7 @@ class ShareAdminShareLinks extends Component {
         }
         {this.state.isCleanOrphanShareLinksDialogOpen &&
           <CommonOperationConfirmationDialog
-            title={gettext('Clean Orphan Share Links')}
+            title={gettext('Clean orphan share links')}
             message={gettext('Are you sure you want to clean orphan share links?')}
             executeOperation={this.cleanOrphanShareLinks}
             confirmBtnText={gettext('Clean')}
@@ -474,5 +501,7 @@ class ShareAdminShareLinks extends Component {
     );
   }
 }
+
+ShareAdminShareLinks.propTypes = propTypes;
 
 export default ShareAdminShareLinks;
