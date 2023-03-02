@@ -630,7 +630,6 @@ def view_lib_file(request, repo_id, path):
     return_dict['last_modified'] = last_modified
 
     # get file type and extention
-    print(filename)
     filetype, fileext = get_file_type_and_ext(filename)
     return_dict['fileext'] = fileext
     return_dict['filetype'] = filetype
@@ -650,7 +649,6 @@ def view_lib_file(request, repo_id, path):
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
 
-    print(filetype)
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
         template = 'common_file_view_react.html'
 
