@@ -136,7 +136,6 @@ function stop_seafile_background_tasks () {
         if ps "${pid}" 2>/dev/null 1>&2 ; then
             kill -KILL "${pid}"
         fi
-        pkill -f "soffice.*--invisible --nocrashreport"
         rm -f "${pidfile}"
         return 0
     else
