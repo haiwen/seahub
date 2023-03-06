@@ -391,7 +391,6 @@ def get_file_type_and_ext(filename):
     if fileExt in get_conf_text_ext():
         return (TEXT, fileExt)
 
-    print(fileExt)
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
         return (filetype, fileExt)
