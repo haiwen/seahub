@@ -64,7 +64,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -651,6 +651,9 @@ def view_lib_file(request, repo_id, path):
 
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
         template = 'common_file_view_react.html'
+
+    if filetype == SEADOC:
+        return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
 
