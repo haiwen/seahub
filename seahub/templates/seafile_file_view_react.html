@@ -14,11 +14,12 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/main.css" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
         {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
     </head>
     <body>
-         <div id="root">你好，我是文档</div>
+         <div id="root"></div>
          <div id="modal-wrapper"></div>
          <script type="text/javascript">
            window.app = {
@@ -65,6 +66,7 @@
              }
           }
          </script>
+         <script src="{{ MEDIA_URL }}seafile-editor/main.js"></script>
          <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
     </body>
 </html>
