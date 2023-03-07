@@ -26,6 +26,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     CUSTOM_LOGIN_BG_PATH, ENABLE_SHARE_LINK_REPORT_ABUSE, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK
 
+from seahub.organizations.models import OrgAdminSettings
+from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_CONVERTER_EXTENSIONS
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
@@ -88,6 +90,11 @@ def base(request):
         custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
         if os.path.exists(custom_logo_file):
             logo_path = CUSTOM_LOGO_PATH
+
+        if ORG_ENABLE_ADMIN_CUSTOM_LOGO and org:
+            org_logo_url = OrgAdminSettings.objects.get_org_logo_url(org.org_id)
+            if org_logo_url:
+                logo_path = org_logo_url
 
         # get favicon path
         custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)
