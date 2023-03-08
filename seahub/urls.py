@@ -876,19 +876,26 @@ if HAS_OFFICE_CONVERTER:
     ]
 
 if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-    from seahub.adfs_auth.views import auth_complete
+    from seahub.adfs_auth.views import *
     urlpatterns += [
-        url(r'^org/custom/[a-z_0-9-]+/', include(('seahub.adfs_auth.urls', 'adfs_auth'), namespace='adfs_auth')),
-        url(r'^saml2/complete/$', auth_complete, name='org_saml2_complete'),
+        url(r'^org/custom/[a-z_0-9-]+/$', multi_adfs_login, name="multi_adfs_login"),
+        url(r'^org/custom/[a-z_0-9-]+/saml2/login/$', login, name='org_saml2_login'),
+        url(r'^org/custom/[a-z_0-9-]+/saml2/acs/$', assertion_consumer_service, name='org_saml2_acs'),
+        url(r'^org/custom/[a-z_0-9-]+/saml2/metadata/$', metadata, name='org_saml2_metadata'),
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
-    from seahub.adfs_auth.views import assertion_consumer_service, \
-        auth_complete
+    from seahub.adfs_auth.views import *
     urlpatterns += [
+        url(r'^saml2/login/$', login, name='saml2_login'),
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
+        url(r'^saml2/metadata/$', metadata, name='saml2_metadata'),
+    ]
+
+if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_ADFS_LOGIN', False):
+    from seahub.adfs_auth.views import auth_complete
+    urlpatterns += [
         url(r'^saml2/complete/$', auth_complete, name='saml2_complete'),
-        url(r'^saml2/', include('djangosaml2.urls')),
     ]
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):

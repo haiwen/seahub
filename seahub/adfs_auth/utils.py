@@ -1,38 +1,46 @@
 # -*- coding: utf-8 -*-
-import os
 import re
+import copy
 import logging
+from os import path
 
-import saml2
-from saml2 import saml
+from saml2 import BINDING_HTTP_POST, NAMEID_FORMAT_EMAILADDRESS
 from saml2.config import SPConfig
 from django.utils.translation import gettext as _
 
 from seaserv import ccnet_api
 
-from seahub.utils import render_error
+from seahub.utils import render_error, get_service_url
 from seahub.organizations.models import OrgSAMLConfig
-try:
-    from seahub.settings import ENABLE_MULTI_ADFS, SP_SERVICE_URL, ATTRIBUTE_MAP_DIR, CERTS_DIR, XMLSEC_BINARY
-except ImportError:
-    ENABLE_MULTI_ADFS = False
-    SP_SERVICE_URL = ''
-    ATTRIBUTE_MAP_DIR = ''
-    CERTS_DIR = ''
-    XMLSEC_BINARY = ''
+from seahub import settings
 
 logger = logging.getLogger(__name__)
+
+ENABLE_ADFS_LOGIN = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+ENABLE_MULTI_ADFS = getattr(settings, 'ENABLE_MULTI_ADFS', False)
+if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
+    REMOTE_METADATA_URL = getattr(settings, 'SAML_REMOTE_METADATA_URL', '')
+    XMLSEC_BINARY_PATH = getattr(settings, 'SAML_XMLSEC_BINARY_PATH', '/usr/bin/xmlsec1')
+    CERTS_DIR = getattr(settings, 'SAML_CERTS_DIR', '/opt/seafile/seahub-data/certs')
+    SAML_ATTRIBUTE_MAPPING = getattr(settings, 'SAML_ATTRIBUTE_MAPPING', {})
 
 
 def settings_check(func):
     def _decorated(request):
         error = False
-        if not ENABLE_MULTI_ADFS:
+        if not ENABLE_ADFS_LOGIN or not ENABLE_MULTI_ADFS:
             logger.error('Feature not enabled.')
             error = True
         else:
-            if not SP_SERVICE_URL or not ATTRIBUTE_MAP_DIR or not CERTS_DIR or not XMLSEC_BINARY:
+            if not XMLSEC_BINARY_PATH or not CERTS_DIR or not SAML_ATTRIBUTE_MAPPING:
                 logger.error('ADFS login relevant settings invalid.')
+                logger.error('SAML_XMLSEC_BINARY_PATH: %s' % XMLSEC_BINARY_PATH)
+                logger.error('SAML_CERTS_DIR: %s' % CERTS_DIR)
+                logger.error('SAML_ATTRIBUTE_MAPPING: %s' % SAML_ATTRIBUTE_MAPPING)
+                error = True
+            if ENABLE_ADFS_LOGIN and not REMOTE_METADATA_URL:
+                logger.error('SAML relevant settings invalid.')
+                logger.error('SAML_REMOTE_METADATA_URL: %s' % REMOTE_METADATA_URL)
                 error = True
         if error:
             return render_error(request, _('Error, please contact administrator.'))
@@ -43,79 +51,68 @@ def settings_check(func):
 @settings_check
 def config_settings_loader(request):
     # get url_prefix
-    url_prefix = None
+    url_prefix = ''
     reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
     if reg:
         url_prefix = reg.group(1)
 
     # get org_id
+    org_id = -1
     org = ccnet_api.get_org_by_url_prefix(url_prefix)
     if not org:
-        return render_error(request, 'Failed to get org %s ' % url_prefix)
-    org_id = org.org_id
+        org_id = org.org_id
 
-    # get org saml_config
-    org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
-    if not org_saml_config:
-        return render_error(request, 'Failed to get org %s saml_config' % org_id)
-    metadata_url = org_saml_config.metadata_url
-    single_sign_on_service = org_saml_config.single_sign_on_service
-    single_logout_service = org_saml_config.single_logout_service
-    valid_days = int(org_saml_config.valid_days)
+    if org_id != -1:
+        org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
+        if not org_saml_config:
+            return render_error(request, 'Failed to get org %s saml_config' % org_id)
 
-    # get org_sp_service_url
-    org_sp_service_url = SP_SERVICE_URL.rstrip('/') + '/' + url_prefix
-
-    # generate org certs dir
-    org_certs_dir = os.path.join(CERTS_DIR, str(org_id))
+        # get org remote_metadata_url
+        remote_metadata_url = org_saml_config.metadata_url
+        # get org sp_service_url
+        sp_service_url = get_service_url().rstrip('/') + '/' + url_prefix
+        # generate org certs dir
+        certs_dir = path.join(CERTS_DIR, str(org_id))
+    else:
+        # get remote_metadata_url
+        remote_metadata_url = REMOTE_METADATA_URL
+        # get sp_service_url
+        sp_service_url = get_service_url().rstrip('/')
+        # generate certs dir
+        certs_dir = CERTS_DIR
 
     # generate org saml_config
     saml_config = {
-        'entityid': org_sp_service_url + '/saml2/metadata/',
-        'attribute_map_dir': ATTRIBUTE_MAP_DIR,
-        'xmlsec_binary': XMLSEC_BINARY,
+        'entityid': sp_service_url + '/saml2/metadata/',
+        'xmlsec_binary': XMLSEC_BINARY_PATH,
+        'attribute_map_dir': path.join(path.dirname(path.abspath(__file__)), 'attribute-maps'),
         'allow_unknown_attributes': True,
         'service': {
             'sp': {
+                'name_id_format': NAMEID_FORMAT_EMAILADDRESS,
+                'required_attributes': ['uid'],
                 'allow_unsolicited': True,
                 # https://github.com/IdentityPython/pysaml2/blob/master/docs/howto/config.rst#want-assertions-or-response-signed
                 'want_response_signed': False,
                 'want_assertions_signed': False,
                 'want_assertions_or_response_signed': True,
-                'name_id_format': saml.NAMEID_FORMAT_EMAILADDRESS,
                 'endpoints': {
-                    'assertion_consumer_service': [(org_sp_service_url + '/saml2/acs/', saml2.BINDING_HTTP_POST)],
-                    'single_logout_service': [
-                        (org_sp_service_url + '/saml2/ls/', saml2.BINDING_HTTP_REDIRECT),
-                        (org_sp_service_url + '/saml2/ls/post', saml2.BINDING_HTTP_POST),
+                    'assertion_consumer_service': [
+                        (sp_service_url + '/saml2/acs/', BINDING_HTTP_POST)
                     ],
-                },
-                'required_attributes': ["uid"],
-                'idp': {
-                    metadata_url: {
-                        'single_sign_on_service': {
-                            saml2.BINDING_HTTP_REDIRECT: single_sign_on_service,
-                        },
-                        'single_logout_service': {
-                            saml2.BINDING_HTTP_REDIRECT: single_logout_service,
-                        },
-                    },
                 },
             },
         },
         'metadata': {
-            'local': [os.path.join(org_certs_dir, 'idp_federation_metadata.xml')],
+            'remote': [{'url': remote_metadata_url}],
         },
-        'debug': 1,
-        'key_file': '',
-        'cert_file': os.path.join(org_certs_dir, 'idp.crt'),
+        'cert_file': path.join(certs_dir, 'idp.crt'),
         'encryption_keypairs': [{
-            'key_file': os.path.join(org_certs_dir, 'sp.key'),
-            'cert_file': os.path.join(org_certs_dir, 'sp.crt'),
+            'key_file': path.join(certs_dir, 'sp.key'),
+            'cert_file': path.join(certs_dir, 'sp.crt'),
         }],
-        'valid_for': valid_days * 24,  # how long is our metadata valid, unit is hour
     }
 
     conf = SPConfig()
-    conf.load(saml_config)
+    conf.load(copy.deepcopy(saml_config))
     return conf

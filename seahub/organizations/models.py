@@ -84,11 +84,7 @@ class OrgSettings(models.Model):
 
 
 class OrgSAMLConfigManager(models.Manager):
-
-    def add_or_update_saml_config(
-            self, org_id, metadata_url, single_sign_on_service,
-            single_logout_service, valid_days
-    ):
+    def add_or_update_saml_config(self, org_id, metadata_url):
         try:
             saml_config = self.get(org_id=org_id)
         except OrgSAMLConfig.DoesNotExist:
@@ -96,12 +92,6 @@ class OrgSAMLConfigManager(models.Manager):
 
         if metadata_url:
             saml_config.metadata_url = metadata_url
-        if single_sign_on_service:
-            saml_config.single_sign_on_service = single_sign_on_service
-        if single_logout_service:
-            saml_config.single_logout_service = single_logout_service
-        if valid_days:
-            saml_config.valid_days = valid_days
 
         saml_config.save(using=self._db)
         return saml_config
@@ -117,9 +107,6 @@ class OrgSAMLConfigManager(models.Manager):
 class OrgSAMLConfig(models.Model):
     org_id = models.IntegerField(unique=True)
     metadata_url = models.TextField()
-    single_sign_on_service = models.TextField()
-    single_logout_service = models.TextField()
-    valid_days = models.IntegerField()
 
     objects = OrgSAMLConfigManager()
 
@@ -131,9 +118,6 @@ class OrgSAMLConfig(models.Model):
             'id': self.pk,
             'org_id': self.org_id,
             'metadata_url': self.metadata_url,
-            'single_sign_on_service': self.single_sign_on_service,
-            'single_logout_service': self.single_logout_service,
-            'valid_days': self.valid_days,
         }
 
 

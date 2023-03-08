@@ -17,12 +17,11 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.organizations.utils import get_ccnet_db_name, update_org_url_prefix
 from seahub.organizations.models import OrgSAMLConfig
-try:
-    from seahub.settings import CERTS_DIR
-except ImportError:
-    CERTS_DIR = ''
+from seahub import settings
 
 logger = logging.getLogger(__name__)
+
+CERTS_DIR = getattr(settings, 'SAML_CERTS_DIR', '/opt/seafile/seahub-data/certs')
 
 
 class OrgUploadIdPCertificateView(APIView):
@@ -67,48 +66,6 @@ class OrgUploadIdPCertificateView(APIView):
         return Response({'success': True})
 
 
-class OrgUploadIdPMetadataXMLView(APIView):
-
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    throttle_classes = (UserRateThrottle,)
-    permission_classes = (IsProVersion, IsOrgAdminUser)
-
-    def post(self, request, org_id):
-        # argument check
-        idp_metadata_xml = request.FILES.get('idp_metadata_xml', None)
-        if not idp_metadata_xml:
-            error_msg = 'idp_metadata_xml not found.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if idp_metadata_xml.name != 'idp_federation_metadata.xml':
-            error_msg = 'idp_metadata_xml invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not CERTS_DIR:
-            error_msg = 'CERTS_DIR invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        if not ccnet_api.get_org_by_id(int(org_id)):
-            error_msg = 'Organization %s not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        org_certs_dir = os.path.join(CERTS_DIR, str(org_id))
-        try:
-            if not os.path.exists(org_certs_dir):
-                os.makedirs(org_certs_dir)
-
-            cert_file_path = os.path.join(org_certs_dir, 'idp_federation_metadata.xml')
-            with open(cert_file_path, 'wb') as fd:
-                fd.write(idp_metadata_xml.read())
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'success': True})
-
-
 class OrgSAMLConfigView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -132,11 +89,8 @@ class OrgSAMLConfigView(APIView):
     def post(self, request, org_id):
         # argument check
         metadata_url = request.data.get('metadata_url', None)
-        single_sign_on_service = request.data.get('single_sign_on_service', None)
-        single_logout_service = request.data.get('single_logout_service', None)
-        valid_days = request.data.get('valid_days', None)
-        if not metadata_url or not single_sign_on_service or not single_logout_service or not valid_days:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'argument invalid.')
+        if not metadata_url:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'metadata_url invalid.')
 
         # resource check
         org_id = int(org_id)
@@ -146,9 +100,7 @@ class OrgSAMLConfigView(APIView):
 
         # add an org saml config
         try:
-            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(
-                org_id, metadata_url, single_sign_on_service, single_logout_service, valid_days
-            )
+            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -159,11 +111,8 @@ class OrgSAMLConfigView(APIView):
     def put(self, request, org_id):
         # argument check
         metadata_url = request.data.get('metadata_url', None)
-        single_sign_on_service = request.data.get('single_sign_on_service', None)
-        single_logout_service = request.data.get('single_logout_service', None)
-        valid_days = request.data.get('valid_days', None)
-        if not metadata_url and not single_sign_on_service and not single_logout_service and not valid_days:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'argument invalid.')
+        if not metadata_url:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'metadata_url invalid.')
 
         # resource check
         org_id = int(org_id)
@@ -173,9 +122,7 @@ class OrgSAMLConfigView(APIView):
 
         # update config
         try:
-            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(
-                org_id, metadata_url, single_sign_on_service, single_logout_service, valid_days
-            )
+            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -229,7 +176,8 @@ class OrgUrlPrefixView(APIView):
 
         reg = re.match(r'^[a-z0-9-]{6,20}$', org_url_prefix)
         if not reg:
-            error_msg = _('org_url_prefix should be 6 to 20 characters, and can only contain alphanumeric characters and hyphens.')
+            error_msg = _('org_url_prefix should be 6 to 20 characters, '
+                          'and can only contain alphanumeric characters and hyphens.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if ccnet_api.get_org_by_url_prefix(org_url_prefix) is not None:
