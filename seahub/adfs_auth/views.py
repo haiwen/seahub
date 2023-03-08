@@ -17,7 +17,6 @@
 import re
 import logging
 
-from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -34,6 +33,7 @@ from djangosaml2.utils import get_custom_setting
 from seahub import auth
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
+from seahub import settings
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
 

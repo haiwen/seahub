@@ -28,7 +28,7 @@ if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
 def settings_check(func):
     def _decorated(request):
         error = False
-        if not ENABLE_ADFS_LOGIN or not ENABLE_MULTI_ADFS:
+        if not ENABLE_ADFS_LOGIN and not ENABLE_MULTI_ADFS:
             logger.error('Feature not enabled.')
             error = True
         else:
@@ -59,7 +59,7 @@ def config_settings_loader(request):
     # get org_id
     org_id = -1
     org = ccnet_api.get_org_by_url_prefix(url_prefix)
-    if not org:
+    if org:
         org_id = org.org_id
 
     if org_id != -1:
@@ -70,7 +70,7 @@ def config_settings_loader(request):
         # get org remote_metadata_url
         remote_metadata_url = org_saml_config.metadata_url
         # get org sp_service_url
-        sp_service_url = get_service_url().rstrip('/') + '/' + url_prefix
+        sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + url_prefix
         # generate org certs dir
         certs_dir = path.join(CERTS_DIR, str(org_id))
     else:
