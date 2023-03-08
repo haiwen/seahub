@@ -21,9 +21,6 @@ class OrgSAMLConfig extends Component {
       newUrlPrefix: '',
       orgUrlPrefix: '',
       metadataUrl: '',
-      singleSignOnService: '',
-      singleLogoutService: '',
-      validDays: '',
       isBtnsShown: false,
     };
   }
@@ -34,7 +31,6 @@ class OrgSAMLConfig extends Component {
 
   hideBtns = () => {
     if (!this.state.isBtnsShown) return;
-
     if (this.state.newUrlPrefix !== this.state.orgUrlPrefix) {
       this.setState({newUrlPrefix: this.state.orgUrlPrefix});
     }
@@ -65,10 +61,6 @@ class OrgSAMLConfig extends Component {
     this.setState({singleLogoutService: e.target.value});
   }
 
-  inputValidDays = (e) => {
-    this.setState({validDays: e.target.value});
-  }
-
   componentDidMount() {
     seafileAPI.orgAdminGetUrlPrefix(orgID).then((res) => {
       this.setState({
@@ -80,9 +72,6 @@ class OrgSAMLConfig extends Component {
           loading: false,
           samlConfigID: res.data.saml_config.id || '',
           metadataUrl: res.data.saml_config.metadata_url || '',
-          singleSignOnService: res.data.saml_config.single_sign_on_service || '',
-          singleLogoutService: res.data.saml_config.single_logout_service || '',
-          validDays: res.data.saml_config.valid_days || '',
         });
       }).catch(error => {
         this.setState({
@@ -121,24 +110,12 @@ class OrgSAMLConfig extends Component {
     });
   }
 
-  postIdpMetadataXml = (file) => {
-    seafileAPI.orgAdminUploadIdpMetadataXml(orgID, file).then(() => {
-      toaster.success(gettext('Success'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   addSamlConfig = () => {
-    const { metadataUrl, singleSignOnService, singleLogoutService, validDays } = this.state;
-    seafileAPI.orgAdminAddSamlConfig(orgID, metadataUrl, singleSignOnService, singleLogoutService, validDays).then((res) => {
+    const { metadataUrl } = this.state;
+    seafileAPI.orgAdminAddSamlConfig(orgID, metadataUrl).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
         metadataUrl: res.data.saml_config.metadata_url,
-        singleSignOnService: res.data.saml_config.single_sign_on_service,
-        singleLogoutService: res.data.saml_config.single_logout_service,
-        validDays: res.data.saml_config.valid_days,
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -148,14 +125,11 @@ class OrgSAMLConfig extends Component {
   }
 
   updateSamlConfig = () => {
-    const { metadataUrl, singleSignOnService, singleLogoutService, validDays } = this.state;
-    seafileAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl, singleSignOnService, singleLogoutService, validDays).then((res) => {
+    const { metadataUrl } = this.state;
+    seafileAPI.orgAdminUpdateSamlConfig(orgID, metadataUrl).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
         metadataUrl: res.data.saml_config.metadata_url,
-        singleSignOnService: res.data.saml_config.single_sign_on_service,
-        singleLogoutService: res.data.saml_config.single_logout_service,
-        validDays: res.data.saml_config.valid_days,
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -169,9 +143,6 @@ class OrgSAMLConfig extends Component {
       this.setState({
         samlConfigID: '',
         metadataUrl: '',
-        singleSignOnService: '',
-        singleLogoutService: '',
-        validDays: '',
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -181,7 +152,7 @@ class OrgSAMLConfig extends Component {
   }
 
   render() {
-    const { loading, errorMsg, samlConfigID, newUrlPrefix, metadataUrl, singleSignOnService, singleLogoutService, validDays, isBtnsShown } = this.state;
+    const { loading, errorMsg, samlConfigID, newUrlPrefix, metadataUrl, isBtnsShown } = this.state;
 
     return (
       <Fragment>
@@ -224,21 +195,6 @@ class OrgSAMLConfig extends Component {
                         changeValue={this.inputMetadataUrl}
                         displayName={gettext('App Federation Metadata URL')}
                       />
-                      <InputItem
-                        value={singleSignOnService}
-                        changeValue={this.inputSingleSignOnService}
-                        displayName={gettext('Login URL')}
-                      />
-                      <InputItem
-                        value={singleLogoutService}
-                        changeValue={this.inputSingleLogoutService}
-                        displayName={gettext('Logout URL')}
-                      />
-                      <InputItem
-                        value={validDays}
-                        changeValue={this.inputValidDays}
-                        displayName={gettext('Valid Days (how long our metadata is valid)')}
-                      />
                       <Row className="my-4">
                         {samlConfigID ?
                           <Fragment>
@@ -256,16 +212,10 @@ class OrgSAMLConfig extends Component {
                     </Fragment>
                   </Section>
                   <Section headingText={gettext('Upload IdP Files')}>
-                    <Fragment>
-                      <FileItem
-                        postFile={this.postIdpCertificate}
-                        displayName={gettext('IdP Certificate')}
-                      />
-                      <FileItem
-                        postFile={this.postIdpMetadataXml}
-                        displayName={gettext('Federation Metadata XML')}
-                      />
-                    </Fragment>
+                    <FileItem
+                      postFile={this.postIdpCertificate}
+                      displayName={gettext('IdP Certificate')}
+                    />
                   </Section>
                 </Fragment>
               }

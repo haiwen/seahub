@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -92,12 +92,14 @@ class SidePanel extends React.Component {
                     <span className="nav-text">{gettext('Logs')}</span>
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('SAML config')}`} to={siteRoot + 'org/samlconfig/'} onClick={() => this.tabItemClick('SAML config')} >
-                    <span className="sf2-icon-cog2"></span>
-                    <span className="nav-text">{gettext('SAML config')}</span>
-                  </Link>
-                </li>
+                {enableMultiADFS &&
+                  <li className="nav-item">
+                    <Link className={`nav-link ellipsis ${this.getActiveClass('SAML config')}`} to={siteRoot + 'org/samlconfig/'} onClick={() => this.tabItemClick('SAML config')} >
+                      <span className="sf2-icon-cog2"></span>
+                      <span className="nav-text">{gettext('SAML config')}</span>
+                    </Link>
+                  </li>
+                }
               </ul>
             </div>
           </div>

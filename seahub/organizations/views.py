@@ -18,6 +18,7 @@ from django.utils.crypto import get_random_string
 import seaserv
 from seaserv import ccnet_api
 
+from seahub import settings
 from seahub.auth import login
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.accounts import User
@@ -36,6 +37,9 @@ from seahub.organizations.utils import get_or_create_invitation_link
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+ENABLE_MULTI_ADFS = getattr(settings, 'ENABLE_MULTI_ADFS', False)
+
 
 ########## ccnet rpc wrapper
 def create_org(org_name, url_prefix, creator):
@@ -253,6 +257,7 @@ def react_fake_view(request, **kwargs):
         'org_enable_admin_custom_name': ORG_ENABLE_ADMIN_CUSTOM_NAME,
         'group_id': group_id,
         'invitation_link': invitation_link,
+        'enable_multi_adfs': ENABLE_MULTI_ADFS,
         })
 
 @login_required
