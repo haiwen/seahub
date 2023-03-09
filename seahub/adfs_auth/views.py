@@ -17,83 +17,84 @@
 import re
 import logging
 
-from django.conf import settings
-from seahub import auth
 from django.urls import reverse
-from django.http import HttpResponseRedirect  # 30x
-from django.http import HttpResponseBadRequest, HttpResponseForbidden  # 40x
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
-try:
-    from django.views.decorators.csrf import csrf_exempt
-except ImportError:
-    # Django 1.0 compatibility
-    def csrf_exempt(view_func):
-        return view_func
-
+from django.views.decorators.csrf import csrf_exempt
 from saml2 import BINDING_HTTP_POST
 from saml2.client import Saml2Client
-from saml2.sigver import MissingKey
-from saml2.ident import code
-
+from saml2.metadata import entity_descriptor
 from djangosaml2.cache import IdentityCache, OutstandingQueriesCache
 from djangosaml2.conf import get_config
 from djangosaml2.signals import post_authenticated
 from djangosaml2.utils import get_custom_setting
 
+from seahub import auth
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
+from seahub import settings
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
 
 logger = logging.getLogger('djangosaml2')
 
 
-def _set_subject_id(session, subject_id):
-    session['_saml2_subject_id'] = code(subject_id)
+def login(request):
+    next_url = settings.LOGIN_REDIRECT_URL
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+    elif 'RelayState' in request.GET:
+        next_url = request.GET['RelayState']
+
+    if not url_has_allowed_host_and_scheme(next_url, None):
+        next_url = settings.LOGIN_REDIRECT_URL
+
+    sp_config = get_config(None, request)
+    saml_client = Saml2Client(sp_config)
+    session_id, info = saml_client.prepare_for_authenticate(relay_state=next_url)
+    try:
+        headers = dict(info['headers'])
+        redirect_url = headers['Location']
+    except KeyError:
+        redirect_url = info['url']
+    except Exception as e:
+        logger.warning(e)
+        redirect_url = None
+
+    return HttpResponseRedirect(redirect_url)
 
 
 @require_POST
 @csrf_exempt
-def assertion_consumer_service(request,
-                               config_loader_path=None,
-                               attribute_mapping=None,
-                               create_unknown_user=None):
-    """SAML Authorization Response endpoint
-
-    The IdP will send its response to this view, which
-    will process it with pysaml2 help and log the user
-    in using the custom Authorization backend
-    djangosaml2.backends.Saml2Backend that should be
-    enabled in the settings.py
+def assertion_consumer_service(request, attribute_mapping=None, create_unknown_user=True):
+    """SAML Authorization Response endpoint.
+    The IdP will send its response to this view, which will process it using pysaml2 and
+    log the user in using whatever SAML authentication backend has been enabled in
+    settings.py. The `djangosaml2.backends.Saml2Backend` can be used for this purpose,
+    though some implementations may instead register their own subclasses of Saml2Backend.
     """
-    attribute_mapping = attribute_mapping or get_custom_setting(
-            'SAML_ATTRIBUTE_MAPPING', {'uid': ('username', )})
-    create_unknown_user = create_unknown_user or get_custom_setting(
-            'SAML_CREATE_UNKNOWN_USER', True)
-    logger.debug('Assertion Consumer Service started')
-
-    conf = get_config(config_loader_path, request)
     if 'SAMLResponse' not in request.POST:
-        return HttpResponseBadRequest(
-            'Couldn\'t find "SAMLResponse" in POST data.')
-    xmlstr = request.POST['SAMLResponse']
-    client = Saml2Client(conf, identity_cache=IdentityCache(request.session))
+        return HttpResponseBadRequest('Missing "SAMLResponse" parameter in POST data.')
+    attribute_mapping = attribute_mapping or get_custom_setting('SAML_ATTRIBUTE_MAPPING', None)
+    conf = get_config(None, request)
 
+    identity_cache = IdentityCache(request.session)
+    client = Saml2Client(conf, identity_cache=identity_cache)
     oq_cache = OutstandingQueriesCache(request.session)
+    oq_cache.sync()
     outstanding_queries = oq_cache.outstanding_queries()
 
+    xmlstr = request.POST['SAMLResponse']
     try:
-        response = client.parse_authn_request_response(xmlstr, BINDING_HTTP_POST,
-                                                       outstanding_queries)
-    except MissingKey:
-        logger.error('MissingKey error in ACS')
-        return HttpResponseForbidden(
-            "The Identity Provider is not configured correctly: "
-            "the certificate key is missing")
+        response = client.parse_authn_request_response(xmlstr, BINDING_HTTP_POST, outstanding_queries)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('SAMLResponse Error')
+
     if response is None:
         logger.error('SAML response is None')
-        return HttpResponseBadRequest(
-            "SAML response has errors. Please check the logs")
+        return HttpResponseBadRequest('SAML response has errors. Please check the logs')
 
     session_id = response.session_id()
     oq_cache.delete(session_id)
@@ -101,13 +102,8 @@ def assertion_consumer_service(request,
     # authenticate the remote user
     session_info = response.session_info()
 
-    if callable(attribute_mapping):
-        attribute_mapping = attribute_mapping()
-    if callable(create_unknown_user):
-        create_unknown_user = create_unknown_user()
-
     # get url_prefix
-    url_prefix = None
+    url_prefix = ''
     reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
     if reg:
         url_prefix = reg.group(1)
@@ -126,20 +122,26 @@ def assertion_consumer_service(request,
         return HttpResponseForbidden("Permission denied")
 
     auth_login(request, user)
-    _set_subject_id(request.session, session_info['name_id'])
-
     logger.debug('Sending the post_authenticated signal')
     post_authenticated.send_robust(sender=user, session_info=session_info)
 
     # redirect the user to the view where he came from
-    default_relay_state = get_custom_setting('ACS_DEFAULT_REDIRECT_URL',
-                                             settings.LOGIN_REDIRECT_URL)
+    default_relay_state = settings.LOGIN_REDIRECT_URL
     relay_state = request.POST.get('RelayState', default_relay_state)
     if not relay_state:
         logger.warning('The RelayState parameter exists but is empty')
         relay_state = default_relay_state
     logger.debug('Redirecting to the RelayState: %s', relay_state)
     return HttpResponseRedirect(relay_state)
+
+
+def metadata(request):
+    sp_config = get_config(None, request)
+    sp_metadata = entity_descriptor(sp_config)
+    return HttpResponse(
+        content=str(sp_metadata).encode("utf-8"),
+        content_type="text/xml; charset=utf-8",
+    )
 
 
 @login_required
@@ -185,6 +187,6 @@ def auth_complete(request):
     return resp
 
 
-def org_multi_adfs(request):
+def multi_adfs_login(request):
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         return HttpResponseRedirect(request.path.rstrip('/') + '/saml2/login/')

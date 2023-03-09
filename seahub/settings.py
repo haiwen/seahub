@@ -953,6 +953,7 @@ if ENABLE_CAS:
 if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
     MIDDLEWARE.append('djangosaml2.middleware.SamlSessionMiddleware')
     AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
+    SAML_CONFIG_LOADER = 'seahub.adfs_auth.utils.config_settings_loader'
 
 #####################
 # Custom Nav Items  #

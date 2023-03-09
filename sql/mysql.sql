@@ -1349,9 +1349,6 @@ CREATE TABLE `org_saml_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `metadata_url` longtext NOT NULL,
-  `single_sign_on_service` longtext NOT NULL,
-  `single_logout_service` longtext NOT NULL,
-  `valid_days` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
