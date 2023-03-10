@@ -54,7 +54,7 @@ ENABLE_NOTIFICATION_SERVER=`awk -F '=' '/\[notification\]/{a=1}a==1&&$1~/^enable
 log "Start Monitor"
 
 while [ 1 ]; do
-    if [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
+    if [ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
         monitor_notification_server
     fi
 
