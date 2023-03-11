@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^logadmin/perm-audit/$', react_fake_view, name='org_log_perm_audit'),
 
     url(r'^info/$', react_fake_view, name='org_info'),
+    url(r'^settings/$', react_fake_view, name='org_settings'),
     url(r'^departmentadmin/$', react_fake_view, name='org_department_admin'),
     url(r'^departmentadmin/groups/(?P<group_id>\d+)/', react_fake_view, name='org_department_admin'),
     url(r'^associate/(?P<token>.+)/$', org_associate, name='org_associate'),
