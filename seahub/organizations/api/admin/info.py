@@ -59,12 +59,15 @@ def get_org_info(request, org_id):
         member_usage = len(org_members)
         active_members = len([m for m in org_members if m.is_active])
 
+    file_ext_white_list = seafile_api.org_get_file_ext_white_list(org_id)
+
     info = {}
     info['storage_quota'] = storage_quota
     info['storage_usage'] = storage_usage
     info['member_quota'] = member_quota
     info['member_usage'] = member_usage
     info['active_members'] = active_members
+    info['file_ext_white_list'] = file_ext_white_list
 
     return info
 
