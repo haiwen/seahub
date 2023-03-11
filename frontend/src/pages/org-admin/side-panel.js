@@ -39,12 +39,6 @@ class SidePanel extends React.Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className={`nav-link ellipsis ${this.getActiveClass('settings')}`} to={siteRoot + 'org/settings/'} onClick={() => this.tabItemClick('settings')} >
-                    <span className="sf2-icon-cog2"></span>
-                    <span className="nav-text">{gettext('Settings')}</span>
-                  </Link>
-                </li>
-                <li className="nav-item">
                   <Link className={`nav-link ellipsis ${this.getActiveClass('statistics-admin')}`} to={siteRoot + 'org/statistics-admin/file/'} onClick={() => this.tabItemClick('statistics-admin')} >
                     <span className="sf2-icon-histogram"></span>
                     <span className="nav-text">{gettext('Statistic')}</span>

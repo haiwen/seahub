@@ -12,7 +12,7 @@ import CheckboxItem from './checkbox-item';
 
 import '../../../css/system-admin-web-settings.css';
 
-class WebSettings extends Component {
+class OrgWebSettings extends Component {
 
   constructor(props) {
     super(props);
@@ -21,6 +21,7 @@ class WebSettings extends Component {
       errorMsg: '',
       config_dict: null,
       logoPath: mediaUrl + logoPath,
+      file_ext_white_list: '', 
     };
   }
 
@@ -28,7 +29,8 @@ class WebSettings extends Component {
     seafileAPI.orgAdminGetOrgInfo().then((res) => {
       this.setState({
         loading: false,
-        config_dict: res.data
+        config_dict: res.data,
+        file_ext_white_list: res.data.file_ext_white_list
       });
     }).catch((error) => {
       this.setState({
@@ -62,8 +64,20 @@ class WebSettings extends Component {
     });
   }
 
+  updateFileExtWhiteList = (key, value) => {
+    seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
+      this.setState({
+        file_ext_white_list: res.data.file_ext_white_list
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   render() {
-    const { loading, errorMsg, config_dict, logoPath } = this.state;
+    const { loading, errorMsg, config_dict, logoPath, file_ext_white_list } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -101,6 +115,17 @@ class WebSettings extends Component {
                     }
                   </Fragment>
                 </Section>
+                <Section headingText={gettext('File Upload')}>
+                  <Fragment>
+                    <InputItem
+                      saveSetting={this.updateFileExtWhiteList}
+                      displayName='file_ext_white_list'
+                      keyText='file_ext_white_list'
+                      value={file_ext_white_list}
+                      helpTip={gettext('File upload format whitelist via web UI and API. For example: "md;txt;docx", empty means no limit.')}
+                    />
+                  </Fragment>
+                </Section>
               </Fragment>
               }
             </div>
@@ -111,4 +136,4 @@ class WebSettings extends Component {
   }
 }
 
-export default WebSettings;
+export default OrgWebSettings;
