@@ -123,12 +123,13 @@ class Repos extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListShareInRepos(this.props.email).then(res => {
+    seafileAPI.sysAdminListShareInRepos(email).then(res => {
       this.setState({
         loading: false,
         repoList: res.data.repo_list
