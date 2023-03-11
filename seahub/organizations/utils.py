@@ -10,11 +10,12 @@ from seahub.utils import gen_token, get_service_url
 
 
 def get_ccnet_db_name():
-    if 'CCNET_CONF_DIR' not in os.environ:
-        error_msg = 'Environment variable CCNET_CONF_DIR is not define.'
+    ccnet_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or os.environ.get('CCNET_CONF_DIR')
+    if not ccnet_conf_dir:
+        error_msg = 'Environment variable ccnet_conf_dir is not define.'
         return None, error_msg
 
-    ccnet_conf_path = os.path.join(os.environ['CCNET_CONF_DIR'], 'ccnet.conf')
+    ccnet_conf_path = os.path.join(ccnet_conf_dir, 'ccnet.conf')
     config = configparser.ConfigParser()
     config.read(ccnet_conf_path)
 
