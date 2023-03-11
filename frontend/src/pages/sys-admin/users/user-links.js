@@ -231,13 +231,14 @@ class Links extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
 
-    seafileAPI.sysAdminListShareLinksByUser(this.props.email).then(res => {
+    seafileAPI.sysAdminListShareLinksByUser(email).then(res => {
       const items = res.data.share_link_list.map(item => {
         item.type = 'download';
         return item;
@@ -250,7 +251,7 @@ class Links extends Component {
         shareLinkItems: items
       });
     });
-    seafileAPI.sysAdminListUploadLinksByUser(this.props.email).then(res => {
+    seafileAPI.sysAdminListUploadLinksByUser(email).then(res => {
       const items = res.data.upload_link_list.map(item => {
         item.type = 'upload';
         return item;

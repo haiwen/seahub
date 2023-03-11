@@ -22,7 +22,8 @@ class OrgUserSharedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.orgAdminGetOrgUserBesharedRepos(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));

@@ -156,12 +156,13 @@ class Groups extends Component {
   }
 
   componentDidMount () {
-    seafileAPI.sysAdminGetUser(this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email).then((res) => {
       this.setState({
         userInfo: res.data
       });
     });
-    seafileAPI.sysAdminListGroupsJoinedByUser(this.props.email).then(res => {
+    seafileAPI.sysAdminListGroupsJoinedByUser(email).then(res => {
       this.setState({
         loading: false,
         items: res.data.group_list

@@ -24,7 +24,8 @@ class OrgUserOwnedRepos extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.orgAdminGetOrgUserOwnedRepos(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));

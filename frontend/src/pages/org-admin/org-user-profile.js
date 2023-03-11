@@ -24,7 +24,8 @@ class OrgUserProfile extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.orgAdminGetOrgUserInfo(orgID, this.props.email).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.orgAdminGetOrgUserInfo(orgID, email).then((res) => {
       this.setState(Object.assign({
         loading: false
       }, res.data));

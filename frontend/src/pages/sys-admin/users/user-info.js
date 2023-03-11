@@ -238,7 +238,8 @@ class User extends Component {
 
   componentDidMount () {
     // avatar size: 160
-    seafileAPI.sysAdminGetUser(this.props.email, 160).then((res) => {
+    const email = decodeURIComponent(this.props.email);
+    seafileAPI.sysAdminGetUser(email, 160).then((res) => {
       this.setState({
         loading: false,
         userInfo: res.data
