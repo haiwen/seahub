@@ -728,6 +728,11 @@ WEBDAV_SECRET_STRENGTH_LEVEL = 1
 
 ENABLE_USER_SET_CONTACT_EMAIL = False
 
+# SSO to thirdparty website
+ENABLE_SSO_TO_THIRDPART_WEBSITE = False
+THIRDPART_WEBSITE_SECRET_KEY = ''
+THIRDPART_WEBSITE_URL = ''
+
 #####################
 # Global AddressBook #
 #####################

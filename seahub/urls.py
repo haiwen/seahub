@@ -6,6 +6,7 @@ from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.views.sso import *
+from seahub.views.sso_to_thirdpart import sso_to_thirdpart
 
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
@@ -202,6 +203,8 @@ urlpatterns = [
     url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
     url(r'^ocm-via-webdav/', include('seahub.ocm_via_webdav.urls')),
     url(r'^cad/', include('seahub.cad.urls')),
+
+    url(r'^sso-to-thirdpart/$', sso_to_thirdpart, name='sso-to-thirdpart'),
 
     url(r'^$', react_fake_view, name='libraries'),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
