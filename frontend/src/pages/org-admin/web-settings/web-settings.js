@@ -119,10 +119,10 @@ class OrgWebSettings extends Component {
                   <Fragment>
                     <InputItem
                       saveSetting={this.updateFileExtWhiteList}
-                      displayName='file_ext_white_list'
+                      displayName={gettext('File extension white list')}
                       keyText='file_ext_white_list'
                       value={file_ext_white_list}
-                      helpTip={gettext('File upload format whitelist via web UI and API. For example: "md;txt;docx", empty means no limit.')}
+                      helpTip={gettext('File extension white list for file upload via web UI and API. For example, "md;txt;docx". Empty means no limit.')}
                     />
                   </Fragment>
                 </Section>
