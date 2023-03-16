@@ -434,7 +434,6 @@ class ShareAdminShareLinks extends Component {
 
   cleanInvalidShareLinks = () => {
     seafileAPI.cleanInvalidShareLinks().then(res => {
-      console.log(this.state.items)
       const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
       this.setState({items: newItems});
       toaster.success(gettext('Successfully cleaned invalid share links.'));
