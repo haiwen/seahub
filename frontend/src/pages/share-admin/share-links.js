@@ -320,7 +320,7 @@ class ShareAdminShareLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCleanOrphanShareLinksDialogOpen: false,
+      isCleanInvalidShareLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: [],
@@ -428,15 +428,16 @@ class ShareAdminShareLinks extends Component {
     });
   }
 
-  toggleCleanOrphanShareLinksDialog = () => {
-    this.setState({isCleanOrphanShareLinksDialogOpen: !this.state.isCleanOrphanShareLinksDialogOpen});
+  toggleCleanInvalidShareLinksDialog = () => {
+    this.setState({isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen});
   }
 
-  cleanOrphanShareLinks = () => {
-    seafileAPI.cleanOrphanShareLinks().then(res => {
-      const newItems = this.state.items.filter(item => item.obj_id !== '');
+  cleanInvalidShareLinks = () => {
+    seafileAPI.cleanInvalidShareLinks().then(res => {
+      console.log(this.state.items)
+      const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
       this.setState({items: newItems});
-      toaster.success(gettext('Successfully cleaned orphan share links.'));
+      toaster.success(gettext('Successfully cleaned invalid share links.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -451,7 +452,7 @@ class ShareAdminShareLinks extends Component {
           onSearchedClick={this.props.onSearchedClick}
         >
 
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanOrphanShareLinksDialog}>{gettext('Clean orphan share links')}</Button>
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidShareLinksDialog}>{gettext('Clean invalid share links')}</Button>
         </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
@@ -488,13 +489,13 @@ class ShareAdminShareLinks extends Component {
           sortItems={this.sortItems}
         />
         }
-        {this.state.isCleanOrphanShareLinksDialogOpen &&
+        {this.state.isCleanInvalidShareLinksDialogOpen &&
           <CommonOperationConfirmationDialog
-            title={gettext('Clean orphan share links')}
-            message={gettext('Are you sure you want to clean orphan share links?')}
-            executeOperation={this.cleanOrphanShareLinks}
+            title={gettext('Clean invalid share links')}
+            message={gettext('Are you sure you want to clean invalid share links?')}
+            executeOperation={this.cleanInvalidShareLinks}
             confirmBtnText={gettext('Clean')}
-            toggleDialog={this.toggleCleanOrphanShareLinksDialog}
+            toggleDialog={this.toggleCleanInvalidShareLinksDialog}
           />
         }
       </Fragment>

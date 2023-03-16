@@ -1209,9 +1209,9 @@ class ShareLinkSaveItemsToRepo(APIView):
             src_parent_dir = os.path.dirname(src_dirent_path)
             src_dirent_name = os.path.basename(src_dirent_path)
 
-            dst_dirent_name = check_filename_with_rename(dst_repo_id,
-                                                         dst_parent_dir,
-                                                         src_dirent_name)
+            check_filename_with_rename(dst_repo_id,
+                                       dst_parent_dir,
+                                       src_dirent_name)
         else:
             # save items in folder share link
             src_parent_dir = request.POST.get('src_parent_dir', '')
@@ -1337,20 +1337,24 @@ class ShareLinkRepoTagsTaggedFiles(APIView):
         return Response({'tagged_files': filtered_tagged_files})
 
 
-class ShareLinksCleanOrphan(APIView):
+class ShareLinksCleanInvalid(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanGenerateShareLink)
     throttle_classes = (UserRateThrottle,)
 
     def delete(self, request):
-        """ Clean orphan share links.
+        """ Clean invalid share links.
         """
 
         username = request.user.username
         share_links = FileShare.objects.filter(username=username)
 
         for share_link in share_links:
+
+            if share_link.is_expired():
+                share_link.delete()
+                continue
 
             repo_id = share_link.repo_id
             if not seafile_api.get_repo(repo_id):

@@ -481,19 +481,23 @@ class UploadLinkUpload(APIView):
         return Response(result)
 
 
-class UploadLinksCleanOrphan(APIView):
+class UploadLinksCleanInvalid(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanGenerateUploadLink)
     throttle_classes = (UserRateThrottle, )
 
     def delete(self, request):
-        """ Clean orphan upload links.
+        """ Clean invalid upload links.
         """
 
         username = request.user.username
         upload_links = UploadLinkShare.objects.filter(username=username)
 
         for upload_link in upload_links:
+
+            if upload_link.is_expired():
+                upload_link.delete()
+                continue
 
             repo_id = upload_link.repo_id
             if not seafile_api.get_repo(repo_id):
