@@ -28,12 +28,23 @@ from seahub.avatar.models import Avatar
 from seahub.group.utils import validate_group_name
 from seahub.auth.models import ExternalDepartment
 
-from seahub.dingtalk.utils import dingtalk_get_access_token
 from seahub.dingtalk.settings import ENABLE_DINGTALK, \
         DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_URL, \
         DINGTALK_DEPARTMENT_GET_DEPARTMENT_USER_LIST_URL, \
         DINGTALK_DEPARTMENT_USER_SIZE, DINGTALK_PROVIDER
+
+
+# for 10.0 or later
+from seahub.dingtalk.settings import DINGTALK_APP_KEY, \
+        DINGTALK_APP_SECRET
+
+if DINGTALK_APP_KEY and DINGTALK_APP_SECRET:
+    from seahub.dingtalk.utils import \
+            dingtalk_get_orgapp_token as dingtalk_get_access_token
+else:
+    from seahub.dingtalk.utils import dingtalk_get_access_token
+
 
 DEPARTMENT_OWNER = 'system admin'
 
@@ -300,7 +311,7 @@ class AdminDingtalkDepartmentsImport(APIView):
         sub_department_resp_json = requests.get(DINGTALK_DEPARTMENT_LIST_DEPARTMENT_URL, params=data).json()
         sub_department_list = sub_department_resp_json.get('department', [])
         department_list = current_department_list + sub_department_list
-        department_list = sorted(department_list, key=lambda x:x['id'])
+        department_list = sorted(department_list, key=lambda x: x['id'])
 
         # get department user list
         data = {
