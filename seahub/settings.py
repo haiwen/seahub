@@ -775,6 +775,15 @@ SEAFILE_COLLAB_SERVER = ''
 
 DTABLE_WEB_SERVER = ''
 
+##########################
+# Settings for seadoc    #
+##########################
+
+SEADOC_PRIVATE_KEY = ''
+SEADOC_SERVER_URL = ''
+SEADOC_USE_INNER_SEAF_SERVER = True
+
+
 ############################
 # Settings for Seahub Priv #
 ############################

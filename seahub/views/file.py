@@ -78,6 +78,7 @@ from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -653,6 +654,9 @@ def view_lib_file(request, repo_id, path):
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
+        file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
+        return_dict['file_uuid'] = file_uuid
+        return_dict['access_token'] = gen_seadoc_access_token(file_uuid, username)
         return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
