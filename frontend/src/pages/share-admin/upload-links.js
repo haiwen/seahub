@@ -211,7 +211,7 @@ class ShareAdminUploadLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCleanOrphanUploadLinksDialogOpen: false,
+      isCleanInvalidUploadLinksDialogOpen: false,
       loading: true,
       errorMsg: '',
       items: []
@@ -253,15 +253,15 @@ class ShareAdminUploadLinks extends Component {
     });
   }
 
-  toggleCleanOrphanUploadLinksDialog = () => {
-    this.setState({isCleanOrphanUploadLinksDialogOpen: !this.state.isCleanOrphanUploadLinksDialogOpen});
+  toggleCleanInvalidUploadLinksDialog = () => {
+    this.setState({isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen});
   }
 
-  cleanOrphanUploadLinks = () => {
-    seafileAPI.cleanOrphanUploadLinks().then(res => {
-      const newItems = this.state.items.filter(item => item.obj_id !== '');
+  cleanInvalidUploadLinks = () => {
+    seafileAPI.cleanInvalidUploadLinks().then(res => {
+      const newItems = this.state.items.filter(item => item.obj_id !== '').filter(item => !item.is_expired);
       this.setState({items: newItems});
-      toaster.success(gettext('Successfully cleaned orphan upload links.'));
+      toaster.success(gettext('Successfully cleaned invalid upload links.'));
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -275,7 +275,7 @@ class ShareAdminUploadLinks extends Component {
           onShowSidePanel={this.props.onShowSidePanel}
           onSearchedClick={this.props.onSearchedClick}
         >
-          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanOrphanUploadLinksDialog}>{gettext('Clean orphan upload links')}</Button>
+          <Button className="operation-item d-none d-md-block" onClick={this.toggleCleanInvalidUploadLinksDialog}>{gettext('Clean invalid upload links')}</Button>
         </TopToolbar>
         <div className="main-panel-center">
           <div className="cur-view-container">
@@ -297,13 +297,13 @@ class ShareAdminUploadLinks extends Component {
             </div>
           </div>
         </div>
-        {this.state.isCleanOrphanUploadLinksDialogOpen &&
+        {this.state.isCleanInvalidUploadLinksDialogOpen &&
         <CommonOperationConfirmationDialog
-          title={gettext('Clean orphan upload links')}
-          message={gettext('Are you sure you want to clean orphan upload links?')}
-          executeOperation={this.cleanOrphanUploadLinks}
+          title={gettext('Clean invalid upload links')}
+          message={gettext('Are you sure you want to clean invalid upload links?')}
+          executeOperation={this.cleanInvalidUploadLinks}
           confirmBtnText={gettext('Clean')}
-          toggleDialog={this.toggleCleanOrphanUploadLinksDialog}
+          toggleDialog={this.toggleCleanInvalidUploadLinksDialog}
         />
         }
       </Fragment>
