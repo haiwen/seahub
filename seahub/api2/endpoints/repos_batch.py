@@ -35,6 +35,7 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
+from seahub.seadoc.utils import batch_move_seadoc_files
 
 logger = logging.getLogger(__name__)
 
@@ -1494,6 +1495,10 @@ class ReposSyncBatchMoveItemView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # seadoc
+        batch_move_seadoc_files(
+            src_repo_id, src_parent_dir, dst_repo_id, dst_parent_dir, src_dirents)
 
         result = {}
         result['success'] = True

@@ -91,7 +91,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL
 
 
 # wopi
@@ -656,7 +656,8 @@ def view_lib_file(request, repo_id, path):
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
         return_dict['file_uuid'] = file_uuid
-        return_dict['access_token'] = gen_seadoc_access_token(file_uuid, username)
+        return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, username)
         return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
