@@ -779,9 +779,9 @@ DTABLE_WEB_SERVER = ''
 # Settings for seadoc    #
 ##########################
 
+ENABLE_SEADOC = False
 SEADOC_PRIVATE_KEY = ''
 SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
-SEADOC_USE_INNER_SEAF_SERVER = True
 
 
 ############################

@@ -924,3 +924,8 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
+
+if getattr(settings, 'ENABLE_SEADOC', False):
+    urlpatterns += [
+        url(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
+    ]

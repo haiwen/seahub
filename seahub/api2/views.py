@@ -72,7 +72,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
-from seahub.utils.file_types import IMAGE, SEADOC
+from seahub.utils.file_types import IMAGE
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
@@ -102,7 +102,6 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
-from seahub.seadoc.utils import rename_seadoc_file, move_seadoc_file, batch_move_seadoc_files_in_dir
 
 
 try:
@@ -2910,11 +2909,6 @@ class FileView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
 
-            # seadoc
-            filetype, fileext = get_file_type_and_ext(oldname)
-            if filetype == SEADOC:
-                rename_seadoc_file(repo_id, parent_dir, oldname, newname)
-
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo, parent_dir)
             else:
@@ -2958,12 +2952,6 @@ class FileView(APIView):
             except SearpcError as e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
-
-            # seadoc
-            filetype, fileext = get_file_type_and_ext(oldname)
-            if filetype == SEADOC:
-                move_seadoc_file(
-                    src_repo_id, src_dir, dst_repo_id, dst_dir, filename)
 
             dst_repo = get_repo(dst_repo_id)
             if not dst_repo:
@@ -3717,9 +3705,6 @@ class DirView(APIView):
                 # rename dir
                 seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
                                         checked_newname, username)
-                # seadoc
-                batch_move_seadoc_files_in_dir(
-                    repo_id, posixpath.join(parent_dir, old_dir_name), repo_id, posixpath.join(parent_dir, checked_newname))
                 return Response('success', status=status.HTTP_200_OK)
             except SearpcError as e:
                 logger.error(e)

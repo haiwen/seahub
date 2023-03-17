@@ -3,17 +3,15 @@ import jwt
 import json
 import time
 import uuid
-import stat
 import logging
 import posixpath
 
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
-from seahub.settings import SEADOC_SERVER_URL, SEADOC_PRIVATE_KEY, SEADOC_USE_INNER_SEAF_SERVER
-from seahub.utils import normalize_dir_path, normalize_file_path, get_file_type_and_ext, \
-    gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, gen_file_upload_url
-from seahub.utils.file_types import SEADOC
+from seahub.settings import SEADOC_PRIVATE_KEY
+from seahub.utils import normalize_dir_path, normalize_file_path, \
+    gen_inner_file_get_url, gen_inner_file_upload_url
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +35,7 @@ def gen_seadoc_access_token(file_uuid, username, permission='rw'):
         'file_uuid': file_uuid,
         'username': username,
         'permission': permission,
-        'exp': int(time.time()) + 3 * 24 * 60 * 60,  # 3 days
+        'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
         SEADOC_PRIVATE_KEY,
         algorithm='HS256'
@@ -102,12 +100,8 @@ def get_seadoc_upload_link(uuid_map):
         repo_id, obj_id, 'upload', '', use_onetime=True)
     if not token:
         return None
-    if SEADOC_USE_INNER_SEAF_SERVER:
-        upload_link = gen_inner_file_upload_url(
-            token, 'upload-api', replace=True)
-    else:
-        upload_link = gen_file_upload_url(
-            token, 'upload-api', replace=True)
+    upload_link = gen_inner_file_upload_url(token, 'upload-api')
+    upload_link = upload_link + '?replace=1'
     return upload_link
 
 
@@ -124,77 +118,5 @@ def get_seadoc_download_link(uuid_map):
         repo_id, obj_id, 'view', '', use_onetime=False)
     if not token:
         return None
-    if SEADOC_USE_INNER_SEAF_SERVER:
-        download_link = gen_inner_file_get_url(token, filename)
-    else:
-        download_link = gen_file_get_url(token, filename)
+    download_link = gen_inner_file_get_url(token, filename)
     return download_link
-
-
-def rename_seadoc_file(repo_id, parent_path, filename, new_filename):
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
-        repo_id, parent_path, filename, is_dir=False)
-    if uuid_map:
-        uuid_map.file_name = new_filename
-        uuid_map.save(update_fields=['file_name'])
-    return uuid_map
-
-
-def move_seadoc_file(src_repo_id, src_parent_path, dst_repo_id, dst_parent_path, filename):
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(
-        src_repo_id, src_parent_path, filename, is_dir=False)
-    dst_repo_id_parent_path_md5 = FileUUIDMap.md5_repo_id_parent_path(
-        dst_repo_id, dst_parent_path)
-    uuid_map.repo_id = dst_repo_id
-    uuid_map.parent_path = dst_parent_path
-    uuid_map.repo_id_parent_path_md5 = dst_repo_id_parent_path_md5
-    uuid_map.save(update_fields=['repo_id_parent_path_md5'])
-    return uuid_map
-
-
-def batch_move_seadoc_files_in_dir(src_repo_id, src_parent_path, dst_repo_id, dst_parent_path):
-    dirents = seafile_api.list_dir_by_path(dst_repo_id, dst_parent_path)
-    if not dirents:
-        return
-
-    # batch move
-    src_repo_id_parent_path_md5 = FileUUIDMap.md5_repo_id_parent_path(
-        src_repo_id, src_parent_path)
-    dst_repo_id_parent_path_md5 = FileUUIDMap.md5_repo_id_parent_path(
-        dst_repo_id, dst_parent_path)
-    FileUUIDMap.objects.filter(
-        repo_id_parent_path_md5=src_repo_id_parent_path_md5,
-        filename__icontains='.' + SEADOC,
-    ).update(
-        repo_id=dst_repo_id,
-        parent_path=dst_parent_path,
-        repo_id_parent_path_md5=dst_repo_id_parent_path_md5,
-    )
-
-    for dirent in dirents:
-        if stat.S_ISDIR(dirent.mode):
-            inner_src_parent_path = os.path.join(
-                src_parent_path, dirent.obj_name)
-            inner_dst_parent_path = os.path.join(
-                dst_parent_path, dirent.obj_name)
-            batch_move_seadoc_files_in_dir(
-                src_repo_id, inner_src_parent_path, dst_repo_id, inner_dst_parent_path)
-            return
-    return
-
-
-def batch_move_seadoc_files(src_repo_id, src_parent_path, dst_repo_id, dst_parent_path, filenames):
-    for filename in filenames:
-        path = os.path.join(dst_parent_path, filename)
-        dirent = seafile_api.get_dirent_by_path(dst_repo_id, path)
-        if not dirent:
-            continue
-        if stat.S_ISDIR(dirent.mode):
-            batch_move_seadoc_files_in_dir(
-                src_repo_id, posixpath.join(src_parent_path, filename), dst_repo_id, posixpath.join(dst_parent_path, filename))
-        else:
-            filetype, fileext = get_file_type_and_ext(filename)
-            if filetype == SEADOC:
-                move_seadoc_file(
-                    src_repo_id, src_parent_path, dst_repo_id, dst_parent_path, filename)
-    return
