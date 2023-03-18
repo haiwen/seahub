@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 18:18+0800\n"
+"POT-Creation-Date: 2023-03-17 18:30+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015\n"
 "Language-Team: Spanish (http://www.transifex.com/haiwen/seahub/language/es/)\n"
@@ -25,22 +25,24 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
-#: seahub/adfs_auth/utils.py:38 seahub/dingtalk/views.py:39
-#: seahub/dingtalk/views.py:59 seahub/dingtalk/views.py:64
-#: seahub/dingtalk/views.py:86 seahub/dingtalk/views.py:101
-#: seahub/dingtalk/views.py:142 seahub/dingtalk/views.py:163
-#: seahub/dingtalk/views.py:168 seahub/dingtalk/views.py:190
-#: seahub/dingtalk/views.py:227 seahub/oauth/views.py:86
-#: seahub/oauth/views.py:109 seahub/oauth/views.py:155
-#: seahub/oauth/views.py:183 seahub/oauth/views.py:194
-#: seahub/templates/remote_user/error.html:8 seahub/weixin/views.py:36
-#: seahub/weixin/views.py:55 seahub/weixin/views.py:60
-#: seahub/weixin/views.py:79 seahub/weixin/views.py:95
-#: seahub/work_weixin/views.py:68 seahub/work_weixin/views.py:73
-#: seahub/work_weixin/views.py:83 seahub/work_weixin/views.py:87
-#: seahub/work_weixin/views.py:106 seahub/work_weixin/views.py:177
-#: seahub/work_weixin/views.py:182 seahub/work_weixin/views.py:192
-#: seahub/work_weixin/views.py:196
+#: seahub/adfs_auth/utils.py:46 seahub/dingtalk/views.py:50
+#: seahub/dingtalk/views.py:74 seahub/dingtalk/views.py:83
+#: seahub/dingtalk/views.py:105 seahub/dingtalk/views.py:120
+#: seahub/dingtalk/views.py:161 seahub/dingtalk/views.py:186
+#: seahub/dingtalk/views.py:195 seahub/dingtalk/views.py:217
+#: seahub/dingtalk/views.py:253 seahub/dingtalk/views.py:293
+#: seahub/dingtalk/views.py:340 seahub/dingtalk/views.py:356
+#: seahub/dingtalk/views.py:425 seahub/dingtalk/views.py:472
+#: seahub/oauth/views.py:86 seahub/oauth/views.py:109
+#: seahub/oauth/views.py:155 seahub/oauth/views.py:183
+#: seahub/oauth/views.py:194 seahub/templates/remote_user/error.html:8
+#: seahub/weixin/views.py:36 seahub/weixin/views.py:55
+#: seahub/weixin/views.py:60 seahub/weixin/views.py:79
+#: seahub/weixin/views.py:95 seahub/work_weixin/views.py:68
+#: seahub/work_weixin/views.py:73 seahub/work_weixin/views.py:83
+#: seahub/work_weixin/views.py:87 seahub/work_weixin/views.py:106
+#: seahub/work_weixin/views.py:177 seahub/work_weixin/views.py:182
+#: seahub/work_weixin/views.py:192 seahub/work_weixin/views.py:196
 msgid "Error, please contact administrator."
 msgstr "Error. por favor contacte al administrador."
 
@@ -157,7 +159,7 @@ msgstr "La biblioteca no puede ser transferida al propietario."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:631
+#: seahub/api2/endpoints/share_links.py:639
 msgid "There is an associated published library."
 msgstr "Hay una biblioteca asociada publicada."
 
@@ -423,8 +425,8 @@ msgstr "Archivo con virus no encontrado"
 #: seahub/notifications/models.py:644 seahub/notifications/models.py:666
 #: seahub/notifications/models.py:692 seahub/notifications/models.py:709
 #: seahub/notifications/models.py:726 seahub/notifications/models.py:755
-#: seahub/search/views.py:200 seahub/utils/__init__.py:165
-#: seahub/utils/__init__.py:1239 seahub/views/__init__.py:918
+#: seahub/search/views.py:200 seahub/utils/__init__.py:166
+#: seahub/utils/__init__.py:1240 seahub/views/__init__.py:918
 #: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
 #: seahub/wiki/views.py:215 seahub/wiki/views.py:224
 msgid "Internal Server Error"
@@ -485,7 +487,7 @@ msgstr "Usuario %s no encontrado."
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/wikis.py:112 seahub/api2/endpoints/wikis.py:201
 #: seahub/drafts/views.py:31 seahub/profile/forms.py:24
-#: seahub/profile/views.py:225 seahub/search/views.py:174
+#: seahub/profile/views.py:227 seahub/search/views.py:174
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:742 seahub/views/ajax.py:83
 #: seahub/views/ajax.py:113 seahub/views/ajax.py:119
@@ -496,7 +498,7 @@ msgstr "Persmiso denegado."
 msgid "File is not locked."
 msgstr "El archivo no está bloqueado."
 
-#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:713
+#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:721
 msgid "You can not refresh this file's lock."
 msgstr "No puede refrescar el bloqueo de este archivo."
 
@@ -674,66 +676,66 @@ msgstr "email inválido."
 msgid "An upload link is shared to you on %s"
 msgstr "Un enlace de subida ha sido compartido contigo en %s"
 
-#: seahub/api2/endpoints/share_links.py:273
-#: seahub/api2/endpoints/upload_links.py:163 seahub/api2/views.py:4006
+#: seahub/api2/endpoints/share_links.py:281
+#: seahub/api2/endpoints/upload_links.py:167 seahub/api2/views.py:4006
 #: seahub/api2/views.py:4126
 msgid "Password is required."
 msgstr "Contraseña requerida"
 
-#: seahub/api2/endpoints/share_links.py:279
-#: seahub/api2/endpoints/upload_links.py:169
+#: seahub/api2/endpoints/share_links.py:287
+#: seahub/api2/endpoints/upload_links.py:173
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "La contraseña es demasiado corta."
 
-#: seahub/api2/endpoints/share_links.py:283
-#: seahub/api2/endpoints/upload_links.py:173
+#: seahub/api2/endpoints/share_links.py:291
+#: seahub/api2/endpoints/upload_links.py:177
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:287
-#: seahub/api2/endpoints/upload_links.py:177
+#: seahub/api2/endpoints/share_links.py:295
+#: seahub/api2/endpoints/upload_links.py:181
 #: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:310
-#: seahub/api2/endpoints/share_links.py:555
-#: seahub/api2/endpoints/upload_links.py:200
-#: seahub/api2/endpoints/upload_links.py:334 seahub/api2/views.py:3420
+#: seahub/api2/endpoints/share_links.py:318
+#: seahub/api2/endpoints/share_links.py:563
+#: seahub/api2/endpoints/upload_links.py:204
+#: seahub/api2/endpoints/upload_links.py:338 seahub/api2/views.py:3420
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "Días al vencimiento de be ser mayor o igual que %s"
 
-#: seahub/api2/endpoints/share_links.py:316
-#: seahub/api2/endpoints/share_links.py:561
-#: seahub/api2/endpoints/upload_links.py:206
-#: seahub/api2/endpoints/upload_links.py:340 seahub/api2/views.py:3426
+#: seahub/api2/endpoints/share_links.py:324
+#: seahub/api2/endpoints/share_links.py:569
+#: seahub/api2/endpoints/upload_links.py:210
+#: seahub/api2/endpoints/upload_links.py:344 seahub/api2/views.py:3426
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "Días al vencimiento de be ser menor o igual que %s"
 
-#: seahub/api2/endpoints/share_links.py:338
-#: seahub/api2/endpoints/share_links.py:585
-#: seahub/api2/endpoints/upload_links.py:228
-#: seahub/api2/endpoints/upload_links.py:364
+#: seahub/api2/endpoints/share_links.py:346
+#: seahub/api2/endpoints/share_links.py:593
+#: seahub/api2/endpoints/upload_links.py:232
+#: seahub/api2/endpoints/upload_links.py:368
 #, python-format
 msgid "Expiration time should be later than %s."
 msgstr "El tiempo de vencimiento debe ser posterior a %s."
 
-#: seahub/api2/endpoints/share_links.py:347
-#: seahub/api2/endpoints/share_links.py:594
-#: seahub/api2/endpoints/upload_links.py:237
-#: seahub/api2/endpoints/upload_links.py:373
+#: seahub/api2/endpoints/share_links.py:355
+#: seahub/api2/endpoints/share_links.py:602
+#: seahub/api2/endpoints/upload_links.py:241
+#: seahub/api2/endpoints/upload_links.py:377
 #, python-format
 msgid "Expiration time should be earlier than %s."
 msgstr "El tiempo de vencimiento debe ser anterior a %s."
 
-#: seahub/api2/endpoints/share_links.py:416
-#: seahub/api2/endpoints/share_links.py:425
+#: seahub/api2/endpoints/share_links.py:424
+#: seahub/api2/endpoints/share_links.py:433
 #, python-format
 msgid "Share link %s already exists."
 msgstr "El enlace de compartir %s ya existe."
@@ -747,14 +749,16 @@ msgstr "El email de contacto %s ya existe."
 msgid "telephone is too long (maximum is 100 characters)."
 msgstr "El número de teléfono es demasiado largo (máximo 100 caracteres)."
 
-#: seahub/api2/endpoints/user_avatar.py:49 seahub/utils/error_msg.py:8
+#: seahub/api2/endpoints/user_avatar.py:49
+#: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
 #, python-format
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
 msgstr "La extensión de archivo %(ext)s no es válida . Las extensiones permitidas son: %(valid_exts_list)s"
 
-#: seahub/api2/endpoints/user_avatar.py:53 seahub/utils/error_msg.py:13
+#: seahub/api2/endpoints/user_avatar.py:53
+#: seahub/organizations/api/admin/logo.py:64 seahub/utils/error_msg.py:13
 #, python-format
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
@@ -1434,7 +1438,8 @@ msgstr "Editado con éxito %s"
 msgid "Successfully Deleted %s"
 msgstr "Borrado con éxito %s"
 
-#: seahub/dingtalk/views.py:104 seahub/weixin/views.py:98
+#: seahub/dingtalk/views.py:123 seahub/dingtalk/views.py:359
+#: seahub/weixin/views.py:98
 #, python-format
 msgid "User %s not found or inactive."
 msgstr "Usuario %s no encontrado o inactivo."
@@ -1466,7 +1471,7 @@ msgstr "El nombre %s no es válido"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
 #: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1867
+#: seahub/views/file.py:1870
 msgid "Argument missing"
 msgstr "Argumento faltante"
 
@@ -1590,8 +1595,8 @@ msgstr "El equipo de %(site_name)s"
 
 #: seahub/group/views.py:105 seahub/share/views.py:231
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1150
-#: seahub/views/file.py:1366 seahub/views/file.py:1876
+#: seahub/views/ajax.py:427 seahub/views/file.py:1153
+#: seahub/views/file.py:1369 seahub/views/file.py:1879
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -3847,7 +3852,7 @@ msgstr "Es requerido."
 msgid "Virus detected on %s"
 msgstr "Virus detectado en %s"
 
-#: seahub/notifications/management/commands/send_dingtalk_notifications.py:167
+#: seahub/notifications/management/commands/send_dingtalk_notifications.py:177
 #: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
 msgid ""
@@ -4154,7 +4159,15 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "Tip: la manera más segura es la última, pero no está soportado por todos los navegadores. Recomendamos utilizar la última versión de Chrome o Firefox."
 
-#: seahub/organizations/api/admin/saml_config.py:232
+#: seahub/organizations/api/admin/info.py:102
+#: seahub/organizations/api/admin/logo.py:33
+#: seahub/organizations/api/admin/logo.py:42 seahub/work_weixin/views.py:37
+#: seahub/work_weixin/views.py:62 seahub/work_weixin/views.py:151
+#: seahub/work_weixin/views.py:171 seahub/work_weixin/views.py:231
+msgid "Feature is not enabled."
+msgstr "La característica no está habilitada"
+
+#: seahub/organizations/api/admin/saml_config.py:179
 msgid ""
 "org_url_prefix should be 6 to 20 characters, and can only contain "
 "alphanumeric characters and hyphens."
@@ -4221,7 +4234,7 @@ msgstr "Siguiente"
 msgid "Per page: "
 msgstr "Por página:"
 
-#: seahub/organizations/views.py:265 seahub/thumbnail/views.py:154
+#: seahub/organizations/views.py:273 seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Identificador inválido"
 
@@ -4252,23 +4265,23 @@ msgstr "Perfil editado con éxito."
 msgid "Failed to edit profile"
 msgstr "Fallo al editar el perfil."
 
-#: seahub/profile/views.py:210
+#: seahub/profile/views.py:212
 msgid "Has not accepted invitation yet"
 msgstr "Aún no ha aceptado la invitación"
 
-#: seahub/profile/views.py:235
+#: seahub/profile/views.py:237
 msgid "Demo account can not be deleted."
 msgstr "La cuenta demo no puede ser eliminada."
 
-#: seahub/profile/views.py:262
+#: seahub/profile/views.py:264
 msgid "Failed to set default library."
 msgstr "Fallo al definir biblioteca predeterminada."
 
-#: seahub/profile/views.py:266
+#: seahub/profile/views.py:268
 msgid "Can not set encrypted library as default library."
 msgstr "No es posible establecer una biblioteca encriptada como biblioteca predeterminada."
 
-#: seahub/profile/views.py:271
+#: seahub/profile/views.py:273
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" definida con éxito como biblioteca predeterminada."
@@ -5227,6 +5240,10 @@ msgstr "Inicio"
 msgid "Network error"
 msgstr "Error de red"
 
+#: seahub/templates/wiki/wiki.html:25
+msgid "Last modified by"
+msgstr "Última modificación por"
+
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
 #: seahub/views/__init__.py:601
 msgid "Invalid arguments."
@@ -5340,7 +5357,7 @@ msgstr "Esta a punto de deshabilitar la autenticación de dos factores. Ésto\n 
 msgid "Disable"
 msgstr "Deshabilitar"
 
-#: seahub/utils/__init__.py:151
+#: seahub/utils/__init__.py:152
 msgid "permission error"
 msgstr "error de permiso"
 
@@ -5355,7 +5372,7 @@ msgstr "Fallo al ver las modificaciones de la biblioteca"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1862
+#: seahub/views/ajax.py:376 seahub/views/file.py:1865
 msgid "Library does not exist"
 msgstr "La biblioteca no existe"
 
@@ -5402,8 +5419,8 @@ msgid "Bad upload link token."
 msgstr "Identificador del enlace de subida inválido."
 
 #: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1145 seahub/views/file.py:1361
-#: seahub/views/file.py:1871
+#: seahub/views/file.py:1148 seahub/views/file.py:1364
+#: seahub/views/file.py:1874
 msgid "File does not exist"
 msgstr "El archivo no existe"
 
@@ -5431,53 +5448,53 @@ msgstr "La codificación elegida no es correcta."
 msgid "Unknown file encoding"
 msgstr "Codificación de archivo desconocida"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:659
-#: seahub/views/file.py:749 seahub/views/file.py:871
+#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:662
+#: seahub/views/file.py:752 seahub/views/file.py:874
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "El tamaño del archivo sobrepasa %s, no se puede abrir en línea."
 
-#: seahub/views/file.py:350 seahub/views/file.py:784
+#: seahub/views/file.py:350 seahub/views/file.py:787
 msgid "The library is encrypted, can not open file online."
 msgstr "La biblioteca está encriptada, no se puede abrir el archivo en línea."
 
 #: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:739 seahub/views/file.py:1004
-#: seahub/views/file.py:1030 seahub/views/file.py:1060
-#: seahub/views/file.py:1191 seahub/views/file.py:1280
-#: seahub/views/file.py:1402 seahub/views/file.py:1502
+#: seahub/views/file.py:513 seahub/views/file.py:742 seahub/views/file.py:1007
+#: seahub/views/file.py:1033 seahub/views/file.py:1063
+#: seahub/views/file.py:1194 seahub/views/file.py:1283
+#: seahub/views/file.py:1405 seahub/views/file.py:1505
 msgid "Unable to view file"
 msgstr "Imposible visualizar el archivo"
 
-#: seahub/views/file.py:808 seahub/views/file.py:952 seahub/views/file.py:1241
-#: seahub/views/file.py:1440
+#: seahub/views/file.py:811 seahub/views/file.py:955 seahub/views/file.py:1244
+#: seahub/views/file.py:1443
 msgid "Error when prepare Office Online file preview page."
 msgstr "Error al preparar la página de la vista preliminar de archivo de Office Online."
 
-#: seahub/views/file.py:840 seahub/views/file.py:964 seahub/views/file.py:1260
-#: seahub/views/file.py:1456
+#: seahub/views/file.py:843 seahub/views/file.py:967 seahub/views/file.py:1263
+#: seahub/views/file.py:1459
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "Error al preparar la página de la vista preliminar de archivo de OnlyOffice."
 
-#: seahub/views/file.py:1096
+#: seahub/views/file.py:1099
 msgid "Unable to download file, invalid file path"
 msgstr "No es posible descargar el archivo, ruta inválida"
 
-#: seahub/views/file.py:1105
+#: seahub/views/file.py:1108
 msgid "Unable to download file, wrong file path"
 msgstr "No es posible descargar el archivo, ruta errónea"
 
-#: seahub/views/file.py:1112
+#: seahub/views/file.py:1115
 msgid "Unable to download file."
 msgstr "Imposible descargar archivo."
 
-#: seahub/views/file.py:1296 seahub/views/file.py:1521
+#: seahub/views/file.py:1299 seahub/views/file.py:1524
 #: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr "Enlace de compartir para %s."
 
-#: seahub/views/file.py:1639 seahub/views/file.py:1644
+#: seahub/views/file.py:1642 seahub/views/file.py:1647
 msgid "Unable to download file"
 msgstr "Imposible descargar archivo"
 
@@ -5566,9 +5583,3 @@ msgstr "Opcional"
 #: seahub/wiki/views.py:158
 msgid "Unable to view Wiki"
 msgstr "No se puede visualizar Wiki"
-
-#: seahub/work_weixin/views.py:37 seahub/work_weixin/views.py:62
-#: seahub/work_weixin/views.py:151 seahub/work_weixin/views.py:171
-#: seahub/work_weixin/views.py:231
-msgid "Feature is not enabled."
-msgstr "La característica no está habilitada"
