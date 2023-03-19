@@ -97,11 +97,11 @@ def get_seadoc_upload_link(uuid_map):
 
     obj_id = json.dumps({'parent_dir': parent_path})
     token = seafile_api.get_fileserver_access_token(
-        repo_id, obj_id, 'upload', '', use_onetime=True)
+        repo_id, obj_id, 'update', '', use_onetime=True)
     if not token:
         return None
-    upload_link = gen_inner_file_upload_url(token, 'upload-api')
-    upload_link = upload_link + '?replace=1'
+    upload_link = gen_inner_file_upload_url('update-api', token)
+    upload_link = upload_link
     return upload_link
 
 
