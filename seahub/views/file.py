@@ -78,6 +78,7 @@ from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -90,7 +91,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
-    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE
+    SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL
 
 
 # wopi
@@ -653,6 +654,10 @@ def view_lib_file(request, repo_id, path):
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
+        file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
+        return_dict['file_uuid'] = file_uuid
+        return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, username)
         return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
