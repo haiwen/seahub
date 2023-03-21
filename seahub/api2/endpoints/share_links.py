@@ -73,12 +73,15 @@ def get_share_link_info(fileshare):
     else:
         obj_name = ''
 
-    if fileshare.s_type == 'd':
-        folder_path = normalize_dir_path(fileshare.path)
-        obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+    if repo:
+        if fileshare.s_type == 'd':
+            folder_path = normalize_dir_path(fileshare.path)
+            obj_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+        else:
+            file_path = normalize_file_path(fileshare.path)
+            obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     else:
-        file_path = normalize_file_path(fileshare.path)
-        obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+        obj_id = ''
 
     if fileshare.expire_date:
         expire_date = datetime_to_isoformat_timestr(fileshare.expire_date)
