@@ -2,10 +2,7 @@
 from copy import deepcopy
 import logging
 
-from seaserv import seafile_api
-
 from django.conf import settings
-from seahub.utils import is_pro_version
 from seahub.constants import DEFAULT_USER, GUEST_USER, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
@@ -80,17 +77,6 @@ except AttributeError:
 ENABLED_ROLE_PERMISSIONS = merge_roles(
     DEFAULT_ENABLED_ROLE_PERMISSIONS, custom_role_permissions
 )
-
-if is_pro_version():
-    for role, permissions in ENABLED_ROLE_PERMISSIONS.items():
-
-        upload_rate_limit = permissions.get('upload_rate_limit', 0)
-        if upload_rate_limit >= 0:
-            seafile_api.set_role_upload_rate_limit(role, upload_rate_limit * 1000)
-
-        download_rate_limit = permissions.get('download_rate_limit', 0)
-        if download_rate_limit >= 0:
-            seafile_api.set_role_download_rate_limit(role, download_rate_limit * 1000)
 
 
 # role permission for administraror
