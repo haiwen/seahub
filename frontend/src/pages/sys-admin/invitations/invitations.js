@@ -159,6 +159,15 @@ class Item extends Component {
       case 'Guest':
         translateResult = gettext('Guest');
         break;
+      case 'guest':
+        translateResult = gettext('Guest');
+        break;
+      case 'Default':
+        translateResult = gettext('Default');
+        break;
+      case 'default':
+        translateResult = gettext('Default');
+        break;
     }
     return translateResult;
   }

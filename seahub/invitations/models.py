@@ -10,13 +10,12 @@ from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token, get_site_name
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.mail import send_html_email_with_dj_template
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
-
-GUEST = 'Guest'
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
+        GUEST_USER, DEFAULT_USER
 
 
 class InvitationManager(models.Manager):
-    def add(self, inviter, accepter, invite_type=GUEST):
+    def add(self, inviter, accepter, invite_type=GUEST_USER):
         token = gen_token(max_length=32)
         expire_at = timezone.now() + timedelta(hours=int(INVITATIONS_TOKEN_AGE))
 
@@ -40,7 +39,8 @@ class InvitationManager(models.Manager):
 
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (
-        (GUEST, 'Guest'),
+        (GUEST_USER, 'guest'),
+        (DEFAULT_USER, 'default'),
     )
 
     token = models.CharField(max_length=40, db_index=True)
@@ -48,7 +48,7 @@ class Invitation(models.Model):
     accepter = LowerCaseCharField(max_length=255)
     invite_type = models.CharField(max_length=20,
                                    choices=INVITE_TYPE_CHOICES,
-                                   default=GUEST)
+                                   default=GUEST_USER)
     invite_time = models.DateTimeField(auto_now_add=True)
     accept_time = models.DateTimeField(null=True, blank=True)
     expire_time = models.DateTimeField()
@@ -77,7 +77,7 @@ class Invitation(models.Model):
         }
 
     def is_guest(self):
-        return self.invite_type == GUEST
+        return self.invite_type == GUEST_USER
 
     def is_expired(self):
         return timezone.now() >= self.expire_time
