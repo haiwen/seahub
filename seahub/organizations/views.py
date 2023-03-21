@@ -31,7 +31,7 @@ from seahub.organizations.signals import org_created
 from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
-        ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER, \
+        ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
         ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME
 from seahub.organizations.utils import get_or_create_invitation_link
 
@@ -247,7 +247,7 @@ def react_fake_view(request, **kwargs):
     group_id = kwargs.get('group_id', '')
     org = request.user.org
 
-    invitation_link = get_or_create_invitation_link(org.org_id) if ORG_ENABLE_ADMIN_INVITE_USER else ''
+    invitation_link = get_or_create_invitation_link(org.org_id) if ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN else ''
 
     # Whether use new page
     return render(request, "organizations/org_admin_react.html", {

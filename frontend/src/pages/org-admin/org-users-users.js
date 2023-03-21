@@ -6,7 +6,7 @@ import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
 import ImportOrgUsersDialog from '../../components/dialog/org-import-users-dialog';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
-import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
+import InviteUserViaWeiXinDialog from '../../components/dialog/org-admin-invite-user-via-weixin-dialog';
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
@@ -74,7 +74,7 @@ class OrgUsers extends Component {
       sortOrder: 'asc',
       isShowAddOrgUserDialog: false,
       isImportOrgUsersDialogOpen: false,
-      isInviteUserDialogOpen: false
+      isInviteUserViaWeiXinDialogOpen: false
     };
   }
 
@@ -120,8 +120,8 @@ class OrgUsers extends Component {
     this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
   }
 
-  toggleInviteUserDialog = () => {
-    this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
+  toggleInviteUserViaWeiXinDialog = () => {
+    this.setState({isInviteUserViaWeiXinDialogOpen: !this.state.isInviteUserViaWeiXinDialogOpen});
   }
 
   initOrgUsersData = (page) => {
@@ -232,8 +232,8 @@ class OrgUsers extends Component {
         <button className={topBtn} title={gettext('Add User')} onClick={this.toggleAddOrgUser}>
           <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add User')}</button>
         {invitationLink &&
-        <button className={topBtn} title={gettext('Invite user')} onClick={this.toggleInviteUserDialog}>
-          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite user')}</button>
+        <button className={topBtn} title={gettext('Invite User via WeiXin')} onClick={this.toggleInviteUserViaWeiXinDialog}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite User via WeiXin')}</button>
         }
         {this.state.isImportOrgUsersDialogOpen &&
         <ModalPortal>
@@ -245,9 +245,9 @@ class OrgUsers extends Component {
           <AddOrgUserDialog handleSubmit={this.addOrgUser} toggle={this.toggleAddOrgUser}/>
         </ModalPortal>
         }
-        {this.state.isInviteUserDialogOpen &&
+        {this.state.isInviteUserViaWeiXinDialogOpen &&
         <ModalPortal>
-          <InviteUserDialog invitationLink={invitationLink} toggle={this.toggleInviteUserDialog}/>
+          <InviteUserViaWeiXinDialog invitationLink={invitationLink} toggle={this.toggleInviteUserViaWeiXinDialog}/>
         </ModalPortal>
         }
       </Fragment>

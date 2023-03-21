@@ -10,7 +10,7 @@ const propTypes = {
   invitationLink: PropTypes.string.isRequired
 };
 
-class InviteUserDialog extends React.Component {
+class OrgAdminInviteUserViaWeiXinDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ class InviteUserDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true}>
-        <ModalHeader toggle={this.props.toggle}>{gettext('Invite user')}</ModalHeader>
+        <ModalHeader toggle={this.props.toggle}>{gettext('Invite User via WeiXin')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Send the invitation link to the others, and they will be able to join the organization via scanning the QR code.')}</p>
           <p>{this.props.invitationLink}</p>
@@ -41,6 +41,6 @@ class InviteUserDialog extends React.Component {
   }
 }
 
-InviteUserDialog.propTypes = propTypes;
+OrgAdminInviteUserViaWeiXinDialog.propTypes = propTypes;
 
-export default InviteUserDialog;
+export default OrgAdminInviteUserViaWeiXinDialog;

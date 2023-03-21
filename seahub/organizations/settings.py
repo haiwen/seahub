@@ -13,7 +13,9 @@ ORG_TRIAL_DAYS = getattr(settings, 'ORG_TRIAL_DAYS', -1)
 
 ORG_AUTO_URL_PREFIX = getattr(settings, 'ORG_AUTO_URL_PREFIX', True)
 
-ORG_ENABLE_ADMIN_INVITE_USER = getattr(settings, 'ORG_ENABLE_ADMIN_INVITE_USER', False)
+ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN = getattr(settings,
+                                                  'ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN',
+                                                  False)
 
 ORG_ENABLE_ADMIN_CUSTOM_NAME = getattr(settings, 'ORG_ENABLE_ADMIN_CUSTOM_NAME', True)
 ORG_ENABLE_ADMIN_CUSTOM_LOGO = getattr(settings, 'ORG_ENABLE_ADMIN_CUSTOM_LOGO', True)
