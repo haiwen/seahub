@@ -55,7 +55,10 @@ def get_upload_link_info(uls):
     else:
         obj_name = ''
 
-    obj_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    if repo:
+        obj_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    else:
+        obj_id = ''
 
     if uls.ctime:
         ctime = datetime_to_isoformat_timestr(uls.ctime)
