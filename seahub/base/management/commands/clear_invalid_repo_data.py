@@ -13,12 +13,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self.stdout.write('Start to get all existing repo')
-        self.all_repo= [repo.repo_id for repo in seafile_api.get_repo_list(-1, -1)]
+        self.all_repo = [repo.repo_id for repo in seafile_api.get_repo_list(-1, -1, ret_virt_repo=True)]
         trash_repo = [repo.repo_id for repo in seafile_api.get_trash_repo_list(-1, -1)]
         self.all_repo.extend(trash_repo)
         self.stdout.write('Successly get all existing repos')
 
-        #on_delete is  CASCADE, so FileTag/FileComment will be deleted
+        # on_delete is CASCADE, so FileTag/FileComment will be deleted
         self.tables = {'FileUUIDMap': FileUUIDMap, 'RevisionTags': RevisionTags,
                        'UserStarredFiles': UserStarredFiles,
                        'ExtraGroupsSharePermission': ExtraGroupsSharePermission,
