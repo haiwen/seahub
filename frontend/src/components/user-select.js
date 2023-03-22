@@ -21,8 +21,9 @@ class UserSelect extends React.Component {
   constructor(props) {
     super(props);
     this.options = [];
+    this.finalValue = '';
     this.state = {
-      searchValue: '',
+      searchValue: ''
     };
   }
 
@@ -37,36 +38,39 @@ class UserSelect extends React.Component {
 
   loadOptions = (input, callback) => {
     const value = input.trim();
-    if (value.length > 0) {
-      seafileAPI.searchUsers(value).then((res) => {
-        this.options = [];
-        for (let i = 0 ; i < res.data.users.length; i++) {
-          const item = res.data.users[i];
-          let obj = {};
-          obj.value = item.name;
-          obj.email = item.email;
-          obj.label =
-              enableShowContactEmailWhenSearchUser ? (
-                <div className="d-flex">
-                  <img src={item.avatar_url} className="avatar" width="24" alt="" />
-                  <div className="ml-2">
-                    <span className="user-option-name">{item.name}</span><br />
-                    <span className="user-option-email">{item.contact_email}</span>
-                  </div>
+    this.finalValue = value;
+    setTimeout(() => {
+      if (this.finalValue === value && value.length > 0) {
+        seafileAPI.searchUsers(value).then((res) => {
+          this.options = [];
+          for (let i = 0 ; i < res.data.users.length; i++) {
+            const item = res.data.users[i];
+            let obj = {};
+            obj.value = item.name;
+            obj.email = item.email;
+            obj.label = enableShowContactEmailWhenSearchUser ? (
+              <div className="d-flex">
+                <img src={item.avatar_url} className="avatar" width="24" alt="" />
+                <div className="ml-2">
+                  <span className="user-option-name">{item.name}</span><br />
+                  <span className="user-option-email">{item.contact_email}</span>
                 </div>
-              ) : (
-                <React.Fragment>
-                  <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
-                  <span className='select-module select-module-name'>{item.name}</span>
-                </React.Fragment>);
-          this.options.push(obj);
-        }
-        callback(this.options);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+              </div>
+            ) : (
+              <React.Fragment>
+                <img src={item.avatar_url} className="select-module select-module-icon avatar" alt=""/>
+                <span className='select-module select-module-name'>{item.name}</span>
+              </React.Fragment>
+            );
+            this.options.push(obj);
+          }
+          callback(this.options);
+        }).catch(error => {
+          let errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      }
+    }, 1000);
   }
 
   clearSelect = () => {
