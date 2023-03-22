@@ -11,7 +11,7 @@ from .api.group_owned_libraries import (
 )
 from .api.group_members import AdminGroupMembers, AdminGroupMember
 from .api.admin.users import OrgAdminUser, OrgAdminUsers, OrgAdminSearchUser, \
-        OrgAdminImportUsers
+        OrgAdminImportUsers, OrgAdminInviteUser
 from .api.admin.user_set_password import OrgAdminUserSetPassword
 from .api.admin.groups import OrgAdminGroups, OrgAdminGroup, OrgAdminSearchGroup
 from .api.admin.repos import OrgAdminRepos, OrgAdminRepo
@@ -82,6 +82,7 @@ urlpatterns = [
     url(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/members/$', AdminGroupMembers.as_view(), name='api-admin-group-members'),
     url(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-admin-group-member'),
     url(r'^(?P<org_id>\d+)/admin/users/$', OrgAdminUsers.as_view(), name='api-v2.1-org-admin-users'),
+    url(r'^(?P<org_id>\d+)/admin/invite-user/$', OrgAdminInviteUser.as_view(), name='api-v2.1-org-admin-invite-user'),
     url(r'^(?P<org_id>\d+)/admin/import-users/$', OrgAdminImportUsers.as_view(), name='api-v2.1-org-admin-import-users'),
     url(r'^(?P<org_id>\d+)/admin/search-user/$', OrgAdminSearchUser.as_view(), name='api-v2.1-org-admin-search-user'),
     url(r'^(?P<org_id>\d+)/admin/users/(?P<email>[^/]+)/$', OrgAdminUser.as_view(), name='api-v2.1-org-admin-user'),

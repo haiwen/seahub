@@ -32,7 +32,8 @@ from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
         ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
-        ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME
+        ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME, \
+        ORG_ENABLE_ADMIN_INVITE_USER
 from seahub.organizations.utils import get_or_create_invitation_link
 
 # Get an instance of a logger
@@ -255,6 +256,7 @@ def react_fake_view(request, **kwargs):
         'org_member_quota_enabled': ORG_MEMBER_QUOTA_ENABLED,
         'org_enable_admin_custom_logo': ORG_ENABLE_ADMIN_CUSTOM_LOGO,
         'org_enable_admin_custom_name': ORG_ENABLE_ADMIN_CUSTOM_NAME,
+        'org_enable_admin_invite_user': ORG_ENABLE_ADMIN_INVITE_USER,
         'group_id': group_id,
         'invitation_link': invitation_link,
         'enable_multi_adfs': ENABLE_MULTI_ADFS,

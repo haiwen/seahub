@@ -25,18 +25,24 @@ from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, \
         get_file_type_and_ext
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.error_msg import file_type_error_msg
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
+        datetime_to_isoformat_timestr
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.views.sysadmin import send_user_add_mail
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.invitations.models import Invitation
+from seahub.constants import DEFAULT_USER
 
 from pysearpc import SearpcError
 
 import seahub.settings as settings
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED
-from seahub.organizations.views import get_org_user_self_usage, get_org_user_quota, \
-    is_org_staff, org_user_exists, unset_org_user, set_org_user, set_org_staff, unset_org_staff
+from seahub.organizations.models import OrgMemberQuota
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_ENABLED, \
+        ORG_ENABLE_ADMIN_INVITE_USER
+from seahub.organizations.views import get_org_user_self_usage, \
+        get_org_user_quota, is_org_staff, org_user_exists, \
+        unset_org_user, set_org_user, set_org_staff, unset_org_staff
 
 
 logger = logging.getLogger(__name__)
@@ -222,7 +228,6 @@ class OrgAdminUsers(APIView):
         org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
 
         if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and org_members >= org_members_quota:
                 err_msg = 'Failed. You can only invite %d members.' % org_members_quota
@@ -754,3 +759,79 @@ class OrgAdminImportUsers(APIView):
             result['success'].append(info)
 
         return Response(result)
+
+
+class OrgAdminInviteUser(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+
+    def post(self, request, org_id):
+
+        """Invite organization user
+        """
+
+        if not ORG_ENABLE_ADMIN_INVITE_USER:
+            error_msg = _('Feature disabled.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not IS_EMAIL_CONFIGURED:
+            error_msg = _('Failed to send email, email service is not properly configured, please contact administrator.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check plan
+        url_prefix = request.user.org.url_prefix
+        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+
+        if ORG_MEMBER_QUOTA_ENABLED:
+            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+            if org_members_quota is not None and org_members >= org_members_quota:
+                err_msg = f'Failed. You can only invite {org_members_quota} members.'
+                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+
+        if user_number_over_limit():
+            return api_error(status.HTTP_403_FORBIDDEN, 'The number of users exceeds the limit')
+
+        email = request.data.get("email", None)
+        if not email or not is_valid_email(email):
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = f'Organization {org_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            User.objects.get(email=email)
+            error_msg = f'User {email} already exists.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        except User.DoesNotExist:
+            pass
+
+        username = request.user.username
+
+        # add user
+        try:
+            user = User.objects.create_user(email, '!',
+                                            is_staff=False,
+                                            is_active=False)
+        except User.DoesNotExist as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        set_org_user(org_id, user.username)
+
+        # send invitation link
+        i = Invitation.objects.add(inviter=username,
+                                   accepter=email,
+                                   invite_type=DEFAULT_USER)
+        send_success = i.send_to(email=email)
+
+        if send_success:
+            return Response(i.to_dict(), status=200)
+        else:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

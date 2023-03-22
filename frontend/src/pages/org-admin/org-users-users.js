@@ -6,11 +6,12 @@ import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
 import ImportOrgUsersDialog from '../../components/dialog/org-import-users-dialog';
 import AddOrgUserDialog from '../../components/dialog/org-add-user-dialog';
+import InviteUserDialog from '../../components/dialog/org-admin-invite-user-dialog';
 import InviteUserViaWeiXinDialog from '../../components/dialog/org-admin-invite-user-via-weixin-dialog';
 import toaster from '../../components/toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import OrgUserInfo from '../../models/org-user';
-import { gettext, invitationLink, orgID, siteRoot } from '../../utils/constants';
+import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser} from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 class Search extends React.Component {
@@ -74,6 +75,7 @@ class OrgUsers extends Component {
       sortOrder: 'asc',
       isShowAddOrgUserDialog: false,
       isImportOrgUsersDialogOpen: false,
+      isInviteUserDialogOpen: false,
       isInviteUserViaWeiXinDialogOpen: false
     };
   }
@@ -118,6 +120,10 @@ class OrgUsers extends Component {
 
   toggleAddOrgUser = () => {
     this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
+  }
+
+  toggleInviteUserDialog = () => {
+    this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
   }
 
   toggleInviteUserViaWeiXinDialog = () => {
@@ -183,6 +189,19 @@ class OrgUsers extends Component {
     });
   }
 
+  inviteOrgUser = (email) => {
+    seafileAPI.orgAdminInviteOrgUser(orgID, email).then(res => {
+      this.toggleInviteUserDialog();
+      let msg = gettext('successfully sent email to %s.');
+      msg = msg.replace('%s', email);
+      toaster.success(msg);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.toggleInviteUserDialog();
+    });
+  }
+
   toggleOrgUsersDelete = (email) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
@@ -231,6 +250,10 @@ class OrgUsers extends Component {
         <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import Users')}</button>
         <button className={topBtn} title={gettext('Add User')} onClick={this.toggleAddOrgUser}>
           <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Add User')}</button>
+        {orgEnableAdminInviteUser &&
+        <button className={topBtn} title={gettext('Invite User')} onClick={this.toggleInviteUserDialog}>
+          <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite User')}</button>
+        }
         {invitationLink &&
         <button className={topBtn} title={gettext('Invite User via WeiXin')} onClick={this.toggleInviteUserViaWeiXinDialog}>
           <i className="fas fa-plus-square text-secondary mr-1"></i>{gettext('Invite User via WeiXin')}</button>
@@ -243,6 +266,11 @@ class OrgUsers extends Component {
         {this.state.isShowAddOrgUserDialog &&
         <ModalPortal>
           <AddOrgUserDialog handleSubmit={this.addOrgUser} toggle={this.toggleAddOrgUser}/>
+        </ModalPortal>
+        }
+        {this.state.isInviteUserDialogOpen &&
+        <ModalPortal>
+          <InviteUserDialog handleSubmit={this.inviteOrgUser} toggle={this.toggleInviteUserDialog}/>
         </ModalPortal>
         }
         {this.state.isInviteUserViaWeiXinDialogOpen &&

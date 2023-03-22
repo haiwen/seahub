@@ -139,6 +139,7 @@ export const invitationLink = window.org ? window.org.pageOptions.invitationLink
 export const orgMemberQuotaEnabled = window.org ? window.org.pageOptions.orgMemberQuotaEnabled : '';
 export const orgEnableAdminCustomLogo = window.org ? window.org.pageOptions.orgEnableAdminCustomLogo === 'True' : false;
 export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgEnableAdminCustomName === 'True' : false;
+export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
 
 // sys admin
