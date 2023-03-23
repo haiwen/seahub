@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Alert } from 'reactstrap';
-import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel } from '../../utils/constants';
+import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, shareLinkForceUsePassword, shareLinkPasswordMinLength, shareLinkPasswordStrengthLevel, canSendShareLinkEmail } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
+import ButtonQR from '../btn-qr-code';
+import SendLink from '../send-link';
 import SetLinkExpiration from '../set-link-expiration';
 
 
@@ -20,15 +22,25 @@ const LinkItemPropTypes = {
   deleteShareLink: PropTypes.func.isRequired,
   onCopyShareLink: PropTypes.func.isRequired,
   onChangePerm: PropTypes.func.isRequired,
+  updateExpiration: PropTypes.func.isRequired,
+  closeShareDialog: PropTypes.func.isRequired,
 };
 
 class LinkItem extends React.Component {
 
   constructor(props) {
     super(props);
+    this.isExpireDaysNoLimit = (shareLinkExpireDaysMin === 0 && shareLinkExpireDaysMax === 0 && shareLinkExpireDaysDefault == 0);
+    this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : shareLinkExpireDaysDefault;
+
     this.state = {
       isShowOperation: false,
       isOpIconShown: false,
+      isEditingExpiration: false,
+      expType: 'by-days',
+      expireDays: this.defaultExpireDays,
+      expDate: null,
+      isSendLinkShown: false,
     };
   }
 
@@ -68,51 +80,134 @@ class LinkItem extends React.Component {
     this.props.onChangePerm(permission, shareLink);
   }
 
+  setExpType = (e) => {
+    this.setState({
+      expType: e.target.value
+    });
+  }
+
+  onExpireDaysChanged = (e) => {
+    let day = e.target.value.trim();
+    this.setState({expireDays: day});
+  }
+
+  onExpDateChanged = (value) => {
+    this.setState({
+      expDate: value
+    });
+  }
+
+  updateExpiration =  (e) => {
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation();
+
+    let shareLink = this.props.shareLink;
+    let { expType, expireDays, expDate } = this.state;
+    this.props.updateExpiration(shareLink, expType, expireDays, expDate);
+    this.editingExpirationToggle();
+  }
+
+  editingExpirationToggle = () => {
+    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
+  }
+
+  toggleSendLink = () => {
+    this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
+  }
+
   render() {
     if (this.props.isLoading) {
       return <Loading />;
     }
     let { shareLink, permissionOptions } = this.props;
-    let { isShowOperation, isOpIconShown } = this.state;
+    let { isShowOperation, isOpIconShown, expType, expireDays, expDate } = this.state;
     let currentPermission = Utils.getShareLinkPermissionStr(shareLink.permissions);
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>{this.cutLink(shareLink.link)}</td>
-        <td>{shareLink.expire_date ? moment(shareLink.expire_date).format('YYYY-MM-DD HH:mm') : '-'}</td>
-        <td>
-          {(isPro && shareLink.permissions) && (
-            <FormGroup className="mb-0">
-              <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-                <ShareLinkPermissionEditor
-                  isTextMode={true}
-                  isEditIconShow={isOpIconShown && !shareLink.is_expired}
-                  currentPermission={currentPermission}
-                  permissionOptions={permissionOptions}
-                  onPermissionChanged={this.changePerm}
-                />
-              </dd>
-            </FormGroup>
-          )}
-        </td>
-        <td>
-          <span 
-            className={`sf2-icon-copy action-icon ${isShowOperation ? '' : 'hide'}`} 
-            data-placement="bottom" 
-            onClick={this.onCopyShareLink} 
-            title={gettext('Copy link')}
-            aria-label={gettext('Copy link')}
-          />
-        </td>
-        <td>
-          <span
-            className={`sf2-icon-x3 action-icon ${isShowOperation ? '' : 'hide'}`}
-            onClick={this.onDeleteShareLink}
-            title={gettext('Delete')}
-            aria-label={gettext('Delete')}
-          />
-        </td>
-      </tr>
+      <Fragment>
+        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>{this.cutLink(shareLink.link)}</td>
+          <td>
+            {shareLink.expire_date ? moment(shareLink.expire_date).format('YYYY-MM-DD HH:mm') : '-'}
+            {
+              shareLink.expire_date &&
+              <a href="#"
+                role="button"
+                aria-label={gettext('Edit')}
+                title={gettext('Edit')}
+                className={`fa fa-pencil-alt attr-action-icon ${isShowOperation ? '' : 'hide'}`}
+                onClick={this.editingExpirationToggle}>
+              </a>
+            }
+          </td>
+          <td>
+            {(isPro && shareLink.permissions) && (
+              <FormGroup className="mb-0">
+                <dd style={{width:'250px'}} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+                  <ShareLinkPermissionEditor
+                    isTextMode={true}
+                    isEditIconShow={isOpIconShown && !shareLink.is_expired}
+                    currentPermission={currentPermission}
+                    permissionOptions={permissionOptions}
+                    onPermissionChanged={this.changePerm}
+                  />
+                </dd>
+              </FormGroup>
+            )}
+          </td>
+          <td>
+            {(canSendShareLinkEmail && !this.state.isSendLinkShown) &&
+              <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
+            }
+            {
+              this.state.isSendLinkShown &&
+              <SendLink
+                linkType='shareLink'
+                token={shareLink.token}
+                toggleSendLink={this.toggleSendLink}
+                closeShareDialog={this.props.closeShareDialog}
+              />
+            }
+          </td>
+          <td>{isShowOperation && <ButtonQR link={shareLink.link} />}</td>
+          <td>
+            <span
+              className={`sf2-icon-copy action-icon ${isShowOperation ? '' : 'hide'}`}
+              data-placement="bottom"
+              onClick={this.onCopyShareLink}
+              title={gettext('Copy link')}
+              aria-label={gettext('Copy link')}
+            />
+          </td>
+          <td>
+            <span
+              className={`sf2-icon-x3 action-icon ${isShowOperation ? '' : 'hide'}`}
+              onClick={this.onDeleteShareLink}
+              title={gettext('Delete')}
+              aria-label={gettext('Delete')}
+            />
+          </td>
+        </tr>
+        {shareLink.expire_date && this.state.isEditingExpiration && (
+          <Fragment>
+            <SetLinkExpiration
+              minDays={shareLinkExpireDaysMin}
+              maxDays={shareLinkExpireDaysMax}
+              defaultDays={shareLinkExpireDaysDefault}
+              expType={expType}
+              setExpType={this.setExpType}
+              expireDays={expireDays}
+              onExpireDaysChanged={this.onExpireDaysChanged}
+              expDate={expDate}
+              onExpDateChanged={this.onExpDateChanged}
+            />
+            <div className={expType == 'by-days' ? 'mt-2' : 'mt-3'}>
+              <button className="btn btn-primary mr-2" onClick={this.updateExpiration}>{gettext('Update')}</button>
+              <button className="btn btn-secondary" onClick={this.editingExpirationToggle}>{gettext('Cancel')}</button>
+            </div>
+          </Fragment>
+        )}
+      </Fragment>
     );
   }
 }
@@ -125,6 +220,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   closeShareDialog: PropTypes.func.isRequired,
   userPerm: PropTypes.string,
+  itemType: PropTypes.string,
 };
 
 const inputWidth = Utils.isDesktop() ? 250 : 210;
@@ -142,8 +238,6 @@ class GenerateShareLink extends React.Component {
       isShowPasswordInput: shareLinkForceUsePassword ? true : false,
       isPasswordVisible: false,
       isExpireChecked: !this.isExpireDaysNoLimit,
-      isExpirationEditIconShow: false,
-      isEditingExpiration: false,
       expType: 'by-days',
       expireDays: this.defaultExpireDays,
       expDate: null,
@@ -152,11 +246,9 @@ class GenerateShareLink extends React.Component {
       storedPasswordVisible: false,
       errorInfo: '',
       shareLinks: [],
-      isNoticeMessageShow: false,
       isLoading: true,
       permissionOptions: [],
       currentPermission: '',
-      isSendLinkShown: false
     };
   }
 
@@ -307,10 +399,7 @@ class GenerateShareLink extends React.Component {
       shareLinks = shareLinks.filter((item) => {
         return item.token !== shareLink.token;
       });
-      this.setState({
-        shareLinks: shareLinks,
-        isNoticeMessageShow: false,
-      });
+      this.setState({shareLinks: shareLinks});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -400,25 +489,7 @@ class GenerateShareLink extends React.Component {
     return true;
   }
 
-  handleMouseOverExpirationEditIcon = () => {
-    this.setState({isExpirationEditIconShow: true});
-  }
-
-  handleMouseOutExpirationEditIcon = () => {
-    this.setState({isExpirationEditIconShow: false});
-  }
-
-  editingExpirationToggle = () => {
-    this.setState({isEditingExpiration: !this.state.isEditingExpiration});
-  }
-
-  updateExpiration = (e, shareLink) => {
-
-    e.preventDefault();
-    e.nativeEvent.stopImmediatePropagation();
-
-    let { expType, expireDays, expDate } = this.state;
-
+  updateExpiration = (shareLink, expType, expireDays, expDate) => {
     let expirationTime = '';
     if (expType == 'by-days') {
       expirationTime = moment().add(parseInt(expireDays), 'days').format();
@@ -433,21 +504,12 @@ class GenerateShareLink extends React.Component {
         return item.token === shareLink.token ? shareLink: item;
       });
       this.setState({
-        shareLinks: shareLinks,
-        isEditingExpiration: false,
+        shareLinks: shareLinks
       });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  onNoticeMessageToggle = () => {
-    this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
-  }
-
-  toggleSendLink = () => {
-    this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
   }
 
   changePerm = (permission, shareLink) => {
@@ -562,9 +624,11 @@ class GenerateShareLink extends React.Component {
             <table>
               <thead>
                 <tr>
-                  <th width="22%">{gettext('Share links')}</th>
-                  <th width="28%">{gettext('Expire date')}</th>
-                  <th width="40%">{gettext('Permission')}</th>
+                  <th width="20%">{gettext('Share links')}</th>
+                  <th width="30%">{gettext('Expire date')}</th>
+                  <th width="30%">{gettext('Permission')}</th>
+                  <th width="5%"></th>
+                  <th width="5%"></th>
                   <th width="5%"></th>
                   <th width="5%"></th>
                 </tr>
@@ -573,7 +637,7 @@ class GenerateShareLink extends React.Component {
                 {
                   shareLinks.map((item, index) => {
                     return (
-                      <LinkItem 
+                      <LinkItem
                         key={index}
                         index={index}
                         shareLink={item}
@@ -582,6 +646,8 @@ class GenerateShareLink extends React.Component {
                         deleteShareLink={this.deleteShareLink}
                         onCopyShareLink={this.onCopySharedLink}
                         onChangePerm={this.changePerm}
+                        updateExpiration={this.updateExpiration}
+                        closeShareDialog={this.props.closeShareDialog}
                       />
                     );
                   })
