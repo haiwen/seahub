@@ -107,13 +107,6 @@ function validate_already_running () {
     check_component_running "seafevents" "seafevents.main --config-file ${central_config_dir}"
 }
 
-function test_java {
-    if ! which java 2>/dev/null 1>&2; then
-        echo "java is not found on your machine. Please install it first."
-        exit 1;
-    fi
-}
-
 function start_seafile_server () {
     validate_already_running;
     validate_central_conf_dir;
@@ -122,7 +115,6 @@ function start_seafile_server () {
 
     if [[ -d ${INSTALLPATH}/pro ]]; then
         test_config;
-        test_java;
     fi
 
     echo "Starting seafile server, please wait ..."
