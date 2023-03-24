@@ -152,25 +152,10 @@ function check_sqlite3 () {
     printf "Done.\n\n"
 }
 
-function check_java () {
-    echo -n "Checking for java ..."
-    if ! which java 2>/dev/null 1>&2; then
-        echo -e "\nJava is not found. install it first.\n"
-        echo "On Debian/Ubuntu:     apt-get install default-jre"
-        echo "On CentOS/RHEL:       yum install jre"
-        err_and_quit;
-    fi
-    printf "Done.\n\n"
-}
-
 function check_system_dependency () {
     printf "Checking packages needed by seafile ...\n\n"
     check_python;
     check_sqlite3;
-
-    if [[ -d ${INSTALLPATH}/pro ]]; then
-        check_java;
-    fi
 
     printf "Checking Done.\n\n"
 }

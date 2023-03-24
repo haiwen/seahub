@@ -550,7 +550,7 @@ class MigratingProfessionalConfigurator(ProfessionalConfigurator):
         ProfessionalConfigurator.__init__(self, args, migrate=True)
 
     def check_pre_condition(self):
-        self.check_java()
+        pass
 
     def config(self):
         self.detect_db_type()
@@ -598,17 +598,6 @@ class MigratingProfessionalConfigurator(ProfessionalConfigurator):
 
         if Utils.run_argv(argv) != 0:
             Utils.error('failed to update avatars folder')
-
-    def check_java(self):
-        Utils.info('\nChecking java ... ', newline=False)
-        if not Utils.find_in_path('java'):
-            msg = '''\nJava is not found. instal it first.\n
-    On Debian/Ubuntu:     apt-get install default-jre
-    On CentOS/RHEL:       yum install jre
-    '''
-            Utils.error(msg)
-
-        Utils.info('Done')
 
 
 class SetupProfessionalConfigurator(ProfessionalConfigurator):
