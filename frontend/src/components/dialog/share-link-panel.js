@@ -592,7 +592,7 @@ class ShareLinkPanel extends React.Component {
             <Button onClick={this.generateShareLink} className="mt-2">{gettext('Generate')}</Button>
           </Form>
           {shareLinks.length > 0 && (
-            <table>
+            <table className="table-hover">
               <thead>
                 <tr>
                   <th width="28%">{gettext('Link')}</th>
@@ -627,6 +627,21 @@ class LinkItem extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isItemOpVisible: false
+    };
+  }
+
+  onMouseOver = () => {
+    this.setState({
+      isItemOpVisible: true
+    });
+  }
+
+  onMouseOut = () => {
+    this.setState({
+      isItemOpVisible: false
+    });
   }
 
   cutLink = (link) => {
@@ -634,16 +649,18 @@ class LinkItem extends React.Component {
     return link.slice(0, 9) + '...' + link.slice(length-5);
   }
 
-  viewDetails = () => {
+  viewDetails = (e) => {
+    e.preventDefault();
     this.props.showLinkDetails(this.props.item);
   }
 
   render() {
+    const { isItemOpVisible } = this.state;
     const { item, permissionOptions } = this.props;
     const { permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     return (
-      <tr>
+      <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
         <td>{this.cutLink(link)}</td>
         <td>
           {(isPro && permissions) && (
@@ -660,7 +677,7 @@ class LinkItem extends React.Component {
           {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
         </td>
         <td>
-          <button onClick={this.viewDetails} className="border-0 btn-sm text-gray">{gettext('Details')}</button>
+          <a href="#" role="button" onClick={this.viewDetails} className={isItemOpVisible ? '' : 'invisible'}>{gettext('Details')}</a>
         </td>
       </tr>
     );
