@@ -24,7 +24,7 @@ const propTypes = {
 
 const inputWidth = Utils.isDesktop() ? 250 : 210;
 
-class GenerateShareLink extends React.Component {
+class ShareLinkPanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -176,7 +176,8 @@ class GenerateShareLink extends React.Component {
       }
       seafileAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions).then((res) => {
         const links = this.state.shareLinks;
-        links.unshift(new ShareLink(res.data));
+        const newLink = new ShareLink(res.data);
+        links.unshift(newLink);
         this.setState({
           password: '',
           passwdnew: '',
@@ -185,6 +186,7 @@ class GenerateShareLink extends React.Component {
           expDate: null,
           isExpireChecked: !this.isExpireDaysNoLimit,
           errorInfo: '',
+          sharedLinkInfo: newLink,
           shareLinks: links
         });
       }).catch((error) => {
@@ -671,6 +673,6 @@ LinkItem.propTypes = {
   showLinkDetails : PropTypes.func.isRequired
 };
 
-GenerateShareLink.propTypes = propTypes;
+ShareLinkPanel.propTypes = propTypes;
 
-export default GenerateShareLink;
+export default ShareLinkPanel;

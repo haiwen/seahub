@@ -2,16 +2,16 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro } from '../../utils/constants';
+import ShareLinkPanel from './share-link-panel';
+import GenerateUploadLink from './generate-upload-link';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import ShareToInvitePeople from './share-to-invite-people';
-import GenerateShareLink from './generate-share-link';
-import GenerateUploadLink from './generate-upload-link';
 import ShareToOtherServer from './share-to-other-server';
 import InternalLink from './internal-link';
 import { seafileAPI } from '../../utils/seafile-api';
-import Loading from '../loading';
 import { Utils } from '../../utils/utils';
+import Loading from '../loading';
 import toaster from '../toast';
 import CustomPermissionManager from './custom-permission/custom-permission-manager';
 
@@ -170,7 +170,7 @@ class ShareDialog extends React.Component {
           <TabContent activeTab={this.state.activeTab}>
             {(enableShareLink && activeTab === 'shareLink') &&
               <TabPane tabId="shareLink" role="tabpanel" id="share-link-panel">
-                <GenerateShareLink
+                <ShareLinkPanel
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
@@ -279,7 +279,7 @@ class ShareDialog extends React.Component {
           <TabContent activeTab={this.state.activeTab}>
             {enableShareLink && activeTab === 'shareLink' &&
               <TabPane tabId="shareLink" role="tabpanel" id="share-link-panel">
-                <GenerateShareLink
+                <ShareLinkPanel
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
