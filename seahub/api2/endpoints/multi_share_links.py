@@ -202,3 +202,205 @@ class MultiShareLinks(APIView):
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
+
+
+class MultiShareLinksBatch(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanGenerateShareLink)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Create multi share link.
+        Permission checking:
+        1. default(NOT guest) user;
+        """
+
+        # argument check
+        repo_id = request.data.get('repo_id', None)
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = request.data.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        share_link_num = request.data.get('number')
+        try:
+            share_link_num = int(share_link_num)
+        except ValueError:
+            error_msg = 'share_link_num invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if share_link_num <= 0:
+            error_msg = 'share_link_num invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        auto_generate_password = request.data.get('auto_generate_password')
+        auto_generate_password = auto_generate_password.lower()
+        if auto_generate_password not in ('true', 'false'):
+            error_msg = 'auto_generate_password invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        auto_generate_password = auto_generate_password == 'true'
+
+        if config.SHARE_LINK_FORCE_USE_PASSWORD and not auto_generate_password:
+            error_msg = _('Password is required.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        expire_days = request.data.get('expire_days', '')
+        expiration_time = request.data.get('expiration_time', '')
+        if expire_days and expiration_time:
+            error_msg = 'Can not pass expire_days and expiration_time at the same time.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        expire_date = None
+        if expire_days:
+            try:
+                expire_days = int(expire_days)
+            except ValueError:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if expire_days <= 0:
+                error_msg = 'expire_days invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                    error_msg = _('Expire days should be greater or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MIN
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                    error_msg = _('Expire days should be less than or equal to %s') % \
+                            SHARE_LINK_EXPIRE_DAYS_MAX
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = timezone.now() + relativedelta(days=expire_days)
+
+        elif expiration_time:
+
+            try:
+                expire_date = dateutil.parser.isoparse(expiration_time)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'expiration_time invalid, should be iso format, for example: 2020-05-17T10:26:22+08:00'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            expire_date = expire_date.astimezone(get_current_timezone()).replace(tzinfo=None)
+
+            if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+                expire_date_min_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MIN)
+                expire_date_min_limit = expire_date_min_limit.replace(hour=0).replace(minute=0).replace(second=0)
+
+                if expire_date < expire_date_min_limit:
+                    error_msg = _('Expiration time should be later than %s.') % \
+                            expire_date_min_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+                expire_date_max_limit = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_MAX)
+                expire_date_max_limit = expire_date_max_limit.replace(hour=23).replace(minute=59).replace(second=59)
+
+                if expire_date > expire_date_max_limit:
+                    error_msg = _('Expiration time should be earlier than %s.') % \
+                            expire_date_max_limit.strftime("%Y-%m-%d %H:%M:%S")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        else:
+            if SHARE_LINK_EXPIRE_DAYS_DEFAULT > 0:
+                expire_date = timezone.now() + relativedelta(days=SHARE_LINK_EXPIRE_DAYS_DEFAULT)
+
+        try:
+            perm = check_permissions_arg(request)
+        except Exception:
+            error_msg = 'permissions invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if path != '/':
+            dirent = seafile_api.get_dirent_by_path(repo_id, path)
+            if not dirent:
+                error_msg = 'Dirent %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if repo.encrypted:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        repo_folder_permission = seafile_api.check_permission_by_path(repo_id, path, username)
+        if parse_repo_perm(repo_folder_permission).can_generate_share_link is False:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if repo_folder_permission in (PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW) \
+                and perm != FileShare.PERM_VIEW_ONLY:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if repo_folder_permission in (PERMISSION_READ) \
+                and perm not in (FileShare.PERM_VIEW_DL, FileShare.PERM_VIEW_ONLY):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # can_upload requires rw repo permission
+        if perm == FileShare.PERM_VIEW_DL_UPLOAD and \
+                repo_folder_permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if path != '/':
+            s_type = 'd' if stat.S_ISDIR(dirent.mode) else 'f'
+            if s_type == 'f':
+                file_name = os.path.basename(path.rstrip('/'))
+                can_edit, error_msg = can_edit_file(file_name, dirent.size, repo)
+                if not can_edit and perm in (FileShare.PERM_EDIT_DL, FileShare.PERM_EDIT_ONLY):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            s_type = 'd'
+
+        # create share link
+        org_id = request.user.org.org_id if is_org_context(request) else None
+
+        def generate_password():
+            import random
+            import string
+            password_length = config.SHARE_LINK_PASSWORD_MIN_LENGTH + 10
+            characters = string.ascii_letters + string.digits + string.punctuation
+            password = ''.join(random.choices(characters, k=password_length))
+            return password
+
+        created_share_links = []
+        for i in range(share_link_num):
+            password = generate_password()
+            if s_type == 'f':
+                fs = FileShare.objects.create_file_link(username, repo_id, path,
+                                                        password, expire_date,
+                                                        permission=perm, org_id=org_id)
+
+            elif s_type == 'd':
+                fs = FileShare.objects.create_dir_link(username, repo_id, path,
+                                                       password, expire_date,
+                                                       permission=perm, org_id=org_id)
+
+            created_share_links.append(fs)
+
+        result = []
+        for fs in created_share_links:
+            link_info = get_share_link_info(fs)
+            link_info['repo_folder_permission'] = repo_folder_permission
+            result.append(link_info)
+
+        return Response(result)
