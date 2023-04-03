@@ -122,7 +122,7 @@ class Account extends Component {
         };
       } else if (isOrgStaff) {
         data = {
-          url: enableSSOToThirdpartWebsite ? `${siteRoot}sso-to-thirdpart/` : `${siteRoot}org/info/`,
+          url: `${siteRoot}org/info/`,
           text: gettext('Organization Admin')
         };
       } else if (isInstAdmin) {
@@ -165,6 +165,7 @@ class Account extends Component {
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
             {this.renderMenu()}
+            {enableSSOToThirdpartWebsite && <a href={siteRoot + 'sso-to-thirdpart/'} className="item">{gettext('Customer Portal')}</a>}
             <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
           </div>
         </div>
