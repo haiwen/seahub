@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 
 from seahub.auth.decorators import login_required
 from seahub.utils import render_error
-from seahub.api2.models import Token
 try:
     from seahub.settings import ENABLE_SSO_TO_THIRDPART_WEBSITE, THIRDPART_WEBSITE_SECRET_KEY, THIRDPART_WEBSITE_URL
 except ImportError:
@@ -24,20 +23,9 @@ def sso_to_thirdpart(request):
         return render_error(request, 'Feature is not enabled.')
 
     username = request.user.username
+    payload = {'exp': int(time.time()) + 30, 'user_id': username}
     try:
-        api_token, _ = Token.objects.get_or_create(user=username)
-    except Exception as e:
-        logger.error(e)
-        return render_error(request, 'Internal Server Error')
-
-    payload = {
-        'exp': int(time.time()) + 100,
-        'user_id': username,
-        'api_token': api_token.key,
-    }
-
-    try:
-        access_token = jwt.encode(payload, THIRDPART_WEBSITE_SECRET_KEY, algorithm='HS256')
+        access_token = jwt.encode(payload, THIRDPART_WEBSITE_SECRET_KEY, algorithm='HS512')
     except Exception as e:
         logger.error(e)
         return render_error(request, 'Internal Server Error')
