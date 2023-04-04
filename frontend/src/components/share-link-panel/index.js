@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import Loading from '../loading';
+import EmptyTip from '../empty-tip';
 import LinkDetails from './link-details';
 import LinkItem from './link-item';
 import LinkCreation from './link-creation';
@@ -103,7 +104,7 @@ class ShareLinkPanel extends React.Component {
         sharedLinkInfo: null,
         shareLinks: shareLinks.filter(item => item.token !== sharedLinkInfo.token)
       });
-      toaster.success(gettext('The link was deleted.'));
+      toaster.success(gettext('Link deleted'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -188,7 +189,11 @@ class ShareLinkPanel extends React.Component {
                 <button className="btn btn-sm btn-outline-primary" onClick={this.setMode.bind(this, 'linksCreation')}>{gettext('Generate links in batch')}</button>
               </div>
             </div>
-            {shareLinks.length > 0 && (
+            {shareLinks.length == 0 ? (
+              <EmptyTip forDialog={true}>
+                <p className="text-secondary">{gettext('No share links')}</p>
+              </EmptyTip>
+            ) : (
               <table className="table-hover">
                 <thead>
                   <tr>
