@@ -157,7 +157,7 @@ class LinkCreation extends React.Component {
       }
     }
 
-    if (isShowPasswordInput) {
+    if (type == 'single' && isShowPasswordInput) {
       if (password.length === 0) {
         this.setState({errorInfo: gettext('Please enter a password.')});
         return false;

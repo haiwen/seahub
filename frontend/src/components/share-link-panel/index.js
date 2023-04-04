@@ -103,7 +103,7 @@ class ShareLinkPanel extends React.Component {
         sharedLinkInfo: null,
         shareLinks: shareLinks.filter(item => item.token !== sharedLinkInfo.token)
       });
-      toaster.success(gettext('The link is deleted.'));
+      toaster.success(gettext('The link was deleted.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
