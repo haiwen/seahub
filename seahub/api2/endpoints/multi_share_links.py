@@ -228,17 +228,25 @@ class MultiShareLinksBatch(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         share_link_num = request.data.get('number')
+        if not share_link_num:
+            error_msg = 'number invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             share_link_num = int(share_link_num)
         except ValueError:
-            error_msg = 'share_link_num invalid.'
+            error_msg = 'number invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if share_link_num <= 0:
-            error_msg = 'share_link_num invalid.'
+            error_msg = 'number invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         auto_generate_password = request.data.get('auto_generate_password')
+        if not auto_generate_password:
+            error_msg = 'auto_generate_password invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         auto_generate_password = auto_generate_password.lower()
         if auto_generate_password not in ('true', 'false'):
             error_msg = 'auto_generate_password invalid.'
@@ -377,14 +385,14 @@ class MultiShareLinksBatch(APIView):
         def generate_password():
             import random
             import string
-            password_length = config.SHARE_LINK_PASSWORD_MIN_LENGTH + 10
+            password_length = 8
             characters = string.ascii_letters + string.digits + string.punctuation
             password = ''.join(random.choices(characters, k=password_length))
             return password
 
         created_share_links = []
         for i in range(share_link_num):
-            password = generate_password()
+            password = generate_password() if auto_generate_password else None
             if s_type == 'f':
                 fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                         password, expire_date,
