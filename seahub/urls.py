@@ -41,8 +41,10 @@ from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinkOnlineOfficeLock, ShareLinkDirents, ShareLinkSaveFileToRepo, \
         ShareLinkUpload, ShareLinkUploadDone, ShareLinkSaveItemsToRepo, \
-        ShareLinkRepoTags, ShareLinkRepoTagsTaggedFiles, ShareLinksCleanInvalid
-from seahub.api2.endpoints.multi_share_links import MultiShareLinks
+        ShareLinkRepoTags, ShareLinkRepoTagsTaggedFiles, \
+        ShareLinksCleanInvalid
+from seahub.api2.endpoints.multi_share_links import MultiShareLinks, \
+        MultiShareLinksBatch
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -346,6 +348,7 @@ urlpatterns = [
     ## user::shared-download-links
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/multi-share-links/$', MultiShareLinks.as_view(), name='api-v2.1-multi-share-links'),
+    url(r'^api/v2.1/multi-share-links/batch/$', MultiShareLinksBatch.as_view(), name='api-v2.1-multi-share-links-batch'),
     url(r'^api/v2.1/share-links/clean-invalid/$', ShareLinksCleanInvalid.as_view(), name='api-v2.1-share-links-clean-invalid'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/save-file-to-repo/$', ShareLinkSaveFileToRepo.as_view(), name='api-v2.1-share-link-save-file-to-repo'),
