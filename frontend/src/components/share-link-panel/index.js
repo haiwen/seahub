@@ -199,8 +199,8 @@ class ShareLinkPanel extends React.Component {
                   <tr>
                     <th width="28%">{gettext('Link')}</th>
                     <th width="30%">{gettext('Permission')}</th>
-                    <th width="30%">{gettext('Expiration')}</th>
-                    <th width="12%"></th>
+                    <th width="28%">{gettext('Expiration')}</th>
+                    <th width="14%"></th>
                   </tr>
                 </thead>
                 <tbody>

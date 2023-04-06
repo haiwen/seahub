@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import copy from 'copy-to-clipboard';
+import toaster from '../toast';
 import { isPro, gettext } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
 import { Utils } from '../../utils/utils';
@@ -37,6 +39,13 @@ class LinkItem extends React.Component {
     return link.slice(0, 9) + '...' + link.slice(length-5);
   }
 
+  copyLink = (e) => {
+    e.preventDefault();
+    const { item } = this.props;
+    copy(item.link);
+    toaster.success(gettext('Share link is copied to the clipboard.'));
+  }
+
   viewDetails = (e) => {
     e.preventDefault();
     this.props.showLinkDetails(this.props.item);
@@ -65,7 +74,8 @@ class LinkItem extends React.Component {
           {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
         </td>
         <td>
-          <a href="#" role="button" onClick={this.viewDetails} className={isItemOpVisible ? '' : 'invisible'}>{gettext('Details')}</a>
+          <a href="#" role="button" onClick={this.copyLink} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+          <a href="#" role="button" onClick={this.viewDetails} className={`fas fa-info-circle font-weight-bold action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Details')} aria-label={gettext('Details')}></a>
         </td>
       </tr>
     );

@@ -47,14 +47,12 @@ class LinkDetails extends React.Component {
     const { sharedLinkInfo } = this.props;
     copy(sharedLinkInfo.link);
     toaster.success(gettext('Share link is copied to the clipboard.'));
-    this.props.closeShareDialog();
   }
 
   onCopyDownloadLink = () => {
     const { sharedLinkInfo } = this.props;
     copy(`${sharedLinkInfo.link}?dl=1`);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
-    this.props.closeShareDialog();
   }
 
   toggleStoredPasswordVisible = () => {
