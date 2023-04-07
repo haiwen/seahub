@@ -75,6 +75,7 @@ MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 MSG_TYPE_REPO_TRANSFER = 'repo_transfer'
 MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
+MSG_TYPE_DELETED_FILES = 'deleted_files'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -406,6 +407,9 @@ class UserNotification(models.Model):
 
     def is_repo_monitor_msg(self):
         return self.msg_type == MSG_TYPE_REPO_MINOTOR
+
+    def is_deleted_files_msg(self):
+        return self.msg_type == MSG_TYPE_DELETED_FILES
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
