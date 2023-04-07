@@ -258,12 +258,6 @@ def update_notice_detail(request, notices):
                     repo_dict[repo_id] = repo
 
                 if repo:
-                    op_user_email = d.pop('op_user')
-                    url, is_default, date_uploaded = api_avatar_url(op_user_email, 32)
-                    d['op_user_avatar_url'] = url
-                    d['op_user_email'] = op_user_email
-                    d['op_user_name'] = email2nickname(op_user_email)
-                    d['op_user_contact_email'] = email2contact_email(op_user_email)
                     d['repo_name'] = repo.name
                     notice.detail = d
                 else:
