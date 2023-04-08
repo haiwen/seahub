@@ -14,10 +14,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 18:30+0800\n"
+"POT-Creation-Date: 2023-04-08 18:07+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: david082321 <david082321@gmail.com>, 2018\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
+"Language-Team: Chinese (Taiwan) (http://app.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -158,7 +158,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:140
-#: seahub/api2/endpoints/share_links.py:639
+#: seahub/api2/endpoints/share_links.py:642
 msgid "There is an associated published library."
 msgstr ""
 
@@ -424,10 +424,11 @@ msgstr ""
 #: seahub/notifications/models.py:644 seahub/notifications/models.py:666
 #: seahub/notifications/models.py:692 seahub/notifications/models.py:709
 #: seahub/notifications/models.py:726 seahub/notifications/models.py:755
-#: seahub/search/views.py:200 seahub/utils/__init__.py:166
-#: seahub/utils/__init__.py:1240 seahub/views/__init__.py:918
-#: seahub/views/ajax.py:401 seahub/views/ajax.py:405 seahub/wiki/views.py:208
-#: seahub/wiki/views.py:215 seahub/wiki/views.py:224
+#: seahub/search/views.py:200 seahub/share/views.py:326
+#: seahub/utils/__init__.py:166 seahub/utils/__init__.py:1240
+#: seahub/views/__init__.py:918 seahub/views/ajax.py:401
+#: seahub/views/ajax.py:405 seahub/wiki/views.py:208 seahub/wiki/views.py:215
+#: seahub/wiki/views.py:224
 msgid "Internal Server Error"
 msgstr "伺服器內部錯誤"
 
@@ -497,7 +498,7 @@ msgstr "沒有權限"
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:721
+#: seahub/api2/endpoints/file.py:654 seahub/api2/endpoints/share_links.py:724
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -537,7 +538,7 @@ msgid "User %s is an organization user."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:414 seahub/group/error_msg.py:17
-#: seahub/group/error_msg.py:23 seahub/views/file.py:464
+#: seahub/group/error_msg.py:23 seahub/views/file.py:465
 msgid "Group does not exist"
 msgstr "群組不存在。"
 
@@ -581,11 +582,82 @@ msgstr "用戶 %s 已存在。"
 #: seahub/api2/endpoints/repo_share_invitations.py:215
 #: seahub/api2/endpoints/send_share_link_email.py:34
 #: seahub/api2/endpoints/send_upload_link_email.py:33 seahub/auth/forms.py:122
-#: seahub/share/views.py:136 seahub/share/views.py:266
+#: seahub/share/views.py:138 seahub/share/views.py:349
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr "郵件發送失敗， 電子信箱服務沒配置好，請聯繫管理員。"
+
+#: seahub/api2/endpoints/multi_share_links.py:55
+#: seahub/api2/endpoints/multi_share_links.py:258
+#: seahub/api2/endpoints/share_links.py:284
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4006
+#: seahub/api2/views.py:4126
+msgid "Password is required."
+msgstr "密碼為必填項。"
+
+#: seahub/api2/endpoints/multi_share_links.py:60
+#: seahub/api2/endpoints/share_links.py:290
+#: seahub/api2/endpoints/upload_links.py:176
+#: seahub/api2/endpoints/webdav_secret.py:60
+msgid "Password is too short."
+msgstr "密碼太短"
+
+#: seahub/api2/endpoints/multi_share_links.py:64
+#: seahub/api2/endpoints/share_links.py:294
+#: seahub/api2/endpoints/upload_links.py:180
+#: seahub/api2/endpoints/webdav_secret.py:64
+msgid "Password is too weak."
+msgstr ""
+
+#: seahub/api2/endpoints/multi_share_links.py:68
+#: seahub/api2/endpoints/share_links.py:298
+#: seahub/api2/endpoints/upload_links.py:184
+#: seahub/api2/endpoints/webdav_secret.py:52
+msgid ""
+"Password can only contain number, upper letter, lower letter and other "
+"symbols."
+msgstr ""
+
+#: seahub/api2/endpoints/multi_share_links.py:91
+#: seahub/api2/endpoints/multi_share_links.py:281
+#: seahub/api2/endpoints/share_links.py:321
+#: seahub/api2/endpoints/share_links.py:566
+#: seahub/api2/endpoints/upload_links.py:207
+#: seahub/api2/endpoints/upload_links.py:341 seahub/api2/views.py:3420
+#, python-format
+msgid "Expire days should be greater or equal to %s"
+msgstr ""
+
+#: seahub/api2/endpoints/multi_share_links.py:96
+#: seahub/api2/endpoints/multi_share_links.py:287
+#: seahub/api2/endpoints/share_links.py:327
+#: seahub/api2/endpoints/share_links.py:572
+#: seahub/api2/endpoints/upload_links.py:213
+#: seahub/api2/endpoints/upload_links.py:347 seahub/api2/views.py:3426
+#, python-format
+msgid "Expire days should be less than or equal to %s"
+msgstr ""
+
+#: seahub/api2/endpoints/multi_share_links.py:116
+#: seahub/api2/endpoints/multi_share_links.py:309
+#: seahub/api2/endpoints/share_links.py:349
+#: seahub/api2/endpoints/share_links.py:596
+#: seahub/api2/endpoints/upload_links.py:235
+#: seahub/api2/endpoints/upload_links.py:371
+#, python-format
+msgid "Expiration time should be later than %s."
+msgstr ""
+
+#: seahub/api2/endpoints/multi_share_links.py:125
+#: seahub/api2/endpoints/multi_share_links.py:318
+#: seahub/api2/endpoints/share_links.py:358
+#: seahub/api2/endpoints/share_links.py:605
+#: seahub/api2/endpoints/upload_links.py:244
+#: seahub/api2/endpoints/upload_links.py:380
+#, python-format
+msgid "Expiration time should be earlier than %s."
+msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
@@ -644,23 +716,23 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:102
-#: seahub/share/views.py:185
+#: seahub/share/views.py:187
 msgid "file"
 msgstr "檔案"
 
 #: seahub/api2/endpoints/send_share_link_email.py:103
-#: seahub/share/views.py:186
+#: seahub/share/views.py:188
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr "有人在 %s 上共享了一個檔案給你"
 
 #: seahub/api2/endpoints/send_share_link_email.py:105
-#: seahub/share/views.py:192
+#: seahub/share/views.py:194
 msgid "directory"
 msgstr "目錄"
 
 #: seahub/api2/endpoints/send_share_link_email.py:106
-#: seahub/share/views.py:193
+#: seahub/share/views.py:195
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr "在 %s 上，有一資料夾共享給你。"
@@ -670,71 +742,13 @@ msgid "email invalid."
 msgstr ""
 
 #: seahub/api2/endpoints/send_upload_link_email.py:97
-#: seahub/share/views.py:307
+#: seahub/share/views.py:390
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr "有人在 %s 上共享了一個上傳網址給你"
 
-#: seahub/api2/endpoints/share_links.py:281
-#: seahub/api2/endpoints/upload_links.py:167 seahub/api2/views.py:4006
-#: seahub/api2/views.py:4126
-msgid "Password is required."
-msgstr "密碼為必填項。"
-
-#: seahub/api2/endpoints/share_links.py:287
-#: seahub/api2/endpoints/upload_links.py:173
-#: seahub/api2/endpoints/webdav_secret.py:60
-msgid "Password is too short."
-msgstr "密碼太短"
-
-#: seahub/api2/endpoints/share_links.py:291
-#: seahub/api2/endpoints/upload_links.py:177
-#: seahub/api2/endpoints/webdav_secret.py:64
-msgid "Password is too weak."
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:295
-#: seahub/api2/endpoints/upload_links.py:181
-#: seahub/api2/endpoints/webdav_secret.py:52
-msgid ""
-"Password can only contain number, upper letter, lower letter and other "
-"symbols."
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:318
-#: seahub/api2/endpoints/share_links.py:563
-#: seahub/api2/endpoints/upload_links.py:204
-#: seahub/api2/endpoints/upload_links.py:338 seahub/api2/views.py:3420
-#, python-format
-msgid "Expire days should be greater or equal to %s"
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:324
-#: seahub/api2/endpoints/share_links.py:569
-#: seahub/api2/endpoints/upload_links.py:210
-#: seahub/api2/endpoints/upload_links.py:344 seahub/api2/views.py:3426
-#, python-format
-msgid "Expire days should be less than or equal to %s"
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:346
-#: seahub/api2/endpoints/share_links.py:593
-#: seahub/api2/endpoints/upload_links.py:232
-#: seahub/api2/endpoints/upload_links.py:368
-#, python-format
-msgid "Expiration time should be later than %s."
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:355
-#: seahub/api2/endpoints/share_links.py:602
-#: seahub/api2/endpoints/upload_links.py:241
-#: seahub/api2/endpoints/upload_links.py:377
-#, python-format
-msgid "Expiration time should be earlier than %s."
-msgstr ""
-
-#: seahub/api2/endpoints/share_links.py:424
-#: seahub/api2/endpoints/share_links.py:433
+#: seahub/api2/endpoints/share_links.py:427
+#: seahub/api2/endpoints/share_links.py:436
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
@@ -804,7 +818,7 @@ msgstr "電郵或使用者名稱"
 #: seahub/base/accounts.py:772
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
-#: seahub/templates/decrypt_repo_form.html:10
+#: seahub/share/views.py:320 seahub/templates/decrypt_repo_form.html:10
 #: seahub/templates/registration/login.html:38
 #: seahub/templates/registration/password_set_form.html:21
 #: seahub/templates/registration/registration_form.html:24
@@ -1458,9 +1472,9 @@ msgstr "描述太長（不超過100個漢字）"
 msgid "Name %s is not valid"
 msgstr "名稱 %s 含有無效字元"
 
-#: seahub/forms.py:97 seahub/views/ajax.py:308 seahub/views/ajax.py:312
-#: seahub/views/ajax.py:316 seahub/views/ajax.py:327 seahub/views/ajax.py:447
-#: seahub/views/file.py:1870
+#: seahub/forms.py:97 seahub/share/views.py:296 seahub/views/ajax.py:308
+#: seahub/views/ajax.py:312 seahub/views/ajax.py:316 seahub/views/ajax.py:327
+#: seahub/views/ajax.py:447 seahub/views/file.py:1875
 msgid "Argument missing"
 msgstr "參數缺失"
 
@@ -1582,10 +1596,10 @@ msgstr "感謝使用！"
 msgid "The %(site_name)s team"
 msgstr "%(site_name)s 團隊"
 
-#: seahub/group/views.py:105 seahub/share/views.py:231
+#: seahub/group/views.py:105 seahub/share/views.py:233
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:381
-#: seahub/views/ajax.py:427 seahub/views/file.py:1153
-#: seahub/views/file.py:1369 seahub/views/file.py:1879
+#: seahub/views/ajax.py:427 seahub/views/file.py:1158
+#: seahub/views/file.py:1374 seahub/views/file.py:1884
 #: seahub/views/repo.py:123 seahub/views/repo.py:180 seahub/views/repo.py:238
 #: seahub/views/repo.py:291 seahub/views/repo.py:401
 msgid "Permission denied"
@@ -4158,7 +4172,7 @@ msgid ""
 "alphanumeric characters and hyphens."
 msgstr ""
 
-#: seahub/organizations/forms.py:40 seahub/share/views.py:447
+#: seahub/organizations/forms.py:40 seahub/share/views.py:530
 msgid "Email address is not valid"
 msgstr "電郵地址無效"
 
@@ -4371,45 +4385,81 @@ msgstr "驗證碼"
 msgid "A verification code has been sent to the email."
 msgstr "您的通知將發送到該郵箱。"
 
-#: seahub/share/views.py:206 seahub/share/views.py:320
+#: seahub/share/views.py:208 seahub/share/views.py:403
 msgid "Internal server error, or please check the email(s) you entered"
 msgstr "內部錯誤，請檢查您輸入的電郵"
 
-#: seahub/share/views.py:227
+#: seahub/share/views.py:229
 msgid "Please choose a directory."
 msgstr "請選擇目錄。"
 
-#: seahub/share/views.py:251
+#: seahub/share/views.py:253
 msgid "Successfully saved."
 msgstr "儲存成功。"
 
-#: seahub/share/views.py:339 seahub/thumbnail/views.py:39
+#: seahub/share/views.py:283
+msgid "Preview and download"
+msgstr ""
+
+#: seahub/share/views.py:284
+msgid "Preview only"
+msgstr ""
+
+#: seahub/share/views.py:285
+msgid "Download and upload"
+msgstr ""
+
+#: seahub/share/views.py:286
+msgid "Edit on cloud and download"
+msgstr ""
+
+#: seahub/share/views.py:287
+msgid "Edit on cloud only"
+msgstr ""
+
+#: seahub/share/views.py:319
+msgid "Share Link"
+msgstr ""
+
+#: seahub/share/views.py:319 seahub/views/sysadmin.py:668
+msgid "Creator"
+msgstr "建立者"
+
+#: seahub/share/views.py:320 seahub/sysadmin_extra/views.py:208
+msgid "Permission"
+msgstr "讀寫權限"
+
+#: seahub/share/views.py:320
+msgid "Expiration"
+msgstr "過期時間"
+
+#: seahub/share/views.py:422 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:161 seahub/views/ajax.py:140
 #: seahub/views/ajax.py:418
 msgid "Library does not exist."
 msgstr "資料庫不存在"
 
-#: seahub/share/views.py:343 seahub/views/ajax.py:386
+#: seahub/share/views.py:426 seahub/views/ajax.py:386
 msgid "Directory does not exist."
 msgstr "目錄不存在"
 
-#: seahub/share/views.py:391
+#: seahub/share/views.py:474
 msgid "Only the owner of the library has permission to share it."
 msgstr "只有資料庫擁有者才有共享權限。"
 
-#: seahub/share/views.py:429
+#: seahub/share/views.py:512
 msgid "Please check the email(s) you entered"
 msgstr "請檢查您輸入的電郵"
 
-#: seahub/share/views.py:456
+#: seahub/share/views.py:539
 msgid "Share link is not found"
 msgstr "共享網址不存在"
 
-#: seahub/share/views.py:464
+#: seahub/share/views.py:547
 msgid "Verification code for visiting share links"
 msgstr "查看共享連接的驗證碼"
 
-#: seahub/share/views.py:475
+#: seahub/share/views.py:558
 msgid "Failed to send a verification code, please try again later."
 msgstr "發送驗證碼失敗，請稍後再試。"
 
@@ -4448,10 +4498,6 @@ msgstr "來源"
 #: seahub/sysadmin_extra/views.py:208
 msgid "To"
 msgstr "共享給"
-
-#: seahub/sysadmin_extra/views.py:208
-msgid "Permission"
-msgstr "讀寫權限"
 
 #: seahub/sysadmin_extra/views.py:209
 msgid "Folder Path"
@@ -5355,7 +5401,7 @@ msgstr "無法瀏覽該資料庫修改歷史"
 
 #: seahub/views/__init__.py:560 seahub/views/__init__.py:603
 #: seahub/views/__init__.py:737 seahub/views/__init__.py:882
-#: seahub/views/ajax.py:376 seahub/views/file.py:1865
+#: seahub/views/ajax.py:376 seahub/views/file.py:1870
 msgid "Library does not exist"
 msgstr "資料庫不存在"
 
@@ -5401,9 +5447,9 @@ msgstr "錯誤的repo id"
 msgid "Bad upload link token."
 msgstr "無效的上傳網址"
 
-#: seahub/views/ajax.py:338 seahub/views/file.py:458 seahub/views/file.py:489
-#: seahub/views/file.py:1148 seahub/views/file.py:1364
-#: seahub/views/file.py:1874
+#: seahub/views/ajax.py:338 seahub/views/file.py:459 seahub/views/file.py:490
+#: seahub/views/file.py:1153 seahub/views/file.py:1369
+#: seahub/views/file.py:1879
 msgid "File does not exist"
 msgstr "檔案不存在"
 
@@ -5415,69 +5461,69 @@ msgstr "上傳網址中含無效的repo id"
 msgid "No conflict in the merge."
 msgstr "合併沒有衝突。"
 
-#: seahub/views/file.py:192
+#: seahub/views/file.py:193
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: 無法線上打開該檔案"
 
-#: seahub/views/file.py:196
+#: seahub/views/file.py:197
 msgid "URLError: failed to open file online"
 msgstr "URLError: 無法線上打開該檔案"
 
-#: seahub/views/file.py:203
+#: seahub/views/file.py:204
 msgid "The encoding you chose is not proper."
 msgstr "檔案編碼不合適"
 
-#: seahub/views/file.py:220 seahub/views/file.py:223
+#: seahub/views/file.py:221 seahub/views/file.py:224
 msgid "Unknown file encoding"
 msgstr "檔案編碼無法識別"
 
-#: seahub/views/file.py:343 seahub/views/file.py:378 seahub/views/file.py:662
-#: seahub/views/file.py:752 seahub/views/file.py:874
+#: seahub/views/file.py:344 seahub/views/file.py:379 seahub/views/file.py:667
+#: seahub/views/file.py:757 seahub/views/file.py:879
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "檔案大小超過 %s，無法線上查看。"
 
-#: seahub/views/file.py:350 seahub/views/file.py:787
+#: seahub/views/file.py:351 seahub/views/file.py:792
 msgid "The library is encrypted, can not open file online."
 msgstr "不能線上預覽加密資料庫檔案。"
 
-#: seahub/views/file.py:445 seahub/views/file.py:467 seahub/views/file.py:472
-#: seahub/views/file.py:513 seahub/views/file.py:742 seahub/views/file.py:1007
-#: seahub/views/file.py:1033 seahub/views/file.py:1063
-#: seahub/views/file.py:1194 seahub/views/file.py:1283
-#: seahub/views/file.py:1405 seahub/views/file.py:1505
+#: seahub/views/file.py:446 seahub/views/file.py:468 seahub/views/file.py:473
+#: seahub/views/file.py:514 seahub/views/file.py:747 seahub/views/file.py:1012
+#: seahub/views/file.py:1038 seahub/views/file.py:1068
+#: seahub/views/file.py:1199 seahub/views/file.py:1288
+#: seahub/views/file.py:1410 seahub/views/file.py:1510
 msgid "Unable to view file"
 msgstr "無法查看該檔案"
 
-#: seahub/views/file.py:811 seahub/views/file.py:955 seahub/views/file.py:1244
-#: seahub/views/file.py:1443
+#: seahub/views/file.py:816 seahub/views/file.py:960 seahub/views/file.py:1249
+#: seahub/views/file.py:1448
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:843 seahub/views/file.py:967 seahub/views/file.py:1263
-#: seahub/views/file.py:1459
+#: seahub/views/file.py:848 seahub/views/file.py:972 seahub/views/file.py:1268
+#: seahub/views/file.py:1464
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1099
+#: seahub/views/file.py:1104
 msgid "Unable to download file, invalid file path"
 msgstr "無法下載檔案，無效的檔案路徑"
 
-#: seahub/views/file.py:1108
+#: seahub/views/file.py:1113
 msgid "Unable to download file, wrong file path"
 msgstr "無法下載檔案，錯誤的檔案路徑"
 
-#: seahub/views/file.py:1115
+#: seahub/views/file.py:1120
 msgid "Unable to download file."
 msgstr "無法下載檔案"
 
-#: seahub/views/file.py:1299 seahub/views/file.py:1524
+#: seahub/views/file.py:1304 seahub/views/file.py:1529
 #: seahub/views/repo.py:347
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1642 seahub/views/file.py:1647
+#: seahub/views/file.py:1647 seahub/views/file.py:1652
 msgid "Unable to download file"
 msgstr "無法下載檔案"
 
@@ -5530,10 +5576,6 @@ msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "成功新增用戶 %s。 但由於郵件服務未正確配置，通知郵件無法發送。"
-
-#: seahub/views/sysadmin.py:668
-msgid "Creator"
-msgstr "建立者"
 
 #: seahub/views/sysadmin.py:697
 msgid "Input should be a number"
