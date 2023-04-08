@@ -10,7 +10,8 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   item: PropTypes.object.isRequired,
   permissionOptions: PropTypes.array,
-  showLinkDetails : PropTypes.func.isRequired
+  showLinkDetails : PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired
 };
 
 class LinkItem extends React.Component {
@@ -51,13 +52,21 @@ class LinkItem extends React.Component {
     this.props.showLinkDetails(this.props.item);
   }
 
+  toggleSelectLink = (e) => {
+    const { item } = this.props;
+    this.props.toggleSelectLink(item, e.target.checked);
+  }
+
   render() {
     const { isItemOpVisible } = this.state;
     const { item, permissionOptions } = this.props;
-    const { permissions, link, expire_date } = item;
+    const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     return (
-      <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+      <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={isSelected ? 'tr-highlight' : ''}>
+        <td className="text-center">
+          <input type="checkbox" checked={isSelected} onChange={this.toggleSelectLink} className="vam" />
+        </td>
         <td>{this.cutLink(link)}</td>
         <td>
           {(isPro && permissions) && (

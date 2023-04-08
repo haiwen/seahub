@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -6,10 +6,9 @@ import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
 import toaster from '../toast';
 import Loading from '../loading';
-import EmptyTip from '../empty-tip';
 import LinkDetails from './link-details';
-import LinkItem from './link-item';
 import LinkCreation from './link-creation';
+import LinkList from './link-list';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -132,6 +131,28 @@ class ShareLinkPanel extends React.Component {
     this.setState({ mode: mode });
   }
 
+  toggleSelectAllLinks = (isSelected) => {
+    const { shareLinks: links } = this.state;
+    this.setState({
+      shareLinks: links.map(item => {
+        item.isSelected = isSelected;
+        return item;
+      })
+    });
+  }
+
+  toggleSelectLink = (link, isSelected) => {
+    const { shareLinks: links } = this.state;
+    this.setState({
+      shareLinks: links.map(item => {
+        if (item.token == link.token) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    });
+  }
+
   render() {
     if (this.state.isLoading) {
       return <Loading />;
@@ -181,45 +202,14 @@ class ShareLinkPanel extends React.Component {
         );
       default:
         return (
-          <Fragment>
-            <div className="d-flex justify-content-between align-items-center pb-2 border-bottom">
-              <h6 className="font-weight-normal m-0">{gettext('Share Link')}</h6>
-              <div>
-                <button className="btn btn-sm btn-outline-primary mr-2" onClick={this.setMode.bind(this, 'singleLinkCreation')}>{gettext('Generate Link')}</button>
-                <button className="btn btn-sm btn-outline-primary" onClick={this.setMode.bind(this, 'linksCreation')}>{gettext('Generate links in batch')}</button>
-              </div>
-            </div>
-            {shareLinks.length == 0 ? (
-              <EmptyTip forDialog={true}>
-                <p className="text-secondary">{gettext('No share links')}</p>
-              </EmptyTip>
-            ) : (
-              <table className="table-hover">
-                <thead>
-                  <tr>
-                    <th width="28%">{gettext('Link')}</th>
-                    <th width="30%">{gettext('Permission')}</th>
-                    <th width="28%">{gettext('Expiration')}</th>
-                    <th width="14%"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    shareLinks.map((item, index) => {
-                      return (
-                        <LinkItem
-                          key={index}
-                          item={item}
-                          permissionOptions={permissionOptions}
-                          showLinkDetails={this.showLinkDetails}
-                        />
-                      );
-                    })
-                  }
-                </tbody>
-              </table>
-            )}
-          </Fragment>
+          <LinkList
+            shareLinks={shareLinks}
+            permissionOptions={permissionOptions}
+            setMode={this.setMode}
+            showLinkDetails={this.showLinkDetails}
+            toggleSelectAllLinks={this.toggleSelectAllLinks}
+            toggleSelectLink={this.toggleSelectLink}
+          />
         );
     }
   }
