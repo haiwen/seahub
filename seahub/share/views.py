@@ -135,8 +135,7 @@ def send_shared_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, \
-                email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = FileLinkShareForm(request.POST)
@@ -347,8 +346,7 @@ def send_shared_upload_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, \
-                email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = UploadLinkShareForm(request.POST)
