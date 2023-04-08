@@ -25,8 +25,10 @@ from seahub.contacts.signals import mail_sended
 from seahub.views import is_registered_user, check_folder_permission
 from seahub.utils import string2list, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
-    gen_token, normalize_cache_key, get_site_name
+    gen_token, normalize_cache_key, get_site_name, gen_shared_link
 from seahub.utils.mail import send_html_email_with_dj_template
+from seahub.utils.ms_excel import write_xls
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
         ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
         SHARE_LINK_AUDIT_CODE_TIMEOUT
@@ -133,7 +135,8 @@ def send_shared_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Failed to send email, \
+                email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = FileLinkShareForm(request.POST)
@@ -252,6 +255,87 @@ def save_shared_link(request):
     return HttpResponseRedirect(next_page)
 
 
+# share link
+@login_required
+def export_shared_link(request):
+    """
+    Export shared links to excel.
+    """
+
+    def get_share_link_info(fileshare):
+
+        if fileshare.expire_date:
+            expire_date = datetime_to_isoformat_timestr(fileshare.expire_date)
+        else:
+            expire_date = ''
+
+        info = {}
+        info['username'] = fileshare.username
+        info['link'] = gen_shared_link(fileshare.token, fileshare.s_type)
+        info['expire_date'] = expire_date
+        info['password'] = fileshare.get_password()
+
+        can_edit = fileshare.get_permissions().get('can_edit')
+        can_download = fileshare.get_permissions().get('can_download')
+        can_upload = fileshare.get_permissions().get('can_upload')
+        permission_str = f"{can_edit} {can_download} {can_upload}".lower()
+
+        permission_dict = {
+            "false true false": _('Preview and download'),
+            "false false false": _('Preview only'),
+            "false true true": _('Download and upload'),
+            "true true false": _('Edit on cloud and download'),
+            "true false false": _('Edit on cloud only')
+        }
+
+        info['permission'] = permission_dict.get(permission_str, '')
+
+        return info
+
+    token_list = request.GET.getlist('token')
+    if not token_list:
+        data = json.dumps({'error': _('Argument missing')})
+        return HttpResponse(data,
+                            status=400,
+                            content_type='application/json; charset=utf-8')
+
+    data_list = []
+    username = request.user.username
+    share_links = FileShare.objects.filter(token__in=token_list)
+
+    for link in share_links:
+
+        if link.username != username:
+            continue
+
+        link_info = get_share_link_info(link)
+        row = [link_info.get('link'), link_info.get('username'),
+               link_info.get('password') or '--',
+               link_info.get('permission'),
+               link_info.get('expire_date')]
+
+        data_list.append(row)
+
+    excel_name = 'Share Links'
+    head = [_("Share Link"), _("Creator"),
+            _('Password'), _("Permission"), _("Expiration")]
+
+    try:
+        wb = write_xls(excel_name, head, data_list)
+    except Exception as e:
+        logger.error(e)
+        data = json.dumps({'error': _('Internal Server Error')})
+        return HttpResponse(data,
+                            status=500,
+                            content_type='application/json; charset=utf-8')
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="%s.xlsx"' % excel_name
+    wb.save(response)
+
+    return response
+
+
 @login_required_ajax
 def send_shared_upload_link(request):
     """
@@ -263,7 +347,8 @@ def send_shared_upload_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if not IS_EMAIL_CONFIGURED:
-        data = json.dumps({'error': _('Failed to send email, email service is not properly configured, please contact administrator.')})
+        data = json.dumps({'error': _('Failed to send email, \
+                email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
     form = UploadLinkShareForm(request.POST)
