@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 18:30+0800\n"
+"POT-Creation-Date: 2023-04-08 18:07+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Greek (Greece) (http://www.transifex.com/haiwen/seahub/language/el_GR/)\n"
+"Language-Team: Greek (Greece) (http://app.transifex.com/haiwen/seahub/language/el_GR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -68,6 +68,10 @@ msgid "Settings"
 msgstr "Ρυθμίσεις"
 
 #: frontend/src/components/common/account.js:168
+msgid "Customer Portal"
+msgstr ""
+
+#: frontend/src/components/common/account.js:169
 #: frontend/src/components/common/logout.js:6
 msgid "Log out"
 msgstr ""
@@ -374,8 +378,6 @@ msgstr "Περιγραφή"
 #: frontend/src/components/dialog/delete-folder-dialog.js:62
 #: frontend/src/components/dialog/delete-repo-dialog.js:72
 #: frontend/src/components/dialog/dismiss-group-dialog.js:33
-#: frontend/src/components/dialog/generate-share-link.js:459
-#: frontend/src/components/dialog/generate-share-link.js:501
 #: frontend/src/components/dialog/generate-upload-link.js:340
 #: frontend/src/components/dialog/import-members-dialog.js:60
 #: frontend/src/components/dialog/insert-file-dialog.js:66
@@ -442,6 +444,9 @@ msgstr "Περιγραφή"
 #: frontend/src/components/review-list-view/review-comment-dialog.js:91
 #: frontend/src/components/review-list-view/review-comments.js:220
 #: frontend/src/components/send-link.js:111
+#: frontend/src/components/share-link-panel/link-details.js:216
+#: frontend/src/components/share-link-panel/link-details.js:257
+#: frontend/src/components/share-link-panel/link-list.js:51
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:127
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:104
 #: frontend/src/pages/org-admin/org-saml-config.js:185
@@ -722,8 +727,6 @@ msgstr ""
 #: frontend/src/components/dialog/delete-repo-dialog.js:73
 #: frontend/src/components/dialog/dismiss-group-dialog.js:34
 #: frontend/src/components/dialog/file-participant-dialog.js:43
-#: frontend/src/components/dialog/generate-share-link.js:494
-#: frontend/src/components/dialog/generate-share-link.js:500
 #: frontend/src/components/dialog/generate-upload-link.js:348
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:66
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:67
@@ -758,6 +761,8 @@ msgstr ""
 #: frontend/src/components/file-view/comment-panel.js:341
 #: frontend/src/components/group-members.js:152
 #: frontend/src/components/review-list-view/review-comments.js:243
+#: frontend/src/components/share-link-panel/link-details.js:250
+#: frontend/src/components/share-link-panel/link-details.js:256
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:444
 #: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:317
 #: frontend/src/components/user-settings/delete-account.js:38
@@ -1063,9 +1068,9 @@ msgid "Password is too short"
 msgstr ""
 
 #: frontend/src/components/dialog/create-repo-dialog.js:103
-#: frontend/src/components/dialog/generate-share-link.js:248
 #: frontend/src/components/dialog/generate-upload-link.js:150
 #: frontend/src/components/dialog/org-add-user-dialog.js:130
+#: frontend/src/components/share-link-panel/link-creation.js:170
 msgid "Passwords don't match"
 msgstr ""
 
@@ -1111,6 +1116,7 @@ msgstr ""
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-group.js:283
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:214
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:265
+#: frontend/src/components/share-link-panel/link-list.js:69
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:83
 #: frontend/src/pages/org-admin/org-logs.js:40
 #: frontend/src/pages/share-admin/folders.js:51
@@ -1145,22 +1151,22 @@ msgid "Encrypt"
 msgstr ""
 
 #: frontend/src/components/dialog/create-repo-dialog.js:232
-#: frontend/src/components/dialog/generate-share-link.js:524
 #: frontend/src/components/dialog/generate-upload-link.js:379
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:66
 #: frontend/src/components/dialog/org-add-user-dialog.js:152
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:106
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:150
+#: frontend/src/components/share-link-panel/link-creation.js:273
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:239
 #: frontend/src/settings.js:44 frontend/src/settings.js:131
 msgid "Password"
 msgstr "Κωδικός"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:245
-#: frontend/src/components/dialog/generate-share-link.js:535
 #: frontend/src/components/dialog/generate-upload-link.js:390
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-org-dialog.js:110
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:160
+#: frontend/src/components/share-link-panel/link-creation.js:284
 msgid "Password again"
 msgstr ""
 
@@ -1178,6 +1184,8 @@ msgstr ""
 #: frontend/src/components/dialog/create-tag-dialog.js:80
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:124
 #: frontend/src/components/dialog/manage-members-dialog.js:46
+#: frontend/src/components/share-link-panel/link-creation.js:248
+#: frontend/src/components/share-link-panel/link-details.js:150
 #: frontend/src/repo-folder-trash.js:196 frontend/src/repo-history.js:108
 #: frontend/src/repo-snapshot.js:146
 msgid "Back"
@@ -1299,6 +1307,7 @@ msgstr ""
 #: frontend/src/components/dialog/repo-api-token-dialog.js:70
 #: frontend/src/components/dialog/share-admin-link.js:34
 #: frontend/src/components/dialog/view-link-dialog.js:38
+#: frontend/src/components/share-link-panel/link-item.js:86
 #: frontend/src/components/shared-link.js:24
 #: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:316
 #: frontend/src/components/toolbar/multiple-dir-operation-toolbar.js:323
@@ -1315,8 +1324,6 @@ msgid "Generate share link"
 msgstr ""
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:55
-#: frontend/src/components/dialog/generate-share-link.js:436
-#: frontend/src/components/dialog/generate-share-link.js:437
 #: frontend/src/components/dialog/generate-upload-link.js:317
 #: frontend/src/components/dialog/generate-upload-link.js:318
 #: frontend/src/components/dirent-detail/detail-comments-list.js:308
@@ -1325,6 +1332,8 @@ msgstr ""
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:64
 #: frontend/src/components/select-editor/select-editor.js:159
 #: frontend/src/components/select-editor/select-editor.js:160
+#: frontend/src/components/share-link-panel/link-details.js:192
+#: frontend/src/components/share-link-panel/link-details.js:193
 #: frontend/src/components/toolbar/view-file-toolbar.js:87
 #: frontend/src/components/user-settings/user-avatar-form.js:97
 #: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:129
@@ -1425,159 +1434,119 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:194
-msgid "Share link is copied to the clipboard."
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:201
-msgid "Direct download link is copied to the clipboard."
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:240
 #: frontend/src/components/dialog/generate-upload-link.js:142
 #: frontend/src/components/dialog/reset-webdav-password.js:29
 #: frontend/src/components/dialog/set-webdav-password.js:29
+#: frontend/src/components/share-link-panel/link-creation.js:162
 msgid "Please enter a password."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:244
 #: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/reset-webdav-password.js:33
 #: frontend/src/components/dialog/set-webdav-password.js:33
+#: frontend/src/components/share-link-panel/link-creation.js:166
 msgid "The password is too short."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:252
 #: frontend/src/components/dialog/generate-upload-link.js:154
 #: frontend/src/components/dialog/reset-webdav-password.js:38
 #: frontend/src/components/dialog/set-webdav-password.js:38
+#: frontend/src/components/share-link-panel/link-creation.js:174
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:260
 #: frontend/src/components/dialog/generate-upload-link.js:162
+#: frontend/src/components/share-link-panel/link-creation.js:182
 msgid "Please select an expiration time"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:269
 #: frontend/src/components/dialog/generate-upload-link.js:170
+#: frontend/src/components/share-link-panel/link-creation.js:191
 msgid "Please enter days"
 msgstr ""
 
-#: frontend/src/components/dialog/generate-share-link.js:273
 #: frontend/src/components/dialog/generate-upload-link.js:174
 #: frontend/src/components/dialog/lib-history-setting-dialog.js:66
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:66
+#: frontend/src/components/share-link-panel/link-creation.js:195
 msgid "Please enter a non-negative integer"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:367
-#: frontend/src/pages/share-admin/folders.js:166
-#: frontend/src/pages/share-admin/libraries.js:141
-#: frontend/src/pages/share-admin/share-links.js:197
-msgid "Successfully modified permission."
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:380
-#: frontend/src/components/dialog/generate-upload-link.js:276
-#: frontend/src/components/dialog/reset-webdav-password.js:68
-#: frontend/src/components/dialog/set-webdav-password.js:68
-msgid ""
-"(at least {passwordMinLength} characters and includes "
-"{passwordStrengthLevel} of the following: number, upper letter, lower letter"
-" and other symbols)"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:395
-msgid "Link:"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:406
-msgid "Direct Download Link:"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:418
-#: frontend/src/components/dialog/generate-upload-link.js:298
-msgid "Password:"
-msgstr "Κωδικός πρόσβασης:"
-
-#: frontend/src/components/dialog/generate-share-link.js:422
-#: frontend/src/components/dialog/generate-upload-link.js:302
-#: frontend/src/components/user-settings/web-api-auth-token.js:82
-msgid "Hide"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:422
-#: frontend/src/components/dialog/generate-upload-link.js:302
-#: frontend/src/components/user-settings/web-api-auth-token.js:82
-msgid "Show"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:429
-#: frontend/src/components/dialog/generate-upload-link.js:310
-msgid "Expiration Date:"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:458
-#: frontend/src/components/dialog/generate-upload-link.js:339
-#: frontend/src/components/dirent-detail/detail-comments-list.js:291
-#: frontend/src/components/file-view/comment-panel.js:318
-#: frontend/src/components/review-list-view/review-comments.js:218
-#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:103
-#: frontend/src/pages/org-admin/org-saml-config.js:202
-#: frontend/src/pages/sys-admin/terms-and-conditions/item.js:117
-msgid "Update"
-msgstr "Ανανέωση"
-
-#: frontend/src/components/dialog/generate-share-link.js:468
-msgid "Permission:"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:483
-#: frontend/src/components/dialog/generate-upload-link.js:347
-#: frontend/src/components/send-link.js:110
-msgid "Send"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:498
-msgid "Are you sure you want to delete the share link?"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:499
-msgid ""
-"If the share link is deleted, no one will be able to access it any more."
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:513
-#: frontend/src/components/dialog/generate-share-link.js:518
-#: frontend/src/components/dialog/generate-upload-link.js:367
-#: frontend/src/components/dialog/generate-upload-link.js:372
-msgid "Add password protection"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:548
-#: frontend/src/components/dialog/generate-upload-link.js:403
-msgid "Add auto expiration"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:569
-msgid "Set permission"
-msgstr ""
-
-#: frontend/src/components/dialog/generate-share-link.js:584
-#: frontend/src/components/dialog/generate-upload-link.js:422
-#: frontend/src/components/user-settings/web-api-auth-token.js:87
-msgid "Generate"
 msgstr ""
 
 #: frontend/src/components/dialog/generate-upload-link.js:206
 msgid "Upload link is copied to the clipboard."
 msgstr ""
 
+#: frontend/src/components/dialog/generate-upload-link.js:276
+#: frontend/src/components/dialog/reset-webdav-password.js:68
+#: frontend/src/components/dialog/set-webdav-password.js:68
+#: frontend/src/components/share-link-panel/link-creation.js:274
+msgid ""
+"(at least {passwordMinLength} characters and includes "
+"{passwordStrengthLevel} of the following: number, upper letter, lower letter"
+" and other symbols)"
+msgstr ""
+
 #: frontend/src/components/dialog/generate-upload-link.js:286
 msgid "Upload Link:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:298
+#: frontend/src/components/share-link-panel/link-details.js:174
+msgid "Password:"
+msgstr "Κωδικός πρόσβασης:"
+
+#: frontend/src/components/dialog/generate-upload-link.js:302
+#: frontend/src/components/share-link-panel/link-details.js:178
+#: frontend/src/components/user-settings/web-api-auth-token.js:82
+msgid "Hide"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:302
+#: frontend/src/components/share-link-panel/link-details.js:178
+#: frontend/src/components/user-settings/web-api-auth-token.js:82
+msgid "Show"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:310
+#: frontend/src/components/share-link-panel/link-details.js:185
+msgid "Expiration Date:"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:339
+#: frontend/src/components/dirent-detail/detail-comments-list.js:291
+#: frontend/src/components/file-view/comment-panel.js:318
+#: frontend/src/components/review-list-view/review-comments.js:218
+#: frontend/src/components/share-link-panel/link-details.js:215
+#: frontend/src/pages/markdown-editor/rich-markdown-editor/comment-item.js:103
+#: frontend/src/pages/org-admin/org-saml-config.js:202
+#: frontend/src/pages/sys-admin/terms-and-conditions/item.js:117
+msgid "Update"
+msgstr "Ανανέωση"
+
+#: frontend/src/components/dialog/generate-upload-link.js:347
+#: frontend/src/components/send-link.js:110
+#: frontend/src/components/share-link-panel/link-details.js:239
+msgid "Send"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:367
+#: frontend/src/components/dialog/generate-upload-link.js:372
+#: frontend/src/components/share-link-panel/link-creation.js:262
+#: frontend/src/components/share-link-panel/link-creation.js:267
+msgid "Add password protection"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:403
+#: frontend/src/components/share-link-panel/link-creation.js:297
+msgid "Add auto expiration"
+msgstr ""
+
+#: frontend/src/components/dialog/generate-upload-link.js:422
+#: frontend/src/components/share-link-panel/link-creation.js:333
+#: frontend/src/components/user-settings/web-api-auth-token.js:87
+msgid "Generate"
 msgstr ""
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:23
@@ -2325,6 +2294,7 @@ msgid "Upload Links"
 msgstr ""
 
 #: frontend/src/components/dialog/repo-share-upload-links-dialog.js:182
+#: frontend/src/components/share-link-panel/link-list.js:59
 #: frontend/src/translate.js:14
 msgid "No share links"
 msgstr ""
@@ -2346,6 +2316,7 @@ msgstr ""
 #: frontend/src/components/dialog/repo-share-upload-links-dialog.js:191
 #: frontend/src/components/dialog/share-admin-link.js:29
 #: frontend/src/components/dialog/view-link-dialog.js:32
+#: frontend/src/components/share-link-panel/link-list.js:68
 msgid "Link"
 msgstr ""
 
@@ -2419,6 +2390,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/share-dialog.js:114
 #: frontend/src/components/dialog/share-dialog.js:267
+#: frontend/src/components/share-link-panel/link-list.js:42
 msgid "Share Link"
 msgstr ""
 
@@ -2487,6 +2459,7 @@ msgid "Select groups..."
 msgstr ""
 
 #: frontend/src/components/dialog/share-to-invite-people.js:302
+#: frontend/src/components/share-link-panel/link-list.js:70
 #: frontend/src/pages/invitations/invitations-view.js:118
 #: frontend/src/pages/invitations/invitations-view.js:202
 #: frontend/src/pages/share-admin/share-links.js:79
@@ -3104,6 +3077,7 @@ msgstr ""
 
 #: frontend/src/components/file-view/file-toolbar.js:174
 #: frontend/src/components/file-view/file-toolbar.js:264
+#: frontend/src/components/share-link-panel/link-item.js:87
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:304
 #: frontend/src/pages/org-admin/org-logs-file-update.js:259
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:127
@@ -3425,6 +3399,66 @@ msgstr ""
 msgid "Expiration time"
 msgstr ""
 
+#: frontend/src/components/share-link-panel/index.js:106
+msgid "Link deleted"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:155
+msgid "Please enter an integer bigger than 1 as number of links."
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:249
+#: frontend/src/components/share-link-panel/link-list.js:47
+msgid "Generate links in batch"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:249
+#: frontend/src/components/share-link-panel/link-list.js:46
+msgid "Generate Link"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:254
+msgid "Number of links"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-creation.js:318
+msgid "Set permission"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:49
+#: frontend/src/components/share-link-panel/link-item.js:47
+msgid "Share link is copied to the clipboard."
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:55
+msgid "Direct download link is copied to the clipboard."
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:152
+msgid "Link:"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:162
+msgid "Direct Download Link:"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:225
+msgid "Permission:"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:254
+msgid "Are you sure you want to delete the share link?"
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-details.js:255
+msgid ""
+"If the share link is deleted, no one will be able to access it any more."
+msgstr ""
+
+#: frontend/src/components/share-link-panel/link-list.js:52
+msgid "Export"
+msgstr ""
+
 #: frontend/src/components/shared-file-view/shared-file-view.js:46
 #: frontend/src/pages/markdown-editor/seafile-editor/index.js:149
 #: frontend/src/view-file-text.js:80
@@ -3634,11 +3668,11 @@ msgstr ""
 msgid "Detail"
 msgstr ""
 
-#: frontend/src/components/user-select.js:86
+#: frontend/src/components/user-select.js:90
 msgid "User not found"
 msgstr ""
 
-#: frontend/src/components/user-select.js:86
+#: frontend/src/components/user-select.js:90
 msgid "Enter characters to start searching"
 msgstr ""
 
@@ -5118,6 +5152,12 @@ msgid ""
 "You have not shared any folders with other users yet. You can share a folder"
 " with other users by clicking the share icon to the right of a folder's "
 "name."
+msgstr ""
+
+#: frontend/src/pages/share-admin/folders.js:166
+#: frontend/src/pages/share-admin/libraries.js:141
+#: frontend/src/pages/share-admin/share-links.js:197
+msgid "Successfully modified permission."
 msgstr ""
 
 #: frontend/src/pages/share-admin/folders.js:225
