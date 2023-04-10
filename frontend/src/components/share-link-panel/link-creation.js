@@ -248,11 +248,11 @@ class LinkCreation extends React.Component {
             <button className="fa fa-arrow-left back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.goBack} title={gettext('Back')} aria-label={gettext('Back')}></button>
             {type == 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}</h6>
         </div>
-        <Form className="generate-share-link">
+        <Form className="pt-4">
           {type == 'batch' && (
             <FormGroup>
-              <Label for="passwd">{gettext('Number of links')}</Label>
-              <Input type="number" value={this.state.linkAmount} onChange={this.onLinkAmountChange} style={{width: inputWidth}} />
+              <Label for="link-number" className="p-0">{gettext('Number of links')}</Label>
+              <Input type="number" id="link-number" value={this.state.linkAmount} onChange={this.onLinkAmountChange} style={{width: inputWidth}} />
             </FormGroup>
           )}
           <FormGroup check>
