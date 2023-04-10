@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/main.css?version=0.1.2" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/main.css?version=0.1.3" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
         {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
     </head>
@@ -35,9 +35,9 @@
               pageOptions: {
                   repoID: '{{ repo.id }}',
                   repoName: '{{ repo.name|escapejs }}',
-                  filePath: '{{ path|escapejs }}',
-                  fileName: '{{ filename|escapejs }}',
-                  fileUuid: '{{ file_uuid }}',
+                  docPath: '{{ path|escapejs }}',
+                  docName: '{{ filename|escapejs }}',
+                  docUuid: '{{ file_uuid }}',
                   seadocAccessToken: '{{ seadoc_access_token }}',
                   seadocServerUrl: '{{ seadoc_server_url }}',
                   domain: '{{ domain }}',
@@ -69,7 +69,7 @@
              }
           }
          </script>
-         <script src="{{ MEDIA_URL }}seafile-editor/main.js?version=0.1.2"></script>
+         <script src="{{ MEDIA_URL }}seafile-editor/main.js?version=0.1.3"></script>
          <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
     </body>
 </html>
