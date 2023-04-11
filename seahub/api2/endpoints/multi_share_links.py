@@ -23,7 +23,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare
-from seahub.utils import is_org_context, get_password_strength_level, is_valid_password
+from seahub.utils import is_org_context, get_password_strength_level, \
+        is_valid_password, gen_shared_link
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 from seahub.views.file import can_edit_file
@@ -405,10 +407,30 @@ class MultiShareLinksBatch(APIView):
 
             created_share_links.append(fs)
 
-        result = []
+        links_info = []
         for fs in created_share_links:
-            link_info = get_share_link_info(fs)
-            link_info['repo_folder_permission'] = repo_folder_permission
-            result.append(link_info)
 
-        return Response(result)
+            token = fs.token
+
+            link_info = {}
+            link_info['username'] = username
+            link_info['repo_id'] = repo_id
+            link_info['repo_name'] = repo.repo_name
+
+            if path:
+                obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
+            else:
+                obj_name = ''
+
+            link_info['path'] = path
+            link_info['obj_name'] = obj_name
+            link_info['is_dir'] = True if s_type == 'd' else False
+            link_info['token'] = token
+            link_info['link'] = gen_shared_link(token, s_type)
+            link_info['ctime'] = datetime_to_isoformat_timestr(fs.ctime) if fs.ctime else ''
+            link_info['expire_date'] = datetime_to_isoformat_timestr(fs.expire_date) if fs.expire_date else ''
+            link_info['permissions'] = fs.get_permissions()
+            link_info['password'] = fs.get_password()
+            links_info.append(link_info)
+
+        return Response(links_info)

@@ -219,32 +219,49 @@ class ShareLinks(APIView):
                                           .filter(repo_id=repo_id) \
                                           .filter(path=path)
 
-        repo_folder_permission_dict = {}
+        repo_object_dict = {}
         for fileshare in fileshares:
-
-            if fileshare.s_type == 'd':
-                folder_path = normalize_dir_path(fileshare.path)
-            else:
-                file_path = normalize_file_path(fileshare.path)
-                folder_path = os.path.dirname(file_path)
-
             repo_id = fileshare.repo_id
-            if repo_id not in repo_folder_permission_dict:
-
-                try:
-                    permission = seafile_api.check_permission_by_path(repo_id,
-                                                                      folder_path,
-                                                                      fileshare.username)
-                except Exception as e:
-                    logger.error(e)
-                    permission = ''
-
-                repo_folder_permission_dict[repo_id] = permission
+            if repo_id not in repo_object_dict:
+                repo = seafile_api.get_repo(repo_id)
+                repo_object_dict[repo_id] = repo
 
         links_info = []
         for fs in fileshares:
-            link_info = get_share_link_info(fs)
-            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(link_info['repo_id'], '')
+
+            link_info = {}
+
+            token = fs.token
+            repo_id = fs.repo_id
+            path = fs.path
+            s_type = fs.s_type
+
+            link_info['username'] = username
+            link_info['repo_id'] = repo_id
+
+            repo_object = repo_object_dict.get(repo_id, '')
+            if repo_object:
+                repo_name = repo_object.repo_name
+            else:
+                repo_name = ''
+
+            if path:
+                obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
+            else:
+                obj_name = ''
+
+            link_info['repo_name'] = repo_name
+            link_info['path'] = path
+            link_info['obj_name'] = obj_name
+            link_info['is_dir'] = True if s_type == 'd' else False
+            link_info['token'] = token
+            link_info['link'] = gen_shared_link(token, s_type)
+            link_info['view_cnt'] = fs.view_cnt
+            link_info['ctime'] = datetime_to_isoformat_timestr(fs.ctime) if fs.ctime else ''
+            link_info['expire_date'] = datetime_to_isoformat_timestr(fs.expire_date) if fs.expire_date else ''
+            link_info['is_expired'] = fs.is_expired()
+            link_info['permissions'] = fs.get_permissions()
+            link_info['password'] = fs.get_password()
             links_info.append(link_info)
 
         if len(links_info) == 1:
