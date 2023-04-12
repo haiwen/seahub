@@ -251,3 +251,62 @@ class RepoTrash(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class RepoTrashRevertDirents(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        """ Revert deleted files/dirs.
+        """
+
+        # argument check
+        path_list = request.data.getlist('path', [])
+        if not path_list:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        commit_id = request.data.get('commit_id', '')
+        if not commit_id:
+            error_msg = 'commit_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        username = request.user.username
+        try:
+            for path in path_list:
+                if seafile_api.get_dir_id_by_commit_and_path(repo_id, commit_id, path):
+                    seafile_api.revert_dir(repo_id, commit_id, path, username)
+                    result['success'].append({'path': path, 'is_dir': True})
+                elif seafile_api.get_file_id_by_commit_and_path(repo_id, commit_id, path):
+                    seafile_api.revert_file(repo_id, commit_id, path, username)
+                    result['success'].append({'path': path, 'is_dir': False})
+                else:
+                    result['failed'].append({
+                        'path': path,
+                        'error_msg': f'Dirent {path} not found.'
+                    })
+
+        except Exception as e:
+            result['failed'].append({
+                'path': path,
+                'error_msg': str(e)
+            })
+
+        return Response(result)

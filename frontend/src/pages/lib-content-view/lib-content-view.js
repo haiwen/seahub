@@ -21,6 +21,7 @@ import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+import DeletedMutipleDirentsSuccessTip from '../../components/deleted-mutiple-dirents-success-tip.js';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -89,6 +90,8 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
+    this.commitIDWhenDeleteDirent = '';
+    this.deletedDirentsForRevert = [];
   }
 
   showDirentDetail = (direntDetailPanelTab) => {
@@ -760,6 +763,64 @@ class LibContentView extends React.Component {
     });
   }
 
+  deleteMutipleDirentsUndo = () => {
+    let repoID = this.props.repoID;
+    seafileAPI.revertDirentsInTrash(repoID, this.commitIDWhenDeleteDirent, this.deletedDirentsForRevert).then(res => {
+
+      res.data.success.map(dirent => {
+        let name = Utils.getFileName(dirent.path);
+        let parentPath = Utils.getDirName(dirent.path);
+        if (!dirent.is_dir) {
+          if (this.state.currentMode === 'column') {
+            this.addNodeToTree(name, parentPath, 'file');
+          }
+          if (parentPath === this.state.path && !this.state.isViewFile) {
+            this.addDirent(name, 'file');
+          }
+	} else {
+          if (this.state.currentMode === 'column') {
+            this.addNodeToTree(name, parentPath, 'dir');
+          }
+          if (parentPath === this.state.path && !this.state.isViewFile) {
+            this.addDirent(name, 'dir');
+          }
+	}
+      });
+
+      let msg = '';
+      let revertedDirentName = '';
+      if (res.data.success.length > 1) {
+        revertedDirentName = res.data.success[0].path.split('/').pop();
+        msg = gettext('Restored {name} and other {n} items.');
+        msg = msg.replace('{name}', revertedDirentName);
+        msg = msg.replace('{n}', res.data.success.length - 1);
+        toaster.success(msg);
+      } else if (res.data.success.length === 1) {
+        revertedDirentName = res.data.success[0].path.split('/').pop();
+        msg = gettext('Restored {name}.');
+        msg = msg.replace('{name}', revertedDirentName);
+        toaster.success(msg);
+      }
+
+      let revertedFailedDirentName = '';
+      if (res.data.failed.length > 1) {
+        revertedFailedDirentName = res.data.failed[0].path.split('/').pop();
+        msg = gettext('Failed to restore {name} and other {n} items.');
+        msg = msg.replace('{name}', revertedFailedDirentName);
+        msg = msg.replace('{n}', res.data.failed.length - 1);
+        toaster.danger(msg);
+      } else if (res.data.failed.length === 1) {
+        revertedFailedDirentName = res.data.failed[0].path.split('/').pop();
+        msg = gettext('Failed to restore {name}.');
+        msg = msg.replace('{name}', revertedFailedDirentName);
+        toaster.danger(msg);
+      }
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onDeleteItems = () => {
     let repoID = this.props.repoID;
     let direntPaths = this.getSelectedDirentPaths();
@@ -773,6 +834,11 @@ class LibContentView extends React.Component {
 
       this.deleteDirents(dirNames);
 
+      this.commitIDWhenDeleteDirent = res.data.commit_id;
+      this.deletedDirentsForRevert = dirNames.map(direntName => {
+        return this.state.path + direntName;
+      });
+
       let msg = '';
       if (direntPaths.length > 1) {
         msg = gettext('Successfully deleted {name} and other {n} items.');
@@ -782,7 +848,9 @@ class LibContentView extends React.Component {
         msg = gettext('Successfully deleted {name}.');
         msg = msg.replace('{name}', dirNames[0]);
       }
-      toaster.success(msg);
+      const successTipWithUndo = <DeletedMutipleDirentsSuccessTip msg={msg} undo={this.deleteMutipleDirentsUndo} />;
+      toaster.success(successTipWithUndo);
+
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
