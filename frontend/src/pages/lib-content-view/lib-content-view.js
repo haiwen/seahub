@@ -841,11 +841,11 @@ class LibContentView extends React.Component {
 
       let msg = '';
       if (direntPaths.length > 1) {
-        msg = gettext('Successfully deleted {name} and other {n} items.');
+        msg = gettext('Deleted {name} and other {n} items.');
         msg = msg.replace('{name}', dirNames[0]);
         msg = msg.replace('{n}', dirNames.length - 1);
       } else {
-        msg = gettext('Successfully deleted {name}.');
+        msg = gettext('Deleted {name}.');
         msg = msg.replace('{name}', dirNames[0]);
       }
       const successTipWithUndo = <DeletedMutipleDirentsSuccessTip msg={msg} undo={this.deleteMutipleDirentsUndo} />;
