@@ -4,6 +4,7 @@
 import os
 import re
 import sys
+import random
 import logging
 import queue
 import threading
@@ -179,11 +180,19 @@ class ObjMigrateWorker(Thread):
             logging.warning('[%s] Failed to list all objects: %s' % (self.dtype, e))
             raise
 
+        objs = []
         for obj in obj_list:
             if self.invalid_obj(obj):
                 continue
             repo_id = obj[0]
             obj_id = obj[1]
+            objs.append(repo_id+"/"+obj_id)
+
+        if self.dest_store.get_name() != "filesystem storage backend":
+            random.shuffle(objs)
+
+        for obj in objs:
+            repo_id,obj_id=obj.split('/')
             task = Task(repo_id, 1, obj_id)
             self.thread_pool.put_task(task)
 
