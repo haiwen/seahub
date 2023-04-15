@@ -4,6 +4,7 @@ import logging
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_http_methods
 
 from django.utils.translation import ugettext as _
 from seaserv import seafile_api
@@ -22,19 +23,22 @@ from seahub.share.utils import share_dir_to_user
 logger = logging.getLogger(__name__)
 
 
+@require_http_methods(['GET', 'HEAD', 'POST'])
 def token_view(request, token):
     """Show form to let user set password.
     """
     i = get_object_or_404(Invitation, token=token)
     if i.is_expired():
-        raise Http404
+        response = render(request, 'invitations/token_view.html', {'message': _('Invitation has expired!'), })
+        response.status_code = 410
+        return response
 
-    if request.method == 'GET':
+    if request.method in ['GET', 'HEAD']:
         try:
             user = User.objects.get(email=i.accepter)
             if user.is_active is True:
                 # user is active return exist
-                messages.error(request, _('A user with this email already exists.'))
+                return render(request, 'invitations/token_view.html', {'message': _('A user with this email already exists.'), })
         except User.DoesNotExist:
             pass
 
