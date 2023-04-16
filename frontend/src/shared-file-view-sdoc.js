@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { MarkdownViewer } from '@seafile/seafile-editor';
+import { SDocViewer } from '@seafile/sdoc-editor';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
-import { serviceURL, mediaUrl } from './utils/constants';
+import { defaultContentForSDoc } from './utils/constants';
 import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import Loading from './components/loading';
 import toaster from './components/toast';
 
-const { repoID, sharedToken, rawPath, err } = window.shared.pageOptions;
-const defaultContent = [{type: 'paragraph', children: [{ text: '' }]}];
+import './css/sdoc-file-view.css';
+
+const { rawPath, err } = window.shared.pageOptions;
 
 class SharedFileViewSdoc extends React.Component {
   render() {
@@ -30,7 +31,7 @@ class FileContent extends React.Component {
   componentDidMount() {
     seafileAPI.getFileContent(rawPath).then((res) => {
       this.setState({
-        content: res.data || defaultContent,
+        content: res.data || defaultContentForSDoc,
         loading: false
       });
     }).catch(error => {
@@ -40,18 +41,18 @@ class FileContent extends React.Component {
   }
 
   render() {
+    const { loading, content } = this.state;
     if (err) {
       return <SharedFileViewTip />;
     }
 
-    if (this.state.loading) {
+    if (loading) {
       return <Loading />;
     }
 
     return (
-      <div className="shared-file-view-body">
-        <div className="md-view">
-        </div>
+      <div className="shared-file-view-body d-flex flex-column sdoc-file-view p-0">
+        {content && <SDocViewer document={content} config={{}} />}
       </div>
     );
   }

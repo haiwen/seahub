@@ -1085,7 +1085,7 @@ def is_textual_file(file_type):
     """
     Check whether a file type is a textual file.
     """
-    if file_type == TEXT or file_type == MARKDOWN:
+    if file_type == TEXT or file_type == MARKDOWN or file_type == SEADOC:
         return True
     else:
         return False

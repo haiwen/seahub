@@ -1,27 +1,38 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
-import { NewEditor } from '@seafile/sdoc-editor';
+import Url from 'url-parse';
+import axios from 'axios';
+import { SDocEditor } from '@seafile/sdoc-editor';
 import { Utils } from './utils/utils';
-import { gettext } from './utils/constants';
+import { defaultContentForSDoc } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
-import toaster from './components/toast';
 import FileView from './components/file-view/file-view';
 import FileViewTip from './components/file-view/file-view-tip';
 
 import './css/sdoc-file-view.css';
 
 const {
-  err, repoID, filePath, fileName, username
+  err, repoID, filePath, username,
+  docPath,
+  docName,
+  docUuid,
+  seadocAccessToken,
+  seadocServerUrl
 } = window.app.pageOptions;
 
 const propTypes = {
-  updateContent: PropTypes.func.isRequired,
-  content: PropTypes.array,
+  content: PropTypes.object,
   errorMsg: PropTypes.string
 };
 
-const defaultContent = [{type: 'paragraph', children: [{ text: '' }]}];
+const config = {
+  docPath: docPath,
+  docName: docName,
+  docUuid: docUuid,
+  sdocServer: (new Url(seadocServerUrl)).origin,
+  accessToken: seadocAccessToken
+};
 
 class FileContent extends React.Component {
 
@@ -36,8 +47,13 @@ class FileContent extends React.Component {
     }
 
     return (
-      <div className="file-view-content flex-1 sdoc-file-view p-0">
-        {content && <NewEditor value={content} onValueChanged={this.props.updateContent} />}
+      <div className="file-view-content flex-1 sdoc-file-view p-0 d-flex flex-column">
+        {content && <SDocEditor
+          document={content}
+          config={config}
+          isOpenSocket={true}
+          onValueChanged={() => {}}
+        />}
       </div>
     );
   }
@@ -45,72 +61,40 @@ class FileContent extends React.Component {
 
 FileContent.propTypes = propTypes;
 
-
 class ViewFileSdoc extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      needSave: false,
-      isSaving: false,
       participants: []
     };
     this.isParticipant = false;
   }
 
+  getFileContent = () => {
+    const {
+      docPath,
+      docName,
+      docUuid,
+      sdocServer,
+      accessToken
+    } = config;
+
+    const url = `${sdocServer}/api/v1/docs/${docUuid}/?doc_path=${encodeURIComponent(docPath)}&doc_name=${encodeURIComponent(docName)}`;
+    return axios.get(url, {headers: {Authorization: `Token ${accessToken}`}});
+  }
+
   componentDidMount() {
     this.getParticipants();
-    seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-      seafileAPI.getFileContent(res.data).then(res => {
-        const content = res.data || defaultContent;
-        this.setState({
-          content: content
-        });
-      }).catch((error) => {
-        this.setState({
-          errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
-        });
-      });
-    });
-  }
 
-  updateContent = (value) => {
-    this.setState({
-      needSave: true,
-      content: value
-    });
-  }
-
-  onSave = () => {
-    if (!this.isParticipant) {
-      this.addParticipant();
-    }
-    const dirPath = '/';
-    seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
-      const uploadLink = res.data;
+    this.getFileContent().then(res => {
+      const content = res.data || defaultContentForSDoc;
       this.setState({
-        isSaving: true
-      });
-      seafileAPI.updateFile(uploadLink, filePath, fileName,
-        JSON.stringify(this.state.content)
-      ).then(() => {
-        toaster.success(gettext('Successfully saved'), {
-          duration: 2
-        });
-        this.setState({
-          isSaving: false,
-          needSave: false
-        });
-      }).catch((error) => {
-        const message = gettext('Failed to save');
-        toaster.danger(message, { duration: 2 });
-        this.setState({
-          isSaving: false,
-          needSave: false
-        });
+        content: content
       });
     }).catch((error) => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+      });
     });
   }
 
@@ -143,13 +127,9 @@ class ViewFileSdoc extends React.Component {
         content={
           <FileContent
             content={this.state.content}
-            updateContent={this.updateContent}
             errorMsg={this.state.errorMsg}
           />
         }
-        isSaving={this.state.isSaving}
-        needSave={this.state.needSave}
-        onSave={this.onSave}
         participants={this.state.participants}
         onParticipantsChange={this.onParticipantsChange}
       />

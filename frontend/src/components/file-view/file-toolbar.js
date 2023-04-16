@@ -23,6 +23,7 @@ const propTypes = {
 const {
   canLockUnlockFile,
   repoID, repoName, repoEncrypted, parentDir, filePerm, filePath,
+  fileType,
   fileName,
   canEditFile, err,
   fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
@@ -140,7 +141,7 @@ class FileToolbar extends React.Component {
             />
           )}
 
-          {(canEditFile && !err) &&
+          {(canEditFile && fileType != 'SDoc' && !err) &&
             ( this.props.isSaving ?
               <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
@@ -204,7 +205,7 @@ class FileToolbar extends React.Component {
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
           <ButtonGroup >
-            {(canEditFile && !err) &&
+            {(canEditFile && fileType != 'SDoc' && !err) &&
                 (this.props.isSaving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button> :

@@ -1,22 +1,17 @@
 import React from 'react';
-import { MarkdownViewer } from '@seafile/seafile-editor';
-import { mediaUrl } from '../../utils/constants';
+import { SDocViewer } from '@seafile/sdoc-editor';
+import { defaultContentForSDoc } from '../../utils/constants';
 
-import '../../css/md-file-view.css';
+import '../../css/sdoc-file-view.css';
 
 const { fileContent } = window.app.pageOptions;
 
 class FileContent extends React.Component {
+
   render() {
     return (
-      <div className="file-view-content flex-1 o-auto">
-        <div className="md-content">
-          <MarkdownViewer
-            markdownContent={fileContent}
-            showTOC={false}
-            scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-          />
-        </div>
+      <div className="file-view-content flex-1 o-auto sdoc-file-view p-0 d-flex flex-column">
+        <SDocViewer document={fileContent ? JSON.parse(fileContent) : defaultContentForSDoc} config={{}} />
       </div>
     );
   }

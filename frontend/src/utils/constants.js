@@ -1,3 +1,8 @@
+export const defaultContentForSDoc = {
+  version: 0,
+  children: [{id: 'aaaa', type: 'paragraph', children: [{ text: '' }]}]
+};
+
 export const dirPath = '/';
 export const gettext = window.gettext;
 
