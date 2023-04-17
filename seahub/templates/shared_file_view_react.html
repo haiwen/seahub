@@ -120,6 +120,8 @@ body {
     <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'js' %}
+{% elif filetype == 'SDoc' %}
+    {% render_bundle 'sharedFileViewSdoc' 'js' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'js' %}
 {% endif %}

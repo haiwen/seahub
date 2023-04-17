@@ -1312,7 +1312,7 @@ export const Utils = {
 
   generatePassword: function(length, hasNum=1, hasChar=1, hasSymbol=1) {
 
-    var password = "";
+    var password = '';
 
     // 65~90：A~Z
     password += String.fromCharCode(Math.floor((Math.random() * (90-65)) + 65));

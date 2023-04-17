@@ -658,6 +658,16 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_uuid'] = file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, username)
+
+        can_edit_file = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_edit_file = False
+        elif is_locked and not locked_by_me:
+            can_edit_file = False
+
+        return_dict['can_edit_file'] = can_edit_file
+
+        send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
