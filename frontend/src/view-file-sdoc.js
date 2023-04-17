@@ -75,11 +75,10 @@ class ViewFileSdoc extends React.Component {
       docPath,
       docName,
       docUuid,
-      sdocServer,
       accessToken
     } = config;
 
-    const url = `${sdocServer}/api/v1/docs/${docUuid}/?doc_path=${encodeURIComponent(docPath)}&doc_name=${encodeURIComponent(docName)}`;
+    const url = `${seadocServerUrl}/api/v1/docs/${docUuid}/?doc_path=${encodeURIComponent(docPath)}&doc_name=${encodeURIComponent(docName)}`;
     return axios.get(url, {headers: {Authorization: `Token ${accessToken}`}});
   }
 
