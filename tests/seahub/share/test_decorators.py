@@ -58,7 +58,7 @@ class ShareLinkAuditTest(BaseTestCase):
     def test_bad_share_token(self):
         resp = self._fake_view_shared_file(self._request, 'fake-token')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(b'Link does not exist or has been expired', resp.content)
+        self.assertIn(b'Link does not exist', resp.content)
 
     def test_non_pro_version(self):
         """
