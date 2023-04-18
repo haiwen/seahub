@@ -26,7 +26,7 @@ class FileView extends React.Component {
 
   render() {
     return (
-      <div className="h-100 d-flex flex-column">
+      <div className="h-100 d-flex flex-column flex-1">
         <div className="file-view-header d-flex justify-content-between align-items-center">
           <div>
             <h2 className="file-title">{fileName}</h2>

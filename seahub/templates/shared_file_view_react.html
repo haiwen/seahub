@@ -33,6 +33,8 @@
     {% render_bundle 'sharedFileViewDocument' 'css' %}
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
+{% elif filetype == 'SDoc' %}
+    {% render_bundle 'sharedFileViewSdoc' 'css' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'css' %}
 {% endif %}
