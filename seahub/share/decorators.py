@@ -30,7 +30,7 @@ def share_link_audit(func):
             return render_error(request, _('Link does not exist.'))
 
         if fileshare.is_expired():
-            return render_error(request, _('Link has been expired.'))
+            return render_error(request, _('Link is expired.'))
 
         if not is_pro_version() or not settings.ENABLE_SHARE_LINK_AUDIT:
             return func(request, fileshare, *args, **kwargs)
