@@ -791,13 +791,13 @@ class LibContentView extends React.Component {
       let revertedDirentName = '';
       if (res.data.success.length > 1) {
         revertedDirentName = res.data.success[0].path.split('/').pop();
-        msg = gettext('Restored {name} and other {n} items.');
+        msg = gettext('Restored {name} and other {n} items');
         msg = msg.replace('{name}', revertedDirentName);
         msg = msg.replace('{n}', res.data.success.length - 1);
         toaster.success(msg);
       } else if (res.data.success.length === 1) {
         revertedDirentName = res.data.success[0].path.split('/').pop();
-        msg = gettext('Restored {name}.');
+        msg = gettext('Restored {name}');
         msg = msg.replace('{name}', revertedDirentName);
         toaster.success(msg);
       }
@@ -805,13 +805,13 @@ class LibContentView extends React.Component {
       let revertedFailedDirentName = '';
       if (res.data.failed.length > 1) {
         revertedFailedDirentName = res.data.failed[0].path.split('/').pop();
-        msg = gettext('Failed to restore {name} and other {n} items.');
+        msg = gettext('Failed to restore {name} and other {n} items');
         msg = msg.replace('{name}', revertedFailedDirentName);
         msg = msg.replace('{n}', res.data.failed.length - 1);
         toaster.danger(msg);
       } else if (res.data.failed.length === 1) {
         revertedFailedDirentName = res.data.failed[0].path.split('/').pop();
-        msg = gettext('Failed to restore {name}.');
+        msg = gettext('Failed to restore {name}');
         msg = msg.replace('{name}', revertedFailedDirentName);
         toaster.danger(msg);
       }
