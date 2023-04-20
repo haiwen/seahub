@@ -9,7 +9,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans with escaped_nickname=email|email2nickname|escape %}{{ escaped_nickname }} shared a {{ file_shared_type }} <span style="font-weight:bold;">{{ file_shared_name}}</span> to you on {{ site_name }}:{% endblocktrans%} <br />
+{% blocktrans with escaped_nickname=email|email2nickname|escape escaped_file_shared_name=file_shared_name|escape %}{{ escaped_nickname }} shared a {{ file_shared_type }} <span style="font-weight:bold;">{{ escaped_file_shared_name }}</span> to you on {{ site_name }}:{% endblocktrans%} <br />
 <a href="{{ file_shared_link }}">{{ file_shared_link }}</a>
 </p>
 
