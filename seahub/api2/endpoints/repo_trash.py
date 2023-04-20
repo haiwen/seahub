@@ -289,8 +289,8 @@ class RepoTrashRevertDirents(APIView):
         result['failed'] = []
         result['success'] = []
         username = request.user.username
-        try:
-            for path in path_list:
+        for path in path_list:
+            try:
                 if seafile_api.get_dir_id_by_commit_and_path(repo_id, commit_id, path):
                     seafile_api.revert_dir(repo_id, commit_id, path, username)
                     result['success'].append({'path': path, 'is_dir': True})
@@ -302,11 +302,10 @@ class RepoTrashRevertDirents(APIView):
                         'path': path,
                         'error_msg': f'Dirent {path} not found.'
                     })
-
-        except Exception as e:
-            result['failed'].append({
-                'path': path,
-                'error_msg': str(e)
-            })
+            except Exception as e:
+                result['failed'].append({
+                    'path': path,
+                    'error_msg': str(e)
+                })
 
         return Response(result)

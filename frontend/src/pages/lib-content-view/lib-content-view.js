@@ -767,7 +767,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.revertDirentsInTrash(repoID, this.commitIDWhenDeleteDirent, this.deletedDirentsForRevert).then(res => {
 
-      res.data.success.map(dirent => {
+      res.data.success.forEach(dirent => {
         let name = Utils.getFileName(dirent.path);
         let parentPath = Utils.getDirName(dirent.path);
         if (!dirent.is_dir) {
@@ -836,7 +836,11 @@ class LibContentView extends React.Component {
 
       this.commitIDWhenDeleteDirent = res.data.commit_id;
       this.deletedDirentsForRevert = dirNames.map(direntName => {
-        return this.state.path + direntName;
+	if (this.state.path === '/') {
+          return this.state.path + direntName;
+	} else {
+          return this.state.path + '/' + direntName;
+	}
       });
 
       let msg = '';
