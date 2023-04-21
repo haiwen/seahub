@@ -1,5 +1,7 @@
 import os
 import logging
+import requests
+import posixpath
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,6 +78,56 @@ class SeadocAccessToken(APIView):
         return Response({'access_token': access_token})
 
 
+class SeadocUploadFile(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, file_uuid):
+        # jwt permission check
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        file = request.FILES.get('file', None)
+        if not file:
+            error_msg = 'file not found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
+        if not file_id:  # save file anyway
+            seafile_api.post_empty_file(
+                uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
+        #
+        upload_link = get_seadoc_upload_link(uuid_map)
+        if not upload_link:
+            error_msg = 'seadoc file %s not found.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # update file
+        files = {
+            'file': file,
+            'file_name': uuid_map.filename,
+            'target_file': file_path,
+        }
+        upload_link = get_seadoc_upload_link(uuid_map)
+        requests.post(upload_link, files=files)
+
+        return Response({'success': True})
+
+
 class SeadocUploadLink(APIView):
 
     authentication_classes = ()
@@ -98,13 +150,23 @@ class SeadocUploadLink(APIView):
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
+        if not file_id:  # save file anyway
+            seafile_api.post_empty_file(
+                uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
+
         #
         upload_link = get_seadoc_upload_link(uuid_map)
         if not upload_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        return Response({'upload_link': upload_link})
+        return Response({
+            'upload_link': upload_link,
+            'parent_dir': uuid_map.parent_path,
+            'filename': uuid_map.filename,
+        })
 
 
 class SeadocDownloadLink(APIView):
