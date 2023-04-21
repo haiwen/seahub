@@ -276,6 +276,8 @@ INSTALLED_APPS = [
 # Enable or disable view File Scan
 ENABLE_FILE_SCAN = False
 
+ENABLE_DOUBLE_CHECK_WHEN_DELETE_DIRENT = True
+
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
 

@@ -76,6 +76,7 @@ export const canInvitePeople = window.app.pageOptions.canInvitePeople;
 export const canLockUnlockFile = window.app.pageOptions.canLockUnlockFile;
 export const customNavItems = window.app.pageOptions.customNavItems;
 export const enableShowContactEmailWhenSearchUser = window.app.pageOptions.enableShowContactEmailWhenSearchUser;
+export const enableDoubleCheckWhenDeleteDirent = window.app.pageOptions.enableDoubleCheckWhenDeleteDirent;
 export const maxUploadFileSize = window.app.pageOptions.maxUploadFileSize;
 export const maxNumberOfFilesForFileupload = window.app.pageOptions.maxNumberOfFilesForFileupload;
 export const enableOCM = window.app.pageOptions.enableOCM;

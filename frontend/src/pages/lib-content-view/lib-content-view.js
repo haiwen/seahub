@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import moment from 'moment';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username, isDocs, enableVideoThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, username, isDocs, enableVideoThumbnail, enableDoubleCheckWhenDeleteDirent } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import collabServer from '../../utils/collab-server';
@@ -21,6 +21,7 @@ import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+import DeleteFileDialog from '../../components/dialog/delete-file-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -77,6 +78,7 @@ class LibContentView extends React.Component {
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
       isDeleteFolderDialogOpen: false,
+      isDeleteFileDialogOpen: false,
       asyncCopyMoveTaskId: '',
       asyncOperationType: 'move',
       asyncOperationProgress: 0,
@@ -1018,26 +1020,49 @@ class LibContentView extends React.Component {
     });
   }
 
-  deleteItem(path, isDir) {
-    let repoID = this.props.repoID;
-    if (isDir) {
-      this.setState({ folderToDelete: path }, () => {
-        this.toggleDeleteFolderDialog();
-      });
-    } else {
-      seafileAPI.deleteFile(repoID, path).then(() => {
-        this.deleteItemAjaxCallback(path, isDir);
+  toggleDeleteFileDialog = () => {
+    this.setState({isDeleteFileDialogOpen: !this.state.isDeleteFileDialogOpen});
+  }
+
+  deleteFile = () => {
+    const { repoID } = this.props;
+    const { fileToDelete: path } = this.state;
+    seafileAPI.deleteFile(repoID, path).then(() => {
+      this.deleteItemAjaxCallback(path, false);
+      let name = Utils.getFileName(path);
+      var msg = gettext('Successfully deleted {name}').replace('{name}', name);
+      toaster.success(msg);
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
         let name = Utils.getFileName(path);
-        var msg = gettext('Successfully deleted {name}').replace('{name}', name);
-        toaster.success(msg);
-      }).catch((error) => {
-        let errMessage = Utils.getErrorMsg(error);
-        if (errMessage === gettext('Error')) {
-          let name = Utils.getFileName(path);
-          errMessage = gettext('Failed to delete {name}').replace('{name}', name);
-        }
-        toaster.danger(errMessage);
-      });
+        errMessage = gettext('Failed to delete {name}').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
+    });
+  }
+
+  deleteItem(path, isDir) {
+    if (!enableDoubleCheckWhenDeleteDirent) {
+      if (isDir) {
+        this.setState({ folderToDelete: path }, () => {
+          this.deleteFolder();
+        });
+      } else {
+        this.setState({ fileToDelete: path }, () => {
+          this.deleteFile();
+        });
+      }
+    } else {
+      if (isDir) {
+        this.setState({ folderToDelete: path }, () => {
+          this.toggleDeleteFolderDialog();
+        });
+      } else {
+        this.setState({ fileToDelete: path }, () => {
+          this.toggleDeleteFileDialog();
+        });
+      }
     }
   }
 
@@ -1812,7 +1837,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, isDeleteFileDialogOpen } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -1974,6 +1999,14 @@ class LibContentView extends React.Component {
             path={this.state.folderToDelete}
             deleteFolder={this.deleteFolder}
             toggleDialog={this.toggleDeleteFolderDialog}
+          />
+        )}
+        {isDeleteFileDialogOpen && (
+          <DeleteFileDialog
+            repoID={this.props.repoID}
+            path={this.state.fileToDelete}
+            deleteFile={this.deleteFile}
+            toggleDialog={this.toggleDeleteFileDialog}
           />
         )}
       </Fragment>
