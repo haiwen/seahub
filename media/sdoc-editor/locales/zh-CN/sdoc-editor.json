@@ -221,5 +221,9 @@
   },
   "The_link_address_is_required": "链接地址是必填项。",
   "The_link_title_is_required": "链接标题是必填项。",
-  "The_link_address_is_invalid": "链接地址不合法，请输入一个正确的链接地址。"
+  "The_link_address_is_invalid": "链接地址不合法，请输入一个正确的链接地址。",
+  "All_changes_saved": "所有更改均已保存",
+  "Saving": "保存中...",
+  "Online_members": "在线成员",
+  "me": "我"
 }

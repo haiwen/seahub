@@ -225,5 +225,10 @@
   "Insert_column": "Insert column",
   "The_link_address_is_required": "The link address is required.",
   "The_link_title_is_required": "The link title is required.",
-  "The_link_address_is_invalid": "The link address is invalid, please enter a correct connection address."
+  "The_link_address_is_invalid": "The link address is invalid, please enter a correct connection address.",
+  "All_changes_saved": "All changes saved",
+  "Saving": "Saving...",
+  "Collaborators": "Collaborators",
+  "Online_members": "Online members",
+  "me": "me"
 }
