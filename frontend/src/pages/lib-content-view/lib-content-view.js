@@ -760,6 +760,53 @@ class LibContentView extends React.Component {
     });
   }
 
+  restoreDeletedDirents = (commitID, paths, e) => {
+    const { repoID } = this.props;
+    e.preventDefault();
+    toaster.closeAll();
+    seafileAPI.restoreDirents(repoID, commitID, paths).then(res => {
+      const { success, failed } = res.data;
+      success.forEach(dirent => {
+        let name = Utils.getFileName(dirent.path);
+        let parentPath = Utils.getDirName(dirent.path);
+        if (!dirent.is_dir) {
+          if (this.state.currentMode === 'column') {
+            this.addNodeToTree(name, parentPath, 'file');
+          }
+          if (parentPath === this.state.path && !this.state.isViewFile) {
+            this.addDirent(name, 'file');
+          }
+        } else {
+          if (this.state.currentMode === 'column') {
+            this.addNodeToTree(name, parentPath, 'dir');
+          }
+          if (parentPath === this.state.path && !this.state.isViewFile) {
+            this.addDirent(name, 'dir');
+          }
+        }
+      });
+
+      if (success.length) {
+        let msg = success.length > 1 ? gettext('Restored {name} and {n} other items') :
+          gettext('Restored {name}');
+        msg = msg.replace('{name}', success[0].path.split('/').pop())
+          .replace('{n}', success.length - 1);
+        toaster.success(msg);
+      }
+
+      if (failed.length) {
+        let msg = failed.length > 1 ? gettext('Failed to restore {name} and {n} other items') :
+          gettext('Failed to restore {name}');
+        msg = msg.replace('{name}', failed[0].path.split('/').pop())
+          .replace('{n}', failed.length - 1);
+        toaster.danger(msg);
+      }
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onDeleteItems = () => {
     let repoID = this.props.repoID;
     let direntPaths = this.getSelectedDirentPaths();
@@ -775,18 +822,24 @@ class LibContentView extends React.Component {
 
       let msg = '';
       if (direntPaths.length > 1) {
-        msg = gettext('Successfully deleted {name} and other {n} items.');
+        msg = gettext('Successfully deleted {name} and {n} other items.');
         msg = msg.replace('{name}', dirNames[0]);
         msg = msg.replace('{n}', dirNames.length - 1);
       } else {
         msg = gettext('Successfully deleted {name}.');
         msg = msg.replace('{name}', dirNames[0]);
       }
-      toaster.success(msg);
+      const successTipWithUndo = (
+        <>
+          <span>{msg}</span>
+          <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, direntPaths)}>{gettext('Undo')}</a>
+        </>
+      );
+      toaster.success(successTipWithUndo, {duration: 5});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to delete {name} and other {n} items.');
+        errMessage = gettext('Failed to delete {name} and {n} other items.');
         errMessage = errMessage.replace('{name}', dirNames[0]);
         errMessage = errMessage.replace('{n}', dirNames.length - 1);
       }

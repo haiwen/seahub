@@ -1535,7 +1535,8 @@ class ReposBatchDeleteItemView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        if not seafile_api.get_repo(repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1580,4 +1581,5 @@ class ReposBatchDeleteItemView(APIView):
 
         result = {}
         result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
         return Response(result)
