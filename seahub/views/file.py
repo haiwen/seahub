@@ -657,7 +657,7 @@ def view_lib_file(request, repo_id, path):
         file_uuid = get_seadoc_file_uuid(repo, path)
         return_dict['file_uuid'] = file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
-        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, username)
+        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username)
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:

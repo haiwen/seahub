@@ -73,7 +73,7 @@ class SeadocAccessToken(APIView):
 
         #
         file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
-        access_token = gen_seadoc_access_token(file_uuid, username)
+        access_token = gen_seadoc_access_token(file_uuid, filename, username)
 
         return Response({'access_token': access_token})
 
