@@ -33,7 +33,7 @@ def uuid_str_to_36_chars(file_uuid):
 
 def gen_seadoc_access_token(file_uuid, username, permission='rw'):
     name = email2nickname(username)
-    url, is_default, date_uploaded = api_avatar_url(username)
+    url, is_default, date_uploaded = api_avatar_url(username, 72)
     access_token = jwt.encode({
         'file_uuid': file_uuid,
         'username': username,
