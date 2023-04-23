@@ -10,8 +10,9 @@ from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
-from seahub.utils import normalize_dir_path, normalize_file_path, \
-    gen_inner_file_get_url, gen_inner_file_upload_url
+from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_file_upload_url
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +32,13 @@ def uuid_str_to_36_chars(file_uuid):
 
 
 def gen_seadoc_access_token(file_uuid, username, permission='rw'):
+    name = email2nickname(username)
+    url, is_default, date_uploaded = api_avatar_url(username)
     access_token = jwt.encode({
         'file_uuid': file_uuid,
         'username': username,
+        'name': name,
+        'avatar_url': url,
         'permission': permission,
         'exp': int(time.time()) + 86400 * 3,  # 3 days
     },
@@ -57,7 +62,8 @@ def is_valid_seadoc_access_token(auth, file_uuid, return_payload=False):
 
     try:
         payload = jwt.decode(token, SEADOC_PRIVATE_KEY, algorithms=['HS256'])
-    except:
+    except Exception as e:
+        logger.error('Failed to decode jwt: %s' % e)
         is_valid = False
     else:
         file_uuid_in_payload = payload.get('file_uuid')
@@ -74,15 +80,15 @@ def is_valid_seadoc_access_token(auth, file_uuid, return_payload=False):
     return is_valid
 
 
-def get_seadoc_file_uuid(repo, parent_dir, filename):
+def get_seadoc_file_uuid(repo, path):
     repo_id = repo.repo_id
     if repo.is_virtual:
         repo_id = repo.origin_repo_id
         path = posixpath.join(repo.origin_path, path.strip('/'))
 
-        path = normalize_file_path(path)
-        parent_dir = os.path.dirname(path)
-        filename = os.path.basename(path)
+    path = normalize_file_path(path)
+    parent_dir = os.path.dirname(path)
+    filename = os.path.basename(path)
 
     uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(
         repo_id, parent_dir, filename, is_dir=False)
