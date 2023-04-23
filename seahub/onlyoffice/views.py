@@ -108,7 +108,9 @@ def onlyoffice_editor_callback(request):
                              .format(status, doc_key, post_data))
                 return HttpResponse('{"error": 1}')
             else:
-                logger.warning('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+                # if the status is 1 and 4, the log level should not be error
+                logger.info('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+                return HttpResponse('{"error": 1}')
         else:
             logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
 
