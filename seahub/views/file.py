@@ -654,7 +654,7 @@ def view_lib_file(request, repo_id, path):
         template = 'common_file_view_react.html'
 
     if filetype == SEADOC:
-        file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
+        file_uuid = get_seadoc_file_uuid(repo, path)
         return_dict['file_uuid'] = file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, username)
