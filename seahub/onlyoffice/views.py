@@ -103,9 +103,14 @@ def onlyoffice_editor_callback(request):
 
         doc_info = cache.get(doc_key)
         if not doc_info:
-            logger.error('status {}: can not get doc_info from cache by doc_key {}'.format(status, doc_key))
-            logger.info(post_data)
-            return HttpResponse('{"error": 1}')
+            if status not in (1, 4):
+                logger.error('status {}: can not get doc_info from cache by doc_key {}, post_data: {}'
+                             .format(status, doc_key, post_data))
+                return HttpResponse('{"error": 1}')
+            else:
+                # if the status is 1 and 4, the log level should not be error
+                logger.info('status {}: can not get doc_info from database by doc_key {}'.format(status, doc_key))
+                return HttpResponse('{"error": 1}')
         else:
             logger.info('status {}: get doc_info {} from cache by doc_key {}'.format(status, doc_info, doc_key))
 
