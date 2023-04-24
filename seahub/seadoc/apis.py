@@ -72,7 +72,7 @@ class SeadocAccessToken(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         #
-        file_uuid = get_seadoc_file_uuid(repo, parent_dir, filename)
+        file_uuid = get_seadoc_file_uuid(repo, path)
         access_token = gen_seadoc_access_token(file_uuid, filename, username)
 
         return Response({'access_token': access_token})
