@@ -26,6 +26,7 @@ from seahub.utils import is_user_password_strong, get_site_name, \
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
+from seahub.utils.auth import gen_user_virtual_id
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -49,14 +50,19 @@ class UserManager(object):
         """
         Creates and saves a User with given username and password.
         """
+        virtual_id = gen_user_virtual_id()
+
         # Lowercasing email address to avoid confusion.
         email = email.lower()
 
-        user = User(email=email)
+        user = User(email=virtual_id)
         user.is_staff = is_staff
         user.is_active = is_active
         user.set_password(password)
         user.save()
+
+        # Set email as contact email.
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email, need_show_video=True)
 
         return self.get(email=email)
 
@@ -66,6 +72,63 @@ class UserManager(object):
         """
         ccnet_api.update_role_emailuser(email, role)
         return self.get(email=email)
+
+    def create_oauth_user(self, email=None, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves an oauth user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email)
+
+        return self.get(email=virtual_id)
+
+    def create_ldap_user(self, email=None, password=None, nickname=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a ldap user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email, nickname=nickname)
+
+        return self.get(email=virtual_id)
+
+    def create_saml_user(self, email=None, password=None, nickname=None, is_staff=False, is_active=False):
+        """
+        Creates and saves an saml user which can without email.
+        """
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        # Set email as contact email.
+        if email:
+            email = email.lower()
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email, nickname=nickname)
+
+        return self.get(email=virtual_id)
 
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)
