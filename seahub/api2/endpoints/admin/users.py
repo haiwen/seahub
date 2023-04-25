@@ -61,6 +61,14 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
+def get_virtual_id_by_email(email):
+    profile_obj = Profile.objects.get_profile_by_contact_email(email)
+    if profile_obj is None:
+        return email
+    else:
+        return profile_obj.user
+
+
 def get_user_last_access_time(email, last_login_time):
 
     device_last_access = ''
@@ -621,11 +629,6 @@ class AdminUsers(APIView):
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        contact_email = request.data.get('contact_email', None)
-        if contact_email and not is_valid_email(contact_email):
-            error_msg = 'contact_email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
             try:
@@ -646,8 +649,9 @@ class AdminUsers(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        vid = get_virtual_id_by_email(email)
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=vid)
             user_exist = True
         except User.DoesNotExist:
             user_exist = False
@@ -665,7 +669,7 @@ class AdminUsers(APIView):
         try:
             user_obj = User.objects.create_user(email, password, is_staff, is_active)
             create_user_info(request, email=user_obj.username, role=role,
-                             nickname=name, contact_email=contact_email,
+                             nickname=name, contact_email=email,
                              quota_total_mb=quota_total_mb)
         except Exception as e:
             logger.error(e)
@@ -687,7 +691,7 @@ class AdminUsers(APIView):
                 logger.error(str(e))
                 add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
 
-        user_info = get_user_info(email)
+        user_info = get_user_info(vid)
         user_info['add_user_tip'] = add_user_tip
 
         # send admin operation log signal

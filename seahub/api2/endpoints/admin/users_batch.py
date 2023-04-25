@@ -38,6 +38,7 @@ from seahub.base.models import UserLastLogin
 from seahub.options.models import UserOptions
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.user_permissions import get_user_role
+from seahub.api2.endpoints.admin.users import get_virtual_id_by_email
 
 logger = logging.getLogger(__name__)
 
@@ -279,6 +280,7 @@ class AdminImportUsers(APIView):
             wb = load_workbook(filename=fs, read_only=True)
         except Exception as e:
             logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         # example file is like:
         # Email    Password Name(Optional) Role(Optional) Space Quota(MB, Optional) Login ID
@@ -331,8 +333,9 @@ class AdminImportUsers(APIView):
                 })
                 continue
 
+            vid = get_virtual_id_by_email(email)
             try:
-                User.objects.get(email=email)
+                User.objects.get(email=vid)
                 result['failed'].append({
                     'email': email,
                     'error_msg': 'user %s exists.' % email
@@ -343,24 +346,26 @@ class AdminImportUsers(APIView):
 
             User.objects.create_user(email, password, is_staff=False, is_active=True)
             if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(email)
+                UserOptions.objects.set_force_passwd_change(vid)
 
             # update the user's optional info
             # update nikename
-            if record[2]:
-                try:
-                    nickname = record[2].strip()
-                    if len(nickname) <= 64 and '/' not in nickname:
-                        Profile.objects.add_or_update(email, nickname, '')
-                except Exception as e:
-                    logger.error(e)
+            nickname = email.split('@')[0]
+            try:
+                if record[2]:
+                    input_nickname = str(record[2]).strip()
+                    if len(input_nickname) <= 64 and '/' not in input_nickname:
+                        nickname = input_nickname
+                Profile.objects.add_or_update(vid, nickname, '')
+            except Exception as e:
+                logger.error(e)
 
             # update role
             if record[3]:
                 try:
                     role = record[3].strip()
                     if is_pro_version() and role in get_available_roles():
-                        User.objects.update_role(email, role)
+                        User.objects.update_role(vid, role)
                 except Exception as e:
                     logger.error(e)
 
@@ -370,14 +375,14 @@ class AdminImportUsers(APIView):
                     space_quota_mb = int(record[4])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
-                        seafile_api.set_user_quota(email, space_quota)
+                        seafile_api.set_user_quota(vid, space_quota)
                 except Exception as e:
                     logger.error(e)
 
             # login id
             if record[5]:
                 try:
-                    Profile.objects.add_or_update(email, login_id=record[5])
+                    Profile.objects.add_or_update(vid, login_id=record[5])
                 except Exception as e:
                     logger.error(e)
 
@@ -390,9 +395,8 @@ class AdminImportUsers(APIView):
                                                  'password': password
                                              })
 
-            user = User.objects.get(email=email)
-
-            info = {}
+            user = User.objects.get(email=vid)
+            info = dict()
             info['email'] = email
             info['name'] = email2nickname(email)
             info['contact_email'] = email2contact_email(email)
