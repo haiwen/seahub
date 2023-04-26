@@ -49,6 +49,8 @@ def get_file_history_info(commit, avatar_size):
     info = {}
 
     creator_name = getattr(commit, 'creator_name', '')
+    if creator_name is None:
+        creator_name = ''
     url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
 
     info['creator_avatar_url'] = url
