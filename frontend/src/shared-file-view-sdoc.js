@@ -4,6 +4,7 @@ import { SimpleViewer } from '@seafile/sdoc-editor';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
+import { Utils } from './utils/utils';
 
 const { serviceURL, siteRoot } = window.app.config;
 const { username, filePerm } = window.app.pageOptions;
@@ -17,7 +18,8 @@ window.seafile = {
   serviceUrl: serviceURL,
   username,
   siteRoot,
-  docPerm: filePerm
+  docPerm: filePerm,
+  historyURL: siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath),
 };
 
 ReactDom.render(
