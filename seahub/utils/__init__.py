@@ -575,7 +575,7 @@ if EVENTS_CONFIG_FILE:
         if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
             if e1.repo_id == e2.repo_id and \
                e1.commit.desc == e2.commit.desc and \
-               e1.commit.creator_name == e2.commit.creator_name:
+               getattr(e1.commit, 'creator_name', '') == getattr(e2.commit, 'creator_name', ''):
                 return True
         return False
 

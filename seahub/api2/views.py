@@ -3356,7 +3356,7 @@ class FileHistory(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for commit in commits:
-            creator_name = commit.creator_name
+            creator_name = getattr(commit, 'creator_name', '')
 
             user_info = {}
             user_info['email'] = creator_name
@@ -4479,7 +4479,7 @@ class EventsView(APIView):
             d = dict(etype=e.etype)
             l.append(d)
             if e.etype == 'repo-update':
-                d['author'] = e.commit.creator_name
+                d['author'] = getattr(e.commit, 'creator_name', '')
                 d['time'] = e.commit.ctime
                 d['desc'] = e.commit.desc
                 d['repo_id'] = e.repo.id
