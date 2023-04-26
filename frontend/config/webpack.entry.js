@@ -8,6 +8,7 @@ const entryFiles = {
   wiki: "/wiki.js",
   fileHistory: "/file-history.js",
   fileHistoryOld: "/file-history-old.js",
+  sdocFileHistory: "/pages/sdoc-file-history/index.js",
   app: "/app.js",
   draft: "/draft.js",
   sharedDirView: "/shared-dir-view.js",

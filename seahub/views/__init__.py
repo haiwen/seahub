@@ -751,8 +751,8 @@ def file_revisions(request, repo_id):
 
     u_filename = os.path.basename(path)
 
-    filetype, file_ext = [x.lower() for x in get_file_type_and_ext(u_filename)]
-    if filetype == 'text' or filetype == 'markdown':
+    file_type, file_ext = [x.lower() for x in get_file_type_and_ext(u_filename)]
+    if file_type == 'text' or file_type == 'markdown' or file_type == 'sdoc':
         can_compare = True
     else:
         can_compare = False
@@ -778,6 +778,17 @@ def file_revisions(request, repo_id):
     if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
+    if file_type == 'sdoc':
+        return render(request, 'sdoc_file_revisions.html', {
+            'repo': repo,
+            'path': path,
+            'u_filename': u_filename,
+            'zipped': zipped,
+            'is_owner': is_owner,
+            'can_compare': can_compare,
+            'can_revert_file': can_revert_file,
+        })
+
     # Whether use new file history API which read file history from db.
     suffix_list = get_file_history_suffix()
     if suffix_list and isinstance(suffix_list, list):
@@ -786,7 +797,7 @@ def file_revisions(request, repo_id):
         suffix_list = []
 
     use_new_api = True if file_ext in suffix_list else False
-    use_new_style = True if use_new_api and filetype == 'markdown' else False
+    use_new_style = True if use_new_api and file_type == 'markdown' else False
 
     if use_new_style:
         return render(request, 'file_revisions_new.html', {

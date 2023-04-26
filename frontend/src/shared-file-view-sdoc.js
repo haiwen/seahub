@@ -5,8 +5,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
 
-const { serviceURL } = window.app.config;
-const { username } = window.app.pageOptions;
+const { serviceURL, siteRoot } = window.app.config;
+const { username, filePerm } = window.app.pageOptions;
 const { repoID, filePath, fileName, rawPath } = window.shared.pageOptions;
 
 window.seafile = {
@@ -16,6 +16,8 @@ window.seafile = {
   docPath: filePath,
   serviceUrl: serviceURL,
   username,
+  siteRoot,
+  docPerm: filePerm
 };
 
 ReactDom.render(
