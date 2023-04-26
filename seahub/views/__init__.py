@@ -934,7 +934,7 @@ def group_events_data(events):
         e.time = utc_to_local(e.timestamp)
         e.date = e.time.strftime("%Y-%m-%d")
         if e.etype == 'repo-update':
-            e.author = e.commit.creator_name
+            e.author = getattr(e.commit, 'creator_name', '')
         elif e.etype == 'repo-create':
             e.author = e.creator
         else:
