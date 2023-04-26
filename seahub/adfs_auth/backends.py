@@ -24,6 +24,7 @@ from django.contrib.auth.backends import ModelBackend
 from seaserv import ccnet_api, seafile_api
 
 from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -31,6 +32,7 @@ from registration.models import notify_admins_on_activate_request, notify_admins
 
 logger = logging.getLogger(__name__)
 
+SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', False)
 SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', False)
 
 
@@ -56,56 +58,42 @@ class Saml2Backend(ModelBackend):
         if not attributes:
             logger.error('The attributes dictionary is empty')
 
-        logger.debug('attributes: %s', attributes)
-        saml_user = None
-        if session_info.get('name_id'):
-            logger.debug('name_id: %s', session_info['name_id'])
-            saml_user = session_info['name_id'].text
-        else:
-            logger.error('The nameid is not available. Cannot find user without a nameid.')
-
-        if saml_user is None:
-            logger.error('Could not determine user identifier')
+        uid = attributes.get('uid', None)
+        if not uid:
+            logger.error('saml user uid not found.')
+            logger.error('attributes: %s' % attributes)
             return None
 
-        main_attribute = self.clean_user_main_attribute(saml_user)
-
-        # check if user exist in local ccnet db/ldapimport database
-        username = main_attribute
-        local_ccnet_users = ccnet_api.search_emailusers('DB', username, -1, -1)
-        if not local_ccnet_users:
-            local_ccnet_users = ccnet_api.search_emailusers('LDAP', username, -1, -1)
-
-        if not local_ccnet_users:
-            if create_unknown_user:
-                activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
-                user = User.objects.create_user(email=username, is_active=activate_after_creation)
-                # create org user
-                url_prefix = kwargs.get('url_prefix', None)
-                if url_prefix:
-                    org = ccnet_api.get_org_by_url_prefix(url_prefix)
-                    if org:
-                        org_id = org.org_id
-                        ccnet_api.add_org_user(org_id, username, 0)
-
-                if not activate_after_creation:
-                    notify_admins_on_activate_request(username)
-                elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
-                    notify_admins_on_register_complete(username)
-
-            else:
-                user = None
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
+        if saml_user:
+            username = saml_user.username
+            user = self.get_user(username)
+            if not user:   # means found user in social_auth_usersocialauth but not found user in EmailUser
+                return None
         else:
-            user = User.objects.get(email=username)
+            user = None
+
+        if not user and create_unknown_user:
+            activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
+            user = User.objects.create_saml_user(is_active=activate_after_creation)
+            SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, uid)
+            # create org user
+            url_prefix = kwargs.get('url_prefix', None)
+            if url_prefix:
+                org = ccnet_api.get_org_by_url_prefix(url_prefix)
+                if org:
+                    org_id = org.org_id
+                    ccnet_api.add_org_user(org_id, user.username, 0)
+
+            if not activate_after_creation:
+                notify_admins_on_activate_request(user.username)
+            elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
+                notify_admins_on_register_complete(user.username)
 
         if user:
             self.make_profile(user, attributes, attribute_mapping)
 
         return user
-
-    def clean_user_main_attribute(self, main_attribute):
-        """Hook to clean the extracted user-identifying value. No-op by default."""
-        return main_attribute
 
     def update_user_role(self, user, parse_result):
         role = parse_result.get('role', '')
