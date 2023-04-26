@@ -7,7 +7,6 @@ from registration.models import (notify_admins_on_activate_request,
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
-from seahub.auth.utils import get_virtual_id_by_email
 
 
 class OauthRemoteUserBackend(RemoteUserBackend):
@@ -42,15 +41,6 @@ class OauthRemoteUserBackend(RemoteUserBackend):
                 DINGTALK_OAUTH_ACTIVATE_USER_AFTER_CREATION
         create_unknown_user = DINGTALK_OAUTH_CREATE_UNKNOWN_USER
         activate_after_creation = DINGTALK_OAUTH_ACTIVATE_USER_AFTER_CREATION
-
-    def get_user(self, username):
-        vid = get_virtual_id_by_email(username)
-
-        try:
-            user = User.objects.get(email=vid)
-        except User.DoesNotExist:
-            user = None
-        return user
 
     def authenticate(self, remote_user):
         """

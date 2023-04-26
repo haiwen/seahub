@@ -68,8 +68,10 @@ class Saml2Backend(ModelBackend):
         if saml_user:
             username = saml_user.username
             user = self.get_user(username)
-            if not user:   # means found user in social_auth_usersocialauth but not found user in EmailUser
-                return None
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=uid).delete()
         else:
             user = None
 

@@ -62,7 +62,7 @@ class UserManager(object):
         user.save()
 
         # Set email as contact email.
-        Profile.objects.add_or_update(username=virtual_id, contact_email=email, need_show_video=True)
+        Profile.objects.add_or_update(username=virtual_id, contact_email=email)
 
         return self.get(email=email)
 

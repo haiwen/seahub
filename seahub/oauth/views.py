@@ -11,10 +11,11 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
-from seahub.utils import is_valid_email, render_error, get_service_url
+from seahub.utils import render_error, get_service_url
 from seahub.utils.file_size import get_quota_from_string
 from seahub.base.accounts import User
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
+from seahub.auth.models import SocialAuthUser
 import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
@@ -50,10 +51,7 @@ if ENABLE_OAUTH:
 
     # Used for init an user for Seahub.
     PROVIDER_DOMAIN = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
-    ATTRIBUTE_MAP = {
-        'id': (True, "email"),
-    }
-    ATTRIBUTE_MAP.update(getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {}))
+    OAUTH_ATTRIBUTE_MAP = getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {})
 
 
 def oauth_check(func):
@@ -154,36 +152,24 @@ def oauth_callback(request):
         logger.error(e)
         return render_error(request, _('Error, please contact administrator.'))
 
-    def format_user_info(user_info_resp):
-        logger.info('user info resp: %s' % user_info_resp.text)
-        error = False
-        user_info = {}
-        user_info_json = user_info_resp.json()
+    oauth_user_info = {}
+    user_info_json = user_info_resp.json()
+    for oauth_key, seafile_key in OAUTH_ATTRIBUTE_MAP.items():
+        oauth_user_info[seafile_key] = user_info_json.get(oauth_key, '')
 
-        for item, attr in list(ATTRIBUTE_MAP.items()):
-            required, user_attr = attr
-            value = user_info_json.get(item, '')
-
-            if value:
-                # ccnet email
-                if user_attr == 'email':
-                    user_info[user_attr] = value if is_valid_email(str(value)) else \
-                            '%s@%s' % (str(value), PROVIDER_DOMAIN)
-                else:
-                    user_info[user_attr] = value
-            elif required:
-                error = True
-
-        return user_info, error
-
-    user_info, error = format_user_info(user_info_resp)
-    if error:
-        logger.error('Required user info not found.')
-        logger.error(user_info)
+    uid = oauth_user_info.get('uid', '')
+    if not uid:
+        logger.error('oauth user uid not found.')
+        logger.error('user_info_json: %s' % user_info_json)
         return render_error(request, _('Error, please contact administrator.'))
 
-    # seahub authenticate user
-    email = user_info['email']
+    oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(PROVIDER_DOMAIN, uid)
+    if oauth_user:
+        email = oauth_user.username
+        is_new_user = False
+    else:
+        email = None
+        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
@@ -193,10 +179,12 @@ def oauth_callback(request):
         logger.error(e)
         return render_error(request, _('Error, please contact administrator.'))
 
-    if not user or not user.is_active:
-        logger.error('User %s not found or inactive.' % email)
-        # a page for authenticate user failed
-        return render_error(request, _('User %s not found.') % email)
+    if not user:
+        return render_error(request, _('Error, new user registration is not allowed, please contact administrator.'))
+
+    email = user.username
+    if is_new_user:
+        SocialAuthUser.objects.add(email, PROVIDER_DOMAIN, uid)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
@@ -204,8 +192,8 @@ def oauth_callback(request):
     auth.login(request, user)
 
     # update user's profile
-    name = user_info['name'] if 'name' in user_info else ''
-    contact_email = user_info['contact_email'] if 'contact_email' in user_info else ''
+    name = oauth_user_info.get('name', '')
+    contact_email = oauth_user_info.get('contact_email', '')
 
     profile = Profile.objects.get_profile_by_user(email)
     if not profile:
@@ -220,12 +208,12 @@ def oauth_callback(request):
         profile.save()
 
     if CUSTOM_GET_USER_ROLE:
-        remote_role_value = user_info.get('role', '')
+        remote_role_value = oauth_user_info.get('role', '')
         if remote_role_value:
             role = custom_get_user_role(remote_role_value)
 
             # update user role
-            ccnet_api.update_role_emailuser(user_info['email'], role)
+            ccnet_api.update_role_emailuser(email, role)
 
             # update user role quota
             role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
