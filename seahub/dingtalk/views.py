@@ -18,12 +18,12 @@ from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
 from seahub.utils import render_error, get_site_scheme_and_netloc
-from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
+from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.base.accounts import User
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
 from seahub.dingtalk.utils import dingtalk_get_detailed_user_info, \
-        dingtalk_get_orgapp_token, dingtalk_get_userid_by_unionid_new, \
+        dingtalk_get_userid_by_unionid_new, \
         dingtalk_get_detailed_user_info_new
 
 from seahub.dingtalk.settings import ENABLE_DINGTALK
@@ -107,12 +107,14 @@ def dingtalk_callback(request):
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk', user_info['unionid'])
     if auth_user:
         email = auth_user.username
+        is_new_user = False
     else:
-        email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, 'dingtalk', user_info['unionid'])
+        email = None
+        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
+        email = user.username
     except User.DoesNotExist:
         user = None
     except Exception as e:
@@ -122,6 +124,10 @@ def dingtalk_callback(request):
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
 
+    # bind
+    if is_new_user:
+        SocialAuthUser.objects.add(user.username, 'dingtalk', user_info['unionid'])
+
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.
     request.user = user
@@ -130,18 +136,13 @@ def dingtalk_callback(request):
 
     # update user's profile
     name = user_info['nick'] if 'nick' in user_info else ''
-    if name:
-
+    user_detail_info = dingtalk_get_detailed_user_info(user_info['unionid'])
+    contact_email = user_detail_info.get('email', '')
+    if name or contact_email:
         profile = Profile.objects.get_profile_by_user(email)
         if not profile:
             profile = Profile(user=email)
-
         profile.nickname = name.strip()
-        profile.save()
-
-    user_detail_info = dingtalk_get_detailed_user_info(user_info['unionid'])
-    contact_email = user_detail_info.get('email', '')
-    if contact_email:
         profile.contact_email = contact_email
         profile.save()
 
@@ -343,12 +344,14 @@ def dingtalk_callback_new(request):
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('dingtalk', union_id)
     if auth_user:
         email = auth_user.username
+        is_new_user = False
     else:
-        email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, 'dingtalk', union_id)
+        email = None
+        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
+        email = user.username
     except User.DoesNotExist:
         user = None
     except Exception as e:
@@ -357,6 +360,10 @@ def dingtalk_callback_new(request):
 
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
+
+    # bind
+    if is_new_user:
+        SocialAuthUser.objects.add(user.username, 'dingtalk', union_id)
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.

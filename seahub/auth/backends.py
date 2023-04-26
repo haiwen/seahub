@@ -45,7 +45,7 @@ class RemoteUserBackend(object):
     # Create a User object if not already in the database?
     create_unknown_user = True
 
-    def authenticate(self, request, remote_user):
+    def authenticate(self, *args, **kwargs):
         raise NotImplementedError('authenticate() must be overridden')
 
     def get_user(self, user_id):

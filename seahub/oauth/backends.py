@@ -7,6 +7,7 @@ from registration.models import (notify_admins_on_activate_request,
 from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
+from seahub.auth.utils import get_virtual_id_by_email
 
 
 class OauthRemoteUserBackend(RemoteUserBackend):
@@ -43,8 +44,10 @@ class OauthRemoteUserBackend(RemoteUserBackend):
         activate_after_creation = DINGTALK_OAUTH_ACTIVATE_USER_AFTER_CREATION
 
     def get_user(self, username):
+        vid = get_virtual_id_by_email(username)
+
         try:
-            user = User.objects.get(email=username)
+            user = User.objects.get(email=vid)
         except User.DoesNotExist:
             user = None
         return user
@@ -58,21 +61,20 @@ class OauthRemoteUserBackend(RemoteUserBackend):
         Returns None if ``create_unknown_user`` is ``False`` and a ``User``
         object with the given username is not found in the database.
         """
-        if not remote_user:
-            return
-
-        username = self.clean_username(remote_user)
-        try:
-            user = User.objects.get(email=username)
-        except User.DoesNotExist:
-            if self.create_unknown_user:
-                user = User.objects.create_user(
-                    email=username, is_active=self.activate_after_creation)
-                if not self.activate_after_creation:
-                    notify_admins_on_activate_request(username)
-                elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
-                    notify_admins_on_register_complete(username)
-            else:
+        if remote_user:
+            username = self.clean_username(remote_user)
+            try:
+                user = User.objects.get(email=username)
+            except User.DoesNotExist:
                 user = None
+        else:
+            user = None
+
+        if not user and self.create_unknown_user:
+            user = User.objects.create_oauth_user(is_active=self.activate_after_creation)
+            if not self.activate_after_creation:
+                notify_admins_on_activate_request(user.username)
+            elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
+                notify_admins_on_register_complete(user.username)
 
         return user

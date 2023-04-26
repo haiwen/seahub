@@ -23,7 +23,6 @@ from seahub.work_weixin.utils import handler_work_weixin_api_response, \
 from seahub.work_weixin.settings import WORK_WEIXIN_DEPARTMENTS_URL, \
     WORK_WEIXIN_DEPARTMENT_MEMBERS_URL, WORK_WEIXIN_PROVIDER, WORK_WEIXIN_UID_PREFIX
 from seahub.base.accounts import User
-from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.group.utils import validate_group_name
 from seahub.auth.models import ExternalDepartment
@@ -161,12 +160,13 @@ def _handler_work_weixin_user_data(api_user, social_auth_queryset):
     return error_data
 
 
-def _import_user_from_work_weixin(email, api_user):
-    api_user['username'] = email
+def _import_user_from_work_weixin(api_user):
     uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid')
     try:
-        User.objects.create_user(email)
-        SocialAuthUser.objects.add(email, WORK_WEIXIN_PROVIDER, uid)
+        contact_email = api_user.get('contact_email') if api_user.get('contact_email') else None
+        user = User.objects.create_user(contact_email)
+        api_user['username'] = user.username
+        SocialAuthUser.objects.add(user.username, WORK_WEIXIN_PROVIDER, uid)
         update_work_weixin_user_info(api_user)
     except Exception as e:
         logger.error(e)
@@ -202,12 +202,11 @@ class AdminWorkWeixinUsersBatch(APIView):
 
             error_data = _handler_work_weixin_user_data(api_user, social_auth_queryset)
             if not error_data:
-                email = gen_user_virtual_id()
-                if _import_user_from_work_weixin(email, api_user):
+                if _import_user_from_work_weixin(api_user):
                     success.append({
                         'userid': api_user.get('userid'),
                         'name': api_user.get('name'),
-                        'email': email,
+                        'email': api_user.get('username'),
                     })
                 else:
                     failed.append({
@@ -334,7 +333,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
         if api_department_list is None:
             error_msg = '获取企业微信组织架构失败'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        api_department_list = sorted(api_department_list, key=lambda x:x['id'])
+        api_department_list = sorted(api_department_list, key=lambda x: x['id'])
 
         # list department members from work weixin
         api_user_list = self._list_department_members_from_work_weixin(access_token, department_id)
@@ -415,16 +414,17 @@ class AdminWorkWeixinDepartmentsImport(APIView):
 
             #  determine the user exists
             if social_auth_queryset.filter(uid=uid).exists():
-                email = social_auth_queryset.get(uid=uid).username
+                email = social_auth_queryset.get(uid=uid).username  # this email means username
             else:
                 # create user
-                email = gen_user_virtual_id()
-                create_user_success = _import_user_from_work_weixin(email, api_user)
+                create_user_success = _import_user_from_work_weixin(api_user)
                 if not create_user_success:
                     failed_msg = self._api_user_failed_msg(
                         '', api_user_name, department_id, '导入用户失败')
                     failed.append(failed_msg)
                     continue
+                # api_user's username is from `User.objects.create_user` in `_import_user_from_work_weixin`
+                email = api_user.get('username')
 
             # bind user to department
             api_user_department_list = api_user.get('department')

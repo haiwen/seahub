@@ -74,3 +74,11 @@ def clear_login_failed_attempts(request, username):
     p = Profile.objects.get_profile_by_user(username)
     if p and p.login_id:
         cache.delete(normalize_cache_key(p.login_id, prefix=LOGIN_ATTEMPT_PREFIX))
+
+
+def get_virtual_id_by_email(email):
+    p = Profile.objects.get_profile_by_contact_email(email)
+    if p is None:
+        return email
+    else:
+        return p.user
