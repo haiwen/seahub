@@ -24,7 +24,7 @@ window.seafile = {
   avatarURL,
   siteRoot,
   docPerm: filePerm,
-  historyURL: Utils.generateHistoryURL(siteRoot, repoID, docUuid),
+  historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
 };
 
 ReactDom.render(
