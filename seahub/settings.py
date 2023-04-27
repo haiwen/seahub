@@ -316,6 +316,21 @@ ENABLE_WEIXIN = False
 # enable dingtalk
 ENABLE_DINGTALK = False
 
+# enable ldap
+ENABLE_LDAP = False
+LDAP_USER_FIRST_NAME_ATTR = ''
+LDAP_USER_LAST_NAME_ATTR = ''
+LDAP_USER_NAME_REVERSE = False
+LDAP_FILTER = ''
+LDAP_CONTACT_EMAIL_ATTR = ''
+LDAP_USER_ROLE_ATTR = ''
+ACTIVATE_USER_WHEN_IMPORT = True
+
+# enable ldap sasl auth
+ENABLE_SASL = False
+SASL_MECHANISM = ''
+SASL_AUTHC_ID_ATTR = ''
+
 # allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True
 
@@ -973,6 +988,9 @@ if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
     MIDDLEWARE.append('djangosaml2.middleware.SamlSessionMiddleware')
     AUTHENTICATION_BACKENDS += ('seahub.adfs_auth.backends.Saml2Backend',)
     SAML_CONFIG_LOADER = 'seahub.adfs_auth.utils.config_settings_loader'
+
+if ENABLE_LDAP:
+    AUTHENTICATION_BACKENDS += ('seahub.base.accounts.CustomLDAPBackend',)
 
 #####################
 # Custom Nav Items  #
