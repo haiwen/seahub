@@ -4,10 +4,11 @@ import { SimpleEditor } from '@seafile/sdoc-editor';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
+import { Utils } from './utils/utils';
 
-const { serviceURL, avatarURL } = window.app.config;
+const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.userInfo;
-const { repoID, docPath, docName, docUuid, seadocAccessToken, seadocServerUrl } = window.app.pageOptions;
+const { repoID, docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, filePerm } = window.app.pageOptions;
 
 window.seafile = {
   repoID,
@@ -21,6 +22,9 @@ window.seafile = {
   name,
   username,
   avatarURL,
+  siteRoot,
+  docPerm: filePerm,
+  historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
 };
 
 ReactDom.render(

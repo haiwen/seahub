@@ -1536,6 +1536,11 @@ export const Utils = {
   updateTabTitle: function(content) {
     const title = document.getElementsByTagName('title')[0];
     title.innerText = content;
+  },
+
+  generateHistoryURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    return siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + this.encodePath(path);
   }
 
 };
