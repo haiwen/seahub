@@ -19,7 +19,7 @@ window.seafile = {
   username,
   siteRoot,
   docPerm: filePerm,
-  historyURL: siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath),
+  historyURL: Utils.generateHistoryURL(siteRoot, repoID, filePath),
 };
 
 ReactDom.render(
