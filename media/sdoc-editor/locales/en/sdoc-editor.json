@@ -230,5 +230,8 @@
   "Saving": "Saving...",
   "Collaborators": "Collaborators",
   "Online_members": "Online members",
-  "me": "me"
+  "me": "me",
+  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later.",
+  "Server_is_disconnected_Reconnecting": "Server is disconnected. Reconnecting...",
+  "Server_is_reconnected": "Server is reconnected."
 }

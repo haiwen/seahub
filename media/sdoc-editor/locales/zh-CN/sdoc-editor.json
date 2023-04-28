@@ -225,5 +225,8 @@
   "All_changes_saved": "所有更改均已保存",
   "Saving": "保存中...",
   "Online_members": "在线成员",
-  "me": "我"
+  "me": "我",
+  "Server_is_not_connected_Operation_will_be_sent_to_server_later": "服务器未连接。 操作稍后将发送到服务器。",
+  "Server_is_disconnected_Reconnecting": "服务器断开连接。正在重新连接...",
+  "Server_is_reconnected": "服务器已重新连接。"
 }
