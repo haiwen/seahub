@@ -233,5 +233,7 @@
   "me": "me",
   "Server_is_not_connected_Operation_will_be_sent_to_server_later": "Server is not connected. Operation will be sent to server later.",
   "Server_is_disconnected_Reconnecting": "Server is disconnected. Reconnecting...",
-  "Server_is_reconnected": "Server is reconnected."
+  "Server_is_reconnected": "Server is reconnected.",
+  "Outline": "Outline",
+  "Headings_you_add_to_the_document_will_appear_here": "Headings you add to the document will appear here"
 }
