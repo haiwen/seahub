@@ -16,6 +16,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-cancel:before {
+  content: "\e641";
+}
+
+.icon-table-of-content:before {
+  content: "\e642";
+}
 
 .icon-history:before {
   content: "\e640";
