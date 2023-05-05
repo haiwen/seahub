@@ -229,6 +229,6 @@
   "Server_is_not_connected_Operation_will_be_sent_to_server_later": "服务器未连接。 操作稍后将发送到服务器。",
   "Server_is_disconnected_Reconnecting": "服务器断开连接。正在重新连接...",
   "Server_is_reconnected": "服务器已重新连接。",
-  "Outline": "大纲",
+  "Outline": "目录",
   "Headings_you_add_to_the_document_will_appear_here": "您添加到文档中的标题将显示在此处"
 }
