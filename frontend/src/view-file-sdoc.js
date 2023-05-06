@@ -8,7 +8,10 @@ import { Utils } from './utils/utils';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.userInfo;
-const { repoID, docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, filePerm } = window.app.pageOptions;
+const {
+  repoID, repoName, parentDir, filePerm,
+  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl
+} = window.app.pageOptions;
 
 window.seafile = {
   repoID,
@@ -25,6 +28,7 @@ window.seafile = {
   siteRoot,
   docPerm: filePerm,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
+  parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`
 };
 
 ReactDom.render(
