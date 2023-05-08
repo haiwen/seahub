@@ -11,6 +11,7 @@
       2,
       { "SwitchCase": 1 }
     ],
+    "default-case": "off",
     "linebreak-style": [
       "warn",
       "unix"
