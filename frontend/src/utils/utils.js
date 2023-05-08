@@ -3,7 +3,7 @@ import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
 import PermissionDeniedTip from '../components/permission-denied-tip';
-import { compareTwoString } from './sort-two-string';
+import { compareTwoString } from './compare-two-string';
 
 export const Utils = {
 
