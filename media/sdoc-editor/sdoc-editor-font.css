@@ -16,6 +16,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-revoke:before {
+  content: "\e643";
+}
+
+.icon-redo:before {
+  content: "\e644";
+}
+
 .icon-cancel:before {
   content: "\e641";
 }
