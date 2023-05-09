@@ -3,8 +3,9 @@ import ReactDom from 'react-dom';
 import { SimpleEditor } from '@seafile/sdoc-editor';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './_i18n/i18n-sdoc-editor';
-import Loading from './components/loading';
 import { Utils } from './utils/utils';
+import Loading from './components/loading';
+import InternalLinkDialog from './components/dialog/internal-link-dialog';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.userInfo;
@@ -28,7 +29,8 @@ window.seafile = {
   siteRoot,
   docPerm: filePerm,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
-  parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`
+  parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`,
+  internalLink: <InternalLinkDialog repoID={repoID} path={docPath} />
 };
 
 ReactDom.render(
