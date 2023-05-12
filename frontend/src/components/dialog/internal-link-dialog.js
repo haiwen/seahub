@@ -7,69 +7,63 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-import '../../css/internal-link.css';
-
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  onInternalLinkDialogToggle: PropTypes.func.isRequired,
 };
 
 class InternalLinkDialog extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
       smartLink: '',
+      isLoading: true,
     };
-
-    this.toggle = this.toggle.bind(this);
-    this.getInternalLink = this.getInternalLink.bind(this);
-    this.copyToClipBoard = this.copyToClipBoard.bind(this);
   }
 
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
+  componentDidMount() {
+    this.getInternalLink();
   }
 
-  getInternalLink() {
+  getInternalLink = () => {
     let repoID = this.props.repoID;
     let path = this.props.path;
     seafileAPI.getInternalLink(repoID, path).then(res => {
+      const { smart_link } = res.data;
       this.setState({
-        isOpen: true,
-        smartLink: res.data.smart_link
+        isLoading: false,
+        smartLink: smart_link,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+      this.setState({isLoading: false});
     });
   }
 
-  copyToClipBoard() {
+  copyToClipBoard = () => {
     copy(this.state.smartLink);
-    this.setState({
-      isOpen: false
-    });
-    let message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message), {
-      duration: 2
-    };
+    const message = gettext('Internal link has been copied to clipboard');
+    toaster.success(message, {duration: 2});
+    this.toggle();
+  }
+
+  toggle = () => {
+    this.props.onInternalLinkDialogToggle();
   }
 
   render() {
+    const tipMessage = gettext('An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.');
     return (
       <Fragment>
-        <i title={gettext('Internal Link')} role="button" tabIndex="0" aria-label={gettext('Internal Link')} className="file-internal-link fa fa-link" onClick={this.getInternalLink}></i>
-        <Modal isOpen={this.state.isOpen} toggle={this.toggle}>
+        <Modal isOpen={true} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>{gettext('Internal Link')}</ModalHeader>
           <ModalBody>
-            <p className="tip mb-1">
-              {gettext('An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.')}
-            </p>
+            <p className="tip mb-1">{tipMessage}</p>
             <p>
-              <a target="_blank" href={this.state.smartLink}>{this.state.smartLink}</a>
+              <a target="_blank" href={this.state.smartLink} rel='noreferrer'>{this.state.smartLink}</a>
             </p>
           </ModalBody>
           <ModalFooter>

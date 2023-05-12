@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { gettext } from '../../../utils/constants';
-import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
+import { InternalLinkOperation } from '../../../components/operations';
 
 const { repoID, filePath } = window.app.pageOptions;
 
@@ -22,7 +22,7 @@ class FileInfo extends React.PureComponent {
             <span className="file-star" title={starTitle}>
               <i className={starIconClass} onClick={this.props.toggleStar}/>
             </span>
-            <InternalLinkDialog path={filePath} repoID={repoID} />
+            <InternalLinkOperation path={filePath} repoID={repoID} />
             {(isPro && isLocked) && (
               <img 
                 className="file-locked-icon mx-2" 

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { UncontrolledTooltip } from 'reactstrap';
 import { siteRoot, gettext } from '../../utils/constants';
-import InternalLinkDialog from '../dialog/internal-link-dialog';
 import { Utils } from '../../utils/utils';
+import { InternalLinkOperation } from '../operations';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
@@ -103,12 +103,9 @@ class DirPath extends React.Component {
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
         }
         {pathElem}
-        {this.props.isViewFile &&
-          <InternalLinkDialog
-            repoID={this.props.repoID}
-            path={this.props.currentPath}
-          />
-        }
+        {this.props.isViewFile && (
+          <InternalLinkOperation repoID={this.props.repoID} path={this.props.currentPath}/>
+        )}
         {(this.props.isViewFile && fileTags.length !== 0) &&
           <span id='column-mode-file-tags' className="tag-list tag-list-stacked align-middle ml-1">
             {fileTags.map((fileTag, index) => {

@@ -200,22 +200,12 @@
   font-size: 0.875rem;
 }
 
-.topbar-file-info .file-title .file-star,
-.topbar-file-info .file-title .file-internal-link {
+.topbar-file-info .file-title .file-star {
   font-size: 0.875rem;
   cursor: pointer;
   margin-left: 0.5rem;
   vertical-align: text-bottom;
   color: #999;
-}
-
-.topbar-file-info .file-title .file-internal-link {
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.topbar-file-info .file-title .file-internal-link:hover {
-  color: #333;
 }
 
 .topbar-file-info .file-title .file-star .star {
