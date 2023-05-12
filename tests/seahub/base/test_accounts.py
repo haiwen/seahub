@@ -33,7 +33,7 @@ class UserTest(BaseTestCase):
 
         assert len(UserOptions.objects.filter(email=test_email)) == 0
 
-        User.objects.create_user(test_email)
+        self.create_user(test_email)
         UserOptions.objects.enable_server_crypto(test_email)
 
         assert len(UserOptions.objects.filter(email=test_email)) == 1

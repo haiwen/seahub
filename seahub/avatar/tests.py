@@ -10,6 +10,7 @@ from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_URL, AVATAR_MAX_AVATARS_PER_USER
 from seahub.avatar.util import get_primary_avatar
 from seahub.avatar.models import Avatar
+from seahub.test_utils import Fixtures
 
 try:
     from PIL import Image
@@ -26,13 +27,13 @@ def upload_helper(o, filename):
     f.close()
     return response
 
-class AvatarTestCase(TestCase):
+class AvatarTestCase(TestCase, Fixtures):
     """
     Helper base class for all the follow test cases.
     """
     def setUp(self):
         self.testdatapath = os.path.join(os.path.dirname(__file__), "testdata")
-        self.user = User.objects.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
+        self.user = self.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
 
         response = self.client.post('/accounts/login/', {
             'username': 'lennon@thebeatles.com',

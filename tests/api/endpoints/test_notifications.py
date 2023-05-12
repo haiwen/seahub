@@ -78,7 +78,7 @@ class NotificationTest(BaseTestCase):
 
     def test_permission_check_permission_denied(self):
         self.login_as(self.user)
-        new_user = UserManager().create_user(email='new@new.com', password='root')
+        new_user = self.create_user(email='new@new.com', password='root')
         notice_to_new_user = UserNotification.objects.add_user_message(new_user.name, 'test for new user')
         data = 'notice_id=%s' % notice_to_new_user.id
 
