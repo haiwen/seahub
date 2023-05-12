@@ -11,6 +11,42 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-history-header-left {
   font-size: 1.25rem;
+  flex: 1;
+}
+
+.sdoc-file-history .sdoc-file-history-header .file-name {
+  flex: 1;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-history-header-right {
+  height: 100%;
+  min-width: 100px;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-container {
+  height: 32px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-divider {
+  border-right: 1px solid #e5e5e5;
+  height: 100%;
+  width: 1px;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next {
+  padding:  0 8px;
+  color: #000;
+  opacity: .5;
+  height: 100%;
+}
+
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover {
+  cursor: pointer;
+  opacity: .75;
 }
 
 .sdoc-file-history .sdoc-file-history-content {
@@ -102,6 +138,7 @@
 
 .sdoc-file-history-versions .history-list-item:hover {
   background-color: #ffe7d5;
+  cursor: pointer;
 }
 
 .history-info .owner {
