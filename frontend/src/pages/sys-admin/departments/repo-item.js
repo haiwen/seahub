@@ -28,25 +28,26 @@ class RepoItem extends React.Component {
   }
 
   render() {
-    const repo = this.props.repo;
+    const { repo } = this.props;
+    const repoName = repo.name || repo.repo_name;
     const highlight = this.state.highlight;
     let iconUrl = Utils.getLibIconUrl(repo);
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} width="24" alt={gettext('icon')}/></td>
         { enableSysAdminViewRepo ?
-          <td><a href={siteRoot + 'sys/libraries/' + repo.repo_id + '/' + repo.name + '/'}>{repo.name}</a></td>
+          <td><a href={`${siteRoot}sys/libraries/${repo.repo_id}/${encodeURIComponent(repoName)}/`}>{repoName}</a></td>
           :
-          <td>{repo.name}</td>
+          <td>{repoName}</td>
         }
         <td>{Utils.bytesToSize(repo.size)}{' '}</td>
-	{ this.props.orgID == -1 ?
+        { this.props.orgID == -1 ?
           <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
             <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
           </td>
           :
           <td></td>
-	}
+        }
       </tr>
     );
   }

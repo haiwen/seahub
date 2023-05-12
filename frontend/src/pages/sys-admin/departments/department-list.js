@@ -12,7 +12,7 @@ import '../../../css/org-department-item.css';
 
 moment.locale(lang);
 
-class DepartmentsList extends React.Component {
+class DepartmentList extends React.Component {
 
   constructor(props) {
     super(props);
@@ -79,6 +79,14 @@ class DepartmentsList extends React.Component {
     });
   }
 
+  onAddNewDepartment = (newDepartment) => {
+    const { groups } = this.state;
+    groups.unshift(newDepartment)
+    this.setState({
+      groups: groups
+   });
+  }
+
   render() {
     const groups = this.state.groups;
     const topbarChildren = (
@@ -88,7 +96,7 @@ class DepartmentsList extends React.Component {
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
             <AddDepartDialog
-              onDepartChanged={this.onDepartChanged}
+             onAddNewDepartment={this.onAddNewDepartment}
               groupID={this.state.groupID}
               toggle={this.toggleAddDepartDialog}
             />
@@ -167,4 +175,4 @@ class DepartmentsList extends React.Component {
   }
 }
 
-export default DepartmentsList;
+export default DepartmentList;

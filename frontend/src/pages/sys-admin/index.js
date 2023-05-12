@@ -44,8 +44,10 @@ import GroupRepos from './groups/group-repos';
 import GroupMembers from './groups/group-members';
 
 import Departments from './departments/departments';
-import DepartmentsList from './departments/departments-list';
-import DepartmentDetail from './departments/department-detail';
+import DepartmentList from './departments/department-list';
+import SubDepartments from './departments/sub-departments';
+import DepartmentMembers from './departments/department-members';
+import DepartmentLibraries from './departments/department-libraries';
 
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
@@ -235,8 +237,10 @@ class SysAdmin extends React.Component {
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
             <Departments path={siteRoot + 'sys/departments'}>
-              <DepartmentsList path='/' {...commonProps} />
-              <DepartmentDetail path='/:groupID' {...commonProps} />
+              <DepartmentList path='/' {...commonProps} />
+              <SubDepartments path='/:groupID' {...commonProps} />
+              <DepartmentMembers path='/:groupID/members' {...commonProps} />
+              <DepartmentLibraries path='/:groupID/libraries' {...commonProps} />
             </Departments>
             <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
