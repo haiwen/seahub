@@ -10,7 +10,8 @@ from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
-from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_file_upload_url
+from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_file_upload_url, \
+    gen_file_get_url, gen_file_upload_url
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
@@ -142,7 +143,8 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
         repo_id, obj_id, 'upload-link', username, use_onetime=True)
     if not token:
         return None
-    upload_link = gen_inner_file_upload_url('upload-aj', token)
+    upload_link = gen_inner_file_upload_url('upload-api', token)
+    upload_link = upload_link + '?replace=1'
     return upload_link
 
 
@@ -155,5 +157,5 @@ def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
         repo_id, obj_id, 'view', username, use_onetime=False)
     if not token:
         return None
-    download_link = gen_inner_file_get_url(token, filename)
+    download_link = gen_file_get_url(token, filename)
     return download_link
