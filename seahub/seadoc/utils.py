@@ -108,7 +108,6 @@ def get_seadoc_upload_link(uuid_map, last_modify_user=''):
     if not token:
         return None
     upload_link = gen_inner_file_upload_url('update-api', token)
-    upload_link = upload_link
     return upload_link
 
 
@@ -123,6 +122,37 @@ def get_seadoc_download_link(uuid_map):
         return None
     token = seafile_api.get_fileserver_access_token(
         repo_id, obj_id, 'view', '', use_onetime=False)
+    if not token:
+        return None
+    download_link = gen_inner_file_get_url(token, filename)
+    return download_link
+
+
+def gen_seadoc_image_parent_path(file_uuid, repo_id, username):
+    parent_path = '/images/sdoc/' + file_uuid + '/'
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_path)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_path[1:], username)
+    return parent_path
+
+
+def get_seadoc_asset_upload_link(repo_id, parent_path, username):
+    obj_id = json.dumps({'parent_dir': parent_path})
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, obj_id, 'upload-link', username, use_onetime=True)
+    if not token:
+        return None
+    upload_link = gen_inner_file_upload_url('upload-aj', token)
+    return upload_link
+
+
+def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
+    file_path = posixpath.join(parent_path, filename)
+    obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not obj_id:
+        return None
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, obj_id, 'view', username, use_onetime=False)
     if not token:
         return None
     download_link = gen_inner_file_get_url(token, filename)

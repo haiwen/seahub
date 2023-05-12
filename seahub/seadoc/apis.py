@@ -8,15 +8,17 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.utils.translation import ugettext as _
 
-from seaserv import seafile_api
+from seaserv import seafile_api, check_quota
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
-    get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token
+    get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
+    gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link
 from seahub.utils.file_types import SEADOC
 from seahub.utils import get_file_type_and_ext, normalize_file_path
 from seahub.tags.models import FileUUIDMap
@@ -194,6 +196,73 @@ class SeadocDownloadLink(APIView):
         download_link = get_seadoc_download_link(uuid_map)
         if not download_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        return Response({'download_link': download_link})
+
+
+class SeadocUploadImage(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """image path: /images/sdoc/${sdocUuid}/${filename}
+        """
+        # jwt permission check
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_quota(uuid_map.repo_id) < 0:
+            error_msg = _("Out of quota.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # main
+        repo_id = uuid_map.repo_id
+        username = payload.get('username', '')
+        parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+
+        upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
+        return Response({
+            'upload_link': upload_link,
+            'parent_dir': parent_path,
+        })
+
+
+class SeadocDownloadImage(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid, filename):
+        # jwt permission check
+        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # main
+        repo_id = uuid_map.repo_id
+        username = payload.get('username', '')
+        parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+
+        download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
+        if not download_link:
+            error_msg = 'file %s not found.' % filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return Response({'download_link': download_link})
