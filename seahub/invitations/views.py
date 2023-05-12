@@ -10,6 +10,7 @@ from seaserv import seafile_api
 
 from seahub.auth import login as auth_login, authenticate
 from seahub.auth import get_backends
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
 from seahub.invitations.models import Invitation, RepoShareInvitation
@@ -29,9 +30,10 @@ def token_view(request, token):
     if i.is_expired():
         raise Http404
 
+    vid = get_virtual_id_by_email(i.accepter)
     if request.method == 'GET':
         try:
-            user = User.objects.get(email=i.accepter)
+            user = User.objects.get(email=vid)
             if user.is_active is True:
                 # user is active return exist
                 messages.error(request, _('A user with this email already exists.'))
@@ -46,7 +48,7 @@ def token_view(request, token):
             return HttpResponseRedirect(request.headers.get('referer'))
 
         try:
-            user = User.objects.get(email=i.accepter)
+            user = User.objects.get(email=vid)
             if user.is_active is True:
                 # user is active return exist
                 messages.error(request, _('A user with this email already exists.'))
@@ -83,7 +85,7 @@ def token_view(request, token):
         # repo share invitation
         try:
             shared_queryset = RepoShareInvitation.objects.list_by_invitation(invitation=i)
-            accepter = i.accepter
+            accepter = user.username
 
             for shared_obj in shared_queryset:
                 repo_id = shared_obj.repo_id

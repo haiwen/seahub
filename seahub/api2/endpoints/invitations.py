@@ -12,6 +12,7 @@ from seahub.api2.permissions import CanInviteGuest
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.accounts import User
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.utils import is_valid_email
 from seahub.invitations.models import Invitation
 from seahub.invitations.utils import block_accepter
@@ -58,8 +59,9 @@ class InvitationsView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              _('%s is already invited.') % accepter)
 
+        vid = get_virtual_id_by_email(accepter)
         try:
-            user = User.objects.get(accepter)
+            user = User.objects.get(vid)
             # user is active return exist
             if user.is_active is True:
                 return api_error(status.HTTP_400_BAD_REQUEST,
@@ -128,8 +130,9 @@ class InvitationsBatchView(APIView):
 
                 continue
 
+            vid = get_virtual_id_by_email(accepter)
             try:
-                user = User.objects.get(accepter)
+                user = User.objects.get(vid)
                 # user is active return exist
                 if user.is_active is True:
                     result['failed'].append({
