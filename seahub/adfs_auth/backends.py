@@ -32,7 +32,7 @@ from registration.models import notify_admins_on_activate_request, notify_admins
 
 logger = logging.getLogger(__name__)
 
-SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', False)
+SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', '')
 SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', False)
 
 

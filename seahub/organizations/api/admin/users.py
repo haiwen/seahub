@@ -16,6 +16,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.endpoints.utils import is_org_user
+from seahub.api2.endpoints.admin.users import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
@@ -691,8 +692,9 @@ class OrgAdminImportUsers(APIView):
             else:
                 password = record[1].strip()
 
+            vid = get_virtual_id_by_email(email)
             try:
-                User.objects.get(email=email)
+                User.objects.get(email=vid)
                 result['failed'].append({
                     'email': email,
                     'error_msg': 'user %s exists.' % email
@@ -701,8 +703,8 @@ class OrgAdminImportUsers(APIView):
             except User.DoesNotExist:
                 pass
 
-            User.objects.create_user(email, password, is_staff=False, is_active=True)
-            set_org_user(org_id, email)
+            user = User.objects.create_user(email, password, is_staff=False, is_active=True)
+            set_org_user(org_id, user.email)
 
             if IS_EMAIL_CONFIGURED:
                 if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
@@ -717,7 +719,7 @@ class OrgAdminImportUsers(APIView):
                 try:
                     nickname = record[2].strip()
                     if len(nickname) <= 64 and '/' not in nickname:
-                        Profile.objects.add_or_update(email, nickname, '')
+                        Profile.objects.add_or_update(user.email, nickname, '')
                 except Exception as e:
                     logger.error(e)
 
@@ -727,23 +729,21 @@ class OrgAdminImportUsers(APIView):
                     space_quota_mb = int(record[3])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
-                        seafile_api.set_org_user_quota(org_id, email, space_quota)
+                        seafile_api.set_org_user_quota(org_id, user.email, space_quota)
                 except Exception as e:
                     logger.error(e)
 
-            user = User.objects.get(email=email)
-
             info = {}
-            info['email'] = email
-            info['name'] = email2nickname(email)
-            info['contact_email'] = email2contact_email(email)
+            info['email'] = user.email
+            info['name'] = email2nickname(user.email)
+            info['contact_email'] = email2contact_email(user.email)
 
             info['is_staff'] = user.is_staff
             info['is_active'] = user.is_active
 
             info['quota_usage'] = 0
             try:
-                info['quota_total'] = get_org_user_quota(org_id, email)
+                info['quota_total'] = get_org_user_quota(org_id, user.email)
             except SearpcError as e:
                 logger.error(e)
                 info['quota_total'] = -1

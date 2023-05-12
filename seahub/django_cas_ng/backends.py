@@ -70,7 +70,7 @@ class CASBackend(ModelBackend):
                 user = User.objects.get(email=username)
                 created = False
             except User.DoesNotExist:
-                user = User.objects.create_user(
+                user = User.objects.create_cas_user(
                     email=username, is_active=True)
                 user = self.configure_user(user)
                 created = True

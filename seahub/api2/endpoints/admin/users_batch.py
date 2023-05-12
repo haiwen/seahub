@@ -344,9 +344,9 @@ class AdminImportUsers(APIView):
             except User.DoesNotExist:
                 pass
 
-            User.objects.create_user(email, password, is_staff=False, is_active=True)
+            user = User.objects.create_user(email, password, is_staff=False, is_active=True)
             if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(vid)
+                UserOptions.objects.set_force_passwd_change(user.email)
 
             # update the user's optional info
             # update nikename
@@ -356,7 +356,7 @@ class AdminImportUsers(APIView):
                     input_nickname = str(record[2]).strip()
                     if len(input_nickname) <= 64 and '/' not in input_nickname:
                         nickname = input_nickname
-                Profile.objects.add_or_update(vid, nickname, '')
+                Profile.objects.add_or_update(user.email, nickname, '')
             except Exception as e:
                 logger.error(e)
 
@@ -365,7 +365,7 @@ class AdminImportUsers(APIView):
                 try:
                     role = record[3].strip()
                     if is_pro_version() and role in get_available_roles():
-                        User.objects.update_role(vid, role)
+                        User.objects.update_role(user.email, role)
                 except Exception as e:
                     logger.error(e)
 
@@ -375,14 +375,14 @@ class AdminImportUsers(APIView):
                     space_quota_mb = int(record[4])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
-                        seafile_api.set_user_quota(vid, space_quota)
+                        seafile_api.set_user_quota(user.email, space_quota)
                 except Exception as e:
                     logger.error(e)
 
             # login id
             if record[5]:
                 try:
-                    Profile.objects.add_or_update(vid, login_id=record[5])
+                    Profile.objects.add_or_update(user.email, login_id=record[5])
                 except Exception as e:
                     logger.error(e)
 
@@ -395,11 +395,10 @@ class AdminImportUsers(APIView):
                                                  'password': password
                                              })
 
-            user = User.objects.get(email=vid)
             info = dict()
-            info['email'] = email
-            info['name'] = email2nickname(email)
-            info['contact_email'] = email2contact_email(email)
+            info['email'] = user.email
+            info['name'] = email2nickname(user.email)
+            info['contact_email'] = email2contact_email(user.email)
 
             info['is_staff'] = user.is_staff
             info['is_active'] = user.is_active

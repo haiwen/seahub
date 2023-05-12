@@ -15,6 +15,7 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, is_user_password_strong, get_site_name, is_valid_email
+from seahub.auth.utils import get_virtual_id_by_email
 
 from captcha.fields import CaptchaField
 
@@ -122,10 +123,11 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError(_('Failed to send email, email service is not properly configured, please contact administrator.'))
 
         email = self.cleaned_data["email"].lower().strip()
+        vid = get_virtual_id_by_email(email)
 
         # TODO: add filter method to UserManager
         try:
-            self.users_cache = User.objects.get(email=email)
+            self.users_cache = User.objects.get(email=vid)
         except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
 

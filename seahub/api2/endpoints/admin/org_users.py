@@ -215,7 +215,7 @@ class AdminOrgUsers(APIView):
         # add user to org
         # set `is_staff` parameter as `0`
         try:
-            ccnet_api.add_org_user(org_id, email, 0)
+            ccnet_api.add_org_user(org_id, user.email, 0)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -223,10 +223,10 @@ class AdminOrgUsers(APIView):
 
         name = request.POST.get('name', None)
         if name:
-            Profile.objects.add_or_update(email, name)
+            Profile.objects.add_or_update(user.email, name)
 
         if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(email)
+            UserOptions.objects.set_force_passwd_change(user.email)
 
         user_info = get_org_user_info(org_id, user)
         user_info['active'] = is_active

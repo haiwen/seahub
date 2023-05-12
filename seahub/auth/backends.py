@@ -149,13 +149,13 @@ class SeafileRemoteUserBackend(AuthBackend):
                 return None
 
             try:
-                user = User.objects.create_user(email=username,
-                                                is_active=self.auto_activate)
+                user = User.objects.create_remote_user(email=username,
+                                                       is_active=self.auto_activate)
 
                 if not self.auto_activate:
-                    notify_admins_on_activate_request(username)
+                    notify_admins_on_activate_request(user.username)
                 elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
-                    notify_admins_on_register_complete(username)
+                    notify_admins_on_register_complete(user.username)
 
             except Exception as e:
                 logger.error(e)
@@ -170,7 +170,7 @@ class SeafileRemoteUserBackend(AuthBackend):
                 return None
 
         # get user again with updated extra info after configure
-        return self.get_user(username)
+        return self.get_user(user.username)
 
     def clean_username(self, username):
         """

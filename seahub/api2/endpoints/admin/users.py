@@ -691,7 +691,7 @@ class AdminUsers(APIView):
                 logger.error(str(e))
                 add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
 
-        user_info = get_user_info(vid)
+        user_info = get_user_info(user_obj.username)
         user_info['add_user_tip'] = add_user_tip
 
         # send admin operation log signal
@@ -702,7 +702,7 @@ class AdminUsers(APIView):
                              operation=USER_ADD, detail=admin_op_detail)
 
         if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(email)
+            UserOptions.objects.set_force_passwd_change(user_obj.email)
 
         return Response(user_info)
 

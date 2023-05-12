@@ -42,6 +42,13 @@ class OauthRemoteUserBackend(RemoteUserBackend):
         create_unknown_user = DINGTALK_OAUTH_CREATE_UNKNOWN_USER
         activate_after_creation = DINGTALK_OAUTH_ACTIVATE_USER_AFTER_CREATION
 
+    def get_user(self, username):
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        return user
+
     def authenticate(self, remote_user):
         """
         The username passed as ``remote_user`` is considered trusted.  This
@@ -53,10 +60,7 @@ class OauthRemoteUserBackend(RemoteUserBackend):
         """
         if remote_user:
             username = self.clean_username(remote_user)
-            try:
-                user = User.objects.get(email=username)
-            except User.DoesNotExist:
-                user = None
+            user = self.get_user(username)
         else:
             user = None
 

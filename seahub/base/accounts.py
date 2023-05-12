@@ -86,7 +86,7 @@ class UserManager(object):
         # Set email as contact email.
         Profile.objects.add_or_update(username=virtual_id, contact_email=email)
 
-        return self.get(email=email)
+        return self.get(email=virtual_id)
 
     def update_role(self, email, role):
         """
@@ -135,7 +135,7 @@ class UserManager(object):
 
     def create_saml_user(self, email=None, password=None, nickname=None, is_staff=False, is_active=False):
         """
-        Creates and saves an saml user which can without email.
+        Creates and saves a saml user which can without email.
         """
         virtual_id = gen_user_virtual_id()
 
@@ -151,6 +151,54 @@ class UserManager(object):
         Profile.objects.add_or_update(username=virtual_id, contact_email=email, nickname=nickname)
 
         return self.get(email=virtual_id)
+
+    def create_remote_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a remote user with given username.
+        """
+        user = User(email=email)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        return self.get(email=email)
+
+    def create_cas_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a CAS user with given username.
+        """
+        user = User(email=email)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        return self.get(email=email)
+
+    def create_krb_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a KRB5 user with given username.
+        """
+        user = User(email=email)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        return self.get(email=email)
+
+    def create_shib_user(self, email, password=None, is_staff=False, is_active=False):
+        """
+        Creates and saves a SHIB user with given username.
+        """
+        user = User(email=email)
+        user.is_staff = is_staff
+        user.is_active = is_active
+        user.set_password(password)
+        user.save()
+
+        return self.get(email=email)
 
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)

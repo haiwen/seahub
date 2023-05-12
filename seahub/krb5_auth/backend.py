@@ -48,8 +48,8 @@ class RemoteKrbBackend(RemoteUserBackend):
         user = self.get_user(username)
         if not user:
             if self.create_unknown_user:
-                user = User.objects.create_user(email=username,
-                                                is_active=True)
+                user = User.objects.create_krb_user(email=username,
+                                                    is_active=True)
             else:
                 pass
 
