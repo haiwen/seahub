@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EventBus } from '@seafile/sdoc-editor';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
 import InternalLinkDialog from '../../components/dialog/internal-link-dialog';
 
 const propTypes = {
@@ -19,7 +19,7 @@ class ExternalOperations extends React.Component {
 
   componentDidMount() {
     const eventBus = EventBus.getInstance();
-    this.unsubscribeInternalLinkEvent = eventBus.subscribe('internal_link', this.onInternalLinkToggle);
+    this.unsubscribeInternalLinkEvent = eventBus.subscribe(EXTERNAL_EVENT.INTERNAL_LINK_CLICK, this.onInternalLinkToggle);
   }
 
   componentWillUnmount() {
