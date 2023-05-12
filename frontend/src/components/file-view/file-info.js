@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isPro, gettext, mediaUrl, siteRoot } from '../../utils/constants';
-import InternalLinkDialog from '../dialog/internal-link-dialog';
+import { InternalLinkOperation } from '../operations';
 
 const propTypes = {
   toggleStar: PropTypes.func.isRequired,
@@ -40,7 +40,7 @@ class FileInfo extends React.PureComponent {
             aria-label={isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.toggleStar}>
           </a>
-          <InternalLinkDialog repoID={repoID} path={filePath} />
+          <InternalLinkOperation repoID={repoID} path={filePath} />
           {(isPro && isLocked) &&
             <img className="file-locked-icon" width="16"
               src={`${mediaUrl}img/file-locked-32.png`}
