@@ -8,7 +8,7 @@ import { Utils } from './utils/utils';
 
 const { serviceURL, siteRoot } = window.app.config;
 const { username, filePerm } = window.app.pageOptions;
-const { repoID, filePath, fileName, rawPath } = window.shared.pageOptions;
+const { repoID, filePath, fileName, rawPath, assetsUrl } = window.shared.pageOptions;
 
 window.seafile = {
   repoID,
@@ -20,6 +20,7 @@ window.seafile = {
   siteRoot,
   docPerm: filePerm,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, filePath),
+  assetsUrl,
 };
 
 ReactDom.render(
