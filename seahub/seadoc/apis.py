@@ -250,9 +250,9 @@ class SeadocUploadImage(APIView):
             'file_name': file.name,
             'target_file': file_path,
         }
-        requests.post(upload_link, files=files)
-        image_url = '/api/v2.1/seadoc/download-image/' + \
-            file_uuid + '/' + file.name
+        data = {'parent_dir': parent_path}
+        resp = requests.post(upload_link, files=files, data=data)
+        image_url = '/api/v2.1/seadoc/download-image/' + file_uuid + '/' + file.name
         return Response({'url': image_url})
 
 
