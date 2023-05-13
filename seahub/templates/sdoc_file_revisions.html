@@ -14,8 +14,10 @@
             repoName: '{{ repo.name }}',
             filePath: '{{ path|escapejs }}',
             fileName: '{{ u_filename|escapejs }}',
+            docUuid: '{{ file_uuid }}',
             domain: '{{ domain }}',
             protocol: '{{ protocol }}',
+            assetsUrl: '{{ assets_url }}',
         }
     }
     </script>

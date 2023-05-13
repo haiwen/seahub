@@ -4,7 +4,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import DiffViewer from '@seafile/sdoc-editor/dist/pages/diff-viewer';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, fileName, historyRepoID } from '../../utils/constants';
+import { gettext, historyRepoID } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GoBack from '../../components/common/go-back';
 import SidePanel from './side-panel';
@@ -13,6 +13,24 @@ import toaster from '../../components/toast';
 
 import '../../css/layout.css';
 import '../../css/sdoc-file-history.css';
+
+const { serviceURL, avatarURL, siteRoot } = window.app.config;
+const { username, name } = window.app.pageOptions;
+const { repoID, fileName, filePath, docUuid, assetsUrl  } = window.fileHistory.pageOptions;
+
+window.seafile = {
+  repoID,
+  docPath: filePath,
+  docName: fileName,
+  docUuid,
+  isOpenSocket: false,
+  serviceUrl: serviceURL,
+  name,
+  username,
+  avatarURL,
+  siteRoot,
+  assetsUrl,
+};
 
 class SdocFileHistory extends React.Component {
 

@@ -36,13 +36,15 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.revision_tag.models import RevisionTags
+from seahub.tags.models import FileUUIDMap
 from seahub.utils import render_permission_error, render_error, \
     gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED
+    is_windows_operating_system, get_file_history_suffix, IS_EMAIL_CONFIGURED, \
+    normalize_file_path
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
@@ -119,6 +121,22 @@ def check_folder_permission(request, repo_id, path):
 
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
+
+def get_seadoc_file_uuid(repo, path):
+    repo_id = repo.repo_id
+    if repo.is_virtual:
+        repo_id = repo.origin_repo_id
+        path = posixpath.join(repo.origin_path, path.strip('/'))
+
+    path = normalize_file_path(path)
+    parent_dir = os.path.dirname(path)
+    filename = os.path.basename(path)
+
+    uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(
+        repo_id, parent_dir, filename, is_dir=False)
+
+    file_uuid = str(uuid_map.uuid)  # 36 chars str
+    return file_uuid
 
 def gen_path_link(path, repo_name):
     """
@@ -779,14 +797,17 @@ def file_revisions(request, repo_id):
         can_revert_file = False
 
     if file_type == 'sdoc':
+        file_uuid = get_seadoc_file_uuid(repo, path)
         return render(request, 'sdoc_file_revisions.html', {
             'repo': repo,
             'path': path,
             'u_filename': u_filename,
+            'file_uuid': file_uuid,
             'zipped': zipped,
             'is_owner': is_owner,
             'can_compare': can_compare,
             'can_revert_file': can_revert_file,
+            'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid
         })
 
     # Whether use new file history API which read file history from db.
