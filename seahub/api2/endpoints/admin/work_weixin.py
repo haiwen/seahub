@@ -164,7 +164,7 @@ def _import_user_from_work_weixin(api_user):
     uid = WORK_WEIXIN_UID_PREFIX + api_user.get('userid')
     try:
         contact_email = api_user.get('contact_email') if api_user.get('contact_email') else None
-        user = User.objects.create_user(contact_email)
+        user = User.objects.create_oauth_user(contact_email)
         api_user['username'] = user.username
         SocialAuthUser.objects.add(user.username, WORK_WEIXIN_PROVIDER, uid)
         update_work_weixin_user_info(api_user)
@@ -423,7 +423,7 @@ class AdminWorkWeixinDepartmentsImport(APIView):
                         '', api_user_name, department_id, '导入用户失败')
                     failed.append(failed_msg)
                     continue
-                # api_user's username is from `User.objects.create_user` in `_import_user_from_work_weixin`
+                # api_user's username is from `User.objects.create_oauth_user` in `_import_user_from_work_weixin`
                 email = api_user.get('username')
 
             # bind user to department

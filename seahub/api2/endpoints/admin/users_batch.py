@@ -319,7 +319,7 @@ class AdminImportUsers(APIView):
                 continue
 
             if record[1]:
-                password = record[1].strip()
+                password = str(record[1]).strip()
                 if not password:
                     result['failed'].append({
                         'email': email,

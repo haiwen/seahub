@@ -261,6 +261,10 @@ class OrgAdminUsers(APIView):
         except User.DoesNotExist:
             pass
 
+        if Profile.objects.filter(contact_email=email).first():
+            error_msg = _('User %s already exists.') % email
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             user = User.objects.create_user(email, password, is_staff=False,
                                             is_active=True)
@@ -683,14 +687,14 @@ class OrgAdminImportUsers(APIView):
                 })
                 continue
 
-            if not record[1] or not record[1].strip():
+            if not record[1] or not str(record[1]).strip():
                 result['failed'].append({
                     'email': email,
                     'error_msg': 'password invalid.'
                 })
                 continue
             else:
-                password = record[1].strip()
+                password = str(record[1]).strip()
 
             vid = get_virtual_id_by_email(email)
             try:
