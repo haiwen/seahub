@@ -1,259 +1,173 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDom from 'react-dom';
-import { Button } from 'reactstrap';
-import { Utils } from '../../utils/utils';
+import { UncontrolledTooltip } from 'reactstrap';
+import classnames from 'classnames';
+import DiffViewer from '@seafile/sdoc-editor/dist/pages/diff-viewer';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, PER_PAGE, filePath, fileName, historyRepoID, canDownload, canCompare } from '../../utils/constants';
-import editUtilities from '../../utils/editor-utilities';
+import { gettext, fileName, historyRepoID } from '../../utils/constants';
 import Loading from '../../components/loading';
-import Logo from '../../components/logo';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import HistoryItem from '../file-history-old/history-item';
+import GoBack from '../../components/common/go-back';
+import SidePanel from './side-panel';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
 
 import '../../css/layout.css';
-import '../../css/toolbar.css';
-import '../../css/search.css';
-import '../../css/file-history-old.css';
+import '../../css/sdoc-file-history.css';
 
 class SdocFileHistory extends React.Component {
 
   constructor(props) {
     super(props);
+    const isShowChanges = localStorage.getItem('seahub-sdoc-history-show-changes') === 'false' ? false : true;
     this.state = {
-      historyList: [],
-      currentPage: 1,
-      hasMore: false,
-      nextCommit: undefined,
-      filePath: '',
-      oldFilePath: '',
       isLoading: true,
-      isReloadingData: false,
+      isShowChanges,
+      currentVersion: {},
+      currentVersionContent: '',
+      lastVersionContent: '',
+      changes: [],
+      currentDiffIndex: 0,
     };
   }
 
-  componentDidMount() {
-    this.listOldHistoryRecords(historyRepoID, filePath);
-  }
-
-  listNewHistoryRecords = (filePath, PER_PAGE) => {
-    editUtilities.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
-      let historyData = res.data;
-      if (!historyData) {
-        this.setState({isLoading: false});
-        throw Error('There is an error in server.');
-      }
-      this.initNewRecords(res.data);
-    });
-  }
-
-  listOldHistoryRecords = (repoID, filePath) => {
-    seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
-      let historyData = res.data;
-      if (!historyData) {
-        this.setState({isLoading: false});
-        throw Error('There is an error in server.');
-      }
-      this.initOldRecords(res.data);
-    });
-  }
-
-  initNewRecords(result) {
-    if (result.total_count < 5) {
-      if (result.data.length) {
-        let commitID = result.data[result.data.length-1].commit_id;
-        let path = result.data[result.data.length-1].path;
-        let oldPath = result.data[result.data.length-1].old_path;
-        path = oldPath ? oldPath : path;
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, path, commitID).then((res) => {
-          if (!res.data) {
-            this.setState({isLoading: false});
-            throw Error('There is an error in server.');
-          }
-          this.setState({
-            historyList: result.data.concat(res.data.data.slice(1, res.data.data.length)),
-            isLoading: false,
-          });
+  onSelectHistoryVersion = (currentVersion, lastVersion) => {
+    this.setState({ isLoading: true, currentVersion });
+    seafileAPI.getFileRevision(historyRepoID, currentVersion.commitId, currentVersion.path).then(res => {
+      return seafileAPI.getFileContent(res.data);
+    }).then(res => {
+      const currentVersionContent = res.data;
+      if (lastVersion) {
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commitId, lastVersion.path).then(res => {
+          return seafileAPI.getFileContent(res.data);
+        }).then(res => {
+          const lastVersionContent = res.data;
+          this.setContent(currentVersionContent, lastVersionContent);
+        }).catch(error => {
+          const errorMessage = Utils.getErrorMsg(error, true);
+          toaster.danger(gettext(errorMessage));
+          this.setContent(currentVersionContent, '');
         });
       } else {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
-          if (!res.data) {
-            this.setState({isLoading: false});
-            throw Error('There is an error in server.');
-          }
-          this.setState({
-            historyList: res.data.data,
-            isLoading: false,
-          });
-        });
+        this.setContent(currentVersionContent, '');
       }
-    } else {
-      this.setState({
-        historyList: result.data,
-        currentPage: result.page,
-        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-        isLoading: false,
-      });
-    }
-  }
-
-  initOldRecords(result) {
-    if (result.data.length) {
-      this.setState({
-        historyList: result.data,
-        nextCommit: result.next_start_commit,
-        filePath: result.data[result.data.length-1].path,
-        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
-        isLoading: false,
-      });
-    } else {
-      this.setState({nextCommit: result.next_start_commit,});
-      if (this.state.nextCommit) {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.initOldRecords(res.data);
-        });
-      } else {
-        this.setState({isLoading: false});
-      }
-    }
-  }
-
-  onScrollHandler = (event) => {
-    const clientHeight = event.target.clientHeight;
-    const scrollHeight = event.target.scrollHeight;
-    const scrollTop = event.target.scrollTop;
-    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    let hasMore = this.state.hasMore;
-    if (isBottom && hasMore) {
-      this.reloadMore();
-    }
-  }
-
-  reloadMore = () => {
-    if (!this.state.isReloadingData) {
-      const commitID = this.state.nextCommit;
-      const filePath = this.state.filePath;
-      const oldFilePath = this.state.oldFilePath;
-      this.setState({ isReloadingData: true });
-      if (oldFilePath) {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, oldFilePath, commitID).then((res) => {
-          this.updateOldRecords(res.data, oldFilePath);
-        });
-      } else {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
-          this.updateOldRecords(res.data, filePath);
-        });
-      }
-    }
-  }
-
-  updateNewRecords(result) {
-    this.setState({
-      historyList: [...this.state.historyList, ...result.data],
-      currentPage: result.page,
-      hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-      isReloadingData: false,
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      toaster.danger(gettext(errorMessage));
+      this.setContent('', '');
     });
   }
 
-  updateOldRecords(result, filePath) {
-    if (result.data.length) {
-      this.setState({
-        historyList: [...this.state.historyList, ...result.data],
-        nextCommit: result.next_start_commit,
-        filePath: result.data[result.data.length-1].path,
-        oldFilePath: result.data[result.data.length-1].rev_renamed_old_path,
-        isReloadingData: false,
-      });
-    } else {
-      this.setState({nextCommit: result.next_start_commit,});
-      if (this.state.nextCommit) {
-        seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, this.state.nextCommit).then((res) => {
-          this.updateOldRecords(res.data, filePath);
-        });
-      }
-    }
+  setContent = (currentVersionContent = '', lastVersionContent = '') => {
+    this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
   }
 
-  onItemRestore = (item) => {
-    let commitId = item.commit_id;
-    let filePath = item.path;
-    editUtilities.revertFile(filePath, commitId).then(res => {
-      if (res.data.success) {
-        this.setState({ isLoading: true });
-        this.refreshFileList();
+  onShowChanges = (isShowChanges) => {
+    this.setState({ isShowChanges }, () => {
+      localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+    });
+  }
+
+  setDiffCount = (diff = { value: [], changes: [] }) => {
+    const { changes } = diff;
+    this.setState({ changes, currentDiffIndex: 0 });
+  }
+
+  jumpToElement = (currentDiffIndex) => {
+    this.setState({ currentDiffIndex }, () => {
+      const { currentDiffIndex, changes } = this.state;
+      const change = changes[currentDiffIndex];
+      const changeElement = document.querySelectorAll(`[data-id=${change}]`)[0];
+      if (changeElement) {
+        this.historyContentRef.scrollTop = changeElement.offsetTop - 10;
       }
     });
   }
 
-  refreshFileList() {
-    seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath).then((res) => {
-      this.initOldRecords(res.data);
-    });
+  lastChange = () => {
+    const { currentDiffIndex, changes } = this.state;
+    if (currentDiffIndex === 0) {
+      this.jumpToElement(changes.length - 1);
+      return;
+    }
+    this.jumpToElement(currentDiffIndex - 1);
   }
 
-  onSearchedClick = (searchedItem) => {
-    Utils.handleSearchedItemClick(searchedItem);
-  }
-
-  onBackClick = (event) => {
-    event.preventDefault();
-    window.history.back();
+  nextChange = () => {
+    const { currentDiffIndex, changes } = this.state;
+    if (currentDiffIndex === changes.length - 1) {
+      this.jumpToElement(0);
+      return;
+    }
+    this.jumpToElement(currentDiffIndex + 1);
   }
 
   render() {
+    const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, changes, currentDiffIndex } = this.state;
+    const changesCount = changes ? changes.length : 0;
+    const isShowChangesTips = isShowChanges && changesCount > 0;
+
     return (
-      <Fragment>
-        <div id="header" className="old-history-header">
-          <div className="logo">
-            <Logo showCloseSidePanelIcon={false}/>
+      <div className="sdoc-file-history d-flex h-100 w-100 o-hidden">
+        <div className="sdoc-file-history-container d-flex flex-column">
+          <div className="sdoc-file-history-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
+            <div className={classnames('sdoc-file-history-header-left d-flex align-items-center o-hidden', { 'pr-4': isShowChangesTips })}>
+              <GoBack />
+              <div className="file-name text-truncate">{fileName}</div>
+            </div>
+            {isShowChangesTips && (
+              <div className="sdoc-file-history-header-right d-flex align-items-center">
+                <div className="sdoc-file-changes-container d-flex align-items-center ">
+                  <div className="sdoc-file-changes-tip d-flex align-items-center justify-content-center pl-2 pr-2">
+                    {`${gettext('Changes')} ${currentDiffIndex + 1}/${changesCount}`}
+                  </div>
+                  <div className="sdoc-file-changes-divider"></div>
+                  <div
+                    className="sdoc-file-changes-last d-flex align-items-center justify-content-center"
+                    id="sdoc-file-changes-last"
+                    onClick={this.lastChange}
+                  >
+                    <span className="fas fa-chevron-up"></span>
+                  </div>
+                  <div className="sdoc-file-changes-divider"></div>
+                  <div
+                    className="sdoc-file-changes-next d-flex align-items-center justify-content-center"
+                    id="sdoc-file-changes-next"
+                    onClick={this.nextChange}
+                  >
+                    <span className="fas fa-chevron-down"></span>
+                  </div>
+                  <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last">
+                    {gettext('Last modification')}
+                  </UncontrolledTooltip>
+                  <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-next">
+                    {gettext('Next modification')}
+                  </UncontrolledTooltip>
+                </div>
+              </div>
+            )}
           </div>
-          <div className='toolbar'>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
+          <div className="sdoc-file-history-content f-flex flex-column" ref={ref => this.historyContentRef = ref}>
+            {isLoading ? (
+              <div className="sdoc-file-history-viewer d-flex align-items-center justify-content-center">
+                <Loading />
+              </div>
+            ) : (
+              <DiffViewer
+                ref={ref => this.diffViewerRef = ref}
+                currentContent={currentVersionContent}
+                lastContent={isShowChanges ? lastVersionContent : ''}
+                didMountCallback={this.setDiffCount}
+              />
+            )}
           </div>
         </div>
-        <div id="main" onScroll={this.onScrollHandler}>
-          <div className="old-history-main">
-            <Fragment>
-              <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
-                <span className="fas fa-chevron-left"></span>
-              </a>
-              <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
-            </Fragment>
-            <Fragment>
-              <table className="commit-list">
-                <thead>
-                  <tr>
-                    <th width="40%" >{gettext('Time')}</th>
-                    <th width="30%" >{gettext('Modifier')}</th>
-                    <th width="25%" >{gettext('Size')}</th>
-                    <th width="5%" ></th>
-                  </tr>
-                </thead>
-                {!this.state.isLoading &&
-                  <tbody>
-                    {this.state.historyList.map((item, index) => {
-                      return (
-                        <HistoryItem
-                          key={index}
-                          item={item}
-                          index={index}
-                          canDownload={canDownload}
-                          canCompare={canCompare}
-                          onItemRestore={this.onItemRestore}
-                        />
-                      );
-                    })}
-                  </tbody>
-                }
-              </table>
-              {(this.state.isReloadingData || this.state.isLoading) && <Loading />}
-              {this.state.nextCommit && !this.state.isLoading && !this.state.isReloadingData &&
-                <Button className="get-more-btn" onClick={this.reloadMore}>{gettext('More')}</Button>
-              }
-            </Fragment>
-          </div>
-        </div>
-      </Fragment>
+        <SidePanel
+          isShowChanges={isShowChanges}
+          currentVersion={currentVersion}
+          onSelectHistoryVersion={this.onSelectHistoryVersion}
+          onShowChanges={this.onShowChanges}
+        />
+      </div>
     );
   }
 }

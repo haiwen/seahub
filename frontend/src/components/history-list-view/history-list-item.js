@@ -5,6 +5,8 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
+import '../../css/history-record-item.css';
+
 moment.locale(window.app.config.lang);
 
 const propTypes = {

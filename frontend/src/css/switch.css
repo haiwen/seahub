@@ -1,0 +1,14 @@
+.seahub-switch.small .custom-switch-indicator {
+  width: 22px;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.seahub-switch.small .custom-switch-indicator:before {
+  height: 8px;
+  width: 8px;
+}
+
+.seahub-switch.small .custom-switch-input:checked~.custom-switch-indicator:before {
+  left: 12px;
+}
