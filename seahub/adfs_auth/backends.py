@@ -58,7 +58,7 @@ class Saml2Backend(ModelBackend):
         if not attributes:
             logger.error('The attributes dictionary is empty')
 
-        uid = attributes.get('uid', None)
+        uid = attributes.get('uid', [''])[0]
         if not uid:
             logger.error('saml user uid not found.')
             logger.error('attributes: %s' % attributes)
@@ -145,8 +145,7 @@ class Saml2Backend(ModelBackend):
         parse_result = {}
         for saml_attr, django_attrs in list(attribute_mapping.items()):
             try:
-                for attr in django_attrs:
-                    parse_result[attr] = attributes[saml_attr][0]
+                parse_result[django_attrs] = attributes.get(saml_attr, [''])[0]
             except KeyError:
                 pass
 
