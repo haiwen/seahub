@@ -7,7 +7,7 @@ const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
 const RepoItemPropTypes = {
   repo: PropTypes.object.isRequired,
-  showDeleteRepoDialog: PropTypes.func.isRequired,
+  showDeleteRepoDialog: PropTypes.func.isRequired
 };
 
 class RepoItem extends React.Component {
@@ -15,7 +15,7 @@ class RepoItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false,
+      highlight: false
     };
   }
 
@@ -40,14 +40,10 @@ class RepoItem extends React.Component {
           :
           <td>{repoName}</td>
         }
-        <td>{Utils.bytesToSize(repo.size)}{' '}</td>
-        { this.props.orgID == -1 ?
-          <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-            <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-          </td>
-          :
-          <td></td>
-        }
+        <td>{Utils.bytesToSize(repo.size)}</td>
+        <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
+          <span className={`sf2-icon-delete action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+        </td>
       </tr>
     );
   }

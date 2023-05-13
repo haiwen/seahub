@@ -7,7 +7,7 @@ import { Utils } from '../../../utils/utils.js';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
-import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
+import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
 import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
 import AddMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-member-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
@@ -31,14 +31,12 @@ class Department extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      orgID: '',
       groupName: '',
       ancestorGroups: [],
-      isShowAddDepartDialog: false,
+      isShowAddDepartmentDialog: false,
       isShowAddMemberDialog: false,
       isShowRenameDepartmentDialog: false,
-      isShowAddRepoDialog: false,
-      groups: [],
+      isShowAddRepoDialog: false
     };
 
     this.navItems = [
@@ -60,13 +58,10 @@ class Department extends React.Component {
   }
 
   getDepartmentInfo = (groupID) => {
-    // TODO
     seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
       this.setState({
-        groups: res.data.groups,
         ancestorGroups: res.data.ancestor_groups,
         groupName: res.data.name,
-        orgID: res.data.org_id,
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -92,8 +87,8 @@ class Department extends React.Component {
     this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
   }
 
-  toggleAddDepartDialog = () => {
-    this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
+  toggleAddDepartmentDialog = () => {
+    this.setState({ isShowAddDepartmentDialog: !this.state.isShowAddDepartmentDialog});
   }
 
   render() {
@@ -106,7 +101,7 @@ class Department extends React.Component {
         {groupID &&
           <Fragment>
             <button className={topBtn} title={gettext('Rename Department')} onClick={this.toggleRenameDepartmentDialog}>{gettext('Rename Department')}</button>
-            {currentItem == 'subDepartments' && <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartDialog}>{gettext('New Sub-department')}</button>}
+            {currentItem == 'subDepartments' && <button className={topBtn} title={gettext('New Sub-department')} onClick={this.toggleAddDepartmentDialog}>{gettext('New Sub-department')}</button>}
             {currentItem == 'members' && <button className={topBtn} title={gettext('Add Member')} onClick={this.toggleAddMemberDialog}>{gettext('Add Member')}</button>}
             {currentItem == 'repos' && <button className={topBtn} onClick={this.toggleAddRepoDialog} title={gettext('New Library')}>{gettext('New Library')}</button>}
           </Fragment>
@@ -139,12 +134,12 @@ class Department extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.isShowAddDepartDialog && (
+        {this.state.isShowAddDepartmentDialog && (
           <ModalPortal>
-            <AddDepartDialog
+            <AddDepartmentDialog
               onAddNewDepartment={this.props.onAddNewDepartment}
               parentGroupID={groupID}
-              toggle={this.toggleAddDepartDialog}
+              toggle={this.toggleAddDepartmentDialog}
             />
           </ModalPortal>
         )}
@@ -169,7 +164,7 @@ class Department extends React.Component {
                     let newHref = siteRoot + 'sys/departments/' + ancestor.id + '/';
                     return <span key={ancestor.id}>{' / '}<Link to={newHref}>{ancestor.name}</Link></span>;
                   })}
-                  {groupID && <span>{' / '}{this.state.groupName}</span>}
+                  {groupID && <span>{' / '}{groupName}</span>}
                 </h3>
               </div>
             </div>

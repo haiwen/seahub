@@ -22,25 +22,20 @@ class DepartmentDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      orgID: '',
-      groupName: '',
-      ancestorGroups: [],
       repos: [],
       deletedRepo: {},
-      showDeleteRepoDialog: false,
+      showDeleteRepoDialog: false
     };
   }
 
   componentDidMount() {
-    const groupID = this.props.groupID;
+    const { groupID } = this.props;
     this.listGroupRepo(groupID);
-    this.getDepartmentInfo(groupID);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
       this.listGroupRepo(nextProps.groupID);
-      this.getDepartmentInfo(nextProps.groupID);
     }
   }
 
@@ -53,23 +48,9 @@ class DepartmentDetail extends React.Component {
     });
   }
 
-  getDepartmentInfo = (groupID) => {
-    seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
-      this.setState({
-        groups: res.data.groups,
-        ancestorGroups: res.data.ancestor_groups,
-        groupName: res.data.name,
-        orgID: res.data.org_id,
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
   toggleCancel = () => {
     this.setState({
-      showDeleteRepoDialog: false,
+      showDeleteRepoDialog: false
     });
   }
 
@@ -89,12 +70,12 @@ class DepartmentDetail extends React.Component {
 
   render() {
     const { repos } = this.state;
-    const groupID = this.props.groupID;
+    const { groupID } = this.props;
 
     return (
       <Fragment>
         <Department groupID={groupID} currentItem="repos" onAddNewRepo={this.onAddNewRepo}>
-          { repos.length > 0 ?
+          {repos.length > 0 ?
             <div className="cur-view-content">
               <table>
                 <thead>
@@ -107,10 +88,8 @@ class DepartmentDetail extends React.Component {
                 </thead>
                 <tbody>
                   {repos.map((repo, index) => {
-                    return(
-                      <Fragment key={index}>
-                        <RepoItem repo={repo} orgID={this.state.orgID} showDeleteRepoDialog={this.showDeleteRepoDialog}/>
-                      </Fragment>
+                    return (
+                      <RepoItem key={index} repo={repo} showDeleteRepoDialog={this.showDeleteRepoDialog} />
                     );
                   })}
                 </tbody>

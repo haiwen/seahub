@@ -4,7 +4,6 @@ import moment from 'moment';
 import Paginator from '../../../components/paginator';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils.js';
-import toaster from '../../../components/toast';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import { gettext, lang } from '../../../utils/constants';
@@ -23,53 +22,41 @@ class DepartmentMembers extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      orgID: '',
-      groupName: '',
       isItemFreezed: false,
-      ancestorGroups: [],
       members: [],
       membersErrorMsg: '',
-      membersPageInfo: {
+      currentPageInfo: {
       },
-      membersPage: 1,
-      membersPerPage: 25,
+      currentPage: 1,
+      perPage: 25,
       deletedMember: {},
-      showDeleteMemberDialog: false,
+      showDeleteMemberDialog: false
     };
   }
 
   componentDidMount() {
-    const groupID = this.props.groupID;
-    this.getDepartmentInfo(groupID);
-    this.listMembers(groupID, this.state.membersPage, this.state.membersPerPage);
+    let urlParams = (new URL(window.location)).searchParams;
+    const { currentPage, perPage } = this.state;
+    this.setState({
+      perPage: parseInt(urlParams.get('per_page') || perPage),
+      currentPage: parseInt(urlParams.get('page') || currentPage)
+    }, () => {
+      const { groupID } = this.props;
+      this.listMembers(groupID, this.state.currentPage, this.state.perPage);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.groupID !== nextProps.groupID) {
-      this.getDepartmentInfo(nextProps.groupID);
-      this.listMembers(nextProps.groupID, this.state.membersPage, this.state.membersPerPage);
+      this.listMembers(nextProps.groupID, this.state.currentPage, this.state.perPage);
     }
-  }
-
-  getDepartmentInfo = (groupID) => {
-    seafileAPI.sysAdminGetDepartmentInfo(groupID, true).then(res => {
-      this.setState({
-        groups: res.data.groups,
-        ancestorGroups: res.data.ancestor_groups,
-        groupName: res.data.name,
-        orgID: res.data.org_id,
-      });
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   }
 
   listMembers = (groupID, page, perPage) => {
     seafileAPI.sysAdminListGroupMembers(groupID, page, perPage).then((res) => {
       this.setState({
         members: res.data.members,
-        membersPageInfo: res.data.page_info
+        currentPageInfo: res.data.page_info
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -78,16 +65,16 @@ class DepartmentMembers extends React.Component {
   }
 
   getPreviousPageList = () => {
-    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page - 1, this.state.membersPerPage);
+    this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page - 1, this.state.perPage);
   }
 
   getNextPageList = () => {
-    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page + 1, this.state.membersPerPage);
+    this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page + 1, this.state.perPage);
   }
 
   resetPerPage = (perPage) => {
     this.setState({
-      membersPerPage: perPage
+      perPage: perPage
     }, () => {
       this.listMembers(this.props.groupID, 1, perPage);
     });
@@ -100,19 +87,11 @@ class DepartmentMembers extends React.Component {
   }
 
   onMemberChanged = () => {
-    this.listMembers(this.props.groupID, this.state.membersPageInfo.current_page, this.state.membersPerPage);
+    this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page, this.state.perPage);
   }
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
-  }
-
-  onFreezedItem = () => {
-    this.setState({isItemFreezed: true});
-  }
-
-  onUnfreezedItem = () => {
-    this.setState({isItemFreezed: false});
   }
 
   showDeleteMemberDialog = (member) => {
@@ -127,7 +106,7 @@ class DepartmentMembers extends React.Component {
 
   render() {
     const { members, membersErrorMsg } = this.state;
-    const groupID = this.props.groupID;
+    const { groupID } = this.props;
 
     return (
       <Fragment>
@@ -155,7 +134,6 @@ class DepartmentMembers extends React.Component {
                         return (
                           <Fragment key={index}>
                             <MemberItem
-                              orgID={this.state.orgID}
                               member={member}
                               showDeleteMemberDialog={this.showDeleteMemberDialog}
                               isItemFreezed={this.state.isItemFreezed}
@@ -168,13 +146,13 @@ class DepartmentMembers extends React.Component {
                       })}
                     </tbody>
                   </table>
-                  {this.state.membersPageInfo &&
+                  {this.state.currentPageInfo &&
                   <Paginator
                     gotoPreviousPage={this.getPreviousPageList}
                     gotoNextPage={this.getNextPageList}
-                    currentPage={this.state.membersPageInfo.current_page}
-                    hasNextPage={this.state.membersPageInfo.has_next_page}
-                    curPerPage={this.state.membersPerPage}
+                    currentPage={this.state.currentPageInfo.current_page}
+                    hasNextPage={this.state.currentPageInfo.has_next_page}
+                    curPerPage={this.state.perPage}
                     resetPerPage={this.resetPerPage}
                   />
                   }

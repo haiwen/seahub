@@ -5,7 +5,10 @@ import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils.js';
 import { siteRoot, gettext } from '../../../utils/constants';
 import OpMenu from '../../../components/dialog/op-menu';
+import ModalPortal from '../../../components/modal-portal';
 import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-rename-department-dialog';
+import DeleteDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog';
+import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
 
 const GroupItemPropTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
@@ -13,8 +16,8 @@ const GroupItemPropTypes = {
   onUnfreezedItem: PropTypes.func.isRequired,
   group: PropTypes.object.isRequired,
   onDepartmentNameChanged: PropTypes.func.isRequired,
-  showSetGroupQuotaDialog: PropTypes.func.isRequired,
-  showDeleteDepartDialog: PropTypes.func.isRequired,
+  onDeleteDepartment: PropTypes.func.isRequired,
+  onSetDepartmentQuota: PropTypes.func.isRequired
 };
 
 class GroupItem extends React.Component {
@@ -24,6 +27,8 @@ class GroupItem extends React.Component {
     this.state = {
       isOpIconShown: false,
       highlight: false,
+      isSetQuotaDialogOpen: false,
+      isDeleteDialogOpen: false,
       isRenameDialogOpen: false
     };
   }
@@ -71,13 +76,12 @@ class GroupItem extends React.Component {
   }
 
   onMenuItemClick = (operation) => {
-    const { group } = this.props;
     switch(operation) {
       case 'Rename':
         this.toggleRenameDialog();
         break;
       case 'Delete':
-        this.props.showDeleteDepartDialog(group);
+        this.toggleDeleteDialog();
         break;
       default:
         break;
@@ -90,26 +94,33 @@ class GroupItem extends React.Component {
     });
   }
 
+  toggleDeleteDialog = () => {
+    this.setState({
+      isDeleteDialogOpen: !this.state.isDeleteDialogOpen
+    });
+  }
+
+  toggleSetQuotaDialog = () => {
+    this.setState({
+      isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen
+    });
+  }
+
   render() {
     const { group } = this.props;
-    const { highlight, isOpIconShown, isRenameDialogOpen } = this.state;
+    const { highlight, isOpIconShown, isRenameDialogOpen, isDeleteDialogOpen, isSetQuotaDialogOpen } = this.state;
     const newHref = siteRoot+ 'sys/departments/' + group.id + '/';
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
           <td><Link to={newHref}>{group.name}</Link></td>
           <td>{moment(group.created_at).fromNow()}</td>
-          {group.org_id === -1 ?
-            <td onClick={this.props.showSetGroupQuotaDialog.bind(this, group.id)}>
-              {Utils.bytesToSize(group.quota)}{' '}
-              <span title="Edit Quota" className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
-            </td>
-            :
-            <td>{Utils.bytesToSize(group.quota)}</td>
-          }
-          {group.org_id === -1 ?
-            <td>
-              {isOpIconShown &&
+          <td>
+            {Utils.bytesToSize(group.quota)}{' '}
+            <span onClick={this.toggleSetQuotaDialog} title={gettext('Edit')} className={`fa fa-pencil-alt attr-action-icon ${highlight ? '' : 'vh'}`}></span>
+          </td>
+          <td>
+            {isOpIconShown &&
               <OpMenu
                 operations={['Rename', 'Delete']}
                 translateOperations={this.translateOperations}
@@ -117,12 +128,27 @@ class GroupItem extends React.Component {
                 onFreezedItem={this.props.onFreezedItem}
                 onUnfreezedItem={this.onUnfreezedItem}
               />
-              }
-            </td>
-            :
-            <td></td>
-          }
+            }
+          </td>
         </tr>
+        {isDeleteDialogOpen && (
+          <ModalPortal>
+            <DeleteDepartmentDialog
+              group={group}
+              onDeleteDepartment={this.props.onDeleteDepartment}
+              toggle={this.toggleDeleteDialog}
+            />
+          </ModalPortal>
+        )}
+        {isSetQuotaDialogOpen && (
+          <ModalPortal>
+            <SetGroupQuotaDialog
+              groupID={group.id}
+              onSetQuota={this.props.onSetDepartmentQuota}
+              toggle={this.toggleSetQuotaDialog}
+            />
+          </ModalPortal>
+        )}
         {isRenameDialogOpen && (
           <RenameDepartmentDialog
             groupID={group.id}
