@@ -801,7 +801,6 @@ def file_revisions(request, repo_id):
         return render(request, 'sdoc_file_revisions.html', {
             'repo': repo,
             'path': path,
-            'file_path': path,
             'u_filename': u_filename,
             'file_uuid': file_uuid,
             'zipped': zipped,
