@@ -89,7 +89,8 @@ body {
       })(),
       {% endif %}
       prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
-      nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %}
+      nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %},
+      assetsUrl: '{{ assets_url }}'
     }
   };
 </script>

@@ -656,6 +656,7 @@ def view_lib_file(request, repo_id, path):
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, path)
         return_dict['file_uuid'] = file_uuid
+        return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username)
 
@@ -1435,6 +1436,10 @@ def view_file_via_shared_dir(request, fileshare):
     filetype, fileext = get_file_type_and_ext(filename)
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
+    
+    if filetype == SEADOC:
+        file_uuid = get_seadoc_file_uuid(repo, raw_path)
+        ret_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
