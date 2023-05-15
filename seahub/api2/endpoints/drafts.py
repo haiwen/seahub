@@ -185,7 +185,7 @@ class DraftView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, pk, format=None):
-        """Delete a draft if user is draft owner
+        """Delete a draft if user is draft owner or has repo rw permission
         """
         username = request.user.username
         try:
@@ -195,10 +195,11 @@ class DraftView(APIView):
                              'Draft %s not found.' % pk)
 
         # perm check
-        draft_file_id = seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path)
-        if draft_file_id and d.username != username:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Permission denied.')
+        if d.username != username:
+            perm = check_folder_permission(request, d.origin_repo_id, '/')
+            if perm != PERMISSION_READ_WRITE:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         d.delete(operator=username)
 
