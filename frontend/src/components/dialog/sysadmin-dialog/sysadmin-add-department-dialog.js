@@ -8,7 +8,7 @@ const propTypes = {
   groupID: PropTypes.string,
   parentGroupID: PropTypes.string,
   toggle: PropTypes.func.isRequired,
-  onDepartChanged: PropTypes.func.isRequired,
+  onAddNewDepartment: PropTypes.func.isRequired
 };
 
 class AddDepartDialog extends React.Component {
@@ -30,7 +30,7 @@ class AddDepartDialog extends React.Component {
       }
       seafileAPI.sysAdminAddNewDepartment(parentGroup, this.state.departName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onDepartChanged();
+        this.props.onAddNewDepartment(res.data);
       }).catch(error => {
         let errorMsg = gettext(error.response.data.error_msg);
         this.setState({ errMessage: errorMsg });
@@ -80,9 +80,10 @@ class AddDepartDialog extends React.Component {
               />
             </FormGroup>
           </Form>
-          { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
+          {this.state.errMessage && <p className="error">{this.state.errMessage}</p>}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

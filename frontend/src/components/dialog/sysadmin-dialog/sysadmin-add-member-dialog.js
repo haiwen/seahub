@@ -10,7 +10,7 @@ import UserSelect from '../../user-select.js';
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   groupID:  PropTypes.string.isRequired,
-  onMemberChanged: PropTypes.func.isRequired
+  onAddNewMembers: PropTypes.func.isRequired
 };
 
 class AddMemberDialog extends React.Component {
@@ -38,7 +38,7 @@ class AddMemberDialog extends React.Component {
         this.setState({ errMessage: res.data.failed[0].error_msg });
       }
       if (res.data.success.length > 0) {
-        this.props.onMemberChanged();
+        this.props.onAddNewMembers(res.data.success);
         this.props.toggle();
       }
     }).catch(error => {
@@ -62,8 +62,8 @@ class AddMemberDialog extends React.Component {
           { this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

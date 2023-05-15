@@ -4,31 +4,26 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';
 import AddDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-department-dialog';
-import DeleteDepartDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-department-dialog';
-import SetGroupQuotaDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-group-quota-dialog';
 import { gettext, lang } from '../../../utils/constants';
 import GroupItem from './group-item';
 import '../../../css/org-department-item.css';
 
 moment.locale(lang);
 
-class DepartmentsList extends React.Component {
+class DepartmentList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       groups: null,
       groupID: '',
-      groupName: '',
-      showDeleteDepartDialog: false,
-      showSetGroupQuotaDialog: false,
       isShowAddDepartDialog: false,
       isItemFreezed: false
     };
   }
 
   componentDidMount() {
-    this.listDepartGroups();
+    this.listDepartments();
   }
 
   onFreezedItem = () => {
@@ -39,33 +34,14 @@ class DepartmentsList extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  listDepartGroups = () => {
+  listDepartments = () => {
     seafileAPI.sysAdminListAllDepartments().then(res => {
       this.setState({ groups: res.data.data });
     });
   }
 
-  showDeleteDepartDialog = (group) => {
-    this.setState({ showDeleteDepartDialog: true, groupID: group.id, groupName: group.name });
-  }
-
-  showSetGroupQuotaDialog = (groupID) => {
-    this.setState({ showSetGroupQuotaDialog: true, groupID: groupID });
-  }
-
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
-  }
-
-  toggleCancel = () => {
-    this.setState({
-      showDeleteDepartDialog: false,
-      showSetGroupQuotaDialog: false,
-    });
-  }
-
-  onDepartChanged = () => {
-    this.listDepartGroups();
   }
 
   onDepartmentNameChanged = (dept) => {
@@ -73,6 +49,33 @@ class DepartmentsList extends React.Component {
       groups: this.state.groups.map(item => {
         if (item.id == dept.id) {
           item.name = dept.name;
+        }
+        return item;
+      })
+    });
+  }
+
+  onAddNewDepartment = (newDepartment) => {
+    const { groups } = this.state;
+    groups.unshift(newDepartment);
+    this.setState({
+      groups: groups
+    });
+  }
+
+  onDeleteDepartment = (id) => {
+    const { groups } = this.state;
+    this.setState({
+      groups: groups.filter((item) => item.id != id)
+    });
+  }
+
+  onSetDepartmentQuota = (target) => {
+    const { groups } = this.state;
+    this.setState({
+      groups: groups.map((item) => {
+        if (item.id == target.id) {
+          item.quota = target.quota;
         }
         return item;
       })
@@ -88,7 +91,7 @@ class DepartmentsList extends React.Component {
         {this.state.isShowAddDepartDialog && (
           <ModalPortal>
             <AddDepartDialog
-              onDepartChanged={this.onDepartChanged}
+              onAddNewDepartment={this.onAddNewDepartment}
               groupID={this.state.groupID}
               toggle={this.toggleAddDepartDialog}
             />
@@ -129,8 +132,8 @@ class DepartmentsList extends React.Component {
                             onFreezedItem={this.onFreezedItem}
                             onUnfreezedItem={this.onUnfreezedItem}
                             onDepartmentNameChanged={this.onDepartmentNameChanged}
-                            showDeleteDepartDialog={this.showDeleteDepartDialog}
-                            showSetGroupQuotaDialog={this.showSetGroupQuotaDialog}
+                            onDeleteDepartment={this.onDeleteDepartment}
+                            onSetDepartmentQuota={this.onSetDepartmentQuota}
                           />
                         </Fragment>
                       );
@@ -141,25 +144,6 @@ class DepartmentsList extends React.Component {
                 <p className="no-group">{gettext('No departments')}</p>
               }
             </div>
-            {this.state.showDeleteDepartDialog && (
-              <ModalPortal>
-                <DeleteDepartDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  groupName={this.state.groupName}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
-            {this.state.showSetGroupQuotaDialog && (
-              <ModalPortal>
-                <SetGroupQuotaDialog
-                  toggle={this.toggleCancel}
-                  groupID={this.state.groupID}
-                  onDepartChanged={this.onDepartChanged}
-                />
-              </ModalPortal>
-            )}
           </div>
         </div>
       </Fragment>
@@ -167,4 +151,4 @@ class DepartmentsList extends React.Component {
   }
 }
 
-export default DepartmentsList;
+export default DepartmentList;

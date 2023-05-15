@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 const propTypes = {
   toggle: PropTypes.func.isRequired,
   groupID: PropTypes.string.isRequired,
-  onRepoChanged: PropTypes.func.isRequired,
+  onAddNewRepo: PropTypes.func.isRequired
 };
 
 class AddRepoDialog extends React.Component {
@@ -26,7 +26,7 @@ class AddRepoDialog extends React.Component {
     if (isValid) {
       seafileAPI.sysAdminAddRepoInDepartment(this.props.groupID, this.state.repoName.trim()).then((res) => {
         this.props.toggle();
-        this.props.onRepoChanged();
+        this.props.onAddNewRepo(res.data);
       }).catch(error => {
         let errorMsg = Utils.getErrorMsg(error);
         this.setState({ errMessage: errorMsg });
@@ -78,6 +78,7 @@ class AddRepoDialog extends React.Component {
           {this.state.errMessage && <p className="error">{this.state.errMessage}</p> }
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

@@ -7,13 +7,12 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
 const propTypes = {
-  groupName: PropTypes.string,
-  groupID: PropTypes.number.isRequired,
+  group: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
-  onDepartChanged: PropTypes.func.isRequired
+  onDeleteDepartment: PropTypes.func.isRequired
 };
 
-class DeleteDepartDialog extends React.Component {
+class DeleteDepartmentDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,8 +20,9 @@ class DeleteDepartDialog extends React.Component {
 
   deleteDepart = () => {
     this.props.toggle();
-    seafileAPI.sysAdminDeleteDepartment(this.props.groupID).then((res) => {
-      this.props.onDepartChanged();
+    const { group } = this.props;
+    seafileAPI.sysAdminDeleteDepartment(group.id).then((res) => {
+      this.props.onDeleteDepartment(group.id);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -30,8 +30,10 @@ class DeleteDepartDialog extends React.Component {
   }
 
   render() {
+    const { group } = this.props;
+
     let tipMessage = gettext('Are you sure you want to delete {placeholder} ?');
-    tipMessage = tipMessage.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(this.props.groupName) + '</span>');
+    tipMessage = tipMessage.replace('{placeholder}', '<span class="op-target">' + Utils.HTMLescape(group.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Delete Department')}</ModalHeader>
@@ -47,6 +49,6 @@ class DeleteDepartDialog extends React.Component {
   }
 }
 
-DeleteDepartDialog.propTypes = propTypes;
+DeleteDepartmentDialog.propTypes = propTypes;
 
-export default DeleteDepartDialog;
+export default DeleteDepartmentDialog;
