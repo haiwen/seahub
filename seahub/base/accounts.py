@@ -255,6 +255,40 @@ class UserManager(object):
 
         return user
 
+    def get_old_user(self, email, provider, uid):
+        emailuser = ccnet_threaded_rpc.get_emailuser(email)
+        if not emailuser:
+            raise User.DoesNotExist('User matching query does not exits.')
+
+        try:
+            SocialAuthUser.objects.add(emailuser.email, provider, uid)
+        except Exception as e:
+            raise Exception(e)
+
+        user = User(emailuser.email)
+        user.id = emailuser.id
+        user.enc_password = emailuser.password
+        user.is_staff = emailuser.is_staff
+        user.is_active = emailuser.is_active
+        user.ctime = emailuser.ctime
+        user.org = emailuser.org
+        user.source = emailuser.source
+        user.role = emailuser.role
+        user.reference_id = emailuser.reference_id
+
+        if user.is_staff:
+            try:
+                role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+                admin_role = role_obj.role
+            except AdminRole.DoesNotExist:
+                admin_role = DEFAULT_ADMIN
+
+            user.admin_role = admin_role
+        else:
+            user.admin_role = ''
+
+        return user
+
 
 class UserPermissions(object):
     def __init__(self, user):
@@ -853,19 +887,21 @@ class CustomLDAPBackend(object):
 
         # check if existed
         ldap_user = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=unique_id).first()
-        if not ldap_user:
-            try:
-                user = User.objects.create_ldap_user(is_active=ACTIVATE_USER_WHEN_IMPORT)
-                ldap_user = SocialAuthUser.objects.add(user.username, LDAP_PROVIDER, unique_id)
-            except Exception as e:
-                logger.error(f'create ldap user failed. {e}')
-                return
-
-        user = self.get_user(ldap_user.username)
-        if not user:
-            logger.warning('The DB data is invalid, delete it and recreate one.')
-            try:
+        if ldap_user:
+            user = self.get_user(ldap_user.username)
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
                 SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=unique_id).delete()
+        else:
+            try:
+                user = User.objects.get_old_user(username, LDAP_PROVIDER, unique_id)
+            except User.DoesNotExist:
+                user = None
+
+        if not user:
+            try:
                 user = User.objects.create_ldap_user(is_active=ACTIVATE_USER_WHEN_IMPORT)
                 SocialAuthUser.objects.add(user.username, LDAP_PROVIDER, unique_id)
             except Exception as e:

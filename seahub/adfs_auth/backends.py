@@ -38,13 +38,6 @@ SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE
 
 class Saml2Backend(ModelBackend):
 
-    def get_user(self, username):
-        try:
-            user = User.objects.get(email=username)
-        except User.DoesNotExist:
-            user = None
-        return user
-
     def authenticate(self, session_info=None, attribute_mapping=None, create_unknown_user=True, **kwargs):
         if session_info is None or attribute_mapping is None:
             logger.error('Session info or attribute mapping are None')
@@ -57,6 +50,7 @@ class Saml2Backend(ModelBackend):
         attributes = session_info['ava']
         if not attributes:
             logger.error('The attributes dictionary is empty')
+            return None
 
         uid = attributes.get('uid', [''])[0]
         if not uid:
@@ -66,19 +60,36 @@ class Saml2Backend(ModelBackend):
 
         saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
         if saml_user:
-            username = saml_user.username
-            user = self.get_user(username)
+            try:
+                user = User.objects.get(email=saml_user.username)
+            except User.DoesNotExist:
+                user = None
+
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
                 SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=uid).delete()
         else:
-            user = None
+            name_id = session_info.get('name_id', '')
+            if name_id:
+                try:
+                    user = User.objects.get_old_user(name_id.text, SAML_PROVIDER_IDENTIFIER, uid)
+                except User.DoesNotExist:
+                    user = None
+            else:
+                logger.warning('The name_id is not available.')
+                user = None
 
         if not user and create_unknown_user:
             activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
-            user = User.objects.create_saml_user(is_active=activate_after_creation)
-            SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, uid)
+            try:
+                user = User.objects.create_saml_user(is_active=activate_after_creation)
+                SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, uid)
+            except Exception as e:
+                logger.error(f'create saml user failed. {e}')
+                return None
+
             # create org user
             url_prefix = kwargs.get('url_prefix', None)
             if url_prefix:

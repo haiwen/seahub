@@ -11,7 +11,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.utils import get_api_token
 from seahub import auth
 from seahub.profile.models import Profile
-from seahub.utils import render_error, get_service_url
+from seahub.utils import is_valid_email, render_error, get_service_url
 from seahub.utils.file_size import get_quota_from_string
 from seahub.base.accounts import User
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -154,10 +154,20 @@ def oauth_callback(request):
 
     oauth_user_info = {}
     user_info_json = user_info_resp.json()
-    for oauth_key, seafile_key in OAUTH_ATTRIBUTE_MAP.items():
-        oauth_user_info[seafile_key] = user_info_json.get(oauth_key, '')
+    for oauth_attr, attr_tuple in OAUTH_ATTRIBUTE_MAP.items():
+        required, user_attr = attr_tuple
+        attr_value = user_info_json.get(oauth_attr, '')
+        if attr_value:
+            # ccnet email
+            if user_attr == 'email' and not is_valid_email(str(attr_value)):
+                attr_value = '%s@%s' % (str(attr_value), PROVIDER_DOMAIN)
+            oauth_user_info[user_attr] = attr_value
+        elif required:
+            logger.error('Required user attr not found.')
+            logger.error(user_info_json)
+            return render_error(request, _('Error, please contact administrator.'))
 
-    uid = oauth_user_info.get('uid', '')
+    uid = email = oauth_user_info.get('email', '')
     if not uid:
         logger.error('oauth user uid not found.')
         logger.error('user_info_json: %s' % user_info_json)
@@ -168,8 +178,13 @@ def oauth_callback(request):
         email = oauth_user.username
         is_new_user = False
     else:
-        email = None
-        is_new_user = True
+        try:
+            oauth_user = User.objects.get_old_user(email, PROVIDER_DOMAIN, uid)
+            email = oauth_user.username
+            is_new_user = False
+        except User.DoesNotExist:
+            email = None
+            is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
