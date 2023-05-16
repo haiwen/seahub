@@ -188,7 +188,7 @@ def get_wopi_dict(request_user, repo_id, file_path,
     }
     WOPI_UI_LLCC = lang_dict[language_code]
 
-    full_action_url += '&ui=%s&rs=%s' % (WOPI_UI_LLCC, WOPI_UI_LLCC)
+    full_action_url += '&ui=%s&rs=%s&lang=%s' % (WOPI_UI_LLCC, WOPI_UI_LLCC, WOPI_UI_LLCC)
 
     # generate access token
     user_repo_path_info = {
