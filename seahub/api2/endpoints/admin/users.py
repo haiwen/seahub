@@ -53,20 +53,13 @@ from seahub.admin_log.models import USER_DELETE, USER_ADD
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
+from seahub.auth.utils import get_virtual_id_by_email
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
-
-
-def get_virtual_id_by_email(email):
-    profile_obj = Profile.objects.get_profile_by_contact_email(email)
-    if profile_obj is None:
-        return email
-    else:
-        return profile_obj.user
 
 
 def get_user_last_access_time(email, last_login_time):

@@ -16,7 +16,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.endpoints.utils import is_org_user
-from seahub.api2.endpoints.admin.users import get_virtual_id_by_email
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email

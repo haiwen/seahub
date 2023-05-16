@@ -38,7 +38,7 @@ from seahub.base.models import UserLastLogin
 from seahub.options.models import UserOptions
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils.user_permissions import get_user_role
-from seahub.api2.endpoints.admin.users import get_virtual_id_by_email
+from seahub.auth.utils import get_virtual_id_by_email
 
 logger = logging.getLogger(__name__)
 
