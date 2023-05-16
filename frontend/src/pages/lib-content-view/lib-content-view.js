@@ -1056,11 +1056,17 @@ class LibContentView extends React.Component {
   deleteFolder = () => {
     const { repoID } = this.props;
     const { folderToDelete: path } = this.state;
-    seafileAPI.deleteDir(repoID, path).then(() => {
+    seafileAPI.deleteDir(repoID, path).then((res) => {
       this.deleteItemAjaxCallback(path, true);
       let name = Utils.getFileName(path);
       var msg = gettext('Successfully deleted {name}').replace('{name}', name);
-      toaster.success(msg);
+      const successTipWithUndo = (
+        <>
+          <span>{msg}</span>
+          <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
+        </>
+      );
+      toaster.success(successTipWithUndo, {duration: 5});
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       if (errMessage === gettext('Error')) {
@@ -1078,11 +1084,17 @@ class LibContentView extends React.Component {
         this.toggleDeleteFolderDialog();
       });
     } else {
-      seafileAPI.deleteFile(repoID, path).then(() => {
+      seafileAPI.deleteFile(repoID, path).then((res) => {
         this.deleteItemAjaxCallback(path, isDir);
         let name = Utils.getFileName(path);
         var msg = gettext('Successfully deleted {name}').replace('{name}', name);
-        toaster.success(msg);
+        const successTipWithUndo = (
+          <>
+            <span>{msg}</span>
+            <a className="action-link p-0 ml-1" href="#" onClick={this.restoreDeletedDirents.bind(this, res.data.commit_id, [path])}>{gettext('Undo')}</a>
+          </>
+        );
+        toaster.success(successTipWithUndo, {duration: 5});
       }).catch((error) => {
         let errMessage = Utils.getErrorMsg(error);
         if (errMessage === gettext('Error')) {

@@ -525,7 +525,10 @@ class DirView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        result = {}
+        result['success'] = True
+        result['commit_id'] = repo.head_cmmt_id
+        return Response(result)
 
 
 class DirDetailView(APIView):
