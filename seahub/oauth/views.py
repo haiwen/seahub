@@ -167,9 +167,9 @@ def oauth_callback(request):
             logger.error(user_info_json)
             return render_error(request, _('Error, please contact administrator.'))
 
-    uid = email = oauth_user_info.get('email', '')
+    uid = oauth_user_info.get('uid', '') or oauth_user_info.get('email', '')
     if not uid:
-        logger.error('oauth user uid not found.')
+        logger.error('oauth user uid and email not found.')
         logger.error('user_info_json: %s' % user_info_json)
         return render_error(request, _('Error, please contact administrator.'))
 
@@ -179,7 +179,7 @@ def oauth_callback(request):
         is_new_user = False
     else:
         try:
-            oauth_user = User.objects.get_old_user(email, PROVIDER_DOMAIN, uid)
+            oauth_user = User.objects.get_old_user(oauth_user_info.get('email', ''), PROVIDER_DOMAIN, uid)
             email = oauth_user.username
             is_new_user = False
         except User.DoesNotExist:
