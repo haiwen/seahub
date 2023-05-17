@@ -163,8 +163,11 @@ class SidePanel extends Component {
   }
 
   onShowChanges = () => {
-    const { isShowChanges } = this.props;
-    this.props.onShowChanges(!isShowChanges);
+    const { isShowChanges, currentVersion } = this.props;
+    const { historyVersions } = this.state;
+    const historyVersionIndex = historyVersions.findIndex(item => item.commitId === currentVersion.commitId);
+    const lastVersion = historyVersions[historyVersionIndex + 1];
+    this.props.onShowChanges(!isShowChanges, lastVersion);
   }
 
   render() {
