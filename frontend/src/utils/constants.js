@@ -82,6 +82,7 @@ export const enableOCM = window.app.pageOptions.enableOCM;
 export const ocmRemoteServers = window.app.pageOptions.ocmRemoteServers;
 export const enableOCMViaWebdav = window.app.pageOptions.enableOCMViaWebdav;
 export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThirdpartWebsite;
+export const enableSeadoc = window.app.pageOptions.enableSeadoc;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
