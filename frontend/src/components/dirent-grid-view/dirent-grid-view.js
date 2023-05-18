@@ -80,6 +80,7 @@ class DirentGridView extends React.Component{
   }
 
   onGridItemClick = (dirent) => {
+    hideMenu();
     this.setState({activeDirent: dirent});
     this.props.onGridItemClick(dirent);
   }
@@ -367,6 +368,7 @@ class DirentGridView extends React.Component{
   }
 
   gridContainerClick = () => {
+    hideMenu();
     if (!this.props.isDirentDetailShow) {
       this.onGridItemClick(null);
     }

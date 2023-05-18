@@ -81,7 +81,7 @@ class ContextMenu extends React.Component {
   }
 
   handleShow = (e) => {
-    if (e.detail.id !== this.props.id || this.state.isVisible) return;
+    if (e.detail.id !== this.props.id) return;
 
     const { x, y } = e.detail.position;
     const { currentObject, menuList} = e.detail;
