@@ -6,20 +6,27 @@ import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
 import { Utils } from './utils/utils';
 
-const { serviceURL, siteRoot } = window.app.config;
-const { username, filePerm } = window.app.pageOptions;
-const { repoID, filePath, fileName, rawPath, assetsUrl } = window.shared.pageOptions;
+const { serviceURL, siteRoot, avatarURL } = window.app.config;
+const { username } = window.app.pageOptions;
+const {
+  repoID, filePerm,
+  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl
+} = window.shared.pageOptions;
 
 window.seafile = {
   repoID,
-  rawPath: rawPath,
-  docName: fileName,  // required
-  docPath: filePath,
+  docPath,
+  docName,
+  docUuid,
+  isOpenSocket: true,
   serviceUrl: serviceURL,
+  accessToken: seadocAccessToken,
+  sdocServer: seadocServerUrl,
   username,
+  avatarURL,
   siteRoot,
   docPerm: filePerm,
-  historyURL: Utils.generateHistoryURL(siteRoot, repoID, filePath),
+  historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
   assetsUrl,
 };
 

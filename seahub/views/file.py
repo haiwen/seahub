@@ -658,7 +658,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_uuid'] = file_uuid
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
-        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username)
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
@@ -666,7 +665,9 @@ def view_lib_file(request, repo_id, path):
         elif is_locked and not locked_by_me:
             can_edit_file = False
 
+        seadoc_perm = 'rw' if can_edit_file else 'r'
         return_dict['can_edit_file'] = can_edit_file
+        return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
@@ -1228,6 +1229,23 @@ def view_shared_file(request, fileshare):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
 
+    if filetype == SEADOC:
+        file_uuid = get_seadoc_file_uuid(repo, path)
+        ret_dict['file_uuid'] = file_uuid
+        ret_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
+        ret_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        ret_dict['can_edit_file'] = can_edit
+        seadoc_perm = 'rw' if can_edit else 'r'
+        ret_dict['file_perm'] = seadoc_perm
+        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+
+        send_file_access_msg(request, repo, path, 'web')
+        request.session['seadoc_share_session'] = {
+            'file_uuid': file_uuid,
+            'permission': seadoc_perm,
+            'seadoc_access_token': ret_dict['seadoc_access_token'],
+        }
+
     if filetype in (DOCUMENT, SPREADSHEET):
 
         def online_office_lock_or_refresh_lock(repo_id, path, username):
@@ -1315,8 +1333,7 @@ def view_shared_file(request, fileshare):
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename, size=192)
 
-    return render(request, template, {
-            'repo': repo,
+    data = {'repo': repo,
             'obj_id': obj_id,
             'path': path,
             'file_name': filename,
@@ -1340,7 +1357,16 @@ def view_shared_file(request, fileshare):
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            })
+        }
+    if filetype == SEADOC:
+        data['file_uuid'] = ret_dict['file_uuid']
+        data['assets_url'] = ret_dict['assets_url']
+        data['seadoc_server_url'] = ret_dict['seadoc_server_url']
+        data['seadoc_access_token'] = ret_dict['seadoc_access_token']
+        data['can_edit_file'] = ret_dict['can_edit_file']
+        data['file_perm'] = ret_dict['file_perm']
+
+    return render(request, template, data)
 
 @share_link_audit
 @share_link_login_required
@@ -1436,10 +1462,23 @@ def view_file_via_shared_dir(request, fileshare):
     filetype, fileext = get_file_type_and_ext(filename)
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
-    
+
     if filetype == SEADOC:
-        file_uuid = get_seadoc_file_uuid(repo, raw_path)
+        file_uuid = get_seadoc_file_uuid(repo, real_path)
+        ret_dict['file_uuid'] = file_uuid
         ret_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
+        ret_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        ret_dict['can_edit_file'] = can_edit
+        seadoc_perm = 'rw' if can_edit else 'r'
+        ret_dict['file_perm'] = seadoc_perm
+        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+
+        send_file_access_msg(request, repo, real_path, 'web')
+        request.session['seadoc_share_session'] = {
+            'file_uuid': file_uuid,
+            'permission': seadoc_perm,
+            'seadoc_access_token': ret_dict['seadoc_access_token'],
+        }
 
     if filetype in (DOCUMENT, SPREADSHEET):
 
@@ -1544,8 +1583,7 @@ def view_file_via_shared_dir(request, fileshare):
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename, size=192)
 
-    return render(request, template, {
-            'repo': repo,
+    data = {'repo': repo,
             'obj_id': obj_id,
             'from_shared_dir': True,
             'path': req_path,
@@ -1572,7 +1610,16 @@ def view_file_via_shared_dir(request, fileshare):
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            })
+        }
+    if filetype == SEADOC:
+        data['file_uuid'] = ret_dict['file_uuid']
+        data['assets_url'] = ret_dict['assets_url']
+        data['seadoc_server_url'] = ret_dict['seadoc_server_url']
+        data['seadoc_access_token'] = ret_dict['seadoc_access_token']
+        data['can_edit_file'] = ret_dict['can_edit_file']
+        data['file_perm'] = ret_dict['file_perm']
+
+    return render(request, template, data)
 
 @login_required
 def view_raw_file(request, repo_id, file_path):

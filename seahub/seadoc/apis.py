@@ -78,7 +78,7 @@ class SeadocAccessToken(APIView):
 
         #
         file_uuid = get_seadoc_file_uuid(repo, path)
-        access_token = gen_seadoc_access_token(file_uuid, filename, username)
+        access_token = gen_seadoc_access_token(file_uuid, filename, username, permission=permission)
 
         return Response({'access_token': access_token})
 
@@ -259,7 +259,7 @@ class SeadocUploadImage(APIView):
 class SeadocDownloadImage(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = ()
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid, filename):
@@ -272,7 +272,7 @@ class SeadocDownloadImage(APIView):
         username = request.user.username
         # permission check
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
-        if not can_access_seadoc_asset(request, repo_id, file_path):
+        if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
