@@ -71,15 +71,19 @@ def config_settings_loader(request):
         remote_metadata_url = org_saml_config.metadata_url
         # get org sp_service_url
         sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + url_prefix
-        # generate org certs dir
-        certs_dir = path.join(CERTS_DIR, str(org_id))
+        # generate org idp cert dir
+        idp_cert_dir = path.join(CERTS_DIR, str(org_id))
+        # generate org sp certs dir
+        sp_certs_dir = CERTS_DIR
     else:
         # get remote_metadata_url
         remote_metadata_url = REMOTE_METADATA_URL
         # get sp_service_url
         sp_service_url = get_service_url().rstrip('/')
-        # generate certs dir
-        certs_dir = CERTS_DIR
+        # generate idp cert dir
+        idp_cert_dir = CERTS_DIR
+        # generate sp certs dir
+        sp_certs_dir = CERTS_DIR
 
     # generate org saml_config
     saml_config = {
@@ -106,10 +110,10 @@ def config_settings_loader(request):
         'metadata': {
             'remote': [{'url': remote_metadata_url}],
         },
-        'cert_file': path.join(certs_dir, 'idp.crt'),
+        'cert_file': path.join(idp_cert_dir, 'idp.crt'),
         'encryption_keypairs': [{
-            'key_file': path.join(certs_dir, 'sp.key'),
-            'cert_file': path.join(certs_dir, 'sp.crt'),
+            'key_file': path.join(sp_certs_dir, 'sp.key'),
+            'cert_file': path.join(sp_certs_dir, 'sp.crt'),
         }],
     }
 
