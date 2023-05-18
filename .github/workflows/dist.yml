@@ -3,7 +3,7 @@ name: Seahub Dist CI
 on:
   push:
     branches:
-      - cloud-seafile-com
+      - cloud-seafile-com-10.0
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
