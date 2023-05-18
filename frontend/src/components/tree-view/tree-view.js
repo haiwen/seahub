@@ -86,6 +86,15 @@ class TreeView extends React.Component {
     }
   }
 
+  onContainerClick = (event) => {
+    hideMenu();
+  }
+
+  onNodeClick = (node) => {
+    hideMenu();
+    this.props.onNodeClick(node);
+  }
+
   onNodeDrop = (e, node) => {
     if (Utils.isIEBrower() || !this.canDrop) {
       return false;
@@ -308,6 +317,7 @@ class TreeView extends React.Component {
         onDragLeave={this.onNodeDragLeave}
         onMouseDown={this.onMouseDown}
         onContextMenu={this.onContextMenu}
+        onClick={this.onContainerClick}
       >
         <TreeNodeView
           userPerm={this.props.userPerm}
@@ -316,7 +326,7 @@ class TreeView extends React.Component {
           paddingLeft={PADDING_LEFT}
           isNodeMenuShow={this.props.isNodeMenuShow}
           isItemFreezed={this.state.isItemFreezed}
-          onNodeClick={this.props.onNodeClick}
+          onNodeClick={this.onNodeClick}
           onMenuItemClick={this.props.onMenuItemClick}
           onNodeExpanded={this.props.onNodeExpanded}
           onNodeCollapse={this.props.onNodeCollapse}

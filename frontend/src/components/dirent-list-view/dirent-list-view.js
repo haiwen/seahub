@@ -49,7 +49,7 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
-  loadDirentList: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -125,6 +125,7 @@ class DirentListView extends React.Component {
   }
 
   onDirentClick = (dirent) => {
+    hideMenu();
     if (this.props.selectedDirentList.length > 0 && !this.state.activeDirent ) {
       return;
     }
@@ -311,6 +312,7 @@ class DirentListView extends React.Component {
 
   // table-container contextmenu handle
   onContainerClick = () => {
+    hideMenu();
     if (this.state.activeDirent) {
       this.onDirentClick(null);
     }
