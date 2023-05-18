@@ -82,6 +82,14 @@ class FileUUIDMapManager(models.Manager):
 
         return self.get_or_create_fileuuidmap(repo_id, parent_path, obj_name, is_dir)
 
+    def delete_fileuuidmap_by_path(self, repo_id, parent_path, filename, is_dir):
+        repo_id, parent_path = self.model.get_origin_repo_id_and_parent_path(repo_id, parent_path)
+        md5_repo_id_parent_path = self.model.md5_repo_id_parent_path(repo_id, parent_path)
+        super(FileUUIDMapManager, self).filter(
+            repo_id_parent_path_md5=md5_repo_id_parent_path,
+            filename=filename, is_dir=is_dir
+        ).delete()
+
 
 class TagsManager(models.Manager):
     def get_or_create_tag(self, tagname):
