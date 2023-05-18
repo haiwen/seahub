@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
-import DiffViewer from '@seafile/sdoc-editor/dist/pages/diff-viewer';
+import { DiffViewer } from '@seafile/sdoc-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, historyRepoID } from '../../utils/constants';
 import Loading from '../../components/loading';
@@ -79,7 +79,26 @@ class SdocFileHistory extends React.Component {
     this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
   }
 
-  onShowChanges = (isShowChanges) => {
+  onShowChanges = (isShowChanges, lastVersion) => {
+    if (isShowChanges && lastVersion) {
+      const { currentVersionContent } = this.state;
+      this.setState({ isLoading: true }, () => {
+        localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commitId, lastVersion.path).then(res => {
+          return seafileAPI.getFileContent(res.data);
+        }).then(res => {
+          const lastVersionContent = res.data;
+          this.setContent(currentVersionContent, lastVersionContent);
+          this.setState({ isShowChanges });
+        }).catch(error => {
+          const errorMessage = Utils.getErrorMsg(error, true);
+          toaster.danger(gettext(errorMessage));
+          this.setContent(currentVersionContent, '');
+          this.setState({ isShowChanges });
+        });
+      });
+      return;
+    }
     this.setState({ isShowChanges }, () => {
       localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
     });
@@ -171,7 +190,6 @@ class SdocFileHistory extends React.Component {
               </div>
             ) : (
               <DiffViewer
-                ref={ref => this.diffViewerRef = ref}
                 currentContent={currentVersionContent}
                 lastContent={isShowChanges ? lastVersionContent : ''}
                 didMountCallback={this.setDiffCount}
