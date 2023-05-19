@@ -27,7 +27,8 @@ from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
-from seahub.utils.file_types import MARKDOWN, TEXT
+from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC
+from seahub.tags.models import FileUUIDMap
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 
@@ -712,6 +713,14 @@ class FileView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:  # rm sdoc fileuuid
+            filetype, fileext = get_file_type_and_ext(file_name)
+            if filetype == SEADOC:
+                FileUUIDMap.objects.delete_fileuuidmap_by_path(
+                    repo_id, parent_dir, file_name, is_dir=False)
+        except Exception as e:
+            logger.error(e)
 
         result = {}
         result['success'] = True

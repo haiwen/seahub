@@ -72,7 +72,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
-from seahub.utils.file_types import IMAGE
+from seahub.tags.models import FileUUIDMap
+from seahub.utils.file_types import IMAGE, SEADOC
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
@@ -3142,6 +3143,14 @@ class FileView(APIView):
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
+
+        try:  # rm sdoc fileuuid
+            filetype, fileext = get_file_type_and_ext(file_name)
+            if filetype == SEADOC:
+                FileUUIDMap.objects.delete_fileuuidmap_by_path(
+                    repo_id, parent_dir, file_name, is_dir=False)
+        except Exception as e:
+            logger.error(e)
 
         return reloaddir_if_necessary(request, repo, parent_dir)
 
