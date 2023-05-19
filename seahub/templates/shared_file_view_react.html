@@ -90,7 +90,18 @@ body {
       {% endif %}
       prevImgPath: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}''{% endif %},
       nextImgPath: {% if img_next %}'{{ img_next|escapejs }}'{% else %}''{% endif %},
-      assetsUrl: '{{ assets_url }}'
+      assetsUrl: '{{ assets_url }}',
+
+      {% if filetype == 'SDoc' %}
+        docPath: '{{ path|escapejs }}',
+        docName: '{{ file_name|escapejs }}',
+        docUuid: '{{ file_uuid }}',
+        assetsUrl: '{{ assets_url }}',
+        seadocAccessToken: '{{ seadoc_access_token }}',
+        seadocServerUrl: '{{ seadoc_server_url }}',
+        canEditFile: {% if can_edit_file %}true{% else %}false{% endif %},
+        filePerm: '{{ file_perm }}',
+      {% endif %}
     }
   };
 </script>

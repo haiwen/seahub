@@ -162,8 +162,13 @@ def get_seadoc_asset_download_link(repo_id, parent_path, filename, username):
     return download_link
 
 
-def can_access_seadoc_asset(request, repo_id, path):
-    if check_folder_permission(request, repo_id, path):
+def can_access_seadoc_asset(request, repo_id, path, file_uuid):
+    # login user
+    if request.user.username and check_folder_permission(request, repo_id, path):
         return True
-    # todo share link
+    # share link
+    seadoc_share_session = request.session.get('seadoc_share_session')
+    if seadoc_share_session and seadoc_share_session.get('file_uuid') == file_uuid:
+        return True
+
     return False
