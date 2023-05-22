@@ -30,6 +30,7 @@ window.seafile = {
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
   parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`,
   assetsUrl,
+  isShowInternalLink: true,
 };
 
 ReactDom.render(
