@@ -115,6 +115,19 @@ class SidePanel extends Component {
     this.props.onSelectHistoryVersion(historyVersion, historyVersions[historyVersionIndex + 1]);
   }
 
+  copyHistoryFile = (historyVersion) => {
+    const { path, revFileId, ctime } = historyVersion;
+    seafileAPI.sdocCopyHistoryFile(historyRepoID, path, revFileId, ctime).then(res => {
+      let message = gettext('Successfully copied %(name)s.');
+      let filename = res.data.file_name;
+      message = message.replace('%(name)s', filename);
+      toaster.success(message);
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      toaster.danger(gettext(errorMessage));
+    });
+  }
+
   renderHistoryVersions = () => {
     const { isLoading, historyVersions, errorMessage } = this.state;
     if (historyVersions.length === 0) {
@@ -150,6 +163,7 @@ class SidePanel extends Component {
               historyVersion={historyVersion}
               onSelectHistoryVersion={this.onSelectHistoryVersion}
               onRestore={this.restoreVersion}
+              onCopy={this.copyHistoryFile}
             />
           );
         })}
