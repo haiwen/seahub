@@ -28,7 +28,7 @@ def get_ccnet_db_name():
 
 
 def update_org_url_prefix(db_name, org_id, url_prefix):
-    sql = """UPDATE %s.Organization SET url_prefix=%%s WHERE org_id=%%s""" % db_name
+    sql = """UPDATE `%s`.Organization SET url_prefix=%%s WHERE org_id=%%s""" % db_name
     with connection.cursor() as cursor:
         cursor.execute(sql, (url_prefix, org_id))
 
