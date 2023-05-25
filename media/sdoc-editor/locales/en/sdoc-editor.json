@@ -19,7 +19,7 @@
   "insert_file": "Insert File",
   "code": "Inline Code",
   "code_block": "Code Block",
-  "insert_link": "Insert Link",
+  "insert_link": "Insert link",
   "insert_table": "Insert Table",
   "save": "Save",
   "more": "More",
@@ -235,5 +235,9 @@
   "Server_is_disconnected_Reconnecting": "Server is disconnected. Reconnecting...",
   "Server_is_reconnected": "Server is reconnected.",
   "Outline": "Outline",
-  "Headings_you_add_to_the_document_will_appear_here": "Headings you add to the document will appear here"
+  "Headings_you_add_to_the_document_will_appear_here": "Headings you add to the document will appear here",
+  "Open_parent_folder": "Open parent folder",
+  "redo": "redo",
+  "undo": "undo",
+  "Open_link": "Open link"
 }

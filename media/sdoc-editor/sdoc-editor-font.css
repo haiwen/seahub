@@ -16,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-edit2:before {
+  content: "\e645";
+}
+
 .icon-revoke:before {
   content: "\e643";
 }
