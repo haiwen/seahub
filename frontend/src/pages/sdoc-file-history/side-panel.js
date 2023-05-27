@@ -94,8 +94,11 @@ class SidePanel extends Component {
     editUtilities.revertFile(path, commitId).then(res => {
       if (res.data.success) {
         this.init();
+        const callback = (historyVersion, lastHistoryVersion) => {
+          this.props.onSelectHistoryVersion(historyVersion, lastHistoryVersion);
+        };
         this.setState({ isLoading: true, historyVersions: [], errorMessage: '' } , () => {
-          this.listHistoryVersions(historyRepoID, filePath);
+          this.listHistoryVersions(historyRepoID, filePath, '', callback);
         });
       }
     }).catch(error => {
