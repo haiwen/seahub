@@ -239,5 +239,8 @@
   "Open_parent_folder": "Open parent folder",
   "redo": "redo",
   "undo": "undo",
-  "Open_link": "Open link"
+  "Open_link": "Open link",
+  "Customize_the_number_of_rows_and_columns": "Customize the number of rows and columns",
+  "Rows": "Rows",
+  "Columns": "Columns"
 }

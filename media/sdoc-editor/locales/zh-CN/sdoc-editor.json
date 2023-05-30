@@ -230,5 +230,11 @@
   "Server_is_disconnected_Reconnecting": "服务器断开连接。正在重新连接...",
   "Server_is_reconnected": "服务器已重新连接。",
   "Outline": "目录",
-  "Headings_you_add_to_the_document_will_appear_here": "您添加到文档中的标题将显示在此处"
+  "Headings_you_add_to_the_document_will_appear_here": "您添加到文档中的标题将显示在此处",
+  "redo": "重做",
+  "undo": "撤销",
+  "Open_link": "打开链接",
+  "Customize_the_number_of_rows_and_columns": "自定义行列数",
+  "Rows": "行数",
+  "Columns": "列数"
 }
