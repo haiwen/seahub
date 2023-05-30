@@ -1,3 +1,5 @@
+import time
+
 from django.core.management.base import BaseCommand
 
 from seaserv import seafile_api
@@ -13,9 +15,20 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self.stdout.write('Start to get all existing repo')
+        start_time1 = time.time()
         self.all_repo = [repo.repo_id for repo in seafile_api.get_repo_list(-1, -1, ret_virt_repo=True)]
+        end_time1 = time.time()
+        self.stdout.write('It takes %s seconds to get repo list' % (end_time1 - start_time1))
+        self.stdout.write('all_repo count %s' % len(self.all_repo))
+
+        start_time2 = time.time()
         trash_repo = [repo.repo_id for repo in seafile_api.get_trash_repo_list(-1, -1)]
+        end_time2 = time.time()
+        self.stdout.write('It takes %s seconds to get trash repo list' % (end_time2 - start_time2))
+        self.stdout.write('trash_repo count %s' % len(trash_repo))
+
         self.all_repo.extend(trash_repo)
+        self.stdout.write('total repos count %s' % len(self.all_repo))
         self.stdout.write('Successly get all existing repos')
 
         # on_delete is CASCADE, so FileTag/FileComment will be deleted
@@ -35,6 +48,13 @@ class Command(BaseCommand):
             table must has `repo_id` column and without foreign relationship 
         """
         self.stdout.write('Start to clear %s table' % table_name)
+        start_time3 = time.time()
         tb_repo_ids = table_model.objects.all().values_list('repo_id', flat=True)
-        table_model.objects.filter(repo_id__in=list(set(tb_repo_ids) - set(self.all_repo))).delete()
+        end_time3 = time.time()
+        self.stdout.write('It takes %s seconds to get table %s repo_ids' % ((end_time3 - start_time3), table_name))
+        self.stdout.write('table %s repo_ids count %s' % (table_name, len(tb_repo_ids)))
+        self.stdout.write('These invalid repo data %s in table %s will be clear.' %
+                          (list(set(tb_repo_ids) - set(self.all_repo)), table_name))
+
+        # table_model.objects.filter(repo_id__in=list(set(tb_repo_ids) - set(self.all_repo))).delete()
         self.stdout.write('%s table has been clear' % table_name)
