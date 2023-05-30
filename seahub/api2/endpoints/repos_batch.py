@@ -1135,7 +1135,8 @@ class ReposAsyncBatchCopyItemView(APIView):
             error_msg = 'Folder %s not found.' % src_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_repo(dst_repo_id):
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1154,6 +1155,12 @@ class ReposAsyncBatchCopyItemView(APIView):
         if parse_repo_perm(dst_parent_permission).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # 3. if dst repo is encrypted, should decrypt it first
+        username = request.user.username
+        if dst_repo.encrypted and not seafile_api.is_password_set(dst_repo.id, username):
+            result = {'lib_need_decrypt': True}
+            return Response(result, status=status.HTTP_403_FORBIDDEN)
 
         dirents_map = {}
         dst_dirents = []
@@ -1255,7 +1262,8 @@ class ReposAsyncBatchMoveItemView(APIView):
             error_msg = 'Folder %s not found.' % src_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.get_repo(dst_repo_id):
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1273,6 +1281,12 @@ class ReposAsyncBatchMoveItemView(APIView):
         if parse_repo_perm(check_folder_permission(request, dst_repo_id, dst_parent_dir)).can_edit_on_web is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # 3. if dst repo is encrypted, should decrypt it first
+        username = request.user.username
+        if dst_repo.encrypted and not seafile_api.is_password_set(dst_repo.id, username):
+            result = {'lib_need_decrypt': True}
+            return Response(result, status=status.HTTP_403_FORBIDDEN)
 
         # check locked files
         username = request.user.username

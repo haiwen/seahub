@@ -692,14 +692,6 @@ class LibContentView extends React.Component {
   onMoveItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
-    if (repoID !== destRepo.repo_id) {
-      this.setState(() => ({
-        asyncOperatedFilesLength: selectedDirentList.length,
-        asyncOperationProgress: 0,
-        asyncOperationType: 'move',
-        isCopyMoveProgressDialogShow: true
-      }));
-    }
 
     let dirNames = this.getSelectedDirentNames();
     let direntPaths = this.getSelectedDirentPaths();
@@ -707,6 +699,10 @@ class LibContentView extends React.Component {
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
+          asyncOperatedFilesLength: selectedDirentList.length,
+          asyncOperationProgress: 0,
+          asyncOperationType: 'move',
+          isCopyMoveProgressDialogShow: true
         }, () => {
           // After moving successfully, delete related files
           this.getAsyncCopyMoveProgress();
@@ -731,15 +727,19 @@ class LibContentView extends React.Component {
       }
 
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = Utils.getMoveFailedMessage(dirNames);
+      if (!error.response.data.lib_need_decrypt) {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          errMessage = Utils.getCopyFailedMessage(dirNames);
+        }
+        toaster.danger(errMessage);
+      } else {
+        this.setState({
+          libNeedDecryptWhenMove: true,
+          destRepoWhenCopyMove: destRepo,
+          destDirentPathWhenCopyMove: destDirentPath,
+        });
       }
-      this.setState({
-        asyncOperationProgress: 0,
-        isCopyMoveProgressDialogShow: false,
-      });
-      toaster.danger(errMessage);
     });
   };
 
@@ -747,20 +747,15 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     let selectedDirentList = this.state.selectedDirentList;
 
-    if (repoID !== destRepo.repo_id) {
-      this.setState({
-        asyncOperatedFilesLength: selectedDirentList.length,
-        asyncOperationProgress: 0,
-        asyncOperationType: 'copy',
-        isCopyMoveProgressDialogShow: true
-      });
-    }
-
     let dirNames = this.getSelectedDirentNames();
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
+          asyncOperatedFilesLength: selectedDirentList.length,
+          asyncOperationProgress: 0,
+          asyncOperationType: 'copy',
+          isCopyMoveProgressDialogShow: true
         }, () => {
           this.getAsyncCopyMoveProgress();
         });
@@ -780,11 +775,19 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = Utils.getCopyFailedMessage(dirNames);
+      if (!error.response.data.lib_need_decrypt) {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          errMessage = Utils.getCopyFailedMessage(dirNames);
+        }
+        toaster.danger(errMessage);
+      } else {
+        this.setState({
+          libNeedDecryptWhenCopy: true,
+          destRepoWhenCopyMove: destRepo,
+          destDirentPathWhenCopyMove: destDirentPath,
+        });
       }
-      toaster.danger(errMessage);
     });
   };
 
@@ -1168,18 +1171,15 @@ class LibContentView extends React.Component {
     }
     let direntPath = Utils.joinPath(nodeParentPath, dirName);
 
-    if (repoID !== destRepo.repo_id) {
-      this.setState({
-        asyncOperatedFilesLength: 1,
-        asyncOperationProgress: 0,
-        asyncOperationType: 'move',
-        isCopyMoveProgressDialogShow: true,
-      });
-    }
-
     seafileAPI.moveDir(repoID, destRepo.repo_id, moveToDirentPath, nodeParentPath, dirName).then(res => {
       if (repoID !== destRepo.repo_id) {
-        this.setState({asyncCopyMoveTaskId: res.data.task_id}, () => {
+        this.setState({
+          asyncCopyMoveTaskId: res.data.task_id,
+          asyncOperatedFilesLength: 1,
+          asyncOperationProgress: 0,
+          asyncOperationType: 'move',
+          isCopyMoveProgressDialogShow: true,
+	}, () => {
           this.currentMoveItemName = dirName;
           this.currentMoveItemPath = direntPath;
           this.getAsyncCopyMoveProgress(dirName, direntPath);
@@ -1205,12 +1205,23 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to move {name}.');
-        errMessage = errMessage.replace('{name}', dirName);
+      if (!error.response.data.lib_need_decrypt) {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          errMessage = gettext('Failed to move {name}.');
+          errMessage = errMessage.replace('{name}', dirName);
+        }
+        toaster.danger(errMessage);
+      } else {
+        this.setState({
+          libNeedDecryptWhenMove: true,
+          destRepoWhenCopyMove: destRepo,
+          destDirentPathWhenCopyMove: moveToDirentPath,
+          copyMoveSingleItem: true,
+          srcDirentWhenCopyMove: dirent,
+          srcNodeParentPathWhenCopyMove: nodeParentPath,
+        });
       }
-      toaster.danger(errMessage);
     });
   };
 
@@ -1222,20 +1233,15 @@ class LibContentView extends React.Component {
       nodeParentPath = this.state.path;
     }
 
-    if (repoID !== destRepo.repo_id) {
-      this.setState({
-        asyncOperatedFilesLength: 1,
-        asyncOperationProgress: 0,
-        asyncOperationType: 'copy',
-        isCopyMoveProgressDialogShow: true
-      });
-    }
-
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, nodeParentPath, dirName).then(res => {
 
       if (repoID !== destRepo.repo_id) {
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
+          asyncOperatedFilesLength: 1,
+          asyncOperationProgress: 0,
+          asyncOperationType: 'copy',
+          isCopyMoveProgressDialogShow: true
         }, () => {
           this.getAsyncCopyMoveProgress();
         });
@@ -1255,12 +1261,23 @@ class LibContentView extends React.Component {
         toaster.success(message);
       }
     }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      if (errMessage === gettext('Error')) {
-        errMessage = gettext('Failed to copy %(name)s');
-        errMessage = errMessage.replace('%(name)s', dirName);
+      if (!error.response.data.lib_need_decrypt) {
+        let errMessage = Utils.getErrorMsg(error);
+        if (errMessage === gettext('Error')) {
+          errMessage = gettext('Failed to copy %(name)s');
+          errMessage = errMessage.replace('%(name)s', dirName);
+        }
+        toaster.danger(errMessage);
+      } else {
+        this.setState({
+          libNeedDecryptWhenCopy: true,
+          destRepoWhenCopyMove: destRepo,
+          destDirentPathWhenCopyMove: copyToDirentPath,
+          copyMoveSingleItem: true,
+          srcDirentWhenCopyMove: dirent,
+          srcNodeParentPathWhenCopyMove: nodeParentPath,
+        });
       }
-      toaster.danger(errMessage);
     });
   };
 
@@ -1861,6 +1878,39 @@ class LibContentView extends React.Component {
     this.loadDirData(this.state.path);
   };
 
+  onLibDecryptWhenCopyMove = () => {
+    if (this.state.libNeedDecryptWhenCopy) {
+        if (this.state.copyMoveSingleItem) {
+          this.onCopyItem(this.state.destRepoWhenCopyMove,
+                          this.state.srcDirentWhenCopyMove,
+                          this.state.destDirentPathWhenCopyMove,
+                          this.state.srcNodeParentPathWhenCopyMove)
+	} else {
+          this.onCopyItems(this.state.destRepoWhenCopyMove,
+                           this.state.destDirentPathWhenCopyMove)
+	}
+        this.setState({
+          libNeedDecryptWhenCopy: false,
+          copyMoveSingleItem: false,
+        });
+    }
+    if (this.state.libNeedDecryptWhenMove) {
+        if (this.state.copyMoveSingleItem) {
+          this.onMoveItem(this.state.destRepoWhenCopyMove,
+                          this.state.srcDirentWhenCopyMove,
+                          this.state.destDirentPathWhenCopyMove,
+                          this.state.srcNodeParentPathWhenCopyMove)
+	} else {
+          this.onMoveItems(this.state.destRepoWhenCopyMove,
+                           this.state.destDirentPathWhenCopyMove)
+	}
+        this.setState({
+          libNeedDecryptWhenMove: false,
+          copyMoveSingleItem: false,
+        });
+    }
+  }
+
   goDraftPage = () => {
     window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
   };
@@ -1946,6 +1996,17 @@ class LibContentView extends React.Component {
           <LibDecryptDialog
             repoID={this.props.repoID}
             onLibDecryptDialog={this.onLibDecryptDialog}
+          />
+        </ModalPortal>
+      );
+    }
+
+    if (this.state.libNeedDecryptWhenCopy || this.state.libNeedDecryptWhenMove) {
+      return (
+        <ModalPortal>
+          <LibDecryptDialog
+            repoID={this.state.destRepoWhenCopyMove.repo_id}
+            onLibDecryptDialog={this.onLibDecryptWhenCopyMove}
           />
         </ModalPortal>
       );

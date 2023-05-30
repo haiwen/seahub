@@ -144,7 +144,7 @@ class CopyDirent extends React.Component {
     } else {
       title = gettext('Copy selected item(s) to:');
     }
-    let mode = this.props.repoEncrypted ? 'only_current_library':'current_repo_and_other_repos';
+    let mode = 'current_repo_and_other_repos';
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
