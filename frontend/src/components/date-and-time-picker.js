@@ -21,39 +21,12 @@ class Picker extends React.Component {
     this.defaultCalendarValue = null;
     this.calendarContainerRef = React.createRef();
     this.inputRef = React.createRef();
-    this.state = {
-      isOpen: false
-    };
-  }
-
-  closeDialog = () => {
-    this.setState({
-      isOpen: false
-    });
-  }
-
-  openDialog = () => {
-    this.setState({
-      isOpen: true
-    });
-  }
-
-  clickOutsideToClose = (e) => {
-    if (!this.inputRef.current.contains(e.target) &&
-        !this.calendarContainerRef.current.contains(e.target)) {
-      this.closeDialog();
-    }
   }
 
   componentDidMount() {
     let lang = window.app.config.lang;
     this.defaultCalendarValue = moment().locale(lang).clone();
 
-    document.addEventListener('click', this.clickOutsideToClose);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.clickOutsideToClose);
   }
 
   getCalendarContainer = () => {
@@ -83,7 +56,6 @@ class Picker extends React.Component {
         getCalendarContainer={this.getCalendarContainer}
         calendar={calendar}
         value={props.value}
-        open={this.state.isOpen}
         onChange={props.onChange}
       >
         {
@@ -98,7 +70,6 @@ class Picker extends React.Component {
                   readOnly={true}
                   value={value && value.format(FORMAT) || ''}
                   className="form-control"
-                  onClick={this.openDialog}
                   ref={this.inputRef}
                 />
                 <div ref={this.calendarContainerRef} />
