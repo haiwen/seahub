@@ -26,6 +26,8 @@ export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
 export const enableRepoAutoDel = window.app.config.enableRepoAutoDel;
+export const cloudMode = window.app.pageOptions.cloudMode;
+export const isOrgContext = window.app.pageOptions.isOrgContext;
 
 //pageOptions
 export const trashReposExpireDays = window.app.pageOptions.trashReposExpireDays;

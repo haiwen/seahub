@@ -25,6 +25,8 @@ from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
 from seahub.api2.endpoints.departments import Departments
+from seahub.api2.endpoints.address_book.departments import AddressBookDepartments, \
+        AddressBookDepartmentMembers
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 
@@ -308,6 +310,8 @@ urlpatterns = [
 
     # departments
     url(r'api/v2.1/departments/$', Departments.as_view(), name='api-v2.1-all-departments'),
+    url(r'^api/v2.1/address-book/departments/$', AddressBookDepartments.as_view(), name='api-v2.1-address-book-groups-departments'),
+    url(r'^api/v2.1/address-book/departments/(?P<department_id>\d+)/members/$', AddressBookDepartmentMembers.as_view(), name='api-v2.1-address-book-groups-department-members'),
 
     ## user::groups
     url(r'^api/v2.1/all-groups/$', AllGroups.as_view(), name='api-v2.1-all-groups'),

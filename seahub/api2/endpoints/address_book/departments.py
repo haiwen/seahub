@@ -1,25 +1,21 @@
-# -*- coding: utf-8 -*-
-
 import logging
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-import seaserv
-from seaserv import ccnet_api, seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.utils import api_error
-from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, get_default_group_avatar_url
-from seahub.utils import is_pro_version
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import is_group_member
-from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
+from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+
+from seahub.utils import is_org_context
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +38,7 @@ def get_address_book_group_memeber_info(group_member_obj, avatar_size=80):
 
 
 def address_book_group_to_dict(group):
+
     if isinstance(group, int):
         group = ccnet_api.get_group(group)
 
@@ -55,17 +52,14 @@ def address_book_group_to_dict(group):
     }
 
 
-class Departments(APIView):
-
+class AddressBookDepartments(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
         """ List sub groups of a group in address book.
         """
-        from seahub.utils import is_org_context
-
         if is_org_context(request):
             org_id = request.user.org.org_id
             groups = ccnet_api.get_org_top_groups(org_id)
@@ -88,55 +82,6 @@ class Departments(APIView):
             'departments': return_results
         })
 
-    def get_tmp(self, request):
-        """list all departments
-        """
-
-        if not is_pro_version():
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        try:
-            departments = ccnet_api.list_all_departments()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = GROUP_AVATAR_DEFAULT_SIZE
-
-        result = []
-        for department in departments:
-            department = seaserv.get_group(department.id)
-
-            username = request.user.username
-            if not is_group_member(department.id, username):
-                continue
-
-            try:
-                avatar_url, is_default, date_uploaded = api_grp_avatar_url(department.id, avatar_size)
-            except Exception as e:
-                logger.error(e)
-                avatar_url = get_default_group_avatar_url()
-
-            created_at = timestamp_to_isoformat_timestr(department.timestamp)
-
-            department_info = {
-                "id": department.id,
-                "email": '%s@seafile_group' % str(department.id),
-                "parent_group_id": department.parent_group_id,
-                "name": department.group_name,
-                "owner": department.creator_name,
-                "created_at": created_at,
-                "avatar_url": request.build_absolute_uri(avatar_url),
-            }
-
-            result.append(department_info)
-
-        return Response(result)
-
 
 class AddressBookDepartmentMembers(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -147,6 +92,7 @@ class AddressBookDepartmentMembers(APIView):
         '''
         check if the department belongs to the org
         '''
+        # TODO
         # owner = "%s@seafile_group" % department_id
         # ws = Workspaces.objects.get_workspace_by_owner(owner)
         # if ws and ws.org_id == org_id:
@@ -163,7 +109,6 @@ class AddressBookDepartmentMembers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Department id invalid')
 
         org_id = request.user.org.org_id if request.user.org else None
-        # TODO
         if org_id and not self._check_department_permission(org_id, department_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
