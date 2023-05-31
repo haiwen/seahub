@@ -242,5 +242,7 @@
   "Open_link": "Open link",
   "Customize_the_number_of_rows_and_columns": "Customize the number of rows and columns",
   "Rows": "Rows",
-  "Columns": "Columns"
+  "Columns": "Columns",
+  "Please_enter_the_title": "Please enter the title",
+  "Please_enter_the_text": "Please enter the text"
 }

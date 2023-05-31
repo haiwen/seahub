@@ -236,5 +236,7 @@
   "Open_link": "打开链接",
   "Customize_the_number_of_rows_and_columns": "自定义行列数",
   "Rows": "行数",
-  "Columns": "列数"
+  "Columns": "列数",
+  "Please_enter_the_title": "请输入标题",
+  "Please_enter_the_text": "请输入正文"
 }
