@@ -1155,7 +1155,10 @@ def react_fake_view(request, **kwargs):
     if resolve(request.path).url_name == 'lib_view':
 
         repo_id = kwargs.get('repo_id', '')
+        repo_name = kwargs.get('repo_name', '')
         path = kwargs.get('path', '')
+        if repo_id and repo_name and not path:
+            path = '/'
 
         if repo_id and path and \
                 not check_folder_permission(request, repo_id, path):
