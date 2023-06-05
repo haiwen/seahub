@@ -616,17 +616,6 @@ class OrgAdminImportUsers(APIView):
             error_msg = 'Organization %s not found.' % org_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
-
-        if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub.organizations.models import OrgMemberQuota
-            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_members >= org_members_quota:
-                err_msg = 'Failed. You can only invite %d members.' % org_members_quota
-                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
-
         xlsx_file = request.FILES.get('file', None)
         if not xlsx_file:
             error_msg = 'file can not be found.'
@@ -658,6 +647,17 @@ class OrgAdminImportUsers(APIView):
         for row in rows:
             if not all(col.value is None for col in row):
                 records.append([col.value for col in row])
+
+        # check plan
+        url_prefix = request.user.org.url_prefix
+        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+
+        if ORG_MEMBER_QUOTA_ENABLED:
+            from seahub.organizations.models import OrgMemberQuota
+            org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+            if org_members_quota is not None and org_members+len(records) > org_members_quota:
+                err_msg = 'The number of users exceeds the limit.'
+                return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit(new_users=len(records)):
             error_msg = 'The number of users exceeds the limit.'
