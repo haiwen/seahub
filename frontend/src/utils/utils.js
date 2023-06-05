@@ -101,7 +101,8 @@ export const Utils = {
     'ico' : 'pic.png',
 
     // default
-    'default' : 'file.png'
+    'default' : 'file.png',
+    'sdoc': 'sdoc.png',
   },
 
   // check if a file is an image
