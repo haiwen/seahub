@@ -64,3 +64,5 @@ frontend/package-lock.json
 frontend/.eslintcache
 
 /.idea
+
+.vscode
