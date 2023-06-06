@@ -23,6 +23,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from saml2 import BINDING_HTTP_POST
+from saml2.ident import code
 from saml2.client import Saml2Client
 from saml2.metadata import entity_descriptor
 from djangosaml2.cache import IdentityCache, OutstandingQueriesCache
@@ -40,6 +41,10 @@ from seahub.base.sudo_mode import update_sudo_mode_ts
 logger = logging.getLogger('djangosaml2')
 
 
+def _set_subject_id(session, subject_id):
+    session['_saml2_subject_id'] = code(subject_id)
+
+
 def login(request):
     next_url = settings.LOGIN_REDIRECT_URL
     if 'next' in request.GET:
@@ -53,6 +58,8 @@ def login(request):
     sp_config = get_config(None, request)
     saml_client = Saml2Client(sp_config)
     session_id, info = saml_client.prepare_for_authenticate(relay_state=next_url)
+    oq_cache = OutstandingQueriesCache(request.saml_session)
+    oq_cache.set(session_id, next_url)
     try:
         headers = dict(info['headers'])
         redirect_url = headers['Location']
@@ -79,9 +86,9 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     attribute_mapping = attribute_mapping or get_custom_setting('SAML_ATTRIBUTE_MAPPING', None)
     conf = get_config(None, request)
 
-    identity_cache = IdentityCache(request.session)
+    identity_cache = IdentityCache(request.saml_session)
     client = Saml2Client(conf, identity_cache=identity_cache)
-    oq_cache = OutstandingQueriesCache(request.session)
+    oq_cache = OutstandingQueriesCache(request.saml_session)
     oq_cache.sync()
     outstanding_queries = oq_cache.outstanding_queries()
 
@@ -122,6 +129,7 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
         return HttpResponseForbidden("Permission denied")
 
     auth_login(request, user)
+    _set_subject_id(request.saml_session, session_info['name_id'])
     logger.debug('Sending the post_authenticated signal')
     post_authenticated.send_robust(sender=user, session_info=session_info)
 

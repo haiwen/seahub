@@ -4,7 +4,7 @@ import copy
 import logging
 from os import path
 
-from saml2 import BINDING_HTTP_POST, NAMEID_FORMAT_EMAILADDRESS
+from saml2 import BINDING_HTTP_REDIRECT, BINDING_HTTP_POST, NAMEID_FORMAT_EMAILADDRESS
 from saml2.config import SPConfig
 from django.utils.translation import gettext as _
 
@@ -103,6 +103,10 @@ def config_settings_loader(request):
                 'endpoints': {
                     'assertion_consumer_service': [
                         (sp_service_url + '/saml2/acs/', BINDING_HTTP_POST)
+                    ],
+                    'single_logout_service': [
+                        (sp_service_url + '/saml2/ls/', BINDING_HTTP_REDIRECT),
+                        (sp_service_url + '/saml2/ls/post', BINDING_HTTP_POST),
                     ],
                 },
             },

@@ -907,6 +907,7 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_AD
     from seahub.adfs_auth.views import auth_complete
     urlpatterns += [
         url(r'^saml2/complete/$', auth_complete, name='saml2_complete'),
+        url(r'^saml2/', include('djangosaml2.urls')),
     ]
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):

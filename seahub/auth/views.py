@@ -251,6 +251,16 @@ def logout(request, next_page=None,
            redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
 
+    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        from saml2.ident import decode
+        try:
+            saml_subject_id = decode(request.saml_session["_saml2_subject_id"])
+        except Exception as e:
+            logger.warning(e)
+            saml_subject_id = None
+        if saml_subject_id:
+            return HttpResponseRedirect(reverse('saml2_logout'))
+
     from seahub.auth import logout
     logout(request)
 
