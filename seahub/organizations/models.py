@@ -84,7 +84,7 @@ class OrgSettings(models.Model):
 
 
 class OrgSAMLConfigManager(models.Manager):
-    def add_or_update_saml_config(self, org_id, metadata_url):
+    def add_or_update_saml_config(self, org_id, metadata_url=None, domain=None):
         try:
             saml_config = self.get(org_id=org_id)
         except OrgSAMLConfig.DoesNotExist:
@@ -92,6 +92,9 @@ class OrgSAMLConfigManager(models.Manager):
 
         if metadata_url:
             saml_config.metadata_url = metadata_url
+
+        if domain:
+            saml_config.domain = domain
 
         saml_config.save(using=self._db)
         return saml_config
@@ -107,6 +110,7 @@ class OrgSAMLConfigManager(models.Manager):
 class OrgSAMLConfig(models.Model):
     org_id = models.IntegerField(unique=True)
     metadata_url = models.TextField()
+    domain = models.CharField(max_length=255)
 
     objects = OrgSAMLConfigManager()
 
