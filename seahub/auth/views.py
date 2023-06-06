@@ -14,7 +14,8 @@ from django.http import HttpResponseRedirect, Http404
 from django.utils.http import urlquote, base36_to_int, is_safe_url
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
-from seaserv import seafile_api
+from saml2.ident import decode
+from seaserv import seafile_api, ccnet_api
 
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
@@ -37,6 +38,7 @@ from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.organizations.models import OrgSAMLConfig
 
 from constance import config
 
@@ -204,6 +206,7 @@ def login(request, template_name='registration/login.html',
         'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
         'enable_sso': enable_sso,
+        'enable_multi_adfs': getattr(settings, 'ENABLE_MULTI_ADFS', False),
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
     })
@@ -252,8 +255,6 @@ def logout(request, next_page=None,
     "Logs out the user and displays 'You are logged out' message."
 
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        from saml2.ident import decode
-        from seaserv import ccnet_api
         from seahub.utils import is_org_context
         try:
             saml_subject_id = decode(request.saml_session["_saml2_subject_id"])
@@ -451,3 +452,35 @@ def password_change(request, template_name='registration/password_change_form.ht
 
 def password_change_done(request, template_name='registration/password_change_done.html'):
     return render(request, template_name)
+
+
+@csrf_protect
+@never_cache
+def multi_adfs_sso(request):
+    if not getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        return
+
+    template_name = 'registration/multi_adfs_sso.html'
+    render_data = {'login_bg_image_path': get_login_bg_image_path()}
+
+    if request.method == "POST":
+        request.session['is_sso_user'] = True
+        login_email = request.POST.get('login', '')
+        domain = login_email.split('@')[-1]
+        if not domain:
+            render_data['error_msg'] = 'Email invalid.'
+            return render(request, template_name, render_data)
+
+        try:
+            org_saml_config = OrgSAMLConfig.objects.get_config_by_domain(domain)
+            org_id = org_saml_config.org_id
+            org = ccnet_api.get_org_by_id(org_id)
+        except Exception as e:
+            logger.error(e)
+            render_data['error_msg'] = 'Error, please contact administrator.'
+            return render(request, template_name, render_data)
+
+        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % org.url_prefix)
+
+    if request.method == "GET":
+        return render(request, template_name, render_data)

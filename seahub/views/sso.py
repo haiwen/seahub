@@ -100,4 +100,8 @@ def shib_login(request):
     next_page = request.GET.get(REDIRECT_FIELD_NAME, '')
     query_string = request.META.get('QUERY_STRING', '')
     params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, urlquote(next_page), query_string)
+
+    if getattr(settings, 'ENABLE_MULTI_ADFS', False):
+        return HttpResponseRedirect(reverse('multi_adfs_sso') + params)
+
     return HttpResponseRedirect(reverse('sso') + params)

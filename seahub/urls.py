@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
+from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
@@ -200,6 +201,7 @@ urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
     url(r'^sso/$', sso, name='sso'),
+    url(r'^multi_adfs_sso/$', multi_adfs_sso, name='multi_adfs_sso'),
     url(r'^jwt-sso/$', jwt_sso, name='jwt_sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),

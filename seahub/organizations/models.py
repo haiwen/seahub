@@ -106,11 +106,18 @@ class OrgSAMLConfigManager(models.Manager):
         except OrgSAMLConfig.DoesNotExist:
             return None
 
+    def get_config_by_domain(self, domain):
+        try:
+            config = self.get(domain=domain)
+            return config
+        except OrgSAMLConfig.DoesNotExist:
+            return None
+
 
 class OrgSAMLConfig(models.Model):
     org_id = models.IntegerField(unique=True)
     metadata_url = models.TextField()
-    domain = models.CharField(max_length=255)
+    domain = models.CharField(max_length=255, unique=True)
 
     objects = OrgSAMLConfigManager()
 

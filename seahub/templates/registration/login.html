@@ -76,6 +76,10 @@ html, body, #wrapper { height:100%; }
     <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
+    {% if enable_multi_adfs %}
+    <a id="multi_adfs_sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
+    {% endif %}
+
     {% if enable_weixin %}
     <div>
     {% trans "Login with: " %}
@@ -171,6 +175,15 @@ $(function() {
 $(function() {
     $('#sso').on('click', function() {
         window.location = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+        return false;
+    });
+});
+{% endif %}
+
+{% if enable_multi_adfs %}
+$(function() {
+    $('#multi_adfs_sso').on('click', function() {
+        window.location = "{% url 'multi_adfs_sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
         return false;
     });
 });
