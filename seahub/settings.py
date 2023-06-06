@@ -230,6 +230,7 @@ INSTALLED_APPS = [
     'constance.backends.database',
     'termsandconditions',
     'webpack_loader',
+    'djangosaml2',
 
     'seahub.api2',
     'seahub.avatar',

@@ -253,13 +253,17 @@ def logout(request, next_page=None,
 
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         from saml2.ident import decode
+        from seaserv import ccnet_api
+        from seahub.utils import is_org_context
         try:
             saml_subject_id = decode(request.saml_session["_saml2_subject_id"])
         except Exception as e:
             logger.warning(e)
             saml_subject_id = None
-        if saml_subject_id:
-            return HttpResponseRedirect(reverse('saml2_logout'))
+        if saml_subject_id and is_org_context(request):
+            org_id = request.user.org.org_id
+            org = ccnet_api.get_org_by_id(org_id)
+            return HttpResponseRedirect('/org/custom/%s/saml2/logout/' % org.url_prefix)
 
     from seahub.auth import logout
     logout(request)
