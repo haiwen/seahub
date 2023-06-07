@@ -1333,7 +1333,12 @@ class LibContentView extends React.Component {
       let fileTags = res.data.file_tags.map(item => {
         return new FileTag(item);
       });
-      this.updateDirent(dirent, 'file_tags', fileTags);
+
+      if (this.state.isViewFile) {
+        this.setState({fileTags: fileTags});
+      } else {
+        this.updateDirent(dirent, 'file_tags', fileTags);
+      }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

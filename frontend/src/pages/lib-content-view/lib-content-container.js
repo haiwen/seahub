@@ -350,6 +350,7 @@ class LibContentContainer extends React.Component {
                   path={this.props.path}
                   dirent={this.state.currentDirent}
                   currentRepoInfo={this.props.currentRepoInfo}
+                  fileTags={this.props.isViewFile ? this.props.fileTags : []}
                   onFileTagChanged={this.props.onFileTagChanged}
                   onItemDetailsClose={this.props.closeDirentDetail}
                   direntDetailPanelTab={this.props.direntDetailPanelTab}

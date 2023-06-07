@@ -157,7 +157,7 @@ class DirentDetail extends React.Component {
   }
 
   renderDetailBody = (bigIconUrl, folderDirent) => {
-    const { dirent } = this.props;
+    const { dirent, fileTags } = this.props;
     return (
       <Fragment>
         <div className="detail-body dirent-info">
@@ -171,7 +171,7 @@ class DirentDetail extends React.Component {
                 dirent={this.props.dirent || folderDirent}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail}
-                fileTagList={dirent ? dirent.file_tags : []}
+                fileTagList={dirent ? dirent.file_tags : fileTags}
                 onFileTagChanged={this.props.onFileTagChanged}
                 fileParticipantList={this.state.fileParticipantList}
                 onParticipantsChange={this.onParticipantsChange}
