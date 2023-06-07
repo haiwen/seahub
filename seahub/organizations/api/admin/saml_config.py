@@ -2,7 +2,10 @@
 import os
 import re
 import logging
+from xml.etree import ElementTree
+from urllib.parse import urlparse
 
+import requests
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -92,6 +95,20 @@ class OrgSAMLConfigView(APIView):
         if not metadata_url:
             return api_error(status.HTTP_400_BAD_REQUEST, 'metadata_url invalid.')
 
+        res = requests.get(metadata_url)
+        root = ElementTree.fromstring(res.text)
+        entity_id = root.attrib.get('entityID', '')
+        if not entity_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Not found entityID in metadata.')
+
+        netloc = urlparse(entity_id).netloc
+        if len(netloc.split('.')) == 2:
+            domain = netloc
+        elif len(netloc.split('.')) > 2:
+            domain = '.'.join(netloc.split('.')[-2:])
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid entityID in metadata.')
+
         # resource check
         org_id = int(org_id)
         if not ccnet_api.get_org_by_id(org_id):
@@ -100,7 +117,7 @@ class OrgSAMLConfigView(APIView):
 
         # add an org saml config
         try:
-            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url)
+            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url, domain)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -114,6 +131,20 @@ class OrgSAMLConfigView(APIView):
         if not metadata_url:
             return api_error(status.HTTP_400_BAD_REQUEST, 'metadata_url invalid.')
 
+        res = requests.get(metadata_url)
+        root = ElementTree.fromstring(res.text)
+        entity_id = root.attrib.get('entityID', '')
+        if not entity_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Not found entityID in metadata.')
+
+        netloc = urlparse(entity_id).netloc
+        if len(netloc.split('.')) == 2:
+            domain = netloc
+        elif len(netloc.split('.')) > 2:
+            domain = '.'.join(netloc.split('.')[-2:])
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid entityID in metadata.')
+
         # resource check
         org_id = int(org_id)
         if not ccnet_api.get_org_by_id(org_id):
@@ -122,7 +153,7 @@ class OrgSAMLConfigView(APIView):
 
         # update config
         try:
-            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url)
+            saml_comfig = OrgSAMLConfig.objects.add_or_update_saml_config(org_id, metadata_url, domain)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

@@ -2,6 +2,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 
+from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
@@ -200,6 +201,7 @@ urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
 
     url(r'^sso/$', sso, name='sso'),
+    url(r'^multi_adfs_sso/$', multi_adfs_sso, name='multi_adfs_sso'),
     url(r'^jwt-sso/$', jwt_sso, name='jwt_sso'),
     url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
@@ -893,6 +895,7 @@ if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         url(r'^org/custom/[a-z_0-9-]+/saml2/login/$', login, name='org_saml2_login'),
         url(r'^org/custom/[a-z_0-9-]+/saml2/acs/$', assertion_consumer_service, name='org_saml2_acs'),
         url(r'^org/custom/[a-z_0-9-]+/saml2/metadata/$', metadata, name='org_saml2_metadata'),
+        url(r'^org/custom/[a-z_0-9-]+/saml2/', include(('djangosaml2.urls', 'djangosaml2'), namespace='org')),
     ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
@@ -901,6 +904,7 @@ if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
         url(r'^saml2/login/$', login, name='saml2_login'),
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
         url(r'^saml2/metadata/$', metadata, name='saml2_metadata'),
+        url(r'^saml2/', include('djangosaml2.urls')),
     ]
 
 if getattr(settings, 'ENABLE_MULTI_ADFS', False) or getattr(settings, 'ENABLE_ADFS_LOGIN', False):
