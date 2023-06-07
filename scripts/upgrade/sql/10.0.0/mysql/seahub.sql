@@ -2,8 +2,10 @@ CREATE TABLE IF NOT EXISTS `org_saml_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `metadata_url` longtext NOT NULL,
+  `domain` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`)
+  UNIQUE KEY `org_id` (`org_id`),
+  UNIQUE KEY `domain` (`domain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `base_usermonitoredrepos` (
