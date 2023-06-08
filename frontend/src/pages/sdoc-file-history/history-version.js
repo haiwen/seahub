@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
+import Rename from '../../components/rename';
 
 import '../../css/history-record-item.css';
 
@@ -13,6 +14,7 @@ class HistoryVersion extends React.Component {
     this.state = {
       isShowOperationIcon: false,
       isMenuShow: false,
+      isRenameShow: false,
     };
   }
 
@@ -53,10 +55,24 @@ class HistoryVersion extends React.Component {
     this.props.onCopy(historyVersion);
   }
 
+  toggleRename = () => {
+    this.setState({isRenameShow: !this.state.isRenameShow});
+  }
+
+  onRenameConfirm = (newName) => {
+    const { revFileId } = this.props.historyVersion;
+    this.props.renameHistoryVersion(revFileId, newName);
+    this.toggleRename();
+  }
+
+  onRenameCancel = () => {
+    this.toggleRename();
+  }
+
   render() {
     const { currentVersion, historyVersion } = this.props;
     if (!currentVersion || !historyVersion) return null;
-    const { ctime, commitId, creatorName, revFileId } = historyVersion;
+    const { ctime, commitId, creatorName, revFileId, name} = historyVersion;
     const isHighlightItem = commitId === currentVersion.commitId;
     const url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: revFileId });
     return (
@@ -67,6 +83,10 @@ class HistoryVersion extends React.Component {
         onClick={this.onClick}
       >
         <div className="history-info">
+          {this.state.isRenameShow ?
+            <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
+            :<div className="name">{name}</div>
+          }
           <div className="time">{ctime}</div>
           <div className="owner">
             <span className="squire-icon"></span>
@@ -86,6 +106,7 @@ class HistoryVersion extends React.Component {
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
               <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
+              <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -101,6 +122,7 @@ HistoryVersion.propTypes = {
   onSelectHistoryVersion: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,
   onCopy: PropTypes.func.isRequired,
+  renameHistoryVersion: PropTypes.func.isRequired,
 };
 
 export default HistoryVersion;

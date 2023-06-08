@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Loading from '../../components/loading';
-import { gettext, filePath, historyRepoID } from '../../utils/constants';
+import { gettext, historyRepoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import FileHistory from '../../models/file-history';
 import { Utils } from '../../utils/utils';
@@ -10,6 +10,8 @@ import editUtilities from '../../utils/editor-utilities';
 import toaster from '../../components/toast';
 import HistoryVersion from './history-version';
 import Switch from '../../components/common/switch';
+
+let { docUuid } = window.fileHistory.pageOptions;
 
 class SidePanel extends Component {
 
@@ -24,7 +26,7 @@ class SidePanel extends Component {
   }
 
   componentDidMount() {
-    this.listHistoryVersions(historyRepoID, filePath, this.nextCommit, (historyVersion, lastHistoryVersion) => {
+    this.listHistoryVersions(this.nextCommit, (historyVersion, lastHistoryVersion) => {
       this.props.onSelectHistoryVersion(historyVersion, lastHistoryVersion);
     });
   }
@@ -36,8 +38,8 @@ class SidePanel extends Component {
     this.oldFilePath = '';
   }
 
-  listHistoryVersions = (repoID, filePath, commit, callback) => {
-    seafileAPI.listOldFileHistoryRecords(repoID, filePath, commit).then((res) => {
+  listHistoryVersions = (commit, callback) => {
+    seafileAPI.listSdocHistory(docUuid, commit).then((res) => {
       let historyData = res.data;
       if (!historyData) {
         this.setState({ isLoading: false, errorMessage: 'There is an error in server.' });
@@ -64,11 +66,27 @@ class SidePanel extends Component {
       return;
     }
     if (this.nextCommit) {
-      this.listHistoryVersions(historyRepoID, filePath, this.nextCommit);
+      this.listHistoryVersions(this.nextCommit);
       return;
     }
     this.hasMore = false;
     this.setState({ isLoading: false, errorMessage: '' });
+  }
+
+  renameHistoryVersion = (objID, newName) => {
+    seafileAPI.renameSdocHistory(docUuid, objID, newName).then((res) => {
+      this.setState({
+        historyVersions: this.state.historyVersions.map(item => {
+          if (item.revFileId == objID) {
+            item.name = newName;
+          }
+          return item;
+        })
+      });
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      this.setState({ isLoading: false, errorMessage: errorMessage });
+    });
   }
 
   onScrollHandler = (event) => {
@@ -84,8 +102,7 @@ class SidePanel extends Component {
   loadMore = () => {
     if (this.state.isLoading) return;
     this.setState({ isLoading: true }, () => {
-      const currentFilePath = this.oldFilePath || this.filePath;
-      this.listHistoryVersions(historyRepoID, currentFilePath, this.nextCommit);
+      this.listHistoryVersions(this.nextCommit);
     });
   }
 
@@ -95,7 +112,7 @@ class SidePanel extends Component {
       if (res.data.success) {
         this.init();
         this.setState({ isLoading: true, historyVersions: [], errorMessage: '' } , () => {
-          this.listHistoryVersions(historyRepoID, filePath);
+          this.listHistoryVersions();
         });
       }
     }).catch(error => {
@@ -164,6 +181,7 @@ class SidePanel extends Component {
               onSelectHistoryVersion={this.onSelectHistoryVersion}
               onRestore={this.restoreVersion}
               onCopy={this.copyHistoryFile}
+              renameHistoryVersion={this.renameHistoryVersion}
             />
           );
         })}
