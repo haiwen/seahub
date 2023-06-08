@@ -117,6 +117,8 @@ def config_settings_loader(request):
         'metadata': {
             'remote': [{'url': remote_metadata_url}],
         },
+
+        # https://djangosaml2.readthedocs.io/contents/setup.html#certificates
         'key_file': path.join(CERTS_DIR, 'sp.key'),
         'cert_file': path.join(CERTS_DIR, 'sp.crt'),
         'encryption_keypairs': [{
