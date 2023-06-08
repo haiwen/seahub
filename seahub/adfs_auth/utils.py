@@ -4,6 +4,7 @@ import copy
 import logging
 from os import path
 
+import saml2.xmldsig
 from saml2 import BINDING_HTTP_REDIRECT, BINDING_HTTP_POST, NAMEID_FORMAT_EMAILADDRESS
 from saml2.config import SPConfig
 from django.utils.translation import gettext as _
@@ -71,19 +72,11 @@ def config_settings_loader(request):
         remote_metadata_url = org_saml_config.metadata_url
         # get org sp_service_url
         sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + url_prefix
-        # generate org idp cert dir
-        idp_cert_dir = path.join(CERTS_DIR, str(org_id))
-        # generate org sp certs dir
-        sp_certs_dir = CERTS_DIR
     else:
         # get remote_metadata_url
         remote_metadata_url = REMOTE_METADATA_URL
         # get sp_service_url
         sp_service_url = get_service_url().rstrip('/')
-        # generate idp cert dir
-        idp_cert_dir = CERTS_DIR
-        # generate sp certs dir
-        sp_certs_dir = CERTS_DIR
 
     # generate org saml_config
     saml_config = {
@@ -100,13 +93,23 @@ def config_settings_loader(request):
                 'want_response_signed': False,
                 'want_assertions_signed': False,
                 'want_assertions_or_response_signed': True,
+
+                # ADFS single logout must be signed
+                'logout_requests_signed': True,
+
+                # The sha1 algorithm is used by default, but sha256 is recommended
+                # https://github.com/IdentityPython/pysaml2/blob/master/src/saml2/xmldsig/__init__.py#L49
+                # https://djangosaml2.readthedocs.io/contents/setup.html#pysaml2-specific-files-and-configuration
+                'signing_algorithm': saml2.xmldsig.SIG_RSA_SHA256,
+                'digest_algorithm': saml2.xmldsig.DIGEST_SHA256,
+
                 'endpoints': {
                     'assertion_consumer_service': [
                         (sp_service_url + '/saml2/acs/', BINDING_HTTP_POST)
                     ],
                     'single_logout_service': [
                         (sp_service_url + '/saml2/ls/', BINDING_HTTP_REDIRECT),
-                        (sp_service_url + '/saml2/ls/post', BINDING_HTTP_POST),
+                        (sp_service_url + '/saml2/ls/post/', BINDING_HTTP_POST),
                     ],
                 },
             },
@@ -114,10 +117,11 @@ def config_settings_loader(request):
         'metadata': {
             'remote': [{'url': remote_metadata_url}],
         },
-        'cert_file': path.join(idp_cert_dir, 'idp.crt'),
+        'key_file': path.join(CERTS_DIR, 'sp.key'),
+        'cert_file': path.join(CERTS_DIR, 'sp.crt'),
         'encryption_keypairs': [{
-            'key_file': path.join(sp_certs_dir, 'sp.key'),
-            'cert_file': path.join(sp_certs_dir, 'sp.crt'),
+            'key_file': path.join(CERTS_DIR, 'sp.key'),
+            'cert_file': path.join(CERTS_DIR, 'sp.crt'),
         }],
     }
 
