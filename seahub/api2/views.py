@@ -450,6 +450,12 @@ class Search(APIView):
             error_msg = 'q invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        return_filename_only = request.GET.get('return_filename_only', '')
+        try:
+            to_python_boolean(str(return_filename_only))
+        except ValueError:
+            return_filename_only = False
+
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '10'))
@@ -602,6 +608,9 @@ class Search(APIView):
             e.pop('last_modified_by', None)
             e.pop('name_highlight', None)
             e.pop('score', None)
+
+            if return_filename_only:
+                e['content_highlight'] = ''
 
             repo_id = e['repo_id']
 
