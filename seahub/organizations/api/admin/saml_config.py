@@ -102,11 +102,8 @@ class OrgSAMLConfigView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Not found entityID in metadata.')
 
         netloc = urlparse(entity_id).netloc
-        if len(netloc.split('.')) == 2:
-            domain = netloc
-        elif len(netloc.split('.')) > 2:
-            domain = '.'.join(netloc.split('.')[-2:])
-        else:
+        domain = '.'.join(netloc.split('.')[1:])
+        if not domain:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid entityID in metadata.')
 
         # resource check
@@ -138,11 +135,8 @@ class OrgSAMLConfigView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Not found entityID in metadata.')
 
         netloc = urlparse(entity_id).netloc
-        if len(netloc.split('.')) == 2:
-            domain = netloc
-        elif len(netloc.split('.')) > 2:
-            domain = '.'.join(netloc.split('.')[-2:])
-        else:
+        domain = '.'.join(netloc.split('.')[1:])
+        if not domain:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid entityID in metadata.')
 
         # resource check

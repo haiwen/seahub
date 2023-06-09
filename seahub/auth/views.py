@@ -32,7 +32,7 @@ from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import is_ldap_user, get_site_name
+from seahub.utils import is_ldap_user, get_site_name, is_valid_email
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
@@ -454,11 +454,9 @@ def password_change_done(request, template_name='registration/password_change_do
     return render(request, template_name)
 
 
-@csrf_protect
-@never_cache
 def multi_adfs_sso(request):
     if not getattr(settings, 'ENABLE_MULTI_ADFS', False):
-        return
+        return HttpResponseRedirect(settings.LOGIN_URL)
 
     template_name = 'registration/multi_adfs_sso.html'
     render_data = {'login_bg_image_path': get_login_bg_image_path()}
@@ -466,6 +464,10 @@ def multi_adfs_sso(request):
     if request.method == "POST":
         request.session['is_sso_user'] = True
         login_email = request.POST.get('login', '')
+        if not is_valid_email(login_email):
+            render_data['error_msg'] = 'Email invalid.'
+            return render(request, template_name, render_data)
+
         domain = login_email.split('@')[-1]
         if not domain:
             render_data['error_msg'] = 'Email invalid.'
