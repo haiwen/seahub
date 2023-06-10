@@ -31,12 +31,20 @@ from djangosaml2.conf import get_config
 from djangosaml2.signals import post_authenticated
 from djangosaml2.utils import get_custom_setting
 
+from seaserv import ccnet_api
+
 from seahub import auth
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub import settings
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
+from seahub.utils.licenseparse import user_number_over_limit
+try:
+    from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
+except ImportError:
+    ORG_MEMBER_QUOTA_ENABLED = False
+
 
 logger = logging.getLogger('djangosaml2')
 
@@ -109,11 +117,25 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     # authenticate the remote user
     session_info = response.session_info()
 
+    # check user number limit by license
+    if user_number_over_limit():
+        return HttpResponseForbidden('The number of users exceeds the license limit.')
+
     # get url_prefix
     url_prefix = ''
     reg = re.search(r'org/custom/([a-z_0-9-]+)', request.path)
     if reg:
         url_prefix = reg.group(1)
+        org = ccnet_api.get_org_by_url_prefix(url_prefix)
+        if org:
+            # check user number limit by org member quota
+            org_id = org.org_id
+            org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
+            if ORG_MEMBER_QUOTA_ENABLED:
+                from seahub.organizations.models import OrgMemberQuota
+                org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+                if org_members_quota is not None and org_members >= org_members_quota:
+                    return HttpResponseForbidden('The number of users exceeds the organization quota.')
 
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(session_info=session_info,
