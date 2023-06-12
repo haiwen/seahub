@@ -10,8 +10,8 @@ from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django.utils import translation, formats
 from django.utils.dateformat import DateFormat
-from django.utils.translation import ugettext as _
-from django.utils.translation import ugettext, ungettext
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext, ngettext
 from django.utils.timezone import get_current_timezone
 from django.utils.html import escape
 
@@ -323,27 +323,27 @@ def translate_seahub_time_str(val):
     if days * 24 * 60 * 60 + seconds > limit:
         return val.strftime("%Y-%m-%d")
     elif days > 0:
-        ret = ungettext(
+        ret = ngettext(
             '%(days)d day ago',
             '%(days)d days ago',
             days ) % { 'days': days }
         return ret
     elif seconds > 60 * 60:
         hours = seconds / 3600
-        ret = ungettext(
+        ret = ngettext(
             '%(hours)d hour ago',
             '%(hours)d hours ago',
             hours ) % { 'hours': hours }
         return ret
     elif seconds > 60:
         minutes = seconds/60
-        ret = ungettext(
+        ret = ngettext(
             '%(minutes)d minute ago',
             '%(minutes)d minutes ago',
             minutes ) % { 'minutes': minutes }
         return ret
     elif seconds > 0:
-        ret = ungettext(
+        ret = ngettext(
             '%(seconds)d second ago',
             '%(seconds)d seconds ago',
             seconds ) % { 'seconds': seconds }
@@ -494,7 +494,7 @@ def seahub_filesizeformat(bytes):
     try:
         bytes = float(bytes)
     except (TypeError, ValueError, UnicodeDecodeError):
-        value = ungettext("%(size)d byte", "%(size)d bytes", 0) % {'size': 0}
+        value = ngettext("%(size)d byte", "%(size)d bytes", 0) % {'size': 0}
         return avoid_wrapping(value)
 
     filesize_number_format = lambda value: formats.number_format(round(value, 1), 1)
@@ -506,16 +506,16 @@ def seahub_filesizeformat(bytes):
     PB = get_file_size_unit('PB')
 
     if bytes < KB:
-        value = ungettext("%(size)d byte", "%(size)d bytes", bytes) % {'size': bytes}
+        value = ngettext("%(size)d byte", "%(size)d bytes", bytes) % {'size': bytes}
     elif bytes < MB:
-        value = ugettext("%s KB") % filesize_number_format(bytes / KB)
+        value = gettext("%s KB") % filesize_number_format(bytes / KB)
     elif bytes < GB:
-        value = ugettext("%s MB") % filesize_number_format(bytes / MB)
+        value = gettext("%s MB") % filesize_number_format(bytes / MB)
     elif bytes < TB:
-        value = ugettext("%s GB") % filesize_number_format(bytes / GB)
+        value = gettext("%s GB") % filesize_number_format(bytes / GB)
     elif bytes < PB:
-        value = ugettext("%s TB") % filesize_number_format(bytes / TB)
+        value = gettext("%s TB") % filesize_number_format(bytes / TB)
     else:
-        value = ugettext("%s PB") % filesize_number_format(bytes / PB)
+        value = gettext("%s PB") % filesize_number_format(bytes / PB)
 
     return avoid_wrapping(value)

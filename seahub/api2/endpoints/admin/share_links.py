@@ -13,7 +13,7 @@ from rest_framework import status
 
 from django.contrib.auth.hashers import check_password
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api
 import seaserv

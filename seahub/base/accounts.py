@@ -6,8 +6,8 @@ import logging
 from django import forms
 from django.core.mail import send_mail
 from django.utils import translation
-from django.utils.encoding import smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, \
@@ -295,7 +295,7 @@ class User(object):
     def name(self):
         if not hasattr(self, '_cached_nickname'):
             # convert raw string to unicode obj
-            self._cached_nickname = smart_text(email2nickname(self.username))
+            self._cached_nickname = smart_str(email2nickname(self.username))
 
         return self._cached_nickname
 

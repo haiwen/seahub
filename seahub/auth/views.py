@@ -11,8 +11,9 @@ from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect, Http404
 
-from django.utils.http import urlquote, base36_to_int, is_safe_url
-from django.utils.translation import ugettext as _
+from urllib.parse import quote
+from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from saml2.ident import decode
 from seaserv import seafile_api, ccnet_api
@@ -52,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
-    if not is_safe_url(url=redirect_to, allowed_hosts=request.get_host()):
+    if not url_has_allowed_host_and_scheme(url=redirect_to, allowed_hosts=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     if request.session.test_cookie_worked():
@@ -97,7 +98,7 @@ def login(request, template_name='registration/login.html',
 
     redirect_to = request.GET.get(redirect_field_name, '')
     if request.user.is_authenticated:
-        if redirect_to and is_safe_url(redirect_to, allowed_hosts=request.get_host()):
+        if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=request.get_host()):
             return HttpResponseRedirect(redirect_to)
         else:
             return HttpResponseRedirect(reverse(redirect_if_logged_in))
@@ -239,7 +240,7 @@ def login_simple_check(request):
         # Ensure the user-originating redirection url is safe.
         if REDIRECT_FIELD_NAME in request.GET:
             next_page = request.GET[REDIRECT_FIELD_NAME]
-            if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+            if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
                 next_page = settings.LOGIN_REDIRECT_URL
         else:
             next_page = settings.SITE_ROOT
@@ -294,7 +295,7 @@ def logout(request, next_page=None,
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
-        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
             next_page = request.path
 
     if next_page is None:
@@ -304,7 +305,7 @@ def logout(request, next_page=None,
         else:
             response = render(request, template_name, {
                 'title': _('Logged out'),
-                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+                'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
             })
     else:
         # Redirect to this page until the session has been cleared.
@@ -323,7 +324,7 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
     "Redirects the user to the login page, passing the given 'next' page"
     if not login_url:
         login_url = settings.LOGIN_URL
-    return HttpResponseRedirect('%s?%s=%s' % (login_url, urlquote(redirect_field_name), urlquote(next)))
+    return HttpResponseRedirect('%s?%s=%s' % (login_url, quote(redirect_field_name), quote(next)))
 
 # 4 views for password reset:
 # - password_reset sends the mail
@@ -346,7 +347,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
             opts['use_https'] = request.is_secure()
             opts['token_generator'] = token_generator
             if is_admin_site:
-                opts['domain_override'] = request.META['HTTP_HOST']
+                opts['domain_override'] = request.headers['host']
             else:
                 opts['email_template_name'] = email_template_name
                 opts['domain_override'] = get_current_site(request).domain

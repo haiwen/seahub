@@ -3,12 +3,12 @@ import django
 if StrictVersion(django.get_version()) < StrictVersion('1.4'):
     from django.conf.urls.defaults import *
 else:
-    from django.conf.urls import url
+    from django.urls import path
 
 from .views import ShibbolethView, ShibbolethLogoutView, ShibbolethLoginView
 
 urlpatterns = [
-    url(r'^login/$', ShibbolethLoginView.as_view(), name='login'),
-    url(r'^logout/$', ShibbolethLogoutView.as_view(), name='logout'),
-    url(r'^$', ShibbolethView.as_view(), name='info'),
+    path('login/', ShibbolethLoginView.as_view(), name='login'),
+    path('logout/', ShibbolethLogoutView.as_view(), name='logout'),
+    path('', ShibbolethView.as_view(), name='info'),
 ]

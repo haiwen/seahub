@@ -2,7 +2,7 @@
 from django.core.cache import cache
 from django.conf import settings
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils import render_error

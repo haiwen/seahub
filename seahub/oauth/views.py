@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api, ccnet_api
 

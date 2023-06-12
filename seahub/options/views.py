@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect, Http404
 from django.views.decorators.http import require_POST
 from django.contrib import messages
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions
@@ -25,7 +25,7 @@ def save_options(request):
     else:
         UserOptions.objects.disable_server_crypto(username)
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if next_page is None:
         next_page = SITE_ROOT
 
@@ -47,7 +47,7 @@ def sub_lib_enable_set(request):
     else:
         UserOptions.objects.disable_sub_lib(username)
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if next_page is None:
         next_page = SITE_ROOT
 

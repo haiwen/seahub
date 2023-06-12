@@ -18,8 +18,6 @@ REST_FRAMEWORK = {
 
 # Use static file storage instead of cached, since the cached need to run collect
 # command first.
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-
 # admin roles for test
 ENABLED_ADMIN_ROLE_PERMISSIONS = {
     'cannot_view_system_info': {
@@ -122,3 +120,4 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'other_permission': False,
     },
 }
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

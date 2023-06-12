@@ -12,10 +12,10 @@ import io
 from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
@@ -272,7 +272,7 @@ def list_lib_dir(request, repo_id):
                 if thumbnail_exist:
                     file_path = posixpath.join(path, f.obj_name)
                     src = get_thumbnail_src(repo_id, size, file_path)
-                    f_['encoded_thumbnail_src'] = urlquote(src)
+                    f_['encoded_thumbnail_src'] = quote(src)
 
         if is_pro_version():
             f_['is_locked'] = True if f.is_locked else False
@@ -354,7 +354,7 @@ def get_file_upload_url_ul(request, token):
     - `request`:
     - `token`:
     """
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
         raise Http404
 
     content_type = 'application/json; charset=utf-8'

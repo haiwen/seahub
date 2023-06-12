@@ -6,7 +6,7 @@ Forms and validation code for organization user registration.
 import re
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import seaserv
 
 from seahub.base.accounts import User

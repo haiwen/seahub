@@ -5,7 +5,7 @@ from binascii import unhexlify
 import logging
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .base import Device, key_validator
 from seahub.two_factor.gateways import make_call, send_sms

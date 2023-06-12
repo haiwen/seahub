@@ -19,8 +19,8 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.utils.translation import gettext as _
+from urllib.parse import quote
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -177,7 +177,7 @@ def sys_useradmin_export_excel(request):
     """ Export all users from database to excel
     """
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -365,7 +365,7 @@ def sys_org_set_quota(request, org_id):
 @require_POST
 def user_remove(request, email):
     """Remove user"""
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     try:
@@ -422,7 +422,7 @@ def user_remove_admin(request, email):
     except User.DoesNotExist:
         messages.error(request, _('Failed to revoke admin: the user does not exist'))
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
@@ -551,7 +551,7 @@ def user_reset(request, email):
         msg = _('Failed to reset password: user does not exist')
         messages.error(request, msg)
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('sys_info') if referer is None else referer
 
     return HttpResponseRedirect(next_page)
@@ -654,7 +654,7 @@ def sys_group_admin_export_excel(request):
     """ Export all groups to excel
     """
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -713,7 +713,7 @@ def sys_org_set_member_quota(request, org_id):
 def sys_repo_delete(request, repo_id):
     """Delete a repo.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = HASH_URLS['SYS_REPO_ADMIN']
 
@@ -782,7 +782,7 @@ def batch_user_make_admin(request):
 def batch_add_user_example(request):
     """ get example file.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
     data_list = []

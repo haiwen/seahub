@@ -26,7 +26,7 @@ def get_redirect_url(request):
         if django_settings.CAS_IGNORE_REFERER:
             next_ = redirect_url
         else:
-            next_ = request.META.get('HTTP_REFERER', redirect_url)
+            next_ = request.headers.get('referer', redirect_url)
         prefix = urllib_parse.urlunparse(
             (get_protocol(request), request.get_host(), '', '', '', ''),
         )
@@ -65,7 +65,7 @@ def get_cas_client(service_url=None, request=None):
     server_url = django_settings.CAS_SERVER_URL
     if server_url and request and server_url.startswith('/'):
         scheme = request.META.get("X-Forwarded-Proto", request.scheme)
-        server_url = scheme + "://" + request.META['HTTP_HOST'] + server_url
+        server_url = scheme + "://" + request.headers['host'] + server_url
     # assert server_url.startswith('http'), "settings.CAS_SERVER_URL invalid"
 
     return CASClient(

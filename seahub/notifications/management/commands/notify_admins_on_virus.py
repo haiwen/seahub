@@ -7,7 +7,7 @@ from django.conf import settings as dj_settings
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import seaserv
 from seaserv import seafile_api
 

@@ -9,7 +9,7 @@ import urllib.parse
 import urllib.error
 
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seahub.auth.decorators import login_required
 from seahub.utils import get_site_scheme_and_netloc
 from seahub.api2.utils import get_api_token
@@ -47,7 +47,7 @@ def work_weixin_oauth_login(request):
         'state': state,
     }
 
-    if 'micromessenger' in request.META.get('HTTP_USER_AGENT').lower():
+    if 'micromessenger' in request.headers.get('user-agent').lower():
         data['response_type'] = 'code'
         data['scope'] = 'snsapi_base'
         authorization_url = MP_WORK_WEIXIN_AUTHORIZATION_URL + '?' + urllib.parse.urlencode(data) + '#wechat_redirect'

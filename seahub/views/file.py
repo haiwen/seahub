@@ -28,8 +28,8 @@ from django.urls import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render
-from django.utils.http import urlquote
-from django.utils.translation import get_language, ugettext as _
+from urllib.parse import quote
+from django.utils.translation import get_language, gettext as _
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
@@ -759,7 +759,7 @@ def view_lib_file(request, repo_id, path):
             error_msg = _('Unable to view file')
             return_dict['err'] = error_msg
         else:
-            return_dict['xmind_image_src'] = urlquote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
+            return_dict['xmind_image_src'] = quote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
 
         return render(request, template, return_dict)
 
@@ -1102,7 +1102,7 @@ def _download_file_from_share_link(request, fileshare):
     """Download shared file.
     `path` need to be provided by frontend, if missing, use `fileshare.path`
     """
-    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.headers.get('referer', settings.SITE_ROOT)
 
     repo = get_repo(fileshare.repo_id)
     if not repo:
@@ -1317,7 +1317,7 @@ def view_shared_file(request, fileshare):
                 error_msg = _('Unable to view file')
                 ret_dict['err'] = error_msg
             else:
-                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
+                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1564,7 +1564,7 @@ def view_file_via_shared_dir(request, fileshare):
                 error_msg = _('Unable to view file')
                 ret_dict['err'] = error_msg
             else:
-                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
+                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1667,7 +1667,7 @@ def send_file_access_msg(request, repo, path, access_from):
     username = request.user.username
 
     ip = get_remote_ip(request)
-    user_agent = request.META.get("HTTP_USER_AGENT")
+    user_agent = request.headers.get("user-agent")
 
     msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
         (access_from, username, ip, user_agent, repo.id, path)
@@ -1707,12 +1707,12 @@ def download_file(request, repo_id, obj_id):
 
         if not token:
             messages.error(request, _('Unable to download file'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            next_page = request.headers.get('referer', settings.SITE_ROOT)
             return HttpResponseRedirect(next_page)
 
     else:
         messages.error(request, _('Unable to download file'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     path = request.GET.get('p', '')
@@ -1819,7 +1819,7 @@ def _check_office_convert_perm(request, repo_id, path, ret):
     token = request.GET.get('token', '')
     if not token:
         # Work around for the images embedded in excel files
-        referer = request.META.get('HTTP_REFERER', '')
+        referer = request.headers.get('referer', '')
         if referer:
             token = urllib.parse.parse_qs(
                 urllib.parse.urlparse(referer).query).get('token', [''])[0]
@@ -1874,7 +1874,7 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
 
 @json_response
 def office_convert_query_status(request):
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
         raise Http404
 
     doctype = request.GET.get('doctype', None)
@@ -1924,7 +1924,7 @@ def file_access(request, repo_id):
     if not is_pro_version() or not FILE_AUDIT_ENABLED:
         raise Http404
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = get_repo(repo_id)
@@ -1979,7 +1979,7 @@ def file_access(request, repo_id):
 
     filename = os.path.basename(path)
     zipped = gen_path_link(path, repo.name)
-    extra_href = "&p=%s" % urlquote(path)
+    extra_href = "&p=%s" % quote(path)
     return render(request, 'file_access.html', {
         'repo': repo,
         'path': path,

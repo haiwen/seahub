@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -164,7 +164,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                             str(thumbnail_size), file_obj_id)
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
-                        file_info['encoded_thumbnail_src'] = urlquote(src)
+                        file_info['encoded_thumbnail_src'] = quote(src)
 
             file_info_list.append(file_info)
 

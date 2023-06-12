@@ -156,7 +156,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'username': username,
         'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK,
-        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
     }
 
     if ONLYOFFICE_JWT_SECRET:

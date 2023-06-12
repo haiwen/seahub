@@ -40,9 +40,6 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     Authentication Middleware for use with Shibboleth.  Uses the recommended pattern
     for remote authentication from: http://code.djangoproject.com/svn/django/tags/releases/1.3/django/contrib/auth/middleware.py
     """
-    def __init__(self, *a, **kw):
-        super(ShibbolethRemoteUserMiddleware, self).__init__(*a, **kw)
-
     def process_request(self, request):
         if request.path.rstrip('/') != settings.SITE_ROOT + 'sso':
             return

@@ -83,7 +83,8 @@ def base(request):
     # filter ajax/api request out
     avatar_url = ''
     username = request.user.username
-    if (not request.is_ajax()) and ("api2/" not in request.path) and \
+
+    if (not request.headers.get('x-requested-with') == 'XMLHttpRequest') and ("api2/" not in request.path) and \
             ("api/v2.1/" not in request.path):
 
         # get logo path

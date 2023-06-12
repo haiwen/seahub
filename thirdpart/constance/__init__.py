@@ -3,7 +3,6 @@ from . import checks
 
 __version__ = '2.4.0'
 
-default_app_config = 'constance.apps.ConstanceConfig'
 
 
 class LazyConfig(LazyObject):

@@ -59,7 +59,6 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
@@ -99,7 +98,12 @@ WEBPACK_LOADER = {
     }
 }
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+# STORAGES = {
+#     "staticfiles": {
+#         "BACKEND": 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',
+#     },
+# }
 
 # StaticI18N config
 STATICI18N_ROOT = '%s/static/scripts' % PROJECT_ROOT
@@ -980,3 +984,7 @@ if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
 #      'link': 'http://127.0.0.1:8000/shared-libs/',
 #      },
 # ]
+
+# settings.py
+
+

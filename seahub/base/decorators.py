@@ -3,14 +3,14 @@ from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
 
-from django.utils.http import urlquote
+from urllib.parse import quote
 from seaserv import get_repo, seafile_api
 
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
 from seahub.base.sudo_mode import sudo_mode_check
 from seahub.utils import render_error
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seahub.settings import ENABLE_SUDO_MODE
 
 def sys_staff_required(func):
@@ -22,7 +22,7 @@ def sys_staff_required(func):
             raise Http404
         if ENABLE_SUDO_MODE and not sudo_mode_check(request):
             return HttpResponseRedirect(
-                reverse('sys_sudo_mode') + '?next=' + urlquote(request.get_full_path()))
+                reverse('sys_sudo_mode') + '?next=' + quote(request.get_full_path()))
         return func(request, *args, **kwargs)
     return _decorated
 

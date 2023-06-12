@@ -5,7 +5,7 @@ import datetime
 import posixpath
 
 from django.core.management.base import BaseCommand
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.utils import get_all_users_traffic_by_month
 from seahub.utils.ms_excel import write_xls

@@ -43,7 +43,7 @@ class AdminSysNotificationsTest(BaseTestCase):
         self.login_as(self.admin)
 
         data = {
-            'msg': get_random_string(),
+            'msg': get_random_string(length=12),
         }
         resp = self.client.post(self.url, json.dumps(data),
                 'application/json')
@@ -55,7 +55,7 @@ class AdminSysNotificationsTest(BaseTestCase):
     def test_create_notification_with_invalid_user_permission(self):
         self.login_as(self.user)
         data = {
-            'msg': get_random_string(),
+            'msg': get_random_string(length=12),
         }
         resp = self.client.post(self.url, json.dumps(data),
                 'application/json')

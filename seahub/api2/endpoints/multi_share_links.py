@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api
 

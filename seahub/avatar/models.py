@@ -9,7 +9,7 @@ from seahub.base.fields import LowerCaseCharField
 
 from django.db import models
 from django.core.files.base import ContentFile
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.encoding import smart_str
 from django.db.models import signals
 

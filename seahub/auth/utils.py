@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.cache import cache
 from django.conf import settings
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from seahub.profile.models import Profile
 from seahub.utils import normalize_cache_key

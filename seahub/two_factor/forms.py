@@ -4,7 +4,7 @@ from time import time
 
 from django import forms
 from django.forms import ModelForm, Form
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seahub.two_factor.oath import totp
 from seahub.two_factor.models import (Device, TOTPDevice, StaticDevice,
