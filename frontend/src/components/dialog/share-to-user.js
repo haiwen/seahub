@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { gettext, isPro, cloudMode, isOrgContext } from '../../utils/constants';
 import { Button } from 'reactstrap';
-import { gettext, isPro } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import DepartmentDetailDialog from './department-detail-dialog';
 
 import '../../css/invitations.css';
 import '../../css/share-to-user.css';
@@ -167,7 +169,9 @@ class ShareToUser extends React.Component {
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
-      isWiki: this.props.repoType === 'wiki'
+      isWiki: this.props.repoType === 'wiki',
+      tmpUserList: [],
+      isShowDepartmentDetailDialog: false
     };
     this.options = [];
     this.permissions = [];
@@ -198,7 +202,16 @@ class ShareToUser extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ sharedItems: res.data });
+        let tmpUserList = res.data.map(item => {
+          return {
+            "email": item.user_info.name,
+            "name": item.user_info.nickname,
+            "avatar_url": item.user_info.avatar_url,
+            "contact_email": item.user_info.contact_email,
+            "permission": item.permission
+          };
+        });
+        this.setState({ sharedItems: res.data, tmpUserList: tmpUserList });
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -341,7 +354,85 @@ class ShareToUser extends React.Component {
     this.setState({ sharedItems: sharedItems });
   };
 
+  toggleDepartmentDetailDialog = () => {
+    this.setState({isShowDepartmentDetailDialog : !this.state.isShowDepartmentDetailDialog});
+  }
+
+  addUserShares = (membersSelectedObj) => {
+    let path = this.props.itemPath;
+    let repoID = this.props.repoID;
+    let users = Object.keys(membersSelectedObj);
+
+    if (this.props.isGroupOwnedRepo) {
+      seafileAPI.shareGroupOwnedRepoToUser(repoID, this.state.permission, users, path).then(res => {
+        let errorMsg = [];
+        if (res.data.failed.length > 0) {
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+        }
+        // todo modify api
+        let items = res.data.success.map(item => {
+          let sharedItem = {
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email},
+            'permission': item.permission,
+            'share_type': 'user',
+          };
+          return sharedItem;
+        });
+        this.setState({
+          errorMsg: errorMsg,
+          sharedItems: this.state.sharedItems.concat(items),
+          selectedOption: null,
+          permission: 'rw',
+        });
+        this.refs.userSelect.clearSelect();
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
+        }
+      });
+    } else {
+      seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+        let errorMsg = [];
+        if (res.data.failed.length > 0) {
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+        }
+        this.setState({
+          errorMsg: errorMsg,
+          sharedItems: this.state.sharedItems.concat(res.data.success),
+          selectedOption: null,
+          permission: 'rw',
+        });
+        this.refs.userSelect.clearSelect();
+      }).catch(error => {
+        if (error.response) {
+          let message = gettext('Library can not be shared to owner.');
+          let errMessage = [];
+          errMessage.push(message);
+          this.setState({
+            errorMsg: errMessage,
+            selectedOption: null,
+          });
+        }
+      });
+    }
+    this.toggleDepartmentDetailDialog();
+  }
+
   render() {
+    let showDeptBtn = true;
+    if (cloudMode && !isOrgContext) {
+      showDeptBtn = false;
+    }
     let { sharedItems } = this.state;
     const thead = (
       <thead>
@@ -359,12 +450,22 @@ class ShareToUser extends React.Component {
           <tbody>
             <tr>
               <td>
-                <UserSelect
-                  ref="userSelect"
-                  isMulti={true}
-                  placeholder={gettext('Search users')}
-                  onSelectChange={this.handleSelectChange}
-                />
+                <div className='add-members'>
+                  <UserSelect
+                    ref="userSelect"
+                    isMulti={true}
+                    className={classnames('reviewer-select', {'user-select-right-btn': showDeptBtn})}
+                    placeholder={gettext('Search users...')}
+                    onSelectChange={this.handleSelectChange}
+                    excludeCurrentUser={false}
+                  />
+                  {showDeptBtn &&
+                  <span
+                    onClick={this.toggleDepartmentDetailDialog}
+                    className="toggle-detail-btn">Button
+                  </span>
+                  }
+                </div>
               </td>
               <td>
                 <SharePermissionEditor
@@ -411,6 +512,14 @@ class ShareToUser extends React.Component {
               onChangeUserPermission={this.onChangeUserPermission}
             />
           </table>
+          {this.state.isShowDepartmentDetailDialog &&
+          <DepartmentDetailDialog
+            toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}
+            addUserShares={this.addUserShares}
+            userList={this.state.tmpUserList}
+            usedFor='add_user_share'
+          />
+          }
         </div>
       </Fragment>
     );
