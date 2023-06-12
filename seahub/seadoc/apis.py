@@ -334,7 +334,8 @@ class SeadocCopyHistoryFile(APIView):
         token = seafile_api.get_fileserver_access_token(
             repo_id, obj_id, 'upload-link', username, use_onetime=True)
         if not token:
-            return None
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         upload_link = gen_inner_file_upload_url('upload-api', token)
         files = {
             'file': file,
@@ -343,6 +344,10 @@ class SeadocCopyHistoryFile(APIView):
         }
         data = {'parent_dir': parent_dir}
         resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({
             'file_name': new_file_name,
