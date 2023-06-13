@@ -53,7 +53,7 @@ class GroupView extends React.Component {
       isSortOptionsDialogOpen: false,
       repoList: [],
       currentPage: 1,
-      perPage: 50,
+      perPage: 300,
       hasNextPage: false,
       libraryType: 'group',
       isCreateRepoDialogShow: false,
