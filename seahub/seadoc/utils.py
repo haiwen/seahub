@@ -11,10 +11,12 @@ from seaserv import seafile_api
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_file_upload_url, \
-    gen_file_get_url, gen_file_upload_url
+    gen_file_get_url, gen_file_upload_url, check_filename_with_rename
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.seadoc.db import add_seadoc_draft
+
 
 logger = logging.getLogger(__name__)
 
@@ -172,3 +174,69 @@ def can_access_seadoc_asset(request, repo_id, path, file_uuid):
         return True
 
     return False
+
+
+def gen_draft_file_name(repo_id, file_path):
+    file_path = normalize_file_path(file_path)
+    parent_dir = os.path.dirname(file_path)
+    file_name, file_ext = os.path.splitext(os.path.basename(file_path))
+    draft_file_name = "%s%s%s" % (file_name, '(draft)', file_ext)
+    draft_file_name = check_filename_with_rename(repo_id, parent_dir, draft_file_name)
+    return draft_file_name
+
+
+def seadoc_mask_as_draft(file_uuid, username, repo_id, path):
+    parent_dir = os.path.dirname(path)
+    filename = os.path.basename(path)
+    draft_file_name = gen_draft_file_name(repo_id, path)
+    draft_file_path = posixpath.join(parent_dir, draft_file_name)
+
+    origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
+
+    # rename file
+    seafile_api.rename_file(
+        repo_id, parent_dir, filename, draft_file_name, username)
+
+    # sql
+    status = 'open'
+    add_seadoc_draft(
+        username, repo_id, origin_file_id, file_uuid, draft_file_path, status)
+
+    info = {
+        'name' : draft_file_name,
+        'parent_dir' : parent_dir,
+        'file_path' : posixpath.join(parent_dir, draft_file_name),
+        'file_id': origin_file_id,
+    }
+    return info
+
+
+def seadoc_create_draft_file(file_uuid, username, repo_id, path):
+    parent_dir = os.path.dirname(path)
+    filename = os.path.basename(path)
+    draft_file_name = gen_draft_file_name(repo_id, path)
+    draft_file_path = posixpath.join(parent_dir, draft_file_name)
+
+    origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
+
+    # copy file
+    seafile_api.copy_file(
+        repo_id, parent_dir, json.dumps([filename]),
+        repo_id, parent_dir, json.dumps([draft_file_name]),
+        username=username,
+        need_progress=0,
+        synchronous=1,
+    )
+
+    # sql
+    status = 'open'
+    add_seadoc_draft(
+        username, repo_id, origin_file_id, file_uuid, draft_file_path, status)
+
+    info = {
+        'name' : draft_file_name,
+        'parent_dir' : parent_dir,
+        'file_path' : draft_file_path,
+        'file_id': origin_file_id,
+    }
+    return info

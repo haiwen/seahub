@@ -526,7 +526,7 @@ export const Utils = {
 
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MASK_AS_DRAFT,
       COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -594,6 +594,9 @@ export const Utils = {
       }
 
       list.push('Divider');
+      if (Utils.isSdocFile(dirent.name) && !Utils.isSdocDraftFile(dirent.name)) {
+        list.push(MASK_AS_DRAFT);
+      }
       if (enableFileComment) {
         list.push(COMMENT);
       }
@@ -802,6 +805,24 @@ export const Utils = {
         return false;
       }
     }
+  },
+
+  isSdocFile: function(filePath) {
+    let index = filePath.lastIndexOf('.');
+    if (index === -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type === '.sdoc' || type === '.sdoc') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+
+  isSdocDraftFile: function(filePath) {
+    return filePath.indexOf('(draft)') != -1;
   },
 
   isInternalFileLink: function(url, repoID) {

@@ -264,6 +264,9 @@ class DirentListItem extends React.Component {
       case 'Lock':
         this.onLockItem();
         break;
+      case 'Mask as draft':
+        this.onMaskAsDraft();
+        break;
       case 'Comment':
         this.props.onDirentClick(this.props.dirent);
         this.props.showDirentDetail('comments');
@@ -347,6 +350,18 @@ class DirentListItem extends React.Component {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', false);
       this.props.updateDirent(this.props.dirent, 'lock_owner_name', '');
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onMaskAsDraft = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    let opType = 'mask';
+    seafileAPI.sdocCreateDraft(repoID, filePath, opType).then((res) => {
+      this.props.updateDirent(this.props.dirent, 'name', res.data.name);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
