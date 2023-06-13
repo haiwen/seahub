@@ -12,7 +12,6 @@ export default class FileHistory {
     this.revFileId = object.rev_file_id || '';
     this.path = object.path || '';
     this.description = object.description || '';
-    this.name = object.name || '';
   }
 
 }

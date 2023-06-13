@@ -25,13 +25,17 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset
 from seahub.utils.file_types import SEADOC, IMAGE
-from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, \
+from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
 from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.seadoc.db import list_seadoc_history_name, update_seadoc_history_name
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 
 
 logger = logging.getLogger(__name__)
@@ -361,14 +365,29 @@ class SeadocCopyHistoryFile(APIView):
 class SeadocHistory(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, file_uuid):
-        """list history, same as FileHistoryView
-        """
-        from seahub.api2.endpoints.file_history import get_file_history_info
+    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+        info = {}
+        creator_name = ent.op_user
+        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        info['creator_avatar_url'] = url
+        info['creator_email'] = creator_name
+        info['creator_name'] = email2nickname(creator_name)
+        info['creator_contact_email'] = email2contact_email(creator_name)
+        info['ctime'] = utc_datetime_to_isoformat_timestr(ent.timestamp)
+        info['size'] = ent.size
+        info['obj_id'] = ent.file_id
+        info['commit_id'] = ent.commit_id
+        info['old_path'] = ent.old_path if hasattr(ent, 'old_path') else ''
+        info['path'] = ent.path
+        info['name'] = name_dict.get(ent.file_id, '')
+        return info
 
+    def get(self, request, file_uuid):
+        """list history, same as NewFileHistoryView
+        """
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -379,7 +398,7 @@ class SeadocHistory(APIView):
         path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
 
         # permission check
-        if not check_folder_permission(request, repo_id, '/'):
+        if not check_folder_permission(request, repo_id, path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -388,70 +407,54 @@ class SeadocHistory(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        commit_id = request.GET.get('commit_id', '')
-        if not commit_id:
-            commit_id = repo.head_cmmt_id
+        commit_id = repo.head_cmmt_id
 
         try:
             avatar_size = int(request.GET.get('avatar_size', 32))
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
         except ValueError:
             avatar_size = 32
+            page = 1
+            per_page = 25
 
         # Don't use seafile_api.get_file_id_by_path()
         # if path parameter is `rev_renamed_old_path`.
         # seafile_api.get_file_id_by_path() will return None.
-        file_id = seafile_api.get_file_id_by_commit_and_path(
-            repo_id, commit_id, path)
+        file_id = seafile_api.get_file_id_by_commit_and_path(repo_id,
+                commit_id, path)
         if not file_id:
             error_msg = 'File %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # get repo history limit
         try:
-            keep_days = seafile_api.get_repo_history_limit(repo_id)
+            history_limit = seafile_api.get_repo_history_limit(repo_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # get file history
-        limit = request.GET.get('limit', 50)
+        start = (page - 1) * per_page
+        count = per_page
         try:
-            limit = 50 if int(limit) < 1 else int(limit)
-        except ValueError:
-            limit = 50
-
-        try:
-            file_revisions, next_start_commit = get_file_revisions_within_limit(
-                    repo_id, path, commit_id, limit)
+            file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = []
-        obj_id_list = []
-        present_time = datetime.utcnow()
-        for commit in file_revisions:
-            history_time = datetime.utcfromtimestamp(commit.ctime)
-            if (keep_days != -1) and ((present_time - history_time).days > keep_days):
-                next_start_commit = False
-                break
-            info = get_file_history_info(commit, avatar_size)
-            info['path'] = path
-            result.append(info)
-            obj_id_list.append(commit.rev_file_id)
-
+        name_dict = {}
+        obj_id_list = [commit.file_id for commit in file_revisions]
         if obj_id_list:
             name_dict = list_seadoc_history_name(file_uuid, obj_id_list)
-            for item in result:
-                item['name'] = name_dict.get(item['rev_file_id'], '')
-
-        return Response({
-            "data": result,
-            "next_start_commit": next_start_commit or False
-            })
+        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        result = {
+            "histories": data,
+            "page": page,
+            "total_count": total_count
+        }
+        return Response(result)
 
     def post(self, request, file_uuid):
         """rename history
@@ -473,9 +476,10 @@ class SeadocHistory(APIView):
 
         repo_id = uuid_map.repo_id
         username = request.user.username
+        path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
 
         # permission check
-        if not check_folder_permission(request, repo_id, '/'):
+        if not check_folder_permission(request, repo_id, path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
