@@ -130,11 +130,11 @@ def get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_
 
     return repo_id_map, repo_type_map
 
-def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=None):
+def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=None, search_filename_only=False):
     # search file
     if len(repos_map) > 1:
         search_path = None
-    files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size)
+    files_found, total = es_search(repos_map, search_path, keyword, obj_desc, start, size, search_filename_only)
 
     result = []
     for f in files_found:
