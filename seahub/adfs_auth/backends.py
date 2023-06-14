@@ -64,13 +64,13 @@ class Saml2Backend(ModelBackend):
                 user = User.objects.get(email=saml_user.username)
             except User.DoesNotExist:
                 user = None
-
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
                 logger.warning('The DB data is invalid, delete it and recreate one.')
                 SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=uid).delete()
         else:
+            # compatible with old users via name_id
             name_id = session_info.get('name_id', '')
             if name_id:
                 try:

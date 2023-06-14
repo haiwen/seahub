@@ -158,9 +158,6 @@ def oauth_callback(request):
         required, user_attr = attr_tuple
         attr_value = user_info_json.get(oauth_attr, '')
         if attr_value:
-            # ccnet email
-            if user_attr == 'email' and not is_valid_email(str(attr_value)):
-                attr_value = '%s@%s' % (str(attr_value), PROVIDER_DOMAIN)
             oauth_user_info[user_attr] = attr_value
         elif required:
             logger.error('Required user attr not found.')
@@ -173,18 +170,28 @@ def oauth_callback(request):
         logger.error('user_info_json: %s' % user_info_json)
         return render_error(request, _('Error, please contact administrator.'))
 
+    # compatible with old users via email
+    old_email = oauth_user_info.get('email', '')
+
     oauth_user = SocialAuthUser.objects.get_by_provider_and_uid(PROVIDER_DOMAIN, uid)
     if oauth_user:
         email = oauth_user.username
         is_new_user = False
-    else:
+    elif old_email:
+        if not is_valid_email(old_email):
+            # In previous versions, if 'email' is not in mailbox format,
+            # we combine 'email' and 'provider' to mailbox format.
+            old_email = '%s@%s' % (str(old_email), PROVIDER_DOMAIN)
         try:
-            oauth_user = User.objects.get_old_user(oauth_user_info.get('email', ''), PROVIDER_DOMAIN, uid)
-            email = oauth_user.username
+            old_user = User.objects.get_old_user(old_email, PROVIDER_DOMAIN, uid)
+            email = old_user.username
             is_new_user = False
         except User.DoesNotExist:
             email = None
             is_new_user = True
+    else:
+        email = None
+        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)

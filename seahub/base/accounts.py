@@ -26,7 +26,7 @@ from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
-    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
+    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED, is_valid_email
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
@@ -256,6 +256,9 @@ class UserManager(object):
         return user
 
     def get_old_user(self, email, provider, uid):
+        if not email:
+            raise User.DoesNotExist('User matching query does not exits.')
+
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             raise User.DoesNotExist('User matching query does not exits.')
@@ -263,7 +266,7 @@ class UserManager(object):
         try:
             SocialAuthUser.objects.add(emailuser.email, provider, uid)
         except Exception as e:
-            raise Exception(e)
+            logger.error(e)
 
         user = User(emailuser.email)
         user.id = emailuser.id
@@ -895,6 +898,10 @@ class CustomLDAPBackend(object):
                 logger.warning('The DB data is invalid, delete it and recreate one.')
                 SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=unique_id).delete()
         else:
+            # compatible with old users via email
+            if not is_valid_email(username):
+                # convert login id to username if any
+                username = Profile.objects.convert_login_str_to_username(username)
             try:
                 user = User.objects.get_old_user(username, LDAP_PROVIDER, unique_id)
             except User.DoesNotExist:
