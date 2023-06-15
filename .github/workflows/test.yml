@@ -33,6 +33,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           pip install -r test-requirements.txt
+          sudo rm -rf /usr/lib/python3/dist-packages/pytz/
 
       - name: run pytest
         run: |
