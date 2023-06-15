@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
-from seahub.api2.endpoints.file_ledgers import FileLedgersExportToExcelView, FileLedgersExportToExcelTaskQueryView, FileLedgersView
+from seahub.api2.endpoints.file_ledgers import FileLedgersView
 
 from seahub.auth.views import multi_adfs_sso
 from seahub.views import *
@@ -423,8 +423,6 @@ urlpatterns = [
 
     ## user:file:ledger
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-ledgers/$', FileLedgersView.as_view(), name='api-v2.1-file-ledgers'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-ledgers/export-to-excel/$', FileLedgersExportToExcelView.as_view(), name='api-v2.1-file-ledgers-export-to-excel'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-ledgers/export-to-excel/task-query/$', FileLedgersExportToExcelTaskQueryView.as_view(), name='api-v2.1-export-file-ledgers-export-to-excel-task-query'),
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-delete/$', RepoAutoDeleteView.as_view(), name='api-v2.1-repo-auto-delete'),
 

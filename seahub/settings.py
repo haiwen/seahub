@@ -862,17 +862,11 @@ if os.environ.get('SEAFILE_DOCS', None):
     LOGO_WIDTH = ''
     ENABLE_WIKI = True
 
-######################
-# ledger dtable-web  #
-######################
-DTABLE_WEB_LEDGER_API_TOKEN = ''
+###################
+# ledger seatable #
+###################
+SEATABLE_LEDGER_BASE_API_TOKEN = ''
 LEDGER_TABLE_NAME = 'ledgers'
-
-#################
-# seafevents io #
-#################
-SEAFEVENTS_IO_SERVER = 'http://127.0.0.1:6000'
-SEAFEVENTS_IO_SERVER_AUTH_TOKEN = 'zNe9ZMrhzqa5tU~!$u+R'
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(

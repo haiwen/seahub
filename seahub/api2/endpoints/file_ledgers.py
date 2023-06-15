@@ -1,9 +1,7 @@
 import logging
 import os
 
-from django.http import FileResponse
 from django.utils import timezone
-from django.utils.http import urlquote
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
@@ -16,10 +14,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.settings import DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME
-from seahub.utils import normalize_file_path
+from seahub.settings import DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN, LEDGER_TABLE_NAME
+from seahub.tags.models import FileUUIDMap
+from seahub.utils import normalize_file_path, EMPTY_SHA1
 from seahub.utils.repo import parse_repo_perm
-from seahub.utils.seafevents_io import add_export_ledger_to_excel_task, query_task
 from seahub.utils.seatable_api import SeaTableAPI, ColumnTypes
 from seahub.views import check_folder_permission
 
@@ -28,6 +26,7 @@ logger = logging.getLogger(__name__)
 LEDGER_COLUMNS = [
     {'column_name': 'Repo ID', 'column_type': ColumnTypes.TEXT},
     {'column_name': '文件名', 'column_type': ColumnTypes.TEXT},
+    {'column_name': 'UUID', 'column_type': ColumnTypes.TEXT},
     {'column_name': '文件路径', 'column_type': ColumnTypes.TEXT},
     {'column_name': '文件大分类', 'column_type': ColumnTypes.SINGLE_SELECT},
     {'column_name': '文件中分类', 'column_type': ColumnTypes.SINGLE_SELECT},
@@ -49,7 +48,7 @@ def check_table(seatable_api: SeaTableAPI):
     """
     table = seatable_api.get_table_by_name(LEDGER_TABLE_NAME)
     if not table:
-        response = seatable_api.add_table(LEDGER_TABLE_NAME, columns=LEDGER_COLUMNS)
+        seatable_api.add_table(LEDGER_TABLE_NAME, columns=LEDGER_COLUMNS)
         return None
     for ledger_col in LEDGER_COLUMNS:
         flag = False
@@ -61,7 +60,7 @@ def check_table(seatable_api: SeaTableAPI):
                 return f"Column {table_col['name']} type invalid"
             break
         if not flag:
-            return f"Column {table_col['name']} not found"
+            return f"Column {ledger_col['column_name']} not found"
     return None
 
 
@@ -71,7 +70,7 @@ class FileLedgersView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
+        if not all((DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN, LEDGER_TABLE_NAME)):
             return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
         # arguments check
         path = request.data.get('path')
@@ -91,6 +90,8 @@ class FileLedgersView(APIView):
         file_id = seafile_api.get_file_id_by_path(repo_id, path)
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found.' % path)
+        if file_id == EMPTY_SHA1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File %s is empty' % path)
 
         # permission check
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
@@ -98,9 +99,9 @@ class FileLedgersView(APIView):
 
         # check base
         try:
-            seatable_api = SeaTableAPI(DTABLE_WEB_LEDGER_API_TOKEN, DTABLE_WEB_SERVER)
+            seatable_api = SeaTableAPI(SEATABLE_LEDGER_BASE_API_TOKEN, DTABLE_WEB_SERVER)
         except:
-            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN)
+            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger base invalid')
         ## ledger table
         try:
@@ -117,10 +118,12 @@ class FileLedgersView(APIView):
         if count > 0:
             return api_error(status.HTTP_400_BAD_REQUEST, 'The ledger of the file exists')
         ## append ledger row
+        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, file_name, False).uuid.hex
         ledger_data.update({
             'Repo ID': repo_id,
             '文件名': file_name,
             '文件路径': path,
+            'UUID': file_uuid,
             '文件负责人': email2nickname(request.user.username),
             '创建日期': str(timezone.now())
         })
@@ -133,7 +136,7 @@ class FileLedgersView(APIView):
         return Response({'success': True})
 
     def get(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
+        if not all((DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN, LEDGER_TABLE_NAME)):
             return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
         # arguments check
         path = request.GET.get('path')
@@ -156,9 +159,9 @@ class FileLedgersView(APIView):
 
         # check base
         try:
-            seatable_api = SeaTableAPI(DTABLE_WEB_LEDGER_API_TOKEN, DTABLE_WEB_SERVER)
+            seatable_api = SeaTableAPI(SEATABLE_LEDGER_BASE_API_TOKEN, DTABLE_WEB_SERVER)
         except:
-            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN)
+            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger base invalid')
         ## ledger table
         try:
@@ -185,7 +188,7 @@ class FileLedgersView(APIView):
         })
 
     def put(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
+        if not all((DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN, LEDGER_TABLE_NAME)):
             return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
         # arguments check
         path = request.data.get('path')
@@ -211,9 +214,9 @@ class FileLedgersView(APIView):
 
         # check base
         try:
-            seatable_api = SeaTableAPI(DTABLE_WEB_LEDGER_API_TOKEN, DTABLE_WEB_SERVER)
+            seatable_api = SeaTableAPI(SEATABLE_LEDGER_BASE_API_TOKEN, DTABLE_WEB_SERVER)
         except:
-            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN)
+            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger base invalid')
         ## ledger table
         try:
@@ -241,7 +244,7 @@ class FileLedgersView(APIView):
         return Response({'success': True})
 
     def delete(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
+        if not all((DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN, LEDGER_TABLE_NAME)):
             return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
         # arguments check
         path = request.GET.get('path')
@@ -264,9 +267,9 @@ class FileLedgersView(APIView):
 
         # check base
         try:
-            seatable_api = SeaTableAPI(DTABLE_WEB_LEDGER_API_TOKEN, DTABLE_WEB_SERVER)
+            seatable_api = SeaTableAPI(SEATABLE_LEDGER_BASE_API_TOKEN, DTABLE_WEB_SERVER)
         except:
-            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN)
+            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_LEDGER_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger base invalid')
         ## ledger table
         try:
@@ -283,85 +286,3 @@ class FileLedgersView(APIView):
             logger.exception('delete ledger record error: %s', e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})
-
-
-class FileLedgersExportToExcelView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def post(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
-        parent_dir = request.data.get('parent_dir') or '/'
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found')
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
-        if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Dir %s not found.' % parent_dir)
-
-        # permission check
-        if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        # check base
-        try:
-            seatable_api = SeaTableAPI(DTABLE_WEB_LEDGER_API_TOKEN, DTABLE_WEB_SERVER)
-        except:
-            logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN)
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger base invalid')
-        ## ledger table
-        try:
-            error_msg = check_table(seatable_api)
-        except Exception as e:
-            logger.exception('fix ledger table %s error: %s', LEDGER_TABLE_NAME, e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        if error_msg:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Ledger table invalid: %s' % error_msg)
-        ## export
-        try:
-            response = add_export_ledger_to_excel_task(repo_id, parent_dir)
-            status_code, response_json = response.status_code, response.json()
-        except Exception as e:
-            logger.exception('add export ledger to excel task error: %s', e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        return Response(response_json, status=status_code)
-
-    def get(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
-        parent_dir = request.GET.get('parent_dir') or '/'
-        task_id = request.GET.get('task_id')
-        if not task_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'task_id invalid')
-        target_dir = '/tmp/seafile-io/ledgers-excels/' + repo_id
-        excel_name = f"{DTABLE_WEB_LEDGER_API_TOKEN}-{LEDGER_TABLE_NAME}-{parent_dir.replace('/', '-')}.xlsx"
-        target_path = os.path.join(target_dir, excel_name)
-        if not os.path.isfile(target_path):
-            return api_error(status.HTTP_404_NOT_FOUND, 'Export file not found')
-        response = FileResponse(open(target_path, 'rb'), content_type='application/ms-excel', as_attachment=True)
-        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + urlquote(excel_name)
-        return response
-
-
-class FileLedgersExportToExcelTaskQueryView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, DTABLE_WEB_LEDGER_API_TOKEN, LEDGER_TABLE_NAME)):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
-        task_id = request.GET.get('task_id')
-        if not task_id:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'task_id invalid')
-        ## export
-        try:
-            response = query_task(task_id)
-            status_code, response_json = response.status_code, response.json()
-        except Exception as e:
-            logger.exception('query export ledger to excel task error: %s', e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        return Response(response_json, status=status_code)
