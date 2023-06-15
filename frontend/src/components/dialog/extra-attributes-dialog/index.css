@@ -1,0 +1,13 @@
+.extra-attributes-dialog {
+  margin: 28px 0 0 0;
+}
+
+.extra-attributes-dialog .extra-attributes-content-container {
+  height: 100%;
+  overflow: hidden;
+}
+
+.extra-attributes-dialog .modal-body {
+  overflow-y: scroll;
+  padding: 30px;
+}

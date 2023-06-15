@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
+import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -22,11 +23,12 @@ class DetailListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEditFileTagShow: false
+      isEditFileTagShow: false,
+      isShowExtraAttributes: false,
     };
   }
 
-  getDirentPostion = () => {
+  getDirentPosition = () => {
     let { repoInfo } = this.props;
     let direntPath = this.getDirentPath();
     let position = repoInfo.repo_name;
@@ -57,9 +59,13 @@ class DetailListView extends React.Component {
     return Utils.joinPath(path, dirent.name);
   }
 
+  toggleExtraAttributesDialog = () => {
+    this.setState({ isShowExtraAttributes: !this.state.isShowExtraAttributes });
+  }
+
   render() {
     let { direntType, direntDetail, fileTagList } = this.props;
-    let position = this.getDirentPostion();
+    let position = this.getDirentPosition();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
       return (
@@ -100,6 +106,15 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
+              {direntDetail.can_edit && (
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
+                      {gettext('Edit extra attributes')}
+                    </div>
+                  </th>
+                </tr>
+              )}
             </tbody>
           </table>
           {this.state.isEditFileTagShow &&
@@ -113,6 +128,14 @@ class DetailListView extends React.Component {
               />
             </ModalPortal>
           }
+          {this.state.isShowExtraAttributes && (
+            <ExtraAttributesDialog
+              repoID={this.props.repoID}
+              filePath={direntPath}
+              direntDetail={direntDetail}
+              onToggle={this.toggleExtraAttributesDialog}
+            />
+          )}
         </Fragment>
       );
     }
