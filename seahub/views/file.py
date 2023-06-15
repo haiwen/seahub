@@ -18,9 +18,7 @@ import logging
 import posixpath
 import re
 import mimetypes
-import datetime
 
-from django.core import signing
 from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
@@ -30,10 +28,8 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, H
 from django.shortcuts import render
 from urllib.parse import quote
 from django.utils.translation import get_language, gettext as _
-from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
-from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
@@ -64,10 +60,11 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
+                                     DOCUMENT, SPREADSHEET, AUDIO,
+                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
-        BadRequestException, RequestForbbiddenException
+        BadRequestException
 from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.views import check_folder_permission, \
@@ -83,7 +80,7 @@ from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, get_office_converted_page,
-        prepare_converted_html, 
+        prepare_converted_html,
     )
 
 import seahub.settings as settings
@@ -234,7 +231,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path,
     """ Get path and the permission to view file.
 
     Returns:
-    	outer fileserver file url, inner fileserver file url, permission
+        outer fileserver file url, inner fileserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -310,7 +307,7 @@ def convert_md_link(file_content, repo_id, username):
             filename = os.path.basename(path)
             obj_id = get_file_id_by_path(repo_id, path)
             if not obj_id:
-                return '''<p class="wiki-page-missing">%s</p>''' %  link_name
+                return '''<p class="wiki-page-missing">%s</p>''' % link_name
 
             token = seafile_api.get_fileserver_access_token(repo_id,
                     obj_id, 'view', username)
@@ -338,7 +335,7 @@ def can_preview_file(file_name, file_size, repo):
     filetype, fileext = get_file_type_and_ext(file_name)
 
     # Seafile defines 10 kinds of filetype:
-    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG 
+    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
     if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
@@ -696,8 +693,8 @@ def view_lib_file(request, repo_id, path):
             file_encoding_list.append(encoding)
 
         return_dict['file_enc'] = file_enc
-        #return_dict['encoding'] = encoding
-        #return_dict['file_encoding_list'] = file_encoding_list
+        # return_dict['encoding'] = encoding
+        # return_dict['file_encoding_list'] = file_encoding_list
         return_dict['file_content'] = file_content
 
         can_edit_file = True
@@ -1836,24 +1833,6 @@ def _check_office_convert_perm(request, repo_id, path, ret):
     else:
         return request.user.is_authenticated and \
             check_folder_permission(request, repo_id, '/') is not None
-
-def _check_cluster_internal_token(request, file_id):
-    token = request.META.get('Seafile-Office-Preview-Token', '')
-    if not token:
-        return HttpResponseForbidden()
-    try:
-        s = '-'.join([file_id, datetime.datetime.now().strftime('%Y%m%d')])
-        return signing.Signer().unsign(token) == s
-    except signing.BadSignature:
-        return False
-
-def _office_convert_get_file_id_internal(request):
-    file_id = request.GET.get('file_id', '')
-    if len(file_id) != 40:
-        raise BadRequestException()
-    if not _check_cluster_internal_token(request, file_id):
-        raise RequestForbbiddenException()
-    return file_id
 
 def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None):
     repo_id = repo_id or request.GET.get('repo_id', '')
