@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import requests
 import posixpath
@@ -10,6 +11,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
+from django.core.files.base import ContentFile
 
 from seaserv import seafile_api, check_quota
 
@@ -22,9 +24,11 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset
 from seahub.utils.file_types import SEADOC, IMAGE
-from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT
+from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, \
+    gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
+from seahub.utils.repo import parse_repo_perm
 
 
 logger = logging.getLogger(__name__)
@@ -286,3 +290,66 @@ class SeadocDownloadImage(APIView):
         filetype, fileext = get_file_type_and_ext(filename)
         return HttpResponse(
             content=resp.content, content_type='image/' + fileext)
+
+
+class SeadocCopyHistoryFile(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        username = request.user.username
+        obj_id = request.data.get('obj_id', '')
+        path = request.data.get('p', '')
+        ctime = request.data.get('ctime', '')
+
+        # only check the permissions at the repo level
+        # to prevent file can not be copied on the history page
+        if not parse_repo_perm(check_folder_permission(request, repo_id, '/')).can_copy:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # new file name
+        file_name = os.path.basename(path.rstrip('/'))
+        parent_dir = os.path.dirname(path)
+        new_file_name = '.'.join(file_name.split('.')[0:-1]) + \
+            '(' + str(ctime) + ').' + file_name.split('.')[-1]
+        new_file_path = posixpath.join(parent_dir, new_file_name)
+
+        # download
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'download', username)
+        if not token:
+            error_msg = 'file %s not found.' % obj_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        download_url = gen_inner_file_get_url(token, file_name)
+        resp = requests.get(download_url)
+        content = resp.content
+        file = ContentFile(content)
+        file.name = new_file_name
+
+        # upload
+        obj_id = json.dumps({'parent_dir': parent_dir})
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, obj_id, 'upload-link', username, use_onetime=True)
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        upload_link = gen_inner_file_upload_url('upload-api', token)
+        files = {
+            'file': file,
+            'file_name': new_file_name,
+            'target_file': new_file_path,
+        }
+        data = {'parent_dir': parent_dir}
+        resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({
+            'file_name': new_file_name,
+            'file_path': new_file_path,
+        })

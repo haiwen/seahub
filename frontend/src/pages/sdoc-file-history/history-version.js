@@ -48,6 +48,11 @@ class HistoryVersion extends React.Component {
     // nothing todo
   }
 
+  onItemCopy = () => {
+    const { historyVersion } = this.props;
+    this.props.onCopy(historyVersion);
+  }
+
   render() {
     const { currentVersion, historyVersion } = this.props;
     if (!currentVersion || !historyVersion) return null;
@@ -80,6 +85,7 @@ class HistoryVersion extends React.Component {
             <DropdownMenu>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
               <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
+              {(this.props.index !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -94,6 +100,7 @@ HistoryVersion.propTypes = {
   historyVersion: PropTypes.object,
   onSelectHistoryVersion: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
 };
 
 export default HistoryVersion;
