@@ -8,7 +8,7 @@ from django.conf import settings
 from django.db import models
 # from django.db import transaction
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seahub.base.accounts import User
 from seahub.utils import send_html_email
@@ -292,7 +292,7 @@ import logging
 
 from django.urls import reverse
 from django.dispatch import receiver
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from registration.signals import user_registered
 from seahub.utils import get_site_scheme_and_netloc
@@ -307,7 +307,7 @@ def notify_admins_on_activate_request(reg_email):
         "site_name": settings.SITE_NAME,
         "user_search_link": "%s%s?query=%s" % (
             get_site_scheme_and_netloc(), reverse("sys_search_users"),
-            urlquote(reg_email)),
+            quote(reg_email)),
     }
 
     subject = render_to_string('registration/activate_request_email_subject.txt',
@@ -330,7 +330,7 @@ def notify_admins_on_register_complete(reg_email):
         "site_name": settings.SITE_NAME,
         "user_search_link": "%s%s?query=%s" % (
             get_site_scheme_and_netloc(), reverse("sys_search_users"),
-            urlquote(reg_email)),
+            quote(reg_email)),
         "reg_email": reg_email,
     }
 

@@ -55,7 +55,7 @@ def generate_file_lock_key_value(request):
         file_path_hash = hashlib.sha256(file_path.encode('utf8')).hexdigest()
         lock_cache_key = '_'.join(['HTTP_X_WOPI_LOCK', repo_id, file_path_hash])
 
-    x_wopi_lock = request.META.get('HTTP_X_WOPI_LOCK', None)
+    x_wopi_lock = request.headers.get('x-wopi-lock', None)
 
     return lock_cache_key, x_wopi_lock
 
@@ -271,9 +271,9 @@ class WOPIFilesView(APIView):
                                     status=409,
                                     content_type=json_content_type)
 
-        x_wopi_override = request.META.get('HTTP_X_WOPI_OVERRIDE', None)
-        x_wopi_lock = request.META.get('HTTP_X_WOPI_LOCK', None)
-        x_wopi_oldlock = request.META.get('HTTP_X_WOPI_OLDLOCK', None)
+        x_wopi_override = request.headers.get('x-wopi-override', None)
+        x_wopi_lock = request.headers.get('x-wopi-lock', None)
+        x_wopi_oldlock = request.headers.get('x-wopi-oldlock', None)
         current_lock_id = get_current_lock_id(request)
 
         if x_wopi_override == 'LOCK':

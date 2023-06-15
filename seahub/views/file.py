@@ -18,9 +18,7 @@ import logging
 import posixpath
 import re
 import mimetypes
-import datetime
 
-from django.core import signing
 from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
@@ -28,12 +26,10 @@ from django.urls import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render
-from django.utils.http import urlquote
-from django.utils.translation import get_language, ugettext as _
-from django.views.decorators.http import require_POST
+from urllib.parse import quote
+from django.utils.translation import get_language, gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
-from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
@@ -64,10 +60,11 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
+                                     DOCUMENT, SPREADSHEET, AUDIO,
+                                     MARKDOWN, TEXT, VIDEO, XMIND, SEADOC)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
-        BadRequestException, RequestForbbiddenException
+        BadRequestException
 from seahub.utils.file_op import check_file_lock, \
         ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.views import check_folder_permission, \
@@ -83,7 +80,7 @@ from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, get_office_converted_page,
-        prepare_converted_html, 
+        prepare_converted_html,
     )
 
 import seahub.settings as settings
@@ -234,7 +231,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path,
     """ Get path and the permission to view file.
 
     Returns:
-    	outer fileserver file url, inner fileserver file url, permission
+        outer fileserver file url, inner fileserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -310,7 +307,7 @@ def convert_md_link(file_content, repo_id, username):
             filename = os.path.basename(path)
             obj_id = get_file_id_by_path(repo_id, path)
             if not obj_id:
-                return '''<p class="wiki-page-missing">%s</p>''' %  link_name
+                return '''<p class="wiki-page-missing">%s</p>''' % link_name
 
             token = seafile_api.get_fileserver_access_token(repo_id,
                     obj_id, 'view', username)
@@ -338,7 +335,7 @@ def can_preview_file(file_name, file_size, repo):
     filetype, fileext = get_file_type_and_ext(file_name)
 
     # Seafile defines 10 kinds of filetype:
-    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG 
+    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
     if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
@@ -696,8 +693,8 @@ def view_lib_file(request, repo_id, path):
             file_encoding_list.append(encoding)
 
         return_dict['file_enc'] = file_enc
-        #return_dict['encoding'] = encoding
-        #return_dict['file_encoding_list'] = file_encoding_list
+        # return_dict['encoding'] = encoding
+        # return_dict['file_encoding_list'] = file_encoding_list
         return_dict['file_content'] = file_content
 
         can_edit_file = True
@@ -759,7 +756,7 @@ def view_lib_file(request, repo_id, path):
             error_msg = _('Unable to view file')
             return_dict['err'] = error_msg
         else:
-            return_dict['xmind_image_src'] = urlquote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
+            return_dict['xmind_image_src'] = quote(get_thumbnail_src(repo_id, XMIND_IMAGE_SIZE, path))
 
         return render(request, template, return_dict)
 
@@ -1102,7 +1099,7 @@ def _download_file_from_share_link(request, fileshare):
     """Download shared file.
     `path` need to be provided by frontend, if missing, use `fileshare.path`
     """
-    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.headers.get('referer', settings.SITE_ROOT)
 
     repo = get_repo(fileshare.repo_id)
     if not repo:
@@ -1317,7 +1314,7 @@ def view_shared_file(request, fileshare):
                 error_msg = _('Unable to view file')
                 ret_dict['err'] = error_msg
             else:
-                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
+                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1564,7 +1561,7 @@ def view_file_via_shared_dir(request, fileshare):
                 error_msg = _('Unable to view file')
                 ret_dict['err'] = error_msg
             else:
-                raw_path = urlquote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
+                raw_path = quote(SITE_ROOT + get_share_link_thumbnail_src(token, XMIND_IMAGE_SIZE, req_path))
     else:
         ret_dict['err'] = err_msg
 
@@ -1667,7 +1664,7 @@ def send_file_access_msg(request, repo, path, access_from):
     username = request.user.username
 
     ip = get_remote_ip(request)
-    user_agent = request.META.get("HTTP_USER_AGENT")
+    user_agent = request.headers.get("user-agent")
 
     msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
         (access_from, username, ip, user_agent, repo.id, path)
@@ -1707,12 +1704,12 @@ def download_file(request, repo_id, obj_id):
 
         if not token:
             messages.error(request, _('Unable to download file'))
-            next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            next_page = request.headers.get('referer', settings.SITE_ROOT)
             return HttpResponseRedirect(next_page)
 
     else:
         messages.error(request, _('Unable to download file'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     path = request.GET.get('p', '')
@@ -1819,7 +1816,7 @@ def _check_office_convert_perm(request, repo_id, path, ret):
     token = request.GET.get('token', '')
     if not token:
         # Work around for the images embedded in excel files
-        referer = request.META.get('HTTP_REFERER', '')
+        referer = request.headers.get('referer', '')
         if referer:
             token = urllib.parse.parse_qs(
                 urllib.parse.urlparse(referer).query).get('token', [''])[0]
@@ -1836,24 +1833,6 @@ def _check_office_convert_perm(request, repo_id, path, ret):
     else:
         return request.user.is_authenticated and \
             check_folder_permission(request, repo_id, '/') is not None
-
-def _check_cluster_internal_token(request, file_id):
-    token = request.META.get('Seafile-Office-Preview-Token', '')
-    if not token:
-        return HttpResponseForbidden()
-    try:
-        s = '-'.join([file_id, datetime.datetime.now().strftime('%Y%m%d')])
-        return signing.Signer().unsign(token) == s
-    except signing.BadSignature:
-        return False
-
-def _office_convert_get_file_id_internal(request):
-    file_id = request.GET.get('file_id', '')
-    if len(file_id) != 40:
-        raise BadRequestException()
-    if not _check_cluster_internal_token(request, file_id):
-        raise RequestForbbiddenException()
-    return file_id
 
 def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None):
     repo_id = repo_id or request.GET.get('repo_id', '')
@@ -1874,7 +1853,7 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
 
 @json_response
 def office_convert_query_status(request):
-    if not request.is_ajax():
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
         raise Http404
 
     doctype = request.GET.get('doctype', None)
@@ -1924,7 +1903,7 @@ def file_access(request, repo_id):
     if not is_pro_version() or not FILE_AUDIT_ENABLED:
         raise Http404
 
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = get_repo(repo_id)
@@ -1979,7 +1958,7 @@ def file_access(request, repo_id):
 
     filename = os.path.basename(path)
     zipped = gen_path_link(path, repo.name)
-    extra_href = "&p=%s" % urlquote(path)
+    extra_href = "&p=%s" % quote(path)
     return render(request, 'file_access.html', {
         'repo': repo,
         'path': path,

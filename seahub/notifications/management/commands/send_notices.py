@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils import translation
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seaserv import seafile_api, ccnet_api
 from seahub.notifications.models import UserNotification

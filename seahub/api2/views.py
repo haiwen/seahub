@@ -27,7 +27,7 @@ from django.db.models import F
 from django.http import HttpResponse
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
@@ -198,12 +198,12 @@ class ObtainAuthToken(APIView):
 
             trust_dev = False
             try:
-                trust_dev_header = int(request.META.get('HTTP_X_SEAFILE_2FA_TRUST_DEVICE', ''))
+                trust_dev_header = int(request.headers.get('x-seafile-2fa-trust-device', ''))
                 trust_dev = True if trust_dev_header == 1 else False
             except ValueError:
                 trust_dev = False
 
-            skip_2fa_header = request.META.get('HTTP_X_SEAFILE_S2FA', None)
+            skip_2fa_header = request.headers.get('x-seafile-s2fa', None)
             if skip_2fa_header is None:
                 if trust_dev:
                     # 2fa login with trust device,

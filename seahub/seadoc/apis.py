@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 
 from seaserv import seafile_api, check_quota
@@ -90,7 +90,7 @@ class SeadocUploadFile(APIView):
 
     def post(self, request, file_uuid):
         # jwt permission check
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -140,7 +140,7 @@ class SeadocUploadLink(APIView):
 
     def get(self, request, file_uuid):
         # jwt permission check
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -180,7 +180,7 @@ class SeadocDownloadLink(APIView):
 
     def get(self, request, file_uuid):
         # jwt permission check
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -213,7 +213,7 @@ class SeadocUploadImage(APIView):
         """image path: /images/sdoc/${sdocUuid}/${filename}
         """
         # jwt permission check
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
         if not is_valid:
             error_msg = 'Permission denied.'

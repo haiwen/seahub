@@ -4,7 +4,7 @@ import logging
 
 from django.shortcuts import render
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.exceptions import ValidationError
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 def sys_login_admin_export_excel(request):
     """ Export user login logs to excel.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -77,7 +77,7 @@ def sys_login_admin_export_excel(request):
 def sys_log_file_audit_export_excel(request):
     """ Export file access logs to excel.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -134,7 +134,7 @@ def sys_log_file_audit_export_excel(request):
 def sys_log_file_update_export_excel(request):
     """ Export file update logs to excel.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -189,7 +189,7 @@ def sys_log_file_update_export_excel(request):
 def sys_log_perm_audit_export_excel(request):
     """ Export permission audit logs to excel.
     """
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 
@@ -249,7 +249,7 @@ def sys_log_perm_audit_export_excel(request):
 
     wb = write_xls('perm-audit-logs', head, data_list)
     if not wb:
-        next_page = request.META.get('HTTP_REFERER', None)
+        next_page = request.headers.get('referer', None)
         if not next_page:
             next_page = SITE_ROOT
 

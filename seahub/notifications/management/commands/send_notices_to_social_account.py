@@ -9,7 +9,7 @@ import requests
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification

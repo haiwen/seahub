@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.invitations.settings import INVITATIONS_TOKEN_AGE

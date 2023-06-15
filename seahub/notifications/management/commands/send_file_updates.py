@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils.html import escape as e
 from django.utils import translation
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url

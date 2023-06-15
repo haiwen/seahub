@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.utils import is_valid_email
 from seahub.api2.authentication import TokenAuthentication

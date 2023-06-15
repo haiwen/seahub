@@ -8,7 +8,7 @@ import requests
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.core.files.base import ContentFile
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.api2.utils import get_api_token
 

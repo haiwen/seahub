@@ -5,7 +5,8 @@ import time
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.utils.http import is_safe_url, urlquote
+from urllib.parse import quote
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 
@@ -20,7 +21,7 @@ def sso(request):
     # Ensure the user-originating redirection url is safe.
     if REDIRECT_FIELD_NAME in request.GET:
         next_page = request.GET[REDIRECT_FIELD_NAME]
-        if not is_safe_url(url=next_page, allowed_hosts=request.get_host()):
+        if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
             next_page = settings.LOGIN_REDIRECT_URL
     else:
         next_page = reverse('libraries')
@@ -35,7 +36,7 @@ def sso(request):
         return HttpResponseRedirect(next_page)
 
     # send next page back to other views
-    next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(next_page)
+    next_param = '?%s=' % REDIRECT_FIELD_NAME + quote(next_page)
     if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
         return HttpResponseRedirect(reverse('saml2_login') + next_param)
 
@@ -99,7 +100,7 @@ def shib_login(request):
 
     next_page = request.GET.get(REDIRECT_FIELD_NAME, '')
     query_string = request.META.get('QUERY_STRING', '')
-    params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, urlquote(next_page), query_string)
+    params = '?%s=%s&%s' % (REDIRECT_FIELD_NAME, quote(next_page), query_string)
 
     if getattr(settings, 'ENABLE_MULTI_ADFS', False):
         return HttpResponseRedirect(reverse('multi_adfs_sso') + params)

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import reverse
 from django.test import override_settings
-from django.utils.http import urlquote
+from urllib.parse import quote
 
 from seahub.test_utils import BaseTestCase
 from seahub.views.sso import sso
@@ -20,5 +20,5 @@ class SSOTest(BaseTestCase):
         resp = self.client.get(self.url + '?next=/foo')
         assert resp.get('location') == '/foo'
 
-        resp = self.client.get(self.url + '?next=' + urlquote('http://testserver\@example.com'))
+        resp = self.client.get(self.url + '?next=' + quote('http://testserver\@example.com'))
         self.assertRegex(resp['Location'], settings.LOGIN_REDIRECT_URL)

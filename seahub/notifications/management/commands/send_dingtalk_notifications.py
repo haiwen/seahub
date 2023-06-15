@@ -9,7 +9,7 @@ import json
 from django.core.management.base import BaseCommand
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ungettext
+from django.utils.translation import ngettext
 
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
@@ -173,7 +173,7 @@ class Command(BaseCommand, CommandLogMixin):
             if count == 0:
                 continue
 
-            title = ungettext(
+            title = ngettext(
                 "\n"
                 "You've got 1 new notice on %(site_name)s:\n",
                 "\n"

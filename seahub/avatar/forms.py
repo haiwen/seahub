@@ -4,7 +4,7 @@ import os
 from django import forms
 from django.forms import widgets
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seahub.avatar.models import Avatar
 from seahub.avatar.settings import (AVATAR_MAX_AVATARS_PER_USER, AVATAR_MAX_SIZE,

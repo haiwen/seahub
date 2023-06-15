@@ -24,50 +24,50 @@ consult a specific backend's documentation for details.
 """
 
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import path, re_path
 
 from seahub.auth import views as auth_views
 from seahub.two_factor.views.login import TwoFactorVerifyView
 
 urlpatterns = [
-    url(r'^password/change/$',
+    path('password/change/',
         auth_views.password_change,
         name='auth_password_change'),
-    url(r'^password/change/done/$',
+    path('password/change/done/',
         auth_views.password_change_done,
         name='auth_password_change_done'),
-    url(r'^password/reset/$',
+    path('password/reset/',
         auth_views.password_reset,
         name='auth_password_reset'),
-    url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
+    re_path(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
         auth_views.password_reset_confirm,
         name='auth_password_reset_confirm'),
-    url(r'^password/reset/complete/$',
+    path('password/reset/complete/',
         auth_views.password_reset_complete,
         name='auth_password_reset_complete'),
-    url(r'^password/reset/done/$',
+    path('password/reset/done/',
         auth_views.password_reset_done,
         name='auth_password_reset_done'),
 
-    url(r'^login/two-factor-auth/$',
+    path('login/two-factor-auth/',
         TwoFactorVerifyView.as_view(),
         name='two_factor_auth'),
 ]
 
 if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
     urlpatterns += [
-        url(r'^login/simple_check/$',
+        path('login/simple_check/',
             auth_views.login_simple_check),
     ]
 
 
 urlpatterns += [
-    url(r'^login/$',
+    path('login/',
         auth_views.login,
         {'template_name': 'registration/login.html',
          'redirect_if_logged_in': 'libraries'},
         name='auth_login'),
-    url(r'^logout/$',
+    path('logout/',
         auth_views.logout,
         {'template_name': 'registration/logout.html',
          'next_page': settings.LOGOUT_REDIRECT_URL},

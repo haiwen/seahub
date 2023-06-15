@@ -24,9 +24,9 @@ from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import loader
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
 from django.utils.crypto import get_random_string
@@ -213,7 +213,7 @@ def normalize_cache_key(value, prefix=None, token=None, max_length=200):
     """
     key = value if prefix is None else prefix + value
     key = key if token is None else key + '_' + token
-    return urlquote(key)[:max_length]
+    return quote(key)[:max_length]
 
 def get_repo_last_modify(repo):
     """ Get last modification time for a repo.
@@ -460,7 +460,7 @@ def gen_inner_file_get_url(token, filename):
     """
     if ENABLE_INNER_FILESERVER:
         return '%s/files/%s/%s' % (get_inner_fileserver_root(), token,
-                                   urlquote(filename))
+                                   quote(filename))
     else:
         return gen_file_get_url(token, filename)
 
@@ -505,7 +505,7 @@ def gen_file_get_url(token, filename):
     Generate fileserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
-    return '%s/files/%s/%s' % (get_fileserver_root(), token, urlquote(filename))
+    return '%s/files/%s/%s' % (get_fileserver_root(), token, quote(filename))
 
 def gen_file_upload_url(token, op, replace=False):
     url = '%s/%s/%s' % (get_fileserver_root(), op, token)
@@ -1093,7 +1093,7 @@ def is_textual_file(file_type):
 def redirect_to_login(request):
     from django.conf import settings
     login_url = settings.LOGIN_URL
-    path = urlquote(request.get_full_path())
+    path = quote(request.get_full_path())
     tup = login_url, REDIRECT_FIELD_NAME, path
     return HttpResponseRedirect('%s?%s=%s' % tup)
 
@@ -1131,10 +1131,10 @@ def convert_cmmt_desc_link(commit):
 
         tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s" class="normal">%s</a>"'
         if remaining:
-            return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir),
+            return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, quote(file_or_dir),
                                         escape(file_or_dir), remaining)
         else:
-            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), escape(file_or_dir))
+            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, quote(file_or_dir), escape(file_or_dir))
 
     return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
@@ -1404,10 +1404,10 @@ def get_system_admins():
     return admins
 
 def is_windows_operating_system(request):
-    if 'HTTP_USER_AGENT' not in request.META:
+    if 'user-agent' not in request.headers:
         return False
 
-    if 'windows' in request.META['HTTP_USER_AGENT'].lower():
+    if 'windows' in request.headers['user-agent'].lower():
         return True
     else:
         return False

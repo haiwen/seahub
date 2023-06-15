@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.settings import ENABLE_UPDATE_USER_INFO

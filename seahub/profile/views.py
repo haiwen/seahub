@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib import messages
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import seaserv
 from seaserv import seafile_api
@@ -225,7 +225,7 @@ def get_user_profile(request, user):
 def delete_user_account(request):
     if not ENABLE_DELETE_ACCOUNT:
         messages.error(request, _('Permission denied.'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     if request.method != 'POST':
@@ -235,7 +235,7 @@ def delete_user_account(request):
 
     if username == 'demo@seafile.com':
         messages.error(request, _('Demo account can not be deleted.'))
-        next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        next_page = request.headers.get('referer', settings.SITE_ROOT)
         return HttpResponseRedirect(next_page)
 
     user = User.objects.get(email=username)
@@ -256,7 +256,7 @@ def default_repo(request):
         raise Http404
 
     repo_id = request.POST.get('dst_repo', '')
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = settings.SITE_ROOT if referer is None else referer
 
     repo = seafile_api.get_repo(repo_id)

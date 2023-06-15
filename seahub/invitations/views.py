@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seaserv import seafile_api
 
 from seahub.auth import login as auth_login, authenticate
@@ -43,7 +43,7 @@ def token_view(request, token):
     if request.method == 'POST':
         passwd = request.POST.get('password', '')
         if not passwd:
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return HttpResponseRedirect(request.headers.get('referer'))
 
         try:
             user = User.objects.get(email=i.accepter)

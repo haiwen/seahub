@@ -18,8 +18,8 @@ from rest_framework import status
 
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
+from django.utils.translation import gettext as _
+from urllib.parse import quote
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -858,7 +858,7 @@ class ShareLinkDirents(APIView):
                     if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), dirent.obj_id)):
                         req_image_path = posixpath.join(request_path, dirent.obj_name)
                         src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                        dirent_info['encoded_thumbnail_src'] = urlquote(src)
+                        dirent_info['encoded_thumbnail_src'] = quote(src)
 
                 # get tag info
                 file_tags = files_tags_in_dir.get(dirent.obj_name, [])

@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 
 from django.db.models import Q
 from django.core.cache import cache
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.utils.timezone import make_naive, is_aware
 
 from seaserv import seafile_api, ccnet_api

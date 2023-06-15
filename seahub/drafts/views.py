@@ -3,7 +3,7 @@ import os
 import posixpath
 
 from django.shortcuts import render, get_object_or_404
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required

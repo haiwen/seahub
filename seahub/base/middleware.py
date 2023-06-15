@@ -57,7 +57,7 @@ class InfobarMiddleware(MiddlewareMixin):
     def process_request(self, request):
 
         # filter AJAX request out
-        if request.is_ajax():
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return None
 
         # filter API request out

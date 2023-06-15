@@ -24,10 +24,16 @@ settings.MIDDLEWARE.append(
 
 
 class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
+
+    def get_response(req):
+        from django.http import HttpResponse
+        response = HttpResponse()
+        return response
+
     def setUp(self):
         self.remove_user('sampledeveloper@school.edu')
 
-        self.middleware = ShibbolethRemoteUserMiddleware()
+        self.middleware = ShibbolethRemoteUserMiddleware(self.get_response)
         self.factory = RequestFactory()
         # Create an instance of a GET request.
         self.request = self.factory.get('/sso/')
@@ -168,7 +174,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         "Shibboleth-displayName": (False, "display_name"),
     })
     def test_get_role_by_affiliation(self):
-        obj = ShibbolethRemoteUserMiddleware()
+        obj = ShibbolethRemoteUserMiddleware(self.get_response)
 
         assert obj._get_role_by_affiliation('employee@school.edu') == 'staff'
         assert obj._get_role_by_affiliation('member@school.edu') == 'staff'

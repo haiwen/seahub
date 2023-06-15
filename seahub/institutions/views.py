@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 import seaserv
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -200,7 +200,7 @@ def user_info(request, email):
 def user_remove(request, email):
     """Remove a institution user.
     """
-    referer = request.META.get('HTTP_REFERER', None)
+    referer = request.headers.get('referer', None)
     next_page = reverse('institutions:useradmin') if referer is None else referer
 
     try:

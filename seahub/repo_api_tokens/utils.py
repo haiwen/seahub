@@ -3,7 +3,7 @@ import os
 import logging
 import posixpath
 import stat
-from django.utils.http import urlquote
+from urllib.parse import quote
 from seaserv import seafile_api
 
 from seahub.base.models import UserStarredFiles
@@ -214,7 +214,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                             str(thumbnail_size), file_obj_id)
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
-                        file_info['encoded_thumbnail_src'] = urlquote(src)
+                        file_info['encoded_thumbnail_src'] = quote(src)
 
             file_info_list.append(file_info)
 

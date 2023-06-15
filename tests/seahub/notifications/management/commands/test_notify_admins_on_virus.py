@@ -1,6 +1,6 @@
 from django.core import mail
 from django.core.management import call_command
-from django.conf.urls import url
+from django.urls import path
 from django.test import override_settings
 
 import seahub
@@ -9,7 +9,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.views.sysadmin import sysadmin_react_fake_view
 
 urlpatterns = seahub.urls.urlpatterns + [
-    url(r'^sys/virus-scan-records/$', sysadmin_react_fake_view, name='sys_virus_scan_records'),
+    path('sys/virus-scan-records/', sysadmin_react_fake_view, name='sys_virus_scan_records'),
 ]
 
 @override_settings(ROOT_URLCONF=__name__)

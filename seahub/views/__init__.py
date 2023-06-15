@@ -14,9 +14,9 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.utils.http import urlquote
+from urllib.parse import quote
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
 
 import seaserv
@@ -172,7 +172,7 @@ def get_file_download_link(repo_id, obj_id, path):
     - `filename`:
     """
     return reverse('download_file', args=[repo_id, obj_id]) + '?p=' + \
-        urlquote(path)
+        quote(path)
 
 def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
     """List repo dirents based on commit id and path. Use ``offset`` and
@@ -230,8 +230,8 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                         dirent.uploadtoken = link.token
                         break
                 p_dpath = posixpath.join(path, dirent.obj_name)
-                dirent.view_link = view_dir_base + '?p=' + urlquote(p_dpath)
-                dirent.dl_link = dl_dir_base + '?p=' + urlquote(p_dpath)
+                dirent.view_link = view_dir_base + '?p=' + quote(p_dpath)
+                dirent.dl_link = dl_dir_base + '?p=' + quote(p_dpath)
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
@@ -245,7 +245,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 dirent.view_link = reverse('view_lib_file', args=[repo.id, p_fpath])
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
-                dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
+                dirent.history_link = file_history_base + '?p=' + quote(p_fpath)
                 if fpath in starred_files:
                     dirent.starred = True
                 for share in fileshares:
@@ -321,7 +321,7 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
+        referer = request.headers.get('referer', None)
         next_page = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next_page)
 
@@ -383,7 +383,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
+        referer = request.headers.get('referer', None)
         next_page = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next_page)
 
@@ -569,7 +569,7 @@ def repo_history(request, repo_id):
 @require_POST
 def repo_revert_history(request, repo_id):
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = settings.SITE_ROOT
 
@@ -885,7 +885,7 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next_page = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+    next_page = request.headers.get('referer', settings.SITE_ROOT)
 
     lang = request.GET.get('lang', settings.LANGUAGE_CODE)
     if lang not in [e[0] for e in settings.LANGUAGES]:
@@ -1243,6 +1243,6 @@ def react_fake_view(request, **kwargs):
         'enable_share_to_department': settings.ENABLE_SHARE_TO_DEPARTMENT,
         'enable_video_thumbnail': settings.ENABLE_VIDEO_THUMBNAIL,
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
-        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.META.get('HTTP_USER_AGENT', ''),
+        'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
     })

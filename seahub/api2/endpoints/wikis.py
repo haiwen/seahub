@@ -12,7 +12,7 @@ from pysearpc import SearpcError
 from django.db import IntegrityError
 from django.db.models import Count
 from django.http import HttpResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle

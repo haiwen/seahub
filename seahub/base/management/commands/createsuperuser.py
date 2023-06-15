@@ -10,7 +10,7 @@ import sys
 from optparse import make_option
 from django.core import exceptions
 from django.core.management.base import BaseCommand, CommandError
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from seahub.base.accounts import User
 

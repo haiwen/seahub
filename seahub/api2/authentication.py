@@ -51,7 +51,7 @@ class TokenAuthentication(BaseAuthentication):
     """
 
     def authenticate(self, request):
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         if not auth or auth[0].lower() != 'token':
             return None
 
@@ -164,7 +164,7 @@ class RepoAPITokenAuthentication(BaseAuthentication):
         :param request: request
         :return: AnonymousUser, repo_api_token
         """
-        auth = request.META.get('HTTP_AUTHORIZATION', '').split()
+        auth = request.headers.get('authorization', '').split()
         if not auth or auth[0].lower() != 'token':
             return None
 

@@ -7,7 +7,7 @@ import logging
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
-from django.utils.translation import ugettext as _, activate
+from django.utils.translation import gettext as _, activate
 from django.contrib import messages
 from django.utils.html import escape
 
@@ -221,7 +221,7 @@ def save_shared_link(request):
     dst_repo_id = request.POST.get('dst_repo', '')
     dst_path = request.POST.get('dst_path', '')
 
-    next_page = request.META.get('HTTP_REFERER', None)
+    next_page = request.headers.get('referer', None)
     if not next_page:
         next_page = SITE_ROOT
 

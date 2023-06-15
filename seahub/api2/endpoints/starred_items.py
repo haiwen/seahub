@@ -2,7 +2,7 @@
 import os
 import logging
 
-from django.utils.http import urlquote
+from urllib.parse import quote
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -67,7 +67,7 @@ class StarredItems(APIView):
                             str(thumbnail_size), dirent.obj_id)
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, path)
-                        item_info['encoded_thumbnail_src'] = urlquote(src)
+                        item_info['encoded_thumbnail_src'] = quote(src)
 
         return item_info
 

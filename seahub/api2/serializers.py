@@ -118,11 +118,11 @@ class AuthTokenSerializer(serializers.Serializer):
         if not has_two_factor_auth() or not two_factor_auth_enabled(user):
             return
 
-        if is_device_remembered(request.META.get('HTTP_X_SEAFILE_S2FA', ''),
+        if is_device_remembered(request.headers.get('x-seafile-s2fa', ''),
                                 user):
             return
 
-        token = request.META.get('HTTP_X_SEAFILE_OTP', '')
+        token = request.headers.get('x-seafile-otp', '')
         if not token:
             # Generate challenge(send sms/call/...) if token is not provided.
             default_device(user).generate_challenge()
