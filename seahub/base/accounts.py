@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 import re
-import uuid
 import logging
 
 from django import forms
@@ -26,7 +25,7 @@ from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
-    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED, is_valid_email
+    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
@@ -47,7 +46,7 @@ from seahub.settings import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LA
     ACTIVATE_USER_WHEN_IMPORT, ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR
 try:
     from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, \
-         LDAP_PROVIDER, LDAP_LOGIN_ATTR, LDAP_USER_UNIQUE_ID
+         LDAP_PROVIDER, LDAP_LOGIN_ATTR
 except ImportError:
     LDAP_SERVER_URL = ''
     LDAP_BASE_DN = ''
@@ -55,7 +54,6 @@ except ImportError:
     LDAP_ADMIN_PASSWORD = ''
     LDAP_PROVIDER = ''
     LDAP_LOGIN_ATTR = ''
-    LDAP_USER_UNIQUE_ID = ''
 
 LDAP_UPDATE_USER_WHEN_LOGIN = getattr(settings, 'LDAP_UPDATE_USER_WHEN_LOGIN', True)
 
@@ -756,14 +754,12 @@ class AuthBackend(object):
 def parse_ldap_res(ldap_search_result):
     first_name = ''
     last_name = ''
-    unique_id = ''
     contact_email = ''
     user_role = ''
     authc_id = ''
     dn = ldap_search_result[0][0]
     first_name_list = ldap_search_result[0][1].get(LDAP_USER_FIRST_NAME_ATTR, [])
     last_name_list = ldap_search_result[0][1].get(LDAP_USER_LAST_NAME_ATTR, [])
-    unique_id_list = ldap_search_result[0][1].get(LDAP_USER_UNIQUE_ID, [])
     contact_email_list = ldap_search_result[0][1].get(LDAP_CONTACT_EMAIL_ATTR, [])
     user_role_list = ldap_search_result[0][1].get(LDAP_USER_ROLE_ATTR, [])
     authc_id_list = list()
@@ -780,12 +776,6 @@ def parse_ldap_res(ldap_search_result):
     else:
         nickname = first_name + ' ' + last_name
 
-    if unique_id_list:
-        try:
-            unique_id = uuid.UUID(bytes=unique_id_list[0])
-        except ValueError:
-            unique_id = unique_id_list[0].decode()
-
     if contact_email_list:
         contact_email = contact_email_list[0].decode()
 
@@ -795,7 +785,7 @@ def parse_ldap_res(ldap_search_result):
     if authc_id_list:
         authc_id = authc_id_list[0].decode()
 
-    return dn, nickname, unique_id, contact_email, user_role, authc_id
+    return dn, nickname, contact_email, user_role, authc_id
 
 
 class CustomLDAPBackend(object):
@@ -836,10 +826,17 @@ class CustomLDAPBackend(object):
             logger.error(f'ldap admin bind failed. {e}')
             return
 
-        if LDAP_LOGIN_ATTR.lower() in ['email', 'mail']:
-            filterstr = filter.filter_format('(&(mail=%s))', [username])
+        username = Profile.objects.convert_login_str_to_username(username)
+        ldap_user = SocialAuthUser.objects.filter(username=username, provider=LDAP_PROVIDER).first()
+        if ldap_user:
+            login_attr = ldap_user.uid
         else:
-            filterstr = filter.filter_format(f'(&({LDAP_LOGIN_ATTR}=%s))', [username])
+            login_attr = username
+
+        if LDAP_LOGIN_ATTR.lower() in ['email', 'mail']:
+            filterstr = filter.filter_format('(&(mail=%s))', [login_attr])
+        else:
+            filterstr = filter.filter_format(f'(&({LDAP_LOGIN_ATTR}=%s))', [login_attr])
 
         if LDAP_FILTER:
             filterstr = filterstr[:-1] + '(' + LDAP_FILTER + '))'
@@ -852,7 +849,7 @@ class CustomLDAPBackend(object):
 
         # user not found in ldap
         if not result_data:
-            logger.error(f'ldap user {username} not found.')
+            logger.error(f'ldap user {login_attr} not found.')
             return
 
         # delete old ldap connection instance and create new, if not, some err will occur
@@ -860,13 +857,9 @@ class CustomLDAPBackend(object):
         del admin_bind_conn
 
         try:
-            dn, nickname, unique_id, contact_email, user_role, authc_id = parse_ldap_res(result_data)
+            dn, nickname, contact_email, user_role, authc_id = parse_ldap_res(result_data)
         except Exception as e:
             logger.error(f'parse ldap result failed {e}')
-            return
-
-        if not unique_id:
-            logger.error(f'Get ldap user {LDAP_USER_UNIQUE_ID} failed.')
             return
 
         user_bind_conn = ldap.initialize(LDAP_SERVER_URL)
@@ -889,28 +882,25 @@ class CustomLDAPBackend(object):
         user_bind_conn.unbind_s()
 
         # check if existed
-        ldap_user = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=unique_id).first()
+        ldap_user = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=login_attr).first()
         if ldap_user:
             user = self.get_user(ldap_user.username)
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
                 logger.warning('The DB data is invalid, delete it and recreate one.')
-                SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=unique_id).delete()
+                SocialAuthUser.objects.filter(provider=LDAP_PROVIDER, uid=login_attr).delete()
         else:
-            # compatible with old users via email
-            if not is_valid_email(username):
-                # convert login id to username if any
-                username = Profile.objects.convert_login_str_to_username(username)
+            # compatible with old users
             try:
-                user = User.objects.get_old_user(username, LDAP_PROVIDER, unique_id)
+                user = User.objects.get_old_user(username, LDAP_PROVIDER, login_attr)
             except User.DoesNotExist:
                 user = None
 
         if not user:
             try:
                 user = User.objects.create_ldap_user(is_active=ACTIVATE_USER_WHEN_IMPORT)
-                SocialAuthUser.objects.add(user.username, LDAP_PROVIDER, unique_id)
+                SocialAuthUser.objects.add(user.username, LDAP_PROVIDER, login_attr)
             except Exception as e:
                 logger.error(f'recreate ldap user failed. {e}')
                 return
