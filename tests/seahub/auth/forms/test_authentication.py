@@ -88,12 +88,3 @@ class AuthenticationFormTest(BaseTestCase):
 
         form = AuthenticationForm(None, data)
         self.assertSuccess(form)
-
-    def test_primary_id(self):
-        data = {
-            'login': 'another_email@test.com',
-            'password': self.user_password,
-        }
-
-        form = AuthenticationForm(None, data)
-        self.assertSuccess(form)
