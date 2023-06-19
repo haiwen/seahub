@@ -267,6 +267,9 @@ class DirentListItem extends React.Component {
       case 'Mask as draft':
         this.onMaskAsDraft();
         break;
+      case 'Unmask as draft':
+        this.onUnmaskAsDraft();
+        break;
       case 'Comment':
         this.props.onDirentClick(this.props.dirent);
         this.props.showDirentDetail('comments');
@@ -359,9 +362,19 @@ class DirentListItem extends React.Component {
   onMaskAsDraft = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
-    let opType = 'mask';
-    seafileAPI.sdocCreateDraft(repoID, filePath, opType).then((res) => {
-      this.props.updateDirent(this.props.dirent, 'name', res.data.name);
+    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(this.props.dirent, 'is_draft', true);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onUnmaskAsDraft = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(this.props.dirent, 'is_draft', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

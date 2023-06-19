@@ -23,8 +23,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset, seadoc_mask_as_draft, seadoc_create_draft_file
-from seahub.seadoc.db import get_seadoc_draft_by_path
+    can_access_seadoc_asset
+from seahub.seadoc.db import seadoc_mask_as_draft, seadoc_unmask_as_draft
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
@@ -507,13 +507,15 @@ class SeadocHistory(APIView):
         })
 
 
-class SeadocDrafts(APIView):
+class SeadocMaskAsDraft(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, repo_id):
+        """ Mask as draft
+        """
         username = request.user.username
         # argument check
         path = request.data.get('p', None)
@@ -521,7 +523,6 @@ class SeadocDrafts(APIView):
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        op_type = request.data.get('op_type', 'create')
         path = normalize_file_path(path)
         parent_dir = os.path.dirname(path)
         filename = os.path.basename(path)
@@ -531,26 +532,10 @@ class SeadocDrafts(APIView):
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # check exists
-        if get_seadoc_draft_by_path(repo_id, path):
-            error_msg = '%s already is a draft.' % filename
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        try:
-            obj_id = seafile_api.get_file_id_by_path(repo_id, path)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        if not obj_id:
-            error_msg = 'File %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -561,13 +546,43 @@ class SeadocDrafts(APIView):
 
         #
         file_uuid = get_seadoc_file_uuid(repo, path)
-
-        if op_type == 'create':
-            info = seadoc_create_draft_file(
-                file_uuid, username, repo_id, path)
-        elif op_type == 'mask':
-            info = seadoc_mask_as_draft(
-                file_uuid, username, repo_id, path)
-        info['op_type'] = op_type
+        info = seadoc_mask_as_draft(file_uuid, username)
 
         return Response(info)
+
+    def delete(self, request, repo_id):
+        """ Unmask as draft
+        """
+        username = request.user.username
+        # argument check
+        path = request.data.get('p', None)
+        if not path:
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
+        filename = os.path.basename(path)
+
+        filetype, fileext = get_file_type_and_ext(filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, parent_dir)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        #
+        file_uuid = get_seadoc_file_uuid(repo, path)
+        seadoc_unmask_as_draft(file_uuid, username)
+
+        return Response({'success': True})
