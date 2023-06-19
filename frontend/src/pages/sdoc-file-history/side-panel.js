@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Loading from '../../components/loading';
-import { gettext, filePath, historyRepoID } from '../../utils/constants';
+import { gettext, historyRepoID, PER_PAGE } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import FileHistory from '../../models/file-history';
 import { Utils } from '../../utils/utils';
 import editUtilities from '../../utils/editor-utilities';
 import toaster from '../../components/toast';
 import HistoryVersion from './history-version';
 import Switch from '../../components/common/switch';
+
+const { docUuid } = window.fileHistory.pageOptions;
 
 class SidePanel extends Component {
 
@@ -19,56 +20,83 @@ class SidePanel extends Component {
       isLoading: true,
       historyVersions: [],
       errorMessage: '',
+      currentPage: 1,
+      hasMore: false,
+      fileOwner: '',
+      isReloadingData: false,
     };
-    this.init();
   }
 
   componentDidMount() {
-    this.listHistoryVersions(historyRepoID, filePath, this.nextCommit, (historyVersion, lastHistoryVersion) => {
-      this.props.onSelectHistoryVersion(historyVersion, lastHistoryVersion);
+    seafileAPI.listSdocHistory(docUuid, 1, PER_PAGE).then(res => {
+      let historyList = res.data;
+      if (historyList.length === 0) {
+        this.setState({isLoading: false});
+        throw Error('there has an error in server');
+      }
+      this.initResultState(res.data);
     });
   }
 
-  init = () => {
-    this.hasMore = true;
-    this.nextCommit = '';
-    this.filePath = '';
-    this.oldFilePath = '';
+  refershFileList() {
+    seafileAPI.listSdocHistory(docUuid, 1, PER_PAGE).then(res => {
+      this.initResultState(res.data);
+    });
   }
 
-  listHistoryVersions = (repoID, filePath, commit, callback) => {
-    seafileAPI.listOldFileHistoryRecords(repoID, filePath, commit).then((res) => {
-      let historyData = res.data;
-      if (!historyData) {
-        this.setState({ isLoading: false, errorMessage: 'There is an error in server.' });
-        return;
-      }
-      this.updateHistoryVersions(historyData, callback);
+  initResultState(result) {
+    if (result.histories.length) {
+      this.setState({
+        historyVersions: result.histories,
+        currentPage: result.page,
+        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+        isLoading: false,
+        fileOwner: result.histories[0].creator_email,
+      });
+      this.props.onSelectHistoryVersion(result.histories[0], result.histories[1]);
+    }
+  }
+
+  updateResultState(result) {
+    if (result.histories.length) {
+      this.setState({
+        historyVersions: [...this.state.historyVersions, ...result.histories],
+        currentPage: result.page,
+        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+        isLoading: false,
+        fileOwner: result.histories[0].creator_email
+      });
+    }
+  }
+
+  loadMore = () => {
+    if (!this.state.isReloadingData) {
+      let currentPage = this.state.currentPage + 1;
+      this.setState({
+        currentPage: currentPage,
+        isReloadingData: true,
+      });
+      seafileAPI.listSdocHistory(docUuid, currentPage, PER_PAGE).then(res => {
+        this.updateResultState(res.data);
+        this.setState({isReloadingData: false});
+      });
+    }
+  }
+
+  renameHistoryVersion = (objID, newName) => {
+    seafileAPI.renameSdocHistory(docUuid, objID, newName).then((res) => {
+      this.setState({
+        historyVersions: this.state.historyVersions.map(item => {
+          if (item.obj_id == objID) {
+            item.name = newName;
+          }
+          return item;
+        })
+      });
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);
       this.setState({ isLoading: false, errorMessage: errorMessage });
     });
-  }
-
-  updateHistoryVersions(result, callback) {
-    const dataCount = result.data ? result.data.length : 0;
-    this.nextCommit = result.next_start_commit || '';
-    if (dataCount) {
-      const addedHistoryVersions = result.data.map(item => new FileHistory(item));
-      this.filePath = addedHistoryVersions[dataCount - 1].path;
-      this.oldFilePath = addedHistoryVersions[dataCount - 1].revRenamedOldPath;
-      const historyVersions = [ ...this.state.historyVersions, ...addedHistoryVersions ];
-      this.setState({ historyVersions: historyVersions, isLoading: false, errorMessage: '' }, () => {
-        callback && callback(historyVersions[0], historyVersions[1]);
-      });
-      return;
-    }
-    if (this.nextCommit) {
-      this.listHistoryVersions(historyRepoID, filePath, this.nextCommit);
-      return;
-    }
-    this.hasMore = false;
-    this.setState({ isLoading: false, errorMessage: '' });
   }
 
   onScrollHandler = (event) => {
@@ -76,28 +104,20 @@ class SidePanel extends Component {
     const scrollHeight = event.target.scrollHeight;
     const scrollTop = event.target.scrollTop;
     const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
-    if (isBottom && this.hasMore && this.nextCommit) {
+    if (isBottom && this.state.hasMore) {
       this.loadMore();
     }
   }
 
-  loadMore = () => {
-    if (this.state.isLoading) return;
-    this.setState({ isLoading: true }, () => {
-      const currentFilePath = this.oldFilePath || this.filePath;
-      this.listHistoryVersions(historyRepoID, currentFilePath, this.nextCommit);
-    });
-  }
-
-  restoreVersion = (historyVersion) => {
-    const { commitId, path } = historyVersion;
-    editUtilities.revertFile(path, commitId).then(res => {
+  restoreVersion = (currentItem) => {
+    const { commit_id, path } = currentItem;
+    editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
-        this.init();
-        this.setState({ isLoading: true, historyVersions: [], errorMessage: '' } , () => {
-          this.listHistoryVersions(historyRepoID, filePath);
-        });
+        this.setState({isLoading: true});
+        this.refershFileList();
       }
+      let message = gettext('Successfully restored.');
+      toaster.success(message);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error, true);
       toaster.danger(gettext(errorMessage));
@@ -111,13 +131,13 @@ class SidePanel extends Component {
       return;
     }
     const { historyVersions } = this.state;
-    const historyVersionIndex = historyVersions.findIndex(item => item.commitId === historyVersion.commitId);
+    const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === historyVersion.commit_id);
     this.props.onSelectHistoryVersion(historyVersion, historyVersions[historyVersionIndex + 1]);
   }
 
   copyHistoryFile = (historyVersion) => {
-    const { path, revFileId, ctime } = historyVersion;
-    seafileAPI.sdocCopyHistoryFile(historyRepoID, path, revFileId, ctime).then(res => {
+    const { path, obj_id, ctime_format } = historyVersion;
+    seafileAPI.sdocCopyHistoryFile(historyRepoID, path, obj_id, ctime_format).then(res => {
       let message = gettext('Successfully copied %(name)s.');
       let filename = res.data.file_name;
       message = message.replace('%(name)s', filename);
@@ -157,13 +177,14 @@ class SidePanel extends Component {
         {historyVersions.map((historyVersion, index) => {
           return (
             <HistoryVersion
-              key={historyVersion.commitId}
+              key={historyVersion.commit_id}
               index={index}
               currentVersion={this.props.currentVersion}
               historyVersion={historyVersion}
               onSelectHistoryVersion={this.onSelectHistoryVersion}
               onRestore={this.restoreVersion}
               onCopy={this.copyHistoryFile}
+              renameHistoryVersion={this.renameHistoryVersion}
             />
           );
         })}
@@ -179,7 +200,7 @@ class SidePanel extends Component {
   onShowChanges = () => {
     const { isShowChanges, currentVersion } = this.props;
     const { historyVersions } = this.state;
-    const historyVersionIndex = historyVersions.findIndex(item => item.commitId === currentVersion.commitId);
+    const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === currentVersion.commit_id);
     const lastVersion = historyVersions[historyVersionIndex + 1];
     this.props.onShowChanges(!isShowChanges, lastVersion);
   }

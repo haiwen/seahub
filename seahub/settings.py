@@ -275,6 +275,7 @@ INSTALLED_APPS = [
     'seahub.organizations',
     'seahub.krb5_auth',
     'seahub.django_cas_ng',
+    'seahub.seadoc',
 ]
 
 

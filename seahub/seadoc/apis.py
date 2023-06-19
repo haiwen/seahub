@@ -3,6 +3,7 @@ import json
 import logging
 import requests
 import posixpath
+from datetime import datetime
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -24,11 +25,17 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset
 from seahub.utils.file_types import SEADOC, IMAGE
-from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, \
+from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
+from seahub.utils.file_revisions import get_file_revisions_within_limit
+from seahub.seadoc.models import SeadocHistoryName
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 
 
 logger = logging.getLogger(__name__)
@@ -352,4 +359,148 @@ class SeadocCopyHistoryFile(APIView):
         return Response({
             'file_name': new_file_name,
             'file_path': new_file_path,
+        })
+
+
+class SeadocHistory(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+        info = {}
+        creator_name = ent.op_user
+        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        info['creator_avatar_url'] = url
+        info['creator_email'] = creator_name
+        info['creator_name'] = email2nickname(creator_name)
+        info['creator_contact_email'] = email2contact_email(creator_name)
+        info['ctime'] = utc_datetime_to_isoformat_timestr(ent.timestamp)
+        info['size'] = ent.size
+        info['obj_id'] = ent.file_id
+        info['commit_id'] = ent.commit_id
+        info['old_path'] = ent.old_path if hasattr(ent, 'old_path') else ''
+        info['path'] = ent.path
+        info['name'] = name_dict.get(ent.file_id, '')
+        return info
+
+    def get(self, request, file_uuid):
+        """list history, same as NewFileHistoryView
+        """
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        username = request.user.username
+        path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        commit_id = repo.head_cmmt_id
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 25))
+        except ValueError:
+            avatar_size = 32
+            page = 1
+            per_page = 25
+
+        # Don't use seafile_api.get_file_id_by_path()
+        # if path parameter is `rev_renamed_old_path`.
+        # seafile_api.get_file_id_by_path() will return None.
+        file_id = seafile_api.get_file_id_by_commit_and_path(repo_id,
+                commit_id, path)
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # get repo history limit
+        try:
+            history_limit = seafile_api.get_repo_history_limit(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        start = (page - 1) * per_page
+        count = per_page
+        try:
+            file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        name_dict = {}
+        obj_id_list = [commit.file_id for commit in file_revisions]
+        if obj_id_list:
+            name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
+                doc_uuid=file_uuid, obj_id_list=obj_id_list)
+            name_dict = {item.obj_id: item.name for item in name_queryset}
+        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        result = {
+            "histories": data,
+            "page": page,
+            "total_count": total_count
+        }
+        return Response(result)
+
+    def post(self, request, file_uuid):
+        """rename history
+        """
+        username = request.user.username
+        obj_id = request.data.get('obj_id', '')
+        new_name = request.data.get('new_name', '')
+        if not obj_id:
+            error_msg = 'obj_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not new_name:
+            error_msg = 'new_name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        username = request.user.username
+        path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'download', username)
+        if not token:
+            error_msg = 'history %s not found.' % obj_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # main
+        SeadocHistoryName.objects.update_name(file_uuid, obj_id, new_name)
+
+        return Response({
+            'obj_id': obj_id,
+            'name': new_name,
         })

@@ -50,12 +50,12 @@ class SdocFileHistory extends React.Component {
 
   onSelectHistoryVersion = (currentVersion, lastVersion) => {
     this.setState({ isLoading: true, currentVersion });
-    seafileAPI.getFileRevision(historyRepoID, currentVersion.commitId, currentVersion.path).then(res => {
+    seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
       const currentVersionContent = res.data;
       if (lastVersion) {
-        seafileAPI.getFileRevision(historyRepoID, lastVersion.commitId, lastVersion.path).then(res => {
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
           return seafileAPI.getFileContent(res.data);
         }).then(res => {
           const lastVersionContent = res.data;
@@ -84,7 +84,7 @@ class SdocFileHistory extends React.Component {
       const { currentVersionContent } = this.state;
       this.setState({ isLoading: true }, () => {
         localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
-        seafileAPI.getFileRevision(historyRepoID, lastVersion.commitId, lastVersion.path).then(res => {
+        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
           return seafileAPI.getFileContent(res.data);
         }).then(res => {
           const lastVersionContent = res.data;
