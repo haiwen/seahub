@@ -37,6 +37,9 @@ class Dirent {
       if (json.encoded_thumbnail_src) {
         this.encoded_thumbnail_src = json.encoded_thumbnail_src;
       }
+      if (Utils.isSdocFile(json.name)) {
+        this.is_sdoc_draft = json.is_sdoc_draft;
+      }
     }
   }
 

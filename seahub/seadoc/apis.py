@@ -24,7 +24,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset
-from seahub.seadoc.db import seadoc_mask_as_draft, seadoc_unmask_as_draft
+from seahub.seadoc.models import SeadocDraft
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
@@ -539,16 +539,21 @@ class SeadocMaskAsDraft(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, parent_dir)
+        permission = check_folder_permission(request, repo_id, path)
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         #
         file_uuid = get_seadoc_file_uuid(repo, path)
-        info = seadoc_mask_as_draft(file_uuid, username)
+        is_exist = SeadocDraft.objects.get_by_doc_uuid(file_uuid)
+        if is_exist:
+            error_msg = '%s is already draft' % filename
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        return Response(info)
+        draft = SeadocDraft.objects.mask_as_draft(file_uuid, username)
+
+        return Response(draft.to_dict())
 
     def delete(self, request, repo_id):
         """ Unmask as draft
@@ -576,13 +581,13 @@ class SeadocMaskAsDraft(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        permission = check_folder_permission(request, repo_id, parent_dir)
+        permission = check_folder_permission(request, repo_id, path)
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         #
         file_uuid = get_seadoc_file_uuid(repo, path)
-        seadoc_unmask_as_draft(file_uuid, username)
+        SeadocDraft.objects.unmask_as_draft(file_uuid)
 
         return Response({'success': True})

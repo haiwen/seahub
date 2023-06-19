@@ -595,7 +595,7 @@ export const Utils = {
 
       list.push('Divider');
       if (Utils.isSdocFile(dirent.name)) {
-        if (dirent.is_draft) {
+        if (dirent.is_sdoc_draft) {
           list.push(UNMASK_AS_DRAFT);
         } else {
           list.push(MASK_AS_DRAFT);
@@ -823,10 +823,6 @@ export const Utils = {
         return false;
       }
     }
-  },
-
-  isSdocDraftFile: function(filePath) {
-    return filePath.indexOf('(draft)') != -1;
   },
 
   isInternalFileLink: function(url, repoID) {

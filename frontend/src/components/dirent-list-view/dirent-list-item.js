@@ -363,7 +363,7 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(this.props.dirent, 'is_draft', true);
+      this.props.updateDirent(this.props.dirent, 'is_sdoc_draft', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -374,7 +374,7 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
-      this.props.updateDirent(this.props.dirent, 'is_draft', true);
+      this.props.updateDirent(this.props.dirent, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -724,6 +724,9 @@ class DirentListItem extends React.Component {
               {(!dirent.isDir() && !this.canPreview) ? 
                 <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
                 <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
+              }
+              {(Utils.isSdocFile(dirent.name) && dirent.is_sdoc_draft) &&
+                <span className="pl-1">{'(draft)'}</span>
               }
             </Fragment>
           )}
