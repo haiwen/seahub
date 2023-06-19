@@ -798,7 +798,7 @@ class CustomLDAPBackend(object):
             user = None
         return user
 
-    def authenticate(self, username, password):
+    def authenticate(self, ldap_user=None, password=None):
         if not is_pro_version() or not ENABLE_LDAP:
             return
 
@@ -826,10 +826,10 @@ class CustomLDAPBackend(object):
             logger.error(f'ldap admin bind failed. {e}')
             return
 
-        username = Profile.objects.convert_login_str_to_username(username)
-        ldap_user = SocialAuthUser.objects.filter(username=username, provider=LDAP_PROVIDER).first()
-        if ldap_user:
-            login_attr = ldap_user.uid
+        username = Profile.objects.convert_login_str_to_username(ldap_user)
+        auth_user = SocialAuthUser.objects.filter(username=username, provider=LDAP_PROVIDER).first()
+        if auth_user:
+            login_attr = auth_user.uid
         else:
             login_attr = username
 

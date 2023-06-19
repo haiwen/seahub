@@ -5,8 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.http import int_to_base36
 from collections import OrderedDict
 
-from seaserv import ccnet_api
-
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
@@ -40,12 +38,6 @@ class AuthenticationForm(forms.Form):
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
-    def get_primary_id_by_username(self, username):
-        """Get user's primary id in case the username is changed.
-        """
-        p_id = ccnet_api.get_primary_id(username)
-        return p_id if p_id is not None else username
-
     def clean_login(self):
         return self.cleaned_data['login'].strip()
 
@@ -54,21 +46,22 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
-
-            self.user_cache = authenticate(username=username,
-                                           password=password)
+            self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
                 # convert login id or contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(username)
-
                 self.user_cache = authenticate(username=username, password=password)
+                # After local user authentication process is completed, authenticate LDAP user
+                if self.user_cache is None and settings.ENABLE_LDAP:
+                    self.user_cache = authenticate(ldap_user=username, password=password)
+
                 if self.user_cache is None:
                     err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
 
                     if settings.LOGIN_ERROR_DETAILS:
                         try:
-                            u = User.objects.get(email=username)
+                            User.objects.get(email=username)
                         except User.DoesNotExist:
                             err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
                             self.errors['not_found'] = err_msg
