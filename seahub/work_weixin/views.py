@@ -22,7 +22,7 @@ from seahub.work_weixin.settings import WORK_WEIXIN_AUTHORIZATION_URL, WORK_WEIX
     WORK_WEIXIN_USER_INFO_AUTO_UPDATE, REMEMBER_ME
 from seahub.work_weixin.utils import work_weixin_oauth_check, get_work_weixin_access_token, \
     handler_work_weixin_api_response, update_work_weixin_user_info
-from seahub.utils.auth import gen_user_virtual_id, VIRTUAL_ID_EMAIL_DOMAIN
+from seahub.utils.auth import VIRTUAL_ID_EMAIL_DOMAIN
 from seahub.auth.models import SocialAuthUser
 from django.urls import reverse
 
@@ -94,7 +94,7 @@ def work_weixin_oauth_callback(request):
         email = work_weixin_user.username
         is_new_user = False
     else:
-        email = gen_user_virtual_id()
+        email = None
         is_new_user = True
 
     try:

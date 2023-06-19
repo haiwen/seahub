@@ -54,7 +54,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
 
         if not local_ccnet_users:
             if self.create_unknown_user:
-                user = User.objects.create_user(
+                user = User.objects.create_shib_user(
                     email=username, is_active=self.activate_after_creation)
                 if user and self.activate_after_creation is False:
                     notify_admins_on_activate_request(user.email)

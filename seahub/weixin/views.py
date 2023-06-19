@@ -17,7 +17,6 @@ from seahub.base.accounts import User
 from seahub.avatar.models import Avatar
 from seahub.profile.models import Profile
 from seahub.utils import render_error, get_site_scheme_and_netloc
-from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 
 from seahub.weixin.settings import ENABLE_WEIXIN, \
@@ -82,12 +81,14 @@ def weixin_oauth_callback(request):
     auth_user = SocialAuthUser.objects.get_by_provider_and_uid('weixin', openid)
     if auth_user:
         email = auth_user.username
+        is_new_user = False
     else:
-        email = gen_user_virtual_id()
-        SocialAuthUser.objects.add(email, 'weixin', openid)
+        email = None
+        is_new_user = True
 
     try:
         user = auth.authenticate(remote_user=email)
+        email = user.username
     except User.DoesNotExist:
         user = None
     except Exception as e:
@@ -96,6 +97,9 @@ def weixin_oauth_callback(request):
 
     if not user or not user.is_active:
         return render_error(request, _('User %s not found or inactive.') % email)
+
+    if is_new_user:
+        SocialAuthUser.objects.add(email, 'weixin', openid)
 
     request.user = user
     auth.login(request, user)

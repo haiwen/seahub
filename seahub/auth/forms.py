@@ -5,8 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.http import int_to_base36
 from collections import OrderedDict
 
-from seaserv import ccnet_api
-
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2contact_email
 from seahub.auth import authenticate
@@ -14,7 +12,8 @@ from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_ldap_user, is_user_password_strong, get_site_name, is_valid_email
+    is_ldap_user, is_user_password_strong, get_site_name
+from seahub.auth.utils import get_virtual_id_by_email
 
 from captcha.fields import CaptchaField
 
@@ -39,12 +38,6 @@ class AuthenticationForm(forms.Form):
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
-    def get_primary_id_by_username(self, username):
-        """Get user's primary id in case the username is changed.
-        """
-        p_id = ccnet_api.get_primary_id(username)
-        return p_id if p_id is not None else username
-
     def clean_login(self):
         return self.cleaned_data['login'].strip()
 
@@ -53,27 +46,22 @@ class AuthenticationForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
-
-            if not is_valid_email(username):
-                # convert login id to username if any
-                username = Profile.objects.convert_login_str_to_username(username)
-
-            self.user_cache = authenticate(username=username,
-                                           password=password)
+            self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
-                # convert contact email to username if any
+                # convert login id or contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(username)
-                # convert username to primary id if any
-                username = self.get_primary_id_by_username(username)
-
                 self.user_cache = authenticate(username=username, password=password)
+                # After local user authentication process is completed, authenticate LDAP user
+                if self.user_cache is None and settings.ENABLE_LDAP:
+                    self.user_cache = authenticate(ldap_user=username, password=password)
+
                 if self.user_cache is None:
                     err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
 
                     if settings.LOGIN_ERROR_DETAILS:
                         try:
-                            u = User.objects.get(email=username)
+                            User.objects.get(email=username)
                         except User.DoesNotExist:
                             err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
                             self.errors['not_found'] = err_msg
@@ -122,10 +110,11 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError(_('Failed to send email, email service is not properly configured, please contact administrator.'))
 
         email = self.cleaned_data["email"].lower().strip()
+        vid = get_virtual_id_by_email(email)
 
         # TODO: add filter method to UserManager
         try:
-            self.users_cache = User.objects.get(email=email)
+            self.users_cache = User.objects.get(email=vid)
         except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
 

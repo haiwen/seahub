@@ -21,7 +21,7 @@ class DemoTest(BaseTestCase):
 
     @override_settings(ENABLE_DEMO_USER=True)
     def test_demo_user(self):
-        u = User.objects.create_user(email=settings.CLOUD_DEMO_USER)
+        u = self.create_user(email=settings.CLOUD_DEMO_USER)
 
         resp = self.client.get(self.url)
         self.assertEqual(302, resp.status_code)

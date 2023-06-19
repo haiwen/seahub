@@ -294,6 +294,7 @@ class Account(APIView):
                 return api_error(status.HTTP_520_OPERATION_FAILED,
                                  'Failed to update user.')
 
+            email = user.email
             try:
                 # update account additional info
                 self._update_account_additional_info(request, email)
@@ -324,6 +325,7 @@ class Account(APIView):
                 return api_error(status.HTTP_520_OPERATION_FAILED,
                                  'Failed to add user.')
 
+            email = user.email
             try:
                 # update account additional info
                 self._update_account_additional_info(request, email)

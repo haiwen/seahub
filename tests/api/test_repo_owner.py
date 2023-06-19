@@ -60,7 +60,7 @@ class RepoOwnerTest(BaseTestCase):
     def test_reshare_to_user_after_transfer_repo(self):
 
         tmp_user = 'tmp_user@email.com'
-        User.objects.create_user(tmp_user)
+        self.create_user(tmp_user)
 
         # share user's repo to tmp_user with 'rw' permission
         seafile_api.share_repo(self.user_repo_id, self.user.username,
@@ -161,7 +161,7 @@ class RepoOwnerTest(BaseTestCase):
     def test_reshare_to_user_group_after_transfer_repo(self):
 
         tmp_user = 'tmp_user@email.com'
-        User.objects.create_user(tmp_user)
+        self.create_user(tmp_user)
 
         # add admin user to group
         ccnet_api.group_add_member(self.group_id, self.user_name, self.admin.username)

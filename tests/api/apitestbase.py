@@ -11,6 +11,7 @@ from tests.common.common import USERNAME, PASSWORD, \
 
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.api.urls import TOKEN_URL, GROUPS_URL, ACCOUNTS_URL, REPOS_URL
+from seahub.base.accounts import User
 
 class ApiTestBase(unittest.TestCase):
     _token = None
@@ -175,8 +176,11 @@ class ApiTestBase(unittest.TestCase):
     def create_user(self):
         username = '%s@test.com' % randstring(20)
         password = randstring(20)
-        data = {'password': password}
-        self.admin_put(urljoin(ACCOUNTS_URL, username), data=data, expected=201)
+        user = User(email=username)
+        user.is_staff = False
+        user.is_active = True
+        user.set_password(password)
+        user.save()
         return _User(username, password)
 
     def remove_user(self, username):

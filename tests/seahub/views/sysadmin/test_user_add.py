@@ -1,3 +1,5 @@
+import json
+
 from django.urls import reverse
 import pytest
 pytestmark = pytest.mark.django_db
@@ -24,16 +26,16 @@ class UserAddTest(BaseTestCase):
             email=self.new_user, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
 
         resp = self.client.post(
-            reverse('user_add',), {
+            reverse('api-v2.1-admin-users',), {
                 'email': self.new_user,
-                'password1': '123',
-                'password2': '123',
-            }, HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                'password': '123',
+            }
         )
 
         self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
         assert UserOptions.objects.get(
-            email=self.new_user,
+            email=json_resp['email'],
             option_key=KEY_FORCE_PASSWD_CHANGE).option_val == VAL_FORCE_PASSWD_CHANGE
 
     def test_can_add_when_pwd_change_not_required(self):
@@ -43,13 +45,13 @@ class UserAddTest(BaseTestCase):
             email=self.new_user, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
 
         resp = self.client.post(
-            reverse('user_add',), {
+            reverse('api-v2.1-admin-users',), {
                 'email': self.new_user,
-                'password1': '123',
-                'password2': '123',
-            }, HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                'password': '123',
+            }
         )
 
         self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
         assert len(UserOptions.objects.filter(
-            email=self.new_user, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
+            email=json_resp['email'], option_key=KEY_FORCE_PASSWD_CHANGE)) == 0

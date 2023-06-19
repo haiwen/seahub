@@ -24,6 +24,7 @@ from django.contrib.auth.backends import ModelBackend
 from seaserv import ccnet_api, seafile_api
 
 from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
@@ -31,17 +32,11 @@ from registration.models import notify_admins_on_activate_request, notify_admins
 
 logger = logging.getLogger(__name__)
 
+SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', '')
 SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', False)
 
 
 class Saml2Backend(ModelBackend):
-
-    def get_user(self, username):
-        try:
-            user = User.objects.get(email=username)
-        except User.DoesNotExist:
-            user = None
-        return user
 
     def authenticate(self, session_info=None, attribute_mapping=None, create_unknown_user=True, **kwargs):
         if session_info is None or attribute_mapping is None:
@@ -54,58 +49,58 @@ class Saml2Backend(ModelBackend):
 
         attributes = session_info['ava']
         if not attributes:
-            logger.error('The attributes dictionary is empty')
+            logger.warning('The attributes dictionary is empty')
 
-        logger.debug('attributes: %s', attributes)
-        saml_user = None
-        if session_info.get('name_id'):
-            logger.debug('name_id: %s', session_info['name_id'])
-            saml_user = session_info['name_id'].text
-        else:
-            logger.error('The nameid is not available. Cannot find user without a nameid.')
-
-        if saml_user is None:
-            logger.error('Could not determine user identifier')
+        name_id = session_info.get('name_id', '')
+        if not name_id:
+            logger.error('The name_id is not available. Could not determine user identifier.')
             return None
+        name_id = name_id.text
 
-        main_attribute = self.clean_user_main_attribute(saml_user)
-
-        # check if user exist in local ccnet db/ldapimport database
-        username = main_attribute
-        local_ccnet_users = ccnet_api.search_emailusers('DB', username, -1, -1)
-        if not local_ccnet_users:
-            local_ccnet_users = ccnet_api.search_emailusers('LDAP', username, -1, -1)
-
-        if not local_ccnet_users:
-            if create_unknown_user:
-                activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
-                user = User.objects.create_user(email=username, is_active=activate_after_creation)
-                # create org user
-                url_prefix = kwargs.get('url_prefix', None)
-                if url_prefix:
-                    org = ccnet_api.get_org_by_url_prefix(url_prefix)
-                    if org:
-                        org_id = org.org_id
-                        ccnet_api.add_org_user(org_id, username, 0)
-
-                if not activate_after_creation:
-                    notify_admins_on_activate_request(username)
-                elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
-                    notify_admins_on_register_complete(username)
-
-            else:
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
+        if saml_user:
+            try:
+                user = User.objects.get(email=saml_user.username)
+            except User.DoesNotExist:
                 user = None
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
+                SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=name_id).delete()
         else:
-            user = User.objects.get(email=username)
+            # compatible with old users via name_id
+            try:
+                user = User.objects.get_old_user(name_id, SAML_PROVIDER_IDENTIFIER, name_id)
+            except User.DoesNotExist:
+                user = None
+
+        if not user and create_unknown_user:
+            activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
+            try:
+                user = User.objects.create_saml_user(is_active=activate_after_creation)
+                SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+            except Exception as e:
+                logger.error(f'create saml user failed. {e}')
+                return None
+
+            # create org user
+            url_prefix = kwargs.get('url_prefix', None)
+            if url_prefix:
+                org = ccnet_api.get_org_by_url_prefix(url_prefix)
+                if org:
+                    org_id = org.org_id
+                    ccnet_api.add_org_user(org_id, user.username, 0)
+
+            if not activate_after_creation:
+                notify_admins_on_activate_request(user.username)
+            elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
+                notify_admins_on_register_complete(user.username)
 
         if user:
             self.make_profile(user, attributes, attribute_mapping)
 
         return user
-
-    def clean_user_main_attribute(self, main_attribute):
-        """Hook to clean the extracted user-identifying value. No-op by default."""
-        return main_attribute
 
     def update_user_role(self, user, parse_result):
         role = parse_result.get('role', '')

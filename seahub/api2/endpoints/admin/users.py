@@ -53,6 +53,7 @@ from seahub.admin_log.models import USER_DELETE, USER_ADD
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
+from seahub.auth.utils import get_virtual_id_by_email
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
@@ -621,11 +622,6 @@ class AdminUsers(APIView):
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        contact_email = request.data.get('contact_email', None)
-        if contact_email and not is_valid_email(contact_email):
-            error_msg = 'contact_email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         quota_total_mb = request.data.get("quota_total", None)
         if quota_total_mb:
             try:
@@ -646,8 +642,9 @@ class AdminUsers(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        vid = get_virtual_id_by_email(email)
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=vid)
             user_exist = True
         except User.DoesNotExist:
             user_exist = False
@@ -665,7 +662,7 @@ class AdminUsers(APIView):
         try:
             user_obj = User.objects.create_user(email, password, is_staff, is_active)
             create_user_info(request, email=user_obj.username, role=role,
-                             nickname=name, contact_email=contact_email,
+                             nickname=name, contact_email=email,
                              quota_total_mb=quota_total_mb)
         except Exception as e:
             logger.error(e)
@@ -687,7 +684,7 @@ class AdminUsers(APIView):
                 logger.error(str(e))
                 add_user_tip = _('Successfully added user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % {'user': email}
 
-        user_info = get_user_info(email)
+        user_info = get_user_info(user_obj.username)
         user_info['add_user_tip'] = add_user_tip
 
         # send admin operation log signal
@@ -698,7 +695,7 @@ class AdminUsers(APIView):
                              operation=USER_ADD, detail=admin_op_detail)
 
         if config.FORCE_PASSWORD_CHANGE:
-            UserOptions.objects.set_force_passwd_change(email)
+            UserOptions.objects.set_force_passwd_change(user_obj.email)
 
         return Response(user_info)
 

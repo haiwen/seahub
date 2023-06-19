@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 
 from seaserv import ccnet_api
 
-from seahub.utils import render_error, get_service_url
+from seahub.utils import get_service_url
 from seahub.organizations.models import OrgSAMLConfig
 from seahub import settings
 
@@ -24,6 +24,7 @@ if ENABLE_ADFS_LOGIN or ENABLE_MULTI_ADFS:
     XMLSEC_BINARY_PATH = getattr(settings, 'SAML_XMLSEC_BINARY_PATH', '/usr/bin/xmlsec1')
     CERTS_DIR = getattr(settings, 'SAML_CERTS_DIR', '/opt/seafile/seahub-data/certs')
     SAML_ATTRIBUTE_MAPPING = getattr(settings, 'SAML_ATTRIBUTE_MAPPING', {})
+    SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', '')
 
 
 def settings_check(func):
@@ -33,18 +34,19 @@ def settings_check(func):
             logger.error('Feature not enabled.')
             error = True
         else:
-            if not XMLSEC_BINARY_PATH or not CERTS_DIR or not SAML_ATTRIBUTE_MAPPING:
+            if not XMLSEC_BINARY_PATH or not CERTS_DIR or not SAML_ATTRIBUTE_MAPPING or not SAML_PROVIDER_IDENTIFIER:
                 logger.error('ADFS login relevant settings invalid.')
                 logger.error('SAML_XMLSEC_BINARY_PATH: %s' % XMLSEC_BINARY_PATH)
                 logger.error('SAML_CERTS_DIR: %s' % CERTS_DIR)
                 logger.error('SAML_ATTRIBUTE_MAPPING: %s' % SAML_ATTRIBUTE_MAPPING)
+                logger.error('SAML_PROVIDER_IDENTIFIER: %s' % SAML_PROVIDER_IDENTIFIER)
                 error = True
             if ENABLE_ADFS_LOGIN and not REMOTE_METADATA_URL:
                 logger.error('SAML relevant settings invalid.')
                 logger.error('SAML_REMOTE_METADATA_URL: %s' % REMOTE_METADATA_URL)
                 error = True
         if error:
-            return render_error(request, _('Error, please contact administrator.'))
+            raise Exception(_('Error, please contact administrator.'))
         return func(request)
     return _decorated
 
@@ -66,7 +68,7 @@ def config_settings_loader(request):
     if org_id != -1:
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if not org_saml_config:
-            return render_error(request, 'Failed to get org %s saml_config' % org_id)
+            raise Exception('Failed to get org %s saml_config' % org_id)
 
         # get org remote_metadata_url
         remote_metadata_url = org_saml_config.metadata_url

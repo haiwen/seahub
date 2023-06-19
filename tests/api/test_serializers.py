@@ -128,12 +128,3 @@ class AuthTokenSerializerTest(BaseTestCase):
 
         s = AuthTokenSerializer(data=d, context={'request': self.fake_request})
         self.assertSuccess(s)
-
-    def test_primary_id(self):
-        d = {
-            'username': 'another_email@test.com',
-            'password': self.user_password,
-        }
-
-        s = AuthTokenSerializer(data=d, context={'request': self.fake_request})
-        self.assertSuccess(s)

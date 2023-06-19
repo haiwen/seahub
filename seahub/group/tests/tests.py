@@ -8,14 +8,15 @@ from django.test import TestCase, Client
 from group.models import GroupMessage
 from base.accounts import User
 from notifications.models import UserNotification
+from seahub.test_utils import Fixtures
 
-class GroupTestCase(TestCase):
+class GroupTestCase(TestCase, Fixtures):
     """
     Helper base class for all the follow test cases.
     """
     def setUp(self):
         self.testdatapath = os.path.join(os.path.dirname(__file__), "testdata")
-        self.user = User.objects.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
+        self.user = self.create_user('lennon@thebeatles.com', 'testpassword', is_active=True)
 
         # Login user
         response = self.client.post('/accounts/login/', {
