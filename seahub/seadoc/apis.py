@@ -31,7 +31,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
 from seahub.utils.file_revisions import get_file_revisions_within_limit
-from seahub.seadoc.db import list_seadoc_history_name, update_seadoc_history_name
+from seahub.seadoc.models import SeadocHistoryName
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -447,7 +447,9 @@ class SeadocHistory(APIView):
         name_dict = {}
         obj_id_list = [commit.file_id for commit in file_revisions]
         if obj_id_list:
-            name_dict = list_seadoc_history_name(file_uuid, obj_id_list)
+            name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
+                doc_uuid=file_uuid, obj_id_list=obj_id_list)
+            name_dict = {item.obj_id: item.name for item in name_queryset}
         data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
         result = {
             "histories": data,
@@ -496,7 +498,7 @@ class SeadocHistory(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # main
-        update_seadoc_history_name(file_uuid, obj_id, new_name)
+        SeadocHistoryName.objects.update_name(file_uuid, obj_id, new_name)
 
         return Response({
             'obj_id': obj_id,
