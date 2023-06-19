@@ -799,7 +799,7 @@ class CustomLDAPBackend(object):
         return user
 
     def authenticate(self, ldap_user=None, password=None):
-        if not is_pro_version() or not ENABLE_LDAP:
+        if not ENABLE_LDAP:
             return
 
         admin_bind_conn = ldap.initialize(LDAP_SERVER_URL)
