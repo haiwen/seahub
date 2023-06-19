@@ -49,16 +49,15 @@ class Saml2Backend(ModelBackend):
 
         attributes = session_info['ava']
         if not attributes:
-            logger.error('The attributes dictionary is empty')
-            return None
+            logger.warning('The attributes dictionary is empty')
 
-        uid = attributes.get('uid', [''])[0]
-        if not uid:
-            logger.error('saml user uid not found.')
-            logger.error('attributes: %s' % attributes)
+        name_id = session_info.get('name_id', '')
+        if not name_id:
+            logger.error('The name_id is not available. Could not determine user identifier.')
             return None
+        name_id = name_id.text
 
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
         if saml_user:
             try:
                 user = User.objects.get(email=saml_user.username)
@@ -68,24 +67,19 @@ class Saml2Backend(ModelBackend):
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
                 logger.warning('The DB data is invalid, delete it and recreate one.')
-                SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=uid).delete()
+                SocialAuthUser.objects.filter(provider=SAML_PROVIDER_IDENTIFIER, uid=name_id).delete()
         else:
             # compatible with old users via name_id
-            name_id = session_info.get('name_id', '')
-            if name_id:
-                try:
-                    user = User.objects.get_old_user(name_id.text, SAML_PROVIDER_IDENTIFIER, uid)
-                except User.DoesNotExist:
-                    user = None
-            else:
-                logger.warning('The name_id is not available.')
+            try:
+                user = User.objects.get_old_user(name_id, SAML_PROVIDER_IDENTIFIER, name_id)
+            except User.DoesNotExist:
                 user = None
 
         if not user and create_unknown_user:
             activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
             try:
                 user = User.objects.create_saml_user(is_active=activate_after_creation)
-                SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, uid)
+                SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, name_id)
             except Exception as e:
                 logger.error(f'create saml user failed. {e}')
                 return None
