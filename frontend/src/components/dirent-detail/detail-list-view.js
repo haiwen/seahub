@@ -5,7 +5,6 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
-import ParticipantsList from '../file-view/participants-list';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -16,8 +15,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  onParticipantsChange: PropTypes.func.isRequired,
-  fileParticipantList: PropTypes.array.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -61,7 +58,7 @@ class DetailListView extends React.Component {
   }
 
   render() {
-    let { direntType, direntDetail, fileTagList, fileParticipantList } = this.props;
+    let { direntType, direntDetail, fileTagList } = this.props;
     let position = this.getDirentPostion();
     let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
@@ -101,20 +98,6 @@ class DetailListView extends React.Component {
                     })}
                   </ul>
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
-                </td>
-              </tr>
-              <tr className="file-participants">
-                <th>{gettext('Participants')}</th>
-                <td>
-                  {fileParticipantList &&
-                    <ParticipantsList
-                      onParticipantsChange={this.props.onParticipantsChange}
-                      participants={fileParticipantList}
-                      repoID={this.props.repoID}
-                      filePath={direntPath}
-                      showIconTip={false}
-                    />
-                  }
                 </td>
               </tr>
             </tbody>

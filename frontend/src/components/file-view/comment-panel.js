@@ -5,7 +5,6 @@ import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import ParticipantsList from './participants-list';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { MentionsInput, Mention } from 'react-mentions';
@@ -159,7 +158,7 @@ class CommentPanel extends React.Component {
   }
 
   render() {
-    const { participants, commentsList } = this.state;
+    const { commentsList } = this.state;
     return (
       <div className="seafile-comment">
         <div className="seafile-comment-title flex-shrink-0">
@@ -190,15 +189,6 @@ class CommentPanel extends React.Component {
           }
         </div>
         <div className="seafile-comment-footer flex-shrink-0">
-          {participants &&
-            <ParticipantsList
-              onParticipantsChange={this.onParticipantsChange}
-              participants={participants}
-              repoID={repoID}
-              filePath={filePath}
-              showIconTip={true}
-            />
-          }
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}

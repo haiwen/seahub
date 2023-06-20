@@ -8,7 +8,6 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import toaster from '../../../components/toast';
-import ParticipantsList from '../../../components/file-view/participants-list';
 import CommentItem from './comment-item';
 
 import { defaultStyle, defaultMentionStyle } from '../../../css/react-mentions-default-style';
@@ -202,15 +201,6 @@ class CommentPanel extends React.Component {
           }
         </div>
         <div className="seafile-comment-footer flex-shrink-0">
-          {participants &&
-            <ParticipantsList
-              onParticipantsChange={this.onParticipantsChange}
-              participants={participants}
-              repoID={repoID}
-              filePath={filePath}
-              showIconTip={true}
-            />
-          }
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}

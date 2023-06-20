@@ -84,9 +84,7 @@ class SidePanel extends React.PureComponent {
             <DetailListView
               fileInfo={this.props.fileInfo}
               fileTagList={this.props.fileTagList}
-              participants={this.props.participants}
               onFileTagChanged={this.props.onFileTagChanged}
-              onParticipantsChange={this.props.onParticipantsChange}
             />
           }
         </div>

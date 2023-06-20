@@ -7,7 +7,6 @@ import { gettext, username, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import ParticipantsList from '../file-view/participants-list';
 import { MentionsInput, Mention } from 'react-mentions';
 import { defaultStyle, defaultMentionStyle } from '../../css/react-mentions-default-style';
 import '../../css/comments-list.css';
@@ -137,7 +136,7 @@ class DetailCommentList extends React.Component {
   }
 
   render() {
-    const { repoID, filePath, fileParticipantList } = this.props;
+    const { repoID, filePath } = this.props;
     const { commentsList } = this.state;
     return (
       <div className="seafile-comment detail-comments h-100">
@@ -164,15 +163,6 @@ class DetailCommentList extends React.Component {
           }
         </div>
         <div className="seafile-comment-footer flex-shrink-0">
-          {fileParticipantList &&
-            <ParticipantsList
-              onParticipantsChange={this.props.onParticipantsChange}
-              participants={fileParticipantList}
-              repoID={repoID}
-              filePath={filePath}
-              showIconTip={true}
-            />
-          }
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}
