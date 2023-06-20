@@ -671,7 +671,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
     url(r'^avatar/', include('seahub.avatar.urls')),
-    url(r'^notification/', include('seahub.notifications.urls')),
+    url(r'^notice/', include('seahub.notifications.urls')),
     url(r'^contacts/', include('seahub.contacts.urls')),
     url(r'^group/', include('seahub.group.urls')),
     url(r'^options/', include('seahub.options.urls')),
