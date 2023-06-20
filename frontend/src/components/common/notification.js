@@ -78,7 +78,7 @@ class Notification extends React.Component {
                 return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
               })}
             </ul>
-            <a href={siteRoot + 'notification/list/'} className="view-all">{gettext('See All Notifications')}</a>
+            <a href={siteRoot + 'notice/list/'} className="view-all">{gettext('See All Notifications')}</a>
           </div>
         </div>
       </div>
