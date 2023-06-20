@@ -73,6 +73,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.tags.models import FileUUIDMap
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft
 from seahub.utils.file_types import IMAGE, SEADOC
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -3154,8 +3155,12 @@ class FileView(APIView):
         try:  # rm sdoc fileuuid
             filetype, fileext = get_file_type_and_ext(file_name)
             if filetype == SEADOC:
+                from seahub.seadoc.utils import get_seadoc_file_uuid
+                file_uuid = get_seadoc_file_uuid(repo, path)
                 FileUUIDMap.objects.delete_fileuuidmap_by_path(
                     repo_id, parent_dir, file_name, is_dir=False)
+                SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
+                SeadocDraft.objects.filter(doc_uuid=file_uuid).delete()
         except Exception as e:
             logger.error(e)
 

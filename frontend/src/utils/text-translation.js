@@ -16,6 +16,8 @@ const TextTranslation = {
   'OPEN_VIA_CLIENT' : {key : 'Open via Client', value : gettext('Open via Client')},
   'LOCK' : {key : 'Lock', value : gettext('Lock')},
   'UNLOCK' : {key : 'Unlock', value : gettext('Unlock')},
+  'MASK_AS_DRAFT' : {key : 'Mask as draft', value : gettext('Mask as draft')},
+  'UNMASK_AS_DRAFT' : {key : 'Unmask as draft', value : gettext('Unmask as draft')},
   'COMMENT' : {key : 'Comment', value : gettext('Comment')},
   'HISTORY' : {key : 'History', value : gettext('History')},
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},

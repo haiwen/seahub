@@ -1,5 +1,7 @@
 from django.db import models
 
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
+
 
 class SeadocHistoryNameManager(models.Manager):
     def update_name(self, doc_uuid, obj_id, name):
@@ -30,4 +32,41 @@ class SeadocHistoryName(models.Model):
             'doc_uuid': self.doc_uuid,
             'obj_id': self.obj_id,
             'name': self.name,
+        }
+
+
+class SeadocDraftManager(models.Manager):
+
+    def get_by_doc_uuid(self, doc_uuid):
+        return self.filter(doc_uuid=doc_uuid).first()
+
+    def mask_as_draft(self, doc_uuid, username):
+        return self.create(doc_uuid=doc_uuid, username=username)
+
+    def unmask_as_draft(self, doc_uuid):
+        return self.filter(doc_uuid=doc_uuid).delete()
+
+    def list_by_doc_uuids(self, doc_uuid_list):
+        return self.filter(doc_uuid__in=doc_uuid_list)
+
+    def list_by_username(self, username):
+        return self.filter(username=username)
+
+
+class SeadocDraft(models.Model):
+    doc_uuid = models.CharField(max_length=36, unique=True)
+    username = models.CharField(max_length=255, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = SeadocDraftManager()
+
+    class Meta:
+        db_table = 'sdoc_draft'
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'doc_uuid': self.doc_uuid,
+            'username': self.username,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
         }
