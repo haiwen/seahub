@@ -4,7 +4,6 @@ import moment from 'moment';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EditFileTagDialog from '../../../components/dialog/edit-filetag-dialog';
-import ParticipantsList from '../../../components/file-view/participants-list';
 
 import '../../../css/dirent-detail.css';
 import '../css/detail-list-view.css';
@@ -14,9 +13,7 @@ const { repoID, filePath } = window.app.pageOptions;
 const propTypes = {
   fileInfo: PropTypes.object.isRequired,
   fileTagList: PropTypes.array.isRequired,
-  participants: PropTypes.array.isRequired,
-  onFileTagChanged: PropTypes.func.isRequired,
-  onParticipantsChange: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired
 };
 
 class DetailListView extends React.Component {
@@ -33,7 +30,7 @@ class DetailListView extends React.Component {
   }
 
   render() {
-    const { fileTagList, participants, fileInfo } = this.props;
+    const { fileTagList, fileInfo } = this.props;
     return (
       <Fragment>
         <div className="dirent-table-container p-2">
@@ -59,20 +56,6 @@ class DetailListView extends React.Component {
                     })}
                   </ul>
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
-                </td>
-              </tr>
-              <tr className="file-participants">
-                <th>{gettext('Participants')}</th>
-                <td>
-                  {participants &&
-                    <ParticipantsList
-                      repoID={repoID}
-                      filePath={filePath}
-                      participants={participants}
-                      showIconTip={true}
-                      onParticipantsChange={this.props.onParticipantsChange}
-                    />
-                  }
                 </td>
               </tr>
             </tbody>

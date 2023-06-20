@@ -173,8 +173,6 @@ class DirentDetail extends React.Component {
                 direntDetail={this.state.direntDetail}
                 fileTagList={dirent ? dirent.file_tags : fileTags}
                 onFileTagChanged={this.props.onFileTagChanged}
-                fileParticipantList={this.state.fileParticipantList}
-                onParticipantsChange={this.onParticipantsChange}
               />
             </div>
           }
