@@ -11,11 +11,10 @@ from seaserv import seafile_api
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_file_upload_url, \
-    gen_file_get_url, gen_file_upload_url, check_filename_with_rename
+    gen_file_get_url, gen_file_upload_url
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-
 
 logger = logging.getLogger(__name__)
 

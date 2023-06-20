@@ -24,7 +24,6 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset
-from seahub.seadoc.models import SeadocDraft
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
@@ -32,7 +31,7 @@ from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
 from seahub.utils.file_revisions import get_file_revisions_within_limit
-from seahub.seadoc.models import SeadocHistoryName
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -546,8 +545,8 @@ class SeadocMaskAsDraft(APIView):
 
         #
         file_uuid = get_seadoc_file_uuid(repo, path)
-        is_exist = SeadocDraft.objects.get_by_doc_uuid(file_uuid)
-        if is_exist:
+        exist_draft = SeadocDraft.objects.get_by_doc_uuid(file_uuid)
+        if exist_draft:
             error_msg = '%s is already draft' % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

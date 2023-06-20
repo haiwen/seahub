@@ -817,7 +817,7 @@ export const Utils = {
       return false;
     } else {
       let type = filePath.substring(index).toLowerCase();
-      if (type === '.sdoc' || type === '.sdoc') {
+      if (type === '.sdoc') {
         return true;
       } else {
         return false;

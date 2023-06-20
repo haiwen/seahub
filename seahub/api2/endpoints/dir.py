@@ -39,8 +39,6 @@ logger = logging.getLogger(__name__)
 
 def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         with_thumbnail, thumbnail_size):
-    from seahub.seadoc.utils import get_seadoc_file_uuid
-    from seahub.seadoc.models import SeadocDraft
 
     repo_id = repo_obj.id
     dir_info_list = []
@@ -99,6 +97,17 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
         except Exception as e:
             logger.error(e)
             files_tags_in_dir = {}
+
+        try:
+            from seahub.tags.models import FileUUIDMap
+            from seahub.seadoc.models import SeadocDraft
+            file_uuid_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(
+                repo_id, parent_dir)
+            file_uuid_list = [item.uuid for item in file_uuid_queryset]
+            seadoc_draft_queryset = SeadocDraft.objects.list_by_doc_uuids(
+                file_uuid_list)
+        except Exception as e:
+            logger.error(e)
 
         for dirent in file_list:
 
@@ -171,13 +180,18 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             # sdoc
             filetype, fileext = get_file_type_and_ext(file_info['name'])
             if filetype == SEADOC:
-                posixpath.join(parent_dir, dirent.obj_name)
-                file_uuid = get_seadoc_file_uuid(repo_obj, file_path)
-                sdoc_draft = SeadocDraft.objects.get_by_doc_uuid(file_uuid)
-                if sdoc_draft:
-                    file_info['is_sdoc_draft'] = True
-                else:
-                    file_info['is_sdoc_draft'] = False
+                try:
+                    file_uuid_map = file_uuid_queryset.filter(
+                        filename=file_name).first()
+                    if file_uuid_map:
+                        sdoc_draft = seadoc_draft_queryset.filter(
+                            doc_uuid=file_uuid_map.uuid).first()
+                        if sdoc_draft:
+                            file_info['is_sdoc_draft'] = True
+                        else:
+                            file_info['is_sdoc_draft'] = False
+                except Exception as e:
+                    logger.error(e)
 
             file_info_list.append(file_info)
 
