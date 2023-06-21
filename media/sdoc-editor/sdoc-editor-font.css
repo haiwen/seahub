@@ -16,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sdoc-unlink:before {
+  content: "\e63a";
+}
+
 .sdoc-delete-table:before {
   content: "\e637";
 }
