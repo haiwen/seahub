@@ -68,12 +68,12 @@ class Notification extends React.Component {
         </a>
         <div id="notice-popover" className={`sf-popover ${this.state.showNotice ? '': 'hide'}`}>
           <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
-          <div className="sf-popover-hd ovhd">
-            <h3 className="sf-popover-title title">{gettext('Notifications')}</h3>
-            <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon float-right"></a>
+          <div className="sf-popover-hd h-7 d-flex align-items-center justify-content-center">
+            <h3 className="sf-popover-title title m-0">{gettext('Notifications')}</h3>
+            <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon m-0"></a>
           </div>
           <div className="sf-popover-con">
-            <ul className="notice-list">
+            <ul className="notice-list list-unstyled">
               {this.state.noticeList.map(item => {
                 return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
               })}
