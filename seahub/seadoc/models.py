@@ -40,8 +40,9 @@ class SeadocDraftManager(models.Manager):
     def get_by_doc_uuid(self, doc_uuid):
         return self.filter(doc_uuid=doc_uuid).first()
 
-    def mask_as_draft(self, doc_uuid, username):
-        return self.create(doc_uuid=doc_uuid, username=username)
+    def mask_as_draft(self, doc_uuid, repo_id, username):
+        return self.create(
+            doc_uuid=doc_uuid, repo_id=repo_id, username=username)
 
     def unmask_as_draft(self, doc_uuid):
         return self.filter(doc_uuid=doc_uuid).delete()
@@ -52,9 +53,13 @@ class SeadocDraftManager(models.Manager):
     def list_by_username(self, username):
         return self.filter(username=username)
 
+    def list_by_repo_id(self, repo_id):
+        return self.filter(repo_id=repo_id)
+
 
 class SeadocDraft(models.Model):
     doc_uuid = models.CharField(max_length=36, unique=True)
+    repo_id = models.CharField(max_length=36, db_index=True)
     username = models.CharField(max_length=255, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -65,8 +70,8 @@ class SeadocDraft(models.Model):
 
     def to_dict(self):
         return {
-            'id': self.pk,
             'doc_uuid': self.doc_uuid,
+            'repo_id': self.repo_id,
             'username': self.username,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
         }
