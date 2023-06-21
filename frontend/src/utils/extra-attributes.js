@@ -1,15 +1,15 @@
 import moment from 'moment';
-import { LEDGER_CAN_EDIT_COLUMN_NAMES, DEFAULT_NUMBER_FORMAT, DISPLAY_INTERNAL_ERRORS, DURATION_FORMATS_MAP,
+import { EXTRA_ATTRIBUTES_NOT_DISPLAY_COLUMN_KEY, DEFAULT_NUMBER_FORMAT, DISPLAY_INTERNAL_ERRORS, DURATION_FORMATS_MAP,
   DURATION_FORMATS, DURATION_ZERO_DISPLAY, DURATION_DECIMAL_DIGITS, } from '../constants';
 import NP from './number-precision';
 
 NP.enableBoundaryChecking(false);
 
-export const getValidColumns = (columns, isEmptyFile = false) => {
+export const getValidColumns = (columns, editableColumns = [], isEmptyFile = false) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
   return columns.map(column => {
     let validColumn = column;
-    const canEdit = isEmptyFile ? false : LEDGER_CAN_EDIT_COLUMN_NAMES.includes(column.name);
+    const canEdit = isEmptyFile ? false : editableColumns.includes(column.name);
     if (column.type === 'single-select') {
       if (!(column.data && column.data.options)) {
         validColumn.data = { options: [] };
@@ -17,7 +17,7 @@ export const getValidColumns = (columns, isEmptyFile = false) => {
     }
     validColumn.editable = canEdit;
     return validColumn;
-  }).filter(column => column.key !== '_id');
+  }).filter(column => !EXTRA_ATTRIBUTES_NOT_DISPLAY_COLUMN_KEY.includes(column.key));
 };
 
 export const getDateDisplayString = (value, format) => {

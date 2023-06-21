@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import isHotkey from 'is-hotkey';
-import { zIndexes, DIALOG_MAX_HEIGHT, LEDGER_COLUMN_TYPE } from '../../../constants';
+import { zIndexes, DIALOG_MAX_HEIGHT, EXTRA_ATTRIBUTES_COLUMN_TYPE } from '../../../constants';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
-import { getSelectColumnOptions, getValidColumns } from '../../../utils/ledger';
+import { getSelectColumnOptions, getValidColumns } from '../../../utils/extra-attributes';
 import Column from './column';
 import Loading from '../../loading';
+import toaster from '../../toast';
 
 import './index.css';
-import toaster from '../../toast';
 
 class ExtraAttributesDialog extends Component {
 
@@ -75,7 +75,7 @@ class ExtraAttributesDialog extends Component {
       if (column && column.editable) {
         const { type, name } = column;
         const value = update[key];
-        if (type === LEDGER_COLUMN_TYPE.SINGLE_SELECT) {
+        if (type === EXTRA_ATTRIBUTES_COLUMN_TYPE.SINGLE_SELECT) {
           const options = getSelectColumnOptions(column);
           const option = options.find(item => item.id === value);
           updateData[name] = option ? option.name : '';
@@ -89,10 +89,10 @@ class ExtraAttributesDialog extends Component {
 
   getData = () => {
     const { repoID, filePath } = this.props;
-    seafileAPI.getFileLedger(repoID, filePath).then(res => {
-      const { row, metadata } = res.data;
+    seafileAPI.getFileExtendedProperties(repoID, filePath).then(res => {
+      const { row, metadata, editable_columns } = res.data;
       this.isExist = Boolean(row._id);
-      this.setState({ row: row, columns: getValidColumns(metadata, this.isEmptyFile), isLoading: false, errorMsg: '' });
+      this.setState({ row: row, columns: getValidColumns(metadata, editable_columns, this.isEmptyFile), isLoading: false, errorMsg: '' });
     }).catch(error => {
       const errorMsg =Utils.getErrorMsg(error);
       this.setState({ isLoading: false, errorMsg });
@@ -101,8 +101,9 @@ class ExtraAttributesDialog extends Component {
 
   createData = (data) => {
     const { repoID, filePath } = this.props;
-    seafileAPI.newFileLedger(repoID, filePath, data).then(res => {
+    seafileAPI.newFileExtendedProperties(repoID, filePath, data).then(res => {
       this.isExist = true;
+      this.getData();
     }).catch(error => {
       const errorMsg =Utils.getErrorMsg(error);
       toaster.danger(gettext(errorMsg));
@@ -110,13 +111,13 @@ class ExtraAttributesDialog extends Component {
   };
 
   updateData = (update, column) => {
-    const newRow = { ...this.state.update, ...update };
-    this.setState({ update: newRow }, () => {
+    const newRow = { ...this.state.row, ...update };
+    this.setState({ row: newRow }, () => {
       const data = this.getFormatUpdateData(update);
       const { repoID, filePath } = this.props;
       if (this.isExist) {
-        seafileAPI.updateFileLedger(repoID, filePath, data).then(res => {
-          //
+        seafileAPI.updateFileExtendedProperties(repoID, filePath, data).then(res => {
+          this.setState({ update: {} });
         }).catch(error => {
           const errorMsg =Utils.getErrorMsg(error);
           toaster.danger(gettext(errorMsg));
@@ -133,7 +134,6 @@ class ExtraAttributesDialog extends Component {
       return;
     }
   }
-
 
   onToggle = () => {
     this.props.onToggle();

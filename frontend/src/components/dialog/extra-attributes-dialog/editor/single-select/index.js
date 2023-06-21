@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { DELETED_OPTION_BACKGROUND_COLOR, DELETED_OPTION_TIPS } from '../../../../../constants';
 import { gettext } from '../../../../../utils/constants';
 import SingleSelectEditor from './single-select-editor';
-import { getSelectColumnOptions } from '../../../../../utils/ledger';
+import { getSelectColumnOptions } from '../../../../../utils/extra-attributes';
 
 import './index.css';
 

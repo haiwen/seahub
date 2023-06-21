@@ -39,7 +39,7 @@
     "react-select": "5.7.0",
     "react-transition-group": "4.4.5",
     "reactstrap": "8.9.0",
-    "seafile-js": "0.3.0-beta4",
+    "seafile-js": "0.3.0-beta6",
     "socket.io-client": "^2.2.0",
     "svg-sprite-loader": "^6.0.11",
     "svgo-loader": "^3.0.1",

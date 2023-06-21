@@ -3,20 +3,24 @@ import KeyCodes from './keyCodes';
 
 export const DIALOG_MAX_HEIGHT = window.innerHeight - 56; // Dialog margin is 3.5rem (56px)
 
-export const LEDGER_COLUMN_TYPE = {
+export const EXTRA_ATTRIBUTES_COLUMN_TYPE = {
   TEXT: 'text',
   NUMBER: 'number',
   DATE: 'date',
   FORMULA: 'formula',
   SINGLE_SELECT: 'single-select',
+  CTIME: 'ctime',
+  MTIME: 'mtime'
 };
 
-export const LEDGER_CAN_EDIT_COLUMN_NAMES = [
-  '文件大分类',
-  '文件中分类',
-  '文件小分类',
-  '密级',
-  '保密期限'
+export const EXTRA_ATTRIBUTES_NOT_DISPLAY_COLUMN_KEY = [
+  '_id',
+  '_locked',
+  '_locked_by',
+  '_archived',
+  '_creator',
+  '_last_modifier',
+  '_mtime',
 ];
 
 export const FORMULA_RESULT_TYPE = {

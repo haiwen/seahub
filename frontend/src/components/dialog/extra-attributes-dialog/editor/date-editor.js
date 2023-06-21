@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getDateDisplayString } from '../../../../utils/ledger';
+import { getDateDisplayString } from '../../../../utils/extra-attributes';
 
 
 class DateEditor extends Component {

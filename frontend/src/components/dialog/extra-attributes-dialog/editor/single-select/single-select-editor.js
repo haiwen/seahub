@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { UncontrolledPopover } from 'reactstrap';
 import { gettext } from '../../../../../utils/constants';
 import SearchInput from '../search-input';
-import { getSelectColumnOptions } from '../../../../../utils/ledger';
+import { getSelectColumnOptions } from '../../../../../utils/extra-attributes';
 
 class SingleSelectEditor extends Component {
 

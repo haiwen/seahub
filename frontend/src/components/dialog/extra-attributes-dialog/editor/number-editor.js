@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber, isMac } from '../../../../utils/ledger';
+import { getNumberDisplayString, replaceNumberNotAllowInput, formatStringToNumber, isMac } from '../../../../utils/extra-attributes';
 import { KeyCodes, DEFAULT_NUMBER_FORMAT } from '../../../../constants';
 
 class NumberEditor extends React.Component {

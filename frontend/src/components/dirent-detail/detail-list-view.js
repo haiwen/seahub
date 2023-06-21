@@ -106,7 +106,7 @@ class DetailListView extends React.Component {
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
-              {direntDetail.can_edit && (
+              {direntDetail.permission === 'rw' && (
                 <tr className="file-extra-attributes">
                   <th colSpan={2}>
                     <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>

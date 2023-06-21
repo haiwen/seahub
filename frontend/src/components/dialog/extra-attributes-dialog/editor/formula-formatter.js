@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FORMULA_RESULT_TYPE } from '../../../../constants';
-import { getDateDisplayString } from '../../../../utils/ledger';
+import { getDateDisplayString } from '../../../../utils/extra-attributes';
 
 function FormulaFormatter(props) {
   const { column, row } = props;

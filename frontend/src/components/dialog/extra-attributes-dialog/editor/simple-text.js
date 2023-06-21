@@ -12,6 +12,13 @@ class SimpleText extends React.Component {
     this.inputRef = React.createRef();
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const nextValue = nextProps.row[nextProps.column.key];
+    if (nextValue !== this.state.value) {
+      this.setState({ value: nextValue });
+    }
+  }
+
   blurInput = () => {
     setTimeout(() => {
       this.inputRef.current && this.inputRef.current.blur();
@@ -67,7 +74,7 @@ class SimpleText extends React.Component {
         onPaste={this.onPaste}
         onChange={this.onChange}
         className="form-control"
-        value={value}
+        value={value || ''}
         onKeyDown={this.onKeyDown}
         disabled={!column.editable}
         ref={this.inputRef}
