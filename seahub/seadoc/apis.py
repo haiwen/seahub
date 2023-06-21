@@ -506,6 +506,44 @@ class SeadocHistory(APIView):
         })
 
 
+class SeadocDrafts(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+        """list drafts
+        """
+        username = request.user.username
+        # argument check
+        owned = request.GET.get('owned')
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        #
+        if owned:
+            draft_queryset = SeadocDraft.objects.filter(
+                repo_id=repo_id, username=username)
+        # all
+        else:
+            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id)
+
+        drafts = [draft.to_dict() for draft in draft_queryset]
+
+        return Response({'drafts': drafts})
+
+
 class SeadocMaskAsDraft(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -550,7 +588,8 @@ class SeadocMaskAsDraft(APIView):
             error_msg = '%s is already draft' % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        draft = SeadocDraft.objects.mask_as_draft(file_uuid, username)
+        draft = SeadocDraft.objects.mask_as_draft(
+            file_uuid, repo_id, username)
 
         return Response(draft.to_dict())
 
