@@ -24,7 +24,9 @@ jobs:
           node-version: "16.x"
 
       - name: gettext for django
-        run: sudo apt-get install gettext python3-wheel libjwt-dev
+        run: |
+          sudo apt-get install gettext python3-wheel libjwt-dev
+          sudo rm -rf /usr/lib/python3/dist-packages/pytz/
 
       - name: Build dist branch
         run: |
