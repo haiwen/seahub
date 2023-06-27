@@ -1,5 +1,6 @@
 import os
 import json
+import uuid
 import logging
 import requests
 import posixpath
@@ -32,12 +33,13 @@ from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
 from seahub.utils.file_revisions import get_file_revisions_within_limit
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.base.models import FileComment
+from seahub.constants import PERMISSION_READ_WRITE
 
 
 logger = logging.getLogger(__name__)
@@ -810,3 +812,189 @@ class SeadocCommentView(APIView):
         comment = file_comment.to_dict()
         comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
         return Response(comment)
+
+
+class SeadocRevisions(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """list
+        """
+        username = request.user.username
+        # argument check
+        owned = request.GET.get('owned')
+        repo_id = request.GET.get('repo_id')
+        if not repo_id or not owned:
+            error_msg = 'repo_id or owned invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if repo_id:
+            # resource check
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            # permission check
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            
+            revision_queryset = SeadocRevision.objects.list_by_repo_id(repo_id)
+        #
+        elif owned:
+            revision_queryset = SeadocRevision.objects.list_by_username(username)
+
+        revisions = [revision.to_dict() for revision in revision_queryset]
+
+        return Response({'revisions': revisions})
+
+    def post(self, request):
+        """create
+        """
+        username = request.user.username
+        # argument check
+        path = request.data.get('p', None)
+        if not path:
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        repo_id = request.GET.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
+        filename = os.path.basename(path)
+
+        filetype, fileext = get_file_type_and_ext(filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # create revision dir if does not exist
+        revision_dir_id = seafile_api.get_dir_id_by_path(repo_id, '/Revisions')
+        if revision_dir_id is None:
+            seafile_api.post_dir(repo_id, '/', 'Revisions', username)
+
+        #
+        origin_file_uuid = get_seadoc_file_uuid(repo, path)
+        origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        revision_file_uuid = str(uuid.uuid4())
+        revision_filename = revision_file_uuid + '.sdoc'
+
+        # copy file to revision dir
+        seafile_api.copy_file(
+            repo_id, parent_dir,
+            json.dumps([filename]),
+            repo_id, '/Revisions',
+            json.dumps([revision_filename]),
+            username=username, need_progress=0, synchronous=1
+        )
+
+        revision_uuid_map = FileUUIDMap(
+            uuid=revision_file_uuid,
+            repo_id=repo_id,
+            parent_path=parent_dir,
+            filename=revision_filename,
+        )
+        revision_uuid_map.save()
+
+        revision = SeadocRevision.objects.create(
+            doc_uuid=revision_file_uuid,
+            origin_doc_uuid=origin_file_uuid,
+            repo_id=repo_id,
+            origin_file_path=path,
+            username=username,
+            origin_file_version=origin_file_id,
+        )
+
+        return Response(revision.to_dict())
+
+
+class SeadocPublishRevision(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, file_uuid):
+        """publish
+        """
+        force = request.data.get('force')  # used when origin file deleted
+
+        # resource check
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = revision.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get origin file info
+        origin_file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(
+            revision.origin_doc_uuid)
+
+        if not origin_file_uuid and not force:
+            error_msg = 'origin sdoc %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if origin_file_uuid:
+            origin_file_parent_path = origin_file_uuid.parent_path
+            origin_file_filename = origin_file_uuid.filename
+        else:
+            origin_file_parent_path = os.path.dirname(revision.origin_doc_path)
+            origin_file_filename = os.path.basename(revision.origin_doc_path)
+
+        # check if origin file's parent folder exists
+        if not seafile_api.get_dir_id_by_path(repo_id, origin_file_parent_path):
+            dst_parent_path = '/'
+        else:
+            dst_parent_path = origin_file_parent_path
+
+        # get revision file info
+        revision_file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        revision_parent_path = revision_file_uuid.parent_pat
+        revision_filename = revision_file_uuid.filename
+
+        # move revision file
+        username = request.user.username
+        seafile_api.move_file(repo_id, revision_parent_path,
+                              json.dumps([revision_filename]),
+                              repo_id, dst_parent_path,
+                              json.dumps([origin_file_filename]),
+                              replace=1, username=username,
+                              need_progress=0, synchronous=1)
+
+        dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_filename)
+        revision = SeadocRevision.objects.publish(
+            file_uuid, username, dst_file_id)
+        return Response(revision.to_dict())

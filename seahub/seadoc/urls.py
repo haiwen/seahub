@@ -1,7 +1,7 @@
 from django.urls import re_path
 from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, SeadocUploadFile, \
     SeadocUploadImage, SeadocDownloadImage, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
-    SeadocCommentsView, SeadocCommentView
+    SeadocCommentsView, SeadocCommentView, SeadocRevisions, SeadocPublishRevision
 
 urlpatterns = [
     re_path(r'^access-token/(?P<repo_id>[-0-9a-f]{36})/$', SeadocAccessToken.as_view(), name='seadoc_access_token'),
@@ -16,4 +16,6 @@ urlpatterns = [
     re_path(r'^mask-as-draft/(?P<repo_id>[-0-9a-f]{36})/$', SeadocMaskAsDraft.as_view(), name='seadoc_mask_as_draft'),
     re_path(r'^comments/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocCommentsView.as_view(), name='seadoc_comments'),
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/$', SeadocCommentView.as_view(), name='seadoc_comment'),
+    re_path(r'^revisions/$', SeadocRevisions.as_view(), name='seadoc_revisions'),
+    re_path(r'^publish-revision/$', SeadocPublishRevision.as_view(), name='seadoc_publish_revision'),
 ]
