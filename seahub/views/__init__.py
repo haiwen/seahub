@@ -796,19 +796,19 @@ def file_revisions(request, repo_id):
     if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
-    if file_type == 'sdoc':
-        file_uuid = get_seadoc_file_uuid(repo, path)
-        return render(request, 'sdoc_file_revisions.html', {
-            'repo': repo,
-            'path': path,
-            'u_filename': u_filename,
-            'file_uuid': file_uuid,
-            'zipped': zipped,
-            'is_owner': is_owner,
-            'can_compare': can_compare,
-            'can_revert_file': can_revert_file,
-            'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid
-        })
+    # if file_type == 'sdoc':
+    #     file_uuid = get_seadoc_file_uuid(repo, path)
+    #     return render(request, 'sdoc_file_revisions.html', {
+    #         'repo': repo,
+    #         'path': path,
+    #         'u_filename': u_filename,
+    #         'file_uuid': file_uuid,
+    #         'zipped': zipped,
+    #         'is_owner': is_owner,
+    #         'can_compare': can_compare,
+    #         'can_revert_file': can_revert_file,
+    #         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid
+    #     })
 
     # Whether use new file history API which read file history from db.
     suffix_list = get_file_history_suffix()

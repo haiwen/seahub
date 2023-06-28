@@ -7,7 +7,6 @@ import SVG from './components/file-content-view/svg';
 import PDF from './components/file-content-view/pdf';
 import Text from './components/file-content-view/text';
 import Markdown from './components/file-content-view/markdown';
-import SDoc from './components/file-content-view/sdoc';
 import Video from './components/file-content-view/video';
 import Audio from './components/file-content-view/audio';
 
@@ -40,9 +39,6 @@ class HistoryTrashFileView extends React.Component {
         break;
       case 'Markdown':
         content = <Markdown />;
-        break;
-      case 'SDoc':
-        content = <SDoc />;
         break;
       case 'Video':
         content = <Video />;

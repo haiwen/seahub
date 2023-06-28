@@ -141,7 +141,7 @@ class FileToolbar extends React.Component {
             />
           )}
 
-          {(canEditFile && fileType != 'SDoc' && !err) &&
+          {(canEditFile && !err) &&
             ( this.props.isSaving ?
               <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                 <i className={'fa fa-spin fa-spinner'}/></button> :
@@ -195,9 +195,9 @@ class FileToolbar extends React.Component {
                 </DropdownItem>
               )}
               {filePerm == 'rw' && (
-                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
-                    {gettext('History')}
-                  </a>
+                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                  {gettext('History')}
+                </a>
               )}
             </DropdownMenu>
           </ButtonDropdown>
@@ -205,7 +205,7 @@ class FileToolbar extends React.Component {
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none">
           <ButtonGroup >
-            {(canEditFile && fileType != 'SDoc' && !err) &&
+            {(canEditFile && !err) &&
                 (this.props.isSaving ?
                   <button type={'button'} aria-label={gettext('Saving...')} className={'btn btn-icon btn-secondary btn-active'}>
                     <i className={'fa fa-spin fa-spinner'}/></button> :

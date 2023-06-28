@@ -102,7 +102,6 @@ export const Utils = {
 
     // default
     'default' : 'file.png',
-    'sdoc': 'sdoc.png',
   },
 
   // check if a file is an image
