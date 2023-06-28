@@ -150,6 +150,15 @@ class DirentGridView extends React.Component{
       case 'Lock':
         this.onLockItem(currentObject);
         break;
+      case 'Mask as draft':
+        this.onMaskAsDraft(currentObject);
+        break;
+      case 'Unmask as draft':
+        this.onUnmaskAsDraft(currentObject);
+        break;
+      case 'Start revise':
+        this.onStartRevise(currentObject);
+        break;
       case 'Comment':
         this.onCommentItem();
         break;
@@ -256,6 +265,40 @@ class DirentGridView extends React.Component{
       this.props.updateDirent(currentObject, 'is_locked', false);
       this.props.updateDirent(currentObject, 'locked_by_me', false);
       this.props.updateDirent(currentObject, 'lock_owner_name', '');
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onMaskAsDraft = (currentObject) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(currentObject);
+    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(currentObject, 'is_sdoc_draft', true);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onUnmaskAsDraft = (currentObject) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(currentObject);
+    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(currentObject, 'is_sdoc_draft', false);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onStartRevise = (currentObject) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(currentObject);
+    seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
+      let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
+      window.open(url);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

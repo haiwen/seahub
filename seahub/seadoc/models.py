@@ -1,4 +1,5 @@
 import os
+import posixpath
 
 from django.db import models
 
@@ -52,11 +53,11 @@ class SeadocDraftManager(models.Manager):
     def list_by_doc_uuids(self, doc_uuid_list):
         return self.filter(doc_uuid__in=doc_uuid_list)
 
-    def list_by_username(self, username):
-        return self.filter(username=username)
+    def list_by_username(self, username, start, limit):
+        return self.filter(username=username)[start:limit]
 
-    def list_by_repo_id(self, repo_id):
-        return self.filter(repo_id=repo_id)
+    def list_by_repo_id(self, repo_id, start, limit):
+        return self.filter(repo_id=repo_id)[start:limit]
 
 
 class SeadocDraft(models.Model):
@@ -89,11 +90,11 @@ class SeadocRevisionManager(models.Manager):
     def list_by_origin_doc_uuid(self, origin_doc_uuid):
         return self.filter(origin_doc_uuid=origin_doc_uuid)
 
-    def list_by_username(self, username):
-        return self.filter(username=username)
+    def list_by_username(self, username, start, limit):
+        return self.filter(username=username)[start:limit]
 
-    def list_by_repo_id(self, repo_id):
-        return self.filter(repo_id=repo_id)
+    def list_by_repo_id(self, repo_id, start, limit):
+        return self.filter(repo_id=repo_id)[start:limit]
 
     def publish(self, doc_uuid, publisher, publish_file_version):
         return self.filter(doc_uuid=doc_uuid).update(
@@ -123,24 +124,44 @@ class SeadocRevision(models.Model):
     class Meta:
         db_table = 'sdoc_revision'
 
-    def to_dict(self):
+    def to_dict(self, fileuuidmap_queryset=None):
         from seahub.tags.models import FileUUIDMap
-        file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.origin_doc_uuid)
-        if file_uuid:
-            origin_parent_path = file_uuid.parent_path
-            origin_filename = file_uuid.filename
+        if fileuuidmap_queryset:
+            origin_doc_uuid = fileuuidmap_queryset.filter(uuid=self.origin_doc_uuid).first()
+        else:
+            origin_doc_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.origin_doc_uuid)
+        if origin_doc_uuid:
+            origin_parent_path = origin_doc_uuid.parent_path
+            origin_filename = origin_doc_uuid.filename
         else:
             origin_parent_path = os.path.dirname(self.origin_doc_path)
             origin_filename = os.path.basename(self.origin_doc_path)
+        origin_file_path = posixpath.join(origin_parent_path, origin_filename)
+
+        if fileuuidmap_queryset:
+            doc_uuid = fileuuidmap_queryset.filter(uuid=self.doc_uuid).first()
+        else:
+            doc_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(self.doc_uuid)
+        if doc_uuid:
+            parent_path = doc_uuid.parent_path
+            filename = doc_uuid.filename
+        else:
+            parent_path = '/Revisions'
+            filename = self.doc_uuid + '.sdoc'
+        file_path = posixpath.join(parent_path, filename)
 
         return {
             'username': self.username,
             'nickname': email2nickname(self.username),
             'repo_id': self.repo_id,
             'doc_uuid': self.doc_uuid,
+            'parent_path': parent_path,
+            'filename': filename,
+            'file_path': file_path,
             'origin_doc_uuid': self.origin_doc_uuid,
             'origin_parent_path': origin_parent_path,
             'origin_filename': origin_filename,
+            'origin_file_path': origin_file_path,
             'origin_file_version': self.origin_file_version,
             'publish_file_version': self.publish_file_version,
             'publisher': self.publisher,

@@ -40,6 +40,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
 
 
 logger = logging.getLogger(__name__)
@@ -516,36 +517,44 @@ class SeadocDrafts(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, repo_id):
+    def get(self, request):
         """list drafts
         """
         username = request.user.username
         # argument check
-        owned = request.GET.get('owned')
+        repo_id = request.GET.get('repo_id')
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+        start = (page - 1) * per_page
+        limit = per_page + 1
 
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if repo_id:
+            # resource check
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
-        permission = check_folder_permission(request, repo_id, '/')
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            # permission check
+            permission = check_folder_permission(request, repo_id, '/')
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        #
-        if owned:
-            draft_queryset = SeadocDraft.objects.filter(
-                repo_id=repo_id, username=username)
-        # all
+            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, limit)
+            count = SeadocDraft.objects.filter(repo_id=repo_id).count()
         else:
-            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id)
+            # owned
+            draft_queryset = SeadocDraft.objects.list_by_username(username, start, limit)
+            count = SeadocDraft.objects.filter(username=username).count()
 
         drafts = [draft.to_dict() for draft in draft_queryset]
 
-        return Response({'drafts': drafts})
+        return Response({'drafts': drafts, 'count': count})
 
 
 class SeadocMaskAsDraft(APIView):
@@ -825,11 +834,15 @@ class SeadocRevisions(APIView):
         """
         username = request.user.username
         # argument check
-        owned = request.GET.get('owned')
         repo_id = request.GET.get('repo_id')
-        if not repo_id or not owned:
-            error_msg = 'repo_id or owned invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+        start = (page - 1) * per_page
+        limit = per_page + 1
 
         if repo_id:
             # resource check
@@ -842,15 +855,23 @@ class SeadocRevisions(APIView):
             if not permission:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            
-            revision_queryset = SeadocRevision.objects.list_by_repo_id(repo_id)
-        #
-        elif owned:
-            revision_queryset = SeadocRevision.objects.list_by_username(username)
 
-        revisions = [revision.to_dict() for revision in revision_queryset]
+            revision_queryset = SeadocRevision.objects.list_by_repo_id(repo_id, start, limit)
+            count = SeadocRevision.objects.filter(repo_id=repo_id).count()
+        else:
+            # owned
+            revision_queryset = SeadocRevision.objects.list_by_username(username, start, limit)
+            count = SeadocRevision.objects.filter(username=username).count()
 
-        return Response({'revisions': revisions})
+        uuid_set = set()
+        for item in revision_queryset:
+            uuid_set.add(item.doc_uuid)
+            uuid_set.add(item.origin_doc_uuid)
+
+        fileuuidmap_queryset = FileUUIDMap.objects.filter(uuid__in=list(uuid_set))
+        revisions = [revision.to_dict(fileuuidmap_queryset) for revision in revision_queryset]
+
+        return Response({'revisions': revisions, 'count': count})
 
     def post(self, request):
         """create
@@ -861,7 +882,7 @@ class SeadocRevisions(APIView):
         if not path:
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        repo_id = request.GET.get('repo_id')
+        repo_id = request.data.get('repo_id')
         if not repo_id:
             error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -910,8 +931,9 @@ class SeadocRevisions(APIView):
         revision_uuid_map = FileUUIDMap(
             uuid=revision_file_uuid,
             repo_id=repo_id,
-            parent_path=parent_dir,
+            parent_path='/Revisions',
             filename=revision_filename,
+            is_dir=False,
         )
         revision_uuid_map.save()
 
@@ -919,7 +941,7 @@ class SeadocRevisions(APIView):
             doc_uuid=revision_file_uuid,
             origin_doc_uuid=origin_file_uuid,
             repo_id=repo_id,
-            origin_file_path=path,
+            origin_doc_path=path,
             username=username,
             origin_file_version=origin_file_id,
         )
@@ -942,6 +964,9 @@ class SeadocPublishRevision(APIView):
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)  
 
         repo_id = revision.repo_id
         repo = seafile_api.get_repo(repo_id)
@@ -973,6 +998,7 @@ class SeadocPublishRevision(APIView):
         else:
             origin_file_parent_path = os.path.dirname(revision.origin_doc_path)
             origin_file_filename = os.path.basename(revision.origin_doc_path)
+        origin_file_path = posixpath.join(origin_file_parent_path, origin_file_filename)
 
         # check if origin file's parent folder exists
         if not seafile_api.get_dir_id_by_path(repo_id, origin_file_parent_path):
@@ -982,7 +1008,7 @@ class SeadocPublishRevision(APIView):
 
         # get revision file info
         revision_file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
-        revision_parent_path = revision_file_uuid.parent_pat
+        revision_parent_path = revision_file_uuid.parent_path
         revision_filename = revision_file_uuid.filename
 
         # move revision file
@@ -994,7 +1020,13 @@ class SeadocPublishRevision(APIView):
                               replace=1, username=username,
                               need_progress=0, synchronous=1)
 
-        dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_filename)
-        revision = SeadocRevision.objects.publish(
-            file_uuid, username, dst_file_id)
+        dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
+        SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
+
+        # refresh origin doc
+        sdoc_server_api = SdocServerAPI(
+            revision.origin_doc_uuid, origin_file_filename, username)
+        sdoc_server_api.refresh_doc()
+
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
