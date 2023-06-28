@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 4097705 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1685591242626'); /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1685591242626#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('./sdoc-editor-font/iconfont.woff2?t=1685591242626') format('woff2'),
-       url('./sdoc-editor-font/iconfont.woff?t=1685591242626') format('woff'),
-       url('./sdoc-editor-font/iconfont.ttf?t=1685591242626') format('truetype'),
-       url('./sdoc-editor-font/iconfont.svg?t=1685591242626#sdocfont') format('svg');
+  src: url('./sdoc-editor-font/iconfont.eot?t=1687918584762'); /* IE9 */
+  src: url('./sdoc-editor-font/iconfont.eot?t=1687918584762#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./sdoc-editor-font/iconfont.woff2?t=1687918584762') format('woff2'),
+       url('./sdoc-editor-font/iconfont.woff?t=1687918584762') format('woff'),
+       url('./sdoc-editor-font/iconfont.ttf?t=1687918584762') format('truetype'),
+       url('./sdoc-editor-font/iconfont.svg?t=1687918584762#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -16,7 +16,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.sdoc-unlink:before {
+.sdoc-align-center:before {
+  content: "\e62e";
+}
+
+.sdoc-align-left:before {
+  content: "\e62f";
+}
+
+.sdoc-superscripts:before {
+  content: "\e638";
+}
+
+.sdoc-subscripts:before {
+  content: "\e639";
+}
+
+.comment:before {
+  content: "\e63b";
+}
+
+.more:before {
+  content: "\e63c";
+}
+
+.unlink:before {
   content: "\e63a";
 }
 
@@ -26,14 +50,6 @@
 
 .sdoc-caret-up:before {
   content: "\e636";
-}
-
-.sdoc-left-alignment:before {
-  content: "\e62e";
-}
-
-.sdoc-center-horizontally:before {
-  content: "\e62f";
 }
 
 .sdoc-align-right:before {
