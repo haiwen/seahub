@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { enableSeadoc, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -142,13 +142,6 @@ class DirOperationToolbar extends React.Component {
     });
   }
 
-  onCreateSeaDocToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.sdoc'
-    });
-  }
-
   onAddFile = (filePath, isDraft) => {
     this.setState({isCreateFileDialogShow: false});
     this.props.onAddFile(filePath, isDraft);
@@ -215,7 +208,6 @@ class DirOperationToolbar extends React.Component {
                 <button className="dropdown-item" onClick={this.onCreateExcelToggle} role="menuitem">{gettext('New Excel File')}</button>
                 <button className="dropdown-item" onClick={this.onCreatePPTToggle} role="menuitem">{gettext('New PowerPoint File')}</button>
                 <button className="dropdown-item" onClick={this.onCreateWordToggle} role="menuitem">{gettext('New Word File')}</button>
-                {enableSeadoc && <button className="dropdown-item" onClick={this.onCreateSeaDocToggle} role="menuitem">{gettext('New SeaDoc File')}</button>}
               </div>
             )}
           </Fragment>
