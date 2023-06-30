@@ -31,6 +31,7 @@ window.seafile = {
   parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`,
   assetsUrl,
   isShowInternalLink: true,
+  isStarIconShown: true // for star/unstar
 };
 
 ReactDom.render(
