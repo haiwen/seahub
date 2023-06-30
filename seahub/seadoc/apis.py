@@ -834,6 +834,7 @@ class SeadocRevisions(APIView):
         """
         username = request.user.username
         # argument check
+        origin_file_uuid = request.GET.get('doc_uuid')
         repo_id = request.GET.get('repo_id')
         try:
             page = int(request.GET.get('page', '1'))
@@ -844,7 +845,22 @@ class SeadocRevisions(APIView):
         start = (page - 1) * per_page
         limit = per_page + 1
 
-        if repo_id:
+        if origin_file_uuid:
+            origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_file_uuid)
+            if not origin_uuid_map:
+                error_msg = 'seadoc uuid %s not found.' % origin_file_uuid
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            repo_id = origin_uuid_map.repo_id
+            username = request.user.username
+            path = posixpath.join(origin_uuid_map.parent_path, origin_uuid_map.filename)
+            # permission check
+            if not check_folder_permission(request, repo_id, path):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            revision_queryset = SeadocRevision.objects.list_by_origin_doc_uuid(origin_uuid_map.uuid, start, limit)
+            count = SeadocRevision.objects.filter(origin_doc_uuid=origin_uuid_map.uuid).count()
+        elif repo_id:
             # resource check
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -915,6 +931,10 @@ class SeadocRevisions(APIView):
 
         #
         origin_file_uuid = get_seadoc_file_uuid(repo, path)
+        if SeadocRevision.objects.get_by_doc_uuid(origin_file_uuid):
+            error_msg = 'seadoc %s is already a revision.' % filename
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
         revision_file_uuid = str(uuid.uuid4())
         revision_filename = revision_file_uuid + '.sdoc'

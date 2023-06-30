@@ -15,6 +15,7 @@ from seahub.utils import normalize_file_path, gen_inner_file_get_url, gen_inner_
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.seadoc.models import SeadocRevision
 
 logger = logging.getLogger(__name__)
 
@@ -172,3 +173,24 @@ def can_access_seadoc_asset(request, repo_id, path, file_uuid):
         return True
 
     return False
+
+def is_seadoc_revision(doc_uuid):
+    info = {}
+    revision = SeadocRevision.objects.get_by_doc_uuid(doc_uuid)
+    if revision:
+        info = {'is_sdoc_revision': True}
+        revision_info = revision.to_dict()
+        info['origin_doc_uuid'] = revision_info['origin_doc_uuid']
+        info['origin_parent_path'] = revision_info['origin_parent_path']
+        info['origin_filename'] = revision_info['origin_filename']
+        info['origin_file_path'] = revision_info['origin_file_path']
+        info['origin_file_version'] = revision_info['origin_file_version']
+        info['publish_file_version'] = revision_info['publish_file_version']
+        info['publisher'] = revision_info['publisher']
+        info['publisher_nickname'] = revision_info['publisher_nickname']
+        info['is_published'] = revision_info['is_published']
+        info['revision_created_at'] = revision_info['created_at']
+        info['revision_updated_at'] = revision_info['updated_at']
+    else:
+        info = {'is_sdoc_revision': False}
+    return info

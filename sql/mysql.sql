@@ -1416,6 +1416,5 @@ CREATE TABLE `sdoc_revision` (
   KEY `sdoc_revision_repo_id` (`repo_id`),
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
   KEY `sdoc_revision_username` (`username`),
-  KEY `sdoc_revision_created_at` (`created_at`),
-  KEY `sdoc_revision_updated_at` (`updated_at`)
+  KEY `sdoc_revision_is_published` (`is_published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

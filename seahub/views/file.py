@@ -75,7 +75,7 @@ from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, get_share_link_thumbnail_src, get_thumbnail_image_path
 from seahub.drafts.utils import get_file_draft, \
         is_draft_file, has_draft_file
-from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, is_seadoc_revision
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -665,6 +665,10 @@ def view_lib_file(request, repo_id, path):
         seadoc_perm = 'rw' if can_edit_file else 'r'
         return_dict['can_edit_file'] = can_edit_file
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+
+        # revision
+        revision_info = is_seadoc_revision(file_uuid)
+        return_dict.update(revision_info)
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)

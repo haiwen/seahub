@@ -54,10 +54,10 @@ class SeadocDraftManager(models.Manager):
         return self.filter(doc_uuid__in=doc_uuid_list)
 
     def list_by_username(self, username, start, limit):
-        return self.filter(username=username)[start:limit]
+        return self.filter(username=username).order_by('-id')[start:limit]
 
     def list_by_repo_id(self, repo_id, start, limit):
-        return self.filter(repo_id=repo_id)[start:limit]
+        return self.filter(repo_id=repo_id).order_by('-id')[start:limit]
 
 
 class SeadocDraft(models.Model):
@@ -87,14 +87,17 @@ class SeadocRevisionManager(models.Manager):
     def list_by_doc_uuids(self, doc_uuid_list):
         return self.filter(doc_uuid__in=doc_uuid_list)
 
-    def list_by_origin_doc_uuid(self, origin_doc_uuid):
-        return self.filter(origin_doc_uuid=origin_doc_uuid)
+    def list_by_origin_doc_uuid(self, origin_doc_uuid, start, limit):
+        return self.filter(
+            origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('-id')[start:limit]
 
     def list_by_username(self, username, start, limit):
-        return self.filter(username=username)[start:limit]
+        return self.filter(
+            username=username, is_published=False).order_by('-id')[start:limit]
 
     def list_by_repo_id(self, repo_id, start, limit):
-        return self.filter(repo_id=repo_id)[start:limit]
+        return self.filter(
+            repo_id=repo_id, is_published=False).order_by('-id')[start:limit]
 
     def publish(self, doc_uuid, publisher, publish_file_version):
         return self.filter(doc_uuid=doc_uuid).update(
@@ -115,9 +118,9 @@ class SeadocRevision(models.Model):
     origin_file_version = models.CharField(max_length=100)
     publish_file_version = models.CharField(max_length=100, null=True)
     publisher = models.CharField(max_length=255, null=True)
-    is_published = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True, db_index=True)
+    is_published = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = SeadocRevisionManager()
 
