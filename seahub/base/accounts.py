@@ -66,6 +66,8 @@ except ImportError:
     MULTI_LDAP_ADMIN_PASSWORD = ''
     MULTI_LDAP_LOGIN_ATTR = ''
     MULTI_LDAP_FILTER = ''
+    MULTI_LDAP_CONTACT_EMAIL_ATTR = ''
+    MULTI_LDAP_USER_ROLE_ATTR = ''
     MULTI_LDAP_ENABLE_SASL = False
     MULTI_LDAP_SASL_MECHANISM = ''
     MULTI_LDAP_SASL_AUTHC_ID_ATTR = ''
@@ -766,7 +768,7 @@ class AuthBackend(object):
             return user
 
 
-def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_id_attr):
+def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr):
     first_name = ''
     last_name = ''
     contact_email = ''
@@ -775,8 +777,8 @@ def parse_ldap_res(ldap_search_result, enable_sasl, sasl_mechanism, sasl_authc_i
     dn = ldap_search_result[0][0]
     first_name_list = ldap_search_result[0][1].get(LDAP_USER_FIRST_NAME_ATTR, [])
     last_name_list = ldap_search_result[0][1].get(LDAP_USER_LAST_NAME_ATTR, [])
-    contact_email_list = ldap_search_result[0][1].get(LDAP_CONTACT_EMAIL_ATTR, [])
-    user_role_list = ldap_search_result[0][1].get(LDAP_USER_ROLE_ATTR, [])
+    contact_email_list = ldap_search_result[0][1].get(contact_email_attr, [])
+    user_role_list = ldap_search_result[0][1].get(role_attr, [])
     authc_id_list = list()
     if enable_sasl and sasl_mechanism:
         authc_id_list = ldap_search_result[0][1].get(sasl_authc_id_attr, [])
@@ -840,7 +842,8 @@ class CustomLDAPBackend(object):
         return bind_conn
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
-                    sasl_authc_id_attr, base_dn, login_attr, login, password, serch_filter):
+                    sasl_authc_id_attr, base_dn, login_attr, login, password, serch_filter,
+                    contact_email_attr, role_attr):
         try:
             admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
         except Exception as e:
@@ -865,7 +868,7 @@ class CustomLDAPBackend(object):
 
         try:
             dn, nickname, contact_email, user_role, authc_id = parse_ldap_res(
-                result_data, enable_sasl, sasl_mechanism, sasl_authc_id_attr)
+                result_data, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr)
         except Exception as e:
             raise 'parse ldap result failed: %s' % e
 
@@ -891,14 +894,16 @@ class CustomLDAPBackend(object):
         try:
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
-                SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER)
+                SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
+                LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR)
         except Exception as e:
             if ENABLE_MULTI_LDAP:
                 try:
                     nickname, contact_email, user_role = self.search_user(
                         MULTI_LDAP_SERVER_URL, MULTI_LDAP_ADMIN_DN, MULTI_LDAP_ADMIN_PASSWORD,
                         MULTI_LDAP_ENABLE_SASL, MULTI_LDAP_SASL_MECHANISM, MULTI_LDAP_SASL_AUTHC_ID_ATTR,
-                        MULTI_LDAP_BASE_DN, MULTI_LDAP_LOGIN_ATTR, login_attr, password, MULTI_LDAP_FILTER)
+                        MULTI_LDAP_BASE_DN, MULTI_LDAP_LOGIN_ATTR, login_attr, password, MULTI_LDAP_FILTER,
+                        MULTI_LDAP_CONTACT_EMAIL_ATTR, MULTI_LDAP_USER_ROLE_ATTR)
                 except Exception as e:
                     logger.error(e)
                     return
