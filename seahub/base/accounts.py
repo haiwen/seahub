@@ -45,20 +45,22 @@ from seahub.settings import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LA
     LDAP_USER_NAME_REVERSE, LDAP_FILTER, LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, \
     ACTIVATE_USER_WHEN_IMPORT, ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR
 try:
-    from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR
+    from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, \
+        LDAP_PROVIDER
 except ImportError:
     LDAP_SERVER_URL = ''
     LDAP_BASE_DN = ''
     LDAP_ADMIN_DN = ''
     LDAP_ADMIN_PASSWORD = ''
     LDAP_LOGIN_ATTR = ''
+    LDAP_PROVIDER = ''
 
 # multi ldap
 try:
     from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
          MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, MULTI_LDAP_1_FILTER, \
          MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, \
-         MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR
+         MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR, MULTI_LDAP_1_PROVIDER
 except ImportError:
     ENABLE_MULTI_LDAP = False
     MULTI_LDAP_1_SERVER_URL = ''
@@ -72,6 +74,7 @@ except ImportError:
     MULTI_LDAP_1_ENABLE_SASL = False
     MULTI_LDAP_1_SASL_MECHANISM = ''
     MULTI_LDAP_1_SASL_AUTHC_ID_ATTR = ''
+    MULTI_LDAP_1_PROVIDER = ''
 
 LDAP_UPDATE_USER_WHEN_LOGIN = getattr(settings, 'LDAP_UPDATE_USER_WHEN_LOGIN', True)
 
@@ -885,26 +888,34 @@ class CustomLDAPBackend(object):
         if not ENABLE_LDAP:
             return
 
-        auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider='ldap').first()
-        if auth_user:
-            login_attr = auth_user.uid
-        else:
-            login_attr = ldap_user
-
         # search user from ldap server
         try:
+            auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=LDAP_PROVIDER).first()
+            if auth_user:
+                login_attr = auth_user.uid
+            else:
+                login_attr = ldap_user
+
             nickname, contact_email, user_role = self.search_user(
                 LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, ENABLE_SASL, SASL_MECHANISM,
                 SASL_AUTHC_ID_ATTR, LDAP_BASE_DN, LDAP_LOGIN_ATTR, login_attr, password, LDAP_FILTER,
                 LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR)
+            ldap_provider = LDAP_PROVIDER
         except Exception as e:
             if ENABLE_MULTI_LDAP:
+                auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=MULTI_LDAP_1_PROVIDER).first()
+                if auth_user:
+                    login_attr = auth_user.uid
+                else:
+                    login_attr = ldap_user
+
                 try:
                     nickname, contact_email, user_role = self.search_user(
                         MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD,
                         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR,
                         MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_LOGIN_ATTR, login_attr, password, MULTI_LDAP_1_FILTER,
                         MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR)
+                    ldap_provider = MULTI_LDAP_1_PROVIDER
                 except Exception as e:
                     logger.error(e)
                     return
@@ -913,25 +924,25 @@ class CustomLDAPBackend(object):
                 return
 
         # check if existed
-        ldap_auth_user = SocialAuthUser.objects.filter(provider='ldap', uid=login_attr).first()
+        ldap_auth_user = SocialAuthUser.objects.filter(provider=ldap_provider, uid=login_attr).first()
         if ldap_auth_user:
             user = self.get_user(ldap_auth_user.username)
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
                 logger.warning('The DB data is invalid, delete it and recreate one.')
-                SocialAuthUser.objects.filter(provider='ldap', uid=login_attr).delete()
+                SocialAuthUser.objects.filter(provider=ldap_provider, uid=login_attr).delete()
         else:
             # compatible with old users
             try:
-                user = User.objects.get_old_user(ldap_user, 'ldap', login_attr)
+                user = User.objects.get_old_user(ldap_user, ldap_provider, login_attr)
             except User.DoesNotExist:
                 user = None
 
         if not user:
             try:
                 user = User.objects.create_ldap_user(is_active=ACTIVATE_USER_WHEN_IMPORT)
-                SocialAuthUser.objects.add(user.username, 'ldap', login_attr)
+                SocialAuthUser.objects.add(user.username, ldap_provider, login_attr)
             except Exception as e:
                 logger.error(f'recreate ldap user failed. {e}')
                 return
