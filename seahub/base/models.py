@@ -65,6 +65,15 @@ class FileCommentManager(models.Manager):
 
         return objs
 
+    def list_by_file_uuid(self, file_uuid):
+        objs = self.filter(uuid=file_uuid)
+        return objs
+
+    def add_by_file_uuid(self, file_uuid, author, comment, detail=''):
+        fileuuidmap = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        return self.create(
+            uuid=fileuuidmap, author=author, comment=comment, detail=detail)
+
     def get_by_parent_path(self, repo_id, parent_path):
         uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id,
                                                                     parent_path)
@@ -99,6 +108,7 @@ class FileComment(models.Model):
             'item_name': o.uuid.filename,
             'comment': o.comment,
             'created_at': datetime_to_isoformat_timestr(o.created_at),
+            'updated_at': datetime_to_isoformat_timestr(o.updated_at),
             'resolved': o.resolved,
             'detail': o.detail,
         }

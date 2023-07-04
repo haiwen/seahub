@@ -13,12 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 from seaserv import seafile_api, check_quota
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
@@ -36,6 +37,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
+from seahub.base.models import FileComment
 
 
 logger = logging.getLogger(__name__)
@@ -629,3 +631,182 @@ class SeadocMaskAsDraft(APIView):
         SeadocDraft.objects.unmask_as_draft(file_uuid)
 
         return Response({'success': True})
+
+
+class SeadocCommentsView(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """list comments of a sdoc, same as FileCommentsView
+        """
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
+        resolved = request.GET.get('resolved', None)
+        if resolved not in ('true', 'false', None):
+            error_msg = 'resolved invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        start = None
+        end = None
+        page = request.GET.get('page', '')
+        if page:
+            try:
+                page = int(request.GET.get('page', '1'))
+                per_page = int(request.GET.get('per_page', '25'))
+            except ValueError:
+                page = 1
+                per_page = 25
+            start = (page - 1) * per_page
+            end = page * per_page
+
+        total_count = FileComment.objects.list_by_file_uuid(file_uuid).count()
+        comments = []
+
+        if resolved is None:
+            file_comments = FileComment.objects.list_by_file_uuid(file_uuid)[start: end]
+        else:
+            comment_resolved = to_python_boolean(resolved)
+            file_comments = FileComment.objects.list_by_file_uuid(file_uuid).filter(resolved=comment_resolved)[start: end]
+
+        for file_comment in file_comments:
+            comment = file_comment.to_dict()
+            comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+            comments.append(comment)
+
+        result = {'comments': comments, 'total_count': total_count}
+        return Response(result)
+
+    def post(self, request, file_uuid):
+        """Post a comment of a sdoc.
+        """
+        # argument check
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
+        comment = request.data.get('comment', '')
+        detail = request.data.get('detail', '')
+        author = request.data.get('author', '')
+        username = payload.get('username', '') or author
+        if not comment:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'comment invalid.')
+        if not username:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'author invalid.')
+
+        file_comment = FileComment.objects.add_by_file_uuid(
+            file_uuid, username, comment, detail)
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+        return Response(comment)
+
+
+class SeadocCommentView(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid, comment_id):
+        """Get a comment, same as FileCommentView
+        """
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
+        # resource check
+        try:
+            file_comment = FileComment.objects.get(pk=comment_id)
+        except FileComment.DoesNotExist:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
+        if str(file_comment.uuid.uuid) != file_uuid:
+            return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
+
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(
+            file_comment.author, request=request, avatar_size=avatar_size))
+        return Response(comment)
+
+    def delete(self, request, file_uuid, comment_id):
+        """Delete a comment
+        """
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        try:
+            file_comment = FileComment.objects.get(pk=comment_id)
+        except FileComment.DoesNotExist:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
+        if str(file_comment.uuid.uuid) != file_uuid:
+            return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
+
+        file_comment.delete()
+        return Response({'success': True})
+
+    def put(self, request, file_uuid, comment_id):
+        """Update a comment
+        """
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
+        # argument check
+        resolved = request.data.get('resolved')
+        if resolved not in ('true', 'false', None):
+            error_msg = 'resolved invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        detail = request.data.get('detail')
+        comment = request.data.get('comment')
+
+        # resource check
+        try:
+            file_comment = FileComment.objects.get(pk=comment_id)
+        except FileComment.DoesNotExist:
+            error_msg = 'FileComment %s not found.' % comment_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if str(file_comment.uuid.uuid) != file_uuid:
+            return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
+
+        if resolved is not None:
+            comment_resolved = to_python_boolean(resolved)
+            file_comment.resolved = comment_resolved
+        if detail is not None:
+            file_comment.detail = detail
+        if comment is not None:
+            file_comment.comment = comment
+
+        # save
+        file_comment.updated_at = timezone.now()
+        file_comment.save()
+
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+        return Response(comment)
