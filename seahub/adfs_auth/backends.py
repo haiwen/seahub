@@ -99,6 +99,7 @@ class Saml2Backend(ModelBackend):
 
         if user:
             self.make_profile(user, attributes, attribute_mapping)
+            self.sync_saml_groups(user, attributes)
 
         return user
 
@@ -183,3 +184,28 @@ class Saml2Backend(ModelBackend):
         d_p.save()
 
         self.update_user_role(user, parse_result)
+
+    def sync_saml_groups(self, user, attributes):
+        seafile_groups = attributes.get('seafile_groups', [])
+        if not isinstance(seafile_groups, list):
+            logger.error('seafile_groups type invalid, it should be a list instance')
+            return
+
+        if not seafile_groups:
+            return
+
+        saml_group_ids = [int(group_id) for group_id in seafile_groups]
+
+        joined_groups = ccnet_api.get_groups(user.username)
+        joined_group_ids = [g.id for g in joined_groups]
+        joined_group_map = {g.id: g.creator_name for g in joined_groups}
+
+        need_join_groups = list(set(saml_group_ids) - set(joined_group_ids))
+        for group_id in need_join_groups:
+            group = ccnet_api.get_group(group_id)
+            if group:
+                ccnet_api.group_add_member(group_id, group.creator_name, user.username)
+
+        need_quit_groups = list(set(joined_group_ids) - set(saml_group_ids))
+        for group_id in need_quit_groups:
+            ccnet_api.group_remove_member(group_id, joined_group_map[group_id], user.username)
