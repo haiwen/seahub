@@ -945,7 +945,7 @@ class SeadocRevisions(APIView):
             json.dumps([filename]),
             repo_id, '/Revisions',
             json.dumps([revision_filename]),
-            username=username, need_progress=0, synchronous=1
+            username=username, need_progress=0, synchronous=1,
         )
 
         revision_uuid_map = FileUUIDMap(
@@ -966,6 +966,22 @@ class SeadocRevisions(APIView):
             origin_file_version=origin_file_id,
         )
 
+        # copy image files
+        origin_image_parent_path = '/images/sdoc/' + origin_file_uuid + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, origin_image_parent_path)
+        if dir_id:
+            revision_image_parent_path = gen_seadoc_image_parent_path(
+                revision_file_uuid, repo_id, username)
+            dirents = seafile_api.list_dir_by_path(repo_id, origin_image_parent_path)
+            for e in dirents:
+                obj_name = e.obj_name
+                seafile_api.copy_file(
+                    repo_id, origin_image_parent_path,
+                    json.dumps([obj_name]),
+                    repo_id, revision_image_parent_path,
+                    json.dumps([obj_name]),
+                    username=username, need_progress=0, synchronous=1
+                )
         return Response(revision.to_dict())
 
 
@@ -1033,12 +1049,14 @@ class SeadocPublishRevision(APIView):
 
         # move revision file
         username = request.user.username
-        seafile_api.move_file(repo_id, revision_parent_path,
-                              json.dumps([revision_filename]),
-                              repo_id, dst_parent_path,
-                              json.dumps([origin_file_filename]),
-                              replace=1, username=username,
-                              need_progress=0, synchronous=1)
+        seafile_api.move_file(
+            repo_id, revision_parent_path,
+            json.dumps([revision_filename]),
+            repo_id, dst_parent_path,
+            json.dumps([origin_file_filename]),
+            replace=1, username=username,
+            need_progress=0, synchronous=1,
+        )
 
         dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
@@ -1047,6 +1065,26 @@ class SeadocPublishRevision(APIView):
         sdoc_server_api = SdocServerAPI(
             revision.origin_doc_uuid, origin_file_filename, username)
         sdoc_server_api.refresh_doc()
+
+        # move image files
+        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+        if dir_id:
+            origin_image_parent_path = gen_seadoc_image_parent_path(
+                str(origin_file_uuid.uuid), repo_id, username)
+            dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
+            for e in dirents:
+                obj_name = e.obj_name
+                seafile_api.move_file(
+                    repo_id, revision_image_parent_path,
+                    json.dumps([obj_name]),
+                    repo_id, origin_image_parent_path,
+                    json.dumps([obj_name]),
+                    replace=1, username=username,
+                    need_progress=0, synchronous=1,
+                )
+            seafile_api.del_file(
+                repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
