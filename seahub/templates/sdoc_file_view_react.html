@@ -17,5 +17,6 @@ seadocServerUrl: '{{ seadoc_server_url }}',
 {% endblock %}
 
 {% block render_bundle %}
+<script src="{{ MEDIA_URL }}js/init-scroll-bar.js" ></script>
 {% render_bundle 'viewFileSdoc' 'js' %}
 {% endblock %}
