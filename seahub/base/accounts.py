@@ -56,12 +56,9 @@ except ImportError:
     LDAP_LOGIN_ATTR = ''
 
 # multi ldap
-MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
 try:
-    from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
-         MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR, MULTI_LDAP_1_FILTER, \
-         MULTI_LDAP_1_ENABLE_SASL, MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_SASL_AUTHC_ID_ATTR, \
-         MULTI_LDAP_1_CONTACT_EMAIL_ATTR, MULTI_LDAP_1_USER_ROLE_ATTR
+    from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, \
+         MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR
 except ImportError:
     ENABLE_MULTI_LDAP = False
     MULTI_LDAP_1_SERVER_URL = ''
@@ -69,12 +66,14 @@ except ImportError:
     MULTI_LDAP_1_ADMIN_DN = ''
     MULTI_LDAP_1_ADMIN_PASSWORD = ''
     MULTI_LDAP_1_LOGIN_ATTR = ''
-    MULTI_LDAP_1_FILTER = ''
-    MULTI_LDAP_1_CONTACT_EMAIL_ATTR = ''
-    MULTI_LDAP_1_USER_ROLE_ATTR = ''
-    MULTI_LDAP_1_ENABLE_SASL = False
-    MULTI_LDAP_1_SASL_MECHANISM = ''
-    MULTI_LDAP_1_SASL_AUTHC_ID_ATTR = ''
+
+MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
+MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
+MULTI_LDAP_1_CONTACT_EMAIL_ATTR = getattr(settings, 'MULTI_LDAP_1_CONTACT_EMAIL_ATTR', '')
+MULTI_LDAP_1_USER_ROLE_ATTR = getattr(settings, 'MULTI_LDAP_1_USER_ROLE_ATTR', '')
+MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
+MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+MULTI_LDAP_1_SASL_AUTHC_ID_ATTR = getattr(settings, 'MULTI_LDAP_1_SASL_AUTHC_ID_ATTR', '')
 
 LDAP_UPDATE_USER_WHEN_LOGIN = getattr(settings, 'LDAP_UPDATE_USER_WHEN_LOGIN', True)
 
@@ -825,7 +824,7 @@ class CustomLDAPBackend(object):
         try:
             bind_conn.set_option(ldap.OPT_REFERRALS, 0)
         except Exception as e:
-            raise 'Failed to set referrals option: %s' % e
+            raise Exception('Failed to set referrals option: %s' % e)
 
         try:
             bind_conn.protocol_version = ldap.VERSION3
@@ -841,30 +840,30 @@ class CustomLDAPBackend(object):
             else:
                 bind_conn.simple_bind_s(dn, password)
         except Exception as e:
-            raise 'ldap bind failed: %s' % e
+            raise Exception('ldap bind failed: %s' % e)
 
         return bind_conn
 
     def search_user(self, server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism,
-                    sasl_authc_id_attr, base_dn, login_attr, login, password, serch_filter,
+                    sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
                     contact_email_attr, role_attr):
         try:
             admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
         except Exception as e:
-            raise e
+            raise Exception(e)
 
-        filterstr = filter.filter_format(f'(&({login_attr}=%s))', [login])
+        filterstr = filter.filter_format(f'(&({login_attr_conf}=%s))', [login_attr])
         if serch_filter:
             filterstr = filterstr[:-1] + '(' + serch_filter + '))'
 
         try:
             result_data = admin_bind.search_s(base_dn, ldap.SCOPE_SUBTREE, filterstr)
         except Exception as e:
-            raise 'ldap user search failed: %s' % e
+            raise Exception('ldap user search failed: %s' % e)
 
         # user not found in ldap
         if not result_data:
-            raise 'ldap user %s not found.' % login
+            raise Exception('ldap user %s not found.' % login_attr)
 
         # delete old ldap bind_conn instance and create new, if not, some err will occur
         admin_bind.unbind_s()
@@ -874,12 +873,12 @@ class CustomLDAPBackend(object):
             dn, nickname, contact_email, user_role, authc_id = parse_ldap_res(
                 result_data, enable_sasl, sasl_mechanism, sasl_authc_id_attr, contact_email_attr, role_attr)
         except Exception as e:
-            raise 'parse ldap result failed: %s' % e
+            raise Exception('parse ldap result failed: %s' % e)
 
         try:
             user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism)
         except Exception as e:
-            raise e
+            raise Exception(e)
 
         user_bind.unbind_s()
         return nickname, contact_email, user_role
