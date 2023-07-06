@@ -1061,10 +1061,11 @@ class SeadocPublishRevision(APIView):
         dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
 
-        # refresh origin doc
+        # refresh docs
+        doc_uuids = [revision.origin_doc_uuid, revision.doc_uuid]
         sdoc_server_api = SdocServerAPI(
             revision.origin_doc_uuid, origin_file_filename, username)
-        sdoc_server_api.refresh_doc()
+        sdoc_server_api.internal_refresh_docs(doc_uuids)
 
         # move image files
         revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'

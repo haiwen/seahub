@@ -32,7 +32,8 @@ class SdocServerAPI(object):
             self.doc_uuid, self.filename, self.username)
         self.headers = {'Authorization': 'Token ' + sdoc_server_access_token}
 
-    def refresh_doc(self):
-        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/internal-refresh-doc/?from=seahub'
-        response = requests.post(url, headers=self.headers)
+    def internal_refresh_docs(self, doc_uuids):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/internal-refresh-docs/?from=seahub'
+        data = {"doc_uuids" : doc_uuids}
+        response = requests.post(url, json=data, headers=self.headers)
         return parse_response(response)
