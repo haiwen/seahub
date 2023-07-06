@@ -15,6 +15,7 @@ from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB
 
 from seahub import auth
 from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
@@ -33,6 +34,8 @@ try:
         CUSTOM_SHIBBOLETH_GET_USER_ROLE = False
 except KeyError:
     CUSTOM_SHIBBOLETH_GET_USER_ROLE = False
+
+SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
 
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
@@ -64,22 +67,23 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # Locate the remote user header.
         # import pprint; pprint.pprint(request.META)
         try:
-            username = request.META[SHIB_USER_HEADER]
+            remote_user = request.META[SHIB_USER_HEADER]
         except KeyError:
             # If specified header doesn't exist then return (leaving
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
             return
 
-        p_id = ccnet_api.get_primary_id(username)
-        if p_id is not None:
-            username = p_id
-
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated:
-            if request.user.username == username:
+            # If user is already authenticated, the value of request.user.username should be random ID of user,
+            # not the SHIB_USER_HEADER in the request header
+            shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+            if shib_user:
+                remote_user = shib_user.username
+            if request.user.username == remote_user:
                 if request.user.is_staff:
                     update_sudo_mode_ts(request)
                 return
@@ -94,7 +98,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         # We are seeing this user for the first time in this session, attempt
         # to authenticate the user.
-        user = auth.authenticate(remote_user=username, shib_meta=shib_meta)
+        user = auth.authenticate(remote_user=remote_user, shib_meta=shib_meta)
         if user:
             if not user.is_active:
                 return HttpResponseRedirect(reverse('shib_complete'))

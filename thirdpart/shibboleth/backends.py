@@ -1,10 +1,17 @@
+import logging
+
 from django.conf import settings
 
-from seaserv import ccnet_api
 from seahub.auth.backends import RemoteUserBackend
+from seahub.auth.models import SocialAuthUser
 from seahub.base.accounts import User
 from registration.models import (
     notify_admins_on_activate_request, notify_admins_on_register_complete)
+
+
+logger = logging.getLogger(__name__)
+
+SHIBBOLETH_PROVIDER_IDENTIFIER = getattr(settings, 'SHIBBOLETH_PROVIDER_IDENTIFIER', 'shibboleth')
 
 
 class ShibbolethRemoteUserBackend(RemoteUserBackend):
@@ -43,29 +50,39 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         if not remote_user:
             return
 
-        username = self.clean_username(remote_user)
-
-        local_ccnet_users = ccnet_api.search_emailusers('DB', username, -1, -1)
-        if not local_ccnet_users:
-            local_ccnet_users = ccnet_api.search_emailusers('LDAP', username, -1, -1)
-
-        if username.lower() not in [item.email for item in local_ccnet_users]:
-            local_ccnet_users = []
-
-        if not local_ccnet_users:
-            if self.create_unknown_user:
-                user = User.objects.create_shib_user(
-                    email=username, is_active=self.activate_after_creation)
-                if user and self.activate_after_creation is False:
-                    notify_admins_on_activate_request(user.email)
-                    # Do not send follwing registration finished email (if any)
-                    # which will cause confusion.
-                    return user
-                if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
-                    notify_admins_on_register_complete(user.email)
-            else:
+        remote_user = self.clean_username(remote_user)
+        shib_user = SocialAuthUser.objects.get_by_provider_and_uid(SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+        if shib_user:
+            try:
+                user = User.objects.get(email=shib_user.username)
+            except User.DoesNotExist:
                 user = None
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
+                SocialAuthUser.objects.filter(provider=SHIBBOLETH_PROVIDER_IDENTIFIER, uid=remote_user).delete()
         else:
-            user = User.objects.get(email=username)
+            # compatible with old users via SHIB_USER_HEADER
+            try:
+                user = User.objects.get_old_user(remote_user, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+            except User.DoesNotExist:
+                user = None
+
+        if not user and self.create_unknown_user:
+            try:
+                user = User.objects.create_shib_user(is_active=self.activate_after_creation)
+                SocialAuthUser.objects.add(user.username, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
+            except Exception as e:
+                logger.error(f'create saml user failed. {e}')
+                return None
+
+            if user and self.activate_after_creation is False:
+                notify_admins_on_activate_request(user.email)
+                # Do not send follwing registration finished email (if any)
+                # which will cause confusion.
+                return user
+            if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
+                notify_admins_on_register_complete(user.email)
 
         return user
