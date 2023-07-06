@@ -20,7 +20,7 @@
 
 .sdoc-revision .sdoc-revision-header .sdoc-revision-header-right {
   height: 100%;
-  min-width: 100px;
+  min-width: fit-content;
 }
 
 .sdoc-revision .sdoc-revision-content {

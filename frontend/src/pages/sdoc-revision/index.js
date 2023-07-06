@@ -11,10 +11,11 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 import '../../css/layout.css';
 import '../../css/sdoc-revision.css';
+import toaster from '../../components/toast';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
-const { repoID, fileName, filePath, docUuid, assetsUrl, fileDownloadLink, originFileDownloadLink, isPublished } = window.sdocRevision;
+const { repoID, fileName, filePath, docUuid, assetsUrl, fileDownloadLink, originFileDownloadLink } = window.sdocRevision;
 
 window.seafile = {
   repoID,
@@ -60,13 +61,21 @@ class SdocRevision extends React.Component {
     });
   }
 
+  edit = (event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    window.location.href = `${siteRoot}lib/${repoID}/file${filePath}`;
+  }
+
   publishRevision = (event) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     seafileAPI.sdocPublishRevision(docUuid).then(res => {
-      console.log(res)
+      const { origin_file_path } = res.data;
+      window.location.href = `${siteRoot}lib/${repoID}/file${origin_file_path}`;
     }).catch(error => {
-      console.log(error);
+      const errorMessage = Utils.getErrorMsg(error, false);
+      toaster.danger(gettext(errorMessage));
     });
   }
 
@@ -74,7 +83,7 @@ class SdocRevision extends React.Component {
     const { isLoading, errorMessage, revisionContent, originContent } = this.state;
     if (isLoading) {
       return (
-        <div className="sdoc-revision-viewer d-flex align-items-center justify-content-center">
+        <div className="sdoc-revision-viewer h-100 d-flex align-items-center justify-content-center">
           <Loading />
         </div>
       );
@@ -82,7 +91,7 @@ class SdocRevision extends React.Component {
 
     if (errorMessage) {
       return (
-        <div className="sdoc-revision-viewer d-flex align-items-center justify-content-center">
+        <div className="sdoc-revision-viewer h-100 d-flex align-items-center justify-content-center">
           {gettext(errorMessage)}
         </div>
       );
@@ -97,18 +106,22 @@ class SdocRevision extends React.Component {
   }
 
   render() {
+    const { isLoading, errorMessage } = this.state;
+
     return (
       <div className="sdoc-revision d-flex h-100 w-100 o-hidden">
         <div className="sdoc-revision-container d-flex flex-column">
-          <div className="sdoc-revision-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
-            <div className={classnames('sdoc-revision-header-left d-flex align-items-center o-hidden')}>
+          <div className="sdoc-revision-header pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
+            <div className={classnames('sdoc-revision-header-left h-100 d-flex align-items-center o-hidden')}>
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>
-            <div className="sdoc-revision-header-right">
-              <Button color="success"></Button>
-              {!isPublished && (
-                <Button color="success" onClick={this.publishRevision}>{gettext('Publish')}</Button>
+            <div className="sdoc-revision-header-right h-100 d-flex align-items-center">
+              {(!isLoading && !errorMessage) && (
+                <>
+                  <Button color="success" className="mr-4" onClick={this.edit}>{gettext('Edit')}</Button>
+                  <Button color="success" onClick={this.publishRevision}>{gettext('Publish')}</Button>
+                </>
               )}
             </div>
           </div>
