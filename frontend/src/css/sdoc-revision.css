@@ -1,0 +1,51 @@
+.sdoc-revision .sdoc-revision-container {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+.sdoc-revision .sdoc-revision-header {
+  height: 50px;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #fff;
+}
+
+.sdoc-revision .sdoc-revision-header .sdoc-revision-header-left {
+  font-size: 1.25rem;
+  flex: 1;
+}
+
+.sdoc-revision .sdoc-revision-header .file-name {
+  flex: 1;
+}
+
+.sdoc-revision .sdoc-revision-header .sdoc-revision-header-right {
+  height: 100%;
+  min-width: 100px;
+}
+
+.sdoc-revision .sdoc-revision-content {
+  flex: 1;
+  min-height: 0;
+  padding: 20px 40px;
+  background-color: #F5F5F5;
+  overflow-y: scroll;
+}
+
+.sdoc-revision .sdoc-revision-content .sdoc-revision-viewer {
+  width: 100%;
+  min-height: 120px;
+  flex: 1;
+  background-color: #fff;
+  word-break: break-word;
+  border: 1px solid #e6e6dd;
+}
+
+.sdoc-revision .sdoc-revision-content .sdoc-editor-content {
+  background-color: #fff;
+}
+
+.sdoc-revision .sdoc-revision-content .article {
+  width: 100%;
+  margin: 0;
+}
+

@@ -1,0 +1,124 @@
+import React from 'react';
+import ReactDom from 'react-dom';
+import classnames from 'classnames';
+import { Button } from 'reactstrap';
+import { DiffViewer } from '@seafile/sdoc-editor';
+import { gettext } from '../../utils/constants';
+import Loading from '../../components/loading';
+import GoBack from '../../components/common/go-back';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
+
+import '../../css/layout.css';
+import '../../css/sdoc-revision.css';
+
+const { serviceURL, avatarURL, siteRoot } = window.app.config;
+const { username, name } = window.app.pageOptions;
+const { repoID, fileName, filePath, docUuid, assetsUrl, fileDownloadLink, originFileDownloadLink, isPublished } = window.sdocRevision;
+
+window.seafile = {
+  repoID,
+  docPath: filePath,
+  docName: fileName,
+  docUuid,
+  isOpenSocket: false,
+  serviceUrl: serviceURL,
+  name,
+  username,
+  avatarURL,
+  siteRoot,
+  assetsUrl,
+};
+
+class SdocRevision extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      errorMessage: '',
+      revisionContent: '',
+      originContent: '',
+    };
+  }
+
+  componentDidMount() {
+    fetch(fileDownloadLink).then(res => {
+      return res.json();
+    }).then(revisionContent => {
+      fetch(originFileDownloadLink).then(res => {
+        return res.json();
+      }).then(originContent => {
+        this.setState({ revisionContent, originContent, isLoading: false, errorMessage: '' });
+      }).catch(error => {
+        const errorMessage = Utils.getErrorMsg(error, true);
+        this.setState({ isLoading: false, errorMessage });
+      });
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      this.setState({ isLoading: false, errorMessage });
+    });
+  }
+
+  publishRevision = (event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    seafileAPI.sdocPublishRevision(docUuid).then(res => {
+      console.log(res)
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  renderContent = () => {
+    const { isLoading, errorMessage, revisionContent, originContent } = this.state;
+    if (isLoading) {
+      return (
+        <div className="sdoc-revision-viewer d-flex align-items-center justify-content-center">
+          <Loading />
+        </div>
+      );
+    }
+
+    if (errorMessage) {
+      return (
+        <div className="sdoc-revision-viewer d-flex align-items-center justify-content-center">
+          {gettext(errorMessage)}
+        </div>
+      );
+    }
+
+    return (
+      <DiffViewer
+        currentContent={revisionContent}
+        lastContent={originContent}
+      />
+    );
+  }
+
+  render() {
+    return (
+      <div className="sdoc-revision d-flex h-100 w-100 o-hidden">
+        <div className="sdoc-revision-container d-flex flex-column">
+          <div className="sdoc-revision-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
+            <div className={classnames('sdoc-revision-header-left d-flex align-items-center o-hidden')}>
+              <GoBack />
+              <div className="file-name text-truncate">{fileName}</div>
+            </div>
+            <div className="sdoc-revision-header-right">
+              <Button color="success"></Button>
+              {!isPublished && (
+                <Button color="success" onClick={this.publishRevision}>{gettext('Publish')}</Button>
+              )}
+            </div>
+          </div>
+          <div className="sdoc-revision-content f-flex">
+            {this.renderContent()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+ReactDom.render(<SdocRevision />, document.getElementById('wrapper'));

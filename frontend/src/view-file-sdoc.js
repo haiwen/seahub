@@ -10,7 +10,7 @@ const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, parentDir, filePerm,
-  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl
+  docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -31,7 +31,8 @@ window.seafile = {
   parentFolderURL: `${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`,
   assetsUrl,
   isShowInternalLink: true,
-  isStarIconShown: true // for star/unstar
+  isStarIconShown: true, // for star/unstar
+  revisionURL: Utils.generateRevisionURL(siteRoot, repoID, docPath),
 };
 
 ReactDom.render(
