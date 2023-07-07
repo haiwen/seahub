@@ -250,5 +250,6 @@
   "Auto_wrap": "Auto wrap",
   "Add_comment": "Add comment",
   "Delete_comment": "Delete comment",
-  "Are_you_sure_to_delete_this_comment": "Are you sure to delete this comment?"
+  "Are_you_sure_to_delete_this_comment": "Are you sure to delete this comment?",
+  "Confirm": "Confirm"
 }

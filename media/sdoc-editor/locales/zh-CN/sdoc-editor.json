@@ -250,5 +250,6 @@
   "Auto_wrap": "自动换行",
   "Add_comment": "添加评论",
   "Delete_comment": "删除评论",
-  "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?"
+  "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?",
+  "Confirm": "确定"
 }
