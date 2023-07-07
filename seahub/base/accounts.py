@@ -856,10 +856,17 @@ class CustomLDAPBackend(object):
         if serch_filter:
             filterstr = filterstr[:-1] + '(' + serch_filter + '))'
 
-        try:
-            result_data = admin_bind.search_s(base_dn, ldap.SCOPE_SUBTREE, filterstr)
-        except Exception as e:
-            raise Exception('ldap user search failed: %s' % e)
+        result_data = None
+        base_list = base_dn.split(';')
+        for base in base_list:
+            if base == '':
+                continue
+            try:
+                result_data = admin_bind.search_s(base, ldap.SCOPE_SUBTREE, filterstr)
+                if result_data is not None:
+                    break
+            except Exception as e:
+                raise Exception('ldap user search failed: %s' % e)
 
         # user not found in ldap
         if not result_data:
