@@ -159,6 +159,9 @@ class DirentGridView extends React.Component{
       case 'Start revise':
         this.onStartRevise(currentObject);
         break;
+      case 'List revisions':
+        this.openRevisionsPage(currentObject);
+        break;
       case 'Comment':
         this.onCommentItem();
         break;
@@ -297,12 +300,20 @@ class DirentGridView extends React.Component{
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
-      let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
+      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
       window.open(url);
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
+      const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }
+
+  openRevisionsPage = (currentObject) => {
+    const repoID = this.props.repoID;
+    const filePath = this.getDirentPath(currentObject);
+    const url = Utils.generateRevisionsURL(siteRoot, repoID, filePath);
+    if (!url) return;
+    window.open(url);
   }
 
   onCommentItem = () => {

@@ -11,7 +11,7 @@ const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
-  isSdocRevision, isPublished,
+  isSdocRevision, isPublished, originFilename, revisionCreatedAt,
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -36,6 +36,8 @@ window.seafile = {
   isSdocRevision,
   isPublished,
   revisionURL: Utils.generateRevisionURL(siteRoot, repoID, docPath),
+  originFilename,
+  revisionCreatedAt,
 };
 
 ReactDom.render(

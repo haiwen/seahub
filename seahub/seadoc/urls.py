@@ -3,7 +3,6 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocUploadImage, SeadocDownloadImage, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocRevisions, SeadocPublishRevision
 
-from .views import sdoc_revision
 
 urlpatterns = [
     re_path(r'^access-token/(?P<repo_id>[-0-9a-f]{36})/$', SeadocAccessToken.as_view(), name='seadoc_access_token'),
