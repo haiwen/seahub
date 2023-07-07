@@ -185,3 +185,28 @@ class RepoAPITokenAuthentication(BaseAuthentication):
         request.repo_api_token_obj = rat
 
         return AnonymousUser(), auth[1]
+
+
+class SdocJWTTokenAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        """ sdoc jwt token
+        """
+        from seahub.seadoc.utils import is_valid_seadoc_access_token
+        file_uuid = request.parser_context['kwargs'].get('file_uuid')
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            return None
+
+        username = payload.get('username')
+        if not username:
+            return None
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        if not user or not user.is_active:
+            return None
+
+        return user, auth[1]

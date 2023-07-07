@@ -19,7 +19,7 @@ from django.utils import timezone
 from seaserv import seafile_api, check_quota
 
 from seahub.views import check_folder_permission
-from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
@@ -986,7 +986,7 @@ class SeadocRevisions(APIView):
 
 
 class SeadocPublishRevision(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
