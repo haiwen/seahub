@@ -3,13 +3,14 @@ import os
 import configparser
 
 import pymysql
+pymysql.install_as_MySQLdb()
 
 
-install_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+install_path = os.path.dirname(os.path.abspath(__file__))
 top_dir = os.path.dirname(install_path)
 ccnet_conf = os.path.join(top_dir, 'conf', 'ccnet.conf')
 
-sql = "INSERT INTO EmailUser (email, passwd, is_staff, is_active, ctime) SELECT email, '!', is_staff, is_active, REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(6)),'.','') FROM LDAPUsers"
+sql = "INSERT IGNORE INTO EmailUser (email, passwd, is_staff, is_active, ctime) SELECT email, '!', is_staff, is_active, REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(6)),'.','') FROM LDAPUsers"
 
 
 def migrate_ldapusers():
@@ -20,7 +21,7 @@ def migrate_ldapusers():
         config.read(ccnet_conf)
         db_user = config.get('Database', 'USER')
         db_host = config.get('Database', 'HOST')
-        db_port = config.get('Database', 'PORT')
+        db_port = config.getint('Database', 'PORT')
         db_password = config.get('Database', 'PASSWD')
         db_name = config.get('Database', 'DB')
     except Exception as e:
@@ -29,6 +30,7 @@ def migrate_ldapusers():
 
     try:
         conn = pymysql.connect(user=db_user, host=db_host, port=db_port, password=db_password, database=db_name)
+        conn.autocommit(True)
         cursor = conn.cursor()
     except Exception as e:
         print('Failed to connect to mysql database: %s' % e)
@@ -36,6 +38,7 @@ def migrate_ldapusers():
 
     try:
         cursor.execute(sql)
+        print('Migrated %s records' % cursor.rowcount)
         print('Finish migrate LDAPUsers.')
     except Exception as e:
         print('Failed to exec sql: %s' % e)
