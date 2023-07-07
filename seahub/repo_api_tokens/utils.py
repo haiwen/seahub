@@ -14,6 +14,7 @@ from seahub.utils import is_pro_version, FILEEXT_TYPE_MAP, IMAGE, XMIND, VIDEO
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.constants import PERMISSION_INVISIBLE
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -38,7 +39,6 @@ def permission_check_admin_owner(request, username, repo_id):  # maybe add more 
 
 def get_dir_file_recursively(repo_id, path, all_dirs):
     is_pro = is_pro_version()
-    path_id = seafile_api.get_dir_id_by_path(repo_id, path)
     dirs = seafile_api.list_dir_by_path(repo_id, path, -1, -1)
 
     for dirent in dirs:
@@ -65,7 +65,7 @@ def get_dir_file_recursively(repo_id, path, all_dirs):
         all_dirs.append(entry)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
-        file_list =  [item for item in all_dirs if item['type'] == 'file']
+        file_list = [item for item in all_dirs if item['type'] == 'file']
         contact_email_dict = {}
         nickname_dict = {}
         modifiers_set = {x['modifier_email'] for x in file_list}
@@ -79,7 +79,6 @@ def get_dir_file_recursively(repo_id, path, all_dirs):
             e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
             e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
-
         if stat.S_ISDIR(dirent.mode):
             sub_path = posixpath.join(path, dirent.obj_name)
             get_dir_file_recursively(repo_id, sub_path, all_dirs)
@@ -88,7 +87,7 @@ def get_dir_file_recursively(repo_id, path, all_dirs):
 
 
 def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
-        with_thumbnail, thumbnail_size):
+                           with_thumbnail, thumbnail_size):
 
     repo_id = repo_obj.id
     dir_info_list = []
@@ -96,12 +95,15 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
     # get dirent(folder and file) list
     parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
-    dir_file_list = seafile_api.list_dir_with_perm(repo_id,
-            parent_dir, parent_dir_id, username, -1, -1)
+    dir_file_list = seafile_api.list_dir_with_perm(repo_id, parent_dir,
+                                                   parent_dir_id, username,
+                                                   -1, -1)
 
     try:
         starred_items = UserStarredFiles.objects.filter(email=username,
-                repo_id=repo_id, path__startswith=parent_dir, org_id=-1)
+                                                        repo_id=repo_id,
+                                                        path__startswith=parent_dir,
+                                                        org_id=-1)
         starred_item_path_list = [f.path.rstrip('/') for f in starred_items]
     except Exception as e:
         logger.error(e)
@@ -109,8 +111,14 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
     # only get dir info list
     if not request_type or request_type == 'd':
+
         dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
+
         for dirent in dir_list:
+
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
             dir_info = {}
             dir_info["type"] = "dir"
             dir_info["id"] = dirent.obj_id
@@ -211,7 +219,8 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                     # Then web browser will use this src to get thumbnail instead of
                     # recreating it.
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
-                            str(thumbnail_size), file_obj_id)
+                                                       str(thumbnail_size),
+                                                       file_obj_id)
                     if os.path.exists(thumbnail_file_path):
                         src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
                         file_info['encoded_thumbnail_src'] = quote(src)

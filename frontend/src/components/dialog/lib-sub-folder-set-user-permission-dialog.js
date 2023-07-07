@@ -96,7 +96,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     if (!isPro) {
       this.permissions = ['r', 'rw'];
     } else {
-      this.permissions = ['r', 'rw', 'cloud-edit', 'preview'];
+      this.permissions = ['r', 'rw', 'cloud-edit', 'preview', 'invisible'];
     }
   }
 

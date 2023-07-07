@@ -28,6 +28,7 @@ from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
+from seahub.constants import PERMISSION_INVISIBLE
 
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT
 
@@ -59,8 +60,14 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
 
     # only get dir info list
     if not request_type or request_type == 'd':
+
         dir_list = [dirent for dirent in dir_file_list if stat.S_ISDIR(dirent.mode)]
+
         for dirent in dir_list:
+
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
             dir_info = {}
             dir_info["type"] = "dir"
             dir_info["id"] = dirent.obj_id
