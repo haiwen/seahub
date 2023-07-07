@@ -206,17 +206,19 @@ class UserManager(object):
 
         return self.get(email=email)
 
-    def create_shib_user(self, email, password=None, is_staff=False, is_active=False):
+    def create_shib_user(self, is_staff=False, is_active=False):
         """
         Creates and saves a SHIB user with given username.
         """
-        user = User(email=email)
+        virtual_id = gen_user_virtual_id()
+
+        user = User(email=virtual_id)
         user.is_staff = is_staff
         user.is_active = is_active
-        user.set_password(password)
+        user.set_unusable_password()
         user.save()
 
-        return self.get(email=email)
+        return self.get(email=virtual_id)
 
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)
