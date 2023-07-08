@@ -270,6 +270,12 @@ class DirentListItem extends React.Component {
       case 'Unmask as draft':
         this.onUnmaskAsDraft();
         break;
+      case 'Start revise':
+        this.onStartRevise();
+        break;
+      case 'List revisions':
+        this.openRevisionsPage();
+        break;
       case 'Comment':
         this.props.onDirentClick(this.props.dirent);
         this.props.showDirentDetail('comments');
@@ -379,6 +385,26 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  }
+
+  onStartRevise = () => {
+    const repoID = this.props.repoID;
+    const filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
+      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
+      window.open(url);
+    }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  openRevisionsPage = () => {
+    const repoID = this.props.repoID;
+    const filePath = this.getDirentPath(this.props.dirent);
+    const url = Utils.generateRevisionsURL(siteRoot, repoID, filePath);
+    if (!url) return;
+    window.open(url);
   }
 
   onHistory = () => {

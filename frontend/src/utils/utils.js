@@ -527,7 +527,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MASK_AS_DRAFT, UNMASK_AS_DRAFT,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+      START_REVISE, LIST_REVISIONS, COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -600,6 +600,8 @@ export const Utils = {
         } else {
           list.push(MASK_AS_DRAFT);
         }
+        list.push(START_REVISE);
+        list.push(LIST_REVISIONS);
       }
       if (enableFileComment) {
         list.push(COMMENT);
@@ -1542,6 +1544,17 @@ export const Utils = {
   generateHistoryURL: function(siteRoot, repoID, path) {
     if (!siteRoot || !repoID || !path) return '';
     return siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + this.encodePath(path);
+  },
+
+  generateRevisionURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    return siteRoot + 'repo/sdoc_revision/' + repoID + '/?p=' + this.encodePath(path);
+  },
+
+  generateRevisionsURL: function(siteRoot, repoID, path) {
+    if (!siteRoot || !repoID || !path) return '';
+    console.log(siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path))
+    return siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path);
   }
 
 };

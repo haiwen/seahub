@@ -18,6 +18,8 @@ const TextTranslation = {
   'UNLOCK' : {key : 'Unlock', value : gettext('Unlock')},
   'MASK_AS_DRAFT' : {key : 'Mask as draft', value : gettext('Mark as draft')},
   'UNMASK_AS_DRAFT' : {key : 'Unmask as draft', value : gettext('Unmark as draft')},
+  'START_REVISE' : {key : 'Start revise', value : gettext('Start revise')},
+  'LIST_REVISIONS': { key: 'List revisions', value: gettext('List revisions') },
   'COMMENT' : {key : 'Comment', value : gettext('Comment')},
   'HISTORY' : {key : 'History', value : gettext('History')},
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},

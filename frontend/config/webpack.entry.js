@@ -9,6 +9,8 @@ const entryFiles = {
   fileHistory: "/file-history.js",
   fileHistoryOld: "/file-history-old.js",
   sdocFileHistory: "/pages/sdoc-file-history/index.js",
+  sdocRevision: "/pages/sdoc-revision/index.js",
+  sdocRevisions: "/pages/sdoc-revisions/index.js",
   app: "/app.js",
   draft: "/draft.js",
   sharedDirView: "/shared-dir-view.js",

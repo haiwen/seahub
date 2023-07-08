@@ -1,0 +1,37 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'sdocRevision' 'css'%}
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+    window.app.config.lang = '{{LANGUAGE_CODE}}';
+    window.sdocRevision = {
+        repoID: '{{ repo.id }}',
+        repoName: '{{ repo.name }}',
+        filePath: '{{ path|escapejs }}',
+        fileName: '{{ u_filename|escapejs }}',
+        docUuid: '{{ file_uuid }}',
+        domain: '{{ domain }}',
+        protocol: '{{ protocol }}',
+        assetsUrl: '{{ assets_url }}',
+        fileDownloadLink: '{{ file_download_link }}',
+        isSdocRevision: {% if is_sdoc_revision %}true{% else %}false{% endif %},
+        originDocUuid: '{{ origin_doc_uuid }}',
+        originFileDownloadLink: '{{ origin_file_download_link }}',
+        originParentPath: '{{ origin_parent_path }}',
+        originFilename: '{{ origin_filename }}',
+        originFilePath: '{{ origin_file_path }}',
+        originFileVersion: '{{ origin_file_version }}',
+        publishFileVersion: '{{ publish_file_version }}',
+        publisher: '{{ publisher }}',
+        publisherNickname: '{{ publisher_nickname }}',
+        isPublished: {% if is_published %}true{% else %}false{% endif %},
+        revisionCreatedAt: '{{ revision_created_at }}',
+        revisionUpdatedAt: '{{ revision_updated_at }}',
+    }
+    </script>
+    {% render_bundle 'sdocRevision' 'js'%}
+{% endblock %}

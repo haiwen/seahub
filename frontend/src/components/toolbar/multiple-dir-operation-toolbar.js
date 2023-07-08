@@ -121,6 +121,40 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   }
 
+  onMaskAsDraft = (dirent) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(dirent, 'is_sdoc_draft', true);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onUnmaskAsDraft = (dirent) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+      this.props.updateDirent(dirent, 'is_sdoc_draft', false);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  onStartRevise = (dirent) => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(dirent);
+    seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
+      let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
+      window.open(url);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
   onCommentItem = () => {
     this.props.showDirentDetail('comments');
   }
@@ -170,6 +204,15 @@ class MultipleDirOperationToolbar extends React.Component {
         break;
       case 'Unlock':
         this.unlockFile(dirent);
+        break;
+      case 'Mask as draft':
+        this.onMaskAsDraft(dirent);
+        break;
+      case 'Unmask as draft':
+        this.onUnmaskAsDraft(dirent);
+        break;
+      case 'Start revise':
+        this.onStartRevise(dirent);
         break;
       case 'Comment':
         this.onCommentItem();

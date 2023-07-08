@@ -1397,3 +1397,24 @@ CREATE TABLE `sdoc_draft` (
   KEY `sdoc_draft_repo_id` (`repo_id`),
   KEY `sdoc_draft_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sdoc_revision` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `doc_uuid` varchar(36) NOT NULL,
+  `origin_doc_uuid` varchar(36) NOT NULL,
+  `origin_doc_path` longtext NOT NULL,
+  `origin_file_version` varchar(100) NOT NULL,
+  `publish_file_version` varchar(100) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
+  `publisher` varchar(255) DEFAULT NULL,
+  `is_published` tinyint(1) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sdoc_revise_doc_uuid` (`doc_uuid`),
+  KEY `sdoc_revision_repo_id` (`repo_id`),
+  KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
+  KEY `sdoc_revision_username` (`username`),
+  KEY `sdoc_revision_is_published` (`is_published`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
