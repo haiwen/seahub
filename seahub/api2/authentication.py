@@ -194,6 +194,12 @@ class SdocJWTTokenAuthentication(BaseAuthentication):
         """
         from seahub.seadoc.utils import is_valid_seadoc_access_token
         file_uuid = request.parser_context['kwargs'].get('file_uuid')
+        if not file_uuid:
+            if request._request.method == 'POST':
+                file_uuid = request._request.POST.get('file_uuid')
+            elif request._request.method == 'GET':
+                file_uuid = request._request.GET.get('file_uuid')
+
         auth = request.headers.get('authorization', '').split()
         is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
         if not is_valid:
