@@ -114,7 +114,7 @@ def get_seadoc_upload_link(uuid_map, last_modify_user=''):
     return upload_link
 
 
-def get_seadoc_download_link(uuid_map):
+def get_seadoc_download_link(uuid_map, is_inner=True):
     repo_id = uuid_map.repo_id
     parent_path = uuid_map.parent_path
     filename = uuid_map.filename
@@ -127,7 +127,11 @@ def get_seadoc_download_link(uuid_map):
         repo_id, obj_id, 'view', '', use_onetime=False)
     if not token:
         return None
-    download_link = gen_inner_file_get_url(token, filename)
+    if is_inner:
+        download_link = gen_inner_file_get_url(token, filename)
+        return download_link
+    
+    download_link = gen_file_get_url(token, filename)
     return download_link
 
 

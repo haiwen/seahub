@@ -825,7 +825,8 @@ class SeadocCommentView(APIView):
 
 class SeadocRevisions(APIView):
 
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 

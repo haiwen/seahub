@@ -156,9 +156,6 @@ class DirentGridView extends React.Component{
       case 'Unmask as draft':
         this.onUnmaskAsDraft(currentObject);
         break;
-      case 'Start revise':
-        this.onStartRevise(currentObject);
-        break;
       case 'List revisions':
         this.openRevisionsPage(currentObject);
         break;
@@ -292,18 +289,6 @@ class DirentGridView extends React.Component{
       this.props.updateDirent(currentObject, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }
-
-  onStartRevise = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocStartRevise(repoID, filePath).then((res) => {
-      const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(res.data.file_path);
-      window.open(url);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
   }
