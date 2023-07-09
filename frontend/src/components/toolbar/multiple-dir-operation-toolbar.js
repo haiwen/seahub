@@ -211,9 +211,6 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Unmask as draft':
         this.onUnmaskAsDraft(dirent);
         break;
-      case 'Start revise':
-        this.onStartRevise(dirent);
-        break;
       case 'Comment':
         this.onCommentItem();
         break;
