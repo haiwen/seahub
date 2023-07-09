@@ -802,7 +802,7 @@ DTABLE_WEB_SERVER = ''
 
 ENABLE_SEADOC = False
 SEADOC_PRIVATE_KEY = ''
-SEADOC_SERVER_URL = 'http://192.168.1.7:7070'
+SEADOC_SERVER_URL = 'http://127.0.0.1:7070'
 
 
 ############################
