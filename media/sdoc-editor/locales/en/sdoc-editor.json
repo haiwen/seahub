@@ -251,5 +251,10 @@
   "Add_comment": "Add comment",
   "Delete_comment": "Delete comment",
   "Are_you_sure_to_delete_this_comment": "Are you sure to delete this comment?",
-  "Confirm": "Confirm"
+  "Confirm": "Confirm",
+  "View_changes": "View changes",
+  "Revision": "Revision",
+  "Error": "Error",
+  "Start_revise": "Start revise",
+  "Failed_to_execute_operation_on_server": "Failed to execute operation on server"
 }

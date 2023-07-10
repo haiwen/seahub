@@ -251,5 +251,10 @@
   "Add_comment": "添加评论",
   "Delete_comment": "删除评论",
   "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?",
-  "Confirm": "确定"
+  "Confirm": "确定",
+  "View_changes": "查看改动",
+  "Revision": "修订",
+  "Error": "错误",
+  "Start_revise": "开始修订",
+  "Failed_to_execute_operation_on_server": "无法在服务器上执行操作"
 }
