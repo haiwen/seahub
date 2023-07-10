@@ -49,7 +49,8 @@ from seahub.share.utils import is_repo_admin, check_group_share_in_permission, n
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_PREVIEW_EDIT, \
+        PERMISSION_INVISIBLE
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -2058,6 +2059,10 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
             path_id, username, -1, -1)
 
     for dirent in dirs:
+
+        if dirent.permission == PERMISSION_INVISIBLE:
+            continue
+
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             entry["type"] = 'dir'
@@ -2126,6 +2131,10 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
 
     dir_list, file_list = [], []
     for dirent in dirs:
+
+        if dirent.permission == PERMISSION_INVISIBLE:
+            continue
+
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"

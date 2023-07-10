@@ -8,7 +8,7 @@ import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.constants import (
-    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
+    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, PERMISSION_INVISIBLE,
     PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
     REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY, CUSTOM_PERMISSION_PREFIX
 )
@@ -44,7 +44,7 @@ def normalize_repo_status_str(status):
 def get_available_repo_perms():
     perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
     if is_pro_version():
-        perms += [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT]
+        perms += [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT, PERMISSION_INVISIBLE]
 
     return perms
 

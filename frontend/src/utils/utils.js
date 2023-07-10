@@ -664,6 +664,9 @@ export const Utils = {
       case 'preview':
         title = gettext('Online Read-Only');
         break;
+      case 'invisible':
+        title = gettext('Invisible');
+        break;
     }
     return title;
   },
@@ -685,6 +688,9 @@ export const Utils = {
         break;
       case 'preview':
         title = gettext('User can only view files online via browser. Files can\'t be downloaded.');
+        break;
+      case 'invisible':
+        title = gettext('User can not see this folder.');
         break;
     }
     return title;
