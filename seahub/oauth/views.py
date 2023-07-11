@@ -178,7 +178,7 @@ def oauth_callback(request):
         email = oauth_user.username
         is_new_user = False
     elif old_email:
-        if not is_valid_email(old_email):
+        if not is_valid_email(str(old_email)):
             # In previous versions, if 'email' is not in mailbox format,
             # we combine 'email' and 'provider' to mailbox format.
             old_email = '%s@%s' % (str(old_email), PROVIDER_DOMAIN)
