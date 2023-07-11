@@ -56,5 +56,7 @@ class Command(BaseCommand):
         self.stdout.write('Table %s will clear these invalid repo data:\n%s' %
                           (table_name, '\n'.join(list(set(tb_repo_ids) - set(self.all_repo)))))
 
+        deleted_count = table_model.objects.filter(repo_id__in=list(set(tb_repo_ids) - set(self.all_repo))).count()
+        self.stdout.write('Deleted records count %s' % deleted_count)
         # table_model.objects.filter(repo_id__in=list(set(tb_repo_ids) - set(self.all_repo))).delete()
         self.stdout.write('%s table has been clear\n\n' % table_name)
