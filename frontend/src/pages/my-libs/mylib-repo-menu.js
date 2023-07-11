@@ -83,10 +83,11 @@ class MylibRepoMenu extends React.Component {
       operations.push(monitorOp);
     }
 
-    operations.push('History Setting', 'API Token');
+    operations.push('API Token');
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
+    operations.push('Divider', 'History Setting');
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
     }
@@ -142,7 +143,7 @@ class MylibRepoMenu extends React.Component {
         translateResult = gettext('Share Links Admin');
         break;
       case 'Old Files Auto Delete':
-        translateResult = gettext('Auto deletion');
+        translateResult = gettext('Auto Deletion Setting');
         break;
       default:
         break;
