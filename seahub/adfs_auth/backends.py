@@ -32,11 +32,17 @@ from registration.models import notify_admins_on_activate_request, notify_admins
 
 logger = logging.getLogger(__name__)
 
-SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', '')
+SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
 SHIBBOLETH_AFFILIATION_ROLE_MAP = getattr(settings, 'SHIBBOLETH_AFFILIATION_ROLE_MAP', False)
 
 
 class Saml2Backend(ModelBackend):
+    def get_user(self, username):
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        return user
 
     def authenticate(self, session_info=None, attribute_mapping=None, create_unknown_user=True, **kwargs):
         if session_info is None or attribute_mapping is None:
@@ -59,10 +65,7 @@ class Saml2Backend(ModelBackend):
 
         saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
         if saml_user:
-            try:
-                user = User.objects.get(email=saml_user.username)
-            except User.DoesNotExist:
-                user = None
+            user = self.get_user(saml_user.username)
             if not user:
                 # Means found user in social_auth_usersocialauth but not found user in EmailUser,
                 # delete it and recreate one.
