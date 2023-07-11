@@ -52,7 +52,7 @@ class Command(BaseCommand):
         tb_repo_ids = table_model.objects.all().values_list('repo_id', flat=True)
         end_time3 = time.time()
         self.stdout.write('It takes %s seconds to get table %s repo_ids' % ((end_time3 - start_time3), table_name))
-        self.stdout.write('Table %s repo_ids count %s' % (table_name, len(tb_repo_ids)))
+        self.stdout.write('Table %s records count %s, repo_id count %s' % (table_name, len(tb_repo_ids), len(set(tb_repo_ids))))
         self.stdout.write('Table %s will clear these invalid repo data:\n%s' %
                           (table_name, '\n'.join(list(set(tb_repo_ids) - set(self.all_repo)))))
 
