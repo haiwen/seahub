@@ -127,10 +127,15 @@ class WikisView(APIView):
         if not seafile_api.get_file_id_by_path(repo_id, "/" + page_name):
             try:
                 seafile_api.post_empty_file(repo_id, '/', page_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit.")
+                    from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                    return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, '/')
         if not fs:
