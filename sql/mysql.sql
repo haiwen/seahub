@@ -939,7 +939,7 @@ CREATE TABLE `share_fileshare` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `repo_id` varchar(36) NOT NULL,
-  `path` longtext NOT NULL,
+  `path` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `token` varchar(100) NOT NULL,
   `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
