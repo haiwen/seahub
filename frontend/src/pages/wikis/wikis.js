@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext } from '../../utils/constants';
+import { gettext, canPublishRepo } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
@@ -115,6 +115,7 @@ class Wikis extends Component {
         <div className="main-panel-north border-left-show">
           <div className="cur-view-toolbar">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            {canPublishRepo &&
             <div className="operation">
               <Fragment>
                 <MediaQuery query="(min-width: 768px)">
@@ -125,6 +126,7 @@ class Wikis extends Component {
                 </MediaQuery>
               </Fragment>
             </div>
+            }
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
