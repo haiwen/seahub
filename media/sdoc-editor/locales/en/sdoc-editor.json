@@ -3,6 +3,8 @@
   "Italic": "Italic",
   "Underline": "Underline",
   "Strikethrough": "Strikethrough",
+  "Superscript": "Superscript",
+  "Subscript": "Subscript",
   "Inline_code": "Code",
   "Header_one": "Heading 1",
   "Header_two": "Heading 2",

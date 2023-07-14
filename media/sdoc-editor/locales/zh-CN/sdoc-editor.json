@@ -3,6 +3,8 @@
   "Italic": "斜体",
   "Underline": "下划线",
   "Strikethrough": "中划线",
+  "Superscript": "上标",
+  "Subscript": "下标",
   "Inline_code": "代码",
   "Header_one": "一级标题",
   "Header_two": "二级标题",
