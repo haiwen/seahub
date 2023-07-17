@@ -121,7 +121,7 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   }
 
-  onMaskAsDraft = (dirent) => {
+  onMarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
     seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
@@ -132,7 +132,7 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   }
 
-  onUnmaskAsDraft = (dirent) => {
+  onUnmarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
     seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
@@ -205,11 +205,11 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Unlock':
         this.unlockFile(dirent);
         break;
-      case 'Mask as draft':
-        this.onMaskAsDraft(dirent);
+      case 'Mark as draft':
+        this.onMarkAsDraft(dirent);
         break;
-      case 'Unmask as draft':
-        this.onUnmaskAsDraft(dirent);
+      case 'Unmark as draft':
+        this.onUnmarkAsDraft(dirent);
         break;
       case 'Comment':
         this.onCommentItem();

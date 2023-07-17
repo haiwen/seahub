@@ -264,11 +264,11 @@ class DirentListItem extends React.Component {
       case 'Lock':
         this.onLockItem();
         break;
-      case 'Mask as draft':
-        this.onMaskAsDraft();
+      case 'Mark as draft':
+        this.onMarkAsDraft();
         break;
-      case 'Unmask as draft':
-        this.onUnmaskAsDraft();
+      case 'Unmark as draft':
+        this.onUnmarkAsDraft();
         break;
       case 'List revisions':
         this.openRevisionsPage();
@@ -362,7 +362,7 @@ class DirentListItem extends React.Component {
     });
   }
 
-  onMaskAsDraft = () => {
+  onMarkAsDraft = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
@@ -373,7 +373,7 @@ class DirentListItem extends React.Component {
     });
   }
 
-  onUnmaskAsDraft = () => {
+  onUnmarkAsDraft = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
