@@ -150,11 +150,11 @@ class DirentGridView extends React.Component{
       case 'Lock':
         this.onLockItem(currentObject);
         break;
-      case 'Mask as draft':
-        this.onMaskAsDraft(currentObject);
+      case 'Mark as draft':
+        this.onMarkAsDraft(currentObject);
         break;
-      case 'Unmask as draft':
-        this.onUnmaskAsDraft(currentObject);
+      case 'Unmark as draft':
+        this.onUnmarkAsDraft(currentObject);
         break;
       case 'List revisions':
         this.openRevisionsPage(currentObject);
@@ -271,7 +271,7 @@ class DirentGridView extends React.Component{
     });
   }
 
-  onMaskAsDraft = (currentObject) => {
+  onMarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
@@ -282,7 +282,7 @@ class DirentGridView extends React.Component{
     });
   }
 
-  onUnmaskAsDraft = (currentObject) => {
+  onUnmarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
