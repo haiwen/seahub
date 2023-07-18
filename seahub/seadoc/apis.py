@@ -25,7 +25,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset
+    can_access_seadoc_asset, is_seadoc_revision
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
@@ -218,6 +218,61 @@ class SeadocDownloadLink(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return Response({'download_link': download_link})
+
+
+class SeadocRevisionDownloadLinks(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        
+        file_download_link = get_seadoc_download_link(uuid_map)
+        if not file_download_link:
+            error_msg = 'seadoc file %s not found.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision_info = is_seadoc_revision(file_uuid)
+        origin_doc_uuid = revision_info.get('origin_doc_uuid', '')
+        is_published = revision_info.get('is_published', False)
+
+        if is_published:
+            error_msg = 'seadoc file %s has publish.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_uuid_map:
+            error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        origin_file_download_link = get_seadoc_download_link(origin_uuid_map)
+        if not origin_file_download_link:
+            error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        return Response({
+            'file_download_link': file_download_link,
+            'origin_file_download_link': origin_file_download_link
+        })
 
 
 class SeadocUploadImage(APIView):
