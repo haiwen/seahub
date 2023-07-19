@@ -20,6 +20,7 @@ const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
+const MSG_TYPE_DELETED_FILES = 'deleted_files';
 
 class NoticeItem extends React.Component {
 
@@ -305,6 +306,21 @@ class NoticeItem extends React.Component {
       notice = notice.replace('{libraryName}', repoLink);
 
       return { avatar_url, notice };
+    }
+
+    if (noticeType === MSG_TYPE_DELETED_FILES) {
+      const {
+        repo_id,
+        repo_name,
+      } = detail;
+
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+
+      let notice = gettext('Your library {libraryName} has recently deleted a large number of files.');
+      notice = notice.replace('{libraryName}', repoLink);
+
+      return { avatar_url : null, notice };
     }
 
     // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {

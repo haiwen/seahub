@@ -247,4 +247,22 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
+        elif notice.is_deleted_files_msg():
+            try:
+                d = json.loads(notice.detail)
+                repo_id = d['repo_id']
+                if repo_id in repo_dict:
+                    repo = repo_dict[repo_id]
+                else:
+                    repo = seafile_api.get_repo(repo_id)
+                    repo_dict[repo_id] = repo
+
+                if repo:
+                    d['repo_name'] = repo.name
+                    notice.detail = d
+                else:
+                    notice.detail = None
+            except Exception as e:
+                logger.error(e)
+
     return notices
