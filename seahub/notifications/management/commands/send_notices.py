@@ -206,6 +206,17 @@ class Command(BaseCommand):
         notice.inv_accept_at = inv.accept_time.strftime("%Y-%m-%d %H:%M:%S")
         return notice
 
+    def format_deleted_files_msg(self, notice):
+        d = json.loads(notice.detail)
+        repo_id = d['repo_id']
+        repo = seafile_api.get_repo(repo_id)
+        repo_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+
+        notice.repo_url = repo_url
+        notice.repo_name = repo.name
+        notice.avatar_src = self.get_avatar_src(notice.to_user)
+        return notice
+
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
@@ -332,6 +343,9 @@ class Command(BaseCommand):
 
                 elif notice.is_guest_invitation_accepted_msg():
                     notice = self.format_guest_invitation_accepted_msg(notice)
+
+                elif notice.is_deleted_files_msg():
+                    notice = self.format_deleted_files_msg(notice)
 
                 if notice is None:
                     continue
