@@ -66,10 +66,10 @@ from seahub.signals import (repo_created, repo_deleted, repo_transfer)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
-    get_user_events, EMPTY_SHA1, is_pro_version, \
+    EMPTY_SHA1, is_pro_version, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
+    calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
@@ -4471,85 +4471,6 @@ class SharedRepo(APIView):
 
         return Response('success', status=status.HTTP_200_OK)
 
-class EventsView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        if not EVENTS_ENABLED:
-            events = None
-            return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
-
-        start = request.GET.get('start', '')
-
-        if not start:
-            start = 0
-        else:
-            try:
-                start = int(start)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Start id must be integer')
-
-        email = request.user.username
-        events_count = 15
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            events, events_more_offset = get_org_user_events(org_id, email,
-                                                             start,
-                                                             events_count)
-        else:
-            events, events_more_offset = get_user_events(email, start,
-                                                         events_count)
-        events_more = True if len(events) == events_count else False
-
-        l = []
-        for e in events:
-            d = dict(etype=e.etype)
-            l.append(d)
-            if e.etype == 'repo-update':
-                d['author'] = getattr(e.commit, 'creator_name', '')
-                d['time'] = e.commit.ctime
-                d['desc'] = e.commit.desc
-                d['repo_id'] = e.repo.id
-                d['repo_name'] = e.repo.name
-                d['commit_id'] = e.commit.id
-                d['converted_cmmt_desc'] = translate_commit_desc_escape(convert_cmmt_desc_link(e.commit))
-                d['more_files'] = e.commit.more_files
-                d['repo_encrypted'] = e.repo.encrypted
-            elif e.etype == 'clean-up-repo-trash':
-                d['repo_id'] = e.repo_id
-                d['author'] = e.username
-                d['time'] = datetime_to_timestamp(e.timestamp)
-                d['days'] = e.days
-                d['repo_name'] = e.repo_name
-                d['etype'] = e.etype
-            else:
-                d['repo_id'] = e.repo_id
-                d['repo_name'] = e.repo_name
-                if e.etype == 'repo-create':
-                    d['author'] = e.creator
-                else:
-                    d['author'] = e.repo_owner
-
-                d['time'] = datetime_to_timestamp(e.timestamp)
-
-            size = request.GET.get('size', 36)
-            url, is_default, date_uploaded = api_avatar_url(d['author'], size)
-            d['nick'] = email2nickname(d['author'])
-            d['name'] = email2nickname(d['author'])
-            d['avatar'] = avatar(d['author'], size)
-            d['avatar_url'] = url
-            d['time_relative'] = translate_seahub_time(utc_to_local(e.timestamp))
-            d['date'] = utc_to_local(e.timestamp).strftime("%Y-%m-%d")
-
-        ret = {
-            'events': l,
-            'more': events_more,
-            'more_offset': events_more_offset,
-            }
-        return Response(ret)
 
 class UnseenMessagesCountView(APIView):
     authentication_classes = (TokenAuthentication, )

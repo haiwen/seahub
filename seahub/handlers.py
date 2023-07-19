@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 try:
 
-    import seafevents_api
+    from seafevents import seafevents_api
 
     def repo_created_cb(sender, **kwargs):
         org_id = kwargs['org_id']
