@@ -866,15 +866,26 @@ class LibContentView extends React.Component {
     });
   }
 
-  onAddFile = (filePath, isDraft) => {
+  onAddFile = (filePath, isMarkdownDraft, isSdocDraft) => {
     let repoID = this.props.repoID;
-    seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
+    seafileAPI.createFile(repoID, filePath, isMarkdownDraft).then(res => {
       let name = Utils.getFileName(filePath);
       let parentPath = Utils.getDirName(filePath);
       if (this.state.currentMode === 'column') {
         this.addNodeToTree(name, parentPath, 'file');
       }
       if (parentPath === this.state.path && !this.state.isViewFile) {
+        if (isSdocDraft) { // the new file is marked to be draft
+          seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+            this.addDirent(name, 'file', res.data.size, isSdocDraft);
+          }).catch(error => {
+            let errMessage = Utils.getErrorMsg(error);
+            toaster.danger(errMessage);
+            this.addDirent(name, 'file', res.data.size);
+          });
+          return;
+        }
+
         this.addDirent(name, 'file', res.data.size);
       }
     }).catch((error) => {
@@ -1377,8 +1388,8 @@ class LibContentView extends React.Component {
     }
   }
 
-  addDirent = (name, type, size) => {
-    let item = this.createDirent(name, type, size);
+  addDirent = (name, type, size, isSdocDraft) => {
+    let item = this.createDirent(name, type, size, isSdocDraft);
     let direntList = this.state.direntList;
     if (type === 'dir') {
       direntList.unshift(item);
@@ -1714,11 +1725,15 @@ class LibContentView extends React.Component {
     return new TreeNode({object});
   }
 
-  createDirent(name, type, size) {
+  createDirent(name, type, size, isSdocDraft) {
     // use current dirent parent's permission as it's permission
     const { userPerm: permission } = this.state;
-    let mtime = new Date().getTime()/1000;
-    let dirent = new Dirent({name, type, mtime, size, permission});
+    const mtime = new Date().getTime()/1000;
+    const obj = { name, type, mtime, size, permission };
+    if (isSdocDraft) {
+      obj.is_sdoc_draft = isSdocDraft;
+    }
+    const dirent = new Dirent(obj);
     return dirent;
   }
 

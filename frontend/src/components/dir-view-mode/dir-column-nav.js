@@ -143,11 +143,6 @@ class DirColumnNav extends React.Component {
     this.props.onAddFolderNode(dirPath);
   }
 
-  onAddFileNode = (filePath, isDraft) => {
-    this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
-    this.props.onAddFileNode(filePath, isDraft);
-  }
-
   onRenameNode = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
@@ -287,9 +282,9 @@ class DirColumnNav extends React.Component {
           <ModalPortal>
             <CreateFile
               parentPath={this.state.opNode.path}
-              onAddFile={this.onAddFileNode}
+              onAddFile={this.props.onAddFileNode}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onAddFileToggle}
+              toggleDialog={this.onAddFileToggle}
             />
           </ModalPortal>
         )}

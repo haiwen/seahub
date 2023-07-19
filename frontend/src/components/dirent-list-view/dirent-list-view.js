@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled, canGenerateShareLink } from '../../utils/constants';
+import { siteRoot, gettext, thumbnailSizeForOriginal, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
-import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import toaster from '../toast';
@@ -220,11 +219,6 @@ class DirentListView extends React.Component {
     this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
   }
 
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
-  }
-
   onAddFolder = (dirPath) => {
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
@@ -371,7 +365,7 @@ class DirentListView extends React.Component {
         let id = 'dirents-menu';
         let menuList = [];
         if (isCustomPermission) {
-          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission; 
+          const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
           canModify && menuList.push(TextTranslation.MOVE);
           canCopy && menuList.push(TextTranslation.COPY);
           canDownload && menuList.push(TextTranslation.DOWNLOAD);
@@ -704,9 +698,9 @@ class DirentListView extends React.Component {
               <CreateFile
                 parentPath={this.props.path}
                 fileType={this.state.fileType}
-                onAddFile={this.onAddFile}
+                onAddFile={this.props.onAddFile}
                 checkDuplicatedName={this.checkDuplicatedName}
-                addFileCancel={this.onCreateFileToggle}
+                toggleDialog={this.onCreateFileToggle}
               />
             </ModalPortal>
           )}

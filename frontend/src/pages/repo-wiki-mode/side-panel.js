@@ -125,11 +125,6 @@ class SidePanel extends Component {
     this.props.onAddFolderNode(dirPath);
   }
 
-  onAddFileNode = (filePath, isDraft) => {
-    this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
-    this.props.onAddFileNode(filePath, isDraft);
-  }
-
   onRenameNode = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
@@ -215,9 +210,9 @@ class SidePanel extends Component {
             <CreateFile
               fileType={'.md'}
               parentPath={this.state.opNode.path}
-              onAddFile={this.onAddFileNode}
+              onAddFile={this.props.onAddFileNode}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onAddFileToggle}
+              toggleDialog={this.onAddFileToggle}
             />
           </ModalPortal>
         )}

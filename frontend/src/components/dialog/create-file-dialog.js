@@ -9,7 +9,7 @@ const propTypes = {
   parentPath: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
   checkDuplicatedName: PropTypes.func.isRequired,
-  addFileCancel: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func.isRequired,
 };
 
 class CreateFile extends React.Component {
@@ -18,7 +18,8 @@ class CreateFile extends React.Component {
     this.state = {
       parentPath: '',
       childName: props.fileType || '',
-      isDraft: false,
+      isMarkdownDraft: false,
+      isSdocDraft: false,
       errMessage: '',
       isSubmitBtnActive: false,
     };
@@ -60,8 +61,9 @@ class CreateFile extends React.Component {
       this.setState({errMessage: errMessage});
     } else {
       let path = this.state.parentPath + newName;
-      let isDraft = this.state.isDraft;
-      this.props.onAddFile(path, isDraft);
+      const { isMarkdownDraft, isSdocDraft } = this.state;
+      this.props.onAddFile(path, isMarkdownDraft, isSdocDraft);
+      this.props.toggleDialog();
     }
   }
 
@@ -75,7 +77,7 @@ class CreateFile extends React.Component {
   handleCheck = () => {
     let pos = this.state.childName.lastIndexOf('.');
 
-    if (this.state.isDraft) {
+    if (this.state.isMarkdownDraft) {
       // from draft to not draft
       // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
       // case 2, the file name is not ended with `(draft)`, the user has deleted some characters, like `test(dra.md`
@@ -86,17 +88,17 @@ class CreateFile extends React.Component {
         // remove `(draft)` from file name
         this.setState({
           childName: fileName + fileType,
-          isDraft: !this.state.isDraft
+          isMarkdownDraft: !this.state.isMarkdownDraft
         });
       } else {
         // don't change file name
         this.setState({
-          isDraft: !this.state.isDraft
+          isMarkdownDraft: !this.state.isMarkdownDraft
         });
       }
     }
 
-    if (!this.state.isDraft) {
+    if (!this.state.isMarkdownDraft) {
       // from not draft to draft
       // case 1, test.md  ===> test(draft).md
       // case 2, .md ===> (draft).md
@@ -106,23 +108,19 @@ class CreateFile extends React.Component {
         let fileType = this.state.childName.substring(pos);
         this.setState({
           childName: fileName + '(draft)' + fileType,
-          isDraft: !this.state.isDraft
+          isMarkdownDraft: !this.state.isMarkdownDraft
         });
       } else if (pos === 0 ) {
         this.setState({
           childName: '(draft)' + this.state.childName,
-          isDraft: !this.state.isdraft
+          isMarkdownDraft: !this.state.isMarkdownDraft
         });
       } else {
         this.setState({
-          isDraft: !this.state.isdraft
+          isMarkdownDraft: !this.state.isMarkdownDraft
         });
       }
     }
-  }
-
-  toggle = () => {
-    this.props.addFileCancel();
   }
 
   checkDuplicatedName = () => {
@@ -136,10 +134,18 @@ class CreateFile extends React.Component {
     this.newInput.current.setSelectionRange(0,0);
   }
 
+  toggleMarkSdocDraft = (e) => {
+    this.setState({
+      isSdocDraft: e.target.checked
+    });
+  }
+
   render() {
+    const { isSdocDraft } = this.state;
+    const { toggleDialog } = this.props;
     return (
-      <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
-        <ModalHeader toggle={this.toggle}>{gettext('New File')}</ModalHeader>
+      <Modal isOpen={true} toggle={toggleDialog} onOpened={this.onAfterModelOpened}>
+        <ModalHeader toggle={toggleDialog}>{gettext('New File')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
@@ -159,11 +165,19 @@ class CreateFile extends React.Component {
                 </Label>
               </FormGroup>
             )}
+            {this.props.fileType == '.sdoc' && (
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" checked={isSdocDraft} onChange={this.toggleMarkSdocDraft}/>
+                  <span>{gettext('Mark as draft')}</span>
+                </Label>
+              </FormGroup>
+            )}
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
