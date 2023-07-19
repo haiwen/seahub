@@ -479,7 +479,7 @@ def multi_adfs_sso(request):
             org = ccnet_api.get_org_by_id(org_id)
         except Exception as e:
             logger.error(e)
-            render_data['error_msg'] = 'Error, please contact administrator.'
+            render_data['error_msg'] = 'Cannot find an organization related to domain %s.' % domain
             return render(request, template_name, render_data)
 
         return HttpResponseRedirect('/org/custom/%s/saml2/login/' % org.url_prefix)
