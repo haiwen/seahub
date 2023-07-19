@@ -270,7 +270,7 @@ class DirentGridView extends React.Component {
   onMarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(currentObject, 'is_sdoc_draft', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -281,7 +281,7 @@ class DirentGridView extends React.Component {
   onUnmarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(currentObject, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

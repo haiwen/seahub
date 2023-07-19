@@ -876,7 +876,7 @@ class LibContentView extends React.Component {
       }
       if (parentPath === this.state.path && !this.state.isViewFile) {
         if (isSdocDraft) { // the new file is marked to be draft
-          seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+          seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
             this.addDirent(name, 'file', res.data.size, isSdocDraft);
           }).catch(error => {
             let errMessage = Utils.getErrorMsg(error);

@@ -124,7 +124,7 @@ class MultipleDirOperationToolbar extends React.Component {
   onMarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
-    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(dirent, 'is_sdoc_draft', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -135,7 +135,7 @@ class MultipleDirOperationToolbar extends React.Component {
   onUnmarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
-    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(dirent, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
