@@ -1,5 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import re
+import os
+from datetime import datetime
 
 from django.utils.deprecation import MiddlewareMixin
 from django.core.cache import cache
@@ -98,3 +100,20 @@ class ForcePasswdChangeMiddleware(MiddlewareMixin):
         if request.session.get('force_passwd_change', False):
             if self._request_in_black_list(request):
                 return HttpResponseRedirect(reverse('auth_password_change'))
+
+
+class CountAPICallsMiddleware(MiddlewareMixin):
+
+    _log_dir = os.environ.get('SEAHUB_LOG_DIR', '/tmp')
+    _logfile = os.path.join(_log_dir, 'count_api_calls.log')
+
+    def process_response(self, request, response):
+        if "api2/" in request.path or "api/v2.1/" in request.path or 'pa_api' in request.path:
+            if response.status_code < 300:
+                with open(self._logfile, 'a') as f:
+                    f.write('[%s] %s called the API: %s.\n' % (datetime.now(), request.user.username, request.path))
+            else:
+                with open(self._logfile, 'a') as f:
+                    f.write('response status code: %s \n' % response.status_code)
+
+        return response

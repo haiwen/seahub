@@ -127,6 +127,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'seahub.auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',
+    'seahub.base.middleware.CountAPICallsMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
