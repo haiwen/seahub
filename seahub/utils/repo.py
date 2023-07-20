@@ -79,15 +79,15 @@ def parse_repo_perm(perm):
     RP.can_download = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
     RP.can_upload = True if perm in [
-        PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT] else False
     RP.can_edit_on_web = True if perm in [
         PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
     ] else False
     RP.can_copy = True if perm in [
-        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
     ] else False
     RP.can_delete = True if perm in [
-        PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
     ] else False
     RP.can_preview = True if perm in [
         PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
