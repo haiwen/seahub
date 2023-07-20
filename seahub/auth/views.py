@@ -475,14 +475,21 @@ def multi_adfs_sso(request):
 
         try:
             org_saml_config = OrgSAMLConfig.objects.get_config_by_domain(domain)
+            if not org_saml_config:
+                render_data['error_msg'] = "Cannot find a SAML/ADFS config for the organization related to domain %s." % domain
+                return render(request, template_name, render_data)
             org_id = org_saml_config.org_id
             org = ccnet_api.get_org_by_id(org_id)
+            if not org:
+                render_data['error_msg'] = 'Cannot find an organization related to domain %s.' % domain
+                return render(request, template_name, render_data)
+            url_prefix = org.url_prefix
         except Exception as e:
             logger.error(e)
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
-        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % org.url_prefix)
+        return HttpResponseRedirect('/org/custom/%s/saml2/login/' % url_prefix)
 
     if request.method == "GET":
         return render(request, template_name, render_data)
