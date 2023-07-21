@@ -6,9 +6,10 @@ export default class SdocEditor extends React.Component {
 
   constructor(props) {
     super(props);
-    const { isStarred } = window.app.pageOptions;
+    const { isStarred, isSdocDraft } = window.app.pageOptions;
     this.state = {
-      isStarred: isStarred
+      isStarred: isStarred,
+      isDraft: isSdocDraft
     };
   }
 
@@ -16,17 +17,22 @@ export default class SdocEditor extends React.Component {
     this.setState({isStarred: isStarred});
   }
 
+  unmarkDraft = () => {
+    this.setState({isDraft: false});
+  }
+
   render() {
     const { repoID, docPath } = window.seafile;
-    const { isStarred } = this.state;
+    const { isStarred, isDraft } = this.state;
     return (
       <Fragment>
-        <SimpleEditor isStarred={isStarred} />
+        <SimpleEditor isStarred={isStarred} isDraft={isDraft} />
         <ExternalOperations
           repoID={repoID}
           docPath={docPath}
           isStarred={isStarred}
           toggleStar={this.toggleStar}
+          unmarkDraft={this.unmarkDraft}
         />
       </Fragment>
     );

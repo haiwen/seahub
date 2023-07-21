@@ -1360,16 +1360,3 @@ a.table-sort-op:hover {
 #wiki-file-content .seafile-markdown-outline .seafile-markdown-outline:hover {
   overflow-y: auto;
 }
-
-/* used in both 'dir view' & 'sdoc file view' pages */
-.sdoc-draft-identifier {
-  display: inline-block;
-  font-size: 14px;
-  color: #888;
-  background: #eee;
-  padding: 0 8px;
-  height: 20px;
-  line-height: 20px;
-  border-radius: 10px;
-  margin-left: 6px;
-}
