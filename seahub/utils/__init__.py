@@ -550,7 +550,6 @@ if EVENTS_CONFIG_FILE:
     parsed_events_conf.read(EVENTS_CONFIG_FILE)
 
     try:
-        import seafevents
         EVENTS_ENABLED = True
         SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
     except ImportError:
@@ -566,65 +565,11 @@ if EVENTS_CONFIG_FILE:
         finally:
            session.close()
 
-    def _same_events(e1, e2):
-        """Two events are equal should follow two rules:
-        1. event1.repo_id = event2.repo_id
-        2. event1.commit.creator = event2.commit.creator
-        3. event1.commit.desc = event2.commit.desc
-        """
-        if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-            if e1.repo_id == e2.repo_id and \
-               e1.commit.desc == e2.commit.desc and \
-               getattr(e1.commit, 'creator_name', '') == getattr(e2.commit, 'creator_name', ''):
-                return True
-        return False
-
-    def _get_events(username, start, count, org_id=None):
-        ev_session = SeafEventsSession()
-
-        valid_events = []
-        total_used = 0
-        try:
-            next_start = start
-            while True:
-                events = _get_events_inner(ev_session, username, next_start,
-                                           count, org_id)
-                if not events:
-                    break
-
-                # filter duplicatly commit and merged commit
-                for e1 in events:
-                    duplicate = False
-                    for e2 in valid_events:
-                        if _same_events(e1, e2): duplicate = True; break
-
-                    new_merge = False
-                    if hasattr(e1, 'commit') and e1.commit and \
-                       new_merge_with_no_conflict(e1.commit):
-                        new_merge = True
-
-                    if not duplicate and not new_merge:
-                        valid_events.append(e1)
-                    total_used = total_used + 1
-                    if len(valid_events) == count:
-                        break
-
-                if len(valid_events) == count:
-                    break
-                next_start = next_start + len(events)
-        finally:
-            ev_session.close()
-
-        for e in valid_events:            # parse commit description
-            if hasattr(e, 'commit'):
-                e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
-                e.commit.more_files = more_files_in_commit(e.commit)
-        return valid_events, start + total_used
 
     def _get_activities(username, start, count):
         ev_session = SeafEventsSession()
 
-        events, total_count = [], 0
+        events = []
         try:
             events = seafevents_api.get_user_activities(ev_session,
                     username, start, count)
@@ -633,59 +578,6 @@ if EVENTS_CONFIG_FILE:
 
         return events
 
-    def _get_events_inner(ev_session, username, start, limit, org_id=None):
-        '''Read events from seafevents database, and remove events that are
-        no longer valid
-
-        Return 'limit' events or less than 'limit' events if no more events remain
-        '''
-        valid_events = []
-        next_start = start
-        while True:
-            if org_id and org_id > 0:
-                events = seafevents_api.get_org_user_events(ev_session, org_id,
-                                                        username, next_start,
-                                                        limit)
-            else:
-                events = seafevents_api.get_user_events(ev_session, username,
-                                                    next_start, limit)
-            if not events:
-                break
-
-            for ev in events:
-                if ev.etype == 'repo-update':
-                    repo = seafile_api.get_repo(ev.repo_id)
-                    if not repo:
-                        # delete the update event for repo which has been deleted
-                        seafevents_api.delete_event(ev_session, ev.uuid)
-                        continue
-                    if repo.encrypted:
-                        repo.password_set = seafile_api.is_password_set(
-                            repo.id, username)
-                    ev.repo = repo
-                    ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
-
-                valid_events.append(ev)
-                if len(valid_events) == limit:
-                    break
-
-            if len(valid_events) == limit:
-                break
-            next_start = next_start + len(valid_events)
-
-        return valid_events
-
-
-    def get_user_events(username, start, count):
-        """Return user events list and a new start.
-
-        For example:
-        ``get_user_events('foo@example.com', 0, 10)`` returns the first 10
-        events.
-        ``get_user_events('foo@example.com', 5, 10)`` returns the 6th through
-        15th events.
-        """
-        return _get_events(username, start, count)
 
     def get_user_activities(username, start, count):
         """Return user events list and a new start.
@@ -709,9 +601,6 @@ if EVENTS_CONFIG_FILE:
         with _get_seafevents_session() as session:
             res = seafevents_api.get_org_user_activity_stats_by_day(session, org_id, start, end)
         return res
-
-    def get_org_user_events(org_id, username, start, count):
-        return _get_events(username, start, count, org_id=org_id)
 
     def get_file_history(repo_id, path, start, count, history_limit=-1):
         """Return file histories
@@ -894,15 +783,11 @@ else:
         pass
     def get_user_traffic_by_month():
         pass
-    def get_user_events():
-        pass
     def get_user_activity_stats_by_day():
         pass
     def get_org_user_activity_stats_by_day():
         pass
     def get_log_events_by_time():
-        pass
-    def get_org_user_events():
         pass
     def get_user_activities():
         pass
