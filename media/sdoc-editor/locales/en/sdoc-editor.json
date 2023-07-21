@@ -258,5 +258,9 @@
   "Revision": "Revision",
   "Error": "Error",
   "Start_revise": "Start revise",
-  "Failed_to_execute_operation_on_server": "Failed to execute operation on server"
+  "Failed_to_execute_operation_on_server": "Failed to execute operation on server",
+  "Start_revise_tip": "Create a temporary document and modify on it, merge it back after reviewing changes",
+  "Load_doc_content_error": "Load doc content error",
+  "Draft": "Draft",
+  "Unmark_as_draft": "Unmark as draft"
 }

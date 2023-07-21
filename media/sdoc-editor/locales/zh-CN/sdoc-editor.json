@@ -255,8 +255,12 @@
   "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?",
   "Confirm": "确定",
   "View_changes": "查看改动",
-  "Revision": "修订",
+  "Revision": "修订稿",
   "Error": "错误",
   "Start_revise": "开始修订",
-  "Failed_to_execute_operation_on_server": "无法在服务器上执行操作"
+  "Failed_to_execute_operation_on_server": "无法在服务器上执行操作",
+  "Start_revise_tip": "创建一个临时文档并对其进行修订，检查更改后将其合并回来",
+  "Load_doc_content_error": "加载文档内容错误",
+  "Draft": "草稿",
+  "Unmark_as_draft": "取消草稿标记"
 }
