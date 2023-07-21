@@ -81,6 +81,9 @@ class SeadocDraft(models.Model):
 
 class SeadocRevisionManager(models.Manager):
 
+    def get_by_pk(self, revision_id):
+        return self.filter(pk=revision_id).first()
+
     def get_by_doc_uuid(self, doc_uuid):
         return self.filter(doc_uuid=doc_uuid).first()
 
@@ -154,6 +157,7 @@ class SeadocRevision(models.Model):
         file_path = posixpath.join(parent_path, filename)
 
         return {
+            'revision_id': self.pk,
             'username': self.username,
             'nickname': email2nickname(self.username),
             'repo_id': self.repo_id,

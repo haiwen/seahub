@@ -1264,7 +1264,10 @@ class LibContentView extends React.Component {
       if (this.state.currentMode === 'column' && Utils.isMarkdownFile(direntPath)) {
         this.showColumnMarkdownFile(direntPath);
       } else {
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(direntPath);
+        if (dirent.is_sdoc_revision && dirent.revision_id) {
+          url = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+        }
 
         let isWeChat = Utils.isWeChat();
         if (!isWeChat) {
@@ -1633,7 +1636,11 @@ class LibContentView extends React.Component {
           this.showColumnMarkdownFile(node.path);
         }
       } else {
-        const url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
+        let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
+        let dirent = node.object;
+        if (dirent.is_sdoc_revision && dirent.revision_id) {
+          url = siteRoot + 'lib/' + repoID + '/revisions/' + dirent.revision_id + '/';
+        }
         window.open(url);
       }
     }
