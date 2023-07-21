@@ -210,7 +210,7 @@ class DirOperationToolbar extends React.Component {
                 <button className="dropdown-item" onClick={this.onCreateExcelToggle} role="menuitem">{gettext('New Excel File')}</button>
                 <button className="dropdown-item" onClick={this.onCreatePPTToggle} role="menuitem">{gettext('New PowerPoint File')}</button>
                 <button className="dropdown-item" onClick={this.onCreateWordToggle} role="menuitem">{gettext('New Word File')}</button>
-                {enableSeadoc && <button className="dropdown-item" onClick={this.onCreateSeaDocToggle} role="menuitem">{gettext('New SeaDoc File')}</button>}
+                {enableSeadoc && <button className="dropdown-item" onClick={this.onCreateSeaDocToggle} role="menuitem">{gettext('New SeaDoc File')} (beta)</button>}
               </div>
             )}
           </Fragment>
