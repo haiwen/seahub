@@ -10,7 +10,8 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   docPath: PropTypes.string.isRequired,
   isStarred: PropTypes.bool.isRequired,
-  toggleStar: PropTypes.func.isRequired
+  toggleStar: PropTypes.func.isRequired,
+  unmarkDraft: PropTypes.func.isRequired
 };
 
 class ExternalOperations extends React.Component {
@@ -26,15 +27,27 @@ class ExternalOperations extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeInternalLinkEvent = eventBus.subscribe(EXTERNAL_EVENT.INTERNAL_LINK_CLICK, this.onInternalLinkToggle);
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
+    this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
   }
 
   componentWillUnmount() {
     this.unsubscribeInternalLinkEvent();
     this.unsubscribeStar();
+    this.unsubscribeUnmark();
   }
 
   onInternalLinkToggle = () => {
     this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
+  }
+
+  unmark = () => {
+    const { repoID, docPath } = this.props;
+    seafileAPI.sdocUnmarkAsDraft(repoID, docPath).then((res) => {
+      this.props.unmarkDraft();
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
   }
 
   toggleStar = () => {

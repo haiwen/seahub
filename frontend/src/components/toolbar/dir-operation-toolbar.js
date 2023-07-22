@@ -110,7 +110,7 @@ class DirOperationToolbar extends React.Component {
   onCreateFileToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '',
+      fileType: ''
     });
   }
 
@@ -147,11 +147,6 @@ class DirOperationToolbar extends React.Component {
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.sdoc'
     });
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
   }
 
   onAddFolder = (dirPath) => {
@@ -215,7 +210,7 @@ class DirOperationToolbar extends React.Component {
                 <button className="dropdown-item" onClick={this.onCreateExcelToggle} role="menuitem">{gettext('New Excel File')}</button>
                 <button className="dropdown-item" onClick={this.onCreatePPTToggle} role="menuitem">{gettext('New PowerPoint File')}</button>
                 <button className="dropdown-item" onClick={this.onCreateWordToggle} role="menuitem">{gettext('New Word File')}</button>
-                {enableSeadoc && <button className="dropdown-item" onClick={this.onCreateSeaDocToggle} role="menuitem">{gettext('New SeaDoc File')}</button>}
+                {enableSeadoc && <button className="dropdown-item" onClick={this.onCreateSeaDocToggle} role="menuitem">{gettext('New SeaDoc File')} (beta)</button>}
               </div>
             )}
           </Fragment>
@@ -255,9 +250,9 @@ class DirOperationToolbar extends React.Component {
             <CreateFile
               parentPath={this.props.path}
               fileType={this.state.fileType}
-              onAddFile={this.onAddFile}
+              onAddFile={this.props.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
+              toggleDialog={this.onCreateFileToggle}
             />
           </ModalPortal>
         )}

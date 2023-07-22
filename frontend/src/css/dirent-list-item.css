@@ -23,3 +23,15 @@
 .tag-list-title {
   overflow: hidden;
 }
+
+.sdoc-draft-identifier {
+  display: inline-block;
+  font-size: 14px;
+  color: #888;
+  background: #eee;
+  padding: 0 8px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 10px;
+  margin-left: 6px;
+}

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, thumbnailSizeForOriginal, username, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled, canGenerateShareLink } from '../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -29,6 +29,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object,
   direntList: PropTypes.array.isRequired,
+  fullDirentList: PropTypes.array,
   onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
   onItemCopy: PropTypes.func.isRequired,
@@ -48,7 +49,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
 };
 
-class DirentGridView extends React.Component{
+class DirentGridView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,11 +92,6 @@ class DirentGridView extends React.Component{
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({isCreateFileDialogShow: false});
-    this.props.onAddFile(filePath, isDraft);
   }
 
   onAddFolder = (dirPath) => {
@@ -169,7 +165,7 @@ class DirentGridView extends React.Component{
         this.onCreateFolderToggle(currentObject);
         break;
       case 'New File':
-        this.onCreateFileToggle(currentObject);
+        this.onCreateFileToggle();
         break;
       case 'Access Log':
         this.onAccessLog(currentObject);
@@ -274,7 +270,7 @@ class DirentGridView extends React.Component{
   onMarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocMaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocMarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(currentObject, 'is_sdoc_draft', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -285,7 +281,7 @@ class DirentGridView extends React.Component{
   onUnmarkAsDraft = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
-    seafileAPI.sdocUnmaskAsDraft(repoID, filePath).then((res) => {
+    seafileAPI.sdocUnmarkAsDraft(repoID, filePath).then((res) => {
       this.props.updateDirent(currentObject, 'is_sdoc_draft', false);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -527,9 +523,9 @@ class DirentGridView extends React.Component{
           <ModalPortal>
             <CreateFile
               parentPath={this.props.path}
-              onAddFile={this.onAddFile}
+              onAddFile={this.props.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
-              addFileCancel={this.onCreateFileToggle}
+              toggleDialog={this.onCreateFileToggle}
             />
           </ModalPortal>
         )}
