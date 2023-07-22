@@ -76,8 +76,16 @@
   border: 1px solid #e6e6dd;
 }
 
-.sdoc-file-history .sdoc-file-history-content .sdoc-editor-content {
-  background-color: #fff;
+.sdoc-file-history .sdoc-file-history-content .sdoc-article-wrapper {
+  position: relative !important;
+  overflow: hidden;
+  width: 100%;
+}
+
+.sdoc-file-history .sdoc-file-history-content .sdoc-article-container {
+  width: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .sdoc-file-history .sdoc-file-history-content .article {

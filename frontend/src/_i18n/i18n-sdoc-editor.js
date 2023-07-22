@@ -14,7 +14,7 @@ i18n
     lng: lang,
     fallbackLng: 'en',
     ns: ['sdoc-editor'],
-    defaultNS: 'translations',
+    defaultNS: 'sdoc-editor',
 
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
