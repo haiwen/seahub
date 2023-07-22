@@ -1401,6 +1401,7 @@ CREATE TABLE `sdoc_draft` (
 CREATE TABLE `sdoc_revision` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_id` varchar(36) NOT NULL,
+  `revision_id` int(11) NOT NULL,
   `doc_uuid` varchar(36) NOT NULL,
   `origin_doc_uuid` varchar(36) NOT NULL,
   `origin_doc_path` longtext NOT NULL,
@@ -1413,6 +1414,7 @@ CREATE TABLE `sdoc_revision` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sdoc_revise_doc_uuid` (`doc_uuid`),
+  UNIQUE KEY `sdoc_revision_repo_id_revision_id` (`repo_id`, `revision_id`),
   KEY `sdoc_revision_repo_id` (`repo_id`),
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
   KEY `sdoc_revision_username` (`username`),

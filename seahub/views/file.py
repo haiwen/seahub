@@ -2127,7 +2127,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
     if not repo:
         raise Http404
 
-    revision = SeadocRevision.objects.get_by_pk(revision_id)
+    revision = SeadocRevision.objects.get_by_revision_id(repo_id, revision_id)
     if not revision:
         return render_error(request, 'revision not found')
     uuid_map = FileUUIDMap.objects.filter(

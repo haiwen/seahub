@@ -203,7 +203,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                             doc_uuid=file_uuid_map.uuid).first()
                         if sdoc_revision:
                             file_info['is_sdoc_revision'] = True
-                            file_info['revision_id'] = sdoc_revision.pk
+                            file_info['revision_id'] = sdoc_revision.revision_id
                         else:
                             file_info['is_sdoc_revision'] = False
                 except Exception as e:
