@@ -13,7 +13,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
     file_access, view_lib_file_via_smart_link, view_media_file_via_share_link, \
-    view_media_file_via_public_wiki
+    view_media_file_via_public_wiki, view_sdoc_revision
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 
@@ -240,6 +240,7 @@ urlpatterns = [
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
+    re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
 

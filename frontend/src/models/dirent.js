@@ -39,6 +39,8 @@ class Dirent {
       }
       if (Utils.isSdocFile(json.name)) {
         this.is_sdoc_draft = json.is_sdoc_draft || false;
+        this.is_sdoc_revision = json.is_sdoc_revision || false;
+        this.revision_id = json.revision_id || null;
       }
     }
   }

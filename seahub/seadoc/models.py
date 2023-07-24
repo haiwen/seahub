@@ -81,6 +81,25 @@ class SeadocDraft(models.Model):
 
 class SeadocRevisionManager(models.Manager):
 
+    def add(self, doc_uuid, origin_doc_uuid, repo_id, origin_doc_path, username, origin_file_version):
+        last_revision = self.filter(repo_id=repo_id).order_by('revision_id').last()
+        if not last_revision:
+            revision_id = 1
+        else:
+            revision_id = last_revision.revision_id + 1
+        return self.create(
+                doc_uuid=doc_uuid,
+                origin_doc_uuid=origin_doc_uuid,
+                repo_id=repo_id,
+                revision_id=revision_id,
+                origin_doc_path=origin_doc_path,
+                username=username,
+                origin_file_version=origin_file_version,
+            )
+
+    def get_by_revision_id(self, repo_id, revision_id):
+        return self.filter(repo_id=repo_id, revision_id=revision_id).first()
+
     def get_by_doc_uuid(self, doc_uuid):
         return self.filter(doc_uuid=doc_uuid).first()
 
@@ -113,6 +132,7 @@ class SeadocRevision(models.Model):
     doc_uuid = models.CharField(max_length=36, unique=True)
     origin_doc_uuid = models.CharField(max_length=36, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
+    revision_id = models.IntegerField()  # revision_id in repo
     origin_doc_path = models.TextField()  # used when origin file deleted
     username = models.CharField(max_length=255, db_index=True)
     origin_file_version = models.CharField(max_length=100)
@@ -126,6 +146,7 @@ class SeadocRevision(models.Model):
 
     class Meta:
         db_table = 'sdoc_revision'
+        unique_together = ('repo_id', 'revision_id')
 
     def to_dict(self, fileuuidmap_queryset=None):
         from seahub.tags.models import FileUUIDMap
@@ -157,6 +178,7 @@ class SeadocRevision(models.Model):
             'username': self.username,
             'nickname': email2nickname(self.username),
             'repo_id': self.repo_id,
+            'revision_id': self.revision_id,
             'doc_uuid': self.doc_uuid,
             'parent_path': parent_path,
             'filename': filename,

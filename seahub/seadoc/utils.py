@@ -178,12 +178,14 @@ def can_access_seadoc_asset(request, repo_id, path, file_uuid):
 
     return False
 
-def is_seadoc_revision(doc_uuid):
+def is_seadoc_revision(doc_uuid, revision=None):
     info = {}
-    revision = SeadocRevision.objects.get_by_doc_uuid(doc_uuid)
+    if not revision:
+        revision = SeadocRevision.objects.get_by_doc_uuid(doc_uuid)
     if revision:
         info = {'is_sdoc_revision': True}
         revision_info = revision.to_dict()
+        info['revision_id'] = revision_info['revision_id']
         info['origin_doc_uuid'] = revision_info['origin_doc_uuid']
         info['origin_parent_path'] = revision_info['origin_parent_path']
         info['origin_filename'] = revision_info['origin_filename']

@@ -15,6 +15,7 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.files.base import ContentFile
 from django.utils import timezone
+from django.db import transaction
 
 from seaserv import seafile_api, check_quota
 
@@ -995,6 +996,25 @@ class SeadocRevisions(APIView):
         revision_file_uuid = str(uuid.uuid4())
         revision_filename = revision_file_uuid + '.sdoc'
 
+        with transaction.atomic():
+            revision_uuid_map = FileUUIDMap(
+                uuid=revision_file_uuid,
+                repo_id=repo_id,
+                parent_path='/Revisions',
+                filename=revision_filename,
+                is_dir=False,
+            )
+            revision_uuid_map.save()
+
+            revision = SeadocRevision.objects.add(
+                doc_uuid=revision_file_uuid,
+                origin_doc_uuid=origin_file_uuid,
+                repo_id=repo_id,
+                origin_doc_path=path,
+                username=username,
+                origin_file_version=origin_file_id,
+            )
+
         # copy file to revision dir
         seafile_api.copy_file(
             repo_id, parent_dir,
@@ -1002,24 +1022,6 @@ class SeadocRevisions(APIView):
             repo_id, '/Revisions',
             json.dumps([revision_filename]),
             username=username, need_progress=0, synchronous=1,
-        )
-
-        revision_uuid_map = FileUUIDMap(
-            uuid=revision_file_uuid,
-            repo_id=repo_id,
-            parent_path='/Revisions',
-            filename=revision_filename,
-            is_dir=False,
-        )
-        revision_uuid_map.save()
-
-        revision = SeadocRevision.objects.create(
-            doc_uuid=revision_file_uuid,
-            origin_doc_uuid=origin_file_uuid,
-            repo_id=repo_id,
-            origin_doc_path=path,
-            username=username,
-            origin_file_version=origin_file_id,
         )
 
         # copy image files

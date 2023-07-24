@@ -673,6 +673,9 @@ class DirentListItem extends React.Component {
       dirHref = siteRoot + 'library/' + this.props.repoID + '/' + this.props.currentRepoInfo.repo_name + Utils.encodePath(direntPath);
     }
     let fileHref = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(direntPath);
+    if (dirent.is_sdoc_revision && dirent.revision_id) {
+      fileHref = siteRoot + 'lib/' + this.props.repoID + '/revisions/' + dirent.revision_id + '/';
+    }
 
     let toolTipID = '';
     let tagTitle = '';
