@@ -879,72 +879,11 @@ class SeadocCommentView(APIView):
         return Response(comment)
 
 
-class SeadocRevisions(APIView):
-
+class SeadocStartRevise(APIView):
     # sdoc editor use jwt token
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
-
-    def get(self, request):
-        """list
-        """
-        username = request.user.username
-        # argument check
-        origin_file_uuid = request.GET.get('doc_uuid')
-        repo_id = request.GET.get('repo_id')
-        try:
-            page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
-        except ValueError:
-            page = 1
-            per_page = 25
-        start = (page - 1) * per_page
-        limit = per_page + 1
-
-        if origin_file_uuid:
-            origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_file_uuid)
-            if not origin_uuid_map:
-                error_msg = 'seadoc uuid %s not found.' % origin_file_uuid
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-            repo_id = origin_uuid_map.repo_id
-            username = request.user.username
-            path = posixpath.join(origin_uuid_map.parent_path, origin_uuid_map.filename)
-            # permission check
-            if not check_folder_permission(request, repo_id, path):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            revision_queryset = SeadocRevision.objects.list_by_origin_doc_uuid(origin_uuid_map.uuid, start, limit)
-            count = SeadocRevision.objects.filter(origin_doc_uuid=origin_uuid_map.uuid).count()
-        elif repo_id:
-            # resource check
-            repo = seafile_api.get_repo(repo_id)
-            if not repo:
-                error_msg = 'Library %s not found.' % repo_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-            # permission check
-            permission = check_folder_permission(request, repo_id, '/')
-            if not permission:
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            revision_queryset = SeadocRevision.objects.list_by_repo_id(repo_id, start, limit)
-            count = SeadocRevision.objects.filter(repo_id=repo_id).count()
-        else:
-            # owned
-            revision_queryset = SeadocRevision.objects.list_by_username(username, start, limit)
-            count = SeadocRevision.objects.filter(username=username).count()
-
-        uuid_set = set()
-        for item in revision_queryset:
-            uuid_set.add(item.doc_uuid)
-            uuid_set.add(item.origin_doc_uuid)
-
-        fileuuidmap_queryset = FileUUIDMap.objects.filter(uuid__in=list(uuid_set))
-        revisions = [revision.to_dict(fileuuidmap_queryset) for revision in revision_queryset]
-
-        return Response({'revisions': revisions, 'count': count})
 
     def post(self, request):
         """create
@@ -1041,6 +980,73 @@ class SeadocRevisions(APIView):
                     username=username, need_progress=0, synchronous=1
                 )
         return Response(revision.to_dict())
+
+
+class SeadocRevisionsCount(APIView):
+
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        revision_queryset = SeadocRevision.objects.list_all_by_origin_doc_uuid(uuid_map.uuid)
+        return Response({
+            'count': revision_queryset.count()
+        })
+
+
+class SeadocRevisions(APIView):
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision_queryset = SeadocRevision.objects.list_all_by_origin_doc_uuid(uuid_map.uuid)
+
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            page = 1
+            per_page = 25
+        start = (page - 1) * per_page
+        limit = per_page + 1
+
+        revisions_queryset= revision_queryset[start:limit]
+        uuid_set = set()
+        for item in revisions_queryset:
+            uuid_set.add(item.doc_uuid)
+            uuid_set.add(item.origin_doc_uuid)
+
+        fileuuidmap_queryset = FileUUIDMap.objects.filter(uuid__in=list(uuid_set))
+        revisions = [revision.to_dict(fileuuidmap_queryset) for revision in revisions_queryset]
+
+        return Response({
+            'count': revision_queryset.count(),
+            'revisions': revisions
+        })
 
 
 class SeadocPublishRevision(APIView):
