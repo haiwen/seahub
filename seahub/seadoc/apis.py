@@ -1032,7 +1032,7 @@ class SeadocRevisions(APIView):
             page = 1
             per_page = 25
         start = (page - 1) * per_page
-        limit = per_page + 1
+        limit = page * per_page
 
         revisions_queryset= revision_queryset[start:limit]
         uuid_set = set()
