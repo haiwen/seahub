@@ -9,22 +9,41 @@ class SingleSelectEditor extends Component {
 
   constructor(props) {
     super(props);
-    const options = this.getSelectColumnOptions();
+    const options = this.getSelectColumnOptions(props);
     this.state = {
       value: props.row[props.column.key],
       searchVal: '',
       highlightIndex: -1,
       maxItemNum: 0,
-      itemHeight: 0
+      itemHeight: 0,
+      filteredOptions: options,
     };
     this.options = options;
-    this.filteredOptions = options;
     this.timer = null;
     this.editorKey = `single-select-editor-${props.column.key}`;
   }
 
-  getSelectColumnOptions = () => {
-    const { column, row, columns } = this.props;
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const currentCascadeColumnValue = this.getCascadeColumnValue(this.props);
+    const nextCascadeColumnValue = this.getCascadeColumnValue(nextProps);
+    if (currentCascadeColumnValue !== nextCascadeColumnValue) {
+      this.options = this.getSelectColumnOptions(nextProps);
+      this.setState({ filteredOptions: this.options });
+    }
+  }
+
+  getCascadeColumnValue = (props) => {
+    const { column, row, columns } = props;
+    const { data } = column;
+    const { cascade_column_key } = data || {};
+    if (!cascade_column_key) return '';
+    const cascadeColumn = columns.find(item => item.key === cascade_column_key);
+    if (!cascadeColumn) return '';
+    return row[cascade_column_key];
+  }
+
+  getSelectColumnOptions = (props) => {
+    const { column, row, columns } = props;
     let options = getSelectColumnOptions(column);
     const { data } = column;
     const { cascade_column_key, cascade_settings } = data || {};
@@ -41,35 +60,30 @@ class SingleSelectEditor extends Component {
     return options;
   }
 
-  setRef = (ref) => {
-    this.ref = ref;
-    if (!this.ref) return;
-    const { toggle } = this.ref;
-    this.ref.toggle = () => {
-      toggle && toggle();
-      this.props.onUpdateState();
-    };
+  toggle = () => {
+    this.ref.toggle();
+    this.props.onUpdateState();
   }
 
   onChangeSearch = (searchVal) => {
     const { searchVal: oldSearchVal } = this.state;
     if (oldSearchVal === searchVal) return;
     const val = searchVal.toLowerCase();
-    this.filteredOptions = val ?
+    const filteredOptions = val ?
       this.options.filter((item) => item.name && item.name.toLowerCase().indexOf(val) > -1) : this.options;
-    this.setState({ searchVal });
+    this.setState({ searchVal, filteredOptions });
   }
 
   onSelectOption = (optionID) => {
     const { column } = this.props;
     this.setState({ value: optionID }, () => {
       this.props.onCommit({ [column.key]: optionID }, column);
-      this.ref.toggle();
+      this.toggle();
     });
   }
 
   render() {
-    const { value } = this.state;
+    const { value, filteredOptions } = this.state;
     const { column } = this.props;
 
     return (
@@ -79,7 +93,8 @@ class SingleSelectEditor extends Component {
         trigger="legacy"
         placement="bottom-start"
         hideArrow={true}
-        ref={this.setRef}
+        toggle={this.toggle}
+        ref={ref => this.ref = ref}
       >
         <div className="single-select-editor-container">
           <div className="search-single-selects">
@@ -91,7 +106,7 @@ class SingleSelectEditor extends Component {
             />
           </div>
           <div className="single-select-editor-content">
-            {this.filteredOptions.map(option => {
+            {filteredOptions.map(option => {
               const isSelected = value === option.id;
               const style = {
                 backgroundColor: option.color,

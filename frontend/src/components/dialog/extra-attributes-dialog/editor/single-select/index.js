@@ -21,7 +21,7 @@ class SingleSelect extends Component {
   }
 
   updateState = () => {
-    // this.setState({ isShowSingleSelect: !this.state.isShowSingleSelect });
+    this.setState({ isShowSingleSelect: !this.state.isShowSingleSelect });
   }
 
   onCommit = (value, column) => {
