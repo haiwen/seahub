@@ -103,7 +103,8 @@ class ExtraAttributesDialog extends Component {
     const { repoID, filePath } = this.props;
     seafileAPI.newFileExtendedProperties(repoID, filePath, data).then(res => {
       this.isExist = true;
-      this.getData();
+      const { row } = res.data;
+      this.setState({ row: row, isLoading: false, errorMsg: '' });
     }).catch(error => {
       const errorMsg =Utils.getErrorMsg(error);
       toaster.danger(gettext(errorMsg));
@@ -117,9 +118,9 @@ class ExtraAttributesDialog extends Component {
       const { repoID, filePath } = this.props;
       if (this.isExist) {
         seafileAPI.updateFileExtendedProperties(repoID, filePath, data).then(res => {
-          this.setState({ update: {} });
+          this.setState({ update: {}, row: res.data.row });
         }).catch(error => {
-          const errorMsg =Utils.getErrorMsg(error);
+          const errorMsg = Utils.getErrorMsg(error);
           toaster.danger(gettext(errorMsg));
         });
       } else {

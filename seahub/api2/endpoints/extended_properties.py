@@ -112,7 +112,20 @@ class ExtendedPropertiesView(APIView):
             logger.error('update props table error: %s', e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'success': True})
+        ## query
+        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `UUID`='{file_uuid}'"
+        try:
+            result = seatable_api.query(sql)
+        except Exception as e:
+            logger.exception('query sql: %s error: %s', sql, e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        rows = result.get('results')
+        row = rows[0] if rows else {}
+        return Response({
+            'row': row,
+            'metadata': result['metadata'],
+            'editable_columns': EX_EDITABLE_COLUMNS
+        })
 
     def get(self, request, repo_id):
         if not all((DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_PROPS_TABLE)):
@@ -228,7 +241,20 @@ class ExtendedPropertiesView(APIView):
             logger.error('update props table error: %s', e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'success': True})
+        ## query
+        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `UUID`='{file_uuid}'"
+        try:
+            result = seatable_api.query(sql)
+        except Exception as e:
+            logger.exception('query sql: %s error: %s', sql, e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        rows = result.get('results')
+        row = rows[0] if rows else {}
+        return Response({
+            'row': row,
+            'metadata': result['metadata'],
+            'editable_columns': EX_EDITABLE_COLUMNS
+        })
 
     def delete(self, request, repo_id):
         if not all((DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_PROPS_TABLE)):

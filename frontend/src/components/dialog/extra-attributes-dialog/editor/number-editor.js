@@ -34,7 +34,7 @@ class NumberEditor extends React.Component {
     let { selectionStart, selectionEnd, value } = event.currentTarget;
     if (event.keyCode === KeyCodes.Enter || event.keyCode === KeyCodes.Esc) {
       event.preventDefault();
-      this.onBlur();
+      this.input.blur();
     } else if ((event.keyCode === KeyCodes.LeftArrow && selectionStart === 0) ||
       (event.keyCode === KeyCodes.RightArrow && selectionEnd === value.length)
     ) {
