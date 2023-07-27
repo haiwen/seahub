@@ -257,6 +257,7 @@ CREATE TABLE `base_filecomment` (
   `uuid_id` char(32) NOT NULL,
   `detail` longtext NOT NULL,
   `resolved` tinyint(1) NOT NULL,
+  `element_id` varchar(36) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid` (`uuid_id`),
   KEY `base_filecomment_author_8a4d7e91` (`author`),
@@ -1419,4 +1420,17 @@ CREATE TABLE `sdoc_revision` (
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
   KEY `sdoc_revision_username` (`username`),
   KEY `sdoc_revision_is_published` (`is_published`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sdoc_comment_reply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(255) NOT NULL,
+  `reply` longtext NOT NULL,
+  `comment_id` int(11) NOT NULL,
+  `doc_uuid` varchar(36) NOT NULL,
+  `created_at` datetime(6) NOT NULL DEFAULT current_timestamp(6),
+  `updated_at` datetime(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6),
+  PRIMARY KEY (`id`),
+  KEY `sdoc_comment_reply_comment_id` (`comment_id`),
+  KEY `sdoc_comment_reply_doc_uuid` (`doc_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

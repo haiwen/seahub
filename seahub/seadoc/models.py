@@ -199,3 +199,36 @@ class SeadocRevision(models.Model):
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }
+
+
+class SeadocCommentReplyManager(models.Manager):
+    def list_by_comment_id(self, comment_id):
+        return self.filter(comment_id=comment_id)
+
+    def list_by_doc_uuid(self, doc_uuid):
+        return self.filter(doc_uuid=doc_uuid)
+
+
+class SeadocCommentReply(models.Model):
+    author = models.CharField(max_length=255)
+    reply = models.TextField()
+    comment_id = models.IntegerField(db_index=True)
+    doc_uuid = models.CharField(max_length=36, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = SeadocCommentReplyManager()
+
+    class Meta:
+        db_table = 'sdoc_comment_reply'
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'author': self.author,
+            'reply': self.reply,
+            'comment_id': self.comment_id,
+            'doc_uuid': self.doc_uuid,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'updated_at': datetime_to_isoformat_timestr(self.updated_at),
+        }
