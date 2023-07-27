@@ -173,7 +173,21 @@ class ExtendedPropertiesView(APIView):
             logger.exception('query sql: %s error: %s', sql, e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         rows = result.get('results')
-        row = rows[0] if rows else {}
+        if rows:
+            row = rows[0]
+        else:
+            row = {
+                'Repo ID': repo_id,
+                'File': file_name,
+                'Path': path,
+                'UUID': file_uuid
+            }
+            for name in ['Repo ID', 'File', 'Path', 'UUID']:
+                for column in result['metadata']:
+                    if name == column['name']:
+                        row[column['key']] = row[name]
+                        row.pop(name, None)
+                        break
         return Response({
             'row': row,
             'metadata': result['metadata'],
