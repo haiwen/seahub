@@ -41,6 +41,12 @@
 }
 
 /* editor */
+.single-select-editor-popover .popover,
+.single-select-editor-popover .popover-inner {
+  width: fit-content;
+  max-width: fit-content;
+}
+
 .single-select-editor-container {
   min-height: 160px;
   width: 320px;

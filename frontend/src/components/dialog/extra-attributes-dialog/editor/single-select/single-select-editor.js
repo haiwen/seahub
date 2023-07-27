@@ -60,14 +60,9 @@ class SingleSelectEditor extends Component {
     return options;
   }
 
-  setRef = (ref) => {
-    this.ref = ref;
-    if (!this.ref) return;
-    const { toggle } = this.ref;
-    this.ref.toggle = () => {
-      toggle && toggle();
-      this.props.onUpdateState();
-    };
+  toggle = () => {
+    this.ref.toggle();
+    this.props.onUpdateState();
   }
 
   onChangeSearch = (searchVal) => {
@@ -83,7 +78,7 @@ class SingleSelectEditor extends Component {
     const { column } = this.props;
     this.setState({ value: optionID }, () => {
       this.props.onCommit({ [column.key]: optionID }, column);
-      this.ref.toggle();
+      this.toggle();
     });
   }
 
@@ -98,7 +93,8 @@ class SingleSelectEditor extends Component {
         trigger="legacy"
         placement="bottom-start"
         hideArrow={true}
-        ref={this.setRef}
+        toggle={this.toggle}
+        ref={ref => this.ref = ref}
       >
         <div className="single-select-editor-container">
           <div className="search-single-selects">
