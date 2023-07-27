@@ -59,7 +59,7 @@ class TestParseRepoPerm(BaseTestCase):
         assert parse_repo_perm(PERMISSION_READ_WRITE).can_upload is True
         assert parse_repo_perm(PERMISSION_READ).can_upload is False
         assert parse_repo_perm(PERMISSION_PREVIEW).can_upload is False
-        assert parse_repo_perm(PERMISSION_PREVIEW_EDIT).can_upload is False
+        assert parse_repo_perm(PERMISSION_PREVIEW_EDIT).can_upload is True
 
     def test_valid_prop(self):
         assert parse_repo_perm(PERMISSION_READ).can_download is True
