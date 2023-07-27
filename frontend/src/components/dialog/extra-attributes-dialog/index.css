@@ -11,3 +11,7 @@
   overflow-y: scroll;
   padding: 30px;
 }
+
+.extra-attributes-dialog .modal-body .form-control.disabled {
+  background-color: #f8f9fa;
+}

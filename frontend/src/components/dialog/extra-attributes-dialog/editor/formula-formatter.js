@@ -10,7 +10,9 @@ function FormulaFormatter(props) {
   const { data } = column;
   const { result_type, format } = data || {};
   if (result_type === FORMULA_RESULT_TYPE.DATE) {
-    return getDateDisplayString(value, format);
+    return (
+      <div className="form-control disabled">{getDateDisplayString(value, format)}</div>
+    );
   }
   if (result_type === FORMULA_RESULT_TYPE.STRING) {
     return value;

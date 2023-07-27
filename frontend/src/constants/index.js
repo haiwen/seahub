@@ -20,7 +20,13 @@ export const EXTRA_ATTRIBUTES_NOT_DISPLAY_COLUMN_KEY = [
   '_archived',
   '_creator',
   '_last_modifier',
+  '_ctime',
   '_mtime',
+];
+
+export const EXTRA_ATTRIBUTES_NOT_DISPLAY_COLUMN_NAME = [
+  'Repo ID',
+  'UUID',
 ];
 
 export const FORMULA_RESULT_TYPE = {
