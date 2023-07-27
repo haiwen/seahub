@@ -1560,6 +1560,11 @@ export const Utils = {
     if (!siteRoot || !repoID || !path) return '';
     console.log(siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path))
     return siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path);
-  }
+  },
+
+  isFunction: function(functionToCheck) {
+    const getType = {};
+    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+  },
 
 };

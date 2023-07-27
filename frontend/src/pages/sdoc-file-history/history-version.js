@@ -107,7 +107,7 @@ class HistoryVersion extends React.Component {
               alt={gettext('More Operations')}
             />
             <DropdownMenu>
-              {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
+              {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
               <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
               <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>

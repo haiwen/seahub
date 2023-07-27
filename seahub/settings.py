@@ -862,6 +862,13 @@ if os.environ.get('SEAFILE_DOCS', None):
     LOGO_WIDTH = ''
     ENABLE_WIKI = True
 
+#######################
+# extended properties #
+#######################
+SEATABLE_EX_PROPS_BASE_API_TOKEN = ''
+EX_PROPS_TABLE = ''
+EX_EDITABLE_COLUMNS = []
+
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
     'EVENTS_CONFIG_FILE',
