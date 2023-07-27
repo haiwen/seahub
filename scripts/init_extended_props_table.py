@@ -17,9 +17,9 @@ LEDGER_COLUMNS = [
     {'column_key': 'ngbE', 'column_name': '废弃日期', 'column_type': 'formula', 'column_data': {'format': 'YYYY-MM-DD', 'formula': "dateAdd({创建日期}, {保密期限}, 'days')", 'operated_columns': ['BeVA', 'uFNa'], 'result_type': 'date'}}
 ]
 
-DTABLE_WEB_SERVER = 'https://dev.seatable.cn'
-SEATABLE_EXTENDED_PROPS_BASE_API_TOKEN = 'ccae087f46c000bb3bfb690b82980048feaaf52c'
-EXTENDED_PROPS_TABLE_NAME = 'props-2'
+DTABLE_WEB_SERVER = ''
+SEATABLE_EXTENDED_PROPS_BASE_API_TOKEN = ''
+EXTENDED_PROPS_TABLE_NAME = ''
 
 # auth
 url = f"{DTABLE_WEB_SERVER.strip('/')}/api/v2.1/dtable/app-access-token/?from=dtable_web"
