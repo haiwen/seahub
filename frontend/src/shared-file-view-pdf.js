@@ -10,7 +10,7 @@ const { err } = window.shared.pageOptions;
 
 class SharedFileViewPDF extends React.Component {
   render() {
-    return <SharedFileView content={<FileContent />} />;
+    return <SharedFileView content={<FileContent />} fileType="pdf" />;
   }
 }
 

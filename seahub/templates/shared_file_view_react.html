@@ -26,6 +26,7 @@
 {% elif filetype == 'Audio' %}
     {% render_bundle 'sharedFileViewAudio' 'css' %}
 {% elif filetype == 'PDF' %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css" />
     <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
     {% render_bundle 'sharedFileViewPDF' 'css' %}
 {% elif filetype == 'Document' %}
