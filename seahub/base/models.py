@@ -38,21 +38,21 @@ class TimestampedModel(models.Model):
 
 
 class FileCommentManager(models.Manager):
-    def add(self, repo_id, parent_path, item_name, author, comment, detail='', element_id=''):
+    def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
         fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
                                                                     parent_path,
                                                                     item_name,
                                                                     False)
-        c = self.model(uuid=fileuuidmap, author=author, comment=comment, detail=detail, element_id=element_id)
+        c = self.model(uuid=fileuuidmap, author=author, comment=comment, detail=detail)
         c.save(using=self._db)
         return c
 
-    def add_by_file_path(self, repo_id, file_path, author, comment, detail='', element_id=''):
+    def add_by_file_path(self, repo_id, file_path, author, comment, detail=''):
         file_path = self.model.normalize_path(file_path)
         parent_path = os.path.dirname(file_path)
         item_name = os.path.basename(file_path)
 
-        return self.add(repo_id, parent_path, item_name, author, comment, detail, element_id)
+        return self.add(repo_id, parent_path, item_name, author, comment, detail)
 
     def get_by_file_path(self, repo_id, file_path):
         parent_path = os.path.dirname(file_path)
@@ -69,10 +69,10 @@ class FileCommentManager(models.Manager):
         objs = self.filter(uuid=file_uuid)
         return objs
 
-    def add_by_file_uuid(self, file_uuid, author, comment, detail='', element_id=''):
+    def add_by_file_uuid(self, file_uuid, author, comment, detail=''):
         fileuuidmap = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         return self.create(
-            uuid=fileuuidmap, author=author, comment=comment, detail=detail, element_id=element_id)
+            uuid=fileuuidmap, author=author, comment=comment, detail=detail)
 
     def get_by_parent_path(self, repo_id, parent_path):
         uuids = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id,
@@ -92,7 +92,6 @@ class FileComment(models.Model):
     updated_at = models.DateTimeField(default=timezone.now)
     resolved = models.BooleanField(default=False, db_index=True)
     detail = models.TextField(default='')
-    element_id = models.CharField(max_length=36, default='')
 
     objects = FileCommentManager()
 
@@ -116,7 +115,6 @@ class FileComment(models.Model):
             'updated_at': datetime_to_isoformat_timestr(o.updated_at),
             'resolved': o.resolved,
             'detail': o.detail,
-            'element_id': o.element_id,
             'replies': replies,
         }
 

@@ -772,7 +772,6 @@ class SeadocCommentsView(APIView):
         comment = request.data.get('comment', '')
         detail = request.data.get('detail', '')
         author = request.data.get('author', '')
-        element_id = request.data.get('element_id', '')
         username = payload.get('username', '') or author
         if not comment:
             return api_error(status.HTTP_400_BAD_REQUEST, 'comment invalid.')
@@ -780,7 +779,7 @@ class SeadocCommentsView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'author invalid.')
 
         file_comment = FileComment.objects.add_by_file_uuid(
-            file_uuid, username, comment, detail, element_id)
+            file_uuid, username, comment, detail)
         comment = file_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
         return Response(comment)

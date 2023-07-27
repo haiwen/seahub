@@ -257,7 +257,6 @@ CREATE TABLE `base_filecomment` (
   `uuid_id` char(32) NOT NULL,
   `detail` longtext NOT NULL,
   `resolved` tinyint(1) NOT NULL,
-  `element_id` varchar(36) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `base_filecomment_uuid_id_4f9a2ca2_fk_tags_fileuuidmap_uuid` (`uuid_id`),
   KEY `base_filecomment_author_8a4d7e91` (`author`),
