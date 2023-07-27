@@ -17,13 +17,13 @@ LEDGER_COLUMNS = [
     {'column_key': 'ngbE', 'column_name': '废弃日期', 'column_type': 'formula', 'column_data': {'format': 'YYYY-MM-DD', 'formula': "dateAdd({创建日期}, {保密期限}, 'days')", 'operated_columns': ['BeVA', 'uFNa'], 'result_type': 'date'}}
 ]
 
-DTABLE_WEB_SERVER = ''
-SEATABLE_LEDGER_BASE_API_TOKEN = ''
-LEDGER_TABLE_NAME = 'props'
+DTABLE_WEB_SERVER = 'https://dev.seatable.cn'
+SEATABLE_EXTENDED_PROPS_BASE_API_TOKEN = 'ccae087f46c000bb3bfb690b82980048feaaf52c'
+EXTENDED_PROPS_TABLE_NAME = 'props-2'
 
 # auth
 url = f"{DTABLE_WEB_SERVER.strip('/')}/api/v2.1/dtable/app-access-token/?from=dtable_web"
-resp = requests.get(url, headers={'Authorization': f'Token {SEATABLE_LEDGER_BASE_API_TOKEN}'})
+resp = requests.get(url, headers={'Authorization': f'Token {SEATABLE_EXTENDED_PROPS_BASE_API_TOKEN}'})
 dtable_uuid = resp.json()['dtable_uuid']
 access_token = resp.json()['access_token']
 dtable_server_url = resp.json()['dtable_server']
@@ -35,13 +35,13 @@ resp = requests.get(url, headers=headers)
 metadata = resp.json()['metadata']
 existed_table = None
 for table in metadata['tables']:
-    if table['name'] == LEDGER_TABLE_NAME:
+    if table['name'] == EXTENDED_PROPS_TABLE_NAME:
         existed_table = table
         break
 
 # check table or add table
 if existed_table:
-    logging.info('table %s exists', LEDGER_TABLE_NAME)
+    logging.info('table %s exists', EXTENDED_PROPS_TABLE_NAME)
     for col in LEDGER_COLUMNS:
         target_col = None
         for table_col in existed_table['columns']:
@@ -58,7 +58,7 @@ else:
     # add table
     url = f"{dtable_server_url.strip('/')}/api/v1/dtables/{dtable_uuid}/tables/?from=dtable_web"
     data = {
-        'table_name': LEDGER_TABLE_NAME,
+        'table_name': EXTENDED_PROPS_TABLE_NAME,
         'columns': LEDGER_COLUMNS
     }
     resp = requests.post(url, headers=headers, json=data)
