@@ -773,7 +773,7 @@ class SeadocCommentsView(APIView):
         detail = request.data.get('detail', '')
         author = request.data.get('author', '')
         username = payload.get('username', '') or author
-        if not comment:
+        if comment is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'comment invalid.')
         if not username:
             return api_error(status.HTTP_400_BAD_REQUEST, 'author invalid.')
@@ -866,16 +866,19 @@ class SeadocCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'comment not found: %s' % comment_id)
 
         if resolved is not None:
+            # do not refresh updated_at
             comment_resolved = to_python_boolean(resolved)
             file_comment.resolved = comment_resolved
-        if detail is not None:
-            file_comment.detail = detail
-        if comment is not None:
-            file_comment.comment = comment
+            file_comment.save(update_fields=['resolved'])
 
-        # save
-        file_comment.updated_at = timezone.now()
-        file_comment.save()
+        if detail is not None or comment is not None:
+            if detail is not None:
+                file_comment.detail = detail
+            if comment is not None:
+                file_comment.comment = comment
+            # save
+            file_comment.updated_at = timezone.now()
+            file_comment.save()
 
         comment = file_comment.to_dict()
         comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
@@ -932,9 +935,10 @@ class SeadocCommentRepliesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         reply_content = request.data.get('reply', '')
+        type_content = request.data.get('type', '')
         author = request.data.get('author', '')
         username = payload.get('username', '') or author
-        if not reply_content:
+        if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
         if not username:
             return api_error(status.HTTP_400_BAD_REQUEST, 'author invalid.')
@@ -947,7 +951,8 @@ class SeadocCommentRepliesView(APIView):
 
         reply = SeadocCommentReply.objects.create(
             author=username,
-            reply=reply_content,
+            reply=str(reply_content),
+            type=str(type_content),
             comment_id=comment_id,
             doc_uuid=file_uuid,
         )
@@ -1009,7 +1014,7 @@ class SeadocCommentReplyView(APIView):
 
         # argument check
         reply_content = request.data.get('reply')
-        if not reply_content:
+        if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
 
         # resource check
@@ -1024,14 +1029,13 @@ class SeadocCommentReplyView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
 
         # save
-        reply.reply = reply_content
+        reply.reply = str(reply_content)
         reply.updated_at = timezone.now()
         reply.save()
         return Response(reply.to_dict())
 
 
 class SeadocStartRevise(APIView):
-
     # sdoc editor use jwt token
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)

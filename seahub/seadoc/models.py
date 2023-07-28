@@ -212,6 +212,7 @@ class SeadocCommentReplyManager(models.Manager):
 class SeadocCommentReply(models.Model):
     author = models.CharField(max_length=255)
     reply = models.TextField()
+    type = models.CharField(max_length=36)
     comment_id = models.IntegerField(db_index=True)
     doc_uuid = models.CharField(max_length=36, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -227,6 +228,7 @@ class SeadocCommentReply(models.Model):
             'id': self.pk,
             'author': self.author,
             'reply': self.reply,
+            'type': self.type,
             'comment_id': self.comment_id,
             'doc_uuid': self.doc_uuid,
             'created_at': datetime_to_isoformat_timestr(self.created_at),

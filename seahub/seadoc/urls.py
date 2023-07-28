@@ -23,7 +23,6 @@ urlpatterns = [
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/$', SeadocCommentRepliesView.as_view(), name='seadoc_comment_replies'),
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', SeadocCommentReplyView.as_view(), name='seadoc_comment_reply'),
     re_path(r'^start-revise/$', SeadocStartRevise.as_view(), name='seadoc_start_revise'),
-    re_path(r'^revisions/$', SeadocRevisions.as_view(), name='seadoc_revisions'),
     re_path(r'^publish-revision/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocPublishRevision.as_view(), name='seadoc_publish_revision'),
     re_path(r'^revisions-count/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionsCount.as_view(), name='seadoc_revisions_count'),
     re_path(r'^revisions/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisions.as_view(), name='seadoc_revisions'),
