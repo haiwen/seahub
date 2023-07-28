@@ -109,6 +109,10 @@ class SeadocRevisionManager(models.Manager):
     def list_by_origin_doc_uuid(self, origin_doc_uuid, start, limit):
         return self.filter(
             origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('-id')[start:limit]
+    
+    def list_all_by_origin_doc_uuid(self, origin_doc_uuid):
+        return self.filter(
+            origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('revision_id')
 
     def list_by_username(self, username, start, limit):
         return self.filter(
