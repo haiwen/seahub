@@ -1000,9 +1000,9 @@ class SeadocRevisionsCount(APIView):
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        revision_queryset = SeadocRevision.objects.list_all_by_origin_doc_uuid(uuid_map.uuid)
+        count = SeadocRevision.objects.filter(origin_doc_uuid=uuid_map.uuid).count()
         return Response({
-            'count': revision_queryset.count()
+            'count': count
         })
 
 
@@ -1023,6 +1023,7 @@ class SeadocRevisions(APIView):
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        count = SeadocRevision.objects.filter(origin_doc_uuid=uuid_map.uuid).count()
         revision_queryset = SeadocRevision.objects.list_all_by_origin_doc_uuid(uuid_map.uuid)
 
         try:
@@ -1044,7 +1045,7 @@ class SeadocRevisions(APIView):
         revisions = [revision.to_dict(fileuuidmap_queryset) for revision in revisions_queryset]
 
         return Response({
-            'count': revision_queryset.count(),
+            'count': count,
             'revisions': revisions
         })
 
