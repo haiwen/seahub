@@ -747,7 +747,7 @@ class SeadocCommentsView(APIView):
         reply_queryset = SeadocCommentReply.objects.list_by_doc_uuid(file_uuid)
 
         for file_comment in file_comments:
-            comment = file_comment.to_dict(reply_queryset) 
+            comment = file_comment.to_dict(reply_queryset)
             comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
             comments.append(comment)
 
