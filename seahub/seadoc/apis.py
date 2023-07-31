@@ -897,6 +897,10 @@ class SeadocCommentRepliesView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
         start = None
         end = None
         page = request.GET.get('page', '')
@@ -919,7 +923,11 @@ class SeadocCommentRepliesView(APIView):
         total_count = SeadocCommentReply.objects.list_by_comment_id(comment_id).count()
         replies = []
         reply_queryset = SeadocCommentReply.objects.list_by_comment_id(comment_id)[start: end]
-        replies = [reply.to_dict() for reply in reply_queryset]
+        for reply in reply_queryset:
+            data = reply.to_dict()
+            data.update(
+                user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+            replies.append(data)
 
         result = {'replies': replies, 'total_count': total_count}
         return Response(result)
@@ -934,8 +942,12 @@ class SeadocCommentRepliesView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
         reply_content = request.data.get('reply', '')
-        type_content = request.data.get('type', '')
+        type_content = request.data.get('type', 'reply')
         author = request.data.get('author', '')
         username = payload.get('username', '') or author
         if reply_content is None:
@@ -956,7 +968,10 @@ class SeadocCommentRepliesView(APIView):
             comment_id=comment_id,
             doc_uuid=file_uuid,
         )
-        return Response(reply.to_dict())
+        data = reply.to_dict()
+        data.update(
+            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+        return Response(data)
 
 
 class SeadocCommentReplyView(APIView):
@@ -971,6 +986,11 @@ class SeadocCommentReplyView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
         # resource check
         file_comment = FileComment.objects.filter(
             id=comment_id, uuid=file_uuid).first()
@@ -981,7 +1001,11 @@ class SeadocCommentReplyView(APIView):
             id=reply_id, doc_uuid=file_uuid, comment_id=comment_id).first()
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
-        return Response(reply.to_dict())
+
+        data = reply.to_dict()
+        data.update(
+            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+        return Response(data)
 
     def delete(self, request, file_uuid, comment_id, reply_id):
         """Delete a comment reply
@@ -1016,6 +1040,10 @@ class SeadocCommentReplyView(APIView):
         reply_content = request.data.get('reply')
         if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
 
         # resource check
         file_comment = FileComment.objects.filter(
@@ -1032,7 +1060,11 @@ class SeadocCommentReplyView(APIView):
         reply.reply = str(reply_content)
         reply.updated_at = timezone.now()
         reply.save()
-        return Response(reply.to_dict())
+
+        data = reply.to_dict()
+        data.update(
+            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+        return Response(data)
 
 
 class SeadocStartRevise(APIView):
