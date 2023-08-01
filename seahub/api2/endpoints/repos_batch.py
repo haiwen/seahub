@@ -1564,7 +1564,7 @@ class ReposBatchDeleteItemView(APIView):
         folder_permission_dict = get_sub_folder_permission_by_dir(request, repo_id, parent_dir)
         for dirent in dirents:
             if dirent in list(folder_permission_dict.keys()) and \
-                    folder_permission_dict[dirent] != 'rw':
+                    folder_permission_dict[dirent] not in ('rw', 'cloud-edit'):
                 error_msg = _("Can't delete folder %s, please check its permission.") % dirent
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

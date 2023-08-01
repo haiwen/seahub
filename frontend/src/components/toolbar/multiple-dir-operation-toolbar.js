@@ -358,6 +358,13 @@ class MultipleDirOperationToolbar extends React.Component {
                   {canDownload && <Button className="secondary group-op-item action-icon sf2-icon-download" title={gettext('Download')} aria-label={gettext('Download')} onClick={this.onItemsDownload}></Button>}
                 </Fragment>
               )}
+              {userPerm === 'cloud-edit' && (
+                <Fragment>
+                  {canModify && <Button className="secondary group-op-item action-icon sf2-icon-move" title={gettext('Move')} aria-label={gettext('Move')} onClick={this.onMoveToggle}></Button>}
+                  {canCopy && <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>}
+                  {canDelete && <Button className="secondary group-op-item action-icon sf2-icon-delete" title={gettext('Delete')} aria-label={gettext('Delete')} onClick={this.onItemsDelete}></Button>}
+                </Fragment>
+              )}
               {userPerm === 'r' && (
                 <Fragment>
                   <Button className="secondary group-op-item action-icon sf2-icon-copy" title={gettext('Copy')} aria-label={gettext('Copy')} onClick={this.onCopyToggle}></Button>

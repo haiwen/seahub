@@ -239,7 +239,7 @@ class DirOperationToolbar extends React.Component {
 
     return (
       <Fragment>
-        {(userPerm === 'rw' || userPerm === 'admin' || isCustomPermission) && (
+        {(userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission) && (
           <div className="dir-operation">
             {content}
           </div>

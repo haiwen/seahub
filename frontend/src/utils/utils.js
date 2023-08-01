@@ -480,7 +480,7 @@ export const Utils = {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
+      if (permission == 'rw' || permission == 'cloud-edit') {
         list.push(DELETE, 'Divider');
       }
 
@@ -489,7 +489,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(RENAME, MOVE);
     }
 
@@ -497,7 +497,7 @@ export const Utils = {
       list.push(RENAME, MOVE);
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(COPY);
     }
 
@@ -544,7 +544,7 @@ export const Utils = {
         list.push(SHARE);
       }
 
-      if (permission == 'rw') {
+      if (permission == 'rw' || permission == 'cloud-edit') {
         if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
           list.push(DELETE);
         }
@@ -559,7 +559,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME, MOVE);
       }
@@ -571,7 +571,7 @@ export const Utils = {
       }
     }
 
-    if (permission == 'rw') {
+    if (permission == 'rw' || permission == 'cloud-edit') {
       list.push(COPY);
     }
 

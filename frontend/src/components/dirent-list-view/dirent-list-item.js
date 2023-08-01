@@ -621,7 +621,7 @@ class DirentListItem extends React.Component {
                 {showShareBtn && (
                   <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
-                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
@@ -645,7 +645,7 @@ class DirentListItem extends React.Component {
                 {showShareBtn && (
                   <a href="#" className="op-icon sf2-icon-share" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></a>
                 )}
-                {(dirent.permission === 'rw' || (isCustomPermission && canDelete)) && (
+                {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
