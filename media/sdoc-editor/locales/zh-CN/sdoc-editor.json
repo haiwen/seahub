@@ -252,7 +252,11 @@
   "Auto_wrap": "自动换行",
   "Add_comment": "添加评论",
   "Delete_comment": "删除评论",
+  "Delete_reply": "删除回复",
   "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?",
+  "Are_you_sure_to_delete_this_reply": "你确定要删除这个回复吗?",
+  "Enter_a_comment": "输入评论",
+  "Enter_a_reply": "输入回复",
   "Confirm": "确定",
   "View_changes": "查看改动",
   "Revision": "修订稿",
@@ -305,5 +309,14 @@
   "Standard_light_blue": "标准浅蓝",
   "Standard_blue": "标准蓝",
   "Standard_dark_blue": "标准深蓝",
-  "Standard_purple": "标准紫"
+  "Standard_purple": "标准紫",
+  "Highlight_color": "突出显示",
+  "Font_color": "字体颜色",
+  "Default": "默认",
+  "No_revisions": "没有修订稿",
+  "1_revision": "1 个修订稿",
+  "x_revisions": "{{count}} 个修订稿",
+  "Creator": "创建者",
+  "Created_time": "创建时间",
+  "Created_at": "创建时间"
 }

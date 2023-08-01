@@ -252,7 +252,11 @@
   "Auto_wrap": "Auto wrap",
   "Add_comment": "Add comment",
   "Delete_comment": "Delete comment",
+  "Delete_reply": "Delete reply",
   "Are_you_sure_to_delete_this_comment": "Are you sure to delete this comment?",
+  "Are_you_sure_to_delete_this_reply": "Are you sure to delete this reply?",
+  "Enter_a_comment": "Enter a comment",
+  "Enter_a_reply": "Enter a reply",
   "Confirm": "Confirm",
   "View_changes": "View changes",
   "Revision": "Revision",
@@ -305,5 +309,14 @@
   "Standard_light_blue": "Standard light blue",
   "Standard_blue": "Standard blue",
   "Standard_dark_blue": "Standard dark blue",
-  "Standard_purple": "Standard purple"
+  "Standard_purple": "Standard purple",
+  "Highlight_color": "Highlight",
+  "Font_color": "Font color",
+  "Default": "Default",
+  "No_revisions": "No revisions",
+  "1_revision": "1 revision",
+  "x_revisions": "{{count}} revisions",
+  "Creator": "Creator",
+  "Created_time": "Created time",
+  "Created_at": "Created at"
 }
