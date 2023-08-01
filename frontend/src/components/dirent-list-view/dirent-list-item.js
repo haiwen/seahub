@@ -740,7 +740,7 @@ class DirentListItem extends React.Component {
                 <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
               }
               {(Utils.isSdocFile(dirent.name) && dirent.is_sdoc_draft) &&
-                <span className="sdoc-draft-identifier">{gettext('Draft')}</span>
+                <span className="dirent-sdoc-draft-identifier">{gettext('Draft')}</span>
               }
             </Fragment>
           )}
