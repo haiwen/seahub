@@ -318,5 +318,6 @@
   "x_revisions": "{{count}} revisions",
   "Creator": "Creator",
   "Created_time": "Created time",
-  "Created_at": "Created at"
+  "Created_at": "Created at",
+  "Resolved_tip": "Mark as resolved and hide discussion"
 }

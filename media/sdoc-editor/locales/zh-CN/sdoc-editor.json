@@ -318,5 +318,6 @@
   "x_revisions": "{{count}} 个修订稿",
   "Creator": "创建者",
   "Created_time": "创建时间",
-  "Created_at": "创建时间"
+  "Created_at": "创建时间",
+  "Resolved_tip": "标记为已解决并隐藏讨论内容"
 }
