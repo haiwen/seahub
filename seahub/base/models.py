@@ -99,8 +99,16 @@ class FileComment(models.Model):
     def normalize_path(self, path):
         return path.rstrip('/') if path != '/' else '/'
 
-    def to_dict(self):
+    def to_dict(self, reply_queryset=None):
+        from seahub.api2.utils import user_to_dict
         o = self
+        replies = []
+        if reply_queryset:
+            r = reply_queryset.filter(comment_id=o.pk)
+            for reply in r:
+                data = reply.to_dict()
+                data.update(user_to_dict(reply.author))
+                replies.append(data)
         return {
             'id': o.pk,
             'repo_id': o.uuid.repo_id,
@@ -111,6 +119,7 @@ class FileComment(models.Model):
             'updated_at': datetime_to_isoformat_timestr(o.updated_at),
             'resolved': o.resolved,
             'detail': o.detail,
+            'replies': replies,
         }
 
 
