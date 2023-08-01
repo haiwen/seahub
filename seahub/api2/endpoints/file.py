@@ -208,7 +208,7 @@ class FileView(APIView):
                 seafile_api.post_empty_file(repo_id, parent_dir, new_file_name, username)
             except Exception as e:
                 if str(e) == 'Too many files in library.':
-                    error_msg = _("The number of files in library exceeds the limit.")
+                    error_msg = _("The number of files in library exceeds the limit")
                     from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
                     return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
                 else:

@@ -1857,7 +1857,7 @@ class UploadLinkView(APIView):
                     obj_id, 'upload', request.user.username, use_onetime=False)
         except Exception as e:
             if str(e) == 'Too many files in library.':
-                error_msg = _("The number of files in library exceeds the limit.")
+                error_msg = _("The number of files in library exceeds the limit")
                 return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
             else:
                 logger.error(e)
