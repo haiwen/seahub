@@ -74,7 +74,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
                 user = User.objects.create_shib_user(is_active=self.activate_after_creation)
                 SocialAuthUser.objects.add(user.username, SHIBBOLETH_PROVIDER_IDENTIFIER, remote_user)
             except Exception as e:
-                logger.error(f'create saml user failed. {e}')
+                logger.error('create shib user failed: %s' % e)
                 return None
 
             if user and self.activate_after_creation is False:

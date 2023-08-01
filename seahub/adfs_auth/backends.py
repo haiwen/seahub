@@ -84,7 +84,7 @@ class Saml2Backend(ModelBackend):
                 user = User.objects.create_saml_user(is_active=activate_after_creation)
                 SocialAuthUser.objects.add(user.username, SAML_PROVIDER_IDENTIFIER, name_id)
             except Exception as e:
-                logger.error(f'create saml user failed. {e}')
+                logger.error('create saml user failed: %s' % e)
                 return None
 
             # create org user

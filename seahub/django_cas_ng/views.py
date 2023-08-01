@@ -1,11 +1,4 @@
 """CAS login/logout replacement views"""
-
-
-
-
-import sys
-import types
-
 from six.moves import urllib_parse
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -37,6 +30,7 @@ __all__ = ['login', 'logout', 'callback']
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
+
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def login(request, next_page=None, required=False):
@@ -55,19 +49,7 @@ def login(request, next_page=None, required=False):
         clean_sessions(client, request)
         return HttpResponseRedirect(next_page)
 
-    # backward compability for django < 2.0
-    is_user_authenticated = False
-
-    if sys.version_info >= (3, 0):
-        bool_type = bool
-    else:
-        bool_type = bool
-
-    if isinstance(request.user.is_authenticated, bool_type):
-        is_user_authenticated = request.user.is_authenticated
-    else:
-        is_user_authenticated = request.user.is_authenticated
-
+    is_user_authenticated = request.user.is_authenticated
     if is_user_authenticated:
         if settings.CAS_LOGGED_MSG is not None:
             message = settings.CAS_LOGGED_MSG % request.user.get_username()
@@ -76,9 +58,9 @@ def login(request, next_page=None, required=False):
 
     ticket = request.GET.get('ticket')
     if ticket:
-        user = authenticate(ticket=ticket,
-                            service=service_url,
-                            request=request)
+        user = authenticate(request=request,
+                            ticket=ticket,
+                            service=service_url)
         pgtiou = request.session.get("pgtiou")
         if user is not None:
             if not request.session.exists(request.session.session_key):

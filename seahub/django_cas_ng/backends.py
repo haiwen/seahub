@@ -1,6 +1,5 @@
 """CAS authentication backend"""
-
-
+import logging
 
 from django.contrib.auth.backends import ModelBackend
 from django.conf import settings
@@ -10,12 +9,15 @@ from .signals import cas_user_authenticated
 from .utils import get_cas_client
 
 from seahub.base.accounts import User
+from seahub.auth.models import SocialAuthUser
 try:
     from seahub.settings import CAS_SEAFILE_DOMAIN
 except ImportError:
     CAS_SEAFILE_DOMAIN = 'seafile.local'
 
 __all__ = ['CASBackend']
+
+logger = logging.getLogger(__name__)
 
 
 class CASBackend(ModelBackend):
@@ -28,8 +30,12 @@ class CASBackend(ModelBackend):
             user = None
         return user
 
-    def authenticate(self, request, ticket, service):
+    def authenticate(self, request, ticket=None, service=None, **kwargs):
         """Verifies CAS ticket and gets or creates User object"""
+        if ticket is None or service is None:
+            logger.error('ticket or service are None')
+            return None
+
         client = get_cas_client(service_url=service, request=request)
         username, attributes, pgtiou = client.verify_ticket(ticket)
         if attributes and request:
@@ -41,7 +47,6 @@ class CASBackend(ModelBackend):
         if CAS_SEAFILE_DOMAIN:
             username = username.split('@')[0] + '@' + CAS_SEAFILE_DOMAIN
 
-        user = None
         username = self.clean_username(username)
 
         if attributes:
@@ -56,30 +61,34 @@ class CASBackend(ModelBackend):
                     attributes[req_attr_name] = attributes[cas_attr_name]
                     attributes.pop(cas_attr_name)
 
-        # Note that this could be accomplished in one try-except clause, but
-        # instead we use get_or_create when creating unknown users since it has
-        # built-in safeguards for multiple threads.
-        if settings.CAS_CREATE_USER:
-            user_kwargs = {
-                username: username
-            }
-            if settings.CAS_CREATE_USER_WITH_ID:
-                user_kwargs['id'] = self.get_user_id(attributes)
-
+        cas_user = SocialAuthUser.objects.get_by_provider_and_uid('cas', username)
+        if cas_user:
             try:
-                user = User.objects.get(email=username)
-                created = False
+                user = User.objects.get(email=cas_user.username)
             except User.DoesNotExist:
-                user = User.objects.create_cas_user(
-                    email=username, is_active=True)
-                user = self.configure_user(user)
-                created = True
+                user = None
+            if not user:
+                # Means found user in social_auth_usersocialauth but not found user in EmailUser,
+                # delete it and recreate one.
+                logger.warning('The DB data is invalid, delete it and recreate one.')
+                SocialAuthUser.objects.filter(provider='cas', uid=username).delete()
         else:
-            created = False
+            # compatible with old users via cas ticket
             try:
-                user = User.objects.get(email=username)
+                user = User.objects.get_old_user(username, 'cas', username)
             except User.DoesNotExist:
-                pass
+                user = None
+
+        created = False
+        if not user and settings.CAS_CREATE_USER:
+            try:
+                user = User.objects.create_cas_user(is_active=True)
+                SocialAuthUser.objects.add(user.email, 'cas', username)
+            except Exception as e:
+                logger.error('create cas user failed: %s' % e)
+                return None
+            user = self.configure_user(user)
+            created = True
 
         if not self.user_can_authenticate(user):
             return None
