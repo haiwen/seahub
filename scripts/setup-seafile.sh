@@ -429,6 +429,13 @@ function usage() {
 # Main workflow of this script 
 # -------------------------------------------
 
+echo "-----------------------------------------------------------------"
+echo
+echo "[Warning] SQLite database support is deprecated. The support of SQLite database will be removed in version 12 or version 13."
+echo
+echo "-----------------------------------------------------------------"
+echo
+
 for param in $@; do
     if [[ "$param" == "-h" || "$param" == "--help" ]]; then
         usage;
