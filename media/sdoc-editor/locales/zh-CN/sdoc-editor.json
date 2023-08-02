@@ -319,5 +319,8 @@
   "Creator": "创建者",
   "Created_time": "创建时间",
   "Created_at": "创建时间",
-  "Resolved_tip": "标记为已解决并隐藏讨论内容"
+  "Resolved_tip": "标记为已解决并隐藏讨论内容",
+  "Search_language": "查找语言",
+  "Sdoc_error_tip": "文档有错误，无法显示。请尝试点击下方按钮自动修复。",
+  "Repair": "修复"
 }

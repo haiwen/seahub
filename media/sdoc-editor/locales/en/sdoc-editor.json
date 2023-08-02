@@ -319,5 +319,8 @@
   "Creator": "Creator",
   "Created_time": "Created time",
   "Created_at": "Created at",
-  "Resolved_tip": "Mark as resolved and hide discussion"
+  "Resolved_tip": "Mark as resolved and hide discussion",
+  "Search_language": "Search language",
+  "Sdoc_error_tip": "The document has errors and cannot be displayed. Please try to fix it automatically by clicking the button below.",
+  "Repair": "Repair"
 }
