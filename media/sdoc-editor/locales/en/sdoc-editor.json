@@ -322,5 +322,8 @@
   "Resolved_tip": "Mark as resolved and hide discussion",
   "Search_language": "Search language",
   "Sdoc_error_tip": "The document has errors and cannot be displayed. Please try to fix it automatically by clicking the button below.",
-  "Repair": "Repair"
+  "Repair": "Repair",
+  "Font_size": "Font size",
+  "Increase_font_size": "Increase font size",
+  "Reduce_font_size": "Reduce font size"
 }

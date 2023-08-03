@@ -322,5 +322,10 @@
   "Resolved_tip": "标记为已解决并隐藏讨论内容",
   "Search_language": "查找语言",
   "Sdoc_error_tip": "文档有错误，无法显示。请尝试点击下方按钮自动修复。",
-  "Repair": "修复"
+  "Repair": "修复",
+  "Remove_row": "删除行",
+  "Remove_column": "删除列",
+  "Font_size": "字号",
+  "Increase_font_size": "增大字号",
+  "Reduce_font_size": "减小字号"
 }
