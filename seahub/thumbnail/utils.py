@@ -54,22 +54,22 @@ def get_rotated_image(image):
 
     if orientation == 2:
         # Vertical image
-        image = image.transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     elif orientation == 3:
         # Rotation 180
         image = image.rotate(180)
     elif orientation == 4:
-        image = image.rotate(180).transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.rotate(180).transpose(Image.Transpose.FLIP_LEFT_RIGHT)
         # Horizontal image
     elif orientation == 5:
         # Horizontal image + Rotation 90 CCW
-        image = image.rotate(-90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.rotate(-90, expand=True).transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     elif orientation == 6:
         # Rotation 270
         image = image.rotate(-90, expand=True)
     elif orientation == 7:
         # Horizontal image + Rotation 270
-        image = image.rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.rotate(90, expand=True).transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     elif orientation == 8:
         # Rotation 90
         image = image.rotate(90, expand=True)
@@ -230,7 +230,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
         image = image.convert("RGB")
 
     image = get_rotated_image(image)
-    image.thumbnail((size, size), Image.ANTIALIAS)
+    image.thumbnail((size, size), Image.Resampling.LANCZOS)
     image.save(thumbnail_file, THUMBNAIL_EXTENSION)
     return (True, 200)
 
