@@ -10,7 +10,11 @@ class PDFViewer extends React.Component {
 
           <div id="sidebarContainer">
             <div id="toolbarSidebar">
-              <div id="toolbarSidebarLeft">
+              <div id="thumbnails-header" className="p-4 d-flex justify-content-between">
+                <h3 className="m-0 title font-weight-normal">{gettext('Thumbnail')}</h3>
+                <button id="close-thumbnail-panel" className="close-thumbnail-panel sf2-icon-x3 border-0 bg-transparent" aria-controls="sidebarContainer"></button>
+              </div>
+              <div id="toolbarSidebarLeft" className="sf-hide">
                 <div id="sidebarViewButtons" className="splitToolbarButton toggled" role="radiogroup">
                   <button id="viewThumbnail" className="toolbarButton toggled" title="Show Thumbnails" tabIndex="2" data-l10n-id="thumbs" role="radio" aria-checked="true" aria-controls="thumbnailView">
                     <span data-l10n-id="thumbs_label">Thumbnails</span>
@@ -49,7 +53,7 @@ class PDFViewer extends React.Component {
             </div>
             <div id="sidebarResizer"></div>
           </div>
-              {/*<!-- sidebarContainer -->*/}
+          {/*<!-- sidebarContainer -->*/}
 
           <div id="mainContainer">
             <div className="findbar hidden doorHanger" id="findbar">
@@ -83,8 +87,8 @@ class PDFViewer extends React.Component {
                 <span id="findResultsCount" className="toolbarLabel"></span>
                 <span id="findMsg" className="toolbarLabel"></span>
               </div>
-            </div> 
-              {/*<!-- findbar -->*/}
+            </div>
+            {/*<!-- findbar -->*/}
 
             <div className="editorParamsToolbar hidden doorHangerRight" id="editorFreeTextParamsToolbar">
               <div className="editorParamsToolbarContainer">
@@ -141,13 +145,14 @@ class PDFViewer extends React.Component {
                 </a>
 
                 <div id="viewBookmarkSeparator" className="horizontalToolbarSeparator"></div>
-
+                {/*
                 <button id="firstPage" className="secondaryToolbarButton" title="Go to First Page" tabIndex="56" data-l10n-id="first_page">
                   <span data-l10n-id="first_page_label">Go to First Page</span>
                 </button>
                 <button id="lastPage" className="secondaryToolbarButton" title="Go to Last Page" tabIndex="57" data-l10n-id="last_page">
                   <span data-l10n-id="last_page_label">Go to Last Page</span>
                 </button>
+                */}
 
                 <div className="horizontalToolbarSeparator"></div>
 
@@ -207,7 +212,7 @@ class PDFViewer extends React.Component {
                 </button>
               </div>
             </div>
-              {/*<!-- secondaryToolbar -->*/}
+            {/*<!-- secondaryToolbar -->*/}
 
             <div className="toolbar">
               <div id="toolbarContainer">
@@ -216,23 +221,29 @@ class PDFViewer extends React.Component {
                     <button id="sidebarToggle" className="toolbarButton" title="Toggle Sidebar" tabIndex="11" data-l10n-id="toggle_sidebar" aria-expanded="false" aria-controls="sidebarContainer">
                       <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
                     </button>
-                    <div className="toolbarButtonSpacer"></div>
-                    <button id="viewFind" className="toolbarButton" title="Find in Document" tabIndex="12" data-l10n-id="findbar" aria-expanded="false" aria-controls="findbar">
+                    <div className="toolbarButtonSpacer d-none"></div>
+                    <button id="viewFind" className="toolbarButton d-none" title="Find in Document" tabIndex="12" data-l10n-id="findbar" aria-expanded="false" aria-controls="findbar">
                       <span data-l10n-id="findbar_label">Find</span>
                     </button>
-                    <div className="splitToolbarButton hiddenSmallView">
+                    <div className="splitToolbarButton hiddenSmallView ml-2 d-flex align-items-center">
+                      <div className="splitToolbarButtonSeparator mr-2"></div>
+                      <button id="firstPage" className="toolbarButton" title="Go to First Page" tabIndex="56" data-l10n-id="first_page">
+                        <span data-l10n-id="first_page_label">Go to First Page</span>
+                      </button>
                       <button className="toolbarButton" title="Previous Page" id="previous" tabIndex="13" data-l10n-id="previous">
                         <span data-l10n-id="previous_label">Previous</span>
                       </button>
-                      <div className="splitToolbarButtonSeparator"></div>
+                      <input type="number" id="pageNumber" className="toolbarField" title="Page" defaultValue="1" min="1" tabIndex="15" data-l10n-id="page" autoComplete="off" />
+                      <span id="numPages" className="toolbarLabel"></span>
                       <button className="toolbarButton" title="Next Page" id="next" tabIndex="14" data-l10n-id="next">
                         <span data-l10n-id="next_label">Next</span>
                       </button>
+                      <button id="lastPage" className="toolbarButton" title="Go to Last Page" tabIndex="57" data-l10n-id="last_page">
+                        <span data-l10n-id="last_page_label">Go to Last Page</span>
+                      </button>
                     </div>
-                    <input type="number" id="pageNumber" className="toolbarField" title="Page" defaultValue="1" min="1" tabIndex="15" data-l10n-id="page" autoComplete="off" />
-                    <span id="numPages" className="toolbarLabel"></span>
                   </div>
-                  <div id="toolbarViewerRight">
+                  <div id="toolbarViewerRight" className="sf-hide">
                     <button id="openFile" className="toolbarButton hiddenLargeView" title="Open File" tabIndex="31" data-l10n-id="open_file">
                       <span data-l10n-id="open_file_label">Open</span>
                     </button>
@@ -262,18 +273,15 @@ class PDFViewer extends React.Component {
                       <span data-l10n-id="tools_label">Tools</span>
                     </button>
                   </div>
-                  <div id="toolbarViewerMiddle">
-                    <div className="splitToolbarButton">
+                  <div id="toolbarViewerMiddle" className="d-flex align-items-center">
+                    <div className="splitToolbarButton float-none">
                       <button id="zoomOut" className="toolbarButton" title="Zoom Out" tabIndex="21" data-l10n-id="zoom_out">
                         <span data-l10n-id="zoom_out_label">Zoom Out</span>
                       </button>
-                      <div className="splitToolbarButtonSeparator"></div>
-                      <button id="zoomIn" className="toolbarButton" title="Zoom In" tabIndex="22" data-l10n-id="zoom_in">
-                        <span data-l10n-id="zoom_in_label">Zoom In</span>
-                      </button>
+                      <div className="splitToolbarButtonSeparator d-none"></div>
                     </div>
-                    <span id="scaleSelectContainer" className="dropdownToolbarButton">
-                      <select id="scaleSelect" title="Zoom" tabIndex="23" data-l10n-id="zoom" defaultValue="auto">
+                    <div id="scaleSelectContainer" className="dropdownToolbarButton my-0 mx-1 float-none">
+                      <select id="scaleSelect" title="Zoom" tabIndex="23" data-l10n-id="zoom" defaultValue="auto" className="bg-white border rounded py-0 px-1">
                         <option id="pageAutoOption" title="" value="auto" data-l10n-id="page_scale_auto">Automatic Zoom</option>
                         <option id="pageActualOption" title="" value="page-actual" data-l10n-id="page_scale_actual">Actual Size</option>
                         <option id="pageFitOption" title="" value="page-fit" data-l10n-id="page_scale_fit">Page Fit</option>
@@ -288,7 +296,13 @@ class PDFViewer extends React.Component {
                         <option title="" value="3" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 300 }'>300%</option>
                         <option title="" value="4" data-l10n-id="page_scale_percent" data-l10n-args='{ "scale": 400 }'>400%</option>
                       </select>
-                    </span>
+                    </div>
+                    <div className="splitToolbarButton float-none">
+                      <button id="zoomIn" className="toolbarButton" title="Zoom In" tabIndex="22" data-l10n-id="zoom_in">
+                        <span data-l10n-id="zoom_in_label">Zoom In</span>
+                      </button>
+                    </div>
+
                   </div>
                 </div>
                 <div id="loadingBar">
@@ -304,102 +318,102 @@ class PDFViewer extends React.Component {
               <div id="viewer" className="pdfViewer"></div>
             </div>
           </div>
-              {/*<!-- mainContainer -->*/}
+          {/*<!-- mainContainer -->*/}
 
           <div id="dialogContainer">
             <dialog id="passwordDialog">
-            <div className="row">
-              <label htmlFor="password" id="passwordText" data-l10n-id="password_label">Enter the password to open this PDF file:</label>
-            </div>
-            <div className="row">
-              <input type="password" id="password" className="toolbarField" />
-            </div>
-            <div className="buttonRow">
-              <button id="passwordCancel" className="dialogButton"><span data-l10n-id="password_cancel">Cancel</span></button>
-              <button id="passwordSubmit" className="dialogButton"><span data-l10n-id="password_ok">OK</span></button>
-            </div>
+              <div className="row">
+                <label htmlFor="password" id="passwordText" data-l10n-id="password_label">Enter the password to open this PDF file:</label>
+              </div>
+              <div className="row">
+                <input type="password" id="password" className="toolbarField" />
+              </div>
+              <div className="buttonRow">
+                <button id="passwordCancel" className="dialogButton"><span data-l10n-id="password_cancel">Cancel</span></button>
+                <button id="passwordSubmit" className="dialogButton"><span data-l10n-id="password_ok">OK</span></button>
+              </div>
             </dialog>
             <dialog id="documentPropertiesDialog">
-            <div className="row">
-              <span id="fileNameLabel" data-l10n-id="document_properties_file_name">File name:</span>
-              <p id="fileNameField" aria-labelledby="fileNameLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="fileSizeLabel" data-l10n-id="document_properties_file_size">File size:</span>
-              <p id="fileSizeField" aria-labelledby="fileSizeLabel">-</p>
-            </div>
-            <div className="separator"></div>
-            <div className="row">
-              <span id="titleLabel" data-l10n-id="document_properties_title">Title:</span>
-              <p id="titleField" aria-labelledby="titleLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="authorLabel" data-l10n-id="document_properties_author">Author:</span>
-              <p id="authorField" aria-labelledby="authorLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="subjectLabel" data-l10n-id="document_properties_subject">Subject:</span>
-              <p id="subjectField" aria-labelledby="subjectLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="keywordsLabel" data-l10n-id="document_properties_keywords">Keywords:</span>
-              <p id="keywordsField" aria-labelledby="keywordsLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="creationDateLabel" data-l10n-id="document_properties_creation_date">Creation Date:</span>
-              <p id="creationDateField" aria-labelledby="creationDateLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="modificationDateLabel" data-l10n-id="document_properties_modification_date">Modification Date:</span>
-              <p id="modificationDateField" aria-labelledby="modificationDateLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="creatorLabel" data-l10n-id="document_properties_creator">Creator:</span>
-              <p id="creatorField" aria-labelledby="creatorLabel">-</p>
-            </div>
-            <div className="separator"></div>
-            <div className="row">
-              <span id="producerLabel" data-l10n-id="document_properties_producer">PDF Producer:</span>
-              <p id="producerField" aria-labelledby="producerLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="versionLabel" data-l10n-id="document_properties_version">PDF Version:</span>
-              <p id="versionField" aria-labelledby="versionLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="pageCountLabel" data-l10n-id="document_properties_page_count">Page Count:</span>
-              <p id="pageCountField" aria-labelledby="pageCountLabel">-</p>
-            </div>
-            <div className="row">
-              <span id="pageSizeLabel" data-l10n-id="document_properties_page_size">Page Size:</span>
-              <p id="pageSizeField" aria-labelledby="pageSizeLabel">-</p>
-            </div>
-            <div className="separator"></div>
-            <div className="row">
-              <span id="linearizedLabel" data-l10n-id="document_properties_linearized">Fast Web View:</span>
-              <p id="linearizedField" aria-labelledby="linearizedLabel">-</p>
-            </div>
-            <div className="buttonRow">
-              <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
-            </div>
+              <div className="row">
+                <span id="fileNameLabel" data-l10n-id="document_properties_file_name">File name:</span>
+                <p id="fileNameField" aria-labelledby="fileNameLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="fileSizeLabel" data-l10n-id="document_properties_file_size">File size:</span>
+                <p id="fileSizeField" aria-labelledby="fileSizeLabel">-</p>
+              </div>
+              <div className="separator"></div>
+              <div className="row">
+                <span id="titleLabel" data-l10n-id="document_properties_title">Title:</span>
+                <p id="titleField" aria-labelledby="titleLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="authorLabel" data-l10n-id="document_properties_author">Author:</span>
+                <p id="authorField" aria-labelledby="authorLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="subjectLabel" data-l10n-id="document_properties_subject">Subject:</span>
+                <p id="subjectField" aria-labelledby="subjectLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="keywordsLabel" data-l10n-id="document_properties_keywords">Keywords:</span>
+                <p id="keywordsField" aria-labelledby="keywordsLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="creationDateLabel" data-l10n-id="document_properties_creation_date">Creation Date:</span>
+                <p id="creationDateField" aria-labelledby="creationDateLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="modificationDateLabel" data-l10n-id="document_properties_modification_date">Modification Date:</span>
+                <p id="modificationDateField" aria-labelledby="modificationDateLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="creatorLabel" data-l10n-id="document_properties_creator">Creator:</span>
+                <p id="creatorField" aria-labelledby="creatorLabel">-</p>
+              </div>
+              <div className="separator"></div>
+              <div className="row">
+                <span id="producerLabel" data-l10n-id="document_properties_producer">PDF Producer:</span>
+                <p id="producerField" aria-labelledby="producerLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="versionLabel" data-l10n-id="document_properties_version">PDF Version:</span>
+                <p id="versionField" aria-labelledby="versionLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="pageCountLabel" data-l10n-id="document_properties_page_count">Page Count:</span>
+                <p id="pageCountField" aria-labelledby="pageCountLabel">-</p>
+              </div>
+              <div className="row">
+                <span id="pageSizeLabel" data-l10n-id="document_properties_page_size">Page Size:</span>
+                <p id="pageSizeField" aria-labelledby="pageSizeLabel">-</p>
+              </div>
+              <div className="separator"></div>
+              <div className="row">
+                <span id="linearizedLabel" data-l10n-id="document_properties_linearized">Fast Web View:</span>
+                <p id="linearizedField" aria-labelledby="linearizedLabel">-</p>
+              </div>
+              <div className="buttonRow">
+                <button id="documentPropertiesClose" className="dialogButton"><span data-l10n-id="document_properties_close">Close</span></button>
+              </div>
             </dialog>
             <dialog id="printServiceDialog" style={{minWidth: '200px'}}>
-            <div className="row">
-              <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
-            </div>
-            <div className="row">
-              <progress value="0" max="100"></progress>
-              <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
-            </div>
-            <div className="buttonRow">
-              <button id="printCancel" className="dialogButton"><span data-l10n-id="print_progress_close">Cancel</span></button>
-            </div>
+              <div className="row">
+                <span data-l10n-id="print_progress_message">Preparing document for printing…</span>
+              </div>
+              <div className="row">
+                <progress value="0" max="100"></progress>
+                <span data-l10n-id="print_progress_percent" data-l10n-args='{ "progress": 0 }' className="relative-progress">0%</span>
+              </div>
+              <div className="buttonRow">
+                <button id="printCancel" className="dialogButton"><span data-l10n-id="print_progress_close">Cancel</span></button>
+              </div>
             </dialog>
-          </div> 
-              {/*<!-- dialogContainer -->*/}
+          </div>
+          {/*<!-- dialogContainer -->*/}
 
         </div>
-              {/*<!-- outerContainer -->*/}
+        {/*<!-- outerContainer -->*/}
         <div id="printContainer"></div>
         <input type="file" id="fileInput" className="hidden" />
       </React.Fragment>

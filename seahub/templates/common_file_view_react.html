@@ -5,6 +5,7 @@
 {% block extra_style %}
 {% if filetype == 'PDF' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/custom.css" />
 <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
 {% endif %}
 {% render_bundle 'fileView' 'css' %}

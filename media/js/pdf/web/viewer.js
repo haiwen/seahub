@@ -7609,6 +7609,10 @@ class PDFSidebar {
     this.toggleButton.addEventListener("click", () => {
       this.toggle();
     });
+    // custom for SEAFILE
+    document.getElementById('close-thumbnail-panel').addEventListener("click", () => {
+      this.toggle();
+    });
     this.thumbnailButton.addEventListener("click", () => {
       this.switchView(_ui_utils.SidebarView.THUMBS);
     });
@@ -8020,6 +8024,8 @@ class PDFThumbnailView {
     this.resume = null;
     this.l10n = l10n;
     const anchor = document.createElement("a");
+    // custom for SEAFILE
+    anchor.className = "d-inline-block position-relative";
     anchor.href = linkService.getAnchorUrl("#page=" + id);
     this._thumbPageTitle.then(msg => {
       anchor.title = msg;
@@ -8037,9 +8043,14 @@ class PDFThumbnailView {
     const img = document.createElement("div");
     img.className = "thumbnailImage";
     this._placeholderImg = img;
-    div.append(img);
-    anchor.append(div);
-    container.append(anchor);
+    // custom for SEAFILE
+    const span = document.createElement("span");
+    span.className = "thumbnail-page-number mr-1 position-absolute";
+    span.innerHTML = this.id;
+    anchor.append(span);
+    anchor.append(img);
+    div.append(anchor);
+    container.append(div);
   }
   #updateDims() {
     const {
