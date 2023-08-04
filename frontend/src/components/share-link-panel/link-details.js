@@ -5,6 +5,7 @@ import copy from 'copy-to-clipboard';
 import { Button } from 'reactstrap';
 import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import ShareLinkPermissionEditor from '../../components/select-editor/share-link-permission-editor';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -250,12 +251,13 @@ class LinkDetails extends React.Component {
         <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
         }
         {this.state.isNoticeMessageShow &&
-        <div className="alert alert-warning">
-          <h4 className="alert-heading">{gettext('Are you sure you want to delete the share link?')}</h4>
-          <p className="mb-4">{gettext('If the share link is deleted, no one will be able to access it any more.')}</p>
-          <button className="btn btn-primary" onClick={this.props.deleteLink}>{gettext('Delete')}</button>{' '}
-          <button className="btn btn-secondary" onClick={this.onNoticeMessageToggle}>{gettext('Cancel')}</button>
-        </div>
+        <CommonOperationConfirmationDialog
+          title={gettext('Delete Share Links')}
+          message={gettext('Are you sure you want to delete the selected share link(s) ?')}
+          executeOperation={this.props.deleteLink}
+          confirmBtnText={gettext('Delete')}
+          toggleDialog={this.onNoticeMessageToggle}
+        />
         }
       </div>
     );

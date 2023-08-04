@@ -459,6 +459,71 @@ class ShareLinks(APIView):
         link_info = get_share_link_info(fs)
         return Response(link_info)
 
+    def delete(self, request):
+        """ Delete share links.
+
+        Permission checking:
+        1. default(NOT guest) user;
+        2. link owner;
+        """
+
+        token_list = request.data.get('tokens')
+        if not token_list:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        username = request.user.username
+        for token in token_list:
+
+            try:
+                fs = FileShare.objects.get(token=token)
+            except FileShare.DoesNotExist:
+                result['success'].append({
+                    'token': token,
+                })
+                continue
+
+            has_published_library = False
+            if fs.path == '/':
+                try:
+                    Wiki.objects.get(repo_id=fs.repo_id)
+                    has_published_library = True
+                except Wiki.DoesNotExist:
+                    pass
+
+            if not fs.is_owner(username):
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': 'Permission denied.'
+                    })
+                continue
+
+            if has_published_library:
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': _('There is an associated published library.')
+                    })
+                continue
+
+            try:
+                fs.delete()
+                result['success'].append({
+                    'token': token,
+                })
+            except Exception as e:
+                logger.error(e)
+                result['failed'].append({
+                    'token': token,
+                    'error_msg': 'Internal Server Error'
+                    })
+                continue
+
+        return Response(result)
+
 
 class ShareLink(APIView):
 

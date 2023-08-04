@@ -10,10 +10,16 @@ const propTypes = {
   setMode: PropTypes.func.isRequired,
   showLinkDetails: PropTypes.func.isRequired,
   toggleSelectAllLinks: PropTypes.func.isRequired,
-  toggleSelectLink: PropTypes.func.isRequired
+  toggleSelectLink: PropTypes.func.isRequired,
+  toggleDeleteShareLinksDialog: PropTypes.func.isRequired,
+  deleteShareLinks: PropTypes.func.isRequired,
 };
 
 class LinkList extends React.Component {
+
+  toggleDeleteShareLinksDialog = () => {
+    this.props.toggleDeleteShareLinksDialog()
+  }
 
   toggleSelectAllLinks = (e) => {
     this.props.toggleSelectAllLinks(e.target.checked);
@@ -49,6 +55,7 @@ class LinkList extends React.Component {
             ) : (
               <>
                 <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
+                <button className="btn btn-sm btn-primary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
                 <button className="btn btn-sm btn-primary" onClick={this.exportSelectedLinks}>{gettext('Export')}</button>
               </>
             )}
@@ -67,8 +74,8 @@ class LinkList extends React.Component {
                 </th>
                 <th width="23%">{gettext('Link')}</th>
                 <th width="30%">{gettext('Permission')}</th>
-                <th width="28%">{gettext('Expiration')}</th>
-                <th width="14%"></th>
+                <th width="24%">{gettext('Expiration')}</th>
+                <th width="18%"></th>
               </tr>
             </thead>
             <tbody>
@@ -80,6 +87,7 @@ class LinkList extends React.Component {
                     permissionOptions={permissionOptions}
                     showLinkDetails={this.props.showLinkDetails}
                     toggleSelectLink={this.props.toggleSelectLink}
+                    deleteShareLinks={this.props.deleteShareLinks}
                   />
                 );
               })}
