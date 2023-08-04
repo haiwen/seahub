@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext } from '../../../utils/constants';
+import { gettext, serviceURL } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
@@ -50,7 +51,7 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, url_prefix, metadata_url, domain } = this.props.orgInfo;
       const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
         <Fragment>
@@ -82,6 +83,29 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
+            {enable_saml_login && 
+              <Fragment>
+                <dt className="info-item-heading">{gettext('SAML Config')}</dt>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="3">{gettext('Custom SAML Login URL')}</Col>
+                    <Col md="6">{`${serviceURL}/org/custom/${url_prefix}`}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="3">{gettext('App Federation Metadata URL')}</Col>
+                    <Col md="6">{metadata_url}</Col>
+                  </Row>
+                </dd>
+                <dd className="info-item-content">
+                  <Row className="my-4">
+                    <Col md="3">{gettext('Email Domain')}</Col>
+                    <Col md="6">{domain}</Col>
+                  </Row>
+                </dd>
+              </Fragment>
+            }
           </dl>
           {isSetQuotaDialogOpen &&
           <SysAdminSetOrgQuotaDialog

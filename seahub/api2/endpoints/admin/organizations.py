@@ -22,6 +22,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.permissions import IsProVersion
 from seahub.role_permissions.utils import get_available_roles
+from seahub.organizations.models import OrgSAMLConfig
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -36,6 +37,11 @@ try:
     from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
+
+try:
+    from seahub.settings import ENABLE_MULTI_ADFS
+except ImportError:
+    ENABLE_MULTI_ADFS = False
 
 logger = logging.getLogger(__name__)
 
@@ -76,6 +82,16 @@ def get_org_detailed_info(org):
     # groups
     groups = ccnet_api.get_org_groups(org_id, -1, -1)
     org_info['groups_count'] = len(groups)
+
+    # saml config
+    org_info['enable_saml_login'] = False
+    if ENABLE_MULTI_ADFS:
+        org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
+        if org_saml_config:
+            org_info['enable_saml_login'] = True
+            org_info['url_prefix'] = org.url_prefix
+            org_info['metadata_url'] = org_saml_config.metadata_url
+            org_info['domain'] = org_saml_config.domain
 
     return org_info
 
