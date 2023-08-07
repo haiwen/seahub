@@ -39,7 +39,7 @@ class LinkDetails extends React.Component {
       expireDays: this.props.defaultExpireDays,
       expDate: null,
       isOpIconShown: false,
-      isNoticeMessageShow: false,
+      isLinkDeleteDialogOpen: false,
       isSendLinkShown: false
     };
   }
@@ -130,12 +130,18 @@ class LinkDetails extends React.Component {
     });
   }
 
-  onNoticeMessageToggle = () => {
-    this.setState({isNoticeMessageShow: !this.state.isNoticeMessageShow});
+  toggleLinkDeleteDialog = () => {
+    this.setState({isLinkDeleteDialogOpen: !this.state.isLinkDeleteDialogOpen});
   }
 
   toggleSendLink = () => {
     this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
+  }
+
+  deleteLink = () => {
+    const { sharedLinkInfo } = this.props;
+    const { token } = sharedLinkInfo;
+    this.props.deleteLink(token);
   }
 
   goBack = () => {
@@ -236,7 +242,7 @@ class LinkDetails extends React.Component {
             </>
           )}
         </dl>
-        {(canSendShareLinkEmail && !this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
+        {(canSendShareLinkEmail && !this.state.isSendLinkShown) &&
         <Button onClick={this.toggleSendLink} className='mr-2'>{gettext('Send')}</Button>
         }
         {this.state.isSendLinkShown &&
@@ -247,16 +253,16 @@ class LinkDetails extends React.Component {
             closeShareDialog={this.props.closeShareDialog}
           />
         }
-        {(!this.state.isSendLinkShown && !this.state.isNoticeMessageShow) &&
-        <Button onClick={this.onNoticeMessageToggle}>{gettext('Delete')}</Button>
+        {(!this.state.isSendLinkShown) &&
+        <Button onClick={this.toggleLinkDeleteDialog}>{gettext('Delete')}</Button>
         }
-        {this.state.isNoticeMessageShow &&
+        {this.state.isLinkDeleteDialogOpen &&
         <CommonOperationConfirmationDialog
-          title={gettext('Delete Share Links')}
-          message={gettext('Are you sure you want to delete the selected share link(s) ?')}
-          executeOperation={this.props.deleteLink}
+          title={gettext('Delete share link')}
+          message={gettext('Are you sure you want to delete the share link?')}
+          executeOperation={this.deleteLink}
           confirmBtnText={gettext('Delete')}
-          toggleDialog={this.onNoticeMessageToggle}
+          toggleDialog={this.toggleLinkDeleteDialog}
         />
         }
       </div>

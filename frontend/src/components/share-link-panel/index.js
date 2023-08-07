@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { isPro, gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -9,7 +9,6 @@ import Loading from '../loading';
 import LinkDetails from './link-details';
 import LinkCreation from './link-creation';
 import LinkList from './link-list';
-import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -32,7 +31,6 @@ class ShareLinkPanel extends React.Component {
       mode: 'listLinks',
       sharedLinkInfo: null,
       shareLinks: [],
-      isDeleteShareLinksDialogOpen: false,
       permissionOptions: [],
       currentPermission: ''
     };
@@ -97,13 +95,13 @@ class ShareLinkPanel extends React.Component {
     });
   }
 
-  deleteLink = () => {
-    const { sharedLinkInfo, shareLinks } = this.state;
-    seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
+  deleteLink = (token) => {
+    const { shareLinks } = this.state;
+    seafileAPI.deleteShareLink(token).then(() => {
       this.setState({
         mode: '',
         sharedLinkInfo: null,
-        shareLinks: shareLinks.filter(item => item.token !== sharedLinkInfo.token)
+        shareLinks: shareLinks.filter(item => item.token !== token)
       });
       toaster.success(gettext('Successfully deleted 1 share link'));
     }).catch((error) => {
@@ -112,32 +110,28 @@ class ShareLinkPanel extends React.Component {
     });
   }
 
-  deleteShareLinks = (shareLink) => {
-    let tokens;
-    if (shareLink !== undefined) {
-      tokens = [shareLink.token]
-    } else {
-      tokens = this.state.shareLinks.filter(item => item.isSelected).map(link=>(link.token));
-    }
+  deleteShareLinks = () => {
+    const { shareLinks } = this.state;
+    const tokens = shareLinks.filter(item => item.isSelected).map(link => link.token);
     seafileAPI.deleteShareLinks(tokens).then(res => {
-      if (res.data.success.length) {
-        let oldShareLinkList = this.state.shareLinks;
-        let newShareLinkList = oldShareLinkList.filter(oldShareLink => {
-          return !res.data.success.some(deletedShareLink =>{
-            return deletedShareLink.token == oldShareLink.token;
+      const { success, failed } = res.data;
+      if (success.length) {
+        let newShareLinkList = shareLinks.filter(shareLink => {
+          return !success.some(deletedShareLink => {
+            return deletedShareLink.token == shareLink.token;
           });
         });
         this.setState({
-          shareLinks: newShareLinkList,
+          shareLinks: newShareLinkList
         });
-        const length = res.data.success.length;
+        const length = success.length;
         const msg = length == 1 ?
           gettext('Successfully deleted 1 share link') :
           gettext('Successfully deleted {number_placeholder} share links')
             .replace('{number_placeholder}', length);
         toaster.success(msg);
       }
-      res.data.failed.map(item => {
+      failed.forEach(item => {
         const msg = `${item.token}: ${item.error_msg}`;
         toaster.danger(msg);
       });
@@ -145,10 +139,6 @@ class ShareLinkPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  toggleDeleteShareLinksDialog = () => {
-    this.setState({isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen});
   }
 
   updateAfterCreation = (newData) => {
@@ -243,7 +233,6 @@ class ShareLinkPanel extends React.Component {
         );
       default:
         return (
-          <Fragment>
           <LinkList
             shareLinks={shareLinks}
             permissionOptions={permissionOptions}
@@ -251,19 +240,9 @@ class ShareLinkPanel extends React.Component {
             showLinkDetails={this.showLinkDetails}
             toggleSelectAllLinks={this.toggleSelectAllLinks}
             toggleSelectLink={this.toggleSelectLink}
-            toggleDeleteShareLinksDialog={this.toggleDeleteShareLinksDialog}
             deleteShareLinks={this.deleteShareLinks}
+            deleteLink={this.deleteLink}
           />
-          {this.state.isDeleteShareLinksDialogOpen && (
-            <CommonOperationConfirmationDialog
-              title={gettext('Delete Share Links')}
-              message={gettext('Are you sure you want to delete the selected share link(s) ?')}
-              executeOperation={this.deleteShareLinks}
-              confirmBtnText={gettext('Delete')}
-              toggleDialog={this.toggleDeleteShareLinksDialog}
-            />
-          )}
-          </Fragment>
         );
     }
   }

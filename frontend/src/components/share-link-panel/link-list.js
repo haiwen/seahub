@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
 import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
+import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
@@ -11,14 +12,21 @@ const propTypes = {
   showLinkDetails: PropTypes.func.isRequired,
   toggleSelectAllLinks: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
-  toggleDeleteShareLinksDialog: PropTypes.func.isRequired,
-  deleteShareLinks: PropTypes.func.isRequired,
+  deleteLink: PropTypes.func.isRequired,
+  deleteShareLinks: PropTypes.func.isRequired
 };
 
 class LinkList extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDeleteShareLinksDialogOpen: false
+    };
+  }
+
   toggleDeleteShareLinksDialog = () => {
-    this.props.toggleDeleteShareLinksDialog()
+    this.setState({isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen});
   }
 
   toggleSelectAllLinks = (e) => {
@@ -46,7 +54,7 @@ class LinkList extends React.Component {
       <Fragment>
         <div className="d-flex justify-content-between align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">{gettext('Share Link')}</h6>
-          <div>
+          <div className="d-flex">
             {selectedLinks.length == 0 ? (
               <>
                 <button className="btn btn-sm btn-outline-primary mr-2" onClick={this.props.setMode.bind(this, 'singleLinkCreation')}>{gettext('Generate Link')}</button>
@@ -55,8 +63,8 @@ class LinkList extends React.Component {
             ) : (
               <>
                 <button className="btn btn-sm btn-secondary mr-2" onClick={this.cancelSelectAllLinks}>{gettext('Cancel')}</button>
-                <button className="btn btn-sm btn-primary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
-                <button className="btn btn-sm btn-primary" onClick={this.exportSelectedLinks}>{gettext('Export')}</button>
+                <button className="btn btn-sm btn-secondary mr-2" onClick={this.toggleDeleteShareLinksDialog}>{gettext('Delete')}</button>
+                <button className="btn btn-sm btn-secondary" onClick={this.exportSelectedLinks}>{gettext('Export')}</button>
               </>
             )}
           </div>
@@ -87,12 +95,21 @@ class LinkList extends React.Component {
                     permissionOptions={permissionOptions}
                     showLinkDetails={this.props.showLinkDetails}
                     toggleSelectLink={this.props.toggleSelectLink}
-                    deleteShareLinks={this.props.deleteShareLinks}
+                    deleteLink={this.props.deleteLink}
                   />
                 );
               })}
             </tbody>
           </table>
+        )}
+        {this.state.isDeleteShareLinksDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete share links')}
+            message={gettext('Are you sure you want to delete the selected share link(s) ?')}
+            executeOperation={this.props.deleteShareLinks}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteShareLinksDialog}
+          />
         )}
       </Fragment>
     );

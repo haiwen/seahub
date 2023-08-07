@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
@@ -13,7 +13,7 @@ const propTypes = {
   permissionOptions: PropTypes.array,
   showLinkDetails : PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
-  deleteShareLinks: PropTypes.func.isRequired
+  deleteLink: PropTypes.func.isRequired
 };
 
 class LinkItem extends React.Component {
@@ -22,7 +22,7 @@ class LinkItem extends React.Component {
     super(props);
     this.state = {
       isItemOpVisible: false,
-      isDeleteShareLinkDialogOpen: false,
+      isDeleteShareLinkDialogOpen: false
     };
   }
 
@@ -43,12 +43,8 @@ class LinkItem extends React.Component {
     return link.slice(0, 9) + '...' + link.slice(length-5);
   }
 
-  toggleDeleteShareLinkDialog = (e) => {
+  toggleDeleteShareLinkDialog = () => {
     this.setState({isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen});
-  }
-
-  deleteShareLinks = () => {
-    this.props.deleteShareLinks(this.props.item)
   }
 
   copyLink = (e) => {
@@ -68,6 +64,11 @@ class LinkItem extends React.Component {
     this.props.toggleSelectLink(item, e.target.checked);
   }
 
+  deleteLink = () => {
+    const { item } = this.props;
+    this.props.deleteLink(item.token);
+  }
+
   render() {
     const { isItemOpVisible } = this.state;
     const { item, permissionOptions } = this.props;
@@ -75,42 +76,42 @@ class LinkItem extends React.Component {
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     return (
       <Fragment>
-      <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={isSelected ? 'tr-highlight' : ''}>
-        <td className="text-center">
-          <input type="checkbox" checked={isSelected} onChange={this.toggleSelectLink} className="vam" />
-        </td>
-        <td>
-          <a href="#" onClick={this.viewDetails}>{this.cutLink(link)}</a>
-	</td>
-        <td>
-          {(isPro && permissions) && (
-            <ShareLinkPermissionEditor
-              isTextMode={true}
-              isEditIconShow={false}
-              currentPermission={currentPermission}
-              permissionOptions={permissionOptions}
-              onPermissionChanged={() => {}}
-            />
-          )}
-        </td>
-        <td>
-          {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
-        </td>
-        <td>
-          <a href="#" role="button" onClick={this.toggleDeleteShareLinkDialog} className={`sf2-icon-delete action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
-          <a href="#" role="button" onClick={this.copyLink} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-          <a href="#" role="button" onClick={this.viewDetails} className={`fas fa-info-circle font-weight-bold action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Details')} aria-label={gettext('Details')}></a>
-        </td>
-      </tr>
-      {this.state.isDeleteShareLinkDialogOpen && (
-        <CommonOperationConfirmationDialog
-          title={gettext('Delete Share Links')}
-          message={gettext('Are you sure you want to delete the selected share link(s) ?')}
-          executeOperation={this.deleteShareLinks}
-          confirmBtnText={gettext('Delete')}
-          toggleDialog={this.toggleDeleteShareLinkDialog}
-        />
-      )}
+        <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={isSelected ? 'tr-highlight' : ''}>
+          <td className="text-center">
+            <input type="checkbox" checked={isSelected} onChange={this.toggleSelectLink} className="vam" />
+          </td>
+          <td>
+            <a href="#" onClick={this.viewDetails} className="text-inherit">{this.cutLink(link)}</a>
+          </td>
+          <td>
+            {(isPro && permissions) && (
+              <ShareLinkPermissionEditor
+                isTextMode={true}
+                isEditIconShow={false}
+                currentPermission={currentPermission}
+                permissionOptions={permissionOptions}
+                onPermissionChanged={() => {}}
+              />
+            )}
+          </td>
+          <td>
+            {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
+          </td>
+          <td>
+            <a href="#" role="button" onClick={this.copyLink} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.viewDetails} className={`fa fa-pencil-alt attr-action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')}></a>
+            <a href="#" role="button" onClick={this.toggleDeleteShareLinkDialog} className={`sf2-icon-delete action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+          </td>
+        </tr>
+        {this.state.isDeleteShareLinkDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete share link')}
+            message={gettext('Are you sure you want to delete the share link?')}
+            executeOperation={this.deleteLink}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteShareLinkDialog}
+          />
+        )}
       </Fragment>
     );
   }
