@@ -12,7 +12,7 @@
 
 .share-dialog-content .share-dialog-side {
     display: flex;
-    flex: 0 0 22%;
+    flex-basis: 22%;
     padding: 1rem;
     border-bottom: 1px solid #eee;
 }
@@ -32,7 +32,7 @@
 
 .share-dialog-content .share-dialog-main {
     display: flex;
-    flex: 0 0 78%;
+    flex-basis: 78%;
     padding: 1rem;
 }
 

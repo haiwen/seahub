@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import stat
 import os
 import json
 import posixpath
@@ -10,7 +9,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.conf import settings
-from django.utils.translation import gettext as _
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -22,10 +20,10 @@ from seahub.utils import is_windows_operating_system, is_pro_version, \
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import ENABLE_SHARE_LINK_AUDIT, SHARE_LINK_LOGIN_REQUIRED
 
-import seaserv
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
+
 
 class ShareLinkZipTaskView(APIView):
 
@@ -66,6 +64,12 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'share_link_token %s not found.' % share_link_token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # check share link password
+        if fileshare.is_encrypted() and not check_share_link_access(request,
+                                                                    share_link_token):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if req_path[-1] != '/':
             req_path += '/'
 
@@ -94,8 +98,7 @@ class ShareLinkZipTaskView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # get file server access token
-        dir_name = repo.name if real_path == '/' else \
-                os.path.basename(real_path.rstrip('/'))
+        dir_name = repo.name if real_path == '/' else os.path.basename(real_path.rstrip('/'))
 
         is_windows = 0
         if is_windows_operating_system(request):
@@ -155,7 +158,7 @@ class ShareLinkZipTaskView(APIView):
 
         # resource check
         try:
-            share_link= FileShare.objects.get(token=share_link_token)
+            share_link = FileShare.objects.get(token=share_link_token)
         except FileShare.DoesNotExist:
             error_msg = 'Share link %s not found.' % share_link_token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -171,7 +174,7 @@ class ShareLinkZipTaskView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         full_parent_dir = posixpath.join(normalize_dir_path(share_link.path),
-                parent_dir.strip('/'))
+                                         parent_dir.strip('/'))
         full_parent_dir = normalize_dir_path(full_parent_dir)
         dir_id = seafile_api.get_dir_id_by_path(repo_id, full_parent_dir)
         if not dir_id:
@@ -194,7 +197,7 @@ class ShareLinkZipTaskView(APIView):
 
         # check share link password
         if share_link.is_encrypted() and not check_share_link_access(request,
-                share_link_token):
+                                                                     share_link_token):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

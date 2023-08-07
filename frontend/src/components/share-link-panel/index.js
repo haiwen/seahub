@@ -95,15 +95,46 @@ class ShareLinkPanel extends React.Component {
     });
   }
 
-  deleteLink = () => {
-    const { sharedLinkInfo, shareLinks } = this.state;
-    seafileAPI.deleteShareLink(sharedLinkInfo.token).then(() => {
+  deleteLink = (token) => {
+    const { shareLinks } = this.state;
+    seafileAPI.deleteShareLink(token).then(() => {
       this.setState({
         mode: '',
         sharedLinkInfo: null,
-        shareLinks: shareLinks.filter(item => item.token !== sharedLinkInfo.token)
+        shareLinks: shareLinks.filter(item => item.token !== token)
       });
-      toaster.success(gettext('Link deleted'));
+      toaster.success(gettext('Successfully deleted 1 share link'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  }
+
+  deleteShareLinks = () => {
+    const { shareLinks } = this.state;
+    const tokens = shareLinks.filter(item => item.isSelected).map(link => link.token);
+    seafileAPI.deleteShareLinks(tokens).then(res => {
+      const { success, failed } = res.data;
+      if (success.length) {
+        let newShareLinkList = shareLinks.filter(shareLink => {
+          return !success.some(deletedShareLink => {
+            return deletedShareLink.token == shareLink.token;
+          });
+        });
+        this.setState({
+          shareLinks: newShareLinkList
+        });
+        const length = success.length;
+        const msg = length == 1 ?
+          gettext('Successfully deleted 1 share link') :
+          gettext('Successfully deleted {number_placeholder} share links')
+            .replace('{number_placeholder}', length);
+        toaster.success(msg);
+      }
+      failed.forEach(item => {
+        const msg = `${item.token}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -209,6 +240,8 @@ class ShareLinkPanel extends React.Component {
             showLinkDetails={this.showLinkDetails}
             toggleSelectAllLinks={this.toggleSelectAllLinks}
             toggleSelectLink={this.toggleSelectLink}
+            deleteShareLinks={this.deleteShareLinks}
+            deleteLink={this.deleteLink}
           />
         );
     }

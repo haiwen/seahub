@@ -217,6 +217,43 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_avatar_src(notice.to_user)
         return notice
 
+    def format_repo_monitor_msg(self, notice):
+
+        d = json.loads(notice.detail)
+
+        op_user_email = d['op_user']
+        notice.user_url = reverse('user_profile', args=[op_user_email])
+        notice.user_name = email2nickname(op_user_email)
+        notice.avatar_src = self.get_avatar_src(op_user_email)
+
+        notice.op_type = d['op_type']
+
+        repo_id = d['repo_id']
+        repo_name = d['repo_name']
+        notice.repo_url = reverse('lib_view', args=[repo_id, repo_name, ''])
+        notice.repo_name = d['repo_name']
+
+        obj_type = d['obj_type']
+        obj_path_list = d['obj_path_list']
+        notice.obj_type = obj_type
+        notice.obj_path_count = len(obj_path_list)
+        notice.obj_path_count_minus_one = len(obj_path_list) - 1
+        notice.obj_name = os.path.basename(d['obj_path_list'][0])
+
+        old_obj_path_list = d.get('old_obj_path_list', [])
+        if old_obj_path_list:
+            notice.old_obj_name = os.path.basename(d['old_obj_path_list'][0])
+        else:
+            notice.old_obj_name = ''
+
+        if obj_type == 'file':
+            notice.obj_url = reverse('view_lib_file', args=[repo_id, obj_path_list[0]])
+        else:
+            notice.obj_url = reverse('lib_view',
+                                     args=[repo_id, repo_name, obj_path_list[0].strip('/')])
+
+        return notice
+
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
@@ -347,6 +384,9 @@ class Command(BaseCommand):
                 elif notice.is_deleted_files_msg():
                     notice = self.format_deleted_files_msg(notice)
 
+                elif notice.is_repo_monitor_msg():
+                    notice = self.format_repo_monitor_msg(notice)
+
                 if notice is None:
                     continue
 
@@ -354,6 +394,7 @@ class Command(BaseCommand):
 
             if not notices:
                 continue
+
             user_name = email2nickname(to_user)
             contact_email = Profile.objects.get_contact_email_by_user(to_user)
             c = {
@@ -368,8 +409,7 @@ class Command(BaseCommand):
                                 'notifications/notice_email.html', c,
                                 None, [contact_email])
                 # set new last_emailed_time
-                UserOptions.objects.set_collaborate_last_emailed_time(
-                    to_user, now)
+                UserOptions.objects.set_collaborate_last_emailed_time(to_user, now)
                 logger.info('Successfully sent email to %s' % contact_email)
                 self.stdout.write('[%s] Successfully sent email to %s' % (str(datetime.datetime.now()), contact_email))
             except Exception as e:

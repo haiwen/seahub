@@ -461,19 +461,29 @@ class UploadLinkUpload(APIView):
         if is_pro_version() and ENABLE_UPLOAD_LINK_VIRUS_CHECK:
             check_virus = True
 
-        if check_virus:
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                                                            obj_id,
-                                                            'upload-link',
-                                                            uls.username,
-                                                            use_onetime=False,
-                                                            check_virus=check_virus)
-        else:
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                                                            obj_id,
-                                                            'upload-link',
-                                                            uls.username,
-                                                            use_onetime=False)
+        try:
+            if check_virus:
+                token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                obj_id,
+                                                                'upload-link',
+                                                                uls.username,
+                                                                use_onetime=False,
+                                                                check_virus=check_virus)
+            else:
+                token = seafile_api.get_fileserver_access_token(repo_id,
+                                                                obj_id,
+                                                                'upload-link',
+                                                                uls.username,
+                                                                use_onetime=False)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                from seahub.api2.views import HTTP_442_TOO_MANY_FILES_IN_LIBRARY
+                return api_error(HTTP_442_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if not token:
             error_msg = 'Internal Server Error'

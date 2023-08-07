@@ -154,7 +154,7 @@ def gen_org_url_prefix(max_trial=None):
         Url prefix if succed, otherwise, ``None``.
     """
     def _gen_prefix():
-        url_prefix = 'org_' + get_random_string(
+        url_prefix = 'org-' + get_random_string(
             6, allowed_chars='abcdefghijklmnopqrstuvwxyz0123456789')
         if get_org_by_url_prefix(url_prefix) is not None:
             logger.info("org url prefix, %s is duplicated" % url_prefix)

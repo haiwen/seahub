@@ -65,6 +65,69 @@ You've got {{num}} new notices on {{ site_name }}:
                 {% elif notice.is_deleted_files_msg %}
                 <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with repo_url=notice.repo_url repo_name=notice.repo_name %}Your library <a href="{{url_base}}{{ repo_url }}">{{ repo_name }}</a> has recently deleted a large number of files.{% endblocktrans %}</p>
 
+                {% elif notice.is_repo_monitor_msg %}
+                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">
+                    {% if notice.obj_type == 'file' %}
+                        {% if notice.op_type == 'create' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> created file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> created file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> and {{ obj_path_count_minus_one }} other file(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if notice.op_type == 'delete' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> deleted file {{obj_name}} in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> deleted file {{obj_name}} and {{ obj_path_count_minus_one }} other file(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if notice.op_type == 'recover' %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> restored file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                        {% endif %}
+                        {% if notice.op_type == 'rename' %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name old_obj_name=notice.old_obj_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> renamed file {{old_obj_name}} to <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                        {% endif %}
+                        {% if notice.op_type == 'move' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> moved file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> moved file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> and {{ obj_path_count_minus_one }} other file(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if notice.op_type == 'edit' %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> updated file <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                        {% endif %}
+		    {% else %}
+                        {% if notice.op_type == 'create' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> created folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> created folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> and {{ obj_path_count_minus_one }} other folder(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if notice.op_type == 'delete' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> deleted folder {{obj_name}} in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> deleted folder {{obj_name}} and {{ obj_path_count_minus_one }} other folder(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                        {% if notice.op_type == 'recover' %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> restored folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                        {% endif %}
+                        {% if notice.op_type == 'rename' %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name old_obj_name=notice.old_obj_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> renamed folder {{old_obj_name}} to <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                        {% endif %}
+                        {% if notice.op_type == 'move' %}
+                            {% if notice.obj_path_count == 1 %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> moved folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% else %}
+                            {% blocktrans with user_url=notice.user_url user_name=notice.user_name obj_url=notice.obj_url obj_name=notice.obj_name repo_url=notice.repo_url repo_name=notice.repo_name obj_path_count_minus_one=notice.obj_path_count_minus_one %} User <a href="{{url_base}}{{user_url}}">{{user_name}}</a> moved folder <a href="{{url_base}}{{obj_url}}">{{obj_name}}</a> and {{ obj_path_count_minus_one }} other folder(s) in library <a href="{{url_base}}{{repo_url}}">{{repo_name}}</a>.{% endblocktrans %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+		    </p>
                 {% endif %}
             </td>
             <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">{{ notice.timestamp|date:"Y-m-d G:i:s"}}</td>
