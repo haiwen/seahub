@@ -6,7 +6,7 @@ import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import SdocEditor from './pages/sdoc-editor';
 
-const { serviceURL, avatarURL, siteRoot } = window.app.config;
+const { serviceURL, avatarURL, siteRoot, lang } = window.app.config;
 const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, parentDir, filePerm,
@@ -38,6 +38,7 @@ window.seafile = {
   revisionURL: Utils.generateRevisionURL(siteRoot, repoID, docPath),
   originFilename,
   revisionCreatedAt,
+  lang,
 };
 
 ReactDom.render(
