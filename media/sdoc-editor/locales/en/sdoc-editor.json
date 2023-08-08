@@ -94,6 +94,8 @@
   "Publish": "Publish",
   "This_file_has_a_draft": "This file has a draft.", 
   "Delete": "Delete",
+  "Reply": "Reply",
+  "Comment": "Comment",
   "Comments": "Comments",
   "All_comments": "All comments",
   "Resolved_comments": "Resolved comments",
@@ -333,5 +335,8 @@
   "Repair": "Repair",
   "Font_size": "Font size",
   "Increase_font_size": "Increase font size",
-  "Reduce_font_size": "Reduce font size"
+  "Reduce_font_size": "Reduce font size",
+  "Font": "Font",
+  "All_fonts": "All fonts",
+  "Default_font": "Default font"
 }

@@ -94,6 +94,8 @@
   "Publish": "发布",
   "This_file_has_a_draft": "这个文件有一个草稿.", 
   "Delete": "删除",
+  "Reply": "回复",
+  "Comment": "评论",
   "Comments": "评论",
   "All_comments": "所有评论",
   "Resolved_comments": "已解决评论",
@@ -335,5 +337,8 @@
   "Remove_column": "删除列",
   "Font_size": "字号",
   "Increase_font_size": "增大字号",
-  "Reduce_font_size": "减小字号"
+  "Reduce_font_size": "减小字号",
+  "Font": "字体",
+  "All_fonts": "所有字体",
+  "Default_font": "默认字体"
 }
