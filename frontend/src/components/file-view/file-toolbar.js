@@ -117,6 +117,13 @@ class FileToolbar extends React.Component {
     return (
       <Fragment>
         <ButtonGroup className="d-none d-md-block">
+          {fileType == 'PDF' && (
+            <IconButton
+              id="seafile-pdf-print"
+              icon="fa fa-print"
+              text={gettext('Print')}
+            />
+          )}
           <IconButton
             id="open-parent-folder"
             icon="fa fa-folder-open"
@@ -195,9 +202,9 @@ class FileToolbar extends React.Component {
                 </DropdownItem>
               )}
               {filePerm == 'rw' && (
-                  <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
-                    {gettext('History')}
-                  </a>
+                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                  {gettext('History')}
+                </a>
               )}
             </DropdownMenu>
           </ButtonDropdown>
