@@ -13665,7 +13665,8 @@ function getViewerConfiguration() {
       zoomOut: document.getElementById("zoomOut"),
       viewFind: document.getElementById("viewFind"),
       openFile: document.getElementById("openFile"),
-      print: document.getElementById("print"),
+      // custom for seafile: 'seafile-pdf-print' only exists in 'pdf file view' page, not in 'shared/history/trash' file view pages
+      print: document.getElementById("seafile-pdf-print") || document.getElementById("print"),
       editorFreeTextButton: document.getElementById("editorFreeText"),
       editorFreeTextParamsToolbar: document.getElementById("editorFreeTextParamsToolbar"),
       editorInkButton: document.getElementById("editorInk"),

@@ -3,6 +3,12 @@ import { gettext } from '../utils/constants';
 
 class PDFViewer extends React.Component {
 
+  componentDidMount() {
+    const el = document.createElement('div');
+    el.id = 'printContainer';
+    document.body.append(el);
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -414,7 +420,7 @@ class PDFViewer extends React.Component {
 
         </div>
         {/*<!-- outerContainer -->*/}
-        <div id="printContainer"></div>
+        {/*<div id="printContainer"></div>*/}
         <input type="file" id="fileInput" className="hidden" />
       </React.Fragment>
     );

@@ -24,7 +24,7 @@
 }
 
 #viewerContainer {
-  padding: 30px 0 15px;
+  padding: 10px 0 32px;
   overflow: auto;
 }
 
@@ -201,4 +201,10 @@ input#pageNumber {
   background-color: rgba(0, 0, 0, 0.2);
   /*z-index: 40000;*/
   z-index: 999; /* 1049: for seahub 'share' dialog */
+}
+
+@media print {
+  #wrapper {
+    display: none;
+  }
 }
