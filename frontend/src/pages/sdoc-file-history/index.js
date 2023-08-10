@@ -145,7 +145,7 @@ class SdocFileHistory extends React.Component {
     const changesCount = changes ? changes.length : 0;
     if (changesCount === 0) {
       return (
-        <div className="sdoc-file-history-header-right d-flex align-items-center ">
+        <div className="sdoc-file-history-header-right d-flex align-items-center">
           <div className="sdoc-file-changes-container d-flex align-items-center pl-2 pr-2">
             {gettext('No changes')}
           </div>
@@ -155,7 +155,7 @@ class SdocFileHistory extends React.Component {
 
     return (
       <div className="sdoc-file-history-header-right d-flex align-items-center">
-        <div className="sdoc-file-changes-container d-flex align-items-center ">
+        <div className="sdoc-file-changes-container d-flex align-items-center">
           <div className="sdoc-file-changes-tip d-flex align-items-center justify-content-center pl-2 pr-2">
             {`${gettext('Changes')} ${currentDiffIndex + 1}/${changesCount}`}
           </div>
