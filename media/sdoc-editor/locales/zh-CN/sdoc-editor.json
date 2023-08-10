@@ -25,6 +25,7 @@
   "Code_block": "代码块",
   "Insert_link": "添加链接",
   "Insert_table": "添加表格",
+  "Valid_values_for_rows_and_columns": "行数和列数的有效值为 0 到 50",
   "Save": "保存",
   "More": "更多",
   "Invalid_url": "无效链接",
