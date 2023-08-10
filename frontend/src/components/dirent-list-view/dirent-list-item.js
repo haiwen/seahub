@@ -283,6 +283,10 @@ class DirentListItem extends React.Component {
       case 'Access Log':
         this.onAccessLog();
         break;
+      case 'Properties':
+        this.props.onDirentClick(this.props.dirent);
+        this.props.showDirentDetail('info');
+        break;
       case 'Open via Client':
         this.onOpenViaClient();
         break;

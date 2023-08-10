@@ -34,7 +34,7 @@ class ViewModeToolbar extends React.Component {
         </div>
         {!this.props.isCustomPermission && (
           <div className="detail-btn btn-group">
-            <button className="btn btn-secondary btn-icon ml-1 fas fa-info" id='detail' title={gettext('Detail')} aria-label={gettext('Detail')} onClick={this.switchViewMode}></button>
+            <button className="btn btn-secondary btn-icon ml-1 fas fa-info" id='detail' title={gettext('Properties')} aria-label={gettext('Properties')} onClick={this.switchViewMode}></button>
           </div>
         )}
       </React.Fragment>

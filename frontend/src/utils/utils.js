@@ -527,7 +527,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MARK_AS_DRAFT, UNMARK_AS_DRAFT,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+      COMMENT, HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -608,7 +608,7 @@ export const Utils = {
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
       }
-      list.push('Divider', OPEN_VIA_CLIENT);
+      list.push(PROPERTIES, 'Divider', OPEN_VIA_CLIENT);
     }
 
     if (permission == 'r') {
