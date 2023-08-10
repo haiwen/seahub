@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+import stat
 import logging
 import requests
 import posixpath
@@ -16,6 +17,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction
+from django.urls import reverse
 
 from seaserv import seafile_api, check_quota
 
@@ -28,7 +30,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision
 from seahub.utils.file_types import SEADOC, IMAGE
-from seahub.utils import get_file_type_and_ext, normalize_file_path, PREVIEW_FILEEXT, get_file_history, \
+from seahub.utils import get_file_type_and_ext, normalize_file_path, normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
@@ -40,7 +42,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.base.models import FileComment
-from seahub.constants import PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 
 
@@ -222,9 +224,6 @@ class SeadocDownloadLink(APIView):
 
 
 class SeadocRevisionDownloadLinks(APIView):
-
-    authentication_classes = ()
-    throttle_classes = (UserRateThrottle,)
 
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
@@ -1342,3 +1341,100 @@ class SeadocPublishRevision(APIView):
 
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
+
+
+class SeadocFileView(APIView):
+    """redirect to file view by doc_uuid
+    """
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        # do not permission check, just redirect
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = uuid_map.repo_id
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_url = reverse('view_lib_file', args=[repo_id, file_path])
+        return HttpResponseRedirect(file_url)
+
+
+class SeadocDirView(APIView):
+    """list all sdoc files in dir
+    """
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('p', '/')
+        path = normalize_dir_path(path)
+
+        repo_id = uuid_map.repo_id
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = payload.get('username', '')
+        try:
+            dirs = seafile_api.list_dir_with_perm(
+                repo_id, path, dir_id, username, -1, -1)
+            dirs = dirs if dirs else []
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Failed to list dir.")
+
+        uuid_map_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, path)
+        dir_list, file_list = [], []
+        for dirent in dirs:
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
+            entry = {}
+            if stat.S_ISDIR(dirent.mode):
+                dtype = "dir"
+            else:
+                dtype = "file"
+                filetype, fileext = get_file_type_and_ext(dirent.obj_name)
+                if filetype != SEADOC:
+                    continue
+                entry["doc_uuid"] = ''
+                dirent_uuid_map = uuid_map_queryset.filter(
+                    filename=dirent.obj_name).first()
+                if dirent_uuid_map:
+                    entry["doc_uuid"] = str(dirent_uuid_map.uuid)
+            entry["type"] = dtype
+            entry["name"] = dirent.obj_name
+            entry["id"] = dirent.obj_id
+            entry["mtime"] = dirent.mtime
+            entry["permission"] = dirent.permission
+            if dtype == 'dir':
+                dir_list.append(entry)
+            else:
+                file_list.append(entry)
+
+        dir_list.sort(key=lambda x: x['name'].lower())
+        file_list.sort(key=lambda x: x['name'].lower())
+        dentrys = dir_list + file_list
+        return Response(dentrys)
