@@ -601,23 +601,27 @@ export const Utils = {
           list.push(MARK_AS_DRAFT);
         }
       }
+      /*
       if (enableFileComment) {
         list.push(COMMENT);
       }
-      list.push(HISTORY);
+      */
+      list.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
       }
-      list.push(PROPERTIES, 'Divider', OPEN_VIA_CLIENT);
+      list.push('Divider', OPEN_VIA_CLIENT);
     }
 
     if (permission == 'r') {
       if (!currentRepoInfo.encrypted) {
         list.push(COPY);
       }
+      /*
       if (enableFileComment) {
         list.push(COMMENT);
       }
+      */
       list.push(HISTORY);
     }
 
