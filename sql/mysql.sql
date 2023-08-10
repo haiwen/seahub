@@ -1413,7 +1413,7 @@ CREATE TABLE `sdoc_revision` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `sdoc_revise_doc_uuid` (`doc_uuid`),
+  UNIQUE KEY `sdoc_revision_doc_uuid` (`doc_uuid`),
   UNIQUE KEY `sdoc_revision_repo_id_revision_id` (`repo_id`, `revision_id`),
   KEY `sdoc_revision_repo_id` (`repo_id`),
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
@@ -1434,3 +1434,13 @@ CREATE TABLE `sdoc_comment_reply` (
   KEY `sdoc_comment_reply_comment_id` (`comment_id`),
   KEY `sdoc_comment_reply_doc_uuid` (`doc_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `deleted_files_count` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  `files_count` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_deleted_files_count_repo_id` (`repo_id`),
+  KEY `ix_deleted_files_count_deleted_time` (`deleted_time`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
