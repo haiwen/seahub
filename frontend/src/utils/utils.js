@@ -527,7 +527,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MARK_AS_DRAFT, UNMARK_AS_DRAFT,
-      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+      COMMENT, HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -601,10 +601,12 @@ export const Utils = {
           list.push(MARK_AS_DRAFT);
         }
       }
+      /*
       if (enableFileComment) {
         list.push(COMMENT);
       }
-      list.push(HISTORY);
+      */
+      list.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
       }
@@ -615,9 +617,11 @@ export const Utils = {
       if (!currentRepoInfo.encrypted) {
         list.push(COPY);
       }
+      /*
       if (enableFileComment) {
         list.push(COMMENT);
       }
+      */
       list.push(HISTORY);
     }
 

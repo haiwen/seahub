@@ -220,6 +220,9 @@ class MultipleDirOperationToolbar extends React.Component {
       case 'Access Log':
         this.onAccessLog(dirent);
         break;
+      case 'Properties':
+        this.props.showDirentDetail('info');
+        break;
       case 'Open via Client':
         this.onOpenViaClient(dirent);
         break;

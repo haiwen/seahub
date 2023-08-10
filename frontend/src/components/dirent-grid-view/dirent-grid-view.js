@@ -170,6 +170,9 @@ class DirentGridView extends React.Component {
       case 'Access Log':
         this.onAccessLog(currentObject);
         break;
+      case 'Properties':
+        this.props.showDirentDetail('info');
+        break;
       case 'Open via Client':
         this.onOpenViaClient(currentObject);
         break;
