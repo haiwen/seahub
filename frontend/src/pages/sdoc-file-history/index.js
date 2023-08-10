@@ -138,50 +138,66 @@ class SdocFileHistory extends React.Component {
     this.jumpToElement(currentDiffIndex + 1);
   }
 
-  render() {
-    const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, changes, currentDiffIndex } = this.state;
+  renderChangesTip = () => {
+    const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
+    if (isLoading) return null;
+    if (!isShowChanges) return null;
     const changesCount = changes ? changes.length : 0;
-    const isShowChangesTips = isShowChanges && changesCount > 0;
+    if (changesCount === 0) {
+      return (
+        <div className="sdoc-file-history-header-right d-flex align-items-center ">
+          <div className="sdoc-file-changes-container d-flex align-items-center pl-2 pr-2">
+            {gettext('No changes')}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="sdoc-file-history-header-right d-flex align-items-center">
+        <div className="sdoc-file-changes-container d-flex align-items-center ">
+          <div className="sdoc-file-changes-tip d-flex align-items-center justify-content-center pl-2 pr-2">
+            {`${gettext('Changes')} ${currentDiffIndex + 1}/${changesCount}`}
+          </div>
+          <div className="sdoc-file-changes-divider"></div>
+          <div
+            className="sdoc-file-changes-last d-flex align-items-center justify-content-center"
+            id="sdoc-file-changes-last"
+            onClick={this.lastChange}
+          >
+            <span className="fas fa-chevron-up"></span>
+          </div>
+          <div className="sdoc-file-changes-divider"></div>
+          <div
+            className="sdoc-file-changes-next d-flex align-items-center justify-content-center"
+            id="sdoc-file-changes-next"
+            onClick={this.nextChange}
+          >
+            <span className="fas fa-chevron-down"></span>
+          </div>
+          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last">
+            {gettext('Last modification')}
+          </UncontrolledTooltip>
+          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-next">
+            {gettext('Next modification')}
+          </UncontrolledTooltip>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading } = this.state;
 
     return (
       <div className="sdoc-file-history d-flex h-100 w-100 o-hidden">
         <div className="sdoc-file-history-container d-flex flex-column">
           <div className="sdoc-file-history-header pt-2 pb-2 pl-4 pr-4 d-flex justify-content-between w-100 o-hidden">
-            <div className={classnames('sdoc-file-history-header-left d-flex align-items-center o-hidden', { 'pr-4': isShowChangesTips })}>
+            <div className={classnames('sdoc-file-history-header-left d-flex align-items-center o-hidden', { 'pr-4': isShowChanges })}>
               <GoBack />
               <div className="file-name text-truncate">{fileName}</div>
             </div>
-            {isShowChangesTips && (
-              <div className="sdoc-file-history-header-right d-flex align-items-center">
-                <div className="sdoc-file-changes-container d-flex align-items-center ">
-                  <div className="sdoc-file-changes-tip d-flex align-items-center justify-content-center pl-2 pr-2">
-                    {`${gettext('Changes')} ${currentDiffIndex + 1}/${changesCount}`}
-                  </div>
-                  <div className="sdoc-file-changes-divider"></div>
-                  <div
-                    className="sdoc-file-changes-last d-flex align-items-center justify-content-center"
-                    id="sdoc-file-changes-last"
-                    onClick={this.lastChange}
-                  >
-                    <span className="fas fa-chevron-up"></span>
-                  </div>
-                  <div className="sdoc-file-changes-divider"></div>
-                  <div
-                    className="sdoc-file-changes-next d-flex align-items-center justify-content-center"
-                    id="sdoc-file-changes-next"
-                    onClick={this.nextChange}
-                  >
-                    <span className="fas fa-chevron-down"></span>
-                  </div>
-                  <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last">
-                    {gettext('Last modification')}
-                  </UncontrolledTooltip>
-                  <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-next">
-                    {gettext('Next modification')}
-                  </UncontrolledTooltip>
-                </div>
-              </div>
-            )}
+            {this.renderChangesTip()}
           </div>
           <div className="sdoc-file-history-content f-flex flex-column" ref={ref => this.historyContentRef = ref}>
             {isLoading ? (
