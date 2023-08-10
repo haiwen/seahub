@@ -76,7 +76,7 @@
   border: 1px solid #e6e6dd;
 }
 
-.sdoc-file-history .sdoc-file-history-content .sdoc-article-wrapper {
+.sdoc-file-history .sdoc-file-history-content .sdoc-scroll-container {
   position: relative !important;
   overflow: hidden;
   width: 100%;
