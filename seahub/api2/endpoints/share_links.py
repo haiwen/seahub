@@ -220,11 +220,21 @@ class ShareLinks(APIView):
                                           .filter(path=path)
 
         repo_object_dict = {}
+        repo_folder_permission_dict = {}
+
         for fileshare in fileshares:
+
             repo_id = fileshare.repo_id
+            path = fileshare.path
+
             if repo_id not in repo_object_dict:
                 repo = seafile_api.get_repo(repo_id)
                 repo_object_dict[repo_id] = repo
+
+            tmp_key = f"{repo_id}_{path}"
+            if tmp_key not in repo_folder_permission_dict:
+                permission = seafile_api.check_permission_by_path(repo_id, path, username)
+                repo_folder_permission_dict[tmp_key] = permission
 
         links_info = []
         for fs in fileshares:
@@ -262,6 +272,10 @@ class ShareLinks(APIView):
             link_info['is_expired'] = fs.is_expired()
             link_info['permissions'] = fs.get_permissions()
             link_info['password'] = fs.get_password()
+
+            tmp_key = f"{repo_id}_{path}"
+            link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")
+
             links_info.append(link_info)
 
         if len(links_info) == 1:
