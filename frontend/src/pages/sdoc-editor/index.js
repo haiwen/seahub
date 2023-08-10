@@ -22,7 +22,7 @@ export default class SdocEditor extends React.Component {
   }
 
   render() {
-    const { repoID, docPath } = window.seafile;
+    const { repoID, docPath, docName, docPerm } = window.seafile;
     const { isStarred, isDraft } = this.state;
     return (
       <Fragment>
@@ -30,6 +30,8 @@ export default class SdocEditor extends React.Component {
         <ExternalOperations
           repoID={repoID}
           docPath={docPath}
+          docName={docName}
+          docPrem={docPerm}
           isStarred={isStarred}
           toggleStar={this.toggleStar}
           unmarkDraft={this.unmarkDraft}

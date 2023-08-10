@@ -5,10 +5,13 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import InternalLinkDialog from '../../components/dialog/internal-link-dialog';
+import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   docPath: PropTypes.string.isRequired,
+  docName: PropTypes.string.isRequired,
+  docPerm: PropTypes.string.isRequired,
   isStarred: PropTypes.bool.isRequired,
   toggleStar: PropTypes.func.isRequired,
   unmarkDraft: PropTypes.func.isRequired
@@ -20,6 +23,7 @@ class ExternalOperations extends React.Component {
     super(props);
     this.state = {
       isShowInternalLinkDialog: false,
+      isShowShareDialog: false,
     };
   }
 
@@ -28,12 +32,14 @@ class ExternalOperations extends React.Component {
     this.unsubscribeInternalLinkEvent = eventBus.subscribe(EXTERNAL_EVENT.INTERNAL_LINK_CLICK, this.onInternalLinkToggle);
     this.unsubscribeStar = eventBus.subscribe(EXTERNAL_EVENT.TOGGLE_STAR, this.toggleStar);
     this.unsubscribeUnmark = eventBus.subscribe(EXTERNAL_EVENT.UNMARK_AS_DRAFT, this.unmark);
+    this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
   }
 
   componentWillUnmount() {
     this.unsubscribeInternalLinkEvent();
     this.unsubscribeStar();
     this.unsubscribeUnmark();
+    this.unsubscribeShare();
   }
 
   onInternalLinkToggle = () => {
@@ -69,9 +75,13 @@ class ExternalOperations extends React.Component {
     }
   }
 
+  onShareToggle = () => {
+    this.setState({isShowShareDialog: !this.state.isShowShareDialog});
+  }
+
   render() {
-    const { repoID, docPath } = this.props;
-    const { isShowInternalLinkDialog } = this.state;
+    const { repoID, docPath, docName, docPerm } = this.props;
+    const { isShowInternalLinkDialog, isShowShareDialog } = this.state;
     return (
       <>
         {isShowInternalLinkDialog && (
@@ -79,6 +89,16 @@ class ExternalOperations extends React.Component {
             repoID={repoID}
             path={docPath}
             onInternalLinkDialogToggle={this.onInternalLinkToggle}
+          />
+        )}
+        {isShowShareDialog && (
+          <ShareDialog
+            itemType={'file'}
+            itemPath={docPath}
+            itemName={docName}
+            repoID={repoID}
+            userPerm={docPerm}
+            toggleDialog={this.onShareToggle}
           />
         )}
       </>
