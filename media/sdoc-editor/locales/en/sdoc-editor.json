@@ -340,5 +340,7 @@
   "Font": "Font",
   "All_fonts": "All fonts",
   "Default_font": "Default font",
-  "Document_content_load_failed": "Document content failed to load, please refresh the page to try again"
+  "Document_content_load_failed": "Document content failed to load, please refresh the page to try again",
+  "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
+  "Recently_saved": "Recently saved"
 }
