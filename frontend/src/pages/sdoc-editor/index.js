@@ -31,7 +31,7 @@ export default class SdocEditor extends React.Component {
           repoID={repoID}
           docPath={docPath}
           docName={docName}
-          docPrem={docPerm}
+          docPerm={docPerm}
           isStarred={isStarred}
           toggleStar={this.toggleStar}
           unmarkDraft={this.unmarkDraft}
