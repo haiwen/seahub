@@ -647,6 +647,15 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
+        # custom for pingan
+        'admin_operation_handler': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'admin_operation.log'),
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 500,
+            'formatter': 'standard',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -671,6 +680,12 @@ LOGGING = {
         },
         'onlyoffice': {
             'handlers': ['onlyoffice_handler', ],
+            'level': 'INFO',
+            'propagate': False
+        },
+        # custom for pingan
+        'admin_operation': {
+            'handlers': ['admin_operation_handler', ],
             'level': 'INFO',
             'propagate': False
         },
