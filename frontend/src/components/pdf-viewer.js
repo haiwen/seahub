@@ -312,10 +312,11 @@ class PDFViewer extends React.Component {
                   </div>
                 </div>
                 <div id="loadingBar">
-                  <div className="progress">
+                  <span className="loading-icon loading-tip"></span>
+                  {/*<div className="progress">
                     <div className="glimmer">
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>

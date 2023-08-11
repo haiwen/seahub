@@ -24,8 +24,9 @@
 }
 
 #viewerContainer {
-  padding: 10px 0 32px;
+  padding: 10px 0 0;
   overflow: auto;
+  margin-bottom: 33px;
 }
 
 #viewerContainer:focus {
@@ -93,7 +94,12 @@ select#scaleSelect {
 }
 
 #loadingBar {
-  height: 0;
+  position: fixed;
+  top: 50%;
+  width: auto;
+  height: auto;
+  border: 0;
+  background: transparent;
 }
 
 input#pageNumber {
