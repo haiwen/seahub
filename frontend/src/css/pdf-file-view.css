@@ -209,6 +209,16 @@ input#pageNumber {
   z-index: 999; /* 1049: for seahub 'share' dialog */
 }
 
+.dirent-info .img .thumbnail {
+  float: none;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+
 @media print {
   #wrapper {
     display: none;
