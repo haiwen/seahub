@@ -59,21 +59,6 @@ class DirentListItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isOperationShow: false,
-      highlight: false,
-      isZipDialogOpen: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
-      isShareDialogShow: false,
-      isMutipleOperation: false,
-      isShowTagTooltip: false,
-      isDragTipShow: false,
-      isDropTipshow: false,
-      isEditFileTagShow: false,
-      isPermissionDialogOpen: false,
-      isOpMenuOpen: false // for mobile
-    };
 
     const { dirent } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
@@ -86,6 +71,23 @@ class DirentListItem extends React.Component {
       this.canPreview = preview || modify;
       this.canDrag = modify;
     }
+
+    this.state = {
+      isOperationShow: false,
+      highlight: false,
+      isZipDialogOpen: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      isShareDialogShow: false,
+      isMutipleOperation: false,
+      canDrag: this.canDrag,
+      isShowTagTooltip: false,
+      isDragTipShow: false,
+      isDropTipshow: false,
+      isEditFileTagShow: false,
+      isPermissionDialogOpen: false,
+      isOpMenuOpen: false // for mobile
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,7 +117,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    if (this.canDrag) {
+    if (this.state.canDrag) {
       this.setState({isDragTipShow: true});
     }
   }
@@ -127,7 +129,7 @@ class DirentListItem extends React.Component {
         isOperationShow: true,
       });
     }
-    if (this.canDrag) {
+    if (this.state.canDrag) {
       this.setState({isDragTipShow: true});
     }
   }
@@ -301,6 +303,7 @@ class DirentListItem extends React.Component {
     this.setState({
       isOperationShow: false,
       isRenameing: true,
+      canDrag: false
     });
   }
 
@@ -310,7 +313,10 @@ class DirentListItem extends React.Component {
   }
 
   onRenameCancel = () => {
-    this.setState({isRenameing: false});
+    this.setState({
+      isRenameing: false,
+      canDrag: this.canDrag // set it back to the initial value
+    });
     this.unfreezeItem();
   }
 
@@ -436,7 +442,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragStart = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
     e.dataTransfer.effectAllowed = 'move';
@@ -466,7 +472,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragEnter = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
     if (this.props.dirent.type === 'dir') {
@@ -476,7 +482,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragOver = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
     if (e.dataTransfer.dropEffect === 'copy') {
@@ -487,7 +493,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragLeave = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
 
@@ -498,7 +504,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemDragDrop = (e) => {
-    if (Utils.isIEBrower() || !this.canDrag) {
+    if (Utils.isIEBrower() || !this.state.canDrag) {
       return false;
     }
     this.setState({isDropTipshow: false});
@@ -652,10 +658,11 @@ class DirentListItem extends React.Component {
     let lockedInfo = gettext('locked by {name}').replace('{name}', dirent.lock_owner_name);
 
     const isDesktop = Utils.isDesktop();
+    const { canDrag } = this.state;
     const desktopItem = (
       <tr
         className={trClass}
-        draggable={this.canDrag}
+        draggable={canDrag}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
