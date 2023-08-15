@@ -17,12 +17,14 @@ from seahub.profile.models import Profile
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.utils.repo import get_available_repo_perms
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, \
+        CustomSharePermissions
 from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
         check_user_share_out_permission, check_group_share_out_permission, \
         normalize_custom_permission_name
 
 logger = logging.getLogger(__name__)
+
 
 class SharedRepos(APIView):
 
@@ -55,13 +57,29 @@ class SharedRepos(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        repo_id_list = []
+        for repo in shared_repos:
+
+            if repo.is_virtual:
+                continue
+
+            repo_id = repo.repo_id
+            repo_id_list.append(repo_id)
+
+        custom_permission_dict = {}
+        custom_permissions = CustomSharePermissions.objects.filter(repo_id__in=repo_id_list)
+        for custom_permission in custom_permissions:
+            custom_id = f'custom-{custom_permission.id}'
+            custom_permission_dict[custom_id] = custom_permission.name
+
         returned_result = []
         shared_repos.sort(key=lambda x: x.repo_name)
         usernames = []
         gids = []
+
         for repo in shared_repos:
             if repo.is_virtual:
-                    continue
+                continue
 
             result = {}
             result['repo_id'] = repo.repo_id
@@ -69,6 +87,7 @@ class SharedRepos(APIView):
             result['encrypted'] = repo.encrypted
             result['share_type'] = repo.share_type
             result['share_permission'] = repo.permission
+            result['share_permission_name'] = custom_permission_dict.get(repo.permission, '')
             result['modifier_email'] = repo.last_modifier
             result['modifier_name'] = email2nickname(repo.last_modifier)
             result['modifier_contact_email'] = email2contact_email(repo.last_modifier)
@@ -163,7 +182,7 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             send_perm_audit_msg('modify-repo-perm', username,
-                shared_to, repo_id, '/', permission)
+                                shared_to, repo_id, '/', permission)
 
         if share_type == 'group':
             group_id = request.data.get('group_id', None)
@@ -194,7 +213,7 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             send_perm_audit_msg('modify-repo-perm', username,
-                    group_id, repo_id, '/', permission)
+                                group_id, repo_id, '/', permission)
 
         if share_type == 'public':
 
@@ -215,7 +234,7 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             send_perm_audit_msg('modify-repo-perm', username,
-                    'all', repo_id, '/', permission)
+                                'all', repo_id, '/', permission)
 
         return Response({'success': True})
 
@@ -279,7 +298,7 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             send_perm_audit_msg('delete-repo-perm', username, user,
-                    repo_id, '/', permission)
+                                repo_id, '/', permission)
 
         if share_type == 'group':
             group_id = request.GET.get('group_id', None)
@@ -294,7 +313,6 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             permission = check_group_share_out_permission(repo_id, '/', group_id, is_org)
-
 
             try:
                 if is_org:
