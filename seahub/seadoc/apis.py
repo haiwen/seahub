@@ -19,7 +19,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 
-from seaserv import seafile_api, check_quota
+from seaserv import seafile_api, check_quota, seafserv_threaded_rpc
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
@@ -44,6 +44,7 @@ from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.api2.views import get_repo_file
 
 
 logger = logging.getLogger(__name__)
@@ -1565,3 +1566,34 @@ class SeadocDirView(APIView):
         file_list.sort(key=lambda x: x['name'].lower())
         dentrys = dir_list + file_list
         return Response(dentrys)
+
+
+class SdocFileHistory(APIView):
+    # authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication)
+    # permission_classes = (IsAuthenticated,)
+    # throttle_classes = (UserRateThrottle, )
+    print('******************')
+
+    def get(self, request, repo_id, format=None):
+        username = request.user.username
+        path = request.GET.get('p', None)
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        file_name = os.path.basename(path)
+        file_version = request.GET.get('file_version', None)
+
+        if not file_version:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File version is missing.')
+
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                file_version, 'download', username)
+        if not token:
+            error_msg = 'file %s not found.' % file_version
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        download_url = gen_inner_file_get_url(token, file_name)
+        resp = requests.get(download_url)
+        return Response({
+            'content': resp.content
+        })
+
