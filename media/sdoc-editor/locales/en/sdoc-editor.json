@@ -276,6 +276,7 @@
   "Failed_to_execute_operation_on_server": "Failed to execute operation on server",
   "Start_revise_tip": "Create a temporary document and modify on it, merge it back after reviewing changes",
   "Load_doc_content_error": "Load doc content error",
+  "Sdoc_format_invalid": "The content of the document does not conform to the sdoc specification",
   "Draft": "Draft",
   "Unmark_as_draft": "Unmark as draft",
   "Background_color": "Background color",
