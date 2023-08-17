@@ -345,5 +345,11 @@
   "Default_font": "默认字体",
   "Document_content_load_failed": "文档内容加载失败, 请刷新页面重新访问",
   "Pending_operations_exceed_limit": "有多个操作未同步到服务器。请检查你的网络。",
-  "Recently_saved": "最近保存"
+  "Recently_saved": "最近保存",
+  "Sdoc_document" : "sdoc 文档",
+  "Text_Link": "文字链",
+  "Icon_and_text_Link": "图标+文字链",
+  "Card": "卡片",
+  "Select_sdoc_document": "选择sdoc文档",
+  "Local_file": "本地文件"
 }

@@ -343,5 +343,11 @@
   "Default_font": "Default font",
   "Document_content_load_failed": "Document content failed to load, please refresh the page to try again",
   "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
-  "Recently_saved": "Recently saved"
+  "Recently_saved": "Recently saved",
+  "Sdoc_document" : "Sdoc document",
+  "Text_Link": "Text Link",
+  "Icon_and_text_Link": "Icon and text Link",
+  "Card": "Card",
+  "Select_sdoc_document": "Select sdoc document",
+  "Local_file": "Local file"
 }
