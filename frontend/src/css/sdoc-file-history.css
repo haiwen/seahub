@@ -85,6 +85,7 @@
   width: 100%;
   padding-top: 0;
   padding-bottom: 0;
+  margin-left: 0 !important;
 }
 
 .sdoc-file-history .sdoc-file-history-content .article {

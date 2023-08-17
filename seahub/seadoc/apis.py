@@ -19,7 +19,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 
-from seaserv import seafile_api, check_quota, seafserv_threaded_rpc
+from seaserv import seafile_api, check_quota
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
@@ -44,7 +44,6 @@ from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
-from seahub.api2.views import get_repo_file
 
 
 logger = logging.getLogger(__name__)
@@ -224,8 +223,7 @@ class SeadocDownloadLink(APIView):
         return Response({'download_link': download_link})
 
 
-class SeadocRevisionDownloadLinks(APIView):
-
+class SeadocOriginFileDownloadLink(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
 
@@ -245,12 +243,6 @@ class SeadocRevisionDownloadLinks(APIView):
         if filetype != SEADOC:
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        
-        file_download_link = get_seadoc_download_link(uuid_map)
-        if not file_download_link:
-            error_msg = 'seadoc file %s not found.' % uuid_map.filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         revision_info = is_seadoc_revision(file_uuid)
         origin_doc_uuid = revision_info.get('origin_doc_uuid', '')
@@ -271,7 +263,6 @@ class SeadocRevisionDownloadLinks(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         return Response({
-            'file_download_link': file_download_link,
             'origin_file_download_link': origin_file_download_link
         })
 
@@ -1292,6 +1283,110 @@ class SeadocRevisions(APIView):
         })
 
 
+class SeadocRevisionAPI(APIView):
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        repo_id = revision.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        # get revision file info
+        revision_file_uuid = uuid_map
+        revision_parent_path = revision_file_uuid.parent_path
+        revision_filename = revision_file_uuid.filename
+        username = request.user.username
+
+        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+        if dir_id:
+            seafile_api.del_file(
+                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+
+            seafile_api.del_file(
+                    repo_id, revision_parent_path, revision_filename, username)
+            
+        SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
+
+        return Response({
+            'success': True
+        })
+
+    # modify by rebase op
+    def put(self, request, file_uuid):
+
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        origin_doc_uuid = revision.origin_doc_uuid
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_uuid_map:
+            error_msg = 'origin file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            origin_doc_path = revision.origin_doc_path
+            newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
+            SeadocRevision.objects.update_origin_file_version(file_uuid, newest_file_version)
+            return Response({
+                'success': True,
+                'origin_file_version': newest_file_version,
+            })
+
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
 class SeadocPublishRevision(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -1354,6 +1449,11 @@ class SeadocPublishRevision(APIView):
         revision_parent_path = revision_file_uuid.parent_path
         revision_filename = revision_file_uuid.filename
 
+        try:
+            replace = int(request.data.get('replace'))
+        except ValueError:
+            replace = 1
+
         # move revision file
         username = request.user.username
         seafile_api.move_file(
@@ -1361,38 +1461,33 @@ class SeadocPublishRevision(APIView):
             json.dumps([revision_filename]),
             repo_id, dst_parent_path,
             json.dumps([origin_file_filename]),
-            replace=1, username=username,
+            replace=replace, username=username,
             need_progress=0, synchronous=1,
         )
 
         dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
 
-        # refresh docs
-        doc_uuids = [revision.origin_doc_uuid, revision.doc_uuid]
-        sdoc_server_api = SdocServerAPI(
-            revision.origin_doc_uuid, origin_file_filename, username)
-        sdoc_server_api.internal_refresh_docs(doc_uuids)
-
+        if replace == 1:
         # move image files
-        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
-        if dir_id:
-            origin_image_parent_path = gen_seadoc_image_parent_path(
-                str(origin_file_uuid.uuid), repo_id, username)
-            dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
-            for e in dirents:
-                obj_name = e.obj_name
-                seafile_api.move_file(
-                    repo_id, revision_image_parent_path,
-                    json.dumps([obj_name]),
-                    repo_id, origin_image_parent_path,
-                    json.dumps([obj_name]),
-                    replace=1, username=username,
-                    need_progress=0, synchronous=1,
-                )
-            seafile_api.del_file(
-                repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+            revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+            if dir_id:
+                origin_image_parent_path = gen_seadoc_image_parent_path(
+                    str(origin_file_uuid.uuid), repo_id, username)
+                dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
+                for e in dirents:
+                    obj_name = e.obj_name
+                    seafile_api.move_file(
+                        repo_id, revision_image_parent_path,
+                        json.dumps([obj_name]),
+                        repo_id, origin_image_parent_path,
+                        json.dumps([obj_name]),
+                        replace=1, username=username,
+                        need_progress=0, synchronous=1,
+                    )
+                seafile_api.del_file(
+                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
@@ -1568,13 +1663,11 @@ class SeadocDirView(APIView):
         return Response(dentrys)
 
 
-class SdocFileHistory(APIView):
-    # authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication)
-    # permission_classes = (IsAuthenticated,)
-    # throttle_classes = (UserRateThrottle, )
-    print('******************')
+class SdocFileHistoryContent(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
 
-    def get(self, request, repo_id, format=None):
+    def get(self, request, file_uuid, format=None):
         username = request.user.username
         path = request.GET.get('p', None)
         if path is None:
@@ -1585,13 +1678,21 @@ class SdocFileHistory(APIView):
 
         if not file_version:
             return api_error(status.HTTP_400_BAD_REQUEST, 'File version is missing.')
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(uuid_map.repo_id,
                 file_version, 'download', username)
+
         if not token:
             error_msg = 'file %s not found.' % file_version
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         download_url = gen_inner_file_get_url(token, file_name)
+
         resp = requests.get(download_url)
         return Response({
             'content': resp.content

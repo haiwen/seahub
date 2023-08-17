@@ -128,6 +128,12 @@ class SeadocRevisionManager(models.Manager):
             publish_file_version=publish_file_version,
             is_published=True,
         )
+    
+    def delete_by_doc_uuid(self, doc_uuid):
+        self.filter(doc_uuid=doc_uuid).delete()
+
+    def update_origin_file_version(self, doc_uuid, origin_file_version):
+        return self.filter(doc_uuid=doc_uuid).update(origin_file_version=origin_file_version)
 
 
 class SeadocRevision(models.Model):

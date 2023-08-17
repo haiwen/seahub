@@ -11,7 +11,8 @@ const { username, name } = window.app.userInfo;
 const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
-  isSdocRevision, isPublished, originFilename, revisionCreatedAt,
+  isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
+  originFilePath, originDocUuid,
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -37,6 +38,9 @@ window.seafile = {
   isPublished,
   revisionURL: Utils.generateRevisionURL(siteRoot, repoID, docPath),
   originFilename,
+  originFileVersion,
+  originFilePath,
+  originDocUuid,
   revisionCreatedAt,
   lang,
 };
