@@ -83,11 +83,13 @@ class Item extends Component {
     let item = this.props.item;
     this.state = {
       share_permission: item.share_permission,
+      share_permission_name: item.share_permission_name,
       is_admin: item.is_admin,
       isOpIconShown: false,
       isOpMenuOpen: false, // for mobile
       isPermSelectDialogOpen: false, // for mobile
-      unshared: false
+      unshared: false,
+      isShowPermEditor: false,
     };
     let permissions = ['rw', 'r'];
     this.permissions = permissions;
@@ -171,12 +173,17 @@ class Item extends Component {
     });
   }
 
+  onEditPermission = (event) => {
+    event.nativeEvent.stopImmediatePropagation();
+    this.setState({isShowPermEditor: true});
+  }
+
   render() {
     if (this.state.unshared) {
       return null;
     }
 
-    let { share_permission, is_admin, isOpIconShown, isPermSelectDialogOpen } = this.state;
+    let { share_permission, share_permission_name, is_admin, isOpIconShown, isPermSelectDialogOpen, isShowPermEditor } = this.state;
     let item = this.props.item;
     Object.assign(item, {
       share_permission: share_permission,
@@ -215,14 +222,31 @@ class Item extends Component {
           {item.share_type == 'personal' ? <span title={item.contact_email}>{shareTo}</span> : shareTo}
         </td>
         <td>
-          <SharePermissionEditor
-            repoID={item.repo_id}
-            isTextMode={true}
-            isEditIconShow={this.state.isOpIconShown}
-            currentPermission={share_permission}
-            permissions={this.permissions}
-            onPermissionChanged={this.changePerm}
-          />
+          {!isShowPermEditor && (
+            <div>
+              <span>{Utils.sharePerms(share_permission) || share_permission_name}</span>
+              {isOpIconShown && (
+                <a href="#"
+                  role="button"
+                  aria-label={gettext('Edit')}
+                  title={gettext('Edit')}
+                  className="fa fa-pencil-alt attr-action-icon"
+                  onClick={this.onEditPermission}>
+                </a>
+              )}
+            </div>
+          )}
+          {isShowPermEditor && (
+            <SharePermissionEditor
+              repoID={item.repo_id}
+              isTextMode={true}
+              isEditing={true}
+              isEditIconShow={this.state.isOpIconShown}
+              currentPermission={share_permission}
+              permissions={this.permissions}
+              onPermissionChanged={this.changePerm}
+            />
+          )}
         </td>
         <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '': 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
       </tr>

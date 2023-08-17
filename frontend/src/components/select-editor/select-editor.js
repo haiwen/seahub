@@ -6,6 +6,7 @@ import '../../css/select-editor.css';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
+  isEditing: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
   options: PropTypes.array.isRequired,
   currentOption: PropTypes.string.isRequired,
@@ -22,12 +23,13 @@ class SelectEditor extends React.Component {
 
   static defaultProps = {
     enableAddCustomPermission: false,
+    isEditing: false,
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: false,
+      isEditing: props.isEditing,
       options: []
     };
     this.options = [];
