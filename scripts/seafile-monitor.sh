@@ -9,10 +9,20 @@ central_config_dir=${TOPDIR}/conf
 seaf_controller="${INSTALLPATH}/seafile/bin/seafile-controller"
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
+seahubdir=${INSTALLPATH}/seahub
+seafile_rpc_pipe_path=${INSTALLPATH}/runtime
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
+export CCNET_CONF_DIR=${default_ccnet_conf_dir}
+export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
+export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
+export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
+export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+export SEAFES_DIR=$seafesdir
+export SEAHUB_DIR=$seahubdir
 
 # log function
 function log() {
@@ -38,6 +48,11 @@ function start_notification_server() {
     sleep 1
 }
 
+function start_seafevents() {
+    /usr/bin/python3 -m seafevents.main --config-file ${central_config_dir}/seafevents.conf --logfile ${TOPDIR}/logs/seafevents.log -P ${TOPDIR}/pids/seafevents.pid &
+    sleep 1
+}
+
 # monitor
 function monitor_notification_server() {
     process_name="notification-server"
@@ -48,14 +63,28 @@ function monitor_notification_server() {
     fi
 }
 
+function monitor_seafevents() {
+    process_name="seafevents.main"
+    check_num=$(check_process $process_name)
+    if [ $check_num -eq 0 ]; then
+        log "Start $process_name"
+        start_seafevents
+    fi
+}
+
 # check enabled
 ENABLE_NOTIFICATION_SERVER=`awk -F '=' '/\[notification\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${central_config_dir}/seafile.conf`
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 log "Start Monitor"
 
 while [ 1 ]; do
     if [ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
         monitor_notification_server
+    fi
+
+    if [ $IS_PRO_SEAFEVENTS ] && [ $IS_PRO_SEAFEVENTS = "False" ]; then
+        monitor_seafevents
     fi
 
     sleep 30
