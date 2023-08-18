@@ -10,6 +10,7 @@ import { isPro } from '../../utils/constants';
 const propTypes = {
   repoID: PropTypes.string,
   isTextMode: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
@@ -19,6 +20,10 @@ const propTypes = {
 };
 
 class SharePermissionEditor extends React.Component {
+
+  static defaultProps = {
+    isEditing: false,
+  }
 
   constructor(props) {
     super(props);
@@ -84,7 +89,7 @@ class SharePermissionEditor extends React.Component {
     }
     return value;
   }
-  
+
   translateExplanation = (explanation) => {
     let value = Utils.sharePermsExplanation(explanation);
     if (!value) {
@@ -120,6 +125,7 @@ class SharePermissionEditor extends React.Component {
     return (
       <SelectEditor
         isTextMode={this.props.isTextMode}
+        isEditing={this.props.isEditing}
         isEditIconShow={this.props.isEditIconShow}
         options={this.getPermissions()}
         currentOption={this.props.currentPermission}

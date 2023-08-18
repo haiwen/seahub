@@ -5,6 +5,7 @@ class SharedRepoInfo {
     this.repo_name = object.repo_name;
     this.share_type = object.share_type;
     this.share_permission = object.share_permission;
+    this.share_permission_name = object.share_permission_name;
     this.modifier_name = object.modifier_name;
     this.modifier_email = object.modifier_email;
     this.modifier_contact_email = object.modifier_contact_email;
