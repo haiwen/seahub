@@ -491,7 +491,7 @@ class UploadLinkShare(models.Model):
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     password = models.CharField(max_length=128, null=True)
-    expire_date = models.DateTimeField(null=True)
+    expire_date = models.DateTimeField(null=True, db_index=True)
     objects = UploadLinkShareManager()
 
     def is_encrypted(self):
