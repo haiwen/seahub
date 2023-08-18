@@ -69,7 +69,7 @@ class MylibRepoMenu extends React.Component {
     if (folderPermEnabled) {
       operations.push('Folder Permission');
     }
-    operations.push('Share Links Admin', 'Divider');
+    operations.push('Share Admin', 'Divider');
 
     if (repo.encrypted) {
       operations.push('Change Password');
@@ -139,8 +139,8 @@ class MylibRepoMenu extends React.Component {
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
         break;
-      case 'Share Links Admin':
-        translateResult = gettext('Share Links Admin');
+      case 'Share Admin':
+        translateResult = gettext('Share Admin');
         break;
       case 'Old Files Auto Delete':
         translateResult = gettext('Auto Deletion Setting');

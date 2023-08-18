@@ -277,7 +277,7 @@ export const Utils = {
     if (path === '/') {
       return path;
     }
-    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length -2);
+    path = path[path.length - 1] !== '/' ? path : path.slice(0, path.length - 1);
     return path.slice(path.lastIndexOf('/') + 1);
   },
 

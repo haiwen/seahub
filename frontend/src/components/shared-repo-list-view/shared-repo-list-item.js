@@ -16,7 +16,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
 import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
-import RepoShareUploadLinksDialog from '../dialog/repo-share-upload-links-dialog';
+import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
 const propTypes = {
@@ -48,7 +48,7 @@ class SharedRepoListItem extends React.Component {
       isHistorySettingDialogShow: false,
       isDeleteDialogShow: false,
       isAPITokenDialogShow: false,
-      isRepoShareUploadLinksDialogOpen: false,
+      isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isChangePasswordDialogShow: false,
       isResetPasswordDialogShow: false
@@ -156,8 +156,8 @@ class SharedRepoListItem extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
-      case 'Share Links Admin':
-        this.toggleRepoShareUploadLinksDialog();
+      case 'Share Admin':
+        this.toggleRepoShareAdminDialog();
         break;
       case 'Change Password':
         this.onChangePasswordToggle();
@@ -275,8 +275,8 @@ class SharedRepoListItem extends React.Component {
     this.setState({isShowSharedDialog: false});
   }
 
-  toggleRepoShareUploadLinksDialog = () => {
-    this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
+  toggleRepoShareAdminDialog = () => {
+    this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
   }
 
   onAPITokenToggle = () => {
@@ -312,8 +312,8 @@ class SharedRepoListItem extends React.Component {
       case 'History Setting':
         translateResult = gettext('History Setting');
         break;
-      case 'Share Links Admin':
-        translateResult = gettext('Share Links Admin');
+      case 'Share Admin':
+        translateResult = gettext('Share Admin');
         break;
       case 'Change Password':
         translateResult = gettext('Change Password');
@@ -352,7 +352,7 @@ class SharedRepoListItem extends React.Component {
             if (folderPermEnabled) {
               operations.push('Folder Permission');
             }
-            operations.push('Share Links Admin');
+            operations.push('Share Admin');
             if (repo.encrypted) {
               operations.push('Change Password');
             }
@@ -653,11 +653,11 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.isRepoShareUploadLinksDialogOpen && (
+        {this.state.isRepoShareAdminDialogOpen && (
           <ModalPortal>
-            <RepoShareUploadLinksDialog
+            <RepoShareAdminDialog
               repo={repo}
-              toggleDialog={this.toggleRepoShareUploadLinksDialog}
+              toggleDialog={this.toggleRepoShareAdminDialog}
             />
           </ModalPortal>
         )}

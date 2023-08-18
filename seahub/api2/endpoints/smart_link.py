@@ -18,7 +18,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.tags.models import FileUUIDMap
 from seahub.utils import get_service_url, normalize_dir_path, \
         normalize_file_path
-from seahub.utils.repo import is_valid_repo_id_format
+from seahub.utils.repo import is_valid_repo_id_format, is_repo_admin
 from seahub.views import check_folder_permission
 
 from seahub.api2.utils import to_python_boolean
@@ -103,7 +103,9 @@ class SmartLink(APIView):
 
         try:
             uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
-                    parent_dir, dirent_name, is_dir)
+                                                                     parent_dir,
+                                                                     dirent_name,
+                                                                     is_dir)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -153,3 +155,83 @@ class SmartLinkToken(APIView):
         result['is_dir'] = is_dir
 
         return Response(result)
+
+
+class RepoSmartLinks(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        """ Get all smart links of a repo.
+
+        Permission checking:
+        1. repo owner or admin;
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_repo_admin(username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['smart_link_list'] = []
+
+        smart_links = FileUUIDMap.objects.filter(repo_id=repo_id)
+        for link in smart_links:
+
+            link_info = {}
+            link_info['token'] = link.uuid
+            link_info['is_dir'] = link.is_dir
+            link_info['parent_dir'] = normalize_dir_path(link.parent_path)
+            link_info['dirent_name'] = link.filename
+            link_info['smart_link'] = gen_smart_link(link.uuid)
+
+            result['smart_link_list'].append(link_info)
+
+        return Response(result)
+
+
+class RepoSmartLink(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request, repo_id, token):
+        """ Delete smart link of a repo.
+
+        Permission checking:
+        1. repo owner or admin;
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_repo_admin(username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        smart_links = FileUUIDMap.objects.filter(repo_id=repo_id).filter(uuid=token)
+
+        try:
+            smart_links.delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

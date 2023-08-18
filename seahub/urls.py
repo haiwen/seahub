@@ -22,7 +22,8 @@ from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
 
 from seahub.api2.endpoints.search_file import SearchFile
 
-from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
+from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken, \
+        RepoSmartLinks, RepoSmartLink
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
 from seahub.api2.endpoints.departments import Departments
@@ -46,6 +47,7 @@ from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
         ShareLinksCleanInvalid
 from seahub.api2.endpoints.multi_share_links import MultiShareLinks, \
         MultiShareLinksBatch
+from seahub.api2.endpoints.repo_folder_share_info import RepoFolderShareInfo
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -310,6 +312,8 @@ urlpatterns = [
     ## user::smart-link
     re_path(r'^api/v2.1/smart-link/$', SmartLink.as_view(), name="api-v2.1-smart-link"),
     re_path(r'^api/v2.1/smart-links/(?P<token>[-0-9a-f]{36})/$', SmartLinkToken.as_view(), name="api-v2.1-smart-links-token"),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/smart-links/$', RepoSmartLinks.as_view(), name='api-v2.1-repo-smart-links'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/smart-links/(?P<token>[-0-9a-f]{36})/$', RepoSmartLink.as_view(), name='api-v2.1-repo-smart-link'),
 
     # search file by name
     re_path(r'^api/v2.1/search-file/$', SearchFile.as_view(), name='api-v2.1-search-file'),
@@ -345,6 +349,9 @@ urlpatterns = [
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/$', CustomSharePermissionsView.as_view(), name='api-v2.1-custom-share-permissions'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/custom-share-permissions/(?P<permission_id>\d+)/$', CustomSharePermissionView.as_view(), name='api-v2.1-custom-share-permission'),
+
+    ## user::shared-repos-folders
+    re_path(r'^api/v2.1/repo-folder-share-info/$', RepoFolderShareInfo.as_view(), name='api-v2.1-repo-folder-share-info'),
 
     ## user::shared-folders
     re_path(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),
