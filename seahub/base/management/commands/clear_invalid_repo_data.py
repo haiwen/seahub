@@ -9,6 +9,10 @@ from seahub.utils.seafile_db import get_seafile_db_name
 class Command(BaseCommand):
     help = "Clear invalid data when repo deleted"
 
+    def add_arguments(self, parser):
+        parser.add_argument('--dry-run', type=str, choices=['true', 'false'], default='false',
+                            help='Whether to only print the log instead of actually deleting the data')
+
     def get_seafile_repo_count(self, table_name):
         db_name, error_msg = get_seafile_db_name()
         if error_msg:
@@ -91,7 +95,7 @@ class Command(BaseCommand):
 
         return invalid_repo_ids
 
-    def clean_up_invalid_records(self, invalid_repo_ids, table_name):
+    def clean_up_invalid_records(self, dry_run, invalid_repo_ids, table_name):
         self.stdout.write('[%s] Start to count invalid records of %s.' % (datetime.now(), table_name))
         count_sql = """SELECT COUNT(1) FROM %s WHERE repo_id IN %%s""" % table_name
         try:
@@ -107,19 +111,22 @@ class Command(BaseCommand):
                           (datetime.now(), table_name, invalid_records_count))
 
         self.stdout.write('[%s] Start to clean up invalid records of %s...' % (datetime.now(), table_name))
-        clean_sql = """DELETE FROM %s WHERE repo_id IN %%s LIMIT 10000""" % table_name
-        for i in range(0, invalid_records_count, 10000):
-            try:
-                with connection.cursor() as cursor:
-                    cursor.execute(clean_sql, (invalid_repo_ids,))
-            except Exception as e:
-                self.stderr.write('[%s] Failed to clean up expired UploadLinkShare, error: %s.' % (datetime.now(), e))
-                return False
+        if dry_run == 'false':
+            clean_sql = """DELETE FROM %s WHERE repo_id IN %%s LIMIT 10000""" % table_name
+            for i in range(0, invalid_records_count, 10000):
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute(clean_sql, (invalid_repo_ids,))
+                except Exception as e:
+                    self.stderr.write('[%s] Failed to clean up expired UploadLinkShare, error: %s.' %
+                                      (datetime.now(), e))
+                    return False
 
         self.stdout.write('[%s] Successfully cleaned up invalid records of %s.' % (datetime.now(), table_name))
         return True
 
     def handle(self, *args, **kwargs):
+        dry_run = kwargs['dry_run']
         # get all exist repo_id
         self.stdout.write('[%s] Count the number of exist repo.' % datetime.now())
         exist_repo_count = self.get_seafile_repo_count('Repo')
@@ -167,13 +174,14 @@ class Command(BaseCommand):
 
         # clean up expired upload_link
         self.stdout.write('[%s] Start to clean up expired upload_link...' % datetime.now())
-        sql1 = """DELETE FROM share_uploadlinkshare WHERE expire_date < DATE_SUB(CURDATE(), INTERVAL 3 DAY)"""
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute(sql1)
-        except Exception as e:
-            self.stderr.write('[%s] Failed to clean up expired upload_link, error: %s.' % (datetime.now(), e))
-            return
+        if dry_run == 'false':
+            sql1 = """DELETE FROM share_uploadlinkshare WHERE expire_date < DATE_SUB(CURDATE(), INTERVAL 3 DAY)"""
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql1)
+            except Exception as e:
+                self.stderr.write('[%s] Failed to clean up expired upload_link, error: %s.' % (datetime.now(), e))
+                return
         self.stdout.write('[%s] Successfully cleaned up expired upload_link.' % datetime.now())
 
         # clean up invalid upload_link
@@ -185,7 +193,7 @@ class Command(BaseCommand):
         if not invalid_repo_ids:
             return
 
-        clean_up_res = self.clean_up_invalid_records(invalid_repo_ids, 'share_uploadlinkshare')
+        clean_up_res = self.clean_up_invalid_records(dry_run, invalid_repo_ids, 'share_uploadlinkshare')
         if not clean_up_res:
             return
 
