@@ -97,15 +97,17 @@ class Command(BaseCommand):
 
     def clean_up_invalid_records(self, dry_run, invalid_repo_ids, table_name):
         self.stdout.write('[%s] Start to count invalid records of %s.' % (datetime.now(), table_name))
-        count_sql = """SELECT COUNT(1) FROM %s WHERE repo_id IN %%s""" % table_name
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute(count_sql, (invalid_repo_ids,))
-                invalid_records_count = int(cursor.fetchone()[0])
-        except Exception as e:
-            self.stderr.write('[%s] Failed to count invalid records of %s, error: %s.' %
-                              (datetime.now(), table_name, e))
-            return False
+        invalid_records_count = 0
+        if invalid_repo_ids:
+            count_sql = """SELECT COUNT(1) FROM %s WHERE repo_id IN %%s""" % table_name
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(count_sql, (invalid_repo_ids,))
+                    invalid_records_count = int(cursor.fetchone()[0])
+            except Exception as e:
+                self.stderr.write('[%s] Failed to count invalid records of %s, error: %s.' %
+                                (datetime.now(), table_name, e))
+                return False
 
         self.stdout.write('[%s] The number of invalid records of %s: %s' %
                           (datetime.now(), table_name, invalid_records_count))
@@ -130,13 +132,13 @@ class Command(BaseCommand):
         # get all exist repo_id
         self.stdout.write('[%s] Count the number of exist repo.' % datetime.now())
         exist_repo_count = self.get_seafile_repo_count('Repo')
-        if not exist_repo_count:
+        if exist_repo_count is None:
             return
         self.stdout.write('[%s] The number of exist repo: %s.' % (datetime.now(), exist_repo_count))
 
         self.stdout.write('[%s] Start to query all exist repo_id.' % datetime.now())
         exist_repo_ids = self.query_seafile_repo_ids(exist_repo_count, 'Repo')
-        if not exist_repo_ids:
+        if exist_repo_ids is None:
             return
         self.stdout.write('[%s] Successfully queried all exist repo_id, result length: %s.' %
                           (datetime.now(), len(exist_repo_ids)))
@@ -144,13 +146,13 @@ class Command(BaseCommand):
         # get all virtual repo_id
         self.stdout.write('[%s] Count the number of virtual repo.' % datetime.now())
         virtual_repo_count = self.get_seafile_repo_count('VirtualRepo')
-        if not virtual_repo_count:
+        if virtual_repo_count is None:
             return
         self.stdout.write('[%s] The number of virtual repo: %s.' % (datetime.now(), virtual_repo_count))
 
         self.stdout.write('[%s] Start to query all virtual repo_id.' % datetime.now())
         virtual_repo_ids = self.query_seafile_repo_ids(virtual_repo_count, 'VirtualRepo')
-        if not virtual_repo_ids:
+        if virtual_repo_ids is None:
             return
         self.stdout.write('[%s] Successfully queried all virtual repo_id, result length: %s.' %
                           (datetime.now(), len(virtual_repo_ids)))
@@ -158,13 +160,13 @@ class Command(BaseCommand):
         # get all trash repo_id
         self.stdout.write('[%s] Count the number of trash repo.' % datetime.now())
         trash_repo_count = self.get_seafile_repo_count('RepoTrash')
-        if not trash_repo_count:
+        if trash_repo_count is None:
             return
         self.stdout.write('[%s] The number of trash repo: %s.' % (datetime.now(), trash_repo_count))
 
         self.stdout.write('[%s] Start to query all trash repo_id.' % datetime.now())
         trash_repo_ids = self.query_seafile_repo_ids(trash_repo_count, 'RepoTrash')
-        if not trash_repo_ids:
+        if trash_repo_ids is None:
             return
         self.stdout.write('[%s] Successfully queried all trash repo_id, result length: %s.' %
                           (datetime.now(), len(trash_repo_ids)))
@@ -186,15 +188,15 @@ class Command(BaseCommand):
 
         # clean up invalid upload_link
         repo_id_count = self.get_repo_id_count('share_uploadlinkshare')
-        if not repo_id_count:
+        if repo_id_count is None:
             return
 
         invalid_repo_ids = self.query_invalid_repo_ids(all_repo_ids, repo_id_count, 'share_uploadlinkshare')
-        if not invalid_repo_ids:
+        if invalid_repo_ids is None:
             return
 
         clean_up_res = self.clean_up_invalid_records(dry_run, invalid_repo_ids, 'share_uploadlinkshare')
-        if not clean_up_res:
+        if clean_up_res is None:
             return
 
         # TODO: tags_fileuuidmap, revision_tag_revisiontags, base_userstarredfiles, share_extragroupssharepermission, share_extrasharepermission
