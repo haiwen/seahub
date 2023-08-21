@@ -34,7 +34,8 @@ from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, ENABLE_REPO_AUTO_DEL, \
+    IS_DB_SQLITE3
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -151,6 +152,7 @@ def base(request):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
+        'is_db_sqlite3': IS_DB_SQLITE3,
         'is_docs': ENABLE_SEAFILE_DOCS,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,

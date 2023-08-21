@@ -105,6 +105,17 @@ def is_cluster_mode():
 
 CLUSTER_MODE = is_cluster_mode()
 
+def is_db_sqlite3():
+    is_db_sqlite3 = False
+    try:
+        if 'sqlite3' in seahub.settings.DATABASES['default']['ENGINE']:
+            is_db_sqlite3 = True
+    except:
+        pass
+    return is_db_sqlite3
+
+IS_DB_SQLITE3 = is_db_sqlite3()
+
 try:
     from seahub.settings import OFFICE_CONVERTOR_ROOT
 except ImportError:

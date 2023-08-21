@@ -8,7 +8,7 @@ import { Utils } from '../utils/utils';
 import toaster from './toast';
 import Group from '../models/group';
 
-import { canViewOrg, isDocs, isPro, customNavItems } from '../utils/constants';
+import { canViewOrg, isDocs, isPro, isDBSqlite3, customNavItems } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -180,7 +180,7 @@ class MainSideNav extends React.Component {
   }
 
   render() {
-    let showActivity = isDocs || isPro;
+    let showActivity = isDocs || isPro || !isDBSqlite3;
     return (
       <div className="side-nav">
         <div className="side-nav-con">
