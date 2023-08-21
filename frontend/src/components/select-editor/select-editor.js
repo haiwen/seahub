@@ -36,7 +36,6 @@ class SelectEditor extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.onHideSelect);
     this.setOptions();
   }
 
@@ -78,10 +77,6 @@ class SelectEditor extends React.Component {
     this.setOptions();
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideSelect);
-  }
-
   onEditPermission = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
@@ -102,7 +97,7 @@ class SelectEditor extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
   }
 
-  onHideSelect = () => {
+  onMenuClose = () => {
     this.setState({isEditing: false});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
   }
@@ -149,6 +144,7 @@ class SelectEditor extends React.Component {
             menuPosition={'fixed'}
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
+            onMenuClose={this.onMenuClose}
             menuShouldScrollIntoView
           />
         }
