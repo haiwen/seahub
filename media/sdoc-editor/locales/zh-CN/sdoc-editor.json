@@ -273,7 +273,7 @@
   "Revision": "修订稿",
   "Error": "错误",
   "Start_revise": "开始修订",
-  "Failed_to_execute_operation_on_server": "无法在服务器上执行操作",
+  "Failed_to_execute_operation_on_server": "无法在服务器上执行操作，当前操作已经撤回",
   "Start_revise_tip": "创建一个临时文档并对其进行修订，检查更改后将其合并回来",
   "Load_doc_content_error": "加载文档内容错误",
   "Sdoc_format_invalid": "文档内容不符合 sdoc 规范",
@@ -343,7 +343,6 @@
   "Font": "字体",
   "All_fonts": "所有字体",
   "Default_font": "默认字体",
-  "Document_content_load_failed": "文档内容加载失败, 请刷新页面重新访问",
   "Pending_operations_exceed_limit": "有多个操作未同步到服务器。请检查你的网络。",
   "Recently_saved": "最近保存",
   "Sdoc_document" : "sdoc 文档",
@@ -351,5 +350,7 @@
   "Icon_and_text_Link": "图标+文字链",
   "Card": "卡片",
   "Select_sdoc_document": "选择sdoc文档",
-  "Local_file": "本地文件"
+  "Local_file": "本地文件",
+  "Internal_server_exec_operations_error": "在服务器执行操作异常，请刷新页面后重试",
+  "Failed_to_sync_with_server_operations": "与服务器同步操作失败，请刷新页面"
 }

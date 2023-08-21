@@ -273,7 +273,7 @@
   "Revision": "Revision",
   "Error": "Error",
   "Start_revise": "Start revise",
-  "Failed_to_execute_operation_on_server": "Failed to execute operation on server",
+  "Failed_to_execute_operation_on_server": "Failed to execute operation on server, the current operation has been withdrawn",
   "Start_revise_tip": "Create a temporary document and modify on it, merge it back after reviewing changes",
   "Load_doc_content_error": "Load doc content error",
   "Sdoc_format_invalid": "The content of the document does not conform to the sdoc specification",
@@ -341,7 +341,6 @@
   "Font": "Font",
   "All_fonts": "All fonts",
   "Default_font": "Default font",
-  "Document_content_load_failed": "Document content failed to load, please refresh the page to try again",
   "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
   "Recently_saved": "Recently saved",
   "Sdoc_document" : "Sdoc document",
@@ -349,5 +348,7 @@
   "Icon_and_text_Link": "Icon and text Link",
   "Card": "Card",
   "Select_sdoc_document": "Select sdoc document",
-  "Local_file": "Local file"
+  "Local_file": "Local file",
+  "Internal_server_exec_operations_error": "An exception occurred on the server, please refresh the page and try again",
+  "Failed_to_sync_with_server_operations": "Synchronization with the server failed, please refresh the page"
 }
