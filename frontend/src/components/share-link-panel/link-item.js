@@ -43,20 +43,30 @@ class LinkItem extends React.Component {
     return link.slice(0, 9) + '...' + link.slice(length-5);
   }
 
+  onDeleteIconClicked = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.toggleDeleteShareLinkDialog();
+  }
+
   toggleDeleteShareLinkDialog = () => {
     this.setState({isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen});
   }
 
-  copyLink = (e) => {
+  onCopyIconClicked = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const { item } = this.props;
     copy(item.link);
     toaster.success(gettext('Share link is copied to the clipboard.'));
   }
 
-  viewDetails = (e) => {
-    e.preventDefault();
+  clickItem = (e) => {
     this.props.showLinkDetails(this.props.item);
+  }
+
+  onCheckboxClicked = (e) => {
+    e.stopPropagation();
   }
 
   toggleSelectLink = (e) => {
@@ -76,12 +86,23 @@ class LinkItem extends React.Component {
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
     return (
       <Fragment>
-        <tr onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={isSelected ? 'tr-highlight' : ''}>
+        <tr
+          onClick={this.clickItem}
+          onMouseOver={this.onMouseOver}
+          onMouseOut={this.onMouseOut}
+          className={`cursor-pointer ${isSelected ? 'tr-highlight' : ''}`}
+        >
           <td className="text-center">
-            <input type="checkbox" checked={isSelected} onChange={this.toggleSelectLink} className="vam" />
+            <input
+              type="checkbox"
+              checked={isSelected}
+              className="vam"
+              onClick={this.onCheckboxClicked}
+              onChange={this.toggleSelectLink}
+            />
           </td>
           <td>
-            <a href="#" onClick={this.viewDetails} className="text-inherit">{this.cutLink(link)}</a>
+            {this.cutLink(link)}
           </td>
           <td>
             {(isPro && permissions) && (
@@ -98,9 +119,8 @@ class LinkItem extends React.Component {
             {expire_date ? moment(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>
-            <a href="#" role="button" onClick={this.copyLink} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.viewDetails} className={`fa fa-pencil-alt attr-action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')}></a>
-            <a href="#" role="button" onClick={this.toggleDeleteShareLinkDialog} className={`sf2-icon-delete action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf2-icon-copy action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf2-icon-delete action-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
           </td>
         </tr>
         {this.state.isDeleteShareLinkDialogOpen && (
