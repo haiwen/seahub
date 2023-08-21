@@ -144,13 +144,8 @@ function start_seafile_server () {
         exit 1;
     fi
 
-    # notification-sever. seafevents only in ce
-    ENABLE_NOTIFICATION_SERVER=`awk -F '=' '/\[notification\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${central_config_dir}/seafile.conf`
-    IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
-
-    if ([ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]) || ([ $IS_PRO_SEAFEVENTS ] && [ $IS_PRO_SEAFEVENTS = "False" ]); then
-        ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
-    fi
+    # seafevents, notification-sever
+    ${INSTALLPATH}/seafile-monitor.sh &>> ${TOPDIR}/logs/seafile-monitor.log &
 
     echo "Seafile server started"
     echo

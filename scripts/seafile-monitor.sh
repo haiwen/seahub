@@ -79,12 +79,11 @@ IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafe
 log "Start Monitor"
 
 while [ 1 ]; do
+
+    monitor_seafevents
+
     if [ $ENABLE_NOTIFICATION_SERVER ] && [ $ENABLE_NOTIFICATION_SERVER = "true" ]; then
         monitor_notification_server
-    fi
-
-    if [ $IS_PRO_SEAFEVENTS ] && [ $IS_PRO_SEAFEVENTS = "False" ]; then
-        monitor_seafevents
     fi
 
     sleep 30
