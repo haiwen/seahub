@@ -244,6 +244,10 @@ class MultiShareLinksBatch(APIView):
             error_msg = 'number invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        if share_link_num > 1000:
+            error_msg = 'number invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         auto_generate_password = request.data.get('auto_generate_password')
         if not auto_generate_password:
             error_msg = 'auto_generate_password invalid.'
