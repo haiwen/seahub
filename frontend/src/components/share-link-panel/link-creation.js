@@ -155,6 +155,10 @@ class LinkCreation extends React.Component {
         this.setState({errorInfo: gettext('Please enter an integer bigger than 1 as number of links.')});
         return false;
       }
+      if (parseInt(linkAmount) > 1000) {
+        this.setState({errorInfo: gettext('Please enter an integer smaller than 1000 as number of links.')});
+        return false;
+      }
     }
 
     if (type == 'single' && isShowPasswordInput) {
