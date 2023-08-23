@@ -277,7 +277,7 @@ class Command(BaseCommand):
                     cursor.execute(sql, (invalid_repo_ids, i, 1000))
                     res = cursor.fetchall()
             except Exception as e:
-                self.stderr.write('[%s] Failed to query invalid uuid of %s, error: tags_fileuuidmap.' %
+                self.stderr.write('[%s] Failed to query invalid uuid of tags_fileuuidmap, error: %s.' %
                                   (datetime.now(), e))
                 return
 
@@ -292,6 +292,18 @@ class Command(BaseCommand):
             clean_up_success = self.clean_up_invalid_uuid_records(dry_run, invalid_uuids, table_name)
             if clean_up_success is False:
                 return
+
+        # truncate related_files_relatedfiles
+        self.stdout.write('[%s] Start to truncate table related_files_relatedfiles.' % datetime.now())
+        truncate_sql = """TRUNCATE TABLE related_files_relatedfiles"""
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(truncate_sql)
+        except Exception as e:
+            self.stderr.write('[%s] Failed to truncate table related_files_relatedfiles, error: %s.' %
+                              (datetime.now(), e))
+            return
+        self.stdout.write('[%s] Successfully truncated table related_files_relatedfiles.' % datetime.now())
 
         self.stdout.write('[%s] Successfully cleaned up tables associated with the tags_fileuuidmap.' %
                           datetime.now())
