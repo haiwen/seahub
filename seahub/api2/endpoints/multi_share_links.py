@@ -27,7 +27,8 @@ from seahub.utils import is_org_context, get_password_strength_level, \
         is_valid_password, gen_shared_link
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.repo import parse_repo_perm
-from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    SHARE_LINK_MAX_NUMBER
 from seahub.views.file import can_edit_file
 from seahub.api2.endpoints.share_links import get_share_link_info, check_permissions_arg
 
@@ -241,6 +242,10 @@ class MultiShareLinksBatch(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if share_link_num <= 0:
+            error_msg = 'number invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if share_link_num > SHARE_LINK_MAX_NUMBER:
             error_msg = 'number invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

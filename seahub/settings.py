@@ -380,6 +380,9 @@ REPO_PASSWORD_MIN_LENGTH = 8
 # token length for the share link
 SHARE_LINK_TOKEN_LENGTH = 20
 
+# the maximum number of external share links in a sdoc file
+SHARE_LINK_MAX_NUMBER = 200
+
 # if limit only authenticated user can view preview share link
 SHARE_LINK_LOGIN_REQUIRED = False
 

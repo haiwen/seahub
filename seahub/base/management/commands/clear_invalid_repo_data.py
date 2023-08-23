@@ -60,7 +60,7 @@ class Command(BaseCommand):
                 cursor.execute(sql)
                 repo_id_count = int(cursor.fetchone()[0])
         except Exception as e:
-            self.stderr.write('[%s] Failed to count the number repo_id of %s, error: %s.' %
+            self.stderr.write('[%s] Failed to count the number of repo_id of %s, error: %s.' %
                               (datetime.now(), table_name, e))
             return
 
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                     invalid_records_count = int(cursor.fetchone()[0])
             except Exception as e:
                 self.stderr.write('[%s] Failed to count invalid records of %s, error: %s.' %
-                                (datetime.now(), table_name, e))
+                                  (datetime.now(), table_name, e))
                 return False
 
         self.stdout.write('[%s] The number of invalid records of %s: %s' %
@@ -120,11 +120,51 @@ class Command(BaseCommand):
                     with connection.cursor() as cursor:
                         cursor.execute(clean_sql, (invalid_repo_ids,))
                 except Exception as e:
-                    self.stderr.write('[%s] Failed to clean up expired UploadLinkShare, error: %s.' %
-                                      (datetime.now(), e))
+                    self.stderr.write('[%s] Failed to clean up invalid records of %s, error: %s.' %
+                                      (datetime.now(), table_name, e))
                     return False
 
         self.stdout.write('[%s] Successfully cleaned up invalid records of %s.' % (datetime.now(), table_name))
+        return True
+
+    def clean_up_invalid_uuid_records(self, dry_run, invalid_uuids, table_name):
+        self.stdout.write('[%s] Start to count invalid records of %s.' % (datetime.now(), table_name))
+        invalid_records_count = 0
+        if invalid_uuids:
+            if table_name == 'file_tags_filetags':
+                count_sql = """SELECT COUNT(1) FROM %s WHERE file_uuid_id IN %%s""" % table_name
+            else:
+                count_sql = """SELECT COUNT(1) FROM %s WHERE uuid_id IN %%s""" % table_name
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(count_sql, (invalid_uuids,))
+                    invalid_records_count = int(cursor.fetchone()[0])
+            except Exception as e:
+                self.stderr.write('[%s] Failed to count invalid records of %s, error: %s.' %
+                                  (datetime.now(), table_name, e))
+                return False
+
+        self.stdout.write('[%s] The number of invalid records of %s: %s' %
+                          (datetime.now(), table_name, invalid_records_count))
+
+        self.stdout.write('[%s] Start to clean up invalid records of %s...' %
+                          (datetime.now(), table_name))
+        if dry_run == 'false':
+            if table_name == 'file_tags_filetags':
+                clean_sql = """DELETE FROM %s WHERE file_uuid_id IN %%s LIMIT 10000""" % table_name
+            else:
+                clean_sql = """DELETE FROM %s WHERE uuid_id IN %%s LIMIT 10000""" % table_name
+            for i in range(0, invalid_records_count, 10000):
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute(clean_sql, (invalid_uuids,))
+                except Exception as e:
+                    self.stderr.write('[%s] Failed to clean up invalid records of %s, error: %s.' %
+                                      (datetime.now(), table_name, e))
+                    return False
+
+        self.stdout.write('[%s] Successfully cleaned up invalid records of %s.' %
+                          (datetime.now(), table_name))
         return True
 
     def handle(self, *args, **kwargs):
@@ -177,7 +217,7 @@ class Command(BaseCommand):
         # clean up expired upload_link
         self.stdout.write('[%s] Start to clean up expired upload_link...' % datetime.now())
         if dry_run == 'false':
-            sql1 = """DELETE FROM share_uploadlinkshare WHERE expire_date < DATE_SUB(CURDATE(), INTERVAL 3 DAY)"""
+            sql1 = """DELETE FROM share_uploadlinkshare WHERE expire_date < DATE_SUB(CURDATE(), INTERVAL 7 DAY)"""
             try:
                 with connection.cursor() as cursor:
                     cursor.execute(sql1)
@@ -186,17 +226,77 @@ class Command(BaseCommand):
                 return
         self.stdout.write('[%s] Successfully cleaned up expired upload_link.' % datetime.now())
 
-        # clean up invalid upload_link
-        repo_id_count = self.get_repo_id_count('share_uploadlinkshare')
+        # clean up invalid data
+        self.stdout.write('[%s] Start to clean up invalid repo data...' % datetime.now())
+
+        table_name_list = ['share_uploadlinkshare', 'revision_tag_revisiontags', 'base_userstarredfiles',
+                           'share_extragroupssharepermission', 'share_extrasharepermission']
+        for table_name in table_name_list:
+            repo_id_count = self.get_repo_id_count(table_name)
+            if repo_id_count is None:
+                return
+
+            invalid_repo_ids = self.query_invalid_repo_ids(all_repo_ids, repo_id_count, table_name)
+            if invalid_repo_ids is None:
+                return
+
+            clean_up_success = self.clean_up_invalid_records(dry_run, invalid_repo_ids, table_name)
+            if clean_up_success is False:
+                return
+
+        self.stdout.write('[%s] Start to clean up tables associated with the tags_fileuuidmap...' % datetime.now())
+        repo_id_count = self.get_repo_id_count('tags_fileuuidmap')
         if repo_id_count is None:
             return
 
-        invalid_repo_ids = self.query_invalid_repo_ids(all_repo_ids, repo_id_count, 'share_uploadlinkshare')
+        invalid_repo_ids = self.query_invalid_repo_ids(all_repo_ids, repo_id_count, 'tags_fileuuidmap')
         if invalid_repo_ids is None:
             return
 
-        clean_up_res = self.clean_up_invalid_records(dry_run, invalid_repo_ids, 'share_uploadlinkshare')
-        if clean_up_res is None:
-            return
+        invalid_uuid_count = 0
+        if invalid_repo_ids:
+            self.stdout.write('[%s] Count the number of invalid uuid of tags_fileuuidmap.' % datetime.now())
+            count_sql = """SELECT COUNT(DISTINCT(`uuid`)) FROM tags_fileuuidmap WHERE repo_id IN %s"""
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(count_sql, (invalid_repo_ids,))
+                    invalid_uuid_count = int(cursor.fetchone()[0])
+            except Exception as e:
+                self.stderr.write('[%s] Failed to count the number of invalid uuid of tags_fileuuidmap, error: %s.' %
+                                  (datetime.now(), e))
+                return
+            self.stdout.write('[%s] The number of invalid uuid of tags_fileuuidmap: %s.' %
+                              (datetime.now(), invalid_uuid_count))
 
-        # TODO: tags_fileuuidmap, revision_tag_revisiontags, base_userstarredfiles, share_extragroupssharepermission, share_extrasharepermission
+        self.stdout.write('[%s] Start to query invalid uuid of tags_fileuuidmap.' % datetime.now())
+        invalid_uuids = list()
+        for i in range(0, invalid_uuid_count, 1000):
+            sql = """SELECT DISTINCT(`uuid`) FROM tags_fileuuidmap WHERE repo_id IN %s LIMIT %s, %s"""
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql, (invalid_repo_ids, i, 1000))
+                    res = cursor.fetchall()
+            except Exception as e:
+                self.stderr.write('[%s] Failed to query invalid uuid of %s, error: tags_fileuuidmap.' %
+                                  (datetime.now(), e))
+                return
+
+            for uuid, *_ in res:
+                invalid_uuids.append(uuid)
+
+        self.stdout.write('[%s] Successfully queried invalid uuid of tags_fileuuidmap, result length: %s.' %
+                          (datetime.now(), len(invalid_uuids)))
+
+        tb_name_list = ['base_filecomment', 'file_participants_fileparticipant', 'file_tags_filetags', 'tags_filetag']
+        for table_name in tb_name_list:
+            clean_up_success = self.clean_up_invalid_uuid_records(dry_run, invalid_uuids, table_name)
+            if clean_up_success is False:
+                return
+
+        self.stdout.write('[%s] Successfully cleaned up tables associated with the tags_fileuuidmap.' %
+                          datetime.now())
+
+        clean_up_success = self.clean_up_invalid_records(dry_run, invalid_repo_ids, 'tags_fileuuidmap')
+        if clean_up_success is False:
+            return
+        self.stdout.write('[%s] Successfully cleaned up all invalid repo data.' % datetime.now())

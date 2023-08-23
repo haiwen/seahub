@@ -21,6 +21,7 @@ const propTypes = {
 };
 
 const inputWidth = Utils.isDesktop() ? 250 : 210;
+const SHARE_LINK_MAX_NUMBER = 200;
 
 class LinkCreation extends React.Component {
 
@@ -153,6 +154,10 @@ class LinkCreation extends React.Component {
     if (type == 'batch') {
       if (!Number.isInteger(parseInt(linkAmount)) || parseInt(linkAmount) <= 1) {
         this.setState({errorInfo: gettext('Please enter an integer bigger than 1 as number of links.')});
+        return false;
+      }
+      if (parseInt(linkAmount) > SHARE_LINK_MAX_NUMBER) {
+        this.setState({errorInfo: gettext('Please enter an integer smaller than 200 as number of links.')});
         return false;
       }
     }
