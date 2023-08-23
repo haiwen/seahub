@@ -1,15 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../toast';
-import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
 import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
 import RepoShareAdminUserShares from './repo-share-admin/user-shares';
 import RepoShareAdminGroupShares from './repo-share-admin/group-shares';
-import RepoShareAdminInternalLinks from './repo-share-admin/internal-links';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -20,13 +16,12 @@ class RepoShareAdminDialog extends React.Component {
 
   constructor(props) {
     super(props);
+    this.enableShareLink = !this.props.repo.encrypted && canGenerateShareLink;
+    this.enableUploadLink = !this.props.repo.encrypted && canGenerateUploadLink;
     this.state = {
-      activeTab: this.getInitialActiveTab(),
+      activeTab: this.getInitialActiveTab()
     };
   }
-
-  enableShareLink = !this.props.repo.encrypted && canGenerateShareLink;
-  enableUploadLink = !this.props.repo.encrypted && canGenerateUploadLink;
 
   getInitialActiveTab = () => {
     if (this.enableShareLink) {
@@ -51,9 +46,8 @@ class RepoShareAdminDialog extends React.Component {
   }
 
   render() {
-
-    let activeTab = this.state.activeTab;
-    let repoName = this.props.repo.repo_name;
+    const { activeTab } = this.state;
+    const { repoName } = this.props.repo;
 
     return (
       <div>
@@ -89,11 +83,6 @@ class RepoShareAdminDialog extends React.Component {
                       {gettext('Group Shares')}
                     </NavLink>
                   </NavItem>
-                  <NavItem role="tab" aria-selected={activeTab === 'internalLink'} aria-controls="internal-link-panel">
-                    <NavLink className={activeTab === 'internalLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'internalLink')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
-                      {gettext('Internal Links')}
-                    </NavLink>
-                  </NavItem>
                 </Nav>
               </div>
               <div className="share-dialog-main">
@@ -122,13 +111,6 @@ class RepoShareAdminDialog extends React.Component {
                   {activeTab === 'shareToGroup' &&
                     <TabPane tabId="shareToGroup" role="tabpanel" id="share-to-group-panel">
                       <RepoShareAdminGroupShares
-                        repo={this.props.repo}
-                      />
-                    </TabPane>
-                  }
-                  {activeTab === 'internalLink' &&
-                    <TabPane tabId="internalLink" role="tabpanel" id="internal-link-panel">
-                      <RepoShareAdminInternalLinks
                         repo={this.props.repo}
                       />
                     </TabPane>

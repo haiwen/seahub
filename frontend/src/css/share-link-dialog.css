@@ -11,7 +11,7 @@
 }
 
 .share-dialog-content .share-dialog-side {
-    display: flex;
+    /*display: flex;*/
     flex-basis: 22%;
     padding: 1rem;
     border-bottom: 1px solid #eee;

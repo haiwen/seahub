@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot, isPro } from '../../../utils/constants';
-
+import { gettext, siteRoot, isPro, username } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -12,7 +11,8 @@ import SharePermissionEditor from '../../../components/select-editor/share-permi
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
-  deleteItem: PropTypes.func.isRequired
+  deleteItem: PropTypes.func.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired
 };
 
 class Item extends Component {
@@ -25,10 +25,10 @@ class Item extends Component {
       isShowPermEditor: false,
     };
     this.permissions = ['rw', 'r'];
-    if (isPro && this.props.item.path === '/') {
-      this.permissions.push('admin');
-    }
     if (isPro) {
+      if (this.props.item.path === '/' && this.props.isRepoOwner) {
+        this.permissions.push('admin');
+      }
       this.permissions.push('cloud-edit', 'preview');
     }
   }
@@ -74,10 +74,10 @@ class Item extends Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
-          <a href={objUrl} target="_blank">{Utils.getFolderName(item.path)}</a>
+          <Link to={objUrl}>{Utils.getFolderName(item.path)}</Link>
         </td>
         <td className="name">{item.share_to_name}</td>
-        <td className="name">
+        <td>
           {!this.state.isShowPermEditor && (
             <div>
               <span>{item.permission_name || Utils.sharePerms(this.state.permission)}</span>
@@ -103,7 +103,7 @@ class Item extends Component {
               onPermissionChanged={this.changePerm}
             />
           )}
-	</td>
+        </td>
         <td>
           <span
             tabIndex="0"
@@ -113,7 +113,8 @@ class Item extends Component {
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
-          />
+          >
+          </span>
         </td>
       </tr>
     );
@@ -155,7 +156,7 @@ class RepoShareAdminGroupShares extends Component {
     seafileAPI.deleteShareToGroupItem(item.repo_id, item.path, 'group', item.share_to).then(res => {
       let items = this.state.items.filter(shareItem => {
         return shareItem.path + shareItem.share_to !== item.path + item.share_to;
-      })
+      });
       this.setState({items: items});
       let message = gettext('Successfully deleted 1 item');
       toaster.success(message);
@@ -167,44 +168,41 @@ class RepoShareAdminGroupShares extends Component {
 
   render() {
     const { loading, errorMsg, items } = this.state;
+    const { repo } = this.props;
+    const isRepoOwner = repo.owner_email === username;
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className="cur-view-content">
-                {loading && <Loading />}
-                {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-                {!loading && !errorMsg && !items.length &&
-                  <EmptyTip forDialog={true}>
-                    <p className="text-secondary">{gettext('No share links')}</p>
-                  </EmptyTip>
-                }
-                {!loading && !errorMsg && items.length > 0 &&
-                <table>
-                  <thead>
-                    <tr>
-                      <th width="30%">{gettext('Name')}</th>
-                      <th width="30%">{gettext('Group')}</th>
-                      <th width="30%">{gettext('Permission')}</th>
-                      <th width="10%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item, index) => {
-                      return (
-                        <Item
-                          key={index}
-                          item={item}
-                          deleteItem={this.deleteItem}
-                        />
-                      );
-                    })}
-                  </tbody>
-                </table>
-                }
-            </div>
-          </div>
-        </div>
+        {loading && <Loading />}
+        {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
+        {!loading && !errorMsg && !items.length &&
+        <EmptyTip forDialog={true}>
+          <p className="text-secondary">{gettext('No group shares')}</p>
+        </EmptyTip>
+        }
+        {!loading && !errorMsg && items.length > 0 &&
+        <table className="table-hover">
+          <thead>
+            <tr>
+              <th width="30%">{gettext('Name')}</th>
+              <th width="30%">{gettext('Group')}</th>
+              <th width="30%">{gettext('Permission')}</th>
+              <th width="10%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              return (
+                <Item
+                  key={index}
+                  item={item}
+                  deleteItem={this.deleteItem}
+                  isRepoOwner={isRepoOwner}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+        }
       </Fragment>
     );
   }

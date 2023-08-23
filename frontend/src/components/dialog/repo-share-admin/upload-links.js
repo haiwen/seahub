@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
-
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
@@ -37,7 +36,6 @@ class Item extends Component {
   };
 
   render() {
-
     let item = this.props.item;
     let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
     let objUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
@@ -46,10 +44,10 @@ class Item extends Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td className="name">{item.creator_name}</td>
         <td>
-          <a href={objUrl} target="_blank">{item.obj_name}</a>
+          <Link to={objUrl}>{item.obj_name}</Link>
         </td>
         <td>
-          <a href={item.link} target="_blank">{item.link}</a>
+          <a href={item.link} target="_blank" rel="noreferrer">{item.link}</a>
         </td>
         <td>
           <span
@@ -60,7 +58,8 @@ class Item extends Component {
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
-          />
+          >
+          </span>
         </td>
       </tr>
     );
@@ -116,42 +115,36 @@ class RepoShareAdminUploadLinks extends Component {
     const { loading, errorMsg, items } = this.state;
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className="cur-view-content">
-                {loading && <Loading />}
-                {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-                {!loading && !errorMsg && !items.length &&
-                  <EmptyTip forDialog={true}>
-                    <p className="text-secondary">{gettext('No upload links')}</p>
-                  </EmptyTip>
-                }
-                {!loading && !errorMsg && items.length > 0 &&
-                <table>
-                  <thead>
-                    <tr>
-                      <th width="22%">{gettext('Creator')}</th>
-                      <th width="20%">{gettext('Name')}</th>
-                      <th width="48%">{gettext('Link')}</th>
-                      <th width="10%"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item, index) => {
-                      return (
-                        <Item
-                          key={index}
-                          item={item}
-                          deleteItem={this.deleteItem}
-                        />
-                      );
-                    })}
-                  </tbody>
-                </table>
-                }
-            </div>
-          </div>
-        </div>
+        {loading && <Loading />}
+        {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
+        {!loading && !errorMsg && !items.length &&
+        <EmptyTip forDialog={true}>
+          <p className="text-secondary">{gettext('No upload links')}</p>
+        </EmptyTip>
+        }
+        {!loading && !errorMsg && items.length > 0 &&
+        <table className="table-hover">
+          <thead>
+            <tr>
+              <th width="22%">{gettext('Creator')}</th>
+              <th width="20%">{gettext('Name')}</th>
+              <th width="50%">{gettext('Link')}</th>
+              <th width="8%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              return (
+                <Item
+                  key={index}
+                  item={item}
+                  deleteItem={this.deleteItem}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+        }
       </Fragment>
     );
   }
