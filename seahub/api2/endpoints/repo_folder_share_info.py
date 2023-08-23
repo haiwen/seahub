@@ -45,6 +45,11 @@ class RepoFolderShareInfo(APIView):
             error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        share_to = request.GET.get('share_to')
+        if share_to and share_to not in ('user', 'group'):
+            error_msg = 'share_to invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -58,8 +63,6 @@ class RepoFolderShareInfo(APIView):
 
         # get share inifo
         share_info_list = []
-        share_to = request.GET.get('share_to')
-
         try:
             seafile_db = SeafileDB()
         except Exception as e:
