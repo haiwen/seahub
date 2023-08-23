@@ -295,14 +295,15 @@ class Command(BaseCommand):
 
         # truncate related_files_relatedfiles
         self.stdout.write('[%s] Start to truncate table related_files_relatedfiles.' % datetime.now())
-        truncate_sql = """TRUNCATE TABLE related_files_relatedfiles"""
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute(truncate_sql)
-        except Exception as e:
-            self.stderr.write('[%s] Failed to truncate table related_files_relatedfiles, error: %s.' %
-                              (datetime.now(), e))
-            return
+        if dry_run == 'false':
+            truncate_sql = """TRUNCATE TABLE related_files_relatedfiles"""
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(truncate_sql)
+            except Exception as e:
+                self.stderr.write('[%s] Failed to truncate table related_files_relatedfiles, error: %s.' %
+                                  (datetime.now(), e))
+                return
         self.stdout.write('[%s] Successfully truncated table related_files_relatedfiles.' % datetime.now())
 
         self.stdout.write('[%s] Successfully cleaned up tables associated with the tags_fileuuidmap.' %
