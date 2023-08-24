@@ -50,6 +50,7 @@ class GroupItem extends React.Component {
         <td>
           <SharePermissionEditor
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={item.permission}
             permissions={this.props.permissions}

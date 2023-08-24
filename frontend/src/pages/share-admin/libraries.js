@@ -241,6 +241,7 @@ class Item extends Component {
               repoID={item.repo_id}
               isTextMode={true}
               isEditing={true}
+              autoFocus={true}
               isEditIconShow={this.state.isOpIconShown}
               currentPermission={share_permission}
               permissions={this.permissions}

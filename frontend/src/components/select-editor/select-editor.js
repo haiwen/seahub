@@ -8,6 +8,7 @@ const propTypes = {
   isTextMode: PropTypes.bool.isRequired, // there will be two mode. first: text and select. second: just select
   isEditing: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
+  autoFocus: PropTypes.bool,
   options: PropTypes.array.isRequired,
   currentOption: PropTypes.string.isRequired,
   translateOption: PropTypes.func.isRequired,
@@ -16,7 +17,6 @@ const propTypes = {
   toggleItemFreezed: PropTypes.func,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
-
 };
 
 class SelectEditor extends React.Component {
@@ -24,6 +24,7 @@ class SelectEditor extends React.Component {
   static defaultProps = {
     enableAddCustomPermission: false,
     isEditing: false,
+    autoFocus: false,
   }
 
   constructor(props) {
@@ -145,6 +146,7 @@ class SelectEditor extends React.Component {
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
             onMenuClose={this.onMenuClose}
+            autoFocus={this.props.autoFocus}
             menuShouldScrollIntoView
           />
         }
