@@ -516,10 +516,14 @@ def get_user_info(email, org_id):
     try:
         info['quota_usage'] = get_org_user_self_usage(org_id, email)
         info['quota_total'] = get_org_user_quota(org_id, email)
+        info['self_usage'] = get_org_user_self_usage(org_id, email)
+        info['quota'] = get_org_user_quota(org_id, email)
     except SearpcError as e:
         logger.error(e)
         info['quota_usage'] = -1
         info['quota_total'] = -1
+        info['self_usage'] = -1
+        info['quota'] = -1
 
     return info
 
