@@ -186,6 +186,7 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
         f['repo_owner_email'] = repo.owner
         f['repo_owner_name'] = repo.owner_nickname
         f['repo_owner_contact_email'] = repo.owner_contact_email
+        f['repo_encrypted'] = repo.encrypted
 
         result.append(f)
 
