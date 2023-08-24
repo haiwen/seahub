@@ -11,6 +11,7 @@ const propTypes = {
   repoID: PropTypes.string,
   isTextMode: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
+  autoFocus: PropTypes.bool,
   isEditIconShow: PropTypes.bool.isRequired,
   permissions: PropTypes.array.isRequired,
   currentPermission: PropTypes.string.isRequired,
@@ -23,6 +24,7 @@ class SharePermissionEditor extends React.Component {
 
   static defaultProps = {
     isEditing: false,
+    autoFocus: false,
   }
 
   constructor(props) {
@@ -127,6 +129,7 @@ class SharePermissionEditor extends React.Component {
         isTextMode={this.props.isTextMode}
         isEditing={this.props.isEditing}
         isEditIconShow={this.props.isEditIconShow}
+        autoFocus={this.props.autoFocus}
         options={this.getPermissions()}
         currentOption={this.props.currentPermission}
         onOptionChanged={this.props.onPermissionChanged}

@@ -45,6 +45,7 @@ class GroupItem extends React.Component {
           <SharePermissionEditor
             repoID={item.repo_id}
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
