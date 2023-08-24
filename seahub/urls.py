@@ -900,3 +900,12 @@ if getattr(settings, 'ENABLE_CAS', False):
         url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
         url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
+
+if getattr(settings, 'ENABLE_ICOURT_LOGIN', False):
+    from seahub.icourt_auth.views import *
+    urlpatterns += [
+        url(r'^api2/weixin-login/$', API2WeixinLogin.as_view(), name='api2_weixin_login'),
+        url(r'^accounts/weixin-login/$', weixin_login, name='weixin_login'),
+        url(r'^weixinlogin/$', weixin_login_callback, name='weixin_login_callback'),
+        url(r'^weixinlogin/newuser/$', weixin_login_newuser, name='weixin_login_newuser'),
+    ]
