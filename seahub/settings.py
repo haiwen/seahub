@@ -271,8 +271,8 @@ INSTALLED_APPS = [
     'seahub.krb5_auth',
     'seahub.django_cas_ng',
     'seahub.icourt_auth',
+    'seahub.repo_trash',
 ]
-
 
 # Enable or disable view File Scan
 ENABLE_FILE_SCAN = False

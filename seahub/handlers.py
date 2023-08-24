@@ -60,7 +60,6 @@ try:
     def repo_deleted_cb(sender, **kwargs):
         """When a repo is deleted, an event would be added to every user in all
         groups to which this repo is shared.
-
         """
         org_id = kwargs['org_id']
         operator = kwargs['operator']
@@ -98,6 +97,7 @@ try:
     def clean_up_repo_trash_cb(sender, **kwargs):
         """When a repo trash is deleted, the operator will be recorded.
         """
+
         org_id = kwargs['org_id']
         operator = kwargs['operator']
         repo_id = kwargs['repo_id']
