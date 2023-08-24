@@ -51,6 +51,7 @@ class UserItem extends React.Component {
         <td>
           <SharePermissionEditor
             isTextMode={true}
+            autoFocus={true}
             isEditIconShow={this.state.isOperationShow}
             currentPermission={currentPermission}
             permissions={this.props.permissions}

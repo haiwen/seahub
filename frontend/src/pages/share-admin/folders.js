@@ -228,6 +228,7 @@ class Item extends Component {
               isTextMode={true}
               isEditIconShow={isOpIconShown}
               isEditing={true}
+              autoFocus={true}
               currentPermission={share_permission}
               permissions={this.permissions}
               onPermissionChanged={this.changePerm}
