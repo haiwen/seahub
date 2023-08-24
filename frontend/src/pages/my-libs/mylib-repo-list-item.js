@@ -19,7 +19,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
-import RepoShareUploadLinksDialog from '../../components/dialog/repo-share-upload-links-dialog';
+import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 
@@ -51,7 +51,7 @@ class MylibRepoListItem extends React.Component {
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogShow: false,
       isAPITokenDialogShow: false,
-      isRepoShareUploadLinksDialogOpen: false,
+      isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isOldFilesAutoDelDialogOpen: false,
     };
@@ -125,8 +125,8 @@ class MylibRepoListItem extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
-      case 'Share Links Admin':
-        this.toggleRepoShareUploadLinksDialog();
+      case 'Share Admin':
+        this.toggleRepoShareAdminDialog();
         break;
       case 'Old Files Auto Delete':
         this.toggleOldFilesAutoDelDialog();
@@ -239,8 +239,8 @@ class MylibRepoListItem extends React.Component {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   }
 
-  toggleRepoShareUploadLinksDialog = () => {
-    this.setState({isRepoShareUploadLinksDialogOpen: !this.state.isRepoShareUploadLinksDialogOpen});
+  toggleRepoShareAdminDialog = () => {
+    this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
   }
 
   toggleOldFilesAutoDelDialog = () => {
@@ -508,11 +508,11 @@ class MylibRepoListItem extends React.Component {
           </ModalPortal>
         )}
 
-        {this.state.isRepoShareUploadLinksDialogOpen && (
+        {this.state.isRepoShareAdminDialogOpen && (
           <ModalPortal>
-            <RepoShareUploadLinksDialog
+            <RepoShareAdminDialog
               repo={repo}
-              toggleDialog={this.toggleRepoShareUploadLinksDialog}
+              toggleDialog={this.toggleRepoShareAdminDialog}
             />
           </ModalPortal>
         )}
