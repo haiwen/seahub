@@ -3,11 +3,10 @@ name: Seahub Dist CI
 on:
   push:
     branches:
-      - master
-      - "9.0"
+      - "alphabox-9.0"
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TOKEN_FOR_PUSH_TO_SEAHUB_PRIV: ${{ secrets.TOKEN_FOR_PUSH_TO_SEAHUB_PRIV }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
@@ -29,5 +28,5 @@ jobs:
       - name: Build dist branch
         run: |
           cd $GITHUB_WORKSPACE/tests/
-          chmod +x github_actions_dist.sh
-          ./github_actions_dist.sh
+          chmod +x alphabox_9.0_dist.sh
+          ./alphabox_9.0_dist.sh
