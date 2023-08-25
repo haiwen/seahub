@@ -350,5 +350,11 @@
   "Select_sdoc_document": "Select sdoc document",
   "Local_file": "Local file",
   "Internal_server_exec_operations_error": "An exception occurred on the server, please refresh the page and try again",
-  "Failed_to_sync_with_server_operations": "Synchronization with the server failed, please refresh the page"
+  "Failed_to_sync_with_server_operations": "Synchronization with the server failed, please refresh the page",
+  "Style": "Style",
+  "Insert": "Insert",
+  "Image": "Image",
+  "Table": "Table",
+  "Link": "Link",
+  "Transform_to": "Transform to"
 }

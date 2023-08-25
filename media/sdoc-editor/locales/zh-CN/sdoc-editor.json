@@ -352,5 +352,12 @@
   "Select_sdoc_document": "选择sdoc文档",
   "Local_file": "本地文件",
   "Internal_server_exec_operations_error": "在服务器执行操作异常，请刷新页面后重试",
-  "Failed_to_sync_with_server_operations": "与服务器同步操作失败，请刷新页面"
+  "Failed_to_sync_with_server_operations": "与服务器同步操作失败，请刷新页面",
+  "Operations_save_error_tip": "操作执行失败，服务器内部错误，请刷新页面",
+  "Style": "样式",
+  "Insert": "插入",
+  "Image": "图片",
+  "Table": "表格",
+  "Link": "链接",
+  "Transform_to": "转化为"
 }
