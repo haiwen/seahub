@@ -6,7 +6,7 @@ import { gettext, siteRoot, isPro, otherPermission, canViewSystemInfo, canViewSt
   canConfigSystem, canManageLibrary, canManageUser, canManageGroup, canViewUserLog,
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
   enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin, enableDingtalk,
-  enableShareLinkReportAbuse } from '../../utils/constants';
+  enableShareLinkReportAbuse, isDBSqlite3 } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -44,7 +44,7 @@ class SidePanel extends React.Component {
                   </Link>
                 </li>
                 }
-                {isPro && canViewStatistic &&
+                {(isPro || !isDBSqlite3) && canViewStatistic &&
                   <li className="nav-item">
                     <Link className={`nav-link ellipsis ${this.getActiveClass('statistic')}`}
                       to={siteRoot + 'sys/statistics/file/'}

@@ -43,6 +43,7 @@
             siteRoot: '{{ SITE_ROOT }}',
             loginUrl: '{{ LOGIN_URL }}',
             isPro: '{{ is_pro }}',
+            isDBSqlite3: {% if is_db_sqlite3 %} true {% else %} false {% endif %},
             isDocs: '{{ is_docs }}',
             lang: '{{ LANGUAGE_CODE }}',
             fileServerRoot: '{{ FILE_SERVER_ROOT }}',

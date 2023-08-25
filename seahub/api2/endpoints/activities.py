@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
 from seahub.base.templatetags.seahub_tags import email2contact_email
-from seahub.utils import EVENTS_ENABLED, get_user_activities
+from seahub.utils import EVENTS_ENABLED, get_user_activities, is_pro_version, IS_DB_SQLITE3
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -27,7 +27,7 @@ class ActivitiesView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        if not EVENTS_ENABLED:
+        if not EVENTS_ENABLED or (not is_pro_version() and IS_DB_SQLITE3):
             events = None
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
 

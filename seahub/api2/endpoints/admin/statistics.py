@@ -14,7 +14,7 @@ from django.http import HttpResponse
 
 from seaserv import ccnet_api
 
-from seahub.utils import get_file_ops_stats_by_day, \
+from seahub.utils import get_file_ops_stats_by_day, IS_DB_SQLITE3, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
         get_all_users_traffic_by_month, get_all_orgs_traffic_by_month
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
-        if not is_pro_version() or not EVENTS_ENABLED:
+        if not EVENTS_ENABLED or (not is_pro_version() and IS_DB_SQLITE3):
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
         start_time = request.GET.get("start", "")
         end_time = request.GET.get("end", "")
