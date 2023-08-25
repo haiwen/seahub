@@ -152,9 +152,6 @@ class DirentGridView extends React.Component {
       case 'Unmark as draft':
         this.onUnmarkAsDraft(currentObject);
         break;
-      case 'List revisions':
-        this.openRevisionsPage(currentObject);
-        break;
       case 'Comment':
         this.onCommentItem();
         break;
@@ -290,14 +287,6 @@ class DirentGridView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  openRevisionsPage = (currentObject) => {
-    const repoID = this.props.repoID;
-    const filePath = this.getDirentPath(currentObject);
-    const url = Utils.generateRevisionsURL(siteRoot, repoID, filePath);
-    if (!url) return;
-    window.open(url);
   }
 
   onCommentItem = () => {

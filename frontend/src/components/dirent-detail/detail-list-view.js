@@ -110,7 +110,7 @@ class DetailListView extends React.Component {
                 <tr className="file-extra-attributes">
                   <th colSpan={2}>
                     <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
-                      {gettext('Edit extra attributes')}
+                      {gettext('Edit extra properties')}
                     </div>
                   </th>
                 </tr>

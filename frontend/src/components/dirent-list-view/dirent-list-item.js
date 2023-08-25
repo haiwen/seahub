@@ -272,9 +272,6 @@ class DirentListItem extends React.Component {
       case 'Unmark as draft':
         this.onUnmarkAsDraft();
         break;
-      case 'List revisions':
-        this.openRevisionsPage();
-        break;
       case 'Comment':
         this.props.onDirentClick(this.props.dirent);
         this.props.showDirentDetail('comments');
@@ -392,14 +389,6 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
-
-  openRevisionsPage = () => {
-    const repoID = this.props.repoID;
-    const filePath = this.getDirentPath(this.props.dirent);
-    const url = Utils.generateRevisionsURL(siteRoot, repoID, filePath);
-    if (!url) return;
-    window.open(url);
   }
 
   onHistory = () => {

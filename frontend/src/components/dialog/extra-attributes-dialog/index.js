@@ -210,7 +210,7 @@ class ExtraAttributesDialog extends Component {
 
     return (
       <>
-        <ModalHeader toggle={this.onToggle}>{gettext('Edit extra attributes')}</ModalHeader>
+        <ModalHeader toggle={this.onToggle}>{gettext('Edit extra properties')}</ModalHeader>
         <ModalBody>
           {this.renderColumns()}
         </ModalBody>

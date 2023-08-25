@@ -63,7 +63,7 @@ You've got {{num}} new notices on {{ site_name }}:
                 <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user=notice.inv_accepter inv_url=notice.inv_url time=notice.inv_accept_at %}Guest {{user}} accepted your <a href="{{url_base}}{{inv_url}}">invitation</a> at {{time}}.{% endblocktrans %}</p>
 
                 {% elif notice.is_deleted_files_msg %}
-                <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with repo_url=notice.repo_url repo_name=notice.repo_name %}Your library <a href="{{url_base}}{{ repo_url }}">{{ repo_name }}</a> has recently deleted a large number of files.{% endblocktrans %}</p>
+                <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with repo_url=notice.repo_url repo_name=notice.repo_name %}A large number of files in your library <a href="{{url_base}}{{ repo_url }}">{{ repo_name }}</a> has been deleted recently.{% endblocktrans %}</p>
 
                 {% elif notice.is_repo_monitor_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">

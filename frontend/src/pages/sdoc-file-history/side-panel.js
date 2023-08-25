@@ -167,7 +167,7 @@ class SidePanel extends Component {
       }
       return (
         <div className="h-100 w-100 d-flex align-items-center justify-content-center empty-tip-color">
-          {gettext('No_historical_versions')}
+          {gettext('No version history')}
         </div>
       );
     }

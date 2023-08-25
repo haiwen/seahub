@@ -157,7 +157,7 @@ class LinkCreation extends React.Component {
         return false;
       }
       if (parseInt(linkAmount) > SHARE_LINK_MAX_NUMBER) {
-        this.setState({errorInfo: gettext('Please enter an integer smaller than 200 as number of links.')});
+        this.setState({errorInfo: gettext('Please enter an integer not bigger than {max_number} as number of links.').replace('{max_number}', SHARE_LINK_MAX_NUMBER)});
         return false;
       }
     }
