@@ -4,9 +4,13 @@ from django.conf import settings
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
+from rest_framework import status
+
+from seahub.api2.utils import api_error
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils import render_error
 from seahub.utils import normalize_cache_key, is_pro_version, redirect_to_login
+from seahub.constants import REPO_SHARE_LINK_COUNT_LIMIT
 
 
 def share_link_audit(func):
@@ -83,5 +87,28 @@ def share_link_login_required(func):
             return redirect_to_login(request)
         else:
             return func(request, *args, **kwargs)
+
+    return _decorated
+
+
+def check_share_link_count(func):
+
+    def _decorated(view, request, *args, **kwargs):
+
+        repo_id = request.data.get('repo_id', None)
+        share_link_num = request.data.get('number', 1)
+
+        try:
+            share_link_num = int(share_link_num)
+        except ValueError:
+            error_msg = 'number invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        link_count = FileShare.objects.get_share_link_count_by_repo(repo_id)
+        if link_count + share_link_num > REPO_SHARE_LINK_COUNT_LIMIT:
+            error_msg = _("The number of share link exceeds the limit.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        return func(view, request, *args, **kwargs)
 
     return _decorated

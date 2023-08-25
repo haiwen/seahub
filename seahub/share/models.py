@@ -180,6 +180,9 @@ class FileShareManager(models.Manager):
     def get_valid_dir_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
 
+    def get_share_link_count_by_repo(self, repo_id):
+        return super(FileShareManager, self).filter(repo_id=repo_id).count()
+
 
 class ExtraSharePermissionManager(models.Manager):
     def get_user_permission(self, repo_id, username):
