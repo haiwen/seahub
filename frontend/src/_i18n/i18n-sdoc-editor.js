@@ -4,7 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { mediaUrl } from '../utils/constants';
 
-const lang = window.app.pageOptions.lang;
+const { lang = 'en' } = window.app.config;
 
 i18n
   .use(Backend)
