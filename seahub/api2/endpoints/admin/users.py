@@ -515,7 +515,7 @@ class AdminUsers(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get_info_of_users_order_by_quota_usage(self, source, direction,
-            page, per_page, all_users=None):
+            page, per_page):
 
         # get user's quota usage info
         user_usage_dict = {}
@@ -529,7 +529,14 @@ class AdminUsers(APIView):
         if source == 'db':
             users = ccnet_api.get_emailusers('DB', -1, -1)
         else:
-            users = all_users
+            email_list = list()
+            if ENABLE_LDAP:
+                ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                email_list.extend([user.username for user in ldap_users])
+            if ENABLE_MULTI_LDAP:
+                multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                email_list.extend([user.username for user in multi_ldap_users])
+            users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
 
         for user in users:
             email = user.email
@@ -640,15 +647,12 @@ class AdminUsers(APIView):
                 users = ccnet_api.get_emailusers('DB', start, per_page)
 
         elif source == 'ldapimport':
-            email_list = list()
+            ldap_users_count = multi_ldap_users_count = 0
             if ENABLE_LDAP:
-                ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
-                email_list.extend([user.username for user in ldap_users])
+                ldap_users_count = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER).count()
             if ENABLE_MULTI_LDAP:
-                multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
-                email_list.extend([user.username for user in multi_ldap_users])
-            all_ldap_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
-            total_count = len(all_ldap_users)
+                multi_ldap_users_count = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER).count()
+            total_count = ldap_users_count + multi_ldap_users_count
 
             if order_by:
 
@@ -661,8 +665,7 @@ class AdminUsers(APIView):
                     data = self.get_info_of_users_order_by_quota_usage(source,
                                                                        direction,
                                                                        page,
-                                                                       per_page,
-                                                                       all_ldap_users)
+                                                                       per_page)
                 except Exception as e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
@@ -671,7 +674,15 @@ class AdminUsers(APIView):
                 result = {'data': data, 'total_count': total_count}
                 return Response(result)
             else:
-                users = all_ldap_users
+                email_list = list()
+                if ENABLE_LDAP:
+                    ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                    email_list.extend([user.username for user in ldap_users])
+                if ENABLE_MULTI_LDAP:
+                    multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                    email_list.extend([user.username for user in multi_ldap_users])
+                all_ldap_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
+                users = all_ldap_users[start: start + per_page]
 
         data = []
         for user in users:
