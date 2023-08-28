@@ -570,6 +570,7 @@ CREATE INDEX "share_extrasharepermission_share_to_823c16cb" ON "share_extrashare
 CREATE INDEX "share_orgfileshare_org_id_8d17998c" ON "share_orgfileshare" ("org_id");
 CREATE INDEX "share_uploadlinkshare_username_3203c243" ON "share_uploadlinkshare" ("username");
 CREATE INDEX "share_uploadlinkshare_repo_id_c519f857" ON "share_uploadlinkshare" ("repo_id");
+CREATE INDEX "share_uploadlinkshare_expire_date" ON "share_uploadlinkshare" ("expire_date");
 CREATE INDEX "share_fileshare_username_5cb6de75" ON "share_fileshare" ("username");
 CREATE INDEX "share_fileshare_repo_id_9b5ae27a" ON "share_fileshare" ("repo_id");
 CREATE INDEX "share_fileshare_s_type_724eb6c1" ON "share_fileshare" ("s_type");

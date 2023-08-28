@@ -18,3 +18,5 @@ CREATE INDEX IF NOT EXISTS "sdoc_comment_reply_doc_uuid" ON "sdoc_comment_reply"
 CREATE TABLE IF NOT EXISTS "deleted_files_count" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "deleted_time" datetime NOT NULL, "files_count" bigint NOT NULL);
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_repo_id" ON "deleted_files_count" ("repo_id");
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_deleted_time" ON "deleted_files_count" ("deleted_time");
+
+CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_expire_date" ON "share_uploadlinkshare" ("expire_date");
