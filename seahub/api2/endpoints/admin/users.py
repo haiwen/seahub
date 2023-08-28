@@ -889,7 +889,6 @@ class AdminLDAPUsers(APIView):
 
         start = (page - 1) * per_page
         end = page * per_page + 1
-        ldap_users = multi_ldap_users = list()
         try:
             ldap_users = get_ldap_users(LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD,
                                         ENABLE_SASL, SASL_MECHANISM, LDAP_BASE_DN, LDAP_LOGIN_ATTR,
@@ -899,6 +898,7 @@ class AdminLDAPUsers(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        multi_ldap_users = list()
         if ENABLE_MULTI_LDAP:
             try:
                 multi_ldap_users = get_ldap_users(MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN,
@@ -912,6 +912,7 @@ class AdminLDAPUsers(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         users = ldap_users + multi_ldap_users
+        users = users[start: end]
         if len(users) == end - start:
             users = users[:per_page]
             has_next_page = True
