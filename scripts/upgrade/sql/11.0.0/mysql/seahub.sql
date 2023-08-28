@@ -67,4 +67,6 @@ CREATE TABLE IF NOT EXISTS `deleted_files_count` (
   KEY `ix_deleted_files_count_deleted_time` (`deleted_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `share_uploadlinkshare` ADD INDEX IF NOT EXISTS `share_uploadlinkshare_expire_date` (`expire_date`);
+
 ALTER TABLE share_fileshare MODIFY COLUMN path longtext NOT NULL COLLATE utf8mb4_bin;

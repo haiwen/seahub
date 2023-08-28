@@ -1009,7 +1009,8 @@ CREATE TABLE `share_uploadlinkshare` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_uploadlinkshare_username_3203c243` (`username`),
-  KEY `share_uploadlinkshare_repo_id_c519f857` (`repo_id`)
+  KEY `share_uploadlinkshare_repo_id_c519f857` (`repo_id`),
+  KEY `share_uploadlinkshare_expire_date` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
