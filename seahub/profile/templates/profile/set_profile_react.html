@@ -52,10 +52,8 @@ window.app.pageOptions = {
     return list;
   })(),
 
-  {% if is_pro %}
   fileUpdatesEmailInterval: {{ file_updates_email_interval }},
   collaborateEmailInterval: {{ collaborate_email_interval }},
-  {% endif %}
 
   twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
   {% if two_factor_auth_enabled %}
