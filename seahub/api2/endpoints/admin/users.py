@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 from types import FunctionType
 from constance import config
@@ -14,6 +15,9 @@ from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import gettext as _
 from django.utils.timezone import make_naive, is_aware
+import ldap
+from ldap import sasl
+from ldap.controls.libldap import SimplePagedResultsControl
 
 from seaserv import seafile_api, ccnet_api
 
@@ -54,12 +58,151 @@ from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_own
 from seahub.group.utils import group_id_to_name
 from seahub.institutions.models import InstitutionAdmin
 from seahub.auth.utils import get_virtual_id_by_email
+from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
 from seahub.share.models import FileShare, UploadLinkShare
+from seahub.settings import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM
+
+try:
+    from seahub.settings import LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR
+except ImportError:
+    LDAP_SERVER_URL = ''
+    LDAP_BASE_DN = ''
+    LDAP_ADMIN_DN = ''
+    LDAP_ADMIN_PASSWORD = ''
+    LDAP_LOGIN_ATTR = ''
+
+try:
+    from seahub.settings import ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, \
+         MULTI_LDAP_1_ADMIN_DN, MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_LOGIN_ATTR
+except ImportError:
+    ENABLE_MULTI_LDAP = False
+    MULTI_LDAP_1_SERVER_URL = ''
+    MULTI_LDAP_1_BASE_DN = ''
+    MULTI_LDAP_1_ADMIN_DN = ''
+    MULTI_LDAP_1_ADMIN_PASSWORD = ''
+    MULTI_LDAP_1_LOGIN_ATTR = ''
+
+
+LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
+LDAP_USER_OBJECT_CLASS = getattr(settings, 'LDAP_USER_OBJECT_CLASS', 'person')
+MULTI_LDAP_1_USER_OBJECT_CLASS = getattr(settings, 'MULTI_LDAP_1_USER_OBJECT_CLASS', 'person')
+MULTI_LDAP_1_PROVIDER = getattr(settings, 'MULTI_LDAP_1_PROVIDER', 'ldap1')
+MULTI_LDAP_1_FILTER = getattr(settings, 'MULTI_LDAP_1_FILTER', '')
+MULTI_LDAP_1_ENABLE_SASL = getattr(settings, 'MULTI_LDAP_1_ENABLE_SASL', False)
+MULTI_LDAP_1_SASL_MECHANISM = getattr(settings, 'MULTI_LDAP_1_SASL_MECHANISM', '')
+
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+
+class LdapUser(object):
+    def __init__(self, email, ctime):
+        self.email = email
+        self.ctime = ctime
+
+
+def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
+    bind_conn = ldap.initialize(server_url)
+
+    try:
+        bind_conn.set_option(ldap.OPT_REFERRALS, 0)
+    except Exception as e:
+        raise Exception('Failed to set referrals option: %s' % e)
+
+    try:
+        bind_conn.protocol_version = ldap.VERSION3
+        if enable_sasl and sasl_mechanism:
+            sasl_cb_value_dict = {}
+            if sasl_mechanism != 'EXTERNAL' and sasl_mechanism != 'GSSAPI':
+                sasl_cb_value_dict = {
+                    sasl.CB_AUTHNAME: authc_id,
+                    sasl.CB_PASS: password,
+                }
+            sasl_auth = sasl.sasl(sasl_cb_value_dict, sasl_mechanism)
+            bind_conn.sasl_interactive_bind_s('', sasl_auth)
+        else:
+            bind_conn.simple_bind_s(dn, password)
+    except Exception as e:
+        raise Exception('Failed to bind ldap server: %s' % e)
+
+    return bind_conn
+
+
+def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mechanism, base_dn,
+                   login_attr, serch_filter, object_class):
+    try:
+        admin_bind = ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism)
+    except Exception as e:
+        raise Exception(e)
+
+    if serch_filter:
+        filterstr = '(&(objectClass=%s)(%s))' % (object_class, serch_filter)
+    else:
+        filterstr = '(objectClass=%s)' % object_class
+
+    result_data = []
+    attr_list = [login_attr]
+    base_list = base_dn.split(';')
+    for base in base_list:
+        if base == '':
+            continue
+        ctrl = SimplePagedResultsControl(True, size=100, cookie='')
+        while True:
+            try:
+                result = admin_bind.search_ext(base, ldap.SCOPE_SUBTREE, filterstr, attr_list, serverctrls=[ctrl])
+                rtype, rdata, rmsgid, ctrls = admin_bind.result3(result)
+            except Exception as e:
+                raise Exception('Failed to get users from ldap server: %s.' % e)
+
+            result_data.extend(rdata)
+
+            page_ctrls = [c for c in ctrls if c.controlType == SimplePagedResultsControl.controlType]
+            if not page_ctrls or not page_ctrls[0].cookie:
+                break
+            ctrl.cookie = page_ctrls[0].cookie
+
+    # get ldap user's uid list, uid means login_attr, likes: ['ldap@email.com', ...]
+    ldap_uid_list = list()
+    for pair in result_data:
+        user_dn, attrs = pair
+        if not isinstance(attrs, dict):
+            continue
+        if login_attr not in attrs:
+            continue
+        uid = attrs[login_attr][0].lower().decode()
+        ldap_uid_list.append(uid)
+
+    # get uid_email_map, likes {'ldap@email.com': 'seafile@email.com', ...}
+    ldap_users = SocialAuthUser.objects.filter(provider__in=[LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER],
+                                               uid__in=ldap_uid_list)
+    uid_email_map = dict()
+    for user in ldap_users:
+        uid_email_map[user.uid] = user.username
+
+    # get email_ctime_map, likes {'seafile@email.com': 1692950099, ...}
+    email_ctime_map = dict()
+    db_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(list(uid_email_map.values())))
+    for user in db_users:
+        email_ctime_map[user.email] = user.ctime
+
+    users = list()
+    for uid in ldap_uid_list:
+        """
+        uid_email_map[uid] -> {'ldap@email.com': 'seafile@email.com', ...}['ldap@email.com'] -> 'seafile@email.com'
+        """
+        """
+        email_ctime_map[uid_email_map[uid]] -> email_ctime_map['seafile@email.com'] ->
+        {'seafile@email.com': 1692950099, ...}['seafile@email.com'] -> 1692950099
+        """
+        if uid in uid_email_map and uid_email_map[uid] in email_ctime_map:
+            users.append(LdapUser(uid_email_map[uid], email_ctime_map[uid_email_map[uid]]))
+        else:
+            users.append(LdapUser(uid, None))
+
+    return users
 
 
 def get_user_last_access_time(email, last_login_time):
@@ -386,7 +529,14 @@ class AdminUsers(APIView):
         if source == 'db':
             users = ccnet_api.get_emailusers('DB', -1, -1)
         else:
-            users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+            email_list = list()
+            if ENABLE_LDAP:
+                ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                email_list.extend([user.username for user in ldap_users])
+            if ENABLE_MULTI_LDAP:
+                multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                email_list.extend([user.username for user in multi_ldap_users])
+            users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
 
         for user in users:
             email = user.email
@@ -497,10 +647,13 @@ class AdminUsers(APIView):
                 users = ccnet_api.get_emailusers('DB', start, per_page)
 
         elif source == 'ldapimport':
+            ldap_users_count = multi_ldap_users_count = 0
+            if ENABLE_LDAP:
+                ldap_users_count = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER).count()
+            if ENABLE_MULTI_LDAP:
+                multi_ldap_users_count = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER).count()
+            total_count = ldap_users_count + multi_ldap_users_count
 
-            # api param is 'LDAP', but actually get count of 'LDAPImport' users
-            total_count = ccnet_api.count_emailusers('LDAP') + \
-                          ccnet_api.count_inactive_emailusers('LDAP')
             if order_by:
 
                 if total_count > 500 and \
@@ -521,7 +674,15 @@ class AdminUsers(APIView):
                 result = {'data': data, 'total_count': total_count}
                 return Response(result)
             else:
-                users = ccnet_api.get_emailusers('LDAPImport', start, per_page)
+                email_list = list()
+                if ENABLE_LDAP:
+                    ldap_users = SocialAuthUser.objects.filter(provider=LDAP_PROVIDER)
+                    email_list.extend([user.username for user in ldap_users])
+                if ENABLE_MULTI_LDAP:
+                    multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
+                    email_list.extend([user.username for user in multi_ldap_users])
+                all_ldap_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
+                users = all_ldap_users[start: start + per_page]
 
         data = []
         for user in users:
@@ -712,6 +873,9 @@ class AdminLDAPUsers(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+        if not ENABLE_LDAP:
+            error_msg = 'Feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not request.user.admin_permissions.can_manage_user():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
@@ -725,8 +889,29 @@ class AdminLDAPUsers(APIView):
 
         start = (page - 1) * per_page
         end = page * per_page + 1
-        users = ccnet_api.get_emailusers('LDAP', start, end)
+        ldap_users = multi_ldap_users = list()
+        try:
+            ldap_users = get_ldap_users(LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD,
+                                        ENABLE_SASL, SASL_MECHANISM, LDAP_BASE_DN, LDAP_LOGIN_ATTR,
+                                        LDAP_FILTER, LDAP_USER_OBJECT_CLASS)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        if ENABLE_MULTI_LDAP:
+            try:
+                multi_ldap_users = get_ldap_users(MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_ADMIN_DN,
+                                                  MULTI_LDAP_1_ADMIN_PASSWORD, MULTI_LDAP_1_ENABLE_SASL,
+                                                  MULTI_LDAP_1_SASL_MECHANISM, MULTI_LDAP_1_BASE_DN,
+                                                  MULTI_LDAP_1_LOGIN_ATTR, MULTI_LDAP_1_FILTER,
+                                                  MULTI_LDAP_1_USER_OBJECT_CLASS)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        users = ldap_users + multi_ldap_users
         if len(users) == end - start:
             users = users[:per_page]
             has_next_page = True
