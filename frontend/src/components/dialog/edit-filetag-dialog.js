@@ -40,7 +40,7 @@ class TagItem extends React.Component {
 
   getRepoTagIdList = () => {
     let repoTagIdList = [];
-    let fileTagList = this.props.fileTagList;
+    let fileTagList = this.props.fileTagList || [];
     repoTagIdList = fileTagList.map((fileTag) => fileTag.repo_tag_id);
     return repoTagIdList;
   }
