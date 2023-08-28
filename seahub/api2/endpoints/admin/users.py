@@ -888,7 +888,7 @@ class AdminLDAPUsers(APIView):
             per_page = 25
 
         start = (page - 1) * per_page
-        end = page * per_page + 1
+        end = page * per_page
         try:
             ldap_users = get_ldap_users(LDAP_SERVER_URL, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD,
                                         ENABLE_SASL, SASL_MECHANISM, LDAP_BASE_DN, LDAP_LOGIN_ATTR,
