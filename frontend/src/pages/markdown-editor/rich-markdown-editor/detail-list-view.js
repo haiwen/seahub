@@ -75,6 +75,10 @@ class DetailListView extends React.Component {
   }
 }
 
+DetailListView.defaultProps = {
+  fileTagList: [],
+};
+
 DetailListView.propTypes = propTypes;
 
 export default DetailListView;
