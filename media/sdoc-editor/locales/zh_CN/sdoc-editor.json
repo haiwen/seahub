@@ -2,7 +2,7 @@
   "Bold": "粗体",
   "Italic": "斜体",
   "Underline": "下划线",
-  "Strikethrough": "中划线",
+  "Strikethrough": "删除线",
   "Superscript": "上标",
   "Subscript": "下标",
   "Inline_code": "代码",
@@ -124,7 +124,7 @@
   "Participants": "参与人",
   "Meeting_note": "会议记录",
   "Chooser_document_type": "选择文档类型",
-  "Empty": "空",
+  "Empty": "暂无",
   "No_related_files": "没有相关文件",
   "No_out_line": "没有大纲",
   "Editing_files_in_this_browser_can_lead_to_slight_display_problems": "在此浏览器中，编辑文件可能导致轻微的显示问题。",
@@ -141,7 +141,7 @@
   "Location": "位置",
   "Last_update": "更新时间",
   "Tags": "标签",
-  "Add_participants": "增加文件参与人",
+  "Add_participants": "添加参与人",
   "Clear_format": "清除格式",
   "MarkdownLint": {
     "missing_h1": {
@@ -149,12 +149,12 @@
       "issue" : "缺少一级标题"
     },
     "heading_end_with_colon": {
-      "description": "标题末尾的标点符号不应该是冒号",
+      "description": "标题中的标点符号不应为冒号",
       "issue": "标题末尾是冒号"
     },
     "heading_increase_irregular": {
-      "description": "标题级别一次只能增加一级",
-      "issue": "标题级别不规范"
+      "description": "标题级别一次只能增加一个级别",
+      "issue": "标题级别错误"
     }
   },
   "Shortcut_help": "快捷键帮助",
@@ -203,26 +203,26 @@
       }, {
         "shortcutType": "公式快捷键",
         "shortcutData": {
-          "Insert_Formula": "插入公式"
+          "Insert_Formula": " 插入公式"
         }
       }, {
-        "shortcutType":"行内快捷键",
+        "shortcutType":"行级操作",
         "shortcutData": {
           "Bold": "粗体",
           "Italic": "斜体",
-          "Italic_Bold": "斜体粗体",
+          "Italic_Bold": "斜体加粗",
           "Inline_code": "行内代码"
         }
       }, {
-        "shortcutType": "保存快捷键",
+        "shortcutType": "文件保存",
         "shortcutData": {
           "Save_file": "保存文件"
         }
       }, {
-        "shortcutType": "图片快捷键",
+        "shortcutType": "图片操作",
         "shortcutData": {
-          "Paste_screen_shot": "粘贴屏幕截图",
-          "Drag_image_from_anywhere_to_upload_it": "从任意地方拖动图像以上传"
+          "Paste_screen_shot": "上传截图",
+          "Drag_image_from_anywhere_to_upload_it": "拖拽任意图片上传"
         }
       }
     ]
@@ -251,24 +251,24 @@
   "Please_enter_text": "请输入正文",
   "Row(s)": "行",
   "Column(s)": "列",
-  "Insert_above": "在上方插入",
   "Insert_below": "在下方插入",
+  "Insert_above": "在上方插入",
   "Insert_on_the_right": "在右侧插入",
   "Insert_on_the_left": "在左侧插入",
-  "Starred": "starred",
-  "Unstarred": "unstarred",
+  "Starred": "星标文件",
+  "Unstarred": "未加星标",
   "Star": "添加星标",
-  "Unstar": "移除星标",
+  "Unstar": "取消星标",
   "Auto_wrap": "自动换行",
   "Add_comment": "添加评论",
   "Delete_comment": "删除评论",
   "Delete_reply": "删除回复",
-  "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗?",
-  "Are_you_sure_to_delete_this_reply": "你确定要删除这个回复吗?",
+  "Are_you_sure_to_delete_this_comment": "你确定要删除这个评论吗？",
+  "Are_you_sure_to_delete_this_reply": "你确定要删除这个回复吗？",
   "Enter_a_comment": "输入评论",
   "Enter_a_reply": "输入回复",
   "Reopen_discussion" : "添加回复会重新提出该讨论",
-  "Confirm": "确定",
+  "Confirm": "确认",
   "View_changes": "查看改动",
   "Revision": "修订稿",
   "Error": "错误",
@@ -278,7 +278,7 @@
   "Load_doc_content_error": "加载文档内容错误",
   "Sdoc_format_invalid": "文档内容不符合 sdoc 规范",
   "Draft": "草稿",
-  "Unmark_as_draft": "取消草稿标记",
+  "Unmark_as_draft": "取消草稿标识",
   "Background_color": "背景色",
   "No_color": "无颜色",
   "Standard_color": "标准色",
@@ -335,8 +335,6 @@
   "Search_language": "查找语言",
   "Sdoc_error_tip": "文档有错误，无法显示。请尝试点击下方按钮自动修复。",
   "Repair": "修复",
-  "Remove_row": "删除行",
-  "Remove_column": "删除列",
   "Font_size": "字号",
   "Increase_font_size": "增大字号",
   "Reduce_font_size": "减小字号",
@@ -349,15 +347,15 @@
   "Text_Link": "文字链",
   "Icon_and_text_Link": "图标+文字链",
   "Card": "卡片",
-  "Select_sdoc_document": "选择sdoc文档",
+  "Select_sdoc_document": "选择 sdoc 文档",
   "Local_file": "本地文件",
   "Internal_server_exec_operations_error": "在服务器执行操作异常，请刷新页面后重试",
   "Failed_to_sync_with_server_operations": "与服务器同步操作失败，请刷新页面",
-  "Operations_save_error_tip": "操作执行失败，服务器内部错误，请刷新页面",
   "Style": "样式",
   "Insert": "插入",
   "Image": "图片",
   "Table": "表格",
   "Link": "链接",
-  "Transform_to": "转化为"
+  "Transform_to": "转化为",
+  "Test": "测试"
 }
