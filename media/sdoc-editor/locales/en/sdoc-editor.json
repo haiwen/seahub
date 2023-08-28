@@ -357,5 +357,8 @@
   "Table": "Table",
   "Link": "Link",
   "Transform_to": "Transform to",
-  "Test": "Test"
+  "Last_modification": "Last modification",
+  "Next_modification": "Next modification",
+  "Changes": "Changes",
+  "No_changes": "No changes"
 }

@@ -357,5 +357,8 @@
   "Table": "表格",
   "Link": "链接",
   "Transform_to": "转化为",
-  "Test": "测试"
+  "Last_modification": "上一个修改",
+  "Next_modification": "下一个修改",
+  "Changes": "改动",
+  "No_changes": "没有变化"
 }
