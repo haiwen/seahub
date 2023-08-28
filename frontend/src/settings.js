@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
-import { isPro, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { isPro, isDBSqlite3, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
@@ -138,7 +138,7 @@ class Settings extends React.Component {
                 {enableAddressBook && this.state.userInfo &&
                   <ListInAddressBook userInfo={this.state.userInfo} updateUserInfo={this.updateUserInfo} />}
                 <LanguageSetting />
-                {isPro && <EmailNotice />}
+                {(isPro || !isDBSqlite3) && <EmailNotice />}
                 {twoFactorAuthEnabled && <TwoFactorAuthentication />}
                 {enableWechatWork && <SocialLogin />}
                 {enableDingtalk && <SocialLoginDingtalk />}
