@@ -69,7 +69,7 @@ class ExtendedPropertiesView(APIView):
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
-        if dirent.obj_id == EMPTY_SHA1:
+        if not stat.S_ISDIR(dirent.mode) and dirent.obj_id == EMPTY_SHA1:
             return api_error(status.HTTP_400_BAD_REQUEST, 'File or folder %s is empty' % path)
 
         # permission check
