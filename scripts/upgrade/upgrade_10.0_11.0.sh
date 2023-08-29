@@ -189,6 +189,19 @@ function move_old_customdir_outside() {
 }
 
 
+function generate_seafevents_conf() {
+    if [[ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/seafevents.conf" ]]; then
+        DB_HOST=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^host/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+        DB_PORT=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^port/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+        DB_USER=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^user/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+        DB_PASSWORD=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^password/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+        DB_NAME="seahub_db"
+
+        PRO_PY=${INSTALLPATH}/pro/pro.py
+        $PYTHON ${PRO_PY} setup --mysql --mysql_host ${DB_HOST} --mysql_port ${DB_PORT} --mysql_user ${DB_USER} --mysql_password ${DB_PASSWORD} --mysql_db ${DB_NAME}
+    fi
+}
+
 
 #################
 # The main execution flow of the script
@@ -204,6 +217,8 @@ migrate_avatars;
 move_old_customdir_outside;
 make_media_custom_symlink;
 upgrade_seafile_server_latest_symlink;
+
+generate_seafevents_conf;
 
 
 echo
