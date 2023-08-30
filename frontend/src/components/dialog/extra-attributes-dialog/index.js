@@ -17,7 +17,7 @@ class ExtraAttributesDialog extends Component {
 
   constructor(props) {
     super(props);
-    const { direntDetail } = props;
+    const { direntDetail, direntType } = props;
     this.state = {
       animationEnd: false,
       isLoading: true,
@@ -26,8 +26,12 @@ class ExtraAttributesDialog extends Component {
       columns: [],
       errorMsg: '',
     };
-    const direntDetailId = direntDetail.id;
-    this.isEmptyFile = direntDetailId === '0'.repeat(direntDetailId.length);
+    if (direntType === 'dir') {
+      this.isEmptyFile = false;
+    } else {
+      const direntDetailId = direntDetail?.id || '';
+      this.isEmptyFile = direntDetailId === '0'.repeat(direntDetailId.length);
+    }
     this.isExist = false;
     this.modalRef = React.createRef();
   }
@@ -243,6 +247,7 @@ class ExtraAttributesDialog extends Component {
 ExtraAttributesDialog.propTypes = {
   repoID: PropTypes.string,
   filePath: PropTypes.string,
+  direntType: PropTypes.string,
   direntDetail: PropTypes.object,
   onToggle: PropTypes.func,
 };

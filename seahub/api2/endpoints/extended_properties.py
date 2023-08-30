@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import stat
 from datetime import datetime
 
 from rest_framework import status
@@ -51,7 +52,7 @@ class ExtendedPropertiesView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
         path = normalize_file_path(path)
         parent_dir = os.path.dirname(path)
-        file_name = os.path.basename(path)
+        dirent_name = os.path.basename(path)
         props_data_str = request.data.get('props_data')
         if not props_data_str or not isinstance(props_data_str, str):
             return api_error(status.HTTP_400_BAD_REQUEST, 'props_data invalid')
@@ -67,9 +68,9 @@ class ExtendedPropertiesView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found')
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found' % path)
-        if dirent.obj_id == EMPTY_SHA1:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'File %s is empty' % path)
+            return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
+        if not stat.S_ISDIR(dirent.mode) and dirent.obj_id == EMPTY_SHA1:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File or folder %s is empty' % path)
 
         # permission check
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
@@ -90,8 +91,10 @@ class ExtendedPropertiesView(APIView):
         if error_msg:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid: %s' % error_msg)
         ## check existed props row
-        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, file_name, False).uuid.hex
-        sql = f"SELECT COUNT(1) as `count` FROM `{EX_PROPS_TABLE}` WHERE `UUID`='{file_uuid}'"
+        file_uuid = None
+        if not stat.S_ISDIR(dirent.mode):
+            file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, dirent_name, False).uuid.hex
+        sql = f"SELECT COUNT(1) as `count` FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         result = seatable_api.query(sql)
         count = result['results'][0]['count']
         if count > 0:
@@ -100,7 +103,7 @@ class ExtendedPropertiesView(APIView):
         props_data = {column_name: value for column_name, value in props_data.items() if column_name in EX_EDITABLE_COLUMNS}
         props_data.update({
             'Repo ID': repo_id,
-            'File': file_name,
+            'File': dirent_name,
             'Path': path,
             'UUID': file_uuid,
             '创建日期': str(datetime.fromtimestamp(dirent.mtime)),
@@ -113,7 +116,7 @@ class ExtendedPropertiesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         ## query
-        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `UUID`='{file_uuid}'"
+        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         try:
             result = seatable_api.query(sql)
         except Exception as e:
@@ -141,9 +144,9 @@ class ExtendedPropertiesView(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found')
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found' % path)
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        if not dirent:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
 
         # permission check
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
@@ -164,9 +167,11 @@ class ExtendedPropertiesView(APIView):
         if error_msg:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid: %s' % error_msg)
         ## query
-        file_name = os.path.basename(path)
-        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, file_name, False).uuid.hex
-        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `UUID`='{file_uuid}'"
+        dirent_name = os.path.basename(path)
+        file_uuid = None
+        if not stat.S_ISDIR(dirent.mode):
+            file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, dirent_name, False).uuid.hex
+        sql = f"SELECT * FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         try:
             result = seatable_api.query(sql)
         except Exception as e:
@@ -178,7 +183,7 @@ class ExtendedPropertiesView(APIView):
         else:
             row = {
                 'Repo ID': repo_id,
-                'File': file_name,
+                'File': dirent_name,
                 'Path': path,
                 'UUID': file_uuid
             }
@@ -216,9 +221,9 @@ class ExtendedPropertiesView(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found')
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found' % path)
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        if not dirent:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
 
         # permission check
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
@@ -239,13 +244,11 @@ class ExtendedPropertiesView(APIView):
         if error_msg:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid: %s' % error_msg)
         ## check existed props row
-        file_name = os.path.basename(path)
-        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, file_name, False).uuid.hex
-        sql = f"SELECT * FROM `{EX_PROPS_TABLE}` WHERE `UUID`='{file_uuid}'"
+        sql = f"SELECT * FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         result = seatable_api.query(sql)
         results = result['results']
         if not results:
-            return api_error(status.HTTP_404_NOT_FOUND, 'The props of the file not found')
+            return api_error(status.HTTP_404_NOT_FOUND, 'The props of the file or folder not found')
         row_id = results[0]['_id']
         ## update props row
         props_data = {col_name: value for col_name, value in props_data.items() if col_name in EX_EDITABLE_COLUMNS}
@@ -256,7 +259,7 @@ class ExtendedPropertiesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         ## query
-        sql = f"SELECT * FROM {EX_PROPS_TABLE} WHERE `UUID`='{file_uuid}'"
+        sql = f"SELECT * FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         try:
             result = seatable_api.query(sql)
         except Exception as e:
@@ -284,9 +287,9 @@ class ExtendedPropertiesView(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found')
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File %s not found' % path)
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        if not dirent:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
 
         # permission check
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
@@ -306,9 +309,7 @@ class ExtendedPropertiesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         if error_msg:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid: %s' % error_msg)
-        file_name = os.path.basename(path)
-        file_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_dir, file_name, False).uuid.hex
-        sql = f"DELETE FROM `{EX_PROPS_TABLE}` WHERE `UUID`='{file_uuid}'"
+        sql = f"DELETE FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
         try:
             seatable_api.query(sql)
         except Exception as e:

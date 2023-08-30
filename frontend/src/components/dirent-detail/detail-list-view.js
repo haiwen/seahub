@@ -63,10 +63,9 @@ class DetailListView extends React.Component {
     this.setState({ isShowExtraAttributes: !this.state.isShowExtraAttributes });
   }
 
-  render() {
-    let { direntType, direntDetail, fileTagList } = this.props;
-    let position = this.getDirentPosition();
-    let direntPath = this.getDirentPath();
+  renderTags = () => {
+    const { direntType, direntDetail, fileTagList } = this.props;
+    const position = this.getDirentPosition();
     if (direntType === 'dir') {
       return (
         <table className="table-thead-hidden">
@@ -76,69 +75,87 @@ class DetailListView extends React.Component {
           <tbody>
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
+            {direntDetail.permission === 'rw' && (
+              <tr className="file-extra-attributes">
+                <th colSpan={2}>
+                  <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
+                    {gettext('Edit extra properties')}
+                  </div>
+                </th>
+              </tr>
+            )}
           </tbody>
         </table>
       );
-    } else {
-      return (
-        <Fragment>
-          <table className="table-thead-hidden">
-            <thead>
-              <tr><th width="35%"></th><th width="65%"></th></tr>
-            </thead>
-            <tbody>
-              <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
-              <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
-              <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
-              <tr className="file-tag-container">
-                <th>{gettext('Tags')}</th>
-                <td>
-                  <ul className="file-tag-list">
-                    {Array.isArray(fileTagList) && fileTagList.map((fileTag) => {
-                      return (
-                        <li key={fileTag.id} className="file-tag-item">
-                          <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
-                          <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
-                </td>
-              </tr>
-              {direntDetail.permission === 'rw' && (
-                <tr className="file-extra-attributes">
-                  <th colSpan={2}>
-                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
-                      {gettext('Edit extra properties')}
-                    </div>
-                  </th>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          {this.state.isEditFileTagShow &&
-            <ModalPortal>
-              <EditFileTagDialog
-                repoID={this.props.repoID}
-                fileTagList={fileTagList}
-                filePath={direntPath}
-                toggleCancel={this.onEditFileTagToggle}
-                onFileTagChanged={this.onFileTagChanged}
-              />
-            </ModalPortal>
-          }
-          {this.state.isShowExtraAttributes && (
-            <ExtraAttributesDialog
-              repoID={this.props.repoID}
-              filePath={direntPath}
-              direntDetail={direntDetail}
-              onToggle={this.toggleExtraAttributesDialog}
-            />
-          )}
-        </Fragment>
-      );
     }
+    return (
+      <table className="table-thead-hidden">
+        <thead>
+          <tr><th width="35%"></th><th width="65%"></th></tr>
+        </thead>
+        <tbody>
+          <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
+          <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
+          <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
+          <tr className="file-tag-container">
+            <th>{gettext('Tags')}</th>
+            <td>
+              <ul className="file-tag-list">
+                {Array.isArray(fileTagList) && fileTagList.map((fileTag) => {
+                  return (
+                    <li key={fileTag.id} className="file-tag-item">
+                      <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
+                      <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
+            </td>
+          </tr>
+          {direntDetail.permission === 'rw' && (
+            <tr className="file-extra-attributes">
+              <th colSpan={2}>
+                <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
+                  {gettext('Edit extra properties')}
+                </div>
+              </th>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    );
+  }
+
+  render() {
+    const { direntType, direntDetail, fileTagList } = this.props;
+    const direntPath = this.getDirentPath();
+
+    return (
+      <Fragment>
+        {this.renderTags()}
+        {this.state.isEditFileTagShow &&
+          <ModalPortal>
+            <EditFileTagDialog
+              repoID={this.props.repoID}
+              fileTagList={fileTagList}
+              filePath={direntPath}
+              toggleCancel={this.onEditFileTagToggle}
+              onFileTagChanged={this.onFileTagChanged}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowExtraAttributes && (
+          <ExtraAttributesDialog
+            repoID={this.props.repoID}
+            filePath={direntPath}
+            direntType={direntType}
+            direntDetail={direntDetail}
+            onToggle={this.toggleExtraAttributesDialog}
+          />
+        )}
+      </Fragment>
+    );
   }
 }
 
