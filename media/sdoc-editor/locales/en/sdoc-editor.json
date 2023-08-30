@@ -360,5 +360,7 @@
   "Last_modification": "Last modification",
   "Next_modification": "Next modification",
   "Changes": "Changes",
-  "No_changes": "No changes"
+  "No_changes": "No changes",
+  "Title": "Title",
+  "Subtitle": "Subtitle"
 }

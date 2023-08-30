@@ -356,5 +356,11 @@
   "Image": "Immagine",
   "Table": "Tabella",
   "Link": "Link",
-  "Transform_to": "Transform to"
+  "Transform_to": "Transform to",
+  "Last_modification": "Last modification",
+  "Next_modification": "Next modification",
+  "Changes": "Modifiche",
+  "No_changes": "No changes",
+  "Title": "Titolo",
+  "Subtitle": "Subtitle"
 }

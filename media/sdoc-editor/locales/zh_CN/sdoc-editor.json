@@ -360,5 +360,7 @@
   "Last_modification": "上一个修改",
   "Next_modification": "下一个修改",
   "Changes": "改动",
-  "No_changes": "没有变化"
+  "No_changes": "没有变化",
+  "Title": "标题",
+  "Subtitle": "副标题"
 }

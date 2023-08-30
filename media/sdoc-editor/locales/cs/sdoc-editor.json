@@ -356,5 +356,11 @@
   "Image": "Obrázek",
   "Table": "Tabulka",
   "Link": "Odkaz",
-  "Transform_to": "Transform to"
+  "Transform_to": "Transform to",
+  "Last_modification": "Last modification",
+  "Next_modification": "Next modification",
+  "Changes": "Změny",
+  "No_changes": "No changes",
+  "Title": "Název",
+  "Subtitle": "Subtitle"
 }
