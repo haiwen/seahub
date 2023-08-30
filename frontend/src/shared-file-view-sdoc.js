@@ -10,8 +10,15 @@ const { serviceURL, siteRoot, avatarURL } = window.app.config;
 const { username } = window.app.pageOptions;
 const {
   repoID, filePerm,
+  canDownload, canEdit,
+  trafficOverLimit, zipped,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl
 } = window.shared.pageOptions;
+
+// share permission of this sdoc
+const sharePermission = {'can_edit': canEdit, 'can_download': canDownload, 'can_upload': false};
+const sharePermissionStr = Utils.getShareLinkPermissionStr(sharePermission);
+const sharePermissionText = Utils.getShareLinkPermissionObject(sharePermissionStr).text;
 
 window.seafile = {
   repoID,
@@ -25,6 +32,8 @@ window.seafile = {
   username,
   avatarURL,
   siteRoot,
+  sharePermissionText: sharePermissionText,
+  downloadURL: (canDownload && !trafficOverLimit) ? `?${zipped ? 'p=' + encodeURIComponent(docPath) + '&' : ''}dl=1` : '',
   docPerm: filePerm,
   historyURL: Utils.generateHistoryURL(siteRoot, repoID, docPath),
   assetsUrl,
