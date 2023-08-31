@@ -47,7 +47,7 @@ class RepoShareAdminDialog extends React.Component {
 
   render() {
     const { activeTab } = this.state;
-    const { repoName } = this.props.repo;
+    const { repo_name: repoName } = this.props.repo;
 
     return (
       <div>
