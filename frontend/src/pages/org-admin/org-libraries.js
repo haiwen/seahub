@@ -248,10 +248,6 @@ class RepoItem extends React.Component {
     this.props.deleteRepoItem(this.props.repo);
   }
 
-  toggleTransfer = () => {
-    this.props.transferRepoItem(this.props.repo);
-  }
-
   renderLibIcon = (repo) => {
     let href;
     let iconTitle;
