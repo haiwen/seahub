@@ -70,6 +70,7 @@ body {
       siteName: '{{ site_name }}',
       enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
       canDownload: {% if permissions.can_download %}true{% else %}false{% endif %},
+      canEdit: {% if permissions.can_edit %}true{% else %}false{% endif %},
       fileContent: '{{ file_content|escapejs }}',
       err: {% if err %}'{{ err }}'{% else %}''{% endif %},
       fileType: '{{ filetype }}',
