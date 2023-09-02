@@ -241,11 +241,9 @@ class Item extends Component {
 	</td>
         <td>{item.shared_by}</td>
         <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
-        <td>
-	  {item.is_dir ? "" : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
+        <td>{item.is_dir ? "" : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
         </td>
-        <td>
-	  {this.props.path ? "" : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}
+        <td>{this.props.path ? "" : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}
         </td>
       </tr>
     );
