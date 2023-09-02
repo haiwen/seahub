@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { DiffViewer, serialize } from '@seafile/seafile-editor';
+import { ReactEditor, DiffViewer, serialize } from '@seafile/seafile-editor';
 import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL, mediaUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
@@ -14,7 +14,6 @@ import ReviewComments from './components/review-list-view/review-comments';
 import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
-import  { ReactEditor }  from '@seafile/slate-react';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
