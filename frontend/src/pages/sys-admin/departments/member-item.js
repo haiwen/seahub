@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils.js';
+import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import RoleEditor from '../../../components/select-editor/role-editor';
 import UserLink from '../user-link';

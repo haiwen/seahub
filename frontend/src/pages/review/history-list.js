@@ -1,6 +1,5 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
-import axios from 'axios';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';

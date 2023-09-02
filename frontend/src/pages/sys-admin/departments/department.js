@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils.js';
+import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import ModalPortal from '../../../components/modal-portal';

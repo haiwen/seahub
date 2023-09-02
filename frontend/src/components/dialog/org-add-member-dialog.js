@@ -5,7 +5,7 @@ import { gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import UserSelect from '../user-select.js';
+import UserSelect from '../user-select';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils.js';
+import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import { gettext, lang } from '../../../utils/constants';
 import GroupItem from './group-item';
