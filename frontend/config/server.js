@@ -17,14 +17,13 @@ const getHttpsConfig = require('./getHttpsConfig');
 const HOST = process.env.HOST || '0.0.0.0';
 const PORT = process.env.PORT || '3000';
 const publicPath = process.env.PUBLIC_PATH || '/assets/bundles/';
-const publicUrlOrPath = `http://${HOST}:${PORT}${publicPath}`;
 
 const devServerOptions = {
   allowedHosts: 'all',
   hot: true,
   static: {
     directory: paths.appBuild,
-    publicPath: publicUrlOrPath,
+    publicPath: publicPath,
     watch: {
       ignored: ignoredFiles(paths.appSrc),
     },
