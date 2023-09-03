@@ -20,7 +20,11 @@ const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 //   require(resolveApp('package.json')).homepage,
 //   process.env.PUBLIC_URL
 // );
-const publicUrlOrPath = process.env.PUBLIC_URL;
+
+const HOST = process.env.HOST || '0.0.0.0';
+const PORT = process.env.PORT || '3000';
+const publicPath = process.env.PUBLIC_PATH || '/assets/bundles/';
+const publicUrlOrPath = `http://${HOST}:${PORT}${publicPath}`;
 
 const buildPath = process.env.BUILD_PATH || 'build';
 
