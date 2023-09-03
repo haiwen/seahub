@@ -50,5 +50,5 @@ const compiler = Webpack(config);
 const server = new WebpackDevServer(devServerOptions, compiler);
 
 server.startCallback(() => {
-  console.log(`Listening at http://${HOST}:${PORT}`);
+  console.log(`Listening at http://${HOST}:${PORT}${publicPath}`);
 });
