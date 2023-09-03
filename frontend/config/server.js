@@ -1,35 +1,52 @@
 'use strict';
 // https://github.com/webpack/webpack-dev-server/blob/master/examples/api/simple/server.js
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 process.env.NODE_ENV = 'development';
 process.env.BABEL_ENV = 'development';
 
-var Webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var configFactory = require('./webpack.config')
-var config = configFactory('development');
+const Webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const ignoredFiles = require('react-dev-utils/ignoredFiles');
+const configFactory = require('./webpack.config')
+const paths = require('./paths');
+const getHttpsConfig = require('./getHttpsConfig');
 
-const compiler = Webpack(config);
-const devServerOptions = Object.assign({}, config.devServer, {
-  stats: {
-    colors: true
-  },
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 3000;
+const devServerOptions = {
+  allowedHosts: 'all',
   hot: true,
-  // Use 'ws' instead of 'sockjs-node' on server since we're using native
-  // websockets in `webpackHotDevClient`.
-  transportMode: 'ws',
-  // Prevent a WS client from getting injected as we're already including
-  // `webpackHotDevClient`.
-  injectClient: false,
-});
+  static: {
+    directory: paths.appBuild,
+    publicPath: '/assets/bundles/',
+    watch: {
+      ignored: ignoredFiles(paths.appSrc),
+    },
+  },
+  client: {
+    overlay: false,
+  },
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': '*',
+  },
+  // Enable gzip compression of generated files.
+  compress: true,
+  https: getHttpsConfig(),
+  host,
+  port,
+};
 
 console.log('Dev server options:', devServerOptions);
 
-const server = new WebpackDevServer(compiler, devServerOptions);
-server.listen(3000, '0.0.0.0', function (err, result) {
-  if (err) {
-    console.log(err)
-  }
+const config = configFactory('development');
+const compiler = Webpack(config);
+const server = new WebpackDevServer(devServerOptions, compiler);
 
-  console.log('Listening at 0.0.0.0:3000')
-})
+server.startCallback(() => {
+  console.log(`Listening at ${host}:${port}`);
+});

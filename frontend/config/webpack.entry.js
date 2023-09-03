@@ -44,7 +44,7 @@ const getEntries = (isEnvDevelopment) => {
   let entries = {};
   Object.keys(entryFiles).forEach(key => {
     let entry = [];
-    entry.push(require.resolve('./polyfills'));
+    // entry.push(require.resolve('./polyfills'));
     if (isEnvDevelopment) {
       entry.push(require.resolve('react-dev-utils/webpackHotDevClient'));
     }
