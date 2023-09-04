@@ -343,7 +343,6 @@
   "Default_font": "Default font",
   "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
   "Recently_saved": "Recently saved",
-  "Sdoc_document" : "Sdoc document",
   "Text_Link": "Text Link",
   "Icon_and_text_Link": "Icon and text Link",
   "Card": "Card",
@@ -362,5 +361,6 @@
   "Changes": "Changes",
   "No_changes": "No changes",
   "Title": "Title",
-  "Subtitle": "Subtitle"
+  "Subtitle": "Subtitle",
+  "Link_sdoc": "Link sdoc"
 }

@@ -343,7 +343,6 @@
   "Default_font": "Шрифт по умолчанию",
   "Pending_operations_exceed_limit": "Несколько операций не синхронизированы с сервером. Проверьте вашу сеть.",
   "Recently_saved": "Недавно сохранено",
-  "Sdoc_document" : "Документ Sdoc",
   "Text_Link": "Текстовая ссылка",
   "Icon_and_text_Link": "Значок и текстовая ссылка",
   "Card": "Карта",
@@ -362,5 +361,6 @@
   "Changes": "Изменения",
   "No_changes": "Без изменений",
   "Title": "Название",
-  "Subtitle": "Subtitle"
+  "Subtitle": "Подзаголовок",
+  "Link_sdoc": "Ссылка на sdoc"
 }
