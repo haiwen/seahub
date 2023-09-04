@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
 import moment from 'moment';
 import { Button, Input } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';

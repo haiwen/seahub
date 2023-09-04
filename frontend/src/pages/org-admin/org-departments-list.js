@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@gatsbyjs/reach-router';
-import { Utils } from '../../utils/utils.js';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';

@@ -11,15 +11,15 @@ import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import Loading from './components/loading';
 import ReviewComments from './components/review-list-view/review-comments';
-import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
+import ReviewCommentDialog from './components/review-list-view/review-comment-dialog';
 import { Tooltip } from 'reactstrap';
-import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
+import AddReviewerDialog from './components/dialog/add-reviewer-dialog';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
 import { Range, Editor } from 'slate';
 import ModalPortal from './components/modal-portal';
-import reviewComment from './models/review-comment.js';
+import reviewComment from './models/review-comment';
 
 import './css/layout.css';
 import './css/toolbar.css';

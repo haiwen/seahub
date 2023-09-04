@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { gettext, ocmRemoteServers } from '../../utils/constants';
 import { Input } from 'reactstrap';
 import { Button } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import OpIcon from '../op-icon';

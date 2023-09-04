@@ -6,7 +6,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import { seafileAPI } from '../../../utils/seafile-api.js';
+import { seafileAPI } from '../../../utils/seafile-api';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';

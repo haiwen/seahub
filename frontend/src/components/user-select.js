@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/async';
-import { seafileAPI } from '../utils/seafile-api.js';
+import { seafileAPI } from '../utils/seafile-api';
 import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
-import { Utils } from '../utils/utils.js';
+import { Utils } from '../utils/utils';
 import toaster from './toast';
 
 import '../css/user-select.css';

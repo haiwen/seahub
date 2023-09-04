@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils.js';
+import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-repo-dialog';

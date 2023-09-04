@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Paginator from '../../../components/paginator';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils.js';
+import { Utils } from '../../../utils/utils';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog';
 import { gettext, lang } from '../../../utils/constants';

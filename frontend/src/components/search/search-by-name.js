@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import SearchFileDialog from '../dialog/search-file-dialog.js';
+import SearchFileDialog from '../dialog/search-file-dialog';
 
 import '../../css/top-search-by-name.css';
 

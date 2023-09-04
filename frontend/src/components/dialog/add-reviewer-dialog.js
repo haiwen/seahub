@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api.js';
+import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
-import UserSelect from '../user-select.js';
+import UserSelect from '../user-select';
 import '../../css/add-reviewer-dialog.css';
 
 const propTypes = {

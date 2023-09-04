@@ -51,7 +51,7 @@ deps
 seahub/thumbnail/thumb/*
 
 .virtualenv
-.env
+# .env
 .dumbjump
 .projectile
 .pytest_cache/
