@@ -8,6 +8,7 @@ import { compareTwoString } from './compare-two-string';
 export const Utils = {
 
   keyCodes:  {
+    enter: 13,
     esc:   27,
     space: 32,
     tab:   9,

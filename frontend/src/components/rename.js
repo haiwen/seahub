@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
+import { Utils } from '../utils/utils';
 import toaster from './toast';
 
 const propTypes = {
@@ -17,15 +18,16 @@ class Rename extends React.Component {
     this.state = {
       name: props.name
     };
+    this.inputRef = React.createRef();
   }
 
   componentDidMount() {
-    this.refs.renameInput.focus();
+    this.inputRef.current.focus();
     if (this.props.hasSuffix) {
       var endIndex = this.props.name.lastIndexOf('.');
-      this.refs.renameInput.setSelectionRange(0, endIndex, 'forward');
+      this.inputRef.current.setSelectionRange(0, endIndex, 'forward');
     } else {
-      this.refs.renameInput.setSelectionRange(0, -1);
+      this.inputRef.current.setSelectionRange(0, -1);
     }
   }
 
@@ -33,14 +35,13 @@ class Rename extends React.Component {
     this.setState({name: e.target.value});
   }
 
-  onClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-  }
-
-  onKeyPress = (e) => {
-    if (e.key === 'Enter') {
+  onKeyDown = (e) => {
+    if (e.keyCode === Utils.keyCodes.enter) {
       this.onRenameConfirm(e);
+    } else if (e.keyCode === Utils.keyCodes.esc) {
+      this.onRenameCancel(e);
     }
+    e.nativeEvent.stopImmediatePropagation();
   }
 
   onRenameConfirm = (e) => {
@@ -87,14 +88,11 @@ class Rename extends React.Component {
     return (
       <div className="rename-container">
         <input
-          ref="renameInput"
+          ref={this.inputRef}
           value={this.state.name}
           onChange={this.onChange}
-          onKeyPress={this.onKeyPress}
-          onClick={this.onClick}
+          onKeyDown={this.onKeyDown}
         />
-        <button className="btn btn-secondary sf2-icon-confirm confirm" onClick={this.onRenameConfirm}></button>
-        <button className="btn btn-secondary sf2-icon-cancel cancel" onClick={this.onRenameCancel}></button>
       </div>
     );
   }
