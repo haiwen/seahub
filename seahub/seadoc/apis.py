@@ -246,7 +246,7 @@ class SeadocRevisionDownloadLinks(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         
-        file_download_link = get_seadoc_download_link(uuid_map, False)
+        file_download_link = get_seadoc_download_link(uuid_map)
         if not file_download_link:
             error_msg = 'seadoc file %s not found.' % uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -264,7 +264,7 @@ class SeadocRevisionDownloadLinks(APIView):
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        origin_file_download_link = get_seadoc_download_link(origin_uuid_map, False)
+        origin_file_download_link = get_seadoc_download_link(origin_uuid_map)
         if not origin_file_download_link:
             error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
