@@ -53,7 +53,7 @@ def sdoc_revision(request, repo_id):
         'is_owner': is_owner,
         'can_compare': True,
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
-        'file_download_link': get_seadoc_download_link(uuid_map, False)
+        'file_download_link': get_seadoc_download_link(uuid_map)
     }
 
     revision_info = is_seadoc_revision(file_uuid)
@@ -63,7 +63,7 @@ def sdoc_revision(request, repo_id):
     is_published = return_dict.get('is_published', False)
     if (origin_doc_uuid and not is_published):
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
-        return_dict['origin_file_download_link'] = get_seadoc_download_link(uuid_map, False)
+        return_dict['origin_file_download_link'] = get_seadoc_download_link(uuid_map)
 
     return render(request, 'sdoc_revision.html', return_dict)
 
