@@ -11,6 +11,7 @@ from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
 
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.utils import is_valid_email
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -207,8 +208,9 @@ class AdminOrganizations(APIView):
             error_msg = 'Failed to create organization, please try again later.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        vid = get_virtual_id_by_email(owner_email)
         try:
-            User.objects.get(email=owner_email)
+            User.objects.get(email=vid)
         except User.DoesNotExist:
             pass
         else:

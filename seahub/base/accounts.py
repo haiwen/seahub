@@ -19,6 +19,7 @@ from ldap import sasl
 from ldap import filter
 
 from seahub.auth import login
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
@@ -767,6 +768,7 @@ class AuthBackend(object):
         return user
 
     def authenticate(self, username=None, password=None):
+        username = get_virtual_id_by_email(username)
         user = self.get_user(username)
         if not user:
             return None
@@ -1248,6 +1250,7 @@ class DetailedRegistrationForm(RegistrationForm):
     note = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
                            required=note_required)
+
 
 # Move here to avoid circular import
 from seahub.base.templatetags.seahub_tags import email2nickname, \
