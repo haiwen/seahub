@@ -479,11 +479,12 @@ class LibContentView extends React.Component {
         direntList.push(dirent);
       });
 
+      direntList = Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder)
       this.setState({
         pathExist: true,
         userPerm: res.data.user_perm,
         isDirentListLoading: false,
-        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
+        direntList: direntList,
         dirID: res.data.dir_id,
         path: path,
         isSessionExpired: false,
@@ -491,6 +492,26 @@ class LibContentView extends React.Component {
 
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
+      }
+
+      if (this.state.currentRepoInfo.is_admin) {
+        let pathInRepoShareInfoList = [];
+        seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
+          let repoShareInfoList = res.data.share_info_list;
+          repoShareInfoList.forEach(item => {
+            if (pathInRepoShareInfoList.indexOf(item.path) === -1) {
+              pathInRepoShareInfoList.push(item.path);
+            }
+          });
+          direntList.forEach(dirent => {
+            if (pathInRepoShareInfoList.indexOf(Utils.joinPath(path, dirent.name) + '/') !== -1) {
+              dirent.has_been_shared_out = true;
+          }
+          });
+          this.setState({
+            direntList: direntList,
+          });
+        });
       }
     }).catch((err) => {
       Utils.getErrorMsg(err, true);

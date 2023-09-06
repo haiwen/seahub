@@ -723,6 +723,9 @@ class DirentListItem extends React.Component {
             <i className={`fa-star ${dirent.starred ? 'fas' : 'far star-empty'}`}></i>
           </a>
           }
+          {dirent.has_been_shared_out &&
+          <i className={`fa-star fas`}></i>
+          }
         </td>
         <td className="pl10">
           <div className="dir-icon">
