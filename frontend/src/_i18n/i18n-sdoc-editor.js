@@ -4,8 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import { mediaUrl } from '../utils/constants';
 
-let { lang = 'en' } = window.app.config;
-lang = lang === 'zh-cn' ? 'zh_cn' : lang; // Compatible with transifex platform
+const { lang = 'en' } = window.app.config;
 
 i18n
   .use(Backend)
@@ -17,7 +16,7 @@ i18n
     ns: ['sdoc-editor'],
     defaultNS: 'sdoc-editor',
 
-    whitelist: ['en', 'zh_CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
+    whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
     backend: {
       loadPath: mediaUrl + 'sdoc-editor/locales/{{ lng }}/{{ ns }}.json',
