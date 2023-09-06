@@ -109,7 +109,7 @@ def get_seadoc_upload_link(uuid_map, last_modify_user=''):
         repo_id, obj_id, 'update', last_modify_user, use_onetime=True)
     if not token:
         return None
-    upload_link = gen_file_upload_url('update-api', token)
+    upload_link = gen_file_upload_url(token, 'update-api')
     return upload_link
 
 
@@ -145,7 +145,7 @@ def get_seadoc_asset_upload_link(repo_id, parent_path, username):
         repo_id, obj_id, 'upload-link', username, use_onetime=True)
     if not token:
         return None
-    upload_link = gen_file_upload_url('upload-api', token)
+    upload_link = gen_file_upload_url(token, 'upload-api')
     upload_link = upload_link + '?replace=1'
     return upload_link
 
