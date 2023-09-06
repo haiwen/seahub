@@ -1,20 +1,18 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import { navigate } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import { Modal, ModalHeader, ModalBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from './utils/utils';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import Paginator from './components/paginator';
-import CommonToolbar from './components/toolbar/common-toolbar';
 import NoticeItem from './components/common/notice-item';
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/user-notifications.css';
 
-class UserNotifications extends React.Component {
+class UserNotificationsDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +22,8 @@ class UserNotifications extends React.Component {
       currentPage: 1,
       perPage: 25,
       hasNextPage: false,
-      items: []
+      items: [],
+      isItemMenuShow: false,
     };
   }
 
@@ -56,7 +55,7 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -64,18 +63,7 @@ class UserNotifications extends React.Component {
     }, () => {
       this.getItems(1);
     });
-  }
-
-  onSearchedClick = (selectedItem) => {
-    if (selectedItem.is_dir === true) {
-      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
-    } else {
-      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    }
-  }
+  };
 
   markAllRead = () => {
     seafileAPI.updateNotifications().then((res) => {
@@ -91,7 +79,7 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clearAll = () => {
     seafileAPI.deleteNotifications().then((res) => {
@@ -104,52 +92,61 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  };
+
+  toggle = () => {
+    this.props.onNotificationDialogToggle();
+  };
+
+  toggleDropDownMenu = () => {
+    this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+  };
+
+  renderHeaderRowBtn = () => {
+    return (
+      <div className="use">
+        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu}>
+          <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} className="notification-dropdown-toggle">
+            <i title="More Operations" data-toggle="dropdown" aria-expanded="true" aria-haspopup="true" className="d-flex w-5 h-5 align-items-center justify-content-center sf-dropdown-toggle fa fa-ellipsis-v">
+              <span class="sr-only">{gettext('Toggle Dropdown')}</span>
+            </i>
+          </DropdownToggle>
+          <DropdownMenu right={true} className="dtable-dropdown-menu large">
+            <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
+            <DropdownItem onClick={this.clearAll}>{gettext('Clear')}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <button type="button" className="close" aria-label="Close" onClick={this.toggle}><span aria-hidden="true">×</span></button>
+      </div>
+    );
   }
 
   render() {
+    const headerRowBtn = this.renderHeaderRowBtn();
     return (
-      <React.Fragment>
-        <div className="h-100 d-flex flex-column">
-          <div className="top-header d-flex justify-content-between">
-            <a href={siteRoot}>
-              <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
-            </a>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
+      <Modal isOpen={true} toggle={this.toggle} className="notification-list-dialog" contentClassName="notification-list-content"
+        zIndex={1046}>
+        <ModalHeader close={headerRowBtn} toggle={this.toggle}>{gettext('Notifications')}</ModalHeader>
+        <ModalBody className="notification-modal-body">
+          <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref}>
+            <Content
+              isLoading={this.state.isLoading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.items}
+              currentPage={this.state.currentPage}
+              hasNextPage={this.state.hasNextPage}
+              curPerPage={this.state.perPage}
+              resetPerPage={this.resetPerPage}
+              getListByPage={this.getItems}
+            />
           </div>
-          <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
-            <div className="row">
-              <div className="col-md-10 offset-md-1">
-                <div className="d-flex justify-content-between align-items-center flex-wrap op-bar">
-                  <h2 className="h4 m-0 my-1">{gettext('Notifications')}</h2>
-                  <div>
-                    <button className="btn btn-secondary op-bar-btn" onClick={this.markAllRead}>{gettext('Mark all read')}</button>
-                    <button className="btn btn-secondary op-bar-btn ml-2" onClick={this.clearAll}>{gettext('Clear')}</button>
-                  </div>
-                </div>
-                <Content
-                  isLoading={this.state.isLoading}
-                  errorMsg={this.state.errorMsg}
-                  items={this.state.items}
-                  currentPage={this.state.currentPage}
-                  hasNextPage={this.state.hasNextPage}
-                  curPerPage={this.state.perPage}
-                  resetPerPage={this.resetPerPage}
-                  getListByPage={this.getItems}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+        </ModalBody>
+      </Modal>
     );
   }
 }
 
 class Content extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
@@ -160,10 +157,7 @@ class Content extends React.Component {
   }
 
   render() {
-    const {
-      isLoading, errorMsg, items,
-      curPerPage, currentPage, hasNextPage
-    } = this.props;
+    const { isLoading, errorMsg, items, curPerPage, currentPage, hasNextPage } = this.props;
 
     if (isLoading) {
       return <Loading />;
@@ -215,4 +209,8 @@ class Content extends React.Component {
   }
 }
 
-ReactDom.render(<UserNotifications />, document.getElementById('wrapper'));
+UserNotificationsDialog.propTypes = {
+  onNotificationDialogToggle: PropTypes.func.isRequired,
+};
+
+export default UserNotificationsDialog;

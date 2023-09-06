@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
