@@ -1,126 +1,126 @@
 #notifications {
-	position: relative;
-	width: 32px;
+  position: relative;
+  width: 32px;
 }
 
 #notice-icon {
-	position: relative;
-	display: block;
+  position: relative;
+  display: block;
 }
 
 @media (max-width: 390px) {
-	#notifications {
+  #notifications {
     margin-left: 8px;
   }
 }
 
 #notifications .title {
-	line-height: 1.5;
-	font-size: 1rem;
-	color: #322;
-	font-weight: normal;
+  line-height: 1.5;
+  font-size: 1rem;
+  color: #322;
+  font-weight: normal;
 }
 
 #notifications .sf2-icon-bell {
-	font-size: 24px;
-	line-height: 1;
-	color: #999;
-	vertical-align: middle;
+  font-size: 24px;
+  line-height: 1;
+  color: #999;
+  vertical-align: middle;
 }
 
 #notifications .num {
-	position: absolute;
-	top: -3px;
-	left: 12px;
-	padding: 0 2px;
-	min-width: 16px;
-	height: 16px;
-	color: #fff;
-	font-size: 9px;
-	line-height: 16px;
-	text-align: center;
-	background: #fc6440;
-	border-radius: 100%;
+  position: absolute;
+  top: -3px;
+  left: 12px;
+  padding: 0 2px;
+  min-width: 16px;
+  height: 16px;
+  color: #fff;
+  font-size: 9px;
+  line-height: 16px;
+  text-align: center;
+  background: #fc6440;
+  border-radius: 100%;
 }
 
 #notice-popover {
-	top: 38px;
-	right: -12px;
+  top: 38px;
+  right: -12px;
 }
 
 #notice-popover .outer-caret {
-	right: 18px;
+  right: 18px;
 }
 
 #notice-popover a {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 #notice-popover li {
-	padding: 9px 0 3px;
-	border-bottom: 1px solid #dfdfe1;
+  padding: 9px 0 3px;
+  border-bottom: 1px solid #dfdfe1;
 }
 
 #notice-popover li.unread {
-	padding-right: 10px;
-	padding-left: 10px;
-	border-left: 2px solid #feac74;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-left: 2px solid #feac74;
 }
 
 #notice-popover li.read {
-	padding-right: 10px;
-	padding-left: 10px;
-	border-left: 2px solid transparent;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-left: 2px solid transparent;
 }
 
 #notice-popover li:hover {
-	background: #f5f5f7;
+  background: #f5f5f7;
 }
 
 #notice-popover li.read:hover {
-	background: #f5f5f7;
-	border-left: 2px solid #dfdfe1;
+  background: #f5f5f7;
+  border-left: 2px solid #dfdfe1;
 }
 
 #notice-popover .avatar {
-	border-radius: 1000px;
-	float: left;
+  border-radius: 1000px;
+  float: left;
 }
 
 #notice-popover .brief {
-	margin-left: 40px;
-	margin-bottom: 1rem;
-	font-size: 0.8125rem;
-	line-height: 1.5rem;
+  margin-left: 40px;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.5rem;
 }
 
 #notice-popover .time {
-	margin: 0;
-	color: #999;
-	text-align: right;
-	font-size: 0.8125rem;
-	line-height: 1.5rem;
-	clear: both;
+  margin: 0;
+  color: #999;
+  text-align: right;
+  font-size: 0.8125rem;
+  line-height: 1.5rem;
+  clear: both;
 }
 
 #notice-popover .view-all {
-	display: block;
-	padding: 7px 0;
-	text-align: center;
-	color: #a4a4a4;
+  display: block;
+  padding: 7px 0;
+  text-align: center;
+  color: #a4a4a4;
 }
 
 #notice-popover .sf-popover-close {
-	position: absolute;
-	right: 10px;
-	top: 17px;
+  position: absolute;
+  right: 10px;
+  top: 17px;
 }
 
 #notice-popover .sf-popover-hd {
-	border-bottom: 1px solid #dfdfe1;
-	margin: 0 10px;
+  border-bottom: 1px solid #dfdfe1;
+  margin: 0 10px;
 }
 
 #notice-popover .sf-popover-con {
-	max-height: 25rem;
+  max-height: 25rem;
 }
