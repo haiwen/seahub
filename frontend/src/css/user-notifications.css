@@ -20,34 +20,29 @@
   width: 24px
 }
 
-.notification-dropdown-toggle .item-dropdown-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #949494;
-}
-
-.notification-dropdown-toggle .item-dropdown-icon:hover {
-  color: #000;
-  opacity: 0.75;
-}
-
+.notification-header-close .item-dropdown-icon,
 .notification-header-close .notification-close-icon {
   height: 24px;
   width: 24px;
-  text-align: center;
   cursor: pointer;
   color: #000;
   opacity: 0.5;
-  font-weight: 700;
 }
 
-.notification-header-close .notification-close-icon:hover {
+.notification-header-close .notification-close-icon:hover,
+.notification-header-close .item-dropdown-icon:hover {
+  color: #000;
   opacity: 0.75;
+}
+
+/* The icon "..." do not need to be bold */
+.notification-header-close .item-dropdown-icon {
+  font-weight: 400;
+}
+
+/* The icon 'x' needs to be bold */
+.notification-header-close .notification-close-icon {
+  font-weight: 700;
 }
 
 .notification-header-close .dropdown-menu {
