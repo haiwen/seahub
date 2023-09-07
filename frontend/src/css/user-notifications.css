@@ -68,14 +68,13 @@
 
 .notification-modal-body .notification-dialog-body {
   overflow: auto;
-  padding: 1rem;
+  padding: 2rem 1rem;
   height: 100%;
 }
 
 .notification-dialog-body table {
   width: 100%;
   table-layout: fixed;
-  max-height: calc(100% - 38px);
   overflow-y: auto;
 }
 

@@ -65,7 +65,7 @@ export default class NotificationPopover extends React.Component {
         <div className="notification-container" ref={ref => this.notificationContainerRef = ref}>
           <div className="notification-header">
             {headerText}
-            <span className="notification-close-icon" aria-label="Close" onClick={this.props.onNotificationListToggle}>×</span>
+            <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.props.onNotificationListToggle}></span>
           </div>
           <div className="notification-body">
             <div className="mark-notifications" onClick={this.props.onMarkAllNotifications}>{bodyText}</div>
