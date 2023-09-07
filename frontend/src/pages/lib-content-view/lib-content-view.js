@@ -563,6 +563,11 @@ class LibContentView extends React.Component {
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(path);
 
+    // for node not loaded, such as a deep folder '/vv/aa'
+    if (!node) { // node: null
+      return false;
+    }
+
     let nodeChildren = node.children.map(item => item.object);
     let nodeChildrenNames = nodeChildren.map(item => item.name);
 
