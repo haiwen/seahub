@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
+{% endblock %}
+
+{% block main_content %}
+<div class="new-narrow-panel">
+    <h2 class="hd">{% trans "Client Login Confirm" %}</h2>
+    <form action="" method="post" class="con">{% csrf_token %}
+    <label>{% trans "Do you want to login to your client?" %}</label><br />
+    <input type="submit" value="{% trans "Yes" %}" class="submit" />
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
+{% endblock %}

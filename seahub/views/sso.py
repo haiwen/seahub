@@ -1,17 +1,29 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+# -*- coding: utf-8 -*-
 import jwt
 import time
+import logging
 
 from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from urllib.parse import quote
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.csrf import csrf_protect
 
 from seahub.base.templatetags.seahub_tags import email2nickname
-
 from seahub.auth import REDIRECT_FIELD_NAME
-from seahub.utils import render_error
+from seahub.auth.decorators import login_required
+from seahub.utils import render_permission_error, render_error
+from seahub.api2.utils import get_token_v1, get_token_v2
+from seahub.settings import CLIENT_SSO_UUID_EXPIRATION
+from seahub.base.models import ClientSSOToken
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 def sso(request):
@@ -106,3 +118,82 @@ def shib_login(request):
         return HttpResponseRedirect(reverse('multi_adfs_sso') + params)
 
     return HttpResponseRedirect(reverse('sso') + params)
+
+
+def client_sso(request, uuid):
+
+    t = get_object_or_404(ClientSSOToken, token=uuid)
+    if not t.accessed_at:
+        t.accessed()
+    else:
+        error_msg = _('This link has already been visited, please click the login button on the client again')
+        return render_error(request, error_msg)
+
+    next_page = reverse('client_sso_complete', args=[uuid, ])
+
+    # client platform args used to create api v2 token
+    req_qs = request.META['QUERY_STRING']
+    if req_qs:
+        next_page = next_page + '?' + req_qs
+
+    # light security check
+    if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
+        logger.error('%s is not safe url.' % next_page)
+        next_page = reverse('client_sso_complete', args=[uuid, ])
+
+    redirect_url = reverse('saml2_login') + '?next=' + quote(next_page)
+    return HttpResponseRedirect(redirect_url)
+
+
+@csrf_protect
+@login_required
+def client_sso_complete(request, uuid):
+
+    t = get_object_or_404(ClientSSOToken, token=uuid)
+    if not t.accessed_at:
+        error_msg = _('Invalid link, please click the login button on the client again')
+        return render_error(request, error_msg)
+
+    interval = (timezone.now() - t.accessed_at).total_seconds()
+    if int(interval) >= CLIENT_SSO_UUID_EXPIRATION:
+        error_msg = _('Login timeout, please click the login button on the client again')
+        return render_error(request, error_msg)
+
+    if request.method == "GET":
+
+        template_name = 'client_login_confirm.html'
+        return render(request, template_name, {})
+
+    elif request.method == "POST":
+
+        username = request.user.username
+
+        if t.is_waiting():
+            # generate tokenv2 using information in request params
+            keys = (
+                'platform',
+                'device_id',
+                'device_name',
+                'client_version',
+                'platform_version',
+            )
+            if all(['shib_' + key in request.GET for key in keys]):
+                platform = request.GET['shib_platform']
+                device_id = request.GET['shib_device_id']
+                device_name = request.GET['shib_device_name']
+                client_version = request.GET['shib_client_version']
+                platform_version = request.GET['shib_platform_version']
+                api_token = get_token_v2(
+                    request, username, platform, device_id,
+                    device_name, client_version, platform_version)
+            elif all(['shib_' + key not in request.GET for key in keys]):
+                api_token = get_token_v1(username)
+
+            t.completed(email=username, api_key=api_token.key)
+            logger.info('Client SSO success, uuid: %s, user: %s' % (uuid, username))
+        else:
+            logger.warning('Client SSO token is not waiting, skip.')
+
+        return HttpResponseRedirect(reverse('libraries'))
+    else:
+        return render_permission_error(request, _('Permission denied.'))

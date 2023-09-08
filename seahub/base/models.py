@@ -9,7 +9,7 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
-from seahub.utils import within_time_range, \
+from seahub.utils import within_time_range, gen_token, \
         normalize_file_path, normalize_dir_path
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.tags.models import FileUUIDMap
@@ -395,3 +395,59 @@ class UserMonitoredRepos(models.Model):
 
     class Meta:
         unique_together = [["email", "repo_id"]]
+
+
+STATUS_WAITING = 'waiting'
+STATUS_SUCCESS = 'success'
+STATUS_ERROR = 'error'
+
+
+class ClientSSOTokenManager(models.Manager):
+    def new(self):
+        o = self.model()
+        o.save(using=self._db)
+        return o
+
+
+class ClientSSOToken(models.Model):
+    STATUS_CHOICES = (
+        (STATUS_WAITING, 'waiting'),
+        (STATUS_SUCCESS, 'success'),
+        (STATUS_ERROR, 'error'),
+    )
+
+    token = models.CharField(max_length=100, unique=True)
+    email = LowerCaseCharField(max_length=255, db_index=True, blank=True, null=True)
+    status = models.CharField(max_length=10, default=STATUS_WAITING, choices=STATUS_CHOICES)
+    api_key = models.CharField(max_length=40, blank=True, null=True)
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    updated_at = models.DateTimeField(db_index=True, blank=True, null=True)
+    accessed_at = models.DateTimeField(db_index=True, blank=True, null=True)
+    objects = ClientSSOTokenManager()
+
+    def gen_token(self):
+        return gen_token(30) + gen_token(30)
+
+    def is_waiting(self):
+        return self.status == STATUS_WAITING
+
+    def is_success(self):
+        return self.status == STATUS_SUCCESS
+
+    def completed(self, email, api_key):
+        assert self.is_waiting() is True
+
+        self.email = email
+        self.api_key = api_key
+        self.status = STATUS_SUCCESS
+        self.updated_at = timezone.now()
+        self.save()
+
+    def accessed(self):
+        self.accessed_at = timezone.now()
+        self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.token:
+            self.token = self.gen_token()
+        return super(ClientSSOToken, self).save(*args, **kwargs)

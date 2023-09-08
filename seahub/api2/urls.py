@@ -15,6 +15,7 @@ from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
+from .endpoints.sso.client_sso_link import ClientSSOLink
 
 urlpatterns = [
     path('ping/', Ping.as_view()),
@@ -114,4 +115,11 @@ if HAS_OFFICE_CONVERTER:
     ]
     urlpatterns += [
         re_path(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
+    ]
+
+from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER
+if CLIENT_SSO_VIA_LOCAL_BROWSER:
+    urlpatterns += [
+        path('client-sso-link/', ClientSSOLink.as_view()),
+        re_path(r'^client-sso-link/(?P<uuid>[^/]+)/$', ClientSSOLink.as_view()),
     ]

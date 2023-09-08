@@ -762,6 +762,10 @@ ENABLE_SSO_TO_THIRDPART_WEBSITE = False
 THIRDPART_WEBSITE_SECRET_KEY = ''
 THIRDPART_WEBSITE_URL = ''
 
+# client sso
+CLIENT_SSO_VIA_LOCAL_BROWSER = False
+CLIENT_SSO_UUID_EXPIRATION = 5 * 60
+
 #####################
 # Global AddressBook #
 #####################
