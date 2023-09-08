@@ -1179,6 +1179,7 @@ class RegistrationForm(forms.Form):
         if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))
 
+        email = get_virtual_id_by_email(email)
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             return self.cleaned_data['email']
