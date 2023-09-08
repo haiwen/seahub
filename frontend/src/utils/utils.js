@@ -1571,4 +1571,34 @@ export const Utils = {
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
   },
 
+  getUrlSearches() {
+    const search = location.search;
+    let searchParams = {};
+    if (search.length === 0) {
+      return searchParams;
+    }
+    let allSearches = search.split('?')[1];
+    let allSearchesArr = allSearches.split('&');
+    allSearchesArr.forEach(item => {
+      let itemArr = item.split('=');
+      searchParams[itemArr[0]] = decodeURI(itemArr[1]);
+    });
+    return searchParams;
+  },
+
+  // If value is null, delete the search parameter; else, add or update the search parameter.
+  updateSearchParameter(key, value) {
+    const { origin, pathname } = location;
+    const searchParams = this.getUrlSearches();
+    searchParams[key] = value;
+    let newSearch = '?';
+    for (let key in searchParams) {
+      let value = searchParams[key];
+      if (value) {
+        newSearch = newSearch === '?' ? `?${key}=${value}` : `${newSearch}&${key}=${value}`;
+      }
+    }
+    history.replaceState(null, '', origin + pathname + newSearch);
+  },
+
 };

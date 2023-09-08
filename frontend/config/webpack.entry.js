@@ -4,7 +4,6 @@ const entryFiles = {
   markdownEditor: "/index.js",
   TCAccept: "/tc-accept.js",
   TCView: "/tc-view.js",
-  userNotifications: "/user-notifications.js",
   wiki: "/wiki.js",
   fileHistory: "/file-history.js",
   fileHistoryOld: "/file-history-old.js",

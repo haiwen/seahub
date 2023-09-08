@@ -137,6 +137,6 @@ You've got {{num}} new notices on {{ site_name }}:
 
 <p style="font-size:14px;color:#434144;">
     {% trans "Go check out at the following page:" %}<br />
-    <a href="{{ url_base }}{% url 'user_notification_list' %}">{{ url_base }}{% url 'user_notification_list' %}</a>
+    <a href="{{ url_base }}?notifications=all">{{ url_base }}?notifications=all</a>
 </p>
 {% endblock %}

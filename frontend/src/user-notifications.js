@@ -1,20 +1,19 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import { navigate } from '@gatsbyjs/reach-router';
+import PropTypes from 'prop-types';
+import { Modal, ModalHeader, ModalBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from './utils/utils';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
+import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
-import Paginator from './components/paginator';
-import CommonToolbar from './components/toolbar/common-toolbar';
 import NoticeItem from './components/common/notice-item';
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/user-notifications.css';
 
-class UserNotifications extends React.Component {
+const PER_PAGE = 20;
+
+class UserNotificationsDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,19 +21,16 @@ class UserNotifications extends React.Component {
       isLoading: true,
       errorMsg: '',
       currentPage: 1,
-      perPage: 25,
       hasNextPage: false,
-      items: []
+      items: [],
+      isItemMenuShow: false,
     };
   }
 
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
-    const {
-      currentPage, perPage
-    } = this.state;
+    const { currentPage } = this.state;
     this.setState({
-      perPage: parseInt(urlParams.get('per_page') || perPage),
       currentPage: parseInt(urlParams.get('page') || currentPage)
     }, () => {
       this.getItems(this.state.currentPage);
@@ -42,13 +38,13 @@ class UserNotifications extends React.Component {
   }
 
   getItems = (page) => {
-    const { perPage } = this.state;
-    seafileAPI.listNotifications(page, perPage).then((res) => {
+    this.setState({ isLoading: true })
+    seafileAPI.listNotifications(page, PER_PAGE).then((res) => {
       this.setState({
         isLoading: false,
-        items: res.data.notification_list,
+        items: [...this.state.items, ...res.data.notification_list],
         currentPage: page,
-        hasNextPage: Utils.hasNextPage(page, perPage, res.data.count)
+        hasNextPage: Utils.hasNextPage(page, PER_PAGE, res.data.count)
       });
     }).catch((error) => {
       this.setState({
@@ -56,26 +52,7 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
-
-  resetPerPage = (perPage) => {
-    this.setState({
-      perPage: perPage
-    }, () => {
-      this.getItems(1);
-    });
-  }
-
-  onSearchedClick = (selectedItem) => {
-    if (selectedItem.is_dir === true) {
-      let url = siteRoot + 'library/' + selectedItem.repo_id + '/' + selectedItem.repo_name + selectedItem.path;
-      navigate(url, {repalce: true});
-    } else {
-      let url = siteRoot + 'lib/' + selectedItem.repo_id + '/file' + Utils.encodePath(selectedItem.path);
-      let newWindow = window.open('about:blank');
-      newWindow.location.href = url;
-    }
-  }
+  };
 
   markAllRead = () => {
     seafileAPI.updateNotifications().then((res) => {
@@ -91,7 +68,7 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clearAll = () => {
     seafileAPI.deleteNotifications().then((res) => {
@@ -104,89 +81,61 @@ class UserNotifications extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  };
+
+  toggle = () => {
+    this.props.onNotificationDialogToggle();
+  };
+
+  toggleDropDownMenu = () => {
+    this.setState({isItemMenuShow: !this.state.isItemMenuShow});
+  };
+
+  onHandleScroll = () => {
+    if (!this.state.hasNextPage || this.state.isLoading ||!this.tableRef) {
+      return;
+    }
+    if (this.notificationTableRef.offsetHeight + this.notificationTableRef.scrollTop + 1 >= this.tableRef.offsetHeight) {
+      this.getItems(this.state.currentPage + 1);
+    }
   }
 
-  render() {
+  renderHeaderRowBtn = () => {
     return (
-      <React.Fragment>
-        <div className="h-100 d-flex flex-column">
-          <div className="top-header d-flex justify-content-between">
-            <a href={siteRoot}>
-              <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
-            </a>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
-          </div>
-          <div className="flex-auto container-fluid pt-4 pb-6 o-auto">
-            <div className="row">
-              <div className="col-md-10 offset-md-1">
-                <div className="d-flex justify-content-between align-items-center flex-wrap op-bar">
-                  <h2 className="h4 m-0 my-1">{gettext('Notifications')}</h2>
-                  <div>
-                    <button className="btn btn-secondary op-bar-btn" onClick={this.markAllRead}>{gettext('Mark all read')}</button>
-                    <button className="btn btn-secondary op-bar-btn ml-2" onClick={this.clearAll}>{gettext('Clear')}</button>
-                  </div>
-                </div>
-                <Content
-                  isLoading={this.state.isLoading}
-                  errorMsg={this.state.errorMsg}
-                  items={this.state.items}
-                  currentPage={this.state.currentPage}
-                  hasNextPage={this.state.hasNextPage}
-                  curPerPage={this.state.perPage}
-                  resetPerPage={this.resetPerPage}
-                  getListByPage={this.getItems}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+      <div className="notification-header-close">
+        <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu}>
+          <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} className="notification-dropdown-toggle">            
+            <span className="sf3-font sf3-font-more-level item-dropdown-icon"></span>
+          </DropdownToggle>
+          <DropdownMenu right={true} className="dtable-dropdown-menu large">
+            <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
+            <DropdownItem onClick={this.clearAll}>{gettext('Clear')}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.toggle}></span>
+      </div>
     );
   }
-}
-
-class Content extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1);
-  }
-
-  getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1);
-  }
 
   render() {
-    const {
-      isLoading, errorMsg, items,
-      curPerPage, currentPage, hasNextPage
-    } = this.props;
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
+    const { isLoading, errorMsg, items } = this.state;
+    let content;
     if (errorMsg) {
-      return <p className="error mt-6 text-center">{errorMsg}</p>;
+      content = <p className="error mt-6 text-center">{errorMsg}</p>;
     }
-
-    const isDesktop = Utils.isDesktop();
-    const theadData = isDesktop ? [
-      {width: '7%', text: ''},
-      {width: '73%', text: gettext('Message')},
-      {width: '20%', text: gettext('Time')}
-    ] : [
-      {width: '15%', text: ''},
-      {width: '52%', text: gettext('Message')},
-      {width: '33%', text: gettext('Time')}
-    ];
-
-    return (
-      <React.Fragment>
-        <table className="table-hover">
+    else {
+      const isDesktop = Utils.isDesktop();
+      const theadData = isDesktop ? [
+        {width: '7%', text: ''},
+        {width: '73%', text: gettext('Message')},
+        {width: '20%', text: gettext('Time')}
+      ] : [
+        {width: '15%', text: ''},
+        {width: '52%', text: gettext('Message')},
+        {width: '33%', text: gettext('Time')}
+      ];
+      content = (
+        <table className="table-hover" ref={ref => this.tableRef = ref}>
           <thead>
             <tr>
               {theadData.map((item, index) => {
@@ -200,19 +149,28 @@ class Content extends React.Component {
             })}
           </tbody>
         </table>
-        {items.length > 0 &&
-        <Paginator
-          gotoPreviousPage={this.getPreviousPage}
-          gotoNextPage={this.getNextPage}
-          currentPage={currentPage}
-          hasNextPage={hasNextPage}
-          curPerPage={curPerPage}
-          resetPerPage={this.props.resetPerPage}
-        />
-        }
-      </React.Fragment>
+      );
+      if (isLoading) {
+        content = <>{content}<Loading /></>;
+      }
+    }
+
+    return (
+      <Modal isOpen={true} toggle={this.toggle} className="notification-list-dialog" contentClassName="notification-list-content"
+        zIndex={1046}>
+        <ModalHeader close={this.renderHeaderRowBtn()} toggle={this.toggle}>{gettext('Notifications')}</ModalHeader>
+        <ModalBody className="notification-modal-body">
+          <div className="notification-dialog-body" ref={ref => this.notificationTableRef = ref} onScroll={this.onHandleScroll}>
+            {content}
+          </div>
+        </ModalBody>
+      </Modal>
     );
   }
 }
 
-ReactDom.render(<UserNotifications />, document.getElementById('wrapper'));
+UserNotificationsDialog.propTypes = {
+  onNotificationDialogToggle: PropTypes.func.isRequired,
+};
+
+export default UserNotificationsDialog;

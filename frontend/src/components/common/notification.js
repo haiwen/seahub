@@ -1,7 +1,11 @@
 import React from 'react';
+import NotificationPopover from './notification-popover';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import NoticeItem from './notice-item';
+import UserNotificationsDialog from '../../user-notifications';
+import { Utils } from '../../utils/utils';
+import './notification.css';
 
 class Notification extends React.Component {
   constructor(props) {
@@ -10,6 +14,7 @@ class Notification extends React.Component {
       showNotice: false,
       unseenCount: 0,
       noticeList: [],
+      isShowNotificationDialog: this.getInitDialogState(),
     };
   }
 
@@ -58,29 +63,60 @@ class Notification extends React.Component {
 
   }
 
-  render() {
+  getInitDialogState = () => {
+    const searchParams = Utils.getUrlSearches();
+    return searchParams.notifications === 'all';
+  }
 
+  onNotificationDialogToggle = () => {
+    let newSearch = this.state.isShowNotificationDialog ? null : 'all';
+    Utils.updateSearchParameter('notifications', newSearch);
+    this.setState({isShowNotificationDialog: !this.state.isShowNotificationDialog});
+  }
+
+  onNotificationListToggle = () => {
+    this.setState({showNotice: false});
+  }
+
+  onMarkAllNotifications = () => {
+    seafileAPI.updateNotifications().then(() => {
+      this.setState({
+        unseenCount: 0,
+      });
+    }).catch((error) => {
+      this.setState({
+        errorMsg: Utils.getErrorMsg(error, true)
+      });
+    });
+  }
+
+  render() {
+    const { unseenCount } = this.state;
     return (
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
-          <span className="sf2-icon-bell"></span>
-          <span className={`num ${this.state.unseenCount ? '' : 'hide'}`}>{this.state.unseenCount}</span>
+          <span className="sf2-icon-bell" id="notification-popover"></span>
+          <span className={`num ${unseenCount ? '' : 'hide'}`}>{unseenCount}</span>
         </a>
-        <div id="notice-popover" className={`sf-popover ${this.state.showNotice ? '': 'hide'}`}>
-          <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
-          <div className="sf-popover-hd h-7 d-flex align-items-center justify-content-center">
-            <h3 className="sf-popover-title title m-0">{gettext('Notifications')}</h3>
-            <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 action-icon m-0"></a>
-          </div>
-          <div className="sf-popover-con">
-            <ul className="notice-list list-unstyled">
+        {this.state.showNotice && 
+          <NotificationPopover
+            headerText={gettext('Notification')}
+            bodyText={gettext('Mark all as read')}
+            footerText={gettext('View all notifications')}
+            onNotificationListToggle={this.onNotificationListToggle}
+            onNotificationDialogToggle={this.onNotificationDialogToggle}
+            onMarkAllNotifications={this.onMarkAllNotifications}
+          >
+            <ul className="notice-list list-unstyled" id="notice-popover">
               {this.state.noticeList.map(item => {
                 return (<NoticeItem key={item.id} noticeItem={item} onNoticeItemClick={this.onNoticeItemClick}/>);
               })}
             </ul>
-            <a href={siteRoot + 'notice/list/'} className="view-all">{gettext('See All Notifications')}</a>
-          </div>
-        </div>
+          </NotificationPopover>
+        }
+        {this.state.isShowNotificationDialog &&
+          <UserNotificationsDialog onNotificationDialogToggle={this.onNotificationDialogToggle} />
+        }
       </div>
     );
   }
