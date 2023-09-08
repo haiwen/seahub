@@ -18,6 +18,7 @@ from seahub.utils import is_valid_email, is_valid_username, IS_EMAIL_CONFIGURED,
     send_html_email, get_site_name
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_file_size_unit
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -179,8 +180,9 @@ class AdminOrgUsers(APIView):
 
         is_active = active == 'true'
 
+        vid = get_virtual_id_by_email(email)
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=vid)
             user_exists = True
         except User.DoesNotExist:
             user_exists = False

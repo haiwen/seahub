@@ -19,6 +19,7 @@ from ldap import sasl
 from ldap import filter
 
 from seahub.auth import login
+from seahub.auth.utils import get_virtual_id_by_email
 from seahub.constants import DEFAULT_USER, DEFAULT_ORG, DEFAULT_ADMIN
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
@@ -1177,6 +1178,7 @@ class RegistrationForm(forms.Form):
         if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))
 
+        email = get_virtual_id_by_email(email)
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             return self.cleaned_data['email']
@@ -1248,6 +1250,7 @@ class DetailedRegistrationForm(RegistrationForm):
     note = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
                            required=note_required)
+
 
 # Move here to avoid circular import
 from seahub.base.templatetags.seahub_tags import email2nickname, \

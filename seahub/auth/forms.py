@@ -135,8 +135,9 @@ class PasswordResetForm(forms.Form):
         else:
             site_name = domain_override
 
+        contact_email = email2contact_email(user.username)
         c = {
-            'email': user.username,
+            'email': contact_email,
             'uid': int_to_base36(user.id),
             'user': user,
             'token': token_generator.make_token(user),
