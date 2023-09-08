@@ -768,7 +768,6 @@ class AuthBackend(object):
         return user
 
     def authenticate(self, username=None, password=None):
-        username = get_virtual_id_by_email(username)
         user = self.get_user(username)
         if not user:
             return None
