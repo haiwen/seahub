@@ -19,7 +19,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.auth.decorators import login_required
 from seahub.utils import render_permission_error, render_error
 from seahub.api2.utils import get_token_v1, get_token_v2
-from seahub.settings import CLIENT_SSO_UUID_EXPIRATION
+from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_UUID_EXPIRATION
 from seahub.base.models import ClientSSOToken
 
 # Get an instance of a logger
@@ -101,6 +101,9 @@ def jwt_sso(request):
 
 
 def shib_login(request):
+    if CLIENT_SSO_VIA_LOCAL_BROWSER:
+        return HttpResponseRedirect(reverse('client_sso'))
+
     # client platform args used to create api v2 token
     keys = ('platform', 'device_id', 'device_name', 'client_version', 'platform_version')
     if all(['shib_' + key in request.GET for key in keys]):
@@ -141,7 +144,7 @@ def client_sso(request, uuid):
         logger.error('%s is not safe url.' % next_page)
         next_page = reverse('client_sso_complete', args=[uuid, ])
 
-    redirect_url = reverse('saml2_login') + '?next=' + quote(next_page)
+    redirect_url = reverse('sso') + '?next=' + quote(next_page)
     return HttpResponseRedirect(redirect_url)
 
 
