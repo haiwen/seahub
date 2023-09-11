@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -170,6 +171,7 @@ class RepoFolderTrash extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         }
         )}
         {pathList[pathList.length - 1]}
@@ -282,6 +284,13 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  getMore: PropTypes.func.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -363,6 +372,11 @@ class Item extends React.Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
 class FolderItem extends React.Component {
 
   constructor(props) {
@@ -390,7 +404,6 @@ class FolderItem extends React.Component {
 
   render() {
     const item = this.props.item;
-    const { isIconShown } = this.state;
     const { commitID, baseDir, folderPath } = this.props;
 
     return item.type == 'dir' ? (
@@ -412,5 +425,13 @@ class FolderItem extends React.Component {
     );
   }
 }
+
+FolderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  commitID: PropTypes.string.isRequired,
+  baseDir: PropTypes.string.isRequired,
+  folderPath: PropTypes.string.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<RepoFolderTrash />, document.getElementById('wrapper'));

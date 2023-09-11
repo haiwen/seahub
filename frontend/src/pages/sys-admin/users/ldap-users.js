@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
@@ -71,12 +72,18 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  errorMsge: PropTypes.string.isRequired,
+  itemse: PropTypes.array.isRequired,
+  currentPagee: PropTypes.number.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+};
+
 class Item extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { item } = this.props;
     let email = '<span class="op-target">' + Utils.HTMLescape(item.email) + '</span>';
@@ -95,6 +102,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class Users extends Component {
 

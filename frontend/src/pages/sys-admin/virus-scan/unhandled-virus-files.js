@@ -12,6 +12,9 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './nav';
 
 const virusFileItemPropTypes = {
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
   virusFile: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
@@ -121,6 +124,15 @@ VirusFileItem.propTypes = virusFileItemPropTypes;
 
 
 const virusFileListPropTypes = {
+  currentPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
+  isAllItemsSelected: PropTypes.bool.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   virusFiles: PropTypes.array.isRequired

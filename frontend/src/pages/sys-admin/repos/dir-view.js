@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import { Utils } from '../../../utils/utils';
@@ -212,5 +213,9 @@ class DirView extends Component {
     );
   }
 }
+
+DirView.propTypes = {
+  repoID: PropTypes.string.isRequired,
+};
 
 export default DirView;

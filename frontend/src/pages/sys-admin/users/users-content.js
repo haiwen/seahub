@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
@@ -160,6 +161,20 @@ class Content extends Component {
     }
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  isLDAPImported: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  updateAdminRole: PropTypes.func.isRequired,
+  revokeAdmin: PropTypes.func.isRequired,
+  onUserSelected: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 

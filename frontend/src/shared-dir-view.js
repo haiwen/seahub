@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import ReactDom from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
@@ -151,6 +152,7 @@ class SharedDirView extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         })
         }
         <span className="ml-1 ellipsis" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
@@ -448,14 +450,25 @@ class SharedDirView extends React.Component {
                 <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')} aria-label={gettext('List')}></a>
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')} aria-label={gettext('Grid')}></a>
+                    <a
+                      href={`?p=${encodeURIComponent(relativePath)}&mode=list`}
+                      className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`}
+                      title={gettext('List')}
+                      aria-label={gettext('List')}
+                    ></a>
+                    <a
+                      href={`?p=${encodeURIComponent(relativePath)}&mode=grid`}
+                      className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`}
+                      title={gettext('Grid')}
+                      aria-label={gettext('Grid')}
+                    ></a>
                   </div>
                   }
                   {canUpload && (
                     <Button disabled={noQuota}
                       title={noQuota ? gettext('The owner of this library has run out of space.') : ''}
-                      onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn">{gettext('Upload')}</Button>
+                      onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn"
+                    >{gettext('Upload')}</Button>
                   )}
                   {showDownloadIcon &&
                   <Fragment>
@@ -669,6 +682,21 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isAllItemsSelected: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -855,6 +883,18 @@ class Item extends React.Component {
   }
 }
 
+Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  item: PropTypes.object.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
+
 class GridItem extends React.Component {
 
   constructor(props) {
@@ -926,5 +966,11 @@ class GridItem extends React.Component {
     }
   }
 }
+
+GridItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));

@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, orgID } from '../../utils/constants';
@@ -59,6 +60,11 @@ class OrgUsersSearchUsersResult extends React.Component {
     );
   }
 }
+
+OrgUsersSearchUsersResult.propTypes = {
+  toggleDelete: PropTypes.func.isRequired,
+  orgUsers: PropTypes.array.isRequired,
+};
 
 class OrgUsersSearchUsers extends Component {
 

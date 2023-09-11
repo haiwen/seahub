@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -13,11 +14,6 @@ import Nav from './user-nav';
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { loading, errorMsg, items } = this.props;
     if (loading) {
@@ -58,11 +54,13 @@ class Content extends Component {
   }
 }
 
-class Item extends Component {
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
-  constructor(props) {
-    super(props);
-  }
+class Item extends Component {
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -109,6 +107,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class Repos extends Component {
 

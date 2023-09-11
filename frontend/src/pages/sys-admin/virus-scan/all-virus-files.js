@@ -14,7 +14,8 @@ const virusFileItemPropTypes = {
   virusFile: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired
+  handleFile: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
 };
 
 class VirusFileItem extends Component {
@@ -115,7 +116,13 @@ VirusFileItem.propTypes = virusFileItemPropTypes;
 const virusFileListPropTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
-  virusFiles: PropTypes.array.isRequired
+  virusFiles: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
 };
 
 class Content extends Component {

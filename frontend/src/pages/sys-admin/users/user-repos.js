@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -76,6 +77,14 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  items: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+  transferRepo: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 
@@ -223,6 +232,15 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+  transferRepo: PropTypes.func.isRequired,
+};
+
 class Repos extends Component {
 
   constructor(props) {
@@ -304,5 +322,9 @@ class Repos extends Component {
     );
   }
 }
+
+Repos.propTypes = {
+  email: PropTypes.string.isRequired,
+};
 
 export default Repos;

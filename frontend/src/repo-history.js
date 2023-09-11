@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -201,6 +202,17 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+};
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -325,5 +337,9 @@ class Item extends React.Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 ReactDom.render(<RepoHistory />, document.getElementById('wrapper'));

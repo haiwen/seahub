@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -106,6 +107,7 @@ class RepoSnapshot extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         }
         )}
         {pathList[pathList.length - 1]}
@@ -235,6 +237,11 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
 class FolderItem extends React.Component {
 
   constructor(props) {
@@ -303,5 +310,11 @@ class FolderItem extends React.Component {
     );
   }
 }
+
+FolderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  folderPath: PropTypes.string.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<RepoSnapshot />, document.getElementById('wrapper'));
