@@ -21,7 +21,7 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   handleInputChange = (e) => {
     const value = e.target.value;
@@ -29,19 +29,19 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
       value: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateValue(this.state.value.trim());
     this.toggle();
-  }
+  };
 
   render() {
     const { value, isSubmitBtnActive } = this.state;

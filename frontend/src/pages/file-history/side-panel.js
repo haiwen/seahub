@@ -80,7 +80,7 @@ class SidePanel extends React.Component {
         this.setState({isReloadingData: false});
       });
     }
-  }
+  };
 
   onItemRestore = (currentItem) => {
     let commitId = currentItem.commit_id;
@@ -92,11 +92,11 @@ class SidePanel extends React.Component {
       let message = gettext('Successfully restored.');
       toaster.success(message);
     });
-  }
+  };
 
   onItemClick =(item, preItem) => {
     this.props.onItemClick(item, preItem);
-  }
+  };
 
   render() {
     return (

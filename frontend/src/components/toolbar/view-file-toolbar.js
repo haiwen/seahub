@@ -41,7 +41,7 @@ class ViewFileToolbar extends React.Component {
     let { path, repoID } = this.props;
     let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
     window.open(url);
-  }
+  };
 
   onNewDraft = (e) => {
     e.preventDefault();
@@ -52,28 +52,28 @@ class ViewFileToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDraftHover = () => {
     this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
-  }
+  };
 
   toggleMore = () => {
     this.setState({isMoreMenuShow: !this.state.isMoreMenuShow});
-  }
+  };
 
   onShareToggle = () => {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
-  }
+  };
 
   onHistoryClick = () => {
     let historyUrl = siteRoot + 'repo/file_revisions/' + this.props.repoID + '/?p=' + Utils.encodePath(this.props.path);
     location.href = historyUrl;
-  }
+  };
 
   render() {
     let { filePermission } = this.props;

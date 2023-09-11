@@ -100,7 +100,7 @@ class Content extends React.Component {
         })}
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const {isLoading, errorMsg, commitDetails} = this.props.data;

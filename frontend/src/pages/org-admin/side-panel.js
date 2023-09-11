@@ -15,11 +15,11 @@ class SidePanel extends React.Component {
 
   getActiveClass = (tab) => {
     return this.props.currentTab == tab ? 'active' : '';
-  }
+  };
 
   tabItemClick = (tab) => {
     this.props.tabItemClick(tab);
-  }
+  };
 
   render() {
     return (

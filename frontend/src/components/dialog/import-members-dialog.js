@@ -19,11 +19,11 @@ class ImportMembersDialog extends React.Component {
 
   toggle = () => {
     this.props.toggleImportMembersDialog();
-  }
+  };
 
   openFileInput = () => {
     this.fileInputRef.current.click();
-  }
+  };
 
   uploadFile = (e) => {
     // no file selected
@@ -41,7 +41,7 @@ class ImportMembersDialog extends React.Component {
     const file = this.fileInputRef.current.files[0];
     this.props.importMembersInBatch(file);
     this.toggle();
-  }
+  };
 
   render() {
     let { errorMsg } = this.state;

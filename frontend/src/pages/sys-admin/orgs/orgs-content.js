@@ -22,11 +22,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -94,11 +94,11 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
@@ -122,16 +122,16 @@ class Item extends Component {
         });
       }
     });
-  }
+  };
 
   updateRole = (role) => {
     this.props.updateRole(this.props.item.org_id, role);
-  }
+  };
 
   deleteOrg = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
     this.props.deleteOrg(this.props.item.org_id);
-  }
+  };
 
   render() {
     const { item } = this.props;

@@ -40,7 +40,7 @@ class GroupItem extends React.Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseOut = () => {
     if (!this.props.isItemFreezed) {
@@ -49,7 +49,7 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -57,7 +57,7 @@ class GroupItem extends React.Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -73,7 +73,7 @@ class GroupItem extends React.Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -86,25 +86,25 @@ class GroupItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   toggleRenameDialog = () => {
     this.setState({
       isRenameDialogOpen: !this.state.isRenameDialogOpen
     });
-  }
+  };
 
   toggleDeleteDialog = () => {
     this.setState({
       isDeleteDialogOpen: !this.state.isDeleteDialogOpen
     });
-  }
+  };
 
   toggleSetQuotaDialog = () => {
     this.setState({
       isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen
     });
-  }
+  };
 
   render() {
     const { group } = this.props;

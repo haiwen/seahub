@@ -33,7 +33,7 @@ class SaveSharedFileDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({errMessage: errMessage});
     });
-  }
+  };
 
   onDirentItemClick = (repo, selectedPath, dirent) => {
     if (dirent.type === 'dir') {
@@ -48,14 +48,14 @@ class SaveSharedFileDialog extends React.Component {
         selectedPath: '',
       });
     }
-  }
+  };
 
   onRepoItemClick = (repo) => {
     this.setState({
       repo: repo,
       selectedPath: '/',
     });
-  }
+  };
 
   render() {
     return (

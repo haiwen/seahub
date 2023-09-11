@@ -60,7 +60,7 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
-  }
+  };
 
   onMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -69,7 +69,7 @@ class TreeNodeView extends React.Component {
         isHighlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -78,7 +78,7 @@ class TreeNodeView extends React.Component {
         isHighlight: false,
       });
     }
-  }
+  };
 
   onNodeClick = () => {
     const { node } = this.props;
@@ -91,9 +91,9 @@ class TreeNodeView extends React.Component {
     if (isCustomPermission) {
       const { preview: canPreview, modify: canModify } = customPermission.permission;
       if (!canPreview && !canModify) return;
-    } 
+    }
     this.props.onNodeClick(this.props.node);
-  }
+  };
 
   onLoadToggle = (e) => {
     e.stopPropagation();
@@ -103,14 +103,14 @@ class TreeNodeView extends React.Component {
     } else {
       this.props.onNodeExpanded(node);
     }
-  }
+  };
 
   onNodeDragStart = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.props.onNodeDragStart(e, this.props.node);
-  }
+  };
 
   onNodeDragEnter = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -120,14 +120,14 @@ class TreeNodeView extends React.Component {
       this.setState({isNodeDropShow: true});
     }
     this.props.onNodeDragEnter(e, this.props.node);
-  }
+  };
 
   onNodeDragMove = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.props.onNodeDragMove(e);
-  }
+  };
 
   onNodeDragLeave = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -135,7 +135,7 @@ class TreeNodeView extends React.Component {
     }
     this.setState({isNodeDropShow: false});
     this.props.onNodeDragLeave(e, this.props.node);
-  }
+  };
 
   onNodeDrop = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -144,32 +144,32 @@ class TreeNodeView extends React.Component {
     e.stopPropagation();
     this.setState({isNodeDropShow: false});
     this.props.onNodeDrop(e, this.props.node);
-  }
+  };
 
   unfreezeItem = () => {
     this.setState({isShowOperationMenu: false});
     this.props.unfreezeItem();
-  }
+  };
 
   onMenuItemClick = (operation, event, node) => {
     this.props.onMenuItemClick(operation, node);
-  }
+  };
 
   onItemMouseDown = (event) => {
     event.stopPropagation();
     if (event.button === 2) {
       return;
     }
-  }
+  };
 
   onItemContextMenu = (event) => {
     this.handleContextClick(event);
-  }
+  };
 
   handleContextClick = (event) => {
     this.props.handleContextClick(event, this.props.node);
     this.setState({isShowOperationMenu: false});
-  }
+  };
 
   getNodeTypeAndIcon = () => {
     let { node } = this.props;
@@ -200,7 +200,7 @@ class TreeNodeView extends React.Component {
       }
     }
     return {icon, type};
-  }
+  };
 
   calculateMenuList = (node) => {
     let { NEW_FOLDER, NEW_FILE, COPY, MOVE, RENAME, DELETE, OPEN_VIA_CLIENT} =  TextTranslation;
@@ -226,12 +226,12 @@ class TreeNodeView extends React.Component {
     canModify && menuList.push(MOVE, RENAME);
     canDelete && menuList.push(DELETE);
 
-    if (node.object.type !== 'dir') { 
+    if (node.object.type !== 'dir') {
       menuList.push(OPEN_VIA_CLIENT);
     }
 
     return menuList;
-  }
+  };
 
   renderChildren = () => {
     let { node, paddingLeft } = this.props;
@@ -267,7 +267,7 @@ class TreeNodeView extends React.Component {
         })}
       </div>
     );
-  }
+  };
 
   render() {
     let { currentPath, node, isNodeMenuShow, userPerm } = this.props;
@@ -277,7 +277,7 @@ class TreeNodeView extends React.Component {
       hlClass = 'tree-node-hight-light';
     }
 
-    const { isCustomPermission } = Utils.getUserPermission(userPerm)
+    const { isCustomPermission } = Utils.getUserPermission(userPerm);
     return (
       <div className="tree-node">
         <div

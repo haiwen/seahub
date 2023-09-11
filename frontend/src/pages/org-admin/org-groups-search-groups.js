@@ -25,7 +25,7 @@ class GroupItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -34,12 +34,12 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -56,11 +56,11 @@ class GroupItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   toggleDelete = () => {
     this.props.deleteGroupItem(this.props.group);
-  }
+  };
 
   renderGroupHref = (group) => {
     let groupInfoHref;
@@ -71,7 +71,7 @@ class GroupItem extends React.Component {
     }
 
     return groupInfoHref;
-  }
+  };
 
   renderGroupCreator = (group) => {
     let userInfoHref = siteRoot + 'org/useradmin/info/' + group.creatorEmail + '/';
@@ -86,7 +86,7 @@ class GroupItem extends React.Component {
         </td>
       );
     }
-  }
+  };
 
   render() {
     let { group } = this.props;
@@ -132,11 +132,11 @@ class OrgGroupsSearchGroupsResult extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let { orgGroups } = this.props;
@@ -206,7 +206,7 @@ class OrgGroupsSearchGroups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteGroupItem = (group) => {
     seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
@@ -220,20 +220,20 @@ class OrgGroupsSearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

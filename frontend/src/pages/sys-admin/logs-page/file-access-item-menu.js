@@ -6,9 +6,9 @@ class FilterMenu extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       isMenuShown: false
-    };  
+    };
   }
 
   toggleMenu = () => {
@@ -17,12 +17,12 @@ class FilterMenu extends React.Component {
     }, () => {
       this.props.toggleFreezeItem(this.state.isMenuShown);
     });
-  }
+  };
 
   onItemClick = () => {
     this.props.filterItems();
     this.props.toggleFreezeItem(false);
-  }
+  };
 
   render() {
     const { filterBy } = this.props;

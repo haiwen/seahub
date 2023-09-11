@@ -28,19 +28,19 @@ class ChangeRepoPasswordDialog extends React.Component {
     this.setState({
       oldPassword: e.target.value
     });
-  }
+  };
 
   handleNewPasswordInputChange = (e) => {
     this.setState({
       newPassword: e.target.value
     });
-  }
+  };
 
   handleNewPasswordAgainInputChange = (e) => {
     this.setState({
       newPasswordAgain: e.target.value
     });
-  }
+  };
 
   formSubmit = (e) => {
     const { oldPassword, newPassword, newPasswordAgain } = this.state;
@@ -89,7 +89,7 @@ class ChangeRepoPasswordDialog extends React.Component {
           submitBtnDisabled: false
         });
       });
-  }
+  };
 
 
   render() {

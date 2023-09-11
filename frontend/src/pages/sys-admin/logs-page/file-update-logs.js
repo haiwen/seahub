@@ -22,11 +22,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getLogsByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -91,27 +91,27 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
 
   toggleCommitDetailsDialog = () => {
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   showCommitDetails = (e) => {
     e.preventDefault();
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   render() {
     let { item } = this.props;
@@ -161,7 +161,7 @@ class FileUpdateLogs extends Component {
 
   toggleExportExcelDialog = () => {
     this.setState({isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen});
-  }
+  };
 
   componentDidMount () {
     let urlParams = (new URL(window.location)).searchParams;
@@ -189,13 +189,13 @@ class FileUpdateLogs extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getLogsByPage(this.initPage));
-  }
+  };
 
   render() {
     let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;

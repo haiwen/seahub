@@ -34,14 +34,14 @@ class Content extends Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -139,43 +139,43 @@ class Item extends Component {
       permissionOptions: permissionOptions,
       currentPermission: currentPermission
     });
-  }
+  };
 
   toggleOpMenu = () => {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   toggleLinkDialog = () => {
     this.setState({
       isLinkDialogOpen: !this.state.isLinkDialogOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   viewLink = (e) => {
     e.preventDefault();
     this.toggleLinkDialog();
-  }
+  };
 
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
-  }
+  };
 
   renderExpiration = () => {
     const item = this.props.item;
@@ -185,7 +185,7 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -200,7 +200,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -377,7 +377,7 @@ class ShareAdminShareLinks extends Component {
       }
     });
     return items;
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     this.setState({
@@ -385,7 +385,7 @@ class ShareAdminShareLinks extends Component {
       sortOrder: sortOrder,
       items: this._sortItems(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   componentDidMount() {
     this.listUserShareLinks();
@@ -420,17 +420,17 @@ class ShareAdminShareLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   toggleCleanInvalidShareLinksDialog = () => {
     this.setState({isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen});
-  }
+  };
 
   cleanInvalidShareLinks = () => {
     seafileAPI.cleanInvalidShareLinks().then(res => {
@@ -441,7 +441,7 @@ class ShareAdminShareLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

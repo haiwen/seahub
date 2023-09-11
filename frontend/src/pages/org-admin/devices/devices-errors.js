@@ -21,11 +21,11 @@ class Content extends Component {
 
   getPreviousPageDeviceErrorsList = () => {
     this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageDeviceErrorsList = () => {
     this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -84,11 +84,11 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -147,7 +147,7 @@ class OrgDevicesErrors extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clean = () => {
     seafileAPI.sysAdminClearDeviceErrors().then((res) => {
@@ -161,7 +161,7 @@ class OrgDevicesErrors extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -169,7 +169,7 @@ class OrgDevicesErrors extends Component {
     }, () => {
       this.getDeviceErrorsListByPage(1);
     });
-  }
+  };
   render() {
     return (
       <Fragment>

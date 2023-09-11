@@ -21,7 +21,7 @@ class SetQuotaDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   handleQuotaChange = (e) => {
     const value = e.target.value;
@@ -29,19 +29,19 @@ class SetQuotaDialog extends React.Component {
       quota: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateQuota(this.state.quota.trim());
     this.toggle();
-  }
+  };
 
   render() {
     const { quota, isSubmitBtnActive } = this.state;

@@ -30,7 +30,7 @@ class ReviewCommentDialog extends React.Component {
   handleCommentChange = (event) => {
     let comment = event.target.value;
     this.setState({ comment: comment });
-  }
+  };
 
   submitComment = () => {
     const { quote, newIndex, oldIndex } = this.props;
@@ -57,7 +57,7 @@ class ReviewCommentDialog extends React.Component {
       });
     }
     this.setState({ comment: '' });
-  }
+  };
 
   setQuoteText = (mdQuote) => {
     processor.process(mdQuote).then(
@@ -66,7 +66,7 @@ class ReviewCommentDialog extends React.Component {
         this.setState({ quote: quote });
       }
     );
-  }
+  };
 
   componentDidMount() {
     this.setQuoteText(this.props.quote);

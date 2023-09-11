@@ -30,28 +30,28 @@ class LinkItem extends React.Component {
     this.setState({
       isItemOpVisible: true
     });
-  }
+  };
 
   onMouseOut = () => {
     this.setState({
       isItemOpVisible: false
     });
-  }
+  };
 
   cutLink = (link) => {
     let length = link.length;
     return link.slice(0, 9) + '...' + link.slice(length-5);
-  }
+  };
 
   onDeleteIconClicked = (e) => {
     e.preventDefault();
     e.stopPropagation();
     this.toggleDeleteShareLinkDialog();
-  }
+  };
 
   toggleDeleteShareLinkDialog = () => {
     this.setState({isDeleteShareLinkDialogOpen: !this.state.isDeleteShareLinkDialogOpen});
-  }
+  };
 
   onCopyIconClicked = (e) => {
     e.preventDefault();
@@ -59,25 +59,25 @@ class LinkItem extends React.Component {
     const { item } = this.props;
     copy(item.link);
     toaster.success(gettext('Share link is copied to the clipboard.'));
-  }
+  };
 
   clickItem = (e) => {
     this.props.showLinkDetails(this.props.item);
-  }
+  };
 
   onCheckboxClicked = (e) => {
     e.stopPropagation();
-  }
+  };
 
   toggleSelectLink = (e) => {
     const { item } = this.props;
     this.props.toggleSelectLink(item, e.target.checked);
-  }
+  };
 
   deleteLink = () => {
     const { item } = this.props;
     this.props.deleteLink(item.token);
-  }
+  };
 
   render() {
     const { isItemOpVisible } = this.state;

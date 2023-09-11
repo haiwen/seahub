@@ -23,7 +23,7 @@ class FileInfo extends React.PureComponent {
   toggleStar = (e) => {
     e.preventDefault();
     this.props.toggleStar();
-  }
+  };
 
   render() {
     const { isStarred, isLocked } = this.props;

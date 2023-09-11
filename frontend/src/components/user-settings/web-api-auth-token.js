@@ -28,7 +28,7 @@ class WebAPIAuthToken extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   createAuthToken = () => {
     seafileAPI.createAuthTokenBySession().then((res) => {
@@ -41,7 +41,7 @@ class WebAPIAuthToken extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   deleteAuthToken = () => {
     seafileAPI.deleteAuthTokenBySession().then((res) => {
@@ -54,19 +54,19 @@ class WebAPIAuthToken extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   toggleAuthTokenVisible = () => {
     this.setState({
       isAuthTokenVisible: !this.state.isAuthTokenVisible
     });
-  }
+  };
 
   onIconKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
     const { authToken, isAuthTokenVisible } = this.state;

@@ -53,17 +53,17 @@ class WikiSelectDialog extends React.Component {
     this.setState({
       repoID: repo.repo_id,
     });
-  }
+  };
 
   handleSubmit = () => {
     let { repoID } = this.state;
     this.props.addWiki(repoID);
     this.props.toggleCancel();
-  }
+  };
 
   toggle = () => {
     this.props.toggleCancel();
-  }
+  };
 
   render() {
     return (

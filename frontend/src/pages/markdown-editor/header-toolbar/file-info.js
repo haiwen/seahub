@@ -24,8 +24,8 @@ class FileInfo extends React.PureComponent {
             </span>
             <InternalLinkOperation path={filePath} repoID={repoID} />
             {(isPro && isLocked) && (
-              <img 
-                className="file-locked-icon mx-2" 
+              <img
+                className="file-locked-icon mx-2"
                 width="16"
                 src={`${mediaUrl}img/file-locked-32.png`}
                 alt={lockedText}

@@ -19,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -120,7 +120,7 @@ class SysAdminShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -141,7 +141,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let repoID = this.props.repoID;
@@ -155,11 +155,11 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
     let groups = [];
@@ -187,7 +187,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let repoID = this.props.repoID;
@@ -199,7 +199,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
@@ -210,7 +210,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_id;
@@ -223,7 +223,7 @@ class SysAdminShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     return (

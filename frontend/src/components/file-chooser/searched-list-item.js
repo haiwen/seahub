@@ -19,22 +19,22 @@ class SearchedListItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({highlight: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({highlight: false});
-  }
+  };
 
   onClick = () => {
     let item = this.props.item;
     this.props.onItemClick(item);
-  }
+  };
 
   searchItemDoubleClick = (e) => {
     let item = this.props.item;
 
     this.props.onSearchedItemDoubleClick(item);
-  }
+  };
 
   render() {
     let { item, currentItem } = this.props;

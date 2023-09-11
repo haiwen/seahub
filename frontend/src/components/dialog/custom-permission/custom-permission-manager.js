@@ -48,14 +48,14 @@ class CustomPermissionManager extends React.Component {
       toaster.danger(errMessage);
       this.setState({isLoading: false});
     });
-  }
+  };
 
   addCustomPermission = (permission_name, permission_desc, permission) => {
     const { repoID } = this.props;
     seafileAPI.createCustomPermission(repoID, permission_name, permission_desc, permission).then(res => {
       const { permissions } = this.state;
       const customPermission = new CustomPermission(res.data.permission);
-      permissions.unshift(customPermission)
+      permissions.unshift(customPermission);
       this.setState({
         permissions,
         currentMode: MANAGER_STATE.LIST
@@ -64,7 +64,7 @@ class CustomPermissionManager extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   editCustomPermission = (newPermission) => {
     const { repoID } = this.props;
@@ -85,7 +85,7 @@ class CustomPermissionManager extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteCustomPermission = (permission) => {
     const { repoID } = this.props;
@@ -98,38 +98,38 @@ class CustomPermissionManager extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeMode = () => {
     this.setState({currentMode: MANAGER_STATE.LIST});
-  }
+  };
 
   onAddCustomPermission = () => {
     this.setState({currentMode: MANAGER_STATE.ADD});
-  }
+  };
 
   onEditCustomPermission = (permission) => {
     this.setState({
       currentMode: MANAGER_STATE.EDIT,
       currentPermission: permission
     });
-  }
+  };
 
   onDeleteCustomPermission = (permission) => {
     this.deleteCustomPermission(permission);
-  }
+  };
 
   render() {
 
     if (this.state.isLoading) {
-      return <Loading />
+      return <Loading />;
     }
-    
+
     const { currentMode, permissions, currentPermission } = this.state;
     return (
       <div className="custom-permission-manager">
         {currentMode === MANAGER_STATE.LIST && (
-          <ListCustomPermission 
+          <ListCustomPermission
             permissions={permissions}
             onAddCustomPermission={this.onAddCustomPermission}
             onEditCustomPermission={this.onEditCustomPermission}
@@ -137,7 +137,7 @@ class CustomPermissionManager extends React.Component {
           />
         )}
         {currentMode === MANAGER_STATE.ADD && (
-          <AddCustomPermission 
+          <AddCustomPermission
             onChangeMode={this.onChangeMode}
             addCustomPermission={this.addCustomPermission}
           />
@@ -145,7 +145,7 @@ class CustomPermissionManager extends React.Component {
         {currentMode === MANAGER_STATE.EDIT && (
           <EditCustomPermission
             permission={currentPermission}
-            onChangeMode={this.onChangeMode} 
+            onChangeMode={this.onChangeMode}
             editCustomPermission={this.editCustomPermission}
           />
         )}

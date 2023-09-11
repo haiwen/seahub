@@ -17,7 +17,7 @@ class Content extends Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -106,21 +106,21 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   onMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -145,7 +145,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unshare = (e) => {
     e.preventDefault();
@@ -171,12 +171,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster(errMessage);
     });
-  }
+  };
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.setState({isShowPermEditor: true});
-  }
+  };
 
   render() {
     if (this.state.unshared) {
@@ -335,7 +335,7 @@ class ShareAdminLibraries extends Component {
       sortOrder: sortOrder,
       items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   render() {
     return (

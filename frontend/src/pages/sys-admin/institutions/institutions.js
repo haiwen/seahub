@@ -21,11 +21,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getInstitutionsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getInstitutionsByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -86,22 +86,22 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteInstitution = () => {
     this.props.deleteInstitution(this.props.item.id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -175,17 +175,17 @@ class Institutions extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getInstitutionsByPage(this.initPage));
-  }
+  };
 
   toggleAddInstitutionDialog = () => {
     this.setState({isAddInstitutionDialogOpen: !this.state.isAddInstitutionDialogOpen});
-  }
+  };
 
   addInstitution = (name) => {
     seafileAPI.sysAdminAddInstitution(name).then(res => {
@@ -196,7 +196,7 @@ class Institutions extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteInstitution = (institutionID) => {
     seafileAPI.sysAdminDeleteInstitution(institutionID).then(res => {
@@ -209,7 +209,7 @@ class Institutions extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { isAddInstitutionDialogOpen, hasNextPage, currentPage, perPage } = this.state;

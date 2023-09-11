@@ -41,16 +41,16 @@ class Search extends Component {
       isMaskShow: true,
       isCloseShow: true
     });
-  }
+  };
 
   onCloseHandler = () => {
     this.resetToDefault();
-  }
+  };
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
     this.props.onSearchedClick(item);
-  }
+  };
 
   onChangeHandler = (event) => {
     let _this = this;
@@ -80,7 +80,7 @@ class Search extends Component {
     }
 
     this.timer = setTimeout(_this.getSearchResult(queryData), 500);
-  }
+  };
 
   getSearchResult(queryData) {
 
@@ -192,7 +192,7 @@ class Search extends Component {
       const { page, perPage } = this.state;
       this.searchWiki(repoID, newValue, page, perPage);
     });
-  }
+  };
 
   renderSearchResult() {
     var _this = this;
@@ -232,7 +232,7 @@ class Search extends Component {
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
     });
-  }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';

@@ -38,7 +38,7 @@ class DirColumnFile extends React.Component {
     let { path, repoID } = this.props;
     let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
     window.open(url);
-  }
+  };
 
   onNewDraft = (e) => {
     e.preventDefault();
@@ -49,19 +49,19 @@ class DirColumnFile extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onOpenFile = (e) => {
     e.preventDefault();
     let { path, repoID } = this.props;
     let newUrl = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path);
     window.open(newUrl, '_blank');
-  }
+  };
 
   goDraftPage = (e) => {
     e.preventDefault();
     this.props.goDraftPage();
-  }
+  };
 
   render() {
     if (this.props.isFileLoadedErr) {

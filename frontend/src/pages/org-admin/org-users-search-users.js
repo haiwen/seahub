@@ -18,11 +18,11 @@ class OrgUsersSearchUsersResult extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let { orgUsers } = this.props;
@@ -96,7 +96,7 @@ class OrgUsersSearchUsers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
@@ -109,7 +109,7 @@ class OrgUsersSearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
@@ -127,20 +127,20 @@ class OrgUsersSearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

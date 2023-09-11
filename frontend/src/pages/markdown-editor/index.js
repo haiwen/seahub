@@ -88,7 +88,7 @@ class MarkdownEditor extends React.Component {
         this.setState({ isLocked: true, lockedByMe: true });
       });
     }
-  }
+  };
 
   emitSwitchEditor = (is_editing=false) => {
     if (userInfo && this.state.collabServer) {
@@ -100,7 +100,7 @@ class MarkdownEditor extends React.Component {
         is_editing,
       });
     }
-  }
+  };
 
   receiveUpdateData (data) {
     let currentTime = new Date();
@@ -161,11 +161,11 @@ class MarkdownEditor extends React.Component {
       showShareLinkDialog: false,
       showInsertFileDialog: false,
     });
-  }
+  };
 
   setEditorMode = (editorMode) => { // rich | plain
     this.setState({editorMode: editorMode});
-  }
+  };
 
   setDraftValue = (type, value) => {
     if (type === 'rich') {
@@ -173,7 +173,7 @@ class MarkdownEditor extends React.Component {
     } else {
       this.draftPlainValue = value;
     }
-  }
+  };
 
   setContent = (str) => {
     let value = deserialize(str);
@@ -181,7 +181,7 @@ class MarkdownEditor extends React.Component {
       markdownContent: str,
       value: value,
     });
-  }
+  };
 
   checkDraft = () => {
     let draftKey = editorApi.getDraftKey();
@@ -192,7 +192,7 @@ class MarkdownEditor extends React.Component {
       that.localDraft = draft;
       localStorage.removeItem(draftKey);
     }
-  }
+  };
 
   useDraft = () => {
     this.setState({
@@ -202,7 +202,7 @@ class MarkdownEditor extends React.Component {
       editorMode: 'rich',
     });
     this.emitSwitchEditor(true);
-  }
+  };
 
   deleteDraft = () => {
     if (this.state.localDraftDialog) {
@@ -213,16 +213,16 @@ class MarkdownEditor extends React.Component {
     }
     let draftKey = editorApi.getDraftKey();
     localStorage.removeItem(draftKey);
-  }
+  };
 
   closeDraftDialog = () => {
     this.setState({localDraftDialog: false});
-  }
+  };
 
   clearTimer = () => {
     clearTimeout(this.timer);
     this.timer = null;
-  }
+  };
 
   openDialogs = (option) => {
     switch (option) {
@@ -244,7 +244,7 @@ class MarkdownEditor extends React.Component {
       default:
         return;
     }
-  }
+  };
 
   componentWillUnmount() {
     this.socket.emit('repo_update', {
@@ -339,21 +339,21 @@ class MarkdownEditor extends React.Component {
       }
       this.setState({ fileTagList: fileTagList });
     });
-  }
+  };
 
   onFileTagChanged = () => {
     this.listFileTags();
-  }
+  };
 
   listFileParticipants = () => {
     editorApi.listFileParticipant().then((res) => {
       this.setState({ participants: res.data.participant_list });
     });
-  }
+  };
 
   onParticipantsChange = () => {
     this.listFileParticipants();
-  }
+  };
 
   setFileInfoMtime = (fileInfo) => {
     const { fileInfo: oldFileInfo } = this.state;
@@ -375,7 +375,7 @@ class MarkdownEditor extends React.Component {
     editorApi.starItem().then((response) => {
       this.setState({fileInfo: newFileInfo});
     });
-  }
+  };
 
   autoSaveDraft = () => {
     let that = this;
@@ -403,29 +403,29 @@ class MarkdownEditor extends React.Component {
       }, 3000);
       that.timer = null;
     }, 60000);
-  }
+  };
 
   openParentDirectory = () => {
     window.location.href = editorApi.getParentDectionaryUrl();
-  }
+  };
 
   onEdit = (editorMode) => {
     if (editorMode === 'rich') {
       window.seafileEditor.switchToRichTextEditor();
-      return
+      return;
     }
     if (editorMode === 'plain') {
       window.seafileEditor.switchToPlainTextEditor();
     }
-  }
+  };
 
   toggleShareLinkDialog = () => {
     this.openDialogs('share_link');
-  }
+  };
 
   toggleHistory = () => {
     window.location.href = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(filePath);
-  }
+  };
 
   getInsertLink = (repoID, filePath) => {
     const fileName = Utils.getFileName(filePath);
@@ -437,15 +437,15 @@ class MarkdownEditor extends React.Component {
     }
     let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
     window.richMarkdownEditor.addLink(fileName, innerURL);
-  }
+  };
 
   onContentChanged = (value) => {
     this.setState({ contentChanged: value });
-  }
+  };
 
   onSaving = (value) => {
     this.setState({ saving: value });
-  }
+  };
 
   render() {
     if (this.state.loading) {

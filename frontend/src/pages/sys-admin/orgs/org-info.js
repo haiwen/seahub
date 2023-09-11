@@ -24,15 +24,15 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleSetNameDialog = () => {
     this.setState({isSetNameDialogOpen: !this.state.isSetNameDialogOpen});
-  }
+  };
 
   toggleSetMaxUserNumberDialog = () => {
     this.setState({isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen});
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -42,7 +42,7 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
     const { loading, errorMsg, orgInfo } = this.props;
@@ -83,7 +83,7 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
-            {enable_saml_login && 
+            {enable_saml_login &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
                 <dd className="info-item-content">
@@ -170,7 +170,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateName = (orgName) => {
     const data = {orgName: orgName};
@@ -184,7 +184,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMaxUserNumber = (newValue) => {
     const data = {maxUserNumber: newValue};
@@ -198,7 +198,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { orgInfo } = this.state;

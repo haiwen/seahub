@@ -36,21 +36,21 @@ class SharedRepoListView extends React.Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   getSortMetaData = () => {
     return {
@@ -59,15 +59,15 @@ class SharedRepoListView extends React.Component {
       sortBySize: this.props.sortBy == 'size',
       sortIcon: this.props.sortOrder == 'asc' ? <span className="fas fa-caret-up"></span> : <span className="fas fa-caret-down"></span>
     };
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onItemRename = (repo, newName) => {
     let isDuplicated = this.props.repoList.some(item => {
@@ -80,7 +80,7 @@ class SharedRepoListView extends React.Component {
       return false;
     }
     this.props.onItemRename(repo, newName);
-  }
+  };
 
   renderRepoListView = () => {
     return (
@@ -105,7 +105,7 @@ class SharedRepoListView extends React.Component {
         })}
       </Fragment>
     );
-  }
+  };
 
   renderPCUI = () => {
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
@@ -130,7 +130,7 @@ class SharedRepoListView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   renderMobileUI = () => {
     return (
@@ -141,7 +141,7 @@ class SharedRepoListView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   render() {
     const table = Utils.isDesktop() ? this.renderPCUI() : this.renderMobileUI();

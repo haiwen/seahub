@@ -29,24 +29,24 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
-  }
+  };
 
   render() {
     const {
@@ -78,7 +78,7 @@ class Content extends Component {
       const spaceText = gettext('Space Used');
       const spaceEl =
         sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
-        <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
+          <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
           spaceText;
       const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
 
@@ -182,7 +182,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -191,7 +191,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -199,27 +199,27 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleDeleteUserDialog = () => {
     this.setState({isDeleteUserDialogOpen: !this.state.isDeleteUserDialogOpen});
-  }
+  };
 
   toggleResetUserPasswordDialog = () => {
     this.setState({isResetUserPasswordDialogOpen: !this.state.isResetUserPasswordDialogOpen});
-  }
+  };
 
   toggleRevokeAdminDialog = () => {
     this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
-  }
+  };
 
   onUserSelected = () => {
     this.props.onUserSelected(this.props.item);
-  }
+  };
 
   updateStatus= (value) => {
     const isActive = value == 'active';
@@ -227,15 +227,15 @@ class Item extends Component {
       toaster.notify(gettext('It may take some time, please wait.'));
     }
     this.props.updateUser(this.props.item.email, 'is_active', isActive);
-  }
+  };
 
   updateRole = (value) => {
     this.props.updateUser(this.props.item.email, 'role', value);
-  }
+  };
 
   updateAdminRole = (value) => {
     this.props.updateAdminRole(this.props.item.email, value);
-  }
+  };
 
   translateAdminRole = (role) => {
     switch (role) {
@@ -250,24 +250,24 @@ class Item extends Component {
       default:
         return role;
     }
-  }
+  };
 
   updateInstitution = (value) => {
     this.props.updateUser(this.props.item.email, 'institution', value);
-  }
+  };
 
   translateInstitution = (inst) => {
     return inst;
-  }
+  };
 
   updateQuota = (value) => {
     this.props.updateUser(this.props.item.email, 'quota_total', value);
-  }
+  };
 
   deleteUser = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
     this.props.deleteUser(this.props.item.email);
-  }
+  };
 
   resetPassword = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
@@ -277,12 +277,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   revokeAdmin = () => {
     const { item } = this.props;
     this.props.revokeAdmin(item.email, item.name);
-  }
+  };
 
   getMenuOperations = () => {
     const {
@@ -298,7 +298,7 @@ class Item extends Component {
       list = ['Revoke Admin'];
     }
     return list;
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -315,7 +315,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -331,7 +331,7 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   render() {
     const { item, isAdmin } = this.props;

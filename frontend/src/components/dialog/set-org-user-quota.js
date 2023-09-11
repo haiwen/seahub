@@ -29,7 +29,7 @@ class SetOrgUserQuota extends React.Component {
     this.setState({
       inputValue: e.target.value
     });
-  }
+  };
 
   formSubmit = () => {
     const { orgID, email } = this.props;
@@ -56,7 +56,7 @@ class SetOrgUserQuota extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     const { inputValue, formErrorMsg, submitBtnDisabled } = this.state;

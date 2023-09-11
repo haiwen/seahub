@@ -23,7 +23,7 @@ class TermsAndConditions extends Component {
 
   toggleAddTermDialog = () => {
     this.setState({isAddTermDialogOpen: !this.state.isAddTermDialogOpen});
-  }
+  };
 
   componentDidMount () {
     seafileAPI.sysAdminListTermsAndConditions().then((res) => {
@@ -47,7 +47,7 @@ class TermsAndConditions extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateTerm = (termID, name, versionNumber, text, isActive) => {
     seafileAPI.sysAdminUpdateTermAndCondition(termID, name, versionNumber, text, isActive).then(res => {
@@ -64,7 +64,7 @@ class TermsAndConditions extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteTerm = (termID) => {
     seafileAPI.sysAdminDeleteTermAndCondition(termID).then(res => {
@@ -75,7 +75,7 @@ class TermsAndConditions extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { termList, isAddTermDialogOpen } = this.state;

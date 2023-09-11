@@ -19,7 +19,7 @@ class ListInAddressBook extends React.Component {
     this.props.updateUserInfo({
       list_in_address_book: checked.toString()
     });
-  }
+  };
 
   render() {
     const { inputChecked } = this.state;

@@ -42,7 +42,7 @@ class MoveDirent extends React.Component {
     } else {
       this.moveItem();
     }
-  }
+  };
 
   moveItems = () => {
     let { repoID } = this.props;
@@ -93,7 +93,7 @@ class MoveDirent extends React.Component {
 
     this.props.onItemsMove(repo, selectedPath);
     this.toggle();
-  }
+  };
 
   moveItem = () => {
     let { repoID } = this.props;
@@ -129,11 +129,11 @@ class MoveDirent extends React.Component {
 
     this.props.onItemMove(repo, this.props.dirent, selectedPath, this.props.path);
     this.toggle();
-  }
+  };
 
   toggle = () => {
     this.props.onCancelMove();
-  }
+  };
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
@@ -141,7 +141,7 @@ class MoveDirent extends React.Component {
       selectedPath: selectedPath,
       errMessage: ''
     });
-  }
+  };
 
   onRepoItemClick = (repo) => {
     this.setState({
@@ -149,7 +149,7 @@ class MoveDirent extends React.Component {
       selectedPath: '/',
       errMessage: ''
     });
-  }
+  };
 
   render() {
     let title = gettext('Move {placeholder} to');

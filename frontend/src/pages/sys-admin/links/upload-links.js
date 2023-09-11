@@ -20,11 +20,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getUploadLinksByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getUploadLinksByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -92,17 +92,17 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   deleteUploadLink = () => {
     this.props.deleteUploadLink(this.props.item.token);
-  }
+  };
 
   renderExpiration = () => {
     let item = this.props.item;
@@ -112,7 +112,7 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
 
   render() {
     let { isOpIconShown } = this.state;
@@ -177,7 +177,7 @@ class UploadLinks extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteUploadLink = (linkToken) => {
     seafileAPI.sysAdminDeleteUploadLink(linkToken).then(res => {
@@ -189,13 +189,13 @@ class UploadLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getUploadLinksByPage(this.initPage));
-  }
+  };
 
   render() {
     let { uploadLinkList, currentPage, perPage, hasNextPage } = this.state;

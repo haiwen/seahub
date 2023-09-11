@@ -20,7 +20,7 @@ class StatisticReports extends React.Component {
     this.setState({
       month: month
     });
-  }
+  };
 
   onGenerateReports = (type) => {
     let url = siteRoot + 'api/v2.1/admin/statistics/';
@@ -54,7 +54,7 @@ class StatisticReports extends React.Component {
       errorMessage: ''
     });
     window.location.href = url;
-  }
+  };
 
   render() {
 

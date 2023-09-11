@@ -18,11 +18,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, curPerPage, hasNextPage, currentPage } = this.props;
@@ -136,7 +136,7 @@ class Users extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -144,7 +144,7 @@ class Users extends Component {
     }, () => {
       this.getUsersListByPage(1);
     });
-  }
+  };
 
   render() {
     return (

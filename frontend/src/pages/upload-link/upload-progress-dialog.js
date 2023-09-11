@@ -29,19 +29,19 @@ class UploadProgressDialog extends React.Component {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.toggleDropdown();
     }
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
     let { allFilesUploaded } = this.props;

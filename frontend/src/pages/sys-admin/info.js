@@ -52,11 +52,11 @@ class Info extends Component {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
     });
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   renderLicenseDescString = (license_mode, license_to, license_expiration) => {
     if (license_mode == 'life-time') {
@@ -70,7 +70,7 @@ class Info extends Component {
       return gettext('licensed to {placeholder_license_to}, expires on {placeholder_license_expiration}')
         .replace('{placeholder_license_to}', license_to).replace('{placeholder_license_expiration}', license_expiration);
     }
-  }
+  };
 
   render() {
     let { license_mode, license_to, license_expiration, org_count,
@@ -106,7 +106,7 @@ class Info extends Component {
                   </dd> :
                   <dd className="info-item-content">
                     {gettext('Community Edition')}
-                    <a className="ml-1" href="https://download.seafile.com/published/seafile-manual/deploy_pro/migrate_from_seafile_community_server.md" target="_blank">{gettext('Upgrade to Pro Edition')}</a>
+                    <a className="ml-1" href="https://download.seafile.com/published/seafile-manual/deploy_pro/migrate_from_seafile_community_server.md" target="_blank" rel="noreferrer">{gettext('Upgrade to Pro Edition')}</a>
                   </dd>
                 }
                 <dt className="info-item-heading">{gettext('Libraries')} / {gettext('Files')}</dt>

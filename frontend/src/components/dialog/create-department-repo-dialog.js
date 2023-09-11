@@ -28,7 +28,7 @@ class CreateDepartmentRepoDialog extends React.Component {
     this.setState({
       repoName: e.target.value,
     });
-  }
+  };
 
   handleSubmit = () => {
     let isValid = this.validateRepoName();
@@ -36,18 +36,18 @@ class CreateDepartmentRepoDialog extends React.Component {
       let repo = this.createRepo(this.state.repoName);
       this.props.onCreateRepo(repo, 'department');
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.onCreateToggle();
-  }
+  };
 
   validateRepoName = () => {
     let errMessage = '';
@@ -64,12 +64,12 @@ class CreateDepartmentRepoDialog extends React.Component {
     }
 
     return true;
-  }
+  };
 
   createRepo = (repoName) => {
     let repo = { repo_name: repoName };
     return repo;
-  }
+  };
 
   render() {
     return (

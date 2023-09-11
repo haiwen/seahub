@@ -50,14 +50,14 @@ class RepoListViewPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onItemDelete = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   onItemRename = (repo, newName) => {
     let group = this.props.group;
@@ -73,7 +73,7 @@ class RepoListViewPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onMonitorRepo = (repo, monitored) => {
     let repoList = this.state.repoList.map(item => {
@@ -83,7 +83,7 @@ class RepoListViewPanel extends React.Component {
       return item;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   render() {
     let group = this.props.group;
@@ -148,13 +148,13 @@ class GroupsView extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   toggleAddGroupModal = () => {
     this.setState({
       showAddGroupModal: !this.state.showAddGroupModal
     });
-  }
+  };
 
   onCreateGroup = () => {
     this.setState({
@@ -163,7 +163,7 @@ class GroupsView extends React.Component {
       groupList: [],
     });
     this.listGroups();
-  }
+  };
 
   componentDidMount() {
     this.listGroups();
@@ -174,11 +174,11 @@ class GroupsView extends React.Component {
       isShowDetails: true,
       currentRepo: repo,
     });
-  }
+  };
 
   closeDetails = () => {
     this.setState({isShowDetails: false});
-  }
+  };
 
   render() {
     const emptyTip = (

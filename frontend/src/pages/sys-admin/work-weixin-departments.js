@@ -225,7 +225,7 @@ class WorkWeixinDepartments extends Component {
       membersList: membersList,
       canCheckUserIds: canCheckUserIds,
     });
-  }
+  };
 
   importDepartmentDialogToggle = (importDepartment) => {
     this.setState({
@@ -283,7 +283,7 @@ class WorkWeixinDepartments extends Component {
   handleError = (error) => {
     const errorMsg = Utils.getErrorMsg(error);
     toaster.danger(errorMsg);
-  }
+  };
 
   componentDidMount() {
     this.getWorkWeixinDepartmentsList(null);

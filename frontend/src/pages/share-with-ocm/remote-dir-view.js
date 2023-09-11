@@ -44,14 +44,14 @@ class DirView extends Component {
 
   onPathClick = (path) => {
     this.loadDirentList(path);
-  }
+  };
 
   openFolder = (dirent) => {
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (!dirent.is_file) {
       this.loadDirentList(direntPath);
     }
-  }
+  };
 
   loadDirentList = (path) => {
     const { providerID, repoID } = this.props;
@@ -78,7 +78,7 @@ class DirView extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   downloadDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -88,11 +88,11 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   onFileInputChange = () => {
     if (!this.fileInput.current.files.length) {
@@ -125,7 +125,7 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg,

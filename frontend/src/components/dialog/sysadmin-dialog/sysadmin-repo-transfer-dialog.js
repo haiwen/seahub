@@ -21,12 +21,12 @@ class SysAdminRepoTransferDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  }
+  };
 
   render() {
     const repoName = this.props.repoName;

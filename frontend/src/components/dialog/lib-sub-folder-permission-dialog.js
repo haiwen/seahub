@@ -29,7 +29,7 @@ class LibSubFolderPermissionDialog extends React.Component {
     if (this.state.activeTab !== tab) {
       this.setState({activeTab: tab});
     }
-  }
+  };
 
   renderContent = () => {
     const activeTab = this.state.activeTab;
@@ -62,7 +62,7 @@ class LibSubFolderPermissionDialog extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     const { repoName, folderName } = this.props;

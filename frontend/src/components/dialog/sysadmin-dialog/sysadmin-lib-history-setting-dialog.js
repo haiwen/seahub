@@ -66,14 +66,14 @@ class SysAdminLibHistorySettingDialog extends React.Component {
         errorInfo: gettext('Please enter a non-negative integer'),
       });
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
     }
-  }
+  };
 
   onChange = (e) => {
     let num = e.target.value;
@@ -81,7 +81,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
       keepDays: num,
       expireDays: num,
     });
-  }
+  };
 
   setLimitDays = (type) => {
     if (type === 'allHistory') {
@@ -103,7 +103,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
       noHistory: type === 'noHistory' ? true : false,
       autoHistory: type === 'autoHistory' ? true : false,
     });
-  }
+  };
 
   render() {
     const itemName = this.props.itemName;

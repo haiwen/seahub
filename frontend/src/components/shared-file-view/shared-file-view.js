@@ -34,25 +34,25 @@ class SharedFileView extends React.Component {
     this.setState({
       showSaveSharedFileDialog: true
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showSaveSharedFileDialog: false
     });
-  }
+  };
 
   handleSaveSharedFile = () => {
     toaster.success(gettext('Successfully saved'), {
       duration: 3
     });
-  }
+  };
 
   toggleAddAbuseReportDialog = () => {
     this.setState({
       isAddAbuseReportDialogOpen: !this.state.isAddAbuseReportDialogOpen
     });
-  }
+  };
 
   componentDidMount() {
     if (trafficOverLimit) {
@@ -94,7 +94,7 @@ class SharedFileView extends React.Component {
         {zipped[zipped.length - 1].name}
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const { fileType } = this.props;

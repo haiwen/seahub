@@ -26,7 +26,7 @@ class WebdavPassword extends React.Component {
     this.setState({
       isSetPasserdDialogOpen: !this.state.isSetPasserdDialogOpen,
     });
-  }
+  };
 
   setPassword = (password) => {
     seafileAPI.updateWebdavSecret(password).then((res) => {
@@ -40,13 +40,13 @@ class WebdavPassword extends React.Component {
       this.toggleSetPasswordDialog();
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   toggleResetPasswordDialog = () => {
     this.setState({
       isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen,
     });
-  }
+  };
 
   resetPassword = (password) => {
     seafileAPI.updateWebdavSecret(password).then((res) => {
@@ -57,13 +57,13 @@ class WebdavPassword extends React.Component {
       this.toggleResetPasswordDialog();
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   toggleRemovePasswordDialog = () => {
     this.setState({
       isRemovePasswordDialogOpen: !this.state.isRemovePasswordDialogOpen,
     });
-  }
+  };
 
   removePassword = () => {
     seafileAPI.updateWebdavSecret().then((res) => {
@@ -77,13 +77,13 @@ class WebdavPassword extends React.Component {
       this.toggleRemovePasswordDialog();
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   onIconKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
     const { isWebdavPasswordSetted } = this.state;

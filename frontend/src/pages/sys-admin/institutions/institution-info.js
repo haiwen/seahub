@@ -19,7 +19,7 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -29,7 +29,7 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
     const { loading, errorMsg, institutionInfo } = this.props;
@@ -105,7 +105,7 @@ class InstitutionInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
 
   render() {

@@ -26,11 +26,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -96,7 +96,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -105,7 +105,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -113,24 +113,24 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleDeleteDialog = () => {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteRepo = () => {
     this.props.deleteRepo(this.props.item.id);
-  }
+  };
 
   toggleTransferDialog = () => {
     this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
-  }
+  };
 
   transferRepo = (owner) => {
     this.props.transferRepo(this.props.item.id, owner.email);
     this.toggleTransferDialog();
-  }
+  };
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -145,7 +145,7 @@ class Item extends Component {
       return gettext('Broken ({repo_id_placeholder})')
         .replace('{repo_id_placeholder}', repo.id);
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -159,7 +159,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -170,7 +170,7 @@ class Item extends Component {
         this.toggleTransferDialog();
         break;
     }
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -266,7 +266,7 @@ class Repos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   transferRepo = (repoID, email) => {
     seafileAPI.sysAdminTransferRepo(repoID, email).then((res) => {
@@ -280,7 +280,7 @@ class Repos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

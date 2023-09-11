@@ -21,7 +21,7 @@ class WikiPermissionEditor extends React.Component {
     if (permission === 'public') {
       return gettext('Public');
     }
-  }
+  };
 
   render() {
     return (

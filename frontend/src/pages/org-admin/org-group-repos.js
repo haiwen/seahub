@@ -112,24 +112,24 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   handleDeleteIconClick = (e) => {
     e.preventDefault();
     this.toggleDeleteRepoDialog();
-  }
+  };
 
   toggleDeleteRepoDialog = () => {
     this.setState({
       isDeleteRepoDialogOpen: !this.state.isDeleteRepoDialogOpen
     });
-  }
+  };
 
   deleteRepo = () => {
     const repo = this.props.data;
@@ -146,7 +146,7 @@ class Item extends Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   render() {
     const { deleted, isOpIconShown, isDeleteRepoDialogOpen } = this.state;

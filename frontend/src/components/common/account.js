@@ -32,7 +32,7 @@ class Account extends Component {
 
   getContainer = () => {
     return ReactDOM.findDOMNode(this);
-  }
+  };
 
   handleProps = () => {
     if (this.state.showInfo) {
@@ -40,19 +40,19 @@ class Account extends Component {
     } else {
       this.removeEvents();
     }
-  }
+  };
 
   addEvents = () => {
     ['click', 'touchstart', 'keyup'].forEach(event =>
       document.addEventListener(event, this.handleDocumentClick, true)
     );
-  }
+  };
 
   removeEvents = () => {
     ['click', 'touchstart', 'keyup'].forEach(event =>
       document.removeEventListener(event, this.handleDocumentClick, true)
     );
-  }
+  };
 
   handleDocumentClick = (e) => {
     if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== Utils.keyCodes.tab))) return;
@@ -65,7 +65,7 @@ class Account extends Component {
     this.setState({
       showInfo: !this.state.showInfo,
     });
-  }
+  };
 
   onClickAccount = (e) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ class Account extends Component {
     } else {
       this.setState({showInfo: !this.state.showInfo});
     }
-  }
+  };
 
   renderMenu = () => {
     let data;
@@ -134,20 +134,20 @@ class Account extends Component {
     }
 
     return data && <a href={data.url} title={data.text} className="item">{data.text}</a>;
-  }
+  };
 
   renderAvatar = () => {
     return (<img src={appAvatarURL} width="36" height="36" className="avatar" alt={gettext('Avatar')} />);
-  }
+  };
 
   render() {
     return (
       <div id="account">
-        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext("View profile and more")}>
+        <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
           {this.renderAvatar()}
           <span className="fas fa-caret-down vam"></span>
         </a>
-        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext("View profile and more")} onClick={this.onClickAccount}></span>
+        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
           <div className="outer-caret up-outer-caret">
             <div className="inner-caret"></div>

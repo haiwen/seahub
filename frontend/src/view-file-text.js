@@ -58,7 +58,7 @@ class ViewFileText extends React.Component {
       needSave: true,
       content: value,
     });
-  }
+  };
 
   onSave () {
     if (!this.isParticipant) {
@@ -96,7 +96,7 @@ class ViewFileText extends React.Component {
         this.getParticipants();
       }
     });
-  }
+  };
 
   getParticipants = () => {
     seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
@@ -108,11 +108,11 @@ class ViewFileText extends React.Component {
         });
       }
     });
-  }
+  };
 
   onParticipantsChange = () => {
     this.getParticipants();
-  }
+  };
 
   componentDidMount() {
     this.getParticipants();

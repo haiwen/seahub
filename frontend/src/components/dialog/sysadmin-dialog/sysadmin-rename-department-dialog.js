@@ -39,7 +39,7 @@ class RenameDepartmentDialog extends React.Component {
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -50,26 +50,26 @@ class RenameDepartmentDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       departmentName: e.target.value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   onAfterModelOpened = () => {
     if (!this.newInput.current) return;
     this.newInput.current.focus();
     this.newInput.current.select();
-  }
+  };
 
   render() {
     let header = gettext('Rename Department');

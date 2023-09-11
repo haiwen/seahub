@@ -29,19 +29,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -119,7 +119,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseOut = () => {
     if (!this.props.isItemFreezed) {
@@ -128,7 +128,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -136,7 +136,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onDeleteRepo = () => {
     const repo = this.props.repo;
@@ -148,7 +148,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onRestoreRepo = () => {
     const repo = this.props.repo;
@@ -160,21 +160,21 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleDeleteRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteRepoDialogOpen: !this.state.isDeleteRepoDialogOpen});
-  }
+  };
 
   toggleRestoreRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isRestoreRepoDialogOpen: !this.state.isRestoreRepoDialogOpen});
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -190,7 +190,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -203,7 +203,7 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   render () {
     const { repo } = this.props;
@@ -289,7 +289,7 @@ class TrashRepos extends Component {
 
   toggleCleanTrashDialog = () => {
     this.setState({isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen});
-  }
+  };
 
   getReposByPage = (page) => {
     let perPage = this.state.perPage;
@@ -305,7 +305,7 @@ class TrashRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -313,7 +313,7 @@ class TrashRepos extends Component {
     }, () => {
       this.getReposByPage(1);
     });
-  }
+  };
 
   onDeleteRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
@@ -322,7 +322,7 @@ class TrashRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   onRestoreRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
@@ -331,7 +331,7 @@ class TrashRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   cleanTrash = () => {
     seafileAPI.sysAdminCleanTrashRepos().then(res => {
@@ -341,14 +341,14 @@ class TrashRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search libraries by owner')}
       submit={this.searchRepos}
     />;
-  }
+  };
 
   searchRepos = (owner) => {
     seafileAPI.sysAdminSearchTrashRepos(owner).then((res) => {
@@ -364,7 +364,7 @@ class TrashRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   render() {
     const { isCleanTrashDialogOpen } = this.state;

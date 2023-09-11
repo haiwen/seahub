@@ -73,11 +73,11 @@ class SdocFileHistory extends React.Component {
       toaster.danger(gettext(errorMessage));
       this.setContent('', '');
     });
-  }
+  };
 
   setContent = (currentVersionContent = '', lastVersionContent = '') => {
     this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
-  }
+  };
 
   onShowChanges = (isShowChanges, lastVersion) => {
     if (isShowChanges && lastVersion) {
@@ -102,12 +102,12 @@ class SdocFileHistory extends React.Component {
     this.setState({ isShowChanges }, () => {
       localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
     });
-  }
+  };
 
   setDiffCount = (diff = { value: [], changes: [] }) => {
     const { changes } = diff;
     this.setState({ changes, currentDiffIndex: 0 });
-  }
+  };
 
   jumpToElement = (currentDiffIndex) => {
     this.setState({ currentDiffIndex }, () => {
@@ -118,7 +118,7 @@ class SdocFileHistory extends React.Component {
         this.historyContentRef.scrollTop = changeElement.offsetTop - 10;
       }
     });
-  }
+  };
 
   lastChange = () => {
     const { currentDiffIndex, changes } = this.state;
@@ -127,7 +127,7 @@ class SdocFileHistory extends React.Component {
       return;
     }
     this.jumpToElement(currentDiffIndex - 1);
-  }
+  };
 
   nextChange = () => {
     const { currentDiffIndex, changes } = this.state;
@@ -136,7 +136,7 @@ class SdocFileHistory extends React.Component {
       return;
     }
     this.jumpToElement(currentDiffIndex + 1);
-  }
+  };
 
   renderChangesTip = () => {
     const { isShowChanges, changes, currentDiffIndex, isLoading } = this.state;
@@ -184,7 +184,7 @@ class SdocFileHistory extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
   render() {
     const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading } = this.state;

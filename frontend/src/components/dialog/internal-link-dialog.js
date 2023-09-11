@@ -41,18 +41,18 @@ class InternalLinkDialog extends React.Component {
       toaster.danger(errMessage);
       this.setState({isLoading: false});
     });
-  }
+  };
 
   copyToClipBoard = () => {
     copy(this.state.smartLink);
     const message = gettext('Internal link has been copied to clipboard');
     toaster.success(message, {duration: 2});
     this.toggle();
-  }
+  };
 
   toggle = () => {
     this.props.onInternalLinkDialogToggle();
-  }
+  };
 
   render() {
     const tipMessage = gettext('An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder.');

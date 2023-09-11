@@ -76,25 +76,25 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   toggleDialog = () => {
     this.setState({
       isConfirmUnlinkDialogOpen: !this.state.isConfirmUnlinkDialogOpen
     });
-  }
+  };
 
   handleClick = (e) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ class Item extends Component {
       const wipeDevice = true;
       this.unlinkDevice(wipeDevice);
     }
-  }
+  };
 
   unlinkDevice = (wipeDevice) => {
     const data = this.props.data;
@@ -121,7 +121,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     if (this.state.unlinked) {

@@ -30,17 +30,17 @@ class UploadProgressDialog extends React.Component {
 
   onCancelAllUploading = () => {
     this.props.onCancelAllUploading();
-  }
+  };
 
   onMinimizeUpload = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isMinimized: !this.state.isMinimized});
-  }
+  };
 
   onCloseUpload = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onCloseUploadDialog();
-  }
+  };
 
   render() {
 

@@ -71,7 +71,7 @@ class StatisticFile extends React.Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { labels, filesData, isLoading } = this.state;

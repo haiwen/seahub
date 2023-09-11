@@ -26,13 +26,13 @@ class SysAdminTransferGroupDialog extends React.Component {
       selectedOption: option,
       submitBtnDisabled: option == null
     });
-  }
+  };
 
   submit = () => {
     const receiver = this.state.selectedOption.email;
     this.props.transferGroup(receiver);
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     const { submitBtnDisabled } = this.state;

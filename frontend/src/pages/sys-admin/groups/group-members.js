@@ -22,11 +22,11 @@ class Content extends Component {
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -91,28 +91,28 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   removeMember = () => {
     const { item } = this.props;
     this.props.removeMember(item.email, item.name);
     this.toggleDeleteDialog();
-  }
+  };
 
   updateMemberRole = (role) => {
     this.props.updateMemberRole(this.props.item.email, role);
-  }
+  };
 
   render() {
     let { isOpIconShown, isDeleteDialogOpen } = this.state;
@@ -201,7 +201,7 @@ class GroupMembers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -209,11 +209,11 @@ class GroupMembers extends Component {
     }, () => {
       this.getListByPage(1);
     });
-  }
+  };
 
   toggleAddMemgerDialog = () => {
     this.setState({isAddMemberDialogOpen: !this.state.isAddMemberDialogOpen});
-  }
+  };
 
   addMembers = (emails) => {
     seafileAPI.sysAdminAddGroupMember(this.props.groupID, emails).then(res => {
@@ -238,7 +238,7 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   removeMember = (email, name) => {
     seafileAPI.sysAdminDeleteGroupMember(this.props.groupID, email).then(res => {
@@ -253,7 +253,7 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMemberRole = (email, role) => {
     let isAdmin = role == 'Admin';
@@ -271,7 +271,7 @@ class GroupMembers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let { isAddMemberDialogOpen } = this.state;

@@ -24,13 +24,13 @@ class SysAdminGroupAddMemberDialog extends React.Component {
       selectedOptions: options,
       isSubmitBtnDisabled: !options.length
     });
-  }
+  };
 
   addMembers = () => {
     let emails = this.state.selectedOptions.map(item => item.email);
     this.props.addMembers(emails);
     this.props.toggle();
-  }
+  };
 
   render() {
     const { isSubmitBtnDisabled } = this.state;

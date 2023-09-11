@@ -168,7 +168,7 @@ class Draft extends React.Component {
         }));
         break;
     }
-  }
+  };
 
   onHistoryItemClick = (currentItem, preItem, activeItem) => {
     const preCommitID = preItem.commit_id;
@@ -187,11 +187,11 @@ class Draft extends React.Component {
         this.setDiffViewerContent(content1.data, content2.data);
       }));
     }));
-  }
+  };
 
   onHistoryListChange = (historyList) => {
     this.setState({historyList: historyList });
-  }
+  };
 
   listComments = () => {
     seafileAPI.listComments(draftRepoID, draftFilePath).then((res) => {
@@ -201,31 +201,31 @@ class Draft extends React.Component {
       });
       this.setState({ commentsList: commentsList });
     });
-  }
+  };
 
   addComment = (e) => {
     e.stopPropagation();
     this.getQuote();
     if (!this.quote) return;
     this.setState({ isShowCommentDialog: true });
-  }
+  };
 
   onCommentAdded = () => {
     this.listComments();
     this.toggleCommentDialog();
-  }
+  };
 
   toggleCommentDialog = () => {
     this.setState({
       isShowCommentDialog: !this.state.isShowCommentDialog
     });
-  }
+  };
 
   getOriginRepoInfo = () => {
     seafileAPI.getRepoInfo(draftRepoID).then((res) => {
       this.setState({ originRepoName: res.data.repo_name });
     });
-  }
+  };
 
   getDraftInfo = () => {
     if (draftStatus === 'open') {
@@ -233,7 +233,7 @@ class Draft extends React.Component {
         this.setState({ draftInfo: res.data });
       });
     }
-  }
+  };
 
   getChangedNodes = () => {
     const nodes = this.refs.diffViewer.value;
@@ -253,7 +253,7 @@ class Draft extends React.Component {
     this.setState({
       changedNodes: keys
     });
-  }
+  };
 
   scrollToChangedNode = (scroll) => {
     if (this.state.changedNodes.length == 0) return;
@@ -279,7 +279,7 @@ class Draft extends React.Component {
     } else {
       scroller.scrollTop = element.offsetTop;
     }
-  }
+  };
 
   findScrollContainer = (element, window) => {
     let parent = element.parentNode;
@@ -299,7 +299,7 @@ class Draft extends React.Component {
       return window.document.body;
     }
     return scroller;
-  }
+  };
 
   scrollToQuote = (newIndex, oldIndex, quote) => {
     const nodes = this.refs.diffViewer.value;
@@ -320,7 +320,7 @@ class Draft extends React.Component {
         scroller.scrollTop = element.offsetTop;
       }
     }
-  }
+  };
 
   showDiffViewer = () => {
     return (
@@ -342,7 +342,7 @@ class Draft extends React.Component {
         <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
       </div>
     );
-  }
+  };
 
   listReviewers = () => {
     seafileAPI.listDraftReviewers(draftID).then((res) => {
@@ -350,7 +350,7 @@ class Draft extends React.Component {
         reviewers: res.data.reviewers
       });
     });
-  }
+  };
 
   onSwitchShowDiff = () => {
     if (!this.state.isShowDiff) {
@@ -362,13 +362,13 @@ class Draft extends React.Component {
     this.setState({
       isShowDiff: !this.state.isShowDiff,
     });
-  }
+  };
 
   toggleDiffTip = () => {
     this.setState({
       showDiffTip: !this.state.showDiffTip
     });
-  }
+  };
 
   toggleAddReviewerDialog = () => {
     if (this.state.showReviewerDialog) {
@@ -377,7 +377,7 @@ class Draft extends React.Component {
     this.setState({
       showReviewerDialog: !this.state.showReviewerDialog
     });
-  }
+  };
 
   showDiffButton = () => {
     return (
@@ -393,7 +393,7 @@ class Draft extends React.Component {
           {gettext('View diff')}</Tooltip>
       </div>
     );
-  }
+  };
 
   onPublishDraft = () => {
     seafileAPI.publishDraft(draftID).then(res => {
@@ -401,7 +401,7 @@ class Draft extends React.Component {
         draftStatus: res.data.draft_status,
       });
     });
-  }
+  };
 
   initialDiffViewerContent = () => {
     seafileAPI.listFileHistoryRecords(draftRepoID, draftFilePath, 1, 25).then((res) => {
@@ -432,7 +432,7 @@ class Draft extends React.Component {
         });
       }
     });
-  }
+  };
 
   setDiffViewerContent = (newContent, prevContent) => {
     this.setState({
@@ -440,13 +440,13 @@ class Draft extends React.Component {
       draftOriginContent: prevContent,
       isLoading: false,
     });
-  }
+  };
 
   setURL = (newurl) => {
     let url = new URL(window.location.href);
     url.set('hash', newurl);
     window.location.href = url.toString();
-  }
+  };
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -462,7 +462,7 @@ class Draft extends React.Component {
         activeTab: tab
       });
     }
-  }
+  };
 
   showNavItem = (showTab) => {
     const commentsNumber = this.state.commentsList.length;
@@ -502,7 +502,7 @@ class Draft extends React.Component {
           </NavItem>
         );
     }
-  }
+  };
 
   getDomNodeByPath = (path) => {
     let node, parent = document.querySelector('.viewer-component');
@@ -515,7 +515,7 @@ class Draft extends React.Component {
       parent = node;
     }
     return node;
-  }
+  };
 
   setBtnPosition = () => {
     const nativeSelection = window.getSelection();
@@ -546,7 +546,7 @@ class Draft extends React.Component {
     } else {
       style.top = '-1000px';
     }
-  }
+  };
 
   getQuote = () => {
     if (!this.range) return;
@@ -554,7 +554,7 @@ class Draft extends React.Component {
     const node = window.viewer.children[this.range.anchor.path[0]];
     this.newIndex = node.data['new_index'];
     this.oldIndex = node.data['old_index'];
-  }
+  };
 
   componentDidMount() {
     this.getOriginRepoInfo();
@@ -582,7 +582,7 @@ class Draft extends React.Component {
         }
         return this.showDiffButton();
     }
-  }
+  };
 
   renderNavItems = () => {
     switch (draftStatus) {
@@ -617,7 +617,7 @@ class Draft extends React.Component {
           </Nav>
         );
     }
-  }
+  };
 
   renderContent = () => {
     switch(draftStatus) {
@@ -632,7 +632,7 @@ class Draft extends React.Component {
         }
         return this.showDiffViewer();
     }
-  }
+  };
 
   render() {
     const { draftInfo, reviewers, originRepoName, draftStatus } = this.state;

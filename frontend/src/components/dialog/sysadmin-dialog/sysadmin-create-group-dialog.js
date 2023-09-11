@@ -30,30 +30,30 @@ class SysAdminCreateGroupDialog extends React.Component {
     }
 
     this.setState({groupName: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     let groupName = this.state.groupName.trim();
     this.props.createGroup(groupName, this.state.ownerEmail);
-  }
+  };
 
   handleSelectChange = (option) => {
     // option can be null
     this.setState({
       ownerEmail: option ? option.email : ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (

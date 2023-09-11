@@ -16,7 +16,7 @@ class CustomPermissionEditor extends React.Component {
 
   static defaultProps = {
     mode: 'add'
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -58,14 +58,14 @@ class CustomPermissionEditor extends React.Component {
     const newName = evt.target.value;
     if (newName === permission_name) return;
     this.setState({permission_name: newName});
-  }
+  };
 
   onChangePermissionDescription = (evt) => {
     const { permission_desc } = this.state;
     const newDescription = evt.target.value;
     if (newDescription === permission_desc) return;
     this.setState({permission_desc: newDescription});
-  }
+  };
 
   onChangePermission = (type) => {
     return () => {
@@ -74,7 +74,7 @@ class CustomPermissionEditor extends React.Component {
       const newPermission = Object.assign({}, permission, {[type]: value});
       this.setState({permission: newPermission});
     };
-  }
+  };
 
   validParams = () => {
     const { permission_name, permission_desc } = this.state;
@@ -91,7 +91,7 @@ class CustomPermissionEditor extends React.Component {
 
     isValid = true;
     return { isValid };
-  }
+  };
 
   onUpdateCustomPermission = () => {
     const { permission_name, permission_desc, permission } = this.state;
@@ -101,11 +101,11 @@ class CustomPermissionEditor extends React.Component {
       return;
     }
     this.props.onUpdateCustomPermission(permission_name, permission_desc, permission);
-  }
+  };
 
   toggle = () => {
     this.setState({tooltipOpen: !this.state.tooltipOpen});
-  }
+  };
 
   render() {
 

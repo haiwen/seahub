@@ -32,7 +32,7 @@ class AddRepoDialog extends React.Component {
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -43,20 +43,20 @@ class AddRepoDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       repoName: e.target.value,
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (

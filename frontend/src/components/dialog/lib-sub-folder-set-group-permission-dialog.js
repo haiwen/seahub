@@ -19,28 +19,28 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteGroupPermissionItem = () => {
     let item = this.props.item;
     this.props.deleteGroupPermissionItem(item);
-  }
+  };
 
   onChangeGroupPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeGroupPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
-          <a href={`${siteRoot}group/${item.group_id}/`} target="_blank">{item.group_name}</a>
+          <a href={`${siteRoot}group/${item.group_id}/`} target="_blank" rel="noreferrer">{item.group_name}</a>
         </td>
         {this.props.showPath &&
           <td>
@@ -107,7 +107,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -124,7 +124,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         };
       });
     });
-  }
+  };
 
   listGroupPermissionItems = () => {
     const { isDepartmentRepo, repoID, folderPath } = this.props;
@@ -138,11 +138,11 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         });
       }
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   addGroupFolderPerm = () => {
     const { selectedOption } = this.state;
@@ -184,7 +184,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         errorMsg: [errorMsg]
       });
     });
-  }
+  };
 
   deleteGroupPermissionItem = (item) => {
     const request = this.props.isDepartmentRepo ?
@@ -195,7 +195,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
         groupPermissionItems: this.state.groupPermissionItems.filter(deletedItem => { return deletedItem != item; })
       });
     });
-  }
+  };
 
   onChangeGroupPermission = (item, permission) => {
     const request = this.props.isDepartmentRepo ?
@@ -204,7 +204,7 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
     request.then(() => {
       this.updateGroupPermission(item, permission);
     });
-  }
+  };
 
   updateGroupPermission = (item, permission) => {
     let groupID = item.group_id;
@@ -216,38 +216,38 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
       return sharedItem;
     });
     this.setState({groupPermissionItems: groupPermissionItems});
-  }
+  };
 
   onSetSubFolder = (e) => {
     this.setState({
       folderPath: e.target.value
     });
-  }
+  };
 
   toggleFileChooser = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser,
       folderPath: ''
     });
-  }
+  };
 
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
     });
-  }
+  };
 
   handleSubmit = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser
     });
-  }
+  };
 
   onRepoItemClick = () => {
     this.setState({
       folderPath: '/'
     });
-  }
+  };
 
   render() {
     let showPath = this.props.folderPath ? false : true;

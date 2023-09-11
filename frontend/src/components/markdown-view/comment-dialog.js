@@ -28,7 +28,7 @@ class CommentDialog extends React.Component {
     this.setState({
       comment: comment
     });
-  }
+  };
 
   submitComment = () => {
     let comment = this.state.comment.trim();
@@ -42,7 +42,7 @@ class CommentDialog extends React.Component {
         this.props.onCommentAdded();
       });
     }
-  }
+  };
 
   setQuoteText = (mdQuote) => {
     processor.process(mdQuote).then(
@@ -53,7 +53,7 @@ class CommentDialog extends React.Component {
         });
       }
     );
-  }
+  };
 
   componentDidMount() {
     this.setQuoteText(this.props.quote);

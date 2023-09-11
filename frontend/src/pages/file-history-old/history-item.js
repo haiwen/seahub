@@ -29,18 +29,18 @@ class HistoryItem extends React.Component {
     this.setState({
       active: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       active: false
     });
-  }
+  };
 
   onItemRestore = (e) => {
     e.preventDefault();
     this.props.onItemRestore(this.props.item);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -58,7 +58,7 @@ class HistoryItem extends React.Component {
           </td>
           <td>
             <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
-            <a href={userProfileURL} target='_blank' className="username">{item.creator_name}</a>
+            <a href={userProfileURL} target='_blank' className="username" rel="noreferrer">{item.creator_name}</a>
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td>
@@ -105,7 +105,7 @@ class MoreMenu extends React.PureComponent {
 
   dropdownToggle = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  }
+  };
 
   render() {
     const { index, downloadUrl, viewUrl, diffUrl, snapshotURL, onItemRestore, canCompare, canDownload } = this.props;

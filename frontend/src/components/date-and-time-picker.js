@@ -31,7 +31,7 @@ class Picker extends React.Component {
 
   getCalendarContainer = () => {
     return this.calendarContainerRef.current;
-  }
+  };
 
   render() {
     const props = this.props;

@@ -22,11 +22,11 @@ class WikiListView extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let { loading, errorMsg, wikis } = this.props.data;

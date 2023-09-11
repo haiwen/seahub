@@ -14,7 +14,7 @@ class ListCreatedFileDialog extends React.Component {
 
   toggle = (activity) => {
     this.props.toggleCancel(activity);
-  }
+  };
 
   render() {
     let activity = this.props.activity;
@@ -36,7 +36,7 @@ class ListCreatedFileDialog extends React.Component {
                   if (item.name.endsWith('(draft).md')) {
                     fileURL = serviceURL + '/drafts/' + item.draft_id + '/';
                   }
-                  let fileLink = <a href={fileURL} target='_blank'>{item.name}</a>;
+                  let fileLink = <a href={fileURL} target='_blank' rel="noreferrer">{item.name}</a>;
                   if (item.name.endsWith('(draft).md') && !item.draft_id) {
                     fileLink = item.name;
                   }

@@ -148,19 +148,19 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({
       showOpIcon: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       showOpIcon: false
     });
-  }
+  };
 
   unstar = (e) => {
     e.preventDefault();
@@ -172,7 +172,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   visitItem = () => {
     const data = this.props.data;
@@ -181,7 +181,7 @@ class Item extends Component {
     } else {
       window.open(data.dirent_view_url);
     }
-  }
+  };
 
   render() {
 
@@ -207,7 +207,7 @@ class Item extends Component {
         <td>
           { data.is_dir ?
             <Link to={linkUrl}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
           }
         </td>
         <td>{data.repo_name}</td>
@@ -230,7 +230,7 @@ class Item extends Component {
         <td onClick={this.visitItem}>
           { data.is_dir ?
             <Link to={linkUrl}>{data.obj_name}</Link> :
-            <a className="normal" href={data.dirent_view_url} target="_blank">{data.obj_name}</a>
+            <a className="normal" href={data.dirent_view_url} target="_blank" rel="noreferrer">{data.obj_name}</a>
           }
           <br />
           <span className="item-meta-info">{data.repo_name}</span>

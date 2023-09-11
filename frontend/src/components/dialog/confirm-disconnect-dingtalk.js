@@ -18,7 +18,7 @@ class ConfirmDisconnectDingtalk extends Component {
 
   disconnect = () => {
     this.form.current.submit();
-  }
+  };
 
   render() {
     const {formActionURL, csrfToken, toggle} = this.props;

@@ -74,18 +74,18 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   leaveShare = (e) => {
     e.preventDefault();
     this.props.leaveShare(this.props.item);
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -150,7 +150,7 @@ class SharedWithOCM extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

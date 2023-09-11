@@ -62,15 +62,15 @@ class DepartmentMembers extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({membersErrorMsg: errMessage});
     });
-  }
+  };
 
   getPreviousPageList = () => {
     this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page - 1, this.state.perPage);
-  }
+  };
 
   getNextPageList = () => {
     this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page + 1, this.state.perPage);
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -78,31 +78,31 @@ class DepartmentMembers extends React.Component {
     }, () => {
       this.listMembers(this.props.groupID, 1, perPage);
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showDeleteMemberDialog: false,
     });
-  }
+  };
 
   onMemberChanged = () => {
     this.listMembers(this.props.groupID, this.state.currentPageInfo.current_page, this.state.perPage);
-  }
+  };
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
-  }
+  };
 
   showDeleteMemberDialog = (member) => {
     this.setState({ showDeleteMemberDialog: true, deletedMember: member });
-  }
+  };
 
   onAddNewMembers = (newMembers) => {
     const { members } = this.state;
     members.unshift(...newMembers);
     this.setState({ members });
-  }
+  };
 
   render() {
     const { members, membersErrorMsg } = this.state;

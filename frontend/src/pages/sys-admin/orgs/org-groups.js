@@ -69,23 +69,23 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteGroup = () => {
     this.toggleDeleteDialog();
     this.props.deleteGroup(this.props.item.group_id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -164,7 +164,7 @@ class OrgGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

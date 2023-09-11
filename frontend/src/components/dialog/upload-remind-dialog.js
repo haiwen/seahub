@@ -15,17 +15,17 @@ class UploadRemindDialog extends React.Component {
   toggle = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.cancelFileUpload();
-  }
+  };
 
   replaceRepetitionFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.replaceRepetitionFile();
-  }
+  };
 
   uploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.uploadFile();
-  }
+  };
 
   render() {
     const { fileName } = this.props.currentResumableFile;

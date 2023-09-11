@@ -18,11 +18,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getLogsByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -94,7 +94,7 @@ class Item extends Component {
       case 'user_delete': return gettext('Delete User');
       default: return '';
     }
-  }
+  };
 
   getOperationDetail = (item) => {
     let detail = item.detail;
@@ -173,7 +173,7 @@ class Item extends Component {
 
       default: return '';
     }
-  }
+  };
 
   render() {
     let { item } = this.props;
@@ -231,13 +231,13 @@ class AdminOperationLogs extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getLogsByPage(this.initPage));
-  }
+  };
 
   render() {
     let { logList, currentPage, perPage, hasNextPage } = this.state;

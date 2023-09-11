@@ -66,7 +66,7 @@ class SetLinkExpiration extends React.Component {
     } else if (minDays === 0 && maxDays !== 0) {
       return current.isBefore(moment(), 'day') || current.isAfter(endDay, 'day');
     }
-  }
+  };
 
   render() {
     const {

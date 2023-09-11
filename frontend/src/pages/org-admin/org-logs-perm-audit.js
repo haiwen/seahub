@@ -47,7 +47,7 @@ class OrgLogsFileUpdate extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -59,11 +59,11 @@ class OrgLogsFileUpdate extends Component {
       page = page - 1;
     }
     this.initData(page);
-  }
+  };
 
   filterUser = (userSelected) => {
     this.setState({ userSelected: userSelected });
-  }
+  };
 
   render() {
     let eventList = this.state.eventList;
@@ -137,7 +137,7 @@ class PermAuditItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -146,7 +146,7 @@ class PermAuditItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   renderFromUser = (permEvent) => {
     if (!permEvent.from_user_email) {
@@ -167,11 +167,11 @@ class PermAuditItem extends React.Component {
         </Dropdown>
       </span>
     );
-  }
+  };
 
   toggleUserDropdown = () => {
     this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
-  }
+  };
 
   renderToUser = (permEvent) => {
     if (permEvent.type.indexOf('public') != -1) {
@@ -189,7 +189,7 @@ class PermAuditItem extends React.Component {
       return <a href={siteRoot + 'org/useradmin/info/' + permEvent.to_user_email + '/'}>{permEvent.to_user_name}</a>;
     }
 
-  }
+  };
 
   renderType = (type) => {
     if (type.indexOf('add') != -1) {
@@ -202,7 +202,7 @@ class PermAuditItem extends React.Component {
       type = 'Delete';
     }
     return type;
-  }
+  };
 
   renderRepo = (permEvent) => {
     let repoName = 'Deleted';
@@ -210,7 +210,7 @@ class PermAuditItem extends React.Component {
       repoName = permEvent.repo_name;
     }
     return repoName;
-  }
+  };
 
   renderFolder = (name) => {
     let folderName = '/';
@@ -218,7 +218,7 @@ class PermAuditItem extends React.Component {
       folderName = name;
     }
     return folderName;
-  }
+  };
 
   render() {
     let { permEvent } = this.props;

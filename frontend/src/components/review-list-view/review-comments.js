@@ -28,7 +28,7 @@ class ReviewComments extends React.Component {
 
   handleCommentChange = (event) => {
     this.setState({ comment: event.target.value });
-  }
+  };
 
   submitComment = () => {
     let comment = this.state.comment.trim();
@@ -41,7 +41,7 @@ class ReviewComments extends React.Component {
       });
       this.setState({ comment: '' });
     }
-  }
+  };
 
   resolveComment = (event) => {
     seafileAPI.updateComment(draftRepoID, event.target.id, 'true').then((res) => {
@@ -50,7 +50,7 @@ class ReviewComments extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   editComment = (commentID, newComment) => {
     seafileAPI.updateComment(draftRepoID, commentID, null, null, newComment).then((res) => {
@@ -59,7 +59,7 @@ class ReviewComments extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteComment = (event) => {
     seafileAPI.deleteComment(draftRepoID, event.target.id).then((res) => {
@@ -68,12 +68,12 @@ class ReviewComments extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   scrollToQuote = (newIndex, oldIndex, quote) => {
     this.props.scrollToQuote(newIndex, oldIndex, quote);
     this.setState({ comment: '' });
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.commentsList.length < nextProps.commentsList.length) {
@@ -152,7 +152,7 @@ class CommentItem extends React.Component {
 
   toggleDropDownMenu = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  }
+  };
 
   convertComment = (item) => {
     processor.process(item.comment).then((result) => {
@@ -163,16 +163,16 @@ class CommentItem extends React.Component {
       let quote = String(result);
       this.setState({ quote: quote });
     });
-  }
+  };
 
   scrollToQuote = () => {
     const item = this.props.item;
     this.props.scrollToQuote(item.newIndex, item.oldIndex, item.quote);
-  }
+  };
 
   toggleEditComment = () => {
     this.setState({ editable: !this.state.editable });
-  }
+  };
 
   updateComment = (event) => {
     const newComment = this.state.newComment;
@@ -180,11 +180,11 @@ class CommentItem extends React.Component {
       this.props.editComment(event.target.id, newComment);
     }
     this.toggleEditComment();
-  }
+  };
 
   handleCommentChange = (event) => {
     this.setState({ newComment: event.target.value });
-  }
+  };
 
   componentWillMount() {
     this.convertComment(this.props.item);

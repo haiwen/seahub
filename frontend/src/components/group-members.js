@@ -84,7 +84,7 @@ class Member extends React.PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteMember = () => {
     const { item } = this.props;
@@ -95,21 +95,21 @@ class Member extends React.PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleMouseOver = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: true,
     });
-  }
+  };
 
   handleMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: false,
     });
-  }
+  };
 
   translateRole = (role) => {
     if (role === 'Admin') {
@@ -121,7 +121,7 @@ class Member extends React.PureComponent {
     else if (role === 'Owner') {
       return gettext('Owner');
     }
-  }
+  };
 
   render() {
     const { item, isOwner } = this.props;

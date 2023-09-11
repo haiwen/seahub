@@ -64,19 +64,19 @@ class FileToolbar extends React.Component {
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
-  }
+  };
 
   toggleMoreOpMenu = () => {
     this.setState({
       moreDropdownOpen: !this.state.moreDropdownOpen
     });
-  }
+  };
 
   toggle = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   render() {
     if (this.state.isLoading) {

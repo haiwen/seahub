@@ -71,24 +71,24 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleUnshareRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen});
-  }
+  };
 
   unshareRepo = () => {
     const { item } = this.props;
     this.props.unshareRepo(item.repo_id, item.name);
     this.toggleUnshareRepoDialog();
-  }
+  };
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -103,7 +103,7 @@ class Item extends Component {
     } else {
       return '--';
     }
-  }
+  };
 
   render() {
     let { isOpIconShown, isUnshareRepoDialogOpen } = this.state;
@@ -184,7 +184,7 @@ class GroupRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

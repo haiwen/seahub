@@ -12,7 +12,7 @@ class CollabUsersButton extends React.PureComponent {
 
   dropdownToggle = () => {
     this.setState({dropdownOpen: !this.state.dropdownOpen});
-  }
+  };
 
   render() {
     return (

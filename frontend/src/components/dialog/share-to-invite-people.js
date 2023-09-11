@@ -21,21 +21,21 @@ class UserItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({ isOperationShow: true });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({ isOperationShow: false });
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.token);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item.token, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -122,14 +122,14 @@ class ShareToInvitePeople extends React.Component {
         errorMsg: '',
       });
     }
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
       this.shareAndInvite();
     }
-  }
+  };
 
   componentDidMount() {
     const path = this.props.itemPath;
@@ -146,14 +146,14 @@ class ShareToInvitePeople extends React.Component {
 
   setPermission = (permission) => {
     this.setState({ permission: permission });
-  }
+  };
 
   onInvitePeople = (successArray) => {
     successArray.push.apply(successArray, this.state.sharedItems);
     this.setState({
       sharedItems: successArray,
     });
-  }
+  };
 
   shareAndInvite = () => {
     let emails = this.state.emails.trim();
@@ -210,7 +210,7 @@ class ShareToInvitePeople extends React.Component {
       toaster.danger(errorMsg);
       this.setState({ isSubmitting: false });
     });
-  }
+  };
 
   deleteShareItem = (token) => {
     const path = this.props.itemPath;
@@ -224,7 +224,7 @@ class ShareToInvitePeople extends React.Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (token, permission) => {
     const path = this.props.itemPath;
@@ -236,7 +236,7 @@ class ShareToInvitePeople extends React.Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (token, permission) => {
     let sharedItems = this.state.sharedItems.map(sharedItem => {
@@ -246,7 +246,7 @@ class ShareToInvitePeople extends React.Component {
       return sharedItem;
     });
     this.setState({ sharedItems: sharedItems });
-  }
+  };
 
   render() {
     let { sharedItems, isSubmitting } = this.state;

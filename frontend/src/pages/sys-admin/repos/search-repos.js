@@ -40,11 +40,11 @@ class SearchRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   searchRepos = () => {
     this.getRepos();
-  }
+  };
 
   onDeleteRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
@@ -53,7 +53,7 @@ class SearchRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   onTransferRepo = (targetRepo) => {
     let repos = this.state.repos.map((item) => {
@@ -62,20 +62,20 @@ class SearchRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   handleNameInputChange = (e) => {
     this.setState({
       name: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { name } = this.state;
     this.setState({
       isSubmitBtnActive: name.trim()
     });
-  }
+  };
 
   render() {
     const { name, isSubmitBtnActive } = this.state;

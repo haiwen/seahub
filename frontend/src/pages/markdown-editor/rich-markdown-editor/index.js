@@ -41,7 +41,7 @@ class RichMarkdownEditor extends React.Component {
       isShowSidePanel: !this.state.isShowSidePanel,
       isShowHelpPanel: false,
     });
-  }
+  };
 
   showHelpDialog = () => {
     this.setState({isShowSidePanel: false, isShowHelpPanel: true});
@@ -53,21 +53,21 @@ class RichMarkdownEditor extends React.Component {
 
   toggleCommentBtn = (isSupport = false) => {
     this.setState({isSupportComment: isSupport});
-  }
+  };
 
   onAddComment = () => {
     this.setState({relistComment: this.state.relistComment + 1});
-  }
+  };
 
   insertRepoFile = () => {
     if (this.props.readOnly) return;
     this.props.openDialogs && this.props.openDialogs('insert_file');
-  }
+  };
 
   addLink = (fileName, url, isImage) => {
     const editorRef = EditorContext.getEditorRef();
     editorRef.addLink(fileName, url, isImage);
-  }
+  };
 
   render() {
     const hasSidePanel = true;
@@ -80,7 +80,7 @@ class RichMarkdownEditor extends React.Component {
     return (
       <div className='seafile-markdown-editor'>
         <div className='markdown-editor-toolbar'>
-          <Toolbar 
+          <Toolbar
             hasSidePanel={hasSidePanel}
             isShowSidePanel={isShowSidePanel}
             toggleSidePanel={this.toggleSidePanel}
@@ -102,7 +102,7 @@ class RichMarkdownEditor extends React.Component {
           </div>
           <div className={`markdown-help-wrapper ${isShowHelpWrapper ? 'show' : ''}`} style={helpWrapperStyle}>
             {isShowSidePanel && (
-              <SidePanel 
+              <SidePanel
                 document={value}
                 fileInfo={this.props.fileInfo}
                 relistComment={this.state.relistComment}

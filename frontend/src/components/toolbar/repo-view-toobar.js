@@ -26,27 +26,27 @@ class RepoViewToolbar extends React.Component {
   onCreateRepo = (repo) => {
     this.props.onCreateRepo(repo);
     this.onCreateToggle();
-  }
+  };
 
   onCreateToggle = () => {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
-  }
+  };
 
   toggleMore = () => {
     this.setState({ isOpen: !this.state.isOpen });
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.toggleMore();
     }
-  }
+  };
 
   visitDeletedviaKey = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       navigate(`${siteRoot}my-libs/deleted/`);
     }
-  }
+  };
 
   render() {
     return (

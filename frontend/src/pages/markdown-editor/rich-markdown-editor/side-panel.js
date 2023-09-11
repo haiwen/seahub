@@ -19,28 +19,28 @@ const propTypes = {
 };
 
 class SidePanel extends React.PureComponent {
-  
+
   state = {
     navItem: 'outline'
-  }
+  };
 
   onOutlineClick = (event) => {
     event.preventDefault();
     this.props.toggleCommentBtn(false);
     this.setState({navItem: 'outline'});
-  }
+  };
 
   onDetailClick = (event) => {
     event.preventDefault();
     this.props.toggleCommentBtn(false);
     this.setState({navItem: 'detail'});
-  }
+  };
 
   onCommentsPanelClick = (event) => {
     event.preventDefault();
     this.props.toggleCommentBtn(true);
     this.setState({navItem: 'commentsPanel'});
-  }
+  };
 
   render() {
     var outlineActive = '';

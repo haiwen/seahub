@@ -27,7 +27,7 @@ class OrgSAMLConfig extends Component {
 
   toggleBtns = () => {
     this.setState({isBtnsShown: !this.state.isBtnsShown});
-  }
+  };
 
   hideBtns = () => {
     if (!this.state.isBtnsShown) return;
@@ -35,7 +35,7 @@ class OrgSAMLConfig extends Component {
       this.setState({newUrlPrefix: this.state.orgUrlPrefix});
     }
     this.toggleBtns();
-  }
+  };
 
   onSubmit = () => {
     const newUrlPrefix = this.state.newUrlPrefix.trim();
@@ -43,23 +43,23 @@ class OrgSAMLConfig extends Component {
       this.updateUrlPrefix(newUrlPrefix);
     }
     this.toggleBtns();
-  }
+  };
 
   inputOrgUrlPrefix = (e) => {
     this.setState({newUrlPrefix: e.target.value});
-  }
+  };
 
   inputMetadataUrl = (e) => {
     this.setState({metadataUrl: e.target.value});
-  }
+  };
 
   inputSingleSignOnService = (e) => {
     this.setState({singleSignOnService: e.target.value});
-  }
+  };
 
   inputSingleLogoutService = (e) => {
     this.setState({singleLogoutService: e.target.value});
-  }
+  };
 
   componentDidMount() {
     seafileAPI.orgAdminGetUrlPrefix(orgID).then((res) => {
@@ -99,7 +99,7 @@ class OrgSAMLConfig extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   postIdpCertificate = (file) => {
     seafileAPI.orgAdminUploadIdpCertificate(orgID, file).then(() => {
@@ -108,7 +108,7 @@ class OrgSAMLConfig extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   addSamlConfig = () => {
     const { metadataUrl } = this.state;
@@ -122,7 +122,7 @@ class OrgSAMLConfig extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSamlConfig = () => {
     const { metadataUrl } = this.state;
@@ -136,7 +136,7 @@ class OrgSAMLConfig extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteSamlConfig = () => {
     seafileAPI.orgAdminDeleteSamlConfig(orgID).then(() => {
@@ -149,7 +149,7 @@ class OrgSAMLConfig extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg, samlConfigID, newUrlPrefix, metadataUrl, isBtnsShown } = this.state;

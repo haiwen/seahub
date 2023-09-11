@@ -22,7 +22,7 @@ class ConfirmRestoreRepo extends Component {
       btnDisabled: true
     });
     this.props.restoreRepo();
-  }
+  };
 
   render() {
     const {formActionURL, csrfToken, toggle} = this.props;

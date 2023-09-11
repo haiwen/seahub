@@ -20,7 +20,7 @@ class SysAdminUserMembershipEditor extends React.Component {
       case 'not_is_org_staff':
         return gettext('Member');
     }
-  }
+  };
 
   render() {
     return (

@@ -49,18 +49,18 @@ class SearchFileDialog extends React.Component {
         isSubmitting: false
       });
     });
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.searchFile();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   handleInputChange = (e) => {
     const q = e.target.value;
@@ -68,7 +68,7 @@ class SearchFileDialog extends React.Component {
       q: q,
       isSubmitDisabled: !q.trim()
     });
-  }
+  };
 
   render() {
     const { q, errMessage, fileList, isSubmitDisabled, isSubmitting } = this.state;

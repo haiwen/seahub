@@ -48,48 +48,48 @@ class LinkDetails extends React.Component {
     const { sharedLinkInfo } = this.props;
     copy(sharedLinkInfo.link);
     toaster.success(gettext('Share link is copied to the clipboard.'));
-  }
+  };
 
   onCopyDownloadLink = () => {
     const { sharedLinkInfo } = this.props;
     copy(`${sharedLinkInfo.link}?dl=1`);
     toaster.success(gettext('Direct download link is copied to the clipboard.'));
-  }
+  };
 
   toggleStoredPasswordVisible = () => {
     this.setState({
       storedPasswordVisible: !this.state.storedPasswordVisible
     });
-  }
+  };
 
   handleMouseOverExpirationEditIcon = () => {
     this.setState({isExpirationEditIconShow: true});
-  }
+  };
 
   handleMouseOutExpirationEditIcon = () => {
     this.setState({isExpirationEditIconShow: false});
-  }
+  };
 
   editingExpirationToggle = () => {
     this.setState({isEditingExpiration: !this.state.isEditingExpiration});
-  }
+  };
 
   setExpType = (e) => {
     this.setState({
       expType: e.target.value
     });
-  }
+  };
 
   onExpDateChanged = (value) => {
     this.setState({
       expDate: value
     });
-  }
+  };
 
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
     this.setState({expireDays: day});
-  }
+  };
 
   updateExpiration = () => {
     const { sharedLinkInfo } = this.props;
@@ -109,15 +109,15 @@ class LinkDetails extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   changePerm = (permission) => {
     const { sharedLinkInfo } = this.props;
@@ -128,25 +128,25 @@ class LinkDetails extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleLinkDeleteDialog = () => {
     this.setState({isLinkDeleteDialogOpen: !this.state.isLinkDeleteDialogOpen});
-  }
+  };
 
   toggleSendLink = () => {
     this.setState({ isSendLinkShown: !this.state.isSendLinkShown });
-  }
+  };
 
   deleteLink = () => {
     const { sharedLinkInfo } = this.props;
     const { token } = sharedLinkInfo;
     this.props.deleteLink(token);
-  }
+  };
 
   goBack = () => {
     this.props.showLinkDetails(null);
-  }
+  };
 
   render() {
     const { sharedLinkInfo, permissionOptions } = this.props;

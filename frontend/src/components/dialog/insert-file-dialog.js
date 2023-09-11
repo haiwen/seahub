@@ -24,7 +24,7 @@ class InsertFileDialog extends React.Component {
   handleInsert = () => {
     this.props.getInsertLink(this.state.repo.repo_id, this.state.selectedPath);
     this.props.toggleCancel();
-  }
+  };
 
   onDirentItemClick = (repo, selectedPath, dirent) => {
     if (dirent.type === 'file') {
@@ -39,14 +39,14 @@ class InsertFileDialog extends React.Component {
         selectedPath: '',
       });
     }
-  }
+  };
 
   onRepoItemClick = () => {
     this.setState({
       repo: null,
       selectedPath: '',
     });
-  }
+  };
 
   render() {
     const toggle = this.props.toggleCancel;

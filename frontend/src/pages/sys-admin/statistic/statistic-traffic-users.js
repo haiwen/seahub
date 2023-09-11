@@ -42,18 +42,18 @@ class UsersTraffic extends React.Component {
 
   getPreviousPage = () => {
     this.getTrafficList(this.state.month, this.state.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.getTrafficList(this.state.month, this.state.currentPage + 1);
-  }
+  };
 
   handleChange = (e) => {
     let month = e.target.value;
     this.setState({
       month: month
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     let { month } = this.state;
@@ -70,7 +70,7 @@ class UsersTraffic extends React.Component {
       e.target.blur();
       e.preventDefault();
     }
-  }
+  };
 
   getTrafficList = (month, page) => {
     const { perPage, sortBy, sortOrder } = this.state;
@@ -92,7 +92,7 @@ class UsersTraffic extends React.Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   sortItems = (sortBy) => {
     this.setState({
@@ -102,13 +102,13 @@ class UsersTraffic extends React.Component {
       const { month, currentPage } = this.state;
       this.getTrafficList(month, currentPage);
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getTrafficList(this.initMonth, this.initPage));
-  }
+  };
 
   render() {
     const {

@@ -39,19 +39,19 @@ class SetGroupQuotaDialog extends React.Component {
       const err = gettext('Quota is invalid.');
       this.setState({ errMessage: err });
     }
-  }
+  };
 
   handleChange = (e) => {
     const quota = e.target.value.trim();
     this.setState({ quota: quota });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.setGroupQuota();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (

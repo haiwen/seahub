@@ -23,11 +23,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -92,7 +92,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -101,7 +101,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -109,18 +109,18 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleRevokeAdminDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
-  }
+  };
 
   revokeAdmin = () => {
     this.props.revokeAdmin(this.props.item);
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch (operation) {
@@ -128,7 +128,7 @@ class Item extends Component {
         this.toggleRevokeAdminDialog();
         break;
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -138,7 +138,7 @@ class Item extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -231,7 +231,7 @@ class InstitutionAdmins extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
@@ -244,7 +244,7 @@ class InstitutionAdmins extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { institutionName } = this.state;

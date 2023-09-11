@@ -23,19 +23,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getItemsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getItemsByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage, hasNextPage, currentPage } = this.props;
@@ -110,7 +110,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -119,7 +119,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -127,11 +127,11 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   deleteItem = () => {
     this.props.deleteItem(this.props.item);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -141,7 +141,7 @@ class Item extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -151,7 +151,7 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   getInviteTypeText = () => {
     let translateResult = '';
@@ -161,7 +161,7 @@ class Item extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -256,7 +256,7 @@ class Invitations extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteItem = (targetItem) => {
     const token = targetItem.token;
@@ -270,7 +270,7 @@ class Invitations extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteItemInBatch = () => {
     seafileAPI.sysAdminDeleteExpiredInvitations().then(res => {
@@ -286,7 +286,7 @@ class Invitations extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -294,7 +294,7 @@ class Invitations extends Component {
     }, () => {
       this.getItemsByPage(1);
     });
-  }
+  };
 
   render() {
     return (

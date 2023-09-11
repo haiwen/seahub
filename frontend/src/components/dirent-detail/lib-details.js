@@ -39,7 +39,7 @@ class LibDetail extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let repo = this.props.currentRepo;

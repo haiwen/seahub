@@ -19,7 +19,7 @@ class InternalLinkOperation extends React.Component {
 
   onInternalLinkDialogToggle = () => {
     this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
-  }
+  };
 
   render() {
     const { repoID, path } = this.props;

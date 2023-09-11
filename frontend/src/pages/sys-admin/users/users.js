@@ -70,19 +70,19 @@ class Users extends Component {
 
   toggleImportUserDialog = () => {
     this.setState({isImportUserDialogOpen: !this.state.isImportUserDialogOpen});
-  }
+  };
 
   toggleAddUserDialog = () => {
     this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
-  }
+  };
 
   toggleBatchSetQuotaDialog = () => {
     this.setState({isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen});
-  }
+  };
 
   toggleBatchDeleteUserDialog = () => {
     this.setState({isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen});
-  }
+  };
 
   onUserSelected = (item) => {
     let hasUserSelected = false;
@@ -112,7 +112,7 @@ class Users extends Component {
       hasUserSelected: hasUserSelected,
       selectedUserList: selectedUserList,
     });
-  }
+  };
 
   toggleSelectAllUsers = () => {
     if (this.state.isAllUsersSelected) {
@@ -140,7 +140,7 @@ class Users extends Component {
         selectedUserList: users
       });
     }
-  }
+  };
 
   getUserList = () => {
   // get admins
@@ -158,7 +158,7 @@ class Users extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   getUsersListByPage = (page) => {
     const { perPage, sortBy, sortOrder } = this.state;
@@ -177,7 +177,7 @@ class Users extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   sortByQuotaUsage = () => {
     this.setState({
@@ -195,7 +195,7 @@ class Users extends Component {
       navigate(url.toString());
       this.getUsersListByPage(currentPage);
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.sysAdminDeleteUser(email).then(res => {
@@ -208,7 +208,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setUserQuotaInBatch = (quotaTotal) => {
     let emails = this.state.selectedUserList.map(user => {
@@ -228,7 +228,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUserInBatch = () => {
     let emails = this.state.selectedUserList.map(user => {
@@ -261,7 +261,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   importUserInBatch = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
@@ -285,7 +285,7 @@ class Users extends Component {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
     });
-  }
+  };
 
   addUser = (data) => {
     toaster.notify(gettext('It may take some time, please wait.'));
@@ -301,7 +301,7 @@ class Users extends Component {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -309,7 +309,7 @@ class Users extends Component {
     }, () => {
       this.getUsersListByPage(1);
     });
-  }
+  };
 
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
@@ -327,7 +327,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateAdminRole = (email, role) => {
     seafileAPI.sysAdminUpdateAdminRole(email, role).then(res => {
@@ -343,7 +343,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   revokeAdmin = (email, name) => {
     seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
@@ -358,7 +358,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   getOperationsForAll = () => {
     const { isAdmin, isLDAPImported } = this.props;
@@ -379,7 +379,7 @@ class Users extends Component {
         <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>
       </Fragment>
     );
-  }
+  };
 
   getCurrentNavItem = () => {
     const { isAdmin, isLDAPImported } = this.props;
@@ -390,11 +390,11 @@ class Users extends Component {
       item = 'ldap-imported';
     }
     return item;
-  }
+  };
 
   toggleBatchAddAdminDialog = () => {
     this.setState({isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen});
-  }
+  };
 
   addAdminInBatch = (emails) => {
     seafileAPI.sysAdminAddAdminInBatch(emails).then(res => {
@@ -412,7 +412,7 @@ class Users extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   getSearch = () => {
     if (this.props.isAdmin) {
@@ -423,11 +423,11 @@ class Users extends Component {
       placeholder={gettext('Search users')}
       submit={this.searchItems}
     />;
-  }
+  };
 
   searchItems = (keyword) => {
     navigate(`${siteRoot}sys/search-users/?query=${encodeURIComponent(keyword)}`);
-  }
+  };
 
   render() {
     const { isAdmin, isLDAPImported } = this.props;

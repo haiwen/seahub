@@ -85,7 +85,7 @@ class WikiMarkdownViewer extends React.Component {
       titlesInfo.push(headingList[i].offsetTop);
     }
     this.titlesInfo = titlesInfo;
-  }
+  };
 
   onLinkClick = (event) => {
     event.preventDefault();
@@ -101,7 +101,7 @@ class WikiMarkdownViewer extends React.Component {
       link = event.target.href;
     }
     this.props.onLinkClick(link);
-  }
+  };
 
   onScrollHandler = () => {
     const contentScrollTop = this.markdownContainer.current.scrollTop + 180;
@@ -126,7 +126,7 @@ class WikiMarkdownViewer extends React.Component {
       }
     }
     this.setState({activeTitleIndex: activeTitleIndex});
-  }
+  };
 
   changeInlineNode = (item) => {
     let url, imagePath;
@@ -168,12 +168,12 @@ class WikiMarkdownViewer extends React.Component {
     }
 
     return item;
-  }
+  };
 
   modifyValueBeforeRender = (value) => {
     let newNodes = Utils.changeMarkdownNodes(value, this.changeInlineNode);
     return newNodes;
-  }
+  };
 
   renderMarkdown = () => {
     let isTOCShow = true;
@@ -200,7 +200,7 @@ class WikiMarkdownViewer extends React.Component {
         activeTitleIndex={this.state.activeTitleIndex}
       />
     );
-  }
+  };
 
   render() {
     if (this.props.isFileLoading) {

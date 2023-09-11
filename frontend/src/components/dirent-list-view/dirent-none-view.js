@@ -28,18 +28,18 @@ class DirentNodeView extends React.Component {
       fileType: type,
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
     });
-  }
+  };
 
   onCreateFileToggle = () => {
     this.setState({
       fileType: '',
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
     });
-  }
+  };
 
   checkDuplicatedName = () => {
     return false; // current repo is null, and unnecessary to check duplicated name
-  }
+  };
 
   render() {
     if (this.props.isDirentListLoading) {

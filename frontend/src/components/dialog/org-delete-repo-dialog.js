@@ -22,7 +22,7 @@ class DeleteRepoDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let subtitle = gettext('Are you sure you want to delete {placeholder} ?');

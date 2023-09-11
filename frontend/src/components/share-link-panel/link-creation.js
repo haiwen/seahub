@@ -50,13 +50,13 @@ class LinkCreation extends React.Component {
     this.setState({
       expType: e.target.value
     });
-  }
+  };
 
   onExpDateChanged = (value) => {
     this.setState({
       expDate: value
     });
-  }
+  };
 
   onPasswordInputChecked = () => {
     this.setState({
@@ -65,13 +65,13 @@ class LinkCreation extends React.Component {
       passwdnew: '',
       errorInfo: ''
     });
-  }
+  };
 
   togglePasswordVisible = () => {
     this.setState({
       isPasswordVisible: !this.state.isPasswordVisible
     });
-  }
+  };
 
   generatePassword = () => {
     let val = Utils.generatePassword(shareLinkPasswordMinLength);
@@ -79,21 +79,21 @@ class LinkCreation extends React.Component {
       password: val,
       passwdnew: val
     });
-  }
+  };
 
   inputPassword = (e) => {
     let passwd = e.target.value.trim();
     this.setState({password: passwd});
-  }
+  };
 
   inputPasswordNew = (e) => {
     let passwd = e.target.value.trim();
     this.setState({passwdnew: passwd});
-  }
+  };
 
   setPermission = (e) => {
     this.setState({currentPermission: e.target.value});
-  }
+  };
 
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
@@ -136,16 +136,16 @@ class LinkCreation extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   onExpireChecked = (e) => {
     this.setState({isExpireChecked: e.target.checked});
-  }
+  };
 
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
     this.setState({expireDays: day});
-  }
+  };
 
   validateParamsInput = () => {
     const { type } = this.props;
@@ -230,17 +230,17 @@ class LinkCreation extends React.Component {
     }
 
     return true;
-  }
+  };
 
   onLinkAmountChange = (e) => {
     this.setState({
       linkAmount: e.target.value
     });
-  }
+  };
 
   goBack = () => {
     this.props.setMode('');
-  }
+  };
 
   render() {
     const { userPerm, type, permissionOptions  } = this.props;

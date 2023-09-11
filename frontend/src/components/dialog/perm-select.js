@@ -51,7 +51,7 @@ class PermSelect extends React.Component {
       toaster.danger(errMessage);
       this.setState({isLoading: false});
     });
-  }
+  };
 
   switchOption = (e) => {
     if (!e.target.checked) {
@@ -65,7 +65,7 @@ class PermSelect extends React.Component {
 
     this.props.changePerm(currentOption);
     this.props.toggleDialog();
-  }
+  };
 
   translatePermission = (permission) => {
     let value = Utils.sharePerms(permission);
@@ -75,9 +75,8 @@ class PermSelect extends React.Component {
       value = item && item.name;
     }
     return value;
-    
-  }
-  
+  };
+
   translateExplanation = (explanation) => {
     let value = Utils.sharePermsExplanation(explanation);
     if (!value) {
@@ -86,7 +85,7 @@ class PermSelect extends React.Component {
       value = item && item.description;
     }
     return value;
-  }
+  };
 
   getPermissions = () => {
     const { permissions } = this.props;
@@ -101,7 +100,7 @@ class PermSelect extends React.Component {
       this.customPermissions = newPermissions;
     }
     return this.customPermissions;
-  }
+  };
 
 
   render() {

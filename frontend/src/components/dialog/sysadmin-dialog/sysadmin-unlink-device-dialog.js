@@ -21,12 +21,12 @@ class SysAdminUnlinkDevice extends React.Component {
     this.setState({
       inputChecked: e.target.checked
     });
-  }
+  };
 
   unlinkDevice = () => {
     this.props.toggleDialog();
     this.props.unlinkDevice(this.state.inputChecked);
-  }
+  };
 
   render() {
     const { inputChecked } = this.state;

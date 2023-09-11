@@ -23,7 +23,7 @@ class RemoveWebdavPassword extends Component {
     });
 
     this.props.removePassword();
-  }
+  };
 
   render() {
     const { toggle } = this.props;

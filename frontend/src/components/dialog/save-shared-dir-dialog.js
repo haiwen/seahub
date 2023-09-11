@@ -26,8 +26,8 @@ class SaveSharedDirDialog extends React.Component {
   }
 
   onSaveSharedFile = () => {
-    this.props.handleSaveSharedDir(this.state.repo.repo_id, this.state.selectedPath)
-  }
+    this.props.handleSaveSharedDir(this.state.repo.repo_id, this.state.selectedPath);
+  };
 
   onDirentItemClick = (repo, selectedPath, dirent) => {
     if (dirent.type === 'dir') {
@@ -42,14 +42,14 @@ class SaveSharedDirDialog extends React.Component {
         selectedPath: '',
       });
     }
-  }
+  };
 
   onRepoItemClick = (repo) => {
     this.setState({
       repo: repo,
       selectedPath: '/',
     });
-  }
+  };
 
   render() {
     return (

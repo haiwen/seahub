@@ -85,7 +85,7 @@ class ZipDownloadDialog extends React.Component {
         errorMsg: errorMsg
       });
     });
-  }
+  };
 
   cancelZipTask = () => {
     const zipToken = this.state.zipToken;
@@ -94,7 +94,7 @@ class ZipDownloadDialog extends React.Component {
     }).catch((error) => {
     // do nothing
     });
-  }
+  };
 
   toggleDialog = () => {
     const zipProgress = this.state.zipProgress;
@@ -103,7 +103,7 @@ class ZipDownloadDialog extends React.Component {
       this.cancelZipTask();
     }
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (

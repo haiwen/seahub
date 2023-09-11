@@ -72,7 +72,7 @@ class EditorApi {
         return this._getImageURL(res.data[0].name);
       })
     );
-  }
+  };
 
   getFileURL(fileNode) {
     var url;
@@ -202,11 +202,11 @@ class EditorApi {
 
   listFileTags = () => {
     return seafileAPI.listFileTags(repoID, filePath);
-  }
+  };
 
   listRepoTags = () => {
     return seafileAPI.listRepoTags(repoID);
-  }
+  };
 
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);

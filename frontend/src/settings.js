@@ -79,7 +79,7 @@ class Settings extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -90,7 +90,7 @@ class Settings extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   handleContentScroll = (e) => {
     const scrollTop = e.target.scrollTop;
@@ -102,7 +102,7 @@ class Settings extends React.Component {
         curItemID: scrolled[scrolled.length -1].href.substr(1)
       });
     }
-  }
+  };
 
   render() {
     return (

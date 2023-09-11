@@ -20,11 +20,11 @@ class DraftListView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let drafts = this.props.draftList;

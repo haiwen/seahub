@@ -20,19 +20,19 @@ class Paginator extends Component {
     const perPage = parseInt(e.target.value);
     this.updateURL(1, perPage);
     this.props.resetPerPage(perPage);
-  }
+  };
 
   goToPrevious = () => {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage - 1, curPerPage);
     this.props.gotoPreviousPage();
-  }
+  };
 
   goToNext = () => {
     const { currentPage, curPerPage } = this.props;
     this.updateURL(currentPage + 1, curPerPage);
     this.props.gotoNextPage();
-  }
+  };
 
   updateURL = (page, perPage) => {
     let url = new URL(location.href);
@@ -41,11 +41,11 @@ class Paginator extends Component {
     searchParams.set('per_page', perPage);
     url.search = searchParams.toString();
     navigate(url.toString());
-  }
+  };
 
   getPerPageText = (perPage) => {
     return gettext('{number_placeholder} / Page').replace('{number_placeholder}', perPage);
-  }
+  };
 
   render() {
     const { curPerPage, currentPage } = this.props;

@@ -32,7 +32,7 @@ class CurDirPath extends React.Component {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   render() {
     const isDesktop = Utils.isDesktop();

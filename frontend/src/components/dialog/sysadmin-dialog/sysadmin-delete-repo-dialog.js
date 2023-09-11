@@ -22,7 +22,7 @@ class DeleteRepoDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { repo } = this.props;

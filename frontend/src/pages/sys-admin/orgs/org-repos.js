@@ -69,22 +69,22 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteRepo = () => {
     this.props.deleteRepo(this.props.item.repo_id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -106,8 +106,8 @@ class Item extends Component {
             {!item.owner_email ?
               '--' :
               item.owner_email.indexOf('@seafile_group') == -1 ?
-              <UserLink email={item.owner_email} name={item.owner_name} /> :
-              item.owner_name
+                <UserLink email={item.owner_email} name={item.owner_name} /> :
+                item.owner_name
             }
           </td>
           <td>
@@ -170,7 +170,7 @@ class OrgRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

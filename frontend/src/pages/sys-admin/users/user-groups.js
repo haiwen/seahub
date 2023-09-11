@@ -21,11 +21,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -85,7 +85,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -94,7 +94,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -102,7 +102,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   getRoleText = () => {
     let roleText;
@@ -119,7 +119,7 @@ class Item extends Component {
         break;
     }
     return roleText;
-  }
+  };
 
   render() {
     const { item } = this.props;

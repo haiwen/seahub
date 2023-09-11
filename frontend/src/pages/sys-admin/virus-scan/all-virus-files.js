@@ -34,7 +34,7 @@ class VirusFileItem extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -43,7 +43,7 @@ class VirusFileItem extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -51,11 +51,11 @@ class VirusFileItem extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     this.props.handleFile(this.props.virusFile.virus_id, operation);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -71,7 +71,7 @@ class VirusFileItem extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   render() {
     const virusFile = this.props.virusFile;
@@ -129,19 +129,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -242,7 +242,7 @@ class AllVirusFiles extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -250,7 +250,7 @@ class AllVirusFiles extends Component {
     }, () => {
       this.getListByPage(1);
     });
-  }
+  };
 
   handleFile = (virusID, op) => {
     let request;
@@ -281,7 +281,7 @@ class AllVirusFiles extends Component {
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
     });
-  }
+  };
 
   render() {
     return (

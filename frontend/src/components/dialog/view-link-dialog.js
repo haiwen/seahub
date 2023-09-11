@@ -23,7 +23,7 @@ class ViewLinkDialog extends React.Component {
       duration: 2
     };
     this.props.toggle();
-  }
+  };
 
   render() {
     const href = this.props.currentLinkHref;
@@ -31,7 +31,7 @@ class ViewLinkDialog extends React.Component {
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>{gettext('Link')}</ModalHeader>
         <ModalBody>
-          <p><a target="_blank" href={href}>{href}</a></p>
+          <p><a target="_blank" href={href} rel="noreferrer">{href}</a></p>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>{' '}

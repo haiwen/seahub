@@ -39,7 +39,7 @@ class ListCustomPermissions extends React.Component {
                 {permissions.map(permission => {
                   return (
                     <CustomPermissionItem
-                      key={permission.id} 
+                      key={permission.id}
                       permission={permission}
                       onEditCustomPermission={this.props.onEditCustomPermission}
                       onDeleteCustomPermission={this.props.onDeleteCustomPermission}

@@ -44,7 +44,7 @@ class FileContent extends React.Component {
     this.setState({
       loadFailed: true
     });
-  }
+  };
 
   render() {
     if (this.state.loadFailed) {

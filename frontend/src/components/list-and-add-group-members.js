@@ -59,14 +59,14 @@ class ManageMembersDialog extends React.Component {
         hasNextPage: false
       });
     });
-  }
+  };
 
   onSelectChange = (option) => {
     this.setState({
       selectedOption: option,
       errMessage: [],
     });
-  }
+  };
 
   addGroupMember = () => {
     let emails = [];
@@ -89,13 +89,13 @@ class ManageMembersDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({
       isItemFreezed: isFreezed
     });
-  }
+  };
 
   handleScroll = (event) => {
     // isLoadingMore: to avoid repeated request
@@ -111,7 +111,7 @@ class ManageMembersDialog extends React.Component {
         });
       }
     }
-  }
+  };
 
   changeMember = (targetMember) => {
     this.setState({
@@ -122,7 +122,7 @@ class ManageMembersDialog extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   deleteMember = (targetMember) => {
     const groupMembers = this.state.groupMembers;
@@ -130,7 +130,7 @@ class ManageMembersDialog extends React.Component {
     this.setState({
       groupMembers: groupMembers
     });
-  }
+  };
 
   searchMembers = (e) => {
     const { groupMembers } = this.state;
@@ -138,26 +138,26 @@ class ManageMembersDialog extends React.Component {
     const value = keyword.trim().toLowerCase();
     const membersFound = groupMembers.filter(item => item.name.toLowerCase().indexOf(value) > -1);
     this.setState({ keyword, membersFound });
-  }
+  };
 
   clearSearch = () => {
     this.setState({
       keyword: '',
       membersFound: []
     });
-  }
+  };
 
   onSearchInputFocus = () => {
     this.setState({
       searchActive: true
     });
-  }
+  };
 
   onSearchInputBlur = () => {
     this.setState({
       searchActive: false
     });
-  }
+  };
 
   render() {
     const {

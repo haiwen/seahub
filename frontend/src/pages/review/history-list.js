@@ -25,7 +25,7 @@ class HistoryList extends React.Component {
   onClick = (event, key, preItem, currentItem)=> {
     if (key === this.state.activeItem) return false;
     this.props.onHistoryItemClick(currentItem, preItem, key);
-  }
+  };
 
   onScroll = (event) => {
     const clientHeight = event.target.clientHeight;
@@ -51,7 +51,7 @@ class HistoryList extends React.Component {
         });
       }
     }
-  }
+  };
 
   render() {
     return (

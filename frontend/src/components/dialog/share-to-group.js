@@ -19,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_info.id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -135,7 +135,7 @@ class ShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -163,7 +163,7 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let path = this.props.itemPath;
@@ -178,11 +178,11 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
     let groups = [];
@@ -243,7 +243,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let path = this.props.itemPath;
@@ -267,7 +267,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let path = this.props.itemPath;
@@ -288,7 +288,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_info.id;
@@ -301,7 +301,7 @@ class ShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     const thead = (

@@ -30,17 +30,17 @@ class TagListItem extends React.Component {
     this.setState({
       isTagHighlighted: true
     });
-  }
+  };
 
   onMouseOut = () => {
     this.setState({
       isTagHighlighted: false
     });
-  }
+  };
 
   deleteTag = () => {
     this.props.onDeleteTag(this.props.item);
-  }
+  };
 
   render() {
     const { isTagHighlighted } = this.state;
@@ -99,12 +99,12 @@ class ListTagDialog extends React.Component {
 
   toggle = () => {
     this.props.onListTagCancel();
-  }
+  };
 
   createNewTag = (e) => {
     e.preventDefault();
     this.props.onCreateRepoTag();
-  }
+  };
 
   onDeleteTag = (tag) => {
     const { repoID } = this.props;
@@ -117,7 +117,7 @@ class ListTagDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

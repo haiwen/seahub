@@ -36,7 +36,7 @@ class Notification extends React.Component {
       this.loadNotices();
       this.setState({showNotice: true});
     }
-  }
+  };
 
   loadNotices = () => {
     let page = 1;
@@ -45,7 +45,7 @@ class Notification extends React.Component {
       let noticeList = res.data.notification_list;
       this.setState({noticeList: noticeList});
     });
-  }
+  };
 
   onNoticeItemClick = (noticeItem) => {
     let noticeList = this.state.noticeList.map(item => {
@@ -61,22 +61,22 @@ class Notification extends React.Component {
       unseenCount: unseenCount,
     });
 
-  }
+  };
 
   getInitDialogState = () => {
     const searchParams = Utils.getUrlSearches();
     return searchParams.notifications === 'all';
-  }
+  };
 
   onNotificationDialogToggle = () => {
     let newSearch = this.state.isShowNotificationDialog ? null : 'all';
     Utils.updateSearchParameter('notifications', newSearch);
     this.setState({isShowNotificationDialog: !this.state.isShowNotificationDialog});
-  }
+  };
 
   onNotificationListToggle = () => {
     this.setState({showNotice: false});
-  }
+  };
 
   onMarkAllNotifications = () => {
     seafileAPI.updateNotifications().then(() => {
@@ -88,7 +88,7 @@ class Notification extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true)
       });
     });
-  }
+  };
 
   render() {
     const { unseenCount } = this.state;
@@ -98,7 +98,7 @@ class Notification extends React.Component {
           <span className="sf2-icon-bell" id="notification-popover"></span>
           <span className={`num ${unseenCount ? '' : 'hide'}`}>{unseenCount}</span>
         </a>
-        {this.state.showNotice && 
+        {this.state.showNotice &&
           <NotificationPopover
             headerText={gettext('Notification')}
             bodyText={gettext('Mark all as read')}

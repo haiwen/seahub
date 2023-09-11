@@ -22,7 +22,7 @@ class SysAdminGroupRoleEditor extends React.Component {
       default:
         return role;
     }
-  }
+  };
 
   render() {
     return (

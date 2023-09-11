@@ -44,7 +44,7 @@ class ExternalOperations extends React.Component {
 
   onInternalLinkToggle = () => {
     this.setState({isShowInternalLinkDialog: !this.state.isShowInternalLinkDialog});
-  }
+  };
 
   unmark = () => {
     const { repoID, docPath } = this.props;
@@ -54,7 +54,7 @@ class ExternalOperations extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleStar = () => {
     const { isStarred, repoID, docPath  } = this.props;
@@ -73,11 +73,11 @@ class ExternalOperations extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   onShareToggle = () => {
     this.setState({isShowShareDialog: !this.state.isShowShareDialog});
-  }
+  };
 
   render() {
     const { repoID, docPath, docName, docPerm } = this.props;

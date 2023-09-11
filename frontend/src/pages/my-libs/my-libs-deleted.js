@@ -38,7 +38,7 @@ class MyLibsDeleted extends Component {
       return item.repo_id !== repoID;
     });
     this.setState({deletedRepoList: deletedRepoList});
-  }
+  };
 
   render() {
     return (
@@ -126,7 +126,7 @@ class DeletedRepoItem extends Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -135,7 +135,7 @@ class DeletedRepoItem extends Component {
         highlight: false,
       });
     }
-  }
+  };
 
   restoreDeletedRepo = (e) => {
     e.preventDefault();
@@ -152,7 +152,7 @@ class DeletedRepoItem extends Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let localTime = moment.utc(this.props.repo.del_time).toDate();

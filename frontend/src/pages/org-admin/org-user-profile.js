@@ -41,19 +41,19 @@ class OrgUserProfile extends Component {
     this.setState({
       name: name
     });
-  }
+  };
 
   updateContactEmail = (contactEmail) => {
     this.setState({
       contact_email: contactEmail
     });
-  }
+  };
 
   updateQuota = (quota) => {
     this.setState({
       quota_total: quota
     });
-  }
+  };
 
   render() {
     return (
@@ -92,19 +92,19 @@ class Content extends Component {
     this.setState({
       isSetNameDialogOpen: !this.state.isSetNameDialogOpen
     });
-  }
+  };
 
   toggleSetContactEmailDialog = () => {
     this.setState({
       isSetContactEmailDialogOpen: !this.state.isSetContactEmailDialogOpen
     });
-  }
+  };
 
   toggleSetQuotaDialog = () => {
     this.setState({
       isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen
     });
-  }
+  };
 
   render() {
     const {

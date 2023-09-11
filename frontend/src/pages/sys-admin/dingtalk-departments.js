@@ -102,7 +102,7 @@ class DingtalkDepartments extends Component {
       this.setState({isMembersListLoading: false});
       this.handleError(error);
     });
-  }
+  };
   getCanCheckUserIds = (membersList) => {
     let userIds = [];
     membersList.forEach((member) => {
@@ -225,7 +225,7 @@ class DingtalkDepartments extends Component {
       membersList: membersList,
       canCheckUserIds: canCheckUserIds,
     });
-  }
+  };
 
   importDepartmentDialogToggle = (importDepartment) => {
     this.setState({
@@ -283,7 +283,7 @@ class DingtalkDepartments extends Component {
   handleError = (error) => {
     const errorMsg = Utils.getErrorMsg(error);
     toaster.danger(errorMsg);
-  }
+  };
 
   componentDidMount() {
     this.getDingtalkDepartmentsList(null);

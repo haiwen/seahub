@@ -19,14 +19,14 @@ class Search extends React.Component {
     this.setState({
       value: e.target.value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     const value = this.state.value.trim();
@@ -34,7 +34,7 @@ class Search extends React.Component {
       return false;
     }
     this.props.submit(value);
-  }
+  };
 
   render() {
     return (

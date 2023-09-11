@@ -19,21 +19,21 @@ class UserItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteUserFolderPermission = () => {
     let item = this.props.item;
     this.props.deleteUserFolderPermission(item);
-  }
+  };
 
   onChangeUserFolderPerm = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserFolderPerm(item.repo_id, permission, item.folder_path, item.user_email);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -41,7 +41,7 @@ class UserItem extends React.Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td>
-          <a href={`${siteRoot}profile/${encodeURIComponent(item.user_email)}/`} target="_blank">{item.user_name}</a>
+          <a href={`${siteRoot}profile/${encodeURIComponent(item.user_email)}/`} target="_blank" rel="noreferrer">{item.user_name}</a>
         </td>
         {this.props.showPath &&
           <td>
@@ -103,7 +103,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   handleUserSelectChange = (option) => {
     this.setState({selectedUsers: option});
-  }
+  };
 
   componentDidMount() {
     const {repoID, folderPath, isDepartmentRepo} = this.props;
@@ -119,7 +119,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   addUserFolderPerm = () => {
     const { selectedUsers } = this.state;
@@ -163,7 +163,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         errorMsg: [errorMsg]
       });
     });
-  }
+  };
 
   deleteUserFolderPermItem = (item) => {
     const request = this.props.isDepartmentRepo ?
@@ -176,7 +176,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
         })
       });
     });
-  }
+  };
 
   onChangeUserFolderPerm = (repoID, permission, folderPath, userEmail) => {
     const request = this.props.isDepartmentRepo ?
@@ -191,38 +191,38 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       });
       this.setState({userFolderPermItems: userFolderPermItems});
     });
-  }
+  };
 
   onSetSubFolder = (e) => {
     this.setState({
       folderPath: e.target.value
     });
-  }
+  };
 
   toggleFileChooser = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser,
       folderPath: ''
     });
-  }
+  };
 
   toggleSubFolder = (repo, path, item) => {
     this.setState({
       folderPath: path,
     });
-  }
+  };
 
   handleFileChooserSubmit = () => {
     this.setState({
       showFileChooser: !this.state.showFileChooser
     });
-  }
+  };
 
   onRepoItemClick = () => {
     this.setState({
       folderPath: '/'
     });
-  }
+  };
 
   render() {
     let showPath = this.props.folderPath ? false : true;

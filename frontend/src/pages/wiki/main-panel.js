@@ -30,18 +30,18 @@ class MainPanel extends Component {
 
   onMenuClick = () => {
     this.props.onMenuClick();
-  }
+  };
 
   onEditClick = (e) => {
     e.preventDefault();
     let url = siteRoot + 'lib/' + repoID + '/file' + this.props.path + '?mode=edit';
     window.open(url);
-  }
+  };
 
   onMainNavBarClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onMainNavBarClick(path);
-  }
+  };
 
   renderNavPath = () => {
     let paths = this.props.path.split('/');
@@ -73,7 +73,7 @@ class MainPanel extends Component {
       }
     });
     return pathElem;
-  }
+  };
 
 
   render() {

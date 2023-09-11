@@ -181,24 +181,24 @@ class SysAdmin extends React.Component {
         }
       }
     }
-  }
+  };
 
   onCloseSidePanel = () => {
     this.setState({isSidePanelClosed: !this.state.isSidePanelClosed});
-  }
+  };
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
-  }
+  };
 
   toggleSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   render() {
     const { currentTab, isSidePanelClosed } = this.state;
@@ -284,9 +284,9 @@ class SysAdmin extends React.Component {
             <AbuseReports path={siteRoot + 'sys/abuse-reports'} {...commonProps} />
           </Router>
         </MainPanel>
-          <MediaQuery query="(max-width: 767.8px)">
-            <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
-          </MediaQuery>
+        <MediaQuery query="(max-width: 767.8px)">
+          <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
+        </MediaQuery>
       </div>
     );
   }

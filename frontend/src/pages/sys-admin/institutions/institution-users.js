@@ -26,19 +26,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getInstitutionUsersByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getInstitutionUsersByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -111,7 +111,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -120,7 +120,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -128,18 +128,18 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleSetAdminDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isSetAdminDialogOpen: !this.state.isSetAdminDialogOpen});
-  }
+  };
 
   setAdmin = () => {
     this.props.setAdmin(this.props.item.email);
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch (operation) {
@@ -150,7 +150,7 @@ class Item extends Component {
         this.toggleSetAdminDialog();
         break;
     }
-  }
+  };
 
   getOperations = () => {
     let operations = [];
@@ -159,7 +159,7 @@ class Item extends Component {
     }
     operations.push('Delete');
     return operations;
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -173,7 +173,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -270,7 +270,7 @@ class InstitutionUsers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   setAdmin = (email) => {
     seafileAPI.sysAdminUpdateInstitutionUser(this.props.institutionID, email, true).then(res => {
@@ -286,17 +286,17 @@ class InstitutionUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleAddUserDialog = () => {
     this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getInstitutionUsersByPage(this.initPage));
-  }
+  };
 
   addUser = (emails) => {
     seafileAPI.sysAdminAddInstitutionUserBatch(this.props.institutionID, emails).then(res => {
@@ -314,7 +314,7 @@ class InstitutionUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
@@ -327,7 +327,7 @@ class InstitutionUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { isAddUserDialogOpen, institutionName, hasNextPage, currentPage, perPage } = this.state;

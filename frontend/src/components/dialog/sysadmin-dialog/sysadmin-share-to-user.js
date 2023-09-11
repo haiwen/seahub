@@ -19,21 +19,21 @@ class UserItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.user_email);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -114,7 +114,7 @@ class SysAdminShareToUser extends React.Component {
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
     this.options = [];
-  }
+  };
 
   componentDidMount() {
     let repoID = this.props.repoID;
@@ -130,7 +130,7 @@ class SysAdminShareToUser extends React.Component {
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToUser = () => {
     let users = [];
@@ -166,7 +166,7 @@ class SysAdminShareToUser extends React.Component {
         });
       }
     });
-  }
+  };
 
   deleteShareItem = (useremail) => {
     let repoID = this.props.repoID;
@@ -178,7 +178,7 @@ class SysAdminShareToUser extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
@@ -189,7 +189,7 @@ class SysAdminShareToUser extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let username = item.user_name;
@@ -202,7 +202,7 @@ class SysAdminShareToUser extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     let { sharedItems } = this.state;

@@ -1562,7 +1562,7 @@ export const Utils = {
 
   generateRevisionsURL: function(siteRoot, repoID, path) {
     if (!siteRoot || !repoID || !path) return '';
-    console.log(siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path))
+    console.log(siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path));
     return siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path);
   },
 

@@ -15,7 +15,7 @@ class SideNavFooter extends React.Component {
   onAboutDialogToggle = (e) => {
     e.preventDefault();
     this.setState({isAboutDialogShow: !this.state.isAboutDialogShow});
-  }
+  };
 
   renderExternalAppLinks = () => {
     if (additionalAppBottomLinks && (typeof additionalAppBottomLinks) === 'object') {
@@ -25,7 +25,7 @@ class SideNavFooter extends React.Component {
       });
     }
     return null;
-  }
+  };
 
   render() {
 

@@ -46,27 +46,27 @@ class DepartmentDetail extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showDeleteRepoDialog: false
     });
-  }
+  };
 
   onRepoChanged = () => {
     this.listGroupRepo(this.props.groupID);
-  }
+  };
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
-  }
+  };
 
   onAddNewRepo = (newRepo) => {
     const { repos } = this.state;
     repos.unshift(newRepo);
     this.setState({ repos });
-  }
+  };
 
   render() {
     const { repos } = this.state;

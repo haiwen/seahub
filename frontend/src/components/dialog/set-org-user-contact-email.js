@@ -27,7 +27,7 @@ class SetOrgUserContactEmail extends React.Component {
     this.setState({
       inputValue: e.target.value
     });
-  }
+  };
 
   formSubmit = () => {
     const { orgID, email } = this.props;
@@ -48,7 +48,7 @@ class SetOrgUserContactEmail extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     const { inputValue, formErrorMsg, submitBtnDisabled } = this.state;

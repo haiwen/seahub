@@ -27,7 +27,7 @@ class TwoFactorAuthentication extends React.Component {
           className="btn btn-outline-primary">{gettext('Show Codes')}</a>
       </React.Fragment>
     );
-  }
+  };
 
   renderDisabled = () => {
     return (
@@ -37,7 +37,7 @@ class TwoFactorAuthentication extends React.Component {
           {gettext('Enable Two-Factor Authentication')}</a>
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     return (

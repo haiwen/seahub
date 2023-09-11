@@ -65,7 +65,7 @@ class RepoHistory extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -73,7 +73,7 @@ class RepoHistory extends React.Component {
     }, () => {
       this.getItems(1);
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -84,12 +84,12 @@ class RepoHistory extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
     return (
@@ -150,11 +150,11 @@ class Content extends React.Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -215,43 +215,43 @@ class Item extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   showCommitDetails = (e) => {
     e.preventDefault();
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   toggleCommitDetailsDialog = () => {
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   editLabel = (e) => {
     e.preventDefault();
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   toggleLabelEditDialog = () => {
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   updateLabels = (labels) => {
     this.setState({
       labels: labels
     });
-  }
+  };
 
   render() {
     const item = this.props.item;

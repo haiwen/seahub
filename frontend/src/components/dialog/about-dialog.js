@@ -17,7 +17,7 @@ class AboutDialog extends React.Component {
       });
     }
     return null;
-  }
+  };
 
   render() {
 
@@ -42,7 +42,7 @@ class AboutDialog extends React.Component {
               <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
               <p>{gettext('Server Version: ')}{seafileVersion}<br />© {(new Date()).getFullYear()} {gettext('Seafile')}</p>
               <p>{this.renderExternalAboutLinks()}</p>
-              <p><a href={href} target="_blank">{gettext('About Us')}</a></p>
+              <p><a href={href} target="_blank" rel="noreferrer">{gettext('About Us')}</a></p>
             </div>
           </ModalBody>
         </Modal>

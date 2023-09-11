@@ -26,7 +26,7 @@ class TagColor extends React.Component {
     this.setState({
       isPopoverOpen: !this.state.isPopoverOpen
     });
-  }
+  };
 
   selectTagColor = (e) => {
     const newColor = e.target.value;
@@ -41,7 +41,7 @@ class TagColor extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { isPopoverOpen, tagColor } = this.state;

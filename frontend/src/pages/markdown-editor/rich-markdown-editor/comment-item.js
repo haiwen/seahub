@@ -33,7 +33,7 @@ class CommentItem extends React.Component {
 
   toggleDropDownMenu = () => {
     this.setState({dropdownOpen: !this.state.dropdownOpen});
-  }
+  };
 
   convertComment = (item) => {
     processor.process(item.comment).then((result) => {
@@ -52,11 +52,11 @@ class CommentItem extends React.Component {
         });
       });
     }
-  }
+  };
 
   toggleEditComment = () => {
     this.setState({editable: !this.state.editable});
-  }
+  };
 
   updateComment = (event) => {
     const newComment = this.state.newComment;
@@ -64,16 +64,16 @@ class CommentItem extends React.Component {
       this.props.editComment(event.target.id, newComment);
     }
     this.toggleEditComment();
-  }
+  };
 
   handleCommentChange = (event) => {
     this.setState({newComment: event.target.value});
-  }
-  
+  };
+
   onScrollToQuote = () => {
     const { position } = this.state;
     this.props.scrollToQuote(position);
-  }
+  };
 
   componentWillMount() {
     this.convertComment(this.props.item);

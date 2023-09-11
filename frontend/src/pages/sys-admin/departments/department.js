@@ -67,29 +67,29 @@ class Department extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDepartmentNameChanged = (dept) => {
     this.setState({
       groupName: dept.name
     });
-  }
+  };
 
   toggleRenameDepartmentDialog = () => {
     this.setState({ isShowRenameDepartmentDialog: !this.state.isShowRenameDepartmentDialog });
-  }
+  };
 
   toggleAddRepoDialog = () => {
     this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
-  }
+  };
 
   toggleAddMemberDialog = () => {
     this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
-  }
+  };
 
   toggleAddDepartmentDialog = () => {
     this.setState({ isShowAddDepartmentDialog: !this.state.isShowAddDepartmentDialog});
-  }
+  };
 
   render() {
     const { groupID, currentItem } = this.props;

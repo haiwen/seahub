@@ -29,12 +29,12 @@ class UserSelect extends React.Component {
 
   onInputChange = (searchValue) => {
     this.setState({ searchValue });
-  }
+  };
 
   handleSelectChange = (option) => {
     this.options = [];
     this.props.onSelectChange(option);
-  }
+  };
 
   loadOptions = (input, callback) => {
     const value = input.trim();
@@ -71,11 +71,11 @@ class UserSelect extends React.Component {
         });
       }
     }, 1000);
-  }
+  };
 
   clearSelect = () => {
     this.refs.userSelect.onChange([], { action: 'clear' });
-  }
+  };
 
   render() {
     const searchValue = this.state.searchValue;

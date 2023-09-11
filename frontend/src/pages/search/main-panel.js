@@ -119,15 +119,15 @@ class SearchViewPanel extends React.Component {
     } else {
       return false;
     }
-  }
+  };
 
   showSearchFilter = () => {
     this.setState({ isShowSearchFilter: true });
-  }
+  };
 
   hideSearchFilter = () => {
     this.setState({ isShowSearchFilter: false });
-  }
+  };
 
   handleReset = () => {
     this.setState({
@@ -144,7 +144,7 @@ class SearchViewPanel extends React.Component {
       errorDateMsg: '',
       errorSizeMsg: '',
     });
-  }
+  };
 
   handlePrevious = (e) => {
     e.preventDefault();

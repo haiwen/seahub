@@ -86,7 +86,7 @@ class DirColumnView extends React.Component {
       });
     }
     this.setCookie('navRate', this.state.navRate);
-  }
+  };
 
   onResizeMouseDown = () => {
     this.containerWidth = this.refs.viewModeContainer.clientWidth;
@@ -120,7 +120,7 @@ class DirColumnView extends React.Component {
   setCookie = (name, value) => {
     let cookie = name + '=' + value + ';';
     document.cookie = cookie;
-  }
+  };
 
   getCookie = (cookiename) => {
     let name = cookiename + '=';
@@ -132,7 +132,7 @@ class DirColumnView extends React.Component {
       }
     }
     return '';
-  }
+  };
 
   componentWillMount() {
     let rate = this.getCookie('navRate');

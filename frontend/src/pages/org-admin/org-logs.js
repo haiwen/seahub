@@ -12,7 +12,7 @@ class OrgLogs extends Component {
 
   tabItemClick = (param) => {
     this.props.tabItemClick(param);
-  }
+  };
 
   render() {
     return (

@@ -34,7 +34,7 @@ class DraftContent extends React.Component {
       msg_s = msg_s.replace('%(draft)s', draft_name);
       toaster.danger(msg_s);
     });
-  }
+  };
 
   onPublishHandler = (draft) => {
     // let draft = this.state.currentDraft;
@@ -49,7 +49,7 @@ class DraftContent extends React.Component {
       msg_s = msg_s.replace('%(draft)s', draft_name);
       toaster.danger(msg_s);
     });
-  }
+  };
 
   render() {
     return (

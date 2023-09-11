@@ -102,21 +102,21 @@ class LibContentView extends React.Component {
         isDirentDetailShow: true
       });
     }
-  }
+  };
 
   toggleDirentDetail = () => {
     this.setState({
       direntDetailPanelTab: '',
       isDirentDetailShow: !this.state.isDirentDetailShow
     });
-  }
+  };
 
   closeDirentDetail = () => {
     this.setState({
       isDirentDetailShow: false,
       direntDetailPanelTab: '',
     });
-  }
+  };
 
   componentWillMount() {
     const hash = window.location.hash;
@@ -225,7 +225,7 @@ class LibContentView extends React.Component {
         isViewFile: false
       });
     }
-  }
+  };
 
   onRepoUpdateEvent = () => {
     let currentTime = new Date();
@@ -258,7 +258,7 @@ class LibContentView extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateUsedRepoTags = () => {
     let repoID = this.props.repoID;
@@ -275,7 +275,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateReadmeMarkdown = (direntList) => {
     this.setState({readmeMarkdown: null});
@@ -286,7 +286,7 @@ class LibContentView extends React.Component {
         return true;
       }
     });
-  }
+  };
 
   updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
@@ -323,7 +323,7 @@ class LibContentView extends React.Component {
         isFileLoadedErr: true,
       });
     });
-  }
+  };
 
   // load data
   loadDirData = (path) => {
@@ -371,7 +371,7 @@ class LibContentView extends React.Component {
         this.showDir(path);
       }
     }
-  }
+  };
 
   loadSidePanel = (path) => {
     let repoID = this.props.repoID;
@@ -391,7 +391,7 @@ class LibContentView extends React.Component {
     } else {
       this.loadNodeAndParentsByPath(path);
     }
-  }
+  };
 
   showDir = (path) => {
     let repoID = this.props.repoID;
@@ -417,7 +417,7 @@ class LibContentView extends React.Component {
     let repoInfo = this.state.currentRepoInfo;
     let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
     window.history.pushState({url: url, path: path}, path, url);
-  }
+  };
 
   showFile = (filePath) => {
     let repoID = this.props.repoID;
@@ -474,7 +474,7 @@ class LibContentView extends React.Component {
     let repoInfo = this.state.currentRepoInfo;
     let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(filePath);
     window.history.pushState({url: url, path: filePath}, filePath, url);
-  }
+  };
 
   loadDirentList = (path) => {
     let repoID = this.props.repoID;
@@ -515,16 +515,16 @@ class LibContentView extends React.Component {
         pathExist: false,
       });
     });
-  }
+  };
 
   onListContainerScroll = () => {
     let itemsShowLength = this.state.itemsShowLength + 100;
     this.setState({itemsShowLength: itemsShowLength});
-  }
+  };
 
   resetShowLength = () => {
     this.setState({itemsShowLength: 100});
-  }
+  };
 
   getThumbnails = (repoID, path, direntList) => {
     let items = direntList.filter((item) => {
@@ -555,7 +555,7 @@ class LibContentView extends React.Component {
       });
     };
     getThumbnail(0);
-  }
+  };
 
   updateMoveCopyTreeNode = (path) => {
     let repoID = this.props.repoID;
@@ -583,7 +583,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   async getAsyncCopyMoveProgress() {
     let { asyncOperationType, asyncCopyMoveTaskId } = this.state;
@@ -651,7 +651,7 @@ class LibContentView extends React.Component {
     this.currentMoveItemPath = '';
     let direntList = this.state.direntList;
     this.setState({direntList: direntList.slice(0)});
-  }
+  };
 
   onMoveProgressDialogToggle = () => {
     let { asyncOperationProgress } = this.state;
@@ -663,7 +663,7 @@ class LibContentView extends React.Component {
       asyncOperationProgress: 0,
       isCopyMoveProgressDialogShow: false,
     });
-  }
+  };
 
   // toolbar operations
   onMoveItems = (destRepo, destDirentPath) => {
@@ -718,7 +718,7 @@ class LibContentView extends React.Component {
       });
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onCopyItems = (destRepo, destDirentPath) => {
     let repoID = this.props.repoID;
@@ -763,7 +763,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   restoreDeletedDirents = (commitID, paths, e) => {
     const { repoID } = this.props;
@@ -810,7 +810,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDeleteItems = () => {
     let repoID = this.props.repoID;
@@ -850,7 +850,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onAddFolder = (dirPath) => {
     let repoID = this.props.repoID;
@@ -869,7 +869,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onAddFile = (filePath, isMarkdownDraft, isSdocDraft) => {
     let repoID = this.props.repoID;
@@ -897,7 +897,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   switchViewMode = (mode) => {
     if (mode === this.state.currentMode) {
@@ -927,7 +927,7 @@ class LibContentView extends React.Component {
     this.isNeedUpdateHistoryState = false;
     this.setState({currentMode: mode});
     this.showDir(path);
-  }
+  };
 
   onSearchedClick = (item) => {
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
@@ -983,7 +983,7 @@ class LibContentView extends React.Component {
         }
       }
     }
-  }
+  };
 
   onMainNavBarClick = (nodePath) => {
     //just for dir
@@ -996,7 +996,7 @@ class LibContentView extends React.Component {
     }
 
     this.showDir(nodePath);
-  }
+  };
 
   onLinkClick = (link) => {
     const url = link;
@@ -1010,26 +1010,26 @@ class LibContentView extends React.Component {
     } else {
       window.open(url);
     }
-  }
+  };
 
   // list&tree operations
   onMainPanelItemRename = (dirent, newName) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     this.renameItem(path, dirent.isDir(), newName);
-  }
+  };
 
   onMainPanelItemDelete = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     this.deleteItem(path, dirent.isDir());
-  }
+  };
 
   onRenameTreeNode = (node, newName) => {
     this.renameItem(node.path, node.object.isDir(), newName);
-  }
+  };
 
   onDeleteTreeNode = (node) => {
     this.deleteItem(node.path, node.object.isDir());
-  }
+  };
 
   renameItem = (path, isDir, newName) => {
     let repoID = this.props.repoID;
@@ -1056,7 +1056,7 @@ class LibContentView extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   renameItemAjaxCallback(path, newName) {
     if (this.state.currentMode === 'column') {
@@ -1067,7 +1067,7 @@ class LibContentView extends React.Component {
 
   toggleDeleteFolderDialog = () => {
     this.setState({isDeleteFolderDialogOpen: !this.state.isDeleteFolderDialogOpen});
-  }
+  };
 
   deleteFolder = () => {
     const { repoID } = this.props;
@@ -1091,7 +1091,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteItem(path, isDir) {
     let repoID = this.props.repoID;
@@ -1183,7 +1183,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onCopyItem = (destRepo, dirent, copyToDirentPath, nodeParentPath) => {
     let repoID = this.props.repoID;
@@ -1233,7 +1233,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDirentClick = (dirent) => {
     let direntList = this.state.direntList.map(dirent => {
@@ -1254,7 +1254,7 @@ class LibContentView extends React.Component {
         selectedDirentList: [],
       });
     }
-  }
+  };
 
   onItemClick = (dirent) => {
     this.resetSelected();
@@ -1282,7 +1282,7 @@ class LibContentView extends React.Component {
         }
       }
     }
-  }
+  };
 
   onDirentSelected = (dirent) => {
     let direntList = this.state.direntList.map(item => {
@@ -1318,7 +1318,7 @@ class LibContentView extends React.Component {
         selectedDirentList: []
       });
     }
-  }
+  };
 
   onAllDirentSelected = () => {
     if (this.state.isAllDirentSelected) {
@@ -1344,7 +1344,7 @@ class LibContentView extends React.Component {
         selectedDirentList: direntList,
       });
     }
-  }
+  };
 
   onFileTagChanged = (dirent, direntPath) => {
     let repoID = this.props.repoID;
@@ -1364,7 +1364,7 @@ class LibContentView extends React.Component {
     });
 
     this.updateUsedRepoTags();
-  }
+  };
 
   onFileUploadSuccess = (direntObject) => {
     let isExist = this.state.direntList.some(item => {
@@ -1394,7 +1394,7 @@ class LibContentView extends React.Component {
         this.updateReadmeMarkdown(this.state.direntList);
       }
     }
-  }
+  };
 
   addDirent = (name, type, size, isSdocDraft) => {
     let item = this.createDirent(name, type, size, isSdocDraft);
@@ -1422,7 +1422,7 @@ class LibContentView extends React.Component {
     }
     this.setState({direntList: direntList});
     this.updateReadmeMarkdown(direntList);
-  }
+  };
 
   renameDirent = (direntPath, newName) => {
     let repoID = this.props.repoID;
@@ -1456,7 +1456,7 @@ class LibContentView extends React.Component {
       let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + newPath;
       window.history.replaceState({ url: url, path: newPath}, newPath, url);
     }
-  }
+  };
 
   deleteDirent(direntPath) {
     if (direntPath === this.state.path) {
@@ -1494,7 +1494,7 @@ class LibContentView extends React.Component {
 
     this.setState({direntList: direntList});
     this.updateReadmeMarkdown(direntList);
-  }
+  };
 
   moveDirent = (direntPath, moveToDirentPath = null) => {
     let name = Utils.getFileName(direntPath);
@@ -1511,7 +1511,7 @@ class LibContentView extends React.Component {
 
     this.setState({direntList: direntList});
     this.updateReadmeMarkdown(direntList);
-  }
+  };
 
   // only one scence: The moved items are inside current path
   moveDirents = (direntNames) => {
@@ -1524,7 +1524,7 @@ class LibContentView extends React.Component {
 
     this.setState({direntList: direntList});
     this.updateReadmeMarkdown(direntList);
-  }
+  };
 
   updateDirent = (dirent, paramKey, paramValue) => {
     let newDirentList = this.state.direntList.map(item => {
@@ -1534,7 +1534,7 @@ class LibContentView extends React.Component {
       return item;
     });
     this.setState({direntList: newDirentList});
-  }
+  };
 
   // tree operations
   loadTreeNodeByPath = (path) => {
@@ -1559,7 +1559,7 @@ class LibContentView extends React.Component {
       parentNode.isExpanded = true;
       this.setState({treeData: tree, currentNode: node}); //tree
     }
-  }
+  };
 
   loadNodeAndParentsByPath = (path) => {
     let repoID = this.props.repoID;
@@ -1593,7 +1593,7 @@ class LibContentView extends React.Component {
     }).catch(() => {
       this.setState({isLoadFailed: true});
     });
-  }
+  };
 
   onTreeNodeClick = (node) => {
     this.resetSelected();
@@ -1649,7 +1649,7 @@ class LibContentView extends React.Component {
         window.open(url);
       }
     }
-  }
+  };
 
   showColumnMarkdownFile = (filePath) => {
     let repoID = this.props.repoID;
@@ -1666,12 +1666,12 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onTreeNodeCollapse = (node) => {
     let tree = treeHelper.collapseNode(this.state.treeData, node);
     this.setState({treeData: tree});
-  }
+  };
 
   onTreeNodeExpanded = (node) => {
     let repoID = this.props.repoID;
@@ -1689,28 +1689,28 @@ class LibContentView extends React.Component {
       tree.expandNode(node);
       this.setState({treeData: tree});
     }
-  }
+  };
 
   addNodeToTree = (name, parentPath, type) => {
     let node = this.createTreeNode(name, type);
     let tree = treeHelper.addNodeToParentByPath(this.state.treeData, node, parentPath);
     this.setState({treeData: tree});
-  }
+  };
 
   renameTreeNode = (path, newName) => {
     let tree = treeHelper.renameNodeByPath(this.state.treeData, path, newName);
     this.setState({treeData: tree});
-  }
+  };
 
   deleteTreeNode = (path) => {
     let tree = treeHelper.deleteNodeByPath(this.state.treeData, path);
     this.setState({treeData: tree});
-  }
+  };
 
   deleteTreeNodes = (paths) => {
     let tree = treeHelper.deleteNodeListByPaths(this.state.treeData, paths);
     this.setState({treeData: tree});
-  }
+  };
 
   moveTreeNode = (nodePath, moveToPath, moveToRepo, nodeName) => {
     let repoID = this.props.repoID;
@@ -1721,7 +1721,7 @@ class LibContentView extends React.Component {
     }
     let tree = treeHelper.moveNodeByPath(this.state.treeData, nodePath, moveToPath, nodeName);
     this.setState({treeData: tree});
-  }
+  };
 
   copyTreeNode = (nodePath, copyToPath, destRepo, nodeName) => {
     let repoID = this.props.repoID;
@@ -1730,7 +1730,7 @@ class LibContentView extends React.Component {
     }
     let tree = treeHelper.copyNodeByPath(this.state.treeData, nodePath, copyToPath, nodeName);
     this.setState({treeData: tree});
-  }
+  };
 
   createTreeNode(name, type) {
     let object = this.createDirent(name, type);
@@ -1761,7 +1761,7 @@ class LibContentView extends React.Component {
       return new TreeNode({object});
     });
     node.addChildren(nodeList);
-  }
+  };
 
   getSelectedDirentPaths = () => {
     let paths = [];
@@ -1769,7 +1769,7 @@ class LibContentView extends React.Component {
       paths.push(Utils.joinPath(this.state.path, selectedDirent.name));
     });
     return paths;
-  }
+  };
 
   getSelectedDirentNames = () => {
     let names = [];
@@ -1777,14 +1777,14 @@ class LibContentView extends React.Component {
       names.push(selectedDirent.name);
     });
     return names;
-  }
+  };
 
   resetSelected = () => {
     this.setState({
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
-  }
+  };
 
   recaculateSelectedStateAfterDirentDeleted = (name, newDirentList) => {
     let selectedDirentList = this.state.selectedDirentList.slice(0);
@@ -1798,16 +1798,16 @@ class LibContentView extends React.Component {
       isDirentSelected: selectedDirentList.length > 0,
       isAllDirentSelected: selectedDirentList.length === newDirentList.length,
     });
-  }
+  };
 
   onLibDecryptDialog = () => {
     this.setState({libNeedDecrypt: false});
     this.loadDirData(this.state.path);
-  }
+  };
 
   goDraftPage = () => {
     window.open(siteRoot + 'drafts/' + this.state.draftID + '/');
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -1817,17 +1817,17 @@ class LibContentView extends React.Component {
       sortOrder: sortOrder,
       items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
     });
-  }
+  };
 
   onUploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.onFileUpload();
-  }
+  };
 
   onUploadFolder = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.onFolderUpload();
-  }
+  };
 
   onToolbarFileTagChanged = () => {
     let repoID = this.props.repoID;
@@ -1842,7 +1842,7 @@ class LibContentView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unSelectDirent = () => {
     this.setState({
@@ -1851,7 +1851,7 @@ class LibContentView extends React.Component {
     });
     const dirent = {};
     this.onDirentSelected(dirent);
-  }
+  };
 
   onDeleteRepoTag = (deletedTagID) => {
     let direntList = this.state.direntList.map(dirent => {
@@ -1865,7 +1865,7 @@ class LibContentView extends React.Component {
     });
     this.setState({direntList: direntList});
     this.updateUsedRepoTags();
-  }
+  };
 
 
   handleSubmit = (e) => {
@@ -1881,7 +1881,7 @@ class LibContentView extends React.Component {
     });
 
     e.preventDefault();
-  }
+  };
 
   render() {
     if (this.state.libNeedDecrypt) {

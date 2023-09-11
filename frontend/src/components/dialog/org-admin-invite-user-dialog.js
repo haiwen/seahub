@@ -23,7 +23,7 @@ class InviteUserDialog extends React.Component {
     toaster.success(message), {
       duration: 2
     };
-  }
+  };
 
   render() {
     return (

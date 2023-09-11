@@ -37,7 +37,7 @@ class DirTool extends React.Component {
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
-  }
+  };
 
   onCloseRepoTagDialog = () => {
     this.setState({
@@ -46,14 +46,14 @@ class DirTool extends React.Component {
       isCreateRepoTagShow: false,
       isListTaggedFileShow: false
     });
-  }
+  };
 
   onCreateRepoTagToggle = () => {
     this.setState({
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
       isListRepoTagShow: !this.state.isListRepoTagShow,
     });
-  }
+  };
 
   onListTaggedFileToggle = (currentTag) => {
     this.setState({
@@ -61,7 +61,7 @@ class DirTool extends React.Component {
       isListRepoTagShow: !this.state.isListRepoTagShow,
       isListTaggedFileShow: !this.state.isListTaggedFileShow,
     });
-  }
+  };
 
   isMarkdownFile(filePath) {
     let name = Utils.getFileName(filePath);

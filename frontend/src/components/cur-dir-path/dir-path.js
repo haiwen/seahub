@@ -22,7 +22,7 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
-  }
+  };
 
   onTabNavClick = (e, tabName, id) => {
     if (window.uploader &&
@@ -35,7 +35,7 @@ class DirPath extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.onTabNavClick(tabName, id);
-  }
+  };
 
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -63,7 +63,7 @@ class DirPath extends React.Component {
       }
     });
     return pathElem;
-  }
+  };
 
   render() {
     let { currentPath, repoName, fileTags } = this.props;

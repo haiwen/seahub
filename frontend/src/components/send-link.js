@@ -30,13 +30,13 @@ class SendLink extends React.Component {
     this.setState({
       emails: e.target.value
     });
-  }
+  };
 
   handleMsgInputChange = (e) => {
     this.setState({
       msg: e.target.value
     });
-  }
+  };
 
   sendLink = () => {
     const { emails, msg } = this.state;
@@ -80,7 +80,7 @@ class SendLink extends React.Component {
         errorMsg: errorMsg
       });
     });
-  }
+  };
 
   render() {
     const { emails, msg, errorMsg, btnDisabled, sending } = this.state;

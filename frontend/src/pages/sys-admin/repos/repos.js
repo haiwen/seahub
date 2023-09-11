@@ -28,29 +28,29 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   sortByFileCount = (e) => {
     e.preventDefault();
     this.props.sortItems('file_count');
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     this.props.sortItems('size');
-  }
+  };
 
   render() {
     // offer 'sort' only for 'all repos'
@@ -150,7 +150,7 @@ class Item extends Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   onTransferRepo = (owner) => {
     seafileAPI.sysAdminTransferRepo(this.props.repo.id, owner.email).then((res) => {
@@ -162,7 +162,7 @@ class Item extends Component {
       toaster.danger(errMessage);
     });
     this.toggleTransferDialog();
-  }
+  };
 
   handleMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -171,7 +171,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseOut = () => {
     if (!this.props.isItemFreezed) {
@@ -180,7 +180,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -188,7 +188,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -207,23 +207,23 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
-  }
+  };
 
   toggleDeleteDialog = () => {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleTransferDialog = () => {
     this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
-  }
+  };
 
   toggleHistorySettingDialog = () => {
     this.setState({isHistorySettingDialogOpen: !this.state.isHistorySettingDialogOpen});
-  }
+  };
 
   renderRepoName = () => {
     const { repo } = this.props;
@@ -236,7 +236,7 @@ class Item extends Component {
     } else {
       return '--';
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -258,7 +258,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   getOperations = () => {
     const { repo } = this.props;
@@ -268,7 +268,7 @@ class Item extends Component {
     }
     operations.push('History Setting');
     return operations;
-  }
+  };
 
   render () {
     const { repo } = this.props;

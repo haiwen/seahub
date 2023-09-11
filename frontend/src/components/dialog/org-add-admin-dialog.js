@@ -29,7 +29,7 @@ class AddOrgAdminDialog extends React.Component {
       errMessage: ''
     });
     this.options = [];
-  }
+  };
 
   addOrgAdmin = () => {
     if (!this.state.selectedOption) return;
@@ -41,11 +41,11 @@ class AddOrgAdminDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   render() {
     return (

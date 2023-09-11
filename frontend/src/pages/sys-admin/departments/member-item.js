@@ -29,16 +29,16 @@ class MemberItem extends React.Component {
   onMouseEnter = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: false });
-  }
+  };
 
   toggleMemberRoleMenu = () => {
     this.setState({ showRoleMenu: !this.state.showRoleMenu });
-  }
+  };
 
   onChangeUserRole = (role) => {
     let isAdmin = role === 'Admin' ? true : false;
@@ -51,7 +51,7 @@ class MemberItem extends React.Component {
     this.setState({
       highlight: false
     });
-  }
+  };
 
   render() {
     const member = this.props.member;

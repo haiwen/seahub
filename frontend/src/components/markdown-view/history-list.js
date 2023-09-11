@@ -70,7 +70,7 @@ class HistoryList extends React.Component {
         this.props.setDiffViewerContent(content1.data, content2.data);
       }));
     }));
-  }
+  };
 
   onScroll = (event) => {
     const clientHeight = event.target.clientHeight;
@@ -93,7 +93,7 @@ class HistoryList extends React.Component {
         });
       }
     }
-  }
+  };
 
   render() {
     return (

@@ -30,20 +30,20 @@ class TagItem extends React.Component {
     this.setState({
       isTagHighlighted: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       isTagHighlighted: false
     });
-  }
+  };
 
   getRepoTagIdList = () => {
     let repoTagIdList = [];
     let fileTagList = this.props.fileTagList || [];
     repoTagIdList = fileTagList.map((fileTag) => fileTag.repo_tag_id);
     return repoTagIdList;
-  }
+  };
 
   onEditFileTag = () => {
     let { repoID, repoTag, filePath } = this.props;
@@ -74,7 +74,7 @@ class TagItem extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   render() {
     const { isTagHighlighted } = this.state;
@@ -135,7 +135,7 @@ class TagList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -197,7 +197,7 @@ class EditFileTagDialog extends React.Component {
       isCreateRepoTagShow: !this.state.isCreateRepoTagShow,
       isListRepoTagShow: !this.state.isListRepoTagShow,
     });
-  }
+  };
 
   onRepoTagCreated = (repoTagID) => {
     let {repoID, filePath} = this.props;
@@ -207,7 +207,7 @@ class EditFileTagDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

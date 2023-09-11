@@ -40,7 +40,7 @@ class AllRepos extends Component {
 
   toggleCreateRepoDialog = () => {
     this.setState({isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen});
-  }
+  };
 
   getReposByPage = (page) => {
     const { perPage, sortBy } = this.state;
@@ -56,7 +56,7 @@ class AllRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   sortItems = (sortBy) => {
     this.setState({
@@ -72,7 +72,7 @@ class AllRepos extends Component {
       navigate(url.toString());
       this.getReposByPage(currentPage);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -80,7 +80,7 @@ class AllRepos extends Component {
     }, () => {
       this.getReposByPage(1);
     });
-  }
+  };
 
   createRepo = (repoName, Owner) => {
     seafileAPI.sysAdminCreateRepo(repoName, Owner).then(res => {
@@ -92,7 +92,7 @@ class AllRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDeleteRepo = (targetRepo) => {
     let repos = this.state.repos.filter(repo => {
@@ -101,7 +101,7 @@ class AllRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   onTransferRepo = (targetRepo) => {
     let repos = this.state.repos.map((item) => {
@@ -110,18 +110,18 @@ class AllRepos extends Component {
     this.setState({
       repos: repos
     });
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search libraries by name or ID')}
       submit={this.searchRepos}
     />;
-  }
+  };
 
   searchRepos = (repoNameOrID) => {
     navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
-  }
+  };
 
   render() {
     let { isCreateRepoDialogOpen } = this.state;

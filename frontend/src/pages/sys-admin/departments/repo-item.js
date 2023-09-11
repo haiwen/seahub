@@ -21,11 +21,11 @@ class RepoItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({ highlight: false });
-  }
+  };
 
   render() {
     const { repo } = this.props;

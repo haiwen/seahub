@@ -36,13 +36,13 @@ class MainSideNav extends React.Component {
       groupsExtended: !this.state.groupsExtended,
     });
     this.loadGroups();
-  }
+  };
 
   shExtend = () => {
     this.setState({
       sharedExtended: !this.state.sharedExtended,
     });
-  }
+  };
 
   loadGroups = () => {
     let _this = this;
@@ -62,7 +62,7 @@ class MainSideNav extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   tabItemClick = (e, param, id) => {
     if (window.uploader &&
@@ -75,16 +75,16 @@ class MainSideNav extends React.Component {
       window.uploader.isUploadProgressDialogShow = false;
     }
     this.props.tabItemClick(param, id);
-  }
+  };
 
   onDTableClick = () => {
     let url = dtableWebServer;
     window.open(url);
-  }
+  };
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
-  }
+  };
 
   renderSharedGroups() {
     let style = {height: 0};
@@ -251,12 +251,12 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
             }
-              <li className="nav-item">
-                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={(e) => this.tabItemClick(e, 'published')}>
-                  <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Published Libraries')}</span>
-                </Link>
-              </li>
+            <li className="nav-item">
+              <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Published Libraries')} onClick={(e) => this.tabItemClick(e, 'published')}>
+                <span className="sf2-icon-wiki-view" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Published Libraries')}</span>
+              </Link>
+            </li>
             {isDocs &&
               <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'drafts')}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>

@@ -23,11 +23,11 @@ class OrgUsersList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -40,12 +40,12 @@ class OrgUsersList extends React.Component {
     }
 
     this.props.initOrgUsersData(page);
-  }
+  };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
-  }
+  };
 
   render() {
     const { sortBy, sortOrder } = this.props;

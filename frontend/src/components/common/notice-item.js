@@ -335,7 +335,7 @@ class NoticeItem extends React.Component {
       return;
     }
     this.props.onNoticeItemClick(item);
-  }
+  };
 
   render() {
     let noticeItem = this.props.noticeItem;

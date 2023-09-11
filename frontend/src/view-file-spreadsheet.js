@@ -80,7 +80,7 @@ class FileContent extends React.Component {
   setIframeHeight = (e) => {
     const iframe = e.currentTarget;
     iframe.height = iframe.contentDocument.body.scrollHeight;
-  }
+  };
 
   render() {
     const { isLoading, errorMsg } = this.state;

@@ -68,13 +68,13 @@ class IndexContentViewer extends React.Component {
     this.links.forEach(link => {
       link.addEventListener('click', this.onLinkClick);
     });
-  }
+  };
 
   removeClickEvent = () => {
     this.links.forEach(link => {
       link.removeEventListener('click', this.onLinkClick);
     });
-  }
+  };
 
   onLinkClick = (event) => {
     event.preventDefault();
@@ -86,7 +86,7 @@ class IndexContentViewer extends React.Component {
     }
     const link = this.getLink(event.target);
     if (link) this.props.onLinkClick(link);
-  }
+  };
 
   getLink = (node) => {
     const tagName = node.tagName;
@@ -96,7 +96,7 @@ class IndexContentViewer extends React.Component {
     } else {
       return this.getLink(node.parentNode);
     }
-  }
+  };
 
   changeInlineNode = (item) => {
     if (item.type == 'link' || item.type === 'image') {
@@ -145,7 +145,7 @@ class IndexContentViewer extends React.Component {
     }
 
     return item;
-  }
+  };
 
   getRootNode = () => {
     let value = deserialize(this.props.indexContent);
@@ -157,7 +157,7 @@ class IndexContentViewer extends React.Component {
         this.treeRoot = treeRoot;
       }
     });
-  }
+  };
 
   setNodePath = (node, parentNodePath) => {
     let name = node.name;
@@ -168,7 +168,7 @@ class IndexContentViewer extends React.Component {
         this.setNodePath(child, path);
       });
     }
-  }
+  };
 
   // slateNodes is list items of an unordered list or ordered list, translate them to treeNode and add to parentTreeNode
   transSlateToTree = (slateNodes, parentTreeNode) => {
@@ -194,7 +194,7 @@ class IndexContentViewer extends React.Component {
     });
     parentTreeNode.addChildren(treeNodes);
     return parentTreeNode;
-  }
+  };
 
   // translate slate_paragraph_node to treeNode
   transParagraph = (paragraphNode) => {
@@ -214,7 +214,7 @@ class IndexContentViewer extends React.Component {
       treeNode = new TreeNode({ name: '', href: '' });
     }
     return treeNode;
-  }
+  };
 
   render() {
     return (
@@ -246,7 +246,7 @@ class FolderItem extends React.Component {
     this.setState({ expanded: !this.state.expanded }, () => {
       if (this.state.expanded) this.props.bindClickEvent();
     });
-  }
+  };
 
   renderLink = ({ href, name, path }) => {
     const className = `wiki-nav-content ${path === this.props.currentPath ? 'wiki-nav-content-highlight' : ''}`;
@@ -257,7 +257,7 @@ class FolderItem extends React.Component {
     } else {
       return null;
     }
-  }
+  };
 
   componentDidMount() {
     if (this.props.node && !this.props.node.parentNode) {

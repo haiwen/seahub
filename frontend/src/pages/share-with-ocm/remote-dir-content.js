@@ -19,22 +19,22 @@ class DirentItem extends React.Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   openFolder = () => {
     this.props.openFolder(this.props.dirent);
-  }
+  };
 
   downloadDirent = (e) => {
     e.preventDefault();
     this.props.downloadDirent(this.props.dirent);
-  }
+  };
 
   render () {
     let { isOpIconShown } = this.state;

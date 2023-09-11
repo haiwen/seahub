@@ -29,7 +29,7 @@ class StatisticTraffic extends React.Component {
 
   changeTabActive = activeName => {
     this.setState({tabActive: activeName});
-  }
+  };
 
   getActiviesFiles = (startTime, endTime, groupBy) => {
     seafileAPI.sysAdminStatisticTraffic(startTime, endTime, groupBy).then((res) => {
@@ -112,7 +112,7 @@ class StatisticTraffic extends React.Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   renderCommonTool = () => {
     let { tabActive } = this.state;
@@ -134,7 +134,7 @@ class StatisticTraffic extends React.Component {
         <div className={`statistic-traffic-tab-item ${tabActive === 'organizations' ? 'active' : ''}`} onClick={this.changeTabActive.bind(this, 'organizations')}>{gettext('Organizations')}</div>
       </div>
     );
-  }
+  };
 
   render() {
     let { labels, filesData, linkData, syncData, webData, isLoading, tabActive } = this.state;

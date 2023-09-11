@@ -39,7 +39,7 @@ class LogsExportExcelDialog extends React.Component {
     }
     location.href = url + '?start=' + startDateStr + '&end=' + endDateStr;
     this.props.toggle();
-  }
+  };
 
   isValidDateStr = () => {
     let { startDateStr, endDateStr } = this.state;
@@ -54,7 +54,7 @@ class LogsExportExcelDialog extends React.Component {
       });
       return false;
     }
-  }
+  };
 
   handleStartChange = (e) => {
     const startDateStr = e.target.value.trim();
@@ -62,7 +62,7 @@ class LogsExportExcelDialog extends React.Component {
       startDateStr: startDateStr,
       errMsg: ''
     });
-  }
+  };
 
   handleEndChange = (e) => {
     const endDateStr = e.target.value.trim();
@@ -70,7 +70,7 @@ class LogsExportExcelDialog extends React.Component {
       endDateStr: endDateStr,
       errMsg: '',
     });
-  }
+  };
 
   render() {
     return (

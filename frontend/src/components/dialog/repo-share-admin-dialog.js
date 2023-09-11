@@ -31,19 +31,19 @@ class RepoShareAdminDialog extends React.Component {
     } else {
       return 'shareToUser';
     }
-  }
+  };
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({ activeTab: tab });
     }
-  }
+  };
 
   onTabKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   render() {
     const { activeTab } = this.state;

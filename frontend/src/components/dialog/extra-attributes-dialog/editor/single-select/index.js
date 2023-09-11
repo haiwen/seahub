@@ -22,11 +22,11 @@ class SingleSelect extends Component {
 
   updateState = () => {
     this.setState({ isShowSingleSelect: !this.state.isShowSingleSelect });
-  }
+  };
 
   onCommit = (value, column) => {
     this.props.onCommit(value, column);
-  }
+  };
 
   render() {
     const { isShowSingleSelect } = this.state;

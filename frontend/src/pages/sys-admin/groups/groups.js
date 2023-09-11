@@ -37,7 +37,7 @@ class Groups extends Component {
 
   toggleCreateGroupDialog = () => {
     this.setState({isCreateGroupDialogOpen: !this.state.isCreateGroupDialogOpen});
-  }
+  };
 
   getGroupListByPage = (page) => {
     seafileAPI.sysAdminListAllGroups(page, this.state.perPage).then((res) => {
@@ -52,7 +52,7 @@ class Groups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -60,7 +60,7 @@ class Groups extends Component {
     }, () => {
       this.getGroupListByPage(1);
     });
-  }
+  };
 
   createGroup = (groupName, OnwerEmail) => {
     seafileAPI.sysAdminCreateNewGroup(groupName, OnwerEmail).then(res => {
@@ -74,7 +74,7 @@ class Groups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteGroup = (groupID) => {
     seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
@@ -89,7 +89,7 @@ class Groups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   transferGroup = (groupID, receiverEmail) => {
     seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
@@ -107,18 +107,18 @@ class Groups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search groups by name')}
       submit={this.searchGroups}
     />;
-  }
+  };
 
   searchGroups = (name) => {
     navigate(`${siteRoot}sys/search-groups/?name=${encodeURIComponent(name)}`);
-  }
+  };
 
   render() {
     let { isCreateGroupDialogOpen } = this.state;

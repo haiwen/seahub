@@ -10,19 +10,19 @@ const propTypes = {
 class AddCustomPermission extends React.Component {
 
   onUpdateCustomPermission = (permission_name, permission_desc, permission) => {
-    this.props.addCustomPermission(permission_name, permission_desc, permission)
-  }
+    this.props.addCustomPermission(permission_name, permission_desc, permission);
+  };
 
   render() {
     return (
-      <CustomPermissionEditor 
+      <CustomPermissionEditor
         mode={'add'}
         onChangeMode={this.props.onChangeMode}
         onUpdateCustomPermission={this.onUpdateCustomPermission}
       />
     );
   }
-  
+
 }
 
 AddCustomPermission.propTypes = propTypes;

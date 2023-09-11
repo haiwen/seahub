@@ -27,7 +27,7 @@ class InsertRepoImageDialog extends React.Component {
     const url = serviceUrl + '/lib/' + this.state.repo.repo_id + '/file' + Utils.encodePath(this.state.selectedPath) + '?raw=1';
     window.richMarkdownEditor.onInsertImage(url);
     this.props.toggleCancel();
-  }
+  };
 
   onDirentItemClick = (repo, selectedPath, dirent) => {
     if (dirent.type === 'file' && Utils.imageCheck(dirent.name)) {
@@ -39,11 +39,11 @@ class InsertRepoImageDialog extends React.Component {
     else {
       this.setState({repo: null, selectedPath: ''});
     }
-  }
+  };
 
   onRepoItemClick = () => {
     this.setState({repo: null, selectedPath: ''});
-  }
+  };
 
   render() {
     const toggle = this.props.toggleCancel;

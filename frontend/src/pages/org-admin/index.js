@@ -72,11 +72,11 @@ class Org extends React.Component {
 
   onCloseSidePanel = () => {
     this.setState({isSidePanelClosed: !this.state.isSidePanelClosed});
-  }
+  };
 
   tabItemClick = (param) => {
     this.setState({currentTab: param});
-  }
+  };
 
   render() {
     let { isSidePanelClosed, currentTab } = this.state;

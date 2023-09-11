@@ -77,7 +77,7 @@ class Item extends Component {
       return gettext('Broken ({repo_id_placeholder})')
         .replace('{repo_id_placeholder}', repo.id);
     }
-  }
+  };
 
   getOwnerLink = () => {
     let link;
@@ -90,7 +90,7 @@ class Item extends Component {
       link = <Link to={`${siteRoot}sys/departments/${groupID}/`}>{item.owner_name}</Link>;
     }
     return link;
-  }
+  };
 
   render() {
     const { item } = this.props;

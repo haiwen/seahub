@@ -17,11 +17,11 @@ class Content extends Component {
 
   getPreviousPageDevicesList = () => {
     this.props.getDevicesListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageDevicesList = () => {
     this.props.getDevicesListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -83,11 +83,11 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   handleUnlink = (e) => {
     e.preventDefault();
@@ -96,11 +96,11 @@ class Item extends Component {
     } else {
       this.unlinkDevice(true);
     }
-  }
+  };
 
   toggleUnlinkDeviceDialog = () => {
     this.setState({isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen});
-  }
+  };
 
   unlinkDevice = (deleteFiles) => {
     const { platform, device_id, user } = this.props.item;
@@ -112,7 +112,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -186,7 +186,7 @@ class DevicesByPlatform extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -194,7 +194,7 @@ class DevicesByPlatform extends Component {
     }, () => {
       this.getDevicesListByPage(1);
     });
-  }
+  };
 
   render() {
     return (

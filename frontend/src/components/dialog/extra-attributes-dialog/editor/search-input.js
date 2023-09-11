@@ -36,7 +36,7 @@ class SearchInput extends Component {
 
   onCompositionStart = () => {
     this.isInputtingChinese = true;
-  }
+  };
 
   onChange = (e) => {
     this.timer && clearTimeout(this.timer);
@@ -48,12 +48,12 @@ class SearchInput extends Component {
         onChange && onChange(this.state.searchValue.trim());
       }, wait);
     });
-  }
+  };
 
   onCompositionEnd = (e) => {
     this.isInputtingChinese = false;
     this.onChange(e);
-  }
+  };
 
   setFocus = (isSelectAllText) => {
     if (this.inputRef === document.activeElement) return;
@@ -62,7 +62,7 @@ class SearchInput extends Component {
       const txtLength = this.state.searchValue.length;
       this.inputRef.setSelectionRange(0, txtLength);
     }
-  }
+  };
 
   render() {
     const { placeholder, autoFocus, className, onKeyDown, disabled, style } = this.props;

@@ -21,11 +21,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -90,7 +90,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -99,7 +99,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -107,15 +107,15 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleLinkDialog = () => {
     this.setState({isLinkDialogOpen: !this.state.isLinkDialogOpen});
-  }
+  };
 
   deleteItem = () => {
     this.props.deleteItem(this.props.item);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -129,7 +129,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -140,7 +140,7 @@ class Item extends Component {
         this.deleteItem();
         break;
     }
-  }
+  };
 
   getRoleText = () => {
     let roleText;
@@ -157,7 +157,7 @@ class Item extends Component {
         break;
     }
     return roleText;
-  }
+  };
 
   getIconUrl = () => {
     const { item } = this.props;
@@ -172,7 +172,7 @@ class Item extends Component {
       }
     }
     return url;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -298,7 +298,7 @@ class Links extends Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   render() {
     const { shareLinkItems, uploadLinkItems } = this.state;

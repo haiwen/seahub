@@ -18,13 +18,13 @@ class ShareRepoListItem extends React.Component {
   onRepoSelect = (e) => {
     let isChecked = e.target.checked;
     this.props.onRepoSelect(this.props.repo, isChecked);
-  }
+  };
 
   onPermissionChange = (e) => {
     let permission = e.target.value;
     let repo = this.props.repo;
     this.props.onPermissionChange(repo, permission);
-  }
+  };
 
   render() {
     let repo = this.props.repo;
@@ -88,7 +88,7 @@ class ShareRepoDialog extends React.Component {
       });
     }
     this.setState({selectedRepoList: selectedRepoList});
-  }
+  };
 
   onPermissionChange = (repo, permission) => {
     let repoList = this.state.repoList.map(item => {
@@ -98,7 +98,7 @@ class ShareRepoDialog extends React.Component {
       return item;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   handleSubmit = () => {
     if (this.state.selectedRepoList.length === 0) {
@@ -109,11 +109,11 @@ class ShareRepoDialog extends React.Component {
 
     this.props.onRepoSelectedHandler(this.state.selectedRepoList);
     this.onCloseDialog();
-  }
+  };
 
   onCloseDialog = () => {
     this.props.onShareRepoDialogClose();
-  }
+  };
 
   render() {
     return (

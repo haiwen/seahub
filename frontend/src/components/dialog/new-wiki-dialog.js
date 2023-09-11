@@ -30,23 +30,23 @@ class NewWikiDialog extends React.Component {
     this.setState({
       name: e.target.value,
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     let { isExist, name, repoID } = this.state;
     this.props.addWiki(isExist, name, repoID);
     this.props.toggleCancel();
-  }
+  };
 
   toggle = () => {
     this.props.toggleCancel();
-  }
+  };
 
   render() {
     return (

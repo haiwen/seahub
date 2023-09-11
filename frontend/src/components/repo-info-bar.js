@@ -39,25 +39,25 @@ class RepoInfoBar extends React.Component {
       currentTag: currentTag,
       isListTaggedFileShow: !this.state.isListTaggedFileShow,
     });
-  }
+  };
 
   onCloseDialog = () => {
     this.setState({
       isListTaggedFileShow: false
     });
-  }
+  };
 
   toggleDrafts = () => {
     this.setState({
       showRepoDrafts: !this.state.showRepoDrafts
     });
-  }
+  };
 
   toggleReadme = () => {
     this.setState({
       showReadmeDialog: !this.state.showReadmeDialog
     });
-  }
+  };
 
   render() {
     let { repoID, currentPath, usedRepoTags, readmeMarkdown, draftCounts, className } = this.props;

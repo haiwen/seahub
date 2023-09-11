@@ -15,11 +15,11 @@ export default class SdocEditor extends React.Component {
 
   toggleStar = (isStarred) => {
     this.setState({isStarred: isStarred});
-  }
+  };
 
   unmarkDraft = () => {
     this.setState({isDraft: false});
-  }
+  };
 
   render() {
     const { repoID, docPath, docName, docPerm } = window.seafile;

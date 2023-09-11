@@ -30,28 +30,28 @@ class Content extends Component {
     this.setState({
       isItemFreezed: freezed
     });
-  }
+  };
 
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -142,7 +142,7 @@ class Item extends Component {
     }, () => {
       this.props.freezeItem(this.state.isOpMenuOpen);
     });
-  }
+  };
 
   handleMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -151,7 +151,7 @@ class Item extends Component {
         showOpIcon: true
       });
     }
-  }
+  };
 
   handleMouseOut = () => {
     if (!this.props.isItemFreezed) {
@@ -160,12 +160,12 @@ class Item extends Component {
         showOpIcon: false
       });
     }
-  }
+  };
 
   share = (e) => {
     e.preventDefault();
     this.setState({isShowSharedDialog: true});
-  }
+  };
 
   leaveShare = (e) => {
     e.preventDefault();
@@ -194,11 +194,11 @@ class Item extends Component {
       }
       toaster(errMessage);
     });
-  }
+  };
 
   toggleShareDialog = () => {
     this.setState({isShowSharedDialog: false});
-  }
+  };
 
   onToggleStarRepo = (e) => {
     e.preventDefault();
@@ -224,11 +224,11 @@ class Item extends Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   visitRepo = () => {
     navigate(this.repoURL);
-  }
+  };
 
   watchFileChanges = () => {
     const { data: repo } = this.props;
@@ -238,7 +238,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unwatchFileChanges = () => {
     const { data: repo } = this.props;
@@ -248,7 +248,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     if (this.state.unshared) {
@@ -429,13 +429,13 @@ class SharedLibraries extends Component {
       sortOrder: sortOrder,
       items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   toggleSortOptionsDialog = () => {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   onMonitorRepo = (repo, monitored) => {
     let items = this.state.items.map(item => {
@@ -445,7 +445,7 @@ class SharedLibraries extends Component {
       return item;
     });
     this.setState({items: items});
-  }
+  };
 
   render() {
     return (

@@ -21,7 +21,7 @@ class MainPanel extends React.Component {
 
   onSearchedClick = () => {
     //todos;
-  }
+  };
 
   render() {
     return (

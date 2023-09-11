@@ -25,19 +25,19 @@ class UpdateUser extends React.Component {
     this.setState({
       value: value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateValue(this.state.value.trim());
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     const  { dialogTitle, toggleDialog } = this.props;

@@ -31,7 +31,7 @@ class TransferGroupDialog extends React.Component {
       errMessage: '',
     });
     this.options = [];
-  }
+  };
 
   transferGroup = () => {
     const email = this.state.selectedOption && this.state.selectedOption.email;
@@ -43,11 +43,11 @@ class TransferGroupDialog extends React.Component {
         this.setState({errMessage: errMessage});
       });
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleTransferGroupDialog();
-  }
+  };
 
   render() {
     return (

@@ -65,7 +65,7 @@ class SdocRevision extends React.Component {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     window.location.href = `${siteRoot}lib/${repoID}/file${filePath}`;
-  }
+  };
 
   publishRevision = (event) => {
     event.stopPropagation();
@@ -77,7 +77,7 @@ class SdocRevision extends React.Component {
       const errorMessage = Utils.getErrorMsg(error, false);
       toaster.danger(gettext(errorMessage));
     });
-  }
+  };
 
   renderContent = () => {
     const { isLoading, errorMessage, revisionContent, originContent } = this.state;
@@ -103,7 +103,7 @@ class SdocRevision extends React.Component {
         lastContent={originContent}
       />
     );
-  }
+  };
 
   render() {
     const { isLoading, errorMessage } = this.state;

@@ -30,7 +30,7 @@ class DeleteMemberDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let tipMessage = gettext('Are you sure you want to delete {placeholder} ?');
