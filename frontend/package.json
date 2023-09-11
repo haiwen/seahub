@@ -33,7 +33,6 @@
     "react-dom": "17.0.0",
     "react-i18next": "12.1.1",
     "react-mentions": "4.4.7",
-    "react-qr-code": "^1.0.5",
     "react-responsive": "9.0.2",
     "react-select": "5.7.0",
     "react-transition-group": "4.4.5",
