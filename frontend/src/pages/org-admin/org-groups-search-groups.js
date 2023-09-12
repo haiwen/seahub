@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
+import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
@@ -120,6 +121,13 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  group: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroupItem: PropTypes.func.isRequired,
+};
 
 class OrgGroupsSearchGroupsResult extends React.Component {
 
@@ -170,6 +178,11 @@ class OrgGroupsSearchGroupsResult extends React.Component {
     );
   }
 }
+
+OrgGroupsSearchGroupsResult.propTypes = {
+  toggleDelete: PropTypes.func.isRequired,
+  orgGroups: PropTypes.array.isRequired,
+};
 
 class OrgGroupsSearchGroups extends Component {
 

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import Nav from './org-users-nav';
 import OrgUsersList from './org-users-list';
@@ -61,6 +62,11 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  submit: PropTypes.func.isRequired,
+};
 
 class OrgUsers extends Component {
 
@@ -155,7 +161,7 @@ class OrgUsers extends Component {
           orgUsers: users.concat(this.state.orgUsers)
         });
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });

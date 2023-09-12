@@ -39,7 +39,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, pageInfo, curPerPage, hasNextPage, currentPage } = this.props;
+    const { loading, errorMsg, items, curPerPage, hasNextPage, currentPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -104,6 +104,9 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getItemsByPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  deleteItem: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -229,6 +232,10 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
 };
 
 class Invitations extends Component {

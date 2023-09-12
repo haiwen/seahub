@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -184,6 +183,16 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
+  leaveShare: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   static propTypes = {
@@ -235,7 +244,7 @@ class Item extends Component {
     }
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={item.icon_url} width="24" /></td>
+        <td><img src={item.icon_url} width="24" alt="" /></td>
         <td>
           {item.is_dir ? <a href="#" onClick={this.openFolder}>{item.name}</a> : item.name}
         </td>
@@ -249,6 +258,13 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  leaveShare: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+};
 
 class DirPath extends React.Component {
 
@@ -308,5 +324,12 @@ class DirPath extends React.Component {
     );
   }
 }
+
+DirPath.propTypes = {
+  shareID: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
+  onPathClick: PropTypes.func.isRequired,
+  getAllReceivedShares: PropTypes.func.isRequired,
+};
 
 export default OCMViaWebdav;

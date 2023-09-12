@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { gettext, siteRoot, lang, trashReposExpireDays } from '../../utils/constants';
@@ -110,6 +111,11 @@ class DeletedRepoTable extends Component {
   }
 }
 
+DeletedRepoTable.propTypes = {
+  deletedRepoList: PropTypes.array.isRequired,
+  refreshDeletedRepoList: PropTypes.func.isRequired,
+};
+
 class DeletedRepoItem extends Component {
   constructor(props) {
     super(props);
@@ -179,5 +185,15 @@ class DeletedRepoItem extends Component {
     );
   }
 }
+
+DeletedRepoItem.propTypes = {
+  isItemFreezed: PropTypes.bool.isRequired,
+  repo: PropTypes.object.isRequired,
+  refreshDeletedRepoList: PropTypes.func.isRequired,
+};
+
+MyLibsDeleted.propTypes = {
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 export default MyLibsDeleted;

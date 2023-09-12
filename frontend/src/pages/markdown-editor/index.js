@@ -150,6 +150,7 @@ class MarkdownEditor extends React.Component {
         });
         return;
       default:
+        // eslint-disable-next-line
         console.log('unknown response type: ' + data.response);
         return;
     }

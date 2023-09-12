@@ -80,6 +80,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  institutionInfo: PropTypes.object.isRequired,
+  updateQuota: PropTypes.func.isRequired,
 };
 
 

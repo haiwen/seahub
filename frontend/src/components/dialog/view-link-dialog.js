@@ -19,9 +19,9 @@ class ViewLinkDialog extends React.Component {
   copyToClipBoard = () => {
     copy(this.props.currentLinkHref);
     let message = gettext('Link has been copied to clipboard');
-    toaster.success(message), {
+    toaster.success(message, {
       duration: 2
-    };
+    });
     this.props.toggle();
   };
 

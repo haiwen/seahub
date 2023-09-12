@@ -513,6 +513,7 @@ Item.propTypes = {
   updateAdminRole: PropTypes.func.isRequired,
   revokeAdmin: PropTypes.func.isRequired,
   onUserSelected: PropTypes.func.isRequired,
+  isSearchResult: PropTypes.bool.isRequired,
 };
 
 export default Content;

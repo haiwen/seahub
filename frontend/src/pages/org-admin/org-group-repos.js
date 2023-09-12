@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -96,6 +97,10 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -181,5 +186,13 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
+OrgGroupRepos.propTypes = {
+  groupID: PropTypes.object.isRequired,
+};
 
 export default OrgGroupRepos;

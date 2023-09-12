@@ -90,6 +90,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getUploadLinksByPage: PropTypes.func.isRequired,
+  deleteUploadLink: PropTypes.func.isRequired,
 };
 
 
@@ -153,6 +155,7 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  deleteUploadLink: PropTypes.func.isRequired,
 };
 
 

@@ -74,15 +74,33 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteUserFolderPermission: PropTypes.func.isRequired,
+  onChangeUserFolderPerm: PropTypes.func.isRequired,
+  showPath: PropTypes.bool.isRequired,
+  repoName: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  deleteGroupPermissionItem: PropTypes.func.isRequired,
+  onChangeGroupPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  isDepartmentRepo: PropTypes.bool
+  isDepartmentRepo: PropTypes.bool,
+  repoName: PropTypes.string,
+  folderPath: PropTypes.string,
 };
 
 const NoOptionsMessage = (props) => {
   return (
     <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
   );
+};
+
+NoOptionsMessage.propTypes = {
+  innerProps: PropTypes.any.isRequired,
 };
 
 class LibSubFolderSerGroupPermissionDialog extends React.Component {

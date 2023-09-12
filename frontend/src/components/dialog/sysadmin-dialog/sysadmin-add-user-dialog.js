@@ -6,6 +6,9 @@ import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 
 const propTypes = {
+  availableRoles: PropTypes.array.isRequired,
+  dialogTitle: PropTypes.string.isRequired,
+  showRole: PropTypes.bool.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired
 };

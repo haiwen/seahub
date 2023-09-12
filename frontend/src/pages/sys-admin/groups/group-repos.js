@@ -68,6 +68,7 @@ Content.propTypes = {
   resetPerPage: PropTypes.func.isRequired,
   curPerPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
+  unshareRepo: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -155,6 +156,7 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  unshareRepo: PropTypes.func.isRequired,
 };
 
 class GroupRepos extends Component {
@@ -226,5 +228,9 @@ class GroupRepos extends Component {
     );
   }
 }
+
+GroupRepos.propTypes = {
+  groupID: PropTypes.string.isRequired,
+};
 
 export default GroupRepos;

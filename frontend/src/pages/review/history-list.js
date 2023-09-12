@@ -1,9 +1,10 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
+import PropTypes from 'prop-types';
 import Loading from '../../components/loading';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { draftRepoID, draftFilePath, draftOriginFilePath } from '../../utils/constants';
+import { draftRepoID, draftFilePath } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 
@@ -102,5 +103,23 @@ class HistoryItem extends React.Component {
   }
 }
 
+HistoryItem.propTypes = {
+  index: PropTypes.number.isRequired,
+  currentItem: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
+  ctime: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  preItem: PropTypes.string.isRequired,
+};
+
+HistoryList.propTypes = {
+  historyList: PropTypes.array.isRequired,
+  onHistoryItemClick: PropTypes.func.isRequired,
+  onHistoryListChange: PropTypes.func.isRequired,
+  totalReversionCount: PropTypes.number.isRequired,
+  activeItem: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+};
 
 export default HistoryList;

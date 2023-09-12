@@ -46,7 +46,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, orgInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {

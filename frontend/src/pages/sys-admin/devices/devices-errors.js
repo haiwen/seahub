@@ -84,6 +84,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
 };
 
 class Item extends Component {

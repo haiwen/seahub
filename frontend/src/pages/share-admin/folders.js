@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -71,6 +72,15 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+};
 
 class Item extends Component {
 
@@ -283,6 +293,11 @@ class Item extends Component {
     return this.props.isDesktop ? desktopItem : mobileItem;
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};
 
 class ShareAdminFolders extends Component {
 

@@ -66,6 +66,7 @@ const propTypes = {
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array,
 };
 
 class DirColumnView extends React.Component {

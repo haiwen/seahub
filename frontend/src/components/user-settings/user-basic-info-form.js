@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const {
@@ -88,5 +89,10 @@ class UserBasicInfoForm extends React.Component {
     );
   }
 }
+
+UserBasicInfoForm.propTypes = {
+  updateUserInfo: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+};
 
 export default UserBasicInfoForm;

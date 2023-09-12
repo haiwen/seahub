@@ -19,7 +19,7 @@ class ShareAdminLink extends React.Component {
   copyToClipboard = () => {
     copy(this.props.link);
     this.props.toggleDialog();
-    toaster.success(gettext('The link is copied to the clipboard.')), {duration: 2};
+    toaster.success(gettext('The link is copied to the clipboard.'), {duration: 2});
   };
 
   render() {

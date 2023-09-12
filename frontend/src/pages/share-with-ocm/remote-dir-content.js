@@ -64,9 +64,11 @@ class DirentItem extends React.Component {
   }
 }
 
-
-const propTypes = {
-  direntList: PropTypes.array.isRequired
+DirentItem.propTypes = {
+  dirent: PropTypes.object.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  deleteDirent: PropTypes.func.isRequired,
+  downloadDirent: PropTypes.func.isRequired,
 };
 
 class DirContent extends React.Component {
@@ -106,7 +108,6 @@ class DirContent extends React.Component {
                 openFolder={this.props.openFolder}
                 deleteDirent={this.props.deleteDirent}
                 downloadDirent={this.props.downloadDirent}
-                fromSystemRepo={this.props.fromSystemRepo}
               />;
             })}
           </tbody>
@@ -116,6 +117,13 @@ class DirContent extends React.Component {
   }
 }
 
-DirContent.propTypes = propTypes;
+DirContent.propTypes =  {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  direntList: PropTypes.array.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  deleteDirent: PropTypes.func.isRequired,
+  downloadDirent: PropTypes.func.isRequired,
+};
 
 export default DirContent;

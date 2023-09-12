@@ -25,7 +25,7 @@ class DirPath extends React.Component {
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') {
-        return;
+        return null;
       }
       if (index === (pathList.length - 1)) {
         return (

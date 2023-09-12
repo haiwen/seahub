@@ -153,7 +153,7 @@ class SearchUsers extends Component {
     });
     seafileAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
       let userList = this.state.userList.map(item => {
-        res.data.success.map(resultUser => {
+        res.data.success.forEach(resultUser => {
           if (item.email == resultUser.email) {
             item.quota_total = resultUser.quota_total;
           }
@@ -190,7 +190,7 @@ class SearchUsers extends Component {
             .replace('{user_number_placeholder}', length);
         toaster.success(msg);
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });

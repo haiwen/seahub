@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { gettext } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
 import FileChooser from '../file-chooser/file-chooser';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   sharedToken: PropTypes.string.isRequired,

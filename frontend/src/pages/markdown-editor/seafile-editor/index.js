@@ -31,6 +31,11 @@ const propTypes = {
   deleteDraft: PropTypes.func,
   contentChanged: PropTypes.bool,
   openDialogs: PropTypes.func,
+  fileInfo: PropTypes.object.isRequired,
+  collabUsers: PropTypes.array.isRequired,
+  emitSwitchEditor: PropTypes.object.isRequired,
+  isSaving: PropTypes.bool,
+  collabServer: PropTypes.string,
 };
 
 class SeafileEditor extends React.Component {

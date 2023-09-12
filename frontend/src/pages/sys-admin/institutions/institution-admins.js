@@ -85,6 +85,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  revokeAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -201,6 +203,11 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  revokeAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
 };
 
 class InstitutionAdmins extends Component {

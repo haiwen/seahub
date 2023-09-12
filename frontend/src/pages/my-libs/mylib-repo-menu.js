@@ -205,6 +205,7 @@ class MylibRepoMenu extends React.Component {
               if (item != 'Divider') {
                 return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
               }
+              return null;
             })}
           </div>
         </div>

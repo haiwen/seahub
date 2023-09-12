@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -67,6 +68,23 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  getItemsByPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  setToCurrent: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 
@@ -195,6 +213,16 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  setToCurrent: PropTypes.func.isRequired,
+  deleteNotification: PropTypes.func.isRequired,
+};
 
 class Notifications extends Component {
 

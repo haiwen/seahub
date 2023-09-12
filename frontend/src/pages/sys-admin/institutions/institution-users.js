@@ -104,8 +104,10 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getInstitutionUsersByPage: PropTypes.func.isRequired,
+  setAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
-
 
 class Item extends Component {
 
@@ -237,6 +239,11 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.string.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  setAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
 };
 
 class InstitutionUsers extends Component {
@@ -325,7 +332,7 @@ class InstitutionUsers extends Component {
         let newUserList = this.state.userList.concat(successArray);
         this.setState({userList: newUserList});
       }
-      failedArray.map((item) => {
+      failedArray.forEach((item) => {
         toaster.danger(item.error_msg);
       });
     }).catch((error) => {

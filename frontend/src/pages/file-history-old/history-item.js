@@ -14,6 +14,7 @@ const propTypes = {
   canDownload: PropTypes.bool.isRequired,
   canCompare: PropTypes.bool.isRequired,
   onItemRestore: PropTypes.func.isRequired,
+  snapshotURL: PropTypes.string.isRequired,
 };
 
 class HistoryItem extends React.Component {
@@ -92,6 +93,7 @@ const MoreMenuPropTypes = {
   onItemRestore: PropTypes.func.isRequired,
   canDownload: PropTypes.bool.isRequired,
   canCompare: PropTypes.bool.isRequired,
+  snapshotURL: PropTypes.string.isRequired,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -108,7 +110,7 @@ class MoreMenu extends React.PureComponent {
   };
 
   render() {
-    const { index, downloadUrl, viewUrl, diffUrl, snapshotURL, onItemRestore, canCompare, canDownload } = this.props;
+    const { index, downloadUrl, viewUrl, snapshotURL, onItemRestore, canDownload } = this.props;
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle

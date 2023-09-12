@@ -17,6 +17,10 @@ const propTypes = {
   updateUsedRepoTags: PropTypes.func.isRequired,
   fileTags: PropTypes.array.isRequired,
   onDeleteRepoTag: PropTypes.func.isRequired,
+  direntList: PropTypes.array,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.array,
 };
 
 class CurDirPath extends React.Component {

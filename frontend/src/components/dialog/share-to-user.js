@@ -105,6 +105,14 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class UserList extends React.Component {
 
   render() {
@@ -127,6 +135,14 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,

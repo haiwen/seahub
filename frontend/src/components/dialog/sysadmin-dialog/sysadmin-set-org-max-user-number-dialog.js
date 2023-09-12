@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, In
 import { gettext } from '../../../utils/constants';
 
 const propTypes = {
+  value: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired
 };

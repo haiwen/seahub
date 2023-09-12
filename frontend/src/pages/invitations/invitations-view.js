@@ -158,7 +158,9 @@ class Item extends React.Component {
 }
 
 const ItemPropTypes = {
+  data: PropTypes.object.isRequired,
   invitation: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 Item.propTypes = ItemPropTypes;
@@ -293,6 +295,10 @@ class InvitationsView extends React.Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 const InvitationsViewPropTypes = {
   onShowSidePanel: PropTypes.func.isRequired,

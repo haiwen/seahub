@@ -81,6 +81,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getDevicesListByPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
 };
 
 class Item extends Component {
@@ -229,5 +231,9 @@ class DevicesByPlatform extends Component {
     );
   }
 }
+
+DevicesByPlatform.propTypes = {
+  devicesPlatform: PropTypes.string.isRequired,
+};
 
 export default DevicesByPlatform;

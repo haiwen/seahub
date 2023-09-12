@@ -7,6 +7,7 @@ const propTypes = {
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
+  isSystemRepo: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
 };
 
@@ -23,7 +24,7 @@ class DirPath extends React.Component {
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') {
-        return;
+        return null;
       }
       if (index === (pathList.length - 1)) {
         return (

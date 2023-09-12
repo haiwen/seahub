@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, In
 import { gettext } from '../../../utils/constants';
 
 const propTypes = {
+  value: PropTypes.string.isRequired,
   dialogTitle: PropTypes.string.isRequired,
   updateValue: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func.isRequired
@@ -39,7 +40,7 @@ class UpdateUser extends React.Component {
   };
 
   render() {
-    const  { dialogTitle, toggleDialog } = this.props;
+    const  { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</ModalHeader>

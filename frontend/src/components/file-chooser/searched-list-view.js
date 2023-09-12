@@ -40,7 +40,8 @@ class SearchedListView extends React.Component {
                 currentItem={this.state.currentItem}
                 onItemClick={this.onItemClick}
                 onSearchedItemDoubleClick={this.props.onSearchedItemDoubleClick}
-              />);
+              />
+            );
           })}
         </tbody>
       </table>

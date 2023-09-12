@@ -230,6 +230,7 @@ class FileHistory extends React.Component {
         <div id="main" onScroll={this.onScrollHandler}>
           <div className="old-history-main">
             <Fragment>
+              {/* eslint-disable-next-line */}
               <a href="javascript:window.history.back()" className="go-back" title="Back">
                 <span className="fas fa-chevron-left"></span>
               </a>

@@ -111,8 +111,12 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getShareLinksByPage: PropTypes.func.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  deleteShareLink: PropTypes.func.isRequired,
 };
-
 
 class Item extends Component {
 
@@ -172,6 +176,7 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  deleteShareLink: PropTypes.func.isRequired,
 };
 
 class ShareLinks extends Component {

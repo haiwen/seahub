@@ -279,7 +279,7 @@ class LibContentView extends React.Component {
 
   updateReadmeMarkdown = (direntList) => {
     this.setState({readmeMarkdown: null});
-    direntList.some(item => {
+    direntList.forEach(item => {
       let fileName = item.name.toLowerCase();
       if (fileName === 'readme.md' || fileName === 'readme.markdown') {
         this.setState({readmeMarkdown: item});
@@ -576,7 +576,7 @@ class LibContentView extends React.Component {
       let newAddedDirents = newDirentList.filter(item => {
         return !nodeChildrenNames.includes(item.name);
       });
-      newAddedDirents.map(item => {
+      newAddedDirents.forEach(item => {
         this.addNodeToTree(item.name, path, item.type);
       });
     }).catch(error => {
@@ -939,6 +939,7 @@ class LibContentView extends React.Component {
       let index = -1;
       let paths = Utils.getPaths(path);
       for (let i = 0; i < paths.length; i++) {
+        // eslint-disable-next-line
         let node = this.state.treeData.getNodeByPath(node);
         if (!node) {
           index = i;

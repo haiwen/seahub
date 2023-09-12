@@ -305,6 +305,7 @@ class Wiki extends Component {
     let index = -1;
     let paths = Utils.getPaths(path);
     for (let i = 0; i < paths.length; i++) {
+      // eslint-disable-next-line no-use-before-define
       let node = this.state.treeData.getNodeByPath(node);
       if (!node) {
         index = i;

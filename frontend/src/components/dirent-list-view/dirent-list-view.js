@@ -49,6 +49,9 @@ const propTypes = {
   userPerm: PropTypes.string,
   showDirentDetail: PropTypes.func.isRequired,
   loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
+  posX: PropTypes.string,
+  posY: PropTypes.string,
 };
 
 class DirentListView extends React.Component {

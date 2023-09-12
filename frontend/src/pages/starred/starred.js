@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
@@ -57,6 +58,11 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
 class TableBody extends Component {
 
@@ -132,6 +138,11 @@ class TableBody extends Component {
     );
   }
 }
+
+TableBody.propTypes = {
+  data: PropTypes.object.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
 class Item extends Component {
 
@@ -259,6 +270,11 @@ class Item extends Component {
     return Utils.isDesktop() ? desktopItem : mobileItem;
   }
 }
+
+Item.propTypes = {
+  data: PropTypes.object.isRequired,
+  items: PropTypes.array.isRequired,
+};
 
 class Starred extends Component {
   constructor(props) {

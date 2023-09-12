@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import moment from 'moment';
-import { gettext, fileServerRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
@@ -48,7 +48,7 @@ class CommitDetails extends React.Component {
       <Modal isOpen={true} centered={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{gettext('Modification Details')}</ModalHeader>
         <ModalBody>
-          <p className="small">{moment(this.props.commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
+          <p className="small">{moment(commitTime).format('YYYY-MM-DD HH:mm:ss')}</p>
           <Content data={this.state} />
         </ModalBody>
       </Modal>
@@ -83,7 +83,7 @@ class Content extends React.Component {
       <React.Fragment>
         {detailsData.map((item, index) => {
           if (!data[item.type].length) {
-            return;
+            return null;
           }
           return (
             <React.Fragment key={index}>
@@ -116,6 +116,10 @@ class Content extends React.Component {
     return this.renderDetails(commitDetails);
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 CommitDetails.propTypes = propTypes;
 

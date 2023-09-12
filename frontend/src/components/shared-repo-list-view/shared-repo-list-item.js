@@ -498,6 +498,8 @@ class SharedRepoListItem extends React.Component {
                   </Dropdown>
                 );
               // no default
+              default:
+                return null;
             }
           })}
         </Fragment>

@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { loginUrl, siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './remote-dir-topbar';
 import DirPathBar from './remote-dir-path';
@@ -169,5 +170,11 @@ class DirView extends Component {
     );
   }
 }
+
+DirView.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  providerID: PropTypes.string.isRequired,
+  onTabNavClick: PropTypes.func.isRequired,
+};
 
 export default DirView;

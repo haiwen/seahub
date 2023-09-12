@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'glamor';
 
 class Alert extends React.PureComponent {
@@ -101,5 +102,12 @@ class Alert extends React.PureComponent {
     );
   }
 }
+
+Alert.propTypes = {
+  onRemove: PropTypes.func.isRequired,
+  children: PropTypes.any.isRequired,
+  title: PropTypes.string.isRequired,
+  intent: PropTypes.string.isRequired,
+};
 
 export default Alert;

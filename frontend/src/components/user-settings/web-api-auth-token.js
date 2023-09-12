@@ -1,5 +1,4 @@
 import React from 'react';
-import ModalPortal from '../modal-portal';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';

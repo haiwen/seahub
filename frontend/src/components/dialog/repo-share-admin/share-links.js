@@ -50,8 +50,11 @@ class Item extends Component {
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
         <td className="name">{item.creator_name}</td>
         <td>
-          {item.is_dir ? <Link to={objUrl}>{item.obj_name}</Link> :
-          <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>}
+          {item.is_dir ?
+            <Link to={objUrl}>{item.obj_name}</Link>
+            :
+            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>
+          }
         </td>
         <td>
           <a href={item.link} target="_blank" rel="noreferrer">{item.link}</a>

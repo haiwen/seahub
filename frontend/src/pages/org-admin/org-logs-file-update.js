@@ -161,6 +161,7 @@ const propTypes = {
   userSelected: PropTypes.string.isRequired,
   repoSelected: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  fileEvent: PropTypes.object.isRequired,
 };
 
 

@@ -241,13 +241,13 @@ class GroupMembers extends Component {
         this.setState({
           memberList: newMemberList.concat(this.state.memberList)
         });
-        newMemberList.map(item => {
+        newMemberList.forEach(item => {
           const msg = gettext('Successfully added {email_placeholder}')
             .replace('{email_placeholder}', item.email);
           toaster.success(msg);
         });
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = gettext('Failed to add {email_placeholder}: {error_msg_placeholder}')
           .replace('{email_placeholder}', item.email)
           .replace('{error_msg_placeholder}', item.error_msg);

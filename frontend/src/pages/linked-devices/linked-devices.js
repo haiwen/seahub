@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -59,6 +60,10 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 class Item extends Component {
 
@@ -186,6 +191,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  data: PropTypes.object.isRequired,
+};
 
 class LinkedDevices extends Component {
   constructor(props) {

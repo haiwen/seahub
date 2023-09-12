@@ -114,6 +114,7 @@ class SearchViewPanel extends React.Component {
 
   compareNumber = (num1, num2) => {
     if (!num1 || !num2) return false;
+    // eslint-disable-next-line
     if (parseInt(num1.replace(/\-/g, '')) >= parseInt(num2.replace(/\-/g, ''))) {
       return true;
     } else {

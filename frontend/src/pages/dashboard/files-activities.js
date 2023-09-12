@@ -76,6 +76,7 @@ const activityPropTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   items: PropTypes.array.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 class ActivityItem extends Component {
@@ -188,6 +189,7 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
         case 'move':
+          // eslint-disable-next-line
           const filePathLink = <a href={fileURL}>{item.path}</a>;
           op = gettext('Moved file');
           details = <span>{item.old_path} => {filePathLink}</span>;
@@ -224,6 +226,7 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
         case 'move':
+          // eslint-disable-next-line
           const dirPathLink = <a href={dirURL}>{item.path}</a>;
           op = gettext('Moved folder');
           details = <span>{item.old_path} => {dirPathLink}</span>;
@@ -337,7 +340,7 @@ class FilesActivities extends Component {
   }
 
   mergePublishEvents = (events) => {
-    events.map((item) => {
+    events.forEach((item) => {
       if (item.op_type === 'publish') {
         this.curPathList.push(item.path);
         this.oldPathList.push(item.old_path);

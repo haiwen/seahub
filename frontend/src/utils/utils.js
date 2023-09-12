@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, enableFileComment, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -528,7 +528,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MARK_AS_DRAFT, UNMARK_AS_DRAFT,
-      COMMENT, HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -842,6 +842,7 @@ export const Utils = {
   },
 
   isInternalMarkdownLink: function(url, repoID) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
     return re.test(url);
   },
@@ -852,6 +853,7 @@ export const Utils = {
   },
 
   getPathFromInternalMarkdownLink: function(url, repoID) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
@@ -869,6 +871,7 @@ export const Utils = {
 
   isWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
     return re.test(url);
   },
@@ -881,6 +884,7 @@ export const Utils = {
 
   getPathFromWikiInternalMarkdownLink: function(url, slug) {
     slug = encodeURIComponent(slug);
+    // eslint-disable-next-line
     var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
     var array = re.exec(url);
     var path = array[1];
@@ -1169,13 +1173,12 @@ export const Utils = {
   },
 
   changeMarkdownNodes: function(nodes, fn) {
-    nodes.map((item) => {
+    nodes.forEach((item) => {
       fn(item);
       if (item.children && item.children.length > 0){
         Utils.changeMarkdownNodes(item.children, fn);
       }
     });
-
     return nodes;
   },
 
@@ -1562,7 +1565,6 @@ export const Utils = {
 
   generateRevisionsURL: function(siteRoot, repoID, path) {
     if (!siteRoot || !repoID || !path) return '';
-    console.log(siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path));
     return siteRoot + 'repo/sdoc_revisions/' + repoID + '/?p=' + this.encodePath(path);
   },
 

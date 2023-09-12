@@ -150,7 +150,7 @@ class IndexContentViewer extends React.Component {
   getRootNode = () => {
     let value = deserialize(this.props.indexContent);
     const newNodes = Utils.changeMarkdownNodes(value, this.changeInlineNode);
-    newNodes.map((node) => {
+    newNodes.forEach((node) => {
       if (node.type === 'unordered_list' || node.type === 'ordered_list') {
         let treeRoot = this.transSlateToTree(node.children, this.treeRoot);
         this.setNodePath(treeRoot, '/');
@@ -164,7 +164,7 @@ class IndexContentViewer extends React.Component {
     let path = parentNodePath === '/' ? parentNodePath + name : parentNodePath + '/' + name;
     node.path = path;
     if (node.children.length > 0) {
-      node.children.map(child => {
+      node.children.forEach(child => {
         this.setNodePath(child, path);
       });
     }

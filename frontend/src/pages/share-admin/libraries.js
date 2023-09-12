@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -74,6 +75,15 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+};
 
 class Item extends Component {
 
@@ -298,6 +308,11 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};
+
 class ShareAdminLibraries extends Component {
 
   constructor(props) {
@@ -313,7 +328,6 @@ class ShareAdminLibraries extends Component {
 
   componentDidMount() {
     seafileAPI.listSharedRepos().then((res) => {
-      // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let items = res.data.map(item => {
         return new SharedRepoInfo(item);
       });

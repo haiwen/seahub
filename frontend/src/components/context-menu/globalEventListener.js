@@ -42,4 +42,6 @@ class GlobalEventListener {
   };
 }
 
-export default new GlobalEventListener();
+const globalEventListener = new GlobalEventListener();
+
+export default globalEventListener;

@@ -94,6 +94,7 @@ class EditorApi {
   }
 
   isInternalDirLink(url) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceUrl + '/library/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }

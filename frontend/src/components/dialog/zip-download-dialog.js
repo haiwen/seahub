@@ -135,6 +135,10 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object,
+};
+
 ZipDownloadDialog.propTypes = propTypes;
 
 export default ZipDownloadDialog;

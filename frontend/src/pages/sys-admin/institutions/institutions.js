@@ -85,6 +85,8 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  getInstitutionsByPage: PropTypes.func.isRequired,
+  deleteInstitution: PropTypes.func.isRequired,
 };
 
 
@@ -149,6 +151,7 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  deleteInstitution: PropTypes.func.isRequired,
 };
 
 class Institutions extends Component {

@@ -31,6 +31,7 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   onItemRename: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array,
 };
 
 class DirGridView extends React.Component {

@@ -15,6 +15,7 @@ const propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 };
 
 class UserItem extends React.Component {

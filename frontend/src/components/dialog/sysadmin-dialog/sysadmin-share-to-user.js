@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, siteRoot } from '../../../utils/constants';
+import { isPro, gettext } from '../../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
@@ -65,6 +65,13 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class UserList extends React.Component {
 
   render() {
@@ -86,6 +93,13 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,

@@ -68,6 +68,11 @@ class ShareItem extends React.Component {
   }
 }
 
+ShareItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
+
 class ShareList extends React.Component {
 
   render() {
@@ -98,6 +103,11 @@ class ShareList extends React.Component {
     );
   }
 }
+
+ShareList.propTypes = {
+  items: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,

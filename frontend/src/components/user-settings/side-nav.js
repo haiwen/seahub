@@ -1,11 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class SideNav extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <ul className="nav flex-column user-setting-nav">
@@ -17,5 +13,10 @@ class SideNav extends React.Component {
     );
   }
 }
+
+SideNav.propTypes = {
+  curItemID: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+};
 
 export default SideNav;

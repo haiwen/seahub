@@ -254,7 +254,7 @@ class ShareDialog extends React.Component {
 
   renderFileContent = () => {
     let activeTab = this.state.activeTab;
-    const { itemType, itemName, repoEncrypted, userPerm } = this.props;
+    const { itemType, repoEncrypted, userPerm } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
 
     return (

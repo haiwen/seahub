@@ -20,8 +20,7 @@ class AboutDialog extends React.Component {
   };
 
   render() {
-
-    let href = lang === lang == 'zh-cn' ? 'http://seafile.com/about/' : 'http://seafile.com/en/about/';
+    let href = lang === 'zh-cn' ? 'http://seafile.com/about/' : 'http://seafile.com/en/about/';
     const { onCloseAboutDialog: toggleDialog } = this.props;
 
     if (aboutDialogCustomHtml) {

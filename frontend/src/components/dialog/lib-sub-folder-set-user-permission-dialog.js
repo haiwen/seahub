@@ -75,10 +75,22 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteUserFolderPermission: PropTypes.func.isRequired,
+  onChangeUserFolderPerm: PropTypes.func.isRequired,
+  showPath: PropTypes.bool.isRequired,
+  repoName: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  isDepartmentRepo: PropTypes.bool
+  isDepartmentRepo: PropTypes.bool,
+  folderPath: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
 };
 
 

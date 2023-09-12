@@ -14,7 +14,6 @@ import toaster from '../../components/toast';
 import OpIcon from '../../components/op-icon';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
-import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
 import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
@@ -302,7 +301,7 @@ class GroupView extends React.Component {
   importMembersInBatch= (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
     seafileAPI.importGroupMembersViaFile(this.state.currentGroup.id, file).then((res) => {
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });

@@ -1,7 +1,7 @@
 class TreeNode {
 
   constructor({ path, object, isLoaded, isPreload, isExpanded, parentNode }) {
-    this.path = path || object.name,  // The default setting is the object name, which is set to a relative path when the father is set.
+    this.path = path || object.name;  // The default setting is the object name, which is set to a relative path when the father is set.
     this.object = object;
     this.isLoaded = isLoaded || false;
     this.isPreload = isPreload || false;

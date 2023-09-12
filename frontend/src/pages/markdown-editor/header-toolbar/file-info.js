@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gettext } from '../../../utils/constants';
 import { InternalLinkOperation } from '../../../components/operations';
@@ -46,5 +47,14 @@ class FileInfo extends React.PureComponent {
     );
   }
 }
+
+FileInfo.propTypes = {
+  fileInfo: PropTypes.object,
+  isPro: PropTypes.bool,
+  isLocked: PropTypes.bool,
+  mediaUrl: PropTypes.string,
+  toggleStar: PropTypes.func,
+  showDraftSaved: PropTypes.func,
+};
 
 export default FileInfo;

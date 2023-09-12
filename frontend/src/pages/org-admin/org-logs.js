@@ -53,6 +53,7 @@ class OrgLogs extends Component {
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
   tabItemClick: PropTypes.func.isRequired,
+  children: PropTypes.any.isRequired,
 };
 
 OrgLogs.propTypes = propTypes;

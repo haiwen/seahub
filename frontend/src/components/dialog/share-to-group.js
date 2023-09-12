@@ -69,6 +69,14 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class GroupList extends React.Component {
 
   render() {
@@ -92,6 +100,14 @@ class GroupList extends React.Component {
   }
 }
 
+GroupList.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -105,6 +121,10 @@ const NoOptionsMessage = (props) => {
   return (
     <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
   );
+};
+
+NoOptionsMessage.propTypes = {
+  innerProps: PropTypes.object.isRequired,
 };
 
 class ShareToGroup extends React.Component {

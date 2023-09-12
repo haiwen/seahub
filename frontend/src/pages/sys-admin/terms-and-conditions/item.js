@@ -11,15 +11,6 @@ import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog'
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from '../../../components/dialog/op-menu';
 
-const propsTypes = {
-  item: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.bool.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
-  deleteTerm: PropTypes.func.isRequired,
-  updateTerm: PropTypes.func.isRequired,
-};
-
 class Item extends Component {
 
   constructor(props) {
@@ -188,6 +179,13 @@ class Item extends Component {
   }
 }
 
-Item.propTypes = propsTypes;
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteTerm: PropTypes.func.isRequired,
+  updateTerm: PropTypes.func.isRequired,
+};
 
 export default Item;

@@ -37,6 +37,10 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
+  onItemRename: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class MultipleDirOperationToolbar extends React.Component {

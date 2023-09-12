@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext, username, siteRoot } from '../../utils/constants';
+import { gettext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -136,7 +136,6 @@ class DetailCommentList extends React.Component {
   };
 
   render() {
-    const { repoID, filePath } = this.props;
     const { commentsList } = this.state;
     return (
       <div className="seafile-comment detail-comments h-100">

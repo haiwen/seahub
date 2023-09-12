@@ -39,9 +39,9 @@ class InternalLink extends React.Component {
   copyToClipBoard = () => {
     copy(this.state.smartLink);
     let message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message), {
+    toaster.success(message, {
       duration: 2
-    };
+    });
   };
 
   render() {

@@ -121,6 +121,11 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
+
 LabelRepoStateDialog.propTypes = propTypes;
 
 export default LabelRepoStateDialog;

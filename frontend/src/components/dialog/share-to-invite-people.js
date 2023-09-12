@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import moment from 'moment';
 import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -71,6 +71,14 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
+
 class UserList extends React.Component {
 
   render() {
@@ -92,6 +100,13 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,

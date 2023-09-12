@@ -134,6 +134,11 @@ Content.propTypes = {
   perPage: PropTypes.number.isRequired,
   pageInfo: PropTypes.object.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
+  toggleFreezeItem: PropTypes.func.isRequired,
+  userFilteredBy: PropTypes.string.isRequired,
+  repoFilteredBy: PropTypes.string.isRequired,
+  filterByUser: PropTypes.func.isRequired,
+  filterByRepo: PropTypes.func.isRequired,
 };
 
 
@@ -222,8 +227,13 @@ class Item extends Component {
 
 Item.propTypes = {
   item: PropTypes.object.isRequired,
+  isFreezed: PropTypes.bool.isRequired,
+  toggleFreezeItem: PropTypes.func.isRequired,
+  userFilteredBy: PropTypes.string.isRequired,
+  repoFilteredBy: PropTypes.string.isRequired,
+  filterByUser: PropTypes.func.isRequired,
+  filterByRepo: PropTypes.func.isRequired,
 };
-
 
 class FileAccessLogs extends Component {
 

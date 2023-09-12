@@ -85,7 +85,7 @@ class Draft extends React.Component {
             });
           return;
         }
-
+        // eslint-disable-next-line
         const hash = window.location.hash;
         if (hash.indexOf('#history-') === 0) {
           const currentCommitID = hash.slice(9, 49);
@@ -154,7 +154,9 @@ class Draft extends React.Component {
           return;
         }
 
+        // eslint-disable-next-line
         let dl0 = siteRoot + 'repo/' + draftRepoID + '/' + draftPublishVersion + '/download?' + 'p=' + draftOriginFilePath;
+        // eslint-disable-next-line
         let dl = siteRoot + 'repo/' + draftRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath;
         axios.all([
           seafileAPI.getFileContent(dl0),
@@ -239,7 +241,7 @@ class Draft extends React.Component {
     const nodes = this.refs.diffViewer.value;
     let keys = [];
     let lastDiffState = '';
-    nodes.map((node, index) => {
+    nodes.forEach((node, index) => {
       const diff_state = node.data['diff_state'];
       if (diff_state === 'diff-added' && lastDiffState !== 'diff-added') {
         keys.push(index);
@@ -307,6 +309,7 @@ class Draft extends React.Component {
       if (node.data['old_index'] == oldIndex && node.data['new_index'] == newIndex) {
         return node;
       }
+      return null;
     });
     if (commentNode) {
       const element = toDOMNode(window.viewer, commentNode);
