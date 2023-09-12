@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class CollabUsersButton extends React.PureComponent {
@@ -32,5 +33,11 @@ class CollabUsersButton extends React.PureComponent {
   }
 
 }
+
+CollabUsersButton.propTypes = {
+  className: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  users: PropTypes.array.isRequired,
+};
 
 export default CollabUsersButton;

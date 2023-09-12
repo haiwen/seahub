@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext, username } from '../../../utils/constants';
+import { gettext, username } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -80,6 +81,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
 class Item extends Component {
 
   constructor(props) {
@@ -250,6 +259,16 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
+
 class OrgUsers extends Component {
 
   constructor(props) {
@@ -379,5 +398,9 @@ class OrgUsers extends Component {
     );
   }
 }
+
+OrgUsers.propTypes = {
+  orgID: PropTypes.string.isRequired,
+};
 
 export default OrgUsers;

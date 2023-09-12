@@ -11,6 +11,7 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onShowMenu: PropTypes.func,
   onHideMenu: PropTypes.func,
+  hideOnLeave: PropTypes.bool,
 };
 
 class ContextMenu extends React.Component {

@@ -19,6 +19,8 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array,
   onItemsMove: PropTypes.func,
+  posX: PropTypes.number.isRequired,
+  posY: PropTypes.number.isRequired,
 };
 
 const PADDING_LEFT = 20;

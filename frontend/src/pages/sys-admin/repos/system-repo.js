@@ -44,9 +44,9 @@ Content.propTypes = {
   resetPerPage: PropTypes.func.isRequired,
   getListByPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  errorMsge: PropTypes.string.isRequired,
-  itemse: PropTypes.array.isRequired,
-  currentPagee: PropTypes.number.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
   curPerPage: PropTypes.number.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
 };

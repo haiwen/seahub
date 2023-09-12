@@ -19,6 +19,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func,
   mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
   fileSuffixes: PropTypes.array,
+  currentPath: PropTypes.string,
 };
 
 class FileChooser extends React.Component {

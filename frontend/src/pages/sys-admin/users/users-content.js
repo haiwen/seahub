@@ -162,18 +162,29 @@ class Content extends Component {
   }
 }
 
-Item.propTypes = {
-  item: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.bool.isRequired,
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isLDAPImported: PropTypes.bool.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
+  isSearchResult: PropTypes.bool.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortByQuotaUsage: PropTypes.string.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  toggleSelectAllUsers: PropTypes.func.isRequired,
+  isAllUsersSelected: PropTypes.bool.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
   updateUser: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
   updateAdminRole: PropTypes.func.isRequired,
   revokeAdmin: PropTypes.func.isRequired,
   onUserSelected: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  sortOrder: PropTypes.string.isRequired,
 };
 
 class Item extends Component {
@@ -489,5 +500,19 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
+  isLDAPImported: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  updateAdminRole: PropTypes.func.isRequired,
+  revokeAdmin: PropTypes.func.isRequired,
+  onUserSelected: PropTypes.func.isRequired,
+};
 
 export default Content;

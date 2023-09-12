@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import moment from 'moment';
@@ -74,6 +75,19 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+};
+
+
 class Item extends Component {
 
   constructor(props) {
@@ -132,6 +146,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class Institutions extends Component {
 

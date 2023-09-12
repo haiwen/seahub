@@ -17,6 +17,7 @@ const virusFileItemPropTypes = {
   handleFile: PropTypes.func.isRequired,
   virusFile: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired
 };

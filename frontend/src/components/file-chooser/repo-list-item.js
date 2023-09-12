@@ -11,6 +11,7 @@ import toaster from '../toast';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
+  isCurrentRepo: PropTypes.bool,
   selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
@@ -19,6 +20,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
+  currentPath: PropTypes.string,
 };
 
 class RepoListItem extends React.Component {

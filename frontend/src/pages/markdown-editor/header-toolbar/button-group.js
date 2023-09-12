@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class ButtonGroup extends React.PureComponent {
   render() {
@@ -9,5 +10,10 @@ class ButtonGroup extends React.PureComponent {
     );
   }
 }
+
+ButtonGroup.propTypes = {
+  className: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired,
+};
 
 export default ButtonGroup;

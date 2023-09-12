@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -11,11 +12,6 @@ import UserLink from '../user-link';
 import OrgNav from './org-nav';
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { loading, errorMsg, items } = this.props;
     if (loading) {
@@ -56,6 +52,13 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 
@@ -128,6 +131,11 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+};
+
 class OrgRepos extends Component {
 
   constructor(props) {
@@ -197,5 +205,9 @@ class OrgRepos extends Component {
     );
   }
 }
+
+OrgRepos.propTypes = {
+  orgID: PropTypes.string.isRequired,
+};
 
 export default OrgRepos;

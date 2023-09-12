@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -56,6 +57,17 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 
@@ -121,6 +133,15 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  transferGroup: PropTypes.func.isRequired,
+};
 
 class OrgGroups extends Component {
 
@@ -191,5 +212,11 @@ class OrgGroups extends Component {
     );
   }
 }
+
+OrgGroups.propTypes = {
+  orgID: PropTypes.string.isRequired,
+};
+
+
 
 export default OrgGroups;

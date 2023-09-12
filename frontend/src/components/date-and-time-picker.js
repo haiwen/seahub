@@ -9,6 +9,7 @@ import '@seafile/seafile-calendar/assets/index.css';
 import '../css/date-and-time-picker.css';
 
 const propsTypes = {
+  showHourAndMinute: PropTypes.bool.isRequired,
   disabledDate: PropTypes.func.isRequired,
   value: PropTypes.object,
   onChange: PropTypes.func.isRequired

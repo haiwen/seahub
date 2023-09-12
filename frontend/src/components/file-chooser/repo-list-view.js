@@ -14,6 +14,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
+  currentPath: PropTypes.string,
 };
 
 class RepoListView extends React.Component {

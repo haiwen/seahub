@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -73,6 +74,18 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+};
 
 class Item extends Component {
 
@@ -186,6 +199,10 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
+
 class InstitutionAdmins extends Component {
 
   constructor(props) {
@@ -273,5 +290,9 @@ class InstitutionAdmins extends Component {
     );
   }
 }
+
+InstitutionAdmins.propTypes = {
+  institutionID: PropTypes.string.isRequired,
+};
 
 export default InstitutionAdmins;

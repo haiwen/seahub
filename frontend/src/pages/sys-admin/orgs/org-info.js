@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -133,6 +134,19 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  orgInfo: PropTypes.object.isRequired,
+  updateQuota: PropTypes.func.isRequired,
+  updateName: PropTypes.func.isRequired,
+  updateMaxUserNumber: PropTypes.func.isRequired,
+};
+
 class OrgInfo extends Component {
 
   constructor(props) {
@@ -225,5 +239,10 @@ class OrgInfo extends Component {
     );
   }
 }
+
+OrgInfo.propTypes = {
+  orgID: PropTypes.string.isRequired,
+  orgInfo: PropTypes.object.isRequired,
+};
 
 export default OrgInfo;

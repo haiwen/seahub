@@ -6,6 +6,7 @@ const propTypes = {
   currentItem: PropTypes.object,
   onItemClick: PropTypes.func.isRequired,
   onSearchedItemDoubleClick: PropTypes.func.isRequired,
+  item: PropTypes.object,
 };
 
 class SearchedListItem extends React.Component {

@@ -174,7 +174,7 @@ class CommentPanel extends React.Component {
   };
 
   render() {
-    const { participants, commentsList } = this.state;
+    const { commentsList } = this.state;
     return (
       <div className="seafile-comment">
         <div className="flex-fill o-auto" ref={this.setCommentsListRef}>

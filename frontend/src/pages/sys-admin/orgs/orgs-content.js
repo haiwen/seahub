@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -15,10 +16,6 @@ import toaster from '../../../components/toast';
 const { availableRoles } = window.sysadmin.pageOptions;
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
@@ -80,6 +77,20 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  items: PropTypes.array.isRequired,
+  updateRole: PropTypes.func.isRequired,
+  deleteOrg: PropTypes.func.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+};
 
 class Item extends Component {
 
@@ -172,5 +183,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  updateRole: PropTypes.func.isRequired,
+  deleteOrg: PropTypes.func.isRequired,
+};
 
 export default Content;

@@ -108,7 +108,7 @@ class SelectEditor extends React.Component {
 
     const MenuSelectStyle = {
       option: (provided, state) => {
-        const { isDisabled, isSelected, isFocused } = state;
+        const { isDisabled, isSelected } = state;
         return ({
           ...provided,
           cursor: isDisabled ? 'default' : 'pointer',

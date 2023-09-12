@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { Button } from 'reactstrap';
 import EmptyTip from '../../../components/empty-tip';
@@ -15,10 +16,6 @@ import ModalPortal from '../../../components/modal-portal';
 
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
@@ -77,6 +74,19 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+};
+
+
 class Item extends Component {
 
   constructor(props) {
@@ -110,6 +120,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class LoginLogs extends Component {
 

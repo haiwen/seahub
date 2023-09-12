@@ -51,7 +51,7 @@ class Item extends Component {
         <td className="name">{item.creator_name}</td>
         <td>
           {item.is_dir ? <Link to={objUrl}>{item.obj_name}</Link> :
-            <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>}
+          <a href={objUrl} target="_blank" rel="noreferrer">{item.obj_name}</a>}
         </td>
         <td>
           <a href={item.link} target="_blank" rel="noreferrer">{item.link}</a>

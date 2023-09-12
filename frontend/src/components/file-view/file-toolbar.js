@@ -26,7 +26,7 @@ const {
   fileType,
   fileName,
   canEditFile, err,
-  fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
+  // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile, enableComment
 } = window.app.pageOptions;
 

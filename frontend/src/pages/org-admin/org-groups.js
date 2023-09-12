@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -57,6 +57,11 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  submit: PropTypes.func.isRequired,
+};
 
 class OrgGroups extends Component {
 

@@ -17,9 +17,8 @@ import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-
-import '../../css/dirent-list-item.css';
 import toaster from '../toast';
+import '../../css/dirent-list-item.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -53,6 +52,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {

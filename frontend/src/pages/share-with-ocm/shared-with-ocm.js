@@ -59,6 +59,7 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
+  leaveShare: PropTypes.func.isRequired,
 };
 
 class Item extends Component {
@@ -111,7 +112,8 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired,
+  leaveShare: PropTypes.func.isRequired,
 };
 
 class SharedWithOCM extends Component {

@@ -73,6 +73,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -218,6 +226,15 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+};
+
 class Links extends Component {
 
   constructor(props) {
@@ -323,5 +340,9 @@ class Links extends Component {
     );
   }
 }
+
+Links.propTypes = {
+  email: PropTypes.string.isRequired,
+};
 
 export default Links;

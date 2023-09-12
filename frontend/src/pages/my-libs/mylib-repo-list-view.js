@@ -14,6 +14,7 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
+  onMonitorRepo: PropTypes.func.isRequired,
 };
 
 class MylibRepoListView extends React.Component {

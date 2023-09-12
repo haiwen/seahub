@@ -25,7 +25,7 @@ class ConfirmRestoreRepo extends Component {
   };
 
   render() {
-    const {formActionURL, csrfToken, toggle} = this.props;
+    const { toggle } = this.props;
     return (
       <Modal centered={true} isOpen={true} toggle={toggle}>
         <ModalHeader toggle={toggle}>{gettext('Restore Library')}</ModalHeader>

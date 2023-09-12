@@ -12,6 +12,7 @@ const propTypes = {
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
+  isPublic: PropTypes.bool,
 };
 
 class Search extends Component {

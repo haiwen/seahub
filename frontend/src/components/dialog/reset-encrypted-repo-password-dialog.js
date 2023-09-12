@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import toaster from '../../components/toast';
-import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { gettext, contactEmail } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {

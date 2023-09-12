@@ -42,7 +42,7 @@ class DirentItem extends React.Component {
   };
 
   render () {
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    let { isOpIconShown } = this.state;
     let { dirent, fromSystemRepo } = this.props;
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -72,16 +72,14 @@ class DirentItem extends React.Component {
   }
 }
 
-
-const propTypes = {
-  direntList: PropTypes.array.isRequired
+DirentItem.propTypes = {
+  dirent: PropTypes.object.isRequired,
+  fromSystemRepo: PropTypes.bool.isRequired,
+  deleteDirent: PropTypes.func.isRequired,
 };
 
-class DirContent extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+class DirContent extends React.Component {
 
   render() {
     let { loading, errorMsg, direntList } = this.props;
@@ -124,6 +122,11 @@ class DirContent extends React.Component {
   }
 }
 
-DirContent.propTypes = propTypes;
+DirContent.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired
+};
 
 export default DirContent;

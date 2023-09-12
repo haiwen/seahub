@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -78,6 +79,18 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  updateMemberRole: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+};
 
 class Item extends Component {
 
@@ -157,6 +170,12 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  updateMemberRole: PropTypes.func.isRequired,
+};
 
 class GroupMembers extends Component {
 
@@ -312,5 +331,9 @@ class GroupMembers extends Component {
     );
   }
 }
+
+GroupMembers.propTypes = {
+  groupID: PropTypes.string.isRequired,
+};
 
 export default GroupMembers;

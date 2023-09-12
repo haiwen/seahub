@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Button } from 'reactstrap';
@@ -15,10 +16,6 @@ import UserLink from '../user-link';
 import LogsNav from './logs-nav';
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
@@ -79,6 +76,18 @@ class Content extends Component {
     }
   }
 }
+
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+};
 
 class Item extends Component {
 
@@ -143,6 +152,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class SharePermissionLogs extends Component {
 

@@ -10,6 +10,9 @@ const propTypes = {
   orgUsers: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
   pageNext: PropTypes.bool.isRequired,
+  sortByQuotaUsage: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
 };
 
 class OrgUsersList extends React.Component {

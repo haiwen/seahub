@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
 const propTypes = {
+  data: PropTypes.object,
   token: PropTypes.string,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string,

@@ -20,6 +20,7 @@ const propTypes = {
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
+  fileTags: PropTypes.array,
 };
 
 class DirentDetail extends React.Component {

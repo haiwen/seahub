@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Account from '../../components/common/account';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import moment from 'moment';
@@ -55,7 +53,6 @@ class AbuseReports extends Component {
   }
 
   render() {
-    const isDesktop = Utils.isDesktop();
     const AbuseReportList = this.state.abuseReportList.map((item, index) => {
       const handled = (!item.handled).toString();
       const abuseReportId = item.id;

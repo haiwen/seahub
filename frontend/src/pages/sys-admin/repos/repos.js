@@ -121,6 +121,22 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onRestoreRepo: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  pageInfo: PropTypes.object.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  sortItems: PropTypes.array.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -361,5 +377,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  repo: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+};
 
 export default Content;

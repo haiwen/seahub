@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 import toaster from '../../components/toast';

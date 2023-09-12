@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import More from '../more';
 import { Utils } from '../../utils/utils';

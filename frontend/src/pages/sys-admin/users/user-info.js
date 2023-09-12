@@ -96,7 +96,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, userInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -226,6 +226,18 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+  disable2FA: PropTypes.func.isRequired,
+  toggleForce2fa: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
+};
+
 class User extends Component {
 
   constructor(props) {
@@ -321,5 +333,9 @@ class User extends Component {
     );
   }
 }
+
+User.propTypes = {
+  email: PropTypes.string.isRequired,
+};
 
 export default User;

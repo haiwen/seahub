@@ -10,6 +10,8 @@ const propTypes = {
   className: PropTypes.string,
   icon: PropTypes.string,
   text: PropTypes.string,
+  onClick: PropTypes.func,
+  onMouseDown: PropTypes.func,
 };
 
 class ButtonItem extends React.Component {

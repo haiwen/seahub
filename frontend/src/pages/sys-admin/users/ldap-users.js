@@ -76,9 +76,9 @@ Content.propTypes = {
   resetPerPage: PropTypes.func.isRequired,
   getListByPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  errorMsge: PropTypes.string.isRequired,
-  itemse: PropTypes.array.isRequired,
-  currentPagee: PropTypes.number.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
   curPerPage: PropTypes.number.isRequired,
   hasNextPage: PropTypes.bool.isRequired,
 };
@@ -86,7 +86,6 @@ Content.propTypes = {
 class Item extends Component {
   render() {
     const { item } = this.props;
-    let email = '<span class="op-target">' + Utils.HTMLescape(item.email) + '</span>';
     return (
       <Fragment>
         <tr>
@@ -182,5 +181,9 @@ class Users extends Component {
     );
   }
 }
+
+Users.propTypes = {
+  email: PropTypes.string.isRequired,
+};
 
 export default Users;

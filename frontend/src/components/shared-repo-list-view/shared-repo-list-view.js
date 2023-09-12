@@ -19,7 +19,8 @@ const propTypes = {
   onItemDelete: PropTypes.func,
   onItemDetails: PropTypes.func,
   onItemRename: PropTypes.func,
-  hasNextPage: PropTypes.bool
+  hasNextPage: PropTypes.bool,
+  onMonitorRepo: PropTypes.func,
 };
 
 class SharedRepoListView extends React.Component {
