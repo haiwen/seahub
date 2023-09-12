@@ -867,6 +867,11 @@ if os.environ.get('SEAFILE_DOCS', None):
     LOGO_WIDTH = ''
     ENABLE_WIKI = True
 
+####################
+# events io server #
+####################
+SEAF_EVENTS_IO_SERVER_URL = 'http://127.0.0.1:6066'
+
 #######################
 # extended properties #
 #######################
