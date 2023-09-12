@@ -115,7 +115,7 @@ Item.propTypes = {
 };
 
 OrgUserSharedRepos.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 

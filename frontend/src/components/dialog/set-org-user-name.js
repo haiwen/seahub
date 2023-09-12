@@ -6,7 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   updateName: PropTypes.func.isRequired,

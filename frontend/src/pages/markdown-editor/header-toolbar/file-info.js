@@ -54,7 +54,7 @@ FileInfo.propTypes = {
   isLocked: PropTypes.bool,
   mediaUrl: PropTypes.string,
   toggleStar: PropTypes.func,
-  showDraftSaved: PropTypes.func,
+  showDraftSaved: PropTypes.bool,
 };
 
 export default FileInfo;

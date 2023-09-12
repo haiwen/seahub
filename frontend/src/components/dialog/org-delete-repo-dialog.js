@@ -45,7 +45,7 @@ class DeleteRepoDialog extends React.Component {
 const propTypes = {
   repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onRepoChanged: PropTypes.func.isRequired
 };
 

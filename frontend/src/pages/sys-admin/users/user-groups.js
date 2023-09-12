@@ -72,7 +72,7 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
 };
 
 class Item extends Component {
@@ -150,7 +150,7 @@ Item.propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
 };
 
 class Groups extends Component {
@@ -207,7 +207,7 @@ class Groups extends Component {
 }
 
 Groups.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default Groups;

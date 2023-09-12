@@ -85,10 +85,10 @@ Content.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   removeMember: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func,
   updateMemberRole: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
   getListByPage: PropTypes.func.isRequired,
 };
 
@@ -333,7 +333,7 @@ class GroupMembers extends Component {
 }
 
 GroupMembers.propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
 };
 
 export default GroupMembers;

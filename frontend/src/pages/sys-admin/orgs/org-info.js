@@ -138,10 +138,10 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  getDeviceErrorsListByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  orgInfo: PropTypes.object.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  orgInfo: PropTypes.object,
   updateQuota: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,
   updateMaxUserNumber: PropTypes.func.isRequired,
@@ -241,8 +241,8 @@ class OrgInfo extends Component {
 }
 
 OrgInfo.propTypes = {
-  orgID: PropTypes.string.isRequired,
-  orgInfo: PropTypes.object.isRequired,
+  orgID: PropTypes.string,
+  orgInfo: PropTypes.object,
 };
 
 export default OrgInfo;

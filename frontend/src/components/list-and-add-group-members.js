@@ -10,7 +10,7 @@ import Loading from './loading';
 import GroupMembers from './group-members';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired
 };
 

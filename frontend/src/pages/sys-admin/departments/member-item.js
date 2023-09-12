@@ -7,7 +7,7 @@ import RoleEditor from '../../../components/select-editor/role-editor';
 import UserLink from '../user-link';
 
 const MemberItemPropTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,

@@ -73,14 +73,14 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  resetPerPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func,
   getListByPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  hasNextPage: PropTypes.bool.isRequired,
+  currentPage: PropTypes.number,
+  curPerPage: PropTypes.number,
+  hasNextPage: PropTypes.bool,
 };
 
 class Item extends Component {
@@ -183,7 +183,7 @@ class Users extends Component {
 }
 
 Users.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default Users;

@@ -98,15 +98,15 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  getLogsByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  hasNextPage: PropTypes.bool.isRequired,
-  getItemsByPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  getItemsByPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  deleteItem: PropTypes.func,
 };
 
 class Item extends Component {
@@ -234,7 +234,7 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
   onFreezedItem: PropTypes.func.isRequired,
 };
 

@@ -207,7 +207,7 @@ class OrgRepos extends Component {
 }
 
 OrgRepos.propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
 };
 
 export default OrgRepos;

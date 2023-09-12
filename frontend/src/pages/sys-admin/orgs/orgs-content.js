@@ -83,13 +83,13 @@ Content.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
   getListByPage: PropTypes.func.isRequired,
-  currentPage: PropTypes.number.isRequired,
+  currentPage: PropTypes.number,
   items: PropTypes.array.isRequired,
   updateRole: PropTypes.func.isRequired,
   deleteOrg: PropTypes.func.isRequired,
-  hasNextPage: PropTypes.bool.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
 };
 
 class Item extends Component {

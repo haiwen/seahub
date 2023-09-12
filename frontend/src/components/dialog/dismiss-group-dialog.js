@@ -42,7 +42,7 @@ const DismissGroupDialogPropTypes = {
   showDismissGroupDialog: PropTypes.bool.isRequired,
   toggleDismissGroupDialog: PropTypes.func.isRequired,
   loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onGroupChanged: PropTypes.func.isRequired,
 };
 

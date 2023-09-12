@@ -7,7 +7,7 @@ import ListAndAddGroupMembers from '../list-and-add-group-members';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
   toggleManageMembersDialog: PropTypes.func.isRequired
 };

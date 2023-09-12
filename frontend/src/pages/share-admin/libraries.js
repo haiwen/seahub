@@ -80,7 +80,7 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  sortItems: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
 };

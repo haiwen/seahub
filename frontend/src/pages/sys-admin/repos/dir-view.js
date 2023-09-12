@@ -215,7 +215,7 @@ class DirView extends Component {
 }
 
 DirView.propTypes = {
-  repoID: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
 };
 
 export default DirView;

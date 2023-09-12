@@ -98,12 +98,12 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  getLogsByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  hasNextPage: PropTypes.bool.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
   getInstitutionUsersByPage: PropTypes.func.isRequired,
   setAdmin: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
@@ -396,7 +396,7 @@ class InstitutionUsers extends Component {
 }
 
 InstitutionUsers.propTypes = {
-  institutionID: PropTypes.string.isRequired,
+  institutionID: PropTypes.string,
 };
 
 export default InstitutionUsers;

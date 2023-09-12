@@ -172,8 +172,8 @@ class DirView extends Component {
 }
 
 DirView.propTypes = {
-  repoID: PropTypes.string.isRequired,
-  providerID: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
+  providerID: PropTypes.string,
   onTabNavClick: PropTypes.func.isRequired,
 };
 

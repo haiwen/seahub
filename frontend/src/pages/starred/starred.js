@@ -60,8 +60,8 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  data: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
+  data: PropTypes.object,
+  items: PropTypes.array,
 };
 
 class TableBody extends Component {
@@ -140,8 +140,8 @@ class TableBody extends Component {
 }
 
 TableBody.propTypes = {
-  data: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
+  data: PropTypes.object,
+  items: PropTypes.array,
 };
 
 class Item extends Component {
@@ -272,8 +272,8 @@ class Item extends Component {
 }
 
 Item.propTypes = {
-  data: PropTypes.object.isRequired,
-  items: PropTypes.array.isRequired,
+  data: PropTypes.object,
+  items: PropTypes.array,
 };
 
 class Starred extends Component {

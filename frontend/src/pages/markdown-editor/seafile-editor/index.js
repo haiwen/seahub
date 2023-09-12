@@ -33,7 +33,7 @@ const propTypes = {
   openDialogs: PropTypes.func,
   fileInfo: PropTypes.object.isRequired,
   collabUsers: PropTypes.array.isRequired,
-  emitSwitchEditor: PropTypes.object.isRequired,
+  emitSwitchEditor: PropTypes.func.isRequired,
   isSaving: PropTypes.bool,
   collabServer: PropTypes.string,
 };

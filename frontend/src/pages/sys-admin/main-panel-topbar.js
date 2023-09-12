@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   children: PropTypes.object,
-  search: PropTypes.string,
+  search: PropTypes.any,
   toggleSidePanel: PropTypes.func
 };
 

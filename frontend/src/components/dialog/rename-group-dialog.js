@@ -75,7 +75,7 @@ const RenameGroupDialogPropTypes = {
   showRenameGroupDialog: PropTypes.bool.isRequired,
   toggleRenameGroupDialog: PropTypes.func.isRequired,
   loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onGroupChanged: PropTypes.func.isRequired,
   currentGroupName: PropTypes.string.isRequired,
 };

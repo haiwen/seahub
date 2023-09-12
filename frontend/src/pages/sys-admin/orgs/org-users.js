@@ -400,7 +400,7 @@ class OrgUsers extends Component {
 }
 
 OrgUsers.propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
 };
 
 export default OrgUsers;

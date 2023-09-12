@@ -230,12 +230,12 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
   updateUser: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
   disable2FA: PropTypes.func.isRequired,
   toggleForce2fa: PropTypes.func.isRequired,
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 class User extends Component {
@@ -335,7 +335,7 @@ class User extends Component {
 }
 
 User.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default User;

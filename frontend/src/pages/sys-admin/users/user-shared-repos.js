@@ -166,7 +166,7 @@ class Repos extends Component {
 }
 
 Repos.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default Repos;

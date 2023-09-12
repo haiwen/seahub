@@ -8,7 +8,7 @@ import toaster from '../../toast';
 
 const propTypes = {
   member: PropTypes.object.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   toggle: PropTypes.func.isRequired,
   onMemberChanged: PropTypes.func.isRequired
 };

@@ -64,10 +64,10 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  getDeviceErrorsListByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
   unshareRepo: PropTypes.func.isRequired,
 };
 
@@ -230,7 +230,7 @@ class GroupRepos extends Component {
 }
 
 GroupRepos.propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
 };
 
 export default GroupRepos;

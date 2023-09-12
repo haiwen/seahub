@@ -4,7 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../../utils/constants';
 
 const propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
   orgName: PropTypes.string.isRequired,
   currentItem: PropTypes.string.isRequired
 };

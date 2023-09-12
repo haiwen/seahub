@@ -78,7 +78,7 @@ Content.propTypes = {
   getDeviceErrorsListByPage: PropTypes.func.isRequired,
   resetPerPage: PropTypes.func.isRequired,
   curPerPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
+  pageInfo: PropTypes.object,
   getDevicesListByPage: PropTypes.func.isRequired,
 };
 

@@ -9,7 +9,7 @@ import { Utils } from '../../utils/utils';
 import '../../css/transfer-group-dialog.css';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   toggleTransferGroupDialog: PropTypes.func.isRequired,
   onGroupChanged: PropTypes.func.isRequired
 };

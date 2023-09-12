@@ -459,7 +459,7 @@ class MemberItem extends React.Component {
 }
 
 const MemberItemPropTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,

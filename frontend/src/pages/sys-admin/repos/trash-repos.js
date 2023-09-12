@@ -105,13 +105,13 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
   onDeleteRepo: PropTypes.func.isRequired,
-  onRestoreRepo: PropTypes.func.isRequired,
+  onRestoreRepo: PropTypes.func,
   getListByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func,
+  pageInfo: PropTypes.object,
+  curPerPage: PropTypes.number,
 };
 
 class Item extends Component {
@@ -282,7 +282,7 @@ Item.propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
-  onRestoreRepo: PropTypes.func.isRequired,
+  onRestoreRepo: PropTypes.func,
 };
 
 class TrashRepos extends Component {

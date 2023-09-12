@@ -12,7 +12,7 @@ class ButtonGroup extends React.PureComponent {
 }
 
 ButtonGroup.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   children: PropTypes.any.isRequired,
 };
 

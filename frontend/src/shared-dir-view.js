@@ -688,7 +688,7 @@ Content.propTypes = {
   isAllItemsSelected: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  sortItems: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   toggleAllSelected: PropTypes.func.isRequired,
@@ -886,7 +886,7 @@ class Item extends React.Component {
 Item.propTypes = {
   isDesktop: PropTypes.bool.isRequired,
   item: PropTypes.object.isRequired,
-  sortItems: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   toggleAllSelected: PropTypes.func.isRequired,

@@ -194,7 +194,7 @@ Content.propTypes = {
 };
 
 OrgUserProfile.propTypes = {
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
 };
 
 export default OrgUserProfile;

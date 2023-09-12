@@ -62,10 +62,10 @@ Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  getDeviceErrorsListByPage: PropTypes.func.isRequired,
-  resetPerPage: PropTypes.func.isRequired,
-  curPerPage: PropTypes.number.isRequired,
-  pageInfo: PropTypes.object.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
   deleteGroup: PropTypes.func.isRequired,
 };
 
@@ -214,7 +214,7 @@ class OrgGroups extends Component {
 }
 
 OrgGroups.propTypes = {
-  orgID: PropTypes.string.isRequired,
+  orgID: PropTypes.string,
 };
 
 
