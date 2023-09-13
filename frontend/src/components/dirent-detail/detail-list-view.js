@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
+import FileTagList from '../file-tag-list';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -64,7 +65,7 @@ class DetailListView extends React.Component {
   };
 
   renderTags = () => {
-    const { direntType, direntDetail, fileTagList } = this.props;
+    const { direntType, direntDetail } = this.props;
     const position = this.getDirentPosition();
     if (direntType === 'dir') {
       return (
@@ -100,16 +101,7 @@ class DetailListView extends React.Component {
           <tr className="file-tag-container">
             <th>{gettext('Tags')}</th>
             <td>
-              <ul className="file-tag-list">
-                {Array.isArray(fileTagList) && fileTagList.map((fileTag) => {
-                  return (
-                    <li key={fileTag.id} className="file-tag-item">
-                      <span className="file-tag" style={{backgroundColor:fileTag.color}}></span>
-                      <span className="tag-name" title={fileTag.name}>{fileTag.name}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              <FileTagList fileTagList={this.props.fileTagList} />
               <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
             </td>
           </tr>

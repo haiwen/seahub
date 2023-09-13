@@ -20,7 +20,7 @@ const propTypes = {
   direntList: PropTypes.array,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
-  sortItems: PropTypes.array,
+  sortItems: PropTypes.func,
 };
 
 class CurDirPath extends React.Component {

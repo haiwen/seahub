@@ -4,6 +4,7 @@ import moment from 'moment';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EditFileTagDialog from '../../../components/dialog/edit-filetag-dialog';
+import FileTagList from '../../../components/file-tag-list';
 
 import '../../../css/dirent-detail.css';
 import '../css/detail-list-view.css';
@@ -30,7 +31,7 @@ class DetailListView extends React.Component {
   };
 
   render() {
-    const { fileTagList, fileInfo } = this.props;
+    const { fileInfo } = this.props;
     return (
       <Fragment>
         <div className="dirent-table-container p-2">
@@ -45,16 +46,7 @@ class DetailListView extends React.Component {
               <tr className="file-tag-container">
                 <th>{gettext('Tags')}</th>
                 <td>
-                  <ul className="file-tag-list">
-                    {Array.isArray(fileTagList) && fileTagList.map((fileTag) => {
-                      return (
-                        <li key={fileTag.id} className="file-tag-item">
-                          <span className="file-tag" style={{backgroundColor: fileTag.tag_color}}></span>
-                          <span className="tag-name" title={fileTag.tag_name}>{fileTag.tag_name}</span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <FileTagList fileTagList={this.props.fileTagList} />
                   <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
                 </td>
               </tr>
@@ -65,7 +57,7 @@ class DetailListView extends React.Component {
           <EditFileTagDialog
             repoID={repoID}
             filePath={filePath}
-            fileTagList={fileTagList}
+            fileTagList={this.props.fileTagList}
             toggleCancel={this.onEditFileTagToggle}
             onFileTagChanged={this.props.onFileTagChanged}
           />

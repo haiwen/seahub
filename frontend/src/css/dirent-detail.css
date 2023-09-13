@@ -106,26 +106,6 @@
   list-style: none;
 }
 
-.file-tag-list li {
-  display: flex;
-  align-items: center;
-  max-width: 180px;
-}
-
-.file-tag-list .file-tag-item .file-tag {
-  width: 12px;
-  height: 12px;
-}
-
-.file-tag-list .tag-name {
-  display: inline-block;
-  margin-left: 5px;
-  width: 80px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 .file-related-files th {
   vertical-align: top;
 }
