@@ -20,7 +20,7 @@ class DismissGroupDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return(
@@ -42,7 +42,7 @@ const DismissGroupDialogPropTypes = {
   showDismissGroupDialog: PropTypes.bool.isRequired,
   toggleDismissGroupDialog: PropTypes.func.isRequired,
   loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onGroupChanged: PropTypes.func.isRequired,
 };
 

@@ -25,7 +25,7 @@ class SharePermissionEditor extends React.Component {
   static defaultProps = {
     isEditing: false,
     autoFocus: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -80,7 +80,7 @@ class SharePermissionEditor extends React.Component {
       toaster.danger(errMessage);
       this.setState({isLoading: false});
     });
-  }
+  };
 
   translatePermission = (permission) => {
     let value = Utils.sharePerms(permission);
@@ -90,7 +90,7 @@ class SharePermissionEditor extends React.Component {
       value = item && item.name;
     }
     return value;
-  }
+  };
 
   translateExplanation = (explanation) => {
     let value = Utils.sharePermsExplanation(explanation);
@@ -100,7 +100,7 @@ class SharePermissionEditor extends React.Component {
       value = item && item.description;
     }
     return value;
-  }
+  };
 
   getPermissions = () => {
     const { permissions } = this.props;
@@ -115,7 +115,7 @@ class SharePermissionEditor extends React.Component {
       this.customPermissions = newPermissions;
     }
     return this.customPermissions;
-  }
+  };
 
   render() {
 

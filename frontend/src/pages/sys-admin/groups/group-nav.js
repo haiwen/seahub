@@ -5,6 +5,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 
 const propTypes = {
   currentItem: PropTypes.string.isRequired,
+  groupName: PropTypes.string.isRequired,
   groupID: PropTypes.string.isRequired
 };
 

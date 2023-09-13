@@ -1,3 +1,3 @@
-import HeaderToolbar from "./header-toolbar";
+import HeaderToolbar from './header-toolbar';
 
 export default HeaderToolbar;

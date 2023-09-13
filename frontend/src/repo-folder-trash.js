@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -60,14 +61,14 @@ class RepoFolderTrash extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   getMore = () => {
     this.setState({
       isLoading: true
     });
     this.getItems(this.state.scanStat);
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -78,22 +79,22 @@ class RepoFolderTrash extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   cleanTrash = () => {
     this.toggleCleanTrashDialog();
-  }
+  };
 
   toggleCleanTrashDialog = () => {
     this.setState({
       isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen
     });
-  }
+  };
 
   refreshTrash = () => {
     this.setState({
@@ -105,7 +106,7 @@ class RepoFolderTrash extends React.Component {
       showFolder: false
     });
     this.getItems();
-  }
+  };
 
   renderFolder = (commitID, baseDir, folderPath) => {
     this.setState({
@@ -142,18 +143,18 @@ class RepoFolderTrash extends React.Component {
         });
       }
     });
-  }
+  };
 
   clickRoot = (e) => {
     e.preventDefault();
     this.refreshTrash();
-  }
+  };
 
   clickFolderPath = (folderPath, e) => {
     e.preventDefault();
     const { commitID, baseDir } = this.state;
     this.renderFolder(commitID, baseDir, folderPath);
-  }
+  };
 
   renderFolderPath = () => {
     const pathList = this.state.folderPath.split('/');
@@ -170,12 +171,13 @@ class RepoFolderTrash extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         }
         )}
         {pathList[pathList.length - 1]}
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const { isCleanTrashDialogOpen, showFolder } = this.state;
@@ -282,6 +284,13 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  getMore: PropTypes.func.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -294,11 +303,11 @@ class Item extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   restoreItem = (e) => {
     e.preventDefault();
@@ -323,13 +332,13 @@ class Item extends React.Component {
       }
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   renderFolder = (e) => {
     e.preventDefault();
     const item = this.props.item;
     this.props.renderFolder(item.commit_id, item.parent_dir, Utils.joinPath('/', item.obj_name));
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -352,7 +361,7 @@ class Item extends React.Component {
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.obj_name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank">{item.obj_name}</a></td>
+        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${item.commit_id}&base=${encodeURIComponent(item.parent_dir)}&p=${encodeURIComponent('/' + item.obj_name)}`} target="_blank" rel="noreferrer">{item.obj_name}</a></td>
         <td title={moment(item.deleted_time).format('LLLL')}>{moment(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
@@ -362,6 +371,11 @@ class Item extends React.Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
 
 class FolderItem extends React.Component {
 
@@ -374,11 +388,11 @@ class FolderItem extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   renderFolder = (e) => {
     e.preventDefault();
@@ -386,11 +400,10 @@ class FolderItem extends React.Component {
     const item = this.props.item;
     const { commitID, baseDir, folderPath } = this.props;
     this.props.renderFolder(commitID, baseDir, Utils.joinPath(folderPath, item.name));
-  }
+  };
 
   render() {
     const item = this.props.item;
-    const { isIconShown } = this.state;
     const { commitID, baseDir, folderPath } = this.props;
 
     return item.type == 'dir' ? (
@@ -404,7 +417,7 @@ class FolderItem extends React.Component {
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
+        <td><a href={`${siteRoot}repo/${repoID}/trash/files/?obj_id=${item.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td></td>
@@ -412,5 +425,13 @@ class FolderItem extends React.Component {
     );
   }
 }
+
+FolderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  commitID: PropTypes.string.isRequired,
+  baseDir: PropTypes.string.isRequired,
+  folderPath: PropTypes.string.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<RepoFolderTrash />, document.getElementById('wrapper'));

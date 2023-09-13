@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -23,7 +22,7 @@ class OCMViaWebdav extends Component {
   }
 
   componentDidMount() {
-    this.getAllReceivedShares()
+    this.getAllReceivedShares();
   }
 
   getAllReceivedShares = () => {
@@ -39,7 +38,7 @@ class OCMViaWebdav extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   leaveShare = (item) => {
     const { id, name } = item;
@@ -54,7 +53,7 @@ class OCMViaWebdav extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openFolder = (item) => {
 
@@ -74,7 +73,7 @@ class OCMViaWebdav extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onPathClick = (path) => {
 
@@ -93,7 +92,7 @@ class OCMViaWebdav extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -133,7 +132,7 @@ class Content extends Component {
     errorMsg: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     path: PropTypes.string.isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -184,11 +183,21 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
+  leaveShare: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -201,28 +210,28 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   downloadFile = () => {
     let downloadUrl = siteRoot + 'ocm-via-webdav/download-received-file/?share_id=' + this.props.item.id + '&path=' + this.props.item.path;
     window.location.href = downloadUrl;
-  }
+  };
 
   leaveShare = (e) => {
     e.preventDefault();
     this.props.leaveShare(this.props.item);
-  }
+  };
 
   openFolder = (e) => {
     e.preventDefault();
     this.props.openFolder(this.props.item);
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -235,20 +244,27 @@ class Item extends Component {
     }
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={item.icon_url} width="24" /></td>
+        <td><img src={item.icon_url} width="24" alt="" /></td>
         <td>
           {item.is_dir ? <a href="#" onClick={this.openFolder}>{item.name}</a> : item.name}
-	</td>
+        </td>
         <td>{item.shared_by}</td>
         <td title={moment(item.last_modified).format('llll')}>{moment(item.ctime).fromNow()}</td>
-        <td>{item.is_dir ? "" : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
+        <td>{item.is_dir ? '' : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
         </td>
-        <td>{this.props.path ? "" : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}
+        <td>{this.props.path ? '' : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}
         </td>
       </tr>
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  leaveShare: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+};
 
 class DirPath extends React.Component {
 
@@ -256,7 +272,7 @@ class DirPath extends React.Component {
     currentPath: PropTypes.string.isRequired,
     onPathClick: PropTypes.func.isRequired,
     getAllReceivedShares: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -267,7 +283,7 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
-  }
+  };
 
   turnPathToLink = (path) => {
     path = path.slice(1, path.length - 1);
@@ -282,11 +298,11 @@ class DirPath extends React.Component {
           </Fragment>
         );
       } else {
-	if (index === 0) {
+        if (index === 0) {
           nodePath = '/';
-	} else {
+        } else {
           nodePath += item + '/';
-	}
+        }
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
@@ -296,7 +312,7 @@ class DirPath extends React.Component {
       }
     });
     return pathElem;
-  }
+  };
 
   render() {
     let pathElem = this.turnPathToLink(this.props.currentPath);
@@ -308,5 +324,12 @@ class DirPath extends React.Component {
     );
   }
 }
+
+DirPath.propTypes = {
+  shareID: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
+  onPathClick: PropTypes.func.isRequired,
+  getAllReceivedShares: PropTypes.func.isRequired,
+};
 
 export default OCMViaWebdav;

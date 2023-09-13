@@ -19,6 +19,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func,
   mode: PropTypes.oneOf(['current_repo_and_other_repos', 'only_all_repos', 'only_current_library']),
   fileSuffixes: PropTypes.array,
+  currentPath: PropTypes.string,
 };
 
 class FileChooser extends React.Component {
@@ -111,11 +112,11 @@ class FileChooser extends React.Component {
     else {
       this.setState({isOtherRepoShow: !this.state.isOtherRepoShow});
     }
-  }
+  };
 
   onCurrentRepoToggle = () => {
     this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow});
-  }
+  };
 
   onDirentItemClick = (repo, filePath, dirent) => {
     this.props.onDirentItemClick(repo, filePath, dirent);
@@ -123,7 +124,7 @@ class FileChooser extends React.Component {
       selectedRepo: repo,
       selectedPath: filePath
     });
-  }
+  };
 
   onRepoItemClick = (repo) => {
     if (this.props.onRepoItemClick) {
@@ -133,7 +134,7 @@ class FileChooser extends React.Component {
       selectedRepo: repo,
       selectedPath: '/',
     });
-  }
+  };
 
   onCloseSearching = () => {
     this.setState({
@@ -145,7 +146,7 @@ class FileChooser extends React.Component {
     this.inputValue = '';
     this.timer = null;
     this.source = null;
-  }
+  };
 
   onSearchInfoChanged = (event) => {
     let searchInfo = event.target.value.trim();
@@ -195,7 +196,7 @@ class FileChooser extends React.Component {
     }
 
     this.timer = setTimeout(this.getSearchResult(queryData), 500);
-  }
+  };
 
   getSearchResult = (queryData) => {
     if (this.source) {
@@ -206,7 +207,7 @@ class FileChooser extends React.Component {
 
     this.source = seafileAPI.getSource();
     this.sendRequest(queryData, this.source.token);
-  }
+  };
 
   sendRequest = (queryData, cancelToken) => {
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
@@ -226,11 +227,11 @@ class FileChooser extends React.Component {
       });
       this.source = null;
     });
-  }
+  };
 
   cancelRequest = () => {
     this.source.cancel('prev request is cancelled');
-  }
+  };
 
   getValueLength = (str) => {
     var i = 0, code, len = 0;
@@ -247,7 +248,7 @@ class FileChooser extends React.Component {
       }
     }
     return len;
-  }
+  };
 
   formatResultItems = (data) => {
     let items = [];
@@ -264,13 +265,13 @@ class FileChooser extends React.Component {
       items[i]['content'] = data[i].content_highlight;
     }
     return items;
-  }
+  };
 
   onSearchedItemClick = (item) => {
     item['type'] = item.is_dir ? 'dir' : 'file';
     let repo = new RepoInfo(item);
     this.props.onDirentItemClick(repo, item.path, item);
-  }
+  };
 
   renderSearchedView = () => {
     if (this.getValueLength(this.inputValue) < 3) {
@@ -293,7 +294,7 @@ class FileChooser extends React.Component {
           onSearchedItemDoubleClick={this.onSearchedItemDoubleClick}
         />);
     }
-  }
+  };
 
   onSearchedItemDoubleClick = (item) => {
     if (item.type !== 'dir') {
@@ -363,11 +364,11 @@ class FileChooser extends React.Component {
       }
     }
     this.onCloseSearching();
-  }
+  };
 
   onScroll = (event) => {
     event.stopPropagation();
-  }
+  };
 
   renderRepoListView = () => {
 
@@ -464,7 +465,7 @@ class FileChooser extends React.Component {
         )}
       </div>
     );
-  }
+  };
 
   render() {
     if (!this.state.selectedRepo && this.props.repoID) {

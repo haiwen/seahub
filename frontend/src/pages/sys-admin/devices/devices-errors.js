@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -21,11 +22,11 @@ class Content extends Component {
 
   getPreviousPageDeviceErrorsList = () => {
     this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageDeviceErrorsList = () => {
     this.props.getDeviceErrorsListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -73,6 +74,20 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  getDeviceErrorsListByPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -84,11 +99,11 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -106,6 +121,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class DeviceErrors extends Component {
 
@@ -147,7 +166,7 @@ class DeviceErrors extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clean = () => {
     seafileAPI.sysAdminClearDeviceErrors().then((res) => {
@@ -161,7 +180,7 @@ class DeviceErrors extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -169,7 +188,7 @@ class DeviceErrors extends Component {
     }, () => {
       this.getDeviceErrorsListByPage(1);
     });
-  }
+  };
   render() {
     return (
       <Fragment>

@@ -20,6 +20,7 @@ const propTypes = {
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
+  fileTags: PropTypes.array,
 };
 
 class DirentDetail extends React.Component {
@@ -79,7 +80,7 @@ class DirentDetail extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateDetailView = (dirent, direntPath) => {
     let repoID = this.props.repoID;
@@ -105,23 +106,23 @@ class DirentDetail extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   listParticipants = (repoID, filePath) => {
     seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
       this.setState({ fileParticipantList: res.data.participant_list });
     });
-  }
+  };
 
   onParticipantsChange = (repoID, filePath) => {
     this.listParticipants(repoID, filePath);
-  }
+  };
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({ activeTab: tab });
     }
-  }
+  };
 
   renderNavItem = (showTab) => {
     switch(showTab) {
@@ -142,7 +143,7 @@ class DirentDetail extends React.Component {
           </NavItem>
         );
     }
-  }
+  };
 
   renderHeader = (smallIconUrl, direntName) => {
     return (
@@ -154,7 +155,7 @@ class DirentDetail extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
   renderDetailBody = (bigIconUrl, folderDirent) => {
     const { dirent, fileTags } = this.props;
@@ -179,7 +180,7 @@ class DirentDetail extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     let { dirent, repoID, path } = this.props;

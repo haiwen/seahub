@@ -35,14 +35,14 @@ class DeleteRepoDialog extends Component {
         sharedToUserCount: res.data['shared_user_emails'].length,
         sharedToGroupCount: res.data['shared_group_ids'].length,
       });
-    })
+    });
   }
 
   onDeleteRepo = () => {
     this.setState({isRequestSended: true}, () => {
       this.props.onDeleteRepo(this.props.repo);
     });
-  }
+  };
 
   render() {
 

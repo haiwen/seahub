@@ -56,7 +56,7 @@ class FileContent extends React.Component {
               isLoading: false,
               errorMsg: ''
             });
-
+            // eslint-disable-next-line
             let scriptNode = document.createElement('script');
             scriptNode.type = 'text/javascript';
             scriptNode.src = `${mediaUrl}js/pdf/web/viewer.js`;

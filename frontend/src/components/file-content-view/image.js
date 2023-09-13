@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
 
@@ -44,7 +45,7 @@ class FileContent extends React.Component {
     this.setState({
       loadFailed: true
     });
-  }
+  };
 
   render() {
     if (this.state.loadFailed) {
@@ -75,5 +76,9 @@ class FileContent extends React.Component {
     );
   }
 }
+
+FileContent.propTypes = {
+  tip: PropTypes.string.isRequired,
+};
 
 export default FileContent;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const {
@@ -27,13 +28,13 @@ class UserBasicInfoForm extends React.Component {
     this.setState({
       name: e.target.value
     });
-  }
+  };
 
   handleContactEmailInputChange = (e) => {
     this.setState({
       contactEmail: e.target.value
     });
-  }
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -44,7 +45,7 @@ class UserBasicInfoForm extends React.Component {
       data.contact_email = this.state.contactEmail;
     }
     this.props.updateUserInfo(data);
-  }
+  };
 
   render() {
     const {
@@ -88,5 +89,10 @@ class UserBasicInfoForm extends React.Component {
     );
   }
 }
+
+UserBasicInfoForm.propTypes = {
+  updateUserInfo: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+};
 
 export default UserBasicInfoForm;

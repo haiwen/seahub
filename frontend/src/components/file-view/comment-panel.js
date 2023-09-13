@@ -44,7 +44,7 @@ class CommentPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listRepoRelatedUsers = () => {
     seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
@@ -53,11 +53,11 @@ class CommentPanel extends React.Component {
       });
       this.setState({ relatedUsers: users });
     });
-  }
+  };
 
   handleCommentChange = (event) => {
     this.setState({ comment: event.target.value });
-  }
+  };
 
   addComment = () => {
     if (!this.state.comment.trim()) return;
@@ -67,7 +67,7 @@ class CommentPanel extends React.Component {
       toaster.danger(Utils.getErrorMsg(err));
     });
     this.setState({ comment: '' });
-  }
+  };
 
   onSubmit = () => {
     this.addParticipant(username);
@@ -82,7 +82,7 @@ class CommentPanel extends React.Component {
         toaster.danger(Utils.getErrorMsg(err));
       });
     }
-  }
+  };
 
   resolveComment = (event) => {
     seafileAPI.updateComment(repoID, event.target.id, 'true').then(() => {
@@ -91,7 +91,7 @@ class CommentPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteComment = (event) => {
     seafileAPI.deleteComment(repoID, event.target.id).then(() => {
@@ -100,7 +100,7 @@ class CommentPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   editComment = (commentID, newComment) => {
     seafileAPI.updateComment(repoID, commentID, null, null, newComment).then((res) => {
@@ -109,7 +109,7 @@ class CommentPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onParticipantsChange = () => {
     if (this.props.onParticipantsChange) {
@@ -117,7 +117,7 @@ class CommentPanel extends React.Component {
     } else {
       this.getParticipants();
     }
-  }
+  };
 
   getParticipants = () => {
     if (this.props.participants) {
@@ -127,20 +127,20 @@ class CommentPanel extends React.Component {
         this.setState({ participants: res.data.participant_list });
       });
     }
-  }
+  };
 
   checkParticipant = (email) => {
     return this.state.participants.map((participant) => {return participant.email;}).includes(email);
-  }
+  };
 
   addParticipant = (email) => {
     if (this.checkParticipant(email)) return;
     this.toBeAddedParticipant.push(email);
-  }
+  };
 
   renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
     return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
-  }
+  };
 
   componentDidMount() {
     this.listComments();
@@ -242,20 +242,20 @@ class CommentItem extends React.Component {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
-  }
+  };
 
   convertComment = (mdFile) => {
     processor.process(mdFile).then((result) => {
       let html = String(result);
       this.setState({ html: html });
     });
-  }
+  };
 
   toggleEditComment = () => {
     this.setState({
       editable: !this.state.editable
     });
-  }
+  };
 
   updateComment = (event) => {
     const newComment = this.state.newComment;
@@ -263,13 +263,13 @@ class CommentItem extends React.Component {
       this.props.editComment(event.target.id, newComment);
     }
     this.toggleEditComment();
-  }
+  };
 
   handleCommentChange = (event) => {
     this.setState({
       newComment: event.target.value,
     });
-  }
+  };
 
   onCommentClick = (e) => {
     // click participant link, page shouldn't jump
@@ -278,7 +278,7 @@ class CommentItem extends React.Component {
     if (preNode && preNode.nodeType === 3 && preNode.nodeValue.slice(-1) === '@') {
       e.preventDefault();
     }
-  }
+  };
 
   componentWillMount() {
     this.convertComment(this.props.item.comment);

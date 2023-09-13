@@ -43,7 +43,7 @@ class TermsPreviewWidget extends React.Component {
         innerHtml: innerHtml
       });
     });
-  }
+  };
 
   render() {
     if (this.state.isFormatValue) {

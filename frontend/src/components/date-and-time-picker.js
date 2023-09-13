@@ -8,12 +8,6 @@ import { translateCalendar } from '../utils/date-format-utils';
 import '@seafile/seafile-calendar/assets/index.css';
 import '../css/date-and-time-picker.css';
 
-const propsTypes = {
-  disabledDate: PropTypes.func.isRequired,
-  value: PropTypes.object,
-  onChange: PropTypes.func.isRequired
-};
-
 class Picker extends React.Component {
 
   constructor(props) {
@@ -31,32 +25,30 @@ class Picker extends React.Component {
 
   getCalendarContainer = () => {
     return this.calendarContainerRef.current;
-  }
+  };
 
   render() {
-    const props = this.props;
-
     let showHourAndMinute = true; // default: true
-    if (props.showHourAndMinute != undefined) {
-      showHourAndMinute = props.showHourAndMinute;
+    if (this.props.showHourAndMinute != undefined) {
+      showHourAndMinute = this.props.showHourAndMinute;
     }
 
     const FORMAT = showHourAndMinute ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD';
 
     const calendar = (<Calendar
       defaultValue={this.defaultCalendarValue}
-      disabledDate={props.disabledDate}
+      disabledDate={this.props.disabledDate}
       format={FORMAT}
       locale={translateCalendar()}
       showHourAndMinute={showHourAndMinute}
     />);
     return (
       <DatePicker
-        disabled={props.disabled}
+        disabled={this.props.disabled}
         getCalendarContainer={this.getCalendarContainer}
         calendar={calendar}
-        value={props.value}
-        onChange={props.onChange}
+        value={this.props.value}
+        onChange={this.props.onChange}
       >
         {
           ({value}) => {
@@ -64,9 +56,9 @@ class Picker extends React.Component {
               <div>
                 <input
                   placeholder={FORMAT}
-                  style={{ width: props.inputWidth || 250 }}
+                  style={{ width: this.props.inputWidth || 250 }}
                   tabIndex="-1"
-                  disabled={props.disabled}
+                  disabled={this.props.disabled}
                   readOnly={true}
                   value={value && value.format(FORMAT) || ''}
                   className="form-control"
@@ -82,6 +74,13 @@ class Picker extends React.Component {
   }
 }
 
-Picker.propsTypes = propsTypes;
+Picker.propTypes = {
+  showHourAndMinute: PropTypes.bool.isRequired,
+  disabledDate: PropTypes.func.isRequired,
+  value: PropTypes.object,
+  disabled: PropTypes.func.isRequired,
+  inputWidth: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired
+};
 
 export default Picker;

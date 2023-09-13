@@ -21,11 +21,11 @@ class OrgSamlConfigPostFile extends Component {
     }
     const file = this.fileInput.current.files[0];
     this.props.postFile(file);
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   render() {
     const { displayName } = this.props;

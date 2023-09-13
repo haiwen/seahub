@@ -25,53 +25,53 @@ class HistoryVersion extends React.Component {
     const { currentVersion, historyVersion } = this.props;
     if (currentVersion.commit_id === historyVersion.commit_id) return;
     this.setState({ isShowOperationIcon: true });
-  }
+  };
 
   onMouseLeave = () => {
     const { currentVersion, historyVersion } = this.props;
     if (currentVersion.commit_id === historyVersion.commit_id) return;
     this.setState({ isShowOperationIcon: false });
-  }
+  };
 
   onToggleClick = (e) => {
     this.setState({ isMenuShow: !this.state.isMenuShow });
-  }
+  };
 
   onClick = () => {
     this.setState({ isShowOperationIcon: false });
     const { currentVersion, historyVersion } = this.props;
     if (currentVersion.commit_id === historyVersion.commit_id) return;
     this.props.onSelectHistoryVersion(historyVersion);
-  }
+  };
 
   onRestore = () => {
     const { historyVersion } = this.props;
     this.props.onRestore(historyVersion);
-  }
+  };
 
   onItemDownload = () => {
     // nothing todo
-  }
+  };
 
   onItemCopy = () => {
     const { historyVersion } = this.props;
     historyVersion.ctime_format = moment(historyVersion.ctime).format('YYYY-MM-DD HH:mm');
     this.props.onCopy(historyVersion);
-  }
+  };
 
   toggleRename = () => {
     this.setState({isRenameShow: !this.state.isRenameShow});
-  }
+  };
 
   onRenameConfirm = (newName) => {
     const { obj_id } = this.props.historyVersion;
     this.props.renameHistoryVersion(obj_id, newName);
     this.toggleRename();
-  }
+  };
 
   onRenameCancel = () => {
     this.toggleRename();
-  }
+  };
 
   render() {
     const { currentVersion, historyVersion } = this.props;

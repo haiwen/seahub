@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -22,19 +23,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -90,6 +91,19 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  getListByPage: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  transferGroup: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -109,7 +123,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -118,7 +132,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -126,7 +140,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -139,29 +153,29 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleTransferDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
-  }
+  };
 
   deleteGroup = () => {
     this.props.deleteGroup(this.props.item.id);
-  }
+  };
 
   transferGroup = (receiver) => {
     this.props.transferGroup(this.props.item.id, receiver);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -175,7 +189,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -233,5 +247,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  transferGroup: PropTypes.func.isRequired,
+};
 
 export default Content;

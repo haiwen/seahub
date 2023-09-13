@@ -42,10 +42,9 @@ class CopyDirent extends React.Component {
     } else {
       this.copyItem();
     }
-  }
+  };
 
   copyItems = () => {
-    let { repoID } = this.props;
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
 
@@ -87,7 +86,7 @@ class CopyDirent extends React.Component {
 
     this.props.onItemsCopy(repo, selectedPath);
     this.toggle();
-  }
+  };
 
   copyItem = () => {
     let { repo, repoID, selectedPath } = this.state;
@@ -116,11 +115,11 @@ class CopyDirent extends React.Component {
 
     this.props.onItemCopy(repo, this.props.dirent, selectedPath, this.props.path);
     this.toggle();
-  }
+  };
 
   toggle = () => {
     this.props.onCancelCopy();
-  }
+  };
 
   onDirentItemClick = (repo, selectedPath) => {
     this.setState({
@@ -128,7 +127,7 @@ class CopyDirent extends React.Component {
       selectedPath: selectedPath,
       errMessage: ''
     });
-  }
+  };
 
   onRepoItemClick = (repo) => {
     this.setState({
@@ -136,7 +135,7 @@ class CopyDirent extends React.Component {
       selectedPath: '/',
       errMessage: ''
     });
-  }
+  };
 
   render() {
     let title = gettext('Copy {placeholder} to');

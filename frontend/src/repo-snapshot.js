@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -42,7 +43,7 @@ class RepoSnapshot extends React.Component {
     this.setState({
       isConfirmDialogOpen: !this.state.isConfirmDialogOpen
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -53,12 +54,12 @@ class RepoSnapshot extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   renderFolder = (folderPath) => {
     this.setState({
@@ -78,12 +79,12 @@ class RepoSnapshot extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clickFolderPath = (folderPath, e) => {
     e.preventDefault();
     this.renderFolder(folderPath);
-  }
+  };
 
   renderPath = () => {
     const path = this.state.folderPath;
@@ -106,12 +107,13 @@ class RepoSnapshot extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         }
         )}
         {pathList[pathList.length - 1]}
       </React.Fragment>
     );
-  }
+  };
 
   restoreRepo = () => {
     seafileAPI.revertRepo(repoID, commitID).then((res) => {
@@ -122,7 +124,7 @@ class RepoSnapshot extends React.Component {
       this.toggleDialog();
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   render() {
     const { isConfirmDialogOpen, folderPath } = this.state;
@@ -235,6 +237,11 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
+
 class FolderItem extends React.Component {
 
   constructor(props) {
@@ -246,11 +253,11 @@ class FolderItem extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   restoreItem = (e) => {
     e.preventDefault();
@@ -266,7 +273,7 @@ class FolderItem extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   renderFolder = (e) => {
     e.preventDefault();
@@ -274,7 +281,7 @@ class FolderItem extends React.Component {
     const item = this.props.item;
     const { folderPath } = this.props;
     this.props.renderFolder(Utils.joinPath(folderPath, item.name));
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -293,7 +300,7 @@ class FolderItem extends React.Component {
     ) : (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
-        <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank">{item.name}</a></td>
+        <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
           <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '': 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
@@ -303,5 +310,11 @@ class FolderItem extends React.Component {
     );
   }
 }
+
+FolderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  folderPath: PropTypes.string.isRequired,
+  renderFolder: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<RepoSnapshot />, document.getElementById('wrapper'));

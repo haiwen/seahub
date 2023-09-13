@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { siteRoot, gettext, isPro } from '../../../utils/constants';
@@ -59,6 +60,17 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  unshareRepo: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -71,24 +83,24 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleUnshareRepoDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen});
-  }
+  };
 
   unshareRepo = () => {
     const { item } = this.props;
     this.props.unshareRepo(item.repo_id, item.name);
     this.toggleUnshareRepoDialog();
-  }
+  };
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -103,7 +115,7 @@ class Item extends Component {
     } else {
       return '--';
     }
-  }
+  };
 
   render() {
     let { isOpIconShown, isUnshareRepoDialogOpen } = this.state;
@@ -141,6 +153,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  unshareRepo: PropTypes.func.isRequired,
+};
 
 class GroupRepos extends Component {
 
@@ -184,7 +201,7 @@ class GroupRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -211,5 +228,9 @@ class GroupRepos extends Component {
     );
   }
 }
+
+GroupRepos.propTypes = {
+  groupID: PropTypes.string,
+};
 
 export default GroupRepos;

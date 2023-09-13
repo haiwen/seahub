@@ -7,12 +7,6 @@ import { translateCalendar } from '../../../utils/date-format-utils';
 
 import '@seafile/seafile-calendar/assets/index.css';
 
-const propsTypes = {
-  disabledDate: PropTypes.func.isRequired,
-  value: PropTypes.object,
-  onChange: PropTypes.func.isRequired,
-};
-
 const FORMAT = 'YYYY-MM-DD';
 
 class Picker extends React.Component {
@@ -61,6 +55,10 @@ class Picker extends React.Component {
   }
 }
 
-Picker.propsTypes = propsTypes;
+Picker.propTypes = {
+  disabledDate: PropTypes.func.isRequired,
+  value: PropTypes.object,
+  onChange: PropTypes.func.isRequired,
+};
 
 export default Picker;

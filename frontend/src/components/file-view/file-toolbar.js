@@ -26,7 +26,7 @@ const {
   fileType,
   fileName,
   canEditFile, err,
-  fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
+  // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile, enableComment
 } = window.app.pageOptions;
 
@@ -64,19 +64,19 @@ class FileToolbar extends React.Component {
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
-  }
+  };
 
   toggleMoreOpMenu = () => {
     this.setState({
       moreDropdownOpen: !this.state.moreDropdownOpen
     });
-  }
+  };
 
   toggle = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
-  }
+  };
 
   render() {
     if (this.state.isLoading) {

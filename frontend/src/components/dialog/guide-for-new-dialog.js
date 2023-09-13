@@ -11,7 +11,7 @@ class GuideForNewDialog extends React.Component {
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (

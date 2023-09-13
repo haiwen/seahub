@@ -65,7 +65,7 @@ class DirColumnNav extends React.Component {
       return;
     }
     this.props.onNodeClick(node);
-  }
+  };
 
   onMenuItemClick = (operation, node) => {
     this.setState({opNode: node});
@@ -100,7 +100,7 @@ class DirColumnNav extends React.Component {
         this.onOpenFile(node);
         break;
     }
-  }
+  };
 
   onAddFileToggle = (type) => {
     if (type === 'root') {
@@ -112,7 +112,7 @@ class DirColumnNav extends React.Component {
     } else {
       this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     }
-  }
+  };
 
   onAddFolderToggle = (type) => {
     if (type === 'root') {
@@ -124,39 +124,39 @@ class DirColumnNav extends React.Component {
     } else {
       this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     }
-  }
+  };
 
   onRenameToggle = () => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-  }
+  };
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onAddFolderNode = (dirPath) => {
     this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     this.props.onAddFolderNode(dirPath);
-  }
+  };
 
   onRenameNode = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
-  }
+  };
 
   onDeleteNode = (node) => {
     this.props.onDeleteNode(node);
-  }
+  };
 
   onOpenFile = (node) => {
     let newUrl = siteRoot + 'lib/' + this.props.repoID + '/file' + Utils.encodePath(node.path);
     window.open(newUrl, '_blank');
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
@@ -169,7 +169,7 @@ class DirColumnNav extends React.Component {
       return object.name === newName;
     });
     return isDuplicated;
-  }
+  };
 
   showNodeImagePopup = (node) => {
     let childrenNode = node.parentNode.children;
@@ -184,7 +184,7 @@ class DirColumnNav extends React.Component {
       imageNodeItems: this.prepareImageItems(node),
       imageIndex: imageNames.indexOf(node.object.name)
     });
-  }
+  };
 
   prepareImageItems = (node) => {
     let childrenNode = node.parentNode.children;
@@ -216,31 +216,31 @@ class DirColumnNav extends React.Component {
     };
 
     return items.map((item) => { return prepareItem(item); });
-  }
+  };
 
   closeNodeImagePopup = () => {
     this.setState({
       isNodeImagePopupOpen: false
     });
-  }
+  };
 
   moveToPrevImage = () => {
     const imageItemsLength = this.state.imageNodeItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
     }));
-  }
+  };
 
   moveToNextImage = () => {
     const imageItemsLength = this.state.imageNodeItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
-  }
+  };
 
   stopTreeScrollPropagation = (e) => {
     e.stopPropagation();
-  }
+  };
 
   render() {
     let flex = this.props.navRate ? '0 0 ' + this.props.navRate * 100 + '%' : '0 0 25%';

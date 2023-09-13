@@ -29,15 +29,15 @@ class MoreMenu extends React.PureComponent {
 
   tooltipToggle = () => {
     this.setState({ tooltipOpen: !this.state.tooltipOpen });
-  }
+  };
 
   dropdownToggle = () => {
     this.setState({ dropdownOpen:!this.state.dropdownOpen });
-  }
+  };
 
   downloadFile = () => {
     location.href = '?dl=1';
-  }
+  };
 
   render() {
     const editorMode = this.props.editorMode;

@@ -7,7 +7,7 @@ class GoBack extends Component {
   onBackClick = (event) => {
     event.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
     return (

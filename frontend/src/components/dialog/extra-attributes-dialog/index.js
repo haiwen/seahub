@@ -69,7 +69,7 @@ class ExtraAttributesDialog extends Component {
         });
       }, 280);
     }, 1);
-  }
+  };
 
   getFormatUpdateData = (update = {}) => {
     const { columns } = this.state;
@@ -89,7 +89,7 @@ class ExtraAttributesDialog extends Component {
       }
     }
     return updateData;
-  }
+  };
 
   getData = () => {
     const { repoID, filePath } = this.props;
@@ -101,7 +101,7 @@ class ExtraAttributesDialog extends Component {
       const errorMsg =Utils.getErrorMsg(error);
       this.setState({ isLoading: false, errorMsg });
     });
-  }
+  };
 
   createData = (data) => {
     const { repoID, filePath } = this.props;
@@ -131,18 +131,18 @@ class ExtraAttributesDialog extends Component {
         this.createData(data);
       }
     });
-  }
+  };
 
   onHotKey = (event) => {
     if (isHotkey('esc', event)) {
       this.onToggle();
       return;
     }
-  }
+  };
 
   onToggle = () => {
     this.props.onToggle();
-  }
+  };
 
   getDialogStyle = () => {
     const width = 800;
@@ -152,7 +152,7 @@ class ExtraAttributesDialog extends Component {
       marginLeft: (window.innerWidth - width) / 2,
       height: DIALOG_MAX_HEIGHT,
     };
-  }
+  };
 
   getInitStyle = () => {
     const transition = 'all .3s';
@@ -169,7 +169,7 @@ class ExtraAttributesDialog extends Component {
       marginTop,
       transition,
     };
-  }
+  };
 
   renderColumns = () => {
     const { isLoading, errorMsg, columns, row, update } = this.state;
@@ -207,7 +207,7 @@ class ExtraAttributesDialog extends Component {
       </>
     );
 
-  }
+  };
 
   renderContent = () => {
     if (!this.state.animationEnd) return null;
@@ -220,7 +220,7 @@ class ExtraAttributesDialog extends Component {
         </ModalBody>
       </>
     );
-  }
+  };
 
   render() {
     const { animationEnd } = this.state;

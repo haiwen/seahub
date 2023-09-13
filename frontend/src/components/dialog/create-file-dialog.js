@@ -45,7 +45,7 @@ class CreateFile extends React.Component {
     this.setState({
       childName: e.target.value,
     }) ;
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) {
@@ -65,14 +65,14 @@ class CreateFile extends React.Component {
       this.props.onAddFile(path, isMarkdownDraft, isSdocDraft);
       this.props.toggleDialog();
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleCheck = () => {
     let pos = this.state.childName.lastIndexOf('.');
@@ -121,24 +121,24 @@ class CreateFile extends React.Component {
         });
       }
     }
-  }
+  };
 
   checkDuplicatedName = () => {
     let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
     return isDuplicated;
-  }
+  };
 
   onAfterModelOpened = () => {
     if (!this.newInput.current) return;
     this.newInput.current.focus();
     this.newInput.current.setSelectionRange(0,0);
-  }
+  };
 
   toggleMarkSdocDraft = (e) => {
     this.setState({
       isSdocDraft: e.target.checked
     });
-  }
+  };
 
   render() {
     const { isSdocDraft } = this.state;

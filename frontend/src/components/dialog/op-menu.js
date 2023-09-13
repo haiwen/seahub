@@ -24,11 +24,11 @@ class OpMenu extends React.Component {
   onMenuItemClick = (e) => {
     let operation = Utils.getEventData(e, 'op');
     this.props.onMenuItemClick(operation);
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     this.setState(
@@ -41,7 +41,7 @@ class OpMenu extends React.Component {
         }
       }
     );
-  }
+  };
 
   render() {
     const { operations, translateOperations } = this.props;

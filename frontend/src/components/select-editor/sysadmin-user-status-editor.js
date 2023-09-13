@@ -20,7 +20,7 @@ class SysAdminUserStatusEditor extends React.Component {
       case 'inactive':
         return gettext('Inactive');
     }
-  }
+  };
 
   render() {
     return (

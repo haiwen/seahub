@@ -15,7 +15,7 @@ class LanguageSetting extends React.Component {
   onSelectChange = (selectedItem) => {
     // selectedItem: {value: '...', label: '...'}
     location.href = `${siteRoot}i18n/?lang=${selectedItem.value}`;
-  }
+  };
 
   render() {
     const options = langList.map((item, index) => {

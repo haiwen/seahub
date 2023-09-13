@@ -87,6 +87,7 @@ const propTypes = {
   onDirentClick: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
   loadDirentList: PropTypes.func.isRequired,
+  fullDirentList: PropTypes.array.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -109,45 +110,45 @@ class LibContentContainer extends React.Component {
   onPathClick = (path) => {
     this.props.onMainNavBarClick(path);
     this.props.closeDirentDetail();
-  }
+  };
 
   onItemClick = (dirent) => {
     this.props.onItemClick(dirent);
     this.props.closeDirentDetail();
-  }
+  };
 
   onGridItemClick = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onDirentClick(dirent);
-  }
+  };
 
   // on '<tr>'
   onDirentClick = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onDirentClick(dirent);
-  }
+  };
 
   onItemSelected = (dirent) => {
     this.setState({currentDirent: dirent});
     this.props.onItemSelected(dirent);
-  }
+  };
 
   onItemDelete = (dirent) => {
     this.checkCurrentDirent(dirent);
     this.props.onItemDelete(dirent);
-  }
+  };
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
     this.checkCurrentDirent(dirent);
     this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
-  }
+  };
 
   checkCurrentDirent = (deletedDirent) => {
     let { currentDirent } = this.state;
     if (currentDirent && deletedDirent.name === currentDirent.name) {
       this.setState({currentDirent: null});
     }
-  }
+  };
 
   onItemsScroll = (e) => {
     let target = e.target;
@@ -159,7 +160,7 @@ class LibContentContainer extends React.Component {
     if (target.scrollTop + target.clientHeight + 1 >= target.scrollHeight) {
       this.props.onListContainerScroll();
     }
-  }
+  };
 
   render() {
     let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;

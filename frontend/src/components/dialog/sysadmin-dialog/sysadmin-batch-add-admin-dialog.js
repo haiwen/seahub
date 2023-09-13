@@ -20,26 +20,26 @@ class SysAdminBatchAddAdminDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
- handleSelectChange = (options) => {
-   this.setState({
-     options: options,
-     isSubmitBtnActive: options.length > 0
-   });
- }
+  handleSelectChange = (options) => {
+    this.setState({
+      options: options,
+      isSubmitBtnActive: options.length > 0
+    });
+  };
 
- handleSubmit = () => {
-   this.props.addAdminInBatch(this.state.options.map(item => item.email));
-   this.toggle();
- }
+  handleSubmit = () => {
+    this.props.addAdminInBatch(this.state.options.map(item => item.email));
+    this.toggle();
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return (

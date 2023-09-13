@@ -27,7 +27,7 @@ class DeleteDepartmentDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { group } = this.props;

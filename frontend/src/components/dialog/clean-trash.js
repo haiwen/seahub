@@ -32,7 +32,7 @@ class CleanTrash extends React.Component {
     this.setState({
       inputValue: value
     });
-  }
+  };
 
   formSubmit = () => {
     const inputValue = this.state.inputValue;
@@ -53,7 +53,7 @@ class CleanTrash extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     const { formErrorMsg } = this.state;

@@ -37,6 +37,10 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   switchViewMode: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
+  onItemRename: PropTypes.func.isRequired,
+  showDirentDetail: PropTypes.func.isRequired,
+  isGroupOwnedRepo: PropTypes.bool.isRequired,
 };
 
 class MultipleDirOperationToolbar extends React.Component {
@@ -60,15 +64,15 @@ class MultipleDirOperationToolbar extends React.Component {
 
   onMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onItemsDelete = () => {
     this.props.onItemsDelete();
-  }
+  };
 
   onItemsDownload = () => {
     let { path, repoID, selectedDirentList } = this.props;
@@ -97,29 +101,29 @@ class MultipleDirOperationToolbar extends React.Component {
         });
       }
     }
-  }
+  };
 
   closeZipDialog = () => {
     this.setState({
       isZipDialogOpen: false
     });
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
-  }
+  };
 
   onItemRename = (newName) => {
     const dirent = this.props.selectedDirentList[0];
     this.props.onItemRename(dirent, newName);
-  }
+  };
 
   onPermissionItem = () => {
     this.setState({
       showLibContentViewDialogs: !this.state.showLibContentViewDialogs,
       isPermissionDialogOpen: !this.state.isPermissionDialogOpen
     });
-  }
+  };
 
   onMarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
@@ -130,7 +134,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onUnmarkAsDraft = (dirent) => {
     let repoID = this.props.repoID;
@@ -141,7 +145,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onStartRevise = (dirent) => {
     let repoID = this.props.repoID;
@@ -153,11 +157,11 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onCommentItem = () => {
     this.props.showDirentDetail('comments');
-  }
+  };
 
   getDirentMenuList = (dirent) => {
     const isRepoOwner = this.props.isRepoOwner;
@@ -175,7 +179,7 @@ class MultipleDirOperationToolbar extends React.Component {
       });
     }
     return opList;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     const dirents = this.props.selectedDirentList;
@@ -229,7 +233,7 @@ class MultipleDirOperationToolbar extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   lockFile = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -244,7 +248,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unlockFile = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -259,7 +263,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onOpenViaClient = (dirent) => {
     const filePath = this.getDirentPath(dirent);
@@ -269,7 +273,7 @@ class MultipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
-  }
+  };
 
   onHistory = (dirent) => {
     let filePath = this.getDirentPath(dirent);
@@ -279,13 +283,13 @@ class MultipleDirOperationToolbar extends React.Component {
       filePath: filePath
     });
     location.href = url;
-  }
+  };
 
   onAccessLog = (dirent) => {
     let filePath = this.getDirentPath(dirent);
     let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
     window.open(path);
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
@@ -295,7 +299,7 @@ class MultipleDirOperationToolbar extends React.Component {
       isRenameDialogOpen: false,
       isPermissionDialogOpen: false,
     });
-  }
+  };
 
   listFileTags = (dirent) => {
     let filePath = this.getDirentPath(dirent);
@@ -313,7 +317,7 @@ class MultipleDirOperationToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onMenuFileTagChanged = () => {
     this.listFileTags(this.props.selectedDirentList[0]);
@@ -323,11 +327,11 @@ class MultipleDirOperationToolbar extends React.Component {
       const direntPath = this.getDirentPath(dirent);
       this.props.onFilesTagChanged(dirent, direntPath);
     }
-  }
+  };
 
   getDirentPath = (dirent) => {
     if (dirent) return Utils.joinPath(this.props.path, dirent.name);
-  }
+  };
 
   render() {
 

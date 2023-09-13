@@ -19,18 +19,18 @@ class ConfirmUnlinkDevice extends Component {
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   executeOperation = () => {
     this.toggle();
     this.props.executeOperation(this.state.isChecked);
-  }
+  };
 
   onInputChange = (e) => {
     this.setState({
       isChecked: e.target.checked
     });
-  }
+  };
 
   render() {
     return (

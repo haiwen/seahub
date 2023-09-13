@@ -40,7 +40,7 @@ class CreateForder extends React.Component {
     }
 
     this.setState({childName: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.isSubmitBtnActive) {
@@ -58,23 +58,23 @@ class CreateForder extends React.Component {
       let path = this.state.parentPath + newName;
       this.props.onAddFolder(path);
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.addFolderCancel();
-  }
+  };
 
   checkDuplicatedName = () => {
     let isDuplicated = this.props.checkDuplicatedName(this.state.childName);
     return isDuplicated;
-  }
+  };
 
   render() {
     return (

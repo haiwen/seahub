@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -29,28 +30,28 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleSetUserUploadRateLimitDialog = () => {
     this.setState({isSetUserUploadRateLimitDialogOpen: !this.state.isSetUserUploadRateLimitDialogOpen});
-  }
+  };
 
   toggleSetUserDownloadRateLimitDialog = () => {
     this.setState({isSetUserDownloadRateLimitDialogOpen: !this.state.isSetUserDownloadRateLimitDialogOpen});
-  }
+  };
 
   updateQuota = (value) => {
     this.props.updateUser('quota_total', value);
-  }
+  };
 
   updateUploadDownloadRateLimit = (uploadOrDownload, value) => {
     if (uploadOrDownload == 'upload'){
-        this.props.updateUser('upload_rate_limit', value);
+      this.props.updateUser('upload_rate_limit', value);
     }
     if (uploadOrDownload == 'download'){
-        this.props.updateUser('download_rate_limit', value);
+      this.props.updateUser('download_rate_limit', value);
     }
-  }
+  };
 
   toggleDialog = (key, dialogTitle) => {
     this.setState({
@@ -58,31 +59,31 @@ class Content extends Component {
       dialogTitle: dialogTitle,
       isUpdateUserDialogOpen: !this.state.isUpdateUserDialogOpen
     });
-  }
+  };
 
   toggleSetNameDialog = () => {
     this.toggleDialog('name', gettext('Set Name'));
-  }
+  };
 
   toggleSetUserLoginIDDialog = () => {
     this.toggleDialog('login_id', gettext('Set Login ID'));
-  }
+  };
 
- toggleSetUserComtactEmailDialog = () => {
-   this.toggleDialog('contact_email', gettext('Set Contact Email'));
- }
+  toggleSetUserComtactEmailDialog = () => {
+    this.toggleDialog('contact_email', gettext('Set Contact Email'));
+  };
 
   toggleSetUserReferenceIDDialog = () => {
     this.toggleDialog('reference_id', gettext('Set Reference ID'));
-  }
+  };
 
   updateValue = (value) => {
     this.props.updateUser(this.state.currentKey, value);
-  }
+  };
 
   toggleUpdateUserDialog = () => {
     this.toggleDialog('', '');
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -92,10 +93,10 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
-    const { loading, errorMsg, userInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -225,6 +226,18 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func,
+  updateUser: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired,
+  disable2FA: PropTypes.func.isRequired,
+  toggleForce2fa: PropTypes.func.isRequired,
+  email: PropTypes.string,
+};
+
 class User extends Component {
 
   constructor(props) {
@@ -265,7 +278,7 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   disable2FA = () => {
     const email = this.state.userInfo.email;
@@ -279,7 +292,7 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleForce2fa = (e) => {
     const email = this.state.userInfo.email;
@@ -294,7 +307,7 @@ class User extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { userInfo } = this.state;
@@ -320,5 +333,9 @@ class User extends Component {
     );
   }
 }
+
+User.propTypes = {
+  email: PropTypes.string,
+};
 
 export default User;

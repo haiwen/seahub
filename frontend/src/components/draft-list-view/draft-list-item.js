@@ -33,7 +33,7 @@ class DraftListItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -42,12 +42,12 @@ class DraftListItem extends React.Component {
         highlight: false,
       });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -64,15 +64,15 @@ class DraftListItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   onDeleteHandler = () => {
     this.props.onDeleteHandler(this.props.draft);
-  }
+  };
 
   onPublishHandler = () => {
     this.props.onPublishHandler(this.props.draft);
-  }
+  };
 
   render() {
     let draft = this.props.draft;
@@ -89,10 +89,10 @@ class DraftListItem extends React.Component {
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
         <td className="name" >
-          <a href={draftUrl} target="_blank">{fileName}</a>
+          <a href={draftUrl} target="_blank" rel="noreferrer">{fileName}</a>
         </td>
         <td className="library">
-          <a href={libraryUrl} target="_blank">{draft.repo_name}</a>
+          <a href={libraryUrl} target="_blank" rel="noreferrer">{draft.repo_name}</a>
         </td>
         <td className="update">{localTime}</td>
         <td className="text-center">

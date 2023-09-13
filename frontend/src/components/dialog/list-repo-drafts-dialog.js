@@ -49,11 +49,11 @@ class ListRepoDraftsDialog extends React.Component {
       msg = msg.replace('%(draft)s', draft.draftFilePath);
       toaster.danger(msg);
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   render() {
     return (
@@ -112,13 +112,13 @@ class DraftItem extends React.Component {
     this.setState({
       active: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       active: false
     });
-  }
+  };
 
   render() {
     const draftItem = this.props.draftItem;
@@ -127,7 +127,7 @@ class DraftItem extends React.Component {
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="name">
-          <a href={href} target='_blank'>{Utils.getFileName(draftItem.draftFilePath)}</a>
+          <a href={href} target='_blank' rel="noreferrer">{Utils.getFileName(draftItem.draftFilePath)}</a>
         </td>
         <td>{draftItem.ownerNickname}</td>
         <td>{moment(draftItem.createdStr).fromNow()}</td>

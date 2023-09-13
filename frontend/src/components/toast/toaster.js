@@ -29,37 +29,37 @@ export default class Toaster {
 
   _bindNotify = handler => {
     this.notifyHandler = handler;
-  }
+  };
 
   _bindGetToasts = handler => {
     this.getToastsHandler = handler;
-  }
+  };
 
   _bindCloseAll = handler => {
     this.closeAllHandler = handler;
-  }
+  };
 
   getToasts = () => {
     return this.getToastsHandler();
-  }
+  };
 
   closeAll = () => {
     return this.closeAllHandler();
-  }
+  };
 
   notify = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'none' });
-  }
+  };
 
   success = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'success' });
-  }
+  };
 
   warning = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'warning' });
-  }
+  };
 
   danger = (title, settings = {}) => {
     return this.notifyHandler(title, { ...settings, intent: 'danger' });
-  }
+  };
 }

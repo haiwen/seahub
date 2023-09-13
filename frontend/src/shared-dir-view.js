@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import MD5 from 'MD5';
 import ReactDom from 'react-dom';
 import { Button, Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
@@ -104,7 +105,7 @@ class SharedDirView extends React.Component {
       sortOrder: sortOrder,
       items: Utils.sortDirentsInSharedDir(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   getThumbnails = () => {
     let items = this.state.items.filter((item) => {
@@ -137,7 +138,7 @@ class SharedDirView extends React.Component {
       });
     };
     getThumbnail(0);
-  }
+  };
 
   renderPath = () => {
     return (
@@ -151,12 +152,13 @@ class SharedDirView extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         })
         }
         <span className="ml-1 ellipsis" title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
       </React.Fragment>
     );
-  }
+  };
 
   zipDownloadFolder = (folderPath) => {
     if (!useGoFileserver) {
@@ -177,7 +179,7 @@ class SharedDirView extends React.Component {
         });
       });
     }
-  }
+  };
 
   zipDownloadSelectedItems = () => {
     if (!useGoFileserver) {
@@ -201,7 +203,7 @@ class SharedDirView extends React.Component {
         });
       });
     }
-  }
+  };
 
   async getAsyncCopyMoveProgress() {
     let { asyncCopyMoveTaskId } = this.state;
@@ -246,7 +248,7 @@ class SharedDirView extends React.Component {
       itemsForSave: this.state.items.filter(item => item.isSelected)
         .map(item => item.file_name || item.folder_name)
     });
-  }
+  };
 
   saveAllItems = () => {
     this.setState({
@@ -254,14 +256,14 @@ class SharedDirView extends React.Component {
       itemsForSave: this.state.items
         .map(item => item.file_name || item.folder_name)
     });
-  }
+  };
 
   toggleSaveSharedDirCancel = () => {
     this.setState({
       isSaveSharedDirDialogShow: false,
       itemsForSave: []
     });
-  }
+  };
 
   handleSaveSharedDir = (destRepoID, dstPath) => {
 
@@ -281,7 +283,7 @@ class SharedDirView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({errMessage: errMessage});
     });
-  }
+  };
 
   onProgressDialogToggle = () => {
     let { asyncOperationProgress } = this.state;
@@ -294,7 +296,7 @@ class SharedDirView extends React.Component {
       asyncOperationProgress: 0,
       isCopyMoveProgressDialogShow: false,
     });
-  }
+  };
 
   closeZipDialog = () => {
     this.setState({
@@ -302,7 +304,7 @@ class SharedDirView extends React.Component {
       zipFolderPath: '',
       selectedItems: []
     });
-  }
+  };
 
   // for image popup
   prepareImageItem = (item) => {
@@ -323,7 +325,7 @@ class SharedDirView extends React.Component {
       'url': fileURL,
       'src': src
     };
-  }
+  };
 
   showImagePopup = (curItem) => {
     const items = this.state.items.filter((item) => {
@@ -338,27 +340,27 @@ class SharedDirView extends React.Component {
       imageItems: imageItems,
       imageIndex: items.indexOf(curItem)
     });
-  }
+  };
 
   closeImagePopup = () => {
     this.setState({
       isImagePopupOpen: false
     });
-  }
+  };
 
   moveToPrevImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + imageItemsLength - 1) % imageItemsLength
     }));
-  }
+  };
 
   moveToNextImage = () => {
     const imageItemsLength = this.state.imageItems.length;
     this.setState((prevState) => ({
       imageIndex: (prevState.imageIndex + 1) % imageItemsLength
     }));
-  }
+  };
 
   toggleAllSelected = () => {
     this.setState((prevState) => ({
@@ -368,7 +370,7 @@ class SharedDirView extends React.Component {
         return item;
       })
     }));
-  }
+  };
 
   toggleItemSelected = (targetItem, isSelected) => {
     this.setState({
@@ -383,12 +385,12 @@ class SharedDirView extends React.Component {
         isAllItemsSelected: !this.state.items.some(item => !item.isSelected)
       });
     });
-  }
+  };
 
   onUploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.onFileUpload();
-  }
+  };
 
   onFileUploadSuccess = (direntObject) => {
     const { name, size } = direntObject;
@@ -406,7 +408,7 @@ class SharedDirView extends React.Component {
     items.splice(folderItems.length, 0, newItem);
     this.setState({items: items});
     seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
-  }
+  };
 
   getShareLinkRepoTags = () => {
     seafileAPI.getShareLinkRepoTags(token).then(res => {
@@ -425,7 +427,7 @@ class SharedDirView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const isDesktop = Utils.isDesktop();
@@ -448,14 +450,25 @@ class SharedDirView extends React.Component {
                 <div className="flex-none">
                   {isDesktop &&
                   <div className="view-mode btn-group">
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=list`} className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`} title={gettext('List')} aria-label={gettext('List')}></a>
-                    <a href={`?p=${encodeURIComponent(relativePath)}&mode=grid`} className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`} title={gettext('Grid')} aria-label={gettext('Grid')}></a>
+                    <a
+                      href={`?p=${encodeURIComponent(relativePath)}&mode=list`}
+                      className={`${modeBaseClass} sf2-icon-list-view ${mode == 'list' ? 'current-mode' : ''}`}
+                      title={gettext('List')}
+                      aria-label={gettext('List')}
+                    ></a>
+                    <a
+                      href={`?p=${encodeURIComponent(relativePath)}&mode=grid`}
+                      className={`${modeBaseClass} sf2-icon-grid-view ${mode == 'grid' ? 'current-mode' : ''}`}
+                      title={gettext('Grid')}
+                      aria-label={gettext('Grid')}
+                    ></a>
                   </div>
                   }
                   {canUpload && (
                     <Button disabled={noQuota}
                       title={noQuota ? gettext('The owner of this library has run out of space.') : ''}
-                      onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn">{gettext('Upload')}</Button>
+                      onClick={this.onUploadFile} className="ml-2 shared-dir-op-btn shared-dir-upload-btn"
+                    >{gettext('Upload')}</Button>
                   )}
                   {showDownloadIcon &&
                   <Fragment>
@@ -572,21 +585,21 @@ class Content extends React.Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const {
@@ -669,6 +682,21 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isAllItemsSelected: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -681,20 +709,20 @@ class Item extends React.Component {
 
   toggleOpMenu = () => {
     this.setState({isOpMenuOpen: !this.state.isOpMenuOpen});
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   zipDownloadFolder = (e) => {
     e.preventDefault();
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
-  }
+  };
 
   handleFileClick = (e) => {
     const item = this.props.item;
@@ -704,11 +732,11 @@ class Item extends React.Component {
 
     e.preventDefault();
     this.props.showImagePopup(item);
-  }
+  };
 
   toggleItemSelected = (e) => {
     this.props.toggleItemSelected(this.props.item, e.target.checked);
-  }
+  };
 
   render() {
     const { item, isDesktop } = this.props;
@@ -855,6 +883,18 @@ class Item extends React.Component {
   }
 }
 
+Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  item: PropTypes.object.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
+
 class GridItem extends React.Component {
 
   constructor(props) {
@@ -866,16 +906,16 @@ class GridItem extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   zipDownloadFolder = (e) => {
     e.preventDefault();
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
-  }
+  };
 
   handleFileClick = (e) => {
     const item = this.props.item;
@@ -885,7 +925,7 @@ class GridItem extends React.Component {
 
     e.preventDefault();
     this.props.showImagePopup(item);
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -926,5 +966,11 @@ class GridItem extends React.Component {
     }
   }
 }
+
+GridItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  zipDownloadFolder: PropTypes.func.isRequired,
+  showImagePopup: PropTypes.func.isRequired,
+};
 
 ReactDom.render(<SharedDirView />, document.getElementById('wrapper'));

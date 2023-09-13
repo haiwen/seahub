@@ -72,7 +72,7 @@ class EditorApi {
         return this._getImageURL(res.data[0].name);
       })
     );
-  }
+  };
 
   getFileURL(fileNode) {
     var url;
@@ -94,6 +94,7 @@ class EditorApi {
   }
 
   isInternalDirLink(url) {
+    // eslint-disable-next-line
     var re = new RegExp(serviceUrl + '/library/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }
@@ -202,11 +203,11 @@ class EditorApi {
 
   listFileTags = () => {
     return seafileAPI.listFileTags(repoID, filePath);
-  }
+  };
 
   listRepoTags = () => {
     return seafileAPI.listRepoTags(repoID);
-  }
+  };
 
   markdownLint(slateValue) {
     return seafileAPI.markdownLint(slateValue);

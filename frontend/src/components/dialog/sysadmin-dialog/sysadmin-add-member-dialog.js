@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -25,7 +25,7 @@ class AddMemberDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.selectedOption) return;
@@ -45,7 +45,7 @@ class AddMemberDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

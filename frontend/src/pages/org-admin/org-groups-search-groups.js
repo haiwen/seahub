@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Button, Form, FormGroup, Input, Col } from 'reactstrap';
+import { Form, FormGroup, Input, Col } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
@@ -25,7 +26,7 @@ class GroupItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -34,12 +35,12 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -56,11 +57,11 @@ class GroupItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   toggleDelete = () => {
     this.props.deleteGroupItem(this.props.group);
-  }
+  };
 
   renderGroupHref = (group) => {
     let groupInfoHref;
@@ -71,7 +72,7 @@ class GroupItem extends React.Component {
     }
 
     return groupInfoHref;
-  }
+  };
 
   renderGroupCreator = (group) => {
     let userInfoHref = siteRoot + 'org/useradmin/info/' + group.creatorEmail + '/';
@@ -86,7 +87,7 @@ class GroupItem extends React.Component {
         </td>
       );
     }
-  }
+  };
 
   render() {
     let { group } = this.props;
@@ -120,6 +121,13 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  group: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroupItem: PropTypes.func.isRequired,
+};
 
 class OrgGroupsSearchGroupsResult extends React.Component {
 
@@ -132,11 +140,11 @@ class OrgGroupsSearchGroupsResult extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let { orgGroups } = this.props;
@@ -170,6 +178,11 @@ class OrgGroupsSearchGroupsResult extends React.Component {
     );
   }
 }
+
+OrgGroupsSearchGroupsResult.propTypes = {
+  toggleDelete: PropTypes.func.isRequired,
+  orgGroups: PropTypes.array.isRequired,
+};
 
 class OrgGroupsSearchGroups extends Component {
 
@@ -206,7 +219,7 @@ class OrgGroupsSearchGroups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteGroupItem = (group) => {
     seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
@@ -220,20 +233,20 @@ class OrgGroupsSearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

@@ -33,18 +33,18 @@ class HistoryListItem extends React.Component {
     if (!this.props.isItemFreezed) {
       this.setState({isShowOperationIcon: true});
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({isShowOperationIcon: false});
     }
-  }
+  };
 
   onToggleClick = (e) => {
     this.setState({isMenuShow: !this.state.isMenuShow});
     this.props.onFreezedItemToggle();
-  }
+  };
 
   onItemClick = () => {
     this.setState({isShowOperationIcon: false});  //restore to default state
@@ -53,15 +53,15 @@ class HistoryListItem extends React.Component {
     }
     let currentIndex = this.props.index;
     this.props.onItemClick(this.props.item, currentIndex);
-  }
+  };
 
   onItemRestore = () => {
     this.props.onItemRestore(this.props.currentItem);
-  }
+  };
 
   onItemDownload = () => {
     // nothing todo
-  }
+  };
 
   render() {
     if (!this.props.currentItem) {

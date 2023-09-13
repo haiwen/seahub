@@ -45,7 +45,7 @@ class LabelRepoStateDialog extends React.Component {
     this.setState({
       inputValue: value
     });
-  }
+  };
 
   formSubmit = () => {
     const inputValue = this.state.inputValue;
@@ -74,7 +74,7 @@ class LabelRepoStateDialog extends React.Component {
         submitBtnDisabled: false
       });
     });
-  }
+  };
 
   render() {
     return (
@@ -120,6 +120,11 @@ class Content extends React.Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
 
 LabelRepoStateDialog.propTypes = propTypes;
 

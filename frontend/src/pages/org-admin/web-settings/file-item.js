@@ -27,11 +27,11 @@ class WebSettingFile extends Component {
     }
     const file = this.fileInput.current.files[0];
     this.props.postFile(file, this.props.keyText);
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   render() {
     const { helpTip, filePath, fileWidth, fileHeight, displayName } = this.props;

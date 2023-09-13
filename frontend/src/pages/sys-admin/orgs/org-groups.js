@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -57,6 +58,17 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  deleteGroup: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -69,23 +81,23 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteGroup = () => {
     this.toggleDeleteDialog();
     this.props.deleteGroup(this.props.item.group_id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -121,6 +133,15 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  transferGroup: PropTypes.func.isRequired,
+};
 
 class OrgGroups extends Component {
 
@@ -164,7 +185,7 @@ class OrgGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -191,5 +212,11 @@ class OrgGroups extends Component {
     );
   }
 }
+
+OrgGroups.propTypes = {
+  orgID: PropTypes.string,
+};
+
+
 
 export default OrgGroups;

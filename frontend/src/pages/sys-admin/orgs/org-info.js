@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -24,15 +25,15 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   toggleSetNameDialog = () => {
     this.setState({isSetNameDialogOpen: !this.state.isSetNameDialogOpen});
-  }
+  };
 
   toggleSetMaxUserNumberDialog = () => {
     this.setState({isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen});
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -42,10 +43,10 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
-    const { loading, errorMsg, orgInfo } = this.props;
+    const { loading, errorMsg } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -83,7 +84,7 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               {this.showEditIcon(this.toggleSetQuotaDialog)}
             </dd>
-            {enable_saml_login && 
+            {enable_saml_login &&
               <Fragment>
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
                 <dd className="info-item-content">
@@ -133,6 +134,19 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getDeviceErrorsListByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+  orgInfo: PropTypes.object,
+  updateQuota: PropTypes.func.isRequired,
+  updateName: PropTypes.func.isRequired,
+  updateMaxUserNumber: PropTypes.func.isRequired,
+};
+
 class OrgInfo extends Component {
 
   constructor(props) {
@@ -170,7 +184,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateName = (orgName) => {
     const data = {orgName: orgName};
@@ -184,7 +198,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMaxUserNumber = (newValue) => {
     const data = {maxUserNumber: newValue};
@@ -198,7 +212,7 @@ class OrgInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { orgInfo } = this.state;
@@ -225,5 +239,10 @@ class OrgInfo extends Component {
     );
   }
 }
+
+OrgInfo.propTypes = {
+  orgID: PropTypes.string,
+  orgInfo: PropTypes.object,
+};
 
 export default OrgInfo;

@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -18,7 +19,7 @@ class Content extends Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -72,6 +73,15 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -96,21 +106,21 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   onMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   unshare = (e) => {
     e.preventDefault();
@@ -141,7 +151,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster(errMessage);
     });
-  }
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -170,12 +180,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.setState({isShowPermEditor: true});
-  }
+  };
 
   render() {
     if (this.state.unshared) {
@@ -284,6 +294,11 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};
+
 class ShareAdminFolders extends Component {
 
   constructor(props) {
@@ -317,7 +332,7 @@ class ShareAdminFolders extends Component {
 
     items.sort(comparator);
     return items;
-  }
+  };
 
   sortItems = (sortBy, sortOrder) => {
     this.setState({
@@ -325,7 +340,7 @@ class ShareAdminFolders extends Component {
       sortOrder: sortOrder,
       items: this._sortItems(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   componentDidMount() {
     seafileAPI.listSharedFolders().then((res) => {

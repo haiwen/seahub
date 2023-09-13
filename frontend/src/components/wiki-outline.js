@@ -12,7 +12,7 @@ class WikiOutlineItem extends React.Component {
   handleNavItemClick = () => {
     var activeId = this.props.item.id;
     this.props.handleNavItemClick(activeId);
-  }
+  };
 
   render() {
     let item = this.props.item;

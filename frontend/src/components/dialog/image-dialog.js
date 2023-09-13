@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-
 import Lightbox from '@seafile/react-image-lightbox';
 import '@seafile/react-image-lightbox/style.css';
 
@@ -14,9 +13,6 @@ const propTypes = {
 };
 
 class ImageDialog extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const imageItems = this.props.imageItems;

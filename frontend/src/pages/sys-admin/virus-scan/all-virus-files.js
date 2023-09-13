@@ -14,7 +14,8 @@ const virusFileItemPropTypes = {
   virusFile: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired
+  handleFile: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
 };
 
 class VirusFileItem extends Component {
@@ -34,7 +35,7 @@ class VirusFileItem extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -43,7 +44,7 @@ class VirusFileItem extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -51,11 +52,11 @@ class VirusFileItem extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     this.props.handleFile(this.props.virusFile.virus_id, operation);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -71,7 +72,7 @@ class VirusFileItem extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   render() {
     const virusFile = this.props.virusFile;
@@ -115,7 +116,13 @@ VirusFileItem.propTypes = virusFileItemPropTypes;
 const virusFileListPropTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
-  virusFiles: PropTypes.array.isRequired
+  virusFiles: PropTypes.array.isRequired,
+  currentPage: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+  curPerPage: PropTypes.number,
+  resetPerPage: PropTypes.func,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
 };
 
 class Content extends Component {
@@ -129,19 +136,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -242,7 +249,7 @@ class AllVirusFiles extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -250,7 +257,7 @@ class AllVirusFiles extends Component {
     }, () => {
       this.getListByPage(1);
     });
-  }
+  };
 
   handleFile = (virusID, op) => {
     let request;
@@ -281,7 +288,7 @@ class AllVirusFiles extends Component {
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
     });
-  }
+  };
 
   render() {
     return (

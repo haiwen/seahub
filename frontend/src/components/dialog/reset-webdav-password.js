@@ -44,24 +44,24 @@ class ResetWebdavPassword extends Component {
     });
 
     this.props.resetPassword(this.state.password.trim());
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({password: e.target.value});
-  }
+  };
 
   togglePasswordVisible = () => {
     this.setState({
       isPasswordVisible: !this.state.isPasswordVisible
     });
-  }
+  };
 
   generatePassword = () => {
     let randomPassword = Utils.generatePassword(webdavSecretMinLength);
     this.setState({
       password: randomPassword
     });
-  }
+  };
 
   render() {
     const { toggle } = this.props;

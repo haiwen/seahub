@@ -10,6 +10,9 @@ const propTypes = {
   orgUsers: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
   pageNext: PropTypes.bool.isRequired,
+  sortByQuotaUsage: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  sortBy: PropTypes.string.isRequired,
 };
 
 class OrgUsersList extends React.Component {
@@ -23,11 +26,11 @@ class OrgUsersList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -40,12 +43,12 @@ class OrgUsersList extends React.Component {
     }
 
     this.props.initOrgUsersData(page);
-  }
+  };
 
   sortByQuotaUsage = (e) => {
     e.preventDefault();
     this.props.sortByQuotaUsage();
-  }
+  };
 
   render() {
     const { sortBy, sortOrder } = this.props;

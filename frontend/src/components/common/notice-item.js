@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   noticeItem: PropTypes.object.isRequired,
+  tr: PropTypes.any,
   onNoticeItemClick: PropTypes.func
 };
 
@@ -17,7 +18,7 @@ const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
 const MSG_TYPE_FILE_COMMENT = 'file_comment';
 const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
-const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
+// const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 
@@ -335,7 +336,7 @@ class NoticeItem extends React.Component {
       return;
     }
     this.props.onNoticeItemClick(item);
-  }
+  };
 
   render() {
     let noticeItem = this.props.noticeItem;

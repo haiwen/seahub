@@ -26,7 +26,7 @@ class FileHistory extends React.Component {
 
   onSearchedClick = (searchedItem) => {
     Utils.handleSearchedItemClick(searchedItem);
-  }
+  };
 
   setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
     this.setState({
@@ -34,7 +34,7 @@ class FileHistory extends React.Component {
       newMarkdownContent: newMarkdownContent,
       oldMarkdownContent: oldMarkdownContent,
     });
-  }
+  };
 
 
   onHistoryItemClick = (item, preItem)=> {
@@ -60,12 +60,12 @@ class FileHistory extends React.Component {
         }));
       });
     }
-  }
+  };
 
   onBackClick = (event) => {
     event.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
     return(

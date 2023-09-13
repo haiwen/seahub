@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem, Tooltip} from 'reactstrap';
-import { gettext, siteRoot, canGenerateShareLink, isDocs } from '../../utils/constants';
+import { gettext, siteRoot, isDocs } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -22,6 +22,7 @@ const propTypes = {
   fileTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
+  dirent: PropTypes.object.isRequired,
 };
 
 class ViewFileToolbar extends React.Component {
@@ -41,7 +42,7 @@ class ViewFileToolbar extends React.Component {
     let { path, repoID } = this.props;
     let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(path) + '?mode=edit';
     window.open(url);
-  }
+  };
 
   onNewDraft = (e) => {
     e.preventDefault();
@@ -52,33 +53,31 @@ class ViewFileToolbar extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDraftHover = () => {
     this.setState({isDraftMessageShow: !this.state.isDraftMessageShow});
-  }
+  };
 
   toggleMore = () => {
     this.setState({isMoreMenuShow: !this.state.isMoreMenuShow});
-  }
+  };
 
   onShareToggle = () => {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({isEditTagDialogShow: !this.state.isEditTagDialogShow});
-  }
+  };
 
   onHistoryClick = () => {
     let historyUrl = siteRoot + 'repo/file_revisions/' + this.props.repoID + '/?p=' + Utils.encodePath(this.props.path);
     location.href = historyUrl;
-  }
+  };
 
   render() {
     let { filePermission } = this.props;
-    let name = Utils.getFileName(this.props.path);
-    let dirent = { name: name };
     return (
       <Fragment>
         <div className="dir-operation">

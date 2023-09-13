@@ -22,11 +22,11 @@ class ShareItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     this.setState({
@@ -37,14 +37,14 @@ class ShareItem extends React.Component {
     });
     let item = this.props.item;
     this.props.deleteShareItem(item);
-  }
+  };
 
   render() {
     let item = this.props.item;
     const { isOperationShow, isOpFrozen } = this.state;
     return (
       <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
-        <td><a href={item.to_server_url} target="_blank">{item.to_server_name}</a></td>
+        <td><a href={item.to_server_url} target="_blank" rel="noreferrer">{item.to_server_name}</a></td>
         <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
         {/* <td>
@@ -67,6 +67,11 @@ class ShareItem extends React.Component {
     );
   }
 }
+
+ShareItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
 
 class ShareList extends React.Component {
 
@@ -98,6 +103,11 @@ class ShareList extends React.Component {
     );
   }
 }
+
+ShareList.propTypes = {
+  items: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
@@ -162,7 +172,7 @@ class ShareToOtherServer extends React.Component {
         isSubmitting: false
       });
     });
-  }
+  };
 
   handleToUserChange = (e) => {
     const toUser = e.target.value;
@@ -170,14 +180,14 @@ class ShareToOtherServer extends React.Component {
       toUser: toUser,
       btnDisabled: !this.state.selectedServer || !toUser.trim()
     });
-  }
+  };
 
   handleServerChange = (selectedServer) => {
     this.setState({
       selectedServer,
       btnDisabled: !this.state.toUser.trim()
     });
-  }
+  };
 
   deleteShareItem = (deletedItem) => {
     const { id } = deletedItem;
@@ -192,11 +202,11 @@ class ShareToOtherServer extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   render() {
     const {

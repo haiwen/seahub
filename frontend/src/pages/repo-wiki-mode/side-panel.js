@@ -50,25 +50,25 @@ class SidePanel extends Component {
 
   onMouseEnter = () => {
     this.setState({isMenuIconShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isMenuIconShow: false});
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu();
-  }
+  };
 
   toggleOperationMenu = () => {
     this.setState({isHeaderMenuShow: !this.state.isHeaderMenuShow});
-  }
+  };
 
   onNodeClick = (node) => {
     this.setState({opNode: node});
     this.props.onNodeClick(node);
-  }
+  };
 
   onMenuItemClick = (operation, node) => {
     this.setState({opNode: node});
@@ -86,7 +86,7 @@ class SidePanel extends Component {
         this.onDeleteToggle();
         break;
     }
-  }
+  };
 
   onAddFileToggle = (type) => {
     if (type === 'root') {
@@ -98,7 +98,7 @@ class SidePanel extends Component {
     } else {
       this.setState({isAddFileDialogShow: !this.state.isAddFileDialogShow});
     }
-  }
+  };
 
   onAddFolderToggle = (type) => {
     if (type === 'root') {
@@ -110,32 +110,32 @@ class SidePanel extends Component {
     } else {
       this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     }
-  }
+  };
 
   onRenameToggle = () => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
-  }
+  };
 
   onDeleteToggle = () => {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-  }
+  };
 
   onAddFolderNode = (dirPath) => {
     this.setState({isAddFolderDialogShow: !this.state.isAddFolderDialogShow});
     this.props.onAddFolderNode(dirPath);
-  }
+  };
 
   onRenameNode = (newName) => {
     this.setState({isRenameDialogShow: !this.state.isRenameDialogShow});
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
-  }
+  };
 
   onDeleteNode = () => {
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
     let node = this.state.opNode;
     this.props.onDeleteNode(node);
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     let node = this.state.opNode;
@@ -148,7 +148,7 @@ class SidePanel extends Component {
       return object.name === newName;
     });
     return isDuplicated;
-  }
+  };
 
   render() {
     return (

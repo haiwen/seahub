@@ -48,7 +48,7 @@ class FileHistory extends React.Component {
       }
       this.initNewRecords(res.data);
     });
-  }
+  };
 
   listOldHistoryRecords = (repoID, filePath) => {
     seafileAPI.listOldFileHistoryRecords(repoID, filePath).then((res) => {
@@ -59,7 +59,7 @@ class FileHistory extends React.Component {
       }
       this.initOldRecords(res.data);
     });
-  }
+  };
 
   initNewRecords(result) {
     if (result.total_count < 5) {
@@ -130,7 +130,7 @@ class FileHistory extends React.Component {
     if (isBottom && hasMore) {
       this.reloadMore();
     }
-  }
+  };
 
   reloadMore = () => {
     if (!this.state.isReloadingData) {
@@ -159,7 +159,7 @@ class FileHistory extends React.Component {
         }
       }
     }
-  }
+  };
 
   updateNewRecords(result) {
     this.setState({
@@ -198,7 +198,7 @@ class FileHistory extends React.Component {
         this.refershFileList();
       }
     });
-  }
+  };
 
   refershFileList() {
     if (useNewAPI) {
@@ -214,7 +214,7 @@ class FileHistory extends React.Component {
 
   onSearchedClick = (searchedItem) => {
     Utils.handleSearchedItemClick(searchedItem);
-  }
+  };
 
   render() {
     return (
@@ -230,6 +230,7 @@ class FileHistory extends React.Component {
         <div id="main" onScroll={this.onScrollHandler}>
           <div className="old-history-main">
             <Fragment>
+              {/* eslint-disable-next-line */}
               <a href="javascript:window.history.back()" className="go-back" title="Back">
                 <span className="fas fa-chevron-left"></span>
               </a>

@@ -25,7 +25,7 @@ class DirentsDraggedPreview extends React.Component {
   handleDragEnd = () => {
     this.element.style.opacity = 0;
     this.props.onHideDirentsDraggablePreview();
-  }
+  };
 
   handleDragOver = (event) => {
     if (Utils.isIEBrower()) {
@@ -36,12 +36,12 @@ class DirentsDraggedPreview extends React.Component {
 
     this.element.style.top = event.clientY + 'px';
     this.element.style.left = event.clientX + 'px';
-  }
+  };
 
   handleDrop = (event) => {
     this.element.style.opacity = 0;
     this.props.onHideDirentsDraggablePreview();
-  }
+  };
 
   render() {
     let{ selectedDirentList } = this.props;

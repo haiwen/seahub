@@ -15,6 +15,7 @@ const propTypes = {
   toggleDelete: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  changeStatus: PropTypes.func.isRequired,
 };
 
 class UserItem extends React.Component {
@@ -38,7 +39,7 @@ class UserItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -47,12 +48,12 @@ class UserItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   toggleDelete = () => {
     const email = this.props.user.email;
     this.props.toggleDelete(email);
-  }
+  };
 
   toggleResetPW = () => {
     const { email, name } = this.props.user;
@@ -69,12 +70,12 @@ class UserItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleRevokeAdmin = () => {
     const email = this.props.user.email;
     this.props.toggleRevokeAdmin(email);
-  }
+  };
 
   changeStatus = (value) => {
     const isActive = value == 'active';
@@ -82,12 +83,12 @@ class UserItem extends React.Component {
       toaster.notify(gettext('It may take some time, please wait.'));
     }
     this.props.changeStatus(this.props.user.email, isActive);
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -104,7 +105,7 @@ class UserItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   getQuotaTotal = (data) => {
     switch (data) {
@@ -115,7 +116,7 @@ class UserItem extends React.Component {
       default: // data > 0
         return Utils.formatSize({bytes: data});
     }
-  }
+  };
 
   render() {
     let { user, currentTab } = this.props;

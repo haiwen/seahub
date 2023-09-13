@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import moment from 'moment';
 import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -21,21 +21,21 @@ class UserItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({ isOperationShow: true });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({ isOperationShow: false });
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.token);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item.token, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -71,6 +71,14 @@ class UserItem extends React.Component {
   }
 }
 
+UserItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
+
 class UserList extends React.Component {
 
   render() {
@@ -92,6 +100,13 @@ class UserList extends React.Component {
     );
   }
 }
+
+UserList.propTypes = {
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -122,14 +137,14 @@ class ShareToInvitePeople extends React.Component {
         errorMsg: '',
       });
     }
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       e.preventDefault();
       this.shareAndInvite();
     }
-  }
+  };
 
   componentDidMount() {
     const path = this.props.itemPath;
@@ -146,14 +161,14 @@ class ShareToInvitePeople extends React.Component {
 
   setPermission = (permission) => {
     this.setState({ permission: permission });
-  }
+  };
 
   onInvitePeople = (successArray) => {
     successArray.push.apply(successArray, this.state.sharedItems);
     this.setState({
       sharedItems: successArray,
     });
-  }
+  };
 
   shareAndInvite = () => {
     let emails = this.state.emails.trim();
@@ -210,7 +225,7 @@ class ShareToInvitePeople extends React.Component {
       toaster.danger(errorMsg);
       this.setState({ isSubmitting: false });
     });
-  }
+  };
 
   deleteShareItem = (token) => {
     const path = this.props.itemPath;
@@ -224,7 +239,7 @@ class ShareToInvitePeople extends React.Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (token, permission) => {
     const path = this.props.itemPath;
@@ -236,7 +251,7 @@ class ShareToInvitePeople extends React.Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (token, permission) => {
     let sharedItems = this.state.sharedItems.map(sharedItem => {
@@ -246,7 +261,7 @@ class ShareToInvitePeople extends React.Component {
       return sharedItem;
     });
     this.setState({ sharedItems: sharedItems });
-  }
+  };
 
   render() {
     let { sharedItems, isSubmitting } = this.state;

@@ -37,7 +37,7 @@ class AdvancedSearch extends React.Component {
       return isAfterToday;
     }
     return startValue.isAfter(endValue) || isAfterToday;
-  }
+  };
 
   disabledEndDate = (endValue) => {
     if (!endValue) {
@@ -51,7 +51,7 @@ class AdvancedSearch extends React.Component {
       return isAfterToday;
     }
     return endValue.isBefore(startValue) || isAfterToday;
-  }
+  };
 
   render() {
     const { stateAndValues } = this.props;

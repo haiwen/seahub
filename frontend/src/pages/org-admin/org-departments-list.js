@@ -39,15 +39,15 @@ class OrgDepartmentsList extends React.Component {
     seafileAPI.orgAdminListDepartGroups(orgID).then(res => {
       this.setState({ groups: res.data.data });
     });
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onDepartmentNameChanged = (dept) => {
     this.setState({
@@ -58,30 +58,30 @@ class OrgDepartmentsList extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   showDeleteDepartDialog = (group) => {
     this.setState({ showDeleteDepartDialog: true, groupID: group.id, groupName: group.name });
-  }
+  };
 
   showSetGroupQuotaDialog = (groupID) => {
     this.setState({ showSetGroupQuotaDialog: true, groupID: groupID });
-  }
+  };
 
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     });
-  }
+  };
 
   onDepartChanged = () => {
     this.listDepartGroups();
-  }
+  };
 
   render() {
     const groups = this.state.groups;
@@ -189,7 +189,7 @@ class GroupItem extends React.Component {
         highlight: true
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -198,7 +198,7 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -214,7 +214,7 @@ class GroupItem extends React.Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     const { group } = this.props;
@@ -228,7 +228,7 @@ class GroupItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -236,13 +236,13 @@ class GroupItem extends React.Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleRenameDialog = () => {
     this.setState({
       isRenameDialogOpen: !this.state.isRenameDialogOpen
     });
-  }
+  };
 
   render() {
     const group = this.props.group;

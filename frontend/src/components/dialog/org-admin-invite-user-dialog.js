@@ -20,10 +20,10 @@ class InviteUserDialog extends React.Component {
     copy(this.props.invitationLink);
     this.props.toggle();
     const message = gettext('Internal link has been copied to clipboard');
-    toaster.success(message), {
+    toaster.success(message, {
       duration: 2
-    };
-  }
+    });
+  };
 
   render() {
     return (

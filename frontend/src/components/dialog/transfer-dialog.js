@@ -29,12 +29,12 @@ class TransferDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   submit = () => {
     let user = this.state.selectedOption;
     this.props.submit(user);
-  }
+  };
 
   componentDidMount() {
     if (isPro) {
@@ -57,7 +57,7 @@ class TransferDialog extends React.Component {
     this.setState({
       transferToUser: !this.state.transferToUser,
     });
-  }
+  };
 
   render() {
     const itemName = this.props.itemName;

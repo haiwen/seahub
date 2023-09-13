@@ -53,7 +53,7 @@ class StatisticCommonTool extends React.Component {
     });
     let group_by = 'day';
     this.props.getActiviesFiles(startTime, endTime, group_by);
-  }
+  };
 
   disabledStartDate = (startValue) => {
     if (!startValue) {
@@ -67,7 +67,7 @@ class StatisticCommonTool extends React.Component {
       return today < startTime;
     }
     return endValue.isBefore(startValue) || moment(startValue).format() > today;
-  }
+  };
 
   disabledEndDate = (endValue) => {
     if (!endValue) {
@@ -80,13 +80,13 @@ class StatisticCommonTool extends React.Component {
       return today < endTime;
     }
     return endValue.isBefore(startValue) || moment(endValue).format() > today;
-  }
+  };
 
   onChange = (field, value) => {
     this.setState({
       [field]: value,
     });
-  }
+  };
 
   onSubmit = () => {
     let { startValue, endValue } = this.state;
@@ -100,7 +100,7 @@ class StatisticCommonTool extends React.Component {
     let endTime = moment(endValue).format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
     this.props.getActiviesFiles(startTime, endTime, group_by);
-  }
+  };
 
   render() {
     let { statisticType, endValue, startValue } = this.state;

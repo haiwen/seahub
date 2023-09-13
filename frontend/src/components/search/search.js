@@ -12,6 +12,7 @@ const propTypes = {
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
+  isPublic: PropTypes.bool,
 };
 
 class Search extends Component {
@@ -41,16 +42,16 @@ class Search extends Component {
       isMaskShow: true,
       isCloseShow: true
     });
-  }
+  };
 
   onCloseHandler = () => {
     this.resetToDefault();
-  }
+  };
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
     this.props.onSearchedClick(item);
-  }
+  };
 
   onChangeHandler = (event) => {
     let _this = this;
@@ -80,7 +81,7 @@ class Search extends Component {
     }
 
     this.timer = setTimeout(_this.getSearchResult(queryData), 500);
-  }
+  };
 
   getSearchResult(queryData) {
 
@@ -222,7 +223,7 @@ class Search extends Component {
     }
 
     window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
-  }
+  };
 
   renderSearchResult() {
     var _this = this;
@@ -262,7 +263,7 @@ class Search extends Component {
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
     });
-  }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';

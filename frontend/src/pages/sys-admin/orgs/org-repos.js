@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -11,11 +12,6 @@ import UserLink from '../user-link';
 import OrgNav from './org-nav';
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { loading, errorMsg, items } = this.props;
     if (loading) {
@@ -57,6 +53,13 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -69,22 +72,22 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   deleteRepo = () => {
     this.props.deleteRepo(this.props.item.repo_id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -106,8 +109,8 @@ class Item extends Component {
             {!item.owner_email ?
               '--' :
               item.owner_email.indexOf('@seafile_group') == -1 ?
-              <UserLink email={item.owner_email} name={item.owner_name} /> :
-              item.owner_name
+                <UserLink email={item.owner_email} name={item.owner_name} /> :
+                item.owner_name
             }
           </td>
           <td>
@@ -127,6 +130,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteRepo: PropTypes.func.isRequired,
+};
 
 class OrgRepos extends Component {
 
@@ -170,7 +178,7 @@ class OrgRepos extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (
@@ -197,5 +205,9 @@ class OrgRepos extends Component {
     );
   }
 }
+
+OrgRepos.propTypes = {
+  orgID: PropTypes.string,
+};
 
 export default OrgRepos;

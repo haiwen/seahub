@@ -63,7 +63,7 @@ class SharedRepoListItem extends React.Component {
         isOperationShow: true,
       });
     }
-  }
+  };
 
   onMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -72,7 +72,7 @@ class SharedRepoListItem extends React.Component {
         isOperationShow: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -81,17 +81,17 @@ class SharedRepoListItem extends React.Component {
         isOperationShow: false,
       });
     }
-  }
+  };
 
   clickOperationMenuToggle = (e) => {
     this.toggleOperationMenu(e);
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.clickOperationMenuToggle(e);
     }
-  }
+  };
 
   toggleOperationMenu = (e) => {
     let dataset = e.target ? e.target.dataset : null;
@@ -114,7 +114,7 @@ class SharedRepoListItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   getRepoComputeParams = () => {
     let repo = this.props.repo;
@@ -124,13 +124,13 @@ class SharedRepoListItem extends React.Component {
     let libPath = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
 
     return { iconUrl, iconTitle, libPath };
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onMenuItemClick(e);
     }
-  }
+  };
 
   onMenuItemClick = (e) => {
     let operation = e.target.dataset.toggle;
@@ -173,7 +173,7 @@ class SharedRepoListItem extends React.Component {
         break;
       // no default
     }
-  }
+  };
 
   watchFileChanges = () => {
     const { repo } = this.props;
@@ -183,7 +183,7 @@ class SharedRepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unwatchFileChanges = () => {
     const { repo } = this.props;
@@ -193,7 +193,7 @@ class SharedRepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onItemRenameToggle = () => {
     this.props.onFreezedItem();
@@ -201,44 +201,44 @@ class SharedRepoListItem extends React.Component {
       isRenaming: !this.state.isRenaming,
       isOperationShow: !this.state.isOperationShow
     });
-  }
+  };
 
   onRenameConfirm = (name) => {
     this.props.onItemRename(this.props.repo, name);
     this.onRenameCancel();
-  }
+  };
 
   onRenameCancel = () => {
     this.props.onUnfreezedItem();
     this.setState({isRenaming: !this.state.isRenaming});
-  }
+  };
 
   onItemFolderPermissionToggle = () => {
     this.setState({isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen});
-  }
+  };
 
   onHistorySettingToggle = () => {
     this.setState({isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow});
-  }
+  };
 
   onItemDetails = () => {
     this.props.onItemDetails(this.props.repo);
-  }
+  };
 
   onItemShare = (e) => {
     e.preventDefault();
     this.setState({isShowSharedDialog: true});
-  }
+  };
 
   onItemUnshare = (e) => {
     e.preventDefault();
     this.props.onItemUnshare(this.props.repo);
-  }
+  };
 
   onItemDeleteToggle = (e) => {
     e.preventDefault();
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-  }
+  };
 
   onItemDelete = () => {
     const { currentGroup, repo } = this.props;
@@ -269,27 +269,27 @@ class SharedRepoListItem extends React.Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   toggleShareDialog = () => {
     this.setState({isShowSharedDialog: false});
-  }
+  };
 
   toggleRepoShareAdminDialog = () => {
     this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
-  }
+  };
 
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
-  }
+  };
 
   onChangePasswordToggle = () => {
     this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
-  }
+  };
 
   onResetPasswordToggle = () => {
     this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
-  }
+  };
 
   translateMenuItem = (menuItem) => {
     let translateResult = '';
@@ -334,7 +334,7 @@ class SharedRepoListItem extends React.Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
@@ -385,7 +385,7 @@ class SharedRepoListItem extends React.Component {
       }
     }
     return operations;
-  }
+  };
 
   generatorMobileMenu = () => {
     let operations = [];
@@ -427,7 +427,7 @@ class SharedRepoListItem extends React.Component {
         </div>
       </Dropdown>
     );
-  }
+  };
 
   generatorPCMenu = () => {
     let operations = [];
@@ -498,12 +498,14 @@ class SharedRepoListItem extends React.Component {
                   </Dropdown>
                 );
               // no default
+              default:
+                return null;
             }
           })}
         </Fragment>
       );
     }
-  }
+  };
 
   onToggleStarRepo = (e) => {
     e.preventDefault();
@@ -529,7 +531,7 @@ class SharedRepoListItem extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
@@ -559,13 +561,13 @@ class SharedRepoListItem extends React.Component {
         </tr>
       </Fragment>
     );
-  }
+  };
 
   visitRepo = () => {
     if (!this.state.isRenaming) {
       navigate(this.repoURL);
     }
-  }
+  };
 
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
@@ -592,7 +594,7 @@ class SharedRepoListItem extends React.Component {
         </tr>
       </Fragment>
     );
-  }
+  };
 
   render() {
     let { repo } = this.props;

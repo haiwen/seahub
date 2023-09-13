@@ -28,11 +28,11 @@ class OrgAdminList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     let orgAdminUsers = this.props.orgAdminUsers;

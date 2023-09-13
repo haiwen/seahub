@@ -6,6 +6,9 @@ import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 
 const propTypes = {
+  availableRoles: PropTypes.array.isRequired,
+  dialogTitle: PropTypes.string.isRequired,
+  showRole: PropTypes.bool.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   addUser: PropTypes.func.isRequired
 };
@@ -39,15 +42,15 @@ class SysAdminAddUserDialog extends React.Component {
     this.setState({
       isSubmitBtnActive: btnActive
     });
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   togglePasswordVisible = () => {
     this.setState({isPasswordVisible: !this.state.isPasswordVisible});
-  }
+  };
 
   inputPassword = (e) => {
     let passwd = e.target.value;
@@ -55,7 +58,7 @@ class SysAdminAddUserDialog extends React.Component {
       password: passwd,
       errorMsg: ''
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputPasswordAgain = (e) => {
     let passwd = e.target.value;
@@ -63,7 +66,7 @@ class SysAdminAddUserDialog extends React.Component {
       passwordAgain: passwd,
       errorMsg: ''
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   generatePassword = () => {
     let val = Utils.generatePassword(8);
@@ -71,27 +74,27 @@ class SysAdminAddUserDialog extends React.Component {
       password: val,
       passwordAgain: val
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputEmail = (e) => {
     let email = e.target.value;
     this.setState({
       email: email
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   inputName = (e) => {
     let name = e.target.value;
     this.setState({
       name: name
     });
-  }
+  };
 
   updateRole = (role) => {
     this.setState({
       role: role
     });
-  }
+  };
 
   handleSubmit = () => {
     const { email, password, passwordAgain, name, role } = this.state;
@@ -109,7 +112,7 @@ class SysAdminAddUserDialog extends React.Component {
     }
     this.props.addUser(data);
     this.toggle();
-  }
+  };
 
   render() {
     const { dialogTitle, showRole } = this.props;

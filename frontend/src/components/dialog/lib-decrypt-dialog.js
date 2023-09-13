@@ -33,7 +33,7 @@ class LibDecryptDialog extends React.Component {
     });
 
     e.preventDefault();
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
@@ -46,7 +46,7 @@ class LibDecryptDialog extends React.Component {
       password: e.target.value,
       showError: false
     });
-  }
+  };
 
   toggle = () => {
     window.location.href = siteRoot;

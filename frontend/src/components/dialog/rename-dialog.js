@@ -44,7 +44,7 @@ class Rename extends React.Component {
     }
 
     this.setState({newName: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     let { isValid, errMessage } = this.validateInput();
@@ -60,22 +60,22 @@ class Rename extends React.Component {
         this.props.onRename(this.state.newName);
       }
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleCancel();
-  }
+  };
 
   changeState = (currentNode) => {
     let name = currentNode.object.name;
     this.setState({newName: name});
-  }
+  };
 
   validateInput = () => {
     let newName = this.state.newName.trim();
@@ -94,12 +94,12 @@ class Rename extends React.Component {
     }
 
     return { isValid, errMessage };
-  }
+  };
 
   checkDuplicatedName = () => {
     let isDuplicated = this.props.checkDuplicatedName(this.state.newName);
     return isDuplicated;
-  }
+  };
 
   onAfterModelOpened = () => {
     if (!this.newInput.current) return;
@@ -112,7 +112,7 @@ class Rename extends React.Component {
     } else {
       this.newInput.current.setSelectionRange(0, -1);
     }
-  }
+  };
 
   render() {
     let type = this.props.currentNode.object.type;

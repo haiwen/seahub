@@ -27,15 +27,15 @@ class LinkList extends React.Component {
 
   toggleDeleteShareLinksDialog = () => {
     this.setState({isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen});
-  }
+  };
 
   toggleSelectAllLinks = (e) => {
     this.props.toggleSelectAllLinks(e.target.checked);
-  }
+  };
 
   cancelSelectAllLinks = () => {
     this.props.toggleSelectAllLinks(false);
-  }
+  };
 
   exportSelectedLinks = () => {
     const { shareLinks } = this.props;
@@ -43,7 +43,7 @@ class LinkList extends React.Component {
     let url = `${siteRoot}share/link/export-excel/?`;
     url += selectedLinks.map(item => `token=${item.token}`).join('&');
     location.href = url;
-  }
+  };
 
   render() {
     const { shareLinks, permissionOptions } = this.props;

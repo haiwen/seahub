@@ -23,7 +23,7 @@ class SearchByName extends Component {
     this.setState({
       isDialogOpen: !this.state.isDialogOpen
     });
-  }
+  };
 
   render() {
     const { repoID, repoName } = this.props;

@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, siteRoot } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
@@ -20,21 +21,21 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getShareLinksByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getShareLinksByPage(this.props.currentPage + 1);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     this.props.sortItems('ctime');
-  }
+  };
 
   sortByCount = (e) => {
     e.preventDefault();
     this.props.sortItems('view_cnt');
-  }
+  };
 
   render() {
     const {
@@ -100,6 +101,23 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  getShareLinksByPage: PropTypes.func.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  deleteShareLink: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -113,17 +131,17 @@ class Item extends Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   deleteShareLink = () => {
     this.props.deleteShareLink(this.props.item.token);
-  }
+  };
 
   renderExpiration = () => {
     const item = this.props.item;
@@ -133,7 +151,7 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
 
   render() {
     let { isOpIconShown } = this.state;
@@ -154,6 +172,12 @@ class Item extends Component {
     );
   }
 }
+
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  deleteShareLink: PropTypes.func.isRequired,
+};
 
 class ShareLinks extends Component {
 
@@ -200,7 +224,7 @@ class ShareLinks extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   sortItems = (sortBy) => {
     this.setState({
@@ -218,7 +242,7 @@ class ShareLinks extends Component {
       navigate(url.toString());
       this.getShareLinksByPage(currentPage);
     });
-  }
+  };
 
   deleteShareLink = (linkToken) => {
     seafileAPI.sysAdminDeleteShareLink(linkToken).then(res => {
@@ -230,19 +254,19 @@ class ShareLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getShareLinksByPage(this.initPage));
-  }
+  };
 
   render() {
     let { shareLinkList, currentPage, perPage, hasNextPage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props} />  
+        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <LinksNav currentItem="shareLinks" />

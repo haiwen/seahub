@@ -18,7 +18,8 @@ const propTypes = {
 
 let loginUser = window.app.pageOptions.name;
 let contactEmail = window.app.pageOptions.contactEmail;
-const { repoID, sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload, zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
+const { sharedToken, trafficOverLimit, fileName, fileSize, sharedBy, siteName, enableWatermark, canDownload,
+  zipped, filePath, enableShareLinkReportAbuse } = window.shared.pageOptions;
 
 class SharedFileView extends React.Component {
 
@@ -34,25 +35,25 @@ class SharedFileView extends React.Component {
     this.setState({
       showSaveSharedFileDialog: true
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
       showSaveSharedFileDialog: false
     });
-  }
+  };
 
   handleSaveSharedFile = () => {
     toaster.success(gettext('Successfully saved'), {
       duration: 3
     });
-  }
+  };
 
   toggleAddAbuseReportDialog = () => {
     this.setState({
       isAddAbuseReportDialogOpen: !this.state.isAddAbuseReportDialogOpen
     });
-  }
+  };
 
   componentDidMount() {
     if (trafficOverLimit) {
@@ -89,12 +90,13 @@ class SharedFileView extends React.Component {
               </React.Fragment>
             );
           }
+          return null;
         })
         }
         {zipped[zipped.length - 1].name}
       </React.Fragment>
     );
-  }
+  };
 
   render() {
     const { fileType } = this.props;

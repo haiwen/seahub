@@ -118,5 +118,5 @@ function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
 export { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
+// eslint-disable-next-line
 export default { strip, plus, minus, times, divide, round, digitLength, float2Fixed, enableBoundaryChecking };
-

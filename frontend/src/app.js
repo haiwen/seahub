@@ -68,7 +68,7 @@ class App extends Component {
       let { currentTab, pathPrefix } = event.state;
       this.setState({currentTab, pathPrefix});
     }
-  }
+  };
 
   componentWillMount() {
     if (!Utils.isDesktop()) {
@@ -85,7 +85,7 @@ class App extends Component {
       let url = siteRoot + 'library/' + repoID + '/';
       navigate(url, {repalce: true});
     }
-  }
+  };
 
   componentDidMount() {
     // url from client  e.g. http://127.0.0.1:8000/#common/lib/34e7fb92-e91d-499d-bcde-c30ea8af9828/
@@ -110,26 +110,26 @@ class App extends Component {
         isLoadingDraft: false,
       });
     });
-  }
+  };
 
   updateDraftsList = (draft_id) => {
     this.setState({
       draftCounts: this.state.draftCounts - 1,
       draftList: this.state.draftList.filter(draft => draft.id != draft_id),
     });
-  }
+  };
 
   onCloseSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   onShowSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -146,7 +146,7 @@ class App extends Component {
         location.href = url;
       }
     }
-  }
+  };
 
   onGroupChanged = (groupID) => {
     setTimeout(function(){
@@ -159,7 +159,7 @@ class App extends Component {
       }
       window.location = url.toString();
     }, 1);
-  }
+  };
 
   tabItemClick = (tabName, groupID) => {
     let pathPrefix = [];
@@ -176,7 +176,7 @@ class App extends Component {
     if (!Utils.isDesktop() && !this.state.isSidePanelClosed) {
       this.setState({ isSidePanelClosed: true });
     }
-  }
+  };
 
   generatorPrefix = (tabName, groupID) => {
     let pathPrefix = [];
@@ -205,7 +205,7 @@ class App extends Component {
       pathPrefix.push(navTab);
     }
     return pathPrefix;
-  }
+  };
 
   getTabShowName = (tabName) => {
     if (tabName === 'my-libs') {
@@ -217,13 +217,13 @@ class App extends Component {
     if (tabName === 'org') {
       return 'Shared with all';
     }
-  }
+  };
 
   toggleSidePanel = () => {
     this.setState({
       isSidePanelClosed: !this.state.isSidePanelClosed
     });
-  }
+  };
 
   render() {
     let { currentTab, isSidePanelClosed } = this.state;

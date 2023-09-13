@@ -19,30 +19,30 @@ class DirentItem extends React.Component {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   openFolder = () => {
     this.props.openFolder(this.props.dirent);
-  }
+  };
 
   deleteDirent = (e) => {
     e.preventDefault();
     this.props.deleteDirent(this.props.dirent);
-  }
+  };
 
   downloadDirent = (e) => {
     e.preventDefault();
     this.props.downloadDirent(this.props.dirent);
-  }
+  };
 
   render () {
-    let { isOpIconShown, isDeleteDialogOpen } = this.state;
+    let { isOpIconShown } = this.state;
     let { dirent, fromSystemRepo } = this.props;
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -72,16 +72,15 @@ class DirentItem extends React.Component {
   }
 }
 
-
-const propTypes = {
-  direntList: PropTypes.array.isRequired
+DirentItem.propTypes = {
+  dirent: PropTypes.object.isRequired,
+  fromSystemRepo: PropTypes.bool.isRequired,
+  deleteDirent: PropTypes.func.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  downloadDirent: PropTypes.func.isRequired,
 };
 
 class DirContent extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let { loading, errorMsg, direntList } = this.props;
@@ -124,6 +123,14 @@ class DirContent extends React.Component {
   }
 }
 
-DirContent.propTypes = propTypes;
+DirContent.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  openFolder: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
+  fromSystemRepo: PropTypes.bool.isRequired,
+  deleteDirent: PropTypes.func.isRequired,
+  downloadDirent: PropTypes.func.isRequired,
+};
 
 export default DirContent;

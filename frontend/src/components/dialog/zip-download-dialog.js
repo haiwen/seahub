@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
 const propTypes = {
+  data: PropTypes.object,
   token: PropTypes.string,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string,
@@ -85,7 +86,7 @@ class ZipDownloadDialog extends React.Component {
         errorMsg: errorMsg
       });
     });
-  }
+  };
 
   cancelZipTask = () => {
     const zipToken = this.state.zipToken;
@@ -94,7 +95,7 @@ class ZipDownloadDialog extends React.Component {
     }).catch((error) => {
     // do nothing
     });
-  }
+  };
 
   toggleDialog = () => {
     const zipProgress = this.state.zipProgress;
@@ -103,7 +104,7 @@ class ZipDownloadDialog extends React.Component {
       this.cancelZipTask();
     }
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (
@@ -133,6 +134,10 @@ class Content extends React.Component {
     return <p className="mt-4 text-center">{`${gettext('Packaging...')} ${zipProgress}`}</p>;
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object,
+};
 
 ZipDownloadDialog.propTypes = propTypes;
 

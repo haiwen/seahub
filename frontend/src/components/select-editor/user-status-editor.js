@@ -21,7 +21,7 @@ class UserStatusEditor extends React.Component {
     if (userStatus === 'inactive') {
       return gettext('Inactive');
     }
-  }
+  };
 
   render() {
     return (

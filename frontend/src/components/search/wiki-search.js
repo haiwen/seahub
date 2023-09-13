@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import More from '../more';
 import { Utils } from '../../utils/utils';
@@ -41,16 +41,16 @@ class Search extends Component {
       isMaskShow: true,
       isCloseShow: true
     });
-  }
+  };
 
   onCloseHandler = () => {
     this.resetToDefault();
-  }
+  };
 
   onItemClickHandler = (item) => {
     this.resetToDefault();
     this.props.onSearchedClick(item);
-  }
+  };
 
   onChangeHandler = (event) => {
     let _this = this;
@@ -80,7 +80,7 @@ class Search extends Component {
     }
 
     this.timer = setTimeout(_this.getSearchResult(queryData), 500);
-  }
+  };
 
   getSearchResult(queryData) {
 
@@ -192,7 +192,7 @@ class Search extends Component {
       const { page, perPage } = this.state;
       this.searchWiki(repoID, newValue, page, perPage);
     });
-  }
+  };
 
   renderSearchResult() {
     var _this = this;
@@ -232,7 +232,7 @@ class Search extends Component {
       isSearchInputShow: !this.state.isSearchInputShow,
       isMaskShow: !this.state.isMaskShow,
     });
-  }
+  };
 
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';

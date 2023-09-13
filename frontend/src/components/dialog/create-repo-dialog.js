@@ -35,15 +35,15 @@ class CreateRepoDialog extends React.Component {
     }
 
     this.setState({repoName: e.target.value});
-  }
+  };
 
   handlePassword1Change = (e) => {
     this.setState({password1: e.target.value});
-  }
+  };
 
   handlePassword2Change = (e) => {
     this.setState({password2: e.target.value});
-  }
+  };
 
   handleSubmit = () => {
     let isValid = this.validateInputParams();
@@ -55,18 +55,18 @@ class CreateRepoDialog extends React.Component {
       }
       this.props.onCreateRepo(repoData);
     }
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.onCreateToggle();
-  }
+  };
 
   validateInputParams() {
     let errMessage = '';
@@ -111,15 +111,15 @@ class CreateRepoDialog extends React.Component {
   onPermissionChange = (e) => {
     let permission = e.target.value;
     this.setState({permission: permission});
-  }
+  };
 
   handleStorageInputChange = (selectedItem) => {
     this.setState({storage_id: selectedItem.value});
-  }
+  };
 
   handlelibraryTemplatesInputChange = (selectedItem) => {
     this.setState({library_template: selectedItem.value});
-  }
+  };
 
   onEncrypted = (e) => {
     let isChecked = e.target.checked;
@@ -127,7 +127,7 @@ class CreateRepoDialog extends React.Component {
       encrypt: isChecked,
       disabled: !isChecked
     });
-  }
+  };
 
   prepareRepoData = () => {
     let libraryType = this.props.libraryType;
@@ -168,7 +168,7 @@ class CreateRepoDialog extends React.Component {
     }
 
     return repo;
-  }
+  };
 
   render() {
     return (
@@ -195,7 +195,7 @@ class CreateRepoDialog extends React.Component {
                   defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
                   options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
                   onChange={this.handlelibraryTemplatesInputChange}
-                /> 
+                />
               </FormGroup>
             )}
 

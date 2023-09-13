@@ -12,8 +12,12 @@ import MainPanelTopbar from '../main-panel-topbar';
 import Nav from './nav';
 
 const virusFileItemPropTypes = {
+  resetPerPage: PropTypes.func,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
   virusFile: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired
 };
@@ -35,7 +39,7 @@ class VirusFileItem extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -44,7 +48,7 @@ class VirusFileItem extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -52,11 +56,11 @@ class VirusFileItem extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     this.props.handleFile(this.props.virusFile.virus_id, operation);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -72,11 +76,11 @@ class VirusFileItem extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   toggleItemSelected = (e) => {
     this.props.toggleItemSelected(this.props.virusFile, e.target.checked);
-  }
+  };
 
   render() {
     const virusFile = this.props.virusFile;
@@ -121,6 +125,15 @@ VirusFileItem.propTypes = virusFileItemPropTypes;
 
 
 const virusFileListPropTypes = {
+  currentPage: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+  curPerPage: PropTypes.number,
+  resetPerPage: PropTypes.func,
+  getListByPage: PropTypes.func.isRequired,
+  handleFile: PropTypes.func.isRequired,
+  isAllItemsSelected: PropTypes.bool.isRequired,
+  toggleAllSelected: PropTypes.func.isRequired,
+  toggleItemSelected: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   virusFiles: PropTypes.array.isRequired
@@ -137,19 +150,19 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -264,7 +277,7 @@ class UnhandledVirusFiles extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -272,7 +285,7 @@ class UnhandledVirusFiles extends Component {
     }, () => {
       this.getListByPage(1);
     });
-  }
+  };
 
   handleFile = (virusID, op) => {
     let request;
@@ -303,7 +316,7 @@ class UnhandledVirusFiles extends Component {
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
     });
-  }
+  };
 
   toggleAllSelected = () => {
     this.setState((prevState) => ({
@@ -313,7 +326,7 @@ class UnhandledVirusFiles extends Component {
         return item;
       })
     }));
-  }
+  };
 
   toggleItemSelected = (targetItem, isSelected) => {
     this.setState({
@@ -328,7 +341,7 @@ class UnhandledVirusFiles extends Component {
         isAllItemsSelected: !this.state.virusFiles.some(item => !item.isSelected)
       });
     });
-  }
+  };
 
   handleSelectedItems = (op) => {
     // op: 'delete-virus', 'ignore-virus'
@@ -368,17 +381,17 @@ class UnhandledVirusFiles extends Component {
     }).catch((error) => {
       toaster.danger(Utils.getErrorMsg(error));
     });
-  }
+  };
 
   deleteSelectedItems = () => {
     const op = 'delete-virus';
     this.handleSelectedItems(op);
-  }
+  };
 
   ignoreSelectedItems = () => {
     const op = 'ignore-virus';
     this.handleSelectedItems(op);
-  }
+  };
 
   render() {
     return (

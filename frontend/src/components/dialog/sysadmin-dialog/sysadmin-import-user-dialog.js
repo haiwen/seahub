@@ -20,11 +20,11 @@ class SysAdminImportUserDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   openFileInput = () => {
     this.fileInputRef.current.click();
-  }
+  };
 
   uploadFile = (e) => {
     // no file selected
@@ -42,7 +42,7 @@ class SysAdminImportUserDialog extends React.Component {
     const file = this.fileInputRef.current.files[0];
     this.props.importUserInBatch(file);
     this.toggle();
-  }
+  };
 
   render() {
     let { errorMsg } = this.state;

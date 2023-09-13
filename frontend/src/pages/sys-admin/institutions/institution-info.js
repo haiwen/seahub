@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -19,7 +20,7 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen});
-  }
+  };
 
   showEditIcon = (action) => {
     return (
@@ -29,7 +30,7 @@ class Content extends Component {
         onClick={action}>
       </span>
     );
-  }
+  };
 
   render() {
     const { loading, errorMsg, institutionInfo } = this.props;
@@ -69,6 +70,21 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  institutionInfo: PropTypes.object.isRequired,
+  updateQuota: PropTypes.func.isRequired,
+};
+
+
 class InstitutionInfo extends Component {
 
   constructor(props) {
@@ -105,7 +121,7 @@ class InstitutionInfo extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
 
   render() {
@@ -130,5 +146,9 @@ class InstitutionInfo extends Component {
     );
   }
 }
+
+InstitutionInfo.propTypes = {
+  institutionID: PropTypes.string,
+};
 
 export default InstitutionInfo;

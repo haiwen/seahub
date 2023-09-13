@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Account from '../../components/common/account';
-import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import moment from 'moment';
@@ -55,7 +53,6 @@ class AbuseReports extends Component {
   }
 
   render() {
-    const isDesktop = Utils.isDesktop();
     const AbuseReportList = this.state.abuseReportList.map((item, index) => {
       const handled = (!item.handled).toString();
       const abuseReportId = item.id;
@@ -63,7 +60,7 @@ class AbuseReports extends Component {
       return (
         <tr key={index}>
           <td>{item.repo_name}</td>
-          <td><a href={fileUrl} target="_blank">{item.file_path}</a></td>
+          <td><a href={fileUrl} target="_blank" rel="noreferrer">{item.file_path}</a></td>
           <td>{item.reporter}</td>
           <td>{item.abuse_type}</td>
           <td>{item.description}</td>
@@ -84,17 +81,17 @@ class AbuseReports extends Component {
               <h3 className="sf-heading">{gettext('Abuse Reports')}</h3>
             </div>
             <div className="cur-view-content">
-              <table className={`table-hover`}>
+              <table className={'table-hover'}>
                 <thead>
-                    <tr>
-                      <th width="20%">{gettext('Library')}</th>
-                      <th width="20%">{gettext('File')}</th>
-                      <th width="10%">{gettext('Reporter')}</th>
-                      <th width="15%">{gettext('Abuse Type')}</th>
-                      <th width="20%">{gettext('Description')}</th>
-                      <th width="10%">{gettext('Time')}</th>
-                      <th width="5%">{gettext('Handled')}</th>
-                    </tr>
+                  <tr>
+                    <th width="20%">{gettext('Library')}</th>
+                    <th width="20%">{gettext('File')}</th>
+                    <th width="10%">{gettext('Reporter')}</th>
+                    <th width="15%">{gettext('Abuse Type')}</th>
+                    <th width="20%">{gettext('Description')}</th>
+                    <th width="10%">{gettext('Time')}</th>
+                    <th width="5%">{gettext('Handled')}</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {AbuseReportList}

@@ -47,11 +47,11 @@ class SearchUsers extends Component {
 
   toggleBatchSetQuotaDialog = () => {
     this.setState({isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen});
-  }
+  };
 
   toggleBatchDeleteUserDialog = () => {
     this.setState({isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen});
-  }
+  };
 
   onUserSelected = (item) => {
     let hasUserSelected = false;
@@ -81,7 +81,7 @@ class SearchUsers extends Component {
       hasUserSelected: hasUserSelected,
       selectedUserList: selectedUserList,
     });
-  }
+  };
 
   toggleSelectAllUsers = () => {
     if (this.state.isAllUsersSelected) {
@@ -109,7 +109,7 @@ class SearchUsers extends Component {
         selectedUserList: users
       });
     }
-  }
+  };
 
   getItems = (page) => {
     seafileAPI.sysAdminSearchUsers(this.state.query.trim(), page, this.state.perPage).then(res => {
@@ -124,7 +124,7 @@ class SearchUsers extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -132,7 +132,7 @@ class SearchUsers extends Component {
     }, () => {
       this.getItems(1);
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.sysAdminDeleteUser(email).then(res => {
@@ -145,7 +145,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setUserQuotaInBatch = (quotaTotal) => {
     let emails = this.state.selectedUserList.map(user => {
@@ -153,7 +153,7 @@ class SearchUsers extends Component {
     });
     seafileAPI.sysAdminSetUserQuotaInBatch(emails, quotaTotal).then(res => {
       let userList = this.state.userList.map(item => {
-        res.data.success.map(resultUser => {
+        res.data.success.forEach(resultUser => {
           if (item.email == resultUser.email) {
             item.quota_total = resultUser.quota_total;
           }
@@ -165,7 +165,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUserInBatch = () => {
     let emails = this.state.selectedUserList.map(user => {
@@ -190,7 +190,7 @@ class SearchUsers extends Component {
             .replace('{user_number_placeholder}', length);
         toaster.success(msg);
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });
@@ -198,7 +198,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateUser = (email, key, value) => {
     seafileAPI.sysAdminUpdateUser(email, key, value).then(res => {
@@ -216,7 +216,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateAdminRole = (email, role) => {
     seafileAPI.sysAdminUpdateAdminRole(email, role).then(res => {
@@ -232,7 +232,7 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   revokeAdmin = (email, name) => {
     seafileAPI.sysAdminUpdateUser(email, 'is_staff', false).then(res => {
@@ -247,28 +247,28 @@ class SearchUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleInputChange = (e) => {
     this.setState({
       query: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { query } = this.state;
     this.setState({
       isSubmitBtnActive: query.trim()
     });
-  }
+  };
 
   getPreviousPageList = () => {
     this.getItems(this.state.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.getItems(this.state.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

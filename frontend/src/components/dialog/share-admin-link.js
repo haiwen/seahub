@@ -16,27 +16,27 @@ class ShareAdminLink extends React.Component {
     super(props);
   }
 
- copyToClipboard = () => {
-   copy(this.props.link);
-   this.props.toggleDialog();
-   toaster.success(gettext('The link is copied to the clipboard.')), {duration: 2};
- }
+  copyToClipboard = () => {
+    copy(this.props.link);
+    this.props.toggleDialog();
+    toaster.success(gettext('The link is copied to the clipboard.'), {duration: 2});
+  };
 
- render() {
-   const { link, toggleDialog } = this.props;
-   return (
-     <Modal isOpen={true} toggle={toggleDialog}>
-       <ModalHeader toggle={toggleDialog}>{gettext('Link')}</ModalHeader>
-       <ModalBody>
-         <a href={link}>{link}</a>
-       </ModalBody>
-       <ModalFooter>
-         <Button color="primary" onClick={this.copyToClipboard}>{gettext('Copy')}</Button>
-         <Button color="secondary" onClick={toggleDialog}>{gettext('Close')}</Button>
-       </ModalFooter>
-     </Modal>
-   );
- }
+  render() {
+    const { link, toggleDialog } = this.props;
+    return (
+      <Modal isOpen={true} toggle={toggleDialog}>
+        <ModalHeader toggle={toggleDialog}>{gettext('Link')}</ModalHeader>
+        <ModalBody>
+          <a href={link}>{link}</a>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.copyToClipboard}>{gettext('Copy')}</Button>
+          <Button color="secondary" onClick={toggleDialog}>{gettext('Close')}</Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
 }
 
 ShareAdminLink.propTypes = propTypes;

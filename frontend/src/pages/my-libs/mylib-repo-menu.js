@@ -25,23 +25,23 @@ class MylibRepoMenu extends React.Component {
   onMenuItemClick = (e) => {
     let operation = Utils.getEventData(e, 'toggle');
     this.props.onMenuItemClick(operation);
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onMenuItemClick(e);
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     this.toggleOperationMenu(e);
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onDropdownToggleClick(e);
     }
-  }
+  };
 
   toggleOperationMenu = (e) => {
     let dataset = e.target ? e.target.dataset : null;
@@ -60,7 +60,7 @@ class MylibRepoMenu extends React.Component {
         }
       }
     );
-  }
+  };
 
   generatorOperations = () => {
     let repo = this.props.repo;
@@ -92,7 +92,7 @@ class MylibRepoMenu extends React.Component {
       operations.push('Old Files Auto Delete');
     }
     return operations;
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -150,7 +150,7 @@ class MylibRepoMenu extends React.Component {
     }
 
     return translateResult;
-  }
+  };
 
   render() {
     let operations = this.generatorOperations();
@@ -205,6 +205,7 @@ class MylibRepoMenu extends React.Component {
               if (item != 'Divider') {
                 return (<DropdownItem key={index} className="mobile-menu-item" data-toggle={item} onClick={this.onMenuItemClick}>{this.translateOperations(item)}</DropdownItem>);
               }
+              return null;
             })}
           </div>
         </div>

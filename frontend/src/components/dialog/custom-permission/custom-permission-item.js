@@ -20,25 +20,25 @@ class CustomPermissionItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isShowOperations: true});
-  }
+  };
 
   onMouseOver = () => {
     this.setState({isShowOperations: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isShowOperations: false});
-  }
+  };
 
   onEditCustomPermission = () => {
     const { permission } = this.props;
     this.props.onEditCustomPermission(permission);
-  }
+  };
 
   onDeleteCustomPermission = () => {
     const { permission } = this.props;
     this.props.onDeleteCustomPermission(permission);
-  }
+  };
 
   render() {
     const { permission } = this.props;

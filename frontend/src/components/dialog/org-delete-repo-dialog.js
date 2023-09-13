@@ -22,7 +22,7 @@ class DeleteRepoDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     let subtitle = gettext('Are you sure you want to delete {placeholder} ?');
@@ -45,7 +45,7 @@ class DeleteRepoDialog extends React.Component {
 const propTypes = {
   repo: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onRepoChanged: PropTypes.func.isRequired
 };
 

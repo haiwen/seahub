@@ -81,7 +81,7 @@ class SidePanel extends Component {
         this.setState({isReloadingData: false});
       });
     }
-  }
+  };
 
   renameHistoryVersion = (objID, newName) => {
     seafileAPI.renameSdocHistory(docUuid, objID, newName).then((res) => {
@@ -97,7 +97,7 @@ class SidePanel extends Component {
       const errorMessage = Utils.getErrorMsg(error, true);
       this.setState({ isLoading: false, errorMessage: errorMessage });
     });
-  }
+  };
 
   onScrollHandler = (event) => {
     const clientHeight = event.target.clientHeight;
@@ -107,7 +107,7 @@ class SidePanel extends Component {
     if (isBottom && this.state.hasMore) {
       this.loadMore();
     }
-  }
+  };
 
   restoreVersion = (currentItem) => {
     const { commit_id, path } = currentItem;
@@ -122,7 +122,7 @@ class SidePanel extends Component {
       const errorMessage = Utils.getErrorMsg(error, true);
       toaster.danger(gettext(errorMessage));
     });
-  }
+  };
 
   onSelectHistoryVersion = (historyVersion) => {
     const { isShowChanges } = this.props;
@@ -133,7 +133,7 @@ class SidePanel extends Component {
     const { historyVersions } = this.state;
     const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === historyVersion.commit_id);
     this.props.onSelectHistoryVersion(historyVersion, historyVersions[historyVersionIndex + 1]);
-  }
+  };
 
   copyHistoryFile = (historyVersion) => {
     const { path, obj_id, ctime_format } = historyVersion;
@@ -146,7 +146,7 @@ class SidePanel extends Component {
       const errorMessage = Utils.getErrorMsg(error, true);
       toaster.danger(gettext(errorMessage));
     });
-  }
+  };
 
   renderHistoryVersions = () => {
     const { isLoading, historyVersions, errorMessage } = this.state;
@@ -195,7 +195,7 @@ class SidePanel extends Component {
         )}
       </>
     );
-  }
+  };
 
   onShowChanges = () => {
     const { isShowChanges, currentVersion } = this.props;
@@ -203,7 +203,7 @@ class SidePanel extends Component {
     const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === currentVersion.commit_id);
     const lastVersion = historyVersions[historyVersionIndex + 1];
     this.props.onShowChanges(!isShowChanges, lastVersion);
-  }
+  };
 
   render() {
     const { historyVersions } = this.state;

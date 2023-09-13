@@ -32,7 +32,7 @@ class CreateGroupDialog extends React.Component {
         errorMsg: ''
       });
     }
-  }
+  };
 
   handleSubmitGroup = () => {
     let name = this.state.groupName.trim();
@@ -52,14 +52,14 @@ class CreateGroupDialog extends React.Component {
     this.setState({
       groupName: '',
     });
-  }
+  };
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       this.handleSubmitGroup();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     return(

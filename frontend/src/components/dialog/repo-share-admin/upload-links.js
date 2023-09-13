@@ -109,7 +109,7 @@ class RepoShareAdminUploadLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.state;

@@ -11,6 +11,7 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
   onShowMenu: PropTypes.func,
   onHideMenu: PropTypes.func,
+  hideOnLeave: PropTypes.bool,
 };
 
 class ContextMenu extends React.Component {
@@ -69,7 +70,7 @@ class ContextMenu extends React.Component {
     document.addEventListener('contextmenu', this.handleHide);
     document.addEventListener('keydown', this.handleKeyNavigation);
     window.addEventListener('resize', this.handleHide);
-  }
+  };
 
   unregisterHandlers = () => {
     document.removeEventListener('mousedown', this.handleOutsideClick);
@@ -78,7 +79,7 @@ class ContextMenu extends React.Component {
     document.removeEventListener('contextmenu', this.handleHide);
     document.removeEventListener('keydown', this.handleKeyNavigation);
     window.removeEventListener('resize', this.handleHide);
-  }
+  };
 
   handleShow = (e) => {
     if (e.detail.id !== this.props.id) return;
@@ -89,7 +90,7 @@ class ContextMenu extends React.Component {
     this.setState({ isVisible: true, x, y, currentObject, menuList });
     this.registerHandlers();
     callIfExists(this.props.onShowMenu, e);
-  }
+  };
 
   handleHide = (e) => {
     if (this.state.isVisible && (!e.detail || !e.detail.id || e.detail.id === this.props.id)) {
@@ -97,21 +98,21 @@ class ContextMenu extends React.Component {
       this.setState({ isVisible: false});
       callIfExists(this.props.onHideMenu, e);
     }
-  }
+  };
 
   handleOutsideClick = (e) => {
     if (!this.menu.contains(e.target)) hideMenu();
-  }
+  };
 
   handleMouseLeave = (event) => {
     event.preventDefault();
 
     if (this.props.hideOnLeave) hideMenu();
-  }
+  };
 
   handleContextMenu = (e) => {
     this.handleHide(e);
-  }
+  };
 
   handleKeyNavigation = (e) => {
     if (this.state.isVisible === false) {
@@ -119,13 +120,13 @@ class ContextMenu extends React.Component {
     }
     e.preventDefault();
     this.hideMenu(e);
-  }
+  };
 
   hideMenu = (e) => {
     if (e.keyCode === 27 || e.keyCode === 13) { // ECS or enter
       hideMenu();
     }
-  }
+  };
 
   getMenuPosition = (x = 0, y = 0) => {
     let menuStyles = {
@@ -155,7 +156,7 @@ class ContextMenu extends React.Component {
     }
 
     return menuStyles;
-  }
+  };
 
   getRTLMenuPosition = (x = 0, y = 0) => {
     let menuStyles = {
@@ -188,7 +189,7 @@ class ContextMenu extends React.Component {
     }
 
     return menuStyles;
-  }
+  };
 
 
   onMenuItemClick = (event) => {
@@ -196,11 +197,11 @@ class ContextMenu extends React.Component {
     let operation = Utils.getEventData(event, 'operation');
     let currentObject = this.state.currentObject;
     this.props.onMenuItemClick(operation, currentObject, event);
-  }
+  };
 
   onContextMenu = (event) => {
     event.stopPropagation();
-  }
+  };
 
   render() {
     const inlineStyle = { position: 'fixed', opacity: 0, pointerEvents: 'none', display: 'block' };

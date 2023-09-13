@@ -51,7 +51,7 @@ class OrgLogsFileUpdate extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangePageNum = (e, num) => {
     e.preventDefault();
@@ -65,13 +65,13 @@ class OrgLogsFileUpdate extends Component {
     let email = this.state.userSelected;
     let repoID = this.state.repoSelected;
     this.initData(email, repoID, page);
-  }
+  };
 
   toggleCancelDetail = () => {
     this.setState({
       showDetails: !this.state.showDetails
     });
-  }
+  };
 
   onDetails = (e, fileEvent) => {
     e.preventDefault();
@@ -80,15 +80,15 @@ class OrgLogsFileUpdate extends Component {
       repoID: fileEvent.repo_id,
       commitID: fileEvent.repo_commit_id
     });
-  }
+  };
 
   filterUser = (userSelected) => {
     this.setState({ userSelected: userSelected });
-  }
+  };
 
   filterRepo = (repoSelected) => {
     this.setState({ repoSelected: repoSelected });
-  }
+  };
 
   render() {
     let eventList = this.state.eventList;
@@ -161,6 +161,7 @@ const propTypes = {
   userSelected: PropTypes.string.isRequired,
   repoSelected: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
+  fileEvent: PropTypes.object.isRequired,
 };
 
 
@@ -184,7 +185,7 @@ class FileUpdateItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -193,11 +194,11 @@ class FileUpdateItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   toggleUserDropdown = () => {
     this.setState({ userDropdownOpen: !this.state.userDropdownOpen });
-  }
+  };
 
   renderUser = (fileEvent) => {
     if (!fileEvent.user_email) {
@@ -218,11 +219,11 @@ class FileUpdateItem extends React.Component {
         </Dropdown>
       </span>
     );
-  }
+  };
 
   toggleRepoDropdown = () => {
     this.setState({ repoDropdownOpen: !this.state.repoDropdownOpen });
-  }
+  };
 
   renderRepo = (fileEvent) => {
     let repoName = 'Deleted';
@@ -246,7 +247,7 @@ class FileUpdateItem extends React.Component {
         }
       </span>
     );
-  }
+  };
 
   renderAction = (fileEvent) => {
     if (fileEvent.repo_encrypted || !fileEvent.repo_id) {
@@ -259,7 +260,7 @@ class FileUpdateItem extends React.Component {
           onClick={(e) => this.props.onDetails(e, fileEvent)}>{gettext('Details')}</a>
       </td>
     );
-  }
+  };
 
   render() {
     let { fileEvent } = this.props;

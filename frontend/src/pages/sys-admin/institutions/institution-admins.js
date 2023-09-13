@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -23,11 +24,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -74,6 +75,20 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  revokeAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -92,7 +107,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -101,7 +116,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -109,18 +124,18 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleRevokeAdminDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen});
-  }
+  };
 
   revokeAdmin = () => {
     this.props.revokeAdmin(this.props.item);
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch (operation) {
@@ -128,7 +143,7 @@ class Item extends Component {
         this.toggleRevokeAdminDialog();
         break;
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -138,7 +153,7 @@ class Item extends Component {
         break;
     }
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -186,6 +201,15 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  revokeAdmin: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+};
+
 class InstitutionAdmins extends Component {
 
   constructor(props) {
@@ -231,7 +255,7 @@ class InstitutionAdmins extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUser = (email) => {
     seafileAPI.sysAdminDeleteInstitutionUser(this.props.institutionID, email).then(res => {
@@ -244,7 +268,7 @@ class InstitutionAdmins extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { institutionName } = this.state;
@@ -273,5 +297,9 @@ class InstitutionAdmins extends Component {
     );
   }
 }
+
+InstitutionAdmins.propTypes = {
+  institutionID: PropTypes.string,
+};
 
 export default InstitutionAdmins;

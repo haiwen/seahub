@@ -42,13 +42,13 @@ class FileView extends React.Component {
 
   toggleDetailsPanel = () => {
     this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
-  }
+  };
 
   toggleCommentPanel = () => {
     this.setState({
       isCommentPanelOpen: !this.state.isCommentPanelOpen
     });
-  }
+  };
 
   toggleStar = () => {
     if (this.state.isStarred) {
@@ -70,7 +70,7 @@ class FileView extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   toggleLockFile = () => {
     if (this.state.isLocked) {
@@ -94,7 +94,7 @@ class FileView extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   render() {
     const { isDetailsPanelOpen } = this.state;

@@ -27,7 +27,7 @@ class WebSettingCheckbox extends Component {
       inputChecked: checked
     });
     this.props.saveSetting(this.props.keyText, valueToNum);
-  }
+  };
 
   render() {
     const { inputChecked } = this.state;

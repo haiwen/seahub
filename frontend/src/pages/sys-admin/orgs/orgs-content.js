@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
@@ -16,17 +17,13 @@ const { availableRoles } = window.sysadmin.pageOptions;
 
 class Content extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -81,6 +78,20 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+  currentPage: PropTypes.number,
+  items: PropTypes.array.isRequired,
+  updateRole: PropTypes.func.isRequired,
+  deleteOrg: PropTypes.func.isRequired,
+  hasNextPage: PropTypes.bool,
+  resetPerPage: PropTypes.func,
+  curPerPage: PropTypes.number,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -94,11 +105,11 @@ class Item extends Component {
 
   handleMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
@@ -122,16 +133,16 @@ class Item extends Component {
         });
       }
     });
-  }
+  };
 
   updateRole = (role) => {
     this.props.updateRole(this.props.item.org_id, role);
-  }
+  };
 
   deleteOrg = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
     this.props.deleteOrg(this.props.item.org_id);
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -172,5 +183,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  updateRole: PropTypes.func.isRequired,
+  deleteOrg: PropTypes.func.isRequired,
+};
 
 export default Content;

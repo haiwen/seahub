@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot, enableSysAdminViewRepo, isPro } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -18,11 +19,11 @@ class Content extends Component {
 
   getPreviousPage = () => {
     this.props.getLogsByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getLogsByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, perPage, currentPage, hasNextPage } = this.props;
@@ -73,6 +74,18 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -94,7 +107,7 @@ class Item extends Component {
       case 'user_delete': return gettext('Delete User');
       default: return '';
     }
-  }
+  };
 
   getOperationDetail = (item) => {
     let detail = item.detail;
@@ -173,7 +186,7 @@ class Item extends Component {
 
       default: return '';
     }
-  }
+  };
 
   render() {
     let { item } = this.props;
@@ -189,6 +202,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class AdminOperationLogs extends Component {
 
@@ -231,13 +248,13 @@ class AdminOperationLogs extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (newPerPage) => {
     this.setState({
       perPage: newPerPage,
     }, () => this.getLogsByPage(this.initPage));
-  }
+  };
 
   render() {
     let { logList, currentPage, perPage, hasNextPage } = this.state;

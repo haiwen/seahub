@@ -10,7 +10,7 @@ import OpIcon from './op-icon';
 
 const propTypes = {
   groupMembers: PropTypes.array.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
@@ -61,7 +61,7 @@ const MemberPropTypes = {
   changeMember: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
   toggleItemFreezed: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   isOwner: PropTypes.bool.isRequired,
   isItemFreezed: PropTypes.bool.isRequired
 };
@@ -84,7 +84,7 @@ class Member extends React.PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteMember = () => {
     const { item } = this.props;
@@ -95,21 +95,21 @@ class Member extends React.PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleMouseOver = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: true,
     });
-  }
+  };
 
   handleMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({
       highlight: false,
     });
-  }
+  };
 
   translateRole = (role) => {
     if (role === 'Admin') {
@@ -121,7 +121,7 @@ class Member extends React.PureComponent {
     else if (role === 'Owner') {
       return gettext('Owner');
     }
-  }
+  };
 
   render() {
     const { item, isOwner } = this.props;

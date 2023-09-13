@@ -6,6 +6,7 @@ const propTypes = {
   currentItem: PropTypes.object,
   onItemClick: PropTypes.func.isRequired,
   onSearchedItemDoubleClick: PropTypes.func.isRequired,
+  item: PropTypes.object,
 };
 
 class SearchedListItem extends React.Component {
@@ -19,22 +20,22 @@ class SearchedListItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({highlight: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({highlight: false});
-  }
+  };
 
   onClick = () => {
     let item = this.props.item;
     this.props.onItemClick(item);
-  }
+  };
 
   searchItemDoubleClick = (e) => {
     let item = this.props.item;
 
     this.props.onSearchedItemDoubleClick(item);
-  }
+  };
 
   render() {
     let { item, currentItem } = this.props;

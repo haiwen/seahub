@@ -19,7 +19,7 @@ class LeaveGroupDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return(
@@ -39,7 +39,7 @@ class LeaveGroupDialog extends React.Component {
 
 const LeaveGroupDialogPropTypes = {
   toggleLeaveGroupDialog: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onGroupChanged: PropTypes.func.isRequired,
 };
 

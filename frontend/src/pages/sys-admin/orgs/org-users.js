@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import moment from 'moment';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { siteRoot, gettext, username } from '../../../utils/constants';
+import { gettext, username } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
@@ -27,11 +28,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -80,6 +81,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
 class Item extends Component {
 
   constructor(props) {
@@ -99,7 +108,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -108,7 +117,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -116,7 +125,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -129,34 +138,34 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleResetPasswordDialog = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.setState({isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen});
-  }
+  };
 
   updateStatus= (statusValue) => {
     this.props.updateStatus(this.props.item.email, statusValue);
-  }
+  };
 
   updateMembership= (membershipValue) => {
     this.props.updateMembership(this.props.item.email, membershipValue);
-  }
+  };
 
   deleteUser = () => {
     const { item } = this.props;
     this.props.deleteUser(item.org_id, item.email);
-  }
+  };
 
   resetPassword = () => {
     seafileAPI.sysAdminResetUserPassword(this.props.item.email).then(res => {
@@ -165,7 +174,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -179,7 +188,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -250,6 +259,16 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  updateMembership: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+};
+
 class OrgUsers extends Component {
 
   constructor(props) {
@@ -284,7 +303,7 @@ class OrgUsers extends Component {
 
   toggleAddUserDialog = () => {
     this.setState({isAddUserDialogOpen: !this.state.isAddUserDialogOpen});
-  }
+  };
 
   addUser = (newUserInfo) => {
     const { email, name, password } = newUserInfo;
@@ -296,7 +315,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUser = (orgID, email) => {
     seafileAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
@@ -309,7 +328,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateStatus = (email, statusValue) => {
     const isActive = statusValue == 'active';
@@ -325,7 +344,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateMembership = (email, membershipValue) => {
     const isOrgStaff = membershipValue == 'is_org_staff';
@@ -341,13 +360,13 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { isAddUserDialogOpen, orgName } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props}> 
+        <MainPanelTopbar {...this.props}>
           <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
@@ -379,5 +398,9 @@ class OrgUsers extends Component {
     );
   }
 }
+
+OrgUsers.propTypes = {
+  orgID: PropTypes.string,
+};
 
 export default OrgUsers;

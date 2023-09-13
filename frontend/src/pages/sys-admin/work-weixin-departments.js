@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Button } from 'reactstrap';
 import deepCopy from 'deep-copy';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, isPro } from '../../utils/constants';
+import { siteRoot, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
@@ -225,7 +225,7 @@ class WorkWeixinDepartments extends Component {
       membersList: membersList,
       canCheckUserIds: canCheckUserIds,
     });
-  }
+  };
 
   importDepartmentDialogToggle = (importDepartment) => {
     this.setState({
@@ -283,7 +283,7 @@ class WorkWeixinDepartments extends Component {
   handleError = (error) => {
     const errorMsg = Utils.getErrorMsg(error);
     toaster.danger(errorMsg);
-  }
+  };
 
   componentDidMount() {
     this.getWorkWeixinDepartmentsList(null);

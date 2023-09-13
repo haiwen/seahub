@@ -49,7 +49,7 @@ class DingtalkDepartmentsTreeNode extends Component {
   importDepartmentDialogToggle = (depart) => {
     this.setState({ active: false });
     this.props.importDepartmentDialogToggle(depart);
-  }
+  };
 
   componentDidMount() {
     if (this.props.index === 0) {
@@ -81,7 +81,7 @@ class DingtalkDepartmentsTreeNode extends Component {
     if (checkedDepartmentId === department.id && !this.state.isChildrenShow) {
       this.setState({ isChildrenShow: true });
     }
-  }
+  };
 
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;

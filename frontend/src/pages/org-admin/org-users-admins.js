@@ -22,7 +22,7 @@ class OrgUsers extends Component {
 
   toggleAddOrgAdmin = () => {
     this.setState({isShowAddOrgAdminDialog: !this.state.isShowAddOrgAdminDialog});
-  }
+  };
 
   initOrgAdmin = () => {
     seafileAPI.orgAdminListOrgUsers(orgID, true).then(res => {
@@ -34,7 +34,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleOrgAdminDelete = (email) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
@@ -48,7 +48,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleRevokeAdmin = (email) => {
     seafileAPI.orgAdminSetOrgAdmin(orgID, email, false).then(res => {
@@ -62,7 +62,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onAddedOrgAdmin = (userInfo) => {
     this.state.orgAdminUsers.unshift(userInfo);
@@ -73,7 +73,7 @@ class OrgUsers extends Component {
     msg = msg.replace('%s', userInfo.email);
     toaster.success(msg);
     this.toggleAddOrgAdmin();
-  }
+  };
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';

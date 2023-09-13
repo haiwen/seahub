@@ -15,7 +15,7 @@ class ShareLinkPermissionEditor extends React.Component {
 
   translatePermission = (permission) => {
     return Utils.getShareLinkPermissionObject(permission).text;
-  }
+  };
 
   render() {
     return (

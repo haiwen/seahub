@@ -29,19 +29,19 @@ class Item extends React.Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   onMouseEnter = () => {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   deleteItem = (e) => {
     e.preventDefault();
@@ -60,18 +60,18 @@ class Item extends React.Component {
         isOpIconShown: true
       });
     });
-  }
+  };
 
   revokeItem = () => {
     this.setState({deleted: true});
-  }
+  };
 
   toggleRevokeDialog = (e) => {
     e.preventDefault();
     this.setState({
       isRevokeDialogOpen: !this.state.isRevokeDialogOpen
     });
-  }
+  };
 
   render() {
     const { isOpIconShown, deleted, isRevokeDialogOpen } = this.state;
@@ -158,7 +158,9 @@ class Item extends React.Component {
 }
 
 const ItemPropTypes = {
+  data: PropTypes.object.isRequired,
   invitation: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 Item.propTypes = ItemPropTypes;
@@ -257,13 +259,13 @@ class InvitationsView extends React.Component {
     this.setState({
       invitationsList: invitationsArray,
     });
-  }
+  };
 
   toggleInvitePeopleDialog = () => {
     this.setState({
       isInvitePeopleDialogOpen: !this.state.isInvitePeopleDialogOpen
     });
-  }
+  };
 
   render() {
     return (
@@ -293,6 +295,10 @@ class InvitationsView extends React.Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 const InvitationsViewPropTypes = {
   onShowSidePanel: PropTypes.func.isRequired,

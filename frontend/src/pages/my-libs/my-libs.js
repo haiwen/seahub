@@ -63,7 +63,7 @@ class MyLibraries extends Component {
     this.setState({
       isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
     });
-  }
+  };
 
   onCreateRepo = (repo) => {
     seafileAPI.createMineRepo(repo).then((res) => {
@@ -83,7 +83,7 @@ class MyLibraries extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   sortRepoList = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
@@ -93,14 +93,14 @@ class MyLibraries extends Component {
       sortOrder: sortOrder,
       repoList: Utils.sortRepos(this.state.repoList, sortBy, sortOrder)
     });
-  }
+  };
 
   onTransferRepo = (repoID) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repoID;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   onRenameRepo = (repo, newName) => {
     let repoList = this.state.repoList.map(item => {
@@ -110,7 +110,7 @@ class MyLibraries extends Component {
       return item;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   onMonitorRepo = (repo, monitored) => {
     let repoList = this.state.repoList.map(item => {
@@ -120,38 +120,38 @@ class MyLibraries extends Component {
       return item;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   onDeleteRepo = (repo) => {
     let repoList = this.state.repoList.filter(item => {
       return item.repo_id !== repo.repo_id;
     });
     this.setState({repoList: repoList});
-  }
+  };
 
   onRepoClick = (repo) => {
     if (this.state.isShowDetails) {
       this.onRepoDetails(repo);
     }
-  }
+  };
 
   onRepoDetails = (repo) => {
     this.setState({
       currentRepo: repo,
       isShowDetails: true,
     });
-  }
+  };
 
   closeDetails = () => {
     this.setState({isShowDetails: !this.state.isShowDetails});
-  }
+  };
 
   toggleGuideForNewDialog = () => {
     window.app.pageOptions.guideEnabled = false;
     this.setState({
       isGuideForNewDialogOpen: false
     });
-  }
+  };
 
   render() {
     return (

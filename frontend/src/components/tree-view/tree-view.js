@@ -19,6 +19,8 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   selectedDirentList: PropTypes.array,
   onItemsMove: PropTypes.func,
+  posX: PropTypes.number.isRequired,
+  posY: PropTypes.number.isRequired,
 };
 
 const PADDING_LEFT = 20;
@@ -42,7 +44,7 @@ class TreeView extends React.Component {
 
   onItemMove = (repo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(repo, dirent, selectedPath, currentPath);
-  }
+  };
 
   onNodeDragStart = (e, node) => {
     if (Utils.isIEBrower()) {
@@ -53,7 +55,7 @@ class TreeView extends React.Component {
 
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartNodeData);
-  }
+  };
 
   onNodeDragEnter = (e, node) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -65,7 +67,7 @@ class TreeView extends React.Component {
         isTreeViewDropTipShow: true,
       });
     }
-  }
+  };
 
   onNodeDragMove = (e) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -73,7 +75,7 @@ class TreeView extends React.Component {
     }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  }
+  };
 
   onNodeDragLeave = (e, node) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -84,16 +86,16 @@ class TreeView extends React.Component {
         isTreeViewDropTipShow: false,
       });
     }
-  }
+  };
 
   onContainerClick = (event) => {
     hideMenu();
-  }
+  };
 
   onNodeClick = (node) => {
     hideMenu();
     this.props.onNodeClick(node);
-  }
+  };
 
   onNodeDrop = (e, node) => {
     if (Utils.isIEBrower() || !this.canDrop) {
@@ -158,7 +160,7 @@ class TreeView extends React.Component {
     }
 
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
-  }
+  };
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
     let direntPaths = [];
@@ -191,27 +193,27 @@ class TreeView extends React.Component {
     }
 
     this.props.onItemsMove(destRepo, destDirentPath);
-  }
+  };
 
   freezeItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   unfreezeItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onMenuItemClick = (operation, node) => {
     this.props.onMenuItemClick(operation, node);
     hideMenu();
-  }
+  };
 
   onMouseDown = (event) => {
     event.stopPropagation();
     if (event.button === 2) {
       return;
     }
-  }
+  };
 
   onContextMenu = (event) => {
     event.preventDefault();
@@ -221,7 +223,7 @@ class TreeView extends React.Component {
       return '';
     }
     this.handleContextClick(event);
-  }
+  };
 
   handleContextClick = (event, node) => {
     event.preventDefault();
@@ -254,7 +256,7 @@ class TreeView extends React.Component {
     };
 
     showMenu(showMenuConfig);
-  }
+  };
 
   getMenuList = (node) => {
     let menuList = [];
@@ -293,20 +295,20 @@ class TreeView extends React.Component {
     canModify && menuList.push(MOVE, RENAME);
     canDelete && menuList.push(DELETE);
 
-    if (node.object.type !== 'dir') { 
+    if (node.object.type !== 'dir') {
       menuList.push(OPEN_VIA_CLIENT);
     }
 
     return menuList;
-  }
+  };
 
   onShowMenu = () => {
     this.freezeItem();
-  }
+  };
 
   onHideMenu = () => {
     this.unfreezeItem();
-  }
+  };
 
   render() {
     return (

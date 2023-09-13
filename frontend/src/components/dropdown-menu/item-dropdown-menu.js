@@ -56,7 +56,7 @@ class ItemDropdownMenu extends React.Component {
 
   onShowMenu = () => {
     // nothing todo
-  }
+  };
 
   onHideMenu = () => {
     if (this.state.isItemMenuShow) {
@@ -65,20 +65,20 @@ class ItemDropdownMenu extends React.Component {
         this.props.unfreezeItem();
       }
     }
-  }
+  };
 
   onDropdownToggleKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onDropdownToggleClick(e);
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     this.toggleOperationMenu();
-  }
+  };
 
   toggleOperationMenu = () => {
     this.setState(
@@ -91,19 +91,19 @@ class ItemDropdownMenu extends React.Component {
         }
       }
     );
-  }
+  };
 
   onMenuItemKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       this.onMenuItemClick(e);
     }
-  }
+  };
 
   onMenuItemClick = (event) => {
     let operation = Utils.getEventData(event, 'toggle');
     let item = this.props.item;
     this.props.onMenuItemClick(operation, event, item);
-  }
+  };
 
   render() {
     let menuList = this.state.menuList;

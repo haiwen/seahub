@@ -11,6 +11,7 @@ import toaster from '../toast';
 
 const propTypes = {
   isShowFile: PropTypes.bool,
+  isCurrentRepo: PropTypes.bool,
   selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
@@ -19,6 +20,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
   fileSuffixes: PropTypes.array,
   selectedItemInfo: PropTypes.object,
+  currentPath: PropTypes.string,
 };
 
 class RepoListItem extends React.Component {
@@ -73,7 +75,7 @@ class RepoListItem extends React.Component {
       return new TreeNode({object});
     });
     node.addChildren(nodeList);
-  }
+  };
 
   onNodeExpanded = (node) => {
     let repoID = this.props.repo.repo_id;
@@ -97,12 +99,12 @@ class RepoListItem extends React.Component {
       tree.expandNode(node);
       this.setState({treeData: tree});
     }
-  }
+  };
 
   onNodeCollapse = (node) => {
     let tree = treeHelper.collapseNode(this.state.treeData, node);
     this.setState({treeData: tree});
-  }
+  };
 
   loadNodeAndParentsByPath = (repoID, path, expandNode) => {
 
@@ -139,17 +141,17 @@ class RepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onToggleClick = (e) => {
     e.stopPropagation();
     this.setState({isShowChildren: !this.state.isShowChildren});
-  }
+  };
 
   onDirentItemClick = (filePath, dirent) => {
     let repo = this.props.repo;
     this.props.onDirentItemClick(repo, filePath, dirent);
-  }
+  };
 
   onRepoItemClick = (e) => {
     if (!this.isCurrentRepo() || this.props.selectedPath !== '') {
@@ -157,12 +159,12 @@ class RepoListItem extends React.Component {
     } else {
       this.onToggleClick(e);
     }
-  }
+  };
 
   isCurrentRepo = () => {
     let { selectedRepo, repo } = this.props;
     return selectedRepo && (repo.repo_id === selectedRepo.repo_id);
-  }
+  };
 
   render() {
     let repoActive = false;

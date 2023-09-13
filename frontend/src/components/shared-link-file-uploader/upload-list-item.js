@@ -45,12 +45,12 @@ class UploadListItem extends React.Component {
   onUploadCancel = (e) => {
     e.preventDefault();
     this.props.onUploadCancel(this.props.resumableFile);
-  }
+  };
 
   onUploadRetry = (e) => {
     e.preventDefault();
     this.props.onUploadRetry(this.props.resumableFile);
-  }
+  };
 
   formatFileSize = (size) => {
     if (typeof size !== 'number') {
@@ -66,7 +66,7 @@ class UploadListItem extends React.Component {
       return (size / 1000).toFixed(1) + ' K';
     }
     return size.toFixed(1) + ' B';
-  }
+  };
 
   render() {
     let { resumableFile } = this.props;

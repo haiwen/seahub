@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -17,11 +18,11 @@ class Content extends Component {
 
   getPreviousPageDevicesList = () => {
     this.props.getDevicesListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageDevicesList = () => {
     this.props.getDevicesListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
@@ -70,6 +71,20 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  getLogsByPage: PropTypes.func,
+  resetPerPage: PropTypes.func,
+  currentPage: PropTypes.number,
+  perPage: PropTypes.number,
+  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
+  getDevicesListByPage: PropTypes.func.isRequired,
+  curPerPage: PropTypes.number,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -83,11 +98,11 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   handleUnlink = (e) => {
     e.preventDefault();
@@ -96,11 +111,11 @@ class Item extends Component {
     } else {
       this.unlinkDevice(true);
     }
-  }
+  };
 
   toggleUnlinkDeviceDialog = () => {
     this.setState({isUnlinkDeviceDialogOpen: !this.state.isUnlinkDeviceDialogOpen});
-  }
+  };
 
   unlinkDevice = (deleteFiles) => {
     const { platform, device_id, user } = this.props.item;
@@ -112,7 +127,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -146,6 +161,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class DevicesByPlatform extends Component {
 
@@ -186,7 +205,7 @@ class DevicesByPlatform extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -194,7 +213,7 @@ class DevicesByPlatform extends Component {
     }, () => {
       this.getDevicesListByPage(1);
     });
-  }
+  };
 
   render() {
     return (
@@ -212,5 +231,9 @@ class DevicesByPlatform extends Component {
     );
   }
 }
+
+DevicesByPlatform.propTypes = {
+  devicesPlatform: PropTypes.string.isRequired,
+};
 
 export default DevicesByPlatform;

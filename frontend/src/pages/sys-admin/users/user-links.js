@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
@@ -21,11 +22,11 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.props;
@@ -72,6 +73,14 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func,
+  email: PropTypes.string,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -90,7 +99,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -99,7 +108,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -107,15 +116,15 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleLinkDialog = () => {
     this.setState({isLinkDialogOpen: !this.state.isLinkDialogOpen});
-  }
+  };
 
   deleteItem = () => {
     this.props.deleteItem(this.props.item);
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -129,7 +138,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -140,7 +149,7 @@ class Item extends Component {
         this.deleteItem();
         break;
     }
-  }
+  };
 
   getRoleText = () => {
     let roleText;
@@ -157,7 +166,7 @@ class Item extends Component {
         break;
     }
     return roleText;
-  }
+  };
 
   getIconUrl = () => {
     const { item } = this.props;
@@ -172,7 +181,7 @@ class Item extends Component {
       }
     }
     return url;
-  }
+  };
 
   render() {
     const { item } = this.props;
@@ -216,6 +225,15 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func,
+  email: PropTypes.string,
+};
 
 class Links extends Component {
 
@@ -298,7 +316,7 @@ class Links extends Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   render() {
     const { shareLinkItems, uploadLinkItems } = this.state;
@@ -322,5 +340,9 @@ class Links extends Component {
     );
   }
 }
+
+Links.propTypes = {
+  email: PropTypes.string,
+};
 
 export default Links;

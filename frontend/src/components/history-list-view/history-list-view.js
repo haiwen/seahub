@@ -32,11 +32,11 @@ class HistoryListView extends React.Component {
         this.props.onItemClick(historyList[0], historyList[1]);
       }
     }
-  }
+  };
 
   onFreezedItemToggle = () => {
     this.setState({isItemFreezed: !this.state.isItemFreezed});
-  }
+  };
 
   onScrollHandler = (event) => {
     const clientHeight = event.target.clientHeight;
@@ -47,7 +47,7 @@ class HistoryListView extends React.Component {
     if (isBottom && hasMore) {
       this.props.reloadMore();
     }
-  }
+  };
 
   onItemClick = (item, currentIndex) => {
     this.setState({currentItem: item});
@@ -57,7 +57,7 @@ class HistoryListView extends React.Component {
     } else {
       this.props.onItemClick(item);
     }
-  }
+  };
 
   render() {
     return (

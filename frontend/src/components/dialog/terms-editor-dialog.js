@@ -15,11 +15,11 @@ class TermsEditorDialog extends React.Component {
 
   static defaultProps = {
     title: gettext('Terms'),
-  }
+  };
 
   onKeyDown = (event) => {
     event.stopPropagation();
-  }
+  };
 
   toggle = () => {
     if (this.isContentChanged()) {
@@ -27,20 +27,20 @@ class TermsEditorDialog extends React.Component {
       this.props.onCommit(currentContent);
     }
     this.props.onCloseEditorDialog();
-  }
+  };
 
   isContentChanged = () => {
     return this.simpleEditor.hasContentChange();
-  }
+  };
 
   getCurrentContent = () => {
     let markdownContent = this.simpleEditor.getMarkdown();
     return markdownContent;
-  }
+  };
 
   setSimpleEditorRef = (editor) => {
     this.simpleEditor = editor;
-  }
+  };
 
   render() {
     let { content, title } = this.props;

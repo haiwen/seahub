@@ -32,6 +32,7 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
+  onMonitorRepo: PropTypes.func.isRequired,
 };
 
 class MylibRepoListItem extends React.Component {
@@ -63,7 +64,7 @@ class MylibRepoListItem extends React.Component {
         isOpIconShow: true
       });
     }
-  }
+  };
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -72,7 +73,7 @@ class MylibRepoListItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -81,7 +82,7 @@ class MylibRepoListItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onMenuItemClick = (item) => {
     switch(item) {
@@ -134,17 +135,17 @@ class MylibRepoListItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   visitRepo = () => {
     if (!this.state.isRenaming && this.props.repo.repo_name) {
       navigate(this.repoURL);
     }
-  }
+  };
 
   onRepoClick = () => {
     this.props.onRepoClick(this.props.repo);
-  }
+  };
 
   onToggleStarRepo = (e) => {
     e.preventDefault();
@@ -170,7 +171,7 @@ class MylibRepoListItem extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   watchFileChanges = () => {
     const { repo } = this.props;
@@ -180,7 +181,7 @@ class MylibRepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unwatchFileChanges = () => {
     const { repo } = this.props;
@@ -190,7 +191,7 @@ class MylibRepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onShareToggle = (e) => {
     // when close share dialog after send share link email,
@@ -199,53 +200,53 @@ class MylibRepoListItem extends React.Component {
       e.preventDefault();
     }
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   onDeleteToggle = (e) => {
     e.preventDefault();
     this.setState({isDeleteDialogShow: !this.state.isDeleteDialogShow});
-  }
+  };
 
   onRenameToggle = () => {
     this.props.onFreezedItem();
     this.setState({isRenaming: !this.state.isRenaming});
-  }
+  };
 
   onTransferToggle = () => {
     this.setState({isTransferDialogShow: !this.state.isTransferDialogShow});
-  }
+  };
 
   onHistorySettingToggle = () => {
     this.setState({isHistorySettingDialogShow: !this.state.isHistorySettingDialogShow});
-  }
+  };
 
   onChangePasswordToggle = () => {
     this.setState({isChangePasswordDialogShow: !this.state.isChangePasswordDialogShow});
-  }
+  };
 
   onResetPasswordToggle = () => {
     this.setState({isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow});
-  }
+  };
 
   onLabelToggle = () => {
     this.setState({isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen});
-  }
+  };
 
   onFolderPermissionToggle = () => {
     this.setState({isFolderPermissionDialogShow: !this.state.isFolderPermissionDialogShow});
-  }
+  };
 
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
-  }
+  };
 
   toggleRepoShareAdminDialog = () => {
     this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
-  }
+  };
 
   toggleOldFilesAutoDelDialog = () => {
     this.setState({isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -253,7 +254,7 @@ class MylibRepoListItem extends React.Component {
       isOpIconShow: false,
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onRenameConfirm = (newName) => {
     let repo = this.props.repo;
@@ -265,12 +266,12 @@ class MylibRepoListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onRenameCancel = () => {
     this.props.onUnfreezedItem();
     this.setState({isRenaming: !this.state.isRenaming});
-  }
+  };
 
   onTransferRepo = (user) => {
     let repoID = this.props.repo.repo_id;
@@ -286,7 +287,7 @@ class MylibRepoListItem extends React.Component {
       }
     });
     this.onTransferToggle();
-  }
+  };
 
   onDeleteRepo = (repo) => {
     seafileAPI.deleteRepo(repo.repo_id).then((res) => {
@@ -310,7 +311,7 @@ class MylibRepoListItem extends React.Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   renderPCUI = () => {
     let repo = this.props.repo;
@@ -363,7 +364,7 @@ class MylibRepoListItem extends React.Component {
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
       </tr>
     );
-  }
+  };
 
   renderMobileUI = () => {
     let repo = this.props.repo;
@@ -407,7 +408,7 @@ class MylibRepoListItem extends React.Component {
         </td>
       </tr>
     );
-  }
+  };
 
   render() {
     let repo = this.props.repo;

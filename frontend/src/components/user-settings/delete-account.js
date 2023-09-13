@@ -21,13 +21,13 @@ class DeleteAccount extends React.Component {
     this.setState({
       isConfirmDialogOpen: true
     });
-  }
+  };
 
   toggleDialog = () => {
     this.setState({
       isConfirmDialogOpen: !this.state.isConfirmDialogOpen
     });
-  }
+  };
 
   render() {
     return (

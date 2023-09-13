@@ -17,9 +17,8 @@ import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-
-import '../../css/dirent-list-item.css';
 import toaster from '../toast';
+import '../../css/dirent-list-item.css';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -53,6 +52,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
+  loadDirentList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -107,7 +107,7 @@ class DirentListItem extends React.Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   //UI Interactive
   onMouseEnter = () => {
@@ -120,7 +120,7 @@ class DirentListItem extends React.Component {
     if (this.state.canDrag) {
       this.setState({isDragTipShow: true});
     }
-  }
+  };
 
   onMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -132,7 +132,7 @@ class DirentListItem extends React.Component {
     if (this.state.canDrag) {
       this.setState({isDragTipShow: true});
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -142,7 +142,7 @@ class DirentListItem extends React.Component {
       });
     }
     this.setState({isDragTipShow: false});
-  }
+  };
 
   unfreezeItem = () => {
     this.setState({
@@ -150,12 +150,12 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
     });
     this.props.unfreezeItem();
-  }
+  };
 
   //buiness handler
   onItemSelected = () => {
     this.props.onItemSelected(this.props.dirent);
-  }
+  };
 
   onItemStarred = (e) => {
     let dirent = this.props.dirent;
@@ -179,7 +179,7 @@ class DirentListItem extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   // on '<tr>'
   onDirentClick = (e) => {
@@ -188,7 +188,7 @@ class DirentListItem extends React.Component {
     if (e.target.tagName == 'TD') {
       this.props.onDirentClick(this.props.dirent);
     }
-  }
+  };
 
   onItemClick = (e) => {
     e.preventDefault();
@@ -211,28 +211,28 @@ class DirentListItem extends React.Component {
     } else {
       this.props.onItemClick(dirent);
     }
-  }
+  };
 
   onItemDelete = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(this.props.dirent);
-  }
+  };
 
   onItemShare = (e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   closeSharedDialog = () => {
     this.setState({isShareDialogShow: !this.state.isShareDialogShow});
-  }
+  };
 
   onMobileMenuItemClick = (e) => {
     const operation = e.target.getAttribute('data-op');
     this.onMenuItemClick(operation, e);
-  }
+  };
 
   onMenuItemClick = (operation, event) => {
     switch(operation) {
@@ -295,18 +295,18 @@ class DirentListItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
     });
-  }
+  };
 
   onFileTagChanged = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onFileTagChanged(this.props.dirent, direntPath);
-  }
+  };
 
   onItemRenameToggle = () => {
     this.props.onItemRenameToggle(this.props.dirent);
@@ -315,12 +315,12 @@ class DirentListItem extends React.Component {
       isRenameing: true,
       canDrag: false
     });
-  }
+  };
 
   onRenameConfirm = (newName) => {
     this.props.onItemRename(this.props.dirent, newName);
     this.onRenameCancel();
-  }
+  };
 
   onRenameCancel = () => {
     this.setState({
@@ -328,19 +328,19 @@ class DirentListItem extends React.Component {
       canDrag: this.canDrag // set it back to the initial value
     });
     this.unfreezeItem();
-  }
+  };
 
   onItemMoveToggle = () => {
     this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
-  }
+  };
 
   onItemCopyToggle = () => {
     this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
-  }
+  };
 
   onPermissionItem = () => {
     this.setState({isPermissionDialogOpen: !this.state.isPermissionDialogOpen});
-  }
+  };
 
   onLockItem = () => {
     let repoID = this.props.repoID;
@@ -354,7 +354,7 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onUnlockItem = () => {
     let repoID = this.props.repoID;
@@ -367,7 +367,7 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onMarkAsDraft = () => {
     let repoID = this.props.repoID;
@@ -378,7 +378,7 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onUnmarkAsDraft = () => {
     let repoID = this.props.repoID;
@@ -389,40 +389,40 @@ class DirentListItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onHistory = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath});
     location.href = url;
-  }
+  };
 
   onAccessLog = () => {
     let filePath = this.getDirentPath(this.props.dirent);
     let path = siteRoot + 'repo/file-access/' + this.props.repoID + '/?p=' + encodeURIComponent(filePath) ;
     window.open(path);
-  }
+  };
 
   onOpenViaClient = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
-  }
+  };
 
   onConvertWithONLYOFFICE = ()=> {
 
     let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent)
+    let filePath = this.getDirentPath(this.props.dirent);
 
     seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
-      this.props.loadDirentList(res.data.parent_dir)
+      this.props.loadDirentList(res.data.parent_dir);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onItemDownload = (e) => {
     e.preventDefault();
@@ -451,27 +451,27 @@ class DirentListItem extends React.Component {
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
     }
-  }
+  };
 
   closeZipDialog = () => {
     this.setState({
       isZipDialogOpen: false
     });
-  }
+  };
 
   getDirentPath = (dirent) => {
     let path = this.props.path;
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
+  };
 
   onTagTooltipToggle = (e) => {
     e.stopPropagation();
     this.setState({isShowTagTooltip: !this.state.isShowTagTooltip});
-  }
+  };
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
-  }
+  };
 
   onItemDragStart = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
@@ -501,7 +501,7 @@ class DirentListItem extends React.Component {
     dragStartItemData = JSON.stringify(dragStartItemData);
 
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
-  }
+  };
 
   onItemDragEnter = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
@@ -511,7 +511,7 @@ class DirentListItem extends React.Component {
       e.stopPropagation();
       this.setState({isDropTipshow: true});
     }
-  }
+  };
 
   onItemDragOver = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
@@ -522,7 +522,7 @@ class DirentListItem extends React.Component {
     }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  }
+  };
 
   onItemDragLeave = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
@@ -533,7 +533,7 @@ class DirentListItem extends React.Component {
       e.stopPropagation();
     }
     this.setState({isDropTipshow: false});
-  }
+  };
 
   onItemDragDrop = (e) => {
     if (Utils.isIEBrower() || !this.state.canDrag) {
@@ -583,16 +583,16 @@ class DirentListItem extends React.Component {
 
     let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
-  }
+  };
 
   onItemMouseDown = (event) => {
     this.props.onItemMouseDown(event);
-  }
+  };
 
   onItemContextMenu = (event) => {
     let dirent = this.props.dirent;
     this.props.onItemContextMenu(event, dirent);
-  }
+  };
 
   renderItemOperation = () => {
     let { dirent, currentRepoInfo, selectedDirentList } = this.props;
@@ -662,7 +662,7 @@ class DirentListItem extends React.Component {
         }
       </Fragment>
     );
-  }
+  };
 
   render() {
     let { path, dirent, activeDirent } = this.props;
@@ -735,7 +735,7 @@ class DirentListItem extends React.Component {
           {this.state.isRenameing && <Rename hasSuffix={dirent.type !== 'dir'} name={dirent.name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} />}
           {!this.state.isRenameing && (
             <Fragment>
-              {(!dirent.isDir() && !this.canPreview) ? 
+              {(!dirent.isDir() && !this.canPreview) ?
                 <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
                 <a href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemClick}>{dirent.name}</a>
               }

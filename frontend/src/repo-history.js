@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import moment from 'moment';
 import { Utils } from './utils/utils';
@@ -65,7 +66,7 @@ class RepoHistory extends React.Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -73,7 +74,7 @@ class RepoHistory extends React.Component {
     }, () => {
       this.getItems(1);
     });
-  }
+  };
 
   onSearchedClick = (selectedItem) => {
     if (selectedItem.is_dir === true) {
@@ -84,12 +85,12 @@ class RepoHistory extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
-  }
+  };
 
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
     return (
@@ -150,11 +151,11 @@ class Content extends React.Component {
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
-  }
+  };
 
   getNextPage = () => {
     this.props.getListByPage(this.props.currentPage + 1);
-  }
+  };
 
   render() {
     const {
@@ -201,6 +202,17 @@ class Content extends React.Component {
   }
 }
 
+Content.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  hasNextPage: PropTypes.bool.isRequired,
+  curPerPage: PropTypes.number.isRequired,
+  resetPerPage: PropTypes.func.isRequired,
+  getListByPage: PropTypes.func.isRequired,
+};
+
 class Item extends React.Component {
 
   constructor(props) {
@@ -215,43 +227,43 @@ class Item extends React.Component {
 
   handleMouseOver = () => {
     this.setState({isIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isIconShown: false});
-  }
+  };
 
   showCommitDetails = (e) => {
     e.preventDefault();
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   toggleCommitDetailsDialog = () => {
     this.setState({
       isCommitDetailsDialogOpen: !this.state.isCommitDetailsDialogOpen
     });
-  }
+  };
 
   editLabel = (e) => {
     e.preventDefault();
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   toggleLabelEditDialog = () => {
     this.setState({
       isCommitLabelUpdateDialogOpen: !this.state.isCommitLabelUpdateDialogOpen
     });
-  }
+  };
 
   updateLabels = (labels) => {
     this.setState({
       labels: labels
     });
-  }
+  };
 
   render() {
     const item = this.props.item;
@@ -325,5 +337,9 @@ class Item extends React.Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 ReactDom.render(<RepoHistory />, document.getElementById('wrapper'));

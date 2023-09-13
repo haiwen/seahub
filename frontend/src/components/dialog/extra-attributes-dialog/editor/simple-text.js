@@ -23,28 +23,28 @@ class SimpleText extends React.Component {
     setTimeout(() => {
       this.inputRef.current && this.inputRef.current.blur();
     }, 1);
-  }
+  };
 
   onBlur = () => {
     let { column, onCommit } = this.props;
     const updated = {};
     updated[column.key] = this.state.value.trim();
     onCommit(updated, column);
-  }
+  };
 
   onChange = (e) => {
     let value = e.target.value;
     if (value === this.state.value) return;
     this.setState({value});
-  }
+  };
 
   onCut = (e) => {
     e.stopPropagation();
-  }
+  };
 
   onPaste = (e) => {
     e.stopPropagation();
-  }
+  };
 
   onKeyDown = (e) => {
     if (e.keyCode === KeyCodes.Esc) {
@@ -60,7 +60,7 @@ class SimpleText extends React.Component {
     ) {
       e.stopPropagation();
     }
-  }
+  };
 
   render() {
     const { column } = this.props;

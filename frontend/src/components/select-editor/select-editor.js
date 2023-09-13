@@ -25,7 +25,7 @@ class SelectEditor extends React.Component {
     enableAddCustomPermission: false,
     isEditing: false,
     autoFocus: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -72,7 +72,7 @@ class SelectEditor extends React.Component {
     this.setState({
       options: this.options
     });
-  }
+  };
 
   componentWillReceiveProps() {
     this.setOptions();
@@ -83,7 +83,7 @@ class SelectEditor extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({isEditing: true});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(true);
-  }
+  };
 
   onOptionChanged = (e) => {
     let permission = e.value;
@@ -92,23 +92,23 @@ class SelectEditor extends React.Component {
     }
     this.setState({isEditing: false});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
-  }
+  };
 
   onSelectHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-  }
+  };
 
   onMenuClose = () => {
     this.setState({isEditing: false});
     this.props.toggleItemFreezed && this.props.toggleItemFreezed(false);
-  }
+  };
 
   render() {
     let { currentOption, isTextMode } = this.props;
 
     const MenuSelectStyle = {
       option: (provided, state) => {
-        const { isDisabled, isSelected, isFocused } = state;
+        const { isDisabled, isSelected } = state;
         return ({
           ...provided,
           cursor: isDisabled ? 'default' : 'pointer',

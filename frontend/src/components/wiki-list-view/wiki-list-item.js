@@ -35,7 +35,7 @@ class WikiListItem extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   // clickMenuToggle = (e) => {
   //   e.preventDefault();
@@ -65,13 +65,13 @@ class WikiListItem extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({ highlight: true });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({ highlight: false });
     }
-  }
+  };
 
   // changePerm = (permission) => {
   //   let wiki = this.props.wiki;
@@ -110,14 +110,14 @@ class WikiListItem extends Component {
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
-  }
+  };
 
   onDeleteCancel = () => {
     this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
-  }
+  };
 
   // renameWiki = (newName) => {
   //   let wiki = this.props.wiki;
@@ -130,7 +130,7 @@ class WikiListItem extends Component {
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
-  }
+  };
 
   render() {
     let wiki = this.props.wiki;
@@ -148,7 +148,7 @@ class WikiListItem extends Component {
               <a href={wiki.link}>{wiki.name}</a>
             */}
         </td>
-        <td><a href={userProfileURL} target='_blank'>{wiki.owner_nickname}</a></td>
+        <td><a href={userProfileURL} target='_blank' rel="noreferrer">{wiki.owner_nickname}</a></td>
         <td>{moment(wiki.updated_at).fromNow()}</td>
         <td className="text-center cursor-pointer">
           <a href="#" role="button" aria-label={gettext('Unpublish')} title={gettext('Unpublish')} className={deleteIcon} onClick={this.onDeleteToggle}></a>
@@ -161,7 +161,7 @@ class WikiListItem extends Component {
         <td><img src={fileIconUrl} width="24" alt="" /></td>
         <td>
           <a href={wiki.link}>{wiki.name}</a><br />
-          <a href={userProfileURL} target='_blank' className="item-meta-info">{wiki.owner_nickname}</a>
+          <a href={userProfileURL} target='_blank' className="item-meta-info" rel="noreferrer">{wiki.owner_nickname}</a>
           <span className="item-meta-info">{moment(wiki.updated_at).fromNow()}</span>
         </td>
         <td>

@@ -32,12 +32,12 @@ class AddReviewerDialog extends React.Component {
     seafileAPI.listDraftReviewers(this.props.draftID).then((res) => {
       this.setState({ reviewers: res.data.reviewers });
     });
-  }
+  };
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
     this.Options = [];
-  }
+  };
 
   addReviewers = () => {
     if (this.state.selectedOption.length > 0 ) {
@@ -70,7 +70,7 @@ class AddReviewerDialog extends React.Component {
         toaster.danger(errorMsg);
       });
     }
-  }
+  };
 
   deleteReviewer = (event) => {
     let reviewer = event.target.getAttribute('name');
@@ -88,7 +88,7 @@ class AddReviewerDialog extends React.Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }
+  };
 
   render() {
     const toggleDialog = this.props.toggleAddReviewerDialog;

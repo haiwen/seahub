@@ -56,12 +56,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.setState({isShowPermEditor: true});
-  }
+  };
 
   render() {
 
@@ -164,7 +164,7 @@ class RepoShareAdminGroupShares extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg, items } = this.state;

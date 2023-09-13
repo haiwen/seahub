@@ -40,7 +40,7 @@ class SingleSelectEditor extends Component {
     const cascadeColumn = columns.find(item => item.key === cascade_column_key);
     if (!cascadeColumn) return '';
     return row[cascade_column_key];
-  }
+  };
 
   getSelectColumnOptions = (props) => {
     const { column, row, columns } = props;
@@ -58,12 +58,12 @@ class SingleSelectEditor extends Component {
       }
     }
     return options;
-  }
+  };
 
   toggle = () => {
     this.ref.toggle();
     this.props.onUpdateState();
-  }
+  };
 
   onChangeSearch = (searchVal) => {
     const { searchVal: oldSearchVal } = this.state;
@@ -72,7 +72,7 @@ class SingleSelectEditor extends Component {
     const filteredOptions = val ?
       this.options.filter((item) => item.name && item.name.toLowerCase().indexOf(val) > -1) : this.options;
     this.setState({ searchVal, filteredOptions });
-  }
+  };
 
   onSelectOption = (optionID) => {
     const { column } = this.props;
@@ -80,7 +80,7 @@ class SingleSelectEditor extends Component {
       this.props.onCommit({ [column.key]: optionID }, column);
       this.toggle();
     });
-  }
+  };
 
   render() {
     const { value, filteredOptions } = this.state;

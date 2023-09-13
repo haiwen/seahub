@@ -32,15 +32,15 @@ class OrgLinks extends React.Component {
         pageNext: data.page_next,
       });
     });
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onChangePageNum = (event, num) => {
     event.preventDefault();
@@ -51,7 +51,7 @@ class OrgLinks extends React.Component {
       page = page - 1;
     }
     this.listOrgLinks(page);
-  }
+  };
 
   deleteOrgLink = (token) => {
     seafileAPI.orgAdminDeleteOrgLink(token).then(res => {
@@ -62,7 +62,7 @@ class OrgLinks extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openLinkDialog = (link) => {
     let href;
@@ -73,11 +73,11 @@ class OrgLinks extends React.Component {
     }
     this.setState({ currentLinkHref: href });
     this.toggleLinkDialog();
-  }
+  };
 
   toggleLinkDialog = () => {
     this.setState({isShowLinkDialog: !this.state.isShowLinkDialog});
-  }
+  };
 
   componentDidMount() {
     this.listOrgLinks(this.state.page);
@@ -161,18 +161,18 @@ class RepoItem extends React.Component {
     if (!this.props.isItemFreezed) {
       this.setState({ showMenu: true, highlight: true });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({ showMenu: false, highlight: false });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -189,7 +189,7 @@ class RepoItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   render() {
     const { link, deleteOrgLink } = this.props;

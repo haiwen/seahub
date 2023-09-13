@@ -12,7 +12,7 @@ class ViewModeToolbar extends React.Component {
 
   static defaultProps = {
     isCustomPermission: false,
-  }
+  };
 
   switchViewMode = (e) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ class ViewModeToolbar extends React.Component {
       return;
     }
     this.props.switchViewMode(id);
-  }
+  };
 
   render() {
     let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';

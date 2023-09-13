@@ -85,7 +85,7 @@ class ShareLinkPanel extends React.Component {
       sharedLinkInfo: link,
       mode: link ? 'displayLinkDetails' : ''
     });
-  }
+  };
 
   updateLink = (link) => {
     const { shareLinks } = this.state;
@@ -93,7 +93,7 @@ class ShareLinkPanel extends React.Component {
       sharedLinkInfo: link,
       shareLinks: shareLinks.map(item => item.token == link.token ? link : item)
     });
-  }
+  };
 
   deleteLink = (token) => {
     const { shareLinks } = this.state;
@@ -108,7 +108,7 @@ class ShareLinkPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteShareLinks = () => {
     const { shareLinks } = this.state;
@@ -139,7 +139,7 @@ class ShareLinkPanel extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateAfterCreation = (newData) => {
     const { mode, shareLinks: links } = this.state;
@@ -156,11 +156,11 @@ class ShareLinkPanel extends React.Component {
         shareLinks: newData.concat(links)
       });
     }
-  }
+  };
 
   setMode = (mode) => {
     this.setState({ mode: mode });
-  }
+  };
 
   toggleSelectAllLinks = (isSelected) => {
     const { shareLinks: links } = this.state;
@@ -170,7 +170,7 @@ class ShareLinkPanel extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   toggleSelectLink = (link, isSelected) => {
     const { shareLinks: links } = this.state;
@@ -182,7 +182,7 @@ class ShareLinkPanel extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   render() {
     if (this.state.isLoading) {

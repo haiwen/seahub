@@ -68,7 +68,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listOrgMembers = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
@@ -82,7 +82,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSubDepartGroups = (groupID) => {
     seafileAPI.orgAdminListGroupInfo(orgID, groupID, true).then(res => {
@@ -91,7 +91,7 @@ class OrgDepartmentItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleCancel = () => {
     this.setState({
@@ -100,15 +100,15 @@ class OrgDepartmentItem extends React.Component {
       showDeleteDepartDialog: false,
       showSetGroupQuotaDialog: false,
     });
-  }
+  };
 
   onFreezedDepart = () => {
     this.setState({isDepartFreezed: true});
-  }
+  };
 
   onUnfreezedDepart = () => {
     this.setState({isDepartFreezed: false});
-  }
+  };
 
   onDepartmentNameChanged = (dept) => {
     this.setState({
@@ -119,43 +119,43 @@ class OrgDepartmentItem extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   onSubDepartChanged = () => {
     this.listSubDepartGroups(this.props.groupID);
-  }
+  };
 
   onRepoChanged = () => {
     this.listOrgGroupRepo(this.props.groupID);
-  }
+  };
 
   onMemberChanged = () => {
     this.listOrgMembers(this.props.groupID);
-  }
+  };
 
   toggleItemFreezed = (isFreezed) => {
     this.setState({ isItemFreezed: isFreezed });
-  }
+  };
 
   showDeleteMemberDialog = (member) => {
     this.setState({ showDeleteMemberDialog: true, deletedMember: member });
-  }
+  };
 
   showDeleteRepoDialog = (repo) => {
     this.setState({ showDeleteRepoDialog: true, deletedRepo: repo });
-  }
+  };
 
   toggleAddRepoDialog = () => {
     this.setState({ isShowAddRepoDialog: !this.state.isShowAddRepoDialog });
-  }
+  };
 
   toggleAddMemberDialog = () => {
     this.setState({ isShowAddMemberDialog: !this.state.isShowAddMemberDialog });
-  }
+  };
 
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog});
-  }
+  };
 
   showDeleteDepartDialog = (subGroup) => {
     this.setState({
@@ -163,14 +163,14 @@ class OrgDepartmentItem extends React.Component {
       subGroupID: subGroup.id,
       subGroupName: subGroup.name
     });
-  }
+  };
 
   showSetGroupQuotaDialog = (subGroupID) => {
     this.setState({
       showSetGroupQuotaDialog: true,
       subGroupID: subGroupID
     });
-  }
+  };
 
   render() {
     const { members, repos, groups } = this.state;
@@ -405,16 +405,16 @@ class MemberItem extends React.Component {
   onMouseEnter = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     if (this.props.isItemFreezed) return;
     this.setState({ highlight: false });
-  }
+  };
 
   toggleMemberRoleMenu = () => {
     this.setState({ showRoleMenu: !this.state.showRoleMenu });
-  }
+  };
 
   onChangeUserRole = (role) => {
     let isAdmin = role === 'Admin' ? true : false;
@@ -427,7 +427,7 @@ class MemberItem extends React.Component {
     this.setState({
       highlight: false,
     });
-  }
+  };
 
   render() {
     const member = this.props.member;
@@ -459,7 +459,7 @@ class MemberItem extends React.Component {
 }
 
 const MemberItemPropTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   member: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onMemberChanged: PropTypes.func.isRequired,
@@ -480,11 +480,11 @@ class RepoItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({ highlight: true });
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({ highlight: false });
-  }
+  };
 
   render() {
     const repo = this.props.repo;
@@ -528,7 +528,7 @@ class GroupItem extends React.Component {
         highlight: true
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -537,7 +537,7 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -553,7 +553,7 @@ class GroupItem extends React.Component {
     }
 
     return translateResult;
-  }
+  };
 
   onMenuItemClick = (operation) => {
     const { group } = this.props;
@@ -567,7 +567,7 @@ class GroupItem extends React.Component {
       default:
         break;
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -575,13 +575,13 @@ class GroupItem extends React.Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   toggleRenameDialog = () => {
     this.setState({
       isRenameDialogOpen: !this.state.isRenameDialogOpen
     });
-  }
+  };
 
   render() {
     const group = this.props.group;

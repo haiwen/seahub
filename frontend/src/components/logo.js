@@ -11,7 +11,7 @@ class Logo extends React.Component {
 
   closeSide = () => {
     this.props.onCloseSidePanel();
-  }
+  };
 
   render() {
     return (

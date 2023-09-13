@@ -28,7 +28,7 @@ class NumberEditor extends React.Component {
     let value = replaceNumberNotAllowInput(initValue, format, currency_symbol);
     if (value === this.state.value) return;
     this.setState({ value });
-  }
+  };
 
   onKeyDown = (event) => {
     let { selectionStart, selectionEnd, value } = event.currentTarget;
@@ -40,13 +40,13 @@ class NumberEditor extends React.Component {
     ) {
       event.stopPropagation();
     }
-  }
+  };
 
   onBlur = () => {
     const { value } = this.state;
     const { column } = this.props;
     this.props.onCommit({ [column.key]: formatStringToNumber(value, column.data) }, column);
-  }
+  };
 
   setInputRef = (input) => {
     this.input = input;
@@ -55,11 +55,11 @@ class NumberEditor extends React.Component {
 
   onPaste = (e) => {
     e.stopPropagation();
-  }
+  };
 
   onCut = (e) => {
     e.stopPropagation();
-  }
+  };
 
   render() {
     const { column } = this.props;

@@ -52,7 +52,7 @@ class DirentGridItem extends React.Component {
 
   onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
     this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
-  }
+  };
 
   onItemClick = (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ class DirentGridItem extends React.Component {
       this.setState({isGridSelected: false});
       this.props.onGridItemClick(this.props.dirent);
     }
-  }
+  };
 
   onItemLinkClick = (e) => {
     e.preventDefault();
@@ -101,7 +101,7 @@ class DirentGridItem extends React.Component {
     } else {
       this.props.onItemClick(dirent);
     }
-  }
+  };
 
   onGridItemDragStart = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -112,7 +112,7 @@ class DirentGridItem extends React.Component {
 
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('applicaiton/drag-item-info', dragStartItemData);
-  }
+  };
 
   onGridItemDragEnter = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -121,7 +121,7 @@ class DirentGridItem extends React.Component {
     if (this.props.dirent.type === 'dir') {
       this.setState({isGridDropTipShow: true});
     }
-  }
+  };
 
   onGridItemDragOver = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -129,14 +129,14 @@ class DirentGridItem extends React.Component {
     }
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  }
+  };
 
   onGridItemDragLeave = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
       return false;
     }
     this.setState({isGridDropTipShow: false});
-  }
+  };
 
   onGridItemDragDrop = (e) => {
     if (Utils.isIEBrower() || !this.canDrag) {
@@ -161,11 +161,11 @@ class DirentGridItem extends React.Component {
 
     let selectedPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
-  }
+  };
 
   onGridItemMouseDown = (event) =>{
     this.props.onGridItemMouseDown(event);
-  }
+  };
 
   getFileUrl = (url) => {
     let fileUrlArr = url.split('/');
@@ -174,12 +174,12 @@ class DirentGridItem extends React.Component {
     }
     let fileUrl = fileUrlArr.join('/');
     return fileUrl;
-  }
+  };
 
   onGridItemContextMenu = (event) => {
     let dirent = this.props.dirent;
     this.props.onGridItemContextMenu(event, dirent);
-  }
+  };
 
   render() {
     let { dirent, path } = this.props;
@@ -245,7 +245,7 @@ class DirentGridItem extends React.Component {
                 </UncontrolledTooltip>
               </Fragment>
             )}
-            {(!dirent.isDir() && !this.canPreview) ? 
+            {(!dirent.isDir() && !this.canPreview) ?
               <a className={`sf-link grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} onClick={this.onItemLinkClick}>{dirent.name}</a> :
               <a className={`grid-file-name-link ${this.state.isGridSelected ? 'grid-link-selected-active' : ''}`} href={dirent.type === 'dir' ? dirHref : fileHref} onClick={this.onItemLinkClick}>{dirent.name}</a>
             }

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 
 const propTypes = {
   uploadOrDownload: PropTypes.string.isRequired,
@@ -22,7 +21,7 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   handleRateLimitChange = (e) => {
     const value = e.target.value;
@@ -30,25 +29,25 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
       rateLimit: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateUploadDownloadRateLimit(this.props.uploadOrDownload, this.state.rateLimit.trim());
     this.toggle();
-  }
+  };
 
   render() {
     const { rateLimit, isSubmitBtnActive } = this.state;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.uploadOrDownload == "upload" ? gettext('Set Upload Rate Limit') : gettext('Set Download Rate Limit')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{this.props.uploadOrDownload == 'upload' ? gettext('Set Upload Rate Limit') : gettext('Set Download Rate Limit')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

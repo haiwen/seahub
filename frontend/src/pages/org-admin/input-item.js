@@ -16,7 +16,7 @@ class OrgSamlConfigInput extends Component {
 
   inputValue = (e) => {
     this.props.changeValue(e);
-  }
+  };
 
   render() {
     const { value, displayName } = this.props;

@@ -31,13 +31,13 @@ class CreateTagDialog extends React.Component {
     if (this.state.errorMsg) {
       this.setState({errorMsg: ''});
     }
-  }
+  };
 
   selectTagcolor = (e) => {
     this.setState({
       tagColor: e.target.value,
     });
-  }
+  };
 
   createTag = () => {
     let name = this.state.tagName;
@@ -57,13 +57,13 @@ class CreateTagDialog extends React.Component {
       }
       this.setState({errorMsg: errMessage});
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.createTag();
     }
-  }
+  };
 
   componentDidMount() {
     this.setState({

@@ -40,6 +40,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
 };
 
 class DirListView extends React.Component {

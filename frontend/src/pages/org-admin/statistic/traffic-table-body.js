@@ -23,7 +23,7 @@ class TrafficTableBody extends React.Component {
       case 'org':
         return(<span>{userTrafficItem.org_name}</span>);
     }
-  }
+  };
 
   render() {
     let { userTrafficItem } = this.props;

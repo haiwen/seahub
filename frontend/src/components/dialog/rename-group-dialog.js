@@ -27,7 +27,7 @@ class RenameGroupDialog extends React.Component {
     this.setState({
       newGroupName: name
     });
-  }
+  };
 
   renameGroup = () => {
     let name = this.state.newGroupName.trim();
@@ -45,13 +45,13 @@ class RenameGroupDialog extends React.Component {
       newGroupName: '',
     });
     this.props.toggleRenameGroupDialog();
-  }
+  };
 
   handleKeyDown = (event) => {
     if (event.keyCode === 13) {
       this.renameGroup();
     }
-  }
+  };
 
   render() {
     return(
@@ -75,7 +75,7 @@ const RenameGroupDialogPropTypes = {
   showRenameGroupDialog: PropTypes.bool.isRequired,
   toggleRenameGroupDialog: PropTypes.func.isRequired,
   loadGroup: PropTypes.func.isRequired,
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.string,
   onGroupChanged: PropTypes.func.isRequired,
   currentGroupName: PropTypes.string.isRequired,
 };

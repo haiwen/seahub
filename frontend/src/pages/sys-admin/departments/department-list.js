@@ -28,21 +28,21 @@ class DepartmentList extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   listDepartments = () => {
     seafileAPI.sysAdminListAllDepartments().then(res => {
       this.setState({ groups: res.data.data });
     });
-  }
+  };
 
   toggleAddDepartDialog = () => {
     this.setState({ isShowAddDepartDialog: !this.state.isShowAddDepartDialog });
-  }
+  };
 
   onDepartmentNameChanged = (dept) => {
     this.setState({
@@ -53,7 +53,7 @@ class DepartmentList extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   onAddNewDepartment = (newDepartment) => {
     const { groups } = this.state;
@@ -61,14 +61,14 @@ class DepartmentList extends React.Component {
     this.setState({
       groups: groups
     });
-  }
+  };
 
   onDeleteDepartment = (id) => {
     const { groups } = this.state;
     this.setState({
       groups: groups.filter((item) => item.id != id)
     });
-  }
+  };
 
   onSetDepartmentQuota = (target) => {
     const { groups } = this.state;
@@ -80,7 +80,7 @@ class DepartmentList extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   render() {
     const groups = this.state.groups;

@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, isPro, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import Section from './section';
 import InputItem from './input-item';
 import FileItem from './file-item';
-import CheckboxItem from './checkbox-item';
 
 import '../../../css/system-admin-web-settings.css';
 
@@ -21,7 +20,7 @@ class OrgWebSettings extends Component {
       errorMsg: '',
       config_dict: null,
       logoPath: mediaUrl + logoPath,
-      file_ext_white_list: '', 
+      file_ext_white_list: '',
     };
   }
 
@@ -41,16 +40,16 @@ class OrgWebSettings extends Component {
   }
 
   updateName= (key, newOrgName) => {
-     seafileAPI.orgAdminUpdateName(orgID, newOrgName).then((res) => {
-       this.setState({
-         config_dict: res.data
-       });
-       toaster.success(gettext('Success'));
-     }).catch((error) => {
-       let errMessage = Utils.getErrorMsg(error);
-       toaster.danger(errMessage);
-     });
-  }
+    seafileAPI.orgAdminUpdateName(orgID, newOrgName).then((res) => {
+      this.setState({
+        config_dict: res.data
+      });
+      toaster.success(gettext('Success'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
 
   updateLogo = (file) => {
     seafileAPI.orgAdminUpdateLogo(orgID, file).then((res) => {
@@ -62,7 +61,7 @@ class OrgWebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateFileExtWhiteList = (key, value) => {
     seafileAPI.orgAdminSetSysSettingInfo(orgID, key, value).then((res) => {
@@ -74,7 +73,7 @@ class OrgWebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg, config_dict, logoPath, file_ext_white_list } = this.state;

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import Nav from './org-users-nav';
 import OrgUsersList from './org-users-list';
@@ -26,14 +27,14 @@ class Search extends React.Component {
     this.setState({
       value: e.target.value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     const value = this.state.value.trim();
@@ -41,7 +42,7 @@ class Search extends React.Component {
       return false;
     }
     this.props.submit(value);
-  }
+  };
 
   render() {
     return (
@@ -61,6 +62,11 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  submit: PropTypes.func.isRequired,
+};
 
 class OrgUsers extends Component {
 
@@ -110,19 +116,19 @@ class OrgUsers extends Component {
       navigate(url.toString());
       this.initOrgUsersData(page);
     });
-  }
+  };
 
   toggleImportOrgUsersDialog = () => {
     this.setState({isImportOrgUsersDialogOpen: !this.state.isImportOrgUsersDialogOpen});
-  }
+  };
 
   toggleAddOrgUser = () => {
     this.setState({isShowAddOrgUserDialog: !this.state.isShowAddOrgUserDialog});
-  }
+  };
 
   toggleInviteUserDialog = () => {
     this.setState({isInviteUserDialogOpen: !this.state.isInviteUserDialogOpen});
-  }
+  };
 
   initOrgUsersData = (page) => {
     const { sortBy, sortOrder } = this.state;
@@ -139,7 +145,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   importOrgUsers = (file) => {
     toaster.notify(gettext('It may take some time, please wait.'));
@@ -155,7 +161,7 @@ class OrgUsers extends Component {
           orgUsers: users.concat(this.state.orgUsers)
         });
       }
-      res.data.failed.map(item => {
+      res.data.failed.forEach(item => {
         const msg = `${item.email}: ${item.error_msg}`;
         toaster.danger(msg);
       });
@@ -163,7 +169,7 @@ class OrgUsers extends Component {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
     });
-  }
+  };
 
   addOrgUser = (email, name, password) => {
     seafileAPI.orgAdminAddOrgUser(orgID, email, name, password).then(res => {
@@ -181,7 +187,7 @@ class OrgUsers extends Component {
       toaster.danger(errMessage);
       this.toggleAddOrgUser();
     });
-  }
+  };
 
   toggleOrgUsersDelete = (email) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
@@ -194,7 +200,7 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   changeStatus= (email, isActive) => {
     seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
@@ -210,18 +216,18 @@ class OrgUsers extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   searchItems = (keyword) => {
     navigate(`${siteRoot}org/useradmin/search-users/?query=${encodeURIComponent(keyword)}`);
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search users')}
       submit={this.searchItems}
     />;
-  }
+  };
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';

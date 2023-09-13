@@ -27,31 +27,31 @@ class SysAdminCreateRepoDialog extends React.Component {
       repoName: value,
       isSubmitBtnActive: value.trim()
     });
-  }
+  };
 
   handleSubmit = () => {
     const { repoName, ownerEmail } = this.state;
     this.props.createRepo(repoName.trim(), ownerEmail);
     this.toggle();
-  }
+  };
 
   handleSelectChange = (option) => {
     // option can be null
     this.setState({
       ownerEmail: option ? option.email : ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   toggle = () => {
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (

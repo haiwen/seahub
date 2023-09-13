@@ -76,6 +76,7 @@ const activityPropTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   items: PropTypes.array.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
 };
 
 class ActivityItem extends Component {
@@ -91,7 +92,7 @@ class ActivityItem extends Component {
     this.setState({
       isListCreatedFiles: !this.state.isListCreatedFiles,
     });
-  }
+  };
 
   render() {
     const isDesktop = this.props.isDesktop;
@@ -133,7 +134,7 @@ class ActivityItem extends Component {
       }
     } else if (item.obj_type == 'draft') {
       let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
+      let fileLink = <a href={fileURL} target="_blank" rel="noreferrer">{item.name}</a>;
       op = gettext('Publish draft');
       details = fileLink;
       moreDetails = true;
@@ -162,7 +163,7 @@ class ActivityItem extends Component {
       const isDraft = item.name.endsWith('(draft).md');
       const fileURL = isDraft ? serviceURL + '/drafts/' + item.draft_id + '/' :
         `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = <a href={fileURL} target="_blank">{item.name}</a>;
+      let fileLink = <a href={fileURL} target="_blank" rel="noreferrer">{item.name}</a>;
       if (isDraft && !item.draft_id) {
         fileLink = item.name;
       }
@@ -188,6 +189,7 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
         case 'move':
+          // eslint-disable-next-line
           const filePathLink = <a href={fileURL}>{item.path}</a>;
           op = gettext('Moved file');
           details = <span>{item.old_path} => {filePathLink}</span>;
@@ -201,7 +203,7 @@ class ActivityItem extends Component {
       }
     } else { // dir
       let dirURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + Utils.encodePath(item.path);
-      let dirLink = <a href={dirURL} target="_blank">{item.name}</a>;
+      let dirLink = <a href={dirURL} target="_blank" rel="noreferrer">{item.name}</a>;
       switch (item.op_type) {
         case 'create':
           op = gettext('Created folder');
@@ -224,6 +226,7 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
         case 'move':
+          // eslint-disable-next-line
           const dirPathLink = <a href={dirURL}>{item.path}</a>;
           op = gettext('Moved folder');
           details = <span>{item.old_path} => {dirPathLink}</span>;
@@ -337,7 +340,7 @@ class FilesActivities extends Component {
   }
 
   mergePublishEvents = (events) => {
-    events.map((item) => {
+    events.forEach((item) => {
       if (item.op_type === 'publish') {
         this.curPathList.push(item.path);
         this.oldPathList.push(item.old_path);
@@ -360,7 +363,7 @@ class FilesActivities extends Component {
       }
     }
     return actuallyEvents;
-  }
+  };
 
   mergeFileCreateEvents = (events) => {
     let actuallyEvents = [];
@@ -394,7 +397,7 @@ class FilesActivities extends Component {
       }
     }
     return actuallyEvents;
-  }
+  };
 
   getMore() {
     let currentPage = this.state.currentPage;
@@ -431,7 +434,7 @@ class FilesActivities extends Component {
         });
       }
     }
-  }
+  };
 
   render() {
     return (

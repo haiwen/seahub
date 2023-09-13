@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -21,7 +20,7 @@ class SetQuotaDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   handleQuotaChange = (e) => {
     const value = e.target.value;
@@ -29,19 +28,19 @@ class SetQuotaDialog extends React.Component {
       quota: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateQuota(this.state.quota.trim());
     this.toggle();
-  }
+  };
 
   render() {
     const { quota, isSubmitBtnActive } = this.state;

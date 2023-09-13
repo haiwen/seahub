@@ -26,7 +26,7 @@ class WebSettingInput extends Component {
 
   toggleBtns = () => {
     this.setState({isBtnsShown: !this.state.isBtnsShown});
-  }
+  };
 
   hideBtns = (e) => {
     if (!this.state.isBtnsShown) {
@@ -36,11 +36,11 @@ class WebSettingInput extends Component {
       this.setState({value: this.props.value});
     }
     this.toggleBtns();
-  }
+  };
 
   onInputChange = (e) => {
     this.setState({ value: e.target.value });
-  }
+  };
 
   onSubmit = (e) => {
     const value = this.state.value.trim();
@@ -48,7 +48,7 @@ class WebSettingInput extends Component {
       this.props.saveSetting(this.props.keyText, value);
     }
     this.toggleBtns();
-  }
+  };
 
   render() {
     const { isBtnsShown, value } = this.state;
@@ -59,8 +59,8 @@ class WebSettingInput extends Component {
         helpTip={helpTip}
         mainContent={
           disabled ?
-          <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} value={value} disabled /> :
-          <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns} value={value} />
+            <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} value={value} disabled /> :
+            <Input type={inputType || 'text'} className={inputType == 'textarea' ? 'web-setting-textarea' : ''} onChange={this.onInputChange} onFocus={this.toggleBtns} onBlur={this.hideBtns} value={value} />
         }
         extraContent={
           isBtnsShown ?

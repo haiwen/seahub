@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -60,6 +61,10 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -76,25 +81,25 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({
       isOpIconShown: true
     });
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({
       isOpIconShown: false
     });
-  }
+  };
 
   toggleDialog = () => {
     this.setState({
       isConfirmUnlinkDialogOpen: !this.state.isConfirmUnlinkDialogOpen
     });
-  }
+  };
 
   handleClick = (e) => {
     e.preventDefault();
@@ -106,7 +111,7 @@ class Item extends Component {
       const wipeDevice = true;
       this.unlinkDevice(wipeDevice);
     }
-  }
+  };
 
   unlinkDevice = (wipeDevice) => {
     const data = this.props.data;
@@ -121,7 +126,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     if (this.state.unlinked) {
@@ -186,6 +191,11 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  isDesktop: PropTypes.bool.isRequired,
+  data: PropTypes.object.isRequired,
+};
 
 class LinkedDevices extends Component {
   constructor(props) {

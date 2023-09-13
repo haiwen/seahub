@@ -20,13 +20,13 @@ class AddMemberDialog extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({ selectedOption: option });
-  }
+  };
 
   handleSubmit = () => {
     if (!this.state.selectedOption) return;
     const emails = this.state.selectedOption.map(item => item.email);
     this.props.addUser(emails);
-  }
+  };
 
   render() {
     return (

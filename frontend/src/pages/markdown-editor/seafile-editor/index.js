@@ -31,6 +31,11 @@ const propTypes = {
   deleteDraft: PropTypes.func,
   contentChanged: PropTypes.bool,
   openDialogs: PropTypes.func,
+  fileInfo: PropTypes.object.isRequired,
+  collabUsers: PropTypes.array.isRequired,
+  emitSwitchEditor: PropTypes.func.isRequired,
+  isSaving: PropTypes.bool,
+  collabServer: PropTypes.string,
 };
 
 class SeafileEditor extends React.Component {
@@ -58,12 +63,12 @@ class SeafileEditor extends React.Component {
       const firstNode = document[0];
       /**
        *  if the markdown content is empty, the rich value contains
-       *  only a paragraph which contains a empty text node 
-       * 
+       *  only a paragraph which contains a empty text node
+       *
       */
       if (document.length === 1 &&
          firstNode.type === 'paragraph' &&
-         firstNode.children.length === 1 && 
+         firstNode.children.length === 1 &&
          Text.isText(firstNode.children[0]) &&
          firstNode.children[0].text.length === 0) {
         let headerContent = this.props.fileInfo.name.slice(0, this.props.fileInfo.name.lastIndexOf('.'));
@@ -73,7 +78,7 @@ class SeafileEditor extends React.Component {
         };
         document.push(header);
         document.shift();
-        
+
         this.setState({richValue: document});
       }
     }
@@ -162,26 +167,26 @@ class SeafileEditor extends React.Component {
   };
 
   onRichEditorSave = () => {
-    if (this.props.isSaving) return; 
+    if (this.props.isSaving) return;
     const value = this.state.richValue;
     const str = serialize(value);
     this.saveContent(str);
     this.props.clearTimer();
     this.props.deleteDraft && this.props.deleteDraft();
-  }
+  };
 
   onPlainEditorSave = () => {
-    if (this.props.isSaving) return; 
+    if (this.props.isSaving) return;
     const str = this.state.currentContent;
     this.saveContent(str);
     this.props.clearTimer();
     this.props.deleteDraft && this.props.deleteDraft();
-  }
+  };
 
   resetRichValue = () => {
     const value = this.state.richValue;
     this.setState({ richValue: value });
-  }
+  };
 
   onChange = (value, operations) => {
     if (this.props.editorMode === 'rich') {
@@ -217,7 +222,7 @@ class SeafileEditor extends React.Component {
       this.isParticipant = true;
       this.props.onParticipantsChange();
     });
-  }
+  };
 
   render() {
 
@@ -244,7 +249,7 @@ class SeafileEditor extends React.Component {
 
     return (
       <PlainMarkdownEditor
-        scriptSource={this.props.scriptSource} 
+        scriptSource={this.props.scriptSource}
         editorApi={this.props.editorApi}
         initialValue={this.state.initialPlainValue}
         currentContent={this.state.currentContent}

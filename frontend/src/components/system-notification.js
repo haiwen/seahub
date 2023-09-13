@@ -33,7 +33,7 @@ class SystemNotification extends React.Component {
         document.cookie = 'info_id=' + newInfoID;
       }
     }
-  }
+  };
 
   render() {
     if (!curNoteMsg || this.state.isClosed) {

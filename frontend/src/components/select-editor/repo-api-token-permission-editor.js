@@ -34,23 +34,23 @@ class RepoAPITokenPermissionEditor extends React.Component {
 
   onHideSelect = () => {
     this.setState({ isEditing: false });
-  }
+  };
 
   onEditPermission = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({ isEditing: true });
-  }
+  };
 
   onPermissionChanged = (e) => {
     if (e.value !== this.props.currentPermission) {
       this.props.onPermissionChanged(e.value);
     }
     this.setState({ isEditing: false });
-  }
+  };
 
   onSelectHandler = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-  }
+  };
 
   render() {
     const { currentPermission, isTextMode } = this.props;

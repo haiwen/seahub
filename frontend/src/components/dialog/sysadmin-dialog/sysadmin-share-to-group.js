@@ -19,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -65,6 +65,13 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class GroupList extends React.Component {
 
   render() {
@@ -87,6 +94,13 @@ class GroupList extends React.Component {
   }
 }
 
+GroupList.propTypes = {
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -99,6 +113,10 @@ const NoOptionsMessage = (props) => {
   return (
     <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
   );
+};
+
+NoOptionsMessage.propTypes = {
+  innerProps: PropTypes.any.isRequired,
 };
 
 class SysAdminShareToGroup extends React.Component {
@@ -120,7 +138,7 @@ class SysAdminShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -141,7 +159,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let repoID = this.props.repoID;
@@ -155,11 +173,11 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
     let groups = [];
@@ -187,7 +205,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let repoID = this.props.repoID;
@@ -199,7 +217,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let repoID = this.props.repoID;
@@ -210,7 +228,7 @@ class SysAdminShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_id;
@@ -223,7 +241,7 @@ class SysAdminShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     return (

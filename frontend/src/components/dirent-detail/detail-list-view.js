@@ -38,18 +38,18 @@ class DetailListView extends React.Component {
       position = position + path;
     }
     return position;
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
     });
-  }
+  };
 
   onFileTagChanged = () => {
     let direntPath = this.getDirentPath();
     this.props.onFileTagChanged(this.props.dirent, direntPath);
-  }
+  };
 
   getDirentPath = () => {
     if (Utils.isMarkdownFile(this.props.path)) {
@@ -57,11 +57,11 @@ class DetailListView extends React.Component {
     }
     let { dirent, path } = this.props;
     return Utils.joinPath(path, dirent.name);
-  }
+  };
 
   toggleExtraAttributesDialog = () => {
     this.setState({ isShowExtraAttributes: !this.state.isShowExtraAttributes });
-  }
+  };
 
   renderTags = () => {
     const { direntType, direntDetail, fileTagList } = this.props;
@@ -125,7 +125,7 @@ class DetailListView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   render() {
     const { direntType, direntDetail, fileTagList } = this.props;

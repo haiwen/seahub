@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { processor } from '@seafile/seafile-editor';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { gettext, username, siteRoot } from '../../utils/constants';
+import { gettext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -44,7 +44,7 @@ class DetailCommentList extends React.Component {
 
   handleCommentChange = (event) => {
     this.setState({ comment: event.target.value });
-  }
+  };
 
   listComments = (filePath) => {
     seafileAPI.listComments(this.props.repoID, (filePath || this.props.filePath)).then((res) => {
@@ -53,7 +53,7 @@ class DetailCommentList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   addComment = () => {
     const { repoID, filePath } = this.props;
@@ -64,7 +64,7 @@ class DetailCommentList extends React.Component {
       toaster.danger(Utils.getErrorMsg(err));
     });
     this.setState({ comment: '' });
-  }
+  };
 
   onSubmit = () => {
     this.addParticipant(username);
@@ -80,7 +80,7 @@ class DetailCommentList extends React.Component {
         toaster.danger(Utils.getErrorMsg(err));
       });
     }
-  }
+  };
 
   resolveComment = (event) => {
     const { repoID } = this.props;
@@ -90,7 +90,7 @@ class DetailCommentList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteComment = (event) => {
     const { repoID } = this.props;
@@ -100,7 +100,7 @@ class DetailCommentList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   editComment = (commentID, newComment) => {
     const { repoID } = this.props;
@@ -110,7 +110,7 @@ class DetailCommentList extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listRepoRelatedUsers = () => {
     const { repoID } = this.props;
@@ -120,23 +120,22 @@ class DetailCommentList extends React.Component {
       });
       this.setState({ relatedUsers: users });
     });
-  }
+  };
 
   checkParticipant = (email) => {
     return this.props.fileParticipantList.map((participant) => {return participant.email;}).includes(email);
-  }
+  };
 
   addParticipant = (email) => {
     if (this.checkParticipant(email)) return;
     this.toBeAddedParticipant.push(email);
-  }
+  };
 
   renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
     return <div className={`user ${focused ? 'focused' : ''}`}>{highlightedDisplay}</div>;
-  }
+  };
 
   render() {
-    const { repoID, filePath } = this.props;
     const { commentsList } = this.state;
     return (
       <div className="seafile-comment detail-comments h-100">
@@ -223,15 +222,15 @@ class CommentItem extends React.Component {
       let html = String(result);
       this.setState({ html: html });
     });
-  }
+  };
 
   toggleDropDownMenu = () => {
     this.setState({ dropdownOpen: !this.state.dropdownOpen });
-  }
+  };
 
   toggleEditComment = () => {
     this.setState({ editable: !this.state.editable });
-  }
+  };
 
   updateComment = (event) => {
     const newComment = this.state.newComment;
@@ -239,11 +238,11 @@ class CommentItem extends React.Component {
       this.props.editComment(event.target.id, newComment);
     }
     this.toggleEditComment();
-  }
+  };
 
   handleCommentChange = (event) => {
     this.setState({ newComment: event.target.value });
-  }
+  };
 
   onCommentClick = (e) => {
     // click participant link, page shouldn't jump
@@ -252,7 +251,7 @@ class CommentItem extends React.Component {
     if (preNode && preNode.nodeType === 3 && preNode.nodeValue.slice(-1) === '@') {
       e.preventDefault();
     }
-  }
+  };
 
   renderInfo = (item) => {
     return (
@@ -264,7 +263,7 @@ class CommentItem extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     const item = this.props.item;

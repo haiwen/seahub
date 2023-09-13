@@ -33,7 +33,7 @@ class Rename extends React.Component {
 
   onChange = (e) => {
     this.setState({name: e.target.value});
-  }
+  };
 
   onKeyDown = (e) => {
     if (e.keyCode === Utils.keyCodes.enter) {
@@ -42,7 +42,7 @@ class Rename extends React.Component {
       this.onRenameCancel(e);
     }
     e.nativeEvent.stopImmediatePropagation();
-  }
+  };
 
   onRenameConfirm = (e) => {
     e.nativeEvent.stopImmediatePropagation();
@@ -58,12 +58,12 @@ class Rename extends React.Component {
     } else {
       this.props.onRenameConfirm(newName);
     }
-  }
+  };
 
   onRenameCancel = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onRenameCancel();
-  }
+  };
 
   validateInput = () => {
     let newName = this.state.name.trim();
@@ -82,7 +82,7 @@ class Rename extends React.Component {
     }
 
     return { isValid, errMessage };
-  }
+  };
 
   render() {
     return (

@@ -14,6 +14,7 @@ const propTypes = {
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
   onRepoClick: PropTypes.func.isRequired,
+  onMonitorRepo: PropTypes.func.isRequired,
 };
 
 class MylibRepoListView extends React.Component {
@@ -27,32 +28,32 @@ class MylibRepoListView extends React.Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   sortByName = (e) => {
     e.preventDefault();
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortRepoList(sortBy, sortOrder);
-  }
+  };
 
   sortByTime = (e) => {
     e.preventDefault();
     const sortBy = 'time';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortRepoList(sortBy, sortOrder);
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     const sortBy = 'size';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortRepoList(sortBy, sortOrder);
-  }
+  };
 
   renderRepoListView = () => {
     return (
@@ -75,7 +76,7 @@ class MylibRepoListView extends React.Component {
         })}
       </Fragment>
     );
-  }
+  };
 
   renderPCUI = () => {
     const showStorageBackend = storages.length > 0;
@@ -98,7 +99,7 @@ class MylibRepoListView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   renderMobileUI = () => {
     return (
@@ -109,7 +110,7 @@ class MylibRepoListView extends React.Component {
         </tbody>
       </table>
     );
-  }
+  };
 
   render() {
     return (

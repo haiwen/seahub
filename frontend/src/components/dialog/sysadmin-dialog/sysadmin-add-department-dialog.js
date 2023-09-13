@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Label } from 'reactstrap';
-import { gettext, orgID } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 
 const propTypes = {
@@ -36,7 +36,7 @@ class AddDepartDialog extends React.Component {
         this.setState({ errMessage: errorMsg });
       });
     }
-  }
+  };
 
   validateName = () => {
     let errMessage = '';
@@ -47,20 +47,20 @@ class AddDepartDialog extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
   handleChange = (e) => {
     this.setState({
       departName: e.target.value,
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   render() {
     let header = this.props.parentGroupID ? gettext('New Sub-department') : gettext('New Department');

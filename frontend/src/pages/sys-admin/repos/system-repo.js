@@ -1,19 +1,14 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, siteRoot } from '../../../utils/constants';
-import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './repos-nav';
 
 class Content extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { loading, errorMsg, items } = this.props;
     if (loading) {
@@ -44,12 +39,19 @@ class Content extends Component {
   }
 }
 
+
+Content.propTypes = {
+  resetPerPage: PropTypes.func,
+  getListByPage: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  currentPage: PropTypes.number,
+  curPerPage: PropTypes.number,
+  hasNextPage: PropTypes.bool,
+};
+
 class Item extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const item = this.props.item;
     return (
@@ -61,6 +63,10 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 class SystemRepo extends Component {
 

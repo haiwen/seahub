@@ -63,21 +63,21 @@ class LibOldFilesAutoDelDialog extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
     }
-  }
+  };
 
   onChange = (e) => {
     let days = e.target.value;
     this.setState({
       autoDelDays: days,
     });
-  }
+  };
 
   updateRadioCheck = (type) => {
     if (type === 'noAutoDel') {
@@ -89,7 +89,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
         isAutoDel: true,
       });
     }
-  }
+  };
 
   render() {
     return (

@@ -39,7 +39,7 @@ class SidePanel extends Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   renderTreeView = () => {
     return (
@@ -58,7 +58,7 @@ class SidePanel extends Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   render() {
     return (

@@ -27,7 +27,7 @@ class DetailListView extends React.Component {
 
   onEditFileTagToggle = () => {
     this.setState({isEditFileTagShow: !this.state.isEditFileTagShow});
-  }
+  };
 
   render() {
     const { fileTagList, fileInfo } = this.props;

@@ -38,18 +38,18 @@ export default class NotificationPopover extends React.Component {
       }
       this.props.onNotificationListToggle();
     }
-  }
+  };
 
   onNotificationDialogToggle = () => {
     this.props.onNotificationDialogToggle();
     this.props.onNotificationListToggle();
-  }
+  };
 
   onHandleScroll = () => {
     if (this.notificationListRef.offsetHeight + this.notificationListRef.scrollTop + 1 >= this.notificationsWrapperRef.offsetHeight) {
       this.props.listNotifications && this.props.listNotifications();
     }
-  }
+  };
 
   render() {
     const { headerText, bodyText, footerText } = this.props;

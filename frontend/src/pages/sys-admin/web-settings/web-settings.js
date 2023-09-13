@@ -50,7 +50,7 @@ class WebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   postFile = (file, fileType) => {
     let postFile;
@@ -80,7 +80,7 @@ class WebSettings extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg, config_dict, logoPath, faviconPath, loginBGPath } = this.state;

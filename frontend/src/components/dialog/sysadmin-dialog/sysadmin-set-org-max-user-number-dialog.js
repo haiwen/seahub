@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 
 const propTypes = {
+  value: PropTypes.string.isRequired,
   toggle: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired
 };
@@ -21,7 +21,7 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
 
   toggle = () => {
     this.props.toggle();
-  }
+  };
 
   handleInputChange = (e) => {
     const value = e.target.value;
@@ -29,19 +29,19 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
       value: value,
       isSubmitBtnActive: value.trim() != ''
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateValue(this.state.value.trim());
     this.toggle();
-  }
+  };
 
   render() {
     const { value, isSubmitBtnActive } = this.state;

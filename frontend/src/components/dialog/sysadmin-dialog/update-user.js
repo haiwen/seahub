@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Input } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import { Utils } from '../../../utils/utils';
 
 const propTypes = {
+  value: PropTypes.string.isRequired,
   dialogTitle: PropTypes.string.isRequired,
   updateValue: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func.isRequired
@@ -25,22 +25,22 @@ class UpdateUser extends React.Component {
     this.setState({
       value: value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
     }
-  }
+  };
 
   handleSubmit = () => {
     this.props.updateValue(this.state.value.trim());
     this.props.toggleDialog();
-  }
+  };
 
   render() {
-    const  { dialogTitle, toggleDialog } = this.props;
+    const  { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog}>
         <ModalHeader toggle={toggleDialog}>{this.props.dialogTitle}</ModalHeader>

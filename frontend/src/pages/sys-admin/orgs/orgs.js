@@ -52,7 +52,7 @@ class Orgs extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   resetPerPage = (perPage) => {
     this.setState({
@@ -60,11 +60,11 @@ class Orgs extends Component {
     }, () => {
       this.getItemsByPage(1);
     });
-  }
+  };
 
   toggleAddOrgDialog = () => {
     this.setState({isAddOrgDialogOpen: !this.state.isAddOrgDialogOpen});
-  }
+  };
 
   updateRole = (orgID, role) => {
     let orgInfo = {};
@@ -82,7 +82,7 @@ class Orgs extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   addOrg = (data) => {
     const { orgName, ownerEmail, password } = data;
@@ -94,7 +94,7 @@ class Orgs extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteOrg = (orgID) => {
     seafileAPI.sysAdminDeleteOrg(orgID).then(res => {
@@ -107,18 +107,18 @@ class Orgs extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search organizations')}
       submit={this.searchItems}
     />;
-  }
+  };
 
   searchItems = (keyword) => {
     navigate(`${siteRoot}sys/search-organizations/?query=${encodeURIComponent(keyword)}`);
-  }
+  };
 
   render() {
     const { isAddOrgDialogOpen } = this.state;

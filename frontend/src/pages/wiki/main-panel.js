@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID, slug, siteRoot, username, isPro } from '../../utils/constants';
+import { gettext, repoID, siteRoot, username, isPro } from '../../utils/constants';
 import WikiMarkdownViewer from '../../components/wiki-markdown-viewer';
 import WikiDirListView from '../../components/wiki-dir-list-view/wiki-dir-list-view';
 import Loading from '../../components/loading';
@@ -30,25 +30,25 @@ class MainPanel extends Component {
 
   onMenuClick = () => {
     this.props.onMenuClick();
-  }
+  };
 
   onEditClick = (e) => {
     e.preventDefault();
     let url = siteRoot + 'lib/' + repoID + '/file' + this.props.path + '?mode=edit';
     window.open(url);
-  }
+  };
 
   onMainNavBarClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onMainNavBarClick(path);
-  }
+  };
 
   renderNavPath = () => {
     let paths = this.props.path.split('/');
     let nodePath = '';
     let pathElem = paths.map((item, index) => {
       if (item === '') {
-        return;
+        return null;
       }
       if (index === (paths.length - 1)) {
         return (
@@ -73,11 +73,11 @@ class MainPanel extends Component {
       }
     });
     return pathElem;
-  }
+  };
 
 
   render() {
-    let { onSearchedClick, permission } = this.props;
+    let { onSearchedClick } = this.props;
     let searchPlaceholder = gettext('Search files in this library');
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
 

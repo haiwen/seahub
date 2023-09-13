@@ -11,15 +11,6 @@ import TermsPerviewDialog from '../../../components/dialog/terms-preview-dialog'
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from '../../../components/dialog/op-menu';
 
-const propsTypes = {
-  item: PropTypes.object.isRequired,
-  isItemFreezed: PropTypes.bool.isRequired,
-  onFreezedItem: PropTypes.func.isRequired,
-  onUnfreezedItem: PropTypes.func.isRequired,
-  deleteTerm: PropTypes.func.isRequired,
-  updateTerm: PropTypes.func.isRequired,
-};
-
 class Item extends Component {
 
   constructor(props) {
@@ -58,7 +49,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -67,19 +58,19 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   toggleUpdateDialog = (e) => {
     this.setState({isUpdateDialogOpen: !this.state.isUpdateDialogOpen});
-  }
+  };
 
   toggleDeleteDialog = (e) => {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleTermsContentDialog = (e) => {
     this.setState({isTermsPerviewDialogOpen: !this.state.isTermsPerviewDialogOpen});
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -90,7 +81,7 @@ class Item extends Component {
         this.toggleDeleteDialog();
         break;
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -98,17 +89,17 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   deleteTerm = () => {
     this.props.deleteTerm(this.props.item.id);
     this.toggleDeleteDialog();
-  }
+  };
 
   updateTerm = (name, versionNumber, text, isActive) => {
     this.props.updateTerm(this.props.item.id, name, versionNumber, text, isActive);
     this.toggleUpdateDialog();
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -124,7 +115,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   render() {
     let { item } = this.props;
@@ -188,6 +179,13 @@ class Item extends Component {
   }
 }
 
-Item.propTypes = propsTypes;
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  deleteTerm: PropTypes.func.isRequired,
+  updateTerm: PropTypes.func.isRequired,
+};
 
 export default Item;

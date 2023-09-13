@@ -47,24 +47,24 @@ class Wikis extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   clickMenuToggle = (e) => {
     e.preventDefault();
     this.onMenuToggle();
-  }
+  };
 
   onMenuToggle = () => {
     this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
-  }
+  };
 
   onSelectToggle = () => {
     this.setState({isShowSelectDialog: !this.state.isShowSelectDialog});
-  }
+  };
 
   onCreateToggle = () => {
     this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
-  }
+  };
 
   addWiki = (repoID) => {
     seafileAPI.addWiki(repoID).then((res) => {
@@ -76,7 +76,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   renameWiki = (wiki, newName) => {
     seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
@@ -93,7 +93,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   deleteWiki = (wiki) => {
     seafileAPI.deleteWiki(wiki.slug).then(() => {
@@ -107,7 +107,7 @@ class Wikis extends Component {
         toaster.danger(errorMsg);
       }
     });
-  }
+  };
 
   render() {
     return (

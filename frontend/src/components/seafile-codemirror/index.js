@@ -23,7 +23,7 @@ class SeafileCodeMirror extends React.Component {
 
   static defaultProps = {
     readOnly: true,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -47,11 +47,11 @@ class SeafileCodeMirror extends React.Component {
       theme: 'light',
       readOnly: readOnly,
     };
-  }
+  };
 
   onChange = (value) => {
     this.props.onChange && this.props.onChange(value);
-  }
+  };
 
   render() {
     const { value } = this.props;

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -41,19 +42,19 @@ class OrgUserProfile extends Component {
     this.setState({
       name: name
     });
-  }
+  };
 
   updateContactEmail = (contactEmail) => {
     this.setState({
       contact_email: contactEmail
     });
-  }
+  };
 
   updateQuota = (quota) => {
     this.setState({
       quota_total: quota
     });
-  }
+  };
 
   render() {
     return (
@@ -92,19 +93,19 @@ class Content extends Component {
     this.setState({
       isSetNameDialogOpen: !this.state.isSetNameDialogOpen
     });
-  }
+  };
 
   toggleSetContactEmailDialog = () => {
     this.setState({
       isSetContactEmailDialogOpen: !this.state.isSetContactEmailDialogOpen
     });
-  }
+  };
 
   toggleSetQuotaDialog = () => {
     this.setState({
       isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen
     });
-  }
+  };
 
   render() {
     const {
@@ -184,5 +185,16 @@ class Content extends Component {
     );
   }
 }
+
+Content.propTypes = {
+  data: PropTypes.object.isRequired,
+  updateName: PropTypes.func.isRequired,
+  updateContactEmail: PropTypes.func.isRequired,
+  updateQuota: PropTypes.func.isRequired,
+};
+
+OrgUserProfile.propTypes = {
+  email: PropTypes.string,
+};
 
 export default OrgUserProfile;

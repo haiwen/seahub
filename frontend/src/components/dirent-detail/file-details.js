@@ -63,7 +63,7 @@ class FileDetails extends React.Component {
         </div>
       </div>
     );
-  }
+  };
 
   renderDetailBody = (bigIconUrl) => {
     const { direntDetail, fileTagList } = this.state;
@@ -102,7 +102,7 @@ class FileDetails extends React.Component {
         }
       </div>
     );
-  }
+  };
 
   render() {
     let { dirent, repoID, path } = this.props;

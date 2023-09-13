@@ -41,7 +41,7 @@ class SearchGroups extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   deleteGroup = (groupID) => {
     seafileAPI.sysAdminDismissGroupByID(groupID).then(res => {
@@ -56,7 +56,7 @@ class SearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   transferGroup = (groupID, receiverEmail) => {
     seafileAPI.sysAdminTransferGroup(receiverEmail, groupID).then(res => {
@@ -74,20 +74,20 @@ class SearchGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   handleNameInputChange = (e) => {
     this.setState({
       name: e.target.value
     }, this.checkSubmitBtnActive);
-  }
+  };
 
   checkSubmitBtnActive = () => {
     const { name } = this.state;
     this.setState({
       isSubmitBtnActive: name.trim()
     });
-  }
+  };
 
   render() {
     const { name, isSubmitBtnActive } = this.state;

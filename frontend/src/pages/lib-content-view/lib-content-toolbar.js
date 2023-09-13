@@ -48,6 +48,8 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   unSelectDirent: PropTypes.func,
   currentRepoInfo: PropTypes.object,
+  onItemRename: PropTypes.func,
+  showDirentDetail: PropTypes.func,
 };
 
 class LibContentToolbar extends React.Component {

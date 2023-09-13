@@ -53,14 +53,14 @@ class DirOperationToolbar extends React.Component {
 
   toggleMobileOpMenu = () => {
     this.setState({isMobileOpMenuOpen: !this.state.isMobileOpMenuOpen});
-  }
+  };
 
   hideOperationMenu = () => {
     this.setState({
       isUploadMenuShow: false,
       isCreateMenuShow: false,
     });
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.nativeEvent.stopImmediatePropagation();
@@ -69,7 +69,7 @@ class DirOperationToolbar extends React.Component {
     let top  = targetRect.bottom;
     let style = {position: 'fixed', display: 'block', left: left, top: top};
     this.setState({operationMenuStyle: style});
-  }
+  };
 
   onUploadClick = (e) => {
     this.toggleOperationMenu(e);
@@ -77,17 +77,17 @@ class DirOperationToolbar extends React.Component {
       isUploadMenuShow: !this.state.isUploadMenuShow,
       isCreateMenuShow: false,
     });
-  }
+  };
 
   onUploadFile = (e) => {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFile(e);
-  }
+  };
 
   onUploadFolder = (e) => {
     this.setState({isUploadMenuShow: false});
     this.props.onUploadFolder(e);
-  }
+  };
 
   onCreateClick = (e) => {
     this.toggleOperationMenu(e);
@@ -95,64 +95,64 @@ class DirOperationToolbar extends React.Component {
       isCreateMenuShow: !this.state.isCreateMenuShow,
       isUploadMenuShow: false,
     });
-  }
+  };
 
   onShareClick = () => {
     this.setState({
       isShareDialogShow: !this.state.isShareDialogShow
     });
-  }
+  };
 
   onCreateFolderToggle = () => {
     this.setState({isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow});
-  }
+  };
 
   onCreateFileToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: ''
     });
-  }
+  };
 
   onCreateMarkdownToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.md'
     });
-  }
+  };
 
   onCreateExcelToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.xlsx'
     });
-  }
+  };
 
   onCreatePPTToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.pptx'
     });
-  }
+  };
 
   onCreateWordToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.docx'
     });
-  }
+  };
 
   onCreateSeaDocToggle = () => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.sdoc'
     });
-  }
+  };
 
   onAddFolder = (dirPath) => {
     this.setState({isCreateFolderDialogShow: false});
     this.props.onAddFolder(dirPath);
-  }
+  };
 
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
@@ -160,7 +160,7 @@ class DirOperationToolbar extends React.Component {
       return object.name === newName;
     });
     return isDuplicated;
-  }
+  };
 
   render() {
     let { path, repoName, userPerm } = this.props;

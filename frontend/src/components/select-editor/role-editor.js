@@ -22,7 +22,7 @@ class RoleEditor extends React.Component {
     if (role === 'Member') {
       return gettext('Member');
     }
-  }
+  };
 
   render() {
     return (

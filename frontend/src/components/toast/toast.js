@@ -88,16 +88,16 @@ export default class Toast extends React.PureComponent {
      * When false, will close the Toast and call onRemove when finished.
      */
     isShown: PropTypes.bool
-  }
+  };
 
   static defaultProps = {
     intent: 'none'
-  }
+  };
 
   state = {
     isShown: true,
     height: 0
-  }
+  };
 
   componentDidUpdate(prevProps) {
     if (prevProps.isShown !== this.props.isShown) {
@@ -121,7 +121,7 @@ export default class Toast extends React.PureComponent {
     this.setState({
       isShown: false
     });
-  }
+  };
 
   startCloseTimer = () => {
     if (this.props.duration) {
@@ -129,22 +129,22 @@ export default class Toast extends React.PureComponent {
         this.close();
       }, this.props.duration * 1000);
     }
-  }
+  };
 
   clearCloseTimer = () => {
     if (this.closeTimer) {
       clearTimeout(this.closeTimer);
       this.closeTimer = null;
     }
-  }
+  };
 
   handleMouseEnter = () => {
     this.clearCloseTimer();
-  }
+  };
 
   handleMouseLeave = () => {
     this.startCloseTimer();
-  }
+  };
 
   onRef = ref => {
     if (ref === null) return;
@@ -154,7 +154,7 @@ export default class Toast extends React.PureComponent {
     this.setState({
       height
     });
-  }
+  };
 
   render() {
     return (

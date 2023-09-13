@@ -92,35 +92,35 @@ class Item extends Component {
     };
   }
 
- toggleOpMenu = () => {
-   this.setState({
-     isOpMenuOpen: !this.state.isOpMenuOpen
-   });
- }
+  toggleOpMenu = () => {
+    this.setState({
+      isOpMenuOpen: !this.state.isOpMenuOpen
+    });
+  };
 
   toggleLinkDialog = () => {
     this.setState({
       isLinkDialogOpen: !this.state.isLinkDialogOpen
     });
-  }
+  };
 
   handleMouseOver = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   handleMouseOut = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   viewLink = (e) => {
     e.preventDefault();
     this.toggleLinkDialog();
-  }
+  };
 
   removeLink = (e) => {
     e.preventDefault();
     this.props.onRemoveLink(this.props.item);
-  }
+  };
 
   renderExpiration = () => {
     const item = this.props.item;
@@ -130,7 +130,7 @@ class Item extends Component {
     const expire_date = moment(item.expire_date).format('YYYY-MM-DD');
     const expire_time = moment(item.expire_date).format('YYYY-MM-DD HH:mm:ss');
     return (<span className={item.is_expired ? 'error' : ''} title={expire_time}>{expire_date}</span>);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -251,11 +251,11 @@ class ShareAdminUploadLinks extends Component {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleCleanInvalidUploadLinksDialog = () => {
     this.setState({isCleanInvalidUploadLinksDialogOpen: !this.state.isCleanInvalidUploadLinksDialogOpen});
-  }
+  };
 
   cleanInvalidUploadLinks = () => {
     seafileAPI.cleanInvalidUploadLinks().then(res => {
@@ -266,7 +266,7 @@ class ShareAdminUploadLinks extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     return (

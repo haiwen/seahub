@@ -45,12 +45,12 @@ class HeaderToolbar extends React.Component {
 
   downloadFile = () => {
     location.href = '?dl=1';
-  }
+  };
 
   openFileViaClient = () => {
     const { repoID, path } = this.props.fileInfo;
     location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(path)}`;
-  }
+  };
 
   render() {
     let { contentChanged, saving, isLocked, lockedByMe } = this.props;

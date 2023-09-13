@@ -38,7 +38,7 @@ class UserNotificationsDialog extends React.Component {
   }
 
   getItems = (page) => {
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true });
     seafileAPI.listNotifications(page, PER_PAGE).then((res) => {
       this.setState({
         isLoading: false,
@@ -98,13 +98,13 @@ class UserNotificationsDialog extends React.Component {
     if (this.notificationTableRef.offsetHeight + this.notificationTableRef.scrollTop + 1 >= this.tableRef.offsetHeight) {
       this.getItems(this.state.currentPage + 1);
     }
-  }
+  };
 
   renderHeaderRowBtn = () => {
     return (
       <div className="notification-header-close">
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu}>
-          <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} className="notification-dropdown-toggle">            
+          <DropdownToggle tag="span" data-toggle="dropdown" aria-expanded={this.state.isItemMenuShow} className="notification-dropdown-toggle">
             <span className="sf3-font sf3-font-more-level item-dropdown-icon"></span>
           </DropdownToggle>
           <DropdownMenu right={true} className="dtable-dropdown-menu large">
@@ -115,7 +115,7 @@ class UserNotificationsDialog extends React.Component {
         <span className="sf3-font sf3-font-x-01 notification-close-icon" onClick={this.toggle}></span>
       </div>
     );
-  }
+  };
 
   render() {
     const { isLoading, errorMsg, items } = this.state;

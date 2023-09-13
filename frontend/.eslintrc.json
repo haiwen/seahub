@@ -44,6 +44,8 @@
     "react/jsx-indent": ["warn", 2],
     "react/prop-types": "warn",
     "react/display-name": "warn",
+    "no-mixed-operators": "off",
+    "no-useless-concat": "off",
     "jsx-a11y/anchor-has-content": "off",
     "jsx-a11y/href-no-hash": "off",
     "jsx-a11y/anchor-is-valid": "off"

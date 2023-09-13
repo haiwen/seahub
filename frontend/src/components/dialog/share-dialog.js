@@ -73,17 +73,17 @@ class ShareDialog extends React.Component {
     } else if (enableDirPrivateShare) {
       return 'shareToUser';
     }
-  }
+  };
 
   toggle = (tab) => {
     if (this.state.activeTab !== tab) {
       this.setState({ activeTab: tab });
     }
-  }
+  };
 
   onAddCustomPermissionToggle = () => {
     this.toggle('customSharePermission');
-  }
+  };
 
   renderDirContent = () => {
 
@@ -244,17 +244,17 @@ class ShareDialog extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   onTabKeyDown = (e) => {
     if (e.key == 'Enter' || e.key == 'Space') {
       e.target.click();
     }
-  }
+  };
 
   renderFileContent = () => {
     let activeTab = this.state.activeTab;
-    const { itemType, itemName, repoEncrypted, userPerm } = this.props;
+    const { itemType, repoEncrypted, userPerm } = this.props;
     const enableShareLink = !repoEncrypted && canGenerateShareLink;
 
     return (
@@ -300,7 +300,7 @@ class ShareDialog extends React.Component {
         </div>
       </Fragment>
     );
-  }
+  };
 
   renderExternalShareMessage = () => {
     if (additionalShareDialogNote && (typeof additionalShareDialogNote) === 'object') {
@@ -312,7 +312,7 @@ class ShareDialog extends React.Component {
       );
     }
     return null;
-  }
+  };
 
   render() {
     const { itemType, itemName } = this.props;

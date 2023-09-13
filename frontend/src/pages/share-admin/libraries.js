@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -17,7 +18,7 @@ class Content extends Component {
     const sortBy = 'name';
     const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
     this.props.sortItems(sortBy, sortOrder);
-  }
+  };
 
   render() {
     const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
@@ -75,6 +76,15 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -106,21 +116,21 @@ class Item extends Component {
     this.setState({
       isOpMenuOpen: !this.state.isOpMenuOpen
     });
-  }
+  };
 
   togglePermSelectDialog = () => {
     this.setState({
       isPermSelectDialogOpen: !this.state.isPermSelectDialogOpen
     });
-  }
+  };
 
   onMouseEnter = () => {
     this.setState({isOpIconShown: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOpIconShown: false});
-  }
+  };
 
   changePerm = (permission) => {
     const item = this.props.item;
@@ -145,7 +155,7 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   unshare = (e) => {
     e.preventDefault();
@@ -171,12 +181,12 @@ class Item extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster(errMessage);
     });
-  }
+  };
 
   onEditPermission = (event) => {
     event.nativeEvent.stopImmediatePropagation();
     this.setState({isShowPermEditor: true});
-  }
+  };
 
   render() {
     if (this.state.unshared) {
@@ -298,6 +308,11 @@ class Item extends Component {
   }
 }
 
+Item.propTypes = {
+  item: PropTypes.object.isRequired,
+  isDesktop: PropTypes.bool.isRequired,
+};
+
 class ShareAdminLibraries extends Component {
 
   constructor(props) {
@@ -313,7 +328,6 @@ class ShareAdminLibraries extends Component {
 
   componentDidMount() {
     seafileAPI.listSharedRepos().then((res) => {
-      // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       let items = res.data.map(item => {
         return new SharedRepoInfo(item);
       });
@@ -335,7 +349,7 @@ class ShareAdminLibraries extends Component {
       sortOrder: sortOrder,
       items: Utils.sortRepos(this.state.items, sortBy, sortOrder)
     });
-  }
+  };
 
   render() {
     return (

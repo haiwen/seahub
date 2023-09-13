@@ -114,20 +114,21 @@ class SearchViewPanel extends React.Component {
 
   compareNumber = (num1, num2) => {
     if (!num1 || !num2) return false;
+    // eslint-disable-next-line
     if (parseInt(num1.replace(/\-/g, '')) >= parseInt(num2.replace(/\-/g, ''))) {
       return true;
     } else {
       return false;
     }
-  }
+  };
 
   showSearchFilter = () => {
     this.setState({ isShowSearchFilter: true });
-  }
+  };
 
   hideSearchFilter = () => {
     this.setState({ isShowSearchFilter: false });
-  }
+  };
 
   handleReset = () => {
     this.setState({
@@ -144,7 +145,7 @@ class SearchViewPanel extends React.Component {
       errorDateMsg: '',
       errorSizeMsg: '',
     });
-  }
+  };
 
   handlePrevious = (e) => {
     e.preventDefault();

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { navigate } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
+import { navigate } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -22,14 +22,14 @@ class Search extends React.Component {
     this.setState({
       value: e.target.value
     });
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
     }
-  }
+  };
 
   handleSubmit = () => {
     const value = this.state.value.trim();
@@ -37,7 +37,7 @@ class Search extends React.Component {
       return false;
     }
     this.props.submit(value);
-  }
+  };
 
   render() {
     return (
@@ -57,6 +57,11 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  placeholder: PropTypes.string.isRequired,
+  submit: PropTypes.func.isRequired,
+};
 
 class OrgGroups extends Component {
 
@@ -90,7 +95,7 @@ class OrgGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
 
   onChangePageNum = (e, num) => {
@@ -103,15 +108,15 @@ class OrgGroups extends Component {
       page = page - 1;
     }
     this.initData(page);
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   deleteGroupItem = (group) => {
     seafileAPI.orgAdminDeleteOrgGroup(orgID, group.id).then(res => {
@@ -125,18 +130,18 @@ class OrgGroups extends Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   searchItems = (keyword) => {
     navigate(`${siteRoot}org/groupadmin/search-groups/?query=${encodeURIComponent(keyword)}`);
-  }
+  };
 
   getSearch = () => {
     return <Search
       placeholder={gettext('Search groups by name')}
       submit={this.searchItems}
     />;
-  }
+  };
 
   render() {
     let groups = this.state.orgGroups;
@@ -212,7 +217,7 @@ class GroupItem extends React.Component {
         highlight: true,
       });
     }
-  }
+  };
 
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
@@ -221,12 +226,12 @@ class GroupItem extends React.Component {
         highlight: false
       });
     }
-  }
+  };
 
   onDropdownToggleClick = (e) => {
     e.preventDefault();
     this.toggleOperationMenu(e);
-  }
+  };
 
   toggleOperationMenu = (e) => {
     e.stopPropagation();
@@ -243,11 +248,11 @@ class GroupItem extends React.Component {
         }
       }
     );
-  }
+  };
 
   toggleDelete = () => {
     this.props.deleteGroupItem(this.props.group);
-  }
+  };
 
   renderGroupHref = (group) => {
     let groupInfoHref;
@@ -258,7 +263,7 @@ class GroupItem extends React.Component {
     }
 
     return groupInfoHref;
-  }
+  };
 
   renderGroupCreator = (group) => {
     let userInfoHref = siteRoot + 'org/useradmin/info/' + group.creatorEmail + '/';
@@ -273,7 +278,7 @@ class GroupItem extends React.Component {
         </td>
       );
     }
-  }
+  };
 
   render() {
     let { group } = this.props;

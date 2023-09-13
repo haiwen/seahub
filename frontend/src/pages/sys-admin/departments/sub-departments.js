@@ -43,7 +43,7 @@ class SubDepartments extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onSubDepartmentNameChanged = (dept) => {
     this.setState({
@@ -54,15 +54,15 @@ class SubDepartments extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   onAddNewDepartment = (newDepartment) => {
     const { groups } = this.state;
@@ -70,14 +70,14 @@ class SubDepartments extends React.Component {
     this.setState({
       groups: groups
     });
-  }
+  };
 
   onDeleteDepartment = (id) => {
     const { groups } = this.state;
     this.setState({
       groups: groups.filter(item => item.id != id)
     });
-  }
+  };
 
   onSetDepartmentQuota = (target) => {
     const { groups } = this.state;
@@ -89,7 +89,7 @@ class SubDepartments extends React.Component {
         return item;
       })
     });
-  }
+  };
 
   render() {
     const { groups } = this.state;

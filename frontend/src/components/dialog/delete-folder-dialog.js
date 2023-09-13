@@ -35,7 +35,7 @@ class DeleteFolderDialog extends Component {
   deleteFolder = () => {
     this.props.deleteFolder();
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     const { sharedToUserCount, sharedToGroupCount } = this.state;

@@ -30,7 +30,7 @@ class TagName extends React.Component {
         this.input.current.focus();
       }
     });
-  }
+  };
 
   updateTagName = (e) => {
     const newName = e.target.value;
@@ -44,19 +44,19 @@ class TagName extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onInputKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.toggleMode();
       this.updateTagName(e);
     }
-  }
+  };
 
   onInputBlur = (e) => {
     this.toggleMode();
     this.updateTagName(e);
-  }
+  };
 
   render() {
     const { isEditing, tagName } = this.state;

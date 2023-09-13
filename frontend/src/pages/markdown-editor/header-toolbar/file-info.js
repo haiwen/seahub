@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gettext } from '../../../utils/constants';
 import { InternalLinkOperation } from '../../../components/operations';
@@ -24,8 +25,8 @@ class FileInfo extends React.PureComponent {
             </span>
             <InternalLinkOperation path={filePath} repoID={repoID} />
             {(isPro && isLocked) && (
-              <img 
-                className="file-locked-icon mx-2" 
+              <img
+                className="file-locked-icon mx-2"
                 width="16"
                 src={`${mediaUrl}img/file-locked-32.png`}
                 alt={lockedText}
@@ -46,5 +47,14 @@ class FileInfo extends React.PureComponent {
     );
   }
 }
+
+FileInfo.propTypes = {
+  fileInfo: PropTypes.object,
+  isPro: PropTypes.bool,
+  isLocked: PropTypes.bool,
+  mediaUrl: PropTypes.string,
+  toggleStar: PropTypes.func,
+  showDraftSaved: PropTypes.bool,
+};
 
 export default FileInfo;

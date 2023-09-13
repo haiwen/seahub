@@ -58,7 +58,7 @@ class Wiki extends Component {
     this.loadSidePanel(initialPath);
     this.loadWikiData(initialPath);
 
-    this.links = document.querySelectorAll(`#wiki-file-content a`);
+    this.links = document.querySelectorAll('#wiki-file-content a');
     this.links.forEach(link => link.addEventListener('click', this.onConentLinkClick));
   }
 
@@ -75,7 +75,7 @@ class Wiki extends Component {
     // load dir list
     initialPath = isDir === 'None' ? '/' : initialPath;
     this.loadNodeAndParentsByPath(initialPath);
-  }
+  };
 
   loadWikiData = (initialPath) => {
     this.pythonWrapper = document.getElementById('wiki-file-content');
@@ -92,7 +92,7 @@ class Wiki extends Component {
       this.showDir(initialPath);
       return;
     }
-    
+
     if (isDir === 'None' && initialPath === '/home.md') {
       this.showDir('/');
       return;
@@ -103,7 +103,7 @@ class Wiki extends Component {
       let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(initialPath);
       window.history.pushState({url: fileUrl, path: initialPath}, initialPath, fileUrl);
     }
-  }
+  };
 
   loadIndexNode = () => {
     seafileAPI.listWikiDir(slug, '/').then(res => {
@@ -121,7 +121,7 @@ class Wiki extends Component {
     }).catch(() => {
       this.setState({isLoadFailed: true});
     });
-  }
+  };
 
   showDir = (dirPath) => {
     this.removePythonWrapper();
@@ -130,7 +130,7 @@ class Wiki extends Component {
     // update location url
     let fileUrl = siteRoot + 'published/' + slug + Utils.encodePath(dirPath);
     window.history.pushState({url: fileUrl, path: dirPath}, dirPath, fileUrl);
-  }
+  };
 
   showFile = (filePath) => {
     this.setState({
@@ -138,7 +138,7 @@ class Wiki extends Component {
       isViewFile: true,
       path: filePath,
     });
-    
+
     this.removePythonWrapper();
     seafileAPI.getWikiFileContent(slug, filePath).then(res => {
       let data = res.data;
@@ -158,7 +158,7 @@ class Wiki extends Component {
     } else {
       window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
     }
-  }
+  };
 
   loadDirentList = (dirPath) => {
     this.setState({isDataLoading: true});
@@ -186,7 +186,7 @@ class Wiki extends Component {
     }).catch(() => {
       this.setState({isLoadFailed: true});
     });
-  }
+  };
 
   loadTreeNodeByPath = (path) => {
     let tree = this.state.treeData.clone();
@@ -206,7 +206,7 @@ class Wiki extends Component {
       parentNode.isExpanded = true;
       this.setState({treeData: tree, currentNode: node}); //tree
     }
-  }
+  };
 
   loadNodeAndParentsByPath = (path) => {
     let tree = this.state.treeData.clone();
@@ -239,14 +239,14 @@ class Wiki extends Component {
     }).catch(() => {
       this.setState({isLoadFailed: true});
     });
-  }
+  };
 
   removePythonWrapper = () => {
     if (this.pythonWrapper)  {
       document.body.removeChild(this.pythonWrapper);
       this.pythonWrapper = null;
     }
-  }
+  };
 
   onConentLinkClick = (event) => {
     event.preventDefault();
@@ -262,7 +262,7 @@ class Wiki extends Component {
       link = event.target.href;
     }
     this.onLinkClick(link);
-  }
+  };
 
   onLinkClick = (link) => {
     const url = link;
@@ -278,7 +278,7 @@ class Wiki extends Component {
     if (!this.state.closeSideBar) {
       this.setState({ closeSideBar: true });
     }
-  }
+  };
 
   onpopstate = (event) => {
     if (event.state && event.state.path) {
@@ -293,7 +293,7 @@ class Wiki extends Component {
         });
       }
     }
-  }
+  };
 
   onSearchedClick = (item) => {
     let path = item.is_dir ? item.path.slice(0, item.path.length - 1) : item.path;
@@ -305,6 +305,7 @@ class Wiki extends Component {
     let index = -1;
     let paths = Utils.getPaths(path);
     for (let i = 0; i < paths.length; i++) {
+      // eslint-disable-next-line no-use-before-define
       let node = this.state.treeData.getNodeByPath(node);
       if (!node) {
         index = i;
@@ -332,11 +333,11 @@ class Wiki extends Component {
         newWindow.location.href = url;
       }
     }
-  }
+  };
 
   onMenuClick = () => {
     this.setState({closeSideBar: !this.state.closeSideBar});
-  }
+  };
 
   onMainNavBarClick = (nodePath) => {
     let tree = this.state.treeData.clone();
@@ -344,7 +345,7 @@ class Wiki extends Component {
     tree.expandNode(node);
     this.setState({treeData: tree, currentNode: node});
     this.showDir(node.path);
-  }
+  };
 
   onDirentClick = (dirent) => {
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
@@ -360,11 +361,11 @@ class Wiki extends Component {
         w.location.href = url;
       }
     }
-  }
+  };
 
   onCloseSide = () => {
     this.setState({closeSideBar: !this.state.closeSideBar});
-  }
+  };
 
   onNodeClick = (node) => {
     if (!this.state.pathExist) {
@@ -412,12 +413,12 @@ class Wiki extends Component {
         w.location.href = url;
       }
     }
-  }
+  };
 
   onNodeCollapse = (node) => {
     let tree = treeHelper.collapseNode(this.state.treeData, node);
     this.setState({treeData: tree});
-  }
+  };
 
   onNodeExpanded = (node) => {
     let tree = this.state.treeData.clone();
@@ -431,7 +432,7 @@ class Wiki extends Component {
       tree.expandNode(node);
       this.setState({treeData: tree});
     }
-  }
+  };
 
   addFirstResponseListToNode = (list, node) => {
     node.isLoaded = true;
@@ -452,7 +453,7 @@ class Wiki extends Component {
       return new TreeNode({object});
     });
     node.addChildren(nodeList);
-  }
+  };
 
   addResponseListToNode = (list, node) => {
     node.isLoaded = true;
@@ -466,7 +467,7 @@ class Wiki extends Component {
       return new TreeNode({object});
     });
     node.addChildren(nodeList);
-  }
+  };
 
   render() {
     return (

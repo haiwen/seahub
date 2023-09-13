@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import axios from 'axios';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { loginUrl, siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './remote-dir-topbar';
 import DirPathBar from './remote-dir-path';
@@ -44,14 +45,14 @@ class DirView extends Component {
 
   onPathClick = (path) => {
     this.loadDirentList(path);
-  }
+  };
 
   openFolder = (dirent) => {
     let direntPath = Utils.joinPath(this.state.path, dirent.name);
     if (!dirent.is_file) {
       this.loadDirentList(direntPath);
     }
-  }
+  };
 
   loadDirentList = (path) => {
     const { providerID, repoID } = this.props;
@@ -78,7 +79,7 @@ class DirView extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
-  }
+  };
 
   downloadDirent = (dirent) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
@@ -88,11 +89,11 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   openFileInput = () => {
     this.fileInput.current.click();
-  }
+  };
 
   onFileInputChange = () => {
     if (!this.fileInput.current.files.length) {
@@ -125,7 +126,7 @@ class DirView extends Component {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   render() {
     const { loading, errorMsg,
@@ -169,5 +170,11 @@ class DirView extends Component {
     );
   }
 }
+
+DirView.propTypes = {
+  repoID: PropTypes.string,
+  providerID: PropTypes.string,
+  onTabNavClick: PropTypes.func.isRequired,
+};
 
 export default DirView;

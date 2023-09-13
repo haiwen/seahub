@@ -59,18 +59,18 @@ class FileContent extends React.Component {
       innerNode.data.src = serviceURL + '/view-image-via-share-link/?token=' + sharedToken + '&path=' + imagePath;
     }
     return innerNode;
-  }
+  };
 
   modifyValueBeforeRender = (value) => {
     return Utils.changeMarkdownNodes(value, this.changeImageURL);
-  }
+  };
 
   updateForNoOutline = () => {
     const $outline = document.querySelector('.md-view .seafile-markdown-outline');
     const $main = document.querySelector('.md-view .article');
     $outline.className += ' d-none';
     $main.className += ' article-no-outline';
-  }
+  };
 
   render() {
     if (err) {

@@ -24,7 +24,7 @@ class IconButton extends React.Component {
     this.setState({
       tooltipOpen: !this.state.tooltipOpen
     });
-  }
+  };
   render() {
     const className = 'btn-icon';
     const btnContent = (

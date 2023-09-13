@@ -41,7 +41,7 @@ class SortOptions extends React.Component {
     const [sortBy, sortOrder] = e.target.value.split('-');
     this.props.sortItems(sortBy, sortOrder);
     this.props.toggleDialog();
-  }
+  };
 
   render() {
     return (

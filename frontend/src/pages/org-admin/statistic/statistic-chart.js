@@ -100,11 +100,11 @@ class StatisticChart extends React.Component {
 
   titleCallback = (tooltipItem, data) => {
     return data.datasets[tooltipItem.datasetIndex].label + ': ' + Utils.bytesToSize(tooltipItem.yLabel);
-  }
+  };
 
   ticksCallback = (value, index, values) => {
     return Utils.bytesToSize(value);
-  }
+  };
 
   render() {
 

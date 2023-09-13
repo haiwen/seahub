@@ -63,7 +63,7 @@ class GenerateUploadLink extends React.Component {
       }
       this.props.closeShareDialog();
     });
-  }
+  };
 
   addPassword = () => {
     this.setState({
@@ -72,13 +72,13 @@ class GenerateUploadLink extends React.Component {
       passwordnew: '',
       errorInfo: ''
     });
-  }
+  };
 
   togglePasswordVisible = () => {
     this.setState({
       passwordVisible: !this.state.passwordVisible
     });
-  }
+  };
 
   generatePassword = () => {
     let val = Utils.generatePassword(shareLinkPasswordMinLength);
@@ -86,25 +86,25 @@ class GenerateUploadLink extends React.Component {
       password: val,
       passwordnew: val
     });
-  }
+  };
 
   inputPassword = (e) => {
     this.setState({
       password: e.target.value
     });
-  }
+  };
 
   inputPasswordNew = (e) => {
     this.setState({
       passwordnew: e.target.value
     });
-  }
+  };
 
   toggleStoredPasswordVisible = () => {
     this.setState({
       storedPasswordVisible: !this.state.storedPasswordVisible
     });
-  }
+  };
 
   generateUploadLink = () => {
     let isValid = this.validateParamsInput();
@@ -131,7 +131,7 @@ class GenerateUploadLink extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   validateParamsInput = () => {
     let { showPasswordInput, password, passwordnew, isExpireChecked, expType, expireDays, expDate } = this.state;
@@ -177,47 +177,47 @@ class GenerateUploadLink extends React.Component {
       this.setState({expireDays: parseInt(expireDays)});
     }
     return true;
-  }
+  };
 
   onExpireChecked = (e) => {
     this.setState({isExpireChecked: e.target.checked});
-  }
+  };
 
   setExpType = (e) => {
     this.setState({
       expType: e.target.value
     });
-  }
+  };
 
   onExpDateChanged = (value) => {
     this.setState({
       expDate: value
     });
-  }
+  };
 
   onExpireDaysChanged = (e) => {
     let day = e.target.value.trim();
     this.setState({expireDays: day});
-  }
+  };
 
   onCopyUploadLink = () => {
     let uploadLink = this.state.sharedUploadInfo.link;
     copy(uploadLink);
     toaster.success(gettext('Upload link is copied to the clipboard.'));
     this.props.closeShareDialog();
-  }
+  };
 
   handleMouseOverExpirationEditIcon = () => {
     this.setState({isExpirationEditIconShow: true});
-  }
+  };
 
   handleMouseOutExpirationEditIcon = () => {
     this.setState({isExpirationEditIconShow: false});
-  }
+  };
 
   editExpirationToggle = () => {
     this.setState({isEditingExpiration: !this.state.isEditingExpiration});
-  }
+  };
 
   updateExpiration = (e) => {
 
@@ -243,7 +243,7 @@ class GenerateUploadLink extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   deleteUploadLink = () => {
     let sharedUploadInfo = this.state.sharedUploadInfo;
@@ -261,13 +261,13 @@ class GenerateUploadLink extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   toggleSendLink = () => {
     this.setState({
       isSendLinkShown: !this.state.isSendLinkShown
     });
-  }
+  };
 
   render() {
 

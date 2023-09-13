@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -28,29 +29,29 @@ class Content extends Component {
 
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
-  }
+  };
 
   getPreviousPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page - 1);
-  }
+  };
 
   getNextPageList = () => {
     this.props.getListByPage(this.props.pageInfo.current_page + 1);
-  }
+  };
 
   sortByFileCount = (e) => {
     e.preventDefault();
     this.props.sortItems('file_count');
-  }
+  };
 
   sortBySize = (e) => {
     e.preventDefault();
     this.props.sortItems('size');
-  }
+  };
 
   render() {
     // offer 'sort' only for 'all repos'
@@ -120,6 +121,22 @@ class Content extends Component {
   }
 }
 
+Content.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onRestoreRepo: PropTypes.func,
+  getListByPage: PropTypes.func.isRequired,
+  resetPerPage: PropTypes.func,
+  pageInfo: PropTypes.object,
+  curPerPage: PropTypes.number,
+  sortItems: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+};
+
 class Item extends Component {
 
   constructor(props) {
@@ -150,7 +167,7 @@ class Item extends Component {
 
       this.setState({isRepoDeleted: false});
     });
-  }
+  };
 
   onTransferRepo = (owner) => {
     seafileAPI.sysAdminTransferRepo(this.props.repo.id, owner.email).then((res) => {
@@ -162,7 +179,7 @@ class Item extends Component {
       toaster.danger(errMessage);
     });
     this.toggleTransferDialog();
-  }
+  };
 
   handleMouseOver = () => {
     if (!this.props.isItemFreezed) {
@@ -171,7 +188,7 @@ class Item extends Component {
         highlight: true
       });
     }
-  }
+  };
 
   handleMouseOut = () => {
     if (!this.props.isItemFreezed) {
@@ -180,7 +197,7 @@ class Item extends Component {
         highlight: false
       });
     }
-  }
+  };
 
   onUnfreezedItem = () => {
     this.setState({
@@ -188,7 +205,7 @@ class Item extends Component {
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
-  }
+  };
 
   onMenuItemClick = (operation) => {
     switch(operation) {
@@ -207,23 +224,23 @@ class Item extends Component {
       default:
         break;
     }
-  }
+  };
 
   toggleShareDialog = () => {
     this.setState({isShareDialogOpen: !this.state.isShareDialogOpen});
-  }
+  };
 
   toggleDeleteDialog = () => {
     this.setState({isDeleteDialogOpen: !this.state.isDeleteDialogOpen});
-  }
+  };
 
   toggleTransferDialog = () => {
     this.setState({isTransferDialogOpen: !this.state.isTransferDialogOpen});
-  }
+  };
 
   toggleHistorySettingDialog = () => {
     this.setState({isHistorySettingDialogOpen: !this.state.isHistorySettingDialogOpen});
-  }
+  };
 
   renderRepoName = () => {
     const { repo } = this.props;
@@ -236,7 +253,7 @@ class Item extends Component {
     } else {
       return '--';
     }
-  }
+  };
 
   translateOperations = (item) => {
     let translateResult = '';
@@ -258,7 +275,7 @@ class Item extends Component {
     }
 
     return translateResult;
-  }
+  };
 
   getOperations = () => {
     const { repo } = this.props;
@@ -268,7 +285,7 @@ class Item extends Component {
     }
     operations.push('History Setting');
     return operations;
-  }
+  };
 
   render () {
     const { repo } = this.props;
@@ -360,5 +377,14 @@ class Item extends Component {
     );
   }
 }
+
+Item.propTypes = {
+  repo: PropTypes.object.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onDeleteRepo: PropTypes.func.isRequired,
+  onTransferRepo: PropTypes.func.isRequired,
+};
 
 export default Content;

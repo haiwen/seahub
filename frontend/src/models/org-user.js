@@ -1,4 +1,3 @@
-import { Utils } from '../utils/utils';
 import { lang } from '../utils/constants';
 import moment from 'moment';
 

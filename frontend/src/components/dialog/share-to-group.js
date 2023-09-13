@@ -19,21 +19,21 @@ class GroupItem extends React.Component {
 
   onMouseEnter = () => {
     this.setState({isOperationShow: true});
-  }
+  };
 
   onMouseLeave = () => {
     this.setState({isOperationShow: false});
-  }
+  };
 
   deleteShareItem = () => {
     let item = this.props.item;
     this.props.deleteShareItem(item.group_info.id);
-  }
+  };
 
   onChangeUserPermission = (permission) => {
     let item = this.props.item;
     this.props.onChangeUserPermission(item, permission);
-  }
+  };
 
   render() {
     let item = this.props.item;
@@ -69,6 +69,14 @@ class GroupItem extends React.Component {
   }
 }
 
+GroupItem.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 class GroupList extends React.Component {
 
   render() {
@@ -92,6 +100,14 @@ class GroupList extends React.Component {
   }
 }
 
+GroupList.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  permissions: PropTypes.array.isRequired,
+  deleteShareItem: PropTypes.func.isRequired,
+  onChangeUserPermission: PropTypes.func.isRequired,
+};
+
 const propTypes = {
   isGroupOwnedRepo: PropTypes.bool,
   itemPath: PropTypes.string.isRequired,
@@ -105,6 +121,10 @@ const NoOptionsMessage = (props) => {
   return (
     <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
   );
+};
+
+NoOptionsMessage.propTypes = {
+  innerProps: PropTypes.object.isRequired,
 };
 
 class ShareToGroup extends React.Component {
@@ -135,7 +155,7 @@ class ShareToGroup extends React.Component {
 
   handleSelectChange = (option) => {
     this.setState({selectedOption: option});
-  }
+  };
 
   componentDidMount() {
     this.loadOptions();
@@ -163,7 +183,7 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   listSharedGroups = () => {
     let path = this.props.itemPath;
@@ -178,11 +198,11 @@ class ShareToGroup extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   setPermission = (permission) => {
     this.setState({permission: permission});
-  }
+  };
 
   shareToGroup = () => {
     let groups = [];
@@ -243,7 +263,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   deleteShareItem = (groupID) => {
     let path = this.props.itemPath;
@@ -267,7 +287,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   onChangeUserPermission = (item, permission) => {
     let path = this.props.itemPath;
@@ -288,7 +308,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  }
+  };
 
   updateSharedItems = (item, permission) => {
     let groupID = item.group_info.id;
@@ -301,7 +321,7 @@ class ShareToGroup extends React.Component {
       return sharedItem;
     });
     this.setState({sharedItems: sharedItems});
-  }
+  };
 
   render() {
     const thead = (

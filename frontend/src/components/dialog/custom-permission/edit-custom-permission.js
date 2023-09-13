@@ -18,11 +18,11 @@ class EditCustomPermission extends React.Component {
       permission: permission
     });
     this.props.editCustomPermission(newPermission);
-  }
+  };
 
   render() {
     return (
-      <CustomPermissionEditor 
+      <CustomPermissionEditor
         mode={'edit'}
         permission={this.props.permission}
         onChangeMode={this.props.onChangeMode}
