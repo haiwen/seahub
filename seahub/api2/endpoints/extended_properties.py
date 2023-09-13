@@ -45,6 +45,12 @@ def add_set_folder_ex_props_task(repo_id, path, username):
     return resp.json()
 
 
+def query_set_ex_props_status(repo_id, path):
+    url = SEAF_EVENTS_IO_SERVER_URL.strip('/') + '/query-set-ex-props-status'
+    resp = requests.get(url, params={'repo_id': repo_id, 'path': path})
+    return resp.json()
+
+
 def check_table(seatable_api: SeaTableAPI):
     """check EX_PROPS_TABLE is invalid or not
 
@@ -365,12 +371,17 @@ class FolderItemsExtendedPropertiesView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
         path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
 
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found' % path)
         if not stat.S_ISDIR(dirent.mode):
             return api_error(status.HTTP_400_BAD_REQUEST, '%s is not a folder' % path)
+
+        # permission check
+        if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         # request props from seatable
         try:
@@ -403,3 +414,33 @@ class FolderItemsExtendedPropertiesView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response({'success': True})
+
+
+class FolderItemsPropertiesStatusQueryView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        if not all((DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_PROPS_TABLE)):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
+        # arguments check
+        path = request.GET.get('path')
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
+        path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
+
+        dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        if not dirent:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found' % path)
+        if not stat.S_ISDIR(dirent.mode):
+            return api_error(status.HTTP_400_BAD_REQUEST, '%s is not a folder' % path)
+
+        # permission check
+        if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        resp_json = query_set_ex_props_status(repo_id, path)
+
+        return Response(resp_json)

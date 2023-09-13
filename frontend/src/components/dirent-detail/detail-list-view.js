@@ -8,6 +8,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 import FileTagList from '../file-tag-list';
+import ConfirmApplyFolderAttributiesDialog from '../dialog/confirm-apply-folder-attributies-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -27,6 +28,7 @@ class DetailListView extends React.Component {
     this.state = {
       isEditFileTagShow: false,
       isShowExtraAttributes: false,
+      isShowApplyAttributes: false
     };
   }
 
@@ -65,6 +67,10 @@ class DetailListView extends React.Component {
     this.setState({ isShowExtraAttributes: !this.state.isShowExtraAttributes });
   };
 
+  toggleApplyAttributiesDialog = () => {
+    this.setState({ isShowApplyAttributes: !this.state.isShowApplyAttributes });
+  };
+
   renderTags = () => {
     const { direntType, direntDetail } = this.props;
     const position = this.getDirentPosition();
@@ -78,13 +84,22 @@ class DetailListView extends React.Component {
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
             {direntDetail.permission === 'rw' && (
-              <tr className="file-extra-attributes">
-                <th colSpan={2}>
-                  <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
-                    {gettext('Edit extra properties')}
-                  </div>
-                </th>
-              </tr>
+              <Fragment>
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
+                      {gettext('Edit extra properties')}
+                    </div>
+                  </th>
+                </tr>
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleApplyAttributiesDialog}>
+                      {gettext('Apply properties to sub dirents')}
+                    </div>
+                  </th>
+                </tr>
+              </Fragment>
             )}
           </tbody>
         </table>
@@ -145,6 +160,13 @@ class DetailListView extends React.Component {
             direntType={direntType}
             direntDetail={direntDetail}
             onToggle={this.toggleExtraAttributesDialog}
+          />
+        )}
+        {this.state.isShowApplyAttributes && (
+          <ConfirmApplyFolderAttributiesDialog
+            toggle={this.toggleApplyAttributiesDialog}
+            repoID={this.props.repoID}
+            path={direntPath}
           />
         )}
       </Fragment>
