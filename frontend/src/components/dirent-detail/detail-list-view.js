@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import Icon from '../icon';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
@@ -102,7 +103,7 @@ class DetailListView extends React.Component {
             <th>{gettext('Tags')}</th>
             <td>
               <FileTagList fileTagList={this.props.fileTagList} />
-              <i className='fa fa-pencil-alt attr-action-icon' onClick={this.onEditFileTagToggle}></i>
+              <span onClick={this.onEditFileTagToggle}><Icon symbol='tag' /></span>
             </td>
           </tr>
           {direntDetail.permission === 'rw' && (

@@ -106,6 +106,12 @@
   list-style: none;
 }
 
+.dirent-table-container .seafile-multicolor-icon.seafile-multicolor-icon-tag {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
 .file-related-files th {
   vertical-align: top;
 }
