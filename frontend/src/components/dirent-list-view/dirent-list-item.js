@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import MD5 from 'MD5';
+import MediaQuery from 'react-responsive';
+import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { UncontrolledTooltip } from 'reactstrap';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -16,6 +16,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import EditFileTagDialog from '../dialog/edit-filetag-dialog';
+import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
 import '../../css/dirent-list-item.css';
@@ -88,6 +89,7 @@ class DirentListItem extends React.Component {
       isPermissionDialogOpen: false,
       isOpMenuOpen: false // for mobile
     };
+    this.tagListTitleID = `tag-list-title-${uuidv4()}`;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -412,10 +414,8 @@ class DirentListItem extends React.Component {
   };
 
   onConvertWithONLYOFFICE = ()=> {
-
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
-
     seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
       this.props.loadDirentList(res.data.parent_dir);
     }).catch(error => {
@@ -676,10 +676,8 @@ class DirentListItem extends React.Component {
       fileHref = siteRoot + 'lib/' + this.props.repoID + '/revisions/' + dirent.revision_id + '/';
     }
 
-    let toolTipID = '';
     let tagTitle = '';
     if (dirent.file_tags && dirent.file_tags.length > 0) {
-      toolTipID = MD5(dirent.name).slice(0, 7);
       tagTitle = dirent.file_tags.map(item => item.name).join(' ');
     }
 
@@ -691,7 +689,6 @@ class DirentListItem extends React.Component {
     trClass += dirent.isSelected? 'tr-active' : '';
 
     let lockedInfo = gettext('locked by {name}').replace('{name}', dirent.lock_owner_name);
-
     const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
     const desktopItem = (
@@ -745,10 +742,10 @@ class DirentListItem extends React.Component {
             </Fragment>
           )}
         </td>
-        <td className="tag-list-title">
+        <td className="tag-list-title" id={this.tagListTitleID}>
           {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
             <Fragment>
-              <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
+              <div className="dirent-item tag-list tag-list-stacked">
                 {dirent.file_tags.map((fileTag, index) => {
                   let length = dirent.file_tags.length;
                   return (
@@ -756,7 +753,7 @@ class DirentListItem extends React.Component {
                   );
                 })}
               </div>
-              <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
+              <UncontrolledTooltip target={this.tagListTitleID} placement="bottom">
                 {tagTitle}
               </UncontrolledTooltip>
             </Fragment>
@@ -851,15 +848,30 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isEditFileTagShow &&
-          <EditFileTagDialog
-            repoID={this.props.repoID}
-            fileTagList={dirent.file_tags}
-            filePath={direntPath}
-            toggleCancel={this.onEditFileTagToggle}
-            onFileTagChanged={this.onFileTagChanged}
-          />
-        }
+        <MediaQuery query="(min-width: 768px)">
+          {this.state.isEditFileTagShow &&
+            <EditFileTagPopover
+              repoID={this.props.repoID}
+              fileTagList={dirent.file_tags}
+              filePath={direntPath}
+              toggleCancel={this.onEditFileTagToggle}
+              onFileTagChanged={this.onFileTagChanged}
+              target={this.tagListTitleID}
+              isEditFileTagShow={this.state.isEditFileTagShow}
+            />
+          }
+        </MediaQuery>
+        <MediaQuery query="(max-width: 767.8px)">
+          {this.state.isEditFileTagShow &&
+            <EditFileTagDialog
+              repoID={this.props.repoID}
+              fileTagList={dirent.file_tags}
+              filePath={direntPath}
+              toggleCancel={this.onEditFileTagToggle}
+              onFileTagChanged={this.onFileTagChanged}
+            />
+          }
+        </MediaQuery>
         {this.state.isZipDialogOpen &&
           <ModalPortal>
             <ZipDownloadDialog

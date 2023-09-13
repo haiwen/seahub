@@ -35,19 +35,6 @@
   color: #444;
 }
 
-.file-tag-item {
-  margin: 0.25rem 0;
-  padding: 0 0.5rem;
-  width: max-content;
-  cursor: pointer;
-  background-color: #eee;
-  border-radius: 1rem;
-}
-
-.file-tag-item:hover {
-  background-color: #bbb;
-}
-
 .tag-dialog-back {
   color: #888;
   cursor: pointer;
@@ -65,9 +52,9 @@
 }
 
 .tag-color-option .color-selected {
-    opacity: 0;
+  opacity: 0;
 }
 
 .tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
-    opacity: 1;
+  opacity: 1;
 }
