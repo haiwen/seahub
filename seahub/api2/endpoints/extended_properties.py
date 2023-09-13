@@ -34,9 +34,14 @@ def request_can_set_ex_props(repo_id, path):
     return resp.json()
 
 
-def add_set_folder_ex_props_task(repo_id, path):
+def add_set_folder_ex_props_task(repo_id, path, username):
     url = SEAF_EVENTS_IO_SERVER_URL.strip('/') + '/set-folder-ex-props'
-    resp = requests.post(url, json={'repo_id': repo_id, 'path': path})
+    context = {
+        'repo_id': repo_id,
+        'path': path,
+        '文件负责人': email2nickname(username)
+    }
+    resp = requests.post(url, json=context)
     return resp.json()
 
 
@@ -363,7 +368,7 @@ class FolderItemsExtendedPropertiesView(APIView):
 
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
         if not dirent:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File or folder %s not found' % path)
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found' % path)
         if not stat.S_ISDIR(dirent.mode):
             return api_error(status.HTTP_400_BAD_REQUEST, '%s is not a folder' % path)
 
@@ -382,9 +387,9 @@ class FolderItemsExtendedPropertiesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         rows = result.get('results')
         if not rows:
-            return api_error(status.HTTP_400_BAD_REQUEST, '%s not set extended properties')
+            return api_error(status.HTTP_400_BAD_REQUEST, '%s not set extended properties' % path)
 
-        resp_json = add_set_folder_ex_props_task(repo_id, path)
+        resp_json = add_set_folder_ex_props_task(repo_id, path, request.user.username)
 
         error_type = resp_json.get('error_type')
         if error_type == 'higher_being_set':
