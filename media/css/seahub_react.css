@@ -942,11 +942,15 @@ a.table-sort-op:hover {
 .dropdown {
   vertical-align: middle;
 }
+
 .dropdown-menu {
-    min-width: 8rem;
+  min-width: 8rem;
 }
+
 .dropdown-item {
-    cursor: pointer;
+  cursor: pointer;
+  color: #212529;
+  font-size: 14px;
 }
   
 /* empty-tip */
