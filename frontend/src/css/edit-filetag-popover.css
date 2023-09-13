@@ -1,0 +1,46 @@
+.edit-filetag-popover .edit-filetag-popover-input {
+  max-height: 30px;
+  font-size: 14px;
+  color: #212529;
+  height: 30px;
+}
+
+.edit-filetag-popover .popover {
+  padding: 10px;
+  width: 200px;
+  padding-bottom: 0px;
+}
+
+.edit-filetag-popover .tag-list-container {
+  padding: 10px 0;
+}
+
+.edit-filetag-popover .tag-list-container .tag-not-found {
+  opacity: 0.5;
+}
+
+.edit-filetag-popover .tag-list-item {
+  height: 30px;
+}
+
+.edit-filetag-popover .tag-item {
+  display: flex;
+  align-items: center;
+  max-width: 130px;
+  margin: 0.25rem 0;
+  padding: 0 0.5rem;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.edit-filetag-popover .tag-item .tag-name {
+  color: #fff;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.edit-filetag-popover .add-item-btn {
+  margin: 0 -10px;
+}

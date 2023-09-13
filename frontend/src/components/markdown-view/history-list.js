@@ -12,6 +12,7 @@ const propTypes = {
   showDiffViewer: PropTypes.func.isRequired,
   setDiffViewerContent: PropTypes.func.isRequired,
   reloadDiffContent: PropTypes.func.isRequired,
+  toggleHistoryPanel: PropTypes.func.isRequired,
 };
 
 class HistoryList extends React.Component {
@@ -143,7 +144,7 @@ const HistoryItempropTypes = {
   onClick: PropTypes.func,
   index: PropTypes.number,
   preItem: PropTypes.object,
-  currewntItem: PropTypes.object,
+  currentItem: PropTypes.object,
   name: PropTypes.string,
   className: PropTypes.string,
 };

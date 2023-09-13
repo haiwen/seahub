@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Popover, PopoverBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import { TAG_COLORS } from '../../constants';
 import toaster from '../toast';
 
 import '../../css/repo-tag.css';
@@ -48,7 +49,7 @@ class TagColor extends React.Component {
     const { tag } = this.props;
     const { id, color } = tag;
 
-    let colorList = ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84', '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'];
+    let colorList = [...TAG_COLORS];
     // for color from previous color options
     if (colorList.indexOf(color) == -1) {
       colorList.unshift(color);

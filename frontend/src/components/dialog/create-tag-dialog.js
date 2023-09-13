@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import { TAG_COLORS } from '../../constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
@@ -17,10 +18,9 @@ class CreateTagDialog extends React.Component {
     super(props);
     this.state = {
       tagName: '',
-      tagColor: '',
+      tagColor: TAG_COLORS[0],
       newTag: {},
       errorMsg: '',
-      colorList: ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84', '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'],
     };
   }
 
@@ -65,14 +65,7 @@ class CreateTagDialog extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this.setState({
-      tagColor: this.state.colorList[0]
-    });
-  }
-
   render() {
-    let colorList = this.state.colorList;
     let canSave = this.state.tagName.trim() ? true : false;
     return (
       <Fragment>
@@ -90,7 +83,7 @@ class CreateTagDialog extends React.Component {
             <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
               <div className="d-flex justify-content-between">
-                {colorList.map((item, index)=>{
+                {TAG_COLORS.map((item, index)=>{
                   return (
                     <div key={index} className="tag-color-option" onChange={this.selectTagcolor}>
                       <label className="colorinput">

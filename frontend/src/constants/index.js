@@ -106,7 +106,7 @@ export const DURATION_DECIMAL_DIGITS = {
   [DURATION_FORMATS_MAP.H_MM_SS_SSS]: 3,
 };
 
-export {
-  KeyCodes,
-  zIndexes,
-};
+const TAG_COLORS = ['#FBD44A', '#EAA775', '#F4667C', '#DC82D2', '#9860E5', '#9F8CF1', '#59CB74', '#ADDF84',
+  '#89D2EA', '#4ECCCB', '#46A1FD', '#C2C2C2'];
+
+export { KeyCodes, zIndexes, TAG_COLORS };
