@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice } from './constants';
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableOnlyoffice, enableSeadoc } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -528,7 +528,7 @@ export const Utils = {
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, MARK_AS_DRAFT, UNMARK_AS_DRAFT,
-      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT } = TextTranslation;
+      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT, CONVERT_TO_MARKDOWN, CONVERT_TO_SDOC } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -595,6 +595,19 @@ export const Utils = {
       }
 
       list.push('Divider');
+    }
+
+    if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {
+        if (dirent.name.endsWith('.md')) {
+          list.push(CONVERT_TO_SDOC);
+        }
+
+        if (dirent.name.endsWith('.sdoc')) {
+          list.push(CONVERT_TO_MARKDOWN);
+        }
+    }
+
+    if (permission == 'rw') {
       if (Utils.isSdocFile(dirent.name)) {
         if (dirent.is_sdoc_draft) {
           list.push(UNMARK_AS_DRAFT);
@@ -602,6 +615,7 @@ export const Utils = {
           list.push(MARK_AS_DRAFT);
         }
       }
+      list.push('Divider');
       /*
       if (enableFileComment) {
         list.push(COMMENT);

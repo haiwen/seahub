@@ -33,6 +33,7 @@ const propTypes = {
   onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -115,6 +116,11 @@ class DirentGridView extends React.Component {
     this.props.onItemDelete(currentObject);
   };
 
+  onItemConvert = (currentObject, e, dstType) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.props.onItemConvert(currentObject, dstType);
+  }
+
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
     switch(operation) {
@@ -135,6 +141,12 @@ class DirentGridView extends React.Component {
         break;
       case 'Copy':
         this.onItemCopyToggle();
+        break;
+      case 'Convert to Markdown':
+        this.onItemConvert(currentObject, event, 'markdown');
+        break;
+      case 'Convert to sdoc':
+        this.onItemConvert(currentObject, event, 'sdoc');
         break;
       case 'Tags':
         this.onEditFileTagToggle();

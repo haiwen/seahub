@@ -334,6 +334,10 @@ def get_no_duplicate_obj_name(obj_name, exist_obj_names):
                 i += 1
 
 def check_filename_with_rename(repo_id, parent_dir, obj_name):
+    exist_obj_names = list_obj_names_in_dir(repo_id, parent_dir)
+    return get_no_duplicate_obj_name(obj_name, exist_obj_names)
+
+def list_obj_names_in_dir(repo_id, parent_dir):
     cmmts = seafile_api.get_commit_list(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None
     if not latest_commit:
@@ -343,6 +347,13 @@ def check_filename_with_rename(repo_id, parent_dir, obj_name):
             latest_commit.id, parent_dir)
 
     exist_obj_names = [dirent.obj_name for dirent in dirents]
+    return exist_obj_names
+
+def check_filename_or_rename(repo_id, parent_dir, obj_name):
+    exist_obj_names = list_obj_names_in_dir(repo_id, parent_dir)
+
+    if obj_name not in exist_obj_names:
+        return obj_name
     return get_no_duplicate_obj_name(obj_name, exist_obj_names)
 
 def get_user_repos(username, org_id=None):

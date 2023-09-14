@@ -35,6 +35,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showImagePopup: PropTypes.func.isRequired,
@@ -268,6 +269,12 @@ class DirentListItem extends React.Component {
       case 'Lock':
         this.onLockItem();
         break;
+      case 'Convert to Markdown':
+        this.onItemConvert(event, 'markdown');
+        break;
+      case 'Convert to sdoc':
+        this.onItemConvert(event, 'sdoc');
+        break;
       case 'Mark as draft':
         this.onMarkAsDraft();
         break;
@@ -298,6 +305,12 @@ class DirentListItem extends React.Component {
         break;
     }
   };
+
+  onItemConvert = (e, dstType)=> {
+    e.preventDefault();
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.props.onItemConvert(this.props.dirent, dstType);
+  }
 
   onEditFileTagToggle = () => {
     this.setState({

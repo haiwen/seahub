@@ -4,6 +4,9 @@ import datetime
 import time
 import urllib.request, urllib.parse, urllib.error
 import logging
+import requests
+import jwt
+from urllib.parse import urljoin
 
 from rest_framework import status
 
@@ -11,9 +14,9 @@ from seaserv import ccnet_api, seafile_api
 from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
-from seahub.base.templatetags.seahub_tags import email2nickname, \
-        email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
+from seahub.settings import SECRET_KEY, FILE_CONVERTER_SERVER_URL
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -210,3 +213,26 @@ def get_user_quota_usage_and_total(email, org_id=''):
         quota_usage = -1
         quota_total = -1
     return quota_usage, quota_total
+
+
+def gen_headers():
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return {"Authorization": "Token %s" % token}
+
+
+def convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type):
+    headers = gen_headers()
+    params = {
+        'path': path,
+        'username': username,
+        'doc_uuid': doc_uuid,
+        'download_token': download_token,
+        'upload_token': upload_token,
+        'src_type': src_type,
+        'dst_type': dst_type,
+    }
+    url = urljoin(FILE_CONVERTER_SERVER_URL, '/api/v1/file-convert/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+
+    return resp

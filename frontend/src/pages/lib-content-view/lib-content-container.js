@@ -69,6 +69,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
@@ -229,6 +230,7 @@ class LibContentContainer extends React.Component {
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
@@ -264,6 +266,7 @@ class LibContentContainer extends React.Component {
                     onItemDelete={this.props.onItemDelete}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     updateDirent={this.props.updateDirent}
                     onAddFolder={this.props.onAddFolder}
                     showDirentDetail={this.props.showDirentDetail}
@@ -322,6 +325,7 @@ class LibContentContainer extends React.Component {
                     onItemRename={this.props.onItemRename}
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
+                    onItemConvert={this.props.onItemConvert}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}

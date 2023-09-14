@@ -623,6 +623,8 @@ SHOW_LOGOUT_ICON = False
 PRIVACY_POLICY_LINK = ''
 TERMS_OF_SERVICE_LINK = ''
 
+FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
+
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
 ALLOWED_HOSTS = ['*']
