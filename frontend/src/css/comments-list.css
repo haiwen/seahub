@@ -43,24 +43,17 @@
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown {
   margin-left: auto;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button {
-  border: none;
-  box-shadow: none;
-  background-color: #fff;
-}
+
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .seafile-comment-dropdown-btn {
   color: #999;
   background-color: transparent;
+  border: none;
+  box-shadow: none;
 }
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
   color: #555;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:hover,
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:focus {
-  border: none;
-  box-shadow: none;
-  background-color: #eee;
-}
+
 .seafile-comment-item .seafile-comment-content {
   margin-left: 42px;
   padding: 5px 10px;
