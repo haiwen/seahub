@@ -5,7 +5,7 @@ import { gettext } from '../../utils/constants';
 import NoticeItem from './notice-item';
 import UserNotificationsDialog from '../../user-notifications';
 import { Utils } from '../../utils/utils';
-import './notification.css';
+import '../../css/notification.css';
 
 class Notification extends React.Component {
   constructor(props) {
