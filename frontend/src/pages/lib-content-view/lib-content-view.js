@@ -1236,6 +1236,32 @@ class LibContentView extends React.Component {
     });
   };
 
+  onConvertItem = (dirent, dstType) => {
+    let path = Utils.joinPath(this.state.path, dirent.name);
+    let repoID = this.props.repoID;
+    seafileAPI.convertFile(repoID, path, dstType).then((res) => {
+      let objName = res.data.obj_name;
+      let parentDir = res.data.parent_dir;
+      let file_size = res.data.size;
+      path = parentDir + '/' + objName;
+      let name = Utils.getFileName(path);
+      let parentPath = Utils.getDirName(path);
+
+      if (this.state.currentMode === 'column') {
+          this.updateMoveCopyTreeNode(parentPath);
+        }
+      this.loadDirentList(this.state.path);
+
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      if (errMessage === gettext('Error')) {
+        let name = Utils.getFileName(path);
+        errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+      }
+      toaster.danger(errMessage);
+    });
+  }
+
   onDirentClick = (dirent) => {
     let direntList = this.state.direntList.map(dirent => {
       dirent.isSelected = false;
@@ -2025,6 +2051,7 @@ class LibContentView extends React.Component {
             onItemRename={this.onMainPanelItemRename}
             onItemMove={this.onMoveItem}
             onItemCopy={this.onCopyItem}
+            onItemConvert={this.onConvertItem}
             onAddFolder={this.onAddFolder}
             onAddFile={this.onAddFile}
             onFileTagChanged={this.onFileTagChanged}

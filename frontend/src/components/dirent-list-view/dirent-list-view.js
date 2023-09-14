@@ -42,6 +42,7 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func,
   enableDirPrivateShare: PropTypes.bool.isRequired,
@@ -620,6 +621,7 @@ class DirentListView extends React.Component {
                   onItemRename={this.onItemRename}
                   onItemMove={this.props.onItemMove}
                   onItemCopy={this.props.onItemCopy}
+                  onItemConvert={this.props.onItemConvert}
                   updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
                   freezeItem={this.freezeItem}

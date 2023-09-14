@@ -5,6 +5,7 @@ import json
 import logging
 import posixpath
 import requests
+from pathlib import Path
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -20,18 +21,20 @@ from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
     gen_inner_file_upload_url, is_valid_dirent_name, normalize_file_path, \
-    normalize_dir_path, get_file_type_and_ext
+    normalize_dir_path, get_file_type_and_ext, check_filename_or_rename
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
-from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC
+from seahub.utils.file_types import MARKDOWN, TEXT, SEADOC, MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
 from seahub.base.models import FileComment
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
+from seahub.api2.endpoints.utils import convert_file
+from seahub.seadoc.utils import get_seadoc_file_uuid
 
 from seahub.drafts.models import Draft
 from seahub.drafts.utils import is_draft_file, get_file_draft
@@ -152,8 +155,8 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = operation.lower()
-        if operation not in ('create', 'rename', 'move', 'copy', 'revert'):
-            error_msg = "operation can only be 'create', 'rename', 'move', 'copy' or 'revert'."
+        if operation not in ('create', 'rename', 'move', 'copy', 'revert', 'convert'):
+            error_msg = "operation can only be 'create', 'rename', 'move', 'copy', 'convert' or 'revert'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -522,6 +525,80 @@ class FileView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             return Response({'success': True})
+
+        if operation == 'convert':
+            dst_type = request.data.get('dst_type')
+
+            extension = Path(path).suffix
+            if extension not in ['.md', '.sdoc']:
+                error_msg = 'path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if (extension == '.md' and dst_type not in MARKDOWN_SUPPORT_CONVERT_TYPES) or \
+                    (extension == '.sdoc' and dst_type not in SDOC_SUPPORT_CONVERT_TYPES):
+                error_msg = 'dst_type invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # resource check
+            try:
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not file_id:
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # check file lock
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_locked and not locked_by_me:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            filename = os.path.basename(path)
+
+            if extension == '.md':
+                src_type = 'markdown'
+                filename = filename[:-2] + 'sdoc'
+            elif extension == '.sdoc':
+                src_type = 'sdoc'
+                filename = filename[:-4] + 'md'
+
+            new_file_name = check_filename_or_rename(repo_id, parent_dir, filename)
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+
+            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
+
+            obj_id = json.dumps({'parent_dir': parent_dir})
+            upload_token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload-link', username,
+                                                                   use_onetime=True)
+            doc_uuid = get_seadoc_file_uuid(repo, path)
+
+            try:
+                resp = convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type)
+                if resp.status_code == 500:
+                    logger.error('convert file error status: %s body: %s', resp.status_code, resp.text)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            file_info = self.get_file_info(username, repo_id, new_file_path)
+            return Response(file_info)
 
     def put(self, request, repo_id, format=None):
         """ Currently only support lock, unlock, refresh-lock file.

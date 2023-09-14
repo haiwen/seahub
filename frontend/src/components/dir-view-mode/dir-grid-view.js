@@ -19,6 +19,7 @@ const propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemConvert: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
@@ -73,6 +74,7 @@ class DirGridView extends React.Component {
           onItemDelete={this.props.onItemDelete}
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
+          onItemConvert={this.props.onItemConvert}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
           onRenameNode={this.props.onRenameNode}
