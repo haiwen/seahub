@@ -415,7 +415,7 @@ msgstr "%curr% z %total%"
 #: static/scripts/app/views/dir.js:63
 #: static/scripts/app/views/starred-file.js:118
 msgid "Open in New Tab"
-msgstr "Otebřít na nové kartě"
+msgstr "Otevřít na nové kartě"
 
 #: static/scripts/app/views/dir.js:66
 #: static/scripts/app/views/starred-file.js:121
