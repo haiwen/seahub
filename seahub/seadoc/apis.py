@@ -1344,7 +1344,7 @@ class SeadocPublishRevision(APIView):
 
 
 class SeadocFileView(APIView):
-    """redirect to file view by doc_uuid
+    """redirect to file view by file_uuid
     """
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
@@ -1354,13 +1354,8 @@ class SeadocFileView(APIView):
 
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
-            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            error_msg = 'file uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
-        if filetype != SEADOC:
-            error_msg = 'seadoc file type %s invalid.' % filetype
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id = uuid_map.repo_id
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
@@ -1368,8 +1363,82 @@ class SeadocFileView(APIView):
         return HttpResponseRedirect(file_url)
 
 
+class SeadocFileUUIDView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        """ Get file_uuid of a file/dir.
+        """
+        sdoc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not sdoc_uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        is_dir = request.GET.get('is_dir', 'false')
+        is_dir = is_dir.lower()
+        if is_dir not in ('true', 'false'):
+            error_msg = "is_dir can only be 'true' or 'false'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo_id = sdoc_uuid_map.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        is_dir = to_python_boolean(is_dir)
+        if is_dir:
+            if not seafile_api.get_dir_id_by_path(repo_id, normalize_dir_path(path)):
+                error_msg = 'Folder %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        else:
+            if not seafile_api.get_file_id_by_path(repo_id, normalize_file_path(path)):
+                error_msg = 'File %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # make sure path:
+        # 1. starts with '/'
+        # 2. NOT ends with '/'
+        path = normalize_file_path(path)
+        parent_dir = os.path.dirname(path)
+        dirent_name = os.path.basename(path)
+
+        # get file/dir uuid
+        if repo.is_virtual:
+            repo_id = repo.origin_repo_id
+            path = posixpath.join(repo.origin_path, path.strip('/'))
+
+            path = normalize_file_path(path)
+            parent_dir = os.path.dirname(path)
+            dirent_name = os.path.basename(path)
+
+        try:
+            uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
+                    parent_dir, dirent_name, is_dir)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'file_uuid': str(uuid_map.uuid)})
+
+
 class SeadocDirView(APIView):
-    """list all sdoc files in dir
+    """list all files in dir
     """
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
@@ -1387,6 +1456,7 @@ class SeadocDirView(APIView):
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        file_type = request.GET.get('type', 'sdoc')
         path = request.GET.get('p', '/')
         path = normalize_dir_path(path)
 
@@ -1417,13 +1487,14 @@ class SeadocDirView(APIView):
             else:
                 dtype = "file"
                 filetype, fileext = get_file_type_and_ext(dirent.obj_name)
-                if filetype != SEADOC:
-                    continue
-                entry["doc_uuid"] = ''
                 dirent_uuid_map = uuid_map_queryset.filter(
                     filename=dirent.obj_name).first()
-                if dirent_uuid_map:
-                    entry["doc_uuid"] = str(dirent_uuid_map.uuid)
+                if file_type == 'sdoc' and filetype == SEADOC:
+                    entry["doc_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                elif file_type != 'sdoc' and filetype != SEADOC:
+                    entry["file_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                else:
+                    continue
             entry["type"] = dtype
             entry["name"] = dirent.obj_name
             entry["id"] = dirent.obj_id
