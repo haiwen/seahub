@@ -191,11 +191,16 @@ function move_old_customdir_outside() {
 
 function generate_seafevents_conf() {
     if [[ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/seafevents.conf" ]]; then
-        DB_HOST=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^host/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
-        DB_PORT=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^port/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
-        DB_USER=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^user/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
-        DB_PASSWORD=`awk -F '=' '/\[database\]/{a=1}a==1&&$1~/^password/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
-        DB_NAME="seahub_db"
+        DB_HOST=`awk -F ':' '/DATABASES/{a=1}a==1&&$1~/HOST/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seahub_settings.py`
+        DB_HOST=$(echo $DB_HOST | sed "s/'//g" | sed "s/,//g")
+        DB_PORT=`awk -F ':' '/DATABASES/{a=1}a==1&&$1~/PORT/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seahub_settings.py`
+        DB_PORT=$(echo $DB_PORT | sed "s/'//g" | sed "s/,//g")
+        DB_USER=`awk -F ':' '/DATABASES/{a=1}a==1&&$1~/USER/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seahub_settings.py`
+        DB_USER=$(echo $DB_USER | sed "s/'//g" | sed "s/,//g")
+        DB_PASSWORD=`awk -F ':' '/DATABASES/{a=1}a==1&&$1~/PASSWORD/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seahub_settings.py`
+        DB_PASSWORD=$(echo $DB_PASSWORD | sed "s/'//g" | sed "s/,//g")
+        DB_NAME=`awk -F ':' '/DATABASES/{a=1}a==1&&$1~/NAME/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seahub_settings.py`
+        DB_NAME=$(echo $DB_NAME | sed "s/'//g" | sed "s/,//g")
 
         PRO_PY=${INSTALLPATH}/pro/pro.py
         $PYTHON ${PRO_PY} setup --mysql --mysql_host ${DB_HOST} --mysql_port ${DB_PORT} --mysql_user ${DB_USER} --mysql_password ${DB_PASSWORD} --mysql_db ${DB_NAME}
