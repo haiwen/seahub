@@ -32,6 +32,7 @@ class SearchRepos extends Component {
     seafileAPI.sysAdminSearchRepos(name).then((res) => {
       this.setState({
         loading: false,
+        errorMsg: '',
         repos: res.data.repo_list
       });
     }).catch((error) => {
@@ -91,7 +92,7 @@ class SearchRepos extends Component {
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Libraries')}</h4>
                 <p className="text-secondary small">{gettext('Tip: you can search by keyword in name or ID.')}</p>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name or ID')}</Label>
                     <Col sm={5}>
