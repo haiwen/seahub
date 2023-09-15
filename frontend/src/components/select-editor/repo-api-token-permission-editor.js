@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { gettext } from '../../utils/constants';
 import OpIcon from '../op-icon';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   isTextMode: PropTypes.bool.isRequired,
@@ -65,7 +65,7 @@ class RepoAPITokenPermissionEditor extends React.Component {
             }
           </Fragment>
           :
-          <Select
+          <SeahubSelect
             options={this.options}
             placeholder={optionTranslation}
             onChange={this.onPermissionChanged}

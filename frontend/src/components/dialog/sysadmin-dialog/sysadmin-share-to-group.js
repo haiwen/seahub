@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
-import Select from 'react-select';
 import { isPro, gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
+import { SeahubSelect, NoGroupMessage } from '../common/select';
 
 class GroupItem extends React.Component {
 
@@ -107,16 +107,6 @@ const propTypes = {
   itemType: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
-  );
-};
-
-NoOptionsMessage.propTypes = {
-  innerProps: PropTypes.any.isRequired,
 };
 
 class SysAdminShareToGroup extends React.Component {
@@ -257,15 +247,13 @@ class SysAdminShareToGroup extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
-                  isMulti
+                <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.options}
                   placeholder={gettext('Select groups...')}
                   maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
+                  components={{ NoOptionsMessage: NoGroupMessage }}
                 />
               </td>
               <td>

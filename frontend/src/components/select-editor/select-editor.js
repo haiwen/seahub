@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import Select from 'react-select';
+import { MenuSelectStyle } from '../common/select';
 import '../../css/select-editor.css';
 
 const propTypes = {
@@ -105,29 +106,6 @@ class SelectEditor extends React.Component {
 
   render() {
     let { currentOption, isTextMode } = this.props;
-
-    const MenuSelectStyle = {
-      option: (provided, state) => {
-        const { isDisabled, isSelected } = state;
-        return ({
-          ...provided,
-          cursor: isDisabled ? 'default' : 'pointer',
-          //backgroundColor: isSelected ? '#5A98F8' : (isFocused ? '#f5f5f5' : '#fff'),
-          '.header-icon .dtable-font': {
-            color: isSelected ? '#fff' : '#aaa',
-          },
-        });
-      },
-      control: (provided) => ({
-        ...provided,
-        fontSize: '14px',
-        cursor: 'pointer',
-        lineHeight: '1.5',
-      }),
-      menuPortal:  base => ({ ...base, zIndex: 9999 }),
-      indicatorSeparator: () => {},
-    };
-
     // scence1: isTextMode (text)editor-icon --> select
     // scence2: !isTextMode select
     return (

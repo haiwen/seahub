@@ -1,6 +1,6 @@
 import React from 'react';
-import Select from 'react-select';
 import { gettext, siteRoot } from '../../utils/constants';
+import { SeahubSelect } from '../common/select';
 
 const {
   currentLang, langList
@@ -28,7 +28,7 @@ class LanguageSetting extends React.Component {
     return (
       <div className="setting-item" id="lang-setting">
         <h3 className="setting-item-heading">{gettext('Language Setting')}</h3>
-        <Select
+        <SeahubSelect
           className='language-selector'
           defaultValue={{value: currentLang.langCode, label: currentLang.langName}}
           options={options}

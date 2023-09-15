@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import Select from 'react-select';
 import { gettext, isPro, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser/file-chooser';
+import { SeahubSelect, NoGroupMessage } from '../common/select';
 
 class GroupItem extends React.Component {
 
@@ -91,16 +91,6 @@ const propTypes = {
   isDepartmentRepo: PropTypes.bool,
   repoName: PropTypes.string,
   folderPath: PropTypes.string,
-};
-
-const NoOptionsMessage = (props) => {
-  return (
-    <div {...props.innerProps} style={{margin: '6px 10px', textAlign: 'center', color: 'hsl(0,0%,50%)'}}>{gettext('Group not found')}</div>
-  );
-};
-
-NoOptionsMessage.propTypes = {
-  innerProps: PropTypes.any.isRequired,
 };
 
 class LibSubFolderSerGroupPermissionDialog extends React.Component {
@@ -306,14 +296,13 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
+                <SeahubSelect
                   onChange={this.handleSelectChange}
                   options={this.options}
                   placeholder={gettext('Select a group')}
                   maxMenuHeight={200}
-                  inputId={'react-select-2-input'}
                   value={this.state.selectedOption}
-                  components={{ NoOptionsMessage }}
+                  components={{ NoOptionsMessage: NoGroupMessage }}
                 />
               </td>
               {showPath &&

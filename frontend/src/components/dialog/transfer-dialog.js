@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import UserSelect from '../user-select';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   itemName: PropTypes.string.isRequired,
@@ -79,9 +79,8 @@ class TransferDialog extends React.Component {
               placeholder={gettext('Select a user')}
               onSelectChange={this.handleSelectChange}
             /> :
-            <Select
+            <SeahubSelect
               isClearable
-              isMulti={false}
               maxMenuHeight={200}
               hideSelectedOptions={true}
               components={makeAnimated()}

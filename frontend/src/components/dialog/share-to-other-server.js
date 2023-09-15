@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
-import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { gettext, ocmRemoteServers } from '../../utils/constants';
-import { Input } from 'reactstrap';
-import { Button } from 'reactstrap';
+import { Input, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import { SeahubSelect } from '../common/select';
 
 class ShareItem extends React.Component {
 
@@ -228,7 +227,7 @@ class ShareToOtherServer extends React.Component {
           <tbody>
             <tr>
               <td>
-                <Select
+                <SeahubSelect
                   placeholder={gettext('Select a server...')}
                   value={selectedServer}
                   options={ocmRemoteServers}
