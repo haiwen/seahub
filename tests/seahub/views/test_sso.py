@@ -10,7 +10,7 @@ from seahub.views.sso import sso, client_sso_complete
 from seahub.urls import urlpatterns
 
 urlpatterns += [
-    re_path(r'^client-sso/(?P<uuid>[^/]+)/complete/$', client_sso_complete, name="client_sso_complete"),
+    re_path(r'^client-sso/(?P<token>[^/]+)/complete/$', client_sso_complete, name="client_sso_complete"),
 ]
 
 

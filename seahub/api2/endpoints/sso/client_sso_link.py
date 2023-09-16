@@ -20,20 +20,20 @@ logger = logging.getLogger(__name__)
 class ClientSSOLink(APIView):
     throttle_classes = (AnonRateThrottle, )
 
-    def get(self, request, uuid):
+    def get(self, request, token):
         # query SSO status
-        t = get_object_or_404(ClientSSOToken, token=uuid)
+        t = get_object_or_404(ClientSSOToken, token=token)
         if not t.is_success():
-            logger.error('{} client sso login status: not success status.'.format(uuid))
+            logger.error('{} client sso login status: not success status.'.format(token))
             return Response({'status': t.status})
 
         if not t.accessed_at:
-            logger.error('{} client sso login error: no accessed_at info.'.format(uuid))
+            logger.error('{} client sso login error: no accessed_at info.'.format(token))
             return Response({'status': STATUS_ERROR})
 
         interval = (timezone.now() - t.accessed_at).total_seconds()
         if int(interval) >= CLIENT_SSO_UUID_EXPIRATION:
-            logger.error('{} client sso login error: login timeout.'.format(uuid))
+            logger.error('{} client sso login error: login timeout.'.format(token))
             return Response({'status': STATUS_ERROR})
 
         return Response({

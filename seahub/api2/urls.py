@@ -121,5 +121,5 @@ from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER
 if CLIENT_SSO_VIA_LOCAL_BROWSER:
     urlpatterns += [
         path('client-sso-link/', ClientSSOLink.as_view()),
-        re_path(r'^client-sso-link/(?P<uuid>[^/]+)/$', ClientSSOLink.as_view()),
+        re_path(r'^client-sso-link/(?P<token>[^/]+)/$', ClientSSOLink.as_view()),
     ]

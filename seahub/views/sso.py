@@ -123,16 +123,16 @@ def shib_login(request):
     return HttpResponseRedirect(reverse('sso') + params)
 
 
-def client_sso(request, uuid):
+def client_sso(request, token):
 
-    t = get_object_or_404(ClientSSOToken, token=uuid)
+    t = get_object_or_404(ClientSSOToken, token=token)
     if not t.accessed_at:
         t.accessed()
     else:
         error_msg = _('This link has already been visited, please click the login button on the client again')
         return render_error(request, error_msg)
 
-    next_page = reverse('client_sso_complete', args=[uuid, ])
+    next_page = reverse('client_sso_complete', args=[token, ])
 
     # client platform args used to create api v2 token
     req_qs = request.META['QUERY_STRING']
@@ -142,7 +142,7 @@ def client_sso(request, uuid):
     # light security check
     if not url_has_allowed_host_and_scheme(url=next_page, allowed_hosts=request.get_host()):
         logger.error('%s is not safe url.' % next_page)
-        next_page = reverse('client_sso_complete', args=[uuid, ])
+        next_page = reverse('client_sso_complete', args=[token, ])
 
     redirect_url = reverse('sso') + '?next=' + quote(next_page)
     return HttpResponseRedirect(redirect_url)
@@ -150,9 +150,9 @@ def client_sso(request, uuid):
 
 @csrf_protect
 @login_required
-def client_sso_complete(request, uuid):
+def client_sso_complete(request, token):
 
-    t = get_object_or_404(ClientSSOToken, token=uuid)
+    t = get_object_or_404(ClientSSOToken, token=token)
     if not t.accessed_at:
         error_msg = _('Invalid link, please click the login button on the client again')
         return render_error(request, error_msg)
@@ -193,7 +193,7 @@ def client_sso_complete(request, uuid):
                 api_token = get_token_v1(username)
 
             t.completed(email=username, api_key=api_token.key)
-            logger.info('Client SSO success, uuid: %s, user: %s' % (uuid, username))
+            logger.info('Client SSO success, token: %s, user: %s' % (token, username))
         else:
             logger.warning('Client SSO token is not waiting, skip.')
 

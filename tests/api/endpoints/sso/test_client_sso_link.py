@@ -11,12 +11,12 @@ from seahub.urls import urlpatterns
 from seahub.views.sso import client_sso
 
 urlpatterns += [
-    re_path(r'^client-sso/(?P<uuid>[^/]+)/$', client_sso, name="client_sso"),
+    re_path(r'^client-sso/(?P<token>[^/]+)/$', client_sso, name="client_sso"),
 ]
 
 api2_urls += [
     path('client-sso-link/', ClientSSOLink.as_view()),
-    re_path(r'^client-sso-link/(?P<uuid>[^/]+)/$', ClientSSOLink.as_view()),
+    re_path(r'^client-sso-link/(?P<token>[^/]+)/$', ClientSSOLink.as_view()),
 ]
 
 
