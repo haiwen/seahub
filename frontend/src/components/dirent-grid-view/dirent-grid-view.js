@@ -119,7 +119,7 @@ class DirentGridView extends React.Component {
   onItemConvert = (currentObject, e, dstType) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemConvert(currentObject, dstType);
-  }
+  };
 
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();

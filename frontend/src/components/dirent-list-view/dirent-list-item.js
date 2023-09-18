@@ -310,7 +310,7 @@ class DirentListItem extends React.Component {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemConvert(this.props.dirent, dstType);
-  }
+  };
 
   onEditFileTagToggle = () => {
     this.setState({

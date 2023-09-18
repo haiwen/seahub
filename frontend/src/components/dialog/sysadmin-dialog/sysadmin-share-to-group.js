@@ -6,7 +6,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
-import { SeahubSelect, NoGroupMessage } from '../common/select';
+import { SeahubSelect, NoGroupMessage } from '../../common/select';
 
 class GroupItem extends React.Component {
 
