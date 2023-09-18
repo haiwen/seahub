@@ -1456,7 +1456,7 @@ class SeadocDirView(APIView):
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        file_type = request.GET.get('type', 'sdoc')
+        file_type = request.GET.get('type', 'sdoc')  # sdoc, image, file
         path = request.GET.get('p', '/')
         path = normalize_dir_path(path)
 
@@ -1488,10 +1488,12 @@ class SeadocDirView(APIView):
                 dtype = "file"
                 filetype, fileext = get_file_type_and_ext(dirent.obj_name)
                 dirent_uuid_map = uuid_map_queryset.filter(
-                    filename=dirent.obj_name).first()
+                filename=dirent.obj_name).first()
                 if file_type == 'sdoc' and filetype == SEADOC:
                     entry["doc_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
-                elif file_type != 'sdoc' and filetype != SEADOC:
+                elif filetype == 'image' and filetype == IMAGE:
+                    entry["file_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
                     entry["file_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
                 else:
                     continue
