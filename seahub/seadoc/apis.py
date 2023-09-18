@@ -1377,7 +1377,7 @@ class SeadocFileUUIDView(APIView):
             error_msg = 'seadoc uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        path = request.GET.get('path', None)
+        path = request.GET.get('p', None)
         if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
