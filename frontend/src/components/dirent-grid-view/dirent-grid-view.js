@@ -166,9 +166,6 @@ class DirentGridView extends React.Component {
       case 'Unmark as draft':
         this.onUnmarkAsDraft(currentObject);
         break;
-      case 'Comment':
-        this.onCommentItem();
-        break;
       case 'History':
         this.onHistory(currentObject);
         break;
@@ -301,10 +298,6 @@ class DirentGridView extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  };
-
-  onCommentItem = () => {
-    this.props.showDirentDetail('comments');
   };
 
   onHistory = (currentObject) => {

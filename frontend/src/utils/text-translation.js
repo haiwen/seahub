@@ -20,7 +20,6 @@ const TextTranslation = {
   'CONVERT_TO_SDOC' : {key : 'Convert to sdoc', value : gettext('Convert to sdoc')},
   'MARK_AS_DRAFT' : {key : 'Mark as draft', value : gettext('Mark as draft')},
   'UNMARK_AS_DRAFT' : {key : 'Unmark as draft', value : gettext('Unmark as draft')},
-  'COMMENT' : {key : 'Comment', value : gettext('Comment')},
   'HISTORY' : {key : 'History', value : gettext('History')},
   'ACCESS_LOG' : {key : 'Access Log', value : gettext('Access Log')},
   'PROPERTIES' : {key : 'Properties', value : gettext('Properties')},

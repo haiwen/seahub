@@ -284,7 +284,6 @@ class Draft extends React.Component {
             ref="diffViewer"
           />
         }
-        {/* <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i> */}
       </div>
     );
   };

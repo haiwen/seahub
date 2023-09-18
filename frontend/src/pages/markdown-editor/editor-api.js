@@ -157,26 +157,6 @@ class EditorApi {
     return seafileAPI.getFileRevision(repoID, commitID, filePath);
   }
 
-  getCommentsNumber() {
-    return seafileAPI.getCommentsNumber(this.repoID, filePath);
-  }
-
-  postComment(comment, detail) {
-    return seafileAPI.postComment(this.repoID, this.filePath, comment, detail);
-  }
-
-  listComments() {
-    return seafileAPI.listComments(this.repoID, this.filePath);
-  }
-
-  updateComment(commentID, resolved, detail, newComment) {
-    return seafileAPI.updateComment(this.repoID, commentID, resolved, detail, newComment);
-  }
-
-  deleteComment(commentID) {
-    return seafileAPI.deleteComment(this.repoID, commentID);
-  }
-
   getUserAvatar(size) {
     return seafileAPI.getUserAvatar(userName, size);
   }

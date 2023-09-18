@@ -15,8 +15,6 @@ const MSG_TYPE_REPO_SHARE = 'repo_share';
 const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group';
 const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
-const MSG_TYPE_FILE_COMMENT = 'file_comment';
-const MSG_TYPE_DRAFT_COMMENT = 'draft_comment';
 const MSG_TYPE_DRAFT_REVIEWER = 'draft_reviewer';
 // const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
@@ -168,45 +166,6 @@ class NoticeItem extends React.Component {
         notice = Utils.HTMLescape(notice);
         notice = notice.replace('{uploaded_link}', '<strong>Deleted Library</strong>');
       }
-      return {avatar_url, notice};
-    }
-
-    if (noticeType === MSG_TYPE_FILE_COMMENT) {
-
-      let avatar_url = detail.author_avatar_url;
-
-      let author = detail.author_name;
-
-      let fileName = detail.file_name;
-      let fileUrl = siteRoot + 'lib/' + detail.repo_id + '/' + 'file' + detail.file_path;
-
-      // 1. handle translate
-      let notice = gettext('File {file_link} has a new comment form user {author}.');
-
-      // 2. handle xss(cross-site scripting)
-      notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
-      notice = notice.replace('{author}', author);
-      notice = Utils.HTMLescape(notice);
-
-      // 3. add jump link
-      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
-      notice = notice.replace('{/tagA}', '</a>');
-      return {avatar_url, notice};
-    }
-
-    if (noticeType === MSG_TYPE_DRAFT_COMMENT) {
-
-      let avatar_url = detail.author_avatar_url;
-
-      let author = detail.author_name;
-
-      let draftId = detail.draft_id;
-      let draftUrl = siteRoot + 'drafts/' + draftId + '/';
-
-      let notice = gettext('{draft_link} has a new comment from user {author}.');
-      let draftLink = '<a href=' + draftUrl + '>' + gettext('Draft') + '#' + draftId + '</a>';
-      notice = notice.replace('{draft_link}', draftLink);
-      notice = notice.replace('{author}', author);
       return {avatar_url, notice};
     }
 

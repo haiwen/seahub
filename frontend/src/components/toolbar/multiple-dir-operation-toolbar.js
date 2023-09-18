@@ -159,10 +159,6 @@ class MultipleDirOperationToolbar extends React.Component {
     });
   };
 
-  onCommentItem = () => {
-    this.props.showDirentDetail('comments');
-  };
-
   getDirentMenuList = (dirent) => {
     const isRepoOwner = this.props.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
@@ -214,9 +210,6 @@ class MultipleDirOperationToolbar extends React.Component {
         break;
       case 'Unmark as draft':
         this.onUnmarkAsDraft(dirent);
-        break;
-      case 'Comment':
-        this.onCommentItem();
         break;
       case 'History':
         this.onHistory(dirent);
