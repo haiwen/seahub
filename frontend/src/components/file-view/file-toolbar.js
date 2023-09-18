@@ -16,7 +16,6 @@ const propTypes = {
   isSaving: PropTypes.bool,
   needSave: PropTypes.bool,
   toggleLockFile: PropTypes.func.isRequired,
-  toggleCommentPanel: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired
 };
 
@@ -27,7 +26,7 @@ const {
   fileName,
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
-  canDownloadFile, enableComment
+  canDownloadFile,
 } = window.app.pageOptions;
 
 class FileToolbar extends React.Component {
@@ -106,12 +105,10 @@ class FileToolbar extends React.Component {
       showShareBtn = true;
     }
 
-    let canComment = enableComment;
     const { isCustomPermission, customPermission } = this;
     if (isCustomPermission) {
       const { download_external_link } = customPermission.permission;
       showShareBtn = download_external_link;
-      canComment = false;
     }
 
     return (
@@ -196,11 +193,6 @@ class FileToolbar extends React.Component {
               <span className="fas fa-ellipsis-v"></span>
             </DropdownToggle>
             <DropdownMenu right={true}>
-              {canComment && (
-                <DropdownItem onClick={this.props.toggleCommentPanel}>
-                  {gettext('Comment')}
-                </DropdownItem>
-              )}
               {filePerm == 'rw' && (
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                   {gettext('History')}
@@ -262,11 +254,6 @@ class FileToolbar extends React.Component {
                 <a href="?dl=1" className="text-inherit">
                   {gettext('Download')}
                 </a>
-              </DropdownItem>
-            )}
-            {canComment && (
-              <DropdownItem onClick={this.props.toggleCommentPanel}>
-                {gettext('Comment')}
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>

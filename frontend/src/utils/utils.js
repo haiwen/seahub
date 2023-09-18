@@ -616,11 +616,6 @@ export const Utils = {
         }
       }
       list.push('Divider');
-      /*
-      if (enableFileComment) {
-        list.push(COMMENT);
-      }
-      */
       list.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
         list.push(ACCESS_LOG);
@@ -632,11 +627,6 @@ export const Utils = {
       if (!currentRepoInfo.encrypted) {
         list.push(COPY);
       }
-      /*
-      if (enableFileComment) {
-        list.push(COMMENT);
-      }
-      */
       list.push(HISTORY);
     }
 

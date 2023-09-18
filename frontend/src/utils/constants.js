@@ -43,7 +43,6 @@ export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLin
 export const canSendShareLinkEmail = window.app.pageOptions.canSendShareLinkEmail;
 export const canViewOrg = window.app.pageOptions.canViewOrg === 'True';
 export const fileAuditEnabled = window.app.pageOptions.fileAuditEnabled;
-export const enableFileComment = window.app.pageOptions.enableFileComment ? true : false;
 export const folderPermEnabled = window.app.pageOptions.folderPermEnabled;
 export const enableResetEncryptedRepoPassword = window.app.pageOptions.enableResetEncryptedRepoPassword === 'True';
 export const isEmailConfigured = window.app.pageOptions.isEmailConfigured === 'True';

@@ -281,10 +281,6 @@ class DirentListItem extends React.Component {
       case 'Unmark as draft':
         this.onUnmarkAsDraft();
         break;
-      case 'Comment':
-        this.props.onDirentClick(this.props.dirent);
-        this.props.showDirentDetail('comments');
-        break;
       case 'History':
         this.onHistory();
         break;
