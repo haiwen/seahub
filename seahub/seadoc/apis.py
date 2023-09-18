@@ -1487,14 +1487,14 @@ class SeadocDirView(APIView):
             else:
                 dtype = "file"
                 filetype, fileext = get_file_type_and_ext(dirent.obj_name)
-                dirent_uuid_map = uuid_map_queryset.filter(
-                filename=dirent.obj_name).first()
+                dirent_uuid_map = uuid_map_queryset.filter(filename=dirent.obj_name).first()
+                dirent_file_uuid = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
                 if file_type == 'sdoc' and filetype == SEADOC:
-                    entry["doc_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                    entry["file_uuid"] = dirent_file_uuid
                 elif filetype == 'image' and filetype == IMAGE:
-                    entry["file_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                    entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
-                    entry["file_uuid"] = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                    entry["file_uuid"] = dirent_file_uuid
                 else:
                     continue
             entry["type"] = dtype
