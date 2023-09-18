@@ -1242,14 +1242,12 @@ class LibContentView extends React.Component {
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
       let objName = res.data.obj_name;
       let parentDir = res.data.parent_dir;
-      let file_size = res.data.size;
       path = parentDir + '/' + objName;
-      let name = Utils.getFileName(path);
       let parentPath = Utils.getDirName(path);
 
       if (this.state.currentMode === 'column') {
-          this.updateMoveCopyTreeNode(parentPath);
-        }
+        this.updateMoveCopyTreeNode(parentPath);
+      }
       this.loadDirentList(this.state.path);
 
     }).catch((error) => {
@@ -1260,7 +1258,7 @@ class LibContentView extends React.Component {
       }
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDirentClick = (dirent) => {
     let direntList = this.state.direntList.map(dirent => {

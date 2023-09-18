@@ -598,13 +598,13 @@ export const Utils = {
     }
 
     if ((permission == 'rw' || permission == 'cloud-edit') && enableSeadoc) {
-        if (dirent.name.endsWith('.md')) {
-          list.push(CONVERT_TO_SDOC);
-        }
+      if (dirent.name.endsWith('.md')) {
+        list.push(CONVERT_TO_SDOC);
+      }
 
-        if (dirent.name.endsWith('.sdoc')) {
-          list.push(CONVERT_TO_MARKDOWN);
-        }
+      if (dirent.name.endsWith('.sdoc')) {
+        list.push(CONVERT_TO_MARKDOWN);
+      }
     }
 
     if (permission == 'rw') {
