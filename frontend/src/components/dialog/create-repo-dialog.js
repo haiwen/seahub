@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
 import { gettext, enableEncryptedLibrary, repoPasswordMinLength, storages, libraryTemplates } from '../../utils/constants';
+import { SeahubSelect } from '../common/select';
 
 const propTypes = {
   libraryType: PropTypes.string.isRequired,
@@ -189,9 +189,8 @@ class CreateRepoDialog extends React.Component {
 
             {libraryTemplates.length > 0 && (
               <FormGroup>
-                <Label for="library-template">{gettext('Template')}</Label>
-                <Select
-                  id="library-template"
+                <Label>{gettext('Template')}</Label>
+                <SeahubSelect
                   defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
                   options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
                   onChange={this.handlelibraryTemplatesInputChange}
@@ -201,9 +200,8 @@ class CreateRepoDialog extends React.Component {
 
             {storages.length > 0 && (
               <FormGroup>
-                <Label for="storage-backend">{gettext('Storage Backend')}</Label>
-                <Select
-                  id="storage-backend"
+                <Label>{gettext('Storage Backend')}</Label>
+                <SeahubSelect
                   defaultValue={{value: storages[0].id, label: storages[0].name}}
                   options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
                   onChange={this.handleStorageInputChange}

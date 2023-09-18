@@ -5,6 +5,7 @@ import { seafileAPI } from '../utils/seafile-api';
 import { gettext, enableShowContactEmailWhenSearchUser } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
+import { UserSelectStyle } from './common/select';
 
 import '../css/user-select.css';
 
@@ -99,6 +100,7 @@ class UserSelect extends React.Component {
         className={`user-select ${this.props.className}`}
         value={this.props.value}
         ref="userSelect"
+        styles={UserSelectStyle}
       />
     );
   }
