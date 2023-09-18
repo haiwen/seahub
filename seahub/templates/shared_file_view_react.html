@@ -2,6 +2,8 @@
 {% load seahub_tags i18n %}
 {% load render_bundle from webpack_loader %}
 
+{% block sub_title %}{{file_name}} - {% endblock %}
+
 {% block extra_ogp_tags %}
 <meta property="og:type" content="object" />
 <meta property="og:site_name" content="{{ site_name }}">
