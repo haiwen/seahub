@@ -37,9 +37,6 @@
   margin: 20px 0px 20px 5%;
   max-width: calc(90% - 260px);
 }
-.seafile-md-viewer-slate.comment-on {
-  max-width: calc(90% - 360px);  
-}
 .seafile-md-viewer-main {
   flex: auto;
   overflow: auto;
@@ -102,43 +99,8 @@
   width: 100%;
   height: 100%;
 }
-.seafile-md-viewer  .seafile-comment .add-comment-input,
-.seafile-md-viewer .seafile-comment .edit-comment-input {
-  background-color: #fff;
-  width: 100%;
-}
 .seafile-md-viewer-side-panel .seafile-history-side-panel {
   border-left: 1px solid #e6e6dd;
-}
-.seafile-md-viewer .seafile-comment {
-  background-color: #fff;
-  min-height: 18.5em;
-  z-index: 3;
-  width: 380px;
-  height: 100%;
-  position: fixed;
-  right: 0;
-}
-.seafile-viewer-comment-btn {
-  position: absolute;
-  top: 0;
-  right: 5000px;
-  border: 1px solid rgba(0, 40, 100, 0.12);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-  background-color: #fff;
-  padding: 5px;
-}
-.seafile-viewer-comment-btn:hover {
-  cursor: pointer;
-  background-color: #eee;
-}
-.seafile-md-viewer .seafile-comment .seafile-comment-footer {
-  min-height: 230px;
-}
-.seafile-md-viewer .seafile-comment-toggle-resolved {
-  width: 100%;
-  z-index: 1;
 }
 @media (max-width:991.8px) {
   .seafile-editor-outline {
@@ -150,20 +112,6 @@
     max-width: 100%;
   }
 }
-.seafile-md-comment {
-  background-color: #fff;
-  position: absolute;
-  right: 1px;
-  height: calc(100% - 56px);
-  width: 30%;
-}
-.seafile-md-comment .seafile-comment {
-  height: 100%;
-  width: 100%;
-}
-.seafile-md-comment .seafile-comment .seafile-comment-toggle-resolved {
-  width: 100%;
-}
 
 @media (max-width: 768px) {
   .sf-md-viewer-topbar-first {
@@ -174,10 +122,6 @@
   .sf-md-viewer-topbar-first-narrow {
     display: none !important;
   }
-}
-
-.seafile-editor-side-panel .seafile-comment {
-  width: 100%;
 }
 
 /* toolbar */

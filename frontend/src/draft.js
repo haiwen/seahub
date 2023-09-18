@@ -1,25 +1,19 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+import axios from 'axios';
+import classnames from 'classnames';
+import { Button, Tooltip, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { ReactEditor, DiffViewer, serialize } from '@seafile/seafile-editor';
+import { ReactEditor, DiffViewer } from '@seafile/seafile-editor';
 import { siteRoot, gettext, draftOriginFilePath, draftFilePath, author, authorAvatar, originFileExists, draftFileExists, draftID, draftFileName, draftRepoID, draftStatus, draftPublishVersion, originFileVersion, filePermission, serviceURL, mediaUrl } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
-import axios from 'axios';
 import Loading from './components/loading';
-import ReviewComments from './components/review-list-view/review-comments';
-import ReviewCommentDialog from './components/review-list-view/review-comment-dialog';
-import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog';
-import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
-import { Range, Editor } from 'slate';
 import ModalPortal from './components/modal-portal';
-import reviewComment from './models/review-comment';
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -29,7 +23,7 @@ import './css/draft.css';
 const URL = require('url-parse');
 var moment = require('moment');
 
-const { toSlateRange: findRange, toDOMNode } = ReactEditor;
+const { toDOMNode } = ReactEditor;
 
 class Draft extends React.Component {
   constructor(props) {
@@ -42,10 +36,8 @@ class Draft extends React.Component {
       isShowDiff: true,
       showDiffTip: false,
       activeTab: 'reviewInfo',
-      commentsList: [],
       changedNodes: [],
       originRepoName: '',
-      isShowCommentDialog: false,
       activeItem: null,
       historyList: [],
       showReviewerDialog: false,
@@ -195,34 +187,6 @@ class Draft extends React.Component {
     this.setState({historyList: historyList });
   };
 
-  listComments = () => {
-    seafileAPI.listComments(draftRepoID, draftFilePath).then((res) => {
-      let commentsList = [];
-      res.data.comments.forEach((item) => {
-        commentsList.push(new reviewComment(item));
-      });
-      this.setState({ commentsList: commentsList });
-    });
-  };
-
-  addComment = (e) => {
-    e.stopPropagation();
-    this.getQuote();
-    if (!this.quote) return;
-    this.setState({ isShowCommentDialog: true });
-  };
-
-  onCommentAdded = () => {
-    this.listComments();
-    this.toggleCommentDialog();
-  };
-
-  toggleCommentDialog = () => {
-    this.setState({
-      isShowCommentDialog: !this.state.isShowCommentDialog
-    });
-  };
-
   getOriginRepoInfo = () => {
     seafileAPI.getRepoInfo(draftRepoID).then((res) => {
       this.setState({ originRepoName: res.data.repo_name });
@@ -303,28 +267,6 @@ class Draft extends React.Component {
     return scroller;
   };
 
-  scrollToQuote = (newIndex, oldIndex, quote) => {
-    const nodes = this.refs.diffViewer.value;
-    let commentNode = nodes.find((node) => {
-      if (node.data['old_index'] == oldIndex && node.data['new_index'] == newIndex) {
-        return node;
-      }
-      return null;
-    });
-    if (commentNode) {
-      const element = toDOMNode(window.viewer, commentNode);
-      if (!element) return;
-      const win = window;
-      const scroller = this.findScrollContainer(element, win);
-      const isWindow = scroller == win.document.body || scroller == win.document.documentElement;
-      if (isWindow) {
-        win.scrollTo(0, element.offsetTop);
-      } else {
-        scroller.scrollTop = element.offsetTop;
-      }
-    }
-  };
-
   showDiffViewer = () => {
     return (
       <div>
@@ -342,7 +284,7 @@ class Draft extends React.Component {
             ref="diffViewer"
           />
         }
-        <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
+        {/* <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i> */}
       </div>
     );
   };
@@ -468,7 +410,6 @@ class Draft extends React.Component {
   };
 
   showNavItem = (showTab) => {
-    const commentsNumber = this.state.commentsList.length;
     switch(showTab) {
       case 'info':
         return (
@@ -478,18 +419,6 @@ class Draft extends React.Component {
               onClick={() => { this.tabItemClick('reviewInfo');}}
             >
               <i className="fas fa-info-circle"></i>
-            </NavLink>
-          </NavItem>
-        );
-      case 'comments':
-        return (
-          <NavItem className="nav-item">
-            <NavLink
-              className={classnames({ active: this.state.activeTab === 'comments' })}
-              onClick={() => {this.tabItemClick('comments');}}
-            >
-              <i className="fa fa-comments"></i>
-              {commentsNumber > 0 && <div className='comments-number'>{commentsNumber}</div>}
             </NavLink>
           </NavItem>
         );
@@ -507,69 +436,11 @@ class Draft extends React.Component {
     }
   };
 
-  getDomNodeByPath = (path) => {
-    let node, parent = document.querySelector('.viewer-component');
-    while(typeof path[0] === 'number' && parent) {
-      node = parent.children[path[0]];
-      if (!node.getAttribute('data-slate-node')) {
-        node = node.children[0];
-      }
-      path.shift();
-      parent = node;
-    }
-    return node;
-  };
-
-  setBtnPosition = () => {
-    const nativeSelection = window.getSelection();
-    if (!nativeSelection.rangeCount) {
-      return;
-    }
-    const nativeRange = nativeSelection.getRangeAt(0);
-    let selection = null;
-    let style = this.refs.commentbtn.style;
-    try {
-      selection = findRange(window.viewer, nativeRange);
-    } catch (err) {
-      style.top = '-1000px';
-      return;
-    }
-    if (!selection || Range.isCollapsed(selection)) {
-      style.top = '-1000px';
-      return;
-    }
-    this.range = selection;
-    const focusNodePath = selection.anchor.path.slice();
-    focusNodePath.pop();
-    const focusNode = this.getDomNodeByPath(focusNodePath);
-    style.right = '0px';
-
-    if (focusNode) {
-      style.top = `${focusNode.offsetTop}px`;
-    } else {
-      style.top = '-1000px';
-    }
-  };
-
-  getQuote = () => {
-    if (!this.range) return;
-    this.quote = serialize(Editor.fragment(window.viewer, this.range));
-    const node = window.viewer.children[this.range.anchor.path[0]];
-    this.newIndex = node.data['new_index'];
-    this.oldIndex = node.data['old_index'];
-  };
-
   componentDidMount() {
     this.getOriginRepoInfo();
     this.getDraftInfo();
     this.listReviewers();
-    this.listComments();
     this.initialContent();
-    document.addEventListener('selectionchange', this.setBtnPosition);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('selectionchange', this.setBtnPosition);
   }
 
   renderDiffButton = () => {
@@ -601,7 +472,6 @@ class Draft extends React.Component {
         return (
           <Nav tabs className="review-side-panel-nav">
             {this.showNavItem('info')}
-            {this.showNavItem('comments')}
             {this.showNavItem('history')}
           </Nav>
         );
@@ -616,7 +486,6 @@ class Draft extends React.Component {
         return (
           <Nav tabs className="review-side-panel-nav">
             {this.showNavItem('info')}
-            {this.showNavItem('comments')}
           </Nav>
         );
     }
@@ -706,7 +575,6 @@ class Draft extends React.Component {
                         reviewers={reviewers}
                         toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>
                       <SidePanelAuthor/>
-                      {draftFileExists && <UnresolvedComments commentsList={this.state.commentsList}/>}
                       {(this.state.isShowDiff === true && this.state.changedNodes.length > 0) &&
                       <SidePanelChanges
                         changedNumber={this.state.changedNodes.length}
@@ -714,14 +582,6 @@ class Draft extends React.Component {
                       }
                       <SidePanelOrigin originRepoName={originRepoName} draftInfo={draftInfo} draftStatus={draftStatus}/>
                     </div>
-                  </TabPane>
-                  <TabPane tabId="comments" className="comments">
-                    <ReviewComments
-                      scrollToQuote={this.scrollToQuote}
-                      listComments={this.listComments}
-                      commentsList={this.state.commentsList}
-                      inResizing={false}
-                    />
                   </TabPane>
                   <TabPane tabId="history" className="history">
                     <HistoryList
@@ -744,17 +604,6 @@ class Draft extends React.Component {
               toggleAddReviewerDialog={this.toggleAddReviewerDialog}
               draftID={draftID}
               reviewers={reviewers}
-            />
-          </ModalPortal>
-        }
-        {this.state.isShowCommentDialog &&
-          <ModalPortal>
-            <ReviewCommentDialog
-              toggleCommentDialog={this.toggleCommentDialog}
-              onCommentAdded={this.onCommentAdded}
-              quote={this.quote}
-              newIndex={this.newIndex}
-              oldIndex={this.oldIndex}
             />
           </ModalPortal>
         }
@@ -853,41 +702,6 @@ const SidePanelOriginPropTypes = {
 };
 
 SidePanelOrigin.propTypes = SidePanelOriginPropTypes;
-
-
-class UnresolvedComments extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { commentsList } = this.props;
-    let unresolvedNumber = 0;
-    if (commentsList) {
-      for (let i = 0, count = commentsList.length; i < count; i++) {
-        if (commentsList[i].resolved === false) {
-          unresolvedNumber++;
-        }
-      }
-    }
-    return (
-      <div className="review-side-panel-item">
-        <div className="review-side-panel-header">{gettext('Comments')}</div>
-        <div className="changes-info">
-          <span>{gettext('Unresolved comments:')}{' '}{unresolvedNumber}</span>
-        </div>
-      </div>
-    );
-  }
-}
-
-const UnresolvedCommentsPropTypes = {
-  commentsList: PropTypes.array.isRequired,
-};
-
-UnresolvedComments.propTypes = UnresolvedCommentsPropTypes;
-
 
 class SidePanelChanges extends React.Component {
 

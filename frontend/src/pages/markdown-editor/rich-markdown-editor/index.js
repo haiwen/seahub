@@ -30,8 +30,6 @@ class RichMarkdownEditor extends React.Component {
     this.state = {
       isShowSidePanel: false,
       isShowHelpPanel: false,
-      isSupportComment: false,
-      relistComment: 0,
     };
     window.richMarkdownEditor = this;
   }
@@ -49,14 +47,6 @@ class RichMarkdownEditor extends React.Component {
 
   hideHelpDialog = () => {
     this.setState({isShowHelpPanel: false});
-  };
-
-  toggleCommentBtn = (isSupport = false) => {
-    this.setState({isSupportComment: isSupport});
-  };
-
-  onAddComment = () => {
-    this.setState({relistComment: this.state.relistComment + 1});
   };
 
   insertRepoFile = () => {
@@ -96,8 +86,8 @@ class RichMarkdownEditor extends React.Component {
               editorApi={this.props.editorApi}
               onChange={this.props.onChange}
               resetRichValue={this.props.resetRichValue}
-              isSupportComment={this.state.isSupportComment}
-              onAddComment={this.onAddComment}
+              isSupportComment={false}
+              onAddComment={() => {}}
             />
           </div>
           <div className={`markdown-help-wrapper ${isShowHelpWrapper ? 'show' : ''}`} style={helpWrapperStyle}>
@@ -105,12 +95,10 @@ class RichMarkdownEditor extends React.Component {
               <SidePanel
                 document={value}
                 fileInfo={this.props.fileInfo}
-                relistComment={this.state.relistComment}
                 fileTagList={this.props.fileTagList}
                 onFileTagChanged={this.props.onFileTagChanged}
                 participants={this.props.participants}
                 onParticipantsChange={this.props.onParticipantsChange}
-                toggleCommentBtn={this.toggleCommentBtn}
               />
             )}
             {isShowHelpPanel && <UserHelp hideHelpDialog={this.hideHelpDialog} />}

@@ -59,12 +59,10 @@
   display: flex;
   margin-right: 10px;
 }
-.seafile-toggle-diff .custom-switch .custom-switch-indicator,
-.seafile-comment-title-toggle .custom-switch .custom-switch-indicator {
+.seafile-toggle-diff .custom-switch .custom-switch-indicator {
   border: 1px solid #e9ecef;
 }
-.seafile-toggle-diff .custom-switch-input:checked ~ .custom-switch-indicator,
-.seafile-comment-title-toggle .custom-switch-input:checked ~ .custom-switch-indicator {
+.seafile-toggle-diff .custom-switch-input:checked ~ .custom-switch-indicator {
   background-color: #f19645;
 }
 
@@ -143,35 +141,6 @@
   background-color: #fff;
 }
 
-.review-comment-btn {
-  position: absolute;
-  top: -1000px;
-  right: 0;
-  border: 1px solid rgba(0, 40, 100, 0.12);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-  background-color: #fff;
-  padding: 5px;
-}
-.review-comment-btn:hover {
-  cursor: pointer;
-  background-color: #eee;
-}
-.comments-number {
-  font-size: 12px;
-  width: 16px;
-  height: 16px;
-  border-radius: 8px;
-  text-align: center;
-  line-height: 16px;
-  font-weight: 600;
-  background-color: #f19645;
-  position: absolute;
-  top: 10%;
-  right: 30%;
-  color: #fff;
-}
-
 .review-side-panel-nav {
   margin: 0;
 }
@@ -194,7 +163,6 @@
 .review-side-panel .tab-content {
   height: calc(100% - 38px);
 }
-.review-side-panel .tab-content .comments,
 .review-side-panel .tab-content .tab-pane {
   height: 100%;
 }
