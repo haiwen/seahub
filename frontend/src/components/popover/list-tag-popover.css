@@ -24,3 +24,8 @@
 .list-tag-popover .tag-list-footer a:hover {
   text-decoration: none;
 }
+
+.list-tag-popover .tag-color {
+  width: 20px;
+  height: 20px;
+}

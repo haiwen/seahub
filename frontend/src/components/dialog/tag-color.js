@@ -59,7 +59,7 @@ class TagColor extends React.Component {
       <div>
         <span
           id={`tag-${id}-color`}
-          className="tag-color cursor-pointer w-4 h-4 rounded-circle d-flex align-items-center justify-content-center"
+          className="tag-color cursor-pointer rounded-circle d-flex align-items-center justify-content-center"
           style={{backgroundColor: tagColor}}
           onClick={this.togglePopover}
         >
@@ -70,7 +70,7 @@ class TagColor extends React.Component {
           isOpen={isPopoverOpen}
           placement="bottom"
           toggle={this.togglePopover}
-          className="mw-100"
+          className="tag-color-popover mw-100"
         >
           <PopoverBody className="p-2">
             <div className="d-flex justify-content-between">
