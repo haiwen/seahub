@@ -68,6 +68,7 @@ class DirentGridView extends React.Component {
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
       isCreateFileDialogShow: false,
+      fileType: '',
       isPermissionDialogOpen: false,
 
       isMutipleOperation: false,
@@ -77,9 +78,10 @@ class DirentGridView extends React.Component {
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
 
-  onCreateFileToggle = () => {
+  onCreateFileToggle = (fileType) => {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: fileType || ''
     });
   };
 
@@ -173,7 +175,22 @@ class DirentGridView extends React.Component {
         this.onCreateFolderToggle(currentObject);
         break;
       case 'New File':
-        this.onCreateFileToggle();
+        this.onCreateFileToggle('');
+        break;
+      case 'New Markdown File':
+        this.onCreateFileToggle('.md');
+        break;
+      case 'New Excel File':
+        this.onCreateFileToggle('.xlsx');
+        break;
+      case 'New PowerPoint File':
+        this.onCreateFileToggle('.pptx');
+        break;
+      case 'New Word File':
+        this.onCreateFileToggle('.docx');
+        break;
+      case 'New SeaDoc File':
+        this.onCreateFileToggle('.sdoc');
         break;
       case 'Access Log':
         this.onAccessLog(currentObject);
@@ -407,7 +424,23 @@ class DirentGridView extends React.Component {
       return;
     }
     let id = 'dirent-grid-container-menu';
-    let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+    const {
+      NEW_FOLDER, NEW_FILE,
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE,
+      NEW_SEADOC_FILE
+    } = TextTranslation;
+
+    const menuList = [
+      NEW_FOLDER, NEW_FILE, 'Divider',
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE,
+      NEW_SEADOC_FILE
+    ];
     this.handleContextClick(event, id, menuList);
   };
 
@@ -513,6 +546,7 @@ class DirentGridView extends React.Component {
           <ModalPortal>
             <CreateFile
               parentPath={this.props.path}
+              fileType={this.state.fileType}
               onAddFile={this.props.onAddFile}
               checkDuplicatedName={this.checkDuplicatedName}
               toggleDialog={this.onCreateFileToggle}
