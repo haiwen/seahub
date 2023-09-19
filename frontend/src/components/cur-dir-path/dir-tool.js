@@ -28,6 +28,17 @@ class DirTool extends React.Component {
     this.setState({ isListRepoTagShow: true });
   };
 
+  hidePopover = (e) => {
+    if (e) {
+      let dom = e.target;
+      while (dom) {
+        if (typeof dom.className === 'string' && dom.className.includes('tag-color-popover')) return;
+        dom = dom.parentNode;
+      }
+    }
+    this.setState({ isListRepoTagShow: false });
+  };
+
   toggleCancel = () => {
     this.setState({ isListRepoTagShow: false });
   };
@@ -81,8 +92,8 @@ class DirTool extends React.Component {
           <SeahubPopover
             popoverClassName="list-tag-popover"
             target={this.tagsIconID}
-            hideSeahubPopover={this.toggleCancel}
-            hideSeahubPopoverWithEsc={this.toggleCancel}
+            hideSeahubPopover={this.hidePopover}
+            hideSeahubPopoverWithEsc={this.hidePopover}
             canHideSeahubPopover={true}
             boundariesElement={document.body}
             placement={'bottom-end'}

@@ -51,6 +51,10 @@ class TagName extends React.Component {
       this.toggleMode();
       this.updateTagName(e);
     }
+    else if (e.key == 'Escape') {
+      e.nativeEvent.stopImmediatePropagation();
+      this.toggleMode();
+    }
   };
 
   onInputBlur = (e) => {
