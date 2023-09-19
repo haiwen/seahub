@@ -134,13 +134,15 @@ class SearchUsers extends Component {
     });
   };
 
-  deleteUser = (email) => {
+  deleteUser = (email, username) => {
     seafileAPI.sysAdminDeleteUser(email).then(res => {
       let newUserList = this.state.userList.filter(item => {
         return item.email != email;
       });
       this.setState({userList: newUserList});
-      toaster.success(gettext('Successfully deleted 1 item.'));
+      let msg = gettext('Deleted user %s');
+      msg = msg.replace('%s', username);
+      toaster.success(msg);
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

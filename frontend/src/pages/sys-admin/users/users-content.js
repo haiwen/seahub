@@ -292,7 +292,7 @@ class Item extends Component {
 
   deleteUser = () => {
     toaster.notify(gettext('It may take some time, please wait.'));
-    this.props.deleteUser(this.props.item.email);
+    this.props.deleteUser(this.props.item.email, this.props.item.name);
   };
 
   resetPassword = () => {
