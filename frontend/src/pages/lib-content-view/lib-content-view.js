@@ -1545,9 +1545,14 @@ class LibContentView extends React.Component {
     });
 
     // Recalculate the state of the selection
-    this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
+    //this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
 
-    this.setState({direntList: direntList});
+    this.setState({
+      direntList: direntList,
+      selectedDirentList: [],
+      isDirentSelected: false,
+      isAllDirentSelected: false,
+    });
     this.updateReadmeMarkdown(direntList);
   };
 
