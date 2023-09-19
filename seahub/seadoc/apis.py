@@ -359,6 +359,61 @@ class SeadocDownloadImage(APIView):
             content=resp.content, content_type='image/' + fileext)
 
 
+class SeadocAsyncCopyImages(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = ()
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, file_uuid):
+        username = request.user.username
+        origin_doc_uuid = request.data.get('origin_doc_uuid', '')
+        if file_uuid == origin_doc_uuid:
+            error_msg = 'file_uuid and origin_doc_uuid can not be the same.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)            
+        if not origin_doc_uuid:
+            error_msg = 'origin_doc_uuid invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        image_list = request.data.get('image_list', [])
+        if not image_list or not isinstance(image_list, list):
+            error_msg = 'image_list invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # dst
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+        if check_quota(repo_id) < 0:
+            error_msg = _("Out of quota.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        image_parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+        if not check_folder_permission(request, repo_id, image_parent_path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        # origin
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        origin_repo_id = origin_uuid_map.repo_id
+        origin_image_parent_path = gen_seadoc_image_parent_path(origin_doc_uuid, origin_repo_id, username)
+        if not check_folder_permission(request, origin_repo_id, origin_image_parent_path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # copy image files
+        res = seafile_api.copy_file(
+            origin_repo_id, origin_image_parent_path,
+            json.dumps(image_list),
+            repo_id, image_parent_path,
+            json.dumps(image_list),
+            username=username, need_progress=1, synchronous=0
+        )
+        task_id = res.task_id if res.background else ''
+        return Response({'task_id': task_id})
+
+
 class SeadocCopyHistoryFile(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -1157,15 +1212,14 @@ class SeadocStartRevise(APIView):
             revision_image_parent_path = gen_seadoc_image_parent_path(
                 revision_file_uuid, repo_id, username)
             dirents = seafile_api.list_dir_by_path(repo_id, origin_image_parent_path)
-            for e in dirents:
-                obj_name = e.obj_name
-                seafile_api.copy_file(
-                    repo_id, origin_image_parent_path,
-                    json.dumps([obj_name]),
-                    repo_id, revision_image_parent_path,
-                    json.dumps([obj_name]),
-                    username=username, need_progress=0, synchronous=1
-                )
+            obj_name_list = [item.obj_name for item in dirents]
+            seafile_api.copy_file(
+                repo_id, origin_image_parent_path,
+                json.dumps(obj_name_list),
+                repo_id, revision_image_parent_path,
+                json.dumps(obj_name_list),
+                username=username, need_progress=0, synchronous=1
+            )
         return Response(revision.to_dict())
 
 
