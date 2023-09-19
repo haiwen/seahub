@@ -189,12 +189,12 @@ class OrgUsers extends Component {
     });
   };
 
-  toggleOrgUsersDelete = (email) => {
+  toggleOrgUsersDelete = (email, username) => {
     seafileAPI.orgAdminDeleteOrgUser(orgID, email).then(res => {
       let users = this.state.orgUsers.filter(item => item.email != email);
       this.setState({orgUsers: users});
-      let msg = gettext('Successfully deleted %s');
-      msg = msg.replace('%s', email);
+      let msg = gettext('Deleted user %s');
+      msg = msg.replace('%s', username);
       toaster.success(msg);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

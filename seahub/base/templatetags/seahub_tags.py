@@ -369,7 +369,8 @@ def email2nickname(value):
     if profile is not None and profile.nickname and profile.nickname.strip():
         nickname = profile.nickname.strip()
     else:
-        nickname = value.split('@')[0]
+        contact_email = email2contact_email(value)
+        nickname = contact_email.split('@')[0]
 
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
