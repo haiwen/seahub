@@ -54,7 +54,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
-  loadDirentList: PropTypes.func.isRequired,
+  loadDirentList: PropTypes.func,
 };
 
 class DirentListItem extends React.Component {

@@ -87,8 +87,8 @@ const propTypes = {
   onListContainerScroll: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   direntDetailPanelTab: PropTypes.string,
-  loadDirentList: PropTypes.func.isRequired,
-  fullDirentList: PropTypes.array.isRequired,
+  loadDirentList: PropTypes.func,
+  fullDirentList: PropTypes.array,
 };
 
 class LibContentContainer extends React.Component {

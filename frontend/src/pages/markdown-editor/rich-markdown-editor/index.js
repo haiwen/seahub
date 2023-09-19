@@ -86,8 +86,6 @@ class RichMarkdownEditor extends React.Component {
               editorApi={this.props.editorApi}
               onChange={this.props.onChange}
               resetRichValue={this.props.resetRichValue}
-              isSupportComment={false}
-              onAddComment={() => {}}
             />
           </div>
           <div className={`markdown-help-wrapper ${isShowHelpWrapper ? 'show' : ''}`} style={helpWrapperStyle}>
