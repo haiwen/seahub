@@ -17,6 +17,7 @@ import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
+import LoadingDialog from '../dialog/loading-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -53,6 +54,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   posX: PropTypes.string,
   posY: PropTypes.string,
+  isConvertLoading: PropTypes.bool,
 };
 
 class DirentListView extends React.Component {
@@ -728,6 +730,9 @@ class DirentListView extends React.Component {
               target={this.state.downloadItems}
               toggleDialog={this.onCloseZipDownloadDialog}
             />
+          }
+          {this.props.isConvertLoading &&
+            <LoadingDialog />
           }
         </Fragment>
       </div>

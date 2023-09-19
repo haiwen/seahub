@@ -21,6 +21,7 @@ import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
+import LoadingDialog from '../dialog/loading-dialog';
 
 import '../../css/grid-view.css';
 
@@ -50,6 +51,7 @@ const propTypes = {
   onItemRename: PropTypes.func.isRequired,
   posX: PropTypes.number.isRequired,
   posY: PropTypes.number.isRequired,
+  isConvertLoading: PropTypes.bool,
 };
 
 class DirentGridView extends React.Component {
@@ -614,6 +616,9 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.props.isConvertLoading &&
+          <LoadingDialog />
+        }
       </Fragment>
     );
   }

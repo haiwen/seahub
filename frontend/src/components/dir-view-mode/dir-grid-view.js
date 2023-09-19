@@ -33,6 +33,7 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   onItemRename: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
+  isConvertLoading: PropTypes.bool,
 };
 
 class DirGridView extends React.Component {
@@ -75,6 +76,7 @@ class DirGridView extends React.Component {
           onItemMove={this.props.onItemMove}
           onItemCopy={this.props.onItemCopy}
           onItemConvert={this.props.onItemConvert}
+          isConvertLoading={this.props.isConvertLoading}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
           onRenameNode={this.props.onRenameNode}

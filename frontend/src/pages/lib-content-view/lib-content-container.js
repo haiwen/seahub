@@ -89,6 +89,7 @@ const propTypes = {
   direntDetailPanelTab: PropTypes.string,
   loadDirentList: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array.isRequired,
+  isConvertLoading: PropTypes.bool.isRequired,
 };
 
 class LibContentContainer extends React.Component {
@@ -231,6 +232,7 @@ class LibContentContainer extends React.Component {
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onItemConvert={this.props.onItemConvert}
+                    isConvertLoading={this.props.isConvertLoading}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}
@@ -267,6 +269,7 @@ class LibContentContainer extends React.Component {
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onItemConvert={this.props.onItemConvert}
+                    isConvertLoading={this.props.isConvertLoading}
                     updateDirent={this.props.updateDirent}
                     onAddFolder={this.props.onAddFolder}
                     showDirentDetail={this.props.showDirentDetail}
@@ -326,6 +329,7 @@ class LibContentContainer extends React.Component {
                     onItemMove={this.onItemMove}
                     onItemCopy={this.props.onItemCopy}
                     onItemConvert={this.props.onItemConvert}
+                    isConvertLoading={this.props.isConvertLoading}
                     onDirentClick={this.onDirentClick}
                     updateDirent={this.props.updateDirent}
                     isAllItemSelected={this.props.isAllDirentSelected}

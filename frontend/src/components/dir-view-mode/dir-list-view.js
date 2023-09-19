@@ -42,6 +42,7 @@ const propTypes = {
   showDirentDetail: PropTypes.func.isRequired,
   loadDirentList: PropTypes.func,
   fullDirentList: PropTypes.array,
+  isConvertLoading: PropTypes.bool,
 };
 
 class DirListView extends React.Component {
@@ -98,6 +99,7 @@ class DirListView extends React.Component {
           onItemsMove={this.props.onItemsMove}
           onItemsCopy={this.props.onItemsCopy}
           onItemConvert={this.props.onItemConvert}
+          isConvertLoading={this.props.isConvertLoading}
           onItemsDelete={this.props.onItemsDelete}
           onAddFile={this.props.onAddFile}
           onAddFolder={this.props.onAddFolder}
