@@ -9,7 +9,7 @@ const TextTranslation = {
   'NEW_EXCEL_FILE' : {key : 'New Excel File', value : gettext('New Excel File')},
   'NEW_POWERPOINT_FILE' : {key : 'New PowerPoint File', value : gettext('New PowerPoint File')},
   'NEW_WORD_FILE' : {key : 'New Word File', value : gettext('New Word File')},
-  'NEW_SEADOC_FILE' : {key : 'New SeaDoc File', value : gettext('New SeaDoc File')},
+  'NEW_SEADOC_FILE' : {key : 'New SeaDoc File', value : gettext('New SeaDoc File') + ' (beta)'},
 
   'SHARE' : {key : 'Share', value : gettext('Share')},
   'DOWNLOAD' : {key : 'Download', value : gettext('Download')},
