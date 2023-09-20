@@ -12,7 +12,7 @@ const propTypes = {
   path: PropTypes.string
 };
 
-class ConfirmApplyFolderAttributiesDialog extends React.Component {
+class ConfirmApplyFolderPropertiesDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -57,7 +57,7 @@ class ConfirmApplyFolderAttributiesDialog extends React.Component {
 
         <ModalBody>
           <p>
-            {gettext('Are you sure to apply folder attributies to all sub dirents in the folder')}
+            {gettext('Are you sure to apply folder extra properties to all sub dirents in the folder')}
           </p>
         </ModalBody>
 
@@ -71,6 +71,6 @@ class ConfirmApplyFolderAttributiesDialog extends React.Component {
 
 }
 
-ConfirmApplyFolderAttributiesDialog.propTypes = propTypes;
+ConfirmApplyFolderPropertiesDialog.propTypes = propTypes;
 
-export default ConfirmApplyFolderAttributiesDialog;
+export default ConfirmApplyFolderPropertiesDialog;
