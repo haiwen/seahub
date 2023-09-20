@@ -101,9 +101,6 @@ def jwt_sso(request):
 
 
 def shib_login(request):
-    if CLIENT_SSO_VIA_LOCAL_BROWSER:
-        return HttpResponseRedirect(reverse('client_sso'))
-
     # client platform args used to create api v2 token
     keys = ('platform', 'device_id', 'device_name', 'client_version', 'platform_version')
     if all(['shib_' + key in request.GET for key in keys]):
@@ -124,6 +121,8 @@ def shib_login(request):
 
 
 def client_sso(request, token):
+    if not CLIENT_SSO_VIA_LOCAL_BROWSER:
+        return render_error(request, 'Feature is not enabled.')
 
     t = get_object_or_404(ClientSSOToken, token=token)
     if not t.accessed_at:
@@ -151,6 +150,8 @@ def client_sso(request, token):
 @csrf_protect
 @login_required
 def client_sso_complete(request, token):
+    if not CLIENT_SSO_VIA_LOCAL_BROWSER:
+        return render_error(request, 'Feature is not enabled.')
 
     t = get_object_or_404(ClientSSOToken, token=token)
     if not t.accessed_at:
