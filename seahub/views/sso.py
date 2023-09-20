@@ -150,8 +150,6 @@ def client_sso(request, token):
 @csrf_protect
 @login_required
 def client_sso_complete(request, token):
-    if not CLIENT_SSO_VIA_LOCAL_BROWSER:
-        return render_error(request, 'Feature is not enabled.')
 
     t = get_object_or_404(ClientSSOToken, token=token)
     if not t.accessed_at:
