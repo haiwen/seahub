@@ -29,6 +29,10 @@ export default class ListTagPopover extends React.Component {
   }
 
   componentDidMount() {
+    this.loadTags();
+  }
+
+  loadTags = () => {
     seafileAPI.listRepoTags(this.props.repoID).then(res => {
       let repotagList = [];
       res.data.repo_tags.forEach(item => {
@@ -135,7 +139,7 @@ export default class ListTagPopover extends React.Component {
           <span className="sf2-icon-plus mr-2"></span>
           {gettext('Create a new tag')}
         </div>
-        <TagListFooter toggle={this.props.onListTagCancel} repotagList={this.state.repotagList}/>
+        <TagListFooter toggle={this.props.onListTagCancel} repotagList={this.state.repotagList} loadTags={this.loadTags} repoID={this.props.repoID}/>
       </Fragment>
     );
   }

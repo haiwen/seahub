@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
+import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../toast';
 
 export default class TagListFooter extends Component {
 
   static propTypes = {
+    repoID: PropTypes.string.isRequired,
     toggle: PropTypes.func.isRequired,
     repotagList: PropTypes.array.isRequired,
+    loadTags: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -75,11 +78,10 @@ export default class TagListFooter extends Component {
       toaster.warning(gettext('The imported tag already exists'));
       return;
     }
-    // TODO
-    // console.log(validTags);
-    // seafileAPI.createRepoTags(repoID, tags).then((res) => {
-    //   toaster.success(gettext('Options_imported'));
-    // });
+    seafileAPI.createRepoTags(this.props.repoID, validTags).then((res) => {
+      toaster.success(gettext('Tags imported'));
+      this.props.loadTags();
+    });
     this.importOptionsInput.value = null;
   };
 
