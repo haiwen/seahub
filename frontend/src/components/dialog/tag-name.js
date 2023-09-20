@@ -22,6 +22,14 @@ class TagName extends React.Component {
     this.input = React.createRef();
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.tag.name !== this.state.tagName) {
+      this.setState({
+        tagName: nextProps.tag.name,
+      });
+    }
+  }
+
   toggleMode = () => {
     this.setState({
       isEditing: !this.state.isEditing

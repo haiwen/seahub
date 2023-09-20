@@ -23,6 +23,14 @@ class TagColor extends React.Component {
     };
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.tag.color !== this.state.tagColor) {
+      this.setState({
+        tagColor: nextProps.tag.color,
+      });
+    }
+  }
+
   togglePopover = () => {
     this.setState({
       isPopoverOpen: !this.state.isPopoverOpen

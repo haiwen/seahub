@@ -44,7 +44,7 @@ export default class ListTagPopover extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }
+  };
 
   onDeleteTag = (tag) => {
     const { repoID } = this.props;
@@ -139,7 +139,12 @@ export default class ListTagPopover extends React.Component {
           <span className="sf2-icon-plus mr-2"></span>
           {gettext('Create a new tag')}
         </div>
-        <TagListFooter toggle={this.props.onListTagCancel} repotagList={this.state.repotagList} loadTags={this.loadTags} repoID={this.props.repoID}/>
+        <TagListFooter
+          toggle={this.props.onListTagCancel}
+          repotagList={this.state.repotagList}
+          loadTags={this.loadTags}
+          repoID={this.props.repoID}
+        />
       </Fragment>
     );
   }

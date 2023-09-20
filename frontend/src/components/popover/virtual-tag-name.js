@@ -20,6 +20,14 @@ export default class VirtualTagName extends React.Component {
     this.input = React.createRef();
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.tag.name !== this.state.tagName) {
+      this.setState({
+        tagName: nextProps.tag.name,
+      });
+    }
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.input.current.focus();
