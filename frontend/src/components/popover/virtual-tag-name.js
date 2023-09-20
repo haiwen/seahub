@@ -21,7 +21,7 @@ export default class VirtualTagName extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.tag.name !== this.state.tagName) {
+    if (nextProps.tag.name !== this.props.tag.name) {
       this.setState({
         tagName: nextProps.tag.name,
       });

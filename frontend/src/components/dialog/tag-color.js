@@ -24,7 +24,7 @@ class TagColor extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.tag.color !== this.state.tagColor) {
+    if (nextProps.tag.color !== this.props.tag.color) {
       this.setState({
         tagColor: nextProps.tag.color,
       });

@@ -136,8 +136,7 @@ export default class ListTagPopover extends React.Component {
           })}
         </ul>
         <div className="add-tag-link px-4 py-2 d-flex align-items-center" onClick={this.createVirtualTag}>
-          <span className="sf2-icon-plus mr-2"></span>
-          {gettext('Create a new tag')}
+          <span className="sf2-icon-plus mr-2"></span>{gettext('Create a new tag')}
         </div>
         <TagListFooter
           toggle={this.props.onListTagCancel}
