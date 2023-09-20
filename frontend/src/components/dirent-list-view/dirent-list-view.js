@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, gettext, username } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import URLDecorator from '../../utils/url-decorator';
@@ -205,8 +205,11 @@ class DirentListView extends React.Component {
     this.setState({isImagePopupOpen: false});
   };
 
-  onCreateFileToggle = () => {
-    this.setState({isCreateFileDialogShow: !this.state.isCreateFileDialogShow});
+  onCreateFileToggle = (fileType) => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: fileType || ''
+    });
   };
 
   onCreateFolderToggle = () => {
@@ -320,6 +323,26 @@ class DirentListView extends React.Component {
       return;
     }
 
+    const {
+      NEW_FOLDER, NEW_FILE,
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE,
+      NEW_SEADOC_FILE
+    } = TextTranslation;
+
+    const direntsContainerMenuList = [
+      NEW_FOLDER, NEW_FILE, 'Divider',
+      NEW_MARKDOWN_FILE,
+      NEW_EXCEL_FILE,
+      NEW_POWERPOINT_FILE,
+      NEW_WORD_FILE
+    ];
+    if (enableSeadoc) {
+      direntsContainerMenuList.push(NEW_SEADOC_FILE);
+    }
+
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
 
@@ -329,7 +352,7 @@ class DirentListView extends React.Component {
         if (!canCreate) return;
       }
 
-      let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+      let menuList = direntsContainerMenuList;
       this.handleContextClick(event, id, menuList);
     } else {
       if (this.props.selectedDirentList.length === 1) {
@@ -351,7 +374,8 @@ class DirentListView extends React.Component {
 
           setTimeout(() => {
             let id = 'dirent-container-menu';
-            let menuList = [TextTranslation.NEW_FOLDER, TextTranslation.NEW_FILE];
+
+            let menuList = direntsContainerMenuList;
             this.handleContextClick(event, id, menuList);
           }, 0);
         }
@@ -380,6 +404,21 @@ class DirentListView extends React.Component {
         break;
       case 'New File':
         this.onCreateFileToggle();
+        break;
+      case 'New Markdown File':
+        this.onCreateFileToggle('.md');
+        break;
+      case 'New Excel File':
+        this.onCreateFileToggle('.xlsx');
+        break;
+      case 'New PowerPoint File':
+        this.onCreateFileToggle('.pptx');
+        break;
+      case 'New Word File':
+        this.onCreateFileToggle('.docx');
+        break;
+      case 'New SeaDoc File':
+        this.onCreateFileToggle('.sdoc');
         break;
       default:
         break;
