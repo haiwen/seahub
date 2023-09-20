@@ -94,8 +94,12 @@ class DetailListView extends React.Component {
                 </tr>
                 <tr className="file-extra-attributes">
                   <th colSpan={2}>
-                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleApplyPropertiesDialog}>
-                      {gettext('Apply properties to sub dirents')}
+                    <div
+                      className="edit-file-extra-attributes-btn text-truncate"
+                      onClick={this.toggleApplyPropertiesDialog}
+                      title={gettext('Apply properties to files inside the folder')}
+                    >
+                      {gettext('Apply properties to files inside the folder')}
                     </div>
                   </th>
                 </tr>

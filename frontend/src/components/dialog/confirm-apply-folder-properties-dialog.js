@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../toast';
 import { Utils } from '../../utils/utils';
+import Loading from '../loading';
 
 const propTypes = {
   toggle: PropTypes.func,
@@ -22,7 +23,6 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
   }
 
   submit = () => {
-    toaster.success(gettext('Please wait a while'));
     const { repoID, path } = this.props;
     this.setState({canSubmit: false});
     seafileAPI.setFolderItemsExtendedProperties(repoID, path).then(() => {
@@ -52,18 +52,25 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.props.toggle}>
         <ModalHeader toggle={this.props.toggle}>
-          {gettext('Apply')}
+          {gettext('Apply properties')}
         </ModalHeader>
 
         <ModalBody>
           <p>
-            {gettext('Are you sure to apply folder extra properties to all sub dirents in the folder')}
+            {gettext('Are you sure to apply properties to all files inside the folder?')}
           </p>
         </ModalBody>
 
         <ModalFooter>
           <Button color='secondary' disabled={!this.state.canSubmit} onClick={this.props.toggle}>{gettext('Cancel')}</Button>
-          <Button color='primary' disabled={!this.state.canSubmit} onClick={this.submit}>{gettext('Submit')}</Button>
+          <Button color='primary' disabled={!this.state.canSubmit} onClick={this.submit}>
+            {this.state.canSubmit &&
+              <span>{gettext('Submit')}</span>
+            }
+            {!this.state.canSubmit &&
+              <Loading />
+            }
+          </Button>
         </ModalFooter>
       </Modal>
     );

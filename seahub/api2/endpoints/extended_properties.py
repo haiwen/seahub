@@ -103,7 +103,7 @@ class ExtendedPropertiesView(APIView):
         resp_json = request_can_set_ex_props(repo_id, path)
         if not resp_json.get('can_set', False):
             if resp_json.get('error_type') == 'higher_being_set':
-                error_msg = 'A directory at a higher level is being set'
+                error_msg = 'Another task is running'
             else:
                 error_msg = 'Please try again later'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -264,7 +264,7 @@ class ExtendedPropertiesView(APIView):
         resp_json = request_can_set_ex_props(repo_id, path)
         if not resp_json.get('can_set', False):
             if resp_json.get('error_type') == 'higher_being_set':
-                error_msg = 'A directory at a higher level is being set'
+                error_msg = 'Another task is running'
             else:
                 error_msg = 'Please try again later'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -404,13 +404,13 @@ class FolderItemsExtendedPropertiesView(APIView):
 
         error_type = resp_json.get('error_type')
         if error_type == 'higher_being_set':
-            error_msg = 'A directory at a higher level is being set'
+            error_msg = 'Another task is running'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         elif error_type == 'server_busy':
             error_msg = 'Server is busy'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         elif error_type == 'sub_folder_setting':
-            error_msg = 'A sub directory is being set'
+            error_msg = 'Another task is running'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return Response({'success': True})
