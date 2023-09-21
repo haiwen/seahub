@@ -343,11 +343,11 @@
   "Default_font": "Default font",
   "Pending_operations_exceed_limit": "There are multiple operations not synced to the server. Please check your network.",
   "Recently_saved": "Recently saved",
-  "Sdoc_document" : "Sdoc document",
   "Text_Link": "Text Link",
   "Icon_and_text_Link": "Icon and text Link",
   "Card": "Card",
   "Select_sdoc_document": "Select sdoc document",
+  "Select_file": "Select file",
   "Local_file": "Local file",
   "Internal_server_exec_operations_error": "An exception occurred on the server, please refresh the page and try again",
   "Failed_to_sync_with_server_operations": "Synchronization with the server failed, please refresh the page",
@@ -362,5 +362,7 @@
   "Changes": "Modifiche",
   "No_changes": "No changes",
   "Title": "Titolo",
-  "Subtitle": "Subtitle"
+  "Subtitle": "Subtitle",
+  "Link_sdoc": "Link sdoc",
+  "Link_file": "Link file"
 }
