@@ -1494,17 +1494,12 @@ class SeadocFileUUIDView(APIView):
 class SeadocDirView(APIView):
     """list all files in dir
     """
-    authentication_classes = ()
-    throttle_classes = (UserRateThrottle,)
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid):
-        # jwt permission check
-        auth = request.headers.get('authorization', '').split()
-        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
-        if not is_valid:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        username = request.user.username
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -1520,7 +1515,11 @@ class SeadocDirView(APIView):
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = payload.get('username', '')
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
             dirs = seafile_api.list_dir_with_perm(
                 repo_id, path, dir_id, username, -1, -1)
