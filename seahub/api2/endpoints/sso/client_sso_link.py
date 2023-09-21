@@ -12,7 +12,7 @@ from seahub.api2.throttling import AnonRateThrottle
 from seahub.base.models import ClientSSOToken, STATUS_ERROR
 from seahub.utils import get_service_url, gen_token
 from seahub.api2.utils import api_error
-from seahub.settings import CLIENT_SSO_UUID_EXPIRATION
+from seahub.settings import CLIENT_SSO_TOKEN_EXPIRATION
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class ClientSSOLink(APIView):
             return Response({'status': STATUS_ERROR})
 
         interval = (timezone.now() - t.accessed_at).total_seconds()
-        if int(interval) >= CLIENT_SSO_UUID_EXPIRATION:
+        if int(interval) >= CLIENT_SSO_TOKEN_EXPIRATION:
             logger.error('{} client sso login error: login timeout.'.format(token))
             return Response({'status': STATUS_ERROR})
 

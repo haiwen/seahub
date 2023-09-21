@@ -19,7 +19,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.auth.decorators import login_required
 from seahub.utils import render_permission_error, render_error
 from seahub.api2.utils import get_token_v1, get_token_v2
-from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_UUID_EXPIRATION
+from seahub.settings import CLIENT_SSO_VIA_LOCAL_BROWSER, CLIENT_SSO_TOKEN_EXPIRATION
 from seahub.base.models import ClientSSOToken
 
 # Get an instance of a logger
@@ -157,7 +157,7 @@ def client_sso_complete(request, token):
         return render_error(request, error_msg)
 
     interval = (timezone.now() - t.accessed_at).total_seconds()
-    if int(interval) >= CLIENT_SSO_UUID_EXPIRATION:
+    if int(interval) >= CLIENT_SSO_TOKEN_EXPIRATION:
         error_msg = _('Login timeout, please click the login button on the client again')
         return render_error(request, error_msg)
 
