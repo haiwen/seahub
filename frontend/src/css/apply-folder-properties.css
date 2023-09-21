@@ -1,0 +1,12 @@
+.apply-properties {
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+}
+
+.apply-properties .loading-tip {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  margin: 0 5px 0 0;
+}

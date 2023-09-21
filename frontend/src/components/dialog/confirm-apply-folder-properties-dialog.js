@@ -7,6 +7,8 @@ import toaster from '../toast';
 import { Utils } from '../../utils/utils';
 import Loading from '../loading';
 
+import '../../css/apply-folder-properties.css';
+
 const propTypes = {
   toggle: PropTypes.func,
   repoID: PropTypes.string,
@@ -63,7 +65,7 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
 
         <ModalFooter>
           <Button color='secondary' disabled={!this.state.canSubmit} onClick={this.props.toggle}>{gettext('Cancel')}</Button>
-          <Button color='primary' disabled={!this.state.canSubmit} onClick={this.submit}>
+          <Button color='primary' className='flex-shrink-0 apply-properties' disabled={!this.state.canSubmit} onClick={this.submit}>
             {this.state.canSubmit &&
               <span>{gettext('Submit')}</span>
             }
