@@ -1445,3 +1445,16 @@ CREATE TABLE `deleted_files_count` (
   KEY `ix_deleted_files_count_repo_id` (`repo_id`),
   KEY `ix_deleted_files_count_deleted_time` (`deleted_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sdoc_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_uuid` varchar(32) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `msg_type` varchar(36) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `detail` longtext NOT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `sdoc_notification_doc_uuid_username` (`doc_uuid`, `username`),
+  KEY `sdoc_notification_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

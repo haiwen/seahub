@@ -53,11 +53,11 @@ class SeadocDraftManager(models.Manager):
     def list_by_doc_uuids(self, doc_uuid_list):
         return self.filter(doc_uuid__in=doc_uuid_list)
 
-    def list_by_username(self, username, start, limit):
-        return self.filter(username=username).order_by('-id')[start:limit]
+    def list_by_username(self, username, start, end):
+        return self.filter(username=username).order_by('-id')[start:end]
 
-    def list_by_repo_id(self, repo_id, start, limit):
-        return self.filter(repo_id=repo_id).order_by('-id')[start:limit]
+    def list_by_repo_id(self, repo_id, start, end):
+        return self.filter(repo_id=repo_id).order_by('-id')[start:end]
 
 
 class SeadocDraft(models.Model):
@@ -109,21 +109,21 @@ class SeadocRevisionManager(models.Manager):
     def list_by_doc_uuids(self, doc_uuid_list):
         return self.filter(doc_uuid__in=doc_uuid_list)
 
-    def list_by_origin_doc_uuid(self, origin_doc_uuid, start, limit):
+    def list_by_origin_doc_uuid(self, origin_doc_uuid, start, end):
         return self.filter(
-            origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('-id')[start:limit]
+            origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('-id')[start:end]
     
     def list_all_by_origin_doc_uuid(self, origin_doc_uuid):
         return self.filter(
             origin_doc_uuid=origin_doc_uuid, is_published=False).order_by('revision_id')
 
-    def list_by_username(self, username, start, limit):
+    def list_by_username(self, username, start, end):
         return self.filter(
-            username=username, is_published=False).order_by('-id')[start:limit]
+            username=username, is_published=False).order_by('-id')[start:end]
 
-    def list_by_repo_id(self, repo_id, start, limit):
+    def list_by_repo_id(self, repo_id, start, end):
         return self.filter(
-            repo_id=repo_id, is_published=False).order_by('-id')[start:limit]
+            repo_id=repo_id, is_published=False).order_by('-id')[start:end]
 
     def publish(self, doc_uuid, publisher, publish_file_version):
         return self.filter(doc_uuid=doc_uuid).update(
@@ -242,4 +242,38 @@ class SeadocCommentReply(models.Model):
             'doc_uuid': self.doc_uuid,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
+        }
+
+
+class SeadocNotificationManager(models.Manager):
+    def total_count(self, doc_uuid, username):
+        return self.filter(doc_uuid=doc_uuid, username=username).count()
+
+    def list_by_user(self, doc_uuid, username, start, end):
+        return self.filter(doc_uuid=doc_uuid, username=username).order_by('-created_at')[start: end]
+
+
+class SeadocNotification(models.Model):
+    doc_uuid = models.CharField(max_length=36)
+    username = models.CharField(max_length=255)
+    msg_type = models.CharField(max_length=36)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    detail = models.TextField()
+    seen = models.BooleanField(default=False)
+
+    objects = SeadocNotificationManager()
+
+    class Meta:
+        db_table = 'sdoc_notification'
+        unique_together = ('doc_uuid', 'username')
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'doc_uuid': self.doc_uuid,
+            'username': self.author,
+            'msg_type': self.msg_type,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'detail': self.detail,
+            'seen': self.seen,
         }
