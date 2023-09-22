@@ -1,4 +1,5 @@
 import os
+import json
 import posixpath
 
 from django.db import models
@@ -252,6 +253,9 @@ class SeadocNotificationManager(models.Manager):
     def list_by_user(self, doc_uuid, username, start, end):
         return self.filter(doc_uuid=doc_uuid, username=username).order_by('-created_at')[start: end]
 
+    def list_by_unseen(self, doc_uuid, username):
+        return self.filter(doc_uuid=doc_uuid, username=username, seen=False)
+
 
 class SeadocNotification(models.Model):
     doc_uuid = models.CharField(max_length=36)
@@ -271,9 +275,9 @@ class SeadocNotification(models.Model):
         return {
             'id': self.pk,
             'doc_uuid': self.doc_uuid,
-            'username': self.author,
+            'username': self.username,
             'msg_type': self.msg_type,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
-            'detail': self.detail,
+            'detail': json.loads(self.detail),
             'seen': self.seen,
         }

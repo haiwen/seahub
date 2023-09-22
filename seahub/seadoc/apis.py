@@ -696,7 +696,7 @@ class SeadocDrafts(APIView):
             page = 1
             per_page = 25
         start = (page - 1) * per_page
-        limit = per_page + 1
+        end = page * per_page
 
         if repo_id:
             # resource check
@@ -711,11 +711,11 @@ class SeadocDrafts(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, limit)
+            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, end)
             count = SeadocDraft.objects.filter(repo_id=repo_id).count()
         else:
             # owned
-            draft_queryset = SeadocDraft.objects.list_by_username(username, start, limit)
+            draft_queryset = SeadocDraft.objects.list_by_username(username, start, end)
             count = SeadocDraft.objects.filter(username=username).count()
 
         drafts = [draft.to_dict() for draft in draft_queryset]
@@ -835,7 +835,7 @@ class SeadocNotificationsView(APIView):
                 page = 1
                 per_page = 25
             start = (page - 1) * per_page
-            end = start + per_page
+            end = page * per_page
 
         # resource check
         total_count = SeadocNotification.objects.total_count(file_uuid, username)
@@ -845,11 +845,50 @@ class SeadocNotificationsView(APIView):
         for notification in notification_queryset:
             data = notification.to_dict()
             data.update(
-                user_to_dict(notification.author, request=request, avatar_size=avatar_size))
+                user_to_dict(notification.username, request=request, avatar_size=avatar_size))
             notifications.append(data)
 
         result = {'notifications': notifications, 'total_count': total_count}
         return Response(result)
+
+    def put(self, request, file_uuid):
+        """ mark all notifications seen
+        """
+        username = request.user.username
+        unseen_notices = SeadocNotification.objects.list_by_unseen(
+            file_uuid, username)
+        unseen_notices.update(seen=True)
+
+        return Response({'success': True})
+
+
+class SeadocNotificationView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, file_uuid, notification_id):
+        """ mark a notification seen
+        """
+        username = request.user.username
+        # resource check
+        notification = SeadocNotification.objects.filter(
+            id=notification_id).first()
+        if not notification:
+            error_msg = 'Notification %s not found.' % notification_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if notification.username != username or notification.doc_uuid != file_uuid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not notification.seen:
+            notification.seen = True
+            notification.save()
+
+        return Response({'success': True})
 
 
 class SeadocCommentsView(APIView):
@@ -885,7 +924,7 @@ class SeadocCommentsView(APIView):
                 page = 1
                 per_page = 25
             start = (page - 1) * per_page
-            end = start + per_page
+            end = page * per_page
 
         total_count = FileComment.objects.list_by_file_uuid(file_uuid).count()
         comments = []
@@ -1064,7 +1103,7 @@ class SeadocCommentRepliesView(APIView):
                 page = 1
                 per_page = 25
             start = (page - 1) * per_page
-            end = start + per_page
+            end = page * per_page
 
         # resource check
         file_comment = FileComment.objects.filter(
@@ -1713,7 +1752,7 @@ class SeadocRevisions(APIView):
             page = 1
             per_page = 25
         start = (page - 1) * per_page
-        end = start + per_page
+        end = page * per_page
 
         revisions_queryset= revision_queryset[start:end]
         uuid_set = set()

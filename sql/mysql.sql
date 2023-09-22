@@ -1448,7 +1448,7 @@ CREATE TABLE `deleted_files_count` (
 
 CREATE TABLE `sdoc_notification` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `doc_uuid` varchar(32) NOT NULL,
+  `doc_uuid` varchar(36) NOT NULL,
   `username` varchar(255) NOT NULL,
   `msg_type` varchar(36) NOT NULL,
   `created_at` datetime NOT NULL,
