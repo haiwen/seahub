@@ -3,7 +3,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, serviceURL } from '../../utils/constants';
+import { username, gettext, siteRoot, serviceURL } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import Activity from '../../models/activity';
@@ -311,10 +311,6 @@ class FilesActivities extends Component {
       currentPage: 1,
       hasMore: true,
       items: [],
-      itemsForRender: [],
-      showSingleAuthorRecords: false,
-      activityAuthors: [],
-      showActivityAuthorsPopover: false,
     };
     this.avatarSize = 72;
     this.curPathList = [];
@@ -323,32 +319,17 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     let currentPage = this.state.currentPage;
-    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
-
+    seafileAPI.listActivities(currentPage, this.avatarSize, username).then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
-
-      // get all authors
-      let uniqueSet = new Set();
-      let activityAuthors = [];
-      events.forEach((item) => {
-	if (!uniqueSet.has(item.author_email)) {
-          uniqueSet.add(item.author_email);
-          item.isSelected = false;
-          activityAuthors.push(item);
-	}
-      });
-
       this.setState({
         items: events,
-        itemsForRender: events,
-        activityAuthors: activityAuthors,
         currentPage: currentPage + 1,
         isFirstLoading: false,
         hasMore: true,
       });
-      if (this.state.itemsForRender.length < 25) {
+      if (this.state.items.length < 25) {
         this.getMore();
       }
     }).catch(error => {
@@ -421,49 +402,17 @@ class FilesActivities extends Component {
 
   getMore() {
     let currentPage = this.state.currentPage;
-    seafileAPI.listActivities(currentPage, this.avatarSize).then(res => {
+    seafileAPI.listActivities(currentPage, this.avatarSize, username).then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
-
-      // merge new authors
-      let uniqueSet = new Set();
-      this.state.activityAuthors.forEach((item) => {
-	if (!uniqueSet.has(item.author_email)) {
-          uniqueSet.add(item.author_email);
-	}
-      });
-      let newActivityAuthors = [];
-      events.forEach((item) => {
-	if (!uniqueSet.has(item.author_email)) {
-          uniqueSet.add(item.author_email);
-          item.isSelected = false;
-          newActivityAuthors.push(item);
-	}
-      });
-
-      // check if only need to show selected author's record
-      let newItemsForRender = []
-      if (this.state.showSingleAuthorRecords) {
-        let authorEmail = this.state.itemsForRender[0].author_email;
-        events.forEach((item) => {
-          if (item.author_email === authorEmail) {
-            newItemsForRender.push(item);
-          }
-        });
-      } else {
-        newItemsForRender = events;
-      }
-
       this.setState({
         isLoadingMore: false,
         items: [...this.state.items, ...events],
-        itemsForRender: [...this.state.itemsForRender, ...newItemsForRender],
-        activityAuthors: [...this.state.activityAuthors, ...newActivityAuthors],
         currentPage: currentPage + 1,
         hasMore: res.data.events.length === 0 ? false : true
       });
-      if (this.state.itemsForRender.length < 25 && this.state.hasMore) {
+      if (this.state.items.length < 25 && this.state.hasMore) {
         this.getMore();
       }
     }).catch(error => {
@@ -488,102 +437,19 @@ class FilesActivities extends Component {
     }
   };
 
-  toggleActivityAuthorsPopover = (state) => {
-    if (state === 'open') {
-      this.setState({
-        showActivityAuthorsPopover: true
-      });
-    } else {
-      this.setState({
-        showActivityAuthorsPopover: false
-      });
-    }
-  };
-
-  showRecordsByAuthor = (authorEmail) => {
-    if (authorEmail === "all") {
-      let allItems = this.state.items;
-      let activityAuthors = this.state.activityAuthors.map(item => {
-        item.isSelected = false;
-        return item;
-      });
-      this.setState({
-        showSingleAuthorRecords: false,
-        itemsForRender: allItems,
-        activityAuthors: activityAuthors,
-      });
-    } else {
-      let itemsForRender = []
-      this.state.items.forEach((item) => {
-        if (item.author_email === authorEmail) {
-          itemsForRender.push(item);
-        }
-      });
-      let activityAuthors = this.state.activityAuthors.map(item => {
-        item.isSelected = item.author_email === authorEmail ? true : false;
-        return item;
-      });
-      this.setState({
-        showSingleAuthorRecords: true,
-        itemsForRender: itemsForRender,
-        activityAuthors: activityAuthors,
-      });
-    }
-  };
-
   render() {
-
     return (
       <div className="main-panel-center">
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
-            <Fragment>
-              <div>
-                <ul className="nav">
-                  <li className="nav-item">
-                  <Link to={`${siteRoot}dashboard/`} className="nav-link active">{gettext('ALL Activities')}</Link>
-                  </li>
-                  <li className="nav-item">
-                  <Link to={`${siteRoot}my-dashboard/`} className="nav-link">{gettext('My Activities')}</Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="path-tool">
-                <a href="#"
-                  className="sf2-icon-user2 action-icon group-top-action-icon"
-                  title={gettext('Authors')}
-                  onClick={() => this.toggleActivityAuthorsPopover('open')}>
-                </a>
-                {this.state.showActivityAuthorsPopover &&
-                <div className="sf-popover" id="group-members-popover">
-                  <div className="sf-popover-hd sf-popover-title group-member-list-header">
-                    <span>{gettext('Authors')}</span>
-                    <a href="#" className="sf-popover-close js-close sf2-icon-x1 action-icon"
-                      onClick={this.toggleActivityAuthorsPopover}></a>
-                  </div>
-                  <div className="sf-popover-con">
-                    <ul className="sf-popover-list group-member-list">
-                      <li>
-                        <a href="#" className="sf-popover-item user-item d-flex" onClick={this.showRecordsByAuthor.bind(this, "all")}>
-                          <span className="group-member-name">{gettext('All Authors')}</span>
-                        </a>
-                      </li>
-                      {this.state.activityAuthors.map((item, index) => {
-                        return (
-                          <li key={index} className={item.isSelected ? "tr-active" : ""}>
-                            <a href="#" className="sf-popover-item user-item d-flex" onClick={this.showRecordsByAuthor.bind(this, item.author_email)}>
-                              <img src={item.avatar_url} className="group-member-avatar avatar"/>
-                              <span className="group-member-name">{item.author_name}</span>
-                              {item.isSelected && <span className="sf2-icon-tick" style={{ position: 'absolute', right: '40px' }}></span>}
-                            </a>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>}
-              </div>
-            </Fragment>
+            <ul className="nav">
+              <li className="nav-item">
+              <Link to={`${siteRoot}dashboard/`} className="nav-link">{gettext('ALL Activities')}</Link>
+              </li>
+              <li className="nav-item">
+              <Link to={`${siteRoot}my-dashboard/`} className="nav-link active">{gettext('My Activities')}</Link>
+              </li>
+            </ul>
           </div>
           <div className="cur-view-content d-block" onScroll={this.handleScroll}>
             {this.state.isFirstLoading && <Loading />}
@@ -591,7 +457,7 @@ class FilesActivities extends Component {
               <p className="error text-center">{this.state.errorMsg}</p>
             }
             {!this.state.isFirstLoading &&
-              <FileActivitiesContent items={this.state.itemsForRender} isLoadingMore={this.state.isLoadingMore}/>
+              <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore}/>
             }
           </div>
         </div>

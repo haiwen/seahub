@@ -11,6 +11,7 @@ import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
 import DraftContent from './pages/drafts/draft-content';
 import FilesActivities from './pages/dashboard/files-activities';
+import MyFileActivities from './pages/dashboard/my-file-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
 import editUtilities from './utils/editor-utilities';
@@ -37,6 +38,7 @@ import './css/toolbar.css';
 import './css/search.css';
 
 const FilesActivitiesWrapper = MainContentWrapper(FilesActivities);
+const MyFileActivitiesWrapper = MainContentWrapper(MyFileActivities);
 const DraftsViewWrapper = MainContentWrapper(DraftsView);
 const StarredWrapper = MainContentWrapper(Starred);
 const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
@@ -241,6 +243,7 @@ class App extends Component {
             <Router className="reach-router">
               {home}
               <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <MyFileActivitiesWrapper path={siteRoot + 'my-dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
               <DraftsViewWrapper path={siteRoot + 'drafts'}
                 onShowSidePanel={this.onShowSidePanel}
                 onSearchedClick={this.onSearchedClick}

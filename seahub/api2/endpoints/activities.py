@@ -21,12 +21,14 @@ from seahub.drafts.models import Draft
 
 logger = logging.getLogger(__name__)
 
+
 class ActivitiesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+
         if not EVENTS_ENABLED or (not is_pro_version() and IS_DB_SQLITE3):
             events = None
             return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
@@ -45,9 +47,10 @@ class ActivitiesView(APIView):
         count = per_page
 
         email = request.user.username
+        author_email = request.GET.get('author_email', '')
 
         try:
-            events = get_user_activities(email, start, count)
+            events = get_user_activities(email, start, count, author_email)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -68,7 +71,7 @@ class ActivitiesView(APIView):
 
             try:
                 avatar_size = int(request.GET.get('avatar_size', 72))
-            except ValueError as e:
+            except ValueError:
                 avatar_size = 72
 
             url, is_default, date_uploaded = api_avatar_url(e.op_user, avatar_size)

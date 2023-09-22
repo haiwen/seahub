@@ -588,27 +588,27 @@ if EVENTS_CONFIG_FILE:
            session.close()
 
 
-    def _get_activities(username, start, count):
+    def _get_activities(username, start, count, op_user=""):
         ev_session = SeafEventsSession()
 
         events = []
         try:
             events = seafevents_api.get_user_activities(ev_session,
-                    username, start, count)
+                    username, start, count, op_user)
         finally:
             ev_session.close()
 
         return events
 
 
-    def get_user_activities(username, start, count):
+    def get_user_activities(username, start, count, op_user=""):
         """Return user events list and a new start.
         For example:
         ``get_user_activities('foo@example.com', 0, 10)`` returns the first 10
         ``get_user_activities('foo@example.com', 4, 10)`` returns the 6th through
                  15th events.
         """
-        return _get_activities(username, start, count)
+        return _get_activities(username, start, count, op_user)
 
     def get_user_activity_stats_by_day(start, end, offset):
         """
