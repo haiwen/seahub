@@ -29,7 +29,21 @@ class Rename extends React.Component {
     } else {
       this.inputRef.current.setSelectionRange(0, -1);
     }
+    // ensure real dom has been rendered, then listen the click event
+    setTimeout(() => {
+      document.addEventListener('click', this.onClick);
+    }, 1);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onClick);
+  }
+
+  onClick = (e) => {
+    if (!this.inputRef.current.contains(e.target)) {
+      this.onRenameConfirm();
+    }
+  };
 
   onChange = (e) => {
     this.setState({name: e.target.value});
@@ -45,7 +59,7 @@ class Rename extends React.Component {
   };
 
   onRenameConfirm = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
+    e && e.nativeEvent.stopImmediatePropagation();
     let newName = this.state.name.trim();
     if (newName === this.props.name) {
       this.props.onRenameCancel();
@@ -55,6 +69,7 @@ class Rename extends React.Component {
     let { isValid, errMessage } = this.validateInput();
     if (!isValid) {
       toaster.danger(errMessage);
+      this.props.onRenameCancel();
     } else {
       this.props.onRenameConfirm(newName);
     }
