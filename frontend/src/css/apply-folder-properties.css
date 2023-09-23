@@ -1,12 +1,14 @@
-.apply-properties {
+.apply-properties-dialog .apply-properties {
   justify-content: center;
   align-items: center;
   width: fit-content;
+  display: flex;
+  height: 38px;
 }
 
-.apply-properties .loading-tip {
+.apply-properties-dialog .apply-properties .loading-tip {
   display: inline-block;
   height: 16px;
   width: 16px;
-  margin: 0 5px 0 0;
+  margin: 0;
 }
