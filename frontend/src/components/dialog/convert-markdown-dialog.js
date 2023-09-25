@@ -5,8 +5,8 @@ import { gettext } from '../../utils/constants';
 
 function ConvertMarkdownDialog() {
   return (
-    <Modal isOpen={true} className="loading-dialog">
-      <ModalBody>
+    <Modal isOpen={true} className="container-markdown-container" style={{width: '300px'}}>
+      <ModalBody className='container-markdown-content'>
         <Loading />
         <div className='d-flex justify-content-center'>{gettext('Converting')}...</div>
       </ModalBody>
