@@ -31,3 +31,5 @@ HASH_URLS = {
         'GROUP_DISCUSS': settings.SITE_ROOT + '#group/%(group_id)s/discussions/',
         'SYS_REPO_ADMIN': settings.SITE_ROOT + 'sysadmin/#all-libs/',
         }
+
+REPO_SHARE_LINK_COUNT_LIMIT = 500000

@@ -23,6 +23,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare
+from seahub.share.decorators import check_share_link_count
 from seahub.utils import is_org_context, get_password_strength_level, \
         is_valid_password, gen_shared_link
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -41,6 +42,7 @@ class MultiShareLinks(APIView):
     permission_classes = (IsAuthenticated, CanGenerateShareLink)
     throttle_classes = (UserRateThrottle,)
 
+    @check_share_link_count
     def post(self, request):
         # argument check
         repo_id = request.data.get('repo_id', None)
@@ -213,6 +215,7 @@ class MultiShareLinksBatch(APIView):
     permission_classes = (IsAuthenticated, CanGenerateShareLink)
     throttle_classes = (UserRateThrottle,)
 
+    @check_share_link_count
     def post(self, request):
         """ Create multi share link.
         Permission checking:

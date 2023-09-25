@@ -104,7 +104,7 @@ class SearchGroups extends Component {
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Groups')}</h4>
                 <p className="text-secondary small">{gettext('Tip: you can search by keyword in name.')}</p>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name')}</Label>
                     <Col sm={5}>

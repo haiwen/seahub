@@ -163,7 +163,7 @@ class OrgUsersSearchUsers extends Component {
             <div className="cur-view-content">
               <div className="mt-4 mb-6">
                 <h4 className="border-bottom font-weight-normal mb-2 pb-1">{gettext('Search Users')}</h4>
-                <Form>
+                <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
                       <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />

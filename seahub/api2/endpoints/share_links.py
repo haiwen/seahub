@@ -31,6 +31,7 @@ from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
         PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW
 from seahub.share.models import FileShare, UploadLinkShare, check_share_link_access
+from seahub.share.decorators import check_share_link_count
 from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
         normalize_dir_path, is_pro_version, get_file_type_and_ext, \
         check_filename_with_rename, gen_file_upload_url, \
@@ -291,6 +292,7 @@ class ShareLinks(APIView):
 
         return Response(result)
 
+    @check_share_link_count
     def post(self, request):
         """ Create share link.
 
