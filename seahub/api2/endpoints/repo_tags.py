@@ -152,13 +152,19 @@ class RepoTagsView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            RepoTags.objects.bulk_create(tag_objs)
+            repo_tag_list = RepoTags.objects.bulk_create(tag_objs)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"success": "true"}, status=status.HTTP_200_OK)
+        repo_tags = list()
+        for repo_tag in repo_tag_list:
+            res = repo_tag.to_dict()
+            repo_tags.append(res)
+
+        return Response({"repo_tags": repo_tags}, status=status.HTTP_200_OK)
+
 
 class RepoTagView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
