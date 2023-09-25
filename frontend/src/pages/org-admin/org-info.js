@@ -3,6 +3,9 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { mediaUrl, gettext, orgMemberQuotaEnabled } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
+import SetOrgUserDefaultQuota from '../../components/dialog/set-org-user-default-quota';
+
+const { orgID } = window.org.pageOptions;
 
 import '../../css/org-admin-info-page.css';
 
@@ -14,6 +17,8 @@ class OrgInfo extends Component {
       org_name: '',
       storage_quota: 0,
       storage_usage: 0,
+      isSetUserDefaultQuotaDialogOpen: false,
+      userDefaultQuota: 0,
       member_quota: 0,
       member_usage: 0,
       active_members: 0
@@ -25,21 +30,33 @@ class OrgInfo extends Component {
       const {
         org_id, org_name,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, user_default_quota
       } = res.data;
       this.setState({
         org_id, org_name,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, user_default_quota
       });
     });
   }
+
+  toggleSetUserDefaultQuotaDialog = () => {
+    this.setState({
+      isSetUserDefaultQuotaDialogOpen: !this.state.isSetUserDefaultQuotaDialogOpen
+    });
+  };
+
+  updateQuota = (quota) => {
+    this.setState({
+      userDefaultQuota: quota
+    });
+  };
 
   render() {
     const {
       org_id, org_name,
       member_quota, member_usage, active_members,
-      storage_quota, storage_usage
+      storage_quota, storage_usage, user_default_quota
     } = this.state;
     return (
       <Fragment>
@@ -108,6 +125,14 @@ class OrgInfo extends Component {
             </div>
           </div>
         </div>
+        {this.state.isSetUserDefaultQuotaDialogOpen &&
+        <SetOrgUserDefaultQuota
+          orgID={orgID}
+          userDefaultQuota={this.state.userDefaultQuota}
+          updateQuota={this.updateQuota}
+          toggleDialog={this.toggleSetUserDefaultQuotaDialog}
+        />
+        }
       </Fragment>
     );
   }
