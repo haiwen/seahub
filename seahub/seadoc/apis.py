@@ -223,7 +223,7 @@ class SeadocDownloadLink(APIView):
         return Response({'download_link': download_link})
 
 
-class SeadocOriginFileDownloadLink(APIView):
+class SeadocOriginFileContent(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
 
@@ -257,13 +257,14 @@ class SeadocOriginFileDownloadLink(APIView):
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        origin_file_download_link = get_seadoc_download_link(origin_uuid_map)
+        origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
         if not origin_file_download_link:
             error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        resp = requests.get(origin_file_download_link)
         return Response({
-            'download_link': origin_file_download_link
+            'content': resp.content
         })
 
 
@@ -1667,7 +1668,7 @@ class SeadocDirView(APIView):
 
 
 class SdocRevisionBasicVersionContent(APIView):
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
