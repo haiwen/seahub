@@ -68,7 +68,6 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
-  isConvertLoading: PropTypes.bool,
 };
 
 class DirColumnView extends React.Component {
@@ -220,7 +219,6 @@ class DirColumnView extends React.Component {
               onItemMove={this.props.onItemMove}
               onItemCopy={this.props.onItemCopy}
               onItemConvert={this.props.onItemConvert}
-              isConvertLoading={this.props.isConvertLoading}
               onDirentClick={this.props.onDirentClick}
               updateDirent={this.props.updateDirent}
               isAllItemSelected={this.props.isAllItemSelected}

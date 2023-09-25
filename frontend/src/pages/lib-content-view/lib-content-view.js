@@ -21,6 +21,7 @@ import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+import LoadingDialog from '../../components/dialog/convert-markdown-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -1942,7 +1943,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, isConvertLoading } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -2058,7 +2059,6 @@ class LibContentView extends React.Component {
             onItemMove={this.onMoveItem}
             onItemCopy={this.onCopyItem}
             onItemConvert={this.onConvertItem}
-            isConvertLoading={this.state.isConvertLoading}
             onAddFolder={this.onAddFolder}
             onAddFile={this.onAddFile}
             onFileTagChanged={this.onFileTagChanged}
@@ -2107,6 +2107,9 @@ class LibContentView extends React.Component {
             deleteFolder={this.deleteFolder}
             toggleDialog={this.toggleDeleteFolderDialog}
           />
+        )}
+        {isConvertLoading && (
+          <LoadingDialog />
         )}
       </Fragment>
     );
