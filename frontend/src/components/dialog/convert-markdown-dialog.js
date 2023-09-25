@@ -6,10 +6,9 @@ import { gettext } from '../../utils/constants';
 function ConvertMarkdownDialog() {
   return (
     <Modal isOpen={true} className="loading-dialog">
-      <ModalHeader>{gettext('Convert markdown to sdoc')}</ModalHeader>
       <ModalBody>
         <Loading />
-        <div className='d-flex justify-content-center'>{gettext('Converting, please wait...')}</div>
+        <div className='d-flex justify-content-center'>{gettext('Converting')}</div>
       </ModalBody>
     </Modal>
   );
