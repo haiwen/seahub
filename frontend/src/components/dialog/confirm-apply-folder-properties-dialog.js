@@ -29,7 +29,7 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
     const { repoID, path } = this.props;
     seafileAPI.queryFolderItemsExtendedPropertiesStatus(repoID, path).then(res => {
       if (res.data.is_finished) {
-        this.timer && clearInterval(timer);
+        this.timer && clearInterval(this.timer);
         this.setState({ submitting: false });
       } else {
         this.queryStatus();
