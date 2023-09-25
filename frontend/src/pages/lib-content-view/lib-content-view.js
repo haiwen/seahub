@@ -21,6 +21,7 @@ import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
+import ConvertMarkdownDialog from '../../components/dialog/convert-markdown-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -81,6 +82,7 @@ class LibContentView extends React.Component {
       asyncOperationType: 'move',
       asyncOperationProgress: 0,
       asyncOperatedFilesLength: 0,
+      isConvertLoading: false,
     };
 
     this.oldonpopstate = window.onpopstate;
@@ -1239,25 +1241,32 @@ class LibContentView extends React.Component {
   onConvertItem = (dirent, dstType) => {
     let path = Utils.joinPath(this.state.path, dirent.name);
     let repoID = this.props.repoID;
+    this.setState({isConvertLoading: true});
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
-      let objName = res.data.obj_name;
+      let newFileName = res.data.obj_name;
       let parentDir = res.data.parent_dir;
-      path = parentDir + '/' + objName;
-      let parentPath = Utils.getDirName(path);
+      let new_path = parentDir + '/' + newFileName;
+      let parentPath = Utils.getDirName(new_path);
 
       if (this.state.currentMode === 'column') {
-        this.updateMoveCopyTreeNode(parentPath);
+        this.addNodeToTree(newFileName, parentPath, 'file');
       }
-      this.loadDirentList(this.state.path);
+
+      this.addDirent(newFileName, 'file', res.data.size);
+      this.setState({isConvertLoading: false});
+      let message = gettext('Successfully converted file.')
+      toaster.success(message);
 
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
+      this.setState({isConvertLoading: false});
       if (errMessage === gettext('Error')) {
         let name = Utils.getFileName(path);
-        errMessage = gettext('Renaming {name} failed').replace('{name}', name);
+        errMessage = gettext('Convert {name} failed').replace('{name}', name);
       }
       toaster.danger(errMessage);
     });
+
   };
 
   onDirentClick = (dirent) => {
@@ -1939,7 +1948,7 @@ class LibContentView extends React.Component {
     }
 
     let enableDirPrivateShare = false;
-    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen } = this.state;
+    let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, isConvertLoading } = this.state;
     let showShareBtn = Utils.isHasPermissionToShare(currentRepoInfo, userPerm);
     let isRepoOwner = currentRepoInfo.owner_email === username;
     let isVirtual = currentRepoInfo.is_virtual;
@@ -2103,6 +2112,9 @@ class LibContentView extends React.Component {
             deleteFolder={this.deleteFolder}
             toggleDialog={this.toggleDeleteFolderDialog}
           />
+        )}
+        {isConvertLoading && (
+          <ConvertMarkdownDialog />
         )}
       </Fragment>
     );

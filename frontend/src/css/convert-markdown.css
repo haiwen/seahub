@@ -1,0 +1,14 @@
+.container-markdown-container {
+  width: 150px !important;
+}
+
+.container-markdown-container .modal-content {
+  height: 150px;
+}
+
+.container-markdown-container .modal-content .modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
