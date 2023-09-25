@@ -598,8 +598,16 @@ class ApplyFolderExtendedPropertiesView(APIView):
         except Exception as e:
             logger.exception('apply folder: %s ex-props error: %s', path, e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        # clear apply task map
-        pass
+        finally:
+            # remove path from worker
+            with self.apply_lock:
+                for repo_id, paths in self.worker_map.items():
+                    if repo_id != repo_id:
+                        continue
+                    self.worker_map[repo_id] = [cur_path for cur_path in paths if cur_path != path]
+                if not self.worker_map[repo_id]:
+                    del self.worker_map[repo_id]
+        return Response({'success': True})
 
 
 class FolderItemsPropertiesStatusQueryView(APIView):
