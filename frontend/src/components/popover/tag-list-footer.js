@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import RepoTag from '../../models/repo-tag';
 import toaster from '../toast';
 
 export default class TagListFooter extends Component {
@@ -11,7 +13,7 @@ export default class TagListFooter extends Component {
     repoID: PropTypes.string.isRequired,
     toggle: PropTypes.func.isRequired,
     repotagList: PropTypes.array.isRequired,
-    loadTags: PropTypes.func.isRequired,
+    updateTags: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -80,7 +82,15 @@ export default class TagListFooter extends Component {
     }
     seafileAPI.createRepoTags(this.props.repoID, validTags).then((res) => {
       toaster.success(gettext('Tags imported'));
-      this.props.loadTags();
+      let repotagList = [];
+      res.data.repo_tags.forEach(item => {
+        let repo_tag = new RepoTag(item);
+        repotagList.push(repo_tag);
+      });
+      this.props.updateTags(repotagList);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
     this.importOptionsInput.value = null;
   };

@@ -46,6 +46,10 @@ export default class ListTagPopover extends React.Component {
     });
   };
 
+  updateTags = (repotagList) => {
+    this.setState({ repotagList });
+  };
+
   onDeleteTag = (tag) => {
     const { repoID } = this.props;
     const { id: targetTagID } = tag;
@@ -141,7 +145,7 @@ export default class ListTagPopover extends React.Component {
         <TagListFooter
           toggle={this.props.onListTagCancel}
           repotagList={this.state.repotagList}
-          loadTags={this.loadTags}
+          updateTags={this.updateTags}
           repoID={this.props.repoID}
         />
       </Fragment>
