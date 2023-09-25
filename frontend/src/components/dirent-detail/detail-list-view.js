@@ -8,6 +8,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import ModalPortal from '../modal-portal';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 import FileTagList from '../file-tag-list';
+import ConfirmApplyFolderPropertiesDialog from '../dialog/confirm-apply-folder-properties-dialog';
 
 const propTypes = {
   repoInfo: PropTypes.object.isRequired,
@@ -26,7 +27,8 @@ class DetailListView extends React.Component {
     super(props);
     this.state = {
       isEditFileTagShow: false,
-      isShowExtraAttributes: false,
+      isShowExtraProperties: false,
+      isShowApplyProperties: false
     };
   }
 
@@ -61,8 +63,12 @@ class DetailListView extends React.Component {
     return Utils.joinPath(path, dirent.name);
   };
 
-  toggleExtraAttributesDialog = () => {
-    this.setState({ isShowExtraAttributes: !this.state.isShowExtraAttributes });
+  toggleExtraPropertiesDialog = () => {
+    this.setState({ isShowExtraProperties: !this.state.isShowExtraProperties });
+  };
+
+  toggleApplyPropertiesDialog = () => {
+    this.setState({ isShowApplyProperties: !this.state.isShowApplyProperties });
   };
 
   renderTags = () => {
@@ -78,13 +84,26 @@ class DetailListView extends React.Component {
             <tr><th>{gettext('Location')}</th><td>{position}</td></tr>
             <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
             {direntDetail.permission === 'rw' && (
-              <tr className="file-extra-attributes">
-                <th colSpan={2}>
-                  <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
-                    {gettext('Edit extra properties')}
-                  </div>
-                </th>
-              </tr>
+              <Fragment>
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
+                      {gettext('Edit extra properties')}
+                    </div>
+                  </th>
+                </tr>
+                <tr className="file-extra-attributes">
+                  <th colSpan={2}>
+                    <div
+                      className="edit-file-extra-attributes-btn text-truncate"
+                      onClick={this.toggleApplyPropertiesDialog}
+                      title={gettext('Apply properties to files inside the folder')}
+                    >
+                      {gettext('Apply properties to files inside the folder')}
+                    </div>
+                  </th>
+                </tr>
+              </Fragment>
             )}
           </tbody>
         </table>
@@ -109,7 +128,7 @@ class DetailListView extends React.Component {
           {direntDetail.permission === 'rw' && (
             <tr className="file-extra-attributes">
               <th colSpan={2}>
-                <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraAttributesDialog}>
+                <div className="edit-file-extra-attributes-btn" onClick={this.toggleExtraPropertiesDialog}>
                   {gettext('Edit extra properties')}
                 </div>
               </th>
@@ -138,13 +157,20 @@ class DetailListView extends React.Component {
             />
           </ModalPortal>
         }
-        {this.state.isShowExtraAttributes && (
+        {this.state.isShowExtraProperties && (
           <ExtraAttributesDialog
             repoID={this.props.repoID}
             filePath={direntPath}
             direntType={direntType}
             direntDetail={direntDetail}
-            onToggle={this.toggleExtraAttributesDialog}
+            onToggle={this.toggleExtraPropertiesDialog}
+          />
+        )}
+        {this.state.isShowApplyProperties && (
+          <ConfirmApplyFolderPropertiesDialog
+            toggle={this.toggleApplyPropertiesDialog}
+            repoID={this.props.repoID}
+            path={direntPath}
           />
         )}
       </Fragment>
