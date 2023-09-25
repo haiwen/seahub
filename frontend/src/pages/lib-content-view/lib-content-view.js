@@ -21,7 +21,7 @@ import LibContentContainer from './lib-content-container';
 import FileUploader from '../../components/file-uploader/file-uploader';
 import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dirent-progress-dialog';
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
-import LoadingDialog from '../../components/dialog/convert-markdown-dialog';
+import ConvertMarkdownDialog from '../../components/dialog/convert-markdown-dialog';
 
 const propTypes = {
   pathPrefix: PropTypes.array.isRequired,
@@ -2109,7 +2109,7 @@ class LibContentView extends React.Component {
           />
         )}
         {isConvertLoading && (
-          <LoadingDialog />
+          <ConvertMarkdownDialog />
         )}
       </Fragment>
     );

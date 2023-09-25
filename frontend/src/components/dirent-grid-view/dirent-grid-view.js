@@ -21,7 +21,6 @@ import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
-import LoadingDialog from '../dialog/convert-markdown-dialog';
 
 import '../../css/grid-view.css';
 
