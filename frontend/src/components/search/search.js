@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
-import More from '../more';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 
@@ -15,6 +15,8 @@ const propTypes = {
   isPublic: PropTypes.bool,
 };
 
+const PER_PAGE = 10;
+
 class Search extends Component {
 
   constructor(props) {
@@ -24,7 +26,9 @@ class Search extends Component {
       width: 'default',
       value: '',
       resultItems: [],
-      total: 0,
+      page: 0,
+      isLoading: false,
+      hasMore: true,
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
@@ -34,11 +38,35 @@ class Search extends Component {
     };
     this.inputValue = '';
     this.source = null; // used to cancel request;
+    this.inputRef = React.createRef();
+    this.searchResultListRef = React.createRef();
   }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onDocumentKeydown);
+  }
+
+  onDocumentKeydown = (e) => {
+    if (isHotkey('mod+f')(e)) {
+      e.preventDefault();
+      this.onFocusHandler();
+      if (this.inputRef && this.inputRef.current) {
+        this.inputRef.current.focus();
+      }
+    }
+    else if (isHotkey('esc', e)) {
+      e.preventDefault();
+      this.resetToDefault();
+    }
+  };
 
   onFocusHandler = () => {
     this.setState({
-      width: '30rem',
+      width: '570px',
       isMaskShow: true,
       isCloseShow: true
     });
@@ -64,6 +92,7 @@ class Search extends Component {
 
     if (this.inputValue === '' || _this.getValueLength(this.inputValue) < 3) {
       this.setState({
+        resultItems: [],
         isResultShow: false,
         isResultGetted: false
       });
@@ -84,73 +113,90 @@ class Search extends Component {
   };
 
   getSearchResult(queryData) {
-
-    if(this.source){
-      this.cancelRequest();
+    if (this.source) {
+      this.source.cancel('prev request is cancelled');
     }
     this.setState({
       isResultShow: true,
-      isResultGetted: false
+      isResultGetted: false,
+      resultItems: [],
     });
-
     this.source = seafileAPI.getSource();
-    this.sendRequest(queryData, this.source.token);
+    this.sendRequest(queryData, this.source.token, 1);
   }
 
-  sendRequest(queryData, cancelToken) {
-    var _this = this;
+  sendRequest = (queryData, cancelToken, page) => {
     let isPublic = this.props.isPublic;
+    this.queryData = queryData;
 
     if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q).then(res => {
-        if (!res.data.total) {
-          _this.setState({
-            resultItems: [],
-            isResultGetted: true
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE).then(res => {
+        this.source = null;
+        if (res.data.total > 0) {
+          this.setState({
+            resultItems: [...this.state.resultItems, this.formatResultItems(res.data.results)],
+            isResultGetted: true,
+            page: page + 1,
+            isLoading: false,
+            hasMore: res.data.has_more,
           });
-          _this.source = null;
-          return;
+        } else {
+          this.setState({
+            resultItems: [],
+            isLoading: false,
+            isResultGetted: true,
+            hasMore: res.data.has_more,
+          });
         }
-
-        let items = _this.formatResultItems(res.data.results);
-        _this.setState({
-          resultItems: items,
-          isResultGetted: true
-        });
-        _this.source = null;
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
+        this.setState({ isLoading: false });
       });
     } else {
       this.updateSearchPageURL(queryData);
-      seafileAPI.searchFiles(queryData,cancelToken).then(res => {
-        if (!res.data.total) {
-          _this.setState({
-            resultItems: [],
-            isResultGetted: true
+      queryData['per_page'] = PER_PAGE;
+      queryData['page'] = page;
+      seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+        this.source = null;
+        if (res.data.total > 0) {
+          this.setState({
+            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
+            isResultGetted: true,
+            isLoading: false,
+            page: page + 1,
+            hasMore: res.data.has_more,
           });
-          _this.source = null;
-          return;
+        } else {
+          this.setState({
+            resultItems: [],
+            isLoading: false,
+            isResultGetted: true,
+            hasMore: res.data.has_more,
+          });
         }
-
-        let items = _this.formatResultItems(res.data.results);
-        _this.setState({
-          resultItems: items,
-          isResultGetted: true
-        });
-        _this.source = null;
-      }).catch(res => {
+      }).catch(error => {
         /* eslint-disable */
-        console.log(res);
+        console.log(error);
         /* eslint-enable */
+        this.setState({ isLoading: false });
       });
     }
-  }
+  };
 
-  cancelRequest() {
-    this.source.cancel('prev request is cancelled');
-  }
+  onResultListScroll = (e) => {
+    // Load less than 100 results
+    if (!this.state.hasMore || this.state.isLoading || this.state.resultItems.length > 100) {
+      return;
+    }
+    const listPadding = 20;
+    if (e.target.scrollTop + e.target.clientHeight + listPadding > this.searchResultListRef.current.clientHeight - 10) {
+      this.setState({isLoading: true}, () => {
+        this.source = seafileAPI.getSource();
+        this.sendRequest(this.queryData, this.source.token, this.state.page);
+      });
+    }
+  };
 
   updateSearchPageURL(queryData) {
     let params = '';
@@ -179,8 +225,7 @@ class Search extends Component {
 
   formatResultItems(data) {
     let items = [];
-    let length = data.length > 5 ? 5 : data.length;
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < data.length; i++) {
       items[i] = {};
       items[i]['index'] = [i];
       items[i]['name'] = data[i].name;
@@ -209,24 +254,8 @@ class Search extends Component {
     });
   }
 
-  onShowMore = () => {
-    let repoID = this.props.repoID;
-    let newValue = this.state.value;
-    let queryData = {
-      q: newValue,
-      search_repo: repoID ? repoID : 'all',
-      search_ftypes: 'all',
-    };
-    let params = '';
-    for (let key in queryData) {
-      params += key + '=' + queryData[key] + '&';
-    }
-
-    window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
-  };
-
   renderSearchResult() {
-    var _this = this;
+    const { resultItems } = this.state;
     if (!this.state.isResultShow) {
       return;
     }
@@ -235,25 +264,22 @@ class Search extends Component {
         <span className="loading-icon loading-tip"></span>
       );
     }
-    if (!this.state.resultItems.length) {
+    if (!resultItems.length) {
       return (
         <div className="search-result-none">{gettext('No results matching.')}</div>
       );
     }
-    const { resultItems, total } = this.state;
-    const isShowMore = total > resultItems.length;
     return (
-      <ul className="search-result-list">
-        {this.state.resultItems.map((item, index) => {
+      <ul className="search-result-list" ref={this.searchResultListRef}>
+        {resultItems.map((item, index) => {
           return (
             <SearchResultItem
               key={index}
               item={item}
-              onItemClickHandler={_this.onItemClickHandler}
+              onItemClickHandler={this.onItemClickHandler}
             />
           );
         })}
-        {isShowMore && <More onShowMore={this.onShowMore} />}
       </ul>
     );
   }
@@ -273,8 +299,8 @@ class Search extends Component {
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
           <div className="search">
-            <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
-            <div className="search-container">
+            <div className={`search-mask ${this.state.isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
+            <div className={`search-container ${this.state.isMaskShow ? 'show' : ''}`}>
               <div className="input-icon">
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
                 <input
@@ -287,15 +313,16 @@ class Search extends Component {
                   onFocus={this.onFocusHandler}
                   onChange={this.onChangeHandler}
                   autoComplete="off"
+                  ref={this.inputRef}
                 />
                 {(this.state.isCloseShow && username) &&
                   <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
                 }
                 {this.state.isCloseShow &&
-                  <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
+                  <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                 }
               </div>
-              <div className="search-result-container dropdown-search-result-container">
+              <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
                 {this.renderSearchResult()}
               </div>
             </div>
@@ -329,7 +356,7 @@ class Search extends Component {
                     <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
                 </div>
-                <div className="search-result-container dropdown-search-result-container">
+                <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
                   {this.renderSearchResult()}
                 </div>
               </div>
