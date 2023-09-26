@@ -381,42 +381,41 @@ class ApplyFolderExtendedPropertiesView(APIView):
         """
         file_path_2_uuid_map = {}
         no_uuid_file_paths = []
-        try:
-            # query uuids
-            for i in range(0, len(file_paths), self.step):
-                parent_path_2_filenames_map = defaultdict(list)
-                for file_path in file_paths[i: i+self.step]:
-                    parent_path, filename = os.path.split(file_path)
-                    parent_path_2_filenames_map[parent_path].append(filename)
-                for parent_path, filenames in parent_path_2_filenames_map.items():
-                    md5 = self.md5_repo_id_parent_path(repo_id, parent_path)
-                    results = FileUUIDMap.objects.filter(repo_id=repo_id, repo_id_parent_path_md5=md5, filename__in=filenames)
-                    for uuid_item in results:
-                        file_path_2_uuid_map[os.path.join(parent_path, uuid_item.filename)] = uuid_item.uuid.hex
-                    ## some filename no uuids
-                    for filename in filenames:
-                        cur_file_path = os.path.join(parent_path, filename)
-                        if cur_file_path not in file_path_2_uuid_map:
-                            no_uuid_file_paths.append({'file_path': cur_file_path, 'uuid': uuid4().hex, 'repo_id_parent_path_md5': md5})
-            # create uuids
-            for i in range(0, len(no_uuid_file_paths), self.step):
-                uuid_objs = []
-                for j in range(i, min(i+self.step, len(no_uuid_file_paths))):
-                    no_uuid_file_path = no_uuid_file_paths[j]
-                    kwargs = {
-                        'uuid': no_uuid_file_path['uuid'],
-                        'repo_id': repo_id,
-                        'repo_id_parent_path_md5': no_uuid_file_path['repo_id_parent_path_md5'],
-                        'parent_path': os.path.dirname(no_uuid_file_path['file_path']),
-                        'filename': os.path.basename(no_uuid_file_path['file_path']),
-                        'is_dir': 0
-                    }
-                    uuid_objs.append(FileUUIDMap(**kwargs))
-                FileUUIDMap.objects.bulk_create(uuid_objs)
-                for j in range(i, min(i+self.step, len(no_uuid_file_paths))):
-                    file_path_2_uuid_map[no_uuid_file_paths[j]['file_path']] = no_uuid_file_paths[j]['uuid']
-        except Exception as e:
-            logger.exception('query repo: %s some fileuuids error: %s', e)
+
+        # query uuids
+        for i in range(0, len(file_paths), self.step):
+            parent_path_2_filenames_map = defaultdict(list)
+            for file_path in file_paths[i: i+self.step]:
+                parent_path, filename = os.path.split(file_path)
+                parent_path_2_filenames_map[parent_path].append(filename)
+            for parent_path, filenames in parent_path_2_filenames_map.items():
+                md5 = self.md5_repo_id_parent_path(repo_id, parent_path)
+                results = FileUUIDMap.objects.filter(repo_id=repo_id, repo_id_parent_path_md5=md5, filename__in=filenames)
+                for uuid_item in results:
+                    file_path_2_uuid_map[os.path.join(parent_path, uuid_item.filename)] = uuid_item.uuid.hex
+                ## some filename no uuids
+                for filename in filenames:
+                    cur_file_path = os.path.join(parent_path, filename)
+                    if cur_file_path not in file_path_2_uuid_map:
+                        no_uuid_file_paths.append({'file_path': cur_file_path, 'uuid': uuid4().hex, 'repo_id_parent_path_md5': md5})
+        # create uuids
+        for i in range(0, len(no_uuid_file_paths), self.step):
+            uuid_objs = []
+            for j in range(i, min(i+self.step, len(no_uuid_file_paths))):
+                no_uuid_file_path = no_uuid_file_paths[j]
+                kwargs = {
+                    'uuid': no_uuid_file_path['uuid'],
+                    'repo_id': repo_id,
+                    'repo_id_parent_path_md5': no_uuid_file_path['repo_id_parent_path_md5'],
+                    'parent_path': os.path.dirname(no_uuid_file_path['file_path']),
+                    'filename': os.path.basename(no_uuid_file_path['file_path']),
+                    'is_dir': 0
+                }
+                uuid_objs.append(FileUUIDMap(**kwargs))
+            FileUUIDMap.objects.bulk_create(uuid_objs)
+            for j in range(i, min(i+self.step, len(no_uuid_file_paths))):
+                file_path_2_uuid_map[no_uuid_file_paths[j]['file_path']] = no_uuid_file_paths[j]['uuid']
+
         return file_path_2_uuid_map
 
     def query_path_2_row_id_map(self, repo_id, query_list, seatable_api: SeaTableAPI):
@@ -427,11 +426,8 @@ class ApplyFolderExtendedPropertiesView(APIView):
         for i in range(0, len(query_list), self.step):
             paths_str = ', '.join(map(lambda x: f"'{x['path']}'", query_list[i: i+self.step]))
             sql = f"SELECT `_id`, `Path` FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path` IN ({paths_str})"
-            try:
-                resp_json = seatable_api.query(sql, convert=True)
-                rows = resp_json['results']
-            except Exception as e:
-                raise QueryException('query repo: %s error: %s' % (repo_id, e))
+            resp_json = seatable_api.query(sql, convert=True)
+            rows = resp_json['results']
             path_2_row_id_map.update({row['Path']: row['_id'] for row in rows})
         return path_2_row_id_map
 
@@ -452,10 +448,7 @@ class ApplyFolderExtendedPropertiesView(APIView):
                     'row_id': update_list[j]['row_id'],
                     'row': ex_props
                 })
-            try:
-                seatable_api.update_rows_by_dtable_db(EX_PROPS_TABLE, updates)
-            except Exception as e:
-                logger.exception('update table: %s error: %s', EX_PROPS_TABLE, e)
+            seatable_api.update_rows_by_dtable_db(EX_PROPS_TABLE, updates)
 
     def insert_ex_props(self, repo_id, insert_list, ex_props, context, seatable_api: SeaTableAPI):
         for i in range(0, len(insert_list), self.step):
@@ -471,10 +464,7 @@ class ApplyFolderExtendedPropertiesView(APIView):
                 }
                 row.update(ex_props)
                 rows.append(row)
-            try:
-                seatable_api.batch_append_rows(EX_PROPS_TABLE, rows)
-            except Exception as e:
-                logger.exception('update table: %s error: %s', EX_PROPS_TABLE, e)
+            seatable_api.batch_append_rows(EX_PROPS_TABLE, rows)
 
     def apply_folder(self, repo_id, folder_path, context, seatable_api: SeaTableAPI, folder_props):
         stack = [folder_path]
@@ -570,7 +560,7 @@ class ApplyFolderExtendedPropertiesView(APIView):
             seatable_api = SeaTableAPI(SEATABLE_EX_PROPS_BASE_API_TOKEN, DTABLE_WEB_SERVER)
         except:
             logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN)
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Props base invalid')
 
         folder_props = self.query_ex_props_by_path(repo_id, path, seatable_api)
         if not folder_props:
