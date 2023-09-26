@@ -1453,45 +1453,55 @@ class SeadocPublishRevision(APIView):
         revision_parent_path = revision_file_uuid.parent_path
         revision_filename = revision_file_uuid.filename
 
+        # username 
+        username = request.user.username
         try:
-            replace = int(request.data.get('replace'))
-        except ValueError:
-            replace = 1
+            sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)            
+            res = sdoc_server_api.save_doc()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # move revision file
-        username = request.user.username
         seafile_api.move_file(
             repo_id, revision_parent_path,
             json.dumps([revision_filename]),
             repo_id, dst_parent_path,
             json.dumps([origin_file_filename]),
-            replace=replace, username=username,
+            replace=1, username=username,
             need_progress=0, synchronous=1,
         )
 
         dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
 
-        if replace == 1:
         # move image files
-            revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
-            if dir_id:
-                origin_image_parent_path = gen_seadoc_image_parent_path(
-                    str(origin_file_uuid.uuid), repo_id, username)
-                dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
-                for e in dirents:
-                    obj_name = e.obj_name
-                    seafile_api.move_file(
-                        repo_id, revision_image_parent_path,
-                        json.dumps([obj_name]),
-                        repo_id, origin_image_parent_path,
-                        json.dumps([obj_name]),
-                        replace=1, username=username,
-                        need_progress=0, synchronous=1,
-                    )
-                seafile_api.del_file(
-                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+        if dir_id:
+            origin_image_parent_path = gen_seadoc_image_parent_path(
+                str(origin_file_uuid.uuid), repo_id, username)
+            dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
+            for e in dirents:
+                obj_name = e.obj_name
+                seafile_api.move_file(
+                    repo_id, revision_image_parent_path,
+                    json.dumps([obj_name]),
+                    repo_id, origin_image_parent_path,
+                    json.dumps([obj_name]),
+                    replace=1, username=username,
+                    need_progress=0, synchronous=1,
+                )
+            seafile_api.del_file(
+                repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+
+        try:         
+            res = sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
