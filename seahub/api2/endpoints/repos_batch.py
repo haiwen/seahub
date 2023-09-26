@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import posixpath
 import json
 import logging
 
@@ -29,12 +30,14 @@ from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
 from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
-        normalize_file_path, check_filename_with_rename
+        normalize_file_path, check_filename_with_rename, get_file_type_and_ext
 from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
         parse_repo_perm, get_locked_files_by_dir, get_sub_folder_permission_by_dir
 
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
+from seahub.utils.file_types import SEADOC
+from seahub.seadoc.utils import copy_sdoc_images_to_different_repo, move_sdoc_images_to_different_repo
 
 logger = logging.getLogger(__name__)
 
@@ -1168,6 +1171,23 @@ class ReposAsyncBatchCopyItemView(APIView):
 
         result = {}
         result['task_id'] = res.task_id if res.background else ''
+
+        # sdoc image
+        try:
+            sdoc_dirents = []
+            if src_repo_id != dst_repo_id:
+                for dirent in src_dirents:
+                    filetype, fileext = get_file_type_and_ext(dirent)
+                    if filetype == SEADOC:
+                        sdoc_dirents.append(dirent)
+            for sdoc_dirent in sdoc_dirents:
+                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
+                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
+                copy_sdoc_images_to_different_repo(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1284,6 +1304,23 @@ class ReposAsyncBatchMoveItemView(APIView):
 
         result = {}
         result['task_id'] = res.task_id if res.background else ''
+
+        # sdoc image
+        try:
+            sdoc_dirents = []
+            if src_repo_id != dst_repo_id:
+                for dirent in src_dirents:
+                    filetype, fileext = get_file_type_and_ext(dirent)
+                    if filetype == SEADOC:
+                        sdoc_dirents.append(dirent)
+            for sdoc_dirent in sdoc_dirents:
+                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
+                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
+                move_sdoc_images_to_different_repo(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1381,6 +1418,23 @@ class ReposSyncBatchCopyItemView(APIView):
 
         result = {}
         result['success'] = True
+
+        # sdoc image
+        try:
+            sdoc_dirents = []
+            if src_repo_id != dst_repo_id:
+                for dirent in src_dirents:
+                    filetype, fileext = get_file_type_and_ext(dirent)
+                    if filetype == SEADOC:
+                        sdoc_dirents.append(dirent)
+            for sdoc_dirent in sdoc_dirents:
+                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
+                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
+                copy_sdoc_images_to_different_repo(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
@@ -1497,6 +1551,23 @@ class ReposSyncBatchMoveItemView(APIView):
 
         result = {}
         result['success'] = True
+
+        # sdoc image
+        try:
+            sdoc_dirents = []
+            if src_repo_id != dst_repo_id:
+                for dirent in src_dirents:
+                    filetype, fileext = get_file_type_and_ext(dirent)
+                    if filetype == SEADOC:
+                        sdoc_dirents.append(dirent)
+            for sdoc_dirent in sdoc_dirents:
+                src_path = posixpath.join(src_parent_dir, sdoc_dirent)
+                dst_path = posixpath.join(dst_parent_dir, sdoc_dirent)
+                move_sdoc_images_to_different_repo(
+                    src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=False)
+        except Exception as e:
+            logger.error(e)
+
         return Response(result)
 
 
