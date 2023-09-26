@@ -22,7 +22,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.settings import DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN, \
-    EX_PROPS_TABLE, EX_EDITABLE_COLUMNS, SEAF_EVENTS_IO_SERVER_URL
+    EX_PROPS_TABLE, EX_EDITABLE_COLUMNS
 from seahub.tags.models import FileUUIDMap
 from seahub.utils import normalize_file_path, EMPTY_SHA1
 from seahub.utils.repo import parse_repo_perm
@@ -34,16 +34,6 @@ logger = logging.getLogger(__name__)
 
 class QueryException(Exception):
     pass
-
-
-def can_set_ex_props(repo_id, path):
-    return {'can_set': True}  # TODO: need to check
-
-
-def query_set_ex_props_status(repo_id, path):
-    url = SEAF_EVENTS_IO_SERVER_URL.strip('/') + '/query-set-ex-props-status'
-    resp = requests.get(url, params={'repo_id': repo_id, 'path': path})
-    return resp.json()
 
 
 def check_table(seatable_api: SeaTableAPI):
@@ -95,13 +85,9 @@ class ExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        resp_json = can_set_ex_props(repo_id, path)
-        if not resp_json.get('can_set', False):
-            if resp_json.get('error_type') == 'higher_being_set':
-                error_msg = 'Another task is running'
-            else:
-                error_msg = 'Please try again later'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        can_set, error_type = ApplyFolderExtendedPropertiesView.can_set_file_or_folder(repo_id, path)
+        if not can_set:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
 
         # check base
         try:
@@ -256,13 +242,9 @@ class ExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        resp_json = can_set_ex_props(repo_id, path)
-        if not resp_json.get('can_set', False):
-            if resp_json.get('error_type') == 'higher_being_set':
-                error_msg = 'Another task is running'
-            else:
-                error_msg = 'Please try again later'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        can_set, error_type = ApplyFolderExtendedPropertiesView.can_set_file_or_folder(repo_id, path)
+        if not can_set:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
 
         # check base
         try:
@@ -360,10 +342,19 @@ class ApplyFolderExtendedPropertiesView(APIView):
 
     apply_lock = Lock()
     worker_map = defaultdict(list)
+    list_max = 1000
+    step = 500
 
     @classmethod
     def can_set_file_or_folder(cls, repo_id, path):
-        pass
+        """
+        :return: can_apply -> bool, error_type -> string or None
+        """
+        paths = cls.worker_map.get(repo_id, [])
+        for cur_path in paths:
+            if path.startswith(cur_path):
+                return False, 'higer_folder_applying'
+        return True, None
 
     @classmethod
     def can_apply_folder(cls, repo_id, path):
@@ -551,9 +542,9 @@ class ApplyFolderExtendedPropertiesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
         # arguments check
         path = request.data.get('path')
+        path = normalize_file_path(path)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
-        path = normalize_file_path(path)
         parent_dir = os.path.dirname(path)
 
         dirent = seafile_api.get_dirent_by_path(repo_id, path)
@@ -566,6 +557,14 @@ class ApplyFolderExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        # with lock check repo and path can apply props
+        with self.apply_lock:
+            can_apply, _ = self.can_apply_folder(repo_id, path)
+            if not can_apply:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
+            # with lock add repo and path to apply task map
+            self.worker_map[repo_id].append(path)
+
         # request props from seatable
         try:
             seatable_api = SeaTableAPI(SEATABLE_EX_PROPS_BASE_API_TOKEN, DTABLE_WEB_SERVER)
@@ -577,15 +576,8 @@ class ApplyFolderExtendedPropertiesView(APIView):
         if not folder_props:
             return api_error(status.HTTP_400_BAD_REQUEST, 'The folder is not be set extended properties')
 
-        # with lock check repo and path can apply props
-        with self.apply_lock:
-            can_apply, _ = self.can_apply_folder(repo_id, path)
-            if not can_apply:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
-            # with lock add repo and path to apply task map
-            self.worker_map[repo_id].append(path)
         # apply props
-        context = {'文件负责人': request.user.username}
+        context = {'文件负责人': email2nickname(request.user.username)}
         try:
             self.apply_folder(repo_id, path, context, seatable_api, folder_props)
         except QueryException as e:

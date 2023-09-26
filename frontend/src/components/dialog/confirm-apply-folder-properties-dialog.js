@@ -20,54 +20,16 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      submitting: true
+      submitting: false
     };
-    this.timer = null;
   }
-
-  componentDidMount() {
-    const { repoID, path } = this.props;
-    seafileAPI.queryFolderItemsExtendedPropertiesStatus(repoID, path).then(res => {
-      if (res.data.is_finished) {
-        this.timer && clearInterval(this.timer);
-        this.setState({ submitting: false });
-      } else {
-        this.queryStatus();
-      }
-    }).catch(error => {
-      //
-    });
-  }
-
-  componentWillUnmount() {
-    this.timer && clearInterval(this.timer);
-  }
-
-  queryStatus = () =>{
-    const { repoID, path } = this.props;
-    this.timer = setInterval(() => {
-      seafileAPI.queryFolderItemsExtendedPropertiesStatus(repoID, path).then(res => {
-        if (res.data.is_finished === true) {
-          clearInterval(this.timer);
-          this.timer = null;
-          toaster.success(gettext('Applied folder properties'));
-          this.props.toggle();
-        }
-      }).catch(error => {
-        clearInterval(this.timer);
-        this.timer = null;
-        let errorMsg = Utils.getErrorMsg(error);
-        toaster.danger(errorMsg);
-        this.setState({ submitting: false });
-      });
-    }, 1000);
-  };
 
   submit = () => {
     const { repoID, path } = this.props;
     this.setState({ submitting: true });
-    seafileAPI.setFolderItemsExtendedProperties(repoID, path).then(() => {
-      this.queryStatus();
+    seafileAPI.applyFolderExtendedProperties(repoID, path).then(() => {
+      toaster.success('Applied folder properties');
+      this.props.toggle();
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -89,7 +51,7 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
           </p>
         </ModalBody>
         <ModalFooter>
-          <Button color='secondary' onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color='secondary' onClick={this.props.toggle} disabled={submitting}>{gettext('Cancel')}</Button>
           <Button color='primary' className='flex-shrink-0 apply-properties' disabled={submitting} onClick={this.submit}>
             {submitting ? (<Loading />) : (<>{gettext('Submit')}</>)}
           </Button>

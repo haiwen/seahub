@@ -1254,7 +1254,7 @@ class LibContentView extends React.Component {
 
       this.addDirent(newFileName, 'file', res.data.size);
       this.setState({isConvertLoading: false});
-      let message = gettext('Successfully converted file.')
+      let message = gettext('Successfully converted file.');
       toaster.success(message);
 
     }).catch((error) => {

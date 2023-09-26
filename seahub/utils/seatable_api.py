@@ -65,13 +65,15 @@ class SeaTableAPI:
         resp = requests.get(url, headers=self.headers)
         return parse_response(resp)['metadata']
 
-    def query(self, sql, convert=None, server_only=None):
+    def query(self, sql, convert=None, server_only=None, parameters=None):
         url = f"{self.dtable_db_url.strip('/')}/api/v1/query/{self.dtable_uuid}/?from=dtable_web"
         data = {'sql': sql}
         if convert is not None:
             data['convert_keys'] = convert
         if server_only is not None:
             data['server_only'] = server_only
+        if parameters:
+            data['parameters'] = parameters
         resp = requests.post(url, json=data, headers=self.headers)
         return parse_response(resp)
 
@@ -109,9 +111,36 @@ class SeaTableAPI:
         resp = requests.put(url, headers=self.headers, json=data)
         return parse_response(resp)
 
+    def batch_append_rows(self, table_name, rows):
+        url = f"{self.dtable_server_url.strip('/')}/api/v1/dtables/{self.dtable_uuid}/batch-append-rows/?from=dtable_web"
+        data = {
+            'table_name': table_name,
+            'rows': rows
+        }
+        resp = requests.post(url, headers=self.headers, json=data)
+        return parse_response(resp)
+
     def get_table_by_name(self, table_name):
         metadata = self.get_metadata()
         for table in metadata['tables']:
             if table['name'] == table_name:
                 return table
         return None
+
+    def update_rows_by_dtable_db(self, table_name, updates):
+        url = f"{self.dtable_db_url.strip('/')}/api/v1/update-rows/{self.dtable_uuid}/?from=dtable_web"
+        data = {
+            'table_name': table_name,
+            'updates': updates
+        }
+        resp = requests.put(url, headers=self.headers, json=data)
+        return parse_response(resp)
+
+    def insert_rows_by_dtable_db(self, table_name, rows):
+        url = f"{self.dtable_db_url.strip('/')}/api/v1/insert-rows/{self.dtable_uuid}/?from=dtable_web"
+        data = {
+            'table_name': table_name,
+            'rows': rows
+        }
+        resp = requests.post(url, headers=self.headers, json=data)
+        return parse_response(resp)
