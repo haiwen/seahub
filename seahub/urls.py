@@ -687,6 +687,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/invitations/(?P<token>[a-f0-9]{32})/$', AdminInvitation.as_view(), name='api-v2.1-admin-invitation'),
 
     path('avatar/', include('seahub.avatar.urls')),
+    path('notice/', include('seahub.notifications.urls')),
     path('contacts/', include('seahub.contacts.urls')),
     path('group/', include('seahub.group.urls')),
     path('options/', include('seahub.options.urls')),
