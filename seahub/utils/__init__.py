@@ -1344,7 +1344,7 @@ def is_valid_org_id(org_id):
         return False
 
 
-def hash_password(password, algorithm='sha1', salt=get_random_string(4)):
+def hash_password(password, algorithm='sha256', salt=get_random_string(16)):
 
     digest = hashlib.pbkdf2_hmac(algorithm,
                                  password.encode(),
