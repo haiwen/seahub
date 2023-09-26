@@ -430,7 +430,6 @@ urlpatterns = [
     ## user:file:extended-props
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/extended-properties/$', ExtendedPropertiesView.as_view(), name='api-v2.1-extended-properties'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/apply-folder-extended-properties/$', FolderItemsExtendedPropertiesView.as_view(), name='api-v2.1-folder-items-extended-properties'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/folder-items-extended-properties/status-query/$', FolderItemsPropertiesStatusQueryView.as_view(), name='api-v2.1-folder-items-extended-properties-status-query'),
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-delete/$', RepoAutoDeleteView.as_view(), name='api-v2.1-repo-auto-delete'),
 

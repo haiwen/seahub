@@ -573,16 +573,9 @@ class ApplyFolderExtendedPropertiesView(APIView):
             logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props table invalid')
 
-        # sql = f"SELECT * FROM `{EX_PROPS_TABLE}` WHERE `Repo ID`='{repo_id}' AND `Path`='{path}'"
-        # try:
-        #     result = seatable_api.query(sql)
-        # except Exception as e:
-        #     logger.exception('query sql: %s error: %s', sql, e)
-        #     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        # rows = result.get('results')
-        # if not rows:
-        #     return api_error(status.HTTP_400_BAD_REQUEST, '%s not set extended properties' % path)
         folder_props = self.query_ex_props_by_path(repo_id, path, seatable_api)
+        if not folder_props:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'The folder is not be set extended properties')
 
         # with lock check repo and path can apply props
         with self.apply_lock:
@@ -595,6 +588,9 @@ class ApplyFolderExtendedPropertiesView(APIView):
         context = {'文件负责人': request.user.username}
         try:
             self.apply_folder(repo_id, path, context, seatable_api, folder_props)
+        except QueryException as e:
+            logger.exception('apply folder: %s ex-props query dtable-db error: %s', path, e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         except Exception as e:
             logger.exception('apply folder: %s ex-props error: %s', path, e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -608,33 +604,3 @@ class ApplyFolderExtendedPropertiesView(APIView):
                 if not self.worker_map[repo_id]:
                     del self.worker_map[repo_id]
         return Response({'success': True})
-
-
-class FolderItemsPropertiesStatusQueryView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle,)
-
-    def get(self, request, repo_id):
-        if not all((DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN, EX_PROPS_TABLE)):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Feature not enabled')
-        # arguments check
-        path = request.GET.get('path')
-        if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
-        path = normalize_file_path(path)
-        parent_dir = os.path.dirname(path)
-
-        dirent = seafile_api.get_dirent_by_path(repo_id, path)
-        if not dirent:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found' % path)
-        if not stat.S_ISDIR(dirent.mode):
-            return api_error(status.HTTP_400_BAD_REQUEST, '%s is not a folder' % path)
-
-        # permission check
-        if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        resp_json = query_set_ex_props_status(repo_id, path)
-
-        return Response(resp_json)
