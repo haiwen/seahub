@@ -270,6 +270,15 @@ class SearchUsers extends Component {
     this.getItems(this.state.pageInfo.current_page + 1);
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
     const {
@@ -299,7 +308,7 @@ class SearchUsers extends Component {
                 <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
-                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
