@@ -1,8 +1,8 @@
 from django.urls import re_path
-from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, SeadocRevisionDownloadLinks, SeadocUploadFile, \
+from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, SeadocOriginFileContent, SeadocUploadFile, \
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
-    SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView
+    SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView
 
 
 # api/v2.1/seadoc/
@@ -11,7 +11,6 @@ urlpatterns = [
     re_path(r'^upload-file/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadFile.as_view(), name='seadoc_upload_file'),
     re_path(r'^upload-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadLink.as_view(), name='seadoc_upload_link'),
     re_path(r'^download-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDownloadLink.as_view(), name='seadoc_download_link'),
-    re_path(r'^revision/download-links/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionDownloadLinks.as_view(), name='seadoc_revision_download_links'),
     re_path(r'^upload-image/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadImage.as_view(), name='seadoc_upload_image'),
     re_path(r'^download-image/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', SeadocDownloadImage.as_view(), name='seadoc_download_image'),
     re_path(r'^async-copy-images/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocAsyncCopyImages.as_view(), name='seadoc_async_copy_images'),
@@ -27,6 +26,9 @@ urlpatterns = [
     re_path(r'^publish-revision/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocPublishRevision.as_view(), name='seadoc_publish_revision'),
     re_path(r'^revisions-count/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionsCount.as_view(), name='seadoc_revisions_count'),
     re_path(r'^revisions/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisions.as_view(), name='seadoc_revisions'),
+    re_path(r'^revision/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionView.as_view(), name='seadoc_revision'),
+    re_path(r'^revision/base-version-content/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRevisionBaseVersionContent.as_view(), name='sdoc_revision_base_version_content'),
+    re_path(r'^revision/origin-file-content/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocOriginFileContent.as_view(), name='sdoc_revision_origin_file_content'),
     re_path(r'^file/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocFileView.as_view(), name='seadoc_file_view'),
     re_path(r'^file-uuid/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocFileUUIDView.as_view(), name='seadoc_file_uuid_view'),
     re_path(r'^dir/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDirView.as_view(), name='seadoc_dir_view'),

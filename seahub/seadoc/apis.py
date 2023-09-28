@@ -223,8 +223,7 @@ class SeadocDownloadLink(APIView):
         return Response({'download_link': download_link})
 
 
-class SeadocRevisionDownloadLinks(APIView):
-
+class SeadocOriginFileContent(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
 
@@ -244,12 +243,6 @@ class SeadocRevisionDownloadLinks(APIView):
         if filetype != SEADOC:
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        
-        file_download_link = get_seadoc_download_link(uuid_map)
-        if not file_download_link:
-            error_msg = 'seadoc file %s not found.' % uuid_map.filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         revision_info = is_seadoc_revision(file_uuid)
         origin_doc_uuid = revision_info.get('origin_doc_uuid', '')
@@ -264,14 +257,14 @@ class SeadocRevisionDownloadLinks(APIView):
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        origin_file_download_link = get_seadoc_download_link(origin_uuid_map)
+        origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
         if not origin_file_download_link:
             error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        resp = requests.get(origin_file_download_link)
         return Response({
-            'file_download_link': file_download_link,
-            'origin_file_download_link': origin_file_download_link
+            'content': resp.content
         })
 
 
@@ -1291,6 +1284,139 @@ class SeadocRevisions(APIView):
         })
 
 
+class SeadocRevisionView(APIView):
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        repo_id = revision.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        # get revision file info
+        revision_file_uuid = uuid_map
+        revision_parent_path = revision_file_uuid.parent_path
+        revision_filename = revision_file_uuid.filename
+        username = request.user.username
+
+        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+        if dir_id:
+            seafile_api.del_file(
+                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+
+            seafile_api.del_file(
+                    repo_id, revision_parent_path, revision_filename, username)
+            
+        SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
+
+        sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
+        sdoc_server_api.remove_doc()
+
+        return Response({
+            'success': True
+        })
+
+    # modify by rebase op
+    def put(self, request, file_uuid):
+
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        origin_doc_uuid = revision.origin_doc_uuid
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_uuid_map:
+            error_msg = 'origin file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
+        if not file_id:  # save file anyway
+            seafile_api.post_empty_file(
+                uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
+
+        username = request.user.username
+        upload_link = get_seadoc_upload_link(uuid_map, username)
+        if not upload_link:
+            error_msg = 'seadoc file %s not found.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+
+            # rewrite file
+            file = request.FILES.get('file', None) 
+            files = {
+                'file': file,
+                'file_name': uuid_map.filename,
+                'target_file': file_path,
+            }
+            requests.post(upload_link, files=files)
+
+            # update origin file version
+            origin_doc_path = revision.origin_doc_path
+            newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
+            SeadocRevision.objects.update_origin_file_version(file_uuid, newest_file_version)
+
+            # server content update 
+            sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)            
+            sdoc_server_api.replace_doc()
+
+            return Response({
+                'origin_file_version': newest_file_version,
+            })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
 class SeadocPublishRevision(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -1353,8 +1479,17 @@ class SeadocPublishRevision(APIView):
         revision_parent_path = revision_file_uuid.parent_path
         revision_filename = revision_file_uuid.filename
 
-        # move revision file
+        # username 
         username = request.user.username
+        try:
+            sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)            
+            res = sdoc_server_api.save_doc()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # move revision file
         seafile_api.move_file(
             repo_id, revision_parent_path,
             json.dumps([revision_filename]),
@@ -1366,12 +1501,6 @@ class SeadocPublishRevision(APIView):
 
         dst_file_id = seafile_api.get_file_id_by_path(repo_id, origin_file_path)
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
-
-        # refresh docs
-        doc_uuids = [revision.origin_doc_uuid, revision.doc_uuid]
-        sdoc_server_api = SdocServerAPI(
-            revision.origin_doc_uuid, origin_file_filename, username)
-        sdoc_server_api.internal_refresh_docs(doc_uuids)
 
         # move image files
         revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
@@ -1392,6 +1521,13 @@ class SeadocPublishRevision(APIView):
                 )
             seafile_api.del_file(
                 repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+
+        try:         
+            res = sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         return Response(revision.to_dict())
@@ -1564,3 +1700,58 @@ class SeadocDirView(APIView):
         file_list.sort(key=lambda x: x['name'].lower())
         dentrys = dir_list + file_list
         return Response(dentrys)
+
+
+class SdocRevisionBaseVersionContent(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'File %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        origin_doc_path = revision.origin_doc_path
+        if not origin_doc_path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file path is invalid.')
+        
+        origin_file_version = revision.origin_file_version
+        if not origin_file_version:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file version is missing.')
+        
+        origin_doc_uuid = revision.origin_doc_uuid
+        origin_doc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_doc_uuid_map:
+            error_msg = 'Origin file uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
+                origin_file_version, 'download', username)
+
+        if not token:
+            error_msg = 'Origin file %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        origin_file_name = os.path.basename(origin_doc_path)
+        download_url = gen_inner_file_get_url(token, origin_file_name)
+
+        resp = requests.get(download_url)
+        return Response({
+            'content': resp.content
+        })
+

@@ -37,3 +37,31 @@ class SdocServerAPI(object):
         data = {"doc_uuids" : doc_uuids}
         response = requests.post(url, json=data, headers=self.headers)
         return parse_response(response)
+    
+    def remove_doc(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/?from=seahub'
+        response = requests.delete(url, headers=self.headers)
+        return parse_response(response)
+
+    def save_doc(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/save/?from=seahub'
+        response = requests.post(url, json={}, headers=self.headers)
+        return parse_response(response)
+    
+    def publish_doc(self, origin_doc_uuid, origin_doc_name):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/publish/?from=seahub'
+        data = {
+            'origin_doc_uuid': origin_doc_uuid,
+            'origin_doc_name': origin_doc_name,
+        }
+        response = requests.post(url, json=data, headers=self.headers)
+        return parse_response(response)
+    
+    def replace_doc(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/replace/?from=seahub'
+        data = {
+            'doc_name': self.filename
+        }
+        response = requests.post(url, json=data, headers=self.headers)
+        return parse_response(response)
+
