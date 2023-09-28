@@ -1703,7 +1703,7 @@ class SeadocDirView(APIView):
         return Response(dentrys)
 
 
-class SdocRevisionBasicVersionContent(APIView):
+class SdocRevisionBaseVersionContent(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
