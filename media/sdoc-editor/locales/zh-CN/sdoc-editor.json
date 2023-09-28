@@ -364,5 +364,16 @@
   "Title": "标题",
   "Subtitle": "副标题",
   "Link_sdoc": "链接 sdoc",
-  "Link_file": "链接文件"
+  "Link_file": "文件链接",
+  "Keep_my_modification": "保留我的更改",
+  "Keep_other_modification": "保留其他的更改",
+  "Keep_both_modification": "保留我的更改",
+  "Tip": "提示",
+  "Rebase_delete_no_change_revision_tip": "修订改没有更改，是否删除修订稿？",
+  "Has_been_replaced_tip": "文档内容已经被替换，请刷新页面。",
+  "Has_been_published_tip": "修订稿已经发布了，{{ time }} 秒后自动跳转到源文件。",
+  "Has_conflict_before_publish_tip": "文档有冲突，请解决冲突后再发布！",
+  "Merge_tip": "文档有冲突，是否合并？",
+  "Has_conflict_before_view_changes_tip": "文档有冲突，请解决冲突后再查看更改！",
+  "Has_been_removed_tip": "文档已经被删除，请查看其他文档"
 }

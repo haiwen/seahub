@@ -364,5 +364,16 @@
   "Title": "Název",
   "Subtitle": "Subtitle",
   "Link_sdoc": "Link sdoc",
-  "Link_file": "Link file"
+  "Link_file": "Link file",
+  "Keep_my_modification": "Keep my modification",
+  "Keep_other_modification": "Keep other's modification",
+  "Keep_both_modification": "Keep my modification",
+  "Tip": "Tip",
+  "Rebase_delete_no_change_revision_tip": "Revision has not made any change compared to original document. Do you want to delete this revision?",
+  "Has_been_replaced_tip": "Document content has been replaced. Please refresh the page.",
+  "Has_been_published_tip": "Revision has been published, Automatically jump to source content after {{ time }} seconds.",
+  "Has_conflict_before_publish_tip": "There are conflicts in the document, please resolve it before publishing!",
+  "Merge_tip": "There are conflicts in the documents. Do you want to merge them?",
+  "Has_conflict_before_view_changes_tip": "There are conflicts in the document. Please resolve the conflict before viewing the changes!",
+  "Has_been_removed_tip": "Document has been removed, please view other documents."
 }
