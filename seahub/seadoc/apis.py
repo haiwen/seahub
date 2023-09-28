@@ -840,8 +840,14 @@ class SeadocNotificationsView(APIView):
         # resource check
         total_count = SeadocNotification.objects.total_count(file_uuid, username)
         notifications = []
-        notification_queryset = SeadocNotification.objects.list_by_user(
-            file_uuid, username, start, end)
+        try:
+            notification_queryset = SeadocNotification.objects.list_by_user(
+                file_uuid, username, start, end)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         for notification in notification_queryset:
             data = notification.to_dict()
             data.update(
@@ -855,9 +861,14 @@ class SeadocNotificationsView(APIView):
         """ mark all notifications seen
         """
         username = request.user.username
-        unseen_notices = SeadocNotification.objects.list_by_unseen(
-            file_uuid, username)
-        unseen_notices.update(seen=True)
+        try:
+            unseen_notices = SeadocNotification.objects.list_by_unseen(
+                file_uuid, username)
+            unseen_notices.update(seen=True)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
 
@@ -885,8 +896,13 @@ class SeadocNotificationView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not notification.seen:
-            notification.seen = True
-            notification.save()
+            try:
+                notification.seen = True
+                notification.save()
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
 
@@ -1174,13 +1190,22 @@ class SeadocCommentRepliesView(APIView):
             'reply' : str(reply_content),
             'msg_type': 'reply',       
         }
+
+        new_notifications = []
         for to_user in to_users:
-            SeadocNotification.objects.create(
-                doc_uuid=file_uuid,
-                username=to_user,
-                msg_type='reply',
-                detail=json.dumps(detail),
-            )
+            new_notifications.append(
+                SeadocNotification(
+                    doc_uuid=file_uuid,
+                    username=to_user,
+                    msg_type='reply',
+                    detail=json.dumps(detail),
+            ))
+        try:
+            SeadocNotification.objects.bulk_create(new_notifications)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         #
         notification = detail
         notification['to_users'] = to_users
