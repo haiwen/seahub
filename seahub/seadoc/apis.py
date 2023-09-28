@@ -1376,15 +1376,41 @@ class SeadocRevisionView(APIView):
             error_msg = 'origin file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
+        if not file_id:  # save file anyway
+            seafile_api.post_empty_file(
+                uuid_map.repo_id, uuid_map.parent_path, uuid_map.filename, '')
+
+        username = request.user.username
+        upload_link = get_seadoc_upload_link(uuid_map, username)
+        if not upload_link:
+            error_msg = 'seadoc file %s not found.' % uuid_map.filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
+
+            # rewrite file
+            file = request.FILES.get('file', None) 
+            files = {
+                'file': file,
+                'file_name': uuid_map.filename,
+                'target_file': file_path,
+            }
+            requests.post(upload_link, files=files)
+
+            # update origin file version
             origin_doc_path = revision.origin_doc_path
             newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
             SeadocRevision.objects.update_origin_file_version(file_uuid, newest_file_version)
+
+            # server content update 
+            sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)            
+            sdoc_server_api.replace_doc()
+
             return Response({
-                'success': True,
                 'origin_file_version': newest_file_version,
             })
-
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

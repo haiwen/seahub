@@ -56,4 +56,12 @@ class SdocServerAPI(object):
         }
         response = requests.post(url, json=data, headers=self.headers)
         return parse_response(response)
+    
+    def replace_doc(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/replace/?from=seahub'
+        data = {
+            'doc_name': self.filename
+        }
+        response = requests.post(url, json=data, headers=self.headers)
+        return parse_response(response)
 
