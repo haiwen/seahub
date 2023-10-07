@@ -263,7 +263,7 @@ class SeadocOriginFileContent(APIView):
         res = sdoc_server_api.get_doc()
         if res:
             return Response({
-                'content': json.loads(res)
+                'content': json.dumps(res)
             })
         
         origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
