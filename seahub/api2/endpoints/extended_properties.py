@@ -518,9 +518,13 @@ class ApplyFolderExtendedPropertiesView(APIView):
             logger.error('server: %s token: %s seatable-api fail', DTABLE_WEB_SERVER, SEATABLE_EX_PROPS_BASE_API_TOKEN)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Props base invalid')
 
-        folder_props = self.query_ex_props_by_path(repo_id, path, seatable_api)
-        if not folder_props:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'The folder is not be set extended properties')
+        try:
+            folder_props = self.query_ex_props_by_path(repo_id, path, seatable_api)
+            if not folder_props:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'The folder is not be set extended properties')
+        except Exception as e:
+            logger.exception('query repo: %s folder: %s ex-props error: %s', repo_id, path, e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         # apply props
         context = {'文件负责人': email2nickname(request.user.username)}
