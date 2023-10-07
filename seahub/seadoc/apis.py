@@ -257,6 +257,15 @@ class SeadocOriginFileContent(APIView):
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
+        # get content from sdoc server
+        username = request.user.username
+        sdoc_server_api = SdocServerAPI(origin_doc_uuid, str(origin_uuid_map.filename), username)            
+        res = sdoc_server_api.get_doc()
+        if res:
+            return Response({
+                'content': json.loads(res)
+            })
+        
         origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
         if not origin_file_download_link:
             error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
@@ -1165,6 +1174,14 @@ class SeadocStartRevise(APIView):
         if SeadocRevision.objects.get_by_doc_uuid(origin_file_uuid):
             error_msg = 'seadoc %s is already a revision.' % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        # save origin file
+        try:
+            sdoc_server_api = SdocServerAPI(origin_file_uuid, filename, username)            
+            res = sdoc_server_api.save_doc()
+        except Exception as e:
+            warning_msg = 'Save origin sdoc %s failed.' % origin_file_uuid
+            logger.warning(warning_msg)
 
         origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
         revision_file_uuid = str(uuid.uuid4())

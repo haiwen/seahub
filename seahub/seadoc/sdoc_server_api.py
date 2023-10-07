@@ -37,10 +37,15 @@ class SdocServerAPI(object):
         data = {"doc_uuids" : doc_uuids}
         response = requests.post(url, json=data, headers=self.headers)
         return parse_response(response)
-    
+
     def remove_doc(self):
         url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/?from=seahub'
         response = requests.delete(url, headers=self.headers)
+        return parse_response(response)
+    
+    def get_doc(self):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/content/?from=seahub'
+        response = requests.get(url, headers=self.headers)
         return parse_response(response)
 
     def save_doc(self):
