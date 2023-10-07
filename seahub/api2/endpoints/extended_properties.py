@@ -85,10 +85,6 @@ class ExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        can_set, error_type = ApplyFolderExtendedPropertiesView.can_set_file_or_folder(repo_id, path)
-        if not can_set:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
-
         # check base
         try:
             seatable_api = SeaTableAPI(SEATABLE_EX_PROPS_BASE_API_TOKEN, DTABLE_WEB_SERVER)
@@ -242,10 +238,6 @@ class ExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        can_set, error_type = ApplyFolderExtendedPropertiesView.can_set_file_or_folder(repo_id, path)
-        if not can_set:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
-
         # check base
         try:
             seatable_api = SeaTableAPI(SEATABLE_EX_PROPS_BASE_API_TOKEN, DTABLE_WEB_SERVER)
@@ -340,36 +332,8 @@ class ApplyFolderExtendedPropertiesView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    apply_lock = Lock()
-    worker_map = defaultdict(list)
     list_max = 1000
     step = 500
-
-    @classmethod
-    def can_set_file_or_folder(cls, repo_id, path):
-        """
-        :return: can_apply -> bool, error_type -> string or None
-        """
-        paths = cls.worker_map.get(repo_id, [])
-        for cur_path in paths:
-            if path.startswith(cur_path):
-                return False, 'higer_folder_applying'
-        return True, None
-
-    @classmethod
-    def can_apply_folder(cls, repo_id, path):
-        """
-        :return: can_apply -> bool, error_type -> string or None
-        """
-        for cur_repo_id, paths in cls.worker_map.items():
-            if repo_id != cur_repo_id:
-                continue
-            for cur_path in paths:
-                if cur_path.startswith(path):
-                    return False, 'sub_folder_applying'
-                if path.startswith(cur_path):
-                    return False, 'higer_folder_applying'
-        return True, None
 
     def md5_repo_id_parent_path(self, repo_id, parent_path):
         parent_path = parent_path.rstrip('/') if parent_path != '/' else '/'
@@ -547,14 +511,6 @@ class ApplyFolderExtendedPropertiesView(APIView):
         if not parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        # with lock check repo and path can apply props
-        with self.apply_lock:
-            can_apply, _ = self.can_apply_folder(repo_id, path)
-            if not can_apply:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Another task is running')
-            # with lock add repo and path to apply task map
-            self.worker_map[repo_id].append(path)
-
         # request props from seatable
         try:
             seatable_api = SeaTableAPI(SEATABLE_EX_PROPS_BASE_API_TOKEN, DTABLE_WEB_SERVER)
@@ -576,13 +532,4 @@ class ApplyFolderExtendedPropertiesView(APIView):
         except Exception as e:
             logger.exception('apply folder: %s ex-props error: %s', path, e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        finally:
-            # remove path from worker
-            with self.apply_lock:
-                for repo_id, paths in self.worker_map.items():
-                    if repo_id != repo_id:
-                        continue
-                    self.worker_map[repo_id] = [cur_path for cur_path in paths if cur_path != path]
-                if not self.worker_map[repo_id]:
-                    del self.worker_map[repo_id]
         return Response({'success': True})
