@@ -1338,7 +1338,7 @@ class SeadocRevisionView(APIView):
                     repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
             seafile_api.del_file(
-                    repo_id, revision_parent_path, revision_filename, username)
+                    repo_id, revision_parent_path, json.dumps([revision_filename]), username)
             
         SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
 
