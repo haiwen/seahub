@@ -751,10 +751,10 @@ class DirentListItem extends React.Component {
             </Fragment>
           )}
         </td>
-        <td className="tag-list-title" id={this.tagListTitleID}>
+        <td className="tag-list-title">
           {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
             <Fragment>
-              <div className="dirent-item tag-list tag-list-stacked">
+              <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
                 {dirent.file_tags.map((fileTag, index) => {
                   let length = dirent.file_tags.length;
                   return (
