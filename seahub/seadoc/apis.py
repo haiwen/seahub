@@ -259,22 +259,16 @@ class SeadocOriginFileContent(APIView):
         
         # get content from sdoc server
         username = request.user.username
-        sdoc_server_api = SdocServerAPI(origin_doc_uuid, str(origin_uuid_map.filename), username)            
-        res = sdoc_server_api.get_doc()
-        if res:
+        sdoc_server_api = SdocServerAPI(origin_doc_uuid, str(origin_uuid_map.filename), username)
+        try:          
+            res = sdoc_server_api.get_doc()
             return Response({
                 'content': json.dumps(res)
             })
-        
-        origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
-        if not origin_file_download_link:
-            error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
-        resp = requests.get(origin_file_download_link)
-        return Response({
-            'content': resp.content
-        })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
 class SeadocUploadImage(APIView):
