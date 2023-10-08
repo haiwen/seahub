@@ -375,5 +375,7 @@
   "Has_conflict_before_publish_tip": "There are conflicts in the document, please resolve it before publishing!",
   "Merge_tip": "There are conflicts in the documents. Do you want to merge them?",
   "Has_conflict_before_view_changes_tip": "There are conflicts in the document. Please resolve the conflict before viewing the changes!",
-  "Has_been_removed_tip": "Document has been removed, please view other documents."
+  "Has_been_removed_tip": "Document has been removed, please view other documents.",
+  "Checking": "Checking...",
+  "Publishing": "Publishing..."
 }

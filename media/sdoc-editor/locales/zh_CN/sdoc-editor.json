@@ -375,5 +375,7 @@
   "Has_conflict_before_publish_tip": "文档有冲突，请解决冲突后再发布！",
   "Merge_tip": "文档有冲突，是否合并？",
   "Has_conflict_before_view_changes_tip": "文档有冲突，请解决冲突后再查看更改！",
-  "Has_been_removed_tip": "文档已经被删除，请查看其他文档"
+  "Has_been_removed_tip": "文档已经被删除，请查看其他文档",
+  "Checking": "检查中...",
+  "Publishing": "发布中..."
 }
