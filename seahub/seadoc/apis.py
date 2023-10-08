@@ -257,15 +257,18 @@ class SeadocOriginFileContent(APIView):
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        origin_file_download_link = get_seadoc_download_link(origin_uuid_map, True)
-        if not origin_file_download_link:
-            error_msg = 'seadoc origin file %s not found.' % origin_uuid_map.filename
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
-        resp = requests.get(origin_file_download_link)
-        return Response({
-            'content': resp.content
-        })
+        # get content from sdoc server
+        username = request.user.username
+        sdoc_server_api = SdocServerAPI(origin_doc_uuid, str(origin_uuid_map.filename), username)
+        try:          
+            res = sdoc_server_api.get_doc()
+            return Response({
+                'content': json.dumps(res)
+            })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
 class SeadocUploadImage(APIView):
@@ -1165,6 +1168,14 @@ class SeadocStartRevise(APIView):
         if SeadocRevision.objects.get_by_doc_uuid(origin_file_uuid):
             error_msg = 'seadoc %s is already a revision.' % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        # save origin file
+        try:
+            sdoc_server_api = SdocServerAPI(origin_file_uuid, filename, username)            
+            res = sdoc_server_api.save_doc()
+        except Exception as e:
+            warning_msg = 'Save origin sdoc %s failed.' % origin_file_uuid
+            logger.warning(warning_msg)
 
         origin_file_id = seafile_api.get_file_id_by_path(repo_id, path)
         revision_file_uuid = str(uuid.uuid4())
@@ -1338,7 +1349,7 @@ class SeadocRevisionView(APIView):
                     repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
             seafile_api.del_file(
-                    repo_id, revision_parent_path, revision_filename, username)
+                    repo_id, revision_parent_path, json.dumps([revision_filename]), username)
             
         SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
 
