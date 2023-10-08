@@ -235,6 +235,15 @@ class OrgGroupsSearchGroups extends Component {
     });
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
 
@@ -251,7 +260,7 @@ class OrgGroupsSearchGroups extends Component {
                 <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
-                      <Input type="text" name="query" value={query} placeholder={gettext('Search groups')} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search groups')} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
