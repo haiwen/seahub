@@ -28,7 +28,7 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
     const { repoID, path } = this.props;
     this.setState({ submitting: true });
     seafileAPI.applyFolderExtendedProperties(repoID, path).then(() => {
-      toaster.success('Applied folder properties');
+      toaster.success(gettext('Successfully applied the properties.'));
       this.props.toggle();
     }).catch(error => {
       let errorMsg = Utils.getErrorMsg(error);
@@ -47,7 +47,7 @@ class ConfirmApplyFolderPropertiesDialog extends React.Component {
         </ModalHeader>
         <ModalBody>
           <p>
-            {gettext('Are you sure to apply properties to all files inside the folder?')}
+            {gettext('Are you sure you want to apply the properties to all the files inside the folder?')}
           </p>
         </ModalBody>
         <ModalFooter>

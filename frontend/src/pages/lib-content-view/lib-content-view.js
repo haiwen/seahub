@@ -1254,7 +1254,7 @@ class LibContentView extends React.Component {
 
       this.addDirent(newFileName, 'file', res.data.size);
       this.setState({isConvertLoading: false});
-      let message = gettext('Successfully converted file.');
+      let message = gettext('Successfully converted the file.');
       toaster.success(message);
 
     }).catch((error) => {
@@ -1262,7 +1262,7 @@ class LibContentView extends React.Component {
       this.setState({isConvertLoading: false});
       if (errMessage === gettext('Error')) {
         let name = Utils.getFileName(path);
-        errMessage = gettext('Convert {name} failed').replace('{name}', name);
+        errMessage = gettext('Failed to convert {name}.').replace('{name}', name);
       }
       toaster.danger(errMessage);
     });
