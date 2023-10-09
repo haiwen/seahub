@@ -6,6 +6,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
+import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
 
 const propTypes = {
@@ -16,6 +17,7 @@ const propTypes = {
 };
 
 const PER_PAGE = 10;
+const controlKey = isMac() ? '⌘' : 'Ctrl';
 
 class Search extends Component {
 
@@ -294,20 +296,21 @@ class Search extends Component {
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { searchPageUrl } = this.state;
+    const { searchPageUrl, isMaskShow } = this.state;
+    const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
           <div className="search">
-            <div className={`search-mask ${this.state.isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
-            <div className={`search-container ${this.state.isMaskShow ? 'show' : ''}`}>
-              <div className="input-icon">
+            <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
+            <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
+              <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
                 <input
                   type="text"
                   className="form-control search-input"
                   name="query"
-                  placeholder={this.props.placeholder}
+                  placeholder={placeholder}
                   style={style}
                   value={this.state.value}
                   onFocus={this.onFocusHandler}
@@ -334,7 +337,7 @@ class Search extends Component {
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
-              <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
+              <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
               <div className="search-container">
                 <div className="input-icon">
                   <i className="search-icon-left input-icon-addon fas fa-search"></i>
@@ -342,7 +345,7 @@ class Search extends Component {
                     type="text"
                     className="form-control search-input"
                     name="query"
-                    placeholder={this.props.placeholder}
+                    placeholder={placeholder}
                     style={style}
                     value={this.state.value}
                     onFocus={this.onFocusHandler}

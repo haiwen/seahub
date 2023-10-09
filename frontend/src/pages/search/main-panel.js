@@ -300,7 +300,7 @@ class SearchViewPanel extends React.Component {
               name="query"
               autoComplete="off"
               value={this.state.q}
-              placeholder={gettext('Search Files')}
+              placeholder={gettext('Search files')}
               onChange={this.handleSearchInput}
               onKeyDown={this.handleKeyDown}
             />
