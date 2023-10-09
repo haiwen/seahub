@@ -89,6 +89,15 @@ class SearchGroups extends Component {
     });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getGroups();
+      }
+    }
+  }
+
   render() {
     const { name, isSubmitBtnActive } = this.state;
 
@@ -108,7 +117,7 @@ class SearchGroups extends Component {
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name')}</Label>
                     <Col sm={5}>
-                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
+                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>

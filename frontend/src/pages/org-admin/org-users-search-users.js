@@ -150,6 +150,15 @@ class OrgUsersSearchUsers extends Component {
     });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
 
@@ -166,7 +175,7 @@ class OrgUsersSearchUsers extends Component {
                 <Form tag={'div'}>
                   <FormGroup row>
                     <Col sm={5}>
-                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" value={query} placeholder={gettext('Search users')} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>

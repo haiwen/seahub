@@ -86,6 +86,15 @@ class SearchOrgs extends Component {
     });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.getItems();
+      }
+    }
+  }
+
   render() {
     const { query, isSubmitBtnActive } = this.state;
     return (
@@ -104,7 +113,7 @@ class SearchOrgs extends Component {
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name')}</Label>
                     <Col sm={5}>
-                      <Input type="text" name="query" id="name" value={query} onChange={this.handleInputChange} />
+                      <Input type="text" name="query" id="name" value={query} onChange={this.handleInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>

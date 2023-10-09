@@ -78,6 +78,15 @@ class SearchRepos extends Component {
     });
   };
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      const { isSubmitBtnActive } = this.state;
+      if (isSubmitBtnActive) {
+        this.searchRepos();
+      }
+    }
+  }
+
   render() {
     const { name, isSubmitBtnActive } = this.state;
     return (
@@ -96,7 +105,7 @@ class SearchRepos extends Component {
                   <FormGroup row>
                     <Label for="name" sm={1}>{gettext('Name or ID')}</Label>
                     <Col sm={5}>
-                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} />
+                      <Input type="text" name="name" id="name" value={name} onChange={this.handleNameInputChange} onKeyDown={this.handleKeyDown} />
                     </Col>
                   </FormGroup>
                   <FormGroup row>
