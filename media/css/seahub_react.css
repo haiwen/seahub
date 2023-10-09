@@ -1023,6 +1023,7 @@ a.table-sort-op:hover {
     display: flex;
     align-items: center;
     width: max-content;
+    min-height: 1rem;
 }
 
 /* react select-module */
