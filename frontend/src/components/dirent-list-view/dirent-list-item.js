@@ -767,6 +767,9 @@ class DirentListItem extends React.Component {
               </UncontrolledTooltip>
             </Fragment>
           )}
+          {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) && (
+            <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
+          )}
         </td>
         <td className="operation">{this.renderItemOperation()}</td>
         <td className="file-size">{dirent.size && dirent.size}</td>
