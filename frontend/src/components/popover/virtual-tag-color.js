@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover, PopoverBody } from 'reactstrap';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
 import { TAG_COLORS } from '../../constants';
-import toaster from '../toast';
 
 import '../../css/repo-tag.css';
 
-const tagColorPropTypes = {
-  tag: PropTypes.object.isRequired,
-  repoID: PropTypes.string.isRequired
-};
+export default class VirtualTagColor extends React.Component {
 
-class TagColor extends React.Component {
+  static propTypes = {
+    updateVirtualTag: PropTypes.func.isRequired,
+    tag: PropTypes.object.isRequired,
+    repoID: PropTypes.string.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -39,16 +37,10 @@ class TagColor extends React.Component {
 
   selectTagColor = (e) => {
     const newColor = e.target.value;
-    const { repoID, tag } = this.props;
-    const { id, name } = tag;
-    seafileAPI.updateRepoTag(repoID, id, name, newColor).then(() => {
-      this.setState({
-        tagColor: newColor,
-        isPopoverOpen: !this.state.isPopoverOpen
-      });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    this.props.updateVirtualTag(this.props.tag, { color: newColor });
+    this.setState({
+      tagColor: newColor,
+      isPopoverOpen: !this.state.isPopoverOpen,
     });
   };
 
@@ -102,7 +94,3 @@ class TagColor extends React.Component {
     );
   }
 }
-
-TagColor.propTypes = tagColorPropTypes;
-
-export default TagColor;

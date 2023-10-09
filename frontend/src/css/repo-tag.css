@@ -58,3 +58,22 @@
 .tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
   opacity: 1;
 }
+
+/* tag-color */
+.tag-color-popover .popover {
+  max-width: 360px;
+}
+
+.tag-color-popover .tag-color {
+  width: 20px;
+  height: 20px;
+}
+
+.tag-color-popover .colorinput-color {
+  width: 20px;
+  height: 20px;
+}
+
+.tag-color-popover .tag-color-option .colorinput-input:checked ~ .colorinput-color .color-selected {
+  font-size: 12px;
+}

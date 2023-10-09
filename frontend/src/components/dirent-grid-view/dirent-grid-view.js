@@ -48,8 +48,8 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
-  posX: PropTypes.number.isRequired,
-  posY: PropTypes.number.isRequired,
+  posX: PropTypes.number,
+  posY: PropTypes.number,
 };
 
 class DirentGridView extends React.Component {

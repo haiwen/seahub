@@ -117,6 +117,54 @@ class RepoTagsView(APIView):
 
         return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
 
+    def put(self, request, repo_id):
+        """bulk add repo_tags.
+        """
+
+        # argument check
+        tags = request.data.get('tags')
+        if not tags:
+            error_msg = 'tags invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        tag_objs = list()
+        try:
+            for tag in tags:
+                name = tag.get('name' ,'')
+                color = tag.get('color', '')
+                if name and color:
+                    obj = RepoTags(repo_id=repo_id, name=name, color=color)
+                    tag_objs.append(obj)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'tags invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            repo_tag_list = RepoTags.objects.bulk_create(tag_objs)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_tags = list()
+        for repo_tag in repo_tag_list:
+            res = repo_tag.to_dict()
+            repo_tags.append(res)
+
+        return Response({"repo_tags": repo_tags}, status=status.HTTP_200_OK)
+
 
 class RepoTagView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

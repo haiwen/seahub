@@ -1,23 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../toast';
 
 import '../../css/repo-tag.css';
 
-const tagNamePropTypes = {
-  tag: PropTypes.object.isRequired,
-  repoID: PropTypes.string.isRequired
-};
+export default class VirtualTagName extends React.Component {
 
-class TagName extends React.Component {
+  static propTypes = {
+    updateVirtualTag: PropTypes.func.isRequired,
+    tag: PropTypes.object.isRequired,
+    repoID: PropTypes.string.isRequired
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       tagName: this.props.tag.name,
-      isEditing: false
+      isEditing: true,
     };
     this.input = React.createRef();
   }
@@ -30,27 +28,23 @@ class TagName extends React.Component {
     }
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.input.current.focus();
+    }, 1);
+  }
+
   toggleMode = () => {
     this.setState({
       isEditing: !this.state.isEditing
-    }, () => {
-      if (this.state.isEditing) {
-        this.input.current.focus();
-      }
     });
   };
 
   updateTagName = (e) => {
     const newName = e.target.value;
-    const { repoID, tag } = this.props;
-    const { id, color } = tag;
-    seafileAPI.updateRepoTag(repoID, id, newName, color).then(() => {
-      this.setState({
-        tagName: newName
-      });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    this.props.updateVirtualTag(this.props.tag, { name: newName });
+    this.setState({
+      tagName: newName
     });
   };
 
@@ -86,13 +80,10 @@ class TagName extends React.Component {
           <span
             onClick={this.toggleMode}
             className="cursor-pointer flex-fill"
+            style={{width: 100, height: 20}}
           >{tagName}</span>
         }
       </div>
     );
   }
 }
-
-TagName.propTypes = tagNamePropTypes;
-
-export default TagName;

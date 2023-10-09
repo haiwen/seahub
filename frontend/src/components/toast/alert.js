@@ -105,7 +105,7 @@ class Alert extends React.PureComponent {
 
 Alert.propTypes = {
   onRemove: PropTypes.func.isRequired,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
   title: PropTypes.string.isRequired,
   intent: PropTypes.string.isRequired,
 };
