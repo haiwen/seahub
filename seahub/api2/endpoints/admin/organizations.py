@@ -410,6 +410,9 @@ class AdminOrganization(APIView):
             # remove org repos
             seafile_api.remove_org_repo_by_org_id(org_id)
 
+            # remove org saml config
+            OrgSAMLConfig.objects.filter(org_id=org_id).delete()
+
             # remove org
             ccnet_api.remove_org(org_id)
         except Exception as e:
