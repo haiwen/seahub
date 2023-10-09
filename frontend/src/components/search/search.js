@@ -304,7 +304,7 @@ class Search extends Component {
           <div className="search">
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`}>
-              <div className="input-icon mb-1">
+              <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
                 <i className="search-icon-left input-icon-addon fas fa-search"></i>
                 <input
                   type="text"
