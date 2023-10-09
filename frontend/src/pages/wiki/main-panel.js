@@ -78,9 +78,7 @@ class MainPanel extends Component {
 
   render() {
     let { onSearchedClick } = this.props;
-    let searchPlaceholder = gettext('Search files in this library');
     const errMessage = (<div className="message err-tip">{gettext('Folder does not exist.')}</div>);
-
     const isViewingFile = this.props.pathExist && !this.props.isDataLoading && this.props.isViewFile;
     return (
       <div className="main-panel wiki-main-panel">
@@ -93,7 +91,7 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 {isPro && (
-                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')}/>
                 )}
               </div>
             </Fragment>
@@ -110,7 +108,7 @@ class MainPanel extends Component {
               </div>
               <div className="common-toolbar">
                 {isPro && (
-                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={searchPlaceholder}/>
+                  <Search isPublic={true} repoID={repoID} onSearchedClick={onSearchedClick} placeholder={gettext('Search files')}/>
                 )}
                 <Notification />
                 <Account />

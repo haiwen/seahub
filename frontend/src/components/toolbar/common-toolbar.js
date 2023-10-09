@@ -18,20 +18,20 @@ const propTypes = {
 class CommonToolbar extends React.Component {
 
   render() {
-    let searchPlaceholder = this.props.searchPlaceholder || gettext('Search Files');
+    const { repoID, repoName } = this.props;
     return (
       <div className="common-toolbar">
         {isPro && (
           <Search
-            repoID={this.props.repoID}
-            placeholder={searchPlaceholder}
+            repoID={repoID}
+            placeholder={this.props.searchPlaceholder || gettext('Search files')}
             onSearchedClick={this.props.onSearchedClick}
           />
         )}
         {this.props.isLibView && !isPro &&
           <SearchByName
-            repoID={this.props.repoID}
-            repoName={this.props.repoName}
+            repoID={repoID}
+            repoName={repoName}
           />
         }
         <Notification />
