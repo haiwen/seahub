@@ -105,6 +105,7 @@
   border-radius: 4px;
 }
 
+.search-result-container .search-result-item:hover,
 .search-result-container .search-result-item.search-result-item-highlight {
   background-color: #f0f0f0;
 }

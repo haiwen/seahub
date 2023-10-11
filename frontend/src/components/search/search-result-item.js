@@ -6,8 +6,6 @@ import { Utils } from '../../utils/utils';
 const propTypes = {
   item: PropTypes.object.isRequired,
   onItemClickHandler: PropTypes.func.isRequired,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
   isHighlight: PropTypes.bool,
 };
 
@@ -31,8 +29,6 @@ class SearchResultItem extends React.Component {
       <li
         className={classnames('search-result-item', {'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
-        onMouseEnter={this.props.onMouseEnter}
-        onMouseLeave={this.props.onMouseLeave}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">

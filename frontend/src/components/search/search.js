@@ -307,8 +307,6 @@ class Search extends Component {
               key={index}
               item={item}
               onItemClickHandler={this.onItemClickHandler}
-              onMouseEnter={(e) => this.setState({ highlightIndex: index })}
-              onMouseLeave={(e) => this.setState({ highlightIndex: -1 })}
               isHighlight={index === highlightIndex}
             />
           );
