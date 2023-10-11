@@ -28,6 +28,7 @@ class Search extends Component {
       width: 'default',
       value: '',
       resultItems: [],
+      highlightIndex: 0,
       page: 0,
       isLoading: false,
       hasMore: true,
@@ -64,6 +65,26 @@ class Search extends Component {
       e.preventDefault();
       this.resetToDefault();
     }
+    else if (isHotkey('enter', e)) {
+      e.preventDefault();
+      let item = this.state.resultItems[this.state.highlightIndex];
+      if (item) {
+        if (document.activeElement) {
+          document.activeElement.blur();
+        }
+        this.onItemClickHandler(item);
+      }
+    }
+    else if (isHotkey('up', e)) {
+      this.setState({
+        highlightIndex: Math.max(this.state.highlightIndex - 1, 0),
+      });
+    }
+    else if (isHotkey('down', e)) {
+      this.setState({
+        highlightIndex: Math.min(this.state.highlightIndex + 1, this.state.resultItems.length - 1),
+      });
+    }
   };
 
   onFocusHandler = () => {
@@ -94,6 +115,7 @@ class Search extends Component {
 
     if (this.inputValue === '' || _this.getValueLength(this.inputValue) < 3) {
       this.setState({
+        highlightIndex: 0,
         resultItems: [],
         isResultShow: false,
         isResultGetted: false
@@ -122,6 +144,7 @@ class Search extends Component {
       isResultShow: true,
       isResultGetted: false,
       resultItems: [],
+      highlightIndex: 0,
     });
     this.source = seafileAPI.getSource();
     this.sendRequest(queryData, this.source.token, 1);
@@ -136,6 +159,7 @@ class Search extends Component {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
+            highlightIndex: 0,
             resultItems: [...this.state.resultItems, this.formatResultItems(res.data.results)],
             isResultGetted: true,
             page: page + 1,
@@ -144,6 +168,7 @@ class Search extends Component {
           });
         } else {
           this.setState({
+            highlightIndex: 0,
             resultItems: [],
             isLoading: false,
             isResultGetted: true,
@@ -163,6 +188,7 @@ class Search extends Component {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
+            highlightIndex: 0,
             resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
             isResultGetted: true,
             isLoading: false,
@@ -171,6 +197,7 @@ class Search extends Component {
           });
         } else {
           this.setState({
+            highlightIndex: 0,
             resultItems: [],
             isLoading: false,
             isResultGetted: true,
@@ -252,12 +279,13 @@ class Search extends Component {
       isResultShow: false,
       isResultGetted: false,
       resultItems: [],
+      highlightIndex: 0,
       isSearchInputShow: false,
     });
   }
 
   renderSearchResult() {
-    const { resultItems } = this.state;
+    const { resultItems, highlightIndex } = this.state;
     if (!this.state.isResultShow) {
       return;
     }
@@ -279,6 +307,7 @@ class Search extends Component {
               key={index}
               item={item}
               onItemClickHandler={this.onItemClickHandler}
+              isHighlight={index === highlightIndex}
             />
           );
         })}
