@@ -40,8 +40,10 @@ class Search extends Component {
       searchPageUrl: this.baseSearchPageURL
     };
     this.inputValue = '';
+    this.highlightRef = null;
     this.source = null; // used to cancel request;
     this.inputRef = React.createRef();
+    this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
   }
 
@@ -64,26 +66,12 @@ class Search extends Component {
     else if (isHotkey('esc', e)) {
       e.preventDefault();
       this.resetToDefault();
-    }
-    else if (isHotkey('enter', e)) {
-      e.preventDefault();
-      let item = this.state.resultItems[this.state.highlightIndex];
-      if (item) {
-        if (document.activeElement) {
-          document.activeElement.blur();
-        }
-        this.onItemClickHandler(item);
-      }
-    }
-    else if (isHotkey('up', e)) {
-      this.setState({
-        highlightIndex: Math.max(this.state.highlightIndex - 1, 0),
-      });
-    }
-    else if (isHotkey('down', e)) {
-      this.setState({
-        highlightIndex: Math.min(this.state.highlightIndex + 1, this.state.resultItems.length - 1),
-      });
+    } else if (isHotkey('enter', e)) {
+      this.onEnter(e);
+    } else if (isHotkey('up', e)) {
+      this.onUp(e);
+    } else if (isHotkey('down', e)) {
+      this.onDown(e);
     }
   };
 
@@ -97,6 +85,50 @@ class Search extends Component {
 
   onCloseHandler = () => {
     this.resetToDefault();
+  };
+
+  onUp = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { highlightIndex } = this.state;
+    if (highlightIndex > 0) {
+      this.setState({ highlightIndex: highlightIndex - 1 }, () => {
+        if (this.highlightRef) {
+          const { top, height } = this.highlightRef.getBoundingClientRect();
+          if (top - height < 0) {
+            this.searchContainer.current.scrollTop -= height;
+          }
+        }
+      });
+    }
+  };
+
+  onDown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const { highlightIndex, resultItems } = this.state;
+    if (highlightIndex < resultItems.length - 1) {
+      this.setState({ highlightIndex: highlightIndex + 1 }, () => {
+        if (this.highlightRef) {
+          const { top, height } = this.highlightRef.getBoundingClientRect();
+          const outerHeight = 300;
+          if (top > outerHeight) {
+            this.searchContainer.current.scrollTop += height;
+          }
+        }
+      });
+    }
+  };
+
+  onEnter = (e) => {
+    e.preventDefault();
+    let item = this.state.resultItems[this.state.highlightIndex];
+    if (item) {
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
+      this.onItemClickHandler(item);
+    }
   };
 
   onItemClickHandler = (item) => {
@@ -159,7 +191,6 @@ class Search extends Component {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
-            highlightIndex: 0,
             resultItems: [...this.state.resultItems, this.formatResultItems(res.data.results)],
             isResultGetted: true,
             page: page + 1,
@@ -188,7 +219,6 @@ class Search extends Component {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
-            highlightIndex: 0,
             resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
             isResultGetted: true,
             isLoading: false,
@@ -302,12 +332,14 @@ class Search extends Component {
     return (
       <ul className="search-result-list" ref={this.searchResultListRef}>
         {resultItems.map((item, index) => {
+          const isHighlight = index === highlightIndex;
           return (
             <SearchResultItem
               key={index}
               item={item}
               onItemClickHandler={this.onItemClickHandler}
-              isHighlight={index === highlightIndex}
+              isHighlight={isHighlight}
+              setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
             />
           );
         })}
@@ -354,7 +386,11 @@ class Search extends Component {
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                 }
               </div>
-              <div className="search-result-container dropdown-search-result-container" onScroll={this.onResultListScroll}>
+              <div
+                className="search-result-container dropdown-search-result-container"
+                onScroll={this.onResultListScroll}
+                ref={this.searchContainer}
+              >
                 {this.renderSearchResult()}
               </div>
             </div>
