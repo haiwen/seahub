@@ -7,9 +7,14 @@ const propTypes = {
   item: PropTypes.object.isRequired,
   onItemClickHandler: PropTypes.func.isRequired,
   isHighlight: PropTypes.bool,
+  setRef: PropTypes.func,
 };
 
 class SearchResultItem extends React.Component {
+
+  static defaultProps = {
+    setRef: () => {},
+  };
 
   onClickHandler = () => {
     var item = this.props.item;
@@ -29,6 +34,7 @@ class SearchResultItem extends React.Component {
       <li
         className={classnames('search-result-item', {'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
+        ref={ref => this.props.setRef(ref)}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
