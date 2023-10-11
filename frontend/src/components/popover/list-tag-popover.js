@@ -46,8 +46,10 @@ export default class ListTagPopover extends React.Component {
     });
   };
 
-  updateTags = (repotagList) => {
-    this.setState({ repotagList });
+  updateTags = (newRepotagList) => {
+    this.setState({
+      repotagList: [...this.state.repotagList, ...newRepotagList],
+    });
   };
 
   onDeleteTag = (tag) => {

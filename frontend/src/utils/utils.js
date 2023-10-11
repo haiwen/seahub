@@ -639,6 +639,15 @@ export const Utils = {
     if (list[list.length - 1] === 'Divider') {
       list.pop();
     }
+
+    // Remove adjacent excess 'Divider'
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] === 'Divider' && list[i + 1] === 'Divider') {
+        list.splice(i, 1);
+        i--;
+      }
+    }
+
     return list;
   },
 
