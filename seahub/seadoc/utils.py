@@ -1,16 +1,21 @@
 import os
+import io
 import jwt
 import json
 import time
 import uuid
+import shutil
 import logging
+import requests
 import posixpath
+from zipfile import ZipFile, is_zipfile
 
 from seaserv import seafile_api
 
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import SEADOC_PRIVATE_KEY
-from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
+from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, \
+    get_fileserver_root, get_inner_fileserver_root
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -287,3 +292,95 @@ def move_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_p
         need_progress=need_progress, synchronous=synchronous,
     )
     return
+def clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path):
+    # delete tmp files/dirs
+    if os.path.exists(tmp_file_path):
+        shutil.rmtree(tmp_file_path)
+    if os.path.exists(tmp_zip_path):
+        os.remove(tmp_zip_path)
+
+
+def prepare_images_folder(repo_id, doc_uuid, images_dir_id, username):
+    # get file server access token
+    fake_obj_id = {
+        'obj_id': images_dir_id,
+        'dir_name': 'images',  # after download and zip, folder root name is images
+        'is_windows': 0
+    }
+    try:
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, json.dumps(fake_obj_id), 'download-dir', username, use_onetime=False
+    )
+    except Exception as e:
+        raise e
+
+    progress = {'zipped': 0, 'total': 1}
+    while progress['zipped'] != progress['total']:
+        time.sleep(0.5)  # sleep 0.5 second
+        try:
+            progress = json.loads(seafile_api.query_zip_progress(token))
+        except Exception as e:
+            raise e
+
+    asset_url = '%s/zip/%s' % (get_inner_fileserver_root(), token)
+    try:
+        resp = requests.get(asset_url)
+    except Exception as e:
+        raise e
+    file_obj = io.BytesIO(resp.content)
+    if is_zipfile(file_obj):
+        with ZipFile(file_obj) as zp:
+            zp.extractall(os.path.join('/tmp/sdoc', doc_uuid, 'sdoc_asset'))
+    return
+
+
+def export_sdoc_zip(uuid_map, username):
+    """
+    /tmp/sdoc/<doc_uuid>/sdoc_asset/
+                                |- images/
+                                |- content.sdoc
+
+    zip /tmp/sdoc/<doc_uuid>/sdoc_asset/ to /tmp/sdoc/<doc_uuid>/zip_file.zip
+    """
+    doc_uuid = str(uuid_map.uuid)
+    repo_id = uuid_map.repo_id
+
+    logger.info('Start prepare /tmp/sdoc/{}/zip_file.zip for export sdoc.'.format(doc_uuid))
+
+    tmp_file_path = os.path.join('/tmp/sdoc', doc_uuid, 'sdoc_asset/')  # used to store asset files and json from file_server
+    tmp_zip_path = os.path.join('/tmp/sdoc', doc_uuid, 'zip_file') + '.zip'  # zip path of zipped xxx.zip
+
+    logger.info('Clear tmp dirs and files before prepare.')
+    clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path)
+    os.makedirs(tmp_file_path, exist_ok=True)
+
+    try:
+        download_link = get_seadoc_download_link(uuid_map, is_inner=True)
+        resp = requests.get(download_link)
+        file_obj = io.BytesIO(resp.content)
+        with open(os.path.join(tmp_file_path, 'content.sdoc') , 'wb') as f:
+            f.write(file_obj.read())
+    except Exception as e:
+        logger.error('prepare sdoc failed. ERROR: {}'.format(e))
+        raise Exception('prepare sdoc failed. ERROR: {}'.format(e))
+
+    # 2. get images folder, images could be empty
+    parent_path = '/images/sdoc/' + doc_uuid + '/'
+    images_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_path)
+    if images_dir_id:
+        logger.info('Create images folder.')
+        try:
+            prepare_images_folder(repo_id, doc_uuid, images_dir_id, username)
+        except Exception as e:
+            logger.warning('create images folder failed. ERROR: {}'.format(e))
+
+    logger.info('Make zip file for download...')
+    try:
+        shutil.make_archive('/tmp/sdoc/' + doc_uuid + '/zip_file', "zip", root_dir=tmp_file_path)
+    except Exception as e:
+        logger.error('make zip failed. ERROR: {}'.format(e))
+        raise Exception('make zip failed. ERROR: {}'.format(e))
+
+    logger.info('Create /tmp/sdoc/{}/zip_file.zip success!'.format(doc_uuid))
+
+    return tmp_zip_path

@@ -3,6 +3,7 @@ import re
 import json
 import uuid
 import stat
+import shutil
 import logging
 import requests
 import posixpath
@@ -20,6 +21,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
+from django.http import FileResponse
 
 from seaserv import seafile_api, check_quota
 
@@ -30,7 +32,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset, is_seadoc_revision
+    can_access_seadoc_asset, is_seadoc_revision, export_sdoc_zip
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
     gen_inner_file_get_url, gen_inner_file_upload_url, get_service_url
@@ -271,6 +273,44 @@ class SeadocOriginFileContent(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
+class SeadocExportZipView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        username = request.user.username
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, uuid_map.repo_id, uuid_map.parent_path)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        tmp_zip_path = export_sdoc_zip(uuid_map, username)
+        if not os.path.exists(tmp_zip_path):
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        response = FileResponse(open(tmp_zip_path, 'rb'), content_type="application/x-zip-compressed", as_attachment=True)
+        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-5]) + '.zip'
+
+        tmp_dir = os.path.join('/tmp/sdoc', str(uuid_map.uuid))
+        if os.path.exists(tmp_dir):
+            shutil.rmtree(tmp_dir)
+
+        return response
 
 
 class SeadocUploadImage(APIView):
