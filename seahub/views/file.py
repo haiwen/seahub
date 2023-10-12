@@ -503,6 +503,13 @@ def view_lib_file(request, repo_id, path):
         if parse_repo_perm(permission).can_download is False:
             raise Http404
 
+        # redirect to sdoc export
+        filetype, fileext = get_file_type_and_ext(filename)
+        if filetype == SEADOC:
+            file_uuid = get_seadoc_file_uuid(repo, path)
+            file_url = reverse('seadoc_export', args=[file_uuid])
+            return HttpResponseRedirect(file_url)
+
         operation = 'download' if dl else 'view'
         token = seafile_api.get_fileserver_access_token(
             repo_id, file_id, operation, username,

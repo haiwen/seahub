@@ -1,5 +1,5 @@
 from django.urls import re_path
-from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, SeadocOriginFileContent, SeadocUploadFile, SeadocExportZipView ,\
+from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, SeadocOriginFileContent, SeadocUploadFile, SeadocExportView ,\
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocQueryCopyMoveProgressView, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
@@ -12,7 +12,7 @@ urlpatterns = [
     re_path(r'^upload-file/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadFile.as_view(), name='seadoc_upload_file'),
     re_path(r'^upload-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadLink.as_view(), name='seadoc_upload_link'),
     re_path(r'^download-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDownloadLink.as_view(), name='seadoc_download_link'),
-    re_path(r'^export/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocExportZipView.as_view(), name='seadoc_export'),
+    re_path(r'^export/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocExportView.as_view(), name='seadoc_export'),
     re_path(r'^upload-image/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadImage.as_view(), name='seadoc_upload_image'),
     re_path(r'^download-image/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', SeadocDownloadImage.as_view(), name='seadoc_download_image'),
     re_path(r'^async-copy-images/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocAsyncCopyImages.as_view(), name='seadoc_async_copy_images'),
