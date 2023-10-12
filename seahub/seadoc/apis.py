@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import uuid
 import stat
@@ -6,6 +7,7 @@ import logging
 import requests
 import posixpath
 from datetime import datetime
+from urllib.parse import quote, unquote
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,7 +33,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     can_access_seadoc_asset, is_seadoc_revision
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
-    gen_inner_file_get_url, gen_inner_file_upload_url
+    gen_inner_file_get_url, gen_inner_file_upload_url, get_service_url
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -1636,6 +1638,95 @@ class SeadocFileUUIDView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'file_uuid': str(uuid_map.uuid)})
+
+
+class SeadocFilesInfoView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, file_uuid):
+        """ Get files info by file view url or smart link
+        """
+        files_url = request.data.get('files_url', [])
+        if not files_url:
+            error_msg = 'files_url invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        service_url = get_service_url().strip('/')
+        smart_link_re = re.compile(r'^%s/smart-link/([-0-9a-f]{36})/$' % (service_url))
+        file_url_re = re.compile(r'^%s/lib/([-0-9a-f]{36})/file/(.*)' % (service_url))
+        dir_url_re = re.compile(r'^%s/library/([-0-9a-f]{36})/(.*)' % (service_url))
+
+        files_info = {}
+        for file_url in files_url:
+            file_url = unquote(file_url)
+            files_info[file_url] = {}
+            repo_id = ''
+            path = ''
+            dirent_file_uuid = ''
+            is_dir = False
+            try:
+                if smart_link_re.match(file_url) is not None:
+                    re_result = smart_link_re.match(file_url)
+                    dirent_file_uuid = re_result.group(1)
+                    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(dirent_file_uuid)
+                    if not uuid_map:
+                        continue
+                    repo_id = uuid_map.repo_id
+                    path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+                    is_dir = uuid_map.is_dir
+                elif file_url_re.match(file_url) is not None:
+                    re_result = file_url_re.match(file_url)
+                    repo_id = re_result.group(1)
+                    path = re_result.group(2)
+                elif dir_url_re.match(file_url) is not None:
+                    re_result = dir_url_re.match(file_url)
+                    repo_id = re_result.group(1)
+                    path = re_result.group(2).split('/', 1)[-1]
+                    is_dir = True
+
+                # check
+                if not repo_id or not path:
+                    continue
+                if is_dir:
+                    path = normalize_dir_path(path)
+                    path = path.rstrip('/')
+                    parent_path = os.path.dirname(path)
+                    file_name = os.path.basename(path)
+                else:
+                    path = normalize_file_path(path)
+                    parent_path = os.path.dirname(path)
+                    file_name = os.path.basename(path)
+
+                # permission check
+                if not check_folder_permission(request, repo_id, path):
+                    continue
+            except Exception as e:
+                logger.exception(e)
+                continue
+ 
+            info = {
+                'is_dir': is_dir,
+                'name': file_name,
+                'parent_path': parent_path,
+                'repo_id': repo_id,
+                'file_type': '',
+                'file_ext': '',
+                'file_uuid': dirent_file_uuid,
+            }
+            if not is_dir:
+                filetype, fileext = get_file_type_and_ext(file_name)
+                info['file_ext'] = fileext
+                info['file_type'] = filetype
+                if filetype == SEADOC and not dirent_file_uuid:
+                    repo = seafile_api.get_repo(repo_id)
+                    dirent_file_uuid = get_seadoc_file_uuid(repo, path)
+                    info['file_uuid'] = dirent_file_uuid
+            files_info[file_url] = info
+
+        return Response({'files_info': files_info})
 
 
 class SeadocDirView(APIView):
