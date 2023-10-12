@@ -325,7 +325,8 @@ def move_sdoc_images(src_repo_id, src_path, dst_repo_id, dst_path, username, is_
         need_progress=need_progress, synchronous=synchronous,
     )
     return
-def clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path):
+
+def export_sdoc_clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path):
     # delete tmp files/dirs
     if os.path.exists(tmp_file_path):
         shutil.rmtree(tmp_file_path)
@@ -333,7 +334,7 @@ def clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path):
         os.remove(tmp_zip_path)
 
 
-def prepare_images_folder(repo_id, doc_uuid, images_dir_id, username):
+def export_sdoc_prepare_images_folder(repo_id, doc_uuid, images_dir_id, username):
     # get file server access token
     fake_obj_id = {
         'obj_id': images_dir_id,
@@ -367,11 +368,11 @@ def prepare_images_folder(repo_id, doc_uuid, images_dir_id, username):
     return
 
 
-def export_sdoc_zip(uuid_map, username):
+def export_sdoc(uuid_map, username):
     """
     /tmp/sdoc/<doc_uuid>/sdoc_asset/
                                 |- images/
-                                |- content.sdoc
+                                |- content.json
 
     zip /tmp/sdoc/<doc_uuid>/sdoc_asset/ to /tmp/sdoc/<doc_uuid>/zip_file.zip
     """
@@ -384,14 +385,14 @@ def export_sdoc_zip(uuid_map, username):
     tmp_zip_path = os.path.join('/tmp/sdoc', doc_uuid, 'zip_file') + '.zip'  # zip path of zipped xxx.zip
 
     logger.info('Clear tmp dirs and files before prepare.')
-    clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path)
+    export_sdoc_clear_tmp_files_and_dirs(tmp_file_path, tmp_zip_path)
     os.makedirs(tmp_file_path, exist_ok=True)
 
     try:
         download_link = get_seadoc_download_link(uuid_map, is_inner=True)
         resp = requests.get(download_link)
         file_obj = io.BytesIO(resp.content)
-        with open(os.path.join(tmp_file_path, 'content.sdoc') , 'wb') as f:
+        with open(os.path.join(tmp_file_path, 'content.json') , 'wb') as f:
             f.write(file_obj.read())
     except Exception as e:
         logger.error('prepare sdoc failed. ERROR: {}'.format(e))
@@ -403,7 +404,8 @@ def export_sdoc_zip(uuid_map, username):
     if images_dir_id:
         logger.info('Create images folder.')
         try:
-            prepare_images_folder(repo_id, doc_uuid, images_dir_id, username)
+            export_sdoc_prepare_images_folder(
+                repo_id, doc_uuid, images_dir_id, username)
         except Exception as e:
             logger.warning('create images folder failed. ERROR: {}'.format(e))
 
@@ -413,7 +415,5 @@ def export_sdoc_zip(uuid_map, username):
     except Exception as e:
         logger.error('make zip failed. ERROR: {}'.format(e))
         raise Exception('make zip failed. ERROR: {}'.format(e))
-
     logger.info('Create /tmp/sdoc/{}/zip_file.zip success!'.format(doc_uuid))
-
     return tmp_zip_path

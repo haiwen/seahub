@@ -34,7 +34,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset, is_seadoc_revision, export_sdoc_zip
+    can_access_seadoc_asset, is_seadoc_revision, export_sdoc
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils.file_op import if_locked_by_online_office
@@ -337,7 +337,7 @@ class SeadocOriginFileContent(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
-class SeadocExportZipView(APIView):
+class SeadocExportView(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
@@ -360,13 +360,18 @@ class SeadocExportZipView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        tmp_zip_path = export_sdoc_zip(uuid_map, username)
+        try:
+            tmp_zip_path = export_sdoc(uuid_map, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         if not os.path.exists(tmp_zip_path):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         response = FileResponse(open(tmp_zip_path, 'rb'), content_type="application/x-zip-compressed", as_attachment=True)
-        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-5]) + '.zip'
+        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename)
 
         tmp_dir = os.path.join('/tmp/sdoc', str(uuid_map.uuid))
         if os.path.exists(tmp_dir):
