@@ -195,17 +195,13 @@ class ShareToGroup extends React.Component {
   };
 
   shareToGroup = () => {
-    let groups = [];
+
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
     let isGroupOwnedRepo = this.props.isGroupOwnedRepo;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0 ) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        groups[i] = this.state.selectedOption[i].id;
-      }
-    }
+
     if (isGroupOwnedRepo) {
-      seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, groups, path).then(res => {
+      seafileAPI.shareGroupOwnedRepoToGroup(repoID, this.state.permission, this.state.selectedOption['id'], path).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
@@ -234,7 +230,7 @@ class ShareToGroup extends React.Component {
         toaster.danger(errMessage);
       });
     } else {
-      seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups).then(res => {
+      seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, [this.state.selectedOption['id']]).then(res => {
         let errorMsg = [];
         if (res.data.failed.length > 0) {
           for (let i = 0 ; i < res.data.failed.length ; i++) {
