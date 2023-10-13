@@ -19,6 +19,7 @@ class MylibRepoMenu extends React.Component {
     super(props);
     this.state = {
       isItemMenuShow: false,
+      isAdvancedMenuShown: false
     };
   }
 
@@ -62,6 +63,25 @@ class MylibRepoMenu extends React.Component {
     );
   };
 
+  toggleAdvancedMenuShown = (e) => {
+    this.setState({ isAdvancedMenuShown: true });
+  };
+
+  toggleAdvancedMenu = (e) => {
+    e.stopPropagation();
+    this.setState({ isAdvancedMenuShown: !this.state.isAdvancedMenuShown }, () => {
+      this.toggleOperationMenu(e);
+    });
+  };
+
+  onDropDownMouseMove = (e) => {
+    if (this.state.isAdvancedMenuShown && e.target && e.target.className === 'dropdown-item') {
+      this.setState({
+        isAdvancedMenuShown: false
+      });
+    }
+  };
+
   generatorOperations = () => {
     let repo = this.props.repo;
     let showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
@@ -83,11 +103,16 @@ class MylibRepoMenu extends React.Component {
       operations.push(monitorOp);
     }
 
+    operations.push('Divider', 'History Setting', 'Advanced');
+    return operations;
+  };
+
+  getAdvancedOperations = () => {
+    const operations = [];
     operations.push('API Token');
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
-    operations.push('Divider', 'History Setting');
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
     }
@@ -145,6 +170,9 @@ class MylibRepoMenu extends React.Component {
       case 'Old Files Auto Delete':
         translateResult = gettext('Auto Deletion Setting');
         break;
+      case 'Advanced':
+        translateResult = gettext('Advanced');
+        break;
       default:
         break;
     }
@@ -154,6 +182,7 @@ class MylibRepoMenu extends React.Component {
 
   render() {
     let operations = this.generatorOperations();
+    const advancedOperations = this.getAdvancedOperations();
 
     // pc menu
     if (this.props.isPC) {
@@ -170,10 +199,34 @@ class MylibRepoMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
           />
-          <DropdownMenu>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
             {operations.map((item, index)=> {
               if (item == 'Divider') {
                 return <DropdownItem key={index} divider />;
+              } else if (item == 'Advanced') {
+                return (
+                  <Dropdown
+                    key={index}
+                    direction="right"
+                    className="w-100"
+                    isOpen={this.state.isAdvancedMenuShown}
+                    toggle={this.toggleAdvancedMenu}
+                    onMouseMove={(e) => {e.stopPropagation();}}
+                  >
+                    <DropdownToggle
+                      caret
+                      className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center"
+                      onMouseEnter={this.toggleAdvancedMenuShown}
+                    >
+                      {this.translateOperations(item)}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {advancedOperations.map((item, index)=> {
+                        return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateOperations(item)}</DropdownItem>);
+                      })}
+                    </DropdownMenu>
+                  </Dropdown>
+                );
               } else {
                 return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateOperations(item)}</DropdownItem>);
               }
@@ -184,6 +237,7 @@ class MylibRepoMenu extends React.Component {
     }
 
     // mobile menu
+    operations.pop(); // removed the last item 'Advanced'
     operations.unshift('Delete');
     operations.unshift('Share');
     this.props.isStarred ? operations.unshift('Unstar') : operations.unshift('Star');

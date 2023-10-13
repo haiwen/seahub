@@ -952,6 +952,15 @@ a.table-sort-op:hover {
   color: #212529;
   font-size: 14px;
 }
+
+.btn-secondary.dropdown-toggle.dropdown-item {
+  line-height: 1.5;
+}
+
+.show>.btn-secondary.dropdown-toggle.dropdown-item {
+  color: #fff;
+  background-color: #20a0ff;
+}
   
 /* empty-tip */
 .empty-tip {
