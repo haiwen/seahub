@@ -215,3 +215,25 @@ class SdocJWTTokenAuthentication(BaseAuthentication):
             return None
 
         return user, auth[1]
+
+
+class SeafileAiAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        """ seafile ai jwt token
+        """
+        import jwt
+        from seahub.settings import SEAFILE_AI_SECRET_KEY
+
+        auth = request.headers.get('authorization', '').split()
+        token = auth[1]
+        try:
+            payload = jwt.decode(token, SEAFILE_AI_SECRET_KEY, algorithms=['HS256'])
+        except Exception as e:
+            raise AuthenticationFailed('Failed to decode jwt')
+
+        username = payload.get('username')
+        if username != 'seafile-ai':
+            raise AuthenticationFailed('Invalid username')
+
+        return AnonymousUser(), auth[1]
