@@ -60,7 +60,7 @@ $('#get-code').on('click', function() {
             email: email
         },
         success: function() {
-            feedback('{% trans "A verification code has been sent to the email." %}', 'success');
+            feedback("{% trans "A verification code has been sent to the email." %}", 'success');
         },
         error: function(xhr) {
             var error_msg = prepareAjaxErrorMsg(xhr);
