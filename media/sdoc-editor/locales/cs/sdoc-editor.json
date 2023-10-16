@@ -378,5 +378,7 @@
   "Has_been_removed_tip": "Document has been removed, please view other documents.",
   "Revision_created": "Revision {{id}} created",
   "Checking": "Checking...",
-  "Publishing": "Publishing..."
+  "Publishing": "Publishing...",
+  "Inline": "Inline",
+  "Block": "Block"
 }

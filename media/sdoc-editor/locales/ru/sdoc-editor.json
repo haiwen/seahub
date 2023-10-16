@@ -367,7 +367,7 @@
   "Link_file": "Ссылка на файл",
   "Keep_my_modification": "Сохранить мою модификацию",
   "Keep_other_modification": "Сохранить чужую модификацию",
-  "Keep_both_modification": "Keep both modification",
+  "Keep_both_modification": "Сохранить обе модификации",
   "Tip": "Совет",
   "Rebase_delete_no_change_revision_tip": "Редакция не внесла никаких изменений по сравнению с исходным документом. Вы хотите удалить эту редакцию?",
   "Has_been_replaced_tip": "Содержимое документа было заменено. Обновите страницу.",
@@ -378,5 +378,7 @@
   "Has_been_removed_tip": "Документ удален, посмотрите другие документы.",
   "Revision_created": "Версия {{id}} создана",
   "Checking": "Проверка...",
-  "Publishing": "Публикация..."
+  "Publishing": "Публикация...",
+  "Inline": "Inline",
+  "Block": "Block"
 }

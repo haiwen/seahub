@@ -378,5 +378,7 @@
   "Has_been_removed_tip": "文档已经被删除，请查看其他文档",
   "Revision_created": "已创建修订稿 {{id}}",
   "Checking": "检查中...",
-  "Publishing": "发布中..."
+  "Publishing": "发布中...",
+  "Inline": "嵌入行内",
+  "Block": "独占一行"
 }
