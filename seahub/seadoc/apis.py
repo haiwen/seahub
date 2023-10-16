@@ -360,7 +360,7 @@ class SeadocDownloadImage(APIView):
 class SeadocAsyncCopyImages(APIView):
 
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
-    permission_classes = ()
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, file_uuid):
@@ -410,6 +410,42 @@ class SeadocAsyncCopyImages(APIView):
         )
         task_id = res.task_id if res.background else ''
         return Response({'task_id': task_id})
+
+
+class SeadocQueryCopyMoveProgressView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """ Fetch progress of file/dir mv/cp.
+        """
+        # argument check
+        task_id = request.GET.get('task_id')
+        if not task_id:
+            error_msg = 'task_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            res = seafile_api.get_copy_task(task_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # res can be None
+        if not res:
+            error_msg = _('Error')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        result['done'] = res.done
+        result['total'] = res.total
+        result['canceled'] = res.canceled
+        result['failed'] = res.failed
+        result['successful'] = res.successful
+        return Response(result)
 
 
 class SeadocCopyHistoryFile(APIView):
