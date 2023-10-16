@@ -42,6 +42,7 @@
     "svgo-loader": "^3.0.1",
     "unified": "^7.0.0",
     "url-parse": "^1.4.3",
+    "uuid": "9.0.1",
     "video.js": "^7.4.1",
     "watermark-dom": "^1.0.0"
   },
