@@ -1465,8 +1465,8 @@ class AdminUserResetPassword(APIView):
                 try:
                     send_html_email(_(u'Password has been reset on %s') % get_site_name(),
                                     'sysadmin/user_reset_email.html', c, None, [contact_email])
-                    reset_tip = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
-                        {'passwd': new_password, 'user': contact_email}
+                    reset_tip = _('Successfully reset password, an email has been sent to %(user)s.') % \
+                        {'user': contact_email}
                 except Exception as e:
                     logger.warning(e)
                     reset_tip = _('Successfully reset password to %(passwd)s, but failed to send email to %(user)s, please check your email configuration.') % \
