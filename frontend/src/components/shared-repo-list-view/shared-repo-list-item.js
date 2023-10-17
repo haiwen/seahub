@@ -4,13 +4,14 @@ import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableRepoAutoDel } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import ChangeRepoPasswordDialog from '../../components/dialog/change-repo-password-dialog';
 import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encrypted-repo-password-dialog';
+import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import Rename from '../rename';
 import { seafileAPI } from '../../utils/seafile-api';
 import LibHistorySettingDialog from '../dialog/lib-history-setting-dialog';
@@ -41,6 +42,7 @@ class SharedRepoListItem extends React.Component {
       highlight: false,
       isOperationShow: false,
       isItemMenuShow: false,
+      isAdvancedMenuShown: false,
       isShowSharedDialog: false,
       isRenaming: false,
       isStarred: this.props.repo.starred,
@@ -51,7 +53,8 @@ class SharedRepoListItem extends React.Component {
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isChangePasswordDialogShow: false,
-      isResetPasswordDialogShow: false
+      isResetPasswordDialogShow: false,
+      isOldFilesAutoDelDialogOpen: false,
     };
     this.isDeparementOnwerGroupMember = false;
   }
@@ -116,6 +119,25 @@ class SharedRepoListItem extends React.Component {
     );
   };
 
+  toggleAdvancedMenuShown = (e) => {
+    this.setState({ isAdvancedMenuShown: true });
+  };
+
+  toggleAdvancedMenu = (e) => {
+    e.stopPropagation();
+    this.setState({ isAdvancedMenuShown: !this.state.isAdvancedMenuShown }, () => {
+      this.toggleOperationMenu(e);
+    });
+  };
+
+  onDropDownMouseMove = (e) => {
+    if (this.state.isAdvancedMenuShown && e.target && e.target.className === 'dropdown-item') {
+      this.setState({
+        isAdvancedMenuShown: false
+      });
+    }
+  };
+
   getRepoComputeParams = () => {
     let repo = this.props.repo;
 
@@ -170,6 +192,9 @@ class SharedRepoListItem extends React.Component {
         break;
       case 'Unwatch File Changes':
         this.unwatchFileChanges();
+        break;
+      case 'Old Files Auto Delete':
+        this.toggleOldFilesAutoDelDialog();
         break;
       // no default
     }
@@ -279,6 +304,10 @@ class SharedRepoListItem extends React.Component {
     this.setState({isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen});
   };
 
+  toggleOldFilesAutoDelDialog = () => {
+    this.setState({isOldFilesAutoDelDialogOpen: !this.state.isOldFilesAutoDelDialogOpen});
+  };
+
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
   };
@@ -327,13 +356,28 @@ class SharedRepoListItem extends React.Component {
       case 'Unwatch File Changes':
         translateResult = gettext('Unwatch File Changes');
         break;
+      case 'Old Files Auto Delete':
+        translateResult = gettext('Auto Deletion Setting');
+        break;
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
+        break;
+      case 'Advanced':
+        translateResult = gettext('Advanced');
         break;
       default:
         break;
     }
     return translateResult;
+  };
+
+  getAdvancedOperations = () => {
+    const operations = [];
+    operations.push('API Token');
+    if (enableRepoAutoDel) {
+      operations.push('Old Files Auto Delete');
+    }
+    return operations;
   };
 
   generatorOperations = () => {
@@ -352,14 +396,22 @@ class SharedRepoListItem extends React.Component {
             if (folderPermEnabled) {
               operations.push('Folder Permission');
             }
-            operations.push('Share Admin');
+            operations.push('Share Admin', 'Divider');
             if (repo.encrypted) {
               operations.push('Change Password');
             }
             if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
               operations.push('Reset Password');
             }
-            operations.push('History Setting', 'API Token', 'Details');
+            if (repo.permission == 'r' || repo.permission == 'rw') {
+              const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
+              operations.push(monitorOp);
+            }
+            operations.push('Divider', 'History Setting', 'Details');
+            if (Utils.isDesktop()) {
+              operations.push('Advanced');
+            }
+            return operations;
           } else {
             operations.push('Unshare');
           }
@@ -444,6 +496,7 @@ class SharedRepoListItem extends React.Component {
     const deleteOperation  = <a href="#" className="op-icon sf2-icon-delete" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></a>;
 
     if (this.isDeparementOnwerGroupMember) {
+      const advancedOperations = this.getAdvancedOperations();
       return (
         <Fragment>
           {shareOperation}
@@ -459,9 +512,37 @@ class SharedRepoListItem extends React.Component {
               onClick={this.clickOperationMenuToggle}
               onKeyDown={this.onDropdownToggleKeyDown}
             />
-            <DropdownMenu>
-              {operations.map((item, index) => {
-                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>;
+            <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
+              {operations.map((item, index)=> {
+                if (item == 'Divider') {
+                  return <DropdownItem key={index} divider />;
+                } else if (item == 'Advanced') {
+                  return (
+                    <Dropdown
+                      key={index}
+                      direction="right"
+                      className="w-100"
+                      isOpen={this.state.isAdvancedMenuShown}
+                      toggle={this.toggleAdvancedMenu}
+                      onMouseMove={(e) => {e.stopPropagation();}}
+                    >
+                      <DropdownToggle
+                        caret
+                        className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center"
+                        onMouseEnter={this.toggleAdvancedMenuShown}
+                      >
+                        {this.translateMenuItem(item)}
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        {advancedOperations.map((item, index)=> {
+                          return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>);
+                        })}
+                      </DropdownMenu>
+                    </Dropdown>
+                  );
+                } else {
+                  return (<DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>);
+                }
               })}
             </DropdownMenu>
           </Dropdown>
@@ -680,6 +761,15 @@ class SharedRepoListItem extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isOldFilesAutoDelDialogOpen && (
+          <ModalPortal>
+            <LibOldFilesAutoDelDialog
+              repoID={repo.repo_id}
+              toggleDialog={this.toggleOldFilesAutoDelDialog}
+            />
+          </ModalPortal>
+        )}
+
       </Fragment>
     );
   }
