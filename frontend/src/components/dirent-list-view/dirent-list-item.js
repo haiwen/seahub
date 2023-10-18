@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MediaQuery from 'react-responsive';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { Dropdown, DropdownToggle, DropdownItem, UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, useGoFileserver, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -19,6 +19,8 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
+import FileTag from './file-tag';
+
 import '../../css/dirent-list-item.css';
 
 const propTypes = {
@@ -685,11 +687,6 @@ class DirentListItem extends React.Component {
       fileHref = siteRoot + 'lib/' + this.props.repoID + '/revisions/' + dirent.revision_id + '/';
     }
 
-    let tagTitle = '';
-    if (dirent.file_tags && dirent.file_tags.length > 0) {
-      tagTitle = dirent.file_tags.map(item => item.name).join(' ');
-    }
-
     let iconUrl = Utils.getDirentIcon(dirent);
 
     let trClass = this.state.highlight ? 'tr-highlight ' : '';
@@ -753,19 +750,13 @@ class DirentListItem extends React.Component {
         </td>
         <td className="tag-list-title">
           {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
-            <Fragment>
-              <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
-                {dirent.file_tags.map((fileTag, index) => {
-                  let length = dirent.file_tags.length;
-                  return (
-                    <span className="file-tag" key={fileTag.id} style={{zIndex:length - index, backgroundColor:fileTag.color}}></span>
-                  );
-                })}
-              </div>
-              <UncontrolledTooltip target={this.tagListTitleID} placement="bottom">
-                {tagTitle}
-              </UncontrolledTooltip>
-            </Fragment>
+            <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked">
+              {dirent.file_tags.map((fileTag, index) => {
+                return (
+                  <FileTag fileTag={fileTag} length={dirent.file_tags.length} key={index} index={index}/>
+                );
+              })}
+            </div>
           )}
           {(dirent.type !== 'dir' && (!dirent.file_tags || dirent.file_tags.length == 0)) && (
             <div id={this.tagListTitleID} className="dirent-item tag-list tag-list-stacked"></div>
