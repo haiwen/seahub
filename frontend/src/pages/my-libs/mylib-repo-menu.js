@@ -215,7 +215,7 @@ class MylibRepoMenu extends React.Component {
                   >
                     <DropdownToggle
                       caret
-                      className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center pr-2"
                       onMouseEnter={this.toggleAdvancedMenuShown}
                     >
                       {this.translateOperations(item)}
