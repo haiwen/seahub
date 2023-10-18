@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:48+0800\n"
+"POT-Creation-Date: 2023-10-18 09:53+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -371,12 +371,10 @@ msgstr "نجح التحرير، و لكن فشل ارسال بريد الكتر�
 msgid "Password has been reset on %s"
 msgstr "تم إعادة تعيين كلمة المرور على %s"
 
-#: seahub/api2/endpoints/admin/users.py:1468 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1468
 #, python-format
-msgid ""
-"Successfully reset password to %(passwd)s, an email has been sent to "
-"%(user)s."
-msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، تم إرسال بريد إلكتروني إلى %(user)s."
+msgid "Successfully reset password, an email has been sent to %(user)s."
+msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:1472 seahub/views/sysadmin.py:541
 #, python-format
@@ -441,12 +439,12 @@ msgstr "مسار الوجهة غير صحيح"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1814
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1814
 #: seahub/api2/views.py:1854 seahub/api2/views.py:1915
 #: seahub/api2/views.py:1959 seahub/api2/views.py:2005
 #: seahub/api2/views.py:2054 seahub/api2/views.py:2467
-#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:305
-#: seahub/seadoc/apis.py:384
+#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:307
+#: seahub/seadoc/apis.py:386
 msgid "Out of quota."
 msgstr "نفدت المساحة المخصصة."
 
@@ -495,7 +493,7 @@ msgstr "الترخيص مرفوض."
 #: seahub/api2/endpoints/file.py:215 seahub/api2/endpoints/upload_links.py:480
 #: seahub/api2/endpoints/wikis.py:132 seahub/api2/views.py:1862
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "عدد الملفات في المكتبة يتجاوز الحد المسموح"
 
 #: seahub/api2/endpoints/file.py:691 seahub/api2/endpoints/file.py:711
 msgid "File is not locked."
@@ -663,6 +661,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "يجب أن تكون أيام انتهاء الصلاحية قبل %s"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
+#: seahub/seadoc/apis.py:439
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -700,20 +699,20 @@ msgstr "خطأ فك تشفير المكتبة"
 msgid "Wrong old password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: seahub/api2/endpoints/repos_batch.py:1258
-#: seahub/api2/endpoints/repos_batch.py:1471
-#: seahub/api2/endpoints/repos_batch.py:1560
+#: seahub/api2/endpoints/repos_batch.py:1278
+#: seahub/api2/endpoints/repos_batch.py:1525
+#: seahub/api2/endpoints/repos_batch.py:1631
 #, python-format
 msgid "File %s is locked."
 msgstr "الملف %s مقفل"
 
-#: seahub/api2/endpoints/repos_batch.py:1268
-#: seahub/api2/endpoints/repos_batch.py:1481
+#: seahub/api2/endpoints/repos_batch.py:1288
+#: seahub/api2/endpoints/repos_batch.py:1535
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "لا يمكن نقل المجلد %s ،يرجى التحقق من الإذن."
 
-#: seahub/api2/endpoints/repos_batch.py:1568
+#: seahub/api2/endpoints/repos_batch.py:1639
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "لا يمكن حذف المجلد %s ،يرجى التحقق من الإذن."
@@ -2213,7 +2212,7 @@ msgstr "يمكنك اختيار المجلدات أو الملفات التي س
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "كيفية إزالة اختصارات SeaDrive المتبقية في مستكشف ويندوز؟"
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -2221,19 +2220,19 @@ msgid ""
 " SeaDrive program or switch Seafile accounts in SeaDrive. This is an "
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
-msgstr ""
+msgstr "لن يختفي اختصار \"SeaDrive\" في مستكشف ويندوز بعد الخروج من برنامج SeaDrive أو تبديل حسابات Seafile في SeaDrive. هذا هو السلوك المقصود. لا تحتاج إلى إزالتها إذا كنت لا تزال بحاجة إلى الوصول إلى الحساب لاحقا."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:52
 msgid ""
 "In some corner cases, the \"SeaDrvie\" shortcut will be left-over in Windows"
 " Explorer and you want to remove it."
-msgstr ""
+msgstr "في بعض الحالات ، سيتم ترك اختصار \"SeaDrvie\" في مستكشف ويندوز ويجب إزالته يدوياً."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
-msgstr ""
+msgstr "يمكنك عادة إزالة هذه الاختصارات عن طريق إلغاء تثبيت برنامج SeaDrive واختيار \"إزالة معلومات الحساب\" في مربع الحوار ."
 
 #: seahub/help/templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -2243,7 +2242,7 @@ msgid ""
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
-msgstr ""
+msgstr "إذا لم تؤد إزالة التثبيت إلى إزالة الاختصارات بنجاح، فيمكنك إزالة اختصار SeaDrive في مستكشف ويندوز عن طريق تحرير سجل الـregistry. افتح المسار \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\" في محرر السجل. قم بإزالة المفاتيح الفرعية التي تتوافق مع الاختصار الذي تريد إزالته."
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -2267,7 +2266,7 @@ msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr ""
+msgstr "إذا قمت بإنشاء مكتبة مشفرة في تطبيق الويب، سيتم إرسال كلمة المرور إلى الخادم. يستخدم الخادم كلمة المرور هذه لإنشاء المكتبة. لكنه لا يخزن كلمة المرور ."
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -2293,19 +2292,19 @@ msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
-msgstr ""
+msgstr "إذا كنت تستخدم عميل سطح المكتب لمزامنة المكتبة، لا يتم إرسال كلمة المرور إلى الخادم. يقوم العميل بفك تشفير محتويات الملف وتشفيرها محليا. لا يتم تخزين كلمة المرور على قرص العميل أيضا."
 
 #: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
-msgstr ""
+msgstr "يدعم عميل iOS التشفير من جانب العميل منذ الإصدار 2.1.6. عميل أندرويد يدعمه منذ الإصدار 2.1.0."
 
 #: seahub/help/templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
-msgstr ""
+msgstr "لاحظ أن المكتبة المشفرة تقوم فقط بتشفير محتويات الملفات، ولكن ليس أسماء المجلدات والملفات."
 
 #: seahub/help/templates/help/file_locking.html:5
 msgid "File locking"
@@ -2478,7 +2477,7 @@ msgid ""
 "You shared a library to a group with \"read only\" permission. You also want"
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
-msgstr ""
+msgstr "لقد قمت بمشاركة مكتبة إلى مجموعة بإذن \"للقراءة فقط\". تريد أيضا السماح لعضو معين في المجموعة بتعديل الملفات في مجلد فرعي واحد. يمكنك منح إذن الكتابة لهذا المجلد الفرعي لهذا الشخص."
 
 #: seahub/help/templates/help/folder_permission.html:11
 msgid ""
@@ -2486,7 +2485,7 @@ msgid ""
 "library, one for each group to upload files. However you don't want users to"
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
-msgstr ""
+msgstr "قمت بمشاركة مكتبة إلى 3 مجموعات. هناك 3 مجلدات فرعية ضمن تلك المكتبة ، واحد لكل مجموعة لتحميل الملفات. ومع ذلك ، لا تريد أن يغير المستخدمون الملفات التي لا تنتمي إلى مجموعتهم. يمكنك منح إذن الكتابة لمجلد فرعي لمجموعتهم فقط."
 
 #: seahub/help/templates/help/folder_permission.html:13
 msgid ""
@@ -2494,18 +2493,18 @@ msgid ""
 " others. To effectively set folder permissions to its sub-folders, you "
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
-msgstr ""
+msgstr "تكون أذونات المجلدات فعالة فقط للمكتبات والمجلدات التي تشاركها مع الآخرين. لتعيين أذونات المجلد بشكل فعال لمجلداته الفرعية ، يجب عليك أولا مشاركة المكتبة أو المجلد الأصل ؛ وإلا فلن يصبح إذن المجلد ساري المفعول."
 
 #: seahub/help/templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "أحد أهداف التصميم المهمة لإذن المجلد هو دعم الأذونات الهرمية:"
 
 #: seahub/help/templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "ترث المجلدات الفرعية تلقائيا أذونات المجلد من المجلد الأصل الخاص بها."
 
 #: seahub/help/templates/help/folder_permission.html:17
 msgid ""
@@ -2514,7 +2513,7 @@ msgid ""
 "files\" for user A, and you set \"read only\" permission on sub-folder "
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
-msgstr ""
+msgstr "تقوم الأذونات التي تم تعيينها على المجلدات الفرعية بالكتابة فوق الأذونات التي تم تعيينها في المجلد الأصل الخاص بها. على سبيل المثال، يمكنك تعيين إذن \"قراءة وكتابة\" على المجلد \"ملفات الاجتماع\" للمستخدم أ، وتعيين إذن \"للقراءة فقط\" على المجلد الفرعي \"ملفات الاجتماع/اليوم\" للمستخدم أ. ثم إذن المستخدم أ لـ \"ملفات الاجتماع / اليوم\" هو \"للقراءة فقط\"."
 
 #: seahub/help/templates/help/folder_permission.html:19
 msgid "Basic usage"
@@ -2526,7 +2525,7 @@ msgid ""
 "file browsing interface, click \"more operations\" button, choose "
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
-msgstr ""
+msgstr "يمكن لمالك المكتبة فقط تعيين أذونات المجلد لمجلداتها الفرعية. في واجهة تصفح الملفات ، انقر فوق الزر \"المزيد من العمليات\" ، واختر \"إذن\" في القائمة المنسدلة. في النافذة المنبثقة ، يمكنك رؤية أذونات المجلد وتعيينها على هذا المجلد."
 
 #: seahub/help/templates/help/folder_permission.html:21
 msgid ""
@@ -2534,24 +2533,24 @@ msgid ""
 "on the library. Click \"more operations\" button, choose \"Folder "
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
-msgstr ""
+msgstr "إذا كنت تريد رؤية جميع أذونات المجلد التي تم تعيينها في مكتبة، فمرر مؤشر الماوس فوق المكتبة. انقر فوق الزر \"المزيد من العمليات\" ، واختر \"إذن المجلد\" في القائمة المنسدلة. في النافذة المنبثقة، يمكنك رؤية أذونات المجلد وتعيينها في هذه المكتبة."
 
 #: seahub/help/templates/help/folder_permission.html:22
 msgid ""
 "When other users navigate into a folder, there will be a small \"eye\" icon "
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
-msgstr ""
+msgstr "عندما ينتقل المستخدمون الآخرون إلى مجلد ، سيكون هناك رمز \"عين\" صغير بجوار المجلدات الفرعية \"للقراءة فقط\". عندما ينتقل المستخدم إلى هذا المجلد الفرعي ، لن يتمكن من إضافة / تعديل / حذف الملفات."
 
 #: seahub/help/templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
-msgstr ""
+msgstr "إذا تمت مزامنة مجلد \"للقراءة فقط\" مع جهاز الكمبيوتر باستخدام تطبيق Seafile لسطح المكتب ، فلن يتم تحميل التغييرات الموجودة ضمن مجلد \"للقراءة فقط\" إلى السحابة."
 
 #: seahub/help/templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "متقدم: الأولوية بين الأذونات المختلفة"
 
 #: seahub/help/templates/help/folder_permission.html:27
 msgid ""
@@ -2560,7 +2559,7 @@ msgid ""
 "permission, and also set \"read only\" permission to a sub-folder of that "
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
-msgstr ""
+msgstr "أذونات المجلد لها أولوية أعلى من مجموعة الأذونات في المشاركة. على سبيل المثال، إذا قمت بمشاركة مكتبة مع المستخدم \"أ\" بإذن \"قراءة وكتابة\"، وقمت أيضا بتعيين إذن \"للقراءة فقط\" إلى مجلد فرعي لتلك المكتبة. ثم يكون لدى المستخدم \"أ\" فقط حق الوصول \"للقراءة فقط\" إلى المجلد الفرعي ، بينما لديه / لديها حق الوصول \"للقراءة والكتابة\" إلى جميع المجلدات والملفات الفرعية الأخرى."
 
 #: seahub/help/templates/help/folder_permission.html:28
 msgid ""
@@ -2568,13 +2567,13 @@ msgid ""
 "permissions set to a group. That is, when checking permission for a folder, "
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
-msgstr ""
+msgstr "أذونات المجلد التي تم تعيينها لمستخدم معين لها أولوية أعلى من الأذونات التي تم تعيينها إلى مجموعة. أي عند التحقق من إذن مجلد، إذا تطابق النظام مع إذن خاص بالمستخدم، فسوف يتجاهل جميع الأذونات التي تم تعيينها للمجموعات التي ينتمي إليها المستخدم."
 
 #: seahub/help/templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "الأذونات على المجلدات الفرعية لها أولوية أعلى من تلك الموجودة في المجلدات الأصل."
 
 #: seahub/help/templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
@@ -2589,14 +2588,14 @@ msgid ""
 "only\". That's because, according to rule 2, \"read only\" permission is "
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
-msgstr ""
+msgstr "لنفترض أن بنية المجلد تبدو مثل \"أ/ب\" مجلد \"ب\" داخل مجلد \"أ\"، المستخدم \"محمد\" موجود في المجموعة \"الموظفين\". إذا قمت بتعيين إذن \"للقراءة فقط\" على المجلد أ لمحمد ، وقمت أيضا بتعيين إذن \"قراءة وكتابة\" في المجلد \"أ/ب\" لمجموعة \"الموظفين\". ثم إذن محمد للمجلد \"أ/ب\" لا يزال \"للقراءة فقط\" فقط. هذا لأنه ، وفقا للقاعدة 2 ، تتم مطابقة إذن \"للقراءة فقط\" أولا للمجلد \"أ/ب\" والمستخدم \"محمد\" ، الموروث من أصل الصلاحيات للمجلد \"أ\"."
 
 #: seahub/help/templates/help/full_text_file_search.html:6
 msgid ""
 "If you're using a Pro Edition Server, you can search file and folder names, "
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
-msgstr ""
+msgstr "إذا كنت تستخدم اﻹصدار اﻹحترافي ، فيمكنك البحث عن أسماء الملفات والمجلدات ، بالإضافة إلى محتوى ملفات معينة ، في تطبيق سيفايل على الويب. يمكن لسيفايل حاليا البحث في محتويات الأنواع التالية من الملفات:"
 
 #: seahub/help/templates/help/full_text_file_search.html:8
 #: seahub/help/templates/help/viewing_files_within_web_app.html:8
@@ -2643,56 +2642,56 @@ msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "لاحظ أن مسؤول نظام سيفايل ربما لم يقم بتمكين ميزة البحث عن النص الكامل. في هذه الحالة ، يمكنك فقط البحث عن أسماء الملفات والمجلدات."
 
 #: seahub/help/templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "يعد إنشاء مجموعة طريقة ملائمة لمشاركة الملفات مع العديد من الأشخاص. في سيفايل ، يمكنك إنشاء مجموعة وإدارتها بسهولة."
 
 #: seahub/help/templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "إليك كيفية عمل المجموعات في سيفايل:"
 
 #: seahub/help/templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "كل مجموعة لها مالك. المالك هو منشئ المجموعة بشكل افتراضي. يمكنه / يمكنها نقل ملكية المجموعة إلى عضو آخر."
 
 #: seahub/help/templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "يمكن أن يكون لكل مجموعة عدة مشرفين. يمكن لمالك المجموعة ومشرفي المجموعة إضافة المزيد من مشرفي المجموعة."
 
 #: seahub/help/templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "يمكن لمشرف المجموعة إضافة/حذف أعضاء في المجموعة. ويمكنه أيضا إلغاء مشاركة مكتبة في المجموعة."
 
 #: seahub/help/templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "انقر فوق علامة التبويب \"مشترك مع المجموعات\" في اللوحة اليمنى ، وسترى جميع المجموعات التي تشارك فيها. بالنقر فوق أي مجموعة ، سترى المكتبات المشتركة في هذه المجموعة."
 
 #: seahub/help/templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "لإنشاء مجموعة جديدة ، انقر فوق علامة التبويب \"مشترك مع المجموعات\" في اللوحة اليمنى. ثم انقر فوق \"كل المجموعات\". في الصفحة ، يمكنك النقر فوق الزر \"مجموعة جديدة\" لإنشاء مجموعة."
 
 #: seahub/help/templates/help/groups_managing.html:15
 #, python-format
 msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
-msgstr ""
+msgstr "راجع <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">مشاركة الملفات والمجلدات</a> حول كيفية مشاركة المكتبات أو المجلدات مع مجموعة."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -2837,7 +2836,7 @@ msgstr "في بعض الأحيان، تحتاج إلى تعديل ملفات ع�
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "سيفايل هي عبارة عن منصة استضافة ملفات للمؤسسات ذات موثوقية وأداء عاليين."
 
 #: seahub/help/templates/help/introduction.html:9
 #, python-format
@@ -2847,21 +2846,21 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/install_sync/\">the file syncing client</a> and <a "
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
-msgstr ""
+msgstr "يحتوي سيفايل على واجهة ويب لإدارة الملفات ومشاركتها. يحتوي على نوعين من عملاء سطح المكتب ، <a href=\"%(SITE_ROOT)shelp/install_sync/\">عميل مزامنة الملفات</a> و<a href=\"%(SITE_ROOT)shelp/using_drive_client\">عميل محرك الأقراص</a>. كما أن لديها عملاء متنقلين لنظامي التشغيل أندرويد Android و iOS."
 
 #: seahub/help/templates/help/introduction.html:10
 msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr ""
+msgstr "يمكنك تنزيل العملاء في موقع <a href=\"https://www.seafile.com/en/download/\" target=\"_blank\">سيفايل على الويب</a>."
 
 #: seahub/help/templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr ""
+msgstr "إذا كان هذا الدليل لا يحتوي على المعلومات التي تحتاجها ، يمكنك طلب المساعدة في منتدانا: <a href=\"https://forum.seafile.com\" target=\"_blank\">https://forum.seafile.com</a>."
 
 #: seahub/help/templates/help/libraries_managing.html:6
 msgid ""
@@ -2870,19 +2869,19 @@ msgid ""
 "project you work on, or each document type you want to save in Seafile. A "
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
-msgstr ""
+msgstr "يستخدم سيفايل \"المكتبات\" لتنظيم ملفاتك. المكتبة هي حاوية المستوى الأعلى لمجموعة من الملفات والمجلدات. يمكنك إنشاء مكتبة لكل مشروع تعمل عليه ، أو كل نوع مستند تريد حفظه في سيفايل. تعمل المكتبة في الغالب مثل مجلد المستوى الأعلى. ولكن لديها أيضا بعض الخصائص الخاصة:"
 
 #: seahub/help/templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
-msgstr ""
+msgstr "تحتفظ كل مكتبة بمحفوظات تعديل الملفات الخاصة بها. لا يوجد محفوظات تعديل ملفات عمومية عبر جميع المكتبات."
 
 #: seahub/help/templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
-msgstr ""
+msgstr "يمكن مزامنة كل مكتبة مع عملاء سطح المكتب بشكل منفصل. يمكنك اختيار المكتبات التي تريد مزامنتها."
 
 #: seahub/help/templates/help/libraries_managing.html:11
 msgid ""
@@ -2890,13 +2889,13 @@ msgid ""
 "automatically creates a default library named \"My Library\" for you. You "
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
-msgstr ""
+msgstr "عند تسجيل الدخول إلى تطبيق الويب الخاص بسيفايل Seafile لأول مرة ، يقوم سيفايل Seafile تلقائيا بإنشاء مكتبة افتراضية باسم \"مكتبتي\" لك. يمكنك أيضا إنشاء المزيد من المكتبات. هذا ما يبدو عليه الأمر عند إنشاء بعض المكتبات."
 
 #: seahub/help/templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
-msgstr ""
+msgstr "يمكنك التنقل إلى مكتبة وإدارة ملفاتك ومجلداتك. يمكنك تحميل الملفات وتنزيلها وإعادة تسميتها ونقلها ونسخها وحذفها."
 
 #: seahub/help/templates/help/libraries_managing.html:15
 #, python-format
@@ -2904,7 +2903,7 @@ msgid ""
 "After <a href=\"%(SITE_ROOT)shelp/install_sync/\">syncing a library with "
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
-msgstr ""
+msgstr "بعد <a href=\"%(SITE_ROOT)shelp/install_sync/\">مزامنة مكتبة مع عميل سطح المكتب</a> ، يمكنك القيام بأي عمليات ملفات داخل مجلد المكتبة المحلية. سيتم تحميل العمليات على الخادم. "
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -2912,7 +2911,7 @@ msgid ""
 "operation applies to a library (file update, file deletion etc.), Seafile "
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
-msgstr ""
+msgstr "يتتبع سيفايل Seafile محفوظات التعديل للمكتبة بأكملها. عندما تنطبق عملية ملف على مكتبة (تحديث الملف ، حذف الملف ، إلخ) ، يقوم سيفايل بإنشاء \"لقطة\" للحالة السابقة للمكتبة. تحتوي اللقطة على بنية الملف والمجلد الكاملة للمكتبة."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -2922,7 +2921,7 @@ msgid ""
 "handy. You can restore the entire library to any point in the past. All the "
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
-msgstr ""
+msgstr "في بعض الحالات ، قمت بتغيير الكثير من الملفات في المكتبة ، ووجدت أنك تريد التراجع عن كل هذه التغييرات. قد تكون استعادة العديد من الملفات إلى إصداراتها القديمة أمرا شاقا. في هذا الوقت ، تصبح ميزة اللقطة مفيدة للغاية. يمكنك استعادة المكتبة بأكملها إلى أي نقطة في الماضي. ستتم استعادة جميع الملفات الموجودة في المكتبة إلى تلك النقطة الزمنية ، دفعة واحدة. إنه يعمل مثل \"آلة الزمن\" للمكتبة."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
@@ -2933,20 +2932,20 @@ msgid ""
 "In Seafile Web App, navigate into the root folder of a library. Click the "
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
-msgstr ""
+msgstr "في صفحة الويب، انتقل إلى المجلد الرئيسي للمكتبة. انقر على أيقونة \"المحفوظات\" في شريط التنقل العلوي للمكتبة. سيتم عرض كل سجل التعديلات الخاص بالمكتبة في قائمة."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
-msgstr ""
+msgstr "انقر على رابط \"عرض لقطة\" في أي سجل التعديلات. سترى حالة المكتبة في الوقت المناسب."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:13
 msgid ""
 "In the snapshot view, you can download or restore any file or folder. If "
 "you're the library's owner, you can restore the enitre library to this point"
 " of time."
-msgstr ""
+msgstr "في طريقة عرض اللقطة ، يمكنك تنزيل أو استعادة أي ملف أو مجلد. إذا كنت مالك المكتبة، يمكنك استعادة المكتبة كاملاً إلى هذا الوقت."
 
 #: seahub/help/templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -2954,7 +2953,7 @@ msgid ""
 "You can configure the retention period of library history: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "يمكنك تكوين فترة الاحتفاظ بمحفوظات المكتبة: <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">تعيين فترة استبقاء المحفوظات</a>."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -2963,7 +2962,7 @@ msgid ""
 "(MD), a simple markup language, to ensure cross platform compatibility. MD "
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
-msgstr ""
+msgstr "التقاط وتخزين القليل من البيانات المنظمة بطريقة سهلة الاستخدام - هذا هو الغرض من مواقع الويكي الخاصة بسيفايل. تتم كتابة صفحات Wiki بلغة ماركداون Markdown (MD) ، وهي لغة ترميز بسيطة ، لضمان التوافق عبر الأنظمة الأساسية. ملفات MD تخزين المعلومات النصية والجدولية وكذلك الرسومية. يمكنك أيضا إضافة روابط إلى مستندات أخرى في ملف ماركداون."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -2971,7 +2970,7 @@ msgid ""
 "View\" introduced in 7.0 version. Since Seafile implements wikis as standard"
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
-msgstr ""
+msgstr "يمكنك إدارة مكتبة قياسية في سيفايل مثل Wiki ، مع \"عرض العمود\" المقدم في الإصدار 7.0. نظرا لأن سيفايل ينفذ مواقع الويكي كمكتبات سيفايل اﻷساسية ، فيمكن مزامنتها ومشاركتها مع مستخدمين آخرين تماما مثل أي مكتبة عادية."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
@@ -2985,7 +2984,7 @@ msgid ""
 "can browse in it and move files and folders just by dragging and dropping. "
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
-msgstr ""
+msgstr "عادة ما تحتوي مواقع الويكي على شريط جانبي يحتوي على بنية مجلد تشبه الشجرة ، لتمكين التصفح السريع والسهل لصفحات Wiki. يتيح لك عرض العمود في سيفايل إدارة الملفات في مكتبة بنفس طريقة مساحة Wiki. يمكن للمستخدمين تصفحه ونقل الملفات والمجلدات فقط عن طريق السحب والإفلات. تتوفر إجراءات الملفات مثل إعادة التسمية والنقل والفتح عبر العميل في قائمة سياق يمكن الوصول إليها بالنقر بزر الماوس الأيمن."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
@@ -3004,20 +3003,20 @@ msgid ""
 "inserted and modified with just a few clicks. The same thing goes for a "
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
-msgstr ""
+msgstr "يتم حفظ صفحات Wiki في سيفايل كمستندات عادية بتنسيق ماركداون. لإنشاء صفحة Wiki جديدة في مكتبة ، ما عليك سوى إنشاء مستند ماركداون جديد. يمكن تحرير ملفات ماركداون MD مباشرة من واجهة الويب الخاصة ب سيفايل باستخدام محرر ماركداون MD عبر الإنترنت. يوفر المحرر المستند إلى الويب تجربة مستخدم سلسة وخيارات تنسيق غنية للنصوص والصور والجداول. يمكن استيراد الصور إلى ملفات ماركداون MD من المكتبات والتخزين المحلي وكذلك عن طريق الارتباطات التشعبية. يمكن أيضا تنفيذ وظائف تحرير الصور الأساسية مثل القياس في واجهة المحرر \"ما تراه هو ما تحصل عليه\" (WYSIWYG). يمكن إدراج الجداول وتعديلها ببضع نقرات فقط. الشيء نفسه ينطبق على محتوى الجدول: يمكن نسخ الجدول كليا أو جزئيا دون مغادرة عرض WYSIWYG."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
-msgstr ""
+msgstr "يمكن الوصول بسهولة إلى محفوظات التغيير لملف ماركداون بالنقر فوق الزر \"محفوظات الملفات\" في القائمة أعلى واجهة المحرر."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:17
 msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
-msgstr ""
+msgstr "يمكنك فتح شريط جانبي مخفي على الجانب الأيمن من محرر ماركداون. يتم توفير جدول المحتويات ومعلومات الملف والتعليق التعاوني في هذا الشريط الجانبي."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
@@ -3029,13 +3028,13 @@ msgid ""
 "allows users to define tags for each library and apply tags to files. Tags "
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
-msgstr ""
+msgstr "يعد وضع علامات على الملفات ميزة مهمة لإدارة المعرفة. يسمح سيفايل للمستخدمين بتحديد العلامات لكل مكتبة وتطبيق العلامات على الملفات. يمكن إدارة العلامات من الشريط الجانبي لمحرر ماركداون ، أو من واجهة متصفح الملفات."
 
 #: seahub/help/templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "توفر واجهة مستعرض الملفات ملخصا لجميع علامات الملفات في المكتبة الحالية."
 
 #: seahub/help/templates/help/read-only_syncing.html:6
 #, python-format
@@ -3048,13 +3047,13 @@ msgid ""
 "popup a notification, saying that the local modified copy conflicts with the"
 " copy at the server side. To prevent data loss, the local copy is renamed to"
 " a conflict file."
-msgstr ""
+msgstr "بالنسبة للمكتبات أو المجلدات الجاهزة فقط ، سيعرض سيفايل رمزا محظورا (<img src=\"%(MEDIA_URL)simg/help/read_only.png\" alt=\"\" width=\"24\" />) للإشارة إلى أنها للقراءة فقط. ومع ذلك، لا يزال بإمكان المستخدمين تعديل النسخ المحلية التي تمت مزامنتها. عندما يتم تعديل نسخة محلية ، سيتجاهل سيفايل النسخة المعدلة. عندما يتم تعديل النسخة الموجودة على الخادم أيضا ، سيظهر العميل إشعارا ، يفيد بأن النسخة المعدلة المحلية تتعارض مع النسخة الموجودة على جانب الخادم. لمنع فقدان البيانات، تتم إعادة تسمية النسخة المحلية إلى ملف تعارض."
 
 #: seahub/help/templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
-msgstr ""
+msgstr "إذا كنت تريد ألا يتمكن المستخدمون الذين تمت مشاركتهم من تعديل النسخ المحلية ، فيمكنك التفكير في استخدام عميل سيفايل درايف Seafile Drive."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
@@ -3065,7 +3064,7 @@ msgid ""
 "Each library in Seafile tracks your file deletion operations automatically. "
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
-msgstr ""
+msgstr "تتعقب كل مكتبة في سيفايل عمليات حذف الملفات تلقائيا. في بعض الأحيان تجد الملفات يتم حذفها عن طريق الخطأ. يمكنك العثور على الملفات المحذوفة مرة أخرى في سلة المهملات لكل مكتبة."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
@@ -3075,28 +3074,28 @@ msgstr "كيفية استخدام ميزة سلة المهملات:"
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "في تطبيق سيفايل للويب، انتقل إلى المجلد الأصل الذي يحتوي على الملف أو المجلد المحذوف."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:11
 msgid ""
 "Click the \"trash\" icon in the library operation bar. The deleted files and"
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
-msgstr ""
+msgstr "انقر فوق رمز \"المهملات\" في شريط عمليات المكتبة. سيتم سرد الملفات والمجلدات المحذوفة بترتيب وقت الحذف. في أسفل القائمة ، يمكنك النقر فوق الزر \"المزيد\" لتحميل المزيد من الملفات المحذوفة."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:12
 msgid ""
 "In the deleted files list, you can restore file and folders. If a file or "
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
-msgstr ""
+msgstr "في قائمة الملفات المحذوفة ، يمكنك استعادة الملفات والمجلدات. إذا تم حذف المجلد الأصل لملف أو مجلد، فستتم استعادته إلى المجلد الجذر للمكتبة."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:13
 msgid ""
 "Note that the trash bin only contains files and sub-folders deleted under "
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
-msgstr ""
+msgstr "لاحظ أن سلة المهملات تحتوي فقط على الملفات والمجلدات الفرعية المحذوفة ضمن المجلد الحالي. يتم أيضا تضمين الملفات المحذوفة في المجلدات الفرعية للمجلد الحالي في القائمة."
 
 #: seahub/help/templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -3104,7 +3103,7 @@ msgid ""
 "You can configure the retention period of deleted files: <a "
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
-msgstr ""
+msgstr "يمكنك تكوين فترة الاحتفاظ بالملفات المحذوفة: <a href=\"%(SITE_ROOT)shelp/setting_library_history/\">تعيين فترة الاحتفاظ بالمحفوظات</a>."
 
 #: seahub/help/templates/help/selective_sync.html:8
 msgid ""
@@ -3112,7 +3111,7 @@ msgid ""
 "currently only interested in a sub-folder inside one library. Then you can "
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
-msgstr ""
+msgstr "قد يكون لديك بعض المكتبات الكبيرة جدا على خادم سيفايل. وأنت مهتم حاليا فقط بمجلد فرعي داخل مكتبة واحدة. ثم يمكنك مزامنة مجلد فرعي في مكتبة بشكل انتقائي ، بدلا من مزامنة المكتبة بأكملها."
 
 #: seahub/help/templates/help/selective_sync.html:10
 msgid ""
@@ -3136,84 +3135,84 @@ msgstr "تعيين فترة الاحتفاظ بتاريخ المكتبة"
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "يتحكم طول فترة الاحتفاظ بالمحفوظات في المكتبة في المدة التي يمكنك خلالها الوصول إلى بيانات المحفوظات في الميزات التالية:"
 
 #: seahub/help/templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "استعادة الملفات المحذوفة: لا يمكنك استعادة الملفات والمجلدات المحذوفة قبل فترة الاحتفاظ."
 
 #: seahub/help/templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "إصدارات الملفات: لا يمكنك الوصول إلى إصدارات الملفات الأقدم من فترة الاحتفاظ."
 
 #: seahub/help/templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "محفوظات المكتبة واللقطات: لا يمكنك الوصول إلى لقطات المكتبة الأقدم من فترة الاستبقاء."
 
 #: seahub/help/templates/help/setting_library_history.html:13
 msgid ""
 "The retention period of old files versions can be configured for each "
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
-msgstr ""
+msgstr "يمكن تكوين فترة الاحتفاظ بإصدارات الملفات القديمة لكل مكتبة على حدة. يجب أن تكون مالك المكتبة لتعيين فترة الاحتفاظ. لتعيين مدة فترة الاحتفاظ:"
 
 #: seahub/help/templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
-msgstr ""
+msgstr "في تطبيق سيفايل للويب ، انقر فوق علامة التبويب \"مكتباتي\" في لوحة التنقل (كما في لقطة الشاشة أدناه). سيتم سرد جميع المكتبات التي تملكها."
 
 #: seahub/help/templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "حرك المؤشر إلى صف المكتبة. ستظهر قائمة عمليات. انقر فوق \"إعداد السجل\" في القائمة المنسدلة."
 
 #: seahub/help/templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "في مربع الحوار المنبثق ، يمكنك تعيين طول فترة الاحتفاظ بالملف."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "في سيفايل ، هناك عدة طرق لمشاركة الملفات والمجلدات مع الآخرين:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "استخدام الروابط: هناك أنواع متعددة من الروابط التي يمكن استخدامها للمشاركة مع نطاق مختلف من المتعاونين."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "مشاركة الروابط: يمكن لأي مستخدم لديه حق الوصول إلى الروابط الوصول إلى الملفات أو المجلدات التي يشير إليها الرابط. لا يلزم تسجيل الدخول."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "تحميل الروابط: يمكن لأي مستخدم لديه حق الوصول إلى الروابط تحميل الملفات إلى المجلد الذي يشير إليه الرابط. لا يلزم تسجيل الدخول."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
-msgstr ""
+msgstr "الروابط الداخلية: يمكن فقط للمستخدمين الذين قاموا بتسجيل الدخول والذين لديهم إذن قراءة للملف أو المجلد الوصول إلى هذا الرابط. تستخدم لمشاركة الملفات الداخلية."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:15
 msgid ""
 "Sharing libraries or folders: used for setting access permissions to a "
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
-msgstr ""
+msgstr "مشاركة المكتبات أو المجلدات: تستخدم لتعيين أذونات الوصول إلى مكتبة أو مجلد لمستخدمين أو مجموعات محددة. يجب على المستخدمين تسجيل الدخول للوصول إلى المجلدات."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
@@ -3224,34 +3223,34 @@ msgid ""
 "Share links are public links to files or folders. They can be accessed by "
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
-msgstr ""
+msgstr "روابط المشاركة هي روابط عامة للملفات أو المجلدات. يمكن الوصول إليها من قبل أي شخص ، بما في ذلك أولئك الذين ليس لديهم حساب سيفايل. يمكنك أيضا استخدام كلمة المرور ووقت انتهاء الصلاحية لحماية الروابط الخاصة بك."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "يمكنك أيضا تعيين إذن الوصول لمشاركة الروابط. هناك ثلاثة أنواع من الأذونات:"
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:21
 msgid ""
 "Preview and Download: the file or files in the folder can be downloaded. If "
 "the type of files can be previewd in web browser, they can also be viewed "
 "online (e.g. Office files)."
-msgstr ""
+msgstr "معاينة وتنزيل: يمكن تنزيل الملف أو الملفات الموجودة في المجلد. إذا كان من الممكن معاينة نوع الملفات في متصفح الويب ، فيمكن أيضا عرضها عبر الإنترنت (مثل ملفات أوفيس )."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
-msgstr ""
+msgstr "المعاينة فقط: لا يمكن عرض الملف أو الملفات الموجودة في المجلد إلا في متصفح الويب ، ولكن لا يمكن تنزيلها. هذا مفيد لمشاركة البيانات السرية."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:23
 msgid ""
 "Edit on cloud and download: Similar to \"Preview and Download\", but if the "
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
-msgstr ""
+msgstr "التحرير على السحابة والتنزيل: على غرار \"المعاينة والتنزيل\" ، ولكن إذا كان من الممكن تحرير الملف في متصفح الويب (مثل ملف Office) ، يسمح لأي مستخدم لديه حق الوصول إلى الارتباط بتحريره."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
@@ -3261,14 +3260,14 @@ msgstr "لإنشاء روابط مشاركة في تطبيق ويب Seafile:"
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "انتقل إلى المجلد الأصل الذي يحتوي على الملف أو المجلد. مرر مؤشر الفأرة فوق الملف أو المجلد وانقر على أيقونة \"مشاركة\" التي تظهر."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:28
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share Link\" tab"
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
-msgstr ""
+msgstr "ستظهر نافذة منبثقة بها خيارات المشاركة. انقر فوق علامة التبويب \"مشاركة الرابط\" على اللوحة اليمنى. ثم انقر فوق الزر \"إنشاء\" لإنشاء رابط. يمكنك استخدام كلمة المرور ووقت انتهاء الصلاحية والإذن لحماية الرابط الخاص بك."
 
 #: seahub/help/templates/help/sharing_files_and_folders.html:29
 #: seahub/help/templates/help/sharing_files_and_folders.html:42
@@ -5542,34 +5541,34 @@ msgstr ""
 msgid "Authentication token"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:27
+#: seahub/two_factor/templates/two_factor/core/login.html:28
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
+#: seahub/two_factor/templates/two_factor/core/login.html:33
+#: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
+#: seahub/two_factor/templates/two_factor/core/login.html:37
+#: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:40
+#: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Don't have your phone?"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:41
+#: seahub/two_factor/templates/two_factor/core/login.html:43
 msgid "Enter a two-factor backup code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:47
+#: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid "Backup code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:54
+#: seahub/two_factor/templates/two_factor/core/login.html:56
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
@@ -5753,6 +5752,13 @@ msgstr "تم إلغاء صلاحية المشرف %s بنجاح"
 #: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "فشل إلغاء صلاحية المشرف: المستخدم غير موجود"
+
+#: seahub/views/sysadmin.py:536
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "تم بنجاح إعادة تعيين كلمة المرور إلى %(passwd)s، تم إرسال بريد إلكتروني إلى %(user)s."
 
 #: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"

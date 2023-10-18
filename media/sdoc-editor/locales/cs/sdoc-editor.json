@@ -380,5 +380,7 @@
   "Checking": "Checking...",
   "Publishing": "Publishing...",
   "Inline": "Inline",
-  "Block": "Block"
+  "Block": "Block",
+  "Full_screen_mode": "Full screen mode",
+  "Image_border": "Image border"
 }
