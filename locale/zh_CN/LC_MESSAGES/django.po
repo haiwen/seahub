@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:48+0800\n"
+"POT-Creation-Date: 2023-10-18 09:53+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -387,12 +387,10 @@ msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 msgid "Password has been reset on %s"
 msgstr "%s 密码已重置"
 
-#: seahub/api2/endpoints/admin/users.py:1468 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1468
 #, python-format
-msgid ""
-"Successfully reset password to %(passwd)s, an email has been sent to "
-"%(user)s."
-msgstr "密码已重置为 %(passwd)s, 通知邮件已发送给 %(user)s。"
+msgid "Successfully reset password, an email has been sent to %(user)s."
+msgstr "密码已重置, 通知邮件已发送给 %(user)s。"
 
 #: seahub/api2/endpoints/admin/users.py:1472 seahub/views/sysadmin.py:541
 #, python-format
@@ -457,12 +455,12 @@ msgstr "目标路径无效"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1814
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1814
 #: seahub/api2/views.py:1854 seahub/api2/views.py:1915
 #: seahub/api2/views.py:1959 seahub/api2/views.py:2005
 #: seahub/api2/views.py:2054 seahub/api2/views.py:2467
-#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:305
-#: seahub/seadoc/apis.py:384
+#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:307
+#: seahub/seadoc/apis.py:386
 msgid "Out of quota."
 msgstr "空间已超"
 
@@ -679,6 +677,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "过期时间应早于 %s。"
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
+#: seahub/seadoc/apis.py:439
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -716,20 +715,20 @@ msgstr "解密资料库出错"
 msgid "Wrong old password"
 msgstr "密码错误"
 
-#: seahub/api2/endpoints/repos_batch.py:1258
-#: seahub/api2/endpoints/repos_batch.py:1471
-#: seahub/api2/endpoints/repos_batch.py:1560
+#: seahub/api2/endpoints/repos_batch.py:1278
+#: seahub/api2/endpoints/repos_batch.py:1525
+#: seahub/api2/endpoints/repos_batch.py:1631
 #, python-format
 msgid "File %s is locked."
 msgstr "文件%s已锁定"
 
-#: seahub/api2/endpoints/repos_batch.py:1268
-#: seahub/api2/endpoints/repos_batch.py:1481
+#: seahub/api2/endpoints/repos_batch.py:1288
+#: seahub/api2/endpoints/repos_batch.py:1535
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "无法移动文件夹%s，请检查其权限。"
 
-#: seahub/api2/endpoints/repos_batch.py:1568
+#: seahub/api2/endpoints/repos_batch.py:1639
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "无法删除文件夹%s，请检查其权限。"
@@ -5518,34 +5517,34 @@ msgstr "打开您手机上的两步认证应用，输入登录验证码验证您
 msgid "Authentication token"
 msgstr "登录验证码"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:27
+#: seahub/two_factor/templates/two_factor/core/login.html:28
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
 msgstr "%(remember_days)s天内记住该设备"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
+#: seahub/two_factor/templates/two_factor/core/login.html:33
+#: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
 msgstr "验证码错误"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
+#: seahub/two_factor/templates/two_factor/core/login.html:37
+#: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
 msgstr "验证"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:40
+#: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Don't have your phone?"
 msgstr "没有手机？"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:41
+#: seahub/two_factor/templates/two_factor/core/login.html:43
 msgid "Enter a two-factor backup code"
 msgstr "输入两步验证备用码"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:47
+#: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid "Backup code"
 msgstr "备用验证码"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:54
+#: seahub/two_factor/templates/two_factor/core/login.html:56
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
@@ -5729,6 +5728,13 @@ msgstr "成功取消 %s 的管理权限"
 #: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "取消管理员权限失败：该用户不存在"
+
+#: seahub/views/sysadmin.py:536
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "密码已重置为 %(passwd)s, 通知邮件已发送给 %(user)s。"
 
 #: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"

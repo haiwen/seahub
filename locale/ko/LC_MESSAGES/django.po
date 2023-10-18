@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:48+0800\n"
+"POT-Creation-Date: 2023-10-18 09:53+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2017,2019,2022-2023\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -372,12 +372,10 @@ msgstr "편집에 성공했지만 전자메일 보내기에 실패했습니다. 
 msgid "Password has been reset on %s"
 msgstr "%s에 암호를 재설정했습니다"
 
-#: seahub/api2/endpoints/admin/users.py:1468 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1468
 #, python-format
-msgid ""
-"Successfully reset password to %(passwd)s, an email has been sent to "
-"%(user)s."
-msgstr "암호를 %(passwd)s(으)로 바꾸기에 성공했으며 %(user)s님께 전자메일을 보냈습니다."
+msgid "Successfully reset password, an email has been sent to %(user)s."
+msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:1472 seahub/views/sysadmin.py:541
 #, python-format
@@ -442,12 +440,12 @@ msgstr "부적절한 대상 경로입니다"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1814
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1814
 #: seahub/api2/views.py:1854 seahub/api2/views.py:1915
 #: seahub/api2/views.py:1959 seahub/api2/views.py:2005
 #: seahub/api2/views.py:2054 seahub/api2/views.py:2467
-#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:305
-#: seahub/seadoc/apis.py:384
+#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:307
+#: seahub/seadoc/apis.py:386
 msgid "Out of quota."
 msgstr "제한 용량을 넘었습니다."
 
@@ -664,6 +662,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "경과 시간은 %s 이전이어야 합니다."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
+#: seahub/seadoc/apis.py:439
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -701,20 +700,20 @@ msgstr "라이브러리 해독 오류"
 msgid "Wrong old password"
 msgstr "잘못된 이전 암호"
 
-#: seahub/api2/endpoints/repos_batch.py:1258
-#: seahub/api2/endpoints/repos_batch.py:1471
-#: seahub/api2/endpoints/repos_batch.py:1560
+#: seahub/api2/endpoints/repos_batch.py:1278
+#: seahub/api2/endpoints/repos_batch.py:1525
+#: seahub/api2/endpoints/repos_batch.py:1631
 #, python-format
 msgid "File %s is locked."
 msgstr "%s 파일을 잠궜습니다."
 
-#: seahub/api2/endpoints/repos_batch.py:1268
-#: seahub/api2/endpoints/repos_batch.py:1481
+#: seahub/api2/endpoints/repos_batch.py:1288
+#: seahub/api2/endpoints/repos_batch.py:1535
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr "%s 폴더를 이동할 수 없습니다. 권한을 확인하세요."
 
-#: seahub/api2/endpoints/repos_batch.py:1568
+#: seahub/api2/endpoints/repos_batch.py:1639
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr "%s 폴더를 삭제할 수 없습니다. 권한을 확인하세요."
@@ -5503,34 +5502,34 @@ msgstr "장치에서 이중 인증 앱을 열어 이중 인증 토큰을 확인 
 msgid "Authentication token"
 msgstr "인증 토큰"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:27
+#: seahub/two_factor/templates/two_factor/core/login.html:28
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
 msgstr "%(remember_days)s일동안 이 컴퓨터 기억"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
+#: seahub/two_factor/templates/two_factor/core/login.html:33
+#: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
 msgstr "잘못된 코드입니다"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
+#: seahub/two_factor/templates/two_factor/core/login.html:37
+#: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
 msgstr "검증"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:40
+#: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Don't have your phone?"
 msgstr "폰을 소유하고 있나요?"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:41
+#: seahub/two_factor/templates/two_factor/core/login.html:43
 msgid "Enter a two-factor backup code"
 msgstr "이중 인증 백업 코드를 입력하세요"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:47
+#: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid "Backup code"
 msgstr "백업 코드"
 
-#: seahub/two_factor/templates/two_factor/core/login.html:54
+#: seahub/two_factor/templates/two_factor/core/login.html:56
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
@@ -5714,6 +5713,13 @@ msgstr "%s 사용자의 관리자 권한 취소에 성공했습니다"
 #: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "관리자 해임 실패: 사용자가 없습니다"
+
+#: seahub/views/sysadmin.py:536
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "암호를 %(passwd)s(으)로 바꾸기에 성공했으며 %(user)s님께 전자메일을 보냈습니다."
 
 #: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"

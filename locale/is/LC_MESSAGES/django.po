@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 14:48+0800\n"
+"POT-Creation-Date: 2023-10-18 09:53+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2014-2016\n"
 "Language-Team: Icelandic (http://app.transifex.com/haiwen/seahub/language/is/)\n"
@@ -372,12 +372,10 @@ msgstr "Breyting tókst, en ekki tókst að senda tölvupóst, vinsamlegast athu
 msgid "Password has been reset on %s"
 msgstr "Lykilorðið hefur verið endursett á %s"
 
-#: seahub/api2/endpoints/admin/users.py:1468 seahub/views/sysadmin.py:536
+#: seahub/api2/endpoints/admin/users.py:1468
 #, python-format
-msgid ""
-"Successfully reset password to %(passwd)s, an email has been sent to "
-"%(user)s."
-msgstr "Tókst að breyta lykilorðinu í %(passwd)s, tölvupóstur hefur verið sendur til %(user)s."
+msgid "Successfully reset password, an email has been sent to %(user)s."
+msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:1472 seahub/views/sysadmin.py:541
 #, python-format
@@ -442,12 +440,12 @@ msgstr "Ekki leyfileg viðtökuslóð"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1814
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:1814
 #: seahub/api2/views.py:1854 seahub/api2/views.py:1915
 #: seahub/api2/views.py:1959 seahub/api2/views.py:2005
 #: seahub/api2/views.py:2054 seahub/api2/views.py:2467
-#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:305
-#: seahub/seadoc/apis.py:384
+#: seahub/api2/views.py:2575 seahub/seadoc/apis.py:307
+#: seahub/seadoc/apis.py:386
 msgid "Out of quota."
 msgstr ""
 
@@ -664,6 +662,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
+#: seahub/seadoc/apis.py:439
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 #: seahub/templates/view_shared_upload_link.html:82
@@ -701,20 +700,20 @@ msgstr "Villa í dulkóðuðu safni"
 msgid "Wrong old password"
 msgstr ""
 
-#: seahub/api2/endpoints/repos_batch.py:1258
-#: seahub/api2/endpoints/repos_batch.py:1471
-#: seahub/api2/endpoints/repos_batch.py:1560
+#: seahub/api2/endpoints/repos_batch.py:1278
+#: seahub/api2/endpoints/repos_batch.py:1525
+#: seahub/api2/endpoints/repos_batch.py:1631
 #, python-format
 msgid "File %s is locked."
 msgstr ""
 
-#: seahub/api2/endpoints/repos_batch.py:1268
-#: seahub/api2/endpoints/repos_batch.py:1481
+#: seahub/api2/endpoints/repos_batch.py:1288
+#: seahub/api2/endpoints/repos_batch.py:1535
 #, python-format
 msgid "Can't move folder %s, please check its permission."
 msgstr ""
 
-#: seahub/api2/endpoints/repos_batch.py:1568
+#: seahub/api2/endpoints/repos_batch.py:1639
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
 msgstr ""
@@ -5511,34 +5510,34 @@ msgstr ""
 msgid "Authentication token"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:27
+#: seahub/two_factor/templates/two_factor/core/login.html:28
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
+#: seahub/two_factor/templates/two_factor/core/login.html:33
+#: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
+#: seahub/two_factor/templates/two_factor/core/login.html:37
+#: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:40
+#: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Don't have your phone?"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:41
+#: seahub/two_factor/templates/two_factor/core/login.html:43
 msgid "Enter a two-factor backup code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:47
+#: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid "Backup code"
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:54
+#: seahub/two_factor/templates/two_factor/core/login.html:56
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
@@ -5722,6 +5721,13 @@ msgstr "Tókst að taka kerfisstjóraréttindi af %s"
 #: seahub/views/sysadmin.py:423
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Mistókst að taka kerfisstjóraréttindin af: notandinn er ekki til"
+
+#: seahub/views/sysadmin.py:536
+#, python-format
+msgid ""
+"Successfully reset password to %(passwd)s, an email has been sent to "
+"%(user)s."
+msgstr "Tókst að breyta lykilorðinu í %(passwd)s, tölvupóstur hefur verið sendur til %(user)s."
 
 #: seahub/views/sysadmin.py:551
 msgid "Failed to reset password: user does not exist"
