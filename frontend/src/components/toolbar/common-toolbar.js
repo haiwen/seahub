@@ -26,6 +26,8 @@ class CommonToolbar extends React.Component {
             repoID={repoID}
             placeholder={this.props.searchPlaceholder || gettext('Search files')}
             onSearchedClick={this.props.onSearchedClick}
+            isLibView={this.props.isLibView}
+            repoName={repoName}
           />
         )}
         {this.props.isLibView && !isPro &&

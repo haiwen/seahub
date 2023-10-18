@@ -201,7 +201,8 @@ from seahub.seadoc.views import sdoc_revision, sdoc_revisions
 
 from seahub.ocm.settings import OCM_ENDPOINT
 
-from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, LibrarySdocIndex, RepoFiles, TaskStatus
+from seahub.ai.apis import LibrarySdocIndexes, SimilaritySearchInLibrary, LibrarySdocIndex, RepoFiles, TaskStatus, \
+    LibraryIndexState
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -534,13 +535,6 @@ urlpatterns = [
     re_path(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', OCMReposDirView.as_view(), name='api-v2.1-ocm-repos-dir'),
     re_path(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/download-link/$', OCMReposDownloadLinkView.as_view(), name='api-v2.1-ocm-repos-download-link'),
     re_path(r'api/v2.1/ocm/providers/(?P<provider_id>[-0-9a-f]{36})/repos/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', OCMReposUploadLinkView.as_view(), name='api-v2.1-ocm-repos-upload-link'),
-
-    # seafile-ai
-    re_path(r'^api/v2.1/ai/library-sdoc-indexes/$', LibrarySdocIndexes.as_view(), name='api-v2.1-ai-library-sdoc-indexes'),
-    re_path(r'^api/v2.1/ai/similarity-search-in-library/$', SimilaritySearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
-    re_path(r'^api/v2.1/ai/library-sdoc-index/$', LibrarySdocIndex.as_view(), name='api-v2.1-ai-library-sdoc-index'),
-    re_path(r'^api/v2.1/ai/repo/files/$', RepoFiles.as_view(), name='api-v2.1-ai-repo-files'),
-    re_path(r'^api/v2.1/ai/task-status/$', TaskStatus.as_view(), name='api-v2.1-ai-task-status'),
 
     # admin: activities
     re_path(r'^api/v2.1/admin/user-activities/$', UserActivitiesView.as_view(), name='api-v2.1-admin-user-activity'),
@@ -963,4 +957,14 @@ if getattr(settings, 'ENABLE_CAS', False):
 if getattr(settings, 'ENABLE_SEADOC', False):
     urlpatterns += [
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
+    ]
+
+if settings.ENABLE_SEAFILE_AI:
+    urlpatterns += [
+        re_path(r'^api/v2.1/ai/library-sdoc-indexes/$', LibrarySdocIndexes.as_view(), name='api-v2.1-ai-library-sdoc-indexes'),
+        re_path(r'^api/v2.1/ai/similarity-search-in-library/$', SimilaritySearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
+        re_path(r'^api/v2.1/ai/library-sdoc-index/$', LibrarySdocIndex.as_view(), name='api-v2.1-ai-library-sdoc-index'),
+        re_path(r'^api/v2.1/ai/repo/files/$', RepoFiles.as_view(), name='api-v2.1-ai-repo-files'),
+        re_path(r'^api/v2.1/ai/task-status/$', TaskStatus.as_view(), name='api-v2.1-ai-task-status'),
+        re_path(r'^api/v2.1/ai/library-index-state/$', LibraryIndexState.as_view(), name='api-v2.1-ai-library-index-state'),
     ]

@@ -3,17 +3,30 @@ import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext, siteRoot, username, enableSeafileAI } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+
+const INDEX_STATE = {
+  RUNNING: 'running',
+  UNCREATED: 'uncreated',
+  FINISHED: 'finished'
+};
+
+const SEARCH_MODE = {
+  SIMILARITY: 'similarity',
+  NORMAL: 'normal',
+};
 
 const propTypes = {
   repoID: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
+  isLibView: PropTypes.bool,
+  repoName: PropTypes.string,
 };
 
 const PER_PAGE = 10;
@@ -37,7 +50,9 @@ class Search extends Component {
       isResultGetted: false,
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
-      searchPageUrl: this.baseSearchPageURL
+      searchPageUrl: this.baseSearchPageURL,
+      searchMode: SEARCH_MODE.NORMAL,
+      indexState: INDEX_STATE.UNCREATED,
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -215,32 +230,71 @@ class Search extends Component {
       this.updateSearchPageURL(queryData);
       queryData['per_page'] = PER_PAGE;
       queryData['page'] = page;
-      seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-        this.source = null;
-        if (res.data.total > 0) {
-          this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
-            isLoading: false,
-            page: page + 1,
-            hasMore: res.data.has_more,
-          });
-        } else {
-          this.setState({
-            highlightIndex: 0,
-            resultItems: [],
-            isLoading: false,
-            isResultGetted: true,
-            hasMore: res.data.has_more,
-          });
-        }
-      }).catch(error => {
-        /* eslint-disable */
-        console.log(error);
-        /* eslint-enable */
-        this.setState({ isLoading: false });
-      });
+      if (this.state.searchMode === SEARCH_MODE.NORMAL) {
+        this.onNarmalSearch(queryData, cancelToken, page);
+      } else {
+        this.onSimilaritySearch(queryData, cancelToken, page);
+      }
     }
+  };
+
+  onNarmalSearch = (queryData, cancelToken, page) => {
+    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+      this.source = null;
+      if (res.data.total > 0) {
+        this.setState({
+          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
+          isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
+          hasMore: res.data.has_more,
+        });
+      } else {
+        this.setState({
+          highlightIndex: 0,
+          resultItems: [],
+          isLoading: false,
+          isResultGetted: true,
+          hasMore: res.data.has_more,
+        });
+      }
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      /* eslint-enable */
+      this.setState({ isLoading: false });
+    });
+  };
+
+  onSimilaritySearch = (queryData, cancelToken, page) => {
+    if (this.state.indexState !== INDEX_STATE.FINISHED) {
+      toaster.danger(gettext('Please create index first.'));
+    }
+    seafileAPI.similaritySearchFiles(queryData, cancelToken).then(res => {
+      this.source = null;
+      if (res.data && res.data.children_list.length > 0) {
+        this.setState({
+          resultItems: [...this.state.resultItems, ...this.formatSimilarityItems(res.data.children_list)],
+          isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
+          hasMore: res.data.has_more,
+        });
+      } else {
+        this.setState({
+          highlightIndex: 0,
+          resultItems: [],
+          isLoading: false,
+          isResultGetted: true,
+          hasMore: res.data.has_more,
+        });
+      }
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      /* eslint-enable */
+      this.setState({ isLoading: false });
+    });
   };
 
   onResultListScroll = (e) => {
@@ -295,6 +349,24 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
+    }
+    return items;
+  }
+
+  formatSimilarityItems(data) {
+    let items = [];
+    let repo_id = this.props.repoID;
+    for (let i = 0; i < data.length; i++) {
+      items[i] = {};
+      items[i]['index'] = [i];
+      items[i]['name'] = data[i].path.substring(data[i].path.lastIndexOf('/')+1);
+      items[i]['path'] = data[i].path;
+      items[i]['repo_id'] = repo_id;
+      items[i]['repo_name'] = this.props.repoName;
+      items[i]['is_dir'] = false;
+      items[i]['link_content'] = decodeURI(data[i].path).substring(1);
+      items[i]['content'] = data[i].sentence;
+      items[i]['thumbnail_url'] = '';
     }
     return items;
   }
@@ -354,10 +426,55 @@ class Search extends Component {
     });
   };
 
+  onChangeSearchMode = (searchMode) => {
+    this.setState({
+      searchMode: searchMode
+    });
+
+    if (searchMode === SEARCH_MODE.SIMILARITY && this.state.indexState === INDEX_STATE.UNCREATED) {
+      this.libraryIndexState();
+    }
+  };
+
+  libraryIndexState = () => {
+    seafileAPI.queryLibraryIndexState(this.props.repoID).then(res => {
+      this.setState({indexState: res.data.state});
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      /* eslint-enable */
+    });
+  };
+
+  onCreateIndex = () => {
+    this.setState({ indexState: INDEX_STATE.RUNNING });
+    seafileAPI.createLibraryIndex(this.props.repoID).then(res => {
+      const taskId = res.data.task_id;
+      this.timer = setInterval(() => {
+        seafileAPI.queryIndexTaskStatus(taskId).then(res => {
+          const is_finished = res.data.is_finished;
+          if (is_finished) {
+            this.setState({ indexState: INDEX_STATE.FINISHED });
+            this.timer && clearInterval(this.timer);
+            this.timer = null;
+          }
+        }).catch(error => {
+          this.timer && clearInterval(this.timer);
+          this.timer = null;
+          const errorMsg = Utils.getErrorMsg(error);
+          toaster.danger(errorMsg);
+        });
+      }, 3000);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { searchPageUrl, isMaskShow } = this.state;
+    const { searchPageUrl, isMaskShow, searchMode, indexState } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
     return (
       <Fragment>
@@ -391,6 +508,15 @@ class Search extends Component {
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
+                {this.state.isCloseShow && enableSeafileAI && this.props.isLibView &&
+                  <div>
+                    <button onClick={() => this.onChangeSearchMode(SEARCH_MODE.NORMAL)} >{gettext('Normal search')}</button>
+                    <button onClick={() => this.onChangeSearchMode(SEARCH_MODE.SIMILARITY)}>{gettext('Similarity search')}</button>
+                    {searchMode === SEARCH_MODE.SIMILARITY &&
+                      <button onClick={this.onCreateIndex} disabled={indexState !== INDEX_STATE.UNCREATED}>{gettext('Open index')}</button>
+                    }
+                  </div>
+                }
                 {this.renderSearchResult()}
               </div>
             </div>

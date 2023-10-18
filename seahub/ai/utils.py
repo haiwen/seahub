@@ -100,3 +100,10 @@ def query_task_status(task_id):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/task-status/')
     resp = requests.get(url, headers=headers, params={'task_id': task_id})
     return resp
+
+
+def query_library_index_state(associate_id):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/library-index-state/')
+    resp = requests.get(url, headers=headers, params={'associate_id': associate_id})
+    return resp
