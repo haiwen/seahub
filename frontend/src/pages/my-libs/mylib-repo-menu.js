@@ -104,6 +104,14 @@ class MylibRepoMenu extends React.Component {
     }
 
     operations.push('Divider', 'History Setting', 'Advanced');
+    
+    // Remove adjacent excess 'Divider'
+    for (let i = 0; i < operations.length; i++) {
+      if (operations[i] === 'Divider' && operations[i + 1] === 'Divider') {
+        operations.splice(i, 1);
+        i--;
+      }
+    }
     return operations;
   };
 
