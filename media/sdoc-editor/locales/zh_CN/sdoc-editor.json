@@ -380,5 +380,7 @@
   "Checking": "检查中...",
   "Publishing": "发布中...",
   "Inline": "嵌入行内",
-  "Block": "独占一行"
+  "Block": "独占一行",
+  "Full_screen_mode": "全屏查看",
+  "Image_border": "图片边框"
 }

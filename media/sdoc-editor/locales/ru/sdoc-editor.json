@@ -379,6 +379,8 @@
   "Revision_created": "Версия {{id}} создана",
   "Checking": "Проверка...",
   "Publishing": "Публикация...",
-  "Inline": "Inline",
-  "Block": "Block"
+  "Inline": "Встроенный",
+  "Block": "Блок",
+  "Full_screen_mode": "Full screen mode",
+  "Image_border": "Image border"
 }
