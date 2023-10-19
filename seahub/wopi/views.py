@@ -21,6 +21,7 @@ from django.core.cache import cache
 from pysearpc import SearpcError
 from seaserv import seafile_api
 
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.accounts import User, ANONYMOUS_EMAIL
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url, \
@@ -256,6 +257,9 @@ class WOPIFilesView(APIView):
         result['SupportsUpdate'] = True if can_edit else False
         result['UserCanWrite'] = True if can_edit else False
         result['ReadOnly'] = True if not can_edit else False
+
+        avatar_url, _, _ = api_avatar_url(request_user, int(72))
+        result['UserExtraInfo'] = { 'avatar': avatar_url, 'mail': request_user }
 
         # new file creation feature is not implemented on wopi host(seahub)
         # hide save as button on view/edit file page
