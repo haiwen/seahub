@@ -50,6 +50,7 @@ export default class SeahubSelect extends React.Component {
     isClearable: PropTypes.bool,
     placeholder: PropTypes.string,
     classNamePrefix: PropTypes.string,
+    className: PropTypes.string,
     form: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     menuPortalTarget: PropTypes.string,
@@ -79,7 +80,8 @@ export default class SeahubSelect extends React.Component {
 
   render() {
     const { options, onChange, value, isSearchable, placeholder, isMulti, menuPosition, isClearable, noOptionsMessage,
-      classNamePrefix, innerRef, isDisabled, form } = this.props;
+      classNamePrefix, innerRef, isDisabled, form, className } = this.props;
+
     return (
       <Select
         value={value}
@@ -88,6 +90,7 @@ export default class SeahubSelect extends React.Component {
         onChange={onChange}
         options={options}
         isMulti={isMulti}
+        className={className}
         classNamePrefix={classNamePrefix}
         styles={MenuSelectStyle}
         components={{ Option, MenuList, ClearIndicator }}

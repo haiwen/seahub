@@ -28,14 +28,7 @@ class DirentDetail extends React.Component {
       direntType: '',
       direntDetail: '',
       folderDirent: null,
-      fileParticipantList: [],
     };
-  }
-
-  componentWillMount() {
-    if (this.props.direntDetailPanelTab) {
-      this.tabItemClick(this.props.direntDetailPanelTab);
-    }
   }
 
   componentDidMount() {
@@ -47,9 +40,6 @@ class DirentDetail extends React.Component {
     let { dirent, path, repoID } = nextProps;
     if (this.props.dirent !== nextProps.dirent) {
       this.loadDirentInfo(dirent, path, repoID);
-    }
-    if (this.props.direntDetailPanelTab) {
-      this.tabItemClick(this.props.direntDetailPanelTab);
     }
   }
 
@@ -90,7 +80,6 @@ class DirentDetail extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
-      this.listParticipants(repoID, direntPath);
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
         this.setState({
@@ -102,16 +91,6 @@ class DirentDetail extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  };
-
-  listParticipants = (repoID, filePath) => {
-    seafileAPI.listFileParticipants(repoID, filePath).then((res) => {
-      this.setState({ fileParticipantList: res.data.participant_list });
-    });
-  };
-
-  onParticipantsChange = (repoID, filePath) => {
-    this.listParticipants(repoID, filePath);
   };
 
   renderHeader = (smallIconUrl, direntName) => {

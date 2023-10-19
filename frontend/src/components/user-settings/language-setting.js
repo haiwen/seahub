@@ -8,10 +8,6 @@ const {
 
 class LanguageSetting extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   onSelectChange = (selectedItem) => {
     // selectedItem: {value: '...', label: '...'}
     location.href = `${siteRoot}i18n/?lang=${selectedItem.value}`;
@@ -30,7 +26,7 @@ class LanguageSetting extends React.Component {
         <h3 className="setting-item-heading">{gettext('Language Setting')}</h3>
         <SeahubSelect
           className='language-selector'
-          defaultValue={{value: currentLang.langCode, label: currentLang.langName}}
+          value={{value: currentLang.langCode, label: currentLang.langName}}
           options={options}
           onChange={this.onSelectChange}
         />
