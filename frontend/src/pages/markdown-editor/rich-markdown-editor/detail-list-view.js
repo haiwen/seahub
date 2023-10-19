@@ -4,7 +4,7 @@ import moment from 'moment';
 import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import EditFileTagDialog from '../../../components/dialog/edit-filetag-dialog';
+import EditFileTagPopover from '../../../components/popover/edit-filetag-popover';
 import FileTagList from '../../../components/file-tag-list';
 
 import '../../../css/dirent-detail.css';
@@ -48,19 +48,21 @@ class DetailListView extends React.Component {
                 <th>{gettext('Tags')}</th>
                 <td>
                   <FileTagList fileTagList={this.props.fileTagList} />
-                  <span onClick={this.onEditFileTagToggle}><Icon symbol='tag' /></span>
+                  <span onClick={this.onEditFileTagToggle} id='file-tag-container-icon'><Icon symbol='tag' /></span>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         {this.state.isEditFileTagShow &&
-          <EditFileTagDialog
+          <EditFileTagPopover
             repoID={repoID}
             filePath={filePath}
             fileTagList={this.props.fileTagList}
             toggleCancel={this.onEditFileTagToggle}
             onFileTagChanged={this.props.onFileTagChanged}
+            target={'file-tag-container-icon'}
+            isEditFileTagShow={this.state.isEditFileTagShow}
           />
         }
       </Fragment>

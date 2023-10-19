@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 import Icon from '../icon';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import ModalPortal from '../modal-portal';
+import EditFileTagPopover from '../popover/edit-filetag-popover';
 import ExtraAttributesDialog from '../dialog/extra-attributes-dialog';
 import FileTagList from '../file-tag-list';
 import ConfirmApplyFolderPropertiesDialog from '../dialog/confirm-apply-folder-properties-dialog';
@@ -30,6 +30,7 @@ class DetailListView extends React.Component {
       isShowExtraProperties: false,
       isShowApplyProperties: false
     };
+    this.tagListTitleID = `detail-list-view-tags-${uuidv4()}`;
   }
 
   getDirentPosition = () => {
@@ -122,7 +123,7 @@ class DetailListView extends React.Component {
             <th>{gettext('Tags')}</th>
             <td>
               <FileTagList fileTagList={this.props.fileTagList} />
-              <span onClick={this.onEditFileTagToggle}><Icon symbol='tag' /></span>
+              <span onClick={this.onEditFileTagToggle} id={this.tagListTitleID}><Icon symbol='tag' /></span>
             </td>
           </tr>
           {direntDetail.permission === 'rw' && (
@@ -147,15 +148,15 @@ class DetailListView extends React.Component {
       <Fragment>
         {this.renderTags()}
         {this.state.isEditFileTagShow &&
-          <ModalPortal>
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              fileTagList={fileTagList}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
-          </ModalPortal>
+          <EditFileTagPopover
+            repoID={this.props.repoID}
+            filePath={direntPath}
+            fileTagList={fileTagList}
+            toggleCancel={this.onEditFileTagToggle}
+            onFileTagChanged={this.onFileTagChanged}
+            target={this.tagListTitleID}
+            isEditFileTagShow={this.state.isEditFileTagShow}
+          />
         }
         {this.state.isShowExtraProperties && (
           <ExtraAttributesDialog
