@@ -103,6 +103,9 @@ class SeadocRevisionManager(models.Manager):
     def get_by_doc_uuid(self, doc_uuid):
         return self.filter(doc_uuid=doc_uuid).first()
 
+    def get_by_origin_doc_uuid_and_revision_id(self, origin_doc_uuid, revision_id):
+        return self.filter(origin_doc_uuid=origin_doc_uuid, revision_id=revision_id).first()
+    
     def list_by_doc_uuids(self, doc_uuid_list):
         return self.filter(doc_uuid__in=doc_uuid_list)
 

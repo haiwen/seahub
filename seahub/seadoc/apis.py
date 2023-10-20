@@ -1466,6 +1466,81 @@ class SeadocRevisionView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
+class DeleteSeadocOtherRevision(APIView):
+    # sdoc editor use jwt token
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, file_uuid, revision_id):
+        origin_doc_uuid = file_uuid
+        if not origin_doc_uuid:
+            error_msg = 'origin_file_uuid %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_uuid_map:
+            error_msg = 'file %s uuid_map not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not revision_id:
+            error_msg = 'Revision %s not found.' % revision_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_origin_doc_uuid_and_revision_id(origin_doc_uuid, revision_id)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if revision.is_published:
+            error_msg = 'Revision %s is already published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_uuid = revision.doc_uuid
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'file %s uuid_map not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo_id = revision.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # permission check
+        permission = check_folder_permission(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if permission != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        # get revision file info
+        revision_file_uuid = uuid_map
+        revision_parent_path = revision_file_uuid.parent_path
+        revision_filename = revision_file_uuid.filename
+        username = request.user.username
+
+        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
+        if dir_id:
+            seafile_api.del_file(
+                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+
+            seafile_api.del_file(
+                    repo_id, revision_parent_path, json.dumps([revision_filename]), username)
+            
+        SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
+
+        sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
+        sdoc_server_api.remove_doc()
+
+        return Response({
+            'success': True,
+        })
+
 class SeadocPublishRevision(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
