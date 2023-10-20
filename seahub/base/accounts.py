@@ -1043,7 +1043,9 @@ class CustomLDAPBackend(object):
                 if nickname:
                     Profile.objects.add_or_update(username, nickname=nickname)
                 if contact_email:
-                    Profile.objects.add_or_update(username, contact_email=contact_email)
+                    p = Profile.objects.get_profile_by_user(username)
+                    if not (p and p.is_manually_set_contact_email):
+                        Profile.objects.add_or_update(username, contact_email=contact_email)
             except Exception as e:
                 logger.error(f'update ldap user failed {e}')
 
