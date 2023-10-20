@@ -311,8 +311,8 @@ class Search extends Component {
         hasMore: res.data.has_more,
       });
     }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      /* eslint-disable */
+      console.log(error);
       this.setState({ isLoading: false });
     });
   };
