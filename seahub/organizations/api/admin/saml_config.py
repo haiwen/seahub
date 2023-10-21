@@ -265,12 +265,12 @@ class OrgVerifyDomain(APIView):
             error_msg = 'Cannot find a SAML/ADFS config for the organization %s.' % org.org_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if saml_config.domain_verified:
+            return Response({'domain_verified': saml_config.domain_verified})
+
         if not saml_config.dns_txt:
             error_msg = 'Cannot find dns_txt, please generate dns_txt first.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if saml_config.domain_verified:
-            return Response({'domain_verified': saml_config.domain_verified})
 
         proc = subprocess.Popen(["nslookup", "-type=TXT", domain], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
