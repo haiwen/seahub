@@ -15,7 +15,8 @@ from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import create_library_sdoc_index, get_dir_file_recursively, similarity_search_in_library, \
-    update_library_sdoc_index, delete_library_index, query_task_status, get_dir_sdoc_info_list
+    update_library_sdoc_index, delete_library_index, query_task_status, get_dir_sdoc_info_list, \
+    query_library_index_state
 
 from seaserv import seafile_api
 
@@ -209,6 +210,29 @@ class TaskStatus(APIView):
             resp = query_task_status(task_id)
             if resp.status_code == 500:
                 logger.error('query task status error status: %s body: %s', resp.status_code, resp.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            resp_json = resp.json()
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(resp_json, resp.status_code)
+
+
+class LibraryIndexState(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        repo_id = request.GET.get('repo_id')
+
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+        try:
+            resp = query_library_index_state(repo_id)
+            if resp.status_code == 500:
+                logger.error('query library index state error status: %s body: %s', resp.status_code, resp.text)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
             resp_json = resp.json()
         except Exception as e:
