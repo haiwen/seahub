@@ -154,7 +154,8 @@ class OrgSAMLConfig extends Component {
   };
 
   verifyDomain = () => {
-    seafileAPI.orgAdminVerifyDomain(orgID, this.state.domain).then((res) => {
+    const {domain} = this.state;
+    seafileAPI.orgAdminVerifyDomain(orgID, domain).then((res) => {
       this.setState({domain_verified: res.data.domain_verified});
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -229,6 +230,7 @@ class OrgSAMLConfig extends Component {
                         value={domain}
                         changeValue={this.updateSamlDomain}
                         displayName={gettext('Email Domain')}
+                        isDomainItem={true}
                         domainVerified={domain_verified}
                       />
 
