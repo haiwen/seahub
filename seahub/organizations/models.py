@@ -112,8 +112,8 @@ class OrgSAMLConfigManager(models.Manager):
 class OrgSAMLConfig(models.Model):
     org_id = models.IntegerField(unique=True)
     metadata_url = models.TextField()
-    domain = models.CharField(max_length=255, unique=True, null=True, default=None)
-    dns_txt = models.CharField(max_length=64, null=True, default=None)
+    domain = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    dns_txt = models.CharField(max_length=64, null=True, blank=True)
     domain_verified = models.BooleanField(default=False, db_index=True)
 
     objects = OrgSAMLConfigManager()
