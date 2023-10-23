@@ -382,5 +382,15 @@
   "Inline": "嵌入行内",
   "Block": "独占一行",
   "Full_screen_mode": "全屏查看",
-  "Image_border": "图片边框"
+  "Image_border": "图片边框",
+  "Delete_revision": "删除修订稿",
+  "Delete_tip": "确定要删除 {{content}} 吗？",
+  "Delete_Successfully": "删除成功",
+  "Delete_failed": "删除失败",
+  "Combine_cell": "合并单元格",
+  "Split_cell": "拆分单元格",
+  "Row_number": "行数",
+  "Column_number": "列数",
+  "The_maximum_row_number_is_{number}": "最大行数为 {number}",
+  "The_maximum_column_number_is_{number}": "最大列数为 {number}"
 }

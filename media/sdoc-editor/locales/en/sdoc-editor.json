@@ -382,5 +382,15 @@
   "Inline": "Inline",
   "Block": "Block",
   "Full_screen_mode": "Full screen mode",
-  "Image_border": "Image border"
+  "Image_border": "Image border",
+  "Delete_revision": "Delete revision",
+  "Delete_tip": "Are you sure you want to delete {{content}} ?",
+  "Delete_Successfully": "Delete Successfully",
+  "Delete_failed": "Delete failed",
+  "Combine_cell": "Combine cells",
+  "Split_cell": "Split cell",
+  "Row_number": "Row number",
+  "Column_number": "Column number",
+  "The_maximum_row_number_is_{number}": "The maximum row number is {number}",
+  "The_maximum_column_number_is_{number}": "The maximum column number is {number}"
 }
