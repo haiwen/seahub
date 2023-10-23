@@ -167,21 +167,24 @@ class Search extends Component {
   };
 
   onChangeHandler = (event) => {
+    const { searchMode } = this.state;
     const newValue = event.target.value;
     this.setState({ value: newValue }, () => {
       if (this.inputValue === newValue.trim()) return;
       this.inputValue = newValue.trim();
-      this.onSearch(false);
+      this.onSearch(searchMode === SEARCH_MODE.NORMAL);
     });
   };
 
-  onKeydownHandler = () => {
-    if (this.state.searchMode === SEARCH_MODE.NORMAL) return;
-    this.onSearch(true);
+  onKeydownHandler = (event) => {
+    if (isHotkey('enter', event)) {
+      if (this.state.searchMode === SEARCH_MODE.NORMAL) return;
+      this.onSearch(true);
+    }
   };
 
-  onSearch = (isSendSimilaritySearchRequest) => {
-    const { value, searchMode } = this.state;
+  onSearch = (isGetSearchResult) => {
+    const { value } = this.state;
     const { repoID } = this.props;
     const _this = this;
     this.timer && clearTimeout(this.timer);
@@ -195,7 +198,7 @@ class Search extends Component {
       });
       return;
     }
-    if (searchMode === SEARCH_MODE.SIMILARITY && !isSendSimilaritySearchRequest) return;
+    if (!isGetSearchResult) return;
 
     const queryData = {
       q: value,
@@ -494,18 +497,18 @@ class Search extends Component {
   
       if (searchMode === SEARCH_MODE.SIMILARITY) {
         if (currentIndexState === INDEX_STATE.FINISHED) {
-          this.onSearch();
+          this.onSearch(true);
           return;
         }
         seafileAPI.queryLibraryIndexState(repoID).then(res => {
           const { state: indexState, task_id: taskId } = res.data;
           this.setState({ indexState }, () => {
             if (indexState === INDEX_STATE.FINISHED) {
-              this.onSearch();
+              this.onSearch(true);
               return;
             }
             if (indexState === INDEX_STATE.RUNNING) {
-              this.queryIndexTaskStatus(taskId, this.onSearch);
+              this.queryIndexTaskStatus(taskId, () => this.onSearch(true));
               return;
             }
           });
