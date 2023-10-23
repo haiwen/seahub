@@ -181,7 +181,7 @@ class Search extends Component {
   };
 
   onSearch = (isSendSimilaritySearchRequest) => {
-    const { value } = this.state;
+    const { value, searchMode } = this.state;
     const { repoID } = this.props;
     const _this = this;
     this.timer && clearTimeout(this.timer);
@@ -195,16 +195,17 @@ class Search extends Component {
       });
       return;
     }
+    if (searchMode === SEARCH_MODE.SIMILARITY && !isSendSimilaritySearchRequest) return;
 
     const queryData = {
       q: value,
       search_repo: repoID ? repoID : 'all',
       search_ftypes: 'all',
     };
-    this.timer = setTimeout(_this.getSearchResult(queryData, isSendSimilaritySearchRequest), 500);
+    this.timer = setTimeout(_this.getSearchResult(queryData), 500);
   };
 
-  getSearchResult = (queryData, isSendSimilaritySearchRequest) => {
+  getSearchResult = (queryData) => {
     if (this.source) {
       this.source.cancel('prev request is cancelled');
     }
@@ -215,10 +216,10 @@ class Search extends Component {
       highlightIndex: 0,
     });
     this.source = seafileAPI.getSource();
-    this.sendRequest(queryData, this.source.token, 1, isSendSimilaritySearchRequest);
+    this.sendRequest(queryData, this.source.token, 1);
   };
 
-  sendRequest = (queryData, cancelToken, page, isSendSimilaritySearchRequest) => {
+  sendRequest = (queryData, cancelToken, page) => {
     let isPublic = this.props.isPublic;
     this.queryData = queryData;
 
@@ -254,7 +255,7 @@ class Search extends Component {
       if (this.state.searchMode === SEARCH_MODE.NORMAL) {
         this.onNormalSearch(queryData, cancelToken, page);
       } else {
-        isSendSimilaritySearchRequest && this.onSimilaritySearch(queryData, cancelToken, page);
+        this.onSimilaritySearch(queryData, cancelToken, page);
       }
     }
   };
