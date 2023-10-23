@@ -171,11 +171,16 @@ class Search extends Component {
     this.setState({ value: newValue }, () => {
       if (this.inputValue === newValue.trim()) return;
       this.inputValue = newValue.trim();
-      this.onSearch();
+      this.onSearch(false);
     });
   };
 
-  onSearch = () => {
+  onKeydownHandler = () => {
+    if (this.state.searchMode === SEARCH_MODE.NORMAL) return;
+    this.onSearch(true);
+  };
+
+  onSearch = (isSendSimilaritySearchRequest) => {
     const { value } = this.state;
     const { repoID } = this.props;
     const _this = this;
@@ -196,10 +201,10 @@ class Search extends Component {
       search_repo: repoID ? repoID : 'all',
       search_ftypes: 'all',
     };
-    this.timer = setTimeout(_this.getSearchResult(queryData), 500);
+    this.timer = setTimeout(_this.getSearchResult(queryData, isSendSimilaritySearchRequest), 500);
   };
 
-  getSearchResult = (queryData) => {
+  getSearchResult = (queryData, isSendSimilaritySearchRequest) => {
     if (this.source) {
       this.source.cancel('prev request is cancelled');
     }
@@ -210,10 +215,10 @@ class Search extends Component {
       highlightIndex: 0,
     });
     this.source = seafileAPI.getSource();
-    this.sendRequest(queryData, this.source.token, 1);
+    this.sendRequest(queryData, this.source.token, 1, isSendSimilaritySearchRequest);
   };
 
-  sendRequest = (queryData, cancelToken, page) => {
+  sendRequest = (queryData, cancelToken, page, isSendSimilaritySearchRequest) => {
     let isPublic = this.props.isPublic;
     this.queryData = queryData;
 
@@ -249,7 +254,7 @@ class Search extends Component {
       if (this.state.searchMode === SEARCH_MODE.NORMAL) {
         this.onNormalSearch(queryData, cancelToken, page);
       } else {
-        this.onSimilaritySearch(queryData, cancelToken, page);
+        isSendSimilaritySearchRequest && this.onSimilaritySearch(queryData, cancelToken, page);
       }
     }
   };
@@ -569,6 +574,7 @@ class Search extends Component {
                   autoComplete="off"
                   ref={this.inputRef}
                   readOnly={isCloseShow && enableSeafileAI && SEARCH_MODE.SIMILARITY === searchMode && indexState !== INDEX_STATE.FINISHED}
+                  onKeyDown={this.onKeydownHandler}
                 />
                 {(this.state.isCloseShow && username) &&
                   <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
