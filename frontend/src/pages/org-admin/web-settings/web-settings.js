@@ -20,8 +20,8 @@ class OrgWebSettings extends Component {
       loading: true,
       errorMsg: '',
       config_dict: null,
-      logoPath: mediaUrl + logoPath,
-      file_ext_white_list: '', 
+      logoPath: logoPath,
+      file_ext_white_list: '',
     };
   }
 
@@ -55,7 +55,7 @@ class OrgWebSettings extends Component {
   updateLogo = (file) => {
     seafileAPI.orgAdminUpdateLogo(orgID, file).then((res) => {
       this.setState({
-        logoPath: mediaUrl + res.data.logo_path
+        logoPath: res.data.logo_path
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -77,7 +77,9 @@ class OrgWebSettings extends Component {
   }
 
   render() {
-    const { loading, errorMsg, config_dict, logoPath, file_ext_white_list } = this.state;
+    const { loading, errorMsg, config_dict, file_ext_white_list } = this.state;
+    let logoPath = this.state.logoPath;
+    logoPath = logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
