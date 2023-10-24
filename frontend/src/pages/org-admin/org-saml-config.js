@@ -62,7 +62,7 @@ class OrgSAMLConfig extends Component {
       seafileAPI.orgAdminGetSamlConfig(orgID).then((res) => {
         this.setState({
           loading: false,
-          samlConfigID: res.data.saml_config.id || '',
+          samlConfigID: res.data.saml_config.id,
           metadataUrl: res.data.saml_config.metadata_url || '',
           domain: res.data.saml_config.domain || '',
           dns_txt: res.data.saml_config.dns_txt || '',
@@ -80,7 +80,7 @@ class OrgSAMLConfig extends Component {
         errorMsg: Utils.getErrorMsg(error, true),
       });
     });
-  };
+  }
 
   updateUrlPrefix = (newUrlPrefix) => {
     seafileAPI.orgAdminUpdateUrlPrefix(orgID, newUrlPrefix).then((res) => {
@@ -109,10 +109,10 @@ class OrgSAMLConfig extends Component {
     seafileAPI.orgAdminUpdateSamlMetadataUrl(orgID, metadataUrl).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url,
-        domain: res.data.saml_config.domain,
-        dns_txt: res.data.saml_config.dns_txt,
-        domain_verified: res.data.saml_config.domain_verified,
+        metadataUrl: res.data.saml_config.metadata_url || '',
+        domain: res.data.saml_config.domain || '',
+        dns_txt: res.data.saml_config.dns_txt || '',
+        domain_verified: res.data.saml_config.domain_verified || false,
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -125,10 +125,10 @@ class OrgSAMLConfig extends Component {
     seafileAPI.orgAdminUpdateSamlDomain(orgID, domain).then((res) => {
       this.setState({
         samlConfigID: res.data.saml_config.id,
-        metadataUrl: res.data.saml_config.metadata_url,
-        domain: res.data.saml_config.domain,
-        dns_txt: res.data.saml_config.dns_txt,
-        domain_verified: res.data.saml_config.domain_verified,
+        metadataUrl: res.data.saml_config.metadata_url || '',
+        domain: res.data.saml_config.domain || '',
+        dns_txt: res.data.saml_config.dns_txt || '',
+        domain_verified: res.data.saml_config.domain_verified || false,
       });
       toaster.success(gettext('Success'));
     }).catch((error) => {
@@ -230,7 +230,6 @@ class OrgSAMLConfig extends Component {
                         value={domain}
                         changeValue={this.updateSamlDomain}
                         displayName={gettext('Email Domain')}
-                        isDomainItem={true}
                         domainVerified={domain_verified}
                       />
 
@@ -247,12 +246,19 @@ class OrgSAMLConfig extends Component {
                               </InputGroupAddon>
                             }
                           </InputGroup>
-                          <p className="small text-secondary mt-1">
-                            {gettext("Generate a domain DNS TXT, then copy it and add it to your domain's DNS records, then click the button to verify domain ownership.")}
-                          </p>
+                          {(!dns_txt && !domain_verified) &&
+                            <p className="small text-secondary mt-1">
+                              {gettext('Generate a domain DNS TXT, then copy it and add it to your domain\'s DNS records, then click the button to verify domain ownership.')}
+                            </p>
+                          }
+                          {(dns_txt && !domain_verified) &&
+                            <p className="small text-secondary mt-1">
+                              {gettext('You must verify domain ownership before Single Sign-On.')}
+                            </p>
+                          }
                         </Col>
                         <Col md="4">
-                          {!dns_txt &&
+                          {(!dns_txt && !domain_verified) &&
                             <Button color="secondary" onClick={this.generateDnsTxt}>{gettext('Generate')}</Button>
                           }
                           {(dns_txt && !domain_verified) &&

@@ -5,7 +5,6 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   value: PropTypes.string,
-  isDomainItem: PropTypes.bool,
   domainVerified: PropTypes.bool,
   changeValue: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
@@ -23,7 +22,7 @@ class OrgSamlConfigInput extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({value: nextProps.value,});
-  };
+  }
 
   toggleBtns = () => {
     this.setState({isBtnsShown: !this.state.isBtnsShown});
@@ -53,7 +52,7 @@ class OrgSamlConfigInput extends Component {
 
   render() {
     const { isBtnsShown, value } = this.state;
-    const { displayName, isDomainItem } = this.props;
+    const { displayName } = this.props;
     return (
       <Fragment>
         <Row className="my-4">
@@ -69,11 +68,6 @@ class OrgSamlConfigInput extends Component {
                 </InputGroupAddon>
               }
             </InputGroup>
-            {isDomainItem &&
-              <p className="small text-secondary mt-1">
-                {gettext("The initial value of domain is empty. You need to customize your domain and verify domain ownership before Single Sign-On.")}
-              </p>
-            }
           </Col>
           <Col md="4">
             {isBtnsShown &&
