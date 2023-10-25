@@ -458,6 +458,8 @@ class GroupMembersImport(APIView):
 
         for email in emails_list:
 
+            email_from_excel = email
+
             user_not_found = False
 
             try:
@@ -473,15 +475,15 @@ class GroupMembersImport(APIView):
                 except User.DoesNotExist:
                     user_not_found = True
 
-            email_name = email2nickname(email)
             if user_not_found:
                 result['failed'].append({
-                    'email': email,
-                    'email_name': email_name,
-                    'error_msg': 'User %s not found.' % email_name
+                    'email': email_from_excel,
+                    'email_name': email2nickname(email_from_excel),
+                    'error_msg': 'User %s not found.' % email2nickname(email_from_excel)
                     })
                 continue
 
+            email_name = email2nickname(email)
             if is_group_member(group_id, email, in_structure=False):
                 result['failed'].append({
                     'email': email,
