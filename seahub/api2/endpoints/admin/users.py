@@ -184,7 +184,9 @@ def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mecha
 
     # get email_ctime_map, likes {'seafile@email.com': 1692950099, ...}
     email_ctime_map = dict()
-    db_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(list(uid_email_map.values())))
+    db_users = list()
+    for i in range(0, len(uid_email_map), 20):
+        db_users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(list(uid_email_map.values())[i: i+20])))
     for user in db_users:
         email_ctime_map[user.email] = user.ctime
 
@@ -536,7 +538,9 @@ class AdminUsers(APIView):
             if ENABLE_MULTI_LDAP:
                 multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
                 email_list.extend([user.username for user in multi_ldap_users])
-            users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
+            users = list()
+            for i in range(0, len(email_list), 20):
+                users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list[i: i+20])))
 
         for user in users:
             email = user.email
@@ -681,7 +685,9 @@ class AdminUsers(APIView):
                 if ENABLE_MULTI_LDAP:
                     multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
                     email_list.extend([user.username for user in multi_ldap_users])
-                all_ldap_users = ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list))
+                all_ldap_users = list()
+                for i in range(0, len(email_list), 20):
+                    all_ldap_users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list[i: i+20])))
                 users = all_ldap_users[start: start + per_page]
 
         data = []
