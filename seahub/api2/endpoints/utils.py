@@ -16,7 +16,7 @@ from pysearpc import SearpcError
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
-from seahub.settings import SECRET_KEY, FILE_CONVERTER_SERVER_URL
+from seahub.settings import SEADOC_PRIVATE_KEY, FILE_CONVERTER_SERVER_URL
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -215,14 +215,14 @@ def get_user_quota_usage_and_total(email, org_id=''):
     return quota_usage, quota_total
 
 
-def gen_headers():
+def convert_file_gen_headers():
     payload = {'exp': int(time.time()) + 300, }
-    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    token = jwt.encode(payload, SEADOC_PRIVATE_KEY, algorithm='HS256')
     return {"Authorization": "Token %s" % token}
 
 
 def convert_file(path, username, doc_uuid, download_token, upload_token, src_type, dst_type):
-    headers = gen_headers()
+    headers = convert_file_gen_headers()
     params = {
         'path': path,
         'username': username,
