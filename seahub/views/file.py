@@ -2121,6 +2121,7 @@ def get_file_content_from_cache(file_id, repo_id, file_name):
 @login_required
 @repo_passwd_set_required
 def view_sdoc_revision(request, repo_id, revision_id):
+    username = request.user.username
 
     # resource check
     repo = seafile_api.get_repo(repo_id)
@@ -2130,21 +2131,34 @@ def view_sdoc_revision(request, repo_id, revision_id):
     revision = SeadocRevision.objects.get_by_revision_id(repo_id, revision_id)
     if not revision:
         return render_error(request, 'revision not found')
-    uuid_map = FileUUIDMap.objects.filter(
-        uuid=revision.doc_uuid).first()
-    if not uuid_map:
-        return render_error(request, _('File does not exist'))
+    
+    is_published = revision.is_published
+    if is_published:
+        origin_file_uuid = revision.origin_doc_uuid
+        origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_file_uuid)
+        if not origin_uuid_map:
+            return render_error(request, _('Origin file does not exist'))
+        
+        parent_dir = origin_uuid_map.parent_path
+        filename = origin_uuid_map.filename
+        path = posixpath.join(parent_dir, filename)
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            return render_error(request, _('File does not exist'))
 
-    path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
-    if not file_id:
-        return render_error(request, _('File does not exist'))
+    else:
+        uuid_map = FileUUIDMap.objects.filter(uuid=revision.doc_uuid).first()
+        if not uuid_map:
+            return render_error(request, _('File does not exist'))
+
+        parent_dir = uuid_map.parent_path
+        filename = uuid_map.filename
+        path = posixpath.join(parent_dir, filename)
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            return render_error(request, _('File does not exist'))
 
     # permission check
-    username = request.user.username
-    parent_dir = uuid_map.parent_path
-    filename = uuid_map.filename
-
     permission = check_folder_permission(request, repo_id, parent_dir)
     if not permission:
         return convert_repo_path_when_can_not_view_file(request, repo_id, path)
@@ -2174,69 +2188,39 @@ def view_sdoc_revision(request, repo_id, revision_id):
         'seafile_collab_server': SEAFILE_COLLAB_SERVER,
     }
 
+    is_locked = False
+    locked_by_me = False
     # check whether file is starred
-    is_starred = is_file_starred(username, repo_id, path, org_id)
-    return_dict['is_starred'] = is_starred
+    if not is_published:
+        is_starred = is_file_starred(username, repo_id, path, org_id)
+        return_dict['is_starred'] = is_starred
 
-    # check file lock info
-    try:
-        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    except Exception as e:
-        logger.error(e)
-        is_locked = False
-        locked_by_me = False
+        # check file lock info
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        except Exception as e:
+            logger.error(e)
+            is_locked = False
+            locked_by_me = False
 
-    if is_pro_version() and permission == 'rw':
-        can_lock_unlock_file = True
-    else:
-        can_lock_unlock_file = False
-
-    return_dict['file_locked'] = is_locked
-    return_dict['locked_by_me'] = locked_by_me
-    return_dict['can_lock_unlock_file'] = can_lock_unlock_file
-
-    # file shared link
-    l = FileShare.objects.filter(repo_id=repo_id).filter(
-        username=username).filter(path=path)
-    fileshare = l[0] if len(l) > 0 else None
-    file_shared_link = gen_file_share_link(fileshare.token) if fileshare else ''
-
-    return_dict['fileshare'] = fileshare,
-    return_dict['file_shared_link'] = file_shared_link
-
-    if parse_repo_perm(permission).can_download and \
-       request.user.permissions.can_generate_share_link():
-        return_dict['can_share_file'] = True
-    else:
-        return_dict['can_share_file'] = False
-
-    # fetch file contributors and latest contributor
-    try:
-        # get real path for sub repo
-        real_path = repo.origin_path + path if repo.origin_path else path
-        dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
-        if dirent:
-            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        if is_pro_version() and permission == 'rw':
+            can_lock_unlock_file = True
         else:
-            latest_contributor, last_modified = None, 0
-    except Exception as e:
-        logger.error(e)
-        latest_contributor, last_modified = None, 0
+            can_lock_unlock_file = False
 
-    return_dict['latest_contributor'] = latest_contributor
-    return_dict['last_modified'] = last_modified
+        return_dict['file_locked'] = is_locked
+        return_dict['locked_by_me'] = locked_by_me
+        return_dict['can_lock_unlock_file'] = can_lock_unlock_file
 
-    # get file type and extention
-    filetype, fileext = get_file_type_and_ext(filename)
-    return_dict['fileext'] = fileext
-    return_dict['filetype'] = filetype
+    return_dict['can_share_file'] = False
+    return_dict['filetype'] = 'SDoc'
 
-    file_uuid = str(uuid_map.uuid)
+    file_uuid = revision.doc_uuid
     return_dict['file_uuid'] = file_uuid
-    return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
     return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+    return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + origin_file_uuid if is_published else file_uuid
 
-    can_edit_file = True
+    can_edit_file = not is_published
     if parse_repo_perm(permission).can_edit_on_web is False:
         can_edit_file = False
     elif is_locked and not locked_by_me:
@@ -2251,4 +2235,8 @@ def view_sdoc_revision(request, repo_id, revision_id):
     return_dict.update(revision_info)
 
     send_file_access_msg(request, repo, path, 'web')
+
+    if is_published:
+        return render(request, 'sdoc_published_revision_file_view.html', return_dict)
+
     return render(request, 'sdoc_file_view_react.html', return_dict)

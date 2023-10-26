@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 import ReactDom from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from './_i18n/i18n-sdoc-editor';
-import { Utils } from './utils/utils';
-import Loading from './components/loading';
-import SdocEditor from './pages/sdoc/sdoc-editor';
+import { PublishedRevisionViewer } from '@seafile/sdoc-editor';
+import i18n from '../../../_i18n/i18n-sdoc-editor';
+import { Utils } from '../../../utils/utils';
+import Loading from '../../../components/loading';
 
 const { serviceURL, avatarURL, siteRoot, lang } = window.app.config;
-const { username, name } = window.app.userInfo;
+const { username, name } = window.app.userInfo || {};
 const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
@@ -47,7 +47,7 @@ window.seafile = {
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <SdocEditor />
+      <PublishedRevisionViewer />
     </Suspense>
   </I18nextProvider>,
   document.getElementById('wrapper')

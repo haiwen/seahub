@@ -1933,10 +1933,6 @@ class SdocRevisionBaseVersionContent(APIView):
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if revision.is_published:
-            error_msg = 'Revision %s is already published.' % file_uuid
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         origin_doc_path = revision.origin_doc_path
         if not origin_doc_path:
@@ -1968,3 +1964,51 @@ class SdocRevisionBaseVersionContent(APIView):
             'content': resp.content
         })
 
+
+class SeadocPublishedRevisionContent(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
+        if not revision:
+            error_msg = 'Revision %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not revision.is_published:
+            error_msg = 'Revision %s is not published.' % file_uuid
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        origin_doc_path = revision.origin_doc_path
+        if not origin_doc_path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file path is invalid.')
+        
+        publish_file_version = revision.publish_file_version
+        if not publish_file_version:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file version is missing.')
+        
+        origin_doc_uuid = revision.origin_doc_uuid
+        origin_doc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
+        if not origin_doc_uuid_map:
+            error_msg = 'Origin file uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
+                publish_file_version, 'download', username)
+
+        if not token:
+            error_msg = 'Origin file %s not found.' % origin_doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        origin_file_name = os.path.basename(origin_doc_path)
+        download_url = gen_inner_file_get_url(token, origin_file_name)
+
+        resp = requests.get(download_url)
+        return Response({
+            'content': resp.content
+        })

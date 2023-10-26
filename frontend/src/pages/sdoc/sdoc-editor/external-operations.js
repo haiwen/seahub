@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
-import InternalLinkDialog from '../../components/dialog/internal-link-dialog';
-import ShareDialog from '../../components/dialog/share-dialog';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../../components/toast';
+import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
+import ShareDialog from '../../../components/dialog/share-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

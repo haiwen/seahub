@@ -3,16 +3,16 @@ import ReactDom from 'react-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import { DiffViewer } from '@seafile/sdoc-editor';
-import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, historyRepoID } from '../../utils/constants';
-import Loading from '../../components/loading';
-import GoBack from '../../components/common/go-back';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { gettext, historyRepoID } from '../../../utils/constants';
+import Loading from '../../../components/loading';
+import GoBack from '../../../components/common/go-back';
 import SidePanel from './side-panel';
-import { Utils } from '../../utils/utils';
-import toaster from '../../components/toast';
+import { Utils } from '../../../utils/utils';
+import toaster from '../../../components/toast';
 
-import '../../css/layout.css';
-import '../../css/sdoc-file-history.css';
+import '../../../css/layout.css';
+import '../../../css/sdoc-file-history.css';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
