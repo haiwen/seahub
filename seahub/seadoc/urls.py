@@ -3,7 +3,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocQueryCopyMoveProgressView, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
-    SeadocFilesInfoView, DeleteSeadocOtherRevision
+    SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent
 
 
 # api/v2.1/seadoc/
@@ -31,6 +31,7 @@ urlpatterns = [
     re_path(r'^revision/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionView.as_view(), name='seadoc_revision'),
     re_path(r'^revision/base-version-content/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRevisionBaseVersionContent.as_view(), name='sdoc_revision_base_version_content'),
     re_path(r'^revision/origin-file-content/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocOriginFileContent.as_view(), name='sdoc_revision_origin_file_content'),
+    re_path(r'^revision/published-content/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocPublishedRevisionContent.as_view(), name='sdoc_published_revision_content'),
     re_path(r'^delete-revision/(?P<file_uuid>[-0-9a-f]{36})/(?P<revision_id>\d+)/$', DeleteSeadocOtherRevision.as_view(), name='sdoc_delete_other_revision'),
     re_path(r'^file/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocFileView.as_view(), name='seadoc_file_view'),
     re_path(r'^file-uuid/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocFileUUIDView.as_view(), name='seadoc_file_uuid_view'),

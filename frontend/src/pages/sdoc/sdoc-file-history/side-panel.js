@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Loading from '../../components/loading';
-import { gettext, historyRepoID, PER_PAGE } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import editUtilities from '../../utils/editor-utilities';
-import toaster from '../../components/toast';
+import Loading from '../../../components/loading';
+import { gettext, historyRepoID, PER_PAGE } from '../../../utils/constants';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
+import editUtilities from '../../../utils/editor-utilities';
+import toaster from '../../../components/toast';
 import HistoryVersion from './history-version';
-import Switch from '../../components/common/switch';
+import Switch from '../../../components/common/switch';
 
 const { docUuid } = window.fileHistory.pageOptions;
 

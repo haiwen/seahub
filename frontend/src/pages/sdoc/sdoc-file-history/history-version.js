@@ -2,11 +2,11 @@ import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
-import { gettext, filePath } from '../../utils/constants';
-import URLDecorator from '../../utils/url-decorator';
-import Rename from '../../components/rename';
+import { gettext, filePath } from '../../../utils/constants';
+import URLDecorator from '../../../utils/url-decorator';
+import Rename from '../../../components/rename';
 
-import '../../css/history-record-item.css';
+import '../../../css/history-record-item.css';
 
 moment.locale(window.app.config.lang);
 
