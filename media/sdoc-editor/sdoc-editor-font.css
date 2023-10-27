@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 4097705 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1696755823394'); /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1696755823394#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('./sdoc-editor-font/iconfont.woff2?t=1696755823394') format('woff2'),
-       url('./sdoc-editor-font/iconfont.woff?t=1696755823394') format('woff'),
-       url('./sdoc-editor-font/iconfont.ttf?t=1696755823394') format('truetype'),
-       url('./sdoc-editor-font/iconfont.svg?t=1696755823394#sdocfont') format('svg');
+  src: url('./sdoc-editor-font/iconfont.eot?t=1698118988223'); /* IE9 */
+  src: url('./sdoc-editor-font/iconfont.eot?t=1698118988223#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('./sdoc-editor-font/iconfont.woff2?t=1698118988223') format('woff2'),
+       url('./sdoc-editor-font/iconfont.woff?t=1698118988223') format('woff'),
+       url('./sdoc-editor-font/iconfont.ttf?t=1698118988223') format('truetype'),
+       url('./sdoc-editor-font/iconfont.svg?t=1698118988223#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-describe:before {
+  content: "\e657";
 }
 
 .sdoc-add-comment:before {
