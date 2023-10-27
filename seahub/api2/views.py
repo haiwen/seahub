@@ -1644,20 +1644,8 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
-        if org_id:
-            # transfer to department
-            if '@seafile_group' in new_owner:
-                group_id = get_group_id_by_repo_owner(new_owner)
-                if not is_group_admin(group_id, username):
-                    error_msg = 'Permission denied.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            # transfer to org user
-            else:
-                if not ccnet_api.org_user_exists(org_id, new_owner):
-                    error_msg = _('User %s not found in organization.') % new_owner
-                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
+        # from user permission check
         if org_id:
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
         else:
@@ -1667,6 +1655,20 @@ class RepoOwner(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # to user permission check
+        # transfer to department
+        if '@seafile_group' in new_owner:
+            group_id = get_group_id_by_repo_owner(new_owner)
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # transfer to org user
+        if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
+            error_msg = _('User %s not found in organization.') % new_owner
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # to user can not add repo
         if not new_owner_obj.permissions.can_add_repo():
             error_msg = _('Transfer failed: role of %s is %s, can not add library.') % \
                     (new_owner, new_owner_obj.role)
@@ -1676,13 +1678,16 @@ class RepoOwner(APIView):
             error_msg = _("Library can not be transferred to owner.")
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # preparation before transfer repo
         pub_repos = []
         if org_id:
             # get repo shared to user/group list
             shared_users = seafile_api.list_org_repo_shared_to(org_id,
-                    repo_owner, repo_id)
+                                                               repo_owner,
+                                                               repo_id)
             shared_groups = seafile_api.list_org_repo_shared_group(org_id,
-                    repo_owner, repo_id)
+                                                                   repo_owner,
+                                                                   repo_id)
 
             # get all org pub repos
             pub_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(
