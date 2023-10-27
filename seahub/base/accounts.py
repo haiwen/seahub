@@ -46,7 +46,7 @@ except ImportError:
 
 from seahub.settings import ENABLE_LDAP, LDAP_USER_FIRST_NAME_ATTR, LDAP_USER_LAST_NAME_ATTR, \
     LDAP_USER_NAME_REVERSE, LDAP_FILTER, LDAP_CONTACT_EMAIL_ATTR, LDAP_USER_ROLE_ATTR, \
-    ACTIVATE_USER_WHEN_IMPORT, ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR
+    ENABLE_SASL, SASL_MECHANISM, SASL_AUTHC_ID_ATTR
 
 LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 try:
@@ -968,7 +968,7 @@ class CustomLDAPBackend(object):
 
         if not user:
             try:
-                user = User.objects.create_ldap_user(is_active=ACTIVATE_USER_WHEN_IMPORT)
+                user = User.objects.create_ldap_user(is_active=True)
                 SocialAuthUser.objects.add(user.username, ldap_provider, login_attr)
             except Exception as e:
                 logger.error(f'recreate ldap user failed. {e}')
