@@ -21,11 +21,11 @@ from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 
-from seaserv import seafile_api, check_quota
+from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
-from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, get_user_common_info
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
@@ -33,7 +33,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     can_access_seadoc_asset, is_seadoc_revision
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils import get_file_type_and_ext, normalize_file_path, normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
-    gen_inner_file_get_url, gen_inner_file_upload_url, get_service_url
+    gen_inner_file_get_url, gen_inner_file_upload_url, get_service_url, is_valid_username
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -46,6 +46,8 @@ from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.file_participants.models import FileParticipant
+from seahub.base.accounts import User
 
 
 logger = logging.getLogger(__name__)
@@ -2012,3 +2014,179 @@ class SeadocPublishedRevisionContent(APIView):
         return Response({
             'content': resp.content
         })
+
+
+class SdocParticipantsView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """List all participants of a file.
+        """
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # main
+        try:
+            participant_list = []
+            participant_queryset = FileParticipant.objects.get_participants(file_uuid)
+
+            for participant in participant_queryset:
+                participant_info = get_user_common_info(participant.username)
+                participant_list.append(participant_info)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'participant_list': participant_list})
+
+    def post(self, request, file_uuid):
+        """batch add participants of a file.
+        """
+        # argument check
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        emails = request.data.get('emails')
+        if not emails or not isinstance(emails, list):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'emails invalid.')
+        emails = list(set(emails))
+
+        # batch add
+        success = list()
+        failed = list()
+
+        try:
+            participants_queryset = FileParticipant.objects.get_participants(file_uuid)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        for email in emails:
+            if not is_valid_username(email):
+                error_dic = {'email': email, 'error_msg': 'email invalid.', 'error_code': 400}
+                failed.append(error_dic)
+                continue
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                error_dic = {'email': email, 'error_msg': 'User not found.', 'error_code': 404}
+                failed.append(error_dic)
+                continue
+
+            # permission check
+            if not seafile_api.check_permission_by_path(repo_id, '/', user.username):
+                error_dic = {'email': email, 'error_msg': _('Permission denied.'), 'error_code': 403}
+                failed.append(error_dic)
+                continue
+
+            # main
+            try:
+                if participants_queryset.filter(uuid=uuid_map, username=email).count() > 0:
+                    error_dic = {'email': email, 'error_msg': _('The participant already exists.'), 'error_code': 409}
+                    failed.append(error_dic)
+                    continue
+
+                FileParticipant.objects.add_participant(uuid_map, email)
+                participant = get_user_common_info(email)
+                success.append(participant)
+            except Exception as e:
+                logger.error(e)
+                error_dic = {'email': email, 'error_msg': _('Internal Server Error'), 'error_code': 500}
+                failed.append(error_dic)
+                continue
+
+        return Response({'success': success, 'failed': failed})
+
+    def delete(self, request, file_uuid):
+        """Delete a participant
+        """
+        # argument check
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        email = request.data.get('email')
+        if not email or not is_valid_username(email):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'email invalid.')
+
+        try:
+            if not FileParticipant.objects.get_participant(file_uuid, email):
+                return api_error(status.HTTP_404_NOT_FOUND, 'Participant %s not found.' % email)
+
+            FileParticipant.objects.delete_participant(file_uuid, email)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True})
+
+
+class SdocRelatedUsers(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        if not file_uuid:
+            error_msg = 'file_uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        org_id = get_org_id_by_repo_id(repo_id)
+        if org_id and org_id > 0:
+            related_user_emails = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            related_user_emails = seafile_api.get_shared_users_by_repo(repo_id)
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if repo_owner not in related_user_emails:
+            related_user_emails.append(repo_owner)
+
+        related_users = []
+        for email in related_user_emails:
+            user_info = get_user_common_info(email)
+            related_users.append(user_info)
+
+        return Response({'related_users': related_users})
