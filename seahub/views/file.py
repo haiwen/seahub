@@ -2218,7 +2218,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
     file_uuid = revision.doc_uuid
     return_dict['file_uuid'] = file_uuid
     return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
-    return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + origin_file_uuid if is_published else file_uuid
+    return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + (origin_file_uuid if is_published else file_uuid)
 
     can_edit_file = not is_published
     if parse_repo_perm(permission).can_edit_on_web is False:
