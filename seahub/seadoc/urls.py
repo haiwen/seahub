@@ -3,7 +3,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocQueryCopyMoveProgressView, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
-    SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocRelatedUsers
+    SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocRelatedUsers, SdocDeleteParticipantView
 
 
 # api/v2.1/seadoc/
@@ -38,5 +38,6 @@ urlpatterns = [
     re_path(r'^files-info/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocFilesInfoView.as_view(), name='seadoc_files_info_view'),
     re_path(r'^dir/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDirView.as_view(), name='seadoc_dir_view'),
     re_path(r'^participants/(?P<file_uuid>[-0-9a-f]{36})/$', SdocParticipantsView.as_view(), name='seadoc_participants_view'),
+    re_path(r'^delete-participant/(?P<file_uuid>[-0-9a-f]{36})/$', SdocDeleteParticipantView.as_view(), name='seadoc_delete_participant_view'),
     re_path(r'^related-users/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRelatedUsers.as_view(), name='seadoc_related_users_view'),
 ]

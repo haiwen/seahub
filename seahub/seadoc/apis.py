@@ -2123,7 +2123,12 @@ class SdocParticipantsView(APIView):
 
         return Response({'success': success, 'failed': failed})
 
-    def delete(self, request, file_uuid):
+
+class SdocDeleteParticipantView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, file_uuid):
         """Delete a participant
         """
         # argument check
