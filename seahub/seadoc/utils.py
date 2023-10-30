@@ -22,6 +22,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.seadoc.models import SeadocRevision
 
 logger = logging.getLogger(__name__)
+ZSDOC = 'zsdoc'
 
 
 def uuid_str_to_32_chars(file_uuid):

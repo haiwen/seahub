@@ -30,7 +30,7 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
-    get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
+    get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, ZSDOC, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision, export_sdoc
 from seahub.utils.file_types import SEADOC, IMAGE
@@ -309,7 +309,7 @@ class SeadocExportView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         response = FileResponse(open(tmp_zip_path, 'rb'), content_type="application/x-zip-compressed", as_attachment=True)
-        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename)
+        response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-4] + ZSDOC)
 
         tmp_dir = os.path.join('/tmp/sdoc', str(uuid_map.uuid))
         if os.path.exists(tmp_dir):
