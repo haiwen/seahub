@@ -24,6 +24,7 @@ from seahub.seadoc.models import SeadocRevision
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 
 logger = logging.getLogger(__name__)
+ZSDOC = 'zsdoc'
 
 
 def uuid_str_to_32_chars(file_uuid):
