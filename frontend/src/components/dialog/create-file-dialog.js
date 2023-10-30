@@ -165,14 +165,14 @@ class CreateFile extends React.Component {
                 </Label>
               </FormGroup>
             )}
-            {this.props.fileType == '.sdoc' && (
+            {/*this.props.fileType == '.sdoc' && (
               <FormGroup check>
                 <Label check>
                   <Input type="checkbox" checked={isSdocDraft} onChange={this.toggleMarkSdocDraft}/>
                   <span>{gettext('Mark as draft')}</span>
                 </Label>
               </FormGroup>
-            )}
+            )*/}
           </Form>
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
