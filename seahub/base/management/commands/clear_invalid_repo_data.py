@@ -83,7 +83,7 @@ class Command(BaseCommand):
                 return
 
             for repo_id, *_ in res:
-                repo_ids.append(repo_ids)
+                repo_ids.append(repo_id)
                 if repo_id not in all_repo_ids:
                     invalid_repo_ids.append(repo_id)
 
