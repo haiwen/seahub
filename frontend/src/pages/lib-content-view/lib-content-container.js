@@ -52,7 +52,6 @@ const propTypes = {
   // repo content
   draftCounts: PropTypes.number,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
   updateUsedRepoTags: PropTypes.func.isRequired,
   // list
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -164,10 +163,10 @@ class LibContentContainer extends React.Component {
   };
 
   render() {
-    let { path, repoID, usedRepoTags, readmeMarkdown, draftCounts } = this.props;
+    let { path, repoID, usedRepoTags, draftCounts } = this.props;
     let isRepoInfoBarShow = false;
     if (path === '/') {
-      if (usedRepoTags.length !== 0 || readmeMarkdown !== null || draftCounts !== 0) {
+      if (usedRepoTags.length !== 0 || draftCounts !== 0) {
         isRepoInfoBarShow = true;
       }
     }
@@ -213,7 +212,6 @@ class LibContentContainer extends React.Component {
                     enableDirPrivateShare={this.props.enableDirPrivateShare}
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
@@ -255,7 +253,6 @@ class LibContentContainer extends React.Component {
                     onRenameNode={this.props.onRenameNode}
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}
@@ -308,7 +305,6 @@ class LibContentContainer extends React.Component {
                     onLinkClick={this.props.onLinkClick}
                     isRepoInfoBarShow={isRepoInfoBarShow}
                     usedRepoTags={this.props.usedRepoTags}
-                    readmeMarkdown={this.props.readmeMarkdown}
                     draftCounts={this.props.draftCounts}
                     updateUsedRepoTags={this.props.updateUsedRepoTags}
                     isDirentListLoading={this.props.isDirentListLoading}

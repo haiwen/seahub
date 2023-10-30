@@ -3,17 +3,13 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
-import ReadmeDialog from './dialog/readme-dialog';
-import { siteRoot, gettext } from '../utils/constants';
-import { Utils } from '../utils/utils';
+import { gettext } from '../utils/constants';
 
 import '../css/repo-info-bar.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  currentPath: PropTypes.string.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func,
   onFileTagChanged: PropTypes.func,
@@ -29,15 +25,14 @@ class RepoInfoBar extends React.Component {
     this.state = {
       currentTag: null,
       isListTaggedFileShow: false,
-      showRepoDrafts: false,
-      showReadmeDialog: false,
+      showRepoDrafts: false
     };
   }
 
   onListTaggedFiles = (currentTag) => {
     this.setState({
       currentTag: currentTag,
-      isListTaggedFileShow: !this.state.isListTaggedFileShow,
+      isListTaggedFileShow: !this.state.isListTaggedFileShow
     });
   };
 
@@ -53,25 +48,14 @@ class RepoInfoBar extends React.Component {
     });
   };
 
-  toggleReadme = () => {
-    this.setState({
-      showReadmeDialog: !this.state.showReadmeDialog
-    });
-  };
-
   render() {
-    let { repoID, currentPath, usedRepoTags, readmeMarkdown, draftCounts, className } = this.props;
+    let { repoID, usedRepoTags, draftCounts, className } = this.props;
 
     // to be compatible with the existing code
-    if (readmeMarkdown === undefined) {
-      readmeMarkdown = null;
-    }
     if (draftCounts === undefined) {
       draftCounts = 0;
     }
 
-    let href = readmeMarkdown !== null ? siteRoot + 'lib/' + repoID + '/file' + Utils.joinPath(currentPath, readmeMarkdown.name) +  '?mode=edit' : '';
-    let filePath = readmeMarkdown !== null ? currentPath + readmeMarkdown.name : '';
     return (
       <div className={`repo-info-bar ${className ? className : ''}`}>
         {usedRepoTags.length > 0 && (
@@ -89,19 +73,7 @@ class RepoInfoBar extends React.Component {
             })}
           </ul>
         )}
-        <div className={(usedRepoTags.length > 0 && readmeMarkdown) ? 'file-info-list mt-1' : 'file-info-list'}>
-          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) > 1) &&
-            <span className="file-info" onClick={this.toggleReadme}>
-              <span className="info-icon sf2-icon-readme"></span>
-              <span className="used-tag-name">{readmeMarkdown.name}</span>
-            </span>
-          }
-          {(readmeMarkdown !== null && parseInt(readmeMarkdown.size) < 2) &&
-            <span className="file-info">
-              <span className="info-icon sf2-icon-readme"></span>
-              <a className="used-tag-name" href={href} target='_blank' rel="noreferrer">{readmeMarkdown.name}</a>
-            </span>
-          }
+        <div className={usedRepoTags.length > 0 ? 'file-info-list mt-1' : 'file-info-list'}>
           {draftCounts > 0 &&
             <span className="file-info">
               <span className="info-icon sf2-icon-drafts"></span>
@@ -136,17 +108,6 @@ class RepoInfoBar extends React.Component {
           </ModalPortal>
         )}
 
-        {this.state.showReadmeDialog && (
-          <ModalPortal>
-            <ReadmeDialog
-              toggleCancel={this.toggleReadme}
-              repoID={repoID}
-              filePath={filePath}
-              href={href}
-              fileName={readmeMarkdown.name}
-            />
-          </ModalPortal>
-        )}
       </div>
     );
   }

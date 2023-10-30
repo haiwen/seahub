@@ -13,7 +13,6 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
   usedRepoTags: PropTypes.array.isRequired,
-  readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
   updateUsedRepoTags: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -64,7 +63,6 @@ class DirListView extends React.Component {
           <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
-            readmeMarkdown={this.props.readmeMarkdown}
             draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}

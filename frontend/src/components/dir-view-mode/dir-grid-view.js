@@ -8,7 +8,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  readmeMarkdown: PropTypes.object,
   draftCounts: PropTypes.number,
   usedRepoTags: PropTypes.array.isRequired,
   updateUsedRepoTags: PropTypes.func.isRequired,
@@ -53,7 +52,6 @@ class DirGridView extends React.Component {
           <RepoInfoBar
             repoID={this.props.repoID}
             currentPath={this.props.path}
-            readmeMarkdown={this.props.readmeMarkdown}
             draftCounts={this.props.draftCounts}
             usedRepoTags={this.props.usedRepoTags}
             updateUsedRepoTags={this.props.updateUsedRepoTags}

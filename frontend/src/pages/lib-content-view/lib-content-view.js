@@ -53,7 +53,6 @@ class LibContentView extends React.Component {
       draftID: '',
       draftCounts: 0,
       usedRepoTags: [],
-      readmeMarkdown: null,
       isTreeDataLoading: true,
       treeData: treeHelper.buildTree(),
       currentNode: null,
@@ -279,17 +278,6 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateReadmeMarkdown = (direntList) => {
-    this.setState({readmeMarkdown: null});
-    direntList.forEach(item => {
-      let fileName = item.name.toLowerCase();
-      if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-        this.setState({readmeMarkdown: item});
-        return true;
-      }
-    });
-  };
-
   updateColumnMarkdownData = (filePath) => {
     let repoID = this.props.repoID;
     // update state
@@ -482,12 +470,7 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     seafileAPI.listDir(repoID, path, {'with_thumbnail': true}).then(res => {
       let direntList = [];
-      let markdownItem = null;
       res.data.dirent_list.forEach(item => {
-        let fileName = item.name.toLowerCase();
-        if (fileName === 'readme.md' || fileName === 'readme.markdown') {
-          markdownItem = item;
-        }
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
@@ -498,7 +481,6 @@ class LibContentView extends React.Component {
         isDirentListLoading: false,
         direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.data.dir_id,
-        readmeMarkdown: markdownItem,
         path: path,
         isSessionExpired: false,
       });
@@ -1425,7 +1407,6 @@ class LibContentView extends React.Component {
         this.setState({direntList: [dirent, ...this.state.direntList]});
       } else {
         this.setState({direntList: [...this.state.direntList, dirent]});
-        this.updateReadmeMarkdown(this.state.direntList);
       }
     }
   };
@@ -1455,7 +1436,6 @@ class LibContentView extends React.Component {
       }
     }
     this.setState({direntList: direntList});
-    this.updateReadmeMarkdown(direntList);
   };
 
   renameDirent = (direntPath, newName) => {
@@ -1480,7 +1460,6 @@ class LibContentView extends React.Component {
         return item;
       });
       this.setState({ direntList: direntList });
-      this.updateReadmeMarkdown(direntList);
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // example: direntPath = /A/B, state.path = /A/B/C
       let newPath = Utils.renameAncestorPath(this.state.path, direntPath, newDirentPath);
@@ -1508,7 +1487,6 @@ class LibContentView extends React.Component {
       this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
 
       this.setState({direntList: direntList});
-      this.updateReadmeMarkdown(direntList);
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
       // the deleted item is ancester of the current item
       let parentPath = Utils.getDirName(direntPath);
@@ -1527,7 +1505,6 @@ class LibContentView extends React.Component {
     this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
 
     this.setState({direntList: direntList});
-    this.updateReadmeMarkdown(direntList);
   };
 
   moveDirent = (direntPath, moveToDirentPath = null) => {
@@ -1544,7 +1521,6 @@ class LibContentView extends React.Component {
     this.recaculateSelectedStateAfterDirentDeleted(name, direntList);
 
     this.setState({direntList: direntList});
-    this.updateReadmeMarkdown(direntList);
   };
 
   // only one scence: The moved items are inside current path
@@ -1562,7 +1538,6 @@ class LibContentView extends React.Component {
       isDirentSelected: false,
       isAllDirentSelected: false,
     });
-    this.updateReadmeMarkdown(direntList);
   };
 
   updateDirent = (dirent, paramKey, paramValue) => {
@@ -2047,7 +2022,6 @@ class LibContentView extends React.Component {
             onDeleteNode={this.onDeleteTreeNode}
             draftCounts={this.state.draftCounts}
             usedRepoTags={this.state.usedRepoTags}
-            readmeMarkdown={this.state.readmeMarkdown}
             updateUsedRepoTags={this.updateUsedRepoTags}
             isDirentListLoading={this.state.isDirentListLoading}
             direntList={direntItemsList}
