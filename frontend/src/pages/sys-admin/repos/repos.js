@@ -132,8 +132,8 @@ Content.propTypes = {
   resetPerPage: PropTypes.func,
   pageInfo: PropTypes.object,
   curPerPage: PropTypes.number,
-  sortItems: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
+  sortItems: PropTypes.func,
+  sortBy: PropTypes.string,
   onTransferRepo: PropTypes.func.isRequired,
 };
 
