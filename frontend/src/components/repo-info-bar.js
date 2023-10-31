@@ -73,7 +73,7 @@ class RepoInfoBar extends React.Component {
             })}
           </ul>
         )}
-        <div className={usedRepoTags.length > 0 ? 'file-info-list mt-1' : 'file-info-list'}>
+        {/*<div className={usedRepoTags.length > 0 ? 'file-info-list mt-1' : 'file-info-list'}>
           {draftCounts > 0 &&
             <span className="file-info">
               <span className="info-icon sf2-icon-drafts"></span>
@@ -83,7 +83,7 @@ class RepoInfoBar extends React.Component {
               </button>
             </span>
           }
-        </div>
+        </div>*/}
         {this.state.isListTaggedFileShow && (
           <ModalPortal>
             <ListTaggedFilesDialog

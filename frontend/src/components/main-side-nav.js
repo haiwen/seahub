@@ -256,7 +256,7 @@ class MainSideNav extends React.Component {
                 <span className="nav-text">{gettext('Published Libraries')}</span>
               </Link>
             </li>
-            {isDocs &&
+            {/*isDocs &&
               <li className="nav-item" onClick={(e) => this.tabItemClick(e, 'drafts')}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('drafts')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                   <span className="sf2-icon-edit" aria-hidden="true"></span>
@@ -264,7 +264,7 @@ class MainSideNav extends React.Component {
                   {this.props.draftCounts > 0 && <span id="draft-num">{this.props.draftCounts}</span>}
                 </Link>
               </li>
-            }
+            */}
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={(e) => this.tabItemClick(e, 'linked-devices')}>
                 <span className="sf2-icon-monitor" aria-hidden="true"></span>

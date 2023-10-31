@@ -158,13 +158,13 @@ class CreateFile extends React.Component {
                 onChange={this.handleChange}
               />
             </FormGroup>
-            {this.props.fileType == '.md' && isDocs && (
+            {/*this.props.fileType == '.md' && isDocs && (
               <FormGroup check>
                 <Label check>
                   <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft')}
                 </Label>
               </FormGroup>
-            )}
+            )*/}
             {/*this.props.fileType == '.sdoc' && (
               <FormGroup check>
                 <Label check>
