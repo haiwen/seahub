@@ -7,6 +7,12 @@
   font-size: 1rem;
   padding: 0.5rem 1rem;
 }
+
+.file-history-header { /* for markdown file history */
+  background-color: #fff;
+  height: 50px;
+}
+
 .history-header .title {
   font-size: 1.25rem;
   line-height: 1rem;
@@ -95,7 +101,7 @@
   line-height: 50px;
   font-size: 1rem;
   padding: 0 10px;
-  background-color: rgb(250,250,249);
+  /*background-color: rgb(250,250,249);*/
   font-weight: bolder;
 }
 

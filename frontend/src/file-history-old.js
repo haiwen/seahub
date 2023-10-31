@@ -216,22 +216,22 @@ class FileHistory extends React.Component {
     Utils.handleSearchedItemClick(searchedItem);
   };
 
+  goBack = (e) => {
+    e.preventDefault();
+    window.history.back();
+  }
+
   render() {
     return (
       <Fragment>
         <div id="header" className="old-history-header">
-          <div className="logo">
-            <Logo showCloseSidePanelIcon={false}/>
-          </div>
-          <div className='toolbar'>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
-          </div>
+          <Logo showCloseSidePanelIcon={false} />
+          <CommonToolbar onSearchedClick={this.onSearchedClick} />
         </div>
         <div id="main" onScroll={this.onScrollHandler}>
           <div className="old-history-main">
             <Fragment>
-              {/* eslint-disable-next-line */}
-              <a href="javascript:window.history.back()" className="go-back" title="Back">
+              <a href="#" className="go-back" title="Back" onClick={this.goBack}>
                 <span className="fas fa-chevron-left"></span>
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
