@@ -190,7 +190,7 @@ def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mecha
                 break
             ctrl.cookie = page_ctrls[0].cookie
 
-    # get ldap user's uid list, uid means login_attr, likes: ['ldap@email.com', ...]
+    # get ldap user's uid list, uid means login_attr, likes: ['uid1', 'uid2', 'uid3', 'uid5', ...]
     ldap_uid_list = list()
     for pair in result_data:
         user_dn, attrs = pair
@@ -201,22 +201,27 @@ def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mecha
         uid = attrs[login_attr][0].lower().decode()
         ldap_uid_list.append(uid)
 
-    # get uid_email_map, likes {'ldap@email.com': 'seafile@email.com', ...}
-    ldap_users = SocialAuthUser.objects.filter(provider__in=[LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER],
-                                               uid__in=ldap_uid_list)
+    # get uid_email_map, likes {'uid2': '2@2.com', 'uid3': '3@3.com', 'uid4': '4@4.com', ...}
+    imported_ldap_users = SocialAuthUser.objects.filter(provider__in=[LDAP_PROVIDER, MULTI_LDAP_1_PROVIDER],
+                                                        uid__in=ldap_uid_list)
     uid_email_map = dict()
-    for user in ldap_users:
+    for user in imported_ldap_users:
         uid_email_map[user.uid] = user.username
 
-    user_objs, error = get_user_objs_from_ccnet(list(uid_email_map.values()))
+    users = list()
+    email_list = list()
+    for uid in ldap_uid_list:
+        if uid in uid_email_map:
+            email_list.append(uid_email_map[uid])
+        else:
+            users.append(UserObj(uid, None, None, None, None))
+
+    user_objs, error = get_user_objs_from_ccnet(email_list)
     if error:
         raise Exception('Failed to query email_user object list from ccnet_db.')
+    users.extend(user_objs)
 
-    for uid in ldap_uid_list:
-        if uid not in uid_email_map:
-            user_objs.append(UserObj(uid, None, None, None, None))
-
-    return user_objs
+    return users
 
 
 def get_user_last_access_time(email, last_login_time):
