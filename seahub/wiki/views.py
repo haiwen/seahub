@@ -107,18 +107,18 @@ def format_markdown_file_content(slug, repo_id, file_path, token, file_response)
     h1_head_content = ''
     for p in html_content.split('\n'):
         if p.startswith('<h1>') and p.endswith('</h1>'):
-            h1_head_content = p.strip('<h1></h1>')
-            head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.strip('<h1></h1>'), 1)
+            h1_head_content = p.replace('<h1>', '', 1).replace('</h1>', '', 1)
+            head = p.replace('<h1>', '<h1 id="user-content-%s">' % p.replace('<h1>', '', 1).replace('</h1>', '', 1), 1)
             html_content = html_content.replace(p, head)
         elif p.startswith('<h2>') and p.endswith('</h2>'):
-            head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.strip('<h2></h2>'), 1)
+            head = p.replace('<h2>', '<h2 id="user-content-%s">' % p.replace('<h2>', '', 1).replace('</h2>', '', 1), 1)
             html_content = html_content.replace(p, head)
-            outline = '<div class="outline-h2">' + p.strip('<h2></h2>') + '</div>'
+            outline = '<div class="outline-h2">' + p.replace('<h2>', '', 1).replace('</h2>', '', 1) + '</div>'
             outlines.append(mark_safe(outline))
         elif p.startswith('<h3>') and p.endswith('</h3>'):
-            head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.strip('<h3></h3>'), 1)
+            head = p.replace('<h3>', '<h3 id="user-content-%s">' % p.replace('<h3>', '', 1).replace('</h3>', '', 1), 1)
             html_content = html_content.replace(p, head)
-            outline = '<div class="outline-h3">' + p.strip('<h3></h3>') + '</div>'
+            outline = '<div class="outline-h3">' + p.replace('<h3>', '', 1).replace('</h3>', '', 1) + '</div>'
             outlines.append(mark_safe(outline))
 
     file_content = mark_safe(html_content)
