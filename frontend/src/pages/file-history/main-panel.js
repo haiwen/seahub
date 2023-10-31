@@ -25,21 +25,17 @@ class MainPanel extends React.Component {
 
   render() {
     return (
-      <div className="main-panel">
-        <div className="main-panel-center content-viewer">
-          <div className={contentClass}>
-            {
-              this.props.renderingContent ?
-                (<Loading />) :
-                (<div className="diff-view article">
-                  <DiffViewer
-                    scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-                    newMarkdownContent={this.props.newMarkdownContent}
-                    oldMarkdownContent={this.props.oldMarkdownContent}
-                  />
-                </div>)
-            }
-          </div>
+      <div className="content-viewer flex-fill">
+        <div className={contentClass}>
+          {this.props.renderingContent ?
+            (<Loading />) :
+            (<div className="diff-view article">
+              <DiffViewer
+                scriptSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+                newMarkdownContent={this.props.newMarkdownContent}
+                oldMarkdownContent={this.props.oldMarkdownContent}
+              />
+            </div>)}
         </div>
       </div>
     );

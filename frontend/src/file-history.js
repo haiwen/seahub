@@ -1,17 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import ReactDom from 'react-dom';
 import axios from 'axios';
 import { fileName, historyRepoID } from './utils/constants';
-import { Utils } from './utils/utils';
-import CommonToolbar from './components/toolbar/common-toolbar';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
 import { seafileAPI } from './utils/seafile-api';
 
 import './css/layout.css';
 import './css/file-history.css';
-import './css/toolbar.css';
-import './css/search.css';
 
 class FileHistory extends React.Component {
 
@@ -23,10 +19,6 @@ class FileHistory extends React.Component {
       oldMarkdownContent: ''
     };
   }
-
-  onSearchedClick = (searchedItem) => {
-    Utils.handleSearchedItemClick(searchedItem);
-  };
 
   setDiffContent = (newMarkdownContent, oldMarkdownContent)=> {
     this.setState({
@@ -68,28 +60,25 @@ class FileHistory extends React.Component {
   };
 
   render() {
-    return(
-      <Fragment>
-        <div id="header" className="history-header">
-          <div className="title">
-            <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
-              <span className="fas fa-chevron-left"></span>
-            </a>
-            <span className="name">{fileName}</span>
+    return (
+      <div className="history-content flex-fill d-flex">
+        <div className="flex-fill d-flex flex-column">
+          <div className="history-header file-history-header">
+            <div className="title">
+              <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
+                <span className="fas fa-chevron-left"></span>
+              </a>
+              <span className="name">{fileName}</span>
+            </div>
           </div>
-          <div className='toolbar'>
-            <CommonToolbar onSearchedClick={this.onSearchedClick} />
-          </div>
-        </div>
-        <div id="main" className="history-content">
           <MainPanel
             newMarkdownContent={this.state.newMarkdownContent}
             oldMarkdownContent={this.state.oldMarkdownContent}
             renderingContent={this.state.renderingContent}
           />
-          <SidePanel onItemClick={this.onHistoryItemClick}/>
         </div>
-      </Fragment>
+        <SidePanel onItemClick={this.onHistoryItemClick}/>
+      </div>
     );
   }
 }
