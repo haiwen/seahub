@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
-import json
 import logging
 from types import FunctionType
 from constance import config
@@ -11,6 +10,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.db import connection
 from django.db.models import Q
 from django.core.cache import cache
 from django.utils.translation import gettext as _
@@ -25,7 +25,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.models import TokenV2
-
+from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
     SEND_EMAIL_ON_RESETTING_USER_PASSWD
@@ -98,10 +98,36 @@ logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
-class LdapUser(object):
-    def __init__(self, email, ctime):
+class UserObj(object):
+    def __init__(self, email, ctime, is_staff, is_active, role):
         self.email = email
         self.ctime = ctime
+        self.is_staff = is_staff
+        self.is_active = is_active
+        self.role = role
+
+
+def get_user_objs_from_ccnet(email_list):
+    db_name, error_msg = get_ccnet_db_name()
+    if error_msg:
+        logger.error(error_msg)
+        return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+    sql = """SELECT e.email, is_staff, is_active, ctime, role FROM `%s`.`EmailUser` e
+             LEFT JOIN UserRole r ON e.emali=r.email WHERE e.email IN %%s""" % db_name
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(sql, (email_list,))
+            res = cursor.fetchall()
+    except Exception as e:
+        logger.error('Failed to query email_user object list from ccnet_db, error: %s.' % e)
+        return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+    user_objs = list()
+    for email, is_staff, is_active, ctime, role in res:
+        user_objs.append(UserObj(email, ctime, is_staff, is_active, role))
+
+    return user_objs, None
 
 
 def ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism):
@@ -182,29 +208,15 @@ def get_ldap_users(server_url, admin_dn, admin_password, enable_sasl, sasl_mecha
     for user in ldap_users:
         uid_email_map[user.uid] = user.username
 
-    # get email_ctime_map, likes {'seafile@email.com': 1692950099, ...}
-    email_ctime_map = dict()
-    db_users = list()
-    for i in range(0, len(uid_email_map), 20):
-        db_users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(list(uid_email_map.values())[i: i+20])))
-    for user in db_users:
-        email_ctime_map[user.email] = user.ctime
+    user_objs, error = get_user_objs_from_ccnet(list(uid_email_map.values()))
+    if error:
+        raise Exception('Failed to query email_user object list from ccnet_db.')
 
-    users = list()
     for uid in ldap_uid_list:
-        """
-        uid_email_map[uid] -> {'ldap@email.com': 'seafile@email.com', ...}['ldap@email.com'] -> 'seafile@email.com'
-        """
-        """
-        email_ctime_map[uid_email_map[uid]] -> email_ctime_map['seafile@email.com'] ->
-        {'seafile@email.com': 1692950099, ...}['seafile@email.com'] -> 1692950099
-        """
-        if uid in uid_email_map and uid_email_map[uid] in email_ctime_map:
-            users.append(LdapUser(uid_email_map[uid], email_ctime_map[uid_email_map[uid]]))
-        else:
-            users.append(LdapUser(uid, None))
+        if uid not in uid_email_map:
+            user_objs.append(UserObj(uid, None, None, None, None))
 
-    return users
+    return user_objs
 
 
 def get_user_last_access_time(email, last_login_time):
@@ -538,9 +550,9 @@ class AdminUsers(APIView):
             if ENABLE_MULTI_LDAP:
                 multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
                 email_list.extend([user.username for user in multi_ldap_users])
-            users = list()
-            for i in range(0, len(email_list), 20):
-                users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list[i: i+20])))
+            users, error = get_user_objs_from_ccnet(email_list)
+            if error:
+                return error
 
         for user in users:
             email = user.email
@@ -685,9 +697,9 @@ class AdminUsers(APIView):
                 if ENABLE_MULTI_LDAP:
                     multi_ldap_users = SocialAuthUser.objects.filter(provider=MULTI_LDAP_1_PROVIDER)
                     email_list.extend([user.username for user in multi_ldap_users])
-                all_ldap_users = list()
-                for i in range(0, len(email_list), 20):
-                    all_ldap_users.append(ccnet_api.get_emailusers_in_list('DB', json.dumps(email_list[i: i+20])))
+                all_ldap_users, error = get_user_objs_from_ccnet(email_list)
+                if error:
+                    return error
                 users = all_ldap_users[start: start + per_page]
 
         data = []
