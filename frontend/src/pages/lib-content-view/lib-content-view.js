@@ -479,12 +479,11 @@ class LibContentView extends React.Component {
         direntList.push(dirent);
       });
 
-      direntList = Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder)
       this.setState({
         pathExist: true,
         userPerm: res.data.user_perm,
         isDirentListLoading: false,
-        direntList: direntList,
+        direntList: Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder),
         dirID: res.data.dir_id,
         path: path,
         isSessionExpired: false,
@@ -503,13 +502,14 @@ class LibContentView extends React.Component {
               pathInRepoShareInfoList.push(item.path);
             }
           });
+          const { direntList } = this.state;
           direntList.forEach(dirent => {
             if (pathInRepoShareInfoList.indexOf(Utils.joinPath(path, dirent.name) + '/') !== -1) {
               dirent.has_been_shared_out = true;
           }
           });
           this.setState({
-            direntList: direntList,
+            direntList: direntList
           });
         });
       }
