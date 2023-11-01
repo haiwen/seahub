@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import ListTaggedFilesDialog from './dialog/list-taggedfiles-dialog';
 import ListRepoDraftsDialog from './dialog/list-repo-drafts-dialog';
-import { gettext } from '../utils/constants';
 
 import '../css/repo-info-bar.css';
 

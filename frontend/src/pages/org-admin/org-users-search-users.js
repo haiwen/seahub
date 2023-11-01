@@ -157,7 +157,7 @@ class OrgUsersSearchUsers extends Component {
         this.getItems();
       }
     }
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

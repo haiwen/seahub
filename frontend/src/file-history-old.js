@@ -219,7 +219,7 @@ class FileHistory extends React.Component {
   goBack = (e) => {
     e.preventDefault();
     window.history.back();
-  }
+  };
 
   render() {
     return (

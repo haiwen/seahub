@@ -133,6 +133,10 @@ class LibContentView extends React.Component {
     location = decodeURIComponent(location);
     let path = location.slice(location.indexOf(repoID) + repoID.length + 1); // get the string after repoID
     path = path.slice(path.indexOf('/')); // get current path
+    // If the path isn't a root path and ends with '/', delete the ending '/'
+    if (path.length > 1 && path[path.length - 1] === '/') {
+      path = path.slice(0, path.length - 1);
+    }
 
     try {
       const repoRes = await seafileAPI.getRepoInfo(repoID);

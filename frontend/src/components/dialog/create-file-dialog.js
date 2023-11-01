@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Alert } from 'reactstrap';
-import { gettext, isDocs } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 
 const propTypes = {
@@ -141,7 +141,6 @@ class CreateFile extends React.Component {
   };
 
   render() {
-    const { isSdocDraft } = this.state;
     const { toggleDialog } = this.props;
     return (
       <Modal isOpen={true} toggle={toggleDialog} onOpened={this.onAfterModelOpened}>
