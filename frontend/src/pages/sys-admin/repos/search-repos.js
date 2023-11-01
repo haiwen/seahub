@@ -85,7 +85,7 @@ class SearchRepos extends Component {
         this.searchRepos();
       }
     }
-  }
+  };
 
   render() {
     const { name, isSubmitBtnActive } = this.state;

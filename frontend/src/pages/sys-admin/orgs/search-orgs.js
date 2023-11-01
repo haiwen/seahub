@@ -93,7 +93,7 @@ class SearchOrgs extends Component {
         this.getItems();
       }
     }
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;

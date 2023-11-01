@@ -96,7 +96,7 @@ class SearchGroups extends Component {
         this.getGroups();
       }
     }
-  }
+  };
 
   render() {
     const { name, isSubmitBtnActive } = this.state;

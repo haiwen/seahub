@@ -279,7 +279,7 @@ class SearchUsers extends Component {
         this.getItems();
       }
     }
-  }
+  };
 
   render() {
     const { query, isSubmitBtnActive } = this.state;
