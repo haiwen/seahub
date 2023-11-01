@@ -6,8 +6,7 @@ import stat
 import logging
 import requests
 import posixpath
-from datetime import datetime
-from urllib.parse import quote, unquote
+from urllib.parse import unquote
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,17 +31,19 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision
 from seahub.utils.file_types import SEADOC, IMAGE
-from seahub.utils import get_file_type_and_ext, normalize_file_path, normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
-    gen_inner_file_get_url, gen_inner_file_upload_url, get_service_url, is_valid_username
+from seahub.utils.file_op import if_locked_by_online_office
+from seahub.utils import get_file_type_and_ext, normalize_file_path, \
+        normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
+        gen_inner_file_get_url, gen_inner_file_upload_url, \
+        get_service_url, is_valid_username, is_pro_version
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
-from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision, SeadocCommentReply
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
@@ -247,7 +248,7 @@ class SeadocOriginFileContent(APIView):
         if filetype != SEADOC:
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         revision_info = is_seadoc_revision(file_uuid)
         origin_doc_uuid = revision_info.get('origin_doc_uuid', '')
         is_published = revision_info.get('is_published', False)
@@ -260,11 +261,11 @@ class SeadocOriginFileContent(APIView):
         if not origin_uuid_map:
             error_msg = 'seadoc origin uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         # get content from sdoc server
         username = request.user.username
         sdoc_server_api = SdocServerAPI(origin_doc_uuid, str(origin_uuid_map.filename), username)
-        try:          
+        try:
             res = sdoc_server_api.get_doc()
             return Response({
                 'content': json.dumps(res)
@@ -370,7 +371,7 @@ class SeadocAsyncCopyImages(APIView):
         origin_doc_uuid = request.data.get('origin_doc_uuid', '')
         if file_uuid == origin_doc_uuid:
             error_msg = 'file_uuid and origin_doc_uuid can not be the same.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)            
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if not origin_doc_uuid:
             error_msg = 'origin_doc_uuid invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1208,10 +1209,10 @@ class SeadocStartRevise(APIView):
         if SeadocRevision.objects.get_by_doc_uuid(origin_file_uuid):
             error_msg = 'seadoc %s is already a revision.' % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         # save origin file
         try:
-            sdoc_server_api = SdocServerAPI(origin_file_uuid, filename, username)            
+            sdoc_server_api = SdocServerAPI(origin_file_uuid, filename, username)
             res = sdoc_server_api.save_doc()
         except Exception as e:
             warning_msg = 'Save origin sdoc %s failed.' % origin_file_uuid
@@ -1307,7 +1308,7 @@ class SeadocRevisions(APIView):
         if not uuid_map:
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         count = SeadocRevision.objects.filter(origin_doc_uuid=uuid_map.uuid, is_published=False).count()
         revision_queryset = SeadocRevision.objects.list_all_by_origin_doc_uuid(uuid_map.uuid)
 
@@ -1345,13 +1346,13 @@ class SeadocRevisionView(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
 
         if not uuid_map:
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
@@ -1359,13 +1360,13 @@ class SeadocRevisionView(APIView):
         if revision.is_published:
             error_msg = 'Revision %s is already published.' % file_uuid
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         repo_id = revision.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         # permission check
         permission = check_folder_permission(request, repo_id, '/')
         if not permission:
@@ -1375,7 +1376,7 @@ class SeadocRevisionView(APIView):
         if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # get revision file info
         revision_file_uuid = uuid_map
         revision_parent_path = revision_file_uuid.parent_path
@@ -1390,7 +1391,7 @@ class SeadocRevisionView(APIView):
 
             seafile_api.del_file(
                     repo_id, revision_parent_path, json.dumps([revision_filename]), username)
-            
+
         SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
 
         sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
@@ -1406,13 +1407,13 @@ class SeadocRevisionView(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
 
         if not uuid_map:
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
@@ -1420,7 +1421,7 @@ class SeadocRevisionView(APIView):
         if revision.is_published:
             error_msg = 'Revision %s is already published.' % file_uuid
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         origin_doc_uuid = revision.origin_doc_uuid
         origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
         if not origin_uuid_map:
@@ -1442,7 +1443,7 @@ class SeadocRevisionView(APIView):
         try:
 
             # rewrite file
-            file = request.FILES.get('file', None) 
+            file = request.FILES.get('file', None)
             files = {
                 'file': file,
                 'file_name': uuid_map.filename,
@@ -1455,8 +1456,8 @@ class SeadocRevisionView(APIView):
             newest_file_version = seafile_api.get_file_id_by_path(origin_uuid_map.repo_id, origin_doc_path)
             SeadocRevision.objects.update_origin_file_version(file_uuid, newest_file_version)
 
-            # server content update 
-            sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)            
+            # server content update
+            sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)
             sdoc_server_api.replace_doc()
 
             return Response({
@@ -1479,7 +1480,7 @@ class DeleteSeadocOtherRevision(APIView):
         if not origin_doc_uuid:
             error_msg = 'origin_file_uuid %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
         if not origin_uuid_map:
             error_msg = 'file %s uuid_map not found.' % origin_doc_uuid
@@ -1488,7 +1489,7 @@ class DeleteSeadocOtherRevision(APIView):
         if not revision_id:
             error_msg = 'Revision %s not found.' % revision_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         revision = SeadocRevision.objects.get_by_origin_doc_uuid_and_revision_id(origin_doc_uuid, revision_id)
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
@@ -1502,13 +1503,13 @@ class DeleteSeadocOtherRevision(APIView):
         if not uuid_map:
             error_msg = 'file %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         repo_id = revision.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         # permission check
         permission = check_folder_permission(request, repo_id, '/')
         if not permission:
@@ -1518,7 +1519,7 @@ class DeleteSeadocOtherRevision(APIView):
         if permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # get revision file info
         revision_file_uuid = uuid_map
         revision_parent_path = revision_file_uuid.parent_path
@@ -1533,7 +1534,7 @@ class DeleteSeadocOtherRevision(APIView):
 
             seafile_api.del_file(
                     repo_id, revision_parent_path, json.dumps([revision_filename]), username)
-            
+
         SeadocRevision.objects.delete_by_doc_uuid(file_uuid)
 
         sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
@@ -1560,7 +1561,7 @@ class SeadocPublishRevision(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         if revision.is_published:
             error_msg = 'Revision %s is already published.' % file_uuid
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)  
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo_id = revision.repo_id
         repo = seafile_api.get_repo(repo_id)
@@ -1605,10 +1606,10 @@ class SeadocPublishRevision(APIView):
         revision_parent_path = revision_file_uuid.parent_path
         revision_filename = revision_file_uuid.filename
 
-        # username 
+        # username
         username = request.user.username
         try:
-            sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)            
+            sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
             res = sdoc_server_api.save_doc()
         except Exception as e:
             logger.error(e)
@@ -1648,7 +1649,7 @@ class SeadocPublishRevision(APIView):
             seafile_api.del_file(
                 repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
-        try:         
+        try:
             res = sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)
         except Exception as e:
             logger.error(e)
@@ -1819,7 +1820,7 @@ class SeadocFilesInfoView(APIView):
             except Exception as e:
                 logger.exception(e)
                 continue
- 
+
             info = {
                 'is_dir': is_dir,
                 'name': file_name,
@@ -1925,25 +1926,25 @@ class SdocRevisionBaseVersionContent(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'File %s uuid_map not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         origin_doc_path = revision.origin_doc_path
         if not origin_doc_path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file path is invalid.')
-        
+
         origin_file_version = revision.origin_file_version
         if not origin_file_version:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file version is missing.')
-        
+
         origin_doc_uuid = revision.origin_doc_uuid
         origin_doc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
         if not origin_doc_uuid_map:
@@ -1957,7 +1958,7 @@ class SdocRevisionBaseVersionContent(APIView):
         if not token:
             error_msg = 'Origin file %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         origin_file_name = os.path.basename(origin_doc_path)
         download_url = gen_inner_file_get_url(token, origin_file_name)
 
@@ -1975,7 +1976,7 @@ class SeadocPublishedRevisionContent(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         revision = SeadocRevision.objects.get_by_doc_uuid(file_uuid)
         if not revision:
             error_msg = 'Revision %s not found.' % file_uuid
@@ -1984,15 +1985,15 @@ class SeadocPublishedRevisionContent(APIView):
         if not revision.is_published:
             error_msg = 'Revision %s is not published.' % file_uuid
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         origin_doc_path = revision.origin_doc_path
         if not origin_doc_path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file path is invalid.')
-        
+
         publish_file_version = revision.publish_file_version
         if not publish_file_version:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Origin file version is missing.')
-        
+
         origin_doc_uuid = revision.origin_doc_uuid
         origin_doc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_doc_uuid)
         if not origin_doc_uuid_map:
@@ -2006,7 +2007,7 @@ class SeadocPublishedRevisionContent(APIView):
         if not token:
             error_msg = 'Origin file %s not found.' % origin_doc_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         origin_file_name = os.path.basename(origin_doc_path)
         download_url = gen_inner_file_get_url(token, origin_file_name)
 
@@ -2026,7 +2027,7 @@ class SdocParticipantsView(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -2059,7 +2060,7 @@ class SdocParticipantsView(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -2127,7 +2128,7 @@ class SdocParticipantsView(APIView):
 class SdocParticipantView(APIView):
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
-    
+
     def delete(self, request, file_uuid):
         """Delete a participant
         """
@@ -2135,7 +2136,7 @@ class SdocParticipantView(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -2171,7 +2172,7 @@ class SdocRelatedUsers(APIView):
         if not file_uuid:
             error_msg = 'file_uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -2195,3 +2196,46 @@ class SdocRelatedUsers(APIView):
             related_users.append(user_info)
 
         return Response({'related_users': related_users})
+
+class SeadocEditorCallBack(APIView):
+
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, file_uuid):
+
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_seadoc_access_token(auth, file_uuid):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # file info check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # currently only implement unlock file
+        sdoc_status = request.POST.get('status', '')
+        if sdoc_status != 'no_write':
+            error_msg = 'status invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # unlock file
+        repo_id = uuid_map.repo_id
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        try:
+            if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
+                seafile_api.unlock_file(repo_id, file_path)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
