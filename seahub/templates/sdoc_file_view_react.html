@@ -1,6 +1,6 @@
 {% extends 'file_view_react.html' %}
 {% load render_bundle from webpack_loader %}
-{% load seahub_tags %}
+{% load seahub_tags i18n static %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
@@ -31,6 +31,66 @@ isSdocDraft: {% if is_sdoc_draft %}true{% else %}false{% endif %}
 {% endblock %}
 
 {% block render_bundle %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
 <script src="{{ MEDIA_URL }}js/init-scroll-bar.js" ></script>
+<script type="text/javascript">
+    var SEAFILE_GLOBAL = {
+        csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
+    };
+    {% if can_edit_file %}
+    var interval;
+    {% if not share_link_token %}
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-file-view" repo.id %}' + '?p={{path|urlencode}}',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                'operation': 'refresh-lock',
+                'expire': 2400
+            },
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    {% else %}
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-share-link-online-office-lock" share_link_token %}',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                'expire': 2400
+            },
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    {% endif %}
+    interval = setInterval(refreshLock, 30 * 60 * 1000);
+    {% endif %}
+</script>
 {% render_bundle 'viewFileSdoc' 'js' %}
 {% endblock %}

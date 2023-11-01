@@ -664,6 +664,17 @@ def view_lib_file(request, repo_id, path):
             can_edit_file = False
         return_dict['can_edit_file'] = can_edit_file
 
+        if is_pro_version() and can_edit_file:
+            try:
+                if not is_locked:
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                          int(time.time()) + 40 * 60)
+                elif locked_by_online_office:
+                    seafile_api.refresh_file_lock(repo_id, path,
+                                                  int(time.time()) + 40 * 60)
+            except Exception as e:
+                logger.error(e)
+
         seadoc_perm = 'rw' if can_edit_file else 'r'
         return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
 
