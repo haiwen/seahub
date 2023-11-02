@@ -21,11 +21,14 @@ def gen_headers():
     return {"Authorization": "Token %s" % token}
 
 
-def get_dir_file_recursively(username, repo_id, path, all_dirs):
+def get_dir_file_recursively(username, repo_id, path, all_dirs, include_sys_dir=False):
     dirs = seafile_api.list_dir_by_path(repo_id, path)
     for dirent in dirs:
         entry = {}
+
         if stat.S_ISDIR(dirent.mode):
+            if not include_sys_dir and path =='/' and dirent.obj_name in ['images', 'Revisions']:
+                continue
             entry["type"] = 'dir'
         else:
             entry["type"] = 'file'
