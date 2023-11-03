@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 import logging
 
 from rest_framework import status
@@ -39,7 +40,6 @@ class CrossUsersCopyView(APIView):
             "dst_parent_dir":"/x/y/",
         }
         """
-
         # argument check
         src_repo_id = request.data.get('src_repo_id', None)
         if not src_repo_id:
@@ -84,25 +84,23 @@ class CrossUsersCopyView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        # User must has `rw` permission for dst parent dir.
+        # User must have `rw` permission for dst parent dir.
         dst_parent_permission = check_folder_permission(request, dst_repo_id, dst_parent_dir)
         if dst_parent_permission != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        formated_src_dirents = [dirent.strip('/') for dirent in src_dirents]
-        src_multi = "\t".join(formated_src_dirents)
-        dst_multi = "\t".join(formated_src_dirents)
-
         try:
             res = seafile_api.copy_file(
-                src_repo_id, src_parent_dir, src_multi,
-                dst_repo_id, dst_parent_dir, dst_multi,
+                src_repo_id, src_parent_dir, json.dumps(src_dirents),
+                dst_repo_id, dst_parent_dir, json.dumps(src_dirents),
                 username=username, need_progress=1, synchronous=0)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        result = dict()
+        result['task_id'] = res.task_id if res.background else ''
+        return Response(result)
