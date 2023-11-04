@@ -3,6 +3,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocQueryCopyMoveProgressView, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
+    SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers,SeadocEditorCallBack
 
 # api/v2.1/seadoc/
@@ -23,6 +24,10 @@ urlpatterns = [
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/$', SeadocCommentView.as_view(), name='seadoc_comment'),
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/$', SeadocCommentRepliesView.as_view(), name='seadoc_comment_replies'),
     re_path(r'^comment/(?P<file_uuid>[-0-9a-f]{36})/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', SeadocCommentReplyView.as_view(), name='seadoc_comment_reply'),
+    re_path(r'^repo-tags/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRepoTagsView.as_view(), name='seadoc_repo_tags'),
+    re_path(r'^repo-tags/(?P<file_uuid>[-0-9a-f]{36})/(?P<repo_tag_id>\d+)/$', SdocRepoTagView.as_view(), name='seadoc_repo_tag'),
+    re_path(r'^file-tags/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRepoFileTagsView.as_view(), name='seadoc_file_tags'),
+    re_path(r'^file-tags/(?P<file_uuid>[-0-9a-f]{36})/(?P<file_tag_id>\d+)/$', SdocRepoFileTagView.as_view(), name='seadoc_file_tag'),
     re_path(r'^start-revise/$', SeadocStartRevise.as_view(), name='seadoc_start_revise'),
     re_path(r'^publish-revision/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocPublishRevision.as_view(), name='seadoc_publish_revision'),
     re_path(r'^revisions-count/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocRevisionsCount.as_view(), name='seadoc_revisions_count'),

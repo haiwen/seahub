@@ -50,6 +50,8 @@ from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.file_participants.models import FileParticipant
 from seahub.base.accounts import User
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
+from seahub.repo_tags.models import RepoTags
+from seahub.file_tags.models import FileTags
 
 
 logger = logging.getLogger(__name__)
@@ -1172,6 +1174,313 @@ class SeadocCommentReplyView(APIView):
         data.update(
             user_to_dict(reply.author, request=request, avatar_size=avatar_size))
         return Response(data)
+
+
+class SdocRepoTagsView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """list all repo_tags by repo_id.
+        """
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get files tags
+        repo_tags = []
+        try:
+            repo_tag_list = RepoTags.objects.get_all_by_repo_id(repo_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        for repo_tag in repo_tag_list:
+            res = repo_tag.to_dict()
+            repo_tags.append(res)
+
+        return Response({"repo_tags": repo_tags}, status=status.HTTP_200_OK)
+
+    def post(self, request, file_uuid):
+        """add one repo_tag.
+        """
+        # argument check
+        tag_name = request.data.get('name')
+        if not tag_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        tag_color = request.data.get('color')
+        if not tag_color:
+            error_msg = 'color invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_name(repo_id, tag_name)
+        if repo_tag:
+            error_msg = 'repo tag %s already exist.' % tag_name
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            repo_tag = RepoTags.objects.create_repo_tag(repo_id, tag_name, tag_color)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
+
+    def put(self, request, file_uuid):
+        """bulk add repo_tags.
+        """
+        # argument check
+        tags = request.data.get('tags')
+        if not tags:
+            error_msg = 'tags invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        tag_objs = list()
+        try:
+            for tag in tags:
+                name = tag.get('name' ,'')
+                color = tag.get('color', '')
+                if name and color:
+                    obj = RepoTags(repo_id=repo_id, name=name, color=color)
+                    tag_objs.append(obj)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'tags invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            repo_tag_list = RepoTags.objects.bulk_create(tag_objs)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_tags = list()
+        for repo_tag in repo_tag_list:
+            res = repo_tag.to_dict()
+            repo_tags.append(res)
+
+        return Response({"repo_tags": repo_tags}, status=status.HTTP_200_OK)
+
+
+class SdocRepoTagView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, file_uuid, repo_tag_id):
+        """update one repo_tag
+        """
+        # argument check
+        tag_name = request.data.get('name')
+        if not tag_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        tag_color = request.data.get('color')
+        if not tag_color:
+            error_msg = 'color invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
+        if not repo_tag:
+            error_msg = 'repo_tag not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            repo_tag.name = tag_name
+            repo_tag.color = tag_color
+            repo_tag.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
+
+    def delete(self, request, file_uuid, repo_tag_id):
+        """delete one repo_tag
+        """
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
+        if not repo_tag:
+            error_msg = 'repo_tag not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            RepoTags.objects.delete_repo_tag(repo_tag_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
+
+
+class SdocRepoFileTagsView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        """list all tags of a file.
+        """
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_tags = FileTags.objects.list_file_tags_by_file_uuid(uuid_map)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"file_tags": file_tags}, status=status.HTTP_200_OK)
+
+    def post(self, request, file_uuid):
+        """add a tag for a file.
+        """
+        # argument check
+        repo_tag_id = request.data.get('repo_tag_id')
+        if not repo_tag_id:
+            error_msg = 'repo_tag_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
+        if not repo_tag:
+            error_msg = 'repo_tag not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_tag = FileTags.objects.get_file_tag_by_file_uuid(uuid_map, repo_tag_id)
+        if file_tag:
+            error_msg = 'file tag %s already exist.' % repo_tag_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        try:
+            file_tag = FileTags.objects.add_file_tag_by_file_uuid(uuid_map, repo_tag_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({"file_tag": file_tag.to_dict()}, status=status.HTTP_201_CREATED)
+
+
+class SdocRepoFileTagView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def delete(self, request, file_uuid, file_tag_id):
+        """delete a tag from a file
+        """
+        # resource check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = uuid_map.repo_id
+
+        file_tag = FileTags.objects.get_file_tag_by_id(file_tag_id)
+        if not file_tag:
+            error_msg = 'file_tag %s not found.' % file_tag_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        try:
+            FileTags.objects.delete_file_tag(file_tag_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True}, status=status.HTTP_200_OK)
 
 
 class SeadocStartRevise(APIView):
