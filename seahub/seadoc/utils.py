@@ -104,7 +104,7 @@ def get_seadoc_upload_link(uuid_map, last_modify_user=''):
     repo_id = uuid_map.repo_id
     parent_path = uuid_map.parent_path
 
-    obj_id = json.dumps({'parent_dir': parent_path})
+    obj_id = json.dumps({'online_office_update': True, 'parent_dir': parent_path})
     token = seafile_api.get_fileserver_access_token(
         repo_id, obj_id, 'update', last_modify_user, use_onetime=True)
     if not token:
