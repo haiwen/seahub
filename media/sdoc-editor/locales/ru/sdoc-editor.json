@@ -50,7 +50,7 @@
   "Right": "Справа",
   "File_saved": "Файл сохранён.",
   "File_failed_to_save": "Не удалось сохранить файл.",
-  "Back_to_parent_directory":"Вернуться в родительский каталог",
+  "Back_to_parent_directory": "Вернуться в родительский каталог",
   "Edit": "Редактировать",
   "Copy": "Копировать",
   "Copied": "Скопировано",
@@ -93,7 +93,7 @@
   "New_draft": "Новый черновик",
   "View_draft": "Просмотр черновика",
   "Publish": "Опубликовать",
-  "This_file_has_a_draft": "Этот файл имеет черновик.", 
+  "This_file_has_a_draft": "Этот файл имеет черновик.",
   "Delete": "Удалить",
   "Reply": "Ответ",
   "Comment": "Комментарий",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "В документе нет h1",
-      "issue" : "Отсутствует h1"
+      "issue": "Отсутствует h1"
     },
     "heading_end_with_colon": {
       "description": "Завершающая пунктуация в заголовке не должна быть двоеточием",
@@ -162,7 +162,7 @@
     "title": "Горячие клавиши",
     "userHelpData": [
       {
-        "shortcutType":"Список горячих клавиш",
+        "shortcutType": "Список горячих клавиш",
         "shortcutData": {
           "Make_list": "Создать список",
           "Make_ordered_list": "Создать нумерованный список",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Вставить дочерний в элемент",
           "Increase_depth": "Увеличить глубину"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для заголовка",
         "shortcutData": {
           "Heading_1": "Заголовок 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Заголовок 5",
           "Heading_6": "Заголовок 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для кода",
         "shortcutData": {
           "Make_code_block": "Создать блок кода",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Выделить блок кода",
           "Insert_indent": "Вставить отступ"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для блока цитаты",
         "shortcutData": {
           "Make_Block_quote": "Создать блок цитаты",
           "Escape_Block_quote": "Выделить блок цитаты"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для таблицы",
         "shortcutData": {
           "Insert_Table_Row": "Вставить строку таблицы",
           "Escape_table": "Выделить таблицу"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для формул",
         "shortcutData": {
           "Insert_Formula": "Вставить формулу"
         }
-      }, {
-        "shortcutType":"Встроенные горячие клавиши",
+      },
+      {
+        "shortcutType": "Встроенные горячие клавиши",
         "shortcutData": {
           "Bold": "Полужирный",
           "Italic": "Курсив",
           "Italic_Bold": "Курсив полужирный",
           "Inline_code": "Встроенный код"
         }
-      }, {
+      },
+      {
         "shortcutType": "Сохранить горячие клавиши",
         "shortcutData": {
           "Save_file": "Сохранить файл"
         }
-      }, {
+      },
+      {
         "shortcutType": "Горячие клавиши для изображений",
         "shortcutData": {
           "Paste_screen_shot": "Вставить скриншот",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Вы уверены, что удалите этот ответ?",
   "Enter_a_comment": "Введите комментарий",
   "Enter_a_reply": "Введите ответ",
-  "Reopen_discussion" : "Добавление ответа приведёт к возобновлению обсуждения.",
+  "Reopen_discussion": "Добавление ответа приведёт к возобновлению обсуждения.",
   "Confirm": "Подтвердить",
   "View_changes": "Просмотр изменений",
   "Revision": "Пересмотр",
@@ -392,5 +400,11 @@
   "Insert_caption": "Вставить подпись",
   "No_collaborators_available": "Нет доступных соавторов",
   "Find_a_collaborator": "Найти соавтора",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Тег не найден",
+  "Create_a_new_tag": "Создать новый тег",
+  "Search_tags": "Search tags",
+  "No_options_available": "Тег не найден",
+  "Add_option": "Создать новый тег",
+  "Find_an_option": "Search tags"
 }

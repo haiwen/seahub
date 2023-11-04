@@ -11,9 +11,9 @@ cp -r frontend/node_modules/@seafile/sdoc-editor/public/media/sdoc-editor-font.c
 
 tx pull -s -t -f seahub.sdoc-editor
 
-git add .
+# git add .
 
-git commit -m "update sdoc version and sdoc translate"
+# git commit -m "update sdoc version and sdoc translate"
 
 # git push origin master
 

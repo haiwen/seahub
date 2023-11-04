@@ -50,7 +50,7 @@
   "Right": "derecha",
   "File_saved": "Archivo guardado",
   "File_failed_to_save": "Fallo al guardar archivo",
-  "Back_to_parent_directory":"Volver a la carpeta superior",
+  "Back_to_parent_directory": "Volver a la carpeta superior",
   "Edit": "Editar",
   "Copy": "Copiar",
   "Copied": "Copiado",
@@ -93,7 +93,7 @@
   "New_draft": "New draft",
   "View_draft": "View draft",
   "Publish": "Publicar",
-  "This_file_has_a_draft": "Este archivo tiene un borrador", 
+  "This_file_has_a_draft": "Este archivo tiene un borrador",
   "Delete": "Borrar",
   "Reply": "Responder",
   "Comment": "Comentar",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "No hay h1 en el documento",
-      "issue" : "Falta h1"
+      "issue": "Falta h1"
     },
     "heading_end_with_colon": {
       "description": "Un encabezado no debe finalizar con el signo Dos Puntos",
@@ -162,7 +162,7 @@
     "title": "Atajos de teclado",
     "userHelpData": [
       {
-        "shortcutType":"Listar atajos",
+        "shortcutType": "Listar atajos",
         "shortcutData": {
           "Make_list": "Crear lista",
           "Make_ordered_list": "Crear lista ordenada",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Insert child in item",
           "Increase_depth": "Increase depth"
         }
-      }, {
+      },
+      {
         "shortcutType": "Head shortcuts",
         "shortcutData": {
           "Heading_1": "Encabezado 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Encabezado 5",
           "Heading_6": "Encabezado 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Code block shortcuts",
         "shortcutData": {
           "Make_code_block": "Crear bloque de código",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Escape code block",
           "Insert_indent": "Insert indent"
         }
-      }, {
+      },
+      {
         "shortcutType": "Block quote shortcuts",
         "shortcutData": {
           "Make_Block_quote": "Make Block quote",
           "Escape_Block_quote": "Escape Block quote"
         }
-      }, {
+      },
+      {
         "shortcutType": "Atajos de tabla",
         "shortcutData": {
           "Insert_Table_Row": "Insertar fila de tabla",
           "Escape_table": "Escape table"
         }
-      }, {
+      },
+      {
         "shortcutType": "Atajos de fórmula",
         "shortcutData": {
           "Insert_Formula": "Insertar Fórmula"
         }
-      }, {
-        "shortcutType":"Inline shortcuts",
+      },
+      {
+        "shortcutType": "Inline shortcuts",
         "shortcutData": {
           "Bold": "Negrita",
           "Italic": "Itálica",
           "Italic_Bold": "Negrita itálica",
           "Inline_code": "Inline code"
         }
-      }, {
+      },
+      {
         "shortcutType": "Guardar atajos",
         "shortcutData": {
           "Save_file": "Guardar archivo"
         }
-      }, {
+      },
+      {
         "shortcutType": "Atajos de imagen",
         "shortcutData": {
           "Paste_screen_shot": "Pegar captura de pantalla",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Are you sure to delete this reply?",
   "Enter_a_comment": "Enter a comment",
   "Enter_a_reply": "Enter a reply",
-  "Reopen_discussion" : "Adding a reply will reopen this discussion",
+  "Reopen_discussion": "Adding a reply will reopen this discussion",
   "Confirm": "Confirmar",
   "View_changes": "View changes",
   "Revision": "Revision",
@@ -392,5 +400,11 @@
   "Insert_caption": "Insert caption",
   "No_collaborators_available": "No_collaborators_available",
   "Find_a_collaborator": "Find a collaborator",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Tag not found",
+  "Create_a_new_tag": "Cear una nueva etiqueta",
+  "Search_tags": "Search tags",
+  "No_options_available": "Tag not found",
+  "Add_option": "Cear una nueva etiqueta",
+  "Find_an_option": "Search tags"
 }

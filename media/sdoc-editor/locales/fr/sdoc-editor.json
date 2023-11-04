@@ -50,7 +50,7 @@
   "Right": "Droite",
   "File_saved": "Le fichier a été sauvegardé.",
   "File_failed_to_save": "Échec de la sauvegarde du fichier",
-  "Back_to_parent_directory":"Retour au répertoire parent",
+  "Back_to_parent_directory": "Retour au répertoire parent",
   "Edit": "Modifier",
   "Copy": "Copier",
   "Copied": "Copié",
@@ -93,7 +93,7 @@
   "New_draft": "Nouveau brouillon",
   "View_draft": "Voir le brouillon",
   "Publish": "Publier",
-  "This_file_has_a_draft": "Ce fichier possède un brouillon.", 
+  "This_file_has_a_draft": "Ce fichier possède un brouillon.",
   "Delete": "Supprimer",
   "Reply": "Répondre",
   "Comment": "Commentaire",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "Il n'y a pas de h1 dans le document.",
-      "issue" : "h1 manquant"
+      "issue": "h1 manquant"
     },
     "heading_end_with_colon": {
       "description": "La ponctuation de fin de titre ne doit pas être deux points",
@@ -162,7 +162,7 @@
     "title": "Raccourcis clavier",
     "userHelpData": [
       {
-        "shortcutType":"Liste des raccourcis",
+        "shortcutType": "Liste des raccourcis",
         "shortcutData": {
           "Make_list": "Faire une liste",
           "Make_ordered_list": "Faire une liste ordonnée",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Insérer enfant dans l'élément",
           "Increase_depth": "Améliorer la profondeur"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis en-tête",
         "shortcutData": {
           "Heading_1": "Titre 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Titre 5",
           "Heading_6": "Titre 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis de blocs de code",
         "shortcutData": {
           "Make_code_block": "Faire un bloc de code",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Sortir du bloc de code",
           "Insert_indent": "Insérer un espace"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis blockquote",
         "shortcutData": {
           "Make_Block_quote": "Faire un blockquote",
           "Escape_Block_quote": "Sortir du blockquote"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis tableau",
         "shortcutData": {
           "Insert_Table_Row": "Insérer une ligne",
           "Escape_table": "Sortir de la table"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis formule",
         "shortcutData": {
           "Insert_Formula": "Insérer formule"
         }
-      }, {
-        "shortcutType":"Raccourcis en ligne",
+      },
+      {
+        "shortcutType": "Raccourcis en ligne",
         "shortcutData": {
           "Bold": "Gras",
           "Italic": "Italique",
           "Italic_Bold": "Italique Gras",
           "Inline_code": "Ligne de code"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis sauvegarde",
         "shortcutData": {
           "Save_file": "Sauvegarder le fichier"
         }
-      }, {
+      },
+      {
         "shortcutType": "Raccourcis image",
         "shortcutData": {
           "Paste_screen_shot": "Coller la capture d'écran",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Êtes-vous sûr de vouloir supprimer cette réponse ?",
   "Enter_a_comment": "Saisir un commentaire",
   "Enter_a_reply": "Saisir une réponse",
-  "Reopen_discussion" : "L'ajout d'une réponse rouvrira la discussion.",
+  "Reopen_discussion": "L'ajout d'une réponse rouvrira la discussion.",
   "Confirm": "Confirmer",
   "View_changes": "Afficher les modifications",
   "Revision": "Révision",
@@ -392,5 +400,11 @@
   "Insert_caption": "Insert caption",
   "No_collaborators_available": "No_collaborators_available",
   "Find_a_collaborator": "Find a collaborator",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Tag not found",
+  "Create_a_new_tag": "Créer un nouveau Tag",
+  "Search_tags": "Search tags",
+  "No_options_available": "Tag not found",
+  "Add_option": "Créer un nouveau Tag",
+  "Find_an_option": "Search tags"
 }

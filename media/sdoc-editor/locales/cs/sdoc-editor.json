@@ -50,7 +50,7 @@
   "Right": "Vpravo",
   "File_saved": "Soubor uložen",
   "File_failed_to_save": "Soubor nebyl uložen",
-  "Back_to_parent_directory":"Zpět do nadřazeného adresáře",
+  "Back_to_parent_directory": "Zpět do nadřazeného adresáře",
   "Edit": "Upravit",
   "Copy": "Kopírovat",
   "Copied": "Zkopírováno",
@@ -93,7 +93,7 @@
   "New_draft": "New draft",
   "View_draft": "View draft",
   "Publish": "Zveřejnit",
-  "This_file_has_a_draft": "Tento soubor má koncept.", 
+  "This_file_has_a_draft": "Tento soubor má koncept.",
   "Delete": "Smazat",
   "Reply": "Odpověď",
   "Comment": "Komentář",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "V dokumentu není žádný h1",
-      "issue" : "Chybí h1"
+      "issue": "Chybí h1"
     },
     "heading_end_with_colon": {
       "description": "Koncová interpunkce v záhlaví by neměla být dvojtečka",
@@ -162,7 +162,7 @@
     "title": "Klávesové zkratky",
     "userHelpData": [
       {
-        "shortcutType":"Seznam zkratek",
+        "shortcutType": "Seznam zkratek",
         "shortcutData": {
           "Make_list": "Vytvořit seznam",
           "Make_ordered_list": "Vytvořit číslovaný seznam",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Vložit podpoložku",
           "Increase_depth": "Zvýšit hloubku"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky záhlaví",
         "shortcutData": {
           "Heading_1": "Záhlaví 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Záhlaví 5",
           "Heading_6": "Záhlaví 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky bloků kódu",
         "shortcutData": {
           "Make_code_block": "Vytvořit blok kódu",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Opustit blok kódu",
           "Insert_indent": "Vložit odrážku"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky bloku citace",
         "shortcutData": {
           "Make_Block_quote": "Vytvořit blokovou citaci",
           "Escape_Block_quote": "Opustit blokovou citaci"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky tabulky",
         "shortcutData": {
           "Insert_Table_Row": "Vložit řádku tabulky",
           "Escape_table": "Opustit tabulku"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky vzorečku",
         "shortcutData": {
           "Insert_Formula": "Insert Formula"
         }
-      }, {
-        "shortcutType":"Řádkové zkratky",
+      },
+      {
+        "shortcutType": "Řádkové zkratky",
         "shortcutData": {
           "Bold": "Tučně",
           "Italic": "Kurzíva",
           "Italic_Bold": "Tučná kurzíva",
           "Inline_code": "Řádkový kód"
         }
-      }, {
+      },
+      {
         "shortcutType": "Uložit zkratky",
         "shortcutData": {
           "Save_file": "Uložit soubor"
         }
-      }, {
+      },
+      {
         "shortcutType": "Zkratky obrázku",
         "shortcutData": {
           "Paste_screen_shot": "Vložit snímek obrazovky",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Are you sure to delete this reply?",
   "Enter_a_comment": "Enter a comment",
   "Enter_a_reply": "Enter a reply",
-  "Reopen_discussion" : "Adding a reply will reopen this discussion",
+  "Reopen_discussion": "Adding a reply will reopen this discussion",
   "Confirm": "Potvrdit",
   "View_changes": "View changes",
   "Revision": "Revision",
@@ -392,5 +400,11 @@
   "Insert_caption": "Insert caption",
   "No_collaborators_available": "No_collaborators_available",
   "Find_a_collaborator": "Find a collaborator",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Tag not found",
+  "Create_a_new_tag": "Vytvořit nový štítek",
+  "Search_tags": "Search tags",
+  "No_options_available": "Tag not found",
+  "Add_option": "Vytvořit nový štítek",
+  "Find_an_option": "Search tags"
 }

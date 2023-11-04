@@ -50,7 +50,7 @@
   "Right": "Destra",
   "File_saved": "File salvato.",
   "File_failed_to_save": "Errore salvataggio file.",
-  "Back_to_parent_directory":"Torna alla cartella precedente",
+  "Back_to_parent_directory": "Torna alla cartella precedente",
   "Edit": "Modifica",
   "Copy": "Copia",
   "Copied": "Copiato",
@@ -93,7 +93,7 @@
   "New_draft": "New draft",
   "View_draft": "View draft",
   "Publish": "Pubblica",
-  "This_file_has_a_draft": "Questo file è una bozza", 
+  "This_file_has_a_draft": "Questo file è una bozza",
   "Delete": "Elimina",
   "Reply": "Rispondi",
   "Comment": "Commento",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "There is no h1 in the document",
-      "issue" : "Missing h1"
+      "issue": "Missing h1"
     },
     "heading_end_with_colon": {
       "description": "Trailing punctuation in heading should not be a colon",
@@ -162,7 +162,7 @@
     "title": "Tasti rapidi",
     "userHelpData": [
       {
-        "shortcutType":"Elenca scorciatoie",
+        "shortcutType": "Elenca scorciatoie",
         "shortcutData": {
           "Make_list": "Crea elenco",
           "Make_ordered_list": "Crea elenco ordinato",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Inserisci un elemento figlio sotto questo elemento",
           "Increase_depth": "Aumenta la profondità"
         }
-      }, {
+      },
+      {
         "shortcutType": "Scorciatoie principali",
         "shortcutData": {
           "Heading_1": "Titolo 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Intestazione 5",
           "Heading_6": "Intestazione 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Scorciatoie di codice",
         "shortcutData": {
           "Make_code_block": "Crea un blocco di codice",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Codice di escape",
           "Insert_indent": "Inserisci indentazione"
         }
-      }, {
+      },
+      {
         "shortcutType": "Blocco scorciatoie di citazione",
         "shortcutData": {
           "Make_Block_quote": "Crea blocco citazioni",
           "Escape_Block_quote": "Escape Blocco Codice"
         }
-      }, {
+      },
+      {
         "shortcutType": "Scorciatoie Tabella",
         "shortcutData": {
           "Insert_Table_Row": "Inserisci riga nella tabella",
           "Escape_table": "Escape tabella"
         }
-      }, {
+      },
+      {
         "shortcutType": "Formula shortcuts",
         "shortcutData": {
           "Insert_Formula": "Insert Formula"
         }
-      }, {
-        "shortcutType":"Scorciatoie in linea",
+      },
+      {
+        "shortcutType": "Scorciatoie in linea",
         "shortcutData": {
           "Bold": "Grassetto",
           "Italic": "Corsivo",
           "Italic_Bold": "Corsivo Grassetto",
           "Inline_code": "Codice in linea"
         }
-      }, {
+      },
+      {
         "shortcutType": "Salva scorciatoie",
         "shortcutData": {
           "Save_file": "Salva file"
         }
-      }, {
+      },
+      {
         "shortcutType": "Scorciatoie per le immagini",
         "shortcutData": {
           "Paste_screen_shot": "Incolla la schermata",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Are you sure to delete this reply?",
   "Enter_a_comment": "Enter a comment",
   "Enter_a_reply": "Enter a reply",
-  "Reopen_discussion" : "Adding a reply will reopen this discussion",
+  "Reopen_discussion": "Adding a reply will reopen this discussion",
   "Confirm": "Confirm",
   "View_changes": "View changes",
   "Revision": "Revision",
@@ -392,5 +400,11 @@
   "Insert_caption": "Insert caption",
   "No_collaborators_available": "No_collaborators_available",
   "Find_a_collaborator": "Find a collaborator",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Tag not found",
+  "Create_a_new_tag": "Crea un nuovo tag",
+  "Search_tags": "Search tags",
+  "No_options_available": "Tag not found",
+  "Add_option": "Crea un nuovo tag",
+  "Find_an_option": "Search tags"
 }

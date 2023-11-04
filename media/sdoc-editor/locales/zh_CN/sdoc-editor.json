@@ -50,7 +50,7 @@
   "Right": "右对齐",
   "File_saved": "保存文件成功",
   "File_failed_to_save": "保存文件失败",
-  "Back_to_parent_directory":"返回上级目录",
+  "Back_to_parent_directory": "返回上级目录",
   "Edit": "编辑",
   "Copy": "复制",
   "Copied": "已复制",
@@ -93,7 +93,7 @@
   "New_draft": "创建草稿",
   "View_draft": "查看草稿",
   "Publish": "发布",
-  "This_file_has_a_draft": "这个文件有一个草稿.", 
+  "This_file_has_a_draft": "这个文件有一个草稿.",
   "Delete": "删除",
   "Reply": "回复",
   "Comment": "评论",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "文档缺少一级标题",
-      "issue" : "缺少一级标题"
+      "issue": "缺少一级标题"
     },
     "heading_end_with_colon": {
       "description": "标题中的标点符号不应为冒号",
@@ -162,7 +162,7 @@
     "title": "键盘快捷键",
     "userHelpData": [
       {
-        "shortcutType":"列表快捷键",
+        "shortcutType": "列表快捷键",
         "shortcutData": {
           "Make_list": "生成列表",
           "Make_ordered_list": "生成有序列表",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "插入新段落",
           "Increase_depth": "增加列表项深度"
         }
-      }, {
+      },
+      {
         "shortcutType": "标题快捷键",
         "shortcutData": {
           "Heading_1": "一级标题",
@@ -180,7 +181,8 @@
           "Heading_5": "五级标题",
           "Heading_6": "六级标题"
         }
-      }, {
+      },
+      {
         "shortcutType": "代码块快捷键",
         "shortcutData": {
           "Make_code_block": "生成代码块",
@@ -188,37 +190,43 @@
           "Escape_code_block": "退出代码块",
           "Insert_indent": "缩进"
         }
-      }, {
+      },
+      {
         "shortcutType": "引用快捷键",
         "shortcutData": {
           "Make_Block_quote": "生成引用",
           "Escape_Block_quote": "退出引用"
         }
-      }, {
+      },
+      {
         "shortcutType": "表格快捷键",
         "shortcutData": {
           "Insert_Table_Row": "插入行",
           "Escape_table": "退出表格"
         }
-      }, {
+      },
+      {
         "shortcutType": "公式快捷键",
         "shortcutData": {
           "Insert_Formula": " 插入公式"
         }
-      }, {
-        "shortcutType":"行级操作",
+      },
+      {
+        "shortcutType": "行级操作",
         "shortcutData": {
           "Bold": "粗体",
           "Italic": "斜体",
           "Italic_Bold": "斜体加粗",
           "Inline_code": "行内代码"
         }
-      }, {
+      },
+      {
         "shortcutType": "文件保存",
         "shortcutData": {
           "Save_file": "保存文件"
         }
-      }, {
+      },
+      {
         "shortcutType": "图片操作",
         "shortcutData": {
           "Paste_screen_shot": "上传截图",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "你确定要删除这个回复吗？",
   "Enter_a_comment": "输入评论",
   "Enter_a_reply": "输入回复",
-  "Reopen_discussion" : "添加回复会重新提出该讨论",
+  "Reopen_discussion": "添加回复会重新提出该讨论",
   "Confirm": "确认",
   "View_changes": "查看改动",
   "Revision": "修订稿",
@@ -392,5 +400,11 @@
   "Insert_caption": "插入标题",
   "No_collaborators_available": "没有找到协作人",
   "Find_a_collaborator": "查找协作人",
-  "Doc_comments": "文档评论"
+  "Doc_comments": "文档评论",
+  "Tag_not_found": "标签未找到",
+  "Create_a_new_tag": "新建标签",
+  "Search_tags": "查找标签",
+  "No_options_available": "标签未找到",
+  "Add_option": "新建标签",
+  "Find_an_option": "查找标签"
 }

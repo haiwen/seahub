@@ -50,7 +50,7 @@
   "Right": "Rechts",
   "File_saved": "Die Datei wurde gespeichert.",
   "File_failed_to_save": "Die Datei konnte nicht gespeichert werden.",
-  "Back_to_parent_directory":"Zurück zum übergeordneten Verzeichnis",
+  "Back_to_parent_directory": "Zurück zum übergeordneten Verzeichnis",
   "Edit": "Bearbeiten",
   "Copy": "Kopieren",
   "Copied": "Kopiert",
@@ -93,7 +93,7 @@
   "New_draft": "New draft",
   "View_draft": "View draft",
   "Publish": "Veröffentlichen",
-  "This_file_has_a_draft": "Zu dieser Datei gibt es einen Entwurf.", 
+  "This_file_has_a_draft": "Zu dieser Datei gibt es einen Entwurf.",
   "Delete": "Löschen",
   "Reply": "Antworten",
   "Comment": "Kommentar",
@@ -146,7 +146,7 @@
   "MarkdownLint": {
     "missing_h1": {
       "description": "Es gibt keine Hauptüberschrift (h1) in dem Text",
-      "issue" : "Hauptüberschrift (h1) fehlt"
+      "issue": "Hauptüberschrift (h1) fehlt"
     },
     "heading_end_with_colon": {
       "description": "Überschriften dürfen nicht mit einem Doppelpunkt enden.",
@@ -162,7 +162,7 @@
     "title": "Tastenkombinationen",
     "userHelpData": [
       {
-        "shortcutType":"Listen",
+        "shortcutType": "Listen",
         "shortcutData": {
           "Make_list": "Ungeordnete Liste anlegen",
           "Make_ordered_list": "Nummerierte Liste anlegen",
@@ -170,7 +170,8 @@
           "Insert_child_in_item": "Textzeile einfügen",
           "Increase_depth": "Einzug erhöhen"
         }
-      }, {
+      },
+      {
         "shortcutType": "Überschriften",
         "shortcutData": {
           "Heading_1": "Überschrift 1",
@@ -180,7 +181,8 @@
           "Heading_5": "Überschrift 5",
           "Heading_6": "Überschrift 6"
         }
-      }, {
+      },
+      {
         "shortcutType": "Codeblock",
         "shortcutData": {
           "Make_code_block": "Codeblock anlegen",
@@ -188,37 +190,43 @@
           "Escape_code_block": "Codeblock beenden",
           "Insert_indent": "Einzug erhöhen"
         }
-      }, {
+      },
+      {
         "shortcutType": "Blockquote",
         "shortcutData": {
           "Make_Block_quote": "Blockquote einfügen",
           "Escape_Block_quote": "Blockquote beenden"
         }
-      }, {
+      },
+      {
         "shortcutType": "Tabellen",
         "shortcutData": {
           "Insert_Table_Row": "Tabellenzeile einfügen",
           "Escape_table": "Tabelle beenden"
         }
-      }, {
+      },
+      {
         "shortcutType": "Formeln",
         "shortcutData": {
           "Insert_Formula": "Formel einfügen"
         }
-      }, {
-        "shortcutType":"Textformatierung",
+      },
+      {
+        "shortcutType": "Textformatierung",
         "shortcutData": {
           "Bold": "Fett",
           "Italic": "Kursiv",
           "Italic_Bold": "Kursiv fett",
           "Inline_code": "Inline-Code"
         }
-      }, {
+      },
+      {
         "shortcutType": "Speichern",
         "shortcutData": {
           "Save_file": "Datei speichern"
         }
-      }, {
+      },
+      {
         "shortcutType": "Bilder",
         "shortcutData": {
           "Paste_screen_shot": "Bild aus Zwischenablage einfügen",
@@ -267,7 +275,7 @@
   "Are_you_sure_to_delete_this_reply": "Are you sure to delete this reply?",
   "Enter_a_comment": "Enter a comment",
   "Enter_a_reply": "Enter a reply",
-  "Reopen_discussion" : "Adding a reply will reopen this discussion",
+  "Reopen_discussion": "Adding a reply will reopen this discussion",
   "Confirm": "Bestätigen",
   "View_changes": "View changes",
   "Revision": "Revision",
@@ -392,5 +400,11 @@
   "Insert_caption": "Insert caption",
   "No_collaborators_available": "No_collaborators_available",
   "Find_a_collaborator": "Find a collaborator",
-  "Doc_comments": "Document comments"
+  "Doc_comments": "Document comments",
+  "Tag_not_found": "Tag not found",
+  "Create_a_new_tag": "Neues Tag erstellen",
+  "Search_tags": "Search tags",
+  "No_options_available": "Tag not found",
+  "Add_option": "Neues Tag erstellen",
+  "Find_an_option": "Search tags"
 }
