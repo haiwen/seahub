@@ -563,11 +563,11 @@ class SeadocHistory(APIView):
         commit_id = repo.head_cmmt_id
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
             page = int(request.GET.get('page', 1))
             per_page = int(request.GET.get('per_page', 25))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
             page = 1
             per_page = 25
 
