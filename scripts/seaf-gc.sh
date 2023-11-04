@@ -11,6 +11,8 @@ default_conf_dir=${TOPDIR}/conf
 check_db_py=${INSTALLPATH}/check-db-type.py
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
 seaf_gc_opts=""
+pro_pylibs_dir=${INSTALLPATH}/pro/python
+IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
@@ -18,7 +20,7 @@ export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafil
 script_name=$0
 function usage () {
     echo "usage : "
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
     else
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
@@ -88,7 +90,7 @@ function validate_already_running () {
 
 function run_seaf_gc () {
 
-    if [[ -d ${INSTALLPATH}/pro ]]; then
+    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
         seafile_conf=${default_conf_dir}/seafile.conf
         db_type=$($PYTHON $check_db_py $seafile_conf)
 
