@@ -49,6 +49,7 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.file_participants.models import FileParticipant
 from seahub.base.accounts import User
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 
 
 logger = logging.getLogger(__name__)
@@ -804,9 +805,9 @@ class SeadocCommentsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         resolved = request.GET.get('resolved', None)
         if resolved not in ('true', 'false', None):
@@ -856,9 +857,9 @@ class SeadocCommentsView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         comment = request.data.get('comment', '')
         detail = request.data.get('detail', '')
@@ -889,9 +890,9 @@ class SeadocCommentView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         try:
@@ -935,9 +936,9 @@ class SeadocCommentView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         # argument check
         resolved = request.data.get('resolved')
@@ -989,9 +990,9 @@ class SeadocCommentRepliesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
         start = None
         end = None
         page = request.GET.get('page', '')
@@ -1034,9 +1035,9 @@ class SeadocCommentRepliesView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
         reply_content = request.data.get('reply', '')
         type_content = request.data.get('type', 'reply')
         author = request.data.get('author', '')
@@ -1078,9 +1079,9 @@ class SeadocCommentReplyView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         file_comment = FileComment.objects.filter(
@@ -1132,9 +1133,9 @@ class SeadocCommentReplyView(APIView):
         if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         file_comment = FileComment.objects.filter(
