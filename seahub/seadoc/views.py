@@ -1,13 +1,23 @@
 import os
-from django.shortcuts import render
-from django.utils.translation import gettext as _
-from seaserv import get_repo
-from urllib.parse import quote
 import json
+import zipfile
+import requests
+from io import BytesIO
+from urllib.parse import quote
+
+from seaserv import seafile_api
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.utils.translation import gettext as _
+from django.db import connection
 
 from seahub.auth.decorators import login_required
-from seahub.utils import render_error
-from seahub.views import check_folder_permission, validate_owner, get_seadoc_file_uuid
+from seahub.utils import render_error, normalize_file_path, \
+        gen_inner_file_get_url, get_file_history
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
+from seahub.views import check_folder_permission, validate_owner, \
+        get_seadoc_file_uuid
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
 
@@ -18,7 +28,7 @@ from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
 def sdoc_revision(request, repo_id):
     """List file revisions in file version history page.
     """
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
         return render_error(request, error_msg)
@@ -69,10 +79,101 @@ def sdoc_revision(request, repo_id):
 
 
 @login_required
+def sdoc_export_revision(request, repo_id):
+    """Export file revisions.
+    """
+
+    # argument check
+    file_path = request.GET.get('file_path')
+    file_path = normalize_file_path(file_path)
+    if not file_path:
+        error_msg = _("File path invalid.")
+        return render_error(request, error_msg)
+
+    try:
+        count = int(request.GET.get('count', '3'))
+    except ValueError:
+        error_msg = _("count invalid.")
+        return render_error(request, error_msg)
+
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        error_msg = _("Library does not exist")
+        return render_error(request, error_msg)
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        error_msg = 'File %s not found.' % file_path
+        return render_error(request, error_msg)
+
+    # permission check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _("Permission denied.")
+        return render_error(request, error_msg)
+
+    file_revisions, total_count = get_file_history(repo_id, file_path,
+                                                   0, count)
+
+    if not file_revisions:
+        error_msg = _("No file history.")
+        return render_error(request, error_msg)
+
+    file_name = os.path.basename(file_path)
+
+    in_memory_zip = BytesIO()
+    with zipfile.ZipFile(in_memory_zip, 'w') as zip_file:
+
+        # get history file
+        version_id = 1
+        for revision in file_revisions:
+
+            file_id = revision.file_id
+            fileserver_token = seafile_api.get_fileserver_access_token(repo_id, file_id,
+                                                                       'view', '',
+                                                                       use_onetime=False)
+
+            inner_path = gen_inner_file_get_url(fileserver_token, file_name)
+            response = requests.get(inner_path)
+
+            version_id = response.json().get('version')
+            file_content = BytesIO(response.content)
+            ctime = utc_datetime_to_isoformat_timestr(revision.timestamp)
+
+            zip_info = zipfile.ZipInfo(filename=f"{file_name.rstrip('.sdoc')}({ctime}).sdoc")
+            zip_file.writestr(zip_info, file_content.getvalue())
+
+        # get operation log
+        sdoc_operation_log_table_name = 'operation_log'
+        sql = f"""
+        SELECT
+            id, doc_uuid, op_id, op_time, operations, author
+        FROM
+            {sdoc_operation_log_table_name}
+        WHERE
+            id >= {version_id};
+        """
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            operation_log_str = ''
+            for item in cursor.fetchall():
+                operation_log_str += str(item) + '\n'
+
+        zip_file.writestr(f"{file_name.rstrip('.sdoc')}(operation_log).txt", operation_log_str)
+
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=compressed_file.zip'
+    in_memory_zip.seek(0)
+    response.write(in_memory_zip.getvalue())
+    return response
+
+
+@login_required
 def sdoc_revisions(request, repo_id):
     """List file revisions in file version history page.
     """
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
         return render_error(request, error_msg)
