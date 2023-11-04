@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
+import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import Content from './repos';
@@ -13,27 +14,36 @@ class SearchRepos extends Component {
     super(props);
     this.state = {
       name: '',
+      currentPage: 1,
+      perPage: 25,
       isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
-      repos: []
+      repos: [],
+      pageInfo: {},
     };
   }
 
   componentDidMount() {
     let params = (new URL(document.location)).searchParams;
+    const { currentPage, perPage } = this.state;
     this.setState({
-      name: params.get('name_or_id') || ''
-    }, this.getRepos);
+      name: params.get('name_or_id') || '',
+      perPage: parseInt(params.get('per_page') || perPage),
+      currentPage: parseInt(params.get('page') || currentPage),
+    }, () => {
+      this.getRepos(this.state.currentPage);
+    });
   }
 
-  getRepos = () => {
-    const { name } = this.state;
-    seafileAPI.sysAdminSearchRepos(name).then((res) => {
+  getRepos = (page) => {
+    const { name, perPage } = this.state;
+    seafileAPI.sysAdminSearchRepos(name, page, perPage).then((res) => {
       this.setState({
         loading: false,
         errorMsg: '',
-        repos: res.data.repo_list
+        repos: res.data.repo_list,
+        pageInfo: res.data.page_info,
       });
     }).catch((error) => {
       this.setState({
@@ -44,7 +54,8 @@ class SearchRepos extends Component {
   };
 
   searchRepos = () => {
-    this.getRepos();
+    const { currentPage } = this.state;
+    this.getRepos(currentPage);
   };
 
   onDeleteRepo = (targetRepo) => {
@@ -67,7 +78,8 @@ class SearchRepos extends Component {
 
   handleNameInputChange = (e) => {
     this.setState({
-      name: e.target.value
+      name: e.target.value,
+      currentPage: 1,
     }, this.checkSubmitBtnActive);
   };
 
@@ -80,12 +92,42 @@ class SearchRepos extends Component {
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      const { isSubmitBtnActive } = this.state;
+      const { isSubmitBtnActive, name } = this.state;
       if (isSubmitBtnActive) {
+        if (this.getValueLength(name) < 3) {
+          toaster.notify(gettext('Required at least three letters.'));
+          return;
+        }
         this.searchRepos();
       }
     }
   };
+
+  resetPerPage = (perPage) => {
+    this.setState({
+      perPage: perPage,
+      currentPage: 1,
+    }, () => {
+      this.searchRepos();
+    });
+  };
+
+  getValueLength(str) {
+    let code, len = 0;
+    for (let i = 0, length = str.length; i < length; i++) {
+      code = str.charCodeAt(i);
+      if (code === 10) { //solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
+  }
 
   render() {
     const { name, isSubmitBtnActive } = this.state;
@@ -121,6 +163,10 @@ class SearchRepos extends Component {
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}
                   items={this.state.repos}
+                  pageInfo={this.state.pageInfo}
+                  curPerPage={this.state.perPage}
+                  getListByPage={this.getRepos}
+                  resetPerPage={this.resetPerPage}
                   onDeleteRepo={this.onDeleteRepo}
                   onTransferRepo={this.onTransferRepo}
                 />
