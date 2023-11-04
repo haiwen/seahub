@@ -381,6 +381,16 @@
   "Publishing": "Публикация...",
   "Inline": "Встроенный",
   "Block": "Блок",
-  "Full_screen_mode": "Full screen mode",
-  "Image_border": "Image border"
+  "Full_screen_mode": "Полноэкранный режим",
+  "Image_border": "Граница изображения",
+  "Delete_revision": "Удалить редакцию",
+  "Delete_tip": "Вы уверены, что хотите удалить {{content}} ?",
+  "Revision_deleted": "Версия удалена",
+  "Published": "Опубликовано",
+  "Delete_Successfully": "Удалено",
+  "Delete_failed": "Не удалось удалить",
+  "Insert_caption": "Вставить подпись",
+  "No_collaborators_available": "Нет доступных соавторов",
+  "Find_a_collaborator": "Найти соавтора",
+  "Doc_comments": "Document comments"
 }

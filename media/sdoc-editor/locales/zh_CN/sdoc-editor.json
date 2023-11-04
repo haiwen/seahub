@@ -382,5 +382,15 @@
   "Inline": "嵌入行内",
   "Block": "独占一行",
   "Full_screen_mode": "全屏查看",
-  "Image_border": "图片边框"
+  "Image_border": "图片边框",
+  "Delete_revision": "删除修订稿",
+  "Delete_tip": "确定要删除 {{content}} 吗？",
+  "Revision_deleted": "修订稿已删除",
+  "Published": "已发布",
+  "Delete_Successfully": "删除成功",
+  "Delete_failed": "删除失败",
+  "Insert_caption": "插入标题",
+  "No_collaborators_available": "没有找到协作人",
+  "Find_a_collaborator": "查找协作人",
+  "Doc_comments": "文档评论"
 }

@@ -382,5 +382,15 @@
   "Inline": "Inline",
   "Block": "Block",
   "Full_screen_mode": "Full screen mode",
-  "Image_border": "Image border"
+  "Image_border": "Image border",
+  "Delete_revision": "Delete revision",
+  "Delete_tip": "Are you sure you want to delete {{content}} ?",
+  "Revision_deleted": "Revision deleted",
+  "Published": "Published",
+  "Delete_Successfully": "Delete Successfully",
+  "Delete_failed": "Delete failed",
+  "Insert_caption": "Insert caption",
+  "No_collaborators_available": "No_collaborators_available",
+  "Find_a_collaborator": "Find a collaborator",
+  "Doc_comments": "Document comments"
 }
