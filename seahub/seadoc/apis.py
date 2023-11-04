@@ -1656,16 +1656,15 @@ class SeadocPublishRevision(APIView):
             origin_image_parent_path = gen_seadoc_image_parent_path(
                 str(origin_file_uuid.uuid), repo_id, username)
             dirents = seafile_api.list_dir_by_path(repo_id, revision_image_parent_path)
-            for e in dirents:
-                obj_name = e.obj_name
-                seafile_api.move_file(
-                    repo_id, revision_image_parent_path,
-                    json.dumps([obj_name]),
-                    repo_id, origin_image_parent_path,
-                    json.dumps([obj_name]),
-                    replace=1, username=username,
-                    need_progress=0, synchronous=1,
-                )
+            obj_names = [e.obj_name for e in dirents]
+            seafile_api.move_file(
+                repo_id, revision_image_parent_path,
+                json.dumps(obj_names),
+                repo_id, origin_image_parent_path,
+                json.dumps(obj_names),
+                replace=1, username=username,
+                need_progress=0, synchronous=1,
+            )
             seafile_api.del_file(
                 repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
 
