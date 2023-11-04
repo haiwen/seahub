@@ -152,7 +152,10 @@ class SeadocUploadFile(APIView):
             'file_name': uuid_map.filename,
             'target_file': file_path,
         }
-        requests.post(upload_link, files=files)
+        resp = requests.post(upload_link, files=files)
+        if not resp.ok:
+            logger.error('save sdoc failed %s, %s' % (file_uuid, resp.text))
+            return api_error(resp.status_code, resp.content)
 
         return Response({'success': True})
 
@@ -324,6 +327,10 @@ class SeadocUploadImage(APIView):
         }
         data = {'parent_dir': parent_path}
         resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         image_url = '/' + file.name
         return Response({'relative_path': image_url})
 
@@ -355,6 +362,10 @@ class SeadocDownloadImage(APIView):
             error_msg = 'file %s not found.' % filename
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         resp = requests.get(download_link)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         filetype, fileext = get_file_type_and_ext(filename)
         return HttpResponse(
             content=resp.content, content_type='image/' + fileext)
@@ -484,6 +495,10 @@ class SeadocCopyHistoryFile(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         download_url = gen_inner_file_get_url(token, file_name)
         resp = requests.get(download_url)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         content = resp.content
         file = ContentFile(content)
         file.name = new_file_name
@@ -1449,7 +1464,11 @@ class SeadocRevisionView(APIView):
                 'file_name': uuid_map.filename,
                 'target_file': file_path,
             }
-            requests.post(upload_link, files=files)
+            resp = requests.post(upload_link, files=files)
+            if not resp.ok:
+                logger.error(resp.text)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             # update origin file version
             origin_doc_path = revision.origin_doc_path
@@ -1963,6 +1982,10 @@ class SdocRevisionBaseVersionContent(APIView):
         download_url = gen_inner_file_get_url(token, origin_file_name)
 
         resp = requests.get(download_url)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({
             'content': resp.content
         })
@@ -2012,6 +2035,10 @@ class SeadocPublishedRevisionContent(APIView):
         download_url = gen_inner_file_get_url(token, origin_file_name)
 
         resp = requests.get(download_url)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({
             'content': resp.content
         })
