@@ -16,14 +16,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.check-mark:before {
-  content: "\e65b";
-}
-
-.add:before {
-  content: "\e65a";
-}
-
 .sdoc-add:before {
   content: "\e658";
 }

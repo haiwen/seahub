@@ -400,11 +400,12 @@
   "Insert_caption": "Вставить подпись",
   "No_collaborators_available": "Нет доступных соавторов",
   "Find_a_collaborator": "Найти соавтора",
-  "Doc_comments": "Document comments",
+  "Doc_comments": "Комментарии к документу",
   "Tag_not_found": "Тег не найден",
   "Create_a_new_tag": "Создать новый тег",
-  "Search_tags": "Search tags",
+  "Search_tags": "Поиск тегов",
   "No_options_available": "Тег не найден",
   "Add_option": "Создать новый тег",
-  "Find_an_option": "Search tags"
+  "Find_an_option": "Поиск тегов",
+  "Copy_link_of_section": "Copy link of section"
 }
