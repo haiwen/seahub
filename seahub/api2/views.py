@@ -1327,6 +1327,7 @@ class Repo(APIView):
             "modifier_contact_email": email2contact_email(repo.last_modifier),
             "modifier_name": email2nickname(repo.last_modifier),
             "file_count": repo.file_count,
+            "head_commit_id": repo.head_cmmt_id,
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
