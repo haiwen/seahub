@@ -28,7 +28,7 @@ from seahub.utils.repo import get_repo_owner, get_available_repo_perms
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
-        share_dir_to_group, normalize_custom_permission_name
+        share_dir_to_group
 from seahub.constants import PERMISSION_READ
 from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -191,10 +191,8 @@ class GroupLibraries(APIView):
 
         permission = request.data.get('permission', PERMISSION_READ)
         if permission not in get_available_repo_perms():
-            permission = normalize_custom_permission_name(permission)
-            if not permission:
-                error_msg = 'permission invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # permission check
         if not request.user.permissions.can_add_repo():
@@ -214,32 +212,33 @@ class GroupLibraries(APIView):
         if is_org_context(request):
             is_org = True
             org_id = request.user.org.org_id
-            repo_id = seafile_api.create_org_repo(repo_name,
-                    '', username, org_id, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+            repo_id = seafile_api.create_org_repo(repo_name, '', username, org_id, password,
+                                                  enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
         else:
-            repo_id = seafile_api.create_repo(repo_name,
-                    '', username, password, enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
+            repo_id = seafile_api.create_repo(repo_name, '', username, password,
+                                              enc_version=settings.ENCRYPTED_LIBRARY_VERSION)
 
         repo = seafile_api.get_repo(repo_id)
         share_dir_to_group(repo, '/', username, username, group_id,
-                permission, org_id if is_org else None)
+                           permission, org_id if is_org else None)
 
         # for activities
         library_template = request.data.get("library_template", '')
         repo_created.send(sender=None, org_id=org_id, creator=username,
-                repo_id=repo_id, repo_name=repo_name,
-                library_template=library_template)
+                          repo_id=repo_id, repo_name=repo_name,
+                          library_template=library_template)
 
         # for notification
         share_repo_to_group_successful.send(sender=None, from_user=username,
-                group_id=group_id, repo=repo, path='/', org_id=org_id)
+                                            group_id=group_id, repo=repo,
+                                            path='/', org_id=org_id)
 
         # for perm audit
-        send_perm_audit_msg('add-repo-perm', username, group_id,
-                repo_id, '/', permission)
+        send_perm_audit_msg('add-repo-perm', username,
+                            group_id, repo_id, '/', permission)
 
-        group_repo = seafile_api.get_group_shared_repo_by_path(repo_id,
-                None, group_id, is_org)
+        group_repo = seafile_api.get_group_shared_repo_by_path(repo_id, None,
+                                                               group_id, is_org)
         group_repo_info = get_group_repo_info(request, group_repo)
 
         group_repo_info['owner_email'] = username
@@ -280,8 +279,8 @@ class GroupLibrary(APIView):
         if is_org_context(request):
             is_org = True
 
-        group_repo = seafile_api.get_group_shared_repo_by_path(repo_id,
-                None, group_id, is_org)
+        group_repo = seafile_api.get_group_shared_repo_by_path(repo_id, None,
+                                                               group_id, is_org)
         if not group_repo:
             error_msg = 'Group library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -307,7 +306,7 @@ class GroupLibrary(APIView):
         origin_repo_id = group_repo.origin_repo_id or repo_id
         origin_path = group_repo.origin_path or '/'
         send_perm_audit_msg('delete-repo-perm', username, group_id,
-                origin_repo_id, origin_path, permission)
+                            origin_repo_id, origin_path, permission)
 
         # delete extra share permission
         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id, group_id)
