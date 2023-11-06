@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
+import os
 import re
 import copy
+import hashlib
 import logging
 from os import path
 
+import requests
 import saml2.xmldsig
 from saml2 import BINDING_HTTP_REDIRECT, BINDING_HTTP_POST, NAMEID_FORMAT_EMAILADDRESS
 from saml2.config import SPConfig
@@ -74,11 +77,30 @@ def config_settings_loader(request):
         remote_metadata_url = org_saml_config.metadata_url
         # get org sp_service_url
         sp_service_url = get_service_url().rstrip('/') + '/org/custom/' + url_prefix
+        # get org certs_dir
+        certs_dir = path.join(CERTS_DIR, str(org_id))
     else:
         # get remote_metadata_url
         remote_metadata_url = REMOTE_METADATA_URL
         # get sp_service_url
         sp_service_url = get_service_url().rstrip('/')
+        # get certs_dir
+        certs_dir = CERTS_DIR
+
+    if not path.exists(certs_dir):
+        os.makedirs(certs_dir)
+
+    metadata_file_name = hashlib.md5(remote_metadata_url.encode()).hexdigest() + '.xml'
+    metadata_file_path = path.join(certs_dir, metadata_file_name)
+
+    if not path.exists(metadata_file_path):
+        try:
+            res = requests.get(remote_metadata_url, timeout=30)
+            with open(metadata_file_path, 'wb') as f:
+                f.write(res.content)
+        except Exception as e:
+            logger.error('Failed to get metadate via remote_url %s, error: %s' % (remote_metadata_url, e))
+            raise Exception('Failed to get metadate via remote_url %s' % remote_metadata_url)
 
     # generate org saml_config
     saml_config = {
@@ -117,7 +139,7 @@ def config_settings_loader(request):
             },
         },
         'metadata': {
-            'remote': [{'url': remote_metadata_url}],
+            'local': [metadata_file_path],
         },
 
         # https://djangosaml2.readthedocs.io/contents/setup.html#certificates
