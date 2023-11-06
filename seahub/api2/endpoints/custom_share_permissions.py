@@ -30,7 +30,8 @@ class CustomSharePermissionsView(APIView):
         """
         # permission check
         if not check_folder_permission(request, repo_id, '/'):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -66,7 +67,8 @@ class CustomSharePermissionsView(APIView):
 
         # permission check
         if not is_repo_admin(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -97,7 +99,8 @@ class CustomSharePermissionView(APIView):
         """
         # permission check
         if not check_folder_permission(request, repo_id, '/'):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -118,21 +121,24 @@ class CustomSharePermissionView(APIView):
     def put(self, request, repo_id, permission_id):
         """Update a custom share permission
         """
-        username = request.user.username
         # argument check
         permission = request.data.get('permission', None)
         if not permission:
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         permission_name = request.data.get('permission_name', None)
         if not permission_name:
             error_msg = 'permission_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         description = request.data.get('description', '')
 
         # permission check
+        username = request.user.username
         if not is_repo_admin(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -140,17 +146,15 @@ class CustomSharePermissionView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            permission_obj = CustomSharePermissions.objects.get(id=permission_id)
-            if not permission_obj:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Permission %s not found.' % permission_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        permission_objs = CustomSharePermissions.objects.filter(repo_id=repo_id) \
+                                                        .filter(id=permission_id)
+        if not permission_objs:
+            error_msg = f'Permission {permission_id} not found in library {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # main
         try:
+            permission_obj = permission_objs[0]
             permission_obj.name = permission_name
             permission_obj.description = description
             permission_obj.permission = permission
@@ -170,7 +174,8 @@ class CustomSharePermissionView(APIView):
 
         # permission check
         if not is_repo_admin(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
