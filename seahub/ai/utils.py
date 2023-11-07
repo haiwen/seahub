@@ -21,51 +21,37 @@ def gen_headers():
     return {"Authorization": "Token %s" % token}
 
 
-def get_dir_file_recursively(username, repo_id, path, all_dirs, include_sys_dir=False):
+def get_sdoc_info_recursively(username, repo_id, path, sdoc_info_list, include_sys_dir=False):
     dirs = seafile_api.list_dir_by_path(repo_id, path)
     for dirent in dirs:
-        entry = {}
 
         if stat.S_ISDIR(dirent.mode):
             if not include_sys_dir and path =='/' and dirent.obj_name in ['images', 'Revisions']:
                 continue
-            entry["type"] = 'dir'
-        else:
-            entry["type"] = 'file'
 
-        entry["parent_dir"] = path
-        entry["id"] = dirent.obj_id
-        entry["name"] = dirent.obj_name
-        entry["mtime"] = dirent.mtime
-
-        all_dirs.append(entry)
-
-        if stat.S_ISDIR(dirent.mode):
             sub_path = posixpath.join(path, dirent.obj_name)
-            get_dir_file_recursively(username, repo_id, sub_path, all_dirs)
-
-    return all_dirs
-
-
-def get_dir_sdoc_info_list(dir_file_info_list, repo_id, username):
-    sdoc_info_list = []
-    for item in dir_file_info_list:
-        if item.get('type') == 'dir' or item.get('size') == 0 or not item.get('name', '').endswith('.sdoc'):
+            get_sdoc_info_recursively(username, repo_id, sub_path, sdoc_info_list)
             continue
 
-        sdoc_parent_dir = item.get('parent_dir')
-        filename = item.get('name')
-        file_id = item.get('id')
-        mtime = item.get('mtime')
-        path = os.path.join(sdoc_parent_dir, filename)
+        sdoc_parent_dir = path
+        filename = dirent.obj_name
+        file_id = dirent.obj_id
+        mtime = dirent.mtime
+        size = dirent.size
+        if not filename.endswith('.sdoc'):
+            continue
+
+        sdoc_path = os.path.join(sdoc_parent_dir, filename)
         download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username,
                                                                  use_onetime=True)
         sdoc_info = {
-            'path': path,
+            'path': sdoc_path,
             'download_token': download_token,
             'mtime': mtime,
+            'size': size,
         }
         sdoc_info_list.append(sdoc_info)
+
     return sdoc_info_list
 
 
