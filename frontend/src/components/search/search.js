@@ -342,15 +342,26 @@ class Search extends Component {
     seafileAPI.questionAnsweringFiles(queryData, cancelToken).then(res => {
       this.source = null;
       if (res.data) {
-        const { answering_result: answeringResult } = res.data || {};
-        this.setState({
-          resultItems: [...this.state.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_sdoc)],
-          isResultGetted: true,
-          isLoading: false,
-          page: page + 1,
-          hasMore: res.data.has_more,
-          answeringResult,
-        });
+    const { answering_result: answeringResult } = res.data || {};
+    if (answeringResult !== 'None') {
+      this.setState(prevState => ({
+        resultItems: [...prevState.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_sdoc)],
+        isResultGetted: true,
+        isLoading: false,
+        page: prevState.page + 1,
+        hasMore: res.data.has_more,
+        answeringResult,
+      }));
+    } else {
+      this.setState(prevState => ({
+        resultItems: [...prevState.resultItems],
+        isResultGetted: true,
+        isLoading: false,
+        page: prevState.page + 1,
+        hasMore: res.data.has_more,
+        answeringResult,
+      }));
+    }
         return;
       }
       this.setState({
