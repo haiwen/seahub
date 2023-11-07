@@ -127,6 +127,10 @@ def config_settings_loader(request):
         }],
     }
 
-    conf = SPConfig()
-    conf.load(copy.deepcopy(saml_config))
+    try:
+        conf = SPConfig()
+        conf.load(copy.deepcopy(saml_config))
+    except Exception as e:
+        logger.exception('Failed to load saml config, error: %s' % e)
+        raise Exception('Failed to load saml config, error: %s' % e)
     return conf
