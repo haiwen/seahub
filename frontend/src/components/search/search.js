@@ -16,6 +16,7 @@ const INDEX_STATE = {
 };
 
 const SEARCH_MODE = {
+  QA: 'question-answering',
   SIMILARITY: 'similarity',
   NORMAL: 'normal',
 };
@@ -99,7 +100,7 @@ class Search extends Component {
     const { searchMode, indexState: currentIndexState } = this.state;
     const { repoID } = this.props;
     this.setState({ width: '570px', isMaskShow: true, isCloseShow: true }, () => {
-      if (searchMode !== SEARCH_MODE.SIMILARITY) return;
+      if ((searchMode !== SEARCH_MODE.SIMILARITY) || (searchMode !== SEARCH_MODE.QA)) return;
       if (currentIndexState === INDEX_STATE.FINISHED) return;
       seafileAPI.queryLibraryIndexState(repoID).then(res => {
         const { state: indexState, task_id: taskId } = res.data;
@@ -257,8 +258,10 @@ class Search extends Component {
       queryData['page'] = page;
       if (this.state.searchMode === SEARCH_MODE.NORMAL) {
         this.onNormalSearch(queryData, cancelToken, page);
-      } else {
+      } else if (this.state.searchMode === SEARCH_MODE.SIMILARITY) {
         this.onSimilaritySearch(queryData, cancelToken, page);
+      } else {
+        this.onQuestionAnsweringSearch(queryData, cancelToken, page);
       }
     }
   };
@@ -309,6 +312,44 @@ class Search extends Component {
           isLoading: false,
           page: page + 1,
           hasMore: res.data.has_more,
+        });
+        return;
+      }
+      this.setState({
+        highlightIndex: 0,
+        resultItems: [],
+        isLoading: false,
+        isResultGetted: true,
+        hasMore: res.data.has_more,
+      });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  };
+
+  onQuestionAnsweringSearch = (queryData, cancelToken, page) => {
+    const { indexState } = this.state;
+    if (indexState === INDEX_STATE.UNCREATED) {
+      toaster.warning(gettext('Please create index first.'));
+      return;
+    }
+    if (indexState === INDEX_STATE.RUNNING) {
+      toaster.warning(gettext('Indexing, please try again later.'));
+      return;
+    }
+    seafileAPI.questionAnsweringFiles(queryData, cancelToken).then(res => {
+      this.source = null;
+      if (res.data) {
+        const { answering_result: answeringResult } = res.data || {};
+        this.setState({
+          resultItems: [...this.state.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_sdoc)],
+          isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
+          hasMore: res.data.has_more,
+          answeringResult,
         });
         return;
       }
@@ -400,6 +441,25 @@ class Search extends Component {
     return items;
   }
 
+  formatQuestionAnsweringItems(data) {
+    let items = [];
+    let repo_id = this.props.repoID;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      items[i] = {};
+      items[i]['index'] = [i];
+      items[i]['name'] = item.path.substring(data[i].path.lastIndexOf('/')+1);;
+      items[i]['path'] = item.path;
+      items[i]['repo_id'] = repo_id;
+      items[i]['repo_name'] = this.props.repoName;
+      items[i]['is_dir'] = false;
+      items[i]['link_content'] = decodeURI(item.path).substring(1);
+      items[i]['content'] = item.sentence;
+      items[i]['thumbnail_url'] = '';
+    }
+    return items;
+  }
   resetToDefault() {
     this.inputValue = '';
     this.setState({
@@ -416,7 +476,7 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, indexState, searchMode, width } = this.state;
+    const { resultItems, highlightIndex, indexState, searchMode, width, answeringResult } = this.state;
     if (!width) return null;
     if (searchMode === SEARCH_MODE.SIMILARITY && indexState === INDEX_STATE.UNCREATED) {
       return (
@@ -429,6 +489,22 @@ class Search extends Component {
     if (searchMode === SEARCH_MODE.SIMILARITY && indexState === INDEX_STATE.RUNNING) {
       return (
         <div className="search-mode-similarity-index-status">
+          {gettext('Indexing...')}
+        </div>
+      );
+    }
+
+    if (searchMode === SEARCH_MODE.QA && indexState === INDEX_STATE.UNCREATED) {
+      return (
+        <div className="search-mode-question-answering-index-status index-status-uncreated" onClick={this.onCreateIndex}>
+          {gettext('Click create index')}
+        </div>
+      );
+    }
+
+    if (searchMode === SEARCH_MODE.QA && indexState === INDEX_STATE.RUNNING) {
+      return (
+        <div className="search-mode-question-answering-index-status">
           {gettext('Indexing...')}
         </div>
       );
@@ -454,6 +530,7 @@ class Search extends Component {
             <SearchResultItem
               key={index}
               item={item}
+              searchMode={searchMode}
               onItemClickHandler={this.onItemClickHandler}
               isHighlight={isHighlight}
               setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
@@ -467,9 +544,11 @@ class Search extends Component {
       <>
         <MediaQuery query="(min-width: 768px)">
           <div className="search-result-list-container">{results}</div>
+          {searchMode === SEARCH_MODE.QA && answeringResult && <span>{answeringResult}</span>}
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           {results}
+          {searchMode === SEARCH_MODE.QA && answeringResult && <span>{answeringResult}</span>}
         </MediaQuery>
       </>
     );
@@ -490,12 +569,34 @@ class Search extends Component {
     this.timer && clearTimeout(this.timer);
     this.setState({ searchMode }, () => {
       if (searchMode === SEARCH_MODE.NORMAL) {
-        this.onSearch();
+        this.onSearch(true);
         this.indexStateTimer && clearInterval(this.indexStateTimer);
         return;
       }
   
       if (searchMode === SEARCH_MODE.SIMILARITY) {
+        if (currentIndexState === INDEX_STATE.FINISHED) {
+          this.onSearch(true);
+          return;
+        }
+        seafileAPI.queryLibraryIndexState(repoID).then(res => {
+          const { state: indexState, task_id: taskId } = res.data;
+          this.setState({ indexState }, () => {
+            if (indexState === INDEX_STATE.FINISHED) {
+              this.onSearch(true);
+              return;
+            }
+            if (indexState === INDEX_STATE.RUNNING) {
+              this.queryIndexTaskStatus(taskId, () => this.onSearch(true));
+              return;
+            }
+          });
+        }).catch(error => {
+          this.setState({ indexState: INDEX_STATE.UNCREATED });
+        });
+      }
+
+      if (searchMode === SEARCH_MODE.QA) {
         if (currentIndexState === INDEX_STATE.FINISHED) {
           this.onSearch(true);
           return;
@@ -577,7 +678,7 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  readOnly={isCloseShow && enableSeafileAI && SEARCH_MODE.SIMILARITY === searchMode && indexState !== INDEX_STATE.FINISHED}
+                  readOnly={isCloseShow && enableSeafileAI && (SEARCH_MODE.SIMILARITY === searchMode || SEARCH_MODE.QA === searchMode) && indexState !== INDEX_STATE.FINISHED}
                   onKeyDown={this.onKeydownHandler}
                 />
                 {(this.state.isCloseShow && username) &&
@@ -596,6 +697,7 @@ class Search extends Component {
                   <div className="search-mode-container">
                     <div className={`search-mode-item ${SEARCH_MODE.NORMAL === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.NORMAL} onClick={this.onChangeSearchMode}>{gettext('Normal search')}</div>
                     <div className={`search-mode-item ${SEARCH_MODE.SIMILARITY === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.SIMILARITY} onClick={this.onChangeSearchMode}>{gettext('Similarity search')}</div>
+                    <div className={`search-mode-item ${SEARCH_MODE.QA === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.QA} onClick={this.onChangeSearchMode}>{gettext('Question answering search')}</div>
                   </div>
                 }
                 {this.renderSearchResult()}
