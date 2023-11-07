@@ -379,7 +379,7 @@
   "Tip": "Совет",
   "Rebase_delete_no_change_revision_tip": "Редакция не внесла никаких изменений по сравнению с исходным документом. Вы хотите удалить эту редакцию?",
   "Has_been_replaced_tip": "Содержимое документа было заменено. Обновите страницу.",
-  "Has_been_published_tip": "Версия опубликована. Автоматический переход к исходному контенту через {{ time }} секунд.",
+  "Has_been_published_tip": "Revision published",
   "Has_conflict_before_publish_tip": "В документе есть конфликты, разрешите их перед публикацией!",
   "Merge_tip": "В документах есть конфликты. Вы хотите объединить их?",
   "Has_conflict_before_view_changes_tip": "В документе есть конфликты. Разрешите конфликт перед просмотром изменений!",
@@ -407,5 +407,6 @@
   "No_options_available": "Тег не найден",
   "Add_option": "Создать новый тег",
   "Find_an_option": "Поиск тегов",
-  "Copy_link_of_section": "Copy link of section"
+  "Copy_link_of_section": "Копировать ссылку на раздел",
+  "revision": "revision"
 }
