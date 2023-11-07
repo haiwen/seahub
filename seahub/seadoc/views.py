@@ -79,8 +79,8 @@ def sdoc_revision(request, repo_id):
 
 
 @login_required
-def sdoc_export_revision(request, repo_id):
-    """Export file revisions.
+def sdoc_export_history(request, repo_id):
+    """Export file history.
     """
 
     # argument check
