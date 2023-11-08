@@ -14,9 +14,8 @@ from seahub.api2.utils import api_error
 
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
-from seahub.ai.utils import create_library_sdoc_index, get_dir_file_recursively, similarity_search_in_library, \
-    update_library_sdoc_index, delete_library_index, query_task_status, get_dir_sdoc_info_list, \
-    query_library_index_state
+from seahub.ai.utils import create_library_sdoc_index, get_sdoc_info_recursively, similarity_search_in_library, \
+    update_library_sdoc_index, delete_library_index, query_task_status, query_library_index_state
 
 from seaserv import seafile_api
 
@@ -48,13 +47,11 @@ class LibrarySdocIndexes(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            dir_file_info_list = get_dir_file_recursively(username, repo_id, parent_dir, [])
+            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_info_list = get_dir_sdoc_info_list(dir_file_info_list, repo_id, username)
 
         params = {
             'repo_id': repo_id,
@@ -99,13 +96,12 @@ class SimilaritySearchInLibrary(APIView):
         username = request.user.username
 
         try:
-            dir_file_info_list = get_dir_file_recursively(username, repo_id, parent_dir, [])
+            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        sdoc_info_list = get_dir_sdoc_info_list(dir_file_info_list, repo_id, username)
         sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
         params = {
             'query': query,
@@ -152,13 +148,11 @@ class LibrarySdocIndex(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            dir_file_info_list = get_dir_file_recursively(username, repo_id, parent_dir, [])
+            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_info_list = get_dir_sdoc_info_list(dir_file_info_list, repo_id, username)
 
         params = {
             'associate_id': repo_id,
@@ -260,13 +254,11 @@ class RepoFiles(APIView):
         username = request.user.username
 
         try:
-            dir_file_info_list = get_dir_file_recursively(username, repo_id, parent_dir, [])
+            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        sdoc_info_list = get_dir_sdoc_info_list(dir_file_info_list, repo_id, username)
 
         library_files_info = {
             'associate_id': repo_id,
