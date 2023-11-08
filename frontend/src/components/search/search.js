@@ -333,7 +333,8 @@ class Search extends Component {
     }
 
     let results = []
-    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+    let normalSearchQueryData = Object.assign({}, queryData, {'search_filename_only': true});
+    seafileAPI.searchFiles(normalSearchQueryData, cancelToken).then(res => {
       if (res.data.total > 0) {
         results = [...results, ...this.formatResultItems(res.data.results)]
       }
