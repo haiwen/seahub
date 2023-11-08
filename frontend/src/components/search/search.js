@@ -56,10 +56,13 @@ class Search extends Component {
     this.searchResultListRef = React.createRef();
     this.timer = null;
     this.indexStateTimer = null;
+    this.isChineseInput = false;
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onDocumentKeydown);
+    document.addEventListener('compositionstart', this.onCompositionStart);
+    document.addEventListener('compositionend', this.onCompositionEnd);
     if (enableSeafileAI && this.props.isLibView) {
       this.queryLibraryIndexState();
     }
@@ -80,9 +83,26 @@ class Search extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onDocumentKeydown);
+    document.removeEventListener('compositionstart', this.onCompositionStart);
+    document.removeEventListener('compositionend', this.onCompositionEnd);
     this.indexStateTimer && clearInterval(this.indexStateTimer);
     this.timer && clearTimeout(this.timer);
+    this.isChineseInput = false;
   }
+
+  onCompositionStart = () => {
+    this.isChineseInput = true;
+  };
+
+  onCompositionEnd = () => {
+    this.isChineseInput = false;
+    // chrome：compositionstart -> onChange -> compositionend
+    // not chrome：compositionstart -> compositionend -> onChange
+    // The onChange event will setState and change input value, then setTimeout to initiate the search
+    setTimeout(() => {
+      this.onSearch(this.state.searchMode === SEARCH_MODE.NORMAL);
+    }, 1);
+  };
 
   onDocumentKeydown = (e) => {
     if (isHotkey('mod+f')(e)) {
@@ -167,7 +187,9 @@ class Search extends Component {
     this.setState({ value: newValue }, () => {
       if (this.inputValue === newValue.trim()) return;
       this.inputValue = newValue.trim();
-      this.onSearch(!this.props.isLibView || !enableSeafileAI);
+      if (!this.isChineseInput) {
+        this.onSearch(!this.props.isLibView || !enableSeafileAI);
+      }
     });
   };
 
