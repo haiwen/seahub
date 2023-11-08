@@ -989,6 +989,40 @@ class SeadocCommentsView(APIView):
             file_uuid, username, comment, detail)
         comment = file_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+
+        # notification
+        to_users = set()
+        participant_queryset = FileParticipant.objects.get_participants(file_uuid)
+        for participant in participant_queryset:
+            to_users.add(participant.username)
+        to_users.discard(username)  # remove author
+        to_users = list(to_users)
+        detail = {
+            'author': username,
+            'comment_id': file_comment.id,
+            'comment' : str(file_comment.comment),
+            'msg_type': 'comment',       
+        }
+
+        new_notifications = []
+        for to_user in to_users:
+            new_notifications.append(
+                SeadocNotification(
+                    doc_uuid=file_uuid,
+                    username=to_user,
+                    msg_type='comment',
+                    detail=json.dumps(detail),
+            ))
+        try:
+            SeadocNotification.objects.bulk_create(new_notifications)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        #
+        notification = detail
+        notification['to_users'] = to_users
+        comment['notification'] = notification
         return Response(comment)
 
 
@@ -1175,12 +1209,15 @@ class SeadocCommentRepliesView(APIView):
             comment_id=comment_id,
             doc_uuid=file_uuid,
         )
+        data = reply.to_dict()
+        data.update(
+            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+
         # notification
         to_users = set()
-        to_users.add(file_comment.author)
-        reply_queryset = SeadocCommentReply.objects.list_by_comment_id(comment_id)
-        for reply in reply_queryset:
-            to_users.add(reply.author)
+        participant_queryset = FileParticipant.objects.get_participants(file_uuid)
+        for participant in participant_queryset:
+            to_users.add(participant.username)
         to_users.discard(username)  # remove author
         to_users = list(to_users)
         detail = {
@@ -1209,9 +1246,6 @@ class SeadocCommentRepliesView(APIView):
         #
         notification = detail
         notification['to_users'] = to_users
-        data = reply.to_dict()
-        data.update(
-            user_to_dict(reply.author, request=request, avatar_size=avatar_size))
         data['notification'] = notification
         return Response(data)
 
