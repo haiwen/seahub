@@ -3,7 +3,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocUploadImage, SeadocDownloadImage, SeadocAsyncCopyImages, SeadocQueryCopyMoveProgressView, SeadocCopyHistoryFile, SeadocHistory, SeadocDrafts, SeadocMaskAsDraft, \
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
-    SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, \
+    SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers,SeadocEditorCallBack
 
 # api/v2.1/seadoc/
@@ -45,4 +45,6 @@ urlpatterns = [
     re_path(r'^participant/(?P<file_uuid>[-0-9a-f]{36})/$', SdocParticipantView.as_view(), name='seadoc_participant_view'),
     re_path(r'^related-users/(?P<file_uuid>[-0-9a-f]{36})/$', SdocRelatedUsers.as_view(), name='seadoc_related_users_view'),
     re_path(r'^editor-status-callback/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocEditorCallBack.as_view(), name='seadoc_editor_callback'),
+    re_path(r'^notifications/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocNotificationsView.as_view(), name='seadoc_notifications'),
+    re_path(r'^notifications/(?P<file_uuid>[-0-9a-f]{36})/(?P<notification_id>\d+)/$', SeadocNotificationView.as_view(), name='seadoc_notification'),
 ]
