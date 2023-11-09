@@ -6,6 +6,7 @@ from django.db import models
 
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.seadoc.settings import SDOC_REVISIONS_DIR
 
 
 class SeadocHistoryNameManager(models.Manager):
@@ -184,7 +185,7 @@ class SeadocRevision(models.Model):
             parent_path = doc_uuid.parent_path
             filename = doc_uuid.filename
         else:
-            parent_path = '/Revisions'
+            parent_path = SDOC_REVISIONS_DIR
             filename = self.doc_uuid + '.sdoc'
         file_path = posixpath.join(parent_path, filename)
 
