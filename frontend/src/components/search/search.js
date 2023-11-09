@@ -105,9 +105,11 @@ class Search extends Component {
     // chrome：compositionstart -> onChange -> compositionend
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
-    setTimeout(() => {
-      this.onSearch(true);
-    }, 1);
+    if (this.state.searchMode !== SEARCH_MODE.QA) {
+      setTimeout(() => {
+        this.onSearch(true);
+      }, 1);
+    }
   };
 
   onDocumentKeydown = (e) => {
