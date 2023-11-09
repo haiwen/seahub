@@ -781,7 +781,7 @@ class Search extends Component {
                 {isCloseShow && enableSeafileAI && this.props.isLibView &&
                   <div className="search-mode-container">
                     <div className={`search-mode-item ${SEARCH_MODE.COMBINED === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.COMBINED} onClick={this.onChangeSearchMode}>{gettext('Search')}</div>
-                    <div className={`search-mode-item ${SEARCH_MODE.QA === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.QA} onClick={this.onChangeSearchMode}>{gettext('Question answering search')}</div>
+                    <div className={`search-mode-item ${SEARCH_MODE.QA === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.QA} onClick={this.onChangeSearchMode}>{gettext('Ask')}</div>
                   </div>
                 }
                 {this.renderSearchResult()}
