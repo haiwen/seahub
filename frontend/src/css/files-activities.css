@@ -10,12 +10,16 @@
   margin-bottom: .2em;
 }
 
-.activity-modifier:hover {
+.cur-activity-modifiers {
+  margin-left: -0.5rem;
+}
+
+.cur-activity-modifiers:hover {
   background: #f5f5f5;
   cursor: pointer;
 }
 
-.activity-modifier .toggle-icon {
+.cur-activity-modifiers .toggle-icon {
   color: #999;
 }
 
@@ -31,6 +35,7 @@
   min-height: 2rem;
   background: #f6f6f6;
   border-bottom: 1px solid #dde2ea;
+  line-height: 1;
 }
 
 .activity-selected-modifier {

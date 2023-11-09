@@ -535,6 +535,7 @@ a, a:hover { color: #ec8000; }
     color: #eb8205;
     text-decoration: none;
     border-bottom: 0.125rem solid #eb8205;
+    z-index: 1;
 }
 
 .nav-pills .nav-item .nav-link {
