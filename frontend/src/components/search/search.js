@@ -52,7 +52,7 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
-      searchMode: SEARCH_MODE.NORMAL,
+      searchMode: SEARCH_MODE.COMBINED
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -106,7 +106,7 @@ class Search extends Component {
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
     setTimeout(() => {
-      this.onSearch(this.state.searchMode === SEARCH_MODE.NORMAL);
+      this.onSearch(true);
     }, 1);
   };
 
@@ -425,7 +425,7 @@ class Search extends Component {
       this.source = null;
       if (res.data) {
     const { answering_result: answeringResult } = res.data || {};
-    if (answeringResult !== 'None') {
+    if (answeringResult !== 'false') {
       this.setState(prevState => ({
         resultItems: [...prevState.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_sdoc)],
         isResultGetted: true,
@@ -780,7 +780,7 @@ class Search extends Component {
               >
                 {isCloseShow && enableSeafileAI && this.props.isLibView &&
                   <div className="search-mode-container">
-                    <div className={`search-mode-item ${SEARCH_MODE.COMBINED === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.COMBINED} onClick={this.onChangeSearchMode}>{gettext('Aggregate search')}</div>
+                    <div className={`search-mode-item ${SEARCH_MODE.COMBINED === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.COMBINED} onClick={this.onChangeSearchMode}>{gettext('Search')}</div>
                     <div className={`search-mode-item ${SEARCH_MODE.QA === searchMode ? 'search-mode-active' : ''}`} mode-type={SEARCH_MODE.QA} onClick={this.onChangeSearchMode}>{gettext('Question answering search')}</div>
                   </div>
                 }
