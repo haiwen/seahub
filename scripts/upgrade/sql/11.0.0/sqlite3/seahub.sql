@@ -19,4 +19,8 @@ CREATE TABLE IF NOT EXISTS "deleted_files_count" ("id" INTEGER NOT NULL PRIMARY 
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_repo_id" ON "deleted_files_count" ("repo_id");
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_deleted_time" ON "deleted_files_count" ("deleted_time");
 
+CREATE TABLE IF NOT EXISTS "sdoc_notification" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "doc_uuid" varchar(36) NOT NULL UNIQUE, "username" varchar(255) NOT NULL, "msg_type" varchar(36) NOT NULL, "created_at" datetime NOT NULL, "detail" text NOT NULL, "seen" integer NOT NULL);
+CREATE INDEX IF NOT EXISTS "sdoc_notification_doc_uuid_username" ON "sdoc_notification" ("doc_uuid", "username");
+CREATE INDEX IF NOT EXISTS "sdoc_notification_created_at" ON "sdoc_notification" ("created_at");
+
 CREATE INDEX IF NOT EXISTS "share_uploadlinkshare_expire_date" ON "share_uploadlinkshare" ("expire_date");
