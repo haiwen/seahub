@@ -525,7 +525,7 @@ a, a:hover { color: #ec8000; }
 }
 .nav .nav-item .nav-link {
     padding: 0.5rem 0;
-    margin-right: 0.5rem;
+    margin-right: 30px;
     color: #8A948F;
     font-weight: normal;
     transition: none;
