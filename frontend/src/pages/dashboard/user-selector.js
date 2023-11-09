@@ -28,6 +28,21 @@ class UserSelector extends Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('click', this.handleOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick = (e) => {
+    const { isPopoverOpen } = this.state;
+    if (isPopoverOpen && !this.userSelector.contains(e.target)) {
+      this.togglePopover();
+    }
+  }
+
   togglePopover = () => {
     this.setState({
       isPopoverOpen: !this.state.isPopoverOpen
@@ -40,6 +55,11 @@ class UserSelector extends Component {
     });
   };
 
+  onToggleClick = (e) => {
+    e.stopPropagation();
+    this.togglePopover();
+  }
+
   searchUsers = (e) => {
     const { availableUsers } = this.state;
     const query = e.target.value.trim();
@@ -49,7 +69,8 @@ class UserSelector extends Component {
     });
   };
 
-  toggleSelectItem = (targetItem) => {
+  toggleSelectItem = (e, targetItem) => {
+    e.stopPropagation();
     const { availableUsers } = this.state;
     const handleItem = (item) => {
       if (item.email == targetItem.email) {
@@ -59,7 +80,7 @@ class UserSelector extends Component {
     };
 
     this.setState({
-      availableUsers: availableUsers.map(handleItem),
+      availableUsers: availableUsers.map(handleItem)
     });
   };
 
@@ -69,7 +90,7 @@ class UserSelector extends Component {
     const selectedUsers = availableUsers.filter(item => item.isSelected);
     return (
       <div className="mt-4 position-relative">
-        <span className="d-inline-block p-2 activity-modifier rounded" onClick={this.togglePopover}>
+        <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
           {gettext('Modified by:')}
           {currentSelectedUsers.length > 0 && (
             <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
@@ -77,14 +98,14 @@ class UserSelector extends Component {
           <i className="fas fa-caret-down ml-2 toggle-icon"></i>
         </span>
         {isPopoverOpen && (
-          <div className="position-absolute activity-modifier-selector-container rounded shadow">
-            <ul className="activity-selected-modifiers px-3 py-2 list-unstyled d-flex">
+          <div className="position-absolute activity-modifier-selector-container rounded shadow" ref={ref => this.userSelector = ref}>
+            <ul className="activity-selected-modifiers px-3 py-2 list-unstyled">
               {selectedUsers.map((item, index) => {
                 return (
                   <li key={index} className="activity-selected-modifier">
-                    <img src={item.avatar_url} className="select-module select-module-icon avatar" alt="" />
-                    <span className='select-module select-module-name'>{item.name}</span>
-                    <i className="sf2-icon-close unselect-activity-user ml-2" onClick={this.toggleSelectItem.bind(this, item)}></i>
+                    <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                    <span className="ml-2">{item.name}</span>
+                    <i className="sf2-icon-close unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}></i>
                   </li>
                 );
               })}
@@ -99,10 +120,10 @@ class UserSelector extends Component {
               <ul className="activity-user-list list-unstyled">
                 {filteredAvailableUsers.map((item, index) => {
                   return (
-                    <li key={index} className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center" onClick={this.toggleSelectItem.bind(this, item)}>
+                    <li key={index} className="activity-user-item h-6 p-1 rounded d-flex justify-content-between align-items-center" onClick={(e) => {this.toggleSelectItem(e, item);}}>
                       <div>
-                        <img src={item.avatar_url} className="select-module select-module-icon avatar" alt="" />
-                        <span className='select-module select-module-name'>{item.name}</span>
+                        <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
+                        <span className="ml-2">{item.name}</span>
                       </div>
                       {item.isSelected && <i className="sf2-icon-tick text-gray"></i>}
                     </li>
