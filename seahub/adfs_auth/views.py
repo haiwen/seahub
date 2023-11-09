@@ -63,7 +63,12 @@ def login(request):
     if not url_has_allowed_host_and_scheme(next_url, None):
         next_url = settings.LOGIN_REDIRECT_URL
 
-    sp_config = get_config(None, request)
+    try:
+        sp_config = get_config(None, request)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('Failed to get saml config, please check your ADFS/SAML service.')
+
     saml_client = Saml2Client(sp_config)
     session_id, info = saml_client.prepare_for_authenticate(relay_state=next_url)
     oq_cache = OutstandingQueriesCache(request.saml_session)
@@ -92,7 +97,12 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
     if 'SAMLResponse' not in request.POST:
         return HttpResponseBadRequest('Missing "SAMLResponse" parameter in POST data.')
     attribute_mapping = attribute_mapping or get_custom_setting('SAML_ATTRIBUTE_MAPPING', None)
-    conf = get_config(None, request)
+
+    try:
+        conf = get_config(None, request)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('Failed to get saml config, please check your ADFS/SAML service.')
 
     identity_cache = IdentityCache(request.saml_session)
     client = Saml2Client(conf, identity_cache=identity_cache)
@@ -166,7 +176,11 @@ def assertion_consumer_service(request, attribute_mapping=None, create_unknown_u
 
 
 def metadata(request):
-    sp_config = get_config(None, request)
+    try:
+        sp_config = get_config(None, request)
+    except Exception as e:
+        logger.error(e)
+        return HttpResponseBadRequest('Failed to get saml config, please check your ADFS/SAML service.')
     sp_metadata = entity_descriptor(sp_config)
     return HttpResponse(
         content=str(sp_metadata).encode("utf-8"),

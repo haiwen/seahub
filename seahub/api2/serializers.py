@@ -12,6 +12,7 @@ from seahub.two_factor.models import default_device
 from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
+from seahub.settings import ENABLE_LDAP
 
 logger = logging.getLogger(__name__)
 
@@ -75,15 +76,14 @@ class AuthTokenSerializer(serializers.Serializer):
                 if not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
             else:
-                """try login id/contact email/primary id"""
+                """try login id/contact email"""
                 # convert login id or contact email to username if any
                 username = Profile.objects.convert_login_str_to_username(login_id)
-                # convert username to primary id if any
-                p_id = ccnet_api.get_primary_id(username)
-                if p_id is not None:
-                    username = p_id
-
                 user = authenticate(username=username, password=password)
+                # After local user authentication process is completed, authenticate LDAP user
+                if user is None and ENABLE_LDAP:
+                    user = authenticate(ldap_user=username, password=password)
+
                 if user is None:
                     raise serializers.ValidationError('Unable to login with provided credentials.')
                 elif not user.is_active:
