@@ -139,15 +139,6 @@ class Search extends Component {
     this.setState({ width: '570px', isMaskShow: true, isCloseShow: true }, () => {
       if ((searchMode !== SEARCH_MODE.COMBINED) || (searchMode !== SEARCH_MODE.QA)) return;
       if (currentIndexState === INDEX_STATE.FINISHED) return;
-      seafileAPI.queryLibraryIndexState(repoID).then(res => {
-        const { state: indexState, task_id: taskId } = res.data;
-        this.setState({ indexState }, () => {
-          if (indexState !== INDEX_STATE.RUNNING) return;
-          this.queryIndexTaskStatus(taskId);
-        });
-      }).catch(error => {
-        this.setState({ indexState: INDEX_STATE.UNCREATED });
-      });
     });
   };
 
@@ -425,36 +416,26 @@ class Search extends Component {
     }
     seafileAPI.questionAnsweringFiles(queryData, cancelToken).then(res => {
       this.source = null;
-      if (res.data) {
-    const { answering_result: answeringResult } = res.data || {};
-    if (answeringResult !== 'false') {
-      this.setState(prevState => ({
-        resultItems: [...prevState.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_sdoc)],
-        isResultGetted: true,
-        isLoading: false,
-        page: prevState.page + 1,
-        hasMore: res.data.has_more,
-        answeringResult,
-      }));
-    } else {
-      this.setState(prevState => ({
-        resultItems: [...prevState.resultItems],
-        isResultGetted: true,
-        isLoading: false,
-        page: prevState.page + 1,
-        hasMore: res.data.has_more,
-        answeringResult,
-      }));
-    }
-        return;
-      }
-      this.setState({
-        highlightIndex: 0,
-        resultItems: [],
-        isLoading: false,
-        isResultGetted: true,
-        hasMore: res.data.has_more,
-      });
+      const { answering_result: answeringResult } = res.data || {};
+      if (answeringResult !== 'false') {
+        this.setState(prevState => ({
+          resultItems: [...prevState.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_files)],
+          isResultGetted: true,
+          isLoading: false,
+          page: prevState.page + 1,
+          hasMore: res.data.has_more,
+          answeringResult,
+        }));
+      } else {
+          this.setState(prevState => ({
+            resultItems: [...prevState.resultItems],
+            isResultGetted: true,
+            isLoading: false,
+            page: prevState.page + 1,
+            hasMore: res.data.has_more,
+            answeringResult,
+          }));
+        }
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
@@ -544,13 +525,13 @@ class Search extends Component {
       const item = data[i];
       items[i] = {};
       items[i]['index'] = [i];
-      items[i]['name'] = item.path.substring(data[i].path.lastIndexOf('/')+1);;
-      items[i]['path'] = item.path;
+      items[i]['name'] = data[i].substring(data[i].lastIndexOf('/')+1);
+      items[i]['path'] = data[i];
       items[i]['repo_id'] = repo_id;
       items[i]['repo_name'] = this.props.repoName;
       items[i]['is_dir'] = false;
-      items[i]['link_content'] = decodeURI(item.path).substring(1);
-      items[i]['content'] = item.sentence;
+      items[i]['link_content'] = decodeURI(data[i]).substring(1);
+      items[i]['content'] = data[i].sentence;
       items[i]['thumbnail_url'] = '';
     }
     return items;
@@ -573,7 +554,7 @@ class Search extends Component {
   renderSearchResult() {
     const { resultItems, highlightIndex, indexState, width, searchMode, answeringResult } = this.state;
     if (!width || width === 'default') return null;
-    if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED && searchMode === SEARCH_MODE.COMBINED) {
+    if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED && (searchMode === SEARCH_MODE.COMBINED || searchMode === SEARCH_MODE.QA) ) {
       return (
         <div className="search-mode-similarity-index-status index-status-uncreated" onClick={this.onCreateIndex}>
           {gettext('Click create index')}
@@ -734,7 +715,7 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  readOnly={isCloseShow && this.props.isLibView && (SEARCH_MODE.COMBINED === searchMode || SEARCH_MODE.QA === searchMode) && indexState !== INDEX_STATE.FINISHED}
+                  readOnly={isCloseShow && this.props.isLibView && enableSeafileAI && indexState !== INDEX_STATE.FINISHED}
                   onKeyDown={this.onKeydownHandler}
                 />
                 {(this.state.isCloseShow && username) &&
