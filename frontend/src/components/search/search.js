@@ -52,7 +52,8 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
       indexState: '',
-      searchMode: SEARCH_MODE.COMBINED
+      searchMode: SEARCH_MODE.COMBINED,
+      answeringResult: '',
     };
     this.inputValue = '';
     this.highlightRef = null;
