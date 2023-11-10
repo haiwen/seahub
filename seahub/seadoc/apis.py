@@ -30,6 +30,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision
+from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 from seahub.utils.file_types import SEADOC, IMAGE
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, \
@@ -1698,9 +1699,9 @@ class SeadocStartRevise(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # create revision dir if does not exist
-        revision_dir_id = seafile_api.get_dir_id_by_path(repo_id, '/Revisions')
+        revision_dir_id = seafile_api.get_dir_id_by_path(repo_id, SDOC_REVISIONS_DIR)
         if revision_dir_id is None:
-            seafile_api.post_dir(repo_id, '/', 'Revisions', username)
+            seafile_api.mkdir_with_parents(repo_id, '/', SDOC_REVISIONS_DIR[1:], username)
 
         #
         origin_file_uuid = get_seadoc_file_uuid(repo, path)
@@ -1724,7 +1725,7 @@ class SeadocStartRevise(APIView):
             revision_uuid_map = FileUUIDMap(
                 uuid=revision_file_uuid,
                 repo_id=repo_id,
-                parent_path='/Revisions',
+                parent_path=SDOC_REVISIONS_DIR,
                 filename=revision_filename,
                 is_dir=False,
             )
@@ -1743,13 +1744,13 @@ class SeadocStartRevise(APIView):
         seafile_api.copy_file(
             repo_id, parent_dir,
             json.dumps([filename]),
-            repo_id, '/Revisions',
+            repo_id, SDOC_REVISIONS_DIR,
             json.dumps([revision_filename]),
             username=username, need_progress=0, synchronous=1,
         )
 
         # copy image files
-        origin_image_parent_path = '/images/sdoc/' + origin_file_uuid + '/'
+        origin_image_parent_path = SDOC_IMAGES_DIR + origin_file_uuid + '/'
         dir_id = seafile_api.get_dir_id_by_path(repo_id, origin_image_parent_path)
         if dir_id:
             revision_image_parent_path = gen_seadoc_image_parent_path(
@@ -1881,11 +1882,11 @@ class SeadocRevisionView(APIView):
         revision_filename = revision_file_uuid.filename
         username = request.user.username
 
-        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        revision_image_parent_path = SDOC_IMAGES_DIR + str(revision_file_uuid.uuid) + '/'
         dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
         if dir_id:
             seafile_api.del_file(
-                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+                    repo_id, SDOC_IMAGES_DIR, json.dumps([str(revision_file_uuid.uuid)]), username)
 
             seafile_api.del_file(
                     repo_id, revision_parent_path, json.dumps([revision_filename]), username)
@@ -2028,11 +2029,11 @@ class DeleteSeadocOtherRevision(APIView):
         revision_filename = revision_file_uuid.filename
         username = request.user.username
 
-        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        revision_image_parent_path = SDOC_IMAGES_DIR + str(revision_file_uuid.uuid) + '/'
         dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
         if dir_id:
             seafile_api.del_file(
-                    repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+                    repo_id, SDOC_IMAGES_DIR, json.dumps([str(revision_file_uuid.uuid)]), username)
 
             seafile_api.del_file(
                     repo_id, revision_parent_path, json.dumps([revision_filename]), username)
@@ -2132,7 +2133,7 @@ class SeadocPublishRevision(APIView):
         SeadocRevision.objects.publish(file_uuid, username, dst_file_id)
 
         # move image files
-        revision_image_parent_path = '/images/sdoc/' + str(revision_file_uuid.uuid) + '/'
+        revision_image_parent_path = SDOC_IMAGES_DIR + str(revision_file_uuid.uuid) + '/'
         dir_id = seafile_api.get_dir_id_by_path(repo_id, revision_image_parent_path)
         if dir_id:
             origin_image_parent_path = gen_seadoc_image_parent_path(
@@ -2148,7 +2149,7 @@ class SeadocPublishRevision(APIView):
                 need_progress=0, synchronous=1,
             )
             seafile_api.del_file(
-                repo_id, '/images/sdoc/', json.dumps([str(revision_file_uuid.uuid)]), username)
+                repo_id, SDOC_IMAGES_DIR, json.dumps([str(revision_file_uuid.uuid)]), username)
 
         try:
             res = sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)

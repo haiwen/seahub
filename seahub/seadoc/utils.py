@@ -15,6 +15,7 @@ from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.seadoc.models import SeadocRevision
+from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +137,7 @@ def get_seadoc_download_link(uuid_map, is_inner=False):
 
 
 def gen_seadoc_image_parent_path(file_uuid, repo_id, username):
-    parent_path = '/images/sdoc/' + file_uuid + '/'
+    parent_path = SDOC_IMAGES_DIR + file_uuid + '/'
     dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_path)
     if not dir_id:
         seafile_api.mkdir_with_parents(repo_id, '/', parent_path[1:], username)
@@ -230,7 +231,7 @@ def gen_path_link(path, repo_name):
 def copy_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
     src_repo = seafile_api.get_repo(src_repo_id)
     src_file_uuid = get_seadoc_file_uuid(src_repo, src_path)
-    src_image_parent_path = '/images/sdoc/' + src_file_uuid + '/'
+    src_image_parent_path = SDOC_IMAGES_DIR + src_file_uuid + '/'
     src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_image_parent_path)
     if not src_dir_id:
         return
@@ -261,7 +262,7 @@ def copy_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_p
 def move_sdoc_images_to_different_repo(src_repo_id, src_path, dst_repo_id, dst_path, username, is_async=True):
     src_repo = seafile_api.get_repo(src_repo_id)
     src_file_uuid = get_seadoc_file_uuid(src_repo, src_path)
-    src_image_parent_path = '/images/sdoc/' + src_file_uuid + '/'
+    src_image_parent_path = SDOC_IMAGES_DIR + src_file_uuid + '/'
     src_dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_image_parent_path)
     if not src_dir_id:
         return
