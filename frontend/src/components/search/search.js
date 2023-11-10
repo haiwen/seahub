@@ -105,7 +105,7 @@ class Search extends Component {
     // chrome：compositionstart -> onChange -> compositionend
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
-    if (this.state.searchMode !== SEARCH_MODE.QA) {
+    if (this.state.searchMode !== SEARCH_MODE.QA && this.state.searchMode !== SEARCH_MODE.COMBINED) {
       setTimeout(() => {
         this.onSearch(true);
       }, 1);
@@ -412,16 +412,18 @@ class Search extends Component {
     seafileAPI.questionAnsweringFiles(queryData, cancelToken).then(res => {
       this.source = null;
       const { answering_result: answeringResult } = res.data || {};
-      if (answeringResult !== 'false') {
-        this.setState(prevState => ({
-          resultItems: [...prevState.resultItems, ...this.formatQuestionAnsweringItems(res.data.hit_files)],
-          isResultGetted: true,
-          isLoading: false,
-          page: prevState.page + 1,
-          hasMore: res.data.has_more,
-          answeringResult,
-        }));
-      }
+      let hit_files = answeringResult !== 'false' ? res.data.hit_files : []
+      this.setState(prevState => ({
+        resultItems: [
+          ...prevState.resultItems,
+          ...this.formatQuestionAnsweringItems(hit_files)
+        ],
+        isResultGetted: true,
+        isLoading: false,
+        page: prevState.page + 1,
+        hasMore: res.data.has_more,
+        answeringResult,
+      }));
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
