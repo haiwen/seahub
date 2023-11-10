@@ -17,6 +17,7 @@ class UserSelector extends Component {
     super(props);
     this.state = {
       isPopoverOpen: false,
+      query: '',
       availableUsers: props.availableUsers.map(item => {
         item.isSelected = false;
         return item;
@@ -60,14 +61,15 @@ class UserSelector extends Component {
     this.togglePopover();
   }
 
-  searchUsers = (e) => {
+  onQueryChange = (e) => {
     const { availableUsers } = this.state;
     const query = e.target.value.trim();
     const filteredAvailableUsers = availableUsers.filter(item => item.email.indexOf(query) != -1);
     this.setState({
+      query: e.target.value,
       filteredAvailableUsers: filteredAvailableUsers
     });
-  };
+  }
 
   toggleSelectItem = (e, targetItem) => {
     e.stopPropagation();
@@ -85,7 +87,7 @@ class UserSelector extends Component {
   };
 
   render() {
-    const { isPopoverOpen, availableUsers, filteredAvailableUsers } = this.state;
+    const { isPopoverOpen, query, availableUsers, filteredAvailableUsers } = this.state;
     const { currentSelectedUsers } = this.props;
     const selectedUsers = availableUsers.filter(item => item.isSelected);
     return (
@@ -113,9 +115,10 @@ class UserSelector extends Component {
             <div className="p-3">
               <Input
                 type="text"
-                placeholder={gettext('Search users...')}
                 className="mb-1"
-                onKeyDown={this.searchUsers}
+                placeholder={gettext('Search users...')}
+                value={query}
+                onChange={this.onQueryChange}
               />
               <ul className="activity-user-list list-unstyled">
                 {filteredAvailableUsers.map((item, index) => {
