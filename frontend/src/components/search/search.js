@@ -484,7 +484,7 @@ class Search extends Component {
     if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED) {
       return (
         <div className="search-mode-similarity-index-status index-status-uncreated" onClick={this.onCreateIndex}>
-          {gettext('Click create index')}
+          {gettext('Create Index')}
         </div>
       );
     }
