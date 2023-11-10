@@ -44,7 +44,7 @@ from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.models import FileComment
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
@@ -1001,8 +1001,11 @@ class SeadocCommentsView(APIView):
             'author': username,
             'comment_id': file_comment.id,
             'comment' : str(file_comment.comment),
-            'msg_type': 'comment',       
+            'msg_type': 'comment',
+            'created_at': datetime_to_isoformat_timestr(file_comment.created_at),
+            'updated_at': datetime_to_isoformat_timestr(file_comment.updated_at),
         }
+        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
 
         new_notifications = []
         for to_user in to_users:
@@ -1225,8 +1228,11 @@ class SeadocCommentRepliesView(APIView):
             'comment_id': comment_id,
             'reply_id': reply.pk,  
             'reply' : str(reply_content),
-            'msg_type': 'reply',       
+            'msg_type': 'reply',
+            'created_at': datetime_to_isoformat_timestr(reply.created_at),
+            'updated_at': datetime_to_isoformat_timestr(reply.updated_at),
         }
+        detail.update(user_to_dict(username, request=request, avatar_size=avatar_size))
 
         new_notifications = []
         for to_user in to_users:
