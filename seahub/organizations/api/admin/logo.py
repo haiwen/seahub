@@ -71,4 +71,8 @@ class OrgAdminLogo(APIView):
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
+        from seahub.avatar.settings import AVATAR_FILE_STORAGE
+        if AVATAR_FILE_STORAGE == 'seahub.base.database_storage.DatabaseStorage':
+            org_logo_url = "/image-view/" + org_logo_url
+
         return Response({'logo_path': org_logo_url})

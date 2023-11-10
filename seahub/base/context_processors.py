@@ -97,6 +97,9 @@ def base(request):
             org_logo_url = OrgAdminSettings.objects.get_org_logo_url(org.org_id)
             if org_logo_url:
                 logo_path = org_logo_url
+                from seahub.avatar.settings import AVATAR_FILE_STORAGE
+                if AVATAR_FILE_STORAGE == 'seahub.base.database_storage.DatabaseStorage':
+                    logo_path = "/image-view/" + logo_path
 
         # get favicon path
         custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)

@@ -17,7 +17,7 @@ class Logo extends React.Component {
     return (
       <div className="top-logo">
         <a href={siteRoot} id="logo">
-          <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+          <img src={logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>
         {this.props.showCloseSidePanelIcon &&
           <a
