@@ -134,12 +134,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    const { searchMode, indexState: currentIndexState } = this.state;
-    const { repoID } = this.props;
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true }, () => {
-      if ((searchMode !== SEARCH_MODE.COMBINED) || (searchMode !== SEARCH_MODE.QA)) return;
-      if (currentIndexState === INDEX_STATE.FINISHED) return;
-    });
+    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
   };
 
   onCloseHandler = () => {
@@ -426,16 +421,7 @@ class Search extends Component {
           hasMore: res.data.has_more,
           answeringResult,
         }));
-      } else {
-          this.setState(prevState => ({
-            resultItems: [...prevState.resultItems],
-            isResultGetted: true,
-            isLoading: false,
-            page: prevState.page + 1,
-            hasMore: res.data.has_more,
-            answeringResult,
-          }));
-        }
+      }
     }).catch(error => {
       /* eslint-disable */
       console.log(error);
@@ -554,7 +540,7 @@ class Search extends Component {
   renderSearchResult() {
     const { resultItems, highlightIndex, indexState, width, searchMode, answeringResult } = this.state;
     if (!width || width === 'default') return null;
-    if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED && (searchMode === SEARCH_MODE.COMBINED || searchMode === SEARCH_MODE.QA) ) {
+    if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED) {
       return (
         <div className="search-mode-similarity-index-status index-status-uncreated" onClick={this.onCreateIndex}>
           {gettext('Click create index')}
@@ -640,21 +626,6 @@ class Search extends Component {
           this.onSearch(true);
           return;
         }
-        seafileAPI.queryLibraryIndexState(repoID).then(res => {
-          const { state: indexState, task_id: taskId } = res.data;
-          this.setState({ indexState }, () => {
-            if (indexState === INDEX_STATE.FINISHED) {
-              this.onSearch(true);
-              return;
-            }
-            if (indexState === INDEX_STATE.RUNNING) {
-              this.queryIndexTaskStatus(taskId, () => this.onSearch(true));
-              return;
-            }
-          });
-        }).catch(error => {
-          this.setState({ indexState: INDEX_STATE.UNCREATED });
-        });
       }
     });
   };
