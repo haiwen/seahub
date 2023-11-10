@@ -275,6 +275,7 @@ urlpatterns = [
 
     ### React ###
     path('dashboard/', react_fake_view, name="dashboard"),
+    path('my-activities/', react_fake_view, name="my_activities"),
     path('starred/', react_fake_view, name="starred"),
     path('linked-devices/', react_fake_view, name="linked_devices"),
     path('share-admin-libs/', react_fake_view, name="share_admin_libs"),

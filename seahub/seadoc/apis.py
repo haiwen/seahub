@@ -39,7 +39,8 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
-from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision, SeadocCommentReply
+from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocRevision, SeadocCommentReply, SeadocNotification
+from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -695,7 +696,7 @@ class SeadocDrafts(APIView):
             page = 1
             per_page = 25
         start = (page - 1) * per_page
-        limit = per_page + 1
+        end = page * per_page
 
         if repo_id:
             # resource check
@@ -710,11 +711,11 @@ class SeadocDrafts(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, limit)
+            draft_queryset = SeadocDraft.objects.list_by_repo_id(repo_id, start, end)
             count = SeadocDraft.objects.filter(repo_id=repo_id).count()
         else:
             # owned
-            draft_queryset = SeadocDraft.objects.list_by_username(username, start, limit)
+            draft_queryset = SeadocDraft.objects.list_by_username(username, start, end)
             count = SeadocDraft.objects.filter(username=username).count()
 
         drafts = [draft.to_dict() for draft in draft_queryset]
@@ -809,6 +810,103 @@ class SeadocMaskAsDraft(APIView):
         return Response({'success': True})
 
 
+class SeadocNotificationsView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        """list notifications
+        """
+        username = request.user.username
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
+        start = None
+        end = None
+        page = request.GET.get('page', '')
+        if page:
+            try:
+                page = int(request.GET.get('page', '1'))
+                per_page = int(request.GET.get('per_page', '25'))
+            except ValueError:
+                page = 1
+                per_page = 25
+            start = (page - 1) * per_page
+            end = page * per_page
+
+        # resource check
+        total_count = SeadocNotification.objects.total_count(file_uuid, username)
+        notifications = []
+        try:
+            notification_queryset = SeadocNotification.objects.list_by_user(
+                file_uuid, username, start, end)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        for notification in notification_queryset:
+            data = notification.to_dict()
+            data.update(
+                user_to_dict(notification.username, request=request, avatar_size=avatar_size))
+            notifications.append(data)
+
+        result = {'notifications': notifications, 'total_count': total_count}
+        return Response(result)
+
+    def put(self, request, file_uuid):
+        """ mark all notifications seen
+        """
+        username = request.user.username
+        try:
+            unseen_notices = SeadocNotification.objects.list_by_unseen(
+                file_uuid, username)
+            unseen_notices.update(seen=True)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class SeadocNotificationView(APIView):
+
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, file_uuid, notification_id):
+        """ mark a notification seen
+        """
+        username = request.user.username
+        # resource check
+        notification = SeadocNotification.objects.filter(
+            id=notification_id).first()
+        if not notification:
+            error_msg = 'Notification %s not found.' % notification_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if notification.username != username or notification.doc_uuid != file_uuid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not notification.seen:
+            try:
+                notification.seen = True
+                notification.save()
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
 class SeadocCommentsView(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
@@ -891,6 +989,40 @@ class SeadocCommentsView(APIView):
             file_uuid, username, comment, detail)
         comment = file_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
+
+        # notification
+        to_users = set()
+        participant_queryset = FileParticipant.objects.get_participants(file_uuid)
+        for participant in participant_queryset:
+            to_users.add(participant.username)
+        to_users.discard(username)  # remove author
+        to_users = list(to_users)
+        detail = {
+            'author': username,
+            'comment_id': file_comment.id,
+            'comment' : str(file_comment.comment),
+            'msg_type': 'comment',       
+        }
+
+        new_notifications = []
+        for to_user in to_users:
+            new_notifications.append(
+                SeadocNotification(
+                    doc_uuid=file_uuid,
+                    username=to_user,
+                    msg_type='comment',
+                    detail=json.dumps(detail),
+            ))
+        try:
+            SeadocNotification.objects.bulk_create(new_notifications)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        #
+        notification = detail
+        notification['to_users'] = to_users
+        comment['notification'] = notification
         return Response(comment)
 
 
@@ -1080,6 +1212,41 @@ class SeadocCommentRepliesView(APIView):
         data = reply.to_dict()
         data.update(
             user_to_dict(reply.author, request=request, avatar_size=avatar_size))
+
+        # notification
+        to_users = set()
+        participant_queryset = FileParticipant.objects.get_participants(file_uuid)
+        for participant in participant_queryset:
+            to_users.add(participant.username)
+        to_users.discard(username)  # remove author
+        to_users = list(to_users)
+        detail = {
+            'author': username,
+            'comment_id': comment_id,
+            'reply_id': reply.pk,  
+            'reply' : str(reply_content),
+            'msg_type': 'reply',       
+        }
+
+        new_notifications = []
+        for to_user in to_users:
+            new_notifications.append(
+                SeadocNotification(
+                    doc_uuid=file_uuid,
+                    username=to_user,
+                    msg_type='reply',
+                    detail=json.dumps(detail),
+            ))
+        try:
+            SeadocNotification.objects.bulk_create(new_notifications)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        #
+        notification = detail
+        notification['to_users'] = to_users
+        data['notification'] = notification
         return Response(data)
 
 
@@ -1644,9 +1811,9 @@ class SeadocRevisions(APIView):
             page = 1
             per_page = 25
         start = (page - 1) * per_page
-        limit = page * per_page
+        end = page * per_page
 
-        revisions_queryset= revision_queryset[start:limit]
+        revisions_queryset= revision_queryset[start:end]
         uuid_set = set()
         for item in revisions_queryset:
             uuid_set.add(item.doc_uuid)
