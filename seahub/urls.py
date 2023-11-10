@@ -964,7 +964,7 @@ if settings.ENABLE_SEAFILE_AI:
     urlpatterns += [
         re_path(r'^api/v2.1/ai/library-sdoc-indexes/$', LibrarySdocIndexes.as_view(), name='api-v2.1-ai-library-sdoc-indexes'),
         re_path(r'^api/v2.1/ai/similarity-search-in-library/$', SimilaritySearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
-        re_path(r'^api/v2.1/ai/question-answering-search-in-library/$', QuestionAnsweringSearchInLibrary.as_view(), name='api-v2.1-ai-similarity-search-in-library'),
+        re_path(r'^api/v2.1/ai/question-answering-search-in-library/$', QuestionAnsweringSearchInLibrary.as_view(), name='api-v2.1-ai-question-answering-search-in-library'),
         re_path(r'^api/v2.1/ai/library-sdoc-index/$', LibrarySdocIndex.as_view(), name='api-v2.1-ai-library-sdoc-index'),
         re_path(r'^api/v2.1/ai/repo/files/$', RepoFiles.as_view(), name='api-v2.1-ai-repo-files'),
         re_path(r'^api/v2.1/ai/task-status/$', TaskStatus.as_view(), name='api-v2.1-ai-task-status'),

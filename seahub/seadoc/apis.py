@@ -207,7 +207,7 @@ class SeadocUploadLink(APIView):
 class SeadocDownloadLink(APIView):
 
     authentication_classes = ()
-    #throttle_classes = (UserRateThrottle,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
         # jwt permission check

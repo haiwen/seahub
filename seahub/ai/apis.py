@@ -164,7 +164,7 @@ class QuestionAnsweringSearchInLibrary(APIView):
         try:
             resp = question_answering_search_in_library(params)
             if resp.status_code == 500:
-                logger.error('search in library error status: %s body: %s', resp.status_code, resp.text)
+                logger.error('ask in library error status: %s body: %s', resp.status_code, resp.text)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
             resp_json = resp.json()
         except Exception as e:

@@ -589,22 +589,6 @@ class Search extends Component {
       );
     }
 
-    if (enableSeafileAI && searchMode === SEARCH_MODE.QA && indexState === INDEX_STATE.UNCREATED) {
-      return (
-        <div className="search-mode-question-answering-index-status index-status-uncreated" onClick={this.onCreateIndex}>
-          {gettext('Click create index')}
-        </div>
-      );
-    }
-
-    if (enableSeafileAI && searchMode === SEARCH_MODE.QA && indexState === INDEX_STATE.RUNNING) {
-      return (
-        <div className="search-mode-question-answering-index-status">
-          {gettext('Indexing...')}
-        </div>
-      );
-    }
-
     if (!this.state.isResultShow) return null;
     if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
       return (
@@ -668,21 +652,6 @@ class Search extends Component {
           this.onSearch(true);
           return;
         }
-        seafileAPI.queryLibraryIndexState(repoID).then(res => {
-          const { state: indexState, task_id: taskId } = res.data;
-          this.setState({ indexState }, () => {
-            if (indexState === INDEX_STATE.FINISHED) {
-              this.onSearch(true);
-              return;
-            }
-            if (indexState === INDEX_STATE.RUNNING) {
-              this.queryIndexTaskStatus(taskId, () => this.onSearch(true));
-              return;
-            }
-          });
-        }).catch(error => {
-          this.setState({ indexState: INDEX_STATE.UNCREATED });
-        });
       }
 
       if (searchMode === SEARCH_MODE.QA) {
@@ -765,7 +734,7 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  readOnly={isCloseShow && enableSeafileAI && this.props.isLibView && (SEARCH_MODE.COMBINED === searchMode || SEARCH_MODE.QA === searchMode) && indexState !== INDEX_STATE.FINISHED}
+                  readOnly={isCloseShow && this.props.isLibView && (SEARCH_MODE.COMBINED === searchMode || SEARCH_MODE.QA === searchMode) && indexState !== INDEX_STATE.FINISHED}
                   onKeyDown={this.onKeydownHandler}
                 />
                 {(this.state.isCloseShow && username) &&
