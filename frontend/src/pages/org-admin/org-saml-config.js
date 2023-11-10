@@ -248,7 +248,7 @@ class OrgSAMLConfig extends Component {
                           </InputGroup>
                           {(!dns_txt && !domain_verified) &&
                             <p className="small text-secondary mt-1">
-                              {gettext('Generate a domain DNS TXT, then copy it and add it to your domain\'s DNS records, then click the button to verify domain ownership.')}
+                              {gettext('Generate a domain DNS TXT, copy it and add it to your domain\'s DNS records, then click the button to verify domain ownership.')}
                             </p>
                           }
                           {(dns_txt && !domain_verified) &&

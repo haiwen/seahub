@@ -2148,7 +2148,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
         origin_file_uuid = revision.origin_doc_uuid
         origin_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(origin_file_uuid)
         if not origin_uuid_map:
-            return render_error(request, _('Origin file does not exist'))
+            return render_error(request, _('The original file does not exist'))
         
         parent_dir = origin_uuid_map.parent_path
         filename = origin_uuid_map.filename
