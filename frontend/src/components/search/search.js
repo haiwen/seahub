@@ -412,7 +412,7 @@ class Search extends Component {
     seafileAPI.questionAnsweringFiles(queryData, cancelToken).then(res => {
       this.source = null;
       const { answering_result: answeringResult } = res.data || {};
-      let hit_files = answeringResult !== 'false' ? res.data.hit_files : []
+      let hit_files = answeringResult !== 'false' ? res.data.hit_files : [];
       this.setState(prevState => ({
         resultItems: [
           ...prevState.resultItems,
