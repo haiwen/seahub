@@ -292,7 +292,7 @@ class FileView(APIView):
 
             # permission check
             if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_edit_on_web is False:
-                error_msg = 'Permission denied.'
+                error_msg = _("Permission denied.")
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # check file lock
