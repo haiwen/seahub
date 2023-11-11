@@ -234,8 +234,13 @@ class ShareLinks(APIView):
 
             tmp_key = f"{repo_id}_{path}"
             if tmp_key not in repo_folder_permission_dict:
-                permission = seafile_api.check_permission_by_path(repo_id, path, username)
-                repo_folder_permission_dict[tmp_key] = permission
+                try:
+                    permission = seafile_api.check_permission_by_path(repo_id,
+                                                                      path,
+                                                                      username)
+                    repo_folder_permission_dict[tmp_key] = permission
+                except Exception:
+                    repo_folder_permission_dict[tmp_key] = ''
 
         links_info = []
         for fs in fileshares:
