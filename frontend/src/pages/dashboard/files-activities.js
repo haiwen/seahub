@@ -51,7 +51,8 @@ class FilesActivities extends Component {
           availableUsers.push({
             email: item.author_email,
             name: item.author_name,
-            avatar_url: item.avatar_url
+            avatar_url: item.avatar_url,
+            isSelected: false
           });
         }
       });
@@ -146,7 +147,8 @@ class FilesActivities extends Component {
           availableUsers.push({
             email: item.author_email,
             name: item.author_name,
-            avatar_url: item.avatar_url
+            avatar_url: item.avatar_url,
+            isSelected: false
           });
         }
       });
@@ -200,6 +202,18 @@ class FilesActivities extends Component {
     });
   };
 
+  toggleSelectUser = (user) => {
+    const { availableUsers } = this.state;
+    this.setState({
+      availableUsers: availableUsers.map(item => {
+        if (item.email == user.email) {
+          item.isSelected = !user.isSelected;
+        }
+        return item;
+      })
+    });
+  };
+
   handleScroll = (event) => {
     if (!this.state.isLoadingMore && this.state.hasMore) {
       const clientHeight = event.target.clientHeight;
@@ -242,6 +256,7 @@ class FilesActivities extends Component {
                     availableUsers={availableUsers}
                     currentSelectedUsers={targetUsers}
                     setTargetUsers={this.setTargetUsers}
+                    toggleSelectUser={this.toggleSelectUser}
                   />
                 )}
                 <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore} />
