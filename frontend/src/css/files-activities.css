@@ -58,6 +58,7 @@
 
 .activity-user-list {
   min-height: 4rem;
+  max-height: 200px;
 }
 
 .activity-user-item {
@@ -66,4 +67,8 @@
 
 .activity-user-item:hover {
   background: #f5f5f5;
+}
+
+.activity-user-name {
+  font-size: 14px;
 }
