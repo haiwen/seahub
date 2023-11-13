@@ -5,7 +5,6 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
-  searchMode: PropTypes.string,
   onItemClickHandler: PropTypes.func.isRequired,
   isHighlight: PropTypes.bool,
   setRef: PropTypes.func,
