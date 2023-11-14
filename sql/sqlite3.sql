@@ -415,7 +415,7 @@ CREATE TABLE "invitations_invitation" ("id" integer NOT NULL PRIMARY KEY AUTOINC
 CREATE TABLE "repo_share_invitation" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "permission" varchar(50) NOT NULL, "invitation_id" integer NOT NULL REFERENCES "invitations_invitation" ("id"));
 CREATE TABLE "notifications_notification" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "message" varchar(512) NOT NULL, "primary" bool NOT NULL);
 CREATE TABLE "notifications_usernotification" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to_user" varchar(255) NOT NULL, "msg_type" varchar(30) NOT NULL, "detail" text NOT NULL, "seen" bool NOT NULL, "timestamp" datetime NOT NULL);
-CREATE TABLE "options_useroptions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(255) NOT NULL, "option_val" varchar(50) NOT NULL, "option_key" varchar(50) NOT NULL);
+CREATE TABLE "options_useroptions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(255) NOT NULL, "option_val" varchar(512) NOT NULL, "option_key" varchar(50) NOT NULL);
 CREATE TABLE "organizations_orgmemberquota" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL, "quota" integer NOT NULL);
 CREATE TABLE "organizations_orgsettings" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "role" varchar(100) NULL, "org_id" integer NOT NULL UNIQUE);
 CREATE TABLE "post_office_attachment_emails" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "attachment_id" integer NOT NULL REFERENCES "post_office_attachment" ("id"), "email_id" integer NOT NULL REFERENCES "post_office_email" ("id"));
@@ -616,7 +616,8 @@ CREATE INDEX IF NOT EXISTS "ocm_via_webdav_share_received_shared_by_1786d580" ON
 CREATE TABLE IF NOT EXISTS "onlyoffice_onlyofficedockey" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "doc_key" varchar(36) NOT NULL, "username" varchar(255) NOT NULL, "repo_id" varchar(36) NULL, "file_path" TEXT NOT NULL, "repo_id_file_path_md5" varchar(100) NOT NULL, "created_time" datetime NOT NULL);
 CREATE INDEX IF NOT EXISTS "onlyoffice_onlyofficedockey_doc_key_edba1352" ON "onlyoffice_onlyofficedockey" ("doc_key");
 CREATE INDEX IF NOT EXISTS "onlyoffice_onlyofficedockey_repo_id_file_path_md5_52002073" ON "onlyoffice_onlyofficedockey" ("repo_id_file_path_md5");
-CREATE TABLE IF NOT EXISTS "org_saml_config" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL UNIQUE, "metadata_url" TEXT NOT NULL, "domain" varchar(255) NOT NULL UNIQUE);
+CREATE TABLE IF NOT EXISTS "org_saml_config" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL UNIQUE, "metadata_url" TEXT NOT NULL, "domain" varchar(255) NULL UNIQUE, "dns_txt" varchar(64) NULL, "domain_verified" integer NOT NULL DEFAULT 0);
+CREATE INDEX IF NOT EXISTS "org_saml_config_domain_verified_398065b9" ON "org_saml_config" ("domain_verified");
 CREATE TABLE IF NOT EXISTS "base_usermonitoredrepos" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(254) NOT NULL, "repo_id" varchar(36) NOT NULL, "timestamp" datetime NOT NULL, UNIQUE ("email", "repo_id"));
 CREATE INDEX IF NOT EXISTS "base_usermonitoredrepos_email_55ead1b9" ON "base_usermonitoredrepos" ("email");
 CREATE INDEX IF NOT EXISTS "base_usermonitoredrepos_repo_id_00e624c3" ON "base_usermonitoredrepos" ("repo_id");
@@ -638,4 +639,7 @@ CREATE INDEX IF NOT EXISTS "sdoc_comment_reply_doc_uuid" ON "sdoc_comment_reply"
 CREATE TABLE IF NOT EXISTS "deleted_files_count" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_id" varchar(36) NOT NULL, "deleted_time" datetime NOT NULL, "files_count" bigint NOT NULL);
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_repo_id" ON "deleted_files_count" ("repo_id");
 CREATE INDEX IF NOT EXISTS "ix_deleted_files_count_deleted_time" ON "deleted_files_count" ("deleted_time");
+CREATE TABLE IF NOT EXISTS "sdoc_notification" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "doc_uuid" varchar(36) NOT NULL UNIQUE, "username" varchar(255) NOT NULL, "msg_type" varchar(36) NOT NULL, "created_at" datetime NOT NULL, "detail" text NOT NULL, "seen" integer NOT NULL DEFAULT 0);
+CREATE INDEX IF NOT EXISTS "sdoc_notification_doc_uuid_username" ON "sdoc_notification" ("doc_uuid", "username");
+CREATE INDEX IF NOT EXISTS "sdoc_notification_created_at" ON "sdoc_notification" ("created_at");
 COMMIT;

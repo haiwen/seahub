@@ -589,7 +589,7 @@ CREATE TABLE `options_useroptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `option_key` varchar(50) NOT NULL,
-  `option_val` varchar(50) NOT NULL,
+  `option_val` varchar(512) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `options_useroptions_email_77d5726a` (`email`),
   KEY `options_useroptions_option_key_7bf7ae4b` (`option_key`)
@@ -1350,10 +1350,13 @@ CREATE TABLE `org_saml_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `metadata_url` longtext NOT NULL,
-  `domain` varchar(255) NOT NULL,
+  `domain` varchar(255) DEFAULT NULL,
+  `dns_txt` varchar(64) DEFAULT NULL,
+  `domain_verified` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`),
-  UNIQUE KEY `domain` (`domain`)
+  UNIQUE KEY `domain` (`domain`),
+  KEY `org_saml_config_domain_verified_398065b9` (`domain_verified`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `base_usermonitoredrepos` (
