@@ -1,31 +1,22 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 
-import os
-from io import BytesIO
 from types import FunctionType
 import logging
 import json
-import re
 import datetime
 import time
 from constance import config
-from openpyxl import load_workbook
 
-from django.db.models import Q
 from django.conf import settings as dj_settings
 from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
+from django.shortcuts import render
 from django.utils.translation import gettext as _
-from urllib.parse import quote
 
-import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafile_api, get_group, get_group_members, ccnet_api, \
-    get_related_users_by_org_repo
+    seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -36,55 +27,37 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
     email2contact_email
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
-from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
-        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS, DEFAULT_ORG
-from seahub.institutions.models import (Institution, InstitutionAdmin,
-                                        InstitutionQuota)
-from seahub.institutions.utils import get_institution_space_usage
-from seahub.invitations.models import Invitation
+from seahub.constants import GUEST_USER, DEFAULT_USER, HASH_URLS
+from seahub.institutions.models import Institution
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
-from seahub.role_permissions.models import AdminRole
-from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version, send_html_email, \
-    get_server_id, delete_virus_file, get_virus_file_by_vid, \
-    get_virus_files, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
-    get_site_name, seafevents_api, is_org_context
+    is_pro_version, send_html_email, get_site_name, is_org_context
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
-from seahub.utils.licenseparse import parse_license, user_number_over_limit
-from seahub.utils.rpc import mute_seafile_api
-from seahub.utils.sysinfo import get_platform_name
+from seahub.utils.licenseparse import parse_license
 from seahub.utils.ms_excel import write_xls
-from seahub.utils.user_permissions import get_basic_user_roles, \
-        get_user_role, get_basic_admin_roles
-from seahub.utils.auth import get_login_bg_image_path
 from seahub.utils.repo import get_related_users_by_repo, get_repo_owner
 from seahub.views import get_system_default_repo_id
-from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
-    TermsAndConditionsForm
+from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.signals import repo_deleted, institution_deleted
-from seahub.share.models import FileShare, UploadLinkShare
+from seahub.signals import repo_deleted
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-    ENABLE_LIMIT_IPADDRESS, ENABLE_SHARE_LINK_REPORT_ABUSE
+    ENABLE_SHARE_LINK_REPORT_ABUSE
 
 try:
     from seahub.settings import MULTI_TENANCY
-    from seahub.organizations.models import OrgSettings
 except ImportError:
     MULTI_TENANCY = False
 
 from seahub.utils.two_factor_auth import has_two_factor_auth
-from termsandconditions.models import TermsAndConditions
 try:
     from seahub.settings import ENABLE_FILE_SCAN
 except ImportError:
@@ -195,13 +168,13 @@ def sys_useradmin_export_excel(request):
         is_pro = False
 
     if is_pro:
-        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"), _("Role"),
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Login ID"), _("Status"), _("Role"),
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
-                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)")]
     else:
-        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Login ID"), _("Status"),
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
-                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)")]
 
     # only operate 100 users for every `for` loop
     looped = 0
@@ -221,10 +194,12 @@ def sys_useradmin_export_excel(request):
             # populate name and contact email
             user.contact_email = ''
             user.name = ''
+            user.login_id = ''
             for profile in user_profiles:
                 if profile.user == user.email:
                     user.contact_email = profile.contact_email
                     user.name = profile.nickname
+                    user.login_id = profile.login_id
 
             # populate space usage and quota
             MB = get_file_size_unit('MB')
@@ -277,13 +252,13 @@ def sys_useradmin_export_excel(request):
                 else:
                     role = _('Default')
 
-                row = [user.email, user.name, user.contact_email, status, role,
-                        space_usage_MB, space_quota_MB, create_at,
-                        last_login, is_admin, ldap_import]
+                row = [user.email, user.name, user.contact_email, user.login_id, status, role,
+                       space_usage_MB, space_quota_MB, create_at,
+                       last_login, is_admin, ldap_import]
             else:
-                row = [user.email, user.name, user.contact_email, status,
-                        space_usage_MB, space_quota_MB, create_at,
-                        last_login, is_admin, ldap_import]
+                row = [user.email, user.name, user.contact_email, user.login_id, status,
+                       space_usage_MB, space_quota_MB, create_at,
+                       last_login, is_admin, ldap_import]
 
             data_list.append(row)
 
