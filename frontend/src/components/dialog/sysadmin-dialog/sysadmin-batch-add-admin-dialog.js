@@ -34,13 +34,6 @@ class SysAdminBatchAddAdminDialog extends React.Component {
     this.toggle();
   };
 
-  handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      this.handleSubmit();
-      e.preventDefault();
-    }
-  };
-
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
