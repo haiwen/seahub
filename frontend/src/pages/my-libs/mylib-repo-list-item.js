@@ -19,6 +19,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import Rename from '../../components/rename';
 import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
+import RepoSeaTableIntegrationDialog from '../../components/dialog/repo-seatable-integration-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import LibOldFilesAutoDelDialog from '../../components/dialog/lib-old-files-auto-del-dialog';
 import RepoMonitoredIcon from '../../components/repo-monitored-icon';
@@ -52,6 +53,7 @@ class MylibRepoListItem extends React.Component {
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogShow: false,
       isAPITokenDialogShow: false,
+      isSeaTableIntegrationShow: false,
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isOldFilesAutoDelDialogOpen: false,
@@ -131,6 +133,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Old Files Auto Delete':
         this.toggleOldFilesAutoDelDialog();
+        break;
+      case 'SeaTable integration':
+        this.onSeaTableIntegrationToggle();
         break;
       default:
         break;
@@ -238,6 +243,10 @@ class MylibRepoListItem extends React.Component {
 
   onAPITokenToggle = () => {
     this.setState({isAPITokenDialogShow: !this.state.isAPITokenDialogShow});
+  };
+
+  onSeaTableIntegrationToggle = () => {
+    this.setState({isSeaTableIntegrationShow: !this.state.isSeaTableIntegrationShow});
   };
 
   toggleRepoShareAdminDialog = () => {
@@ -505,6 +514,15 @@ class MylibRepoListItem extends React.Component {
             <RepoAPITokenDialog
               repo={repo}
               onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isSeaTableIntegrationShow && (
+          <ModalPortal>
+            <RepoSeaTableIntegrationDialog
+              repo={repo}
+              onSeaTableIntegrationToggle={this.onSeaTableIntegrationToggle}
             />
           </ModalPortal>
         )}

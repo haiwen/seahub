@@ -123,6 +123,7 @@ class MylibRepoMenu extends React.Component {
     if (enableRepoAutoDel) {
       operations.push('Old Files Auto Delete');
     }
+    operations.push('SeaTable integration');
     return operations;
   };
 
@@ -179,6 +180,9 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Advanced':
         translateResult = gettext('Advanced');
+        break;
+      case 'SeaTable integration':
+        translateResult = gettext('SeaTable integration');
         break;
       default:
         break;
