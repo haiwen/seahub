@@ -67,6 +67,27 @@ CREATE TABLE IF NOT EXISTS `deleted_files_count` (
   KEY `ix_deleted_files_count_deleted_time` (`deleted_time`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `sdoc_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_uuid` varchar(36) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `msg_type` varchar(36) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `detail` longtext NOT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `sdoc_notification_doc_uuid_username` (`doc_uuid`, `username`),
+  KEY `sdoc_notification_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 ALTER TABLE `share_uploadlinkshare` ADD INDEX IF NOT EXISTS `share_uploadlinkshare_expire_date` (`expire_date`);
 
 ALTER TABLE share_fileshare MODIFY COLUMN path longtext NOT NULL COLLATE utf8mb4_bin;
+
+ALTER TABLE options_useroptions MODIFY option_val VARCHAR(512) NOT NULL;
+
+ALTER TABLE `org_saml_config` CHANGE domain domain varchar(255) DEFAULT NULL;
+ALTER TABLE `org_saml_config` ADD COLUMN IF NOT EXISTS `dns_txt` varchar(64) NULL;
+ALTER TABLE `org_saml_config` ADD COLUMN IF NOT EXISTS `domain_verified` TINYINT(1) NOT NULL DEFAULT 0;
+ALTER TABLE `org_saml_config` ADD INDEX IF NOT EXISTS `org_saml_config_domain_verified_398065b9` (`domain_verified`);
+UPDATE `org_saml_config` SET domain_verified=1 WHERE domain_verified=0;
