@@ -31,7 +31,7 @@ class SysAdminSetOrgNameDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -54,7 +54,7 @@ class SysAdminSetOrgNameDialog extends React.Component {
               <Input
                 type="text"
                 value={name}
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 onChange={this.handleInputChange}
               />
             </FormGroup>

@@ -65,7 +65,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
@@ -112,7 +112,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
                 value={this.state.autoDelDays}
                 disabled={!this.state.isAutoDel}
                 onChange={this.onChange}
-                onKeyDown={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>

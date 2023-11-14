@@ -31,7 +31,7 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -55,7 +55,7 @@ class SysAdminSetOrgMaxUserNumberDialog extends React.Component {
                 type="text"
                 className="form-control"
                 value={value}
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 onChange={this.handleInputChange}
               />
             </FormGroup>

@@ -32,7 +32,7 @@ class NewWikiDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
@@ -54,7 +54,7 @@ class NewWikiDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
         <ModalBody>
           <label className="form-label">{gettext('Name')}</label>
-          <Input onKeyPress={this.handleKeyPress} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
+          <Input onKeyDown={this.handleKeyDown} autoFocus={true} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>

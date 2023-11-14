@@ -68,7 +68,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.submit();
       e.preventDefault();
@@ -132,7 +132,7 @@ class SysAdminLibHistorySettingDialog extends React.Component {
                 value={this.state.expireDays}
                 onChange={this.onChange}
                 disabled={this.state.disabled}
-                onKeyDown={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
               />{' '}
               <Label><span>{gettext('days')}</span></Label>
             </FormGroup>

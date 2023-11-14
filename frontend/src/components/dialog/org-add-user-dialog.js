@@ -34,7 +34,7 @@ class AddOrgUserDialog extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     e.preventDefault();
     if (e.key == 'Enter') {
       this.handleSubmit(e);

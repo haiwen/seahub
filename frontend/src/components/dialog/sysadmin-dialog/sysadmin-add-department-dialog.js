@@ -55,7 +55,7 @@ class AddDepartDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -73,7 +73,7 @@ class AddDepartDialog extends React.Component {
               <Label for="departName">{gettext('Name')}</Label>
               <Input
                 id="departName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.departName}
                 onChange={this.handleChange}
                 autoFocus={true}
