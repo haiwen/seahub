@@ -46,7 +46,7 @@ class SetGroupQuotaDialog extends React.Component {
     this.setState({ quota: quota });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.setGroupQuota();
       e.preventDefault();
@@ -60,7 +60,7 @@ class SetGroupQuotaDialog extends React.Component {
         <ModalBody>
           <InputGroup>
             <Input
-              onKeyPress={this.handleKeyPress}
+              onKeyDown={this.handleKeyDown}
               value={this.state.quota}
               onChange={this.handleChange}
               autoFocus={true}

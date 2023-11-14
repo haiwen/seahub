@@ -63,7 +63,7 @@ class Rename extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
     }
@@ -123,7 +123,7 @@ class Rename extends React.Component {
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext('New file name'): gettext('New folder name')}</p>
-          <Input onKeyPress={this.handleKeyPress} innerRef={this.newInput} value={this.state.newName} onChange={this.handleChange} />
+          <Input onKeyDown={this.handleKeyDown} innerRef={this.newInput} value={this.state.newName} onChange={this.handleChange} />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>

@@ -27,7 +27,7 @@ class UpdateUser extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -50,7 +50,7 @@ class UpdateUser extends React.Component {
               <Input
                 type="text"
                 value={this.state.value}
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 onChange={this.handleInputChange}
               />
             </FormGroup>

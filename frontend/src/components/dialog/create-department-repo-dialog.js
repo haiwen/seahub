@@ -38,7 +38,7 @@ class CreateDepartmentRepoDialog extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -81,7 +81,7 @@ class CreateDepartmentRepoDialog extends React.Component {
               <Label for="repo-name">{gettext('Name')}</Label>
               <Input
                 id="repo-name"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleChange}
                 maxLength={maxFileName}

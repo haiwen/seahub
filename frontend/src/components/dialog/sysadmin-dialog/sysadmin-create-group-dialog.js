@@ -44,7 +44,7 @@ class SysAdminCreateGroupDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -65,7 +65,7 @@ class SysAdminCreateGroupDialog extends React.Component {
               <Label for="groupName">{gettext('Name')}</Label>
               <Input
                 id="groupName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.groupName}
                 onChange={this.handleRepoNameChange}
                 autoFocus={true}

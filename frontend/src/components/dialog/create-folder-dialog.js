@@ -60,7 +60,7 @@ class CreateForder extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -87,7 +87,7 @@ class CreateForder extends React.Component {
               <Input
                 id="folderName"
                 value={this.state.childName}
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 onChange={this.handleChange}
                 autoFocus={true}
               />

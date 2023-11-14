@@ -30,7 +30,7 @@ class SetQuotaDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -55,7 +55,7 @@ class SetQuotaDialog extends React.Component {
                   type="text"
                   className="form-control"
                   value={quota}
-                  onKeyPress={this.handleKeyPress}
+                  onKeyDown={this.handleKeyDown}
                   onChange={this.handleQuotaChange}
                 />
                 <InputGroupAddon addonType="append">

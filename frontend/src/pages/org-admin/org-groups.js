@@ -24,7 +24,7 @@ class Search extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key == 'Enter') {
       e.preventDefault();
       this.handleSubmit();
@@ -50,7 +50,7 @@ class Search extends React.Component {
           placeholder={this.props.placeholder}
           value={this.state.value}
           onChange={this.handleInputChange}
-          onKeyPress={this.handleKeyPress}
+          onKeyDown={this.handleKeyDown}
           autoComplete="off"
         />
       </div>

@@ -58,7 +58,7 @@ class RenameDepartmentDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -82,7 +82,7 @@ class RenameDepartmentDialog extends React.Component {
               <Label for="departmentName">{gettext('Name')}</Label>
               <Input
                 id="departmentName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.departmentName}
                 onChange={this.handleChange}
                 innerRef={this.newInput}

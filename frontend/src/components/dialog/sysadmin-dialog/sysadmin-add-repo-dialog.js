@@ -51,7 +51,7 @@ class AddRepoDialog extends React.Component {
     });
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -68,7 +68,7 @@ class AddRepoDialog extends React.Component {
               <Label for="repoName">{gettext('Name')}</Label>
               <Input
                 id="repoName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 value={this.state.repoName}
                 onChange={this.handleChange}
                 autoFocus={true}

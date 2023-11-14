@@ -34,13 +34,6 @@ class AddOrgUserDialog extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
-    e.preventDefault();
-    if (e.key == 'Enter') {
-      this.handleSubmit(e);
-    }
-  };
-
   togglePasswordVisible = () => {
     this.setState({isPasswordVisible: !this.state.isPasswordVisible}, () => {
       if (this.state.isPasswordVisible) {

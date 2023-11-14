@@ -67,7 +67,7 @@ class CreateFile extends React.Component {
     }
   };
 
-  handleKeyPress = (e) => {
+  handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
       e.preventDefault();
@@ -151,7 +151,7 @@ class CreateFile extends React.Component {
               <Label for="fileName">{gettext('Name')}</Label>
               <Input
                 id="fileName"
-                onKeyPress={this.handleKeyPress}
+                onKeyDown={this.handleKeyDown}
                 innerRef={this.newInput}
                 value={this.state.childName}
                 onChange={this.handleChange}
