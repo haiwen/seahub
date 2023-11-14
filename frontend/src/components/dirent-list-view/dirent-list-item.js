@@ -271,6 +271,9 @@ class DirentListItem extends React.Component {
       case 'Lock':
         this.onLockItem();
         break;
+      case 'Freeze Document':
+        this.onFreezeDocument();
+        break;
       case 'Convert to Markdown':
         this.onItemConvert(event, 'markdown');
         break;
@@ -359,6 +362,20 @@ class DirentListItem extends React.Component {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.lockfile(repoID, filePath).then(() => {
+      this.props.updateDirent(this.props.dirent, 'is_locked', true);
+      this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
+      let lockName = username.split('@');
+      this.props.updateDirent(this.props.dirent, 'lock_owner_name', lockName[0]);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  onFreezeDocument = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', true);
       this.props.updateDirent(this.props.dirent, 'locked_by_me', true);
       let lockName = username.split('@');

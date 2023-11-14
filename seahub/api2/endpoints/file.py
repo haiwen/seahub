@@ -662,14 +662,13 @@ class FileView(APIView):
                 error_msg = _("File is locked")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            # expire < 0, freeze document
+            # expire = 0, use default lock duration
+            # expire > 0, specify lock duration
             expire = request.data.get('expire', 0)
             try:
                 expire = int(expire)
             except ValueError:
-                error_msg = 'expire invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if expire < 0:
                 error_msg = 'expire invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -679,7 +678,7 @@ class FileView(APIView):
                     seafile_api.lock_file(repo_id, path, username,
                                           int(time.time()) + expire)
                 else:
-                    seafile_api.lock_file(repo_id, path, username, 0)
+                    seafile_api.lock_file(repo_id, path, username, expire)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
