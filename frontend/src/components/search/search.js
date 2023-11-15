@@ -249,7 +249,7 @@ class Search extends Component {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
-            resultItems: [...this.state.resultItems, this.formatResultItems(res.data.results)],
+            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
             isResultGetted: true,
             page: page + 1,
             isLoading: false,
