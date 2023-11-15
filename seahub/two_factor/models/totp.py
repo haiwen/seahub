@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-
-
+import logging
 from binascii import unhexlify
 import time
 
@@ -109,6 +108,8 @@ class TOTPDevice(Device):
                     verified = True
                     break
             else:
+                logging.info('user input invalid token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                             % (token, totp.token(), totp.t(), self.last_t))
                 verified = False
 
         return verified
