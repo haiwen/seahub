@@ -99,8 +99,6 @@ class TOTPDevice(Device):
 
             for offset in range(-self.tolerance, self.tolerance + 1):
                 totp.drift = self.drift + offset
-                logging.info('user input token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
-                             % (token, totp.token(), totp.t(), self.last_t))
                 if (totp.t() > self.last_t) and (totp.token() == token):
                     self.last_t = totp.t()
                     if (offset != 0) and OTP_TOTP_SYNC:
@@ -110,6 +108,8 @@ class TOTPDevice(Device):
                     verified = True
                     break
             else:
+                logging.info('user input token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                             % (token, totp.token(), totp.t(), self.last_t))
                 verified = False
 
         return verified
