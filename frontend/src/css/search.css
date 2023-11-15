@@ -83,6 +83,10 @@
   flex-direction: column;
 }
 
+.dropdown-search-result-container .seahub-switch .custom-switch {
+  padding-left: 0;
+}
+
 .search-result-container .search-result-none {
   text-align: center;
   line-height: 4rem;

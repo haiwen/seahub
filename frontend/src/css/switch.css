@@ -2,6 +2,11 @@
   width: 22px;
   height: 12px;
   border-radius: 6px;
+  cursor: pointer;
+}
+
+.seahub-switch.small .custom-switch-indicator.disabled {
+  cursor: default;
 }
 
 .seahub-switch.small .custom-switch-indicator:before {

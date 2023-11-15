@@ -1037,14 +1037,12 @@ class LibContentView extends React.Component {
       seafileAPI.renameFile(repoID, path, newName).then(() => {
         this.renameItemAjaxCallback(path, newName);
       }).catch((error) => {
-
-        let errMessage = "";
+        let errMessage = '';
         if (error.response.status == 403 && error.response.data && error.response.data['error_msg']) {
           errMessage = error.response.data['error_msg'];
         } else {
           errMessage = Utils.getErrorMsg(error);
-	}
-
+        }
         if (errMessage === gettext('Error')) {
           let name = Utils.getFileName(path);
           errMessage = gettext('Renaming {name} failed').replace('{name}', name);
