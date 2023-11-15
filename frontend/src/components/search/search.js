@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Form, FormGroup, Input, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
@@ -100,7 +101,7 @@ class Search extends Component {
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
     setTimeout(() => {
-      this.onSearch(true);
+      this.onSearch(!this.props.isLibView || !enableSeafileAI);
     }, 1);
   };
 
@@ -272,10 +273,13 @@ class Search extends Component {
       this.updateSearchPageURL(queryData);
       queryData['per_page'] = PER_PAGE;
       queryData['page'] = page;
-      if (!enableSeafileAI || !this.props.isLibView) {
-        this.onNormalSearch(queryData, cancelToken, page);
-      } else {
+      if (enableSeafileAI && this.props.isLibView) {
+        queryData['search_filename_only'] = true;
+      }
+      if (enableSeafileAI && this.props.isLibView && this.state.indexState === INDEX_STATE.FINISHED) {
         this.onCombinedSearch(queryData, cancelToken, page);
+      } else {
+        this.onNormalSearch(queryData, cancelToken, page);
       }
     }
   };
@@ -479,23 +483,8 @@ class Search extends Component {
   }
 
   renderSearchResult() {
-    const { resultItems, highlightIndex, indexState, width } = this.state;
+    const { resultItems, highlightIndex, width } = this.state;
     if (!width || width === 'default') return null;
-    if (enableSeafileAI && indexState === INDEX_STATE.UNCREATED) {
-      return (
-        <div className="search-mode-similarity-index-status index-status-uncreated" onClick={this.onCreateIndex}>
-          {gettext('Create Index')}
-        </div>
-      );
-    }
-
-    if (enableSeafileAI && indexState === INDEX_STATE.RUNNING) {
-      return (
-        <div className="search-mode-similarity-index-status">
-          {gettext('Indexing...')}
-        </div>
-      );
-    }
 
     if (!this.state.isResultShow) return null;
     if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
@@ -569,6 +558,7 @@ class Search extends Component {
     this.setState({ indexState: INDEX_STATE.RUNNING });
     seafileAPI.createLibraryIndex(this.props.repoID).then(res => {
       const taskId = res.data.task_id;
+      toaster.notify(gettext('Indexing the library. Semantic search will be available within a few minutes.'))
       this.queryIndexTaskStatus(taskId);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -601,7 +591,6 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                   ref={this.inputRef}
-                  readOnly={isCloseShow && this.props.isLibView && enableSeafileAI && indexState !== INDEX_STATE.FINISHED}
                   onKeyDown={this.onKeydownHandler}
                 />
                 {(this.state.isCloseShow && username) &&
@@ -616,6 +605,14 @@ class Search extends Component {
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
+                {isCloseShow && this.props.isLibView && enableSeafileAI &&
+                  <Form>
+                    <FormGroup check>
+                      <Input type="radio" name="radio1" checked={indexState === INDEX_STATE.FINISHED} onChange={() => {this.onCreateIndex()}}/>
+                      <Label>{gettext('Turn on semantic search for this library.')}</Label>
+                    </FormGroup>
+                  </Form>
+                }
                 {this.renderSearchResult()}
               </div>
             </div>
