@@ -821,9 +821,9 @@ class SeadocNotificationsView(APIView):
         """
         username = request.user.username
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         start = None
         end = None
@@ -873,6 +873,17 @@ class SeadocNotificationsView(APIView):
 
         return Response({'success': True})
 
+    def delete(self, request, file_uuid):
+        """ delete all notifications
+        """
+        try:
+            SeadocNotification.objects.filter(doc_uuid=file_uuid).delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 class SeadocNotificationView(APIView):
 
