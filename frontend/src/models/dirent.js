@@ -16,6 +16,9 @@ class Dirent {
     this.permission = json.permission || 'rw';
     this.isSelected = false; // is check or not
     this.starred = json.starred || false;
+    if (json.type === 'dir') {
+      this.has_been_shared_out = false;
+    }
     if (json.type === 'file') {
       this.size_original = json.size;
       this.size = Utils.bytesToSize(json.size);

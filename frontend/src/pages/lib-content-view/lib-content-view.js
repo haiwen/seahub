@@ -492,6 +492,22 @@ class LibContentView extends React.Component {
       if (!this.state.repoEncrypted && direntList.length) {
         this.getThumbnails(repoID, path, this.state.direntList);
       }
+
+      if (this.state.currentRepoInfo.is_admin) {
+        if (this.foldersSharedOut) {
+          this.identifyFoldersSharedOut();
+        } else {
+          this.foldersSharedOut = [];
+          seafileAPI.getAllRepoFolderShareInfo(repoID).then(res => {
+            res.data.share_info_list.forEach(item => {
+              if (this.foldersSharedOut.indexOf(item.path) === -1) {
+                this.foldersSharedOut.push(item.path);
+              }
+            });
+            this.identifyFoldersSharedOut();
+          });
+        }
+      }
     }).catch((err) => {
       Utils.getErrorMsg(err, true);
       if (err.response && err.response.status === 403) {
@@ -502,6 +518,21 @@ class LibContentView extends React.Component {
         isDirentListLoading: false,
         pathExist: false,
       });
+    });
+  };
+
+  identifyFoldersSharedOut = () => {
+    const { path, direntList } = this.state;
+    if (this.foldersSharedOut.length == 0) {
+      return;
+    }
+    direntList.forEach(dirent => {
+      if (dirent.type == 'dir' && this.foldersSharedOut.indexOf(Utils.joinPath(path, dirent.name) + '/') !== -1) {
+        dirent.has_been_shared_out = true;
+      }
+    });
+    this.setState({
+      direntList: direntList
     });
   };
 

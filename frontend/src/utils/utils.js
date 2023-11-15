@@ -373,7 +373,7 @@ export const Utils = {
       if (dirent.permission && (dirent.permission === 'r' || dirent.permission === 'preview')) {
         readonly = true;
       }
-      return this.getFolderIconUrl(readonly, size);
+      return this.getFolderIconUrl(readonly, size, dirent.has_been_shared_out);
     } else {
       return this.getFileIconUrl(dirent.name, size);
     }
@@ -389,12 +389,12 @@ export const Utils = {
     }
   },
 
-  getFolderIconUrl: function(readonly = false, size) {
+  getFolderIconUrl: function(readonly = false, size, sharedOut) {
     if (!size) {
       size = Utils.isHiDPI() ? 48 : 24;
     }
     size = size > 24 ? 192 : 24;
-    return `${mediaUrl}img/folder${readonly ? '-read-only-' : '-'}${size}.png`;
+    return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${sharedOut ? '-shared-out' : ''}-${size}.png`;
   },
 
   getFileIconUrl: function(filename, size) {
