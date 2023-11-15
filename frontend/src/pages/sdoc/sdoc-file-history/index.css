@@ -150,6 +150,10 @@
   border-bottom: 1px solid #e5e5e5;
 }
 
+.sdoc-file-history-versions .history-list-item.history-month-title {
+  padding: 5px 16px;
+}
+
 .sdoc-file-history-versions .history-list-item:last-child {
   border-bottom: none;
 }
@@ -157,6 +161,25 @@
 .sdoc-file-history-versions .history-list-item:not(.item-active):hover {
   background-color: #F5F5F5;
   cursor: pointer;
+}
+
+.sdoc-file-history-versions .history-list-item .history-operation {
+  flex-shrink: 0;
+}
+
+.sdoc-file-history-versions .history-list-item .history-info {
+  overflow: hidden;
+}
+
+.sdoc-file-history-versions .history-list-item .history-info .name {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sdoc-file-history-versions .history-list-item.item-active .history-info .name{
+  color: #ff8000;
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover {
@@ -208,6 +231,57 @@
   padding: 0 10px;
   background-color: rgb(250,250,249);
   font-weight: bolder;
+}
+
+.sdoc-file-history-versions .history-info .rename-container,
+.sdoc-file-history-versions .history-info .rename-container input {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  overflow: hidden;
+}
+
+.sdoc-file-history-versions .history-info .rename-container input:focus {
+  box-shadow: none;
+}
+
+.sdoc-file-history-versions .daily-history-detail-toggle-container {
+  width: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sdoc-file-history-versions .daily-history-detail-toggle-container .daily-history-detail-toggle {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdoc-file-history-versions .daily-history-detail-no-more {
+  width: 20px;
+  height: 20px;
+  margin-right: 14px;
+}
+
+.sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle {
+  font-size: 18px;
+  color: #888;
+  transform: rotate(-90deg);
+  transition: all .1s;
+}
+
+.sdoc-file-history-versions .daily-history-detail-toggle.daily-history-detail-show .dropdown-toggle {
+  transform: unset;
+}
+
+.sdoc-file-history-versions .daily-history-detail-toggle .dropdown-toggle:hover {
+  color: #333;
+  cursor: pointer;
 }
 
 @media (min-width:992px) {

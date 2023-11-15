@@ -61,6 +61,7 @@ urlpatterns = [
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),
+    re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/next-revision/(?P<current_revision_id>[0-9]+)/$', FileNextRevision.as_view(), name="file-next-revision"),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revert/$', FileRevert.as_view(), name='api2-file-revert'),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/shared-link/$', FileSharedLinkView.as_view()),
     re_path(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/$', DirView.as_view(), name='DirView'),

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Loading from '../../../components/loading';
@@ -10,6 +11,8 @@ import toaster from '../../../components/toast';
 import HistoryVersion from './history-version';
 import Switch from '../../../components/common/switch';
 
+moment.locale(window.app.config.lang);
+
 const { docUuid } = window.fileHistory.pageOptions;
 
 class SidePanel extends Component {
@@ -18,67 +21,81 @@ class SidePanel extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      historyVersions: [],
+      historyGroups: [],
       errorMessage: '',
-      currentPage: 1,
       hasMore: false,
       fileOwner: '',
       isReloadingData: false,
     };
+    this.currentPage = 1;
   }
+
+  // listSdocDailyHistoryDetail
 
   componentDidMount() {
-    seafileAPI.listSdocHistory(docUuid, 1, PER_PAGE).then(res => {
-      let historyList = res.data;
-      if (historyList.length === 0) {
-        this.setState({isLoading: false});
-        throw Error('there has an error in server');
-      }
-      this.initResultState(res.data);
-    });
+    this.firstLoadSdocHistory();
   }
 
-  refershFileList() {
-    seafileAPI.listSdocHistory(docUuid, 1, PER_PAGE).then(res => {
-      this.initResultState(res.data);
-    });
-  }
-
-  initResultState(result) {
-    if (result.histories.length) {
+  firstLoadSdocHistory() {
+    this.currentPage = 1;
+    seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
+      const result = res.data;
+      const resultCount = result.histories.length;
       this.setState({
-        historyVersions: result.histories,
-        currentPage: result.page,
-        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
+        historyGroups: this.formatHistories(result.histories),
+        hasMore: resultCount >= PER_PAGE,
         isLoading: false,
         fileOwner: result.histories[0].creator_email,
       });
-      this.props.onSelectHistoryVersion(result.histories[0], result.histories[1]);
-    }
+      if (result.histories[0]) {
+        this.props.onSelectHistoryVersion(result.histories[0], result.histories[1]);
+      }
+    }).catch((error) => {
+      this.setState({isLoading: false});
+      throw Error('there has an error in server');
+    });
+  }
+
+  formatHistories(histories) {
+    const oldHistoryGroups = this.state.historyGroups;
+    if (!Array.isArray(histories) || histories.length === 0) return oldHistoryGroups;
+    const newHistoryGroups = oldHistoryGroups.slice(0);
+    histories.forEach(history => {
+      const { date } = history;
+      const month = moment(date).format('YYYY-MM');
+      const monthItem = newHistoryGroups.find(item => item.month === month);
+      if (monthItem) {
+        monthItem.children.push({ day: moment(date).format('YYYY-MM-DD'), showDaily: false, children: [ history ] });
+      } else {
+        newHistoryGroups.push({
+          month,
+          children: [
+            { day: moment(date).format('YYYY-MM-DD'), showDaily: false, children: [ history ] }
+          ]
+        });
+      }
+    });
+    return newHistoryGroups;
   }
 
   updateResultState(result) {
-    if (result.histories.length) {
-      this.setState({
-        historyVersions: [...this.state.historyVersions, ...result.histories],
-        currentPage: result.page,
-        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
-        isLoading: false,
-        fileOwner: result.histories[0].creator_email
-      });
-    }
+    const resultCount = result.histories.length;
+    this.setState({
+      historyGroups: this.formatHistories(result.histories),
+      hasMore: resultCount >= PER_PAGE,
+      isLoading: false,
+      fileOwner: result.histories[0].creator_email,
+    });
   }
 
   loadMore = () => {
     if (!this.state.isReloadingData) {
-      let currentPage = this.state.currentPage + 1;
-      this.setState({
-        currentPage: currentPage,
-        isReloadingData: true,
-      });
-      seafileAPI.listSdocHistory(docUuid, currentPage, PER_PAGE).then(res => {
-        this.updateResultState(res.data);
-        this.setState({isReloadingData: false});
+      this.currentPage = this.currentPage + 1;
+      this.setState({ isReloadingData: true }, () => {
+        seafileAPI.listSdocHistory(docUuid, this.currentPage, PER_PAGE).then(res => {
+          this.updateResultState(res.data);
+          this.setState({isReloadingData: false});
+        });
       });
     }
   };
@@ -86,7 +103,7 @@ class SidePanel extends Component {
   renameHistoryVersion = (objID, newName) => {
     seafileAPI.renameSdocHistory(docUuid, objID, newName).then((res) => {
       this.setState({
-        historyVersions: this.state.historyVersions.map(item => {
+        historyGroups: this.state.historyGroups.map(item => {
           if (item.obj_id == objID) {
             item.name = newName;
           }
@@ -113,8 +130,9 @@ class SidePanel extends Component {
     const { commit_id, path } = currentItem;
     editUtilities.revertFile(path, commit_id).then(res => {
       if (res.data.success) {
-        this.setState({isLoading: true});
-        this.refershFileList();
+        this.setState({isLoading: true}, () => {
+          this.firstLoadSdocHistory();
+        });
       }
       let message = gettext('Successfully restored.');
       toaster.success(message);
@@ -124,15 +142,11 @@ class SidePanel extends Component {
     });
   };
 
-  onSelectHistoryVersion = (historyVersion) => {
+  onSelectHistoryVersion = (path) => {
     const { isShowChanges } = this.props;
-    if (!isShowChanges) {
-      this.props.onSelectHistoryVersion(historyVersion);
-      return;
-    }
-    const { historyVersions } = this.state;
-    const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === historyVersion.commit_id);
-    this.props.onSelectHistoryVersion(historyVersion, historyVersions[historyVersionIndex + 1]);
+    const { historyGroups } = this.state;
+    const historyVersion = historyGroups[path[0]].children[path[1]].children[path[2]];
+    this.props.onSelectHistoryVersion(historyVersion, isShowChanges);
   };
 
   copyHistoryFile = (historyVersion) => {
@@ -148,9 +162,41 @@ class SidePanel extends Component {
     });
   };
 
+  showDailyHistory = (path, callback) => {
+    const { historyGroups } = this.state;
+    const newHistoryGroups = historyGroups.slice(0);
+    const dayHistoryGroup = newHistoryGroups[path[0]].children[path[1]];
+    if (dayHistoryGroup.showDaily) {
+      dayHistoryGroup.showDaily = false;
+      this.setState({ historyGroups: newHistoryGroups }, () => {
+        callback && callback();
+      });
+      return;
+    }
+    if (dayHistoryGroup.children.length > 1) {
+      dayHistoryGroup.showDaily = true;
+      this.setState({ historyGroups: newHistoryGroups }, () => {
+        callback && callback();
+      });
+      return;
+    }
+
+    seafileAPI.listSdocDailyHistoryDetail(docUuid, dayHistoryGroup.children[0].ctime).then(res => {
+      const histories = res.data.histories;
+      dayHistoryGroup.children.push(...histories);
+      dayHistoryGroup.showDaily = true;
+      this.setState({ historyGroups: newHistoryGroups }, () => {
+        callback && callback();
+      });
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error, true);
+      toaster.danger(gettext(errorMessage));
+    });
+  };
+
   renderHistoryVersions = () => {
-    const { isLoading, historyVersions, errorMessage } = this.state;
-    if (historyVersions.length === 0) {
+    const { isLoading, historyGroups, errorMessage } = this.state;
+    if (historyGroups.length === 0) {
       if (isLoading) {
         return (
           <div className="h-100 w-100 d-flex align-items-center justify-content-center">
@@ -174,18 +220,31 @@ class SidePanel extends Component {
 
     return (
       <>
-        {historyVersions.map((historyVersion, index) => {
+        {historyGroups.map((monthHistoryGroup, historyGroupIndex) => {
           return (
-            <HistoryVersion
-              key={historyVersion.commit_id}
-              index={index}
-              currentVersion={this.props.currentVersion}
-              historyVersion={historyVersion}
-              onSelectHistoryVersion={this.onSelectHistoryVersion}
-              onRestore={this.restoreVersion}
-              onCopy={this.copyHistoryFile}
-              renameHistoryVersion={this.renameHistoryVersion}
-            />
+            <Fragment key={monthHistoryGroup.month}>
+              <div className="history-list-item history-month-title" key={monthHistoryGroup.month}>{monthHistoryGroup.month}</div>
+              {monthHistoryGroup.children.map((dayHistoryGroup, dayHistoryGroupIndex) => {
+                const { children, showDaily } = dayHistoryGroup;
+                const displayHistories = showDaily ? children : children.slice(0, 1);
+                return displayHistories.map((history, index) => {
+                  return (
+                    <HistoryVersion
+                      key={history.commit_id}
+                      path={[historyGroupIndex, dayHistoryGroupIndex, index]}
+                      showDaily={index === 0 && showDaily}
+                      currentVersion={this.props.currentVersion}
+                      historyVersion={history}
+                      onSelectHistoryVersion={this.onSelectHistoryVersion}
+                      onRestore={this.restoreVersion}
+                      onCopy={this.copyHistoryFile}
+                      renameHistoryVersion={this.renameHistoryVersion}
+                      showDailyHistory={this.showDailyHistory}
+                    />
+                  );
+                });
+              }).flat()}
+            </Fragment>
           );
         })}
         {isLoading && (
@@ -198,15 +257,12 @@ class SidePanel extends Component {
   };
 
   onShowChanges = () => {
-    const { isShowChanges, currentVersion } = this.props;
-    const { historyVersions } = this.state;
-    const historyVersionIndex = historyVersions.findIndex(item => item.commit_id === currentVersion.commit_id);
-    const lastVersion = historyVersions[historyVersionIndex + 1];
-    this.props.onShowChanges(!isShowChanges, lastVersion);
+    const { isShowChanges } = this.props;
+    this.props.onShowChanges(!isShowChanges);
   };
 
   render() {
-    const { historyVersions } = this.state;
+    const { historyGroups } = this.state;
 
     return (
       <div className="sdoc-file-history-panel h-100 o-hidden d-flex flex-column">
@@ -216,7 +272,7 @@ class SidePanel extends Component {
           </div>
         </div>
         <div
-          className={classnames('sdoc-file-history-versions', { 'o-hidden': historyVersions.length === 0 } )}
+          className={classnames('sdoc-file-history-versions', { 'o-hidden': historyGroups.length === 0 } )}
           onScroll={this.onScrollHandler}
         >
           {this.renderHistoryVersions()}
