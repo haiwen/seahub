@@ -876,8 +876,9 @@ class SeadocNotificationsView(APIView):
     def delete(self, request, file_uuid):
         """ delete all notifications
         """
+        username = request.user.username
         try:
-            SeadocNotification.objects.filter(doc_uuid=file_uuid).delete()
+            SeadocNotification.objects.filter(doc_uuid=file_uuid, username=username).delete()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
