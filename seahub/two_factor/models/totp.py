@@ -108,7 +108,7 @@ class TOTPDevice(Device):
                     verified = True
                     break
             else:
-                logging.info('user input token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                logging.info('user input invalid token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
                              % (token, totp.token(), totp.t(), self.last_t))
                 verified = False
 
