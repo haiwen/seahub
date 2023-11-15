@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { Form, FormGroup, Input, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import MediaQuery from 'react-responsive';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, username, enableSeafileAI } from '../../utils/constants';
+import { gettext, siteRoot, enableSeafileAI } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import Switch from '../common/switch';
 
 const INDEX_STATE = {
   RUNNING: 'running',
@@ -567,10 +567,38 @@ class Search extends Component {
     });
   };
 
+  renderSwitch = () => {
+    const { indexState } = this.state;
+    if (indexState === INDEX_STATE.FINISHED || indexState === INDEX_STATE.RUNNING) {
+      return (
+        <Switch
+          checked={true}
+          placeholder={gettext('Turn on semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          textPosition='right'
+          disabled
+        />
+      );
+    } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {
+      return (
+        <Switch
+          checked={false}
+          placeholder={gettext('Turn on semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          onChange={this.onCreateIndex}
+          textPosition='right'
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { searchPageUrl, isMaskShow, indexState, isCloseShow, resultItems } = this.state;
+    const { isMaskShow, isCloseShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
     return (
       <Fragment>
@@ -593,9 +621,6 @@ class Search extends Component {
                   ref={this.inputRef}
                   onKeyDown={this.onKeydownHandler}
                 />
-                {(this.state.isCloseShow && username) &&
-                  <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
-                }
                 {this.state.isCloseShow &&
                   <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent mr-4" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                 }
@@ -605,14 +630,7 @@ class Search extends Component {
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
-                {isCloseShow && this.props.isLibView && enableSeafileAI &&
-                  <Form>
-                    <FormGroup check>
-                      <Input type="radio" name="radio1" checked={indexState === INDEX_STATE.FINISHED} onChange={() => {this.onCreateIndex()}}/>
-                      <Label>{gettext('Turn on semantic search for this library.')}</Label>
-                    </FormGroup>
-                  </Form>
-                }
+                {isCloseShow && this.props.isLibView && enableSeafileAI && this.renderSwitch()}
                 {this.renderSearchResult()}
               </div>
             </div>
@@ -639,9 +657,6 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {(this.state.isCloseShow && username) &&
-                    <a href={searchPageUrl} className="search-icon-right input-icon-addon fas fa-external-link-alt search-icon-arrow"></a>
-                  }
                   {this.state.isCloseShow &&
                     <button type="button" className="search-icon-right input-icon-addon fas fa-times border-0 bg-transparent" onClick={this.onCloseHandler} aria-label={gettext('Close')}></button>
                   }
