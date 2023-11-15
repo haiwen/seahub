@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, internalFilePath, dirPath } from '../../utils/constants';
 import { Modal, ModalHeader, ModalBody, Button, Input, ModalFooter, InputGroup } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -30,55 +30,62 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     });
   };
 
-  testSeafileRepoAPIToken = () => {
-    const { t } = this.props;
-    let { seafile_url, repo_api_token } = this.state;
-    seafile_url = seafile_url.trim();
-    repo_api_token = repo_api_token.trim();
-    if (seafile_url.slice(seafile_url.length-1) === '/') {
-      seafile_url = seafile_url.slice(0, seafile_url.length - 1);
-    }
-    this.setState({ seafile_url, repo_api_token });
-    window.dtableWebAPI.getSeafileRepoInfo(seafile_url, repo_api_token).then(resp => {
-      let {repo_name, repo_id} = resp.data;
-      if (repo_id && repo_name) {
-        this.setState({
-          repoInfo: resp.data,
-          stage: 'toSubmit',
-        });
+  getFile = () => {
+    const { baseName, seaTableUrl, baseApiToken } = this.state;
+    const fileName = internalFilePath.split('/')[2];
+    const fileContent = JSON.stringify({
+      [this.repo.repo_id]: {
+        'base_name': baseName,
+        'seatable_server_url': seaTableUrl,
+        'base_api_token': baseApiToken
       }
-    }).catch((e)=> {
-      this.setState({
-        errMessage: t('URL_or_library_API_token_is_invalid'),
-      });
     });
+    const newFile = new File([fileContent], fileName);
+    return newFile;
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     const { baseName, seaTableUrl, baseApiToken } = this.state;
-    console.log('baseName', baseName);
-    console.log('seaTableUrl', seaTableUrl);
-    console.log('baseApiToken', baseApiToken);
     if (!baseName.trim()) {
-      toaster.danger(gettext('Base_name_is_required'));
+      toaster.danger(gettext('Base name is required'));
       return;
     }
     else if (!seaTableUrl.trim()) {
-      toaster.danger(gettext('URL_is_required'));
+      toaster.danger(gettext('URL is required'));
       return;
     }
     else if (!baseApiToken.trim()) {
-      toaster.danger(gettext('API_token_required'));
+      toaster.danger(gettext('API token required'));
       return;
     }
 
-    console.log(window);
-    console.log('seafileAPI', seafileAPI);
-
+    const newFile = this.getFile();
+    const [downloadLinkRes, err] = await seafileAPI.getFileDownloadLink(this.repo.repo_id, internalFilePath).then(res => [res, null]).catch((err) => [null, err]);
+    // Replace
+    if (downloadLinkRes && downloadLinkRes.data) {
+      const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
+      if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
+        const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 9));
+        const fileName = internalFilePath.split('/')[2];
+        await seafileAPI.updateFile(updateLink.data, internalFilePath, fileName, newFile).catch(err => {toaster.danger(gettext(err.message));});
+        this.props.onSeaTableIntegrationToggle();
+      }
+    }
+    // Add
+    if (err) {
+      const uploadLink = await seafileAPI.getFileServerUploadLink(this.repo.repo_id, dirPath);
+      const formData = new FormData();
+      formData.append('file', newFile);
+      formData.append('relative_path', internalFilePath.split('/')[1]);
+      formData.append('parent_dir', dirPath);
+      await seafileAPI.uploadImage(uploadLink.data + '?ret-json=1', formData).catch(err => {toaster.danger(gettext(err.message));});
+      this.props.onSeaTableIntegrationToggle();
+    }
   };
 
   render() {
-    const { isPasswordVisible } = this.state;
+    const { isPasswordVisible, baseName, seaTableUrl, baseApiToken } = this.state;
+    const { onSeaTableIntegrationToggle } = this.props;
     let repo = this.repo;
     const itemName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
     const title = gettext('{placeholder} SeaTable integration').replace('{placeholder}', itemName);
@@ -86,9 +93,9 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     return (
       <Modal
         isOpen={true} style={{maxWidth: '600px'}}
-        toggle={this.props.onSeaTableIntegrationToggle}
+        toggle={onSeaTableIntegrationToggle}
       >
-        <ModalHeader toggle={this.props.onSeaTableIntegrationToggle}>
+        <ModalHeader toggle={onSeaTableIntegrationToggle}>
           <p dangerouslySetInnerHTML={{__html: title}} className="m-0"></p>
         </ModalHeader>
         <ModalBody>
@@ -98,7 +105,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
               <Input
                 type="text"
                 id="baseName"
-                value={this.state.baseName}
+                value={baseName}
                 onChange={(e) => {this.onInputChange(e, 'baseName');}}
               />
             </div>
@@ -107,15 +114,15 @@ class RepoSeaTableIntegrationDialog extends React.Component {
               <Input
                 type="text"
                 id="SeaTableServerURL"
-                value={this.state.seaTableUrl}
+                value={seaTableUrl}
                 onChange={(e) => {this.onInputChange(e, 'seaTableUrl');}}
               />
             </div>
             <div className='form-group'>
               <label>{gettext('Base API token')}</label>
               <InputGroup>
-                <Input type={isPasswordVisible ? 'text' : 'password'} autocomplete="new-password" value={this.state.baseApiToken || ''} onChange={(e) => {this.onInputChange(e, 'baseApiToken');}}/>
-                <span className='input-group-text' onClick={() => {this.setState({isPasswordVisible: !this.state.isPasswordVisible});}} style={{borderRadius: '0 3px 3px 0', height: '38px'}}>
+                <Input type={isPasswordVisible ? 'text' : 'password'} autoComplete="new-password" value={baseApiToken || ''} onChange={(e) => {this.onInputChange(e, 'baseApiToken');}}/>
+                <span className='input-group-text' onClick={() => {this.setState({isPasswordVisible: !isPasswordVisible});}} style={{borderRadius: '0 3px 3px 0', height: '38px'}}>
                   <i className={`iconfont dtable-font ${isPasswordVisible ? 'icon-eye': 'icon-eye-slash'} cursor-pointer`}></i>
                 </span>
               </InputGroup>
