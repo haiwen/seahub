@@ -7,6 +7,7 @@ import FileView from './components/file-view/file-view';
 import SeafileCodeMirror from './components/seafile-codemirror';
 import FileViewTip from './components/file-view/file-view-tip';
 import { seafileAPI } from './utils/seafile-api';
+import { Utils } from './utils/utils';
 
 import './css/text-file-view.css';
 const {
@@ -64,7 +65,7 @@ class ViewFileText extends React.Component {
     if (!this.isParticipant) {
       this.addParticipant();
     }
-    let dirPath = '/';
+    let dirPath = Utils.getDirName(filePath);
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data;
