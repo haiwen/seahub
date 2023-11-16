@@ -109,6 +109,8 @@ class TOTPDevice(Device):
                         break
                     else:
                         logging.info('Warning! Suspected token replay!')
+                        logging.info('user input token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
+                                     % (token, totp.token(), self.last_t, totp.t()))
             else:
                 logging.info('user input invalid token = %s, totp.token = %s, self.last_t = %s, totp.t = %s'
                              % (token, totp.token(), self.last_t, totp.t()))
