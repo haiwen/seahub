@@ -851,8 +851,7 @@ class SeadocNotificationsView(APIView):
         ids = request.data.get('ids')
 
         try:
-            SeadocNotification.objects.delete_user_unseen(
-                file_uuid, username, ids)
+            SeadocNotification.objects.delete_by_ids(file_uuid, username, ids)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
