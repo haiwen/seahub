@@ -384,7 +384,6 @@
   "Merge_tip": "文档有冲突，是否合并？",
   "Has_conflict_before_view_changes_tip": "文档有冲突，请解决冲突后再查看更改！",
   "Has_been_removed_tip": "文档已经被删除，请查看其他文档",
-  "Revision_created": "已创建修订稿 {{id}}",
   "Checking": "检查中...",
   "Publishing": "发布中...",
   "Inline": "嵌入行内",
@@ -408,5 +407,8 @@
   "Add_option": "新建标签",
   "Find_an_option": "查找标签",
   "Copy_link_of_section": "拷贝章节的链接",
-  "revision": "修订稿"
+  "revision": "修订稿",
+  "xxx_added_a_new_comment": "{{author}} 添加了一条新评论",
+  "xxx_added_a_reply": "{{author}} 添加了一条回复",
+  "New": "新"
 }

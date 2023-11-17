@@ -384,7 +384,6 @@
   "Merge_tip": "There are conflicts in the documents. Do you want to merge them?",
   "Has_conflict_before_view_changes_tip": "There are conflicts in the document. Please resolve the conflict before viewing the changes!",
   "Has_been_removed_tip": "Document has been removed, please view other documents.",
-  "Revision_created": "Revision {{id}} created",
   "Checking": "Checking...",
   "Publishing": "Publishing...",
   "Inline": "Inline",
@@ -408,5 +407,8 @@
   "Add_option": "Vytvořit nový štítek",
   "Find_an_option": "Search tags",
   "Copy_link_of_section": "Copy link of section",
-  "revision": "revision"
+  "revision": "revision",
+  "xxx_added_a_new_comment": "{{author}} added a new comment",
+  "xxx_added_a_reply": "{{author}} added a reply",
+  "New": "Nový"
 }

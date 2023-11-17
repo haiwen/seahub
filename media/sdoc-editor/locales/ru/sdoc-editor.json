@@ -384,7 +384,6 @@
   "Merge_tip": "В документах есть конфликты. Вы хотите объединить их?",
   "Has_conflict_before_view_changes_tip": "В документе есть конфликты. Разрешите конфликт перед просмотром изменений!",
   "Has_been_removed_tip": "Документ удален, посмотрите другие документы.",
-  "Revision_created": "Версия {{id}} создана",
   "Checking": "Проверка...",
   "Publishing": "Публикация...",
   "Inline": "Встроенный",
@@ -408,5 +407,8 @@
   "Add_option": "Создать новый тег",
   "Find_an_option": "Поиск тегов",
   "Copy_link_of_section": "Копировать ссылку на раздел",
-  "revision": "версия"
+  "revision": "версия",
+  "xxx_added_a_new_comment": "{{author}} добавил новый комментарий",
+  "xxx_added_a_reply": "{{author}} добавил ответ",
+  "New": "Новый"
 }
