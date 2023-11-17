@@ -65,7 +65,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     if (downloadLinkRes && downloadLinkRes.data) {
       const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
       if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
-        const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 9));
+        const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 10));
         const fileName = internalFilePath.split('/')[2];
         await seafileAPI.updateFile(updateLink.data, internalFilePath, fileName, newFile).catch(err => {toaster.danger(gettext(err.message));});
         this.props.onSeaTableIntegrationToggle();

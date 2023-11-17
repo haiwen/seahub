@@ -6,7 +6,7 @@ export const defaultContentForSDoc = {
 export const dirPath = '/';
 export const gettext = window.gettext;
 
-export const internalFilePath = '/internal/seatable-integration.json';
+export const internalFilePath = '/_Internal/seatable-integration.json';
 
 export const siteRoot = window.app.config.siteRoot;
 export const loginUrl = window.app.config.loginUrl;
