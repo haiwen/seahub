@@ -256,6 +256,9 @@ class SeadocNotificationManager(models.Manager):
 
     def list_by_unseen(self, doc_uuid, username):
         return self.filter(doc_uuid=doc_uuid, username=username, seen=False)
+    
+    def delete_user_unseen(self, doc_uuid, username, seenIds):
+        return self.filter(doc_uuid=doc_uuid, username=username, id__in=seenIds).delete()
 
 
 class SeadocNotification(models.Model):

@@ -817,55 +817,42 @@ class SeadocNotificationsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid):
-        """list notifications
+        """list unseen notifications
         """
         username = request.user.username
         try:
-            avatar_size = int(request.GET.get('avatar_size', 32))
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
         except ValueError:
-            avatar_size = 32
-
-        start = None
-        end = None
-        page = request.GET.get('page', '')
-        if page:
-            try:
-                page = int(request.GET.get('page', '1'))
-                per_page = int(request.GET.get('per_page', '25'))
-            except ValueError:
-                page = 1
-                per_page = 25
-            start = (page - 1) * per_page
-            end = page * per_page
+            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
-        total_count = SeadocNotification.objects.total_count(file_uuid, username)
         notifications = []
         try:
-            notification_queryset = SeadocNotification.objects.list_by_user(
-                file_uuid, username, start, end)
+            notifications_query = SeadocNotification.objects.list_by_unseen(
+                file_uuid, username)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        for notification in notification_queryset:
+        for notification in notifications_query:
             data = notification.to_dict()
             data.update(
                 user_to_dict(notification.username, request=request, avatar_size=avatar_size))
             notifications.append(data)
 
-        result = {'notifications': notifications, 'total_count': total_count}
+        result = {'notifications': notifications}
         return Response(result)
 
-    def put(self, request, file_uuid):
-        """ mark all notifications seen
+    def delete(self, request, file_uuid):
+        """delete notifications seen
         """
         username = request.user.username
+        ids = request.data.get('ids')
+
         try:
-            unseen_notices = SeadocNotification.objects.list_by_unseen(
-                file_uuid, username)
-            unseen_notices.update(seen=True)
+            SeadocNotification.objects.delete_user_unseen(
+                file_uuid, username, ids)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -1000,7 +987,7 @@ class SeadocCommentsView(APIView):
         to_users = list(to_users)
         detail = {
             'author': username,
-            'comment_id': file_comment.id,
+            'comment_id': int(file_comment.id),
             'comment' : str(file_comment.comment),
             'msg_type': 'comment',
             'created_at': datetime_to_isoformat_timestr(file_comment.created_at),
@@ -1226,7 +1213,7 @@ class SeadocCommentRepliesView(APIView):
         to_users = list(to_users)
         detail = {
             'author': username,
-            'comment_id': comment_id,
+            'comment_id': int(comment_id),
             'reply_id': reply.pk,  
             'reply' : str(reply_content),
             'msg_type': 'reply',
