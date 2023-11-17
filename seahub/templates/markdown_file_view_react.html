@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <title>{{ filename }}</title>
 
-        <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+        <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" id="favicon" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-editor-font/seafile-editor-font.css" />
@@ -46,7 +46,7 @@
                   hasDraft: '{{ has_draft }}' === 'True',
                   draftFilePath: '{{ draft_file_path }}',
                   draftOriginFilePath: '{{ draft_origin_file_path }}',
-		  shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
+                  shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
                   shareLinkPasswordMinLength: {{ share_link_password_min_length }},
                   shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
                   shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},

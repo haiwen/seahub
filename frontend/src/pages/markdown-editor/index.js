@@ -261,6 +261,9 @@ class MarkdownEditor extends React.Component {
 
   async componentDidMount() {
 
+    const fileIcon = Utils.getFileIconUrl(fileName, 192);
+    document.getElementById('favicon').href = fileIcon;
+
     // get file info
     const fileInfoRes = await seafileAPI.getFileInfo(repoID, filePath);
     const { mtime, size, starred, permission, last_modifier_name, id } = fileInfoRes.data;

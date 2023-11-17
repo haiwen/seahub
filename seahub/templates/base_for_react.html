@@ -13,7 +13,7 @@
 {% endblock %}
 {% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<link rel="icon" href="{{ MEDIA_URL }}{% if filetype == 'dtable' %}{{ dtable_favicon_path }}{% else %}{{ favicon_path }}{% endif %}" type="image/x-icon">
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}fontawesome/css/fontawesome-all.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
