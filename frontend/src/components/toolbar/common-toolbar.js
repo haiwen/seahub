@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, enableSeafileAI } from '../../utils/constants';
 import Search from '../search/search';
+import AISearch from '../search/ai-search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
 import Account from '../common/account';
@@ -18,19 +19,26 @@ const propTypes = {
 class CommonToolbar extends React.Component {
 
   render() {
-    const { repoID, repoName } = this.props;
+    const { repoID, repoName, isLibView } = this.props;
     return (
       <div className="common-toolbar">
-        {isPro && (
+        {isPro && !(enableSeafileAI && isLibView) &&(
           <Search
             repoID={repoID}
             placeholder={this.props.searchPlaceholder || gettext('Search files')}
             onSearchedClick={this.props.onSearchedClick}
-            isLibView={this.props.isLibView}
+            isPublic={false}
+          />
+        )}
+        {isPro && enableSeafileAI && isLibView && (
+          <AISearch
+            repoID={repoID}
+            placeholder={this.props.searchPlaceholder || gettext('Search files')}
+            onSearchedClick={this.props.onSearchedClick}
             repoName={repoName}
           />
         )}
-        {this.props.isLibView && !isPro &&
+        {!isPro && isLibView &&
           <SearchByName
             repoID={repoID}
             repoName={repoName}
