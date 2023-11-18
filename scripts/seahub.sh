@@ -160,11 +160,10 @@ function before_start() {
             echo "LC_ALL is not set in ENV, set to en_US.UTF-8"
             export LC_ALL='en_US.UTF-8'
         fi
-
-        export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
-        export SEAFES_DIR=$seafesdir
-        export SEAHUB_DIR=$seahubdir
     fi
+    export PYTHONPATH=$PYTHONPATH:$pro_pylibs_dir
+    export SEAFES_DIR=$seafesdir
+    export SEAHUB_DIR=$seahubdir
 }
 
 function start_seahub () {
