@@ -114,7 +114,7 @@ def get_user_objs_from_ccnet(email_list):
         return list(), api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
     sql = """SELECT e.email, is_staff, is_active, ctime, role FROM `%s`.`EmailUser` e
-             LEFT JOIN UserRole r ON e.emali=r.email WHERE e.email IN %%s""" % db_name
+             LEFT JOIN `%s`.`UserRole` r ON e.email=r.email WHERE e.email IN %%s""" % (db_name, db_name)
     try:
         with connection.cursor() as cursor:
             cursor.execute(sql, (email_list,))
