@@ -18,32 +18,44 @@ const propTypes = {
 
 class CommonToolbar extends React.Component {
 
-  render() {
-    const { repoID, repoName, isLibView } = this.props;
-    return (
-      <div className="common-toolbar">
-        {isPro && !(enableSeafileAI && isLibView) &&(
+  renderSearch = () => {
+    const { repoID, repoName, isLibView, searchPlaceholder } = this.props;
+    const placeholder = searchPlaceholder || gettext('Search files');
+
+    if (isPro) {
+      if (enableSeafileAI && isLibView) {
+        return (
+          <AISearch
+            repoID={repoID}
+            placeholder={placeholder}
+            onSearchedClick={this.props.onSearchedClick}
+            repoName={repoName}
+          />
+        );
+      } else {
+        return (
           <Search
             repoID={repoID}
-            placeholder={this.props.searchPlaceholder || gettext('Search files')}
+            placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
             isPublic={false}
           />
-        )}
-        {isPro && enableSeafileAI && isLibView && (
-          <AISearch
-            repoID={repoID}
-            placeholder={this.props.searchPlaceholder || gettext('Search files')}
-            onSearchedClick={this.props.onSearchedClick}
-            repoName={repoName}
-          />
-        )}
-        {!isPro && isLibView &&
-          <SearchByName
-            repoID={repoID}
-            repoName={repoName}
-          />
-        }
+        );
+      }
+    } else {
+      if (isLibView) {
+        return (
+          <SearchByName repoID={repoID} repoName={repoName} />
+        );
+      }
+      return null;
+    }
+  };
+
+  render() {
+    return (
+      <div className="common-toolbar">
+        {this.renderSearch()}
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
