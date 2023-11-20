@@ -411,6 +411,6 @@
   "xxx_added_a_new_comment": "{{author}} добавил новый комментарий",
   "xxx_added_a_reply": "{{author}} добавил ответ",
   "New": "Новый",
-  "Table_template": "Table template",
-  "Jump_to_source_doc": "Jump to the source document"
+  "Table_template": "Шаблон таблицы",
+  "Jump_to_original_doc": "Jump to the original document"
 }
