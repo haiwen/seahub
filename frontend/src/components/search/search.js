@@ -8,6 +8,7 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import { SEARCH_DELAY_TIME } from './constant';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -59,12 +60,19 @@ class Search extends Component {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
-    this.timer && clearTimeout(this.timer);
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
     this.isChineseInput = false;
   }
 
   onCompositionStart = () => {
     this.isChineseInput = true;
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
   };
 
   onCompositionEnd = () => {
@@ -72,9 +80,13 @@ class Search extends Component {
     // chrome：compositionstart -> onChange -> compositionend
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
-    setTimeout(() => {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    this.timer = setTimeout(() => {
       this.onSearch();
-    }, 1);
+    }, SEARCH_DELAY_TIME);
   };
 
   onDocumentKeydown = (e) => {
@@ -166,7 +178,7 @@ class Search extends Component {
         }
         this.timer = setTimeout(() => {
           this.onSearch();
-        }, 500);
+        }, SEARCH_DELAY_TIME);
       }
     });
   };

@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
 import Switch from '../common/switch';
+import { SEARCH_DELAY_TIME } from './constant';
 
 const INDEX_STATE = {
   RUNNING: 'running',
@@ -54,6 +55,7 @@ export default class AISearch extends Component {
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
     this.indexStateTimer = null;
+    this.timer = null;
     this.isChineseInput = false;
   }
 
@@ -81,12 +83,23 @@ export default class AISearch extends Component {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
-    this.indexStateTimer && clearInterval(this.indexStateTimer);
     this.isChineseInput = false;
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    if (this.indexStateTimer) {
+      clearInterval(this.indexStateTimer);
+      this.indexStateTimer = null;
+    }
   }
 
   onCompositionStart = () => {
     this.isChineseInput = true;
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
   };
 
   onCompositionEnd = () => {
@@ -94,9 +107,13 @@ export default class AISearch extends Component {
     // chrome：compositionstart -> onChange -> compositionend
     // not chrome：compositionstart -> compositionend -> onChange
     // The onChange event will setState and change input value, then setTimeout to initiate the search
-    setTimeout(() => {
-      this.onSearch(false);
-    }, 1);
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    this.timer = setTimeout(() => {
+      this.onSearch();
+    }, SEARCH_DELAY_TIME);
   };
 
   onDocumentKeydown = (e) => {
@@ -182,18 +199,24 @@ export default class AISearch extends Component {
       if (this.inputValue === newValue.trim()) return;
       this.inputValue = newValue.trim();
       if (!this.isChineseInput) {
-        this.onSearch(false);
+        if (this.timer) {
+          clearTimeout(this.timer);
+          this.timer = null;
+        }
+        this.timer = setTimeout(() => {
+          this.onSearch();
+        }, SEARCH_DELAY_TIME);
       }
     });
   };
 
   onKeydownHandler = (event) => {
     if (isHotkey('enter', event)) {
-      this.onSearch(true);
+      this.onSearch();
     }
   };
 
-  onSearch = (isGetSearchResult) => {
+  onSearch = () => {
     const { value } = this.state;
     const { repoID } = this.props;
     if (this.inputValue === '' || this.getValueLength(this.inputValue) < 3) {
@@ -205,14 +228,12 @@ export default class AISearch extends Component {
       });
       return;
     }
-    if (isGetSearchResult) {
-      const queryData = {
-        q: value,
-        search_repo: repoID ? repoID : 'all',
-        search_ftypes: 'all',
-      };
-      this.getSearchResult(queryData);
-    }
+    const queryData = {
+      q: value,
+      search_repo: repoID ? repoID : 'all',
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(queryData);
   };
 
   getSearchResult = (queryData) => {
@@ -306,10 +327,6 @@ export default class AISearch extends Component {
           isLoading: false,
           page: page + 1,
           hasMore: false,
-        }).catch(error => {
-          let errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
-          this.setState({ isLoading: false });
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
