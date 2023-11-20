@@ -410,5 +410,7 @@
   "revision": "revision",
   "xxx_added_a_new_comment": "{{author}} added a new comment",
   "xxx_added_a_reply": "{{author}} added a reply",
-  "New": "Nuevo"
+  "New": "Nuevo",
+  "Table_template": "Table template",
+  "Jump_to_source_doc": "Jump to the source document"
 }

@@ -410,5 +410,7 @@
   "revision": "修订稿",
   "xxx_added_a_new_comment": "{{author}} 添加了一条新评论",
   "xxx_added_a_reply": "{{author}} 添加了一条回复",
-  "New": "新"
+  "New": "新",
+  "Table_template": "表格模版",
+  "Jump_to_source_doc": "跳转到源文档"
 }
