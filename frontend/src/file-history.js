@@ -61,9 +61,9 @@ class FileHistory extends React.Component {
 
   render() {
     return (
-      <div className="history-content flex-fill d-flex">
+      <div className="history-content flex-fill d-flex h-100">
         <div className="flex-fill d-flex flex-column">
-          <div className="history-header file-history-header">
+          <div className="history-header file-history-header flex-shrink-0">
             <div className="title">
               <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
                 <span className="fas fa-chevron-left"></span>
