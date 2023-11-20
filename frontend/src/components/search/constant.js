@@ -1,0 +1,3 @@
+const SEARCH_DELAY_TIME = 1000;
+
+export { SEARCH_DELAY_TIME };

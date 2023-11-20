@@ -8,19 +8,26 @@ import SearchResultItem from './search-result-item';
 import { Utils } from '../../utils/utils';
 import { isMac } from '../../utils/extra-attributes';
 import toaster from '../toast';
+import Switch from '../common/switch';
 import { SEARCH_DELAY_TIME } from './constant';
 
-const propTypes = {
-  repoID: PropTypes.string,
-  placeholder: PropTypes.string,
-  onSearchedClick: PropTypes.func.isRequired,
-  isPublic: PropTypes.bool,
+const INDEX_STATE = {
+  RUNNING: 'running',
+  UNCREATED: 'uncreated',
+  FINISHED: 'finished'
 };
 
 const PER_PAGE = 10;
 const controlKey = isMac() ? '⌘' : 'Ctrl';
 
-class Search extends Component {
+export default class AISearch extends Component {
+
+  static propTypes = {
+    repoID: PropTypes.string,
+    placeholder: PropTypes.string,
+    onSearchedClick: PropTypes.func.isRequired,
+    repoName: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -39,6 +46,7 @@ class Search extends Component {
       isCloseShow: false,
       isSearchInputShow: false, // for mobile
       searchPageUrl: this.baseSearchPageURL,
+      indexState: '',
     };
     this.inputValue = '';
     this.highlightRef = null;
@@ -46,6 +54,7 @@ class Search extends Component {
     this.inputRef = React.createRef();
     this.searchContainer = React.createRef();
     this.searchResultListRef = React.createRef();
+    this.indexStateTimer = null;
     this.timer = null;
     this.isChineseInput = false;
   }
@@ -54,17 +63,35 @@ class Search extends Component {
     document.addEventListener('keydown', this.onDocumentKeydown);
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
+    this.queryLibraryIndexState();
+  }
+
+  queryLibraryIndexState() {
+    seafileAPI.queryLibraryIndexState(this.props.repoID).then(res => {
+      const { state: indexState, task_id: taskId } = res.data;
+      this.setState({ indexState }, () => {
+        if (indexState === INDEX_STATE.RUNNING) {
+          this.queryIndexTaskStatus(taskId);
+        }
+      });
+    }).catch(error => {
+      this.setState({ indexState: INDEX_STATE.UNCREATED });
+    });
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onDocumentKeydown);
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
+    this.isChineseInput = false;
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
     }
-    this.isChineseInput = false;
+    if (this.indexStateTimer) {
+      clearInterval(this.indexStateTimer);
+      this.indexStateTimer = null;
+    }
   }
 
   onCompositionStart = () => {
@@ -224,63 +251,93 @@ class Search extends Component {
   };
 
   sendRequest = (queryData, cancelToken, page) => {
-    let isPublic = this.props.isPublic;
     this.queryData = queryData;
+    this.updateSearchPageURL(queryData);
+    queryData['per_page'] = PER_PAGE;
+    queryData['page'] = page;
+    queryData['search_filename_only'] = true;
+    if (this.state.indexState === INDEX_STATE.FINISHED) {
+      this.onCombinedSearch(queryData, cancelToken, page);
+    } else {
+      this.onNormalSearch(queryData, cancelToken, page);
+    }
+  };
 
-    if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE).then(res => {
+  onNormalSearch = (queryData, cancelToken, page) => {
+    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+      this.source = null;
+      if (res.data.total > 0) {
+        this.setState({
+          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
+          isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
+          hasMore: res.data.has_more,
+        });
+        return;
+      }
+      this.setState({
+        highlightIndex: 0,
+        resultItems: [],
+        isLoading: false,
+        isResultGetted: true,
+        hasMore: res.data.has_more,
+      });
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
+  };
+
+  onCombinedSearch = (queryData, cancelToken, page) => {
+    const { indexState } = this.state;
+    if (indexState === INDEX_STATE.UNCREATED) {
+      toaster.warning(gettext('Please create index first.'));
+      return;
+    }
+    if (indexState === INDEX_STATE.RUNNING) {
+      toaster.warning(gettext('Indexing, please try again later.'));
+      return;
+    }
+
+    let results = [];
+    let normalSearchQueryData = Object.assign({}, queryData, {'search_filename_only': true});
+    seafileAPI.searchFiles(normalSearchQueryData, cancelToken).then(res => {
+      if (res.data.total > 0) {
+        results = [...results, ...this.formatResultItems(res.data.results)];
+      }
+      seafileAPI.similaritySearchFiles(queryData, cancelToken).then(res => {
         this.source = null;
-        if (res.data.total > 0) {
-          this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
-            page: page + 1,
-            isLoading: false,
-            hasMore: res.data.has_more,
-          });
-        } else {
-          this.setState({
-            highlightIndex: 0,
-            resultItems: [],
-            isLoading: false,
-            isResultGetted: true,
-            hasMore: res.data.has_more,
-          });
+        if (res.data && res.data.children_list) {
+          results = [...results, ...this.formatSimilarityItems(res.data.children_list)];
         }
+
+        let tempPathObj = {};
+        let searchResults = [];
+        results.forEach(item => {
+          if (!tempPathObj[item.path]) {
+            tempPathObj[item.path] = true;
+            searchResults.push(item);
+          }
+        });
+        this.setState({
+          resultItems: searchResults,
+          isResultGetted: true,
+          isLoading: false,
+          page: page + 1,
+          hasMore: false,
+        });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
         this.setState({ isLoading: false });
       });
-    } else {
-      this.updateSearchPageURL(queryData);
-      queryData['per_page'] = PER_PAGE;
-      queryData['page'] = page;
-      seafileAPI.searchFiles(queryData, cancelToken).then(res => {
-        this.source = null;
-        if (res.data.total > 0) {
-          this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
-            isResultGetted: true,
-            isLoading: false,
-            page: page + 1,
-            hasMore: res.data.has_more,
-          });
-          return;
-        }
-        this.setState({
-          highlightIndex: 0,
-          resultItems: [],
-          isLoading: false,
-          isResultGetted: true,
-          hasMore: res.data.has_more,
-        });
-      }).catch(error => {
-        /* eslint-disable */
-        console.log(error);
-        this.setState({ isLoading: false });
-      });
-    }
+    }).catch(error => {
+      /* eslint-disable */
+      console.log(error);
+      this.setState({ isLoading: false });
+    });
   };
 
   onResultListScroll = (e) => {
@@ -335,6 +392,24 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
+    }
+    return items;
+  }
+
+  formatSimilarityItems(data) {
+    let items = [];
+    let repo_id = this.props.repoID;
+    for (let i = 0; i < data.length; i++) {
+      items[i] = {};
+      items[i]['index'] = [i];
+      items[i]['name'] = data[i].path.substring(data[i].path.lastIndexOf('/')+1);
+      items[i]['path'] = data[i].path;
+      items[i]['repo_id'] = repo_id;
+      items[i]['repo_name'] = this.props.repoName;
+      items[i]['is_dir'] = false;
+      items[i]['link_content'] = decodeURI(data[i].path).substring(1);
+      items[i]['content'] = data[i].sentence;
+      items[i]['thumbnail_url'] = '';
     }
     return items;
   }
@@ -406,10 +481,71 @@ class Search extends Component {
     });
   };
 
+  queryIndexTaskStatus = (taskId) => {
+    if (!taskId) return;
+    this.indexStateTimer = setInterval(() => {
+      seafileAPI.queryIndexTaskStatus(taskId).then(res => {
+        const isFinished = res.data.is_finished;
+        if (isFinished) {
+          this.setState({ indexState: INDEX_STATE.FINISHED });
+          this.indexStateTimer && clearInterval(this.indexStateTimer);
+          this.indexStateTimer = null;
+        }
+      }).catch(error => {
+        this.indexStateTimer && clearInterval(this.indexStateTimer);
+        this.indexStateTimer = null;
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        this.setState({ indexState: INDEX_STATE.UNCREATED });
+      });
+    }, 3000);
+  };
+
+  onCreateIndex = () => {
+    this.setState({ indexState: INDEX_STATE.RUNNING });
+    seafileAPI.createLibraryIndex(this.props.repoID).then(res => {
+      const taskId = res.data.task_id;
+      toaster.notify(gettext('Indexing the library. Semantic search will be available within a few minutes.'))
+      this.queryIndexTaskStatus(taskId);
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      this.setState({ indexState: INDEX_STATE.UNCREATED });
+    });
+  };
+
+  renderSwitch = () => {
+    const { indexState } = this.state;
+    if (indexState === INDEX_STATE.FINISHED || indexState === INDEX_STATE.RUNNING) {
+      return (
+        <Switch
+          checked={true}
+          placeholder={gettext('Turn on semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          textPosition='right'
+          disabled
+        />
+      );
+    } else if (indexState === '' || indexState === INDEX_STATE.UNCREATED) {
+      return (
+        <Switch
+          checked={false}
+          placeholder={gettext('Turn on semantic search for this library')}
+          className="w-100 mt-1"
+          size="small"
+          onChange={this.onCreateIndex}
+          textPosition='right'
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
     let style = {'width': width};
-    const { isMaskShow } = this.state;
+    const { isMaskShow, isCloseShow } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + f )`}`;
     return (
       <Fragment>
@@ -441,6 +577,7 @@ class Search extends Component {
                 onScroll={this.onResultListScroll}
                 ref={this.searchContainer}
               >
+                {isCloseShow && this.renderSwitch()}
                 {this.renderSearchResult()}
               </div>
             </div>
@@ -482,7 +619,3 @@ class Search extends Component {
     );
   }
 }
-
-Search.propTypes = propTypes;
-
-export default Search;

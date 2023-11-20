@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, enableSeafileAI } from '../../utils/constants';
 import Search from '../search/search';
+import AISearch from '../search/ai-search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
 import Account from '../common/account';
@@ -17,25 +18,44 @@ const propTypes = {
 
 class CommonToolbar extends React.Component {
 
-  render() {
-    const { repoID, repoName } = this.props;
-    return (
-      <div className="common-toolbar">
-        {isPro && (
+  renderSearch = () => {
+    const { repoID, repoName, isLibView, searchPlaceholder } = this.props;
+    const placeholder = searchPlaceholder || gettext('Search files');
+
+    if (isPro) {
+      if (enableSeafileAI && isLibView) {
+        return (
+          <AISearch
+            repoID={repoID}
+            placeholder={placeholder}
+            onSearchedClick={this.props.onSearchedClick}
+            repoName={repoName}
+          />
+        );
+      } else {
+        return (
           <Search
             repoID={repoID}
-            placeholder={this.props.searchPlaceholder || gettext('Search files')}
+            placeholder={placeholder}
             onSearchedClick={this.props.onSearchedClick}
-            isLibView={this.props.isLibView}
-            repoName={repoName}
+            isPublic={false}
           />
-        )}
-        {this.props.isLibView && !isPro &&
-          <SearchByName
-            repoID={repoID}
-            repoName={repoName}
-          />
-        }
+        );
+      }
+    } else {
+      if (isLibView) {
+        return (
+          <SearchByName repoID={repoID} repoName={repoName} />
+        );
+      }
+      return null;
+    }
+  };
+
+  render() {
+    return (
+      <div className="common-toolbar">
+        {this.renderSearch()}
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
