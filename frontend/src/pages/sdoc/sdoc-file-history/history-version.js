@@ -2,12 +2,12 @@ import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import classnames from 'classnames';
 import { gettext, filePath } from '../../../utils/constants';
 import URLDecorator from '../../../utils/url-decorator';
 import Rename from '../../../components/rename';
 
 import '../../../css/history-record-item.css';
-import classNames from 'classnames';
 
 moment.locale(window.app.config.lang);
 
@@ -97,7 +97,7 @@ class HistoryVersion extends React.Component {
         {path[2] === 0 && (
           <div className="daily-history-detail-toggle-container">
             {count > 1 && (
-              <div className={classNames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })} onClick={this.showDailyHistory}>
+              <div className={classnames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })} onClick={this.showDailyHistory}>
                 <i className="dropdown-toggle"></i>
               </div>
             )}
