@@ -412,5 +412,6 @@
   "xxx_added_a_reply": "{{author}} добавил ответ",
   "New": "Новый",
   "Table_template": "Шаблон таблицы",
-  "Jump_to_original_doc": "Jump to the original document"
+  "Jump_to_original_doc": "Перейти к исходному документу",
+  "Selected_text": "Selected text"
 }

@@ -412,5 +412,6 @@
   "xxx_added_a_reply": "{{author}} 添加了一条回复",
   "New": "新",
   "Table_template": "表格模版",
-  "Jump_to_original_doc": "跳转到源文档"
+  "Jump_to_original_doc": "跳转到源文档",
+  "Selected_text": "选中的文本"
 }
