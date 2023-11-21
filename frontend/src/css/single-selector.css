@@ -1,0 +1,27 @@
+.sf-single-selector .cur-option .toggle-icon {
+  color: #999;
+}
+
+.sf-single-selector .options-container {
+  min-width: 165px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  z-index: 2;
+}
+
+.sf-single-selector .option-list {
+  min-height: 4rem;
+  max-height: 200px;
+}
+
+.sf-single-selector .option-item {
+  cursor: pointer;
+}
+
+.sf-single-selector .option-item:hover {
+  background: #f5f5f5;
+}
+
+.sf-single-selector .option-item-text {
+  font-size: 14px;
+}

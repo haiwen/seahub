@@ -7,7 +7,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ModalPortal from '../../components/modal-portal';
-import RoleEditor from '../../components/select-editor/role-editor';
+import RoleSelector from '../../components/single-selector';
 import AddDepartDialog from '../../components/dialog/org-add-department-dialog';
 import AddMemberDialog from '../../components/dialog/org-add-member-dialog';
 import DeleteMemberDialog from '../../components/dialog/org-delete-member-dialog';
@@ -396,10 +396,12 @@ class MemberItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false,
-      showRoleMenu: false,
+      highlight: false
     };
-    this.roles = ['Admin', 'Member'];
+    this.roleOptions = [
+      { value: 'Admin', text: gettext('Admin'), isSelected: false },
+      { value: 'Member', text: gettext('Member'), isSelected: false }
+    ];
   }
 
   onMouseEnter = () => {
@@ -412,12 +414,8 @@ class MemberItem extends React.Component {
     this.setState({ highlight: false });
   };
 
-  toggleMemberRoleMenu = () => {
-    this.setState({ showRoleMenu: !this.state.showRoleMenu });
-  };
-
-  onChangeUserRole = (role) => {
-    let isAdmin = role === 'Admin' ? true : false;
+  onChangeUserRole = (roleOption) => {
+    let isAdmin = roleOption.value === 'Admin' ? true : false;
     seafileAPI.orgAdminSetGroupMemberRole(orgID, this.props.groupID, this.props.member.email, isAdmin).then((res) => {
       this.props.onMemberChanged();
     }).catch(error => {
@@ -434,25 +432,29 @@ class MemberItem extends React.Component {
     const highlight = this.state.highlight;
     let memberLink = serviceURL + '/org/useradmin/info/' + member.email + '/';
     if (member.role === 'Owner') return null;
+
+    this.roleOptions = this.roleOptions.map(item => {
+      item.isSelected = item.value == member.role;
+      return item;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
+
     return (
       <tr className={highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={member.avatar_url} alt="member-header" width="24" className="avatar"/></td>
         <td><a href={memberLink}>{member.name}</a></td>
         <td>
-          <RoleEditor
-            isTextMode={true}
-            isEditIconShow={highlight}
-            currentRole={member.role}
-            roles={this.roles}
-            onRoleChanged={this.onChangeUserRole}
+          <RoleSelector
+            isDropdownToggleShown={highlight}
+            currentSelectedOption={currentSelectedOption}
+            options={this.roleOptions}
+            selectOption={this.onChangeUserRole}
             toggleItemFreezed={this.props.toggleItemFreezed}
           />
         </td>
-        {!this.props.isItemFreezed ?
-          <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
+        <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
             <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-          </td> : <td></td>
-        }
+          </td>
       </tr>
     );
   }
