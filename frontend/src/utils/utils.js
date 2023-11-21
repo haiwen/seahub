@@ -527,7 +527,7 @@ export const Utils = {
 
   getFileOperationList: function(isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK,
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT, CONVERT_TO_MARKDOWN, CONVERT_TO_SDOC } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -590,7 +590,11 @@ export const Utils = {
             list.push(UNLOCK);
           }
         } else {
-          list.push(LOCK);
+          if (dirent.name.endsWith('.sdoc')) {
+            list.push(FREEZE_DOCUMENT);
+          } else {
+            list.push(LOCK);
+          }
         }
       }
 

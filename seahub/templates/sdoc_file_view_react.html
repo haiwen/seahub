@@ -27,7 +27,8 @@ publisherNickname: '{{ publisher_nickname }}',
 isPublished: {% if is_published %}true{% else %}false{% endif %},
 revisionCreatedAt: '{{ revision_created_at }}',
 revisionUpdatedAt: '{{ revision_updated_at }}',
-isSdocDraft: {% if is_sdoc_draft %}true{% else %}false{% endif %}
+isSdocDraft: {% if is_sdoc_draft %}true{% else %}false{% endif %},
+isFreezed: {% if is_freezed %}true{% else %}false{% endif %}
 {% endblock %}
 
 {% block render_bundle %}

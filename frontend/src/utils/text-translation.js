@@ -21,6 +21,7 @@ const TextTranslation = {
   'DETAILS' : {key : 'Details', value : gettext('Details')},
   'OPEN_VIA_CLIENT' : {key : 'Open via Client', value : gettext('Open via Client')},
   'LOCK' : {key : 'Lock', value : gettext('Lock')},
+  'FREEZE_DOCUMENT' : {key : 'Freeze Document', value : gettext('Freeze Document')},
   'UNLOCK' : {key : 'Unlock', value : gettext('Unlock')},
   'CONVERT_TO_MARKDOWN' : {key : 'Convert to Markdown', value : gettext('Convert to Markdown')},
   'CONVERT_TO_SDOC' : {key : 'Convert to sdoc', value : gettext('Convert to sdoc')},

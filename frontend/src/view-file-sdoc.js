@@ -12,7 +12,7 @@ const {
   repoID, repoName, parentDir, filePerm,
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
-  originFilePath, originDocUuid, revisionId,
+  originFilePath, originDocUuid, revisionId, isFreezed
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -44,6 +44,7 @@ window.seafile = {
   lang,
   revisionId,
   mediaUrl,
+  isFreezed,
 };
 
 ReactDom.render(

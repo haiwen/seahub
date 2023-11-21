@@ -662,7 +662,11 @@ def view_lib_file(request, repo_id, path):
             can_edit_file = False
         elif is_locked and not locked_by_me:
             can_edit_file = False
+
         return_dict['can_edit_file'] = can_edit_file
+
+        lock_info = seafile_api.get_lock_info(repo_id, path)
+        return_dict['is_freezed'] = lock_info is not None and lock_info.expire < 0
 
         if is_pro_version() and can_edit_file:
             try:

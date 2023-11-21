@@ -142,6 +142,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             if is_pro_version():
                 file_info["is_locked"] = dirent.is_locked
                 file_info["lock_time"] = dirent.lock_time
+                file_info["is_freezed"] = dirent.expire is not None and dirent.expire < 0
 
                 lock_owner_email = dirent.lock_owner or ''
                 file_info["lock_owner"] = lock_owner_email
