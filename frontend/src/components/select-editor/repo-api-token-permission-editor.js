@@ -70,6 +70,7 @@ class RepoAPITokenPermissionEditor extends React.Component {
             placeholder={optionTranslation}
             onChange={this.onPermissionChanged}
             captureMenuScroll={false}
+            value={this.options.find(opt => opt.value === currentPermission) || null}
           />
         }
       </div>
