@@ -3379,8 +3379,6 @@ class FileNextRevision(APIView):
         try:
             next_file_history = get_next_file_history(repo_id, path, current_revision_id)
         except Exception as e:
-            print('**********')
-            print(e)
             next_file_history = {}
 
         commit_id = next_file_history.get('commit_id', '')
@@ -3388,7 +3386,7 @@ class FileNextRevision(APIView):
         file_name = os.path.basename(path)
 
         if not commit_id:
-            return Response('')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Revision commit_id not found.')
 
         try:
             obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(

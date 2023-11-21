@@ -754,8 +754,6 @@ class SeadocDailyHistoryDetail(APIView):
             error_msg = 'op_date invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        to_tz = request.GET.get('to_tz', TO_TZ)
-
         try:
             file_revisions = get_file_daily_history_detail(repo_id, path, start_time, end_time, to_tz)
         except Exception as e:
