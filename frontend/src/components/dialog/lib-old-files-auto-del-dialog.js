@@ -93,7 +93,7 @@ class LibOldFilesAutoDelDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <ModalHeader toggle={this.props.toggleDialog}>
           {gettext('Auto deletion')}
         </ModalHeader>

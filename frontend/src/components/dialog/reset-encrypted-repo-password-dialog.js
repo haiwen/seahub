@@ -42,7 +42,7 @@ class ResetEncryptedRepoPasswordDialog extends React.Component {
     let message = gettext('New password has been sent to your email {mail}. Please check your mailbox. If you don’t receive the password, please check if your email address is properly configured.').replace('{mail}', user_email);
 
     return (
-      <Modal isOpen={true}  centered={true}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog} centered={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
           {gettext('Reset library password')}
         </ModalHeader>
