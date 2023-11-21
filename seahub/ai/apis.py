@@ -15,7 +15,7 @@ from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
 from seahub.utils.repo import parse_repo_perm
 from seahub.ai.utils import create_library_sdoc_index, get_sdoc_info_recursively, similarity_search_in_library, \
-    update_library_sdoc_index, delete_library_index, query_task_status, query_library_index_state
+    update_library_sdoc_index, delete_library_index, query_task_status, query_library_index_state, question_answering_search_in_library
 
 from seaserv import seafile_api
 
@@ -122,6 +122,56 @@ class SimilaritySearchInLibrary(APIView):
 
         return Response(resp_json, resp.status_code)
 
+class QuestionAnsweringSearchInLibrary(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        query = request.data.get('query')
+        repo_id = request.data.get('repo_id')
+
+        try:
+            count = int(request.data.get('count'))
+        except:
+            count = 10
+
+        if not query:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid')
+
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
+
+        parent_dir = '/'
+        username = request.user.username
+
+        try:
+            sdoc_info_list = get_sdoc_info_recursively(username, repo_id, parent_dir, [])
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        sdoc_files_info = {file.get('path'): file for file in sdoc_info_list}
+        params = {
+            'query': query,
+            'associate_id': repo_id,
+            'sdoc_files_info': sdoc_files_info,
+            'count': count,
+        }
+
+        try:
+            resp = question_answering_search_in_library(params)
+            if resp.status_code == 500:
+                logger.error('ask in library error status: %s body: %s', resp.status_code, resp.text)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+            resp_json = resp.json()
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(resp_json, resp.status_code)
 
 class LibrarySdocIndex(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
