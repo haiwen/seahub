@@ -87,6 +87,7 @@ class TransferDialog extends React.Component {
               placeholder={gettext('Select a department')}
               options={this.options}
               onChange={this.handleSelectChange}
+              value={this.state.selectedOption}
             />
           }
           {isPro && canTransferToDept &&

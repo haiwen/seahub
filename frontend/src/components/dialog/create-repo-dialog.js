@@ -25,6 +25,14 @@ class CreateRepoDialog extends React.Component {
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
+    this.templateOptions = [];
+    this.storageOptions = [];
+    if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
+      this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
+    }
+    if (Array.isArray(storages) && storages.length) {
+      this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+    }
   }
 
   handleRepoNameChange = (e) => {
@@ -191,9 +199,10 @@ class CreateRepoDialog extends React.Component {
               <FormGroup>
                 <Label>{gettext('Template')}</Label>
                 <SeahubSelect
-                  defaultValue={{value: libraryTemplates[0], label: libraryTemplates[0]}}
-                  options={libraryTemplates.map((item, index) => { return {value: item, label: item}; })}
+                  defaultValue={this.templateOptions[0]}
+                  options={this.templateOptions}
                   onChange={this.handlelibraryTemplatesInputChange}
+                  value={this.templateOptions.find(opt => opt.value === this.state.library_template) || null}
                 />
               </FormGroup>
             )}
@@ -202,9 +211,10 @@ class CreateRepoDialog extends React.Component {
               <FormGroup>
                 <Label>{gettext('Storage Backend')}</Label>
                 <SeahubSelect
-                  defaultValue={{value: storages[0].id, label: storages[0].name}}
-                  options={storages.map((item, index) => { return {value: item.id, label: item.name}; })}
+                  defaultValue={this.storageOptions[0]}
+                  options={this.storageOptions}
                   onChange={this.handleStorageInputChange}
+                  value={this.storageOptions.find(opt => opt.value === this.state.storage_id) || null}
                 />
               </FormGroup>
             )}

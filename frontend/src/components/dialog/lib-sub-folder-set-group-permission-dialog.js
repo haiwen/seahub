@@ -93,7 +93,7 @@ const propTypes = {
   folderPath: PropTypes.string,
 };
 
-class LibSubFolderSerGroupPermissionDialog extends React.Component {
+class LibSubFolderSetGroupPermissionDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -363,6 +363,6 @@ class LibSubFolderSerGroupPermissionDialog extends React.Component {
   }
 }
 
-LibSubFolderSerGroupPermissionDialog.propTypes = propTypes;
+LibSubFolderSetGroupPermissionDialog.propTypes = propTypes;
 
-export default LibSubFolderSerGroupPermissionDialog;
+export default LibSubFolderSetGroupPermissionDialog;
