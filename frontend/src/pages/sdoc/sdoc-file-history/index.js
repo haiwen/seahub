@@ -82,25 +82,25 @@ class SdocFileHistory extends React.Component {
   onShowChanges = (isShowChanges) => {
     if (isShowChanges) {
       const { currentVersionContent, currentVersion } = this.state;
-      this.setState({ isLoading: true }, () => {
+      this.setState({ isLoading: true, isShowChanges }, () => {
         localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
         seafileAPI.getNextFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
           return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
         }).then(res => {
           const lastVersionContent = res.data;
           this.setContent(currentVersionContent, lastVersionContent);
-          this.setState({ isShowChanges });
         }).catch(error => {
           const errorMessage = Utils.getErrorMsg(error, true);
           toaster.danger(gettext(errorMessage));
           this.setContent(currentVersionContent, '');
-          this.setState({ isShowChanges });
         });
       });
       return;
     }
-    this.setState({ isShowChanges }, () => {
-      localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+    this.setState({ isLoading: true, isShowChanges }, () => {
+      this.setState({ isLoading: false, lastVersionContent: '' }, () => {
+        localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+      });
     });
   };
 
