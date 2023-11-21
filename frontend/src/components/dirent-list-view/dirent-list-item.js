@@ -714,6 +714,8 @@ class DirentListItem extends React.Component {
     let lockedInfo = gettext('locked by {name}').replace('{name}', dirent.lock_owner_name);
     const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
+    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
+    const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
     const desktopItem = (
       <tr
         className={trClass}
@@ -747,7 +749,7 @@ class DirentListItem extends React.Component {
               <img ref='drag_icon' src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" onClick={this.onItemClick} alt="" /> :
               <img ref='drag_icon' src={iconUrl} width="24" alt='' />
             }
-            {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
             <div ref="empty_content" style={{position: 'absolute', width: '1px', height: '1px'}}></div>
           </div>
         </td>
@@ -792,7 +794,7 @@ class DirentListItem extends React.Component {
               <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
               <img src={iconUrl} width="24" alt="" />
             }
-            {dirent.is_locked && <img className="locked" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
           </div>
         </td>
         <td onClick={this.onItemClick}>

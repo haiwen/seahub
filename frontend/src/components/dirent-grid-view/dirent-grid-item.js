@@ -210,6 +210,8 @@ class DirentGridItem extends React.Component {
     let lockedInfo = gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
+    const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed' : 'locked'}-32.png`;
+    const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
     return (
       <Fragment>
         <li className="grid-item" onContextMenu={this.onGridItemContextMenu} onMouseDown={this.onGridItemMouseDown}>
@@ -227,7 +229,7 @@ class DirentGridItem extends React.Component {
               <img src={`${siteRoot}${fileUrl}`} ref={this.gridIcon} className="thumbnail" onClick={this.onItemClick} alt=""/> :
               <img src={iconUrl} ref={this.gridIcon} width="96" alt='' />
             }
-            {dirent.is_locked && <img className="grid-file-locked-icon" src={mediaUrl + 'img/file-locked-32.png'} alt={gettext('locked')} title={lockedInfo}/>}
+            {dirent.is_locked && <img className="grid-file-locked-icon" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
           </div>
           <div className="grid-file-name" onDragStart={this.onGridItemDragStart} draggable={this.canDrag} >
             {(dirent.type !== 'dir' && dirent.file_tags && dirent.file_tags.length > 0) && (
