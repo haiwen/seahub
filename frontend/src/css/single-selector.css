@@ -1,3 +1,7 @@
+.sf-single-selector .cur-option {
+  cursor: pointer;
+}
+
 .sf-single-selector .cur-option .toggle-icon {
   color: #999;
 }
