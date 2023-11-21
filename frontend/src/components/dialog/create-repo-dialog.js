@@ -25,8 +25,14 @@ class CreateRepoDialog extends React.Component {
       library_template: libraryTemplates.length ? libraryTemplates[0] : '',
       isSubmitBtnActive: false,
     };
-    this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
-    this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+    this.templateOptions = [];
+    this.storageOptions = [];
+    if (Array.isArray(libraryTemplates) && libraryTemplates.length) {
+      this.templateOptions = libraryTemplates.map((item) => { return {value: item, label: item}; });
+    }
+    if (Array.isArray(storages) && storages.length) {
+      this.storageOptions = storages.map((item) => { return {value: item.id, label: item.name}; });
+    }
   }
 
   handleRepoNameChange = (e) => {

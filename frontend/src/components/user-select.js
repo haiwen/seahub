@@ -14,7 +14,7 @@ const propTypes = {
   onSelectChange: PropTypes.func.isRequired,
   isMulti: PropTypes.bool.isRequired,
   className: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 };
 
 class UserSelect extends React.Component {
