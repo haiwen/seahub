@@ -8,7 +8,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import { seafileAPI } from '../../../utils/seafile-api';
-import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
+import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
 import toaster from '../../../components/toast';
@@ -16,6 +16,17 @@ import toaster from '../../../components/toast';
 const { availableRoles } = window.sysadmin.pageOptions;
 
 class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false
+    };
+  }
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
+  };
 
   getPreviousPage = () => {
     this.props.getListByPage(this.props.currentPage - 1);
@@ -39,7 +50,7 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
                 <th width="20%">{gettext('Name')}</th>
@@ -57,6 +68,8 @@ class Content extends Component {
                   item={item}
                   updateRole={this.props.updateRole}
                   deleteOrg={this.props.deleteOrg}
+                  isItemFreezed={this.state.isItemFreezed}
+                  toggleItemFreezed={this.toggleItemFreezed}
                 />);
               })}
             </tbody>
@@ -81,7 +94,6 @@ class Content extends Component {
 Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
-  item: PropTypes.object.isRequired,
   getListByPage: PropTypes.func.isRequired,
   currentPage: PropTypes.number,
   items: PropTypes.array.isRequired,
@@ -97,18 +109,20 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpIconShown: false,
+      highlighted: false,
       isDeleteDialogOpen: false,
       deleteDialogMsg: '',
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({isOpIconShown: true});
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: true});
   };
 
   handleMouseLeave = () => {
-    this.setState({isOpIconShown: false});
+    if (this.props.isItemFreezed) return;
+    this.setState({highlighted: false});
   };
 
   toggleDeleteDialog = (e) => {
@@ -135,8 +149,8 @@ class Item extends Component {
     });
   };
 
-  updateRole = (role) => {
-    this.props.updateRole(this.props.item.org_id, role);
+  updateRole = (roleOption) => {
+    this.props.updateRole(this.props.item.org_id, roleOption.value);
   };
 
   deleteOrg = () => {
@@ -146,28 +160,41 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen, deleteDialogMsg } = this.state;
+    const { highlighted, isDeleteDialogOpen, deleteDialogMsg } = this.state;
+
+    const { role: curRole } = item;
+    // availableRoles: ['default', 'guest']
+    this.roleOptions = availableRoles.map(item => {
+      let newItem = item == 'default' ? {
+        value: 'default', text: gettext('Default')
+      } : {
+        value: 'guest', text: gettext('Guest')
+      };
+      newItem.isSelected = item == curRole;
+      return newItem;
+    });
+    const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td><Link to={`${siteRoot}sys/organizations/${item.org_id}/info/`}>{item.org_name}</Link></td>
           <td>
             <UserLink email={item.creator_email} name={item.creator_name} />
           </td>
           <td>
-            <SysAdminUserRoleEditor
-              isTextMode={true}
-              isEditIconShow={isOpIconShown}
-              currentRole={item.role}
-              roleOptions={availableRoles}
-              onRoleChanged={this.updateRole}
+            <RoleSelector
+              isDropdownToggleShown={highlighted}
+              currentSelectedOption={currentSelectedOption}
+              options={this.roleOptions}
+              selectOption={this.updateRole}
+              toggleItemFreezed={this.props.toggleItemFreezed}
             />
           </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota > 0 ? Utils.bytesToSize(item.quota) : '--'}`}</td>
           <td>{moment(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-delete ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <a href="#" className={`action-icon sf2-icon-delete ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
           </td>
         </tr>
         {isDeleteDialogOpen &&
@@ -188,6 +215,8 @@ Item.propTypes = {
   item: PropTypes.object.isRequired,
   updateRole: PropTypes.func.isRequired,
   deleteOrg: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  toggleItemFreezed: PropTypes.func.isRequired
 };
 
 export default Content;

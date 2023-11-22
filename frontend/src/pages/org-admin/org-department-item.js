@@ -453,8 +453,8 @@ class MemberItem extends React.Component {
           />
         </td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteMemberDialog.bind(this, member)}>
-            <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
-          </td>
+          <span className={`sf2-icon-x3 action-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+        </td>
       </tr>
     );
   }
