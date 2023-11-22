@@ -281,6 +281,7 @@
   "Revision": "修订稿",
   "Error": "错误",
   "Start_revise": "开始修订",
+  "Revise": "修订",
   "Failed_to_execute_operation_on_server": "无法在服务器上执行操作，当前操作已经撤回",
   "Start_revise_tip": "创建一个临时文档并对其进行修订，检查更改后将其合并回来",
   "Load_doc_content_error": "加载文档内容错误",
@@ -413,5 +414,5 @@
   "New": "新",
   "Table_template": "表格模版",
   "Jump_to_original_doc": "跳转到源文档",
-  "Selected_text": "选中的文本"
+  "Freezed": "已冻结"
 }

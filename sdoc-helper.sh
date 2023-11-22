@@ -6,7 +6,7 @@ npm install @seafile/sdoc-editor@latest
 
 cd ..
 
-cp -r frontend/node_modules/@seafile/sdoc-editor/public/media/sdoc-editor-font media/sdoc-editor/sdoc-editor-font
+cp -r frontend/node_modules/@seafile/sdoc-editor/public/media/sdoc-editor-font media/sdoc-editor/
 cp -r frontend/node_modules/@seafile/sdoc-editor/public/media/sdoc-editor-font.css media/sdoc-editor/sdoc-editor-font.css
 
 

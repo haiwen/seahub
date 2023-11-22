@@ -281,6 +281,7 @@
   "Revision": "Revision",
   "Error": "Fehler",
   "Start_revise": "Start revise",
+  "Revise": "Revise",
   "Failed_to_execute_operation_on_server": "Failed to execute operation on server, the current operation has been withdrawn",
   "Start_revise_tip": "Create a temporary document and modify on it, merge it back after reviewing changes",
   "Load_doc_content_error": "Load doc content error",
@@ -413,5 +414,5 @@
   "New": "Erstellen",
   "Table_template": "Table template",
   "Jump_to_original_doc": "Jump to the original document",
-  "Selected_text": "Selected text"
+  "Freezed": "Freezed"
 }

@@ -281,6 +281,7 @@
   "Revision": "Révision",
   "Error": "Erreur",
   "Start_revise": "Commencer à réviser",
+  "Revise": "Revise",
   "Failed_to_execute_operation_on_server": "Échec de l'exécution de l'opération sur le serveur, l'opération en cours a été annulée.",
   "Start_revise_tip": "Créer un document temporaire et le modifier, le fusionner à nouveau après avoir examiné les modifications.",
   "Load_doc_content_error": "Erreur de chargement du contenu du document",
@@ -413,5 +414,5 @@
   "New": "Créer",
   "Table_template": "Table template",
   "Jump_to_original_doc": "Jump to the original document",
-  "Selected_text": "Selected text"
+  "Freezed": "Freezed"
 }
