@@ -62,15 +62,16 @@ class SidePanel extends Component {
     const newHistoryGroups = oldHistoryGroups.slice(0);
     histories.forEach(history => {
       const { date } = history;
-      const month = moment(date).format('YYYY-MM');
+      const momentDate = moment(date);
+      const month = momentDate.format('YYYY-MM');
       const monthItem = newHistoryGroups.find(item => item.month === month);
       if (monthItem) {
-        monthItem.children.push({ day: moment(date).format('YYYY-MM-DD'), showDaily: false, children: [ history ] });
+        monthItem.children.push({ day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [ history ] });
       } else {
         newHistoryGroups.push({
           month,
           children: [
-            { day: moment(date).format('YYYY-MM-DD'), showDaily: false, children: [ history ] }
+            { day: momentDate.format('YYYY-MM-DD'), showDaily: false, children: [ history ] }
           ]
         });
       }
