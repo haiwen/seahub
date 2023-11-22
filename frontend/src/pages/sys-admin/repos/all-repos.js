@@ -120,7 +120,28 @@ class AllRepos extends Component {
   }
 
   searchRepos = (repoNameOrID) => {
+    if (this.getValueLength(repoNameOrID) < 4) {
+      toaster.notify(gettext('Required at least four letters.'));
+      return;
+    }
     navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
+  }
+
+  getValueLength(str) {
+    let code, len = 0;
+    for (let i = 0, length = str.length; i < length; i++) {
+      code = str.charCodeAt(i);
+      if (code === 10) { //solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
   }
 
   render() {

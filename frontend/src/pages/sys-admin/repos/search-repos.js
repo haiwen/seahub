@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Form, FormGroup, Input, Label, Col } from 'reactstrap';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
+import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import MainPanelTopbar from '../main-panel-topbar';
 import Content from './repos';
@@ -16,7 +17,8 @@ class SearchRepos extends Component {
       isSubmitBtnActive: false,
       loading: true,
       errorMsg: '',
-      repos: []
+      repos: [],
+      pageInfo: {},
     };
   }
 
@@ -29,6 +31,10 @@ class SearchRepos extends Component {
 
   getRepos = () => {
     const { name } = this.state;
+    if (this.getValueLength(name) < 4) {
+      toaster.notify(gettext('Required at least four letters.'));
+      return;
+    }
     seafileAPI.sysAdminSearchRepos(name).then((res) => {
       this.setState({
         loading: false,
@@ -80,11 +86,32 @@ class SearchRepos extends Component {
 
   handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      const { isSubmitBtnActive } = this.state;
+      const { isSubmitBtnActive, name } = this.state;
       if (isSubmitBtnActive) {
+        if (this.getValueLength(name) < 4) {
+          toaster.notify(gettext('Required at least four letters.'));
+          return;
+        }
         this.searchRepos();
       }
     }
+  }
+
+  getValueLength(str) {
+    let code, len = 0;
+    for (let i = 0, length = str.length; i < length; i++) {
+      code = str.charCodeAt(i);
+      if (code === 10) { //solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
   }
 
   render() {

@@ -199,6 +199,16 @@ def login(request, template_name='registration/login.html',
 
     login_bg_image_path = get_login_bg_image_path()
 
+    ########## custom for pingan ##########
+    # get page id
+    from seahub.pingan.pacas import get_page_id
+    page_id = ''
+    if not request.is_mobile and not request.is_tablet:
+        resp_json_for_page_id = get_page_id()
+        if resp_json_for_page_id.get('code', '') == 'SUCCESS':
+            page_id = resp_json_for_page_id.get('content', {}).get('pageId', '')
+    ########## custom for pingan ##########
+
     return render(request, template_name, {
         'form': form,
         redirect_field_name: redirect_to,
@@ -209,6 +219,7 @@ def login(request, template_name='registration/login.html',
         'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
         'enable_change_password': settings.ENABLE_CHANGE_PASSWORD,
+        'page_id': page_id,
         'xHex': PINGAN_PACAS_XHEX,
         'yHex': PINGAN_PACAS_YHEX,
     })

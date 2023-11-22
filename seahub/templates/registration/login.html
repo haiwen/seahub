@@ -50,11 +50,38 @@ html, body, #wrapper { height:100%; }
   background: #aaa;
 }
 
+{% comment %} custom for pingan {% endcomment %}
+#osx-overlay{
+  background-color:black;
+}
+#simplemodal-container {
+    max-width: 400px;
+    padding-bottom: 40px
+}
+.modalCloseImg.simplemodal-close {
+    display: none;
+}
+#confirm-modal {
+    border: none !important;
+}
+#modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+#modal-buttons div {
+    margin-right: 20px
+}
+#modal-close {
+    margin-right: 20px;
+    padding: 0 12px;
+    min-width: 2.375rem
+}
+{% comment %} custom for pingan {% endcomment %}
 </style>
 {% endblock %}
 
 {% block main_content %}
-<div class="login-panel-outer-container vh">
+<div name="login-panel-outer-container" class="login-panel-outer-container vh">
 <div class="login-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
     <form name="form1" action="{{ LOGIN_URL }}" method="post" id="login-form">{% csrf_token %}
@@ -82,7 +109,7 @@ html, body, #wrapper { height:100%; }
             <span class="vam">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
         </label>
 
-        <button type="submit" class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
+        <button id="valid-pc-owner" type="button" data-click='0' class="submit btn btn-primary btn-block">{% trans "Log In" %}</button>
     </form>
 
     {% if enable_sso %}
@@ -110,9 +137,18 @@ html, body, #wrapper { height:100%; }
     <a href="mailto:dept_kjjcjgbyfzwpzc@pingan.com.cn" class="normal">联系我们</a>
 </div>
 </div>
+
+<div id="confirm-modal" style="border:1px solid red;display:none">
+    <p>当前系统登录账号与开机账号不一致，存在账号共享风险，请谨慎使用。是否继续登录？</p>
+    <div id="modal-buttons">
+        <div id="login-confirm" class="btn btn-primary">确定</div>
+        <button id="modal-close" class="simplemodal-close">取消</button>
+    </div>
+</div>
+
 {% include "snippets/policy_service_link.html" %}
 <div class="logo-company-copyright">
-    <span>Powered By &nbsp;<img width="16" height="16" style="vertical-align: text-bottom" src="{{ MEDIA_URL }}img/logo-p.png">平安科技办公技术服务部</div>
+    <span>Powered By &nbsp;<img width="16" height="16" style="vertical-align: text-bottom" src="{{ MEDIA_URL }}img/logo-p.png" alt="" />平安科技办公技术服务部</span>
 </div>
 {% endblock %}
 
@@ -207,7 +243,10 @@ function doEncrypt() {
     f1.password.value = encryptData.toUpperCase();
 }
 
-$('#login-form').on('submit', function(){
+const validPcOwnerBtn = $('#valid-pc-owner');
+const loginConfirm = $('#login-confirm');
+validPcOwnerBtn.on('click', function(evnet) {
+    event.stopPropagation();
     var loginName = $.trim($('input[name="login"]').val());
     if (!loginName) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
@@ -220,7 +259,34 @@ $('#login-form').on('submit', function(){
     if (loginName.indexOf('@') === -1) {
         doEncrypt();
     }
+    const clickCount = parseInt(validPcOwnerBtn.data('click'));
+    if (clickCount === 0 && '{{ page_id }}') {
+        $.ajax({
+            url: '{% url 'api_pingan_pacas_valid_login_account' %}',
+            dataType:'json',
+            data: {account: loginName, page_id: '{{ page_id }}'},
+            cache:false,
+            success: function(data) {
+                if (data['code'] === 'NEED_PC_OWNER_LOGIN' || data['code'] === 'SUGGEST_PC_OWNER_LOGIN') {
+                    $('#confirm-modal').modal({
+                        position: ['0'],
+                        opacity: 0, 
+                        overlayId: 'osx-overlay',
+                        overlayClose: false,
+                    }); 
+                }
+            },
+        });
+        return true;
+    }
+    $('#login-form').submit();
 });
+
+loginConfirm.on('click', function(event) {
+    validPcOwnerBtn.data('click', 1);
+    $.modal.close();
+})
+
 // set tabindex
 $(function() {
     $('input:not([type="hidden"])').each(function(index) {

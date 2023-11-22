@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 import json
+import uuid
+import hmac
+import base64
 import hashlib
 import logging
 import requests
@@ -27,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 # for oauth access token
 # client_id：P_ifbss-mobfile
-# client_secret： 测试 cp488XdS  生产 m9R7SAD5
+# client_secret： 测试 cp488XdS 生产 m9R7SAD5
 # grant_type：client_credentials
 PINGAN_PACAS_GET_ACCESS_TOKEN_URL = getattr(settings, 'PINGAN_PACAS_GET_ACCESS_TOKEN_URL', 'http://esg-oauth-super.paic.com.cn/oauth/oauth2/access_token')
 PINGAN_PACAS_CLIENT_ID = getattr(settings, 'PINGAN_PACAS_CLIENT_ID', 'P_ifbss-mobfile')
@@ -50,6 +53,15 @@ PINGAN_PACAS_AUTHENTICATE_URL = getattr(settings, 'PINGAN_PACAS_AUTHENTICATE_URL
 # auth by cookie
 PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL = getattr(settings, 'PINGAN_PACAS_AUTHENTICATE_BY_SSO_URL', 'http://esg-open.paic.com.cn/open/appsvr/public/casapi/v2/PA011/IFBSS_MOBFILE/authenticateBySSO2.do')
 
+# get page_id
+PINGAN_PACAS_GET_PAGE_ID_URL = getattr(settings, 'PINGAN_PACAS_GET_PAGE_ID_URL', 'http://pacas-super.paic.com.cn/cas/pcOwner/getPageId')
+
+# get owner info
+PINGAN_PACAS_GET_OWNER_URL = getattr(settings, 'PINGAN_PACAS_GET_OWNER_URL', 'http://pacas-super.paic.com.cn/cas/auth/spnego/api/pcOwner')
+
+# valid login account
+PINGAN_PACAS_VALID_LOGIN_ACCOUNT_URL = getattr(settings, 'PINGAN_PACAS_VALID_LOGIN_ACCOUNT_URL', 'http://pacas-super.paic.com.cn/cas/pcOwner/validLoginAccount')
+
 PINGAN_PACAS_CLIENT_AUTH = getattr(settings, 'PINGAN_PACAS_CLIENT_AUTH', False)
 PINGAN_PACAS_XHEX = getattr(settings, 'PINGAN_PACAS_XHEX', 'CE334A29C0FDF7810D4BBB1C9917E54719E53394F947AC8B525CCDEFDDA44810')
 PINGAN_PACAS_YHEX = getattr(settings, 'PINGAN_PACAS_YHEX', '649E2A9651401CC3251BCEDAD42CE1506841A7A31D3EE3DEADDE65D769BA4458')
@@ -58,6 +70,72 @@ PINGAN_PACAS_YHEX = getattr(settings, 'PINGAN_PACAS_YHEX', '649E2A9651401CC3251B
 def send_post_request(url, payload):
     headers = {"Content-Type": "application/json"}
     return requests.post(url, headers=headers, data=json.dumps(payload)).json()
+
+
+def get_page_id():
+    payload = dict()
+    timestamp = str(int(time.time()*1000))
+    nonce = uuid.uuid4().hex
+    content = json.dumps(payload) + timestamp + nonce
+    hash_str = hmac.new(PINGAN_PACAS_CLIENT_SECRET.encode(), content.encode(), hashlib.sha256).digest()
+    signature = base64.b64encode(hash_str).decode()
+    headers = {
+        "Content-Type": "application/json",
+        "clientID": PINGAN_PACAS_CLIENT_ID,
+        "signatureMethod": "HmacSHA256",
+        "signature": signature,
+        "timestamp": timestamp,
+        "nonce": nonce,
+    }
+    resp_json = requests.post(PINGAN_PACAS_GET_PAGE_ID_URL, headers=headers, data=json.dumps(payload)).json()
+    # resp_json = {
+    #     "code": "SUCCESS",
+    #     "message": "SUCCESS",
+    #     "content": {"pageId": "7f893a2d987046c09833b4dc82be442c"},
+    #     "tId": "<T=510fdf689ca347e988b2b07e937f6c77>"
+    # }
+    if resp_json.get('code', '') != 'SUCCESS' or not resp_json.get('content', {}).get('pageId', ''):
+        logger.error('failed to get page id')
+        logger.error(PINGAN_PACAS_GET_PAGE_ID_URL)
+        logger.error(resp_json)
+
+    return resp_json
+
+
+def valid_login_account(account, page_id):
+    payload = {"loginAccount": account, "pageId": page_id}
+    timestamp = str(int(time.time()*1000))
+    nonce = uuid.uuid4().hex
+    content = json.dumps(payload) + timestamp + nonce
+    hash_str = hmac.new(PINGAN_PACAS_CLIENT_SECRET.encode(), content.encode(), hashlib.sha256).digest()
+    signature = base64.b64encode(hash_str).decode()
+    headers = {
+        "Content-Type": "application/json",
+        "clientID": PINGAN_PACAS_CLIENT_ID,
+        "signatureMethod": "HmacSHA256",
+        "signature": signature,
+        "timestamp": timestamp,
+        "nonce": nonce,
+    }
+    resp_json = requests.post(PINGAN_PACAS_VALID_LOGIN_ACCOUNT_URL, headers=headers, data=json.dumps(payload)).json()
+    # resp_json = {
+    #     "code": "NEED_PC_OWNER_LOGIN",
+    #     "message": "SUCCESS",
+    #     "content": "",
+    #     "tId": "<T=510fdf689ca347e988b2b07e937f6c77>"
+    # }
+    if resp_json.get('code', '') != 'SUCCESS' and resp_json.get('code', '') != 'NEED_PC_OWNER_LOGIN' \
+            and resp_json.get('code', '') != 'SUGGEST_PC_OWNER_LOGIN':
+        logger.error('failed to valid login account')
+        logger.error(PINGAN_PACAS_VALID_LOGIN_ACCOUNT_URL)
+        logger.error(payload)
+        logger.error(resp_json)
+    return resp_json
+
+
+def get_pc_owner_info(page_id):
+    url = PINGAN_PACAS_GET_OWNER_URL + '?pageId=%s&clientID=%s' % (page_id, PINGAN_PACAS_CLIENT_ID)
+    return requests.get(url)
 
 
 def get_access_token():
@@ -294,6 +372,30 @@ def pingan_pacas_authenticate_by_sso(request, sso_cookie, sso_type, access_token
     return resp_json
 
 
+def api_pingan_pacas_valid_login_account(request):
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+    account = request.GET.get('account', '')
+    page_id = request.GET.get('page_id', '')
+
+    # check whether login account is pc owner
+    if page_id:
+        resp_json_for_valid = valid_login_account(account, page_id)
+        code = resp_json_for_valid.get('code', '')
+        if code == 'SUCCESS' or code == 'NEED_PC_OWNER_LOGIN' or code == 'SUGGEST_PC_OWNER_LOGIN':
+            logger.debug('login account: %s, page_id: %s, code: %s' % (account, page_id, code))
+            result['code'] = code
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
+            logger.warning('login account: %s, page_id: %s, code: %s' % (account, page_id, code))
+            result['code'] = code
+            return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        logger.warning('login account: %s, page_id: %s' % (account, page_id))
+        result['code'] = ''
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
+
 def api_pingan_pacas_refresh_valid_code(request):
 
     result = {}
@@ -344,11 +446,19 @@ def pacas_login(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(redirect_to)
 
+    # get page id
+    page_id = ''
+    if not request.is_mobile and not request.is_tablet:
+        resp_json_for_page_id = get_page_id()
+        if resp_json_for_page_id.get('code', '') == 'SUCCESS':
+            page_id = resp_json_for_page_id.get('content', {}).get('pageId', '')
+
     template_name = 'registration/login.html'
     login_bg_image_path = get_login_bg_image_path()
     render_data = {
         'login_bg_image_path': login_bg_image_path,
         'remember_days': config.LOGIN_REMEMBER_DAYS,
+        'page_id': page_id,
         'xHex': PINGAN_PACAS_XHEX,
         'yHex': PINGAN_PACAS_YHEX,
     }
