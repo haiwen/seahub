@@ -30,15 +30,27 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     });
   };
 
-  getFile = () => {
+  getFile = (fileList) => {
     const { baseName, seaTableUrl, baseApiToken } = this.state;
+    let content = [{
+      'base_name': baseName,
+      'seatable_server_url': seaTableUrl,
+      'base_api_token': baseApiToken
+    }];
+
+    if (fileList && fileList.length !== 0) {
+      const index = fileList?.findIndex((item) => item.base_api_token === baseApiToken) || -1;
+      if (index !== -1) {
+        fileList[index] = content[0];
+      } else {
+        fileList.push(content[0]);
+      }
+      content = fileList;
+    }
+
     const fileName = internalFilePath.split('/')[2];
     const fileContent = JSON.stringify({
-      [this.repo.repo_id]: {
-        'base_name': baseName,
-        'seatable_server_url': seaTableUrl,
-        'base_api_token': baseApiToken
-      }
+      [this.repo.repo_id]: content
     });
     const newFile = new File([fileContent], fileName);
     return newFile;
@@ -59,21 +71,22 @@ class RepoSeaTableIntegrationDialog extends React.Component {
       return;
     }
 
-    const newFile = this.getFile();
     const [downloadLinkRes, err] = await seafileAPI.getFileDownloadLink(this.repo.repo_id, internalFilePath).then(res => [res, null]).catch((err) => [null, err]);
-    // Replace
+    // Contains configuration files
     if (downloadLinkRes && downloadLinkRes.data) {
       const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
       if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
+        const newFile = this.getFile(fileInfoRes.data[this.repo.repo_id]);
         const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 10));
         const fileName = internalFilePath.split('/')[2];
         await seafileAPI.updateFile(updateLink.data, internalFilePath, fileName, newFile).catch(err => {toaster.danger(gettext(err.message));});
         this.props.onSeaTableIntegrationToggle();
       }
     }
-    // Add
+    // No configuration file
     if (err) {
       const uploadLink = await seafileAPI.getFileServerUploadLink(this.repo.repo_id, dirPath);
+      const newFile = this.getFile();
       const formData = new FormData();
       formData.append('file', newFile);
       formData.append('relative_path', internalFilePath.split('/')[1]);
