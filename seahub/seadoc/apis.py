@@ -2714,6 +2714,13 @@ class SdocParticipantsView(APIView):
                 failed.append(error_dic)
                 continue
 
+        username = request.user.username
+        sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)
+        try:
+            sdoc_server_api.add_participant(success)
+        except Exception as e:
+            logger.error('Sdoc server notification to add participants error', e)
+
         return Response({'success': success, 'failed': failed})
 
 
@@ -2752,6 +2759,13 @@ class SdocParticipantView(APIView):
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        username = request.user.username
+        sdoc_server_api = SdocServerAPI(file_uuid, str(uuid_map.filename), username)
+        try:
+            sdoc_server_api.remove_participant(email)
+        except Exception as e:
+            logger.error('Sdoc server notification to remove participants error', e)
 
         return Response({'success': True})
 

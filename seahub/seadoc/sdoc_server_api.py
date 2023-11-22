@@ -70,3 +70,19 @@ class SdocServerAPI(object):
         response = requests.post(url, json=data, headers=self.headers)
         return parse_response(response)
 
+    def add_participant(self, users):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/participants/?from=seahub'
+        data = {
+            'users': users
+        }
+        response = requests.post(url, json=data, headers=self.headers)
+        return parse_response(response)
+
+    def remove_participant(self, email):
+        url = self.sdoc_server_url + '/api/v1/docs/' + self.doc_uuid + '/participants/?from=seahub'
+        data = {
+            'doc_name': self.filename,
+            'email': email
+        }
+        response = requests.delete(url, json=data, headers=self.headers)
+        return parse_response(response)
