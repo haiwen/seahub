@@ -38,6 +38,11 @@ class FileView extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const fileIcon = Utils.getFileIconUrl(fileName, 192);
+    document.getElementById('favicon').href = fileIcon;
+  }
+
   toggleDetailsPanel = () => {
     this.setState({isDetailsPanelOpen: !this.state.isDetailsPanelOpen});
   };

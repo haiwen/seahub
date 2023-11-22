@@ -39,6 +39,11 @@ window.seafile = {
   assetsUrl,
 };
 
+(function() {
+  const fileIcon = Utils.getFileIconUrl(docName, 192);
+  document.getElementById('favicon').href = fileIcon;
+})();
+
 ReactDom.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>

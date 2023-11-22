@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { SimpleEditor } from '@seafile/sdoc-editor';
 import ExternalOperations from './external-operations';
+import { Utils } from '../../../utils/utils';
 
 export default class SdocEditor extends React.Component {
 
@@ -11,6 +12,12 @@ export default class SdocEditor extends React.Component {
       isStarred: isStarred,
       isDraft: isSdocDraft
     };
+  }
+
+  componentDidMount() {
+    const { docName } = window.seafile;
+    const fileIcon = Utils.getFileIconUrl(docName, 192);
+    document.getElementById('favicon').href = fileIcon;
   }
 
   toggleStar = (isStarred) => {
