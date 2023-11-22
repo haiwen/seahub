@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
+import classnames from 'classnames';
 import { gettext, filePath } from '../../../utils/constants';
 import URLDecorator from '../../../utils/url-decorator';
 import Rename from '../../../components/rename';
@@ -39,9 +40,9 @@ class HistoryVersion extends React.Component {
 
   onClick = () => {
     this.setState({ isShowOperationIcon: false });
-    const { currentVersion, historyVersion } = this.props;
+    const { currentVersion, historyVersion, path } = this.props;
     if (currentVersion.commit_id === historyVersion.commit_id) return;
-    this.props.onSelectHistoryVersion(historyVersion);
+    this.props.onSelectHistoryVersion(path);
   };
 
   onRestore = () => {
@@ -73,19 +74,36 @@ class HistoryVersion extends React.Component {
     this.toggleRename();
   };
 
+  showDailyHistory = (event) => {
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    const { path } = this.props;
+    this.props.showDailyHistory(path);
+  };
+
   render() {
-    const { currentVersion, historyVersion } = this.props;
+    const { currentVersion, historyVersion, path, showDaily } = this.props;
     if (!currentVersion || !historyVersion) return null;
-    const { ctime, commit_id, creator_name, obj_id, name} = historyVersion;
+    const { ctime, commit_id, creator_name, obj_id, name, count } = historyVersion;
     const isHighlightItem = commit_id === currentVersion.commit_id;
     const url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: obj_id });
     return (
       <li
-        className={`history-list-item ${isHighlightItem ? 'item-active' : ''}`}
+        className={`history-list-item ${isHighlightItem ? 'item-active' : ''} ${path[2] > 0 ? 'daily-history-detail' : ''}`}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
       >
+        {path[2] === 0 && (
+          <div className="daily-history-detail-toggle-container">
+            {count > 1 && (
+              <div className={classnames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })} onClick={this.showDailyHistory}>
+                <i className="dropdown-toggle"></i>
+              </div>
+            )}
+          </div>
+        )}
+        {path[2] > 0 && (<div className="daily-history-detail-no-more"></div>)}
         <div className="history-info">
           {this.state.isRenameShow ?
             <Rename name={name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/>
@@ -109,7 +127,7 @@ class HistoryVersion extends React.Component {
             <DropdownMenu>
               {/* {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>} */}
               <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-              {(this.props.index !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
+              {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
               <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -120,13 +138,15 @@ class HistoryVersion extends React.Component {
 }
 
 HistoryVersion.propTypes = {
-  index: PropTypes.number,
+  showDaily: PropTypes.bool,
+  path: PropTypes.array,
   currentVersion: PropTypes.object.isRequired,
   historyVersion: PropTypes.object,
   onSelectHistoryVersion: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,
   onCopy: PropTypes.func.isRequired,
   renameHistoryVersion: PropTypes.func.isRequired,
+  showDailyHistory: PropTypes.func.isRequired,
 };
 
 export default HistoryVersion;

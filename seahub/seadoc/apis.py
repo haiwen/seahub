@@ -7,6 +7,8 @@ import logging
 import requests
 import posixpath
 from urllib.parse import unquote
+import time
+from datetime import datetime, timedelta
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -36,7 +38,7 @@ from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, get_file_history, \
         gen_inner_file_get_url, gen_inner_file_upload_url, \
-        get_service_url, is_valid_username, is_pro_version
+        get_service_url, is_valid_username, is_pro_version, get_file_history_by_day, get_file_daily_history_detail
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.utils.repo import parse_repo_perm
@@ -57,6 +59,11 @@ from seahub.file_tags.models import FileTags
 
 
 logger = logging.getLogger(__name__)
+
+try:
+    TO_TZ = time.strftime('%z')[:3] + ':' + time.strftime('%z')[3:]
+except Exception as error:
+    TO_TZ = '+00:00'
 
 
 class SeadocAccessToken(APIView):
@@ -542,19 +549,22 @@ class SeadocHistory(APIView):
 
     def _get_new_file_history_info(self, ent, avatar_size, name_dict):
         info = {}
-        creator_name = ent.op_user
+        creator_name = ent.get('op_user')
         url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
         info['creator_avatar_url'] = url
         info['creator_email'] = creator_name
         info['creator_name'] = email2nickname(creator_name)
         info['creator_contact_email'] = email2contact_email(creator_name)
-        info['ctime'] = utc_datetime_to_isoformat_timestr(ent.timestamp)
-        info['size'] = ent.size
-        info['obj_id'] = ent.file_id
-        info['commit_id'] = ent.commit_id
-        info['old_path'] = ent.old_path if hasattr(ent, 'old_path') else ''
-        info['path'] = ent.path
-        info['name'] = name_dict.get(ent.file_id, '')
+        info['ctime'] = utc_datetime_to_isoformat_timestr(ent.get('timestamp'))
+        info['size'] = ent.get('size')
+        info['obj_id'] = ent.get('file_id')
+        info['commit_id'] = ent.get('commit_id')
+        info['old_path'] = ent.get('old_path', '')
+        info['path'] = ent.get('path')
+        info['name'] = name_dict.get(ent.get('file_id', ''), '')
+        info['count'] = ent.get('count', 1)
+        info['date'] = ent.get('date', '')
+        info['id'] = ent.get('id', '')
         return info
 
     def get(self, request, file_uuid):
@@ -609,24 +619,24 @@ class SeadocHistory(APIView):
 
         start = (page - 1) * per_page
         count = per_page
+        to_tz = request.GET.get('to_tz', TO_TZ)
+
         try:
-            file_revisions, total_count = get_file_history(repo_id, path, start, count, history_limit)
+            file_revisions = get_file_history_by_day(repo_id, path, start, count, to_tz, history_limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         name_dict = {}
-        obj_id_list = [commit.file_id for commit in file_revisions]
+        obj_id_list = [commit.get('file_id', '') for commit in file_revisions]
         if obj_id_list:
             name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
                 doc_uuid=file_uuid, obj_id_list=obj_id_list)
             name_dict = {item.obj_id: item.name for item in name_queryset}
         data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
         result = {
-            "histories": data,
-            "page": page,
-            "total_count": total_count
+            "histories": data
         }
         return Response(result)
 
@@ -676,6 +686,92 @@ class SeadocHistory(APIView):
             'obj_id': obj_id,
             'name': new_name,
         })
+
+
+class SeadocDailyHistoryDetail(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def _get_new_file_history_info(self, ent, avatar_size, name_dict):
+        info = {}
+        creator_name = ent.op_user
+        url, is_default, date_uploaded = api_avatar_url(creator_name, avatar_size)
+        info['creator_avatar_url'] = url
+        info['creator_email'] = creator_name
+        info['creator_name'] = email2nickname(creator_name)
+        info['creator_contact_email'] = email2contact_email(creator_name)
+        info['ctime'] = utc_datetime_to_isoformat_timestr(ent.timestamp)
+        info['size'] = ent.size
+        info['obj_id'] = ent.file_id
+        info['commit_id'] = ent.commit_id
+        info['old_path'] = ent.old_path if hasattr(ent, 'old_path') else ''
+        info['path'] = ent.path
+        info['name'] = name_dict.get(ent.file_id, '')
+        info['count'] = 1
+        info['id'] = ent.id
+        return info
+
+    def get(self, request, file_uuid):
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        username = request.user.username
+        path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        op_date = request.GET.get('op_date', None)
+        if not op_date:
+            error_msg = 'op_date invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            # op_date eg: 2023-05-16T07:30:49+08:00
+            op_date_format = datetime.strptime(op_date, '%Y-%m-%dT%H:%M:%S%z')
+            to_tz = op_date[-6:]
+            start_time = op_date_format.replace(hour=0, minute=0, second=0, tzinfo=None)
+            end_time = start_time + timedelta(days=1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'op_date invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            file_revisions = get_file_daily_history_detail(repo_id, path, start_time, end_time, to_tz)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        name_dict = {}
+        obj_id_list = [commit.file_id for commit in file_revisions]
+        if obj_id_list:
+            name_queryset = SeadocHistoryName.objects.list_by_obj_ids(
+                doc_uuid=file_uuid, obj_id_list=obj_id_list)
+            name_dict = {item.obj_id: item.name for item in name_queryset}
+        data = [self._get_new_file_history_info(ent, avatar_size, name_dict) for ent in file_revisions]
+        result = {
+            "histories": data[1:]
+        }
+        return Response(result)
 
 
 class SeadocDrafts(APIView):

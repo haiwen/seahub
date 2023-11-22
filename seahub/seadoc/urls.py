@@ -4,7 +4,8 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocCommentsView, SeadocCommentView, SeadocStartRevise, SeadocPublishRevision, SeadocRevisionsCount, SeadocRevisions, \
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
     SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
-    SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers,SeadocEditorCallBack
+    SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers, SeadocEditorCallBack, \
+    SeadocDailyHistoryDetail
 
 # api/v2.1/seadoc/
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     re_path(r'^query-copy-move-progress/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocQueryCopyMoveProgressView.as_view(), name='seadoc_query_copy_move_progress'),
     re_path(r'^copy-history-file/(?P<repo_id>[-0-9a-f]{36})/$', SeadocCopyHistoryFile.as_view(), name='seadoc_copy_history_file'),
     re_path(r'^history/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocHistory.as_view(), name='seadoc_history'),
+    re_path(r'^daily-history-detail/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDailyHistoryDetail.as_view(), name='seadoc_daily_history_detail'),
     re_path(r'^drafts/$', SeadocDrafts.as_view(), name='seadoc_drafts'),
     re_path(r'^mark-as-draft/(?P<repo_id>[-0-9a-f]{36})/$', SeadocMaskAsDraft.as_view(), name='seadoc_mark_as_draft'),
     re_path(r'^comments/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocCommentsView.as_view(), name='seadoc_comments'),

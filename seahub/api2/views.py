@@ -71,7 +71,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
+    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path, get_next_file_history
 
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocDraft, SeadocCommentReply
@@ -3357,6 +3357,37 @@ class FileRevision(APIView):
         file_name = os.path.basename(path)
         commit_id = request.GET.get('commit_id', None)
 
+        try:
+            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
+                repo_id, commit_id, path)
+        except:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+
+        return get_repo_file(request, repo_id, obj_id, file_name, 'download')
+
+
+class FileNextRevision(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, current_revision_id, format=None):
+        path = request.GET.get('p', None)
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        
+        try:
+            next_file_history = get_next_file_history(repo_id, path, current_revision_id)
+        except Exception as e:
+            next_file_history = {}
+
+        commit_id = next_file_history.get('commit_id', '')
+        if not commit_id:
+            # There is no need to get the content of the commit, just return ''
+            return Response('')
+
+        path = next_file_history.get('path', '')
+        file_name = os.path.basename(path)
         try:
             obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
                 repo_id, commit_id, path)

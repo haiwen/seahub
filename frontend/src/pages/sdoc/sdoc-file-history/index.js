@@ -12,7 +12,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 
 import '../../../css/layout.css';
-import '../../../css/sdoc-file-history.css';
+import './index.css';
 
 const { serviceURL, avatarURL, siteRoot } = window.app.config;
 const { username, name } = window.app.pageOptions;
@@ -48,15 +48,15 @@ class SdocFileHistory extends React.Component {
     };
   }
 
-  onSelectHistoryVersion = (currentVersion, lastVersion) => {
+  onSelectHistoryVersion = (currentVersion, isShowChanges) => {
     this.setState({ isLoading: true, currentVersion });
     seafileAPI.getFileRevision(historyRepoID, currentVersion.commit_id, currentVersion.path).then(res => {
       return seafileAPI.getFileContent(res.data);
     }).then(res => {
       const currentVersionContent = res.data;
-      if (lastVersion) {
-        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
-          return seafileAPI.getFileContent(res.data);
+      if (isShowChanges) {
+        seafileAPI.getNextFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
+          return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
         }).then(res => {
           const lastVersionContent = res.data;
           this.setContent(currentVersionContent, lastVersionContent);
@@ -79,28 +79,28 @@ class SdocFileHistory extends React.Component {
     this.setState({ currentVersionContent, lastVersionContent, isLoading: false, changes: [], currentDiffIndex: 0 });
   };
 
-  onShowChanges = (isShowChanges, lastVersion) => {
-    if (isShowChanges && lastVersion) {
-      const { currentVersionContent } = this.state;
-      this.setState({ isLoading: true }, () => {
+  onShowChanges = (isShowChanges) => {
+    if (isShowChanges) {
+      const { currentVersionContent, currentVersion } = this.state;
+      this.setState({ isLoading: true, isShowChanges }, () => {
         localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
-        seafileAPI.getFileRevision(historyRepoID, lastVersion.commit_id, lastVersion.path).then(res => {
-          return seafileAPI.getFileContent(res.data);
+        seafileAPI.getNextFileRevision(historyRepoID, currentVersion.id, currentVersion.path).then(res => {
+          return res.data ? seafileAPI.getFileContent(res.data) : { data: '' };
         }).then(res => {
           const lastVersionContent = res.data;
           this.setContent(currentVersionContent, lastVersionContent);
-          this.setState({ isShowChanges });
         }).catch(error => {
           const errorMessage = Utils.getErrorMsg(error, true);
           toaster.danger(gettext(errorMessage));
           this.setContent(currentVersionContent, '');
-          this.setState({ isShowChanges });
         });
       });
       return;
     }
-    this.setState({ isShowChanges }, () => {
-      localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+    this.setState({ isLoading: true, isShowChanges }, () => {
+      this.setState({ isLoading: false, lastVersionContent: '' }, () => {
+        localStorage.setItem('seahub-sdoc-history-show-changes', isShowChanges + '');
+      });
     });
   };
 
@@ -175,10 +175,10 @@ class SdocFileHistory extends React.Component {
           >
             <span className="fas fa-chevron-down"></span>
           </div>
-          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last">
+          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last" delay={0} fade={false}>
             {gettext('Last modification')}
           </UncontrolledTooltip>
-          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-next">
+          <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-next" delay={0} fade={false}>
             {gettext('Next modification')}
           </UncontrolledTooltip>
         </div>
