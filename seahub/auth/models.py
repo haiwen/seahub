@@ -154,7 +154,7 @@ class SocialAuthUser(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=255)
-    extra_data = models.TextField()
+    extra_data = models.TextField(null=True)
     objects = SocialAuthUserManager()
 
     class Meta:
