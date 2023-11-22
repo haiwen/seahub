@@ -1,0 +1,24 @@
+.ai-search-refrences {
+  margin-top: 10px;
+}
+
+.ai-search-refrences .ai-search-refrences-title {
+  margin-bottom: 6px;
+}
+
+.ai-search-refrences .ai-search-refrences-container {
+  display: flex;
+}
+
+.ai-search-refrences .ai-search-refrences-container .ai-search-refrences-detail {
+  border: 1px solid #ccc;
+  max-width: 200px;
+  margin-right: 8px;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.ai-search-refrences .ai-search-refrences-detail:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+}

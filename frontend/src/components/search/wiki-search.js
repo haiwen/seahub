@@ -7,6 +7,7 @@ import SearchResultItem from './search-result-item';
 import More from '../more';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import { getValueLength } from './constant';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -134,23 +135,6 @@ class Search extends Component {
     this.source.cancel('prev request is cancelled');
   }
 
-  getValueLength(str) {
-    var i = 0, code, len = 0;
-    for (; i < str.length; i++) {
-      code = str.charCodeAt(i);
-      if (code == 10) { //solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
-  }
-
   formatResultItems(data) {
     let items = [];
     let length = data.length > 5 ? 5 : data.length;
@@ -199,7 +183,7 @@ class Search extends Component {
     if (!this.state.isResultShow) {
       return;
     }
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );
