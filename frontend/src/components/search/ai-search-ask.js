@@ -35,7 +35,7 @@ export default class AISearchAsk extends Component {
     super(props);
     this.state = {
       value: props.value,
-      isLoading: true,
+      isLoading: false,
       answeringResult: '',
       hitFiles: [],
     };
@@ -154,7 +154,7 @@ export default class AISearchAsk extends Component {
     return (
       <div className="search">
         <div className="search-mask show" onClick={this.props.closeAsk}></div>
-        <div className="ai-search-ask search-container show p-0" style={{width: 800}}>
+        <div className="ai-search-ask search-container show p-0">
 
           <div className="ai-search-ask-header">
             <span className="ai-search-ask-return" onClick={this.props.closeAsk}>

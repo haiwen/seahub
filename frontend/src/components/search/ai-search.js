@@ -434,7 +434,7 @@ export default class AISearch extends Component {
     if (!width || width === 'default') return null;
 
     if (!this.state.isResultShow) return null;
-    if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
+    if (!this.state.isResultGetted || getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
       );

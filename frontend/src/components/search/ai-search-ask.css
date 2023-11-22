@@ -1,3 +1,7 @@
+.search-container.show.ai-search-ask {
+  width: 800px;
+}
+
 .ai-search-ask .ai-search-ask-header {
   display: flex;
   align-items: center;
@@ -59,4 +63,17 @@
 
 .ai-search-ask .ai-search-ask-footer .ai-search-ask-footer-btn:hover .seafile-multicolor-icon-send {
   color: #d96d00;
+}
+
+@media (max-width: 768px) {
+
+  .search-container.show.ai-search-ask {
+    width: 100%;
+  }
+
+  .ai-search-ask .search-input {
+    box-shadow: none;
+    width: 100% !important;
+  }
+
 }
