@@ -75,6 +75,22 @@ class OrgUsers extends Component {
     this.toggleAddOrgAdmin();
   };
 
+  changeStatus = (email, isActive) => {
+    seafileAPI.orgAdminChangeOrgUserStatus(orgID, email, isActive).then(res => {
+      let users = this.state.orgAdminUsers.map(item => {
+        if (item.email == email) {
+          item['is_active']= res.data['is_active'];
+        }
+        return item;
+      });
+      this.setState({orgAdminUsers: users});
+      toaster.success(gettext('Edit succeeded.'));
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     const topBtn = 'btn btn-secondary operation-item';
     let topbarChildren;
@@ -103,6 +119,7 @@ class OrgUsers extends Component {
               toggleRevokeAdmin={this.toggleRevokeAdmin}
               orgAdminUsers={this.state.orgAdminUsers}
               initOrgAdmin={this.initOrgAdmin}
+              changeStatus={this.changeStatus}
             />
           </div>
         </div>

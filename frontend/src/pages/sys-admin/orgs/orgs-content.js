@@ -149,6 +149,17 @@ class Item extends Component {
     });
   };
 
+  translateRole = (role) => {
+    switch (role) {
+      case 'default':
+        return gettext('Default');
+      case 'guest':
+        return gettext('Guest');
+      default:
+        return role;
+    }
+  };
+
   updateRole = (roleOption) => {
     this.props.updateRole(this.props.item.org_id, roleOption.value);
   };
@@ -163,15 +174,12 @@ class Item extends Component {
     const { highlighted, isDeleteDialogOpen, deleteDialogMsg } = this.state;
 
     const { role: curRole } = item;
-    // availableRoles: ['default', 'guest']
     this.roleOptions = availableRoles.map(item => {
-      let newItem = item == 'default' ? {
-        value: 'default', text: gettext('Default')
-      } : {
-        value: 'guest', text: gettext('Guest')
+      return {
+        value: item,
+        text: this.translateRole(item),
+        isSelected: item == curRole
       };
-      newItem.isSelected = item == curRole;
-      return newItem;
     });
     const currentSelectedOption = this.roleOptions.filter(item => item.isSelected)[0];
 

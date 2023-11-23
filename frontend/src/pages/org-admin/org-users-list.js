@@ -10,7 +10,7 @@ const propTypes = {
   orgUsers: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
   pageNext: PropTypes.bool.isRequired,
-  sortByQuotaUsage: PropTypes.string.isRequired,
+  sortByQuotaUsage: PropTypes.func.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortBy: PropTypes.string.isRequired,
 };
@@ -30,6 +30,10 @@ class OrgUsersList extends React.Component {
 
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
+  };
+
+  toggleItemFreezed = (isFreezed) => {
+    this.setState({ isItemFreezed: isFreezed });
   };
 
   onChangePageNum = (e, num) => {
@@ -86,6 +90,7 @@ class OrgUsersList extends React.Component {
                   changeStatus={this.props.changeStatus}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
+                  toggleItemFreezed={this.toggleItemFreezed}
                 />
               );})}
           </tbody>
