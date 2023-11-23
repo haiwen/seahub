@@ -1,0 +1,273 @@
+/* common */
+.account-dialog .nav .nav-item {
+  padding: 0;
+}
+
+.account-dialog .nav .nav-item .nav-link {
+  padding: 0.5rem 0;
+  color: #8a948f;
+  font-weight: normal;
+  transition: none;
+  width: 100%;
+}
+
+.account-dialog .nav .nav-item .nav-link.active {
+  color: #ff8000;
+  text-decoration: none;
+  border-bottom: 0.125rem solid #ff8000;
+}
+
+.account-dialog .nav-pills .nav-item .nav-link {
+  padding: .3125rem 1rem .3125rem 8px;
+  color: #333;
+}
+
+.account-dialog .nav-pills .nav-item .nav-link:hover {
+  background-color: #f5f5f5;
+}
+
+.account-dialog .nav-pills .nav-item .nav-link.active {
+  background-color: #ff8000;
+  color: #fff;
+  border: none;
+}
+
+.account-dialog table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.account-dialog .accounts-list table thead tr {
+  border-bottom: 1px solid #efefef;
+  height: 2.1875rem;
+}
+
+.account-dialog .accounts-list table tbody tr {
+  border-bottom: 1px solid #efefef;
+  height: 2.5625rem;
+}
+
+.account-dialog table th {
+  padding: 0.3125rem 0.1875rem;
+  font-weight: 500;
+}
+
+.account-dialog table td {
+  padding: 3px 0.1875rem;
+  color: #333;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.account-dialog table td a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.account-dialog .ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-dialog .select-module {
+  font-size: 16px;
+}
+
+.account-dialog .select-module.select-module-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.account-dialog .select-module.select-module-name {
+  margin-left: 0.5rem;
+}
+
+.account-dialog .op-target {
+  color: #ea7500;
+  word-wrap: break-word;
+}
+
+/* custom */
+.account-dialog {
+  max-width: 800px;
+  height: calc(100% - 56px);
+}
+
+.account-dialog .modal-content {
+  height: 100%;
+}
+
+.account-dialog .account-dialog-content {
+  padding: 0;
+  min-height: 27rem;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.account-dialog-content .account-dialog-side {
+  display: flex;
+  flex: 0 0 25%;
+  padding: 12px 8px;
+  border-right: 1px solid #eee;
+}
+
+.account-dialog-content .account-dialog-main {
+  display: flex;
+  flex: 0 0 75%;
+  padding: 0.5rem 1.5rem 2rem;
+}
+
+.account-dialog-content .account-dialog-main .tab-content {
+  flex: 1;
+}
+
+.account-dialog-content .account-dialog-main .tab-pane {
+  height: 100%;
+}
+
+.account-dialog .wechat-input-content {
+  height: 250px;
+}
+
+.accounts-manage .accounts-manage-header {
+  border-bottom: 1px solid #efefef;
+  padding: .375rem 0;
+}
+
+.accounts-manage .accounts-manage-header button {
+  font-weight: normal;
+}
+
+.accounts-manage .no-accounts {
+  height: 400px;
+}
+
+.accounts-manage .no-accounts img {
+  width: 120px;
+}
+
+.accounts-manage .no-accounts p {
+  margin-top: 1rem;
+  color: #afafaf;
+}
+
+.accounts-manage .accounts-list-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.accounts-manage th,
+.accounts-manage td {
+  padding: .5rem .1875rem;
+  border-color: #efefef;
+}
+
+.accounts-manage th {
+  color: #999;
+}
+
+.accounts-manage .accounts-list-body tr:hover {
+  background-color: #f9f9f9;
+}
+
+.accounts-manage .accounts-list-body .account-operation-btn {
+  display: none;
+  margin-right: .2rem;
+}
+
+.accounts-manage .accounts-list-body tr:hover .account-operation-btn {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.accounts-manage .account-operation-btn .dtable-font {
+  font-size: 14px;
+  color: #999;
+}
+
+.accounts-manage .account-operation-btn:hover .dtable-font {
+  color: #5a5a5a;
+}
+
+.add-account,
+.edit-account {
+  height: 100%;
+}
+
+.add-account .add-account-header,
+.edit-account .edit-account-header {
+  padding: .375rem 0;
+  border-bottom: 1px solid #efefef;
+}
+
+.add-account .back-btn,
+.edit-account .back-btn {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.add-account .back-btn .dtable-icon-return,
+.edit-account .back-btn .dtable-icon-return {
+  font-size: 14px;
+  color: #999;
+}
+
+.add-account .back-btn:hover .dtable-icon-return,
+.edit-account .back-btn:hover .dtable-icon-return {
+  color: #5a5a5a;
+}
+
+.add-account .add-account-header-text,
+.edit-account .edit-account-header-text {
+  margin-left: .25rem;
+}
+
+.add-account .add-account-btn,
+.edit-account .edit-account-btn {
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-weight: normal;
+  border-color: #ff8000;
+  color: #ff8000;
+}
+
+.add-account .account-loading-tip {
+  margin-top: 1rem;
+}
+
+.add-account .add-account-btn:hover,
+.edit-account .edit-account-btn:hover {
+  background-color: transparent;
+}
+
+.base-account {
+  height: calc(100% - 38px);
+}
+
+.base-account input[type="checkbox"] {
+  margin-top: -2px;
+  vertical-align: middle;
+}
+
+.base-account .account-name-desc {
+  margin-top: .375rem;
+}
+
+.base-account .base-account-password .input-group .form-control {
+  height: 38px;
+  border-right: none;
+}
+
+.base-account .base-account-password .input-group .input-group-text {
+  height: 38px;
+  border-radius: 0 3px 3px 0;
+}
+
