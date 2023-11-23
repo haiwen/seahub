@@ -445,7 +445,7 @@ export default class AISearch extends Component {
           <li className='search-result-item align-items-center' onClick={this.openAsk}>
             <AISearchRobot />
             <div className="item-content">
-              <div className="item-name ellipsis">{gettext('Ask Seafile AI')}{': '}{this.state.value.trim()}</div>
+              <div className="item-name ellipsis">{gettext('Ask AI')}{': '}{this.state.value.trim()}</div>
             </div>
           </li>
           <div className="search-result-none">{gettext('No results matching.')}</div>
@@ -462,7 +462,7 @@ export default class AISearch extends Component {
           <AISearchRobot style={{width: 36}}/>
           <div className="item-content">
             <div className="item-name ellipsis">
-            {gettext('Ask Seafile AI')}{': '}{this.state.value.trim()}
+            {gettext('Ask AI')}{': '}{this.state.value.trim()}
             </div>
           </div>
         </li>
