@@ -45,9 +45,9 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     const [downloadLinkRes] = await seafileAPI.getFileDownloadLink(this.repo.repo_id, internalFilePath).then(res => [res, null]).catch((err) => [null, err]);
     if (downloadLinkRes && downloadLinkRes.data) {
       const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
-      if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
+      if (fileInfoRes?.data && fileInfoRes.data) {
         this.setState({
-          seatableSettings: fileInfoRes.data[this.repo.repo_id]
+          seatableSettings: fileInfoRes.data
         });
         status && this.setState({ status });
       }
@@ -62,13 +62,6 @@ class RepoSeaTableIntegrationDialog extends React.Component {
 
   changeStatus = (status) => {
     this.setState({status});
-  };
-
-  onInputChange = (e, key) => {
-    let value = e.target.value;
-    this.setState({
-      [key]: value,
-    });
   };
 
   getFile = (detail, fileList) => {
@@ -90,9 +83,7 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     }
 
     const fileName = internalFilePath.split('/')[2];
-    const fileContent = JSON.stringify({
-      [this.repo.repo_id]: content
-    });
+    const fileContent = JSON.stringify(content);
     const newFile = new File([fileContent], fileName);
     return newFile;
   };
@@ -111,14 +102,12 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     const [downloadLinkRes] = await seafileAPI.getFileDownloadLink(this.repo.repo_id, internalFilePath).then(res => [res, null]).catch((err) => [null, err]);
     if (downloadLinkRes && downloadLinkRes.data) {
       const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
-      if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
-        const fileList = fileInfoRes.data[this.repo.repo_id];
+      if (fileInfoRes?.data) {
+        const fileList = fileInfoRes.data;
         const index = fileList?.findIndex((item) => item.base_api_token === base_api_token);
         if (index !== -1) {
           fileList.splice(index, 1);
-          const fileContent = JSON.stringify({
-            [this.repo.repo_id]: fileList
-          });
+          const fileContent = JSON.stringify(fileList);
           const fileName = internalFilePath.split('/')[2];
           const newFile = new File([fileContent], fileName);
           const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 10));
@@ -135,8 +124,8 @@ class RepoSeaTableIntegrationDialog extends React.Component {
     // Contains configuration files
     if (downloadLinkRes && downloadLinkRes.data) {
       const fileInfoRes = await seafileAPI.getFileContent(downloadLinkRes.data);
-      if (fileInfoRes?.data && fileInfoRes.data[this.repo.repo_id]) {
-        const newFile = this.getFile(detail, fileInfoRes.data[this.repo.repo_id]);
+      if (fileInfoRes?.data) {
+        const newFile = this.getFile(detail, fileInfoRes.data);
         const updateLink = await seafileAPI.getUpdateLink(this.repo.repo_id, internalFilePath.slice(0, 10));
         const fileName = internalFilePath.split('/')[2];
         await seafileAPI.updateFile(updateLink.data, internalFilePath, fileName, newFile).catch(err => {toaster.danger(gettext(err.message));});
